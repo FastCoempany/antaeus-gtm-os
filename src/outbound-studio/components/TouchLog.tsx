@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     allTouches,
     rack,
@@ -54,13 +55,19 @@ export function TouchLog(): JSX.Element {
     // ("Phase 4 / Rooms 3 + 4 read this same table for execution-
     // context temperature").
     const emptyMsg = hasRackScope
-        ? "No touches yet for this account. Click \"Log touch\" on the send line to start the trail."
-        : "No touches logged yet. Every touch you log here flows into the account's heat score and the dashboard's ranking.";
+        ? t(
+              'No touches yet for this account. Click "Log touch" on the send line to start the trail.',
+              { class: "body" }
+          )
+        : t(
+              "No touches logged yet. Every touch you log here flows into the account's heat score and the dashboard's ranking.",
+              { class: "body" }
+          );
 
     return (
-        <section class="ob-log" aria-label="Touch log">
+        <section class="ob-log" aria-label={t("Touch log")}>
             <header class="ob-log__header">
-                <p class="ob-log__kicker">TOUCH LOG</p>
+                <p class="ob-log__kicker">{t("TOUCH LOG")}</p>
                 <span class="ob-log__count">
                     {hasRackScope
                         ? `${scoped.length} for active account`
@@ -74,12 +81,12 @@ export function TouchLog(): JSX.Element {
                     <table class="ob-log__table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Account</th>
-                                <th>Contact</th>
-                                <th>Persona · Temp</th>
-                                <th>Channel</th>
-                                <th>Outcome</th>
+                                <th>{t("Date")}</th>
+                                <th>{t("Account")}</th>
+                                <th>{t("Contact")}</th>
+                                <th>{t("Persona · Temp")}</th>
+                                <th>{t("Channel")}</th>
+                                <th>{t("Outcome")}</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { benchmark, coverage, metrics } from "../state";
 import {
     hrefToColdCallStudio,
@@ -25,60 +26,62 @@ export function HandoffStrip(): JSX.Element {
     const b = benchmark.value;
     const c = coverage.value;
     return (
-        <section class="qw-handoff" aria-label="Downstream handoffs">
+        <section class="qw-handoff" aria-label={t("Downstream handoffs")}>
             <header class="qw-section__head">
-                <p class="qw-section__kicker">CARRY THE PRESSURE FORWARD</p>
-                <h2 class="qw-section__title">Where the plan lives next.</h2>
+                <p class="qw-section__kicker">{t("CARRY THE PRESSURE FORWARD")}</p>
+                <h2 class="qw-section__title">{t("Where the plan lives next.")}</h2>
                 <p class="qw-section__sub">
-                    The weekly pressure number has to land in the rooms
-                    that actually create pipeline.
+                    {t(
+                        "The weekly pressure number has to land in the rooms that actually create pipeline.",
+                        { class: "body" }
+                    )}
                 </p>
             </header>
             <div class="qw-handoff__grid">
                 <Card
-                    title="Outbound Studio"
+                    title={t("Outbound Studio")}
                     metric={`${fmt(m.touchesWeek)} / week`}
-                    body="Turn the weekly touch count into actual sends. Enough touches, enough active accounts, enough meetings created."
+                    body={t("Turn the weekly touch count into actual sends. Enough touches, enough active accounts, enough meetings created.", { class: "body" })}
                     meta={`${fmt(m.activeAccounts)} active accounts · ${pct(m.touchToMeetingRaw)} touch→meeting · ${fmt(m.touchesMonth)} touches/month.`}
                     href={hrefToOutboundStudio()}
-                    cta="Compose outbound"
+                    cta={t("Compose outbound")}
                     primary
                 />
                 <Card
-                    title="Cold Call Studio"
+                    title={t("Cold Call Studio")}
                     metric={`${fmt(m.meetingPushesWeek)} meeting pushes / week`}
-                    body="Calls when the plan needs faster conversation density."
+                    body={t("Calls when the plan needs faster conversation density.", { class: "body" })}
                     meta={`${m.touchesDay} touches/day floor · ${pct(m.showRateRaw)} show rate · ${pct(m.meetingToOppRaw)} meeting→opp.`}
                     href={hrefToColdCallStudio()}
-                    cta="Run a call"
+                    cta={t("Run a call")}
                 />
                 <Card
-                    title="Dashboard"
+                    title={t("Dashboard")}
                     metric={money(m.pipelineNeeded)}
-                    body="Hold yourself accountable to coverage, recovery pressure, and whether the workspace supports the quota."
+                    body={t("Hold yourself accountable to coverage, recovery pressure, and whether the workspace supports the quota.", { class: "body" })}
                     meta={
                         c.ratio > 0
                             ? `Current coverage: ${c.ratio}x against ${b.coverage}x target.`
-                            : "Set quota and load deals to see live coverage pressure."
+                            : t("Set quota and load deals to see live coverage pressure.", { class: "body" })
                     }
                     href={hrefToDashboard()}
-                    cta="Check coverage"
+                    cta={t("Check coverage")}
                 />
                 <Card
-                    title="Deal Workspace"
+                    title={t("Deal Workspace")}
                     metric={`${fmt(m.dealsQuarter)} deals / quarter`}
-                    body="Open weak deals and decide which corrective move serves the plan."
+                    body={t("Open weak deals and decide which corrective move serves the plan.", { class: "body" })}
                     meta={`${fmt(m.oppsQuarter)} opportunities required to make the quarter believable.`}
                     href={hrefToDealWorkspace()}
-                    cta="Work the pipeline"
+                    cta={t("Work the pipeline")}
                 />
                 <Card
-                    title="Founding GTM"
-                    metric="Day-one weekly cadence"
-                    body="The quota math feeds Section 7 — the weekly cadence your first AE inherits."
-                    meta="The cadence a first hire opens on day one is the thing the kit promises them."
+                    title={t("Founding GTM")}
+                    metric={t("Day-one weekly cadence")}
+                    body={t("The quota math feeds Section 7 — the weekly cadence your first AE inherits.", { class: "body" })}
+                    meta={t("The cadence a first hire opens on day one is the thing the kit promises them.", { class: "body" })}
                     href={hrefToFoundingGtm()}
-                    cta="Open the kit"
+                    cta={t("Open the kit")}
                 />
             </div>
         </section>

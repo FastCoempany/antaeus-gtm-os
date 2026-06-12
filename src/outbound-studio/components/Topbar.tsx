@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allTouches } from "../state";
 
 /**
@@ -23,10 +24,13 @@ export function Topbar(): JSX.Element {
                 OUTBOUND STUDIO ·{" "}
                 {count > 0
                     ? `${count} ${touchLabel} logged`
-                    : "no touches yet"}
+                    : t("no touches yet")}
             </p>
             <h1 class="ob-topbar__title">
-                Route one live line — to one named buyer, with one specific angle.
+                {t(
+                    "Route one live line — to one named buyer, with one specific angle.",
+                    { class: "body" }
+                )}
             </h1>
         </header>
     );

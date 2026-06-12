@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { benchmark, metrics, quality } from "../state";
 
 const fmt = (n: number) => n.toLocaleString();
@@ -16,49 +17,60 @@ export function PlanReadout(): JSX.Element {
 
     const summary =
         m.qualityScore >= 82
-            ? "The math is believable. Make sure Dashboard coverage and Outbound execution stay in sync with it."
+            ? t(
+                  "The math is believable. Make sure Dashboard coverage and Outbound execution stay in sync with it.",
+                  { class: "body" }
+              )
             : m.qualityScore >= 68
-              ? "The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before you trust the plan."
-              : "The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.";
+              ? t(
+                    "The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before you trust the plan.",
+                    { class: "body" }
+                )
+              : t(
+                    "The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.",
+                    { class: "body" }
+                );
 
     return (
-        <section class="qw-plan" aria-label="Operating plan">
+        <section class="qw-plan" aria-label={t("Operating plan")}>
             <header class="qw-section__head">
-                <p class="qw-section__kicker">OPERATING PLAN</p>
-                <h2 class="qw-section__title">What the team has to run every week.</h2>
+                <p class="qw-section__kicker">{t("OPERATING PLAN")}</p>
+                <h2 class="qw-section__title">{t("What the team has to run every week.", { class: "body" })}</h2>
                 <p class="qw-section__sub">
-                    Each card is a pressure number. If one feels
-                    unrealistic, change the upstream assumption.
+                    {t(
+                        "Each card is a pressure number. If one feels unrealistic, change the upstream assumption.",
+                        { class: "body" }
+                    )}
                 </p>
             </header>
 
             <div class="qw-plan__grid">
                 <PlanCard
-                    label="Touches / week"
+                    label={t("Touches / week")}
                     value={fmt(m.touchesWeek)}
-                    note={`Run ${m.touchesDay} touches/day so the outbound machine stays on pace.`}
+                    note={t("Run {n} touches/day so the outbound machine stays on pace.", { class: "body" }).replace("{n}", String(m.touchesDay))}
                 />
                 <PlanCard
-                    label="Meetings / week"
+                    label={t("Meetings / week")}
                     value={String(m.meetingsWeek)}
-                    note="Meeting-creation floor your channels need to support."
+                    note={t("Meeting-creation floor your channels need to support.", { class: "body" })}
                     accent
                 />
                 <PlanCard
-                    label="Opps / quarter"
+                    label={t("Opps / quarter")}
                     value={fmt(m.oppsQuarter)}
-                    note="Pipeline-creation pressure, not a passive report."
+                    note={t("Pipeline-creation pressure, not a passive report.", { class: "body" })}
                 />
                 <PlanCard
-                    label="Deals / quarter"
+                    label={t("Deals / quarter")}
                     value={fmt(m.dealsQuarter)}
-                    note="Close rate the weekly work is trying to make inevitable."
+                    note={t("Close rate the weekly work is trying to make inevitable.", { class: "body" })}
                 />
             </div>
 
             <div class="qw-plan__summary">
                 <div class="qw-summary-box">
-                    <h4 class="qw-summary-box__title">Planning read</h4>
+                    <h4 class="qw-summary-box__title">{t("Planning read")}</h4>
                     <p>
                         {b.label} quota math currently scores{" "}
                         <strong>{m.qualityScore}/100</strong> ({q.label}).
@@ -68,25 +80,25 @@ export function PlanReadout(): JSX.Element {
                     </p>
                 </div>
                 <div class="qw-summary-box">
-                    <h4 class="qw-summary-box__title">What to pressure-test</h4>
+                    <h4 class="qw-summary-box__title">{t("What to pressure-test")}</h4>
                     <p>{summary}</p>
                 </div>
             </div>
 
             <details class="qw-math">
-                <summary>The raw math</summary>
+                <summary>{t("The raw math")}</summary>
                 <div class="qw-math__rows">
-                    <Row label="Monthly target" value={money(m.monthlyTarget)} />
-                    <Row label="Deals needed / month" value={fmt(m.dealsMonth)} />
+                    <Row label={t("Monthly target")} value={money(m.monthlyTarget)} />
+                    <Row label={t("Deals needed / month")} value={fmt(m.dealsMonth)} />
                     <Row
-                        label="Weighted pipeline needed"
+                        label={t("Weighted pipeline needed")}
                         value={money(m.pipelineNeeded)}
                     />
-                    <Row label="Opportunities needed" value={fmt(m.oppsMonth)} />
-                    <Row label="Meetings to schedule" value={fmt(m.meetingsMonth)} />
-                    <Row label="Total touches / month" value={fmt(m.touchesMonth)} />
+                    <Row label={t("Opportunities needed")} value={fmt(m.oppsMonth)} />
+                    <Row label={t("Meetings to schedule")} value={fmt(m.meetingsMonth)} />
+                    <Row label={t("Total touches / month")} value={fmt(m.touchesMonth)} />
                     <Row
-                        label="Active accounts to work"
+                        label={t("Active accounts to work")}
                         value={fmt(m.activeAccounts)}
                         accent
                     />

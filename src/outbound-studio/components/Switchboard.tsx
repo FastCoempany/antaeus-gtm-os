@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     accountOptions,
     rack,
@@ -45,12 +46,12 @@ export function Switchboard(): JSX.Element {
             </header>
 
             <div class="ob-switchboard__form">
-                <Field label="Account">
+                <Field label={t("Account")}>
                     <input
                         list="ob-account-options"
                         type="text"
                         value={r.accountName}
-                        placeholder="e.g. Acme Industries"
+                        placeholder={t("e.g. Acme Industries", { class: "body" })}
                         onInput={(e) =>
                             setAccount(
                                 (e.currentTarget as HTMLInputElement).value
@@ -66,11 +67,11 @@ export function Switchboard(): JSX.Element {
                     </datalist>
                 </Field>
 
-                <Field label="Buyer (contact)">
+                <Field label={t("Buyer (contact)")}>
                     <input
                         type="text"
                         value={r.contactName}
-                        placeholder="e.g. Sarah Chen, VP Eng"
+                        placeholder={t("e.g. Sarah Chen, VP Eng", { class: "body" })}
                         onInput={(e) =>
                             setContact(
                                 (e.currentTarget as HTMLInputElement).value
@@ -79,7 +80,7 @@ export function Switchboard(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Persona">
+                <Field label={t("Persona")}>
                     <select
                         value={r.persona}
                         onChange={(e) =>
@@ -96,7 +97,7 @@ export function Switchboard(): JSX.Element {
                     </select>
                 </Field>
 
-                <Field label="Temperature">
+                <Field label={t("Temperature")}>
                     <select
                         value={r.temperature}
                         onChange={(e) =>
@@ -113,7 +114,7 @@ export function Switchboard(): JSX.Element {
                     </select>
                 </Field>
 
-                <Field label="Trigger">
+                <Field label={t("Trigger")}>
                     <select
                         value={r.trigger}
                         onChange={(e) =>
@@ -136,13 +137,13 @@ export function Switchboard(): JSX.Element {
                         class={`ob-noask${r.noAsk ? " is-active" : ""}`}
                         aria-pressed={r.noAsk}
                         onClick={toggleNoAsk}
-                        title="When on, the generated line gives something useful without asking for anything in return — no meeting request, no demo ask."
+                        title={t("When on, the generated line gives something useful without asking for anything in return — no meeting request, no demo ask.", { class: "body" })}
                     >
                         <span class="ob-noask__label">No-ask mode</span>
                         <span class="ob-noask__sub">
                             {r.noAsk
-                                ? "On — give value, don't ask for anything"
-                                : "Off — include a CTA"}
+                                ? t("On — give value, don't ask for anything", { class: "body" })
+                                : t("Off — include a CTA")}
                         </span>
                     </button>
                 </div>

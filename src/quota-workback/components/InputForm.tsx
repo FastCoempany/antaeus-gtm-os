@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { applyBenchmark, benchmark, inputs, patchInputs } from "../state";
 
 /**
@@ -23,18 +24,20 @@ export function InputForm(): JSX.Element {
     }
 
     return (
-        <section class="qw-form" aria-label="Plan inputs">
+        <section class="qw-form" aria-label={t("Plan inputs")}>
             <header class="qw-section__head">
-                <p class="qw-section__kicker">YOUR TARGETS</p>
-                <h2 class="qw-section__title">What is the quarter actually asking for?</h2>
+                <p class="qw-section__kicker">{t("YOUR TARGETS")}</p>
+                <h2 class="qw-section__title">{t("What is the quarter actually asking for?", { class: "body" })}</h2>
                 <p class="qw-section__sub">
-                    Quota → deals → opps → meetings → touches → daily
-                    activity. Tighten the inputs that matter most.
+                    {t(
+                        "Quota → deals → opps → meetings → touches → daily activity. Tighten the inputs that matter most.",
+                        { class: "body" }
+                    )}
                 </p>
             </header>
 
             <div class="qw-form__primary">
-                <Field label="Annual quota ($)" hint="Your personal target">
+                <Field label={t("Annual quota ($)")} hint={t("Your personal target")}>
                     <input
                         class="qw-input"
                         type="text"
@@ -44,7 +47,7 @@ export function InputForm(): JSX.Element {
                         placeholder="0"
                     />
                 </Field>
-                <Field label="Avg deal size ($)" hint="Annual contract value">
+                <Field label={t("Avg deal size ($)")} hint={t("Annual contract value")}>
                     <input
                         class="qw-input"
                         type="text"
@@ -54,7 +57,7 @@ export function InputForm(): JSX.Element {
                         placeholder="50,000"
                     />
                 </Field>
-                <Field label="Win rate (%)" hint="Opp to closed-won">
+                <Field label={t("Win rate (%)")} hint={t("Opp to closed-won")}>
                     <input
                         class="qw-input"
                         type="number"
@@ -76,9 +79,9 @@ export function InputForm(): JSX.Element {
             </div>
 
             <details class="qw-adv">
-                <summary>Advanced conversion settings</summary>
+                <summary>{t("Advanced conversion settings")}</summary>
                 <div class="qw-form__adv">
-                    <Field label="Meeting → opp (%)">
+                    <Field label={t("Meeting → opp (%)")}>
                         <input
                             class="qw-input"
                             type="number"
@@ -86,7 +89,7 @@ export function InputForm(): JSX.Element {
                             onInput={num("m2o")}
                         />
                     </Field>
-                    <Field label="Touch → meeting (%)">
+                    <Field label={t("Touch → meeting (%)")}>
                         <input
                             class="qw-input"
                             type="number"
@@ -95,7 +98,7 @@ export function InputForm(): JSX.Element {
                             onInput={num("t2m")}
                         />
                     </Field>
-                    <Field label="Show rate (%)">
+                    <Field label={t("Show rate (%)")}>
                         <input
                             class="qw-input"
                             type="number"
@@ -103,7 +106,7 @@ export function InputForm(): JSX.Element {
                             onInput={num("show")}
                         />
                     </Field>
-                    <Field label="Working days / mo">
+                    <Field label={t("Working days / mo")}>
                         <input
                             class="qw-input"
                             type="number"
@@ -111,7 +114,7 @@ export function InputForm(): JSX.Element {
                             onInput={num("days")}
                         />
                     </Field>
-                    <Field label="Touches / account">
+                    <Field label={t("Touches / account")}>
                         <input
                             class="qw-input"
                             type="number"
@@ -119,7 +122,7 @@ export function InputForm(): JSX.Element {
                             onInput={num("tpa")}
                         />
                     </Field>
-                    <Field label="Avg cycle (days)">
+                    <Field label={t("Avg cycle (days)")}>
                         <input
                             class="qw-input"
                             type="number"

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { benchmark, coverage, metrics, quality } from "../state";
 
 const fmt = (n: number) => n.toLocaleString();
@@ -28,47 +29,71 @@ export function SystemHealth(): JSX.Element {
 
     if (m.qualityScore >= 82) {
         compounding.push(
-            "The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them."
+            t(
+                "The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them.",
+                { class: "body" }
+            )
         );
     }
     if ((c.ratio || 0) >= b.coverage) {
         compounding.push(
-            "Coverage is already where it needs to be. The pipeline is at or above what the quota plan calls for."
+            t(
+                "Coverage is already where it needs to be. The pipeline is at or above what the quota plan calls for.",
+                { class: "body" }
+            )
         );
     } else if (fitCount >= 2) {
         compounding.push(
-            "Most assumptions still fit the typical range. The weekly plan isn't fully proven yet, but the underlying math is anchored to numbers that hold up."
+            t(
+                "Most assumptions still fit the typical range. The weekly plan isn't fully proven yet, but the underlying math is anchored to numbers that hold up.",
+                { class: "body" }
+            )
         );
     }
     if (compounding.length === 0) {
         compounding.push(
-            "The room is asking the right questions about the plan. The plan itself still needs harder proof before you should bet the quarter on it."
+            t(
+                "The room is asking the right questions about the plan. The plan itself still needs harder proof before you should bet the quarter on it.",
+                { class: "body" }
+            )
         );
     }
 
     if ((c.ratio || 0) < b.coverage) {
         fragile.push(
-            "Coverage is still below where the plan needs it. Until the pipeline catches up, the math is more aspiration than reality."
+            t(
+                "Coverage is still below where the plan needs it. Until the pipeline catches up, the math is more aspiration than reality.",
+                { class: "body" }
+            )
         );
     }
     if (fitCount < 2) {
         fragile.push(
-            "Too many of the assumptions have drifted away from typical ranges. Custom numbers can be right, but they need stronger proof before they should run the quarter."
+            t(
+                "Too many of the assumptions have drifted away from typical ranges. Custom numbers can be right, but they need stronger proof before they should run the quarter.",
+                { class: "body" }
+            )
         );
     }
     if (m.touchesDay > 25 || m.activeAccounts > 250) {
         fragile.push(
-            "Daily pressure may still be unrealistic. The required touch volume or account load suggests the current plan could outrun actual execution capacity."
+            t(
+                "Daily pressure may still be unrealistic. The required touch volume or account load suggests the current plan could outrun actual execution capacity.",
+                { class: "body" }
+            )
         );
     }
     if (fragile.length === 0) {
         fragile.push(
-            "No single fragility is dominating the plan. Keep pressure-testing conversions, but the quota model is behaving credibly right now."
+            t(
+                "No single fragility is dominating the plan. Keep pressure-testing conversions, but the quota model is behaving credibly right now.",
+                { class: "body" }
+            )
         );
     }
 
     return (
-        <section class="qw-health" aria-label="System health">
+        <section class="qw-health" aria-label={t("System health")}>
             <header class="qw-section__head">
                 <p class="qw-section__kicker">SYSTEM HEALTH</p>
                 <h2 class="qw-section__title">What is holding and what is still fragile.</h2>
@@ -80,36 +105,36 @@ export function SystemHealth(): JSX.Element {
 
             <div class="qw-health__metrics">
                 <Metric
-                    label="Plan posture"
+                    label={t("Plan posture")}
                     value={q.label}
                     sub={`${m.qualityScore}/100 planning quality`}
                     tone={q.tone}
                 />
                 <Metric
-                    label="Coverage"
+                    label={t("Coverage")}
                     value={`${c.ratio || 0}x`}
                     sub={`Against a ${b.coverage}x target.`}
                 />
                 <Metric
-                    label="Touches / week"
+                    label={t("Touches / week")}
                     value={fmt(m.touchesWeek)}
                     sub={`${m.touchesDay} per day across ${fmt(m.activeAccounts)} accounts.`}
                 />
                 <Metric
-                    label="Pressure fit"
+                    label={t("Pressure fit")}
                     value={`${fitCount}/3`}
-                    sub="Win, meeting, and cycle assumptions still in band."
+                    sub={t("Win, meeting, and cycle assumptions still in band.", { class: "body" })}
                 />
             </div>
 
             <div class="qw-health__split">
                 <Panel
-                    title="Compounding"
+                    title={t("Compounding")}
                     items={compounding.slice(0, 2)}
                     tone="good"
                 />
                 <Panel
-                    title="Still weak"
+                    title={t("Still weak")}
                     items={fragile.slice(0, 2)}
                     tone="warn"
                 />

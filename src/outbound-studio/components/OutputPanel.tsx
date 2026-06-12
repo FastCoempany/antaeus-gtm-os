@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     canGenerate,
@@ -29,9 +30,9 @@ import { saveAngle, saveTouch } from "../lib/cloud-persistence";
  *     the switchboard.
  */
 const QUALITY_BAND_LABEL: Record<string, string> = {
-    ready: "Ready to send",
-    workable: "Workable — sharpen further",
-    thin: "Too thin — add a real trigger"
+    ready: t("Ready to send"),
+    workable: t("Workable — sharpen further"),
+    thin: t("Too thin — add a real trigger", { class: "body" })
 };
 
 export function OutputPanel(): JSX.Element {
@@ -47,30 +48,34 @@ export function OutputPanel(): JSX.Element {
 
     function copy(): void {
         if (typeof navigator === "undefined" || !navigator.clipboard) {
-            flashToast("Copy unavailable — try selecting + Cmd-C.");
+            flashToast(t("Copy unavailable — try selecting + Cmd-C.", { class: "body" }));
             return;
         }
         navigator.clipboard
             .writeText(out.content)
-            .then(() => flashToast("Copied."))
-            .catch(() => flashToast("Copy failed — try selecting + Cmd-C."));
+            .then(() => flashToast(t("Copied.")))
+            .catch(() =>
+                flashToast(
+                    t("Copy failed — try selecting + Cmd-C.", { class: "body" })
+                )
+            );
     }
 
     function logTouch(): void {
-        const t = logTouchFromRack();
-        if (t) {
-            flashToast("Touch logged.");
-            void saveTouch(t);
+        const touch = logTouchFromRack();
+        if (touch) {
+            flashToast(t("Touch logged."));
+            void saveTouch(touch);
         }
     }
 
     function onSaveAngle(): void {
         const result = saveAngleFromRack();
         if (result.saved) {
-            flashToast("Angle saved.");
+            flashToast(t("Angle saved."));
             void saveAngle(result.angle);
         } else if (result.reason === "duplicate") {
-            flashToast("Angle already saved.");
+            flashToast(t("Angle already saved."));
         }
     }
 
@@ -83,39 +88,39 @@ export function OutputPanel(): JSX.Element {
         QUALITY_BAND_LABEL[out.motionBand] ?? out.motionBand;
 
     return (
-        <section class="ob-output" aria-label="Generated send line">
+        <section class="ob-output" aria-label={t("Generated send line")}>
             <header class="ob-output__header">
-                <p class="ob-output__kicker">SEND LINE</p>
+                <p class="ob-output__kicker">{t("SEND LINE")}</p>
                 <h2 class="ob-output__title">
                     Send line · for {accountLabel}
                 </h2>
                 {enabled ? (
                     <p class="ob-output__context">{buyerSummary}</p>
                 ) : null}
-                <ul class="ob-output__chips" aria-label="Recommendations">
+                <ul class="ob-output__chips" aria-label={t("Recommendations")}>
                     <li
                         class="ob-output__chip"
-                        title="Which surface to send through — email, LinkedIn, or another channel — given the temperature + persona."
+                        title={t("Which surface to send through — email, LinkedIn, or another channel — given the temperature + persona.", { class: "body" })}
                     >
-                        <span class="ob-output__chip-label">Channel</span>
+                        <span class="ob-output__chip-label">{t("Channel")}</span>
                         <span class="ob-output__chip-value">
                             {CHANNEL_LABELS[out.channel]}
                         </span>
                     </li>
                     <li
                         class="ob-output__chip"
-                        title="What this touch should carry — a case, a benchmark, or something the buyer would forward to someone else."
+                        title={t("What this touch should carry — a case, a benchmark, or something the buyer would forward to someone else.", { class: "body" })}
                     >
-                        <span class="ob-output__chip-label">Asset</span>
+                        <span class="ob-output__chip-label">{t("Asset")}</span>
                         <span class="ob-output__chip-value">
                             {ASSET_LABELS[out.asset]}
                         </span>
                     </li>
                     <li
                         class="ob-output__chip"
-                        title="The ask shape (meeting, intro, demo) — or none, in no-ask mode."
+                        title={t("The ask shape (meeting, intro, demo) — or none, in no-ask mode.", { class: "body" })}
                     >
-                        <span class="ob-output__chip-label">CTA</span>
+                        <span class="ob-output__chip-label">{t("CTA")}</span>
                         <span class="ob-output__chip-value">
                             {CTA_LABELS[out.ctaKey]}
                         </span>
@@ -124,7 +129,7 @@ export function OutputPanel(): JSX.Element {
                         class={`ob-output__chip ob-output__chip--band ob-output__chip--${out.motionBand}`}
                         title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`}
                     >
-                        <span class="ob-output__chip-label">Quality</span>
+                        <span class="ob-output__chip-label">{t("Quality")}</span>
                         <span class="ob-output__chip-value">
                             {out.qualityScore} · {qualityLabel}
                         </span>
@@ -135,7 +140,10 @@ export function OutputPanel(): JSX.Element {
             <p class="ob-output__body" aria-live="polite">
                 {enabled
                     ? out.content
-                    : "Set account + buyer in the switchboard to generate the line."}
+                    : t(
+                          "Set account + buyer in the switchboard to generate the line.",
+                          { class: "body" }
+                      )}
             </p>
 
             <footer class="ob-output__actions">
@@ -145,7 +153,7 @@ export function OutputPanel(): JSX.Element {
                     disabled={!enabled}
                     onClick={copy}
                 >
-                    Copy
+                    {t("Copy")}
                 </button>
                 <button
                     type="button"
@@ -153,7 +161,7 @@ export function OutputPanel(): JSX.Element {
                     disabled={!enabled}
                     onClick={logTouch}
                 >
-                    Log touch
+                    {t("Log touch")}
                 </button>
                 <button
                     type="button"
@@ -161,7 +169,7 @@ export function OutputPanel(): JSX.Element {
                     disabled={!enabled}
                     onClick={onSaveAngle}
                 >
-                    Save angle
+                    {t("Save angle")}
                 </button>
                 {toast ? (
                     <span class="ob-output__toast" role="status">

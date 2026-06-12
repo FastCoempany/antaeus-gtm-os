@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { rack } from "../state";
 
 /**
@@ -67,21 +68,27 @@ function readStatus(r: {
     if (filled >= 5 && r.accountName.trim() && r.contactName.trim()) {
         return {
             tone: "ready",
-            headline: "Ready to ship.",
-            copy: "Every jack is patched. The generated line is honest."
+            headline: t("Ready to ship."),
+            copy: t("Every jack is patched. The generated line is honest.", {
+                class: "body"
+            })
         };
     }
     if (r.accountName.trim()) {
         return {
             tone: "tighten",
-            headline: "Tighten the contact.",
-            copy: "The account is patched. The buyer is still loose."
+            headline: t("Tighten the contact."),
+            copy: t("The account is patched. The buyer is still loose.", {
+                class: "body"
+            })
         };
     }
     return {
         tone: "loose",
-        headline: "Two cables are loose.",
-        copy: "Patch the account first, then the contact carries the line."
+        headline: t("Two cables are loose."),
+        copy: t("Patch the account first, then the contact carries the line.", {
+            class: "body"
+        })
     };
 }
 
@@ -96,18 +103,26 @@ function nextMove(r: {
 }): MoveCopy {
     if (!r.accountName.trim()) {
         return {
-            headline: "Start with the account.",
-            copy: "Type or pick the account name. Signal Console accounts auto-suggest."
+            headline: t("Start with the account."),
+            copy: t(
+                "Type or pick the account name. Signal Console accounts auto-suggest.",
+                { class: "body" }
+            )
         };
     }
     if (!r.contactName.trim()) {
         return {
-            headline: "Add the buyer name.",
-            copy: "The contact is the first human cable. Without it the line is a category."
+            headline: t("Add the buyer name."),
+            copy: t(
+                "The contact is the first human cable. Without it the line is a category.",
+                { class: "body" }
+            )
         };
     }
     return {
-        headline: "Ship the line.",
-        copy: "Hit Copy or Log touch — every input is patched."
+        headline: t("Ship the line."),
+        copy: t("Hit Copy or Log touch — every input is patched.", {
+            class: "body"
+        })
     };
 }
