@@ -314,6 +314,12 @@ export default defineConfig({
                 "outdoors-events": resolve(
                     __dirname,
                     "src/outdoors-events/index.html"
+                ),
+                // Design-system proof sheet (spec 03) — internal
+                // surface rendering the built component library.
+                "design-system": resolve(
+                    __dirname,
+                    "src/design-system/index.html"
                 )
             }
         }
