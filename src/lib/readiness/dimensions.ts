@@ -18,6 +18,7 @@
  */
 
 import type { DimensionScore, ReadinessInput } from "./types";
+import { t } from "@/lib/voice/t";
 import { DIMENSION_LABEL } from "./types";
 
 /** Saturating contribution: returns `cap` once `value >= threshold`. */
@@ -49,32 +50,50 @@ export function scoreIcp(input: ReadinessInput): DimensionScore {
 
     const icpExists = input.icpCount > 0 ? 6 : 0;
     if (icpExists > 0) {
-        evidence.push(`${input.icpCount} ICP defined`);
+        evidence.push(
+            t("{n} ICP defined", { class: "body" }).replace(
+                "{n}",
+                String(input.icpCount)
+            )
+        );
     } else {
-        gaps.push("Define your first ICP in ICP Studio");
+        gaps.push(t("Define your first ICP in ICP Studio", { class: "body" }));
     }
 
     const quality = saturate(input.bestIcpQualityScore, 100, 6);
     if (quality >= 4.5) {
         evidence.push(
-            `Best ICP quality: ${input.bestIcpQualityScore}/100`
+            t("Best ICP quality: {n}/100", { class: "body" }).replace(
+                "{n}",
+                String(input.bestIcpQualityScore)
+            )
         );
     } else if (icpExists > 0) {
-        gaps.push("Sharpen ICP — quality below 75/100");
+        gaps.push(t("Sharpen ICP — quality below 75/100", { class: "body" }));
     }
 
     const territory = saturate(input.territoryAccountCount, 30, 5);
     if (territory >= 4) {
-        evidence.push(`${input.territoryAccountCount} accounts in territory`);
+        evidence.push(
+            t("{n} accounts in territory", { class: "body" }).replace(
+                "{n}",
+                String(input.territoryAccountCount)
+            )
+        );
     } else {
-        gaps.push("Build out territory to 30+ accounts");
+        gaps.push(t("Build out territory to 30+ accounts", { class: "body" }));
     }
 
     const pushed = saturate(input.sourcingProspectsReady, 10, 3);
     if (pushed >= 2) {
-        evidence.push(`${input.sourcingProspectsReady} prospects ready/pushed`);
+        evidence.push(
+            t("{n} prospects ready/pushed", { class: "body" }).replace(
+                "{n}",
+                String(input.sourcingProspectsReady)
+            )
+        );
     } else {
-        gaps.push("Push 10+ qualified prospects through Sourcing");
+        gaps.push(t("Push 10+ qualified prospects through Sourcing", { class: "body" }));
     }
 
     return {
@@ -100,32 +119,50 @@ export function scoreOutreach(input: ReadinessInput): DimensionScore {
 
     const touches = saturate(input.outboundTouches, 30, 6);
     if (touches >= 3) {
-        evidence.push(`${input.outboundTouches} outbound touches`);
+        evidence.push(
+            t("{n} outbound touches", { class: "body" }).replace(
+                "{n}",
+                String(input.outboundTouches)
+            )
+        );
     } else {
-        gaps.push("Send 30+ outbound touches");
+        gaps.push(t("Send 30+ outbound touches", { class: "body" }));
     }
 
     const calls = saturate(input.coldCallsLogged, 15, 5);
     if (calls >= 3) {
-        evidence.push(`${input.coldCallsLogged} cold calls logged`);
+        evidence.push(
+            t("{n} cold calls logged", { class: "body" }).replace(
+                "{n}",
+                String(input.coldCallsLogged)
+            )
+        );
     } else {
-        gaps.push("Log 15+ cold calls");
+        gaps.push(t("Log 15+ cold calls", { class: "body" }));
     }
 
     const cues = saturate(input.linkedinCues, 12, 4);
     if (cues >= 2) {
-        evidence.push(`${input.linkedinCues} LinkedIn cues`);
+        evidence.push(
+            t("{n} LinkedIn cues", { class: "body" }).replace(
+                "{n}",
+                String(input.linkedinCues)
+            )
+        );
     } else {
-        gaps.push("Run 12+ LinkedIn cues");
+        gaps.push(t("Run 12+ LinkedIn cues", { class: "body" }));
     }
 
     const breadth = saturate(input.distinctAccountsTouched, 12, 5);
     if (breadth >= 3) {
         evidence.push(
-            `${input.distinctAccountsTouched} distinct accounts touched`
+            t("{n} distinct accounts touched", { class: "body" }).replace(
+                "{n}",
+                String(input.distinctAccountsTouched)
+            )
         );
     } else {
-        gaps.push("Touch 12+ distinct accounts (breadth)");
+        gaps.push(t("Touch 12+ distinct accounts (breadth)", { class: "body" }));
     }
 
     return {
@@ -152,25 +189,38 @@ export function scoreDiscovery(input: ReadinessInput): DimensionScore {
 
     const planned = saturate(input.callPlannerSessions, 8, 6);
     if (planned >= 2) {
-        evidence.push(`${input.callPlannerSessions} call plans built`);
+        evidence.push(
+            t("{n} call plans built", { class: "body" }).replace(
+                "{n}",
+                String(input.callPlannerSessions)
+            )
+        );
     } else {
-        gaps.push("Build 8+ call plans in Call Planner");
+        gaps.push(t("Build 8+ call plans in Call Planner", { class: "body" }));
     }
 
     const advanced = saturate(input.discoveryAdvancedCalls, 6, 9);
     if (advanced >= 3) {
         evidence.push(
-            `${input.discoveryAdvancedCalls} calls advanced the deal`
+            t("{n} calls advanced the deal", { class: "body" }).replace(
+                "{n}",
+                String(input.discoveryAdvancedCalls)
+            )
         );
     } else {
-        gaps.push("Advance 6+ calls (outcome = advanced)");
+        gaps.push(t("Advance 6+ calls (outcome = advanced)", { class: "body" }));
     }
 
     const studio = saturate(input.discoveryStudioSessions, 5, 5);
     if (studio >= 2) {
-        evidence.push(`${input.discoveryStudioSessions} discovery sessions`);
+        evidence.push(
+            t("{n} discovery sessions", { class: "body" }).replace(
+                "{n}",
+                String(input.discoveryStudioSessions)
+            )
+        );
     } else {
-        gaps.push("Run 5+ Discovery Studio sessions");
+        gaps.push(t("Run 5+ Discovery Studio sessions", { class: "body" }));
     }
 
     return {
@@ -198,34 +248,50 @@ export function scoreDeals(input: ReadinessInput): DimensionScore {
 
     const active = saturate(input.activeDeals, 6, 6);
     if (active >= 2) {
-        evidence.push(`${input.activeDeals} active deals`);
+        evidence.push(
+            t("{n} active deals", { class: "body" }).replace(
+                "{n}",
+                String(input.activeDeals)
+            )
+        );
     } else {
-        gaps.push("Build pipeline to 6+ active deals");
+        gaps.push(t("Build pipeline to 6+ active deals", { class: "body" }));
     }
 
     const stepped = saturate(input.dealsWithNextStep, 5, 5);
     if (stepped >= 2) {
         evidence.push(
-            `${input.dealsWithNextStep} deals with named next-step`
+            t("{n} deals with named next-step", { class: "body" }).replace(
+                "{n}",
+                String(input.dealsWithNextStep)
+            )
         );
     } else {
-        gaps.push("Name a next-step on every active deal");
+        gaps.push(t("Name a next-step on every active deal", { class: "body" }));
     }
 
     const won = saturate(input.closedWonDeals, 3, 5);
     if (won >= 2) {
-        evidence.push(`${input.closedWonDeals} closed-won deals`);
+        evidence.push(
+            t("{n} closed-won deals", { class: "body" }).replace(
+                "{n}",
+                String(input.closedWonDeals)
+            )
+        );
     } else {
-        gaps.push("Close 3+ wins");
+        gaps.push(t("Close 3+ wins", { class: "body" }));
     }
 
     const analyzed = saturate(input.closedLostDealsAnalyzed, 3, 4);
     if (analyzed >= 2) {
         evidence.push(
-            `${input.closedLostDealsAnalyzed} losses analyzed (loss reason captured)`
+            t("{n} losses analyzed (loss reason captured)", { class: "body" }).replace(
+                "{n}",
+                String(input.closedLostDealsAnalyzed)
+            )
         );
     } else {
-        gaps.push("Capture loss reason on closed-lost deals");
+        gaps.push(t("Capture loss reason on closed-lost deals", { class: "body" }));
     }
 
     return {
@@ -253,34 +319,50 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
 
     const proofs = saturate(input.castProofs, 3, 5);
     if (proofs >= 2) {
-        evidence.push(`${input.castProofs} cast proofs`);
+        evidence.push(
+            t("{n} cast proofs", { class: "body" }).replace(
+                "{n}",
+                String(input.castProofs)
+            )
+        );
     } else {
-        gaps.push("Cast 3+ proofs in PoC Framework");
+        gaps.push(t("Cast 3+ proofs in PoC Framework", { class: "body" }));
     }
 
     const autopsies = saturate(input.futureAutopsiesRun, 3, 5);
     if (autopsies >= 2) {
         evidence.push(
-            `${input.futureAutopsiesRun} deals with autopsy artifacts`
+            t("{n} deals with autopsy artifacts", { class: "body" }).replace(
+                "{n}",
+                String(input.futureAutopsiesRun)
+            )
         );
     } else {
-        gaps.push("Run 3+ Future Autopsies (corrective action logged)");
+        gaps.push(t("Run 3+ Future Autopsies (corrective action logged)", { class: "body" }));
     }
 
     const advisors = saturate(input.advisorDeployments, 3, 4);
     if (advisors >= 2) {
-        evidence.push(`${input.advisorDeployments} advisor deployments`);
+        evidence.push(
+            t("{n} advisor deployments", { class: "body" }).replace(
+                "{n}",
+                String(input.advisorDeployments)
+            )
+        );
     } else {
-        gaps.push("Deploy advisors on 3+ deals");
+        gaps.push(t("Deploy advisors on 3+ deals", { class: "body" }));
     }
 
     const handoff = saturate(input.handoffSectionsReady, 5, 6);
     if (handoff >= 2) {
         evidence.push(
-            `${input.handoffSectionsReady}/7 handoff sections ready`
+            t("{n}/7 handoff sections ready", { class: "body" }).replace(
+                "{n}",
+                String(input.handoffSectionsReady)
+            )
         );
     } else {
-        gaps.push("Compose 5+ Founding GTM sections");
+        gaps.push(t("Compose 5+ Founding GTM sections", { class: "body" }));
     }
 
     return {

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { benchmark, inputs, metrics, quality } from "../state";
 
 /**
@@ -26,18 +27,20 @@ export function Topbar(): JSX.Element {
     const hasPlan = m.monthlyTarget > 0;
     const kicker = hasPlan
         ? `QUOTA WORKBACK · $${m.monthlyTarget.toLocaleString()}/mo · ${b.label} posture`
-        : "QUOTA WORKBACK";
+        : t("QUOTA WORKBACK");
 
     // Annualized rollups used for the sub-note context lines.
     const dealsYear = m.dealsMonth * 12;
     const oppsYear = m.oppsMonth * 12;
 
     return (
-        <header class="qw-topbar" aria-label="Quota Workback header">
+        <header class="qw-topbar" aria-label={t("Quota Workback header")}>
             <p class="qw-topbar__kicker">{kicker}</p>
-            <h1 class="qw-topbar__title">Make the math feel daily.</h1>
+            <h1 class="qw-topbar__title">{t("Make the math feel daily.")}</h1>
             <p class="qw-topbar__subtitle">
-                Turn quota into the week the team actually has to run.
+                {t("Turn quota into the week the team actually has to run.", {
+                    class: "body"
+                })}
             </p>
             <div class="qw-topbar__hero">
                 <div class="qw-hero">
@@ -45,39 +48,42 @@ export function Topbar(): JSX.Element {
                     <span class="qw-hero__label">
                         {hasPlan
                             ? `touches per day across ${m.activeAccounts} accounts to hit $${m.monthlyTarget.toLocaleString()}/month`
-                            : "Set quota and ACV to turn revenue into weekly execution pressure."}
+                            : t(
+                                  "Set quota and ACV to turn revenue into weekly execution pressure.",
+                                  { class: "body" }
+                              )}
                     </span>
                 </div>
                 <span class={`qw-band qw-band--${q.tone}`}>
                     {q.label} · {q.score}/100
                 </span>
             </div>
-            <div class="qw-topbar__stats" role="group" aria-label="Plan inputs">
+            <div class="qw-topbar__stats" role="group" aria-label={t("Plan inputs")}>
                 <Stat
-                    label="Annual quota"
+                    label={t("Annual quota")}
                     value={i.quota > 0 ? `$${formatMoney(i.quota)}` : "—"}
-                    sub={i.quota > 0 ? "Set in onboarding" : "Not set"}
+                    sub={i.quota > 0 ? t("Set in onboarding") : t("Not set")}
                 />
                 <Stat
-                    label="Avg ACV"
+                    label={t("Avg ACV")}
                     value={i.acv > 0 ? `$${formatMoney(i.acv)}` : "—"}
                     sub={
                         dealsYear > 0
                             ? `${Math.round(dealsYear).toLocaleString()} deals to hit number`
-                            : "Set ACV to see deals needed"
+                            : t("Set ACV to see deals needed", { class: "body" })
                     }
                 />
                 <Stat
-                    label="Win rate"
+                    label={t("Win rate")}
                     value={i.win > 0 ? `${i.win}%` : "—"}
                     sub={
                         oppsYear > 0
                             ? `~${Math.round(oppsYear).toLocaleString()} opps needed`
-                            : "Set win rate to see opps needed"
+                            : t("Set win rate to see opps needed", { class: "body" })
                     }
                 />
                 <Stat
-                    label="Cycle"
+                    label={t("Cycle")}
                     value={i.cycle > 0 ? `${i.cycle}d` : "—"}
                     sub={b.label}
                 />

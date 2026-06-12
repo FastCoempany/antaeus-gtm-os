@@ -11,6 +11,8 @@
  * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6 Phase 5
  */
 
+import { t } from "@/lib/voice/t";
+
 /** The five verdict levels — strictly ordered, gate-based. */
 export type Verdict =
     | "you_are_the_system"
@@ -30,11 +32,11 @@ export const VERDICT_RANK: Record<Verdict, number> = {
 
 /** Human-readable label for each verdict (UI surface). */
 export const VERDICT_LABEL: Record<Verdict, string> = {
-    you_are_the_system: "You are the system",
-    building: "Building",
-    inheritable_with_guardrails: "Inheritable with guardrails",
-    hire_ready: "Hire-ready",
-    hire_ready_repeatable: "Hire-ready, repeatable"
+    you_are_the_system: t("You are the system"),
+    building: t("Building"),
+    inheritable_with_guardrails: t("Inheritable with guardrails"),
+    hire_ready: t("Hire-ready"),
+    hire_ready_repeatable: t("Hire-ready, repeatable")
 };
 
 /**
@@ -54,11 +56,11 @@ export const DIMENSION_IDS: ReadonlyArray<DimensionId> = [
 
 /** Human-readable label for each dimension. */
 export const DIMENSION_LABEL: Record<DimensionId, string> = {
-    icp: "ICP & targeting",
-    outreach: "Outreach",
-    discovery: "Discovery",
-    deals: "Deal motion",
-    proof: "Proof & memory"
+    icp: t("ICP & targeting"),
+    outreach: t("Outreach"),
+    discovery: t("Discovery"),
+    deals: t("Deal motion"),
+    proof: t("Proof & memory")
 };
 
 /**

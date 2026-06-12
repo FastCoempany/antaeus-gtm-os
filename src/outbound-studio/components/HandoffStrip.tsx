@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { rack } from "../state";
 import {
     hrefToColdCallStudio,
@@ -29,26 +30,26 @@ export function HandoffStrip(): JSX.Element {
     const focus = account.length > 0 ? account : "";
 
     return (
-        <nav class="ob-handoff" aria-label="Cross-room routes">
-            <span class="ob-handoff__kicker">CARRY THE WORK FORWARD</span>
+        <nav class="ob-handoff" aria-label={t("Cross-room routes")}>
+            <span class="ob-handoff__kicker">{t("CARRY THE WORK FORWARD")}</span>
             <div class="ob-handoff__list">
                 <a
                     class="ob-handoff__cta"
                     href={hrefToSignalConsole(focus)}
                 >
-                    Check the signals
+                    {t("Check the signals")}
                 </a>
                 <a
                     class="ob-handoff__cta ob-handoff__cta--primary"
                     href={hrefToLinkedInPlaybook(focus)}
                 >
-                    Send LinkedIn air cover
+                    {t("Send LinkedIn air cover")}
                 </a>
                 <a
                     class="ob-handoff__cta"
                     href={hrefToColdCallStudio(focus)}
                 >
-                    Run a cold call
+                    {t("Run a cold call")}
                 </a>
             </div>
         </nav>

@@ -14,6 +14,7 @@
  * just below the winner — those are the unmet conditions.
  */
 
+import { t } from "@/lib/voice/t";
 import type {
     DimensionScore,
     ReadinessInput,
@@ -49,23 +50,35 @@ function gateHireReadyRepeatable(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                `Tighten ${weak.label.toLowerCase()} — it's the weakest dimension.`
+                t("Tighten {dimension} — it's the weakest dimension.", {
+                    class: "body"
+                }).replace("{dimension}", weak.label.toLowerCase())
             );
         }
     }
 
     if (input.closedWonDeals < 1) {
-        blockers.push("Close-won a deal so the kit has a real proof point.");
+        blockers.push(
+            t("Close-won a deal so the kit has a real proof point.", {
+                class: "body"
+            })
+        );
     }
     if (input.futureAutopsiesRun < 1) {
-        blockers.push("Run a Future Autopsy — even on a still-open deal.");
+        blockers.push(
+            t("Run a Future Autopsy — even on a still-open deal.", {
+                class: "body"
+            })
+        );
     }
     if (input.castProofs < 1) {
-        blockers.push("Cast a proof in PoC Framework.");
+        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
     }
     if (input.advisorDeployments < 1) {
         blockers.push(
-            "Deploy an advisor — backchannel ask on a real deal."
+            t("Deploy an advisor — backchannel ask on a real deal.", {
+                class: "body"
+            })
         );
     }
 
@@ -77,13 +90,15 @@ function gateHireReadyRepeatable(
             : input.closedWonDeals / input.closedLostDealsAnalyzed;
     if (winLossRatio < 1) {
         blockers.push(
-            "Bring win/loss balance to 1:1 or better."
+            t("Bring win/loss balance to 1:1 or better.", { class: "body" })
         );
     }
 
     if (input.handoffSectionsReady < 5) {
         blockers.push(
-            `Fill in Founding GTM to 5/7 sections (currently ${input.handoffSectionsReady}/7).`
+            t("Fill in Founding GTM to 5/7 sections (currently {n}/7).", {
+                class: "body"
+            }).replace("{n}", String(input.handoffSectionsReady))
         );
     }
 
@@ -102,19 +117,21 @@ function gateHireReady(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                `Tighten ${weak.label.toLowerCase()} — it's holding the gate.`
+                t("Tighten {dimension} — it's holding the gate.", {
+                    class: "body"
+                }).replace("{dimension}", weak.label.toLowerCase())
             );
         }
     }
 
     if (input.closedWonDeals < 1) {
-        blockers.push("Close-won a deal.");
+        blockers.push(t("Close-won a deal.", { class: "body" }));
     }
     if (input.futureAutopsiesRun < 1) {
-        blockers.push("Run a Future Autopsy.");
+        blockers.push(t("Run a Future Autopsy.", { class: "body" }));
     }
     if (input.castProofs < 1) {
-        blockers.push("Cast a proof in PoC Framework.");
+        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -132,7 +149,10 @@ function gateInheritable(
         const weak = dimensions.find((d) => d.score < 10);
         if (weak) {
             blockers.push(
-                `Strengthen ${weak.label.toLowerCase()} — every dimension needs to clear the bar.`
+                t(
+                    "Strengthen {dimension} — every dimension needs to clear the bar.",
+                    { class: "body" }
+                ).replace("{dimension}", weak.label.toLowerCase())
             );
         }
     }
@@ -140,12 +160,15 @@ function gateInheritable(
     const maxScore = Math.max(...dimensions.map((d) => d.score));
     if (maxScore < 16) {
         blockers.push(
-            "Make one dimension a strong suit — work outbound, discovery, or deal motion until something stands out."
+            t(
+                "Make one dimension a strong suit — work outbound, discovery, or deal motion until something stands out.",
+                { class: "body" }
+            )
         );
     }
 
     if (input.castProofs < 1) {
-        blockers.push("Cast a proof in PoC Framework.");
+        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -158,7 +181,10 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     const aboveEight = dimensions.filter((d) => d.score >= 8).length;
     if (aboveEight < 2) {
         blockers.push(
-            "Get two dimensions warming up — start with an ICP + the first outbound touches."
+            t(
+                "Get two dimensions warming up — start with an ICP + the first outbound touches.",
+                { class: "body" }
+            )
         );
     }
 

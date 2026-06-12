@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { benchmark, coverage, inputs } from "../state";
 
 /**
@@ -15,16 +16,18 @@ export function CoveragePanel(): JSX.Element {
 
     if (!q || q <= 0) {
         return (
-            <section class="qw-cov" aria-label="Pipeline coverage">
+            <section class="qw-cov" aria-label={t("Pipeline coverage")}>
                 <header class="qw-cov__head">
-                    <span class="qw-cov__title">PIPELINE COVERAGE</span>
+                    <span class="qw-cov__title">{t("PIPELINE COVERAGE")}</span>
                     <span class="qw-cov__ratio is-muted">
-                        Set quota to see live coverage
+                        {t("Set quota to see live coverage", { class: "body" })}
                     </span>
                 </header>
                 <p class="qw-cov__empty">
-                    Coverage compares weighted open pipeline against the
-                    quota target.
+                    {t(
+                        "Coverage compares weighted open pipeline against the quota target.",
+                        { class: "body" }
+                    )}
                 </p>
             </section>
         );
@@ -32,16 +35,18 @@ export function CoveragePanel(): JSX.Element {
 
     if (!c.hasDeals || c.ratio <= 0) {
         return (
-            <section class="qw-cov" aria-label="Pipeline coverage">
+            <section class="qw-cov" aria-label={t("Pipeline coverage")}>
                 <header class="qw-cov__head">
-                    <span class="qw-cov__title">PIPELINE COVERAGE</span>
+                    <span class="qw-cov__title">{t("PIPELINE COVERAGE")}</span>
                     <span class="qw-cov__ratio is-muted">
-                        No open deals yet
+                        {t("No open deals yet")}
                     </span>
                 </header>
                 <p class="qw-cov__empty">
-                    Add open opportunities in Deal Workspace and coverage
-                    lights up automatically.
+                    {t(
+                        "Add open opportunities in Deal Workspace and coverage lights up automatically.",
+                        { class: "body" }
+                    )}
                 </p>
             </section>
         );
@@ -56,9 +61,9 @@ export function CoveragePanel(): JSX.Element {
     const pct = Math.min(100, Math.round((c.ratio / target) * 100));
 
     return (
-        <section class="qw-cov" aria-label="Pipeline coverage">
+        <section class="qw-cov" aria-label={t("Pipeline coverage")}>
             <header class="qw-cov__head">
-                <span class="qw-cov__title">PIPELINE COVERAGE</span>
+                <span class="qw-cov__title">{t("PIPELINE COVERAGE")}</span>
                 <span class={`qw-cov__ratio is-${tone}`}>
                     {c.ratio}x / {target}x needed
                 </span>
@@ -72,7 +77,7 @@ export function CoveragePanel(): JSX.Element {
                 <span class={c.needed > 0 ? "is-bad" : "is-good"}>
                     {c.needed > 0
                         ? `Gap: $${c.needed.toLocaleString()}`
-                        : "On target"}
+                        : t("On target")}
                 </span>
             </div>
         </section>
