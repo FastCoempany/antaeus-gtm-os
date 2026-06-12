@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { ModeSwitcher } from "./ModeSwitcher";
 import { ReadinessAnchor } from "./ReadinessAnchor";
 import {
@@ -48,14 +49,16 @@ export function Topbar(): JSX.Element {
     const kickerTail =
         riskCount + moveCount > 0
             ? `${cmd.ranked.length} ranked · ${riskCount} ${riskCount === 1 ? "deal" : "deals"} at risk · ${moveCount} ${moveCount === 1 ? "move" : "moves"} queued`
-            : "no live pressure";
+            : t("no live pressure");
 
     return (
         <header class="db-topbar">
             <div class="db-topbar__lead">
                 <p class="db-topbar__kicker">DASHBOARD · {kickerTail}</p>
                 <h1 class="db-topbar__title">
-                    What is under the most pressure right now.
+                    {t("What is under the most pressure right now.", {
+                        class: "body"
+                    })}
                 </h1>
             </div>
             <div class="db-topbar__rail">

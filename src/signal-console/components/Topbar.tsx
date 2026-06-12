@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allAccounts } from "../state";
 
 /**
@@ -27,14 +28,16 @@ export function Topbar(): JSX.Element {
                 SIGNAL CONSOLE ·{" "}
                 {count > 0
                     ? `${count} account${count === 1 ? "" : "s"} on the radar`
-                    : "no accounts yet"}
+                    : t("no accounts yet")}
             </p>
             <h1 class="sc-topbar__title">
-                Where account heat becomes real work.
+                {t("Where account heat becomes real work.", { class: "body" })}
             </h1>
             <p class="sc-topbar__headline">
-                Signals are time-limited. Heat ranks them. Motion comes
-                from the account ledger — not from research piling up.
+                {t(
+                    "Signals are time-limited. Heat ranks them. Motion comes from the account ledger — not from research piling up.",
+                    { class: "body" }
+                )}
             </p>
         </header>
     );

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allAccounts, inboundFocus, visibleAccounts } from "../state";
 import { rankByHeat } from "../lib/heat";
 import { AccountCard } from "./AccountCard";
@@ -30,22 +31,28 @@ export function AccountGrid(): JSX.Element {
         // against, and the inbound account hint is acknowledged.
         const focus = inboundFocus.value;
         return (
-            <section class="sc-grid sc-grid--empty" aria-label="Get started">
+            <section class="sc-grid sc-grid--empty" aria-label={t("Get started")}>
                 <div class="sc-empty">
                     <p class="sc-empty__kicker">
                         {focus
                             ? `TARGETING: ${focus}`
-                            : "NO ACCOUNTS ON THE RADAR YET"}
+                            : t("NO ACCOUNTS ON THE RADAR YET")}
                     </p>
                     <h2 class="sc-empty__title">
                         {focus
                             ? `Add the first ${focus.toLowerCase().includes("freight") || focus.toLowerCase().includes("logistics") ? "company" : "account"} that fits the ICP.`
-                            : "Drop in the first one — anything you've been watching."}
+                            : t(
+                                  "Drop in the first one — anything you've been watching.",
+                                  { class: "body" }
+                              )}
                     </h2>
                     <p class="sc-empty__body">
                         {focus
                             ? `Anything you've been watching that matches the ICP. Once one account is in, the room starts ranking accounts by how hot their signals are.`
-                            : "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The room starts ranking accounts by signal strength the moment one account is in."}
+                            : t(
+                                  "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The room starts ranking accounts by signal strength the moment one account is in.",
+                                  { class: "body" }
+                              )}
                     </p>
                     <AddAccountForm embedded />
                 </div>
@@ -55,8 +62,8 @@ export function AccountGrid(): JSX.Element {
 
     if (visible.length === 0) {
         return (
-            <section class="sc-grid sc-grid--empty" aria-label="Account grid">
-                <p class="sc-grid__empty">No accounts match the current filter.</p>
+            <section class="sc-grid sc-grid--empty" aria-label={t("Account grid")}>
+                <p class="sc-grid__empty">{t("No accounts match the current filter.", { class: "body" })}</p>
             </section>
         );
     }
@@ -66,7 +73,7 @@ export function AccountGrid(): JSX.Element {
     return (
         <>
             <HeatBandBanner />
-            <section class="sc-grid" aria-label="Account grid">
+            <section class="sc-grid" aria-label={t("Account grid")}>
                 <ul class="sc-grid__list">
                     {ranked.map((a) => (
                         <li key={a.id}>

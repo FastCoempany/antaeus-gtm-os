@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { exportDealsCsv, setDealFilter, setFolioTab } from "../state";
 
 /**
@@ -17,10 +18,12 @@ import { exportDealsCsv, setDealFilter, setFolioTab } from "../state";
  */
 export function Hero(): JSX.Element {
     return (
-        <section class="dw-hero" aria-label="Deal workspace headline">
-            <p class="dw-hero__eyebrow">Deal review</p>
+        <section class="dw-hero" aria-label={t("Deal workspace headline")}>
+            <p class="dw-hero__eyebrow">{t("Deal review")}</p>
             <h1 class="dw-hero__title">
-                Make the board confess where it is weak.
+                {t("Make the board confess where it is weak.", {
+                    class: "body"
+                })}
             </h1>
             <button
                 type="button"
@@ -30,7 +33,7 @@ export function Hero(): JSX.Element {
                     setFolioTab("queue");
                 }}
             >
-                Find weakest →
+                {t("Find weakest")} →
             </button>
             <button
                 type="button"
@@ -38,9 +41,9 @@ export function Hero(): JSX.Element {
                 onClick={() => {
                     void exportDealsCsv();
                 }}
-                title="Download your pipeline as CSV"
+                title={t("Download your pipeline as CSV", { class: "body" })}
             >
-                Export pipeline (CSV)
+                {t("Export pipeline (CSV)")}
             </button>
         </section>
     );

@@ -1,6 +1,7 @@
 import { signal, type Signal } from "@preact/signals";
 import { useEffect, useState } from "preact/hooks";
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { listObservations, dismissObservation } from "@/lib/observations/reader";
 import {
     EMPTY_BRIEFING_PATTERN_INDEX,
@@ -93,13 +94,15 @@ export function WeekReadsCard(): JSX.Element {
     const visible = filterByDecayThreshold(undeduped, threshold);
 
     return (
-        <section class="db-week-reads" aria-label="This week's reads">
+        <section class="db-week-reads" aria-label={t("This week's reads")}>
             <header class="db-week-reads__head">
-                <p class="db-week-reads__kicker">THIS WEEK'S READS</p>
+                <p class="db-week-reads__kicker">{t("THIS WEEK'S READS")}</p>
                 <h2 class="db-week-reads__title">
-                    What the system noticed about your work
+                    {t("What the system noticed about your work", {
+                        class: "body"
+                    })}
                 </h2>
-                <div class="db-week-reads__toggle" role="group" aria-label="Decay threshold">
+                <div class="db-week-reads__toggle" role="group" aria-label={t("Decay threshold")}>
                     <button
                         type="button"
                         class={`db-week-reads__pill${threshold === 14 ? " is-active" : ""}`}
@@ -126,11 +129,16 @@ export function WeekReadsCard(): JSX.Element {
             )}
 
             {loadingSignal.value && visible.length === 0 ? (
-                <p class="db-week-reads__empty">Loading…</p>
+                <p class="db-week-reads__empty">{t("Loading…")}</p>
             ) : visible.length === 0 ? (
                 <p class="db-week-reads__empty">
-                    No reads above the {threshold}-day threshold right now.
-                    {threshold === 14 ? " Try 7d for thinner signals." : ""}
+                    {t("No reads above the {days}-day threshold right now.", {
+                        class: "body"
+                    }).replace("{days}", String(threshold))}
+                    {threshold === 14
+                        ? " " +
+                          t("Try 7d for thinner signals.", { class: "body" })
+                        : ""}
                 </p>
             ) : (
                 <ul class="db-week-reads__list">
@@ -144,9 +152,9 @@ export function WeekReadsCard(): JSX.Element {
                                 class="db-week-reads__dismiss"
                                 onClick={() => void handleDismiss(o.id)}
                                 disabled={busyId === o.id}
-                                aria-label="Dismiss this read"
+                                aria-label={t("Dismiss this read")}
                             >
-                                {busyId === o.id ? "…" : "Dismiss"}
+                                {busyId === o.id ? "…" : t("Dismiss")}
                             </button>
                         </li>
                     ))}

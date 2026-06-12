@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { Verdict } from "@/lib/readiness";
 
 /**
@@ -35,7 +36,7 @@ export function ReadinessAnchor(props: ReadinessAnchorProps): JSX.Element {
             onClick={props.onOpen}
             aria-label={`Readiness: ${props.verdictLabel}. Open drawer.`}
         >
-            <span class="db-readiness-anchor__kicker">READINESS</span>
+            <span class="db-readiness-anchor__kicker">{t("READINESS")}</span>
             <span class="db-readiness-anchor__label">{props.verdictLabel}</span>
             <span class="db-readiness-anchor__chevron" aria-hidden="true">›</span>
         </button>

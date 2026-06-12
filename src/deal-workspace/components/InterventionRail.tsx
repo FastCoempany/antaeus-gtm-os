@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     activeDeals,
@@ -73,9 +74,9 @@ function ticketEdgeFor(
 function actionLabelFor(
     lane: RecoveryAssessment["lane"]
 ): string {
-    if (lane === "critical") return "Recover now";
-    if (lane === "at-risk") return "Tighten path";
-    return "Keep honest";
+    if (lane === "critical") return t("Recover now");
+    if (lane === "at-risk") return t("Tighten path");
+    return t("Keep honest");
 }
 
 type Filter = "all" | "at-risk" | "stalled" | "this-quarter";
@@ -102,18 +103,20 @@ export function InterventionRail(): JSX.Element {
         return (
             <section
                 class="dw-rail dw-rail--empty"
-                aria-label="Intervention rail"
+                aria-label={t("Intervention rail")}
             >
                 <p class="dw-rail__empty">
-                    No deals on the board yet. Add a deal — the
-                    workspace will rank intervention urgency here.
+                    {t(
+                        "No deals on the board yet. Add a deal — the workspace will rank intervention urgency here.",
+                        { class: "body" }
+                    )}
                 </p>
             </section>
         );
     }
 
     return (
-        <section class="dw-rail" aria-label="Intervention rail">
+        <section class="dw-rail" aria-label={t("Intervention rail")}>
             <Toolbar
                 query={query}
                 onQuery={setQuery}
@@ -133,31 +136,49 @@ export function InterventionRail(): JSX.Element {
 
             <div class="dw-rail__layout">
                 <RailRow
-                    state="Now"
-                    copy="Fix these today. If you leave them, they're going to drag the rest of the board down."
+                    state={t("Now")}
+                    copy={t(
+                        "Fix these today. If you leave them, they're going to drag the rest of the board down.",
+                        { class: "body" }
+                    )}
                     items={groups.now}
                     focused={focused}
                     onPin={setFocusedDealId}
                     mode="ticket"
-                    emptyCopy="No deals in the critical lane right now — the board is clean."
+                    emptyCopy={t(
+                        "No deals in the critical lane right now — the board is clean.",
+                        { class: "body" }
+                    )}
                 />
                 <RailRow
-                    state="Next"
-                    copy="Tighten one live opportunity, but only after the critical-lane deals are handled."
+                    state={t("Next")}
+                    copy={t(
+                        "Tighten one live opportunity, but only after the critical-lane deals are handled.",
+                        { class: "body" }
+                    )}
                     items={groups.next}
                     focused={focused}
                     onPin={setFocusedDealId}
                     mode="ticket"
-                    emptyCopy="Nothing in the at-risk lane yet — keep the Now row clean first."
+                    emptyCopy={t(
+                        "Nothing in the at-risk lane yet — keep the Now row clean first.",
+                        { class: "body" }
+                    )}
                 />
                 <RailRow
-                    state="Keep honest"
-                    copy="The reserve shows up here as signals, not as full deal cards — so the room doesn't repeat itself."
+                    state={t("Keep honest")}
+                    copy={t(
+                        "The reserve shows up here as signals, not as full deal cards — so the room doesn't repeat itself.",
+                        { class: "body" }
+                    )}
                     items={groups.keepHonest}
                     focused={focused}
                     onPin={setFocusedDealId}
                     mode="reserve"
-                    emptyCopy="No reserve deals — every live deal is in the Now or Next row."
+                    emptyCopy={t(
+                        "No reserve deals — every live deal is in the Now or Next row.",
+                        { class: "body" }
+                    )}
                 />
             </div>
         </section>
@@ -185,19 +206,19 @@ function Toolbar(props: {
                 <input
                     type="search"
                     class="dw-rail__search-input"
-                    placeholder="Search intervention docket"
+                    placeholder={t("Search intervention docket")}
                     value={props.query}
                     onInput={(e) =>
                         props.onQuery(
                             (e.currentTarget as HTMLInputElement).value
                         )
                     }
-                    aria-label="Search deals"
+                    aria-label={t("Search deals")}
                 />
             </label>
-            <ul class="dw-rail__pills" aria-label="Lane scope">
+            <ul class="dw-rail__pills" aria-label={t("Lane scope")}>
                 <PillButton
-                    label="Now"
+                    label={t("Now")}
                     count={props.now}
                     active={props.activeFilter === "at-risk"}
                     onClick={() =>
@@ -207,7 +228,7 @@ function Toolbar(props: {
                     }
                 />
                 <PillButton
-                    label="Next"
+                    label={t("Next")}
                     count={props.next}
                     active={props.activeFilter === "stalled"}
                     onClick={() =>
@@ -217,7 +238,7 @@ function Toolbar(props: {
                     }
                 />
                 <PillButton
-                    label="Reserve"
+                    label={t("Reserve")}
                     count={props.reserve}
                     active={props.activeFilter === "this-quarter"}
                     onClick={() =>
@@ -234,7 +255,7 @@ function Toolbar(props: {
                 class="dw-rail__primary"
                 onClick={props.onRunIntervention}
             >
-                Run intervention →
+                {t("Run intervention")} →
             </button>
         </div>
     );
@@ -267,23 +288,25 @@ function FilterStrip(props: { readonly filter: Filter }): JSX.Element {
     let mode: string;
     let copy: string;
     if (props.filter === "at-risk") {
-        mode = "Now scope";
-        copy = "Showing only deals in the critical lane.";
+        mode = t("Now scope");
+        copy = t("Showing only deals in the critical lane.", { class: "body" });
     } else if (props.filter === "stalled") {
-        mode = "Next scope";
-        copy = "Showing the deals worth tightening next.";
+        mode = t("Next scope");
+        copy = t("Showing the deals worth tightening next.", { class: "body" });
     } else if (props.filter === "this-quarter") {
-        mode = "Reserve scope";
-        copy = "Showing only the deals in the keep-honest reserve.";
+        mode = t("Reserve scope");
+        copy = t("Showing only the deals in the keep-honest reserve.", { class: "body" });
     } else {
-        mode = "Intervention rail";
-        copy =
-            "Sorted by what needs your attention next, not by pipeline stage.";
+        mode = t("Intervention rail");
+        copy = t(
+            "Sorted by what needs your attention next, not by pipeline stage.",
+            { class: "body" }
+        );
     }
     return (
         <div class="dw-rail__filter-strip">
             <span class="dw-rail__filter-shell">
-                <span class="dw-rail__filter-label">Board mode</span>
+                <span class="dw-rail__filter-label">{t("Board mode")}</span>
                 <span class="dw-rail__filter-value">{mode}</span>
             </span>
             <span class="dw-rail__filter-copy">{copy}</span>
@@ -355,10 +378,10 @@ function Ticket(props: {
     const cause = props.assessment.causes[0];
     if (cause) detailPieces.push(cause);
     if (!deal.nextStep || !deal.nextStep.trim()) {
-        detailPieces.push("No dated next step");
+        detailPieces.push(t("No dated next step"));
     }
     if (!deal.useCase || !deal.useCase.trim()) {
-        detailPieces.push("Use case thin");
+        detailPieces.push(t("Use case thin"));
     }
     return (
         <li class="dw-rail__ticket-item">
@@ -421,8 +444,8 @@ function reserveLabelFor(
     deal: Deal,
     assessment: RecoveryAssessment
 ): string {
-    if (!deal.nextStep || !deal.nextStep.trim()) return "Stale";
-    if (!deal.useCase || !deal.useCase.trim()) return "Thin proof";
-    if (assessment.lane === "at-risk") return "At risk";
-    return "Healthy";
+    if (!deal.nextStep || !deal.nextStep.trim()) return t("Stale");
+    if (!deal.useCase || !deal.useCase.trim()) return t("Thin proof");
+    if (assessment.lane === "at-risk") return t("At risk");
+    return t("Healthy");
 }

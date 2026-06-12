@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import type { ReadinessSummary, Verdict } from "@/lib/readiness";
+import { t } from "@/lib/voice/t";
 import { commandMode, commandSummary } from "../state";
 import { exportCommandCenterJson } from "../lib/command-export";
 import { exportReadinessJson } from "../lib/readiness-export";
@@ -22,16 +23,25 @@ import { exportReadinessJson } from "../lib/readiness-export";
  */
 
 const VERDICT_SUBTITLE: Record<Verdict, string> = {
-    you_are_the_system:
+    you_are_the_system: t(
         "Right now the system only lives in your head. A new hire would have nothing to inherit on day one.",
-    building:
+        { class: "body" }
+    ),
+    building: t(
         "Activity is real, but a hire would still be improvising the system on day one.",
-    inheritable_with_guardrails:
+        { class: "body" }
+    ),
+    inheritable_with_guardrails: t(
         "A hire could run this if you're around for sanity-checks.",
-    hire_ready:
-        "The motion would survive a 2-week founder vacation.",
-    hire_ready_repeatable:
-        "The system has earned the right to be repeated — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed."
+        { class: "body" }
+    ),
+    hire_ready: t("The motion would survive a 2-week founder vacation.", {
+        class: "body"
+    }),
+    hire_ready_repeatable: t(
+        "This system holds up to repetition — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed.",
+        { class: "body" }
+    )
 };
 
 const VERDICT_TONE: Record<Verdict, string> = {
@@ -78,7 +88,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
         <div
             class="db-readiness-drawer"
             role="dialog"
-            aria-label="Readiness verdict"
+            aria-label={t("Readiness")}
             aria-modal="true"
         >
             <div
@@ -98,7 +108,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                      * /20 caps) since they're operator-readable
                      * progress markers, not the headline.
                      */}
-                    <p class="db-readiness-drawer__kicker">READINESS</p>
+                    <p class="db-readiness-drawer__kicker">{t("READINESS")}</p>
                     <h2 class="db-readiness-drawer__verdict">
                         {props.summary.verdictLabel}
                     </h2>
@@ -107,7 +117,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                         type="button"
                         class="db-readiness-drawer__close"
                         onClick={props.onClose}
-                        aria-label="Close readiness drawer"
+                        aria-label={t("Close readiness panel")}
                     >
                         ×
                     </button>
@@ -115,7 +125,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
 
                 <section class="db-readiness-drawer__dimensions">
                     <h3 class="db-readiness-drawer__section-title">
-                        Where the motion stands
+                        {t("Where the motion stands")}
                     </h3>
                     <ul class="db-readiness-dim-list">
                         {props.summary.dimensions.map((d) => (
@@ -167,11 +177,14 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                 {props.summary.nextVerdict && (
                     <section class="db-readiness-drawer__next">
                         <h3 class="db-readiness-drawer__section-title">
-                            What would move the verdict next
+                            {t("What would move this next")}
                         </h3>
                         {props.summary.gateBlockers.length === 0 ? (
                             <p class="db-readiness-drawer__no-blockers">
-                                Everything the next gate needs is in place. The verdict will refresh the next time you save a change in any room.
+                                {t(
+                                    "Everything the next gate needs is in place. This will refresh the next time you save a change in any room.",
+                                    { class: "body" }
+                                )}
                             </p>
                         ) : (
                             <ul class="db-readiness-blockers">
@@ -196,21 +209,23 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                         disabled={rankedCount === 0}
                         title={
                             rankedCount === 0
-                                ? "No ranked objects to export yet"
+                                ? t("No ranked objects to export yet", {
+                                      class: "body"
+                                  })
                                 : `Export ${rankedCount} ranked object${
                                       rankedCount === 1 ? "" : "s"
                                   } as JSON`
                         }
                     >
-                        Export today's snapshot
+                        {t("Export today's snapshot")}
                     </button>
                     <button
                         type="button"
                         class="db-readiness-drawer__export"
                         onClick={handleExportReadiness}
-                        title="Download the verdict + dimensions + history as JSON"
+                        title={t("Download the readiness state, dimensions, and history as JSON", { class: "body" })}
                     >
-                        Export verdict + history
+                        {t("Export readiness + history")}
                     </button>
                 </footer>
             </aside>

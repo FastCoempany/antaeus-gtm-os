@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useEffect, useState } from "preact/hooks";
 import { allDeals, closeLossReason, lossReasonTarget } from "../state";
 import {
@@ -63,7 +64,7 @@ export function LossReasonModal(): JSX.Element | null {
                         type="button"
                         class="dw-modal__close"
                         onClick={closeLossReason}
-                        aria-label="Close"
+                        aria-label={t("Close")}
                     >
                         ×
                     </button>
@@ -71,8 +72,10 @@ export function LossReasonModal(): JSX.Element | null {
 
                 <div class="dw-modal__body">
                     <p class="dw-modal__hint">
-                        Pick the closest reason. Loss patterns feed the
-                        founding-GTM win/loss section and Future Autopsy.
+                        {t(
+                            "Pick the closest reason. Loss patterns feed the founding-GTM win/loss section and Future Autopsy.",
+                            { class: "body" }
+                        )}
                     </p>
                     <ul class="dw-loss-reasons">
                         {LOSS_REASONS.map((r) => (
@@ -91,11 +94,11 @@ export function LossReasonModal(): JSX.Element | null {
                         ))}
                     </ul>
                     <label class="dw-form-field dw-form-field--wide">
-                        <span class="dw-form-field__label">Notes (optional)</span>
+                        <span class="dw-form-field__label">{t("Notes (optional)")}</span>
                         <textarea
                             rows={3}
                             value={notes}
-                            placeholder="What changed? What would have moved this?"
+                            placeholder={t("What changed? What would have moved this?", { class: "body" })}
                             onInput={(e) =>
                                 setNotes(
                                     (e.currentTarget as HTMLTextAreaElement).value
@@ -112,7 +115,7 @@ export function LossReasonModal(): JSX.Element | null {
                         onClick={closeLossReason}
                         disabled={saving}
                     >
-                        Skip for now
+                        {t("Skip for now")}
                     </button>
                     <button
                         type="button"
@@ -120,7 +123,7 @@ export function LossReasonModal(): JSX.Element | null {
                         onClick={handleSave}
                         disabled={!reason || saving}
                     >
-                        {saving ? "Saving…" : "Save reason"}
+                        {saving ? t("Saving…") : t("Save reason")}
                     </button>
                 </footer>
             </div>

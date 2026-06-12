@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { FolioTab } from "../state";
 
 const TABS: ReadonlyArray<FolioTab> = ["drags", "win", "weighted", "queue"];
@@ -17,7 +18,7 @@ export interface FolioDockProps {
  */
 export function FolioDock(props: FolioDockProps): JSX.Element {
     return (
-        <nav class="dw-folio-dock" role="tablist" aria-label="Folio view">
+        <nav class="dw-folio-dock" role="tablist" aria-label={t("Folio view")}>
             {TABS.map((tab) => {
                 const isActive = tab === props.active;
                 const isRisk = tab === "drags";

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { CommandObject, CommandFamily } from "../lib/types";
 
 /**
@@ -29,14 +30,14 @@ const TONES: ReadonlyArray<{
     readonly label: string;
     readonly families: ReadonlyArray<CommandFamily>;
 }> = [
-    { key: "hot", label: "Hot", families: ["risk"] },
+    { key: "hot", label: t("Hot"), families: ["risk"] },
     {
         key: "warm",
-        label: "Warm",
+        label: t("Warm"),
         families: ["move", "opportunity", "icp"]
     },
-    { key: "live", label: "Live", families: ["advisor"] },
-    { key: "cold", label: "Cold", families: ["system"] }
+    { key: "live", label: t("Live"), families: ["advisor"] },
+    { key: "cold", label: t("Cold"), families: ["system"] }
 ];
 
 export function SignalLine({ objects }: Props): JSX.Element {
@@ -52,7 +53,7 @@ export function SignalLine({ objects }: Props): JSX.Element {
     }
 
     return (
-        <ul class="db-signal-line" aria-label="Ranked pressure by tone">
+        <ul class="db-signal-line" aria-label={t("Ranked pressure by tone")}>
             {TONES.map((tone) => {
                 const n = counts.get(tone.key) ?? 0;
                 const dim = n === 0;

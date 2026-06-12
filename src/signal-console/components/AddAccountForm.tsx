@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { buildManualAccount, upsertAccount } from "../state";
 import { saveAccount } from "../lib/cloud-persistence";
 
@@ -64,7 +65,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
         e.preventDefault();
         const trimmed = name.trim();
         if (!trimmed) {
-            flash("Name is required.");
+            flash(t("Name is required.", { class: "body" }));
             return;
         }
         setWorking(true);
@@ -97,7 +98,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                     class="sc-add-btn sc-add-btn--primary"
                     onClick={() => setOpen(true)}
                 >
-                    + Add account
+                    {t("+ Add account")}
                 </button>
                 {toast ? (
                     <span class="sc-add-toast" role="status">
@@ -115,7 +116,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
         >
             {!embedded ? (
                 <header class="sc-add-form__head">
-                    <p class="sc-add-form__kicker">ADD ACCOUNT</p>
+                    <p class="sc-add-form__kicker">{t("ADD ACCOUNT")}</p>
                     <button
                         type="button"
                         class="sc-add-form__close"
@@ -123,7 +124,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                             reset();
                             setOpen(false);
                         }}
-                        aria-label="Close add-account form"
+                        aria-label={t("Close add-account form")}
                     >
                         ×
                     </button>
@@ -131,7 +132,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
             ) : null}
 
             <label class="sc-add-form__field sc-add-form__field--wide">
-                <span>Account name</span>
+                <span>{t("Account name")}</span>
                 <input
                     type="text"
                     value={name}
@@ -146,7 +147,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
             {expanded ? (
                 <div class="sc-add-form__grid">
                     <label class="sc-add-form__field">
-                        <span>Domain</span>
+                        <span>{t("Domain")}</span>
                         <input
                             type="text"
                             value={domain}
@@ -160,7 +161,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                         />
                     </label>
                     <label class="sc-add-form__field">
-                        <span>Ticker</span>
+                        <span>{t("Ticker")}</span>
                         <input
                             type="text"
                             value={ticker}
@@ -174,7 +175,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                         />
                     </label>
                     <label class="sc-add-form__field">
-                        <span>Industry</span>
+                        <span>{t("Industry")}</span>
                         <input
                             type="text"
                             value={industry}
@@ -188,7 +189,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                         />
                     </label>
                     <label class="sc-add-form__field">
-                        <span>HQ</span>
+                        <span>{t("HQ")}</span>
                         <input
                             type="text"
                             value={hq}
@@ -202,7 +203,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                         />
                     </label>
                     <label class="sc-add-form__field sc-add-form__field--wide">
-                        <span>Why this account's on the radar</span>
+                        <span>{t("Why this account's on the radar", { class: "body" })}</span>
                         <textarea
                             rows={2}
                             value={notes}
@@ -212,7 +213,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                                         .value
                                 )
                             }
-                            placeholder="One sentence. Trigger, conversation, or signal that brought them up."
+                            placeholder={t("One sentence. Trigger, conversation, or signal that brought them up.", { class: "body" })}
                         />
                     </label>
                 </div>
@@ -222,7 +223,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                     class="sc-add-form__expand"
                     onClick={() => setExpanded(true)}
                 >
-                    + Add details (optional)
+                    {t("+ Add details (optional)")}
                 </button>
             )}
 
@@ -232,7 +233,7 @@ export function AddAccountForm(props: AddAccountFormProps = {}): JSX.Element {
                     class="sc-add-btn sc-add-btn--primary"
                     disabled={working || name.trim().length === 0}
                 >
-                    {working ? "Saving…" : "Add account"}
+                    {working ? t("Saving…") : t("Add account")}
                 </button>
                 {!embedded ? (
                     <button

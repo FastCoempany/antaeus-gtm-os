@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { commandMode, setCommandMode } from "../state";
 import {
     COMMAND_MODES,
@@ -21,15 +22,15 @@ import {
  * Active mode persists to localStorage + URL via setCommandMode.
  */
 const MODE_DESCRIPTIONS: Record<CommandMode, string> = {
-    brief: "Narrative — what's happening today",
-    spotlight: "One object — what to act on first",
-    queue: "Ranked list — work down the list"
+    brief: t("Narrative — what's happening today", { class: "body" }),
+    spotlight: t("One object — what to act on first", { class: "body" }),
+    queue: t("Ranked list — work down the list", { class: "body" })
 };
 
 export function ModeSwitcher(): JSX.Element {
     const active = commandMode.value;
     return (
-        <nav class="db-mode-switcher" aria-label="Command mode">
+        <nav class="db-mode-switcher" aria-label={t("Command mode")}>
             {/*
              * Phase 2.2 audit — retired the "Density: Read
              * (narrative), Focus (one object), Triage (list)." hint
