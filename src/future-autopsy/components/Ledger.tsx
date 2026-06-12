@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { autopsyUniverse, selectedVitals, selectDeal } from "../state";
 
 function fmtMoney(n: number): string {
@@ -26,7 +27,7 @@ export function Ledger(): JSX.Element {
 
     if (cases.length === 0) {
         return (
-            <section class="fa-ledger fa-ledger--empty" aria-label="Pinned-case ledger">
+            <section class="fa-ledger fa-ledger--empty" aria-label={t("Pinned-case ledger")}>
                 <p class="fa-ledger__empty">
                     No deals pinned yet. Open Deal Workspace and push one
                     here to start the autopsy.
@@ -36,9 +37,9 @@ export function Ledger(): JSX.Element {
     }
 
     return (
-        <section class="fa-ledger" aria-label="Pinned-case ledger">
+        <section class="fa-ledger" aria-label={t("Pinned-case ledger")}>
             <header class="fa-ledger__header">
-                <span class="fa-ledger__kicker">PINNED CASES</span>
+                <span class="fa-ledger__kicker">{t("PINNED CASES")}</span>
                 <span class="fa-ledger__count">
                     {cases.length} live case{cases.length === 1 ? "" : "s"}
                 </span>

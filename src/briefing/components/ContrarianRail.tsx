@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { contrarianLoaded, contrarianPatterns } from "../state";
 import type { BriefingPattern, TargetPositionKind } from "../lib/patterns";
 import { MoveRow } from "./PatternCard";
@@ -45,7 +46,7 @@ function ContrarianCard({ pattern }: { pattern: BriefingPattern }): JSX.Element 
     return (
         <article class="bf-contra">
             <div class="bf-contra__meta">
-                <span class="bf-contra__chip">Challenge</span>
+                <span class="bf-contra__chip">{t("Challenge")}</span>
                 {tp && (
                     <span class="bf-contra__target">
                         targets {kindLabel(tp.kind)} · "{tp.quoted_text}"
@@ -75,7 +76,7 @@ function ContrarianCard({ pattern }: { pattern: BriefingPattern }): JSX.Element 
 
             {pattern.recommended_moves.length > 0 && (
                 <div class="bf-contra__moves">
-                    <p class="bf-contra__moves-label">If you act on this</p>
+                    <p class="bf-contra__moves-label">{t("If you act on this")}</p>
                     <ol class="bf-moves">
                         {pattern.recommended_moves.map((m, i) => (
                             <MoveRow
@@ -103,9 +104,9 @@ export function ContrarianRail(): JSX.Element | null {
     if (list.length === 0) return null;
 
     return (
-        <section class="bf-contra-rail" aria-label="Where the data disagrees">
+        <section class="bf-contra-rail" aria-label={t("Where the data disagrees")}>
             <div class="bf-contra-rail__head">
-                <p class="bf-contra-rail__kicker">Where the data disagrees</p>
+                <p class="bf-contra-rail__kicker">{t("Where the data disagrees")}</p>
                 <p class="bf-contra-rail__sub">
                     The system found evidence that contradicts a position you've stated.
                     Read it the way you'd read pushback from a sharp peer — not a verdict,

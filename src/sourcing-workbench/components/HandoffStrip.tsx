@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { inboundFocus, stats } from "../state";
 import {
     hrefToOutboundStudio,
@@ -21,10 +22,10 @@ export function HandoffStrip(): JSX.Element {
     const ready = stats.value.ready;
     const focus = inboundFocus.value || undefined;
     return (
-        <section class="sw-handoff" aria-label="Cross-room handoff">
+        <section class="sw-handoff" aria-label={t("Cross-room handoff")}>
             <header class="sw-section__head">
-                <p class="sw-section__kicker">CARRY THE WORK FORWARD</p>
-                <h2 class="sw-section__title">Hand the names off.</h2>
+                <p class="sw-section__kicker">{t("CARRY THE WORK FORWARD")}</p>
+                <h2 class="sw-section__title">{t("Hand the names off.")}</h2>
                 <p class="sw-section__sub">
                     {ready === 0
                         ? "Nothing is push-ready yet. Sharpen a name to ready before routing."

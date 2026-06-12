@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft, linkedDeal, matchedAccount } from "../state";
 import { evaluateQuality } from "../lib/quality";
 
@@ -17,22 +18,22 @@ export function Quality(): JSX.Element {
     });
 
     return (
-        <section class="cp-quality" aria-label="Agenda quality">
+        <section class="cp-quality" aria-label={t("Agenda quality")}>
             <header class="cp-quality__head">
                 <div>
-                    <p class="cp-quality__kicker">AGENDA QUALITY</p>
+                    <p class="cp-quality__kicker">{t("AGENDA QUALITY")}</p>
                     <h2 class="cp-quality__title">
                         Five gates the meeting has to clear.
                     </h2>
                 </div>
-                <div class="cp-quality__band-wrap" aria-label="Score band">
+                <div class="cp-quality__band-wrap" aria-label={t("Score band")}>
                     <span class={`cp-quality__band cp-quality__band--${q.band}`}>
                         {q.bandLabel} · {q.score}/100
                     </span>
                 </div>
             </header>
             <p class="cp-quality__next">
-                <strong>Next move:</strong> {q.nextMove}
+                <strong>{t("Next move:")}</strong> {q.nextMove}
             </p>
             <ul class="cp-quality__gates">
                 {q.gates.map((g) => (

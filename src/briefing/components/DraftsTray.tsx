@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 import {
     clearAllBriefingDrafts,
@@ -73,7 +74,7 @@ export function DraftsTray(): JSX.Element | null {
     if (drafts.length === 0) return null;
     const expanded = expandedSignal.value;
     return (
-        <aside class="bf-drafts" aria-label="Pending Briefing drafts">
+        <aside class="bf-drafts" aria-label={t("Pending Briefing drafts")}>
             <button
                 type="button"
                 class="bf-drafts__head"
@@ -122,7 +123,7 @@ export function DraftsTray(): JSX.Element | null {
                                         type="button"
                                         class="bf-drafts__row-clear"
                                         onClick={() => onClear(d)}
-                                        aria-label="Clear this draft"
+                                        aria-label={t("Clear this draft")}
                                     >
                                         Clear
                                     </button>

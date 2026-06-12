@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { currentAutopsy, selectedVitals, taskLog, toggleTaskDone } from "../state";
 import { buildActionPlan } from "../lib/action-plan";
 import { isTaskDone } from "../lib/task-log";
@@ -28,7 +29,7 @@ export function PinnedCase(): JSX.Element {
 
     if (!v) {
         return (
-            <section class="fa-pinned fa-pinned--empty" aria-label="Pinned case">
+            <section class="fa-pinned fa-pinned--empty" aria-label={t("Pinned case")}>
                 <p class="fa-pinned__empty">
                     No case pinned. Pick a deal from the ledger below to
                     start the autopsy.
@@ -40,7 +41,7 @@ export function PinnedCase(): JSX.Element {
     return (
         <section class="fa-pinned" aria-label={`Pinned case: ${v.name}`}>
             <header class="fa-pinned__header">
-                <p class="fa-pinned__kicker">PINNED CASE</p>
+                <p class="fa-pinned__kicker">{t("PINNED CASE")}</p>
                 <h2 class="fa-pinned__name">{v.name}</h2>
                 <p class="fa-pinned__sub">
                     {v.stage} · {fmtMoney(v.value)} · {v.staleDays}d since last
@@ -63,9 +64,9 @@ export function PinnedCase(): JSX.Element {
                     <ForensicSheets />
 
                     {doc && doc.countermeasures.length > 0 ? (
-                        <section class="fa-docket" aria-label="Countermeasure docket">
+                        <section class="fa-docket" aria-label={t("Countermeasure docket")}>
                             <header class="fa-docket__header">
-                                <span class="fa-docket__kicker">COUNTERMEASURES</span>
+                                <span class="fa-docket__kicker">{t("COUNTERMEASURES")}</span>
                                 <span class="fa-docket__count">
                                     {doc.countermeasures.length} task
                                     {doc.countermeasures.length === 1 ? "" : "s"}
@@ -106,15 +107,15 @@ export function PinnedCase(): JSX.Element {
                     ) : null}
 
                     {doc?.killSwitch ? (
-                        <p class="fa-kill" aria-label="Kill switch verdict">
-                            <span class="fa-kill__label">KILL SWITCH</span>
+                        <p class="fa-kill" aria-label={t("Kill switch")}>
+                            <span class="fa-kill__label">{t("KILL SWITCH")}</span>
                             {doc.killSwitch}
                         </p>
                     ) : null}
                 </div>
 
                 {doc ? (
-                    <aside class="fa-pinned__route" aria-label="Corrective route">
+                    <aside class="fa-pinned__route" aria-label={t("Corrective route")}>
                         <RouteRack plan={buildActionPlan(doc)} />
                     </aside>
                 ) : null}

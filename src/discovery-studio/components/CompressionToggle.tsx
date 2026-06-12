@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     compressionMode,
     setCompressionMode,
@@ -38,9 +39,9 @@ export function CompressionToggle(): JSX.Element {
         <div
             class="ds-compression-toggle"
             role="radiogroup"
-            aria-label="Compression mode"
+            aria-label={t("Compression mode")}
         >
-            <span class="ds-compression-toggle__label">Compression</span>
+            <span class="ds-compression-toggle__label">{t("Compression")}</span>
             <div class="ds-compression-toggle__group">
                 {MODES.map((m) => (
                     <button

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { actions, activation, model } from "../state";
 
 /**
@@ -46,34 +47,34 @@ export function LaunchFolio(): JSX.Element {
     const returnBehavior = buildReturnBehavior(dominant, allLive);
 
     return (
-        <section class="wel-folio" aria-label="Launch folio">
+        <section class="wel-folio" aria-label={t("Launch folio")}>
             <header class="wel-folio__head">
-                <p class="wel-folio__kicker">LAUNCH FOLIO · COMMISSION LOCK</p>
-                <h2 class="wel-folio__title">Open the live mandate.</h2>
+                <p class="wel-folio__kicker">{t("LAUNCH FOLIO · COMMISSION LOCK")}</p>
+                <h2 class="wel-folio__title">{t("Open the live mandate.")}</h2>
                 <p class="wel-folio__support">
                     The file is commissioned. One cell stays locked until
                     the next anchor lands.
                 </p>
             </header>
-            <ul class="wel-folio__grid" aria-label="Mandate map">
+            <ul class="wel-folio__grid" aria-label={t("Mandate map")}>
                 <FolioCell
-                    label="Where you are"
+                    label={t("Where you are")}
                     value={whereYouAre.value}
                     note={whereYouAre.note}
                 />
                 <FolioCell
-                    label="What is missing"
+                    label={t("What is missing")}
                     value={whatsMissing.value}
                     note={whatsMissing.note}
                     variant={allLive ? "default" : "locked"}
                 />
                 <FolioCell
-                    label="What unlocks next"
+                    label={t("What opens up next")}
                     value={whatUnlocks.value}
                     note={whatUnlocks.note}
                 />
                 <FolioCell
-                    label="Return behavior"
+                    label={t("Return behavior")}
                     value={returnBehavior.value}
                     note={returnBehavior.note}
                 />

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { patterns, patternsLoaded } from "../state";
 import { PatternCard } from "./PatternCard";
 import { EmptyState } from "./EmptyState";
@@ -14,7 +15,7 @@ export function PatternList(): JSX.Element {
     if (!patternsLoaded.value) {
         return (
             <section class="bf-loading" aria-busy="true">
-                <p class="bf-loading__label">Reading the week…</p>
+                <p class="bf-loading__label">{t("Reading the week…")}</p>
             </section>
         );
     }
@@ -25,7 +26,7 @@ export function PatternList(): JSX.Element {
     }
 
     return (
-        <section class="bf-patterns" aria-label="This week's reads">
+        <section class="bf-patterns" aria-label={t("This week's reads")}>
             <p class="bf-patterns__count">
                 {list.length} read{list.length === 1 ? "" : "s"} this week
             </p>

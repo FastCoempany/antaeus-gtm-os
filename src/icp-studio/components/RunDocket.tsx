@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     effectiveBuyer,
@@ -108,17 +109,17 @@ export function RunDocket(): JSX.Element {
     const savedCount = recentIcps.value.length;
 
     return (
-        <aside class="icp-docket" aria-label="Run docket">
+        <aside class="icp-docket" aria-label={t("Run docket")}>
             <div class={`icp-docket__score icp-docket__score--${quality.tier}`}>
                 <div class="icp-docket__score-head">
-                    <p class="icp-docket__score-kicker">RUN READ</p>
+                    <p class="icp-docket__score-kicker">{t("RUN READ")}</p>
                     <p class="icp-docket__score-label">{quality.label}</p>
                 </div>
                 <p class="icp-docket__score-value">{quality.score}</p>
             </div>
 
             <article class="icp-docket__block">
-                <p class="icp-docket__block-label">Weakest field</p>
+                <p class="icp-docket__block-label">{t("Weakest field")}</p>
                 <p class="icp-docket__block-headline">
                     {weakest?.headline ?? "The ICP holds together."}
                 </p>
@@ -129,7 +130,7 @@ export function RunDocket(): JSX.Element {
             </article>
 
             <article class="icp-docket__block">
-                <p class="icp-docket__block-label">Broad version to avoid</p>
+                <p class="icp-docket__block-label">{t("Broad version to avoid")}</p>
                 <p class="icp-docket__block-headline">
                     "B2B companies needing more pipeline."
                 </p>
@@ -139,7 +140,7 @@ export function RunDocket(): JSX.Element {
             </article>
 
             <article class="icp-docket__block">
-                <p class="icp-docket__block-label">Downstream changes</p>
+                <p class="icp-docket__block-label">{t("Downstream changes")}</p>
                 <p class="icp-docket__block-copy">
                     Territory narrows to a real geography. Sourcing looks for the specific buyer role. Outbound stops writing generic productivity language. Discovery opens on the named pain.
                 </p>

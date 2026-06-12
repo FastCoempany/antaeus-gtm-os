@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { currentVerdictMode, setVerdictMode } from "../state";
 import type { VerdictMode } from "../lib/types";
 
@@ -18,7 +19,7 @@ const OPTIONS: ReadonlyArray<{ key: VerdictMode; label: string; sub: string }> =
 export function VerdictToggle(): JSX.Element {
     const active = currentVerdictMode.value;
     return (
-        <nav class="fa-verdict" aria-label="Verdict mode">
+        <nav class="fa-verdict" aria-label={t("Left alone or corrected")}>
             {OPTIONS.map((opt) => {
                 const isActive = opt.key === active;
                 return (

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { eventsByTier, loaded } from "../state";
 import { TIER_LABEL, TIER_HINT } from "../lib/types";
 import { EventRow } from "./EventRow";
@@ -14,7 +15,7 @@ export function EventList(): JSX.Element {
     if (!loaded.value) {
         return (
             <section class="oe-list oe-list--loading" aria-busy="true">
-                <p class="oe-list__loading">Loading your events…</p>
+                <p class="oe-list__loading">{t("Loading your events…")}</p>
             </section>
         );
     }
@@ -25,8 +26,8 @@ export function EventList(): JSX.Element {
 
     if (!hasAny) {
         return (
-            <section class="oe-list oe-list--empty" aria-label="No events yet">
-                <p class="oe-list__empty-kicker">DISCOVERY HASN'T RUN YET</p>
+            <section class="oe-list oe-list--empty" aria-label={t("No events yet")}>
+                <p class="oe-list__empty-kicker">{t("DISCOVERY HASN'T RUN YET")}</p>
                 <h2 class="oe-list__empty-headline">
                     The system will find events worth knowing about.
                 </h2>
@@ -42,7 +43,7 @@ export function EventList(): JSX.Element {
     }
 
     return (
-        <section class="oe-list" aria-label="Discovered events">
+        <section class="oe-list" aria-label={t("Discovered events")}>
             {tierGroups.map((g) => (
                 <div class="oe-list__group" key={g.tier}>
                     <div class="oe-list__group-head">

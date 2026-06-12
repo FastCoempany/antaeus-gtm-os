@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeFramework,
     activeNode,
@@ -66,7 +67,7 @@ export function SegmentRail(): JSX.Element {
 
     if (!fid) {
         return (
-            <section class="ds-segment-rail" aria-label="Discovery segments">
+            <section class="ds-segment-rail" aria-label={t("Discovery segments")}>
                 <p class="ds-segment-rail__empty">
                     Pick a framework above to load its discovery segments.
                 </p>
@@ -77,7 +78,7 @@ export function SegmentRail(): JSX.Element {
     const fw = frameworkRegistry.value.find((f) => f.id === fid);
     if (!fw) {
         return (
-            <section class="ds-segment-rail" aria-label="Discovery segments">
+            <section class="ds-segment-rail" aria-label={t("Discovery segments")}>
                 <p class="ds-segment-rail__empty">
                     Framework is still loading — try reselecting.
                 </p>
@@ -89,7 +90,7 @@ export function SegmentRail(): JSX.Element {
         mode === "off" ? true : essentials.includes(nodeId);
 
     return (
-        <section class="ds-segment-rail" aria-label="Discovery segments">
+        <section class="ds-segment-rail" aria-label={t("Discovery segments")}>
             <ol class="ds-segment-rail__list">
                 {fw.segments.map((seg) => {
                     const visibleNodes = seg.nodes.filter((n) =>
@@ -254,16 +255,16 @@ function BranchPicker({ branches }: BranchPickerProps): JSX.Element {
                         {isExpanded ? (
                             <div class="ds-branch-picker__detail">
                                 <p class="ds-branch-picker__move">
-                                    <strong>Say next:</strong> {b.move}
+                                    <strong>{t("Say next:")}</strong> {b.move}
                                 </p>
                                 {b.clear ? (
                                     <p class="ds-branch-picker__clear">
-                                        <strong>Clear:</strong> {b.clear}
+                                        <strong>{t("Clear:")}</strong> {b.clear}
                                     </p>
                                 ) : null}
                                 {b.missing ? (
                                     <p class="ds-branch-picker__missing">
-                                        <strong>Still missing:</strong>{" "}
+                                        <strong>{t("Still missing:")}</strong>{" "}
                                         {b.missing}
                                     </p>
                                 ) : null}

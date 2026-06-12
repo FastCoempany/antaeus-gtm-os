@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 
 /**
@@ -61,15 +62,15 @@ export function FirstVisitPrimer(): JSX.Element | null {
     }
     if (dismissedSignal.value) return null;
     return (
-        <aside class="bf-primer" role="note" aria-label="What the Briefing room does">
+        <aside class="bf-primer" role="note" aria-label={t("What the Briefing room does")}>
             <div class="bf-primer__head">
-                <p class="bf-primer__kicker">FIRST TIME HERE</p>
+                <p class="bf-primer__kicker">{t("FIRST TIME HERE")}</p>
                 <button
                     type="button"
                     class="bf-primer__close"
                     onClick={dismiss}
-                    aria-label="Dismiss primer"
-                    title="Dismiss"
+                    aria-label={t("Dismiss primer")}
+                    title={t("Dismiss")}
                 >
                     ×
                 </button>
@@ -80,36 +81,36 @@ export function FirstVisitPrimer(): JSX.Element | null {
             </h2>
             <p class="bf-primer__body">
                 Open it daily. The toggle at the top picks between two
-                views: <strong>Workspace</strong> (what's moving in your
+                views: <strong>{t("Workspace")}</strong> (what's moving in your
                 own deals, signals, proofs — refreshed every 30 minutes)
-                and <strong>World</strong> (what's moving in the market
+                and <strong>{t("World")}</strong> (what's moving in the market
                 you sell into — refreshed Monday mornings).
             </p>
             <ul class="bf-primer__list">
                 <li>
-                    <strong>Workspace</strong> — heartbeat-fresh reads
+                    <strong>{t("Workspace")}</strong> — heartbeat-fresh reads
                     about your deals going stale, accounts going quiet,
                     proofs past their readout. Dismiss what doesn't matter;
                     the rest tells you where to look first.
                 </li>
                 <li>
-                    <strong>World · Patterns</strong> — synthesized reads
+                    <strong>{t("World · Patterns")}</strong> — synthesized reads
                     of what's moving in your market. Click any destination
                     chip to draft a move in the destination room. "Show
                     the work" expands the audit trail.
                 </li>
                 <li>
-                    <strong>World · Where the data disagrees</strong> —
+                    <strong>{t("World · Where the data disagrees")}</strong> —
                     the system challenging an assumption you've stated.
                     Quiet most weeks. Loud when the evidence stops matching.
                 </li>
                 <li>
-                    <strong>World · Consider watching</strong> — companies
+                    <strong>{t("World · Consider watching")}</strong> — companies
                     the data kept mentioning alongside the ones you've
                     named but that aren't on your watchlist yet.
                 </li>
                 <li>
-                    <strong>Watch list</strong> — your standing orders,
+                    <strong>{t("Watch list")}</strong> — your standing orders,
                     shared across both views. Arm a trigger and the system
                     tells you when it fires.
                 </li>

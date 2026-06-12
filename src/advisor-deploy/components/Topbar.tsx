@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { advisors, recentDeployments, selectedDeal } from "../state";
 
 /**
@@ -14,7 +15,7 @@ export function Topbar(): JSX.Element {
     const deal = selectedDeal.value;
     const tail = `${advisorCount} ${advisorCount === 1 ? "advisor" : "advisors"} · ${deploymentCount} ${deploymentCount === 1 ? "ask logged" : "asks logged"}${deal ? ` · ${deal.accountName}` : ""}`;
     return (
-        <header class="ad-topbar" aria-label="Advisor Deploy header">
+        <header class="ad-topbar" aria-label={t("Advisor Deploy header")}>
             <div class="ad-topbar__mast">
                 <p class="ad-topbar__kicker">ADVISOR DEPLOY · {tail}</p>
                 <h1 class="ad-topbar__title">

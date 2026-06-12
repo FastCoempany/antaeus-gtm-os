@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     LEVERAGE_LABELS,
     PROSPECT_STAGES,
@@ -44,10 +45,10 @@ const PREV_STAGE: Record<ProspectStage, ProspectStage | null> = {
 export function ProspectKanban(): JSX.Element {
     const grouped = prospectsByStage.value;
     return (
-        <section class="sw-kanban" aria-label="Prospect lifecycle">
+        <section class="sw-kanban" aria-label={t("Prospect lifecycle")}>
             <header class="sw-section__head">
-                <p class="sw-section__kicker">PIPELINE</p>
-                <h2 class="sw-section__title">Walk names across the board.</h2>
+                <p class="sw-section__kicker">{t("PIPELINE")}</p>
+                <h2 class="sw-section__title">{t("Walk names across the board.")}</h2>
                 <p class="sw-section__sub">
                     Each column hardens the name a step further. Push only
                     when the entry can carry the meeting.
@@ -117,12 +118,12 @@ function Card({ prospect }: { readonly prospect: Prospect }): JSX.Element {
             </p>
             {prospect.entryPoint ? (
                 <p class="sw-card__line">
-                    <span class="sw-mono">Entry</span> {prospect.entryPoint}
+                    <span class="sw-mono">{t("Entry")}</span> {prospect.entryPoint}
                 </p>
             ) : null}
             {prospect.approach ? (
                 <p class="sw-card__line">
-                    <span class="sw-mono">Approach</span> {prospect.approach}
+                    <span class="sw-mono">{t("Approach")}</span> {prospect.approach}
                 </p>
             ) : null}
             {q.gaps.length > 0 ? (

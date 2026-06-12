@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * HandoffStrip — bottom-of-room culmination affordance.
@@ -24,9 +25,9 @@ import type { JSX } from "preact";
  */
 export function HandoffStrip(): JSX.Element {
     return (
-        <section class="fg-handoff" aria-label="Carry the kit forward">
+        <section class="fg-handoff" aria-label={t("Carry the kit forward")}>
             <header class="fg-handoff__head">
-                <p class="fg-handoff__kicker">CARRY THE KIT FORWARD</p>
+                <p class="fg-handoff__kicker">{t("CARRY THE KIT FORWARD")}</p>
                 <h2 class="fg-handoff__title">
                     Run the daily rhythm. Sharpen the math.
                 </h2>
@@ -35,7 +36,7 @@ export function HandoffStrip(): JSX.Element {
                     rooms that feed it.
                 </p>
             </header>
-            <nav class="fg-handoff__row" aria-label="Cross-room handoff">
+            <nav class="fg-handoff__row" aria-label={t("Cross-room handoff")}>
                 <a
                     class="fg-handoff__cta fg-handoff__cta--primary"
                     href="/dashboard/"

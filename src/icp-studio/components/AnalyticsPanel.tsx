@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { recentIcps, removeSavedIcp, totalWorked } from "../state";
 import type { QualityTier } from "../lib/types";
 import {
@@ -53,34 +54,34 @@ export function AnalyticsPanel(): JSX.Element {
     ).length;
 
     return (
-        <section class="icp-analytics" aria-label="ICP analytics">
+        <section class="icp-analytics" aria-label={t("ICP analytics")}>
             <header class="icp-analytics__head">
-                <p class="icp-analytics__kicker">SAVED ICPS</p>
+                <p class="icp-analytics__kicker">{t("SAVED ICPS")}</p>
                 <h2 class="icp-analytics__title">
                     Your saved wedges, sharpest first.
                 </h2>
             </header>
 
-            <div class="icp-stats" aria-label="ICP library stats">
+            <div class="icp-stats" aria-label={t("ICP library stats")}>
                 <div class="icp-stat">
                     <p class="icp-stat__value">{recent.length}</p>
-                    <p class="icp-stat__label">saved</p>
+                    <p class="icp-stat__label">{t("saved")}</p>
                 </div>
                 <div class="icp-stat">
                     <p class="icp-stat__value icp-stat__value--green">
                         {sharpCount}
                     </p>
-                    <p class="icp-stat__label">sharp</p>
+                    <p class="icp-stat__label">{t("sharp")}</p>
                 </div>
                 <div class="icp-stat">
                     <p class="icp-stat__value icp-stat__value--orange">
                         {workableCount}
                     </p>
-                    <p class="icp-stat__label">workable</p>
+                    <p class="icp-stat__label">{t("workable")}</p>
                 </div>
                 <div class="icp-stat">
                     <p class="icp-stat__value">{worked}</p>
-                    <p class="icp-stat__label">sessions</p>
+                    <p class="icp-stat__label">{t("sessions")}</p>
                 </div>
             </div>
 
@@ -129,14 +130,14 @@ export function AnalyticsPanel(): JSX.Element {
                 </ul>
             )}
 
-            <footer class="icp-outflow" aria-label="Use this ICP">
-                <p class="icp-outflow__kicker">USE THIS ICP</p>
+            <footer class="icp-outflow" aria-label={t("Use this ICP")}>
+                <p class="icp-outflow__kicker">{t("USE THIS ICP")}</p>
                 <p class="icp-outflow__copy">
                     {recent[0]?.industry
                         ? `Take ${recent[0].industry} downstream — territory, prospects, live signals, or outbound.`
                         : "Save your first ICP above to start handing it off."}
                 </p>
-                <nav class="icp-handoffs" aria-label="Cross-room handoff">
+                <nav class="icp-handoffs" aria-label={t("Cross-room handoff")}>
                     <a
                         class="icp-handoff icp-handoff--primary"
                         href={hrefToTerritoryArchitect(

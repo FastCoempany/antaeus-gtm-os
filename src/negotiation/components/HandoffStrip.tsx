@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft, draftDeal } from "../state";
 import {
     hrefToAdvisorDeploy,
@@ -32,9 +33,9 @@ export function HandoffStrip(): JSX.Element {
     const accountName = deal?.accountName?.trim() || undefined;
 
     return (
-        <section class="ng-handoff" aria-label="Carry the negotiation forward">
+        <section class="ng-handoff" aria-label={t("Carry the negotiation forward")}>
             <header class="ng-handoff__head">
-                <p class="ng-handoff__kicker">CARRY THE NEGOTIATION FORWARD</p>
+                <p class="ng-handoff__kicker">{t("CARRY THE NEGOTIATION FORWARD")}</p>
                 <h2 class="ng-handoff__title">
                     {accountName
                         ? `Push the ${accountName} rehearsal into the deal.`
@@ -46,7 +47,7 @@ export function HandoffStrip(): JSX.Element {
                         : "Link a deal in the rack above first, or jump to a room and pick once you're there."}
                 </p>
             </header>
-            <nav class="ng-handoff__row" aria-label="Cross-room handoff">
+            <nav class="ng-handoff__row" aria-label={t("Cross-room handoff")}>
                 <a
                     class="ng-handoff__cta ng-handoff__cta--primary"
                     href={hrefToDealWorkspace(dealId, accountName)}

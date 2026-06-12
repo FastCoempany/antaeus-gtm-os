@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { HeatLedger as HeatLedgerData, HeatReading } from "../lib/types";
 
 interface Props {
@@ -20,8 +21,8 @@ const LABELS: Record<keyof HeatLedgerData, string> = {
  */
 export function HeatLedger({ ledger }: Props): JSX.Element {
     return (
-        <section class="poc-heat" aria-label="How strong each piece is">
-            <p class="poc-heat__kicker">HOW STRONG EACH PIECE IS</p>
+        <section class="poc-heat" aria-label={t("How strong each piece is")}>
+            <p class="poc-heat__kicker">{t("HOW STRONG EACH PIECE IS")}</p>
             <ul class="poc-heat__list">
                 {(Object.keys(LABELS) as Array<keyof HeatLedgerData>).map((key) => (
                     <HeatRow key={key} label={LABELS[key]} reading={ledger[key]} />

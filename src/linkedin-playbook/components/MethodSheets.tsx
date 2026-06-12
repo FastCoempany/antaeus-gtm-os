@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import { METHOD_TEMPLATES, type MethodTemplate } from "../lib/scripts";
 
@@ -73,10 +74,10 @@ function Sheet({ template }: SheetProps): JSX.Element {
 
 export function MethodSheets(): JSX.Element {
     return (
-        <section class="lp-method" aria-label="LinkedIn method sheets">
+        <section class="lp-method" aria-label={t("LinkedIn method sheets")}>
             <header class="lp-method__head">
                 <div>
-                    <p class="lp-method__kicker">SECONDARY METHOD SHEETS</p>
+                    <p class="lp-method__kicker">{t("SECONDARY METHOD SHEETS")}</p>
                     <h2 class="lp-method__title">
                         Reference stays below the booth.
                     </h2>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { BriefingPattern, RecommendedMove, Trajectory } from "../lib/patterns";
 import {
     briefingDestinationHref,
@@ -113,7 +114,7 @@ export function PatternCard({ pattern }: { pattern: BriefingPattern }): JSX.Elem
 
             {pattern.recommended_moves.length > 0 && (
                 <div class="bf-pattern__moves">
-                    <p class="bf-pattern__moves-label">Recommended moves</p>
+                    <p class="bf-pattern__moves-label">{t("Recommended moves")}</p>
                     <ol class="bf-moves">
                         {pattern.recommended_moves.map((m, i) => (
                             <MoveRow

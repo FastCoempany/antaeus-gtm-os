@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { callLog, selectedAccountName } from "../state";
 import { OUTCOME_LABELS } from "../lib/types";
 import { hrefToCallPlanner, hrefToDealWorkspace } from "../lib/handoff";
@@ -27,15 +28,15 @@ export function CallMemory(): JSX.Element {
     const account = selectedAccountName.value ?? "";
 
     return (
-        <section class="cc-memory" aria-label="Call memory">
+        <section class="cc-memory" aria-label={t("Call memory")}>
             <header class="cc-memory__head">
                 <div>
-                    <p class="cc-memory__kicker">CALL MEMORY</p>
+                    <p class="cc-memory__kicker">{t("CALL MEMORY")}</p>
                     <h2 class="cc-memory__title">
                         Log the outcome before the thread goes cold.
                     </h2>
                 </div>
-                <nav class="cc-memory__handoff" aria-label="Cross-room handoff">
+                <nav class="cc-memory__handoff" aria-label={t("Cross-room handoff")}>
                     <a
                         class="cc-handoff cc-handoff--ghost"
                         href={hrefToCallPlanner(account)}
@@ -68,10 +69,10 @@ export function CallMemory(): JSX.Element {
                     <table class="cc-memory__table">
                         <thead>
                             <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Account</th>
-                                <th scope="col">Thread</th>
-                                <th scope="col">Outcome</th>
+                                <th scope="col">{t("Date")}</th>
+                                <th scope="col">{t("Account")}</th>
+                                <th scope="col">{t("Thread")}</th>
+                                <th scope="col">{t("Outcome")}</th>
                             </tr>
                         </thead>
                         <tbody>

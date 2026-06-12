@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { RoomChrome } from "@/lib/room-chrome";
 import { activation, model, roleLabel, stamp } from "../state";
 
@@ -35,19 +36,19 @@ export function Hero(): JSX.Element {
         <header class="wel-hero">
             <div class="wel-hero__chrome">
                 <RoomChrome
-                    kicker="WELCOME"
+                    kicker={t("WELCOME")}
                     workspace={ctx.companyName ?? null}
                 />
             </div>
             <div class="wel-hero__head">
                 <h1 class="wel-hero__title">{m.headline}</h1>
-                <span class="wel-hero__stamp" aria-label="Workspace age">
+                <span class="wel-hero__stamp" aria-label={t("Workspace age")}>
                     {stampVal.label}
                 </span>
             </div>
             <p class="wel-hero__subtitle">{m.body}</p>
             {chips.length > 0 ? (
-                <ul class="wel-hero__chips" aria-label="Activation context">
+                <ul class="wel-hero__chips" aria-label={t("Activation context")}>
                     {chips.map((chip) => (
                         <li key={chip} class="wel-chip">
                             {chip}
@@ -57,7 +58,7 @@ export function Hero(): JSX.Element {
             ) : null}
             {!isEmptyState ? (
                 <div class="wel-hero__progress">
-                    <span class="wel-hero__progress-label">Anchors live</span>
+                    <span class="wel-hero__progress-label">{t("Anchors live")}</span>
                     <span class="wel-hero__progress-count">
                         {m.completed} / {m.total}
                     </span>

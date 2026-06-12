@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeDeals,
     advisors,
@@ -124,16 +125,16 @@ export function DeskBoard(): JSX.Element {
         <section class="ad-desk" aria-labelledby="adDeskTitle">
             <div class="ad-desk__hero">
                 <div>
-                    <p class="ad-desk__kicker">PRIVATE INFLUENCE DESK</p>
+                    <p class="ad-desk__kicker">{t("PRIVATE INFLUENCE DESK")}</p>
                     <h1 class="ad-desk__title" id="adDeskTitle">
                         {desktopTitle}
                     </h1>
                     <p class="ad-desk__note">{desktopNote}</p>
                 </div>
-                <aside class="ad-desk__read" aria-label="Is the ask ready">
+                <aside class="ad-desk__read" aria-label={t("Is the ask ready")}>
                     <div class="ad-desk__read-top">
                         <div>
-                            <p class="ad-desk__read-kicker">IS THE ASK READY</p>
+                            <p class="ad-desk__read-kicker">{t("IS THE ASK READY")}</p>
                             <h3 class="ad-desk__read-band">
                                 {spend.bandLabel}
                             </h3>
@@ -149,9 +150,9 @@ export function DeskBoard(): JSX.Element {
                 </aside>
             </div>
 
-            <div class="ad-desk__route" aria-label="Advisor route controls">
+            <div class="ad-desk__route" aria-label={t("Advisor route controls")}>
                 <label class="ad-route__cell">
-                    <span class="ad-route__label">Deal</span>
+                    <span class="ad-route__label">{t("Deal")}</span>
                     <select
                         class="ad-select"
                         value={desk.value.dealId}
@@ -162,7 +163,7 @@ export function DeskBoard(): JSX.Element {
                         }
                     >
                         {dealOptionList.length === 0 ? (
-                            <option value="">No live deals yet</option>
+                            <option value="">{t("No live deals yet")}</option>
                         ) : null}
                         {dealOptionList.map((d) => (
                             <option key={d.id} value={d.id}>
@@ -173,7 +174,7 @@ export function DeskBoard(): JSX.Element {
                     </select>
                 </label>
                 <label class="ad-route__cell">
-                    <span class="ad-route__label">Carrier</span>
+                    <span class="ad-route__label">{t("Carrier")}</span>
                     <select
                         class="ad-select"
                         value={desk.value.advisorId}
@@ -184,7 +185,7 @@ export function DeskBoard(): JSX.Element {
                         }
                     >
                         {allAdvisors.length === 0 ? (
-                            <option value="">No advisors registered</option>
+                            <option value="">{t("No advisors registered")}</option>
                         ) : null}
                         {allAdvisors.map((a) => (
                             <option key={a.id} value={a.id}>
@@ -195,7 +196,7 @@ export function DeskBoard(): JSX.Element {
                     </select>
                 </label>
                 <label class="ad-route__cell">
-                    <span class="ad-route__label">Ask moment</span>
+                    <span class="ad-route__label">{t("Ask moment")}</span>
                     <select
                         class="ad-select"
                         value={desk.value.momentId}
@@ -216,8 +217,8 @@ export function DeskBoard(): JSX.Element {
             </div>
 
             <div class="ad-desktop">
-                <article class="ad-blotter" aria-label="Proof blotter">
-                    <p class="ad-blotter__kicker">PROOF BLOTTER</p>
+                <article class="ad-blotter" aria-label={t("Proof blotter")}>
+                    <p class="ad-blotter__kicker">{t("PROOF BLOTTER")}</p>
                     <h3 class="ad-blotter__title">{generated.proof}</h3>
                     <p class="ad-blotter__copy">{dealPressure(deal)}</p>
                     <div class="ad-blotter__chips">
@@ -231,7 +232,7 @@ export function DeskBoard(): JSX.Element {
                     </div>
                 </article>
 
-                <div class="ad-rolodex" aria-label="Advisor rolodex">
+                <div class="ad-rolodex" aria-label={t("Advisor rolodex")}>
                     {rolodexList.length === 0 ? (
                         <p class="ad-rolodex__empty">
                             No advisors registered yet. Add one in the
@@ -267,7 +268,7 @@ export function DeskBoard(): JSX.Element {
                     {doNotUse ? (
                         <article
                             class={`ad-rolodex__antitab ad-rolodex__antitab--${doNotUse.cost}`}
-                            aria-label="Don't use this carrier yet"
+                            aria-label={t("Don't use this carrier yet")}
                         >
                             <p class="ad-rolodex__antitab-kicker">
                                 DON'T USE YET
@@ -278,8 +279,8 @@ export function DeskBoard(): JSX.Element {
                     ) : null}
                 </div>
 
-                <article class="ad-asksheet" aria-label="Forwardable note">
-                    <p class="ad-asksheet__kicker">FORWARDABLE NOTE</p>
+                <article class="ad-asksheet" aria-label={t("Forwardable note")}>
+                    <p class="ad-asksheet__kicker">{t("FORWARDABLE NOTE")}</p>
                     <h3 class="ad-asksheet__title">{generated.title}</h3>
                     <p class="ad-asksheet__carrier">
                         Carrier:{" "}
@@ -290,7 +291,7 @@ export function DeskBoard(): JSX.Element {
                     </p>
                     <textarea
                         class="ad-asksheet__editor"
-                        aria-label="Advisor ask text"
+                        aria-label={t("Advisor ask text")}
                         value={generated.ask}
                         onInput={(e) =>
                             setCustomAsk(
@@ -300,7 +301,7 @@ export function DeskBoard(): JSX.Element {
                     />
                 </article>
 
-                <div class="ad-stamps" aria-label="Deployment outcome stamps">
+                <div class="ad-stamps" aria-label={t("Deployment outcome stamps")}>
                     <button
                         type="button"
                         class="ad-stamp ad-stamp--send"
@@ -332,21 +333,21 @@ export function DeskBoard(): JSX.Element {
 
                 <div class="ad-desk__edge">
                     <div>
-                        <p class="ad-route__label">Input</p>
+                        <p class="ad-route__label">{t("Input")}</p>
                         <h3>
                             {deal ? `${deal.accountName} proof line` : "No live deal"}
                         </h3>
                     </div>
                     <div>
-                        <p class="ad-route__label">Carrier</p>
+                        <p class="ad-route__label">{t("Carrier")}</p>
                         <h3>{advisor ? advisor.name : "No advisor"}</h3>
                     </div>
                     <div>
-                        <p class="ad-route__label">Output</p>
-                        <h3>Copy-ready ask</h3>
+                        <p class="ad-route__label">{t("Output")}</p>
+                        <h3>{t("Copy-ready ask")}</h3>
                     </div>
                     <div>
-                        <p class="ad-route__label">Return</p>
+                        <p class="ad-route__label">{t("Return")}</p>
                         <h3>{generated.outcome}</h3>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * EmptyState — what the room shows when no Patterns surfaced for the
@@ -15,7 +16,7 @@ import type { JSX } from "preact";
 export function EmptyState(): JSX.Element {
     return (
         <section class="bf-empty" aria-labelledby="bf-empty-headline">
-            <p class="bf-empty__label">Nothing to read this week</p>
+            <p class="bf-empty__label">{t("Nothing to read this week")}</p>
             <h2 id="bf-empty-headline" class="bf-empty__headline">
                 The pipeline either hasn't fired yet, or it fired and
                 nothing cleared the quality gate.

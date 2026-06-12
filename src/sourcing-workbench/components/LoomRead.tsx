@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { computed } from "@preact/signals";
 import { prospects, stats } from "../state";
 import { computeLoomRead } from "../lib/loom-read";
@@ -31,21 +32,21 @@ export function LoomRead(): JSX.Element {
     return (
         <aside
             class={`sw-loom-read sw-loom-read--${read.band}`}
-            aria-label="Sourcing week read"
+            aria-label={t("Sourcing week read")}
         >
             <div class="sw-loom-read__score-row">
                 <div>
-                    <p class="sw-loom-read__kicker">SOURCING THIS WEEK</p>
+                    <p class="sw-loom-read__kicker">{t("SOURCING THIS WEEK")}</p>
                     <p class="sw-loom-read__band">{read.bandLabel}</p>
                 </div>
                 <p class="sw-loom-read__score">{read.score}</p>
             </div>
             <div class="sw-loom-read__line">
-                <p class="sw-loom-read__line-label">This week</p>
+                <p class="sw-loom-read__line-label">{t("This week")}</p>
                 <p class="sw-loom-read__line-copy">{read.weekRead}</p>
             </div>
             <div class="sw-loom-read__line sw-loom-read__line--move">
-                <p class="sw-loom-read__line-label">Next move</p>
+                <p class="sw-loom-read__line-label">{t("Next move")}</p>
                 <p class="sw-loom-read__line-copy">{read.operatorMove}</p>
             </div>
         </aside>

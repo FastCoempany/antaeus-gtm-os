@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeReply,
     activeThread,
@@ -85,8 +86,8 @@ function ThreadRow({
 }
 
 export function TalkLoom(): JSX.Element {
-    const t = findThread(activeThread.value);
-    const reply = findReply(t, activeReply.value);
+    const activeT = findThread(activeThread.value);
+    const reply = findReply(activeT, activeReply.value);
     const next = nextThreadFor(reply);
     const account = selectedAccount.value;
     const hasAccount = account !== null;
@@ -102,15 +103,15 @@ export function TalkLoom(): JSX.Element {
     const score = loomScore({
         hasAccount,
         heat: account?.heat ?? 0,
-        threadId: t.id,
+        threadId: activeT.id,
         hasReply: reply !== null
     });
 
-    const sayPersonalized = personalize(t.say, ctx);
+    const sayPersonalized = personalize(activeT.say, ctx);
     const replyPersonalized = reply ? personalize(reply.reply, ctx) : "";
 
     return (
-        <section class="cc-loom" aria-label="Live call threads">
+        <section class="cc-loom" aria-label={t("Live call threads")}>
             {/*
               Cold Call Studio audit (2026-05): cc-loom__intro
               paragraph and cc-loom__law "Room law" block retired.
@@ -119,28 +120,28 @@ export function TalkLoom(): JSX.Element {
               itself + the say/reply/say-next sheet do the work.
             */}
             <div class="cc-loom__head">
-                <p class="cc-loom__kicker">LIVE CALL THREADS</p>
+                <p class="cc-loom__kicker">{t("LIVE CALL THREADS")}</p>
                 <h2 class="cc-loom__title">
-                    Pull <span>one</span> thread at a time.
+                    Pull <span>{t("one")}</span> thread at a time.
                 </h2>
             </div>
 
             <div class="cc-loom__grid">
-                <div class="cc-loom__stage" role="list" aria-label="Threads">
+                <div class="cc-loom__stage" role="list" aria-label={t("Threads")}>
                     {THREADS.map((thread, i) => (
                         <ThreadRow
                             key={thread.id}
                             thread={thread}
                             index={i}
-                            active={thread.id === t.id}
+                            active={thread.id === activeT.id}
                             onActivate={setActiveThread}
                         />
                     ))}
                 </div>
 
-                <aside class="cc-loom__read" aria-label="Where the call stands">
-                    <p class="cc-loom__read-kicker">WHERE THE CALL STANDS</p>
-                    <p class="cc-loom__score" aria-label="Call score">
+                <aside class="cc-loom__read" aria-label={t("Where the call stands")}>
+                    <p class="cc-loom__read-kicker">{t("WHERE THE CALL STANDS")}</p>
+                    <p class="cc-loom__score" aria-label={t("Call score")}>
                         {score}
                     </p>
                     {/*
@@ -153,12 +154,12 @@ export function TalkLoom(): JSX.Element {
                         its own pressure.
                     </p>
                     <div class="cc-loom__read-block">
-                        <p class="cc-loom__read-label">Current pull</p>
-                        <p class="cc-loom__read-title">{t.title}</p>
-                        <p class="cc-loom__read-copy">{t.copy}</p>
+                        <p class="cc-loom__read-label">{t("Current pull")}</p>
+                        <p class="cc-loom__read-title">{activeT.title}</p>
+                        <p class="cc-loom__read-copy">{activeT.copy}</p>
                     </div>
                     <div class="cc-loom__read-block">
-                        <p class="cc-loom__read-label">Weakest thread</p>
+                        <p class="cc-loom__read-label">{t("Weakest thread")}</p>
                         <p class="cc-loom__read-title">
                             {weakestThreadCopy(hasAccount)}
                         </p>
@@ -175,12 +176,12 @@ export function TalkLoom(): JSX.Element {
                                 What to do about it
                             </span>
                             <span class="cc-loom__read-correction-copy">
-                                {requiredCorrectionCopy(hasAccount, t.id)}
+                                {requiredCorrectionCopy(hasAccount, activeT.id)}
                             </span>
                         </p>
                     </div>
                     <div class="cc-loom__read-block">
-                        <p class="cc-loom__read-label">Session count</p>
+                        <p class="cc-loom__read-label">{t("Session count")}</p>
                         <p class="cc-loom__read-title">
                             {stats.total}{" "}
                             {stats.total === 1 ? "logged call" : "logged calls"}
@@ -194,16 +195,16 @@ export function TalkLoom(): JSX.Element {
             </div>
 
             <div class="cc-loom__sheet">
-                <article class="cc-say" aria-label="Say this now">
-                    <p class="cc-say__kicker">SAY THIS NOW</p>
+                <article class="cc-say" aria-label={t("Say this now")}>
+                    <p class="cc-say__kicker">{t("SAY THIS NOW")}</p>
                     <p class="cc-say__line">{sayPersonalized}</p>
-                    <p class="cc-say__coach">{t.coach}</p>
+                    <p class="cc-say__coach">{activeT.coach}</p>
                 </article>
 
-                <article class="cc-replies" aria-label="Buyer might say">
-                    <p class="cc-replies__kicker">BUYER MIGHT SAY</p>
+                <article class="cc-replies" aria-label={t("Buyer might say")}>
+                    <p class="cc-replies__kicker">{t("BUYER MIGHT SAY")}</p>
                     <ul class="cc-replies__list">
-                        {t.replies.map((r) => (
+                        {activeT.replies.map((r) => (
                             <li key={r.id}>
                                 <button
                                     type="button"
@@ -219,8 +220,8 @@ export function TalkLoom(): JSX.Element {
                     </ul>
                 </article>
 
-                <article class="cc-capture" aria-label="Say next">
-                    <p class="cc-capture__kicker">SAY NEXT</p>
+                <article class="cc-capture" aria-label={t("Say next")}>
+                    <p class="cc-capture__kicker">{t("SAY NEXT")}</p>
                     {reply ? (
                         <>
                             <p class="cc-capture__response">
@@ -254,7 +255,7 @@ export function TalkLoom(): JSX.Element {
                         </span>
                         <textarea
                             class="cc-notes__field"
-                            placeholder="Capture the real objection, signal, or next move."
+                            placeholder={t("Capture the real objection, signal, or next move.", { class: "body" })}
                             value={d.notes}
                             onInput={(e) =>
                                 patchDraft({
@@ -266,7 +267,7 @@ export function TalkLoom(): JSX.Element {
                         />
                     </label>
 
-                    <div class="cc-outcomes" role="group" aria-label="Outcome">
+                    <div class="cc-outcomes" role="group" aria-label={t("Outcome")}>
                         {OUTCOMES.map((o: Outcome) => (
                             <button
                                 key={o}

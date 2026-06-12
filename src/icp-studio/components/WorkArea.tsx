@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     draft,
@@ -77,7 +78,7 @@ function parseActiveAccounts(value: string): number {
 function RoleToggle(): JSX.Element {
     const role = draft.value.role;
     return (
-        <div class="icp-roles" role="tablist" aria-label="Role">
+        <div class="icp-roles" role="tablist" aria-label={t("Role")}>
             {(["founder", "firstae"] as ReadonlyArray<RoleKey>).map((r) => (
                 <button
                     key={r}
@@ -100,8 +101,8 @@ function RoleToggle(): JSX.Element {
 
 function TemplatePanel(): JSX.Element {
     return (
-        <div class="icp-templates" aria-label="ICP templates">
-            <p class="icp-templates__label">PREFILL FROM TEMPLATE</p>
+        <div class="icp-templates" aria-label={t("ICP templates")}>
+            <p class="icp-templates__label">{t("PREFILL FROM TEMPLATE")}</p>
             <div class="icp-templates__row">
                 {ICP_TEMPLATES.map((t) => (
                     <button
@@ -141,10 +142,10 @@ function FormField({
 function FormFields(): JSX.Element {
     const d = draft.value;
     return (
-        <div class="icp-form" aria-label="ICP inputs">
+        <div class="icp-form" aria-label={t("ICP inputs")}>
             <FormField
-                label="Industry"
-                hint="Be specific enough that a list exists."
+                label={t("Industry")}
+                hint={t("Be specific enough that a list exists.", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -157,7 +158,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose industry</option>
+                    <option value="">{t("Choose industry")}</option>
                     {INDUSTRY_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -168,7 +169,7 @@ function FormFields(): JSX.Element {
                     <input
                         class="icp-input"
                         type="text"
-                        placeholder="Type industry"
+                        placeholder={t("Type industry")}
                         value={d.industryCustom}
                         onInput={(e) =>
                             patchDraft({
@@ -182,8 +183,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Company size"
-                hint="A proxy for process complexity and buying friction."
+                label={t("Company size")}
+                hint={t("A proxy for process complexity and buying friction.", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -194,7 +195,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose band</option>
+                    <option value="">{t("Choose band")}</option>
                     {SIZE_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -204,8 +205,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Geography"
-                hint="Pick a region you can actually cover."
+                label={t("Geography")}
+                hint={t("Pick a region you can actually cover.", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -216,7 +217,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose zone</option>
+                    <option value="">{t("Choose zone")}</option>
                     {GEO_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -226,8 +227,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Primary buyer (owner)"
-                hint="Choose the person who owns the pain and can say yes."
+                label={t("Primary buyer (owner)")}
+                hint={t("Choose the person who owns the pain and can say yes.", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -240,7 +241,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose owner</option>
+                    <option value="">{t("Choose owner")}</option>
                     {BUYER_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -251,7 +252,7 @@ function FormFields(): JSX.Element {
                     <input
                         class="icp-input"
                         type="text"
-                        placeholder="Type buyer/owner role"
+                        placeholder={t("Type buyer/owner role")}
                         value={d.buyerCustom}
                         onInput={(e) =>
                             patchDraft({
@@ -265,8 +266,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Primary pain"
-                hint="One pain. Not a buffet."
+                label={t("Primary pain")}
+                hint={t("One pain. Not a buffet.")}
             >
                 <select
                     class="icp-select"
@@ -277,7 +278,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose pain</option>
+                    <option value="">{t("Choose pain")}</option>
                     {PAIN_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -287,8 +288,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Trigger"
-                hint="A trigger is the difference between interest and urgency."
+                label={t("Trigger")}
+                hint={t("A trigger is the difference between interest and urgency.", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -301,7 +302,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose trigger</option>
+                    <option value="">{t("Choose trigger")}</option>
                     {TRIGGER_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -311,8 +312,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Proof window"
-                hint="How fast you can demonstrate value (matters a lot early stage)."
+                label={t("Proof window")}
+                hint={t("How fast you can demonstrate value (matters a lot early stage).", { class: "body" })}
             >
                 <select
                     class="icp-select"
@@ -325,7 +326,7 @@ function FormFields(): JSX.Element {
                         })
                     }
                 >
-                    <option value="">Choose window</option>
+                    <option value="">{t("Choose window")}</option>
                     {PROOF_WINDOW_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
                             {o.label}
@@ -335,8 +336,8 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label="Active accounts (optional)"
-                hint="If you enter this, the recommended focus becomes precise."
+                label={t("Active accounts (optional)")}
+                hint={t("If you enter this, the recommended focus becomes precise.", { class: "body" })}
             >
                 <input
                     class="icp-input"
@@ -375,20 +376,20 @@ function Outputs(): JSX.Element {
     const evidence = buildEvidence(d.pain, d.trigger);
 
     return (
-        <div class="icp-outputs" aria-label="Live build outputs">
+        <div class="icp-outputs" aria-label={t("Live build outputs")}>
             <article class="icp-out icp-out--statement">
-                <p class="icp-out__kicker">THIN ICP STATEMENT</p>
+                <p class="icp-out__kicker">{t("THIN ICP STATEMENT")}</p>
                 <p class="icp-out__statement">{statement.text}</p>
                 <p class="icp-out__hint">{statement.hint}</p>
             </article>
 
             <article class="icp-out">
-                <p class="icp-out__kicker">FOCUS RECOMMENDATION</p>
+                <p class="icp-out__kicker">{t("FOCUS RECOMMENDATION")}</p>
                 <p class="icp-out__body">{focus}</p>
             </article>
 
             <article class="icp-out">
-                <p class="icp-out__kicker">BUYING GROUP MINIMUM</p>
+                <p class="icp-out__kicker">{t("BUYING GROUP MINIMUM")}</p>
                 <ul class="icp-out__list">
                     {buyingGroup.map((row, i) => (
                         <li key={i}>{row}</li>
@@ -397,7 +398,7 @@ function Outputs(): JSX.Element {
             </article>
 
             <article class="icp-out">
-                <p class="icp-out__kicker">EVIDENCE SIGNALS</p>
+                <p class="icp-out__kicker">{t("EVIDENCE SIGNALS")}</p>
                 <ul class="icp-out__list">
                     {evidence.map((row, i) => (
                         <li key={i}>{row}</li>
@@ -437,7 +438,7 @@ function SaveBar(): JSX.Element {
     }
 
     return (
-        <div class="icp-savebar" aria-label="Save ICP">
+        <div class="icp-savebar" aria-label={t("Save ICP")}>
             <button
                 type="button"
                 class="icp-save-btn"
@@ -461,8 +462,8 @@ function SaveBar(): JSX.Element {
 
 export function WorkArea(): JSX.Element {
     return (
-        <section class="icp-work" aria-label="ICP work surface">
-            <p class="icp-work__kicker">BUILD THE ICP</p>
+        <section class="icp-work" aria-label={t("ICP work surface")}>
+            <p class="icp-work__kicker">{t("BUILD THE ICP")}</p>
             <h2 class="icp-work__title">
                 One industry. One buyer. One pain. One trigger.
             </h2>

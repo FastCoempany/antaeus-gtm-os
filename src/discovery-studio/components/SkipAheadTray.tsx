@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import { skipAheadHandlers } from "../state";
 
@@ -24,8 +25,8 @@ export function SkipAheadTray(): JSX.Element {
 
     if (handlers.length === 0) {
         return (
-            <section class="ds-skip-ahead-tray" aria-label="Skip-ahead handlers">
-                <header class="ds-skip-ahead-tray__header">Skip-ahead</header>
+            <section class="ds-skip-ahead-tray" aria-label={t("Skip-ahead handlers")}>
+                <header class="ds-skip-ahead-tray__header">{t("Skip-ahead")}</header>
                 <p class="ds-skip-ahead-tray__empty">
                     No skip-ahead handlers loaded for this framework.
                 </p>
@@ -36,7 +37,7 @@ export function SkipAheadTray(): JSX.Element {
     return (
         <section
             class={`ds-skip-ahead-tray${open ? " is-open" : ""}`}
-            aria-label="Skip-ahead handlers"
+            aria-label={t("Skip-ahead handlers")}
         >
             <header class="ds-skip-ahead-tray__header">
                 <button

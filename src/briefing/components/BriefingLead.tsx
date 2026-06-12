@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { briefingLead, briefingLeadLoaded } from "../state";
 
 /**
@@ -24,8 +25,8 @@ export function BriefingLead(): JSX.Element | null {
     if (!summary || !summary.lead) return null;
 
     return (
-        <section class="bf-lead" aria-label="The read this week">
-            <p class="bf-lead__kicker">The read this week</p>
+        <section class="bf-lead" aria-label={t("The read this week")}>
+            <p class="bf-lead__kicker">{t("The read this week")}</p>
             <p class="bf-lead__line">{summary.lead}</p>
         </section>
     );

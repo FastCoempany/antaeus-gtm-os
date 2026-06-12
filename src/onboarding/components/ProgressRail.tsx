@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { progress, stepIndex } from "../state";
 import { STEP_ORDER, type StepId } from "../lib/types";
 
@@ -22,7 +23,7 @@ export function ProgressRail(): JSX.Element {
     const p = progress.value;
     const idx = stepIndex.value;
     return (
-        <header class="ob-progress" aria-label="Onboarding progress">
+        <header class="ob-progress" aria-label={t("Onboarding progress")}>
             <div class="ob-progress__head">
                 <span class="ob-progress__kicker">
                     Step {p.current} of {p.total}

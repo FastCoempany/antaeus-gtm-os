@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft, allProofs } from "../state";
 
 /**
@@ -86,7 +87,7 @@ export function StageStrip(): JSX.Element {
         <nav
             class="poc-stage-strip"
             role="navigation"
-            aria-label="Proof event sequence"
+            aria-label={t("Proof event sequence")}
         >
             {STAGES.map((s, i) => {
                 const state = stateFor(s.key, forgeStarted, castReady, hasReadout);

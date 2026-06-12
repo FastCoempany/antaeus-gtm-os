@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     linkedDeal,
@@ -35,18 +36,18 @@ export function ForgePanel(): JSX.Element {
     const quality = computeQuality(drft, linked);
 
     return (
-        <section class="poc-forge" aria-label="Proof forge">
+        <section class="poc-forge" aria-label={t("Proof forge")}>
             <header class="poc-forge__header">
-                <p class="poc-forge__kicker">FORGE</p>
-                <h2 class="poc-forge__title">Shape the molds.</h2>
+                <p class="poc-forge__kicker">{t("FORGE")}</p>
+                <h2 class="poc-forge__title">{t("Shape the molds.")}</h2>
             </header>
 
             <div class="poc-forge__form">
-                <Field label="Account">
+                <Field label={t("Account")}>
                     <input
                         type="text"
                         value={drft.account}
-                        placeholder="e.g. Acme Industries"
+                        placeholder={t("e.g. Acme Industries")}
                         onInput={(e) =>
                             patchDraft({
                                 account: (e.currentTarget as HTMLInputElement).value
@@ -55,11 +56,11 @@ export function ForgePanel(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Vendor">
+                <Field label={t("Vendor")}>
                     <input
                         type="text"
                         value={drft.vendor}
-                        placeholder="Your product"
+                        placeholder={t("Your product")}
                         onInput={(e) =>
                             patchDraft({
                                 vendor: (e.currentTarget as HTMLInputElement).value
@@ -68,11 +69,11 @@ export function ForgePanel(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Readout owner">
+                <Field label={t("Readout owner")}>
                     <input
                         type="text"
                         value={drft.readoutOwner}
-                        placeholder="e.g. Sarah Chen, VP Eng"
+                        placeholder={t("e.g. Sarah Chen, VP Eng")}
                         onInput={(e) =>
                             patchDraft({
                                 readoutOwner: (e.currentTarget as HTMLInputElement)
@@ -82,7 +83,7 @@ export function ForgePanel(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Linked deal">
+                <Field label={t("Linked deal")}>
                     <select
                         value={drft.linkedDealId}
                         onChange={(e) =>
@@ -93,7 +94,7 @@ export function ForgePanel(): JSX.Element {
                             })
                         }
                     >
-                        <option value="">— No linked deal —</option>
+                        <option value="">{t("— No linked deal —")}</option>
                         {deals.map((d) => (
                             <option key={d.id} value={d.id}>
                                 {d.accountName} ({d.stage})
@@ -102,11 +103,11 @@ export function ForgePanel(): JSX.Element {
                     </select>
                 </Field>
 
-                <Field label="Success criteria (one per line)" wide>
+                <Field label={t("Success criteria (one per line)")} wide>
                     <textarea
                         rows={4}
                         value={drft.successCriteria}
-                        placeholder="3+ pass/fail criteria the buyer agrees to."
+                        placeholder={t("3+ pass/fail criteria the buyer agrees to.", { class: "body" })}
                         onInput={(e) =>
                             patchDraft({
                                 successCriteria: (
@@ -117,11 +118,11 @@ export function ForgePanel(): JSX.Element {
                     />
                 </Field>
 
-                <Field label="Kill rules (one per line)" wide>
+                <Field label={t("Kill rules (one per line)")} wide>
                     <textarea
                         rows={3}
                         value={drft.boundaries}
-                        placeholder="2+ stop conditions — when does the pilot end without a sale?"
+                        placeholder={t("2+ stop conditions — when does the pilot end without a sale?", { class: "body" })}
                         onInput={(e) =>
                             patchDraft({
                                 boundaries: (
@@ -176,8 +177,8 @@ interface DurationProps {
 function DurationToggle({ value }: DurationProps): JSX.Element {
     const options: ReadonlyArray<DurationDays> = [7, 14];
     return (
-        <div class="poc-toggle" role="group" aria-label="Pilot duration">
-            <span class="poc-field__label">Duration</span>
+        <div class="poc-toggle" role="group" aria-label={t("Pilot duration")}>
+            <span class="poc-field__label">{t("Duration")}</span>
             <div class="poc-toggle__group">
                 {options.map((days) => (
                     <button
@@ -204,7 +205,7 @@ interface OutcomeProps {
 function OutcomeSelect({ value }: OutcomeProps): JSX.Element {
     return (
         <label class="poc-field">
-            <span class="poc-field__label">Outcome</span>
+            <span class="poc-field__label">{t("Outcome")}</span>
             <select
                 value={value}
                 onChange={(e) =>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * Topbar — kicker + thesis headline + subtitle for the Briefing room.
@@ -16,7 +17,7 @@ import type { JSX } from "preact";
 export function Topbar(): JSX.Element {
     return (
         <header class="bf-topbar">
-            <p class="bf-topbar__kicker">Briefing · weekly read</p>
+            <p class="bf-topbar__kicker">{t("Briefing · weekly read")}</p>
             <h1 class="bf-topbar__title">
                 What the system saw this week.
             </h1>

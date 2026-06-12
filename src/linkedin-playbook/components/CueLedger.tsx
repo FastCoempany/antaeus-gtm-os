@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     actions,
     draft,
@@ -91,9 +92,9 @@ export function CueLedger(): JSX.Element {
     const hasContext = (d.accountName + d.contactName).trim().length > 0;
 
     return (
-        <section class="lp-ledger" aria-label="Cue ledger and activity">
+        <section class="lp-ledger" aria-label={t("Cue ledger and activity")}>
             <div class="lp-ledger__form-wrap">
-                <p class="lp-ledger__kicker">CUE LEDGER</p>
+                <p class="lp-ledger__kicker">{t("CUE LEDGER")}</p>
                 <h2 class="lp-ledger__title">
                     Log the touch while the cue is still fresh.
                 </h2>
@@ -111,11 +112,11 @@ export function CueLedger(): JSX.Element {
                     }}
                 >
                     <label class="lp-ledger__field">
-                        <span class="lp-ledger__field-label">Account</span>
+                        <span class="lp-ledger__field-label">{t("Account")}</span>
                         <input
                             type="text"
                             class="lp-ledger__input"
-                            placeholder="Company name"
+                            placeholder={t("Company name")}
                             value={d.accountName}
                             autoComplete="off"
                             onInput={(e) =>
@@ -128,11 +129,11 @@ export function CueLedger(): JSX.Element {
                         />
                     </label>
                     <label class="lp-ledger__field">
-                        <span class="lp-ledger__field-label">Human</span>
+                        <span class="lp-ledger__field-label">{t("Human")}</span>
                         <input
                             type="text"
                             class="lp-ledger__input"
-                            placeholder="Person name"
+                            placeholder={t("Person name")}
                             value={d.contactName}
                             autoComplete="off"
                             onInput={(e) =>
@@ -145,7 +146,7 @@ export function CueLedger(): JSX.Element {
                         />
                     </label>
                     <label class="lp-ledger__field">
-                        <span class="lp-ledger__field-label">Cue taken</span>
+                        <span class="lp-ledger__field-label">{t("Cue taken")}</span>
                         <select
                             class="lp-ledger__select"
                             value={d.actionType}
@@ -174,8 +175,8 @@ export function CueLedger(): JSX.Element {
                 </form>
             </div>
             <div class="lp-ledger__activity">
-                <p class="lp-ledger__kicker">CHANNEL MEMORY</p>
-                <div class="lp-stats" aria-label="Channel stats">
+                <p class="lp-ledger__kicker">{t("CHANNEL MEMORY")}</p>
+                <div class="lp-stats" aria-label={t("Channel stats")}>
                     {STAT_PRIMARY.map((stat) => {
                         const value = view[stat.key];
                         const display =
@@ -209,11 +210,11 @@ export function CueLedger(): JSX.Element {
                         <table class="lp-log-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Account</th>
-                                    <th scope="col">Human</th>
-                                    <th scope="col">Cue</th>
-                                    <th scope="col">Outcome</th>
+                                    <th scope="col">{t("Date")}</th>
+                                    <th scope="col">{t("Account")}</th>
+                                    <th scope="col">{t("Human")}</th>
+                                    <th scope="col">{t("Cue")}</th>
+                                    <th scope="col">{t("Outcome")}</th>
                                 </tr>
                             </thead>
                             <tbody>

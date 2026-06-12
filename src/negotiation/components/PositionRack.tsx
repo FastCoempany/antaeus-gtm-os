@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     setOpeningLine,
@@ -18,15 +19,15 @@ import {
 export function PositionRack(): JSX.Element {
     const d = draft.value;
     return (
-        <section class="ng-positions" aria-label="Position rack">
-            <h2 class="ng-section__title">The three positions you've already decided.</h2>
+        <section class="ng-positions" aria-label={t("Position rack")}>
+            <h2 class="ng-section__title">{t("The three positions you've already decided.")}</h2>
             <div class="ng-positions__grid">
                 <div class="ng-position">
-                    <p class="ng-position__label">Starting position</p>
+                    <p class="ng-position__label">{t("Starting position")}</p>
                     <textarea
                         class="ng-position__textarea"
                         rows={3}
-                        placeholder="What we open with. List price, full terms."
+                        placeholder={t("What we open with. List price, full terms.", { class: "body" })}
                         value={d.startingPosition}
                         onInput={(e) =>
                             setStartingPosition(
@@ -36,11 +37,11 @@ export function PositionRack(): JSX.Element {
                     />
                 </div>
                 <div class="ng-position ng-position--walkaway">
-                    <p class="ng-position__label">Walkaway</p>
+                    <p class="ng-position__label">{t("Walkaway")}</p>
                     <textarea
                         class="ng-position__textarea"
                         rows={3}
-                        placeholder="The line we won't cross. Below this we walk."
+                        placeholder={t("The line we won't cross. Below this we walk.", { class: "body" })}
                         value={d.walkawayPosition}
                         onInput={(e) =>
                             setWalkawayPosition(
@@ -50,11 +51,11 @@ export function PositionRack(): JSX.Element {
                     />
                 </div>
                 <div class="ng-position">
-                    <p class="ng-position__label">Opening line</p>
+                    <p class="ng-position__label">{t("Opening line")}</p>
                     <textarea
                         class="ng-position__textarea"
                         rows={3}
-                        placeholder="The actual first words. Authored, not improvised."
+                        placeholder={t("The actual first words. Authored, not improvised.", { class: "body" })}
                         value={d.openingLine}
                         onInput={(e) =>
                             setOpeningLine(

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import { draft, linkedDeal } from "../state";
 import { buildIngotRead, computeQuality, deriveMolds } from "../lib/quality";
@@ -33,9 +34,9 @@ export function CastPanel(): JSX.Element {
     const [activeDoc, setActiveDoc] = useState<keyof ProofDocs>("scope");
 
     return (
-        <section class="poc-cast" aria-label="The proof, finished">
+        <section class="poc-cast" aria-label={t("The proof, finished")}>
             <header class="poc-cast__header">
-                <p class="poc-cast__kicker">WHAT THE BUYER'S BOSS WILL SEE</p>
+                <p class="poc-cast__kicker">{t("WHAT THE BUYER'S BOSS WILL SEE")}</p>
                 <h2 class="poc-cast__title">{quality.title}</h2>
                 <p class="poc-cast__sub">
                     Quality {quality.score}/100 ·{" "}
@@ -50,12 +51,12 @@ export function CastPanel(): JSX.Element {
                   glance read so the operator doesn't have to scan all
                   five rows.
                 */}
-                <p class="poc-cast__ingot-read" aria-label="Where the proof stands">
+                <p class="poc-cast__ingot-read" aria-label={t("Where the proof stands")}>
                     {ingotRead}
                 </p>
             </header>
 
-            <ul class="poc-mold-grid" aria-label="The five molds">
+            <ul class="poc-mold-grid" aria-label={t("The five molds")}>
                 {molds.map((m) => (
                     <li
                         key={m.label}
@@ -68,8 +69,8 @@ export function CastPanel(): JSX.Element {
                 ))}
             </ul>
 
-            <section class="poc-weakest" aria-label="The weakest mold and next move">
-                <p class="poc-weakest__kicker">WEAKEST MOLD · NEXT MOVE</p>
+            <section class="poc-weakest" aria-label={t("The weakest mold and next move")}>
+                <p class="poc-weakest__kicker">{t("WEAKEST MOLD · NEXT MOVE")}</p>
                 <p class="poc-weakest__title">{quality.weakest.title}</p>
                 <p class="poc-weakest__copy">{quality.weakest.copy}</p>
             </section>
@@ -106,14 +107,14 @@ function DocsRack({ docs, active, onSelect }: DocsRackProps): JSX.Element {
     }
 
     return (
-        <section class="poc-docs" aria-label="Proof documents">
+        <section class="poc-docs" aria-label={t("Proof documents")}>
             <header class="poc-docs__header">
-                <p class="poc-docs__kicker">DOCUMENTS</p>
+                <p class="poc-docs__kicker">{t("DOCUMENTS")}</p>
                 <button type="button" class="poc-docs__copy" onClick={copy}>
                     Copy
                 </button>
             </header>
-            <nav class="poc-docs__tabs" aria-label="Document selector">
+            <nav class="poc-docs__tabs" aria-label={t("Document selector")}>
                 {keys.map((key) => (
                     <button
                         key={key}

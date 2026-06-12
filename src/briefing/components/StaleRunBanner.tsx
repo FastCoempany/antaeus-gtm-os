@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { briefingLead, briefingLeadLoaded } from "../state";
 
 /**
@@ -45,9 +46,9 @@ export function StaleRunBanner(): JSX.Element | null {
         <aside
             class="bf-stale-banner"
             role="status"
-            aria-label="This briefing is stale"
+            aria-label={t("This briefing is stale")}
         >
-            <p class="bf-stale-banner__kicker">HEADS UP · STALE READ</p>
+            <p class="bf-stale-banner__kicker">{t("HEADS UP · STALE READ")}</p>
             <p class="bf-stale-banner__body">
                 The most recent briefing ran {days} days ago. The pipeline
                 is meant to fire weekly. If that wasn't intentional, the

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeFramework,
     essentialNodeSet,
@@ -28,8 +29,8 @@ export function WorkedMemory(): JSX.Element {
 
     if (!fw) {
         return (
-            <section class="ds-worked-memory" aria-label="Worked memory">
-                <header class="ds-worked-memory__header">Worked memory</header>
+            <section class="ds-worked-memory" aria-label={t("Worked memory")}>
+                <header class="ds-worked-memory__header">{t("Worked memory")}</header>
                 <p class="ds-worked-memory__empty">
                     Pick a framework to start tracking covered ground.
                 </p>
@@ -56,7 +57,7 @@ export function WorkedMemory(): JSX.Element {
     };
 
     return (
-        <section class="ds-worked-memory" aria-label="Worked memory">
+        <section class="ds-worked-memory" aria-label={t("Worked memory")}>
             <header class="ds-worked-memory__header">
                 Worked memory
                 <span class="ds-worked-memory__progress">
@@ -76,7 +77,7 @@ export function WorkedMemory(): JSX.Element {
                                 type="button"
                                 class="ds-worked-memory__node"
                                 onClick={() => handleJump(id)}
-                                title="Jump to this node"
+                                title={t("Jump to this node")}
                             >
                                 {nodeText[id] ?? id}
                             </button>

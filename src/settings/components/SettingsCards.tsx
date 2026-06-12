@@ -1,5 +1,6 @@
 import { useRef, useState } from "preact/hooks";
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     PRODUCT_CATEGORIES,
     type ProductCategory
@@ -98,8 +99,8 @@ function DeleteCloudDataCard(): JSX.Element {
     return (
         <article class="st-card st-card--danger">
             <header class="st-card__head">
-                <span class="st-scope st-scope--workspace">Workspace-level</span>
-                <h2 class="st-card__title">Delete my data</h2>
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("Delete my data")}</h2>
             </header>
             <p class="st-card__desc">
                 Permanently delete every row in your workspace — ICPs,
@@ -110,12 +111,12 @@ function DeleteCloudDataCard(): JSX.Element {
             </p>
             <ul class="st-status-list">
                 <li>
-                    <span>Cloud rows in scope</span>
+                    <span>{t("Cloud rows in scope")}</span>
                     <strong>{totalCloudRows}</strong>
                 </li>
                 {last ? (
                     <li>
-                        <span>Last delete</span>
+                        <span>{t("Last delete")}</span>
                         <strong>
                             {last.totalDeleted} rows
                             {last.errors.length > 0
@@ -208,32 +209,32 @@ function CloudSyncCard(): JSX.Element {
                 <span class="st-scope st-scope--workspace">
                     Workspace-level
                 </span>
-                <h2 class="st-card__title">Cloud sync</h2>
+                <h2 class="st-card__title">{t("Cloud sync")}</h2>
             </header>
             <p class="st-card__desc">{helpCopy[conn.status]}</p>
             <ul class="st-status-list">
                 <li>
-                    <span>Connection</span>
+                    <span>{t("Connection")}</span>
                     <strong class={`st-cloud__status st-cloud__status--${statusTone[conn.status]}`}>
                         {statusLabel[conn.status]}
                     </strong>
                 </li>
                 <li>
-                    <span>Signed in as</span>
+                    <span>{t("Signed in as")}</span>
                     <strong>{conn.userEmail || "—"}</strong>
                 </li>
                 <li>
-                    <span>Workspace</span>
+                    <span>{t("Workspace")}</span>
                     <strong>{conn.workspace?.name || "—"}</strong>
                 </li>
                 <li>
-                    <span>Total cloud rows</span>
+                    <span>{t("Total cloud rows")}</span>
                     <strong>
                         {conn.status === "connected" ? totalRows : "—"}
                     </strong>
                 </li>
                 <li>
-                    <span>Last verified</span>
+                    <span>{t("Last verified")}</span>
                     <strong>
                         {verifiedAt ? new Date(verifiedAt).toLocaleString() : "—"}
                     </strong>
@@ -241,34 +242,34 @@ function CloudSyncCard(): JSX.Element {
             </ul>
             {conn.status === "connected" && totalRows > 0 ? (
                 <details class="st-cloud__breakdown">
-                    <summary>Per-noun breakdown</summary>
+                    <summary>{t("Per-noun breakdown")}</summary>
                     <ul class="st-cloud__counts">
                         <li>
-                            <span>ICPs</span>
+                            <span>{t("ICPs")}</span>
                             <strong>{counts.icps}</strong>
                         </li>
                         <li>
-                            <span>Deals</span>
+                            <span>{t("Deals")}</span>
                             <strong>{counts.deals}</strong>
                         </li>
                         <li>
-                            <span>Proofs</span>
+                            <span>{t("Proofs")}</span>
                             <strong>{counts.proofs}</strong>
                         </li>
                         <li>
-                            <span>Advisor deployments</span>
+                            <span>{t("Advisor deployments")}</span>
                             <strong>{counts.advisorDeployments}</strong>
                         </li>
                         <li>
-                            <span>Signal accounts</span>
+                            <span>{t("Signal accounts")}</span>
                             <strong>{counts.signalConsoleAccounts}</strong>
                         </li>
                         <li>
-                            <span>Sequences (outbound + LinkedIn + angles)</span>
+                            <span>{t("Sequences (outbound + LinkedIn + angles)")}</span>
                             <strong>{counts.sequences}</strong>
                         </li>
                         <li>
-                            <span>Call logs (cold call + planner)</span>
+                            <span>{t("Call logs (cold call + planner)")}</span>
                             <strong>{counts.discoveryCallLogs}</strong>
                         </li>
                         <li>
@@ -278,7 +279,7 @@ function CloudSyncCard(): JSX.Element {
                             <strong>{counts.studioArtifacts}</strong>
                         </li>
                         <li>
-                            <span>Pipeline settings (quota workback)</span>
+                            <span>{t("Pipeline settings (quota workback)")}</span>
                             <strong>{counts.pipelineSettings}</strong>
                         </li>
                     </ul>
@@ -331,22 +332,22 @@ function BackupCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--workspace">Workspace-level</span>
-                <h2 class="st-card__title">Backup and restore</h2>
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("Backup and restore")}</h2>
             </header>
             <p class="st-card__desc">
-                Export every <code>gtmos_*</code> key on this device into a
+                Export every <code>{t("gtmos_*")}</code> key on this device into a
                 JSON backup file. Import to restore from a previous backup.
                 Clear empties the local cache on this device only — cloud
                 sync is unaffected.
             </p>
             <ul class="st-status-list">
                 <li>
-                    <span>Keys captured</span>
+                    <span>{t("Keys captured")}</span>
                     <strong>{b.keyCount}</strong>
                 </li>
                 <li>
-                    <span>Last export</span>
+                    <span>{t("Last export")}</span>
                     <strong>
                         {b.capturedAt
                             ? new Date(b.capturedAt).toLocaleString()
@@ -390,8 +391,8 @@ function BackupCard(): JSX.Element {
             <p class="st-card__help">
                 Export creates an offline recovery file. Import merges the
                 backup over the current local cache (matching keys are
-                replaced; non-<code>gtmos_*</code> keys are skipped). Clear
-                removes every <code>gtmos_*</code> key from this device.
+                replaced; non-<code>{t("gtmos_*")}</code> keys are skipped). Clear
+                removes every <code>{t("gtmos_*")}</code> key from this device.
             </p>
         </article>
     );
@@ -419,8 +420,8 @@ function CloudExportCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--workspace">Workspace-level</span>
-                <h2 class="st-card__title">Export cloud data</h2>
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("Export cloud data")}</h2>
             </header>
             <p class="st-card__desc">
                 Download every row from your workspace as a JSON file —
@@ -431,12 +432,12 @@ function CloudExportCard(): JSX.Element {
             </p>
             <ul class="st-status-list">
                 <li>
-                    <span>Cloud rows in scope</span>
+                    <span>{t("Cloud rows in scope")}</span>
                     <strong>{totalRows}</strong>
                 </li>
                 {last ? (
                     <li>
-                        <span>Last export</span>
+                        <span>{t("Last export")}</span>
                         <strong>
                             {last.totalRows} rows
                             {last.errors.length > 0
@@ -481,8 +482,8 @@ function PhaseFCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--workspace">Workspace-level</span>
-                <h2 class="st-card__title">System suggestions</h2>
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("System suggestions")}</h2>
             </header>
             <p class="st-card__desc">
                 The system will sometimes notice a pattern in how you work —
@@ -493,7 +494,7 @@ function PhaseFCard(): JSX.Element {
             </p>
             <ul class="st-status-list">
                 <li>
-                    <span>Status</span>
+                    <span>{t("Status")}</span>
                     <strong class={enabled ? "is-good" : "is-warn"}>
                         {loaded ? (enabled ? "On" : "Off") : "Checking…"}
                     </strong>
@@ -536,8 +537,8 @@ function CategoryCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--workspace">Workspace-level</span>
-                <h2 class="st-card__title">Product category</h2>
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("Product category")}</h2>
             </header>
             <p class="st-card__desc">
                 Pick the category that matches what you sell. This loads
@@ -547,7 +548,7 @@ function CategoryCard(): JSX.Element {
                 class="st-select"
                 value={cur}
                 onChange={handleChange}
-                aria-label="Product category"
+                aria-label={t("Product category")}
             >
                 {PRODUCT_CATEGORIES.map((c) => (
                     <option key={c.key} value={c.key}>
@@ -568,8 +569,8 @@ function DemoCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--browser">Browser-only</span>
-                <h2 class="st-card__title">Demo mode</h2>
+                <span class="st-scope st-scope--browser">{t("Browser-only")}</span>
+                <h2 class="st-card__title">{t("Demo mode")}</h2>
             </header>
             <p class="st-card__desc">
                 Demo mode loads a sample workspace into this browser only. It
@@ -578,20 +579,20 @@ function DemoCard(): JSX.Element {
             </p>
             <ul class="st-status-list">
                 <li>
-                    <span>Status</span>
+                    <span>{t("Status")}</span>
                     <strong class={d.active ? "is-warn" : "is-good"}>
                         {d.active ? "Active on this browser" : "Off"}
                     </strong>
                 </li>
                 {d.scenario ? (
                     <li>
-                        <span>Scenario</span>
+                        <span>{t("Scenario")}</span>
                         <strong>{d.scenario}</strong>
                     </li>
                 ) : null}
                 {d.seededAt ? (
                     <li>
-                        <span>Seeded</span>
+                        <span>{t("Seeded")}</span>
                         <strong>{new Date(d.seededAt).toLocaleString()}</strong>
                     </li>
                 ) : null}
@@ -631,8 +632,8 @@ function RoleCard(): JSX.Element {
     return (
         <article class="st-card">
             <header class="st-card__head">
-                <span class="st-scope st-scope--account">Account-level</span>
-                <h2 class="st-card__title">Role + onboarding</h2>
+                <span class="st-scope st-scope--account">{t("Account-level")}</span>
+                <h2 class="st-card__title">{t("Role + onboarding")}</h2>
             </header>
             <p class="st-card__desc">
                 Changed roles or starting fresh? Re-run onboarding to

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 import { loadView, saveView, type BriefingView } from "../lib/view-state";
 
@@ -37,7 +38,7 @@ export function ViewToggle(): JSX.Element {
     return (
         <nav
             class="bf-view-toggle"
-            aria-label="Briefing view"
+            aria-label={t("Briefing view")}
             role="tablist"
         >
             <button
@@ -49,8 +50,8 @@ export function ViewToggle(): JSX.Element {
                 aria-selected={view === "workspace"}
                 onClick={() => setBriefingView("workspace")}
             >
-                <span class="bf-view-toggle__kicker">YOUR WORK</span>
-                <span class="bf-view-toggle__label">Workspace</span>
+                <span class="bf-view-toggle__kicker">{t("YOUR WORK")}</span>
+                <span class="bf-view-toggle__label">{t("Workspace")}</span>
             </button>
             <button
                 type="button"
@@ -61,8 +62,8 @@ export function ViewToggle(): JSX.Element {
                 aria-selected={view === "world"}
                 onClick={() => setBriefingView("world")}
             >
-                <span class="bf-view-toggle__kicker">YOUR MARKET</span>
-                <span class="bf-view-toggle__label">World</span>
+                <span class="bf-view-toggle__kicker">{t("YOUR MARKET")}</span>
+                <span class="bf-view-toggle__label">{t("World")}</span>
             </button>
         </nav>
     );

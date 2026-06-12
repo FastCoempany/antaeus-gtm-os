@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { backup, demo } from "../state";
 
 /**
@@ -34,16 +35,16 @@ export function Topbar(): JSX.Element {
     return (
         <header class="st-topbar">
             <p class="st-topbar__kicker">{kicker}</p>
-            <h1 class="st-topbar__title">Settings</h1>
+            <h1 class="st-topbar__title">{t("Settings")}</h1>
             <p class="st-topbar__subtitle">
                 Backup, restore, category, demo mode, and cloud sync —
                 the controls that keep the workspace safe.
             </p>
             <div class="st-topbar__stats">
-                <Stat label="Keys on this device" value={String(b.keyCount)} />
-                <Stat label="Last backup" value={lastBackup} muted />
+                <Stat label={t("Keys on this device")} value={String(b.keyCount)} />
+                <Stat label={t("Last backup")} value={lastBackup} muted />
                 <Stat
-                    label="Mode"
+                    label={t("Mode")}
                     value={d.active ? "Demo workspace" : "Real workspace"}
                     accent={!d.active}
                     warn={d.active}

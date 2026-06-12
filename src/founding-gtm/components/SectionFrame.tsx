@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type {
     AuthoredSection,
     SectionId,
@@ -84,7 +85,7 @@ export function SectionFrame(props: SectionFrameProps): JSX.Element {
                 <aside
                     class={`fg-surprise fg-surprise--${section.surprise.tone}`}
                 >
-                    <p class="fg-surprise__kicker">SURPRISE</p>
+                    <p class="fg-surprise__kicker">{t("SURPRISE")}</p>
                     <p class="fg-surprise__headline">
                         {section.surprise.headline}
                     </p>

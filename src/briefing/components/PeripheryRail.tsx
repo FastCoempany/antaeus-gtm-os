@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     dismissPeripheryAction,
@@ -115,9 +116,9 @@ export function PeripheryRail(): JSX.Element | null {
     if (list.length === 0) return null;
 
     return (
-        <section class="bf-peri-rail" aria-label="Consider watching">
+        <section class="bf-peri-rail" aria-label={t("Consider watching")}>
             <div class="bf-peri-rail__head">
-                <p class="bf-peri-rail__kicker">Consider watching</p>
+                <p class="bf-peri-rail__kicker">{t("Consider watching")}</p>
                 <p class="bf-peri-rail__sub">
                     Companies you haven't named, but the data this week kept mentioning
                     them alongside the ones you have.
