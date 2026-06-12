@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { CommandObject } from "../lib/types";
 import { setFocusedCommand, focusedCommandId } from "../state";
 import { Slice } from "./Slice";
@@ -35,23 +36,26 @@ export function SliceRail({ objects, mode }: Props): JSX.Element {
 
     if (objects.length === 0) {
         return (
-            <aside class="db-rail db-rail--empty" aria-label="Ranked pressure">
+            <aside class="db-rail db-rail--empty" aria-label={t("Ranked pressure")}>
                 <header class="db-rail__head">
-                    <p class="db-rail__kicker">MOST PRESSURE</p>
-                    <p class="db-rail__title">What needs you</p>
+                    <p class="db-rail__kicker">{t("MOST PRESSURE")}</p>
+                    <p class="db-rail__title">{t("What needs you")}</p>
                 </header>
                 <p class="db-rail__empty">
-                    No ranked items yet. The other rooms haven't sent anything for the dashboard to rank — the list lights up the moment one of them does.
+                    {t(
+                        "No ranked items yet. The other rooms haven't sent anything for the dashboard to rank — the list lights up the moment one of them does.",
+                        { class: "body" }
+                    )}
                 </p>
             </aside>
         );
     }
 
     return (
-        <aside class="db-rail" aria-label="Ranked pressure">
+        <aside class="db-rail" aria-label={t("Ranked pressure")}>
             <header class="db-rail__head">
                 <p class="db-rail__kicker">MOST PRESSURE · {objects.length}</p>
-                <p class="db-rail__title">What needs you</p>
+                <p class="db-rail__title">{t("What needs you")}</p>
             </header>
             <div class="db-rail__stack">
                 {objects.map((object) => {

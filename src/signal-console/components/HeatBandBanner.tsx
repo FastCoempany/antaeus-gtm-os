@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 
 /**
@@ -42,37 +43,39 @@ export function HeatBandBanner(): JSX.Element | null {
     }
 
     return (
-        <aside class="sc-heat-banner" aria-label="How heat scores work">
+        <aside class="sc-heat-banner" aria-label={t("How heat scores work")}>
             <div class="sc-heat-banner__body">
-                <p class="sc-heat-banner__kicker">How heat works</p>
+                <p class="sc-heat-banner__kicker">{t("How heat works")}</p>
                 <p class="sc-heat-banner__copy">
-                    Each card's heat score blends signal volume, recency, and
-                    confidence into one number, then bands it:
+                    {t(
+                        "Each card's heat score blends signal volume, recency, and confidence into one number, then bands it:",
+                        { class: "body" }
+                    )}
                 </p>
                 <ul class="sc-heat-banner__bands">
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--hot">
                             91+ Hot
                         </span>{" "}
-                        — act this week, the window is now
+                        {t("— act this week, the window is now", { class: "body" })}
                     </li>
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--active">
                             75+ Active
                         </span>{" "}
-                        — motion-ready, the room treats these as primary work
+                        {t("— motion-ready, the room treats these as primary work", { class: "body" })}
                     </li>
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--watch">
                             50+ Watch
                         </span>{" "}
-                        — keep an eye on; not urgent
+                        {t("— keep an eye on; not urgent", { class: "body" })}
                     </li>
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--low">
                             &lt;50 Low
                         </span>{" "}
-                        — quiet, but staying on the board doesn't cost anything
+                        {t("— quiet, but staying on the board doesn't cost anything", { class: "body" })}
                     </li>
                 </ul>
             </div>
@@ -80,7 +83,7 @@ export function HeatBandBanner(): JSX.Element | null {
                 type="button"
                 class="sc-heat-banner__close"
                 onClick={handleDismiss}
-                aria-label="Dismiss heat band explainer"
+                aria-label={t("Dismiss heat band explainer")}
             >
                 ×
             </button>

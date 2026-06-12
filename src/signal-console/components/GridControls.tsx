@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allAccounts, searchQuery, setSearchQuery } from "../state";
 import { AddAccountForm } from "./AddAccountForm";
 import { EnrichAllButton } from "./EnrichAllButton";
@@ -21,14 +22,14 @@ export function GridControls(): JSX.Element | null {
     if (total === 0) return null;
 
     return (
-        <nav class="sc-grid-controls" aria-label="Account list controls">
+        <nav class="sc-grid-controls" aria-label={t("Account list controls")}>
             <AddAccountForm />
             <EnrichAllButton />
             <label class="sc-grid-controls__search">
-                <span class="sc-grid-controls__search-label">FILTER</span>
+                <span class="sc-grid-controls__search-label">{t("FILTER")}</span>
                 <input
                     type="search"
-                    placeholder="Search accounts by name, ticker, industry…"
+                    placeholder={t("Search accounts by name, ticker, industry…", { class: "body" })}
                     value={searchQuery.value}
                     onInput={(e) =>
                         setSearchQuery(

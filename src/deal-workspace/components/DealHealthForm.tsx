@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useEffect, useState } from "preact/hooks";
 import {
     closeDealEditor,
@@ -44,21 +45,21 @@ import { saveDealEdit } from "../lib/persistence";
 type Draft = Deal;
 
 const FORECAST_OPTIONS = [
-    { value: "", label: "Unset" },
-    { value: "commit", label: "Commit" },
-    { value: "best_case", label: "Best Case" },
-    { value: "pipeline", label: "Pipeline" },
-    { value: "omitted", label: "Omitted" }
+    { value: "", label: t("Unset") },
+    { value: "commit", label: t("Commit") },
+    { value: "best_case", label: t("Best Case") },
+    { value: "pipeline", label: t("Pipeline") },
+    { value: "omitted", label: t("Omitted") }
 ] as const;
 
 const MOMENTUM_OPTIONS: ReadonlyArray<{
     value: Momentum | "";
     label: string;
 }> = [
-    { value: "", label: "Unset" },
-    { value: "strong", label: "Strong" },
-    { value: "neutral", label: "Neutral" },
-    { value: "stalling", label: "Stalling" }
+    { value: "", label: t("Unset") },
+    { value: "strong", label: t("Strong") },
+    { value: "neutral", label: t("Neutral") },
+    { value: "stalling", label: t("Stalling") }
 ];
 
 function asMomentumValue(v: string): Momentum | undefined {
@@ -99,12 +100,12 @@ export function DealHealthForm(): JSX.Element | null {
     }
 
     return (
-        <div class="dw-folio-form" role="region" aria-label="Deal health form">
+        <div class="dw-folio-form" role="region" aria-label={t("Deal health form")}>
             <div class="dw-folio-form__body">
                 <section class="dw-form-section">
-                    <h3 class="dw-form-section__title">Account &amp; stage</h3>
+                    <h3 class="dw-form-section__title">{t("Account & stage")}</h3>
                     <div class="dw-form-grid">
-                        <Field label="Account name">
+                        <Field label={t("Account name")}>
                             <input
                                 type="text"
                                 value={draft.accountName}
@@ -117,7 +118,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 }
                             />
                         </Field>
-                        <Field label="Stage">
+                        <Field label={t("Stage")}>
                             <select
                                 value={draft.stage}
                                 onChange={(e) =>
@@ -135,7 +136,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 ))}
                             </select>
                         </Field>
-                        <Field label="Value (USD)">
+                        <Field label={t("Value (USD)")}>
                             <input
                                 type="number"
                                 min="0"
@@ -153,7 +154,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 }
                             />
                         </Field>
-                        <Field label="Close date">
+                        <Field label={t("Close date")}>
                             <input
                                 type="date"
                                 value={draft.closeDate ?? ""}
@@ -171,13 +172,13 @@ export function DealHealthForm(): JSX.Element | null {
                 </section>
 
                 <section class="dw-form-section">
-                    <h3 class="dw-form-section__title">Next move</h3>
+                    <h3 class="dw-form-section__title">{t("Next move")}</h3>
                     <div class="dw-form-grid">
-                        <Field label="Next step" wide>
+                        <Field label={t("Next step")} wide>
                             <input
                                 type="text"
                                 value={draft.nextStep ?? ""}
-                                placeholder="e.g. Send pricing proposal to Sarah by Tuesday"
+                                placeholder={t("e.g. Send pricing proposal to Sarah by Tuesday", { class: "body" })}
                                 onInput={(e) =>
                                     patch({
                                         nextStep:
@@ -188,7 +189,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 }
                             />
                         </Field>
-                        <Field label="Next step date">
+                        <Field label={t("Next step date")}>
                             <input
                                 type="date"
                                 value={draft.nextStepDate ?? ""}
@@ -202,7 +203,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 }
                             />
                         </Field>
-                        <Field label="Forecast">
+                        <Field label={t("Forecast")}>
                             <select
                                 value={draft.forecastCategory ?? ""}
                                 onChange={(e) =>
@@ -221,7 +222,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 ))}
                             </select>
                         </Field>
-                        <Field label="Momentum">
+                        <Field label={t("Momentum")}>
                             <select
                                 value={draft.momentum ?? ""}
                                 onChange={(e) =>
@@ -245,9 +246,9 @@ export function DealHealthForm(): JSX.Element | null {
                 </section>
 
                 <section class="dw-form-section">
-                    <h3 class="dw-form-section__title">Buying group</h3>
+                    <h3 class="dw-form-section__title">{t("Buying group")}</h3>
                     <div class="dw-form-grid">
-                        <Field label="Champion">
+                        <Field label={t("Champion")}>
                             <input
                                 type="text"
                                 value={draft.champion ?? ""}
@@ -261,7 +262,7 @@ export function DealHealthForm(): JSX.Element | null {
                                 }
                             />
                         </Field>
-                        <Field label="Economic Buyer">
+                        <Field label={t("Economic Buyer")}>
                             <input
                                 type="text"
                                 value={draft.economicBuyer ?? ""}
@@ -283,8 +284,8 @@ export function DealHealthForm(): JSX.Element | null {
                 </section>
 
                 <section class="dw-form-section">
-                    <h3 class="dw-form-section__title">Deal intel</h3>
-                    <Field label="Use case" wide>
+                    <h3 class="dw-form-section__title">{t("Deal intel")}</h3>
+                    <Field label={t("Use case")} wide>
                         <textarea
                             rows={2}
                             value={draft.useCase ?? ""}
@@ -298,7 +299,7 @@ export function DealHealthForm(): JSX.Element | null {
                             }
                         />
                     </Field>
-                    <Field label="Pain" wide>
+                    <Field label={t("Pain")} wide>
                         <textarea
                             rows={2}
                             value={draft.pain ?? ""}
@@ -312,7 +313,7 @@ export function DealHealthForm(): JSX.Element | null {
                             }
                         />
                     </Field>
-                    <Field label="Competition" wide>
+                    <Field label={t("Competition")} wide>
                         <input
                             type="text"
                             value={draft.competition ?? ""}
@@ -326,7 +327,7 @@ export function DealHealthForm(): JSX.Element | null {
                             }
                         />
                     </Field>
-                    <Field label="Decision process" wide>
+                    <Field label={t("Decision process")} wide>
                         <textarea
                             rows={2}
                             value={draft.decisionProcess ?? ""}
@@ -340,7 +341,7 @@ export function DealHealthForm(): JSX.Element | null {
                             }
                         />
                     </Field>
-                    <Field label="Notes" wide>
+                    <Field label={t("Notes")} wide>
                         <textarea
                             rows={3}
                             value={draft.notes ?? ""}
@@ -364,7 +365,7 @@ export function DealHealthForm(): JSX.Element | null {
                     onClick={closeDealEditor}
                     disabled={saving}
                 >
-                    ← Back to folio
+                    ← {t("Back to folio")}
                 </button>
                 <button
                     type="button"
@@ -372,7 +373,7 @@ export function DealHealthForm(): JSX.Element | null {
                     onClick={handleSave}
                     disabled={saving}
                 >
-                    {saving ? "Saving…" : "Save deal"}
+                    {saving ? t("Saving…") : t("Save deal")}
                 </button>
             </footer>
         </div>
@@ -424,7 +425,7 @@ function StakeholdersEditor({
     return (
         <div class="dw-stakeholders">
             <div class="dw-stakeholders__header">
-                <span class="dw-form-field__label">Stakeholders</span>
+                <span class="dw-form-field__label">{t("Stakeholders")}</span>
                 <button
                     type="button"
                     class="dw-stakeholders__add"
@@ -444,7 +445,7 @@ function StakeholdersEditor({
                             <input
                                 type="text"
                                 class="dw-stakeholders__name"
-                                placeholder="Name"
+                                placeholder={t("Name")}
                                 value={s.name}
                                 onInput={(e) =>
                                     patchAt(i, {
@@ -465,7 +466,7 @@ function StakeholdersEditor({
                                     })
                                 }
                             >
-                                <option value="">Role…</option>
+                                <option value="">{t("Role…")}</option>
                                 {STAKEHOLDER_ROLES.map((r) => (
                                     <option key={r} value={r}>
                                         {ROLE_LABELS[r]}
@@ -491,7 +492,7 @@ function StakeholdersEditor({
                                 type="button"
                                 class="dw-stakeholders__remove"
                                 onClick={() => removeAt(i)}
-                                aria-label="Remove stakeholder"
+                                aria-label={t("Remove stakeholder")}
                             >
                                 ×
                             </button>

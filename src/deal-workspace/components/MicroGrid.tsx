@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeDeals,
     lostDeals,
@@ -27,17 +28,17 @@ export function MicroGrid(): JSX.Element {
     const lost = lostDeals.value.length;
 
     return (
-        <section class="dw-micro-grid" aria-label="Workspace truth">
+        <section class="dw-micro-grid" aria-label={t("Workspace truth")}>
             <div class="dw-micro">
-                <p class="dw-micro__label">Active deals</p>
+                <p class="dw-micro__label">{t("Active deals")}</p>
                 <p class="dw-micro__value">{active}</p>
             </div>
             <div class="dw-micro">
-                <p class="dw-micro__label">Pipeline value</p>
+                <p class="dw-micro__label">{t("Pipeline value")}</p>
                 <p class="dw-micro__value">{fmtMoney(pipelineValue.value)}</p>
             </div>
             <div class="dw-micro">
-                <p class="dw-micro__label">Won / lost (closed)</p>
+                <p class="dw-micro__label">{t("Won / lost (closed)")}</p>
                 <p class="dw-micro__value">
                     {won} / {lost}
                 </p>

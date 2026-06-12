@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allAccounts } from "../state";
 import { buildSignalRoomHealthSnapshot } from "../lib/health-snapshot";
 
@@ -24,18 +25,18 @@ export function WorkspaceHealth(): JSX.Element | null {
     const motionReady = snapshot.topHeat >= 75;
 
     return (
-        <aside class="sc-health" aria-label="Workspace health">
+        <aside class="sc-health" aria-label={t("Workspace health")}>
             <span
                 class={`sc-health__verdict sc-health__verdict--${motionReady ? "ready" : "research"}`}
             >
-                {motionReady ? "Motion ready" : "Research heavy"}
+                {motionReady ? t("Motion ready") : t("Research heavy")}
             </span>
             <div class="sc-health__cell">
-                <span class="sc-health__label">Active accounts</span>
+                <span class="sc-health__label">{t("Active accounts")}</span>
                 <span class="sc-health__value">{snapshot.accountCount}</span>
             </div>
             <div class="sc-health__cell">
-                <span class="sc-health__label">Hot ≥ 75</span>
+                <span class="sc-health__label">{t("Hot ≥ 75")}</span>
                 <span class="sc-health__value">{snapshot.readyCount}</span>
             </div>
             {/*
@@ -45,7 +46,7 @@ export function WorkspaceHealth(): JSX.Element | null {
               "Total signals" was inventory, not pressure.
             */}
             <div class="sc-health__cell">
-                <span class="sc-health__label">Top heat</span>
+                <span class="sc-health__label">{t("Top heat")}</span>
                 <span class="sc-health__value">{snapshot.topHeat}</span>
             </div>
         </aside>

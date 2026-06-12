@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     cancelEnrichAll,
     enrichmentProgress,
@@ -57,7 +58,7 @@ export function EnrichAllButton(): JSX.Element | null {
             onClick={() => {
                 void runEnrichAll();
             }}
-            title="Run the enrichment service against every account on the radar."
+            title={t("Run the enrichment service against every account on the radar.", { class: "body" })}
         >
             {hasPrior
                 ? `Enrich all (${progress.done} of ${progress.total} last run)`

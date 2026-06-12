@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeDeals,
     editingDeal,
@@ -30,10 +31,10 @@ import { DealHealthForm } from "./DealHealthForm";
  */
 
 const TAB_LABEL: Record<FolioTab, string> = {
-    drags: "Active drags",
-    win: "One-session win",
-    weighted: "Weighted truth",
-    queue: "Recovery queue"
+    drags: t("Active drags"),
+    win: t("One-session win"),
+    weighted: t("Weighted truth"),
+    queue: t("Recovery queue")
 };
 
 function fmtMoney(n: number): string {
@@ -67,7 +68,7 @@ export function TargetFolio(): JSX.Element {
             aria-label={`Commissioned case: ${deal.accountName}`}
         >
             <div class="dw-target-folio__head">
-                <p class="dw-target-folio__kicker">Commissioned case</p>
+                <p class="dw-target-folio__kicker">{t("Commissioned case")}</p>
                 <div class="dw-target-folio__heading">
                     <h2 class="dw-target-folio__title">{deal.accountName}</h2>
                     <span class="dw-target-folio__value">
@@ -75,37 +76,38 @@ export function TargetFolio(): JSX.Element {
                     </span>
                 </div>
                 <p class="dw-target-folio__copy">
-                    The live case the room should sharpen first. If it
-                    can't survive pressure, the rest of the board becomes
-                    decorative.
+                    {t(
+                        "The live case the room should sharpen first. If it can't survive pressure, the rest of the board becomes decorative.",
+                        { class: "body" }
+                    )}
                 </p>
             </div>
 
             <ul class="dw-signal-grid">
                 <li class="dw-signal-row">
                     <span class="dw-signal__mark dw-signal__mark--risk">!</span>
-                    <span class="dw-signal__label">Risk</span>
+                    <span class="dw-signal__label">{t("Risk")}</span>
                     <span class="dw-signal__copy">
                         {assessment
-                            ? assessment.causes[0] ?? "No active risk"
-                            : "Closed deal"}
+                            ? assessment.causes[0] ?? t("No active risk")
+                            : t("Closed deal")}
                     </span>
                 </li>
                 <li class="dw-signal-row">
                     <span class="dw-signal__mark dw-signal__mark--proof">≡</span>
-                    <span class="dw-signal__label">Proof</span>
+                    <span class="dw-signal__label">{t("Proof")}</span>
                     <span class="dw-signal__copy">
                         {(deal.useCase ?? "").trim() === ""
-                            ? "Thin · use-case not locked"
+                            ? t("Thin · use-case not locked")
                             : `Locked · ${deal.useCase}`}
                     </span>
                 </li>
                 <li class="dw-signal-row">
                     <span class="dw-signal__mark dw-signal__mark--motion">→</span>
-                    <span class="dw-signal__label">Motion</span>
+                    <span class="dw-signal__label">{t("Motion")}</span>
                     <span class="dw-signal__copy">
                         {(deal.nextStep ?? "").trim() === ""
-                            ? "Stalled · no next step set"
+                            ? t("Stalled · no next step set")
                             : `Next: ${deal.nextStep}`}
                     </span>
                 </li>
@@ -121,7 +123,7 @@ export function TargetFolio(): JSX.Element {
                             class="dw-target-folio__open-detail"
                             onClick={() => openDealEditor(deal)}
                         >
-                            Open 9-field detail →
+                            {t("Open 9-field detail")} →
                         </button>
                     </div>
                     <FolioDock
@@ -177,7 +179,9 @@ function FolioPanel(props: { readonly tab: FolioTab }): JSX.Element {
             return (
                 <div class="dw-folio-panel">
                     <p class="dw-folio-panel__empty">
-                        No recoverable deals — board is healthy.
+                        {t("No recoverable deals — board is healthy.", {
+                            class: "body"
+                        })}
                     </p>
                 </div>
             );
@@ -201,8 +205,10 @@ function FolioPanel(props: { readonly tab: FolioTab }): JSX.Element {
                     deals.
                 </p>
                 <p class="dw-folio-panel__copy">
-                    Weighted truth = stage probability × value. Stage isn't
-                    truth unless next-step truth backs it up.
+                    {t(
+                        "Weighted truth = stage probability × value. Stage isn't truth unless next-step truth backs it up.",
+                        { class: "body" }
+                    )}
                 </p>
             </div>
         );

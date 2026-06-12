@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * EmptyDashboard — replaces every mode view (Read/Focus/Triage) when
@@ -25,80 +26,93 @@ import type { JSX } from "preact";
  */
 export function EmptyDashboard(): JSX.Element {
     return (
-        <section class="db-empty" aria-label="Get started">
+        <section class="db-empty" aria-label={t("Get started")}>
             <header class="db-empty__head">
-                <p class="db-empty__kicker">DASHBOARD IS QUIET</p>
+                <p class="db-empty__kicker">{t("DASHBOARD IS QUIET")}</p>
                 <h2 class="db-empty__title">
-                    Nothing's under pressure yet because nothing's in the
-                    workspace yet.
+                    {t(
+                        "Nothing's under pressure yet because nothing's in the workspace yet.",
+                        { class: "body" }
+                    )}
                 </h2>
                 <p class="db-empty__sub">
-                    The ranking engine waits on three kinds of input —
-                    targets, signals, and deals. Start with whichever you
-                    have a few minutes for.
+                    {t(
+                        "The ranking engine waits on three kinds of input — targets, signals, and deals. Start with whichever you have a few minutes for.",
+                        { class: "body" }
+                    )}
                 </p>
             </header>
 
             <ol class="db-empty__paths">
                 <li class="db-empty__path">
-                    <p class="db-empty__path-kicker">FIRST · TARGETING</p>
+                    <p class="db-empty__path-kicker">{t("FIRST · TARGETING")}</p>
                     <h3 class="db-empty__path-title">
-                        Push 10–25 prospects into the funnel.
+                        {t("Push 10–25 prospects into the funnel.", {
+                            class: "body"
+                        })}
                     </h3>
                     <p class="db-empty__path-body">
-                        Sourcing Workbench is where prospects become
-                        qualified accounts. A few real names unlock signal
-                        heat + pipeline pressure.
+                        {t(
+                            "Sourcing Workbench is where prospects become qualified accounts. A few real names light up signal heat + pipeline pressure.",
+                            { class: "body" }
+                        )}
                     </p>
                     <a
                         class="db-empty__path-cta"
                         href="/sourcing-workbench/?returnTo=%2Fdashboard%2F&returnLabel=Back%20to%20Dashboard&fromMode=system&fromSurface=dashboard-empty"
                     >
-                        Add prospects to the funnel
+                        {t("Add prospects to the funnel")}
                     </a>
                 </li>
 
                 <li class="db-empty__path">
-                    <p class="db-empty__path-kicker">OR · LIVE SIGNAL</p>
+                    <p class="db-empty__path-kicker">{t("OR · LIVE SIGNAL")}</p>
                     <h3 class="db-empty__path-title">
-                        Add one real account you're watching right now.
+                        {t("Add one real account you're watching right now.", {
+                            class: "body"
+                        })}
                     </h3>
                     <p class="db-empty__path-body">
-                        Signal Console is the radar. One live account with
-                        a recent event lights up the heat engine — and the
-                        Dashboard ranks against that.
+                        {t(
+                            "Signal Console is the radar. One live account with a recent event lights up the heat engine — and the Dashboard ranks against that.",
+                            { class: "body" }
+                        )}
                     </p>
                     <a
                         class="db-empty__path-cta"
                         href="/signal-console/?returnTo=%2Fdashboard%2F&returnLabel=Back%20to%20Dashboard&fromMode=system&fromSurface=dashboard-empty"
                     >
-                        Add an account to the radar
+                        {t("Add an account to the radar")}
                     </a>
                 </li>
 
                 <li class="db-empty__path">
-                    <p class="db-empty__path-kicker">OR · LIVE PRESSURE</p>
+                    <p class="db-empty__path-kicker">{t("OR · LIVE PRESSURE")}</p>
                     <h3 class="db-empty__path-title">
-                        Load one deal you're currently working.
+                        {t("Load one deal you're currently working.", {
+                            class: "body"
+                        })}
                     </h3>
                     <p class="db-empty__path-body">
-                        Deal Workspace turns pipeline into recovery
-                        pressure. One live deal makes the ranking concrete:
-                        which deal is weakest, what's the next move.
+                        {t(
+                            "Deal Workspace turns pipeline into recovery pressure. One live deal makes the ranking concrete: which deal is weakest, what's the next move.",
+                            { class: "body" }
+                        )}
                     </p>
                     <a
                         class="db-empty__path-cta"
                         href="/deal-workspace/?returnTo=%2Fdashboard%2F&returnLabel=Back%20to%20Dashboard&fromMode=system&fromSurface=dashboard-empty"
                     >
-                        Load a live deal
+                        {t("Load a live deal")}
                     </a>
                 </li>
             </ol>
 
             <p class="db-empty__foot">
-                Coming later: a market-intelligence brief in this slot so
-                there's something worth reading even before the workspace
-                fills up.
+                {t(
+                    "Coming later: a market-intelligence brief in this slot so there's something worth reading even before the workspace fills up.",
+                    { class: "body" }
+                )}
             </p>
         </section>
     );

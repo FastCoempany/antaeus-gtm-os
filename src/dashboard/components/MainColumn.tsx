@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { commandSummary } from "../state";
 import { buildBriefNarrative } from "../lib/brief-narrative";
 import { SignalLine } from "./SignalLine";
@@ -35,7 +36,7 @@ interface Props {
 export function MainColumn({ mode }: Props): JSX.Element {
     const summary = commandSummary.value;
     return (
-        <section class="db-main" aria-label="Main column">
+        <section class="db-main" aria-label={t("Main column")}>
             <SignalLine objects={summary.ranked} />
             {mode === "brief" ? <BriefBlock /> : null}
             {mode === "spotlight" ? <SpotlightPointer /> : null}
@@ -50,7 +51,7 @@ function BriefBlock(): JSX.Element {
     return (
         <article class="db-main__brief">
             <header class="db-main__brief-head">
-                <p class="db-main__brief-kicker">MORNING BRIEF</p>
+                <p class="db-main__brief-kicker">{t("MORNING BRIEF")}</p>
                 <h2 class="db-main__brief-headline">{narrative.headline}</h2>
             </header>
             <div class="db-main__brief-body">
@@ -62,7 +63,7 @@ function BriefBlock(): JSX.Element {
             </div>
             {narrative.insight ? (
                 <p class="db-main__brief-insight">
-                    <span class="db-main__brief-insight-label">INSIGHT</span>
+                    <span class="db-main__brief-insight-label">{t("INSIGHT")}</span>
                     {narrative.insight}
                 </p>
             ) : null}
@@ -76,11 +77,13 @@ function SpotlightPointer(): JSX.Element {
     if (!spotlight) return <></>;
     return (
         <article class="db-main__spotlight-pointer">
-            <p class="db-main__spotlight-kicker">SPOTLIGHT MODE</p>
+            <p class="db-main__spotlight-kicker">{t("SPOTLIGHT MODE")}</p>
             <p class="db-main__spotlight-copy">
-                The focal slice on the right is{" "}
-                <strong>{spotlight.title}</strong>. Click another slice to
-                swap the spotlight.
+                {t("The focal slice on the right is", { class: "body" })}{" "}
+                <strong>{spotlight.title}</strong>
+                {t(". Click another slice to swap the spotlight.", {
+                    class: "body"
+                })}
             </p>
         </article>
     );
@@ -90,7 +93,7 @@ function QueueMeta(): JSX.Element {
     const summary = commandSummary.value;
     return (
         <article class="db-main__queue-meta">
-            <p class="db-main__queue-kicker">QUEUE MODE</p>
+            <p class="db-main__queue-kicker">{t("QUEUE MODE")}</p>
             <p class="db-main__queue-copy">
                 {summary.ranked.length} ranked item
                 {summary.ranked.length === 1 ? "" : "s"} — work down the list.

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { allDeals, focusedDeal } from "../state";
 import {
     hrefToAdvisorDeploy,
@@ -42,48 +43,51 @@ export function HandoffStrip(): JSX.Element {
     }
 
     return (
-        <section class="dw-handoff" aria-label="Push the recovery forward">
+        <section class="dw-handoff" aria-label={t("Push the recovery forward")}>
             <header class="dw-handoff__head">
-                <p class="dw-handoff__kicker">CARRY THE RECOVERY FORWARD</p>
+                <p class="dw-handoff__kicker">{t("CARRY THE RECOVERY FORWARD")}</p>
                 <h2 class="dw-handoff__title">
                     {focal
                         ? `Push ${focal.accountName} into intervention.`
-                        : "Pick an intervention room."}
+                        : t("Pick an intervention room.")}
                 </h2>
                 <p class="dw-handoff__sub">
                     {focal
-                        ? "Carries the focal deal into the destination."
-                        : "Pin a deal above first to carry it through, or jump to a room and pick from there."}
+                        ? t("Carries the focal deal into the destination.", { class: "body" })
+                        : t(
+                              "Pin a deal above first to carry it through, or jump to a room and pick from there.",
+                              { class: "body" }
+                          )}
                 </p>
             </header>
-            <nav class="dw-handoff__row" aria-label="Cross-room handoff">
+            <nav class="dw-handoff__row" aria-label={t("Cross-room handoff")}>
                 <a
                     class="dw-handoff__cta dw-handoff__cta--primary"
                     href={hrefToFutureAutopsy(focusName)}
                     data-dw-handoff="future-autopsy"
                 >
-                    Pre-mortem this deal
+                    {t("Pre-mortem this deal")}
                 </a>
                 <a
                     class="dw-handoff__cta"
                     href={hrefToPocFramework(focusName)}
                     data-dw-handoff="poc-framework"
                 >
-                    Forge a proof
+                    {t("Forge a proof")}
                 </a>
                 <a
                     class="dw-handoff__cta"
                     href={hrefToNegotiation(focusId, focusName)}
                     data-dw-handoff="negotiation"
                 >
-                    Rehearse the negotiation
+                    {t("Rehearse the negotiation")}
                 </a>
                 <a
                     class="dw-handoff__cta"
                     href={hrefToAdvisorDeploy(focusName)}
                     data-dw-handoff="advisor-deploy"
                 >
-                    Deploy an advisor
+                    {t("Deploy an advisor")}
                 </a>
             </nav>
         </section>

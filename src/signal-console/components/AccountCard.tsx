@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import type { Account, RelationshipType, Signal } from "../lib/types";
 import { RELATIONSHIP_LABEL, RELATIONSHIP_TYPES } from "../lib/types";
@@ -87,7 +88,7 @@ export function AccountCard({ account, now }: Props): JSX.Element {
             {/* Relationship type (ADR-007). A 'competitor' flag here is
                 what the Briefing reads to drive category-specific
                 source queries. Default prospect. */}
-            <div class="sc-card__relationship" role="group" aria-label="Relationship">
+            <div class="sc-card__relationship" role="group" aria-label={t("Relationship")}>
                 {RELATIONSHIP_TYPES.map((rt) => {
                     const active = (account.relationshipType ?? "prospect") === rt;
                     return (
@@ -112,7 +113,7 @@ export function AccountCard({ account, now }: Props): JSX.Element {
             </div>
 
             {sigs.length === 0 ? (
-                <p class="sc-card__empty">No signals captured yet.</p>
+                <p class="sc-card__empty">{t("No signals captured yet.", { class: "body" })}</p>
             ) : (
                 <ul class="sc-card__signals">
                     {previewSigs.map((s) => (
@@ -160,21 +161,21 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                             class="sc-card__cta sc-card__cta--primary"
                             href={hrefToDealWorkspace(account.name)}
                         >
-                            Open in Deal Workspace
+                            {t("Open in Deal Workspace")}
                         </a>
                     ) : (
                         <a
                             class="sc-card__cta sc-card__cta--primary"
                             href={hrefToOutbound(account.name, exec.temperature)}
                         >
-                            Compose outbound
+                            {t("Compose outbound")}
                         </a>
                     )}
                     <a
                         class="sc-card__cta sc-card__cta--ghost"
                         href={hrefToDiscoveryAgenda(account.name)}
                     >
-                        Plan call
+                        {t("Plan call")}
                     </a>
                 </div>
             </footer>

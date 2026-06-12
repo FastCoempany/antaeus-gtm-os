@@ -15,6 +15,7 @@
  * objects through to the typed engine while the new room consumes
  * them directly.
  */
+import { t } from "@/lib/voice/t";
 
 export const COMMAND_MODES = ["brief", "spotlight", "queue"] as const;
 export type CommandMode = (typeof COMMAND_MODES)[number];
@@ -26,9 +27,9 @@ export type CommandMode = (typeof COMMAND_MODES)[number];
 //   spotlight → Focus (single dominant object)
 //   queue → Triage   (ranked list)
 export const COMMAND_MODE_LABELS: Record<CommandMode, string> = {
-    brief: "Read",
-    spotlight: "Focus",
-    queue: "Triage"
+    brief: t("Read"),
+    spotlight: t("Focus"),
+    queue: t("Triage")
 };
 
 // Dashboard audit: first-time default flipped from spotlight → brief.
