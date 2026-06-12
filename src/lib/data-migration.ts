@@ -294,11 +294,14 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
     },
     {
         table: "deals",
+        // gtmos_deal_room_health was dropped 2026-06-12: the localStorage
+        // inventory audit confirmed it is an alias with no writer or
+        // reader in active code (the live key is
+        // gtmos_deal_workspace_health, owned by health-snapshot.ts).
         keys: [
             "gtmos_deal_workspaces",
             "gtmos_deal_stage_history",
-            "gtmos_deal_outcomes",
-            "gtmos_deal_room_health"
+            "gtmos_deal_outcomes"
         ],
         placeholderFields: { account_name: MIGRATION_BLOB_PLACEHOLDER }
     },
@@ -419,11 +422,12 @@ const PASSTHROUGH_CONFIGS: MigratorConfig[] = [
     {
         table: "readiness_snapshots",
         keys: ["gtmos_readiness_snapshot"]
-    },
-    {
-        table: "handoff_artifacts",
-        keys: ["gtmos_handoff_exported"]
     }
+    // handoff_artifacts (gtmos_handoff_exported) was dropped 2026-06-12:
+    // the localStorage inventory audit found no writer or reader for the
+    // key in active code. The one-shot production migration already ran
+    // (2026-04-24), so this only affects fresh runs, which would have
+    // migrated nothing.
 ];
 
 const MIGRATORS: Migrator[] = PASSTHROUGH_CONFIGS.map(makePassthroughMigrator);
@@ -464,7 +468,7 @@ function makePassthroughMigrator(config: MigratorConfig): Migrator {
                 if (raw === null) continue;
                 keysRead.push(key);
                 // Parse as JSON when possible; preserve as raw string otherwise.
-                // Some legacy localStorage keys (e.g. gtmos_handoff_exported,
+                // Some legacy localStorage keys (e.g. gtmos_deal_stage_history,
                 // gtmos_product_category, gtmos_welcome_seen) were written as
                 // bare strings or primitives, not JSON-wrapped values. The
                 // migration blob keeps whatever the browser had — no data loss.

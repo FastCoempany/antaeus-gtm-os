@@ -10,6 +10,7 @@ import {
 import { bootSnapshotAggregator } from "./lib/snapshot-aggregator";
 import { aggregateReadinessInput } from "./lib/readiness-aggregator";
 import { bootReadinessHistory } from "./lib/readiness-history";
+import { bootReadinessSnapshotPublisher } from "./lib/readiness-snapshot-publisher";
 import { warmUpMissingSnapshots } from "./lib/snapshot-warmup";
 
 /**
@@ -58,6 +59,22 @@ render(<Dashboard />, root);
 // never booted to publish their snapshots) and cross-tab cold starts.
 warmUpMissingSnapshots();
 
+// Phase 5.A Wave 3 — readiness aggregator. Reads cloud-mirrored
+// localStorage from every cloud-synced room and builds a
+// ReadinessInput. Seeds once synchronously (BEFORE the snapshot
+// aggregator below, so the readiness snapshot publisher has a real
+// summary to write on its first run); refreshes on the same storage
+// events the snapshot aggregator listens to.
+setReadinessInput(aggregateReadinessInput());
+
+// Substrate fix (2026-06-12) — readiness snapshot publisher. The
+// legacy /app/readiness/ room used to write gtmos_readiness_snapshot;
+// its retirement orphaned the engine's readiness reads. The Dashboard
+// computes the verdict anyway, so it publishes the snapshot itself.
+// Booted before the snapshot aggregator so the key exists by the
+// aggregator's first read.
+bootReadinessSnapshotPublisher();
+
 // Wave 5 — start the cross-room snapshot aggregator after first
 // paint. It seeds engineInput synchronously (initial read) then
 // listens for storage events + a 10s visibility-aware refresh.
@@ -66,12 +83,6 @@ bootSnapshotAggregator({
         setEngineInput(input);
     }
 });
-
-// Phase 5.A Wave 3 — readiness aggregator. Reads cloud-mirrored
-// localStorage from every cloud-synced room and builds a
-// ReadinessInput. Seeds once synchronously; refreshes on the same
-// storage events the snapshot aggregator listens to.
-setReadinessInput(aggregateReadinessInput());
 if (typeof window !== "undefined") {
     window.addEventListener("storage", () => {
         setReadinessInput(aggregateReadinessInput());
