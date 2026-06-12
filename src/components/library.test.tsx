@@ -20,7 +20,17 @@ import {
     TextInput,
     Toast,
     Toggle,
-    WayfinderBar
+    Tooltip,
+    WayfinderBar,
+    Avatar,
+    BrandLockup,
+    BrandMark,
+    PatternCard,
+    Progress,
+    ProposalCard,
+    ReadinessReadout,
+    Stamp,
+    Table
 } from "./index";
 import { paletteOpen } from "@/lib/palette/Palette";
 
@@ -323,5 +333,140 @@ describe("Meter — the one admitted data-viz", () => {
         expect(container.querySelector(".ds-meter__read")?.textContent).toContain(
             "2.4×"
         );
+    });
+});
+
+describe("brand (spec 10)", () => {
+    it("BrandMark drops the crossbar at 16 and keeps it above", () => {
+        const small = render(<BrandMark size={16} />);
+        expect(small.container.querySelectorAll("path")).toHaveLength(2);
+        const large = render(<BrandMark size={32} />);
+        expect(large.container.querySelectorAll("path")).toHaveLength(3);
+    });
+
+    it("BrandLockup renders mark + the letterspaced caps name", () => {
+        const { container } = render(<BrandLockup />);
+        expect(container.querySelector(".ds-lockup__name")?.textContent).toBe(
+            "ANTAEUS"
+        );
+        expect(container.querySelector("svg")).not.toBeNull();
+    });
+
+    it("WayfinderBar's home affordance carries the lockup", () => {
+        const { container } = render(<WayfinderBar room="DASHBOARD" />);
+        expect(
+            container.querySelector(".ds-wayfinder__mark .ds-lockup")
+        ).not.toBeNull();
+    });
+});
+
+describe("catalog tail", () => {
+    it("Stamp is hairline-bracketed judgment; Avatar renders initials only", () => {
+        const { container } = render(
+            <div>
+                <Stamp tone="green">CORRECTED</Stamp>
+                <Avatar name="Sarah Chen" role="decider" />
+            </div>
+        );
+        expect(container.querySelector(".ds-stamp--green")).not.toBeNull();
+        const avatar = container.querySelector(".ds-avatar--orange");
+        expect(avatar?.textContent).toBe("SC");
+    });
+
+    it("Tooltip renders the bubble in show-me-how and vanishes in step-back", () => {
+        const a = render(
+            <Tooltip text="help here">
+                <button>x</button>
+            </Tooltip>
+        );
+        expect(a.container.querySelector(".ds-tooltip__bubble")).not.toBeNull();
+        const b = render(
+            <Tooltip text="help here" density="step-back">
+                <button>x</button>
+            </Tooltip>
+        );
+        expect(b.container.querySelector(".ds-tooltip__bubble")).toBeNull();
+    });
+
+    it("Table renders columns + at most one offset row breaking rank", () => {
+        const { container } = render(
+            <Table
+                label="Recovery queue"
+                columns={[
+                    { key: "a", label: "Account" },
+                    { key: "v", label: "Value", numeric: true }
+                ]}
+                rows={[
+                    { id: "1", offset: true, cells: { a: "Acme", v: "$1" } },
+                    { id: "2", cells: { a: "Meridian", v: "$2" } }
+                ]}
+            />
+        );
+        expect(container.querySelectorAll("tbody tr")).toHaveLength(2);
+        expect(
+            container.querySelectorAll(".ds-table__row--offset")
+        ).toHaveLength(1);
+    });
+
+    it("Progress carries the real-things count and per-milestone done marks", () => {
+        const { container, getByText } = render(
+            <Progress
+                label="Kit"
+                count="4 of 7 sections ready"
+                milestones={[
+                    { label: "One", done: true },
+                    { label: "Two", done: false }
+                ]}
+            />
+        );
+        expect(getByText("4 of 7 sections ready")).toBeTruthy();
+        expect(container.querySelectorAll(".is-done")).toHaveLength(1);
+    });
+});
+
+describe("system cards", () => {
+    it("PatternCard renders claim + evidence + how-sure", () => {
+        const { getByText } = render(
+            <PatternCard
+                claim="Two accounts went quiet the same week."
+                evidence={["Acme: 16 days silent"]}
+                howSure="Fairly sure."
+            />
+        );
+        expect(getByText("Two accounts went quiet the same week.")).toBeTruthy();
+        expect(getByText("Acme: 16 days silent")).toBeTruthy();
+        expect(getByText("Fairly sure.")).toBeTruthy();
+    });
+
+    it("ProposalCard wires the three operator moves", () => {
+        const onAccept = vi.fn();
+        const onSnooze = vi.fn();
+        const onDismiss = vi.fn();
+        const { getByText } = render(
+            <ProposalCard
+                noticed="You ran this every Friday."
+                change="Make it standing."
+                onAccept={onAccept}
+                onSnooze={onSnooze}
+                onDismiss={onDismiss}
+            />
+        );
+        fireEvent.click(getByText("Yes, make that change"));
+        fireEvent.click(getByText("Ask me again in a month"));
+        fireEvent.click(getByText("Not now"));
+        expect(onAccept).toHaveBeenCalled();
+        expect(onSnooze).toHaveBeenCalled();
+        expect(onDismiss).toHaveBeenCalled();
+    });
+
+    it("ReadinessReadout is a plain-sentence state, no bars", () => {
+        const { container, getByText } = render(
+            <ReadinessReadout
+                state="Inheritable with guardrails"
+                read="A hire could run this if you're around."
+            />
+        );
+        expect(getByText("Inheritable with guardrails")).toBeTruthy();
+        expect(container.querySelector("[role='progressbar']")).toBeNull();
     });
 });

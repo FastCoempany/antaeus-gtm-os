@@ -99,3 +99,25 @@ export function Modal(props: {
         </div>
     );
 }
+
+/**
+ * Tooltip — hover help, present in Show me how and gone in Step back
+ * (02). CSS-driven; the trigger stays keyboard-focusable.
+ */
+export function Tooltip(props: {
+    readonly text: string;
+    readonly children: ComponentChildren;
+    readonly density?: "show-me-how" | "step-back";
+}): JSX.Element {
+    if ((props.density ?? "show-me-how") === "step-back") {
+        return <>{props.children}</>;
+    }
+    return (
+        <span class="ds-tooltip" tabIndex={0}>
+            {props.children}
+            <span class="ds-tooltip__bubble" role="tooltip">
+                {props.text}
+            </span>
+        </span>
+    );
+}

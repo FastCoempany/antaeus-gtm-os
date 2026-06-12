@@ -73,3 +73,45 @@ export function Gauge(props: { readonly tone?: AccentRole }): JSX.Element {
         />
     );
 }
+
+/**
+ * Stamp — a judgment, hairline-bracketed (03 §4.1). For settled
+ * reads ("CORRECTED", "LEFT ALONE"), not status churn.
+ */
+export function Stamp(props: {
+    readonly children: ComponentChildren;
+    readonly tone?: AccentRole;
+}): JSX.Element {
+    return (
+        <span class={`ds-stamp${props.tone ? ` ds-stamp--${props.tone}` : ""}`}>
+            {props.children}
+        </span>
+    );
+}
+
+/**
+ * Avatar — initials, never photos (03 §4.1). Orange marks the
+ * decider, blue the advisor; everyone else is ink.
+ */
+export function Avatar(props: {
+    readonly name: string;
+    readonly role?: "decider" | "advisor";
+}): JSX.Element {
+    const initials = props.name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((w) => w[0]?.toUpperCase() ?? "")
+        .join("");
+    const tone =
+        props.role === "decider"
+            ? " ds-avatar--orange"
+            : props.role === "advisor"
+              ? " ds-avatar--blue"
+              : "";
+    return (
+        <span class={`ds-avatar${tone}`} title={props.name} aria-label={props.name}>
+            {initials}
+        </span>
+    );
+}
