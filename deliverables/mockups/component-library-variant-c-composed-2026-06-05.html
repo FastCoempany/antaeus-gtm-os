@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant C · Composed (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --surface: #FFFFFF;
+    --surface-sunken: #F0F3F9;
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --rule: rgba(10, 28, 64, 0.08);
+    --rule-mid: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --orange-tinted: rgba(230, 112, 30, 0.05);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.14);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.10);
+    --gold: #C8A24A;
+
+    --shadow-sm: 0 1px 2px rgba(10, 28, 64, 0.04), 0 1px 3px rgba(10, 28, 64, 0.04);
+    --shadow-md: 0 4px 12px rgba(10, 28, 64, 0.05), 0 2px 6px rgba(10, 28, 64, 0.03);
+    --shadow-lg: 0 12px 32px rgba(10, 28, 64, 0.07), 0 4px 12px rgba(10, 28, 64, 0.04);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background-image: radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 60%),
+                      radial-gradient(circle at 80% 100%, rgba(230, 112, 30, 0.04) 0%, transparent 60%);
+  }
+  .serif { font-family: "DM Serif Display", Georgia, serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .stage {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 72px 56px 96px;
+  }
+
+  /* Page header */
+  .stage-header {
+    margin-bottom: 88px;
+    max-width: 720px;
+  }
+  .stage-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stage-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+  .stage-title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    margin: 0 0 28px;
+  }
+  .stage-lead {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Section structure */
+  .room {
+    margin-top: 96px;
+  }
+  .room-head {
+    margin-bottom: 40px;
+    max-width: 640px;
+  }
+  .room-head-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .room-head-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--orange), transparent);
+    opacity: 0.4;
+    max-width: 64px;
+  }
+  .room-head-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1.05;
+    margin: 0 0 12px;
+  }
+  .room-head-sub {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .grid-1 { grid-template-columns: 1fr; }
+
+  /* Tile (a primitive container) */
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 260px;
+    transition: box-shadow 0.18s;
+  }
+  .tile:hover { box-shadow: var(--shadow-lg); }
+  .tile-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tile-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .tile-tag {
+    font-size: 11px;
+    color: var(--ink-faint);
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: var(--surface-sunken);
+    font-weight: 500;
+  }
+  .tile-demo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    background: var(--surface-sunken);
+    border-radius: var(--radius-md);
+    min-height: 100px;
+  }
+  .tile-demo--stretch { padding: 0; background: transparent; min-height: 80px; }
+  .tile-demo--top { align-items: flex-start; padding-top: 24px; }
+  .tile-annotation {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ====== PRIMITIVES ====== */
+  /* Buttons — rounded, generous */
+  .btn {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 1px 2px rgba(230, 112, 30, 0.20), 0 0 0 1px rgba(230, 112, 30, 0.20) inset;
+  }
+  .btn-primary:hover { box-shadow: 0 3px 8px rgba(230, 112, 30, 0.25), 0 0 0 1px rgba(230, 112, 30, 0.30) inset; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--rule-mid);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 9px 16px;
+  }
+  .btn-ghost:hover { background: var(--surface-sunken); color: var(--ink); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  /* IconButton — rounded */
+  .btn-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--rule-mid);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Status chips — soft fills, rounded */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .chip::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .chip--green { background: var(--green-soft); color: #15803D; }
+  .chip--blue { background: var(--blue-soft); color: #1D4ED8; }
+  .chip--amber { background: var(--amber-soft); color: #B45309; }
+  .chip--red { background: var(--red-soft); color: #B91C1C; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+  /* Heat — soft tinted pills */
+  .heat {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 12px;
+    min-width: 76px;
+    box-shadow: 0 0 0 1px var(--rule) inset;
+  }
+  .heat-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    line-height: 1;
+  }
+  .heat-band {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .heat--hot { background: var(--red-soft); color: #B91C1C; }
+  .heat--active { background: var(--orange-soft); color: var(--orange); }
+  .heat--watch { background: var(--blue-soft); color: #1D4ED8; }
+  .heat-row { display: flex; gap: 10px; justify-content: center; }
+
+  /* Inputs — rounded, soft */
+  .input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--rule-mid);
+    border-radius: 10px;
+    background: var(--surface);
+    font-family: "Public Sans", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px var(--orange-tinted);
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .field-help {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* Toggle — rounded pill */
+  .toggle {
+    display: inline-flex;
+    width: 44px; height: 26px;
+    background: var(--rule-mid);
+    border-radius: 99px;
+    padding: 2px;
+    cursor: pointer;
+    transition: background 0.18s;
+    box-shadow: 0 1px 2px rgba(10,28,64,0.06) inset;
+  }
+  .toggle::after {
+    content: ''; width: 22px; height: 22px;
+    background: white; border-radius: 50%;
+    transition: transform 0.18s;
+    box-shadow: 0 1px 3px rgba(10,28,64,0.20);
+  }
+  .toggle.on { background: var(--orange); }
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* RoomChrome — rounded floating bar */
+  .room-chrome {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .wordmark {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+  }
+  .crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-sunken);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .palette-trigger {
+    margin-left: auto;
+    background: var(--surface-sunken);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  /* Topbar */
+  .topbar {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .topbar-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .topbar-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  /* SectionFrame */
+  .section-frame {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .section-frame-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .section-frame-title {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .section-frame-meta {
+    font-size: 11px;
+    color: var(--ink-faint);
+    background: var(--surface-sunken);
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+  .section-frame-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Panel */
+  .panel-mock {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .panel-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .panel-body { font-size: 13px; color: var(--ink-soft); }
+
+  /* Mini card */
+  .mini-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .mini-card-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .mini-card-body { font-size: 12px; color: var(--ink-soft); }
+
+  /* Stat */
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .stat-tag {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  /* Banner — soft */
+  .banner {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--amber-soft);
+    border-radius: 12px;
+    color: #92400E;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .banner-icon {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .banner--blue {
+    background: var(--blue-soft);
+    color: #1D4ED8;
+  }
+  .banner--blue .banner-icon { background: var(--blue); }
+
+  /* Toast */
+  .toast {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast-mark {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* Modal */
+  .modal {
+    width: 100%;
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--rule);
+  }
+  .modal-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .modal-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Tooltip */
+  .tooltip-wrap { position: relative; display: inline-block; margin-top: 56px; }
+  .tooltip-anchor {
+    font-size: 14px;
+    color: var(--ink);
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+  .tooltip-bubble {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-md);
+  }
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+
+  /* NavLink */
+  .nav-row {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface-sunken);
+    border-radius: 10px;
+    width: 100%;
+  }
+  .nav-link {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Palette */
+  .palette-mock {
+    width: 100%;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .palette-search {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .palette-search::before {
+    content: '⌘';
+    color: var(--ink-faint);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+  }
+  .palette-list { padding: 6px; }
+  .palette-item {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .palette-item-kind {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    background: var(--surface-sunken);
+    padding: 2px 8px;
+    border-radius: 99px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .palette-item.hl {
+    background: var(--orange-tinted);
+    color: var(--ink);
+  }
+  .palette-item.hl .palette-item-kind {
+    background: var(--orange-soft);
+    color: var(--orange);
+  }
+
+  /* HandoffStrip */
+  .handoff {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .handoff-item {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .handoff-item:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .handoff-item--primary {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+    font-weight: 600;
+  }
+
+  /* BackPill */
+  .back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  .back-pill::before {
+    content: '←';
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* ProposalCard */
+  .proposal {
+    width: 100%;
+    background: linear-gradient(180deg, var(--orange-tinted), var(--surface));
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+  }
+  .proposal-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: var(--surface);
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+  }
+  .proposal-eyebrow::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--orange); border-radius: 50%;
+  }
+  .proposal-body {
+    font-family: "DM Serif Display", serif;
+    font-size: 19px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .proposal-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Pattern */
+  .pattern {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+  }
+  .pattern-headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .pattern-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .pattern-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: var(--blue-soft);
+    border-radius: 99px;
+    color: #1D4ED8;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* RiskCard */
+  .risk {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+  .risk::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--red);
+  }
+  .risk-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .risk-name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .risk-amount {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .risk-cause {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .risk-chips {
+    display: flex;
+    gap: 6px;
+  }
+
+  /* Readiness */
+  .readiness {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+  }
+  .readiness-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--surface-sunken);
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+  }
+  .readiness-state {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  /* Density demos */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+  }
+  .density-cell {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .density-cell-label {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--orange-tinted);
+    color: var(--orange);
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .density-cell-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .density-cell-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .density-cell-body--terse {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Section list */
+  .section-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .section-list-item {
+    background: var(--surface-sunken);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .section-list-item--expanded {
+    background: var(--surface);
+    border: 1px solid var(--orange-soft);
+    border-left: 3px solid var(--orange);
+    padding: 12px 14px;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .section-list-item--expanded strong { color: var(--orange); }
+
+  /* Footer */
+  .stage-footer {
+    margin-top: 96px;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stage-footer p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin: 0 0 12px;
+    max-width: 70ch;
+  }
+  .stage-footer p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="stage-header">
+    <div class="stage-eyebrow">Variant C · Composed</div>
+    <h1 class="stage-title">A measured set of primitives</h1>
+    <p class="stage-lead">
+      The composed cut treats every primitive as a tailored object. Soft elevated surfaces, generous padding, rounded
+      corners, gentle shadows. Public Sans does most of the work; DM Serif Display lifts the moments that earn weight;
+      JetBrains Mono recedes to function-key hints. The same primitive set, considered as craft.
+    </p>
+  </header>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 01</div>
+      <h2 class="room-head-title">Layout primitives</h2>
+      <p class="room-head-sub">How the surface frames itself.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">RoomChrome</span><span class="tile-tag">Chrome</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="room-chrome">
+            <span class="wordmark">Antaeus</span>
+            <span class="crumb">From Dashboard</span>
+            <span class="palette-trigger">⌘K</span>
+          </div>
+        </div>
+        <p class="tile-annotation">Floating bar with shadow. Serif wordmark, soft pill crumb, recessive palette mark.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Topbar</span><span class="tile-tag">Per-room</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="topbar">
+            <div class="topbar-eyebrow">Briefing · Weekly read · Workspace</div>
+            <div class="topbar-title">Where the motion is today</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Card with soft border. Small uppercase eyebrow, serif title.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">SectionFrame</span><span class="tile-tag">Block</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="section-frame">
+            <div class="section-frame-head">
+              <span class="section-frame-title">Pattern · pricing momentum</span>
+              <span class="section-frame-meta">3d · conf 78%</span>
+            </div>
+            <p class="section-frame-body">Three of your last five closed deals dropped price 12% or more in the final week. The pattern is real, not noise.</p>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft card with pill-shaped meta. Reads as composed not constructed.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Panel</span><span class="tile-tag">Generic</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="panel-mock">
+            <div class="panel-title">Recovery queue</div>
+            <div class="panel-body">Six deals are weakening. Three need a move this week.</div>
+          </div>
+        </div>
+        <p class="tile-annotation">The plain workhorse, rounded.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 02</div>
+      <h2 class="room-head-title">Display primitives</h2>
+      <p class="room-head-sub">How information renders.</p>
+    </div>
+    <div class="grid">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Heading · serif</span><span class="tile-tag">Display</span></div>
+        <div class="tile-demo"><span class="serif" style="font-size:30px; line-height:1.0;">Acme is stalling.</span></div>
+        <p class="tile-annotation">DM Serif Display. The room's authored emphasis.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Heading · sans</span><span class="tile-tag">Control</span></div>
+        <div class="tile-demo"><span style="font-weight:600; font-size:18px;">Recovery options</span></div>
+        <p class="tile-annotation">Public Sans 600. Control-surface heads.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Kicker</span><span class="tile-tag">Caption</span></div>
+        <div class="tile-demo"><span style="font-size:11px; font-weight:600; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-soft);">Signal Console · Live</span></div>
+        <p class="tile-annotation">Sans caps for soft captions; mono reserved for codes.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">BodyText</span><span class="tile-tag">Reading</span></div>
+        <div class="tile-demo tile-demo--top">
+          <p style="margin:0; font-size:14px; line-height:1.65;">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo.</p>
+        </div>
+        <p class="tile-annotation">Public Sans, generous line height.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Stat</span><span class="tile-tag">Figure</span></div>
+        <div class="tile-demo">
+          <div class="stat">
+            <div class="stat-num">37</div>
+            <div class="stat-tag">Deals under pressure</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Serif numeral, sans caption. Composed pair.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Card</span><span class="tile-tag">Unit</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="mini-card">
+            <div class="mini-card-title">Acme Corp.</div>
+            <div class="mini-card-body">Stalled 18 days at proposal stage.</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Rounded card with shadow. The universal block.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">StatusChip</span><span class="tile-tag">State</span></div>
+        <div class="tile-demo">
+          <div class="chip-row">
+            <span class="chip chip--green">Ready now</span>
+            <span class="chip chip--blue">Compounding</span>
+            <span class="chip chip--amber">Still weak</span>
+            <span class="chip chip--red">At risk</span>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft fill, dot indicator. Canon §10 state vocabulary.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">HeatBadge</span><span class="tile-tag">Meter</span></div>
+        <div class="tile-demo">
+          <div class="heat-row">
+            <div class="heat heat--hot"><span class="heat-num">94</span><span class="heat-band">Hot</span></div>
+            <div class="heat heat--active"><span class="heat-num">78</span><span class="heat-band">Active</span></div>
+            <div class="heat heat--watch"><span class="heat-num">52</span><span class="heat-band">Watch</span></div>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft pill badges with serif numeral.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 03</div>
+      <h2 class="room-head-title">Action primitives</h2>
+      <p class="room-head-sub">How the operator moves.</p>
+    </div>
+    <div class="grid">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Button · primary</span><span class="tile-tag">Dominant</span></div>
+        <div class="tile-demo"><button class="btn btn-primary">Cast proof</button></div>
+        <p class="tile-annotation">Orange fill, soft shadow. One per surface.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Button · secondary</span><span class="tile-tag">Paired</span></div>
+        <div class="tile-demo"><button class="btn btn-secondary">Save draft</button></div>
+        <p class="tile-annotation">White card with hairline border.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Button · ghost</span><span class="tile-tag">Tertiary</span></div>
+        <div class="tile-demo"><button class="btn btn-ghost">Dismiss</button></div>
+        <p class="tile-annotation">No frame; soft hover fill.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">IconButton</span><span class="tile-tag">Inline</span></div>
+        <div class="tile-demo">
+          <div class="btn-row">
+            <button class="btn-icon">⌘</button>
+            <button class="btn-icon">↗</button>
+            <button class="btn-icon">×</button>
+          </div>
+        </div>
+        <p class="tile-annotation">38px rounded squares.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Link</span><span class="tile-tag">Cross-room</span></div>
+        <div class="tile-demo">
+          <a href="#" style="color:var(--blue); text-decoration:none; font-weight:500; font-size:14px;">Open in Discovery Studio →</a>
+        </div>
+        <p class="tile-annotation">Blue, no underline by default.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Toggle</span><span class="tile-tag">Binary</span></div>
+        <div class="tile-demo">
+          <div class="btn-row" style="gap:24px;">
+            <span class="toggle"></span>
+            <span class="toggle on"></span>
+          </div>
+        </div>
+        <p class="tile-annotation">Rounded pill with floating thumb.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 04</div>
+      <h2 class="room-head-title">Input primitives</h2>
+      <p class="room-head-sub">How the operator authors.</p>
+    </div>
+    <div class="grid">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">TextInput</span><span class="tile-tag">Line</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <input class="input" value="Acme Corp.">
+        </div>
+        <p class="tile-annotation">Rounded cell. Orange focus ring.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Select</span><span class="tile-tag">Enum</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <select class="input">
+            <option>Proposal</option>
+            <option>Discovery</option>
+            <option>Negotiation</option>
+          </select>
+        </div>
+        <p class="tile-annotation">Same cell shape; inherits chrome.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Textarea</span><span class="tile-tag">Block</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <textarea class="input" rows="3" style="resize:none; font-family:inherit;">Sarah needs the revised proposal by Friday.</textarea>
+        </div>
+        <p class="tile-annotation">Multi-line, same rounded shape.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">FormField</span><span class="tile-tag">Composed</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="field">
+            <label class="field-label">Buying group minimum</label>
+            <input class="input" type="number" value="5">
+            <div class="field-help">How many decision-makers typically have to agree before a deal closes?</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Label, input, help. Microcopy disappears in Step back.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Checkbox</span><span class="tile-tag">Binary</span></div>
+        <div class="tile-demo">
+          <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+            <label style="display:flex; gap:10px; align-items:center; font-size:14px;">
+              <input type="checkbox" checked style="accent-color:var(--orange); width:16px; height:16px;"> Champion identified
+            </label>
+            <label style="display:flex; gap:10px; align-items:center; font-size:14px; color:var(--ink-soft);">
+              <input type="checkbox" style="width:16px; height:16px;"> Economic buyer confirmed
+            </label>
+          </div>
+        </div>
+        <p class="tile-annotation">Orange accent for checked state.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 05</div>
+      <h2 class="room-head-title">Feedback primitives</h2>
+      <p class="room-head-sub">How the system speaks back.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Toast</span><span class="tile-tag">Transient</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="toast">
+            <span class="toast-mark">✓</span>
+            <span>Proof cast. Linked to Acme — Q4 expansion.</span>
+          </div>
+        </div>
+        <p class="tile-annotation">Navy pill with check mark. Lifted by shadow.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Banner</span><span class="tile-tag">Persistent</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+            <div class="banner">
+              <span class="banner-icon">!</span>
+              <span>It's been twelve days since the last brief was synthesized.</span>
+            </div>
+            <div class="banner banner--blue">
+              <span class="banner-icon">↗</span>
+              <span>From Briefing · refresh objection handler for Acme pricing.</span>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft-fill banner with icon medallion.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Modal</span><span class="tile-tag">Overlay</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="modal">
+            <div class="modal-title">Discard draft?</div>
+            <div class="modal-body">You've made unsaved edits to this proof draft. Discarding clears them.</div>
+            <div class="modal-actions">
+              <button class="btn btn-ghost">Cancel</button>
+              <button class="btn btn-primary">Discard</button>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Lifted card. Reserved for destructive confirmations.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Tooltip</span><span class="tile-tag">Hint</span></div>
+        <div class="tile-demo">
+          <div class="tooltip-wrap">
+            <div class="tooltip-bubble">One of the eight ICP quality checks</div>
+            <span class="tooltip-anchor">Buying group minimum</span>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft bubble with shadow. Hidden in Step back.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 06</div>
+      <h2 class="room-head-title">Navigation primitives</h2>
+      <p class="room-head-sub">How the operator moves between rooms.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">NavLink</span><span class="tile-tag">Tabs</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="nav-row">
+            <span class="nav-link active">Dashboard</span>
+            <span class="nav-link">Signal</span>
+            <span class="nav-link">Deals</span>
+            <span class="nav-link">Autopsy</span>
+          </div>
+        </div>
+        <p class="tile-annotation">Pill-shaped tab group with sunken track.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Palette · ⌘K</span><span class="tile-tag">Summoned</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="palette-mock">
+            <div class="palette-search">whats at risk_</div>
+            <div class="palette-list">
+              <div class="palette-item hl">
+                <span class="palette-item-kind">Skill</span>
+                <span>What's at risk this week</span>
+              </div>
+              <div class="palette-item">
+                <span class="palette-item-kind">Room</span>
+                <span>Deal Workspace</span>
+              </div>
+              <div class="palette-item">
+                <span class="palette-item-kind">Room</span>
+                <span>Future Autopsy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Lifted card. Pill-shaped kind tags.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">HandoffStrip</span><span class="tile-tag">Routes</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="handoff">
+            <div class="handoff-item handoff-item--primary">Pre-mortem this deal</div>
+            <div class="handoff-item">Carry to advisor</div>
+            <div class="handoff-item">Cast proof</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Three card-buttons. Primary in orange fill.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">BackPill</span><span class="tile-tag">Inbound</span></div>
+        <div class="tile-demo">
+          <span class="back-pill">From Briefing · pricing-momentum pattern</span>
+        </div>
+        <p class="tile-annotation">Soft pill, orange arrow. Lives in RoomChrome.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 07</div>
+      <h2 class="room-head-title">System primitives</h2>
+      <p class="room-head-sub">Antaeus-specific composed components.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">ProposalCard · Phase F</span><span class="tile-tag">Suggestion</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="proposal">
+            <div class="proposal-eyebrow">A Suggestion</div>
+            <div class="proposal-body">You closed your first deal last week. The system has been walking you through every surface — want it to step back?</div>
+            <div class="proposal-actions">
+              <button class="btn btn-primary">Yes, step back</button>
+              <button class="btn btn-secondary">Ask in a month</button>
+              <button class="btn btn-ghost">Not now</button>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft orange-tinted gradient, pill eyebrow, serif body, three-action ladder.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">PatternCard · Briefing</span><span class="tile-tag">Synthesis</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="pattern">
+            <div class="pattern-headline">Late-stage price pressure is rising.</div>
+            <div class="pattern-body">Three of your last five closed deals dropped price 12% or more in the final week. Your stated discount band is 8%. The pattern shows up across two ICP segments.</div>
+            <div class="pattern-confidence">Confidence 78% · 14-day window</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Serif headline, soft body, blue confidence chip.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">RiskCard · Deal Workspace</span><span class="tile-tag">Recovery</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="risk">
+            <div class="risk-head">
+              <span class="risk-name">Acme Corp.</span>
+              <span class="risk-amount">$84K</span>
+            </div>
+            <div class="risk-cause">Stalled 18 days at proposal. Single-threaded. Champion last replied Nov 3.</div>
+            <div class="risk-chips">
+              <span class="chip chip--amber">Proposal</span>
+              <span class="chip chip--red">Risk · 78</span>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Red top-rule signals severity. Soft chips for stage and risk.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">ReadinessReadout</span><span class="tile-tag">State</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="readiness">
+            <div class="readiness-eyebrow">Readiness</div>
+            <div class="readiness-state">You're at Inheritable with guardrails.</div>
+          </div>
+        </div>
+        <p class="tile-annotation">Soft pill eyebrow. The sentence-shaped state carries.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="room">
+    <div class="room-head">
+      <div class="room-head-eyebrow">Section 08</div>
+      <h2 class="room-head-title">Density gradient, side by side</h2>
+      <p class="room-head-sub">Show me how and Step back on the same primitive.</p>
+    </div>
+
+    <div class="grid grid-1" style="gap:24px;">
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Dashboard command card · sentence count</span><span class="tile-tag">Demo 1</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <span class="density-cell-label">Show me how</span>
+              <div class="density-cell-title">Acme Corp.</div>
+              <div class="density-cell-body">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is what the system shows you first today because it is the ranked deal under the most pressure — a mix of how long it's been stalled, how big the deal is, and how late in the stage it should have moved by now. Click in to see the recovery options.</div>
+            </div>
+            <div class="density-cell">
+              <span class="density-cell-label">Step back</span>
+              <div class="density-cell-title">Acme Corp.</div>
+              <div class="density-cell-body density-cell-body--terse">Acme — stalled 18d at proposal. Recovery options inside.</div>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">Same Command Chamber voice; verbosity is what differs.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Deal card · affordance count</span><span class="tile-tag">Demo 2</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <span class="density-cell-label">Show me how</span>
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">View</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Edit</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Mark at risk</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Add note</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Carry to advisor</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Pre-mortem</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Rehearse</button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;">Cast proof</button>
+              </div>
+            </div>
+            <div class="density-cell">
+              <span class="density-cell-label">Step back</span>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-primary">View</button>
+                <button class="btn btn-secondary">Edit</button>
+                <button class="btn btn-ghost">More ⌄</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">All eight visible vs. two plus a collapsed menu.</p>
+      </div>
+
+      <div class="tile">
+        <div class="tile-head"><span class="tile-name">Autopsy sheets · default-expanded</span><span class="tile-tag">Demo 3</span></div>
+        <div class="tile-demo tile-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <span class="density-cell-label">Show me how</span>
+              <div class="section-list">
+                <div class="section-list-item section-list-item--expanded"><strong>Pattern</strong> — Pressure before clarity. The proposal landed before the buyer had named their actual constraint.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>Proof</strong> — The pilot never anchored. Readout owner was never assigned.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>Symptom</strong> — Three weeks of single-threaded communication with Sarah.</div>
+                <div class="section-list-item section-list-item--expanded"><strong>Decision</strong> — The decision architecture was never mapped.</div>
+              </div>
+            </div>
+            <div class="density-cell">
+              <span class="density-cell-label">Step back</span>
+              <div class="section-list">
+                <div class="section-list-item">Pattern — Pressure before clarity · 3 prior cases match</div>
+                <div class="section-list-item">Proof — Never anchored · readout owner unset</div>
+                <div class="section-list-item section-list-item--expanded"><strong>Symptom</strong> — Three weeks of single-threaded communication with Sarah. Champion replied once in fourteen days.</div>
+                <div class="section-list-item">Decision — Architecture unmapped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="tile-annotation">All four expanded vs. only the highest-severity sheet expanded.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="stage-footer">
+    <p>
+      The composed cut treats every primitive as a tailored object — soft elevated surfaces, generous padding, rounded
+      corners, gentle shadows. Public Sans does most of the reading work; DM Serif Display lifts the moments that
+      earn weight; JetBrains Mono recedes almost entirely.
+    </p>
+    <p>
+      Color palette inherits canon Part II §1 (bright field) and §3 (orange for the dominant move, blue for system
+      intelligence, green for healthy, amber for caution, red for risk). Typography inherits §2. The other variants
+      take the same primitives in distinctly different voices.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>

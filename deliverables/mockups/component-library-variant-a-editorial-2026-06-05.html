@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antaeus Component Library — Variant A · Editorial (2026-06-05)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Serif+Text:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --paper: #FAFAF5;
+    --paper-warm: #F5F2E8;
+    --ink: #0A1C40;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.36);
+    --rule: rgba(10, 28, 64, 0.14);
+    --rule-thick: rgba(10, 28, 64, 0.55);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.14);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.10);
+    --gold: #C8A24A;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .serif { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; }
+  .serif-text { font-family: "DM Serif Text", "DM Serif Display", Georgia, serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 80px 64px 96px;
+  }
+
+  /* Page masthead */
+  .masthead {
+    text-align: center;
+    margin-bottom: 96px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--rule-thick);
+  }
+  .masthead-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .masthead-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: clamp(56px, 7vw, 96px);
+    line-height: 0.98;
+    margin: 0 0 32px;
+    letter-spacing: -0.015em;
+  }
+  .masthead-subtitle {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 32ch;
+    margin: 0 auto 32px;
+  }
+  .masthead-lead {
+    max-width: 60ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  /* Section heads — editorial */
+  .section {
+    margin-top: 112px;
+  }
+  .section-head {
+    text-align: center;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .section-head::before {
+    content: '';
+    display: block;
+    width: 64px;
+    height: 4px;
+    background: var(--orange);
+    margin: 0 auto 28px;
+  }
+  .section-head-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .section-head-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 48px;
+    line-height: 1.0;
+    margin: 0 0 14px;
+  }
+  .section-head-tag {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  .grid-1 { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Editorial entry — paper card, no rounding, thick top rule */
+  .entry {
+    background: var(--paper);
+    border-top: 3px solid var(--ink);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 240px;
+  }
+  .entry-eyebrow {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .entry-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 26px;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .entry-demo {
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+  }
+  .entry-demo--stretch > * { width: 100%; }
+  .entry-annotation {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ====== Component primitives — editorial cuts ====== */
+  /* Buttons: still sans (functional) but longer, more letter-spaced */
+  .btn {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    border-radius: 0;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-primary--orange { background: var(--orange); }
+  .btn-secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 10px 18px; border-bottom: 1px solid var(--rule); }
+  .btn-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  /* IconButton — serif initial inside */
+  .btn-icon {
+    width: 42px; height: 42px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 16px;
+    border-radius: 0;
+    cursor: pointer;
+  }
+
+  /* Status chips — serif italic with rule under */
+  .chip {
+    display: inline-block;
+    padding: 4px 0;
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    border-bottom: 1px solid currentColor;
+  }
+  .chip--green { color: #15803D; }
+  .chip--amber { color: #B45309; }
+  .chip--red { color: #B91C1C; }
+  .chip--blue { color: #1D4ED8; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+
+  /* Heat — serif numeral on cream, italic band */
+  .heat {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .heat-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 44px;
+    line-height: 1;
+  }
+  .heat-band {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 13px;
+  }
+  .heat--hot .heat-num, .heat--hot .heat-band { color: #B91C1C; }
+  .heat--active .heat-num, .heat--active .heat-band { color: var(--orange); }
+  .heat--watch .heat-num, .heat--watch .heat-band { color: #1D4ED8; }
+  .heat-row { display: flex; gap: 32px; justify-content: center; }
+
+  /* Inputs — minimal, underlined */
+  .input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    padding: 10px 0;
+    font-family: "DM Serif Text", Georgia, serif;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .input:focus { outline: none; border-bottom-color: var(--orange); border-bottom-width: 2px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .field-help {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* Toggle — minimal */
+  .toggle {
+    display: inline-flex;
+    width: 56px; height: 28px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    padding: 2px;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: ''; width: 22px; height: 22px;
+    background: var(--ink);
+  }
+  .toggle.on::after { background: var(--orange); transform: translateX(28px); transition: transform 0.18s; }
+
+  /* RoomChrome — serif wordmark dominant */
+  .room-chrome {
+    width: 100%;
+    padding: 16px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 32px;
+    border-bottom: 1px solid var(--rule-thick);
+  }
+  .wordmark {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 28px;
+    line-height: 1;
+  }
+  .crumb {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .palette-trigger {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  /* Topbar — masthead style */
+  .topbar {
+    width: 100%;
+    text-align: left;
+  }
+  .topbar-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .topbar-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 38px;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  /* Banner — italic, with hairline borders */
+  .banner {
+    width: 100%;
+    padding: 14px 20px;
+    background: transparent;
+    border-top: 1px solid var(--amber);
+    border-bottom: 1px solid var(--amber);
+    color: #92400E;
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+  }
+  .banner--blue { border-color: var(--blue); color: #1D4ED8; }
+
+  /* Toast — solid serif */
+  .toast {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 20px;
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  /* Modal */
+  .modal {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 24px;
+  }
+  .modal-title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .modal-body {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+  }
+
+  /* Tooltip — footnote style */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-anchor { border-bottom: 1px solid var(--orange); font-size: 16px; }
+  .tooltip-anchor sup { font-family: "DM Serif Display", serif; color: var(--orange); margin-left: 2px; }
+  .tooltip-note {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 0;
+    background: var(--paper-warm);
+    border-left: 2px solid var(--orange);
+    padding: 8px 12px;
+    font-family: "DM Serif Text", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink);
+    width: 220px;
+  }
+
+  /* NavLink — list style */
+  .nav-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+  .nav-link {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-size: 17px;
+    color: var(--ink-soft);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+  }
+  .nav-link.active {
+    color: var(--ink);
+    font-style: italic;
+    border-bottom-color: var(--orange);
+    border-bottom-width: 2px;
+  }
+
+  /* Palette — table-style */
+  .palette-mock {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 0;
+  }
+  .palette-search {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--ink);
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 15px;
+  }
+  .palette-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    font-family: "DM Serif Text", serif;
+    font-size: 15px;
+    display: flex;
+    gap: 12px;
+  }
+  .palette-item:last-child { border-bottom: none; }
+  .palette-item.hl { background: var(--orange-soft); color: var(--orange); font-style: italic; }
+  .palette-item-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    min-width: 60px;
+  }
+
+  /* HandoffStrip — typographic row */
+  .handoff {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .handoff-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+  }
+  .handoff-item:last-child { border-bottom: none; }
+  .handoff-arrow {
+    font-family: "DM Serif Display", serif;
+    color: var(--orange);
+    font-size: 18px;
+  }
+  .handoff-item--primary .handoff-arrow { font-size: 24px; }
+  .handoff-label {
+    font-family: "DM Serif Text", serif;
+    font-size: 16px;
+  }
+  .handoff-item--primary .handoff-label { font-weight: normal; font-size: 18px; }
+
+  /* Proposal — editorial paper */
+  .proposal {
+    width: 100%;
+    background: var(--paper-warm);
+    border-left: 4px solid var(--orange);
+    padding: 24px 28px;
+  }
+  .proposal-eyebrow {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .proposal-body {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .proposal-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  /* Pattern — long-form journal entry */
+  .pattern {
+    width: 100%;
+  }
+  .pattern-date {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .pattern-headline {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 28px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .pattern-body {
+    font-family: "DM Serif Text", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .pattern-meta {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  /* Risk — newspaper bulletin */
+  .risk {
+    width: 100%;
+    padding: 16px 0;
+    border-top: 2px solid var(--red);
+    border-bottom: 1px solid var(--rule);
+  }
+  .risk-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+  .risk-body {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .risk-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 24px;
+  }
+
+  /* Readiness — masthead style */
+  .readiness {
+    width: 100%;
+    text-align: center;
+    padding: 28px 24px;
+    background: var(--paper-warm);
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+  }
+  .readiness-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .readiness-state {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 30px;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  /* SectionFrame — editorial article block */
+  .section-frame {
+    width: 100%;
+    padding: 0;
+  }
+  .section-frame-head {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .section-frame-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+  }
+  .section-frame-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+  }
+  .section-frame-body {
+    font-family: "DM Serif Text", serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* Panel */
+  .panel-mock {
+    width: 100%;
+    background: var(--paper-warm);
+    padding: 24px;
+    border-bottom: 4px solid var(--ink);
+  }
+  .panel-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .panel-body {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  /* Card mini */
+  .mini-card {
+    width: 100%;
+    background: var(--paper);
+    padding: 16px 18px;
+    border-left: 3px solid var(--ink);
+  }
+  .mini-card-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .mini-card-body {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* Stat */
+  .stat-cell { text-align: center; }
+  .stat-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.95;
+    color: var(--orange);
+  }
+  .stat-tag {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink);
+    margin-top: 8px;
+  }
+
+  /* Density demos */
+  .density-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .density-cell {
+    border-top: 2px solid var(--ink);
+    padding-top: 20px;
+  }
+  .density-cell-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .density-cell-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .density-cell-body {
+    font-family: "DM Serif Text", serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .density-cell-body--terse {
+    font-size: 17px;
+    font-style: italic;
+  }
+
+  /* Section list (for autopsy demo) */
+  .section-list { display: flex; flex-direction: column; gap: 12px; }
+  .section-list-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: "DM Serif Text", serif;
+    font-size: 14px;
+  }
+  .section-list-item--expanded {
+    border-bottom: 2px solid var(--orange);
+    padding: 12px 0;
+  }
+  .section-list-item--expanded em { color: var(--orange); }
+
+  .colophon {
+    margin-top: 128px;
+    padding-top: 40px;
+    border-top: 1px solid var(--rule-thick);
+    text-align: center;
+  }
+  .colophon p {
+    font-family: "DM Serif Text", serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 auto 12px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead-eyebrow">VARIANT A · EDITORIAL · 2026·06·05</div>
+    <h1 class="masthead-title">The Antaeus Sheet</h1>
+    <p class="masthead-subtitle">Candidate primitives, rendered as a long-form journal.</p>
+    <p class="masthead-lead">
+      The editorial cut treats every primitive as if it were a column in a research journal. Serif type carries the
+      narrative weight, ruled borders structure the field, italics carry softer states, mono recedes to footnotes and
+      timestamps. The bones are the same; the voice of the surfaces shifts toward considered authorship.
+    </p>
+  </header>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER ONE</div>
+      <h2 class="section-head-title">Layout primitives</h2>
+      <p class="section-head-tag">How the surface frames itself.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-eyebrow">RoomChrome</div>
+        <h3 class="entry-title">The mast at the top of every room</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="room-chrome">
+            <span class="wordmark">Antaeus</span>
+            <span class="crumb">From the Dashboard</span>
+            <span class="palette-trigger">⌘K</span>
+          </div>
+        </div>
+        <p class="entry-annotation">Serif wordmark, italic continuity crumb, recessive palette trigger as a mono note.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Topbar</div>
+        <h3 class="entry-title">The argument of the room, in one line</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="topbar">
+            <div class="topbar-eyebrow">BRIEFING · WEEKLY READ · WORKSPACE</div>
+            <div class="topbar-title">Where the motion really is today</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Tiny mono kicker, large serif title carrying the argument.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">SectionFrame</div>
+        <h3 class="entry-title">An article block, ruled at the head</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="section-frame">
+            <div class="section-frame-head">
+              <span class="section-frame-title">Pattern · pricing momentum</span>
+              <span class="section-frame-meta">3D AGO · CONF 78%</span>
+            </div>
+            <p class="section-frame-body">Three of your last five closed deals dropped price 12% or more in the final week. The pattern is real, not noise.</p>
+          </div>
+        </div>
+        <p class="entry-annotation">Article-style head + body. The serif title and ruled border do the structural work.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Panel</div>
+        <h3 class="entry-title">The cream surface that holds shorter prose</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="panel-mock">
+            <div class="panel-title">Recovery queue</div>
+            <div class="panel-body">Six deals are weakening. Three need a move this week.</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Warm cream background, navy ground rule. The body italicizes by default.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER TWO</div>
+      <h2 class="section-head-title">Display primitives</h2>
+      <p class="section-head-tag">How information speaks.</p>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-eyebrow">Heading · serif</div>
+        <h3 class="entry-title">The argument carrier</h3>
+        <div class="entry-demo">
+          <span class="serif" style="font-size:38px; line-height:1.0;">Acme is stalling.</span>
+        </div>
+        <p class="entry-annotation">DM Serif Display, the room's voice in its highest register.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Heading · sans</div>
+        <h3 class="entry-title">The control-surface heading</h3>
+        <div class="entry-demo">
+          <span style="font-weight:600; font-size:22px; letter-spacing:0.01em;">Recovery options</span>
+        </div>
+        <p class="entry-annotation">Public Sans, weight 600. Where forms and lists ask their head questions.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Kicker · mono</div>
+        <h3 class="entry-title">The dateline</h3>
+        <div class="entry-demo">
+          <span class="mono" style="font-size:12px; letter-spacing:0.32em; text-transform:uppercase; color:var(--ink-soft);">SIGNAL CONSOLE · LIVE</span>
+        </div>
+        <p class="entry-annotation">Mono uppercase. Used as a dateline or section code.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">BodyText</div>
+        <h3 class="entry-title">The reading column</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <p class="serif-text" style="font-size:16px; line-height:1.65; font-style:normal; margin:0;">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth.</p>
+        </div>
+        <p class="entry-annotation">DM Serif Text. The room's reading rhythm.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Stat</div>
+        <h3 class="entry-title">The figure in display weight</h3>
+        <div class="entry-demo">
+          <div class="stat-cell">
+            <div class="stat-num">37</div>
+            <div class="stat-tag">deals under pressure</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Serif numeral, italic caption. The figure earns its size.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Card</div>
+        <h3 class="entry-title">The journal entry block</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="mini-card">
+            <div class="mini-card-title">Acme Corp.</div>
+            <div class="mini-card-body">Stalled 18d at proposal stage.</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Navy left-rule, italic body. The universal block.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">StatusChip</div>
+        <h3 class="entry-title">State, in italics</h3>
+        <div class="entry-demo">
+          <div class="chip-row">
+            <span class="chip chip--green">ready now</span>
+            <span class="chip chip--blue">compounding</span>
+            <span class="chip chip--amber">still weak</span>
+            <span class="chip chip--red">at risk</span>
+          </div>
+        </div>
+        <p class="entry-annotation">Italic words with hairline rule under. Canon §10 vocabulary, set as prose.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">HeatBadge</div>
+        <h3 class="entry-title">The heat reading</h3>
+        <div class="entry-demo">
+          <div class="heat-row">
+            <div class="heat heat--hot"><span class="heat-num">94</span><span class="heat-band">hot</span></div>
+            <div class="heat heat--active"><span class="heat-num">78</span><span class="heat-band">active</span></div>
+            <div class="heat heat--watch"><span class="heat-num">52</span><span class="heat-band">watch</span></div>
+          </div>
+        </div>
+        <p class="entry-annotation">Serif numerals, italic band labels. Score forward, band beneath.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER THREE</div>
+      <h2 class="section-head-title">Action primitives</h2>
+      <p class="section-head-tag">How the operator moves.</p>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-eyebrow">Button · primary</div>
+        <h3 class="entry-title">The dominant move</h3>
+        <div class="entry-demo">
+          <button class="btn btn-primary">Cast proof</button>
+        </div>
+        <p class="entry-annotation">Solid navy, white set, uppercase. The dominant action per surface.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Button · orange</div>
+        <h3 class="entry-title">The accented variant</h3>
+        <div class="entry-demo">
+          <button class="btn btn-primary btn-primary--orange">Accept</button>
+        </div>
+        <p class="entry-annotation">Orange fill for accept-style moves inside Phase F surfaces.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Button · secondary</div>
+        <h3 class="entry-title">The paired action</h3>
+        <div class="entry-demo">
+          <button class="btn btn-secondary">Save draft</button>
+        </div>
+        <p class="entry-annotation">Outlined navy. Lower weight, pairs with a primary.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Button · ghost</div>
+        <h3 class="entry-title">The footnote action</h3>
+        <div class="entry-demo">
+          <button class="btn btn-ghost">dismiss</button>
+        </div>
+        <p class="entry-annotation">Hairline underline. The recessive tertiary.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">IconButton</div>
+        <h3 class="entry-title">The marginal mark</h3>
+        <div class="entry-demo">
+          <div class="btn-row">
+            <button class="btn-icon">⌘</button>
+            <button class="btn-icon">↗</button>
+            <button class="btn-icon">×</button>
+          </div>
+        </div>
+        <p class="entry-annotation">Square outline, serif glyph inside.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Link</div>
+        <h3 class="entry-title">The cross-reference</h3>
+        <div class="entry-demo">
+          <a href="#" style="color:var(--blue); text-decoration:none; font-family:'DM Serif Text', serif; font-style:italic; font-size:17px; border-bottom:1px solid var(--blue);">Open in Discovery Studio →</a>
+        </div>
+        <p class="entry-annotation">Italic, blue, dotted-underlined. Hand-off mark.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Toggle</div>
+        <h3 class="entry-title">The state mark</h3>
+        <div class="entry-demo">
+          <div class="btn-row" style="gap:32px;">
+            <span class="toggle"></span>
+            <span class="toggle on"></span>
+          </div>
+        </div>
+        <p class="entry-annotation">Square cell, navy at rest, orange when set.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER FOUR</div>
+      <h2 class="section-head-title">Input primitives</h2>
+      <p class="section-head-tag">How the operator authors.</p>
+    </div>
+    <div class="grid">
+
+      <div class="entry">
+        <div class="entry-eyebrow">TextInput</div>
+        <h3 class="entry-title">A line for one thought</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <input class="input" value="Acme Corp.">
+        </div>
+        <p class="entry-annotation">Underlined, serif set. The line is the form.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Select</div>
+        <h3 class="entry-title">A choice from a known set</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <select class="input" style="font-family:'DM Serif Text', serif;">
+            <option>Proposal</option>
+            <option>Discovery</option>
+            <option>Negotiation</option>
+          </select>
+        </div>
+        <p class="entry-annotation">Same underlined chrome. The drop-down inherits the line.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Textarea</div>
+        <h3 class="entry-title">A column of authored prose</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <textarea class="input" rows="3" style="resize:none; border:1px solid var(--rule); padding:12px;">Sarah needs the revised proposal by Friday.</textarea>
+        </div>
+        <p class="entry-annotation">Multi-line takes the bordered cell. Serif text inside.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">FormField</div>
+        <h3 class="entry-title">Label, line, footnote</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="field">
+            <label class="field-label">Buying group minimum</label>
+            <input class="input" type="number" value="5">
+            <div class="field-help">How many decision-makers typically have to agree before a deal closes?</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Mono caps label, serif line, italic footnote.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Checkbox</div>
+        <h3 class="entry-title">The marginal tick</h3>
+        <div class="entry-demo">
+          <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+            <label style="display:flex; gap:12px; align-items:center; font-family:'DM Serif Text', serif; font-size:15px;">
+              <input type="checkbox" checked style="accent-color:var(--orange);"> Champion identified
+            </label>
+            <label style="display:flex; gap:12px; align-items:center; font-family:'DM Serif Text', serif; font-size:15px; color:var(--ink-soft);">
+              <input type="checkbox"> Economic buyer confirmed
+            </label>
+          </div>
+        </div>
+        <p class="entry-annotation">Serif labels. Unchecked items recede in color.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER FIVE</div>
+      <h2 class="section-head-title">Feedback primitives</h2>
+      <p class="section-head-tag">How the system speaks back.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-eyebrow">Toast</div>
+        <h3 class="entry-title">A line that arrives and leaves</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="toast">Proof cast. Linked to Acme — Q4 expansion.</div>
+        </div>
+        <p class="entry-annotation">Solid navy, italic cream type. Brief confirmation.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Banner</div>
+        <h3 class="entry-title">A bracketed note</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div style="display:flex; flex-direction:column; gap:14px; width:100%;">
+            <div class="banner">It's been twelve days since the last brief was synthesized.</div>
+            <div class="banner banner--blue">FROM BRIEFING · Refresh the objection handler — Acme pricing pushback.</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Hairline rules above and below; italic serif inside.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Modal</div>
+        <h3 class="entry-title">A column that overlays</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="modal">
+            <div class="modal-title">Discard draft?</div>
+            <div class="modal-body">You've made unsaved edits to this proof draft. Discarding clears them.</div>
+            <div class="modal-actions">
+              <button class="btn btn-ghost">Cancel</button>
+              <button class="btn btn-primary">Discard</button>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Cream surface, navy outline. Reserved for destructive confirmations.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Tooltip</div>
+        <h3 class="entry-title">A footnote on hover</h3>
+        <div class="entry-demo">
+          <div class="tooltip-wrap" style="margin-top:60px;">
+            <div class="tooltip-note">One of the eight ICP quality checks the score reads from.</div>
+            <span class="tooltip-anchor serif-text">Buying group minimum<sup>1</sup></span>
+          </div>
+        </div>
+        <p class="entry-annotation">Superscript mark on the anchor; cream paper bubble above.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER SIX</div>
+      <h2 class="section-head-title">Navigation primitives</h2>
+      <p class="section-head-tag">How the operator moves between rooms.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-eyebrow">NavLink</div>
+        <h3 class="entry-title">A table of contents</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="nav-row">
+            <span class="nav-link active">Dashboard</span>
+            <span class="nav-link">Signal Console</span>
+            <span class="nav-link">Deal Workspace</span>
+            <span class="nav-link">Future Autopsy</span>
+          </div>
+        </div>
+        <p class="entry-annotation">Stacked serif lines with hairline rule. Active item italicized, orange-ruled.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Palette</div>
+        <h3 class="entry-title">The summoned index</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="palette-mock">
+            <div class="palette-search">› whats at risk_</div>
+            <div class="palette-item hl">
+              <span class="palette-item-kind">SKILL</span>
+              <span>What's at risk this week</span>
+            </div>
+            <div class="palette-item">
+              <span class="palette-item-kind">ROOM</span>
+              <span>Deal Workspace</span>
+            </div>
+            <div class="palette-item">
+              <span class="palette-item-kind">ROOM</span>
+              <span>Future Autopsy</span>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Index-style rows, italic for the highlighted result, mono for the kind.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">HandoffStrip</div>
+        <h3 class="entry-title">The route stack at the foot of the room</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="handoff">
+            <div class="handoff-item handoff-item--primary">
+              <span class="handoff-arrow">→</span>
+              <span class="handoff-label">Pre-mortem this deal</span>
+            </div>
+            <div class="handoff-item">
+              <span class="handoff-arrow">→</span>
+              <span class="handoff-label">Carry to an advisor</span>
+            </div>
+            <div class="handoff-item">
+              <span class="handoff-arrow">→</span>
+              <span class="handoff-label">Cast the proof</span>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Serif arrows + labels, stacked. The primary route reads larger.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">BackPill</div>
+        <h3 class="entry-title">The inbound dateline</h3>
+        <div class="entry-demo">
+          <span class="crumb">← From the Briefing · pricing-momentum pattern</span>
+        </div>
+        <p class="entry-annotation">Italic serif. Reads as a continuation, not a button.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER SEVEN</div>
+      <h2 class="section-head-title">System primitives</h2>
+      <p class="section-head-tag">Composed components, native to Antaeus.</p>
+    </div>
+    <div class="grid grid-2">
+
+      <div class="entry">
+        <div class="entry-eyebrow">ProposalCard · Phase F</div>
+        <h3 class="entry-title">A note from the system</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="proposal">
+            <div class="proposal-eyebrow">A SUGGESTION</div>
+            <div class="proposal-body">You closed your first deal last week. The system has been walking you through every surface — want it to step back?</div>
+            <div class="proposal-actions">
+              <button class="btn btn-primary btn-primary--orange">Yes, step back</button>
+              <button class="btn btn-secondary">Ask in a month</button>
+              <button class="btn btn-ghost">not now</button>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Cream paper, orange left-rule, serif display body. Three-button accept ladder.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">PatternCard · Briefing</div>
+        <h3 class="entry-title">An entry in the weekly read</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="pattern">
+            <div class="pattern-date">14·NOV·2026 · CONFIDENCE 78%</div>
+            <div class="pattern-headline">Late-stage price pressure is rising.</div>
+            <div class="pattern-body">Three of your last five closed deals dropped price 12% or more in the final week. Your stated discount band is 8%. The pattern shows up across two ICP segments.</div>
+            <div class="pattern-meta">— Across the last fourteen days.</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Long-form journal entry. Dateline, serif headline, paragraphed body, italic meta.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">RiskCard · Deal Workspace</div>
+        <h3 class="entry-title">A bulletin</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="risk">
+            <div class="risk-name">Acme Corp. — $84K</div>
+            <div class="risk-body">Stalled eighteen days at proposal. Single-threaded. Champion last replied November 3.</div>
+            <div class="risk-meta">
+              <span>STAGE · PROPOSAL</span>
+              <span>RISK · 78</span>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Red rule above, hairline below. Newspaper-bulletin posture.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">ReadinessReadout</div>
+        <h3 class="entry-title">The state, spoken</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="readiness">
+            <div class="readiness-eyebrow">READINESS</div>
+            <div class="readiness-state">You're at Inheritable with guardrails.</div>
+          </div>
+        </div>
+        <p class="entry-annotation">Cream cell bracketed by thick rules. The sentence-shaped state speaks for itself.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head-eyebrow">CHAPTER EIGHT</div>
+      <h2 class="section-head-title">The density gradient, side by side</h2>
+      <p class="section-head-tag">Show me how and Step back on the same primitive.</p>
+    </div>
+
+    <div class="grid grid-1">
+
+      <div class="entry">
+        <div class="entry-eyebrow">Dashboard command card · sentence count</div>
+        <h3 class="entry-title">The same card, in two voices of verbosity</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-label">SHOW ME HOW</div>
+              <div class="density-cell-title">Acme Corp.</div>
+              <div class="density-cell-body">The Acme deal hasn't moved in eighteen days. Sarah has been quiet since the demo on the fourteenth. This is what the system shows you first today because it is the ranked deal under the most pressure — a mix of how long it's been stalled, how big the deal is, and how late in the stage it should have moved by now. Click in to see the recovery options.</div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-label">STEP BACK</div>
+              <div class="density-cell-title">Acme Corp.</div>
+              <div class="density-cell-body density-cell-body--terse">Acme — stalled 18d at proposal. Recovery options inside.</div>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">Same primitive, same Command Chamber temperature. Verbosity is what differs.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Deal card · affordance count</div>
+        <h3 class="entry-title">Eight options vs. two and a margin</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-label">SHOW ME HOW</div>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">View</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Edit</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Mark at risk</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Add note</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Carry to advisor</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Pre-mortem</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Rehearse</button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px 14px;">Cast proof</button>
+              </div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-label">STEP BACK</div>
+              <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary">View</button>
+                <button class="btn btn-secondary">Edit</button>
+                <button class="btn btn-ghost">More ⌄</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">All eight visible vs. two visible plus a margin menu.</p>
+      </div>
+
+      <div class="entry">
+        <div class="entry-eyebrow">Autopsy sheets · default-expanded sections</div>
+        <h3 class="entry-title">Four expanded vs. one expanded</h3>
+        <div class="entry-demo entry-demo--stretch">
+          <div class="density-grid">
+            <div class="density-cell">
+              <div class="density-cell-label">SHOW ME HOW</div>
+              <div class="section-list">
+                <div class="section-list-item section-list-item--expanded"><em>Pattern</em> — Pressure before clarity. The proposal landed before the buyer had named their actual constraint.</div>
+                <div class="section-list-item section-list-item--expanded"><em>Proof</em> — The pilot never anchored. Readout owner was never assigned.</div>
+                <div class="section-list-item section-list-item--expanded"><em>Symptom</em> — Three weeks of single-threaded communication with Sarah.</div>
+                <div class="section-list-item section-list-item--expanded"><em>Decision</em> — The decision architecture was never mapped.</div>
+              </div>
+            </div>
+            <div class="density-cell">
+              <div class="density-cell-label">STEP BACK</div>
+              <div class="section-list">
+                <div class="section-list-item">Pattern · Pressure before clarity · 3 prior cases match</div>
+                <div class="section-list-item">Proof · Never anchored · readout owner unset</div>
+                <div class="section-list-item section-list-item--expanded"><em>Symptom</em> — Three weeks of single-threaded communication with Sarah. Champion replied once in fourteen days.</div>
+                <div class="section-list-item">Decision · Architecture unmapped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="entry-annotation">All four sheets expanded vs. only Symptom expanded, others as one-line summaries.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <p>This sheet is exploratory. The component library spec — the third sibling document under the design system charter — locks the actual set, contracts, and migration. The editorial cut treats every primitive as if it were a column in a journal; the other variants take the same primitives in distinctly different voices.</p>
+    <p>Color palette inherits canon Part II §1 (bright field) and §3 (orange for the dominant move, blue for system intelligence, green for healthy, amber for caution, red for risk). Typography inherits §2 (DM Serif Display, Public Sans, JetBrains Mono).</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

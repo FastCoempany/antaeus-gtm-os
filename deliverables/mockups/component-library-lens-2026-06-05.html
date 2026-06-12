@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lens UI — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F4F6FA;
+    --surface: #FFFFFF;
+    --surface-sub: #F8FAFC;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+    --shadow-rest: 0 1px 2px rgba(10,28,64,0.04), 0 4px 12px rgba(10,28,64,0.05);
+    --shadow-lens: 0 0 0 1px rgba(230, 112, 30, 0.18), 0 8px 28px rgba(10, 28, 64, 0.10), 0 24px 64px rgba(10, 28, 64, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1140px; margin: 0 auto; padding: 72px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 96px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 20px 0 16px;
+  }
+  .masthead-sub { font-size: 18px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 24px; }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 96px; }
+  .section-head { margin-bottom: 32px; display: grid; grid-template-columns: 60px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    line-height: 1.05;
+    margin: 0 0 6px;
+  }
+  .section-head-text p { font-size: 14px; color: var(--ink-soft); margin: 0; max-width: 56ch; }
+
+  /* ============================ */
+  /* SIGNATURE: THE FOCUS LENS    */
+  /* ============================ */
+  .container {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 36px 40px 40px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .container-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+  }
+  .container-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .container-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* THE LENS — asymmetric oval shape, the second geometry */
+  .lens {
+    position: relative;
+    padding: 36px 48px;
+    margin: 0 auto;
+    max-width: 520px;
+    background:
+      radial-gradient(ellipse at center, rgba(255,255,255,0.96) 0%, rgba(248, 250, 252, 0.96) 70%, rgba(244, 246, 250, 0.96) 100%);
+    border-radius: 50% 50% 50% 50% / 28% 28% 28% 28%;
+    box-shadow: var(--shadow-lens);
+    text-align: center;
+  }
+  /* Concentric aperture ring */
+  .lens::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border-radius: 50% 50% 50% 50% / 28% 28% 28% 28%;
+    border: 1px solid rgba(230, 112, 30, 0.10);
+    pointer-events: none;
+  }
+  .lens-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .lens-signal {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.25;
+    margin-bottom: 18px;
+    max-width: 32ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .lens-divider {
+    width: 28px;
+    height: 1px;
+    background: var(--orange);
+    margin: 0 auto 18px;
+    opacity: 0.55;
+  }
+  .lens-move-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .lens-move {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 24px;
+    max-width: 38ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* The CTA "attaches" to the lens, not bottom-right of a card */
+  .lens-cta {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    background: var(--orange);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10), 0 6px 18px rgba(230,112,30,0.25);
+  }
+  .lens-cta::after { content: '→'; }
+
+  /* Container context around the lens */
+  .lens-context-top { text-align: left; margin-bottom: 16px; }
+  .lens-context-bottom { text-align: left; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--hair); display: flex; justify-content: space-between; align-items: center; }
+  .lens-context-bottom-meta { font-size: 13px; color: var(--ink-soft); }
+
+  /* ============================ */
+  /* LENS PREVIEW IN TABLE        */
+  /* ============================ */
+  .table-frame {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 8px 20px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .row:last-child { border-bottom: none; }
+  .row-name { font-weight: 600; font-size: 14px; }
+  .row-ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .row-num { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); }
+  .row-sig {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .row-sig.risk { color: var(--red); }
+  .row-sig.attn { color: var(--amber); }
+  .row-sig.healthy { color: #15803D; }
+
+  /* Selected row expands into a lens preview */
+  .row.selected {
+    background: linear-gradient(180deg, var(--orange-soft) 0%, transparent 80%);
+    border-radius: 12px;
+    border-bottom: 1px solid var(--orange-soft);
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 20px 16px 24px;
+    text-align: center;
+  }
+  .row.selected .mini-lens {
+    margin-top: 12px;
+    padding: 22px 28px;
+    background: radial-gradient(ellipse at center, var(--surface) 0%, var(--surface-sub) 100%);
+    border-radius: 50% 50% 50% 50% / 36% 36% 36% 36%;
+    box-shadow: 0 0 0 1px rgba(230, 112, 30, 0.20), 0 6px 18px rgba(10,28,64,0.06);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============================ */
+  /* TOOLTIPS AS CIRCULAR CALLOUTS */
+  /* ============================ */
+  .tip-wrap { position: relative; display: inline-block; }
+  .tip-anchor { border-bottom: 1px dotted var(--orange); cursor: help; padding-bottom: 2px; }
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    padding: 18px 24px;
+    background: var(--surface);
+    border-radius: 50% / 32%;
+    box-shadow: 0 0 0 1px rgba(230,112,30,0.18), 0 8px 24px rgba(10,28,64,0.10);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  /* Buttons (rest of system) */
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 99px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-accent { background: var(--orange); color: white; }
+  .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hair-strong); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 14px; }
+
+  /* Side focus pane */
+  .focus-pane {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: var(--shadow-rest);
+    border: 1px solid var(--hair);
+    position: relative;
+    overflow: hidden;
+  }
+  .focus-pane-glow {
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 112, 30, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .focus-pane-content {
+    position: relative;
+    z-index: 1;
+  }
+  .focus-pane-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    margin: 0 0 4px;
+  }
+  .focus-pane-ctx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* Helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .vstack { display: flex; flex-direction: column; gap: 16px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    box-shadow: var(--shadow-rest);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">LENS UI · DIRECTION 01 · 2026·06·05</p>
+    <h1>Lens UI.</h1>
+    <p class="masthead-sub">A second geometry. The system visually narrows attention around the next GTM truth.</p>
+    <p class="masthead-body">
+      Most of the workspace is rectangular. Inside the working surface, the moments that earn full attention render as <strong>focus lenses</strong> — soft asymmetric ovals with a quiet aperture ring, the CTA attaching to the lens rather than floating below a card. Used only for next-best-action, risk explanation, forecast judgment, account summary, AI recommendation. The signature is the introduction of a second silhouette into a SaaS surface that otherwise behaves normally.
+    </p>
+  </header>
+
+  <!-- 01 - The signature: lens inside container -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">01</span>
+      <div class="section-head-text">
+        <h2>The Focus Lens.</h2>
+        <p>The system's read of the most important thing — rendered as an aperture inside the rectangular container.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="container-head">
+        <span class="container-name">Account · Acme Corp.</span>
+        <span class="container-meta">PROPOSAL · DAY 18 · $84,000</span>
+      </div>
+
+      <div class="lens-context-top">
+        <span class="eyebrow">— SYSTEM READ</span>
+      </div>
+
+      <div class="lens">
+        <div class="lens-eyebrow">Signal</div>
+        <div class="lens-signal">Renewal risk is rising. The CFO has not seen the redline.</div>
+        <div class="lens-divider"></div>
+        <div class="lens-move-label">— Recommended move</div>
+        <div class="lens-move">Send the revised proposal to the CFO before EOW. Backchannel via Tasha as air cover.</div>
+        <button class="lens-cta">Draft CFO note</button>
+      </div>
+
+      <div class="lens-context-bottom">
+        <span class="lens-context-bottom-meta">Last touched 12 days ago · pattern matches three prior closed-lost</span>
+        <button class="btn btn-ghost">Mark for later</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 - selected row expands into a lens preview -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">02</span>
+      <div class="section-head-text">
+        <h2>Selected row, lens preview.</h2>
+        <p>The table is rectangular. When the operator opens a row, it expands into a lens preview that introduces the second geometry inline.</p>
+      </div>
+    </div>
+
+    <div class="table-frame">
+      <div class="row">
+        <div><div class="row-name">Helix Robotics</div><div class="row-ctx">CFO meeting Thursday</div></div>
+        <div class="row-num">$240,000</div>
+        <span class="row-sig healthy">Track</span>
+        <button class="btn btn-ghost">Open ↗</button>
+      </div>
+      <div class="row">
+        <div><div class="row-name">Northwind Logistics</div><div class="row-ctx">Pilot pending readout</div></div>
+        <div class="row-num">$112,000</div>
+        <span class="row-sig attn">Attn</span>
+        <button class="btn btn-ghost">Open ↗</button>
+      </div>
+      <div class="row selected">
+        <div>
+          <div class="row-name" style="font-size:16px;">Acme Corp.</div>
+          <div class="row-ctx">PROPOSAL · DAY 18 · $84,000</div>
+          <div class="mini-lens">
+            <div class="lens-eyebrow">— SIGNAL</div>
+            <div style="font-family:'DM Serif Display', serif; font-size:19px; line-height:1.3; margin-bottom:14px;">CFO has not seen the redline. Deal slips if she doesn't see it by Friday.</div>
+            <div style="font-size:13px; color:var(--ink-soft); line-height:1.5; margin-bottom:16px;">Move: send revised proposal directly. Backchannel via Tasha as air cover.</div>
+            <button class="lens-cta">Draft CFO note</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div><div class="row-name">Cordillera Health</div><div class="row-ctx">Legal stalled on residency</div></div>
+        <div class="row-num">$340,000</div>
+        <span class="row-sig risk">Exec</span>
+        <button class="btn btn-ghost">Open ↗</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 - side focus pane + circular tooltip -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">03</span>
+      <div class="section-head-text">
+        <h2>Soft focus surfaces.</h2>
+        <p>Side panes carry a quiet radial glow at the focus point. Tooltips render as small circular callouts rather than black rectangles.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="focus-pane">
+        <div class="focus-pane-glow"></div>
+        <div class="focus-pane-content">
+          <div class="eyebrow" style="margin-bottom:14px;">— TODAY'S READ</div>
+          <h3 class="focus-pane-name">Pricing momentum is shifting.</h3>
+          <div class="focus-pane-ctx">BRIEFING · 14D WINDOW · CONF 78%</div>
+          <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:0 0 14px;">Three of the last five closed deals dropped price 12% or more in the final week. The pattern shows up across two ICP segments.</p>
+          <p style="font-size:13px; color:var(--ink-soft); margin:0 0 20px; line-height:1.55;">Worth reading before the Acme CFO note — the pattern affects what you say.</p>
+          <button class="btn btn-accent">Open the brief</button>
+        </div>
+      </div>
+
+      <div class="focus-pane" style="display:flex; flex-direction:column; justify-content:center; min-height:280px; padding:40px 32px; text-align:center;">
+        <div class="focus-pane-content">
+          <div class="tip-wrap">
+            <div class="tip">One of eight quality checks the ICP score reads from. Typical 3–7 for B2B teams.</div>
+            <p style="font-size:14px; max-width:36ch; margin:0 auto 24px; line-height:1.6;">The ICP definition includes a <span class="tip-anchor">buying-group minimum</span>; the system uses it to filter every Account downstream.</p>
+          </div>
+          <div class="hstack" style="justify-content:center; gap:10px;">
+            <button class="btn btn-accent">Sharpen the ICP</button>
+            <button class="btn btn-secondary">Review accounts</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 10px;">
+      <strong>Lens UI.</strong> A second geometry — soft asymmetric ovals with quiet aperture rings — introduced inside an otherwise rectangular SaaS workspace. The lens shows up only for what the system has actually evaluated: next-best-action, risk explanation, forecast judgment, account summary, AI recommendation. The CTA attaches to the lens, not the card edge. Tooltips render as small circular callouts. Selected rows expand into lens previews inline.
+    </p>
+    <p style="margin:0;">
+      <strong>Canon preserved.</strong> Bright field. DM Serif Display for lens signal copy and headlines. Public Sans for body. JetBrains Mono for codes and timestamps. Orange for the dominant move and the lens aperture ring; canon color roles intact. The discipline: never put a chip in a bubble. Bubble plague is real. The lens is reserved for the moments the system has earned.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

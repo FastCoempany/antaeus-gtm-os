@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inset Console — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #EDF0F4;
+    --surface: #F7F9FC;
+    --surface-raised: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.10);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.06);
+
+    /* The well effect — the signature */
+    --well-bg: rgba(20, 24, 32, 0.025);
+    --well-shadow:
+      inset 0 1px 2px rgba(10, 28, 64, 0.10),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.80),
+      0 1px 0 rgba(255, 255, 255, 0.60);
+    --well-deep:
+      inset 0 2px 4px rgba(10, 28, 64, 0.14),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.80),
+      0 1px 0 rgba(255, 255, 255, 0.60);
+    --raised-shadow:
+      0 1px 0 rgba(10, 28, 64, 0.05),
+      0 2px 4px rgba(10, 28, 64, 0.06),
+      0 8px 16px rgba(10, 28, 64, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.50);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .page { max-width: 1180px; margin: 0 auto; padding: 72px 48px 144px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .masthead { margin-bottom: 96px; max-width: 720px; }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 20px 0 16px;
+  }
+  .masthead-sub { font-size: 18px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 24px; }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+
+  .section { margin-bottom: 80px; }
+  .section-head { margin-bottom: 28px; display: grid; grid-template-columns: 60px 1fr; gap: 24px; align-items: baseline; }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    line-height: 1.05;
+    margin: 0 0 6px;
+  }
+  .section-head-text p { font-size: 14px; color: var(--ink-soft); margin: 0; max-width: 56ch; }
+
+  /* ============================ */
+  /* SURFACE: the workspace ground */
+  /* ============================ */
+  .surface {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 32px 36px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(10, 28, 64, 0.04),
+      0 8px 24px rgba(10, 28, 64, 0.04);
+  }
+  .surface-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .surface-head h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 4px 0 0;
+  }
+  .surface-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* ============================ */
+  /* THE WELL — the signature      */
+  /* ============================ */
+  .well {
+    background: var(--well-bg);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: var(--well-shadow);
+  }
+  .well.deep {
+    box-shadow: var(--well-deep);
+    background: rgba(20, 24, 32, 0.045);
+  }
+  .well-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .well-name { font-weight: 600; font-size: 16px; color: var(--ink); }
+  .well-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .well-body { font-size: 14px; color: var(--ink); line-height: 1.55; }
+
+  /* Layered structure inside the well — Signal / Reason / Move */
+  .well-layers {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 4px 16px;
+    margin-top: 12px;
+  }
+  .well-layer-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 3px;
+  }
+  .well-layer-key.move { color: var(--orange); }
+  .well-layer-val { font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .well-layer-val.heavy { font-weight: 500; }
+
+  .well-foot {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(10, 28, 64, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Risk well — subtle red tint */
+  .well.risk {
+    background: rgba(239, 68, 68, 0.045);
+    box-shadow:
+      inset 0 1px 2px rgba(239, 68, 68, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(255, 255, 255, 0.50);
+  }
+  .well.attn {
+    background: rgba(245, 158, 11, 0.06);
+    box-shadow:
+      inset 0 1px 2px rgba(245, 158, 11, 0.16),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(255, 255, 255, 0.50);
+  }
+  .well.healthy {
+    background: rgba(34, 197, 94, 0.05);
+    box-shadow:
+      inset 0 1px 2px rgba(34, 197, 94, 0.14),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(255, 255, 255, 0.50);
+  }
+
+  /* ============================ */
+  /* INPUTS — sunken               */
+  /* ============================ */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field-help { font-size: 12px; color: var(--ink-soft); }
+  .input {
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(10, 28, 64, 0.04);
+    box-shadow:
+      inset 0 1px 2px rgba(10, 28, 64, 0.10),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.60);
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .input:focus {
+    outline: none;
+    box-shadow:
+      inset 0 1px 2px rgba(230, 112, 30, 0.20),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.40),
+      0 0 0 3px var(--orange-soft);
+  }
+
+  /* ============================ */
+  /* BUTTONS — raised against well */
+  /* ============================ */
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: box-shadow 0.12s, transform 0.08s;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.10), 0 2px 6px rgba(10,28,64,0.20), inset 0 1px 0 rgba(255,255,255,0.10);
+  }
+  .btn-primary:hover { background: var(--ink-700); }
+  .btn-primary:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.10), 0 1px 2px rgba(10,28,64,0.20); }
+  .btn-accent {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.10), 0 2px 6px rgba(230,112,30,0.30), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .btn-accent:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: var(--surface-raised);
+    color: var(--ink);
+    border-color: var(--hair-strong);
+    box-shadow: 0 1px 0 rgba(10,28,64,0.04), 0 2px 4px rgba(10,28,64,0.04);
+  }
+  .btn-ghost { background: transparent; color: var(--ink-soft); padding: 9px 12px; box-shadow: none; }
+
+  /* ============================ */
+  /* SHELL with depressed nav      */
+  /* ============================ */
+  .shell {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(10, 28, 64, 0.04),
+      0 8px 24px rgba(10, 28, 64, 0.04);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 540px;
+    overflow: hidden;
+  }
+  .nav {
+    background: var(--surface);
+    padding: 24px 12px;
+    border-right: 1px solid var(--hair);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    padding: 0 10px 24px;
+  }
+  .nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 12px 10px 4px;
+  }
+  .nav-item {
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-item:hover { color: var(--ink); }
+  /* Active item is DEPRESSED into the rail — inverse of normal SaaS */
+  .nav-item.active {
+    background: rgba(10, 28, 64, 0.05);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow:
+      inset 0 1px 2px rgba(10, 28, 64, 0.10),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.70);
+  }
+  .nav-item .ct {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .nav-item.active .ct { color: var(--orange); }
+
+  .main { padding: 28px 32px; display: flex; flex-direction: column; gap: 22px; }
+  .main-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .main-topline h3 { font-family: "DM Serif Display", serif; font-size: 26px; line-height: 1.1; margin: 4px 0 0; }
+  .main-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* Summary - small wells */
+  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .summary-cell {
+    background: var(--well-bg);
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: var(--well-shadow);
+  }
+  .summary-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .summary-val { font-family: "DM Serif Display", serif; font-size: 28px; line-height: 1; }
+  .summary-val.risk { color: var(--red); }
+  .summary-val.attn { color: var(--amber); }
+  .summary-trail { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+
+  /* Recovery queue — rows inside grooves */
+  .queue { display: flex; flex-direction: column; gap: 8px; }
+  .queue-row {
+    background: var(--well-bg);
+    border-radius: 6px;
+    padding: 12px 14px;
+    box-shadow: var(--well-shadow);
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 14px;
+    align-items: center;
+  }
+  .queue-name { font-weight: 600; font-size: 14px; }
+  .queue-ctx { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .queue-num { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); }
+  .queue-sig {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .queue-sig.risk { color: var(--red); }
+  .queue-sig.attn { color: var(--amber); }
+  .queue-sig.healthy { color: #15803D; }
+
+  /* AI answer well — for recommendations */
+  .answer-well {
+    background: rgba(230, 112, 30, 0.045);
+    border-radius: 10px;
+    padding: 22px 26px;
+    box-shadow:
+      inset 0 1px 2px rgba(230, 112, 30, 0.16),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.65),
+      0 1px 0 rgba(255, 255, 255, 0.50);
+  }
+  .answer-well-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .answer-well-claim {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 0 0 12px;
+  }
+  .answer-well-body { font-size: 14px; line-height: 1.55; color: var(--ink); margin-bottom: 16px; }
+
+  /* Toggle — feels switched into the surface */
+  .toggle {
+    display: inline-flex;
+    width: 40px; height: 22px;
+    border-radius: 99px;
+    background: rgba(10, 28, 64, 0.10);
+    padding: 2px;
+    cursor: pointer;
+    box-shadow:
+      inset 0 1px 2px rgba(10, 28, 64, 0.14),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.50);
+  }
+  .toggle::after {
+    content: '';
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 2px rgba(10, 28, 64, 0.25);
+    transition: transform 0.15s;
+  }
+  .toggle.on { background: var(--orange); }
+  .toggle.on::after { transform: translateX(18px); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .vstack { display: flex; flex-direction: column; gap: 14px; }
+  .hstack { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .concept {
+    margin-top: 96px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.70),
+      0 1px 0 rgba(10, 28, 64, 0.04),
+      0 6px 18px rgba(10, 28, 64, 0.04);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">INSET CONSOLE · DIRECTION 03 · 2026·06·05</p>
+    <h1>Inset Console.</h1>
+    <p class="masthead-sub">Important work feels set into the workspace, not slapped on top.</p>
+    <p class="masthead-body">
+      Most SaaS products lift every card with shadows. Antaeus goes the other direction: content panels are recessed wells, inputs sink into the surface, the active nav item depresses into the rail. Buttons stay raised because they are the things that act. The surface reads as <strong>worked into</strong>, not <strong>floating above</strong>. The silhouette is physical without being skeuomorphic — shallow, matte, and quiet.
+    </p>
+  </header>
+
+  <!-- 01 - signature wells -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">01</span>
+      <div class="section-head-text">
+        <h2>The Well.</h2>
+        <p>Content sits in a shallow recess. Layered Signal / Reason / Move structure reads as embossed into the surface.</p>
+      </div>
+    </div>
+
+    <div class="surface">
+      <div class="surface-head">
+        <div>
+          <div class="eyebrow">— TODAY'S RECOVERY QUEUE</div>
+          <h3>Where the motion is today.</h3>
+        </div>
+        <span class="surface-meta">TUESDAY · 09:12 CT</span>
+      </div>
+
+      <div class="vstack">
+        <div class="well risk">
+          <div class="well-head">
+            <span class="well-name">Acme Corp.</span>
+            <span class="well-meta">PROPOSAL · DAY 18 · $84K</span>
+          </div>
+          <div class="well-layers">
+            <span class="well-layer-key">Signal</span>
+            <span class="well-layer-val">Champion silent for twelve days.</span>
+            <span class="well-layer-key">Reason</span>
+            <span class="well-layer-val">Procurement re-opened pricing on Nov 3. CFO has not seen the redline.</span>
+            <span class="well-layer-key move">Move</span>
+            <span class="well-layer-val heavy">Send revised proposal to CFO before EOW.</span>
+          </div>
+          <div class="well-foot">
+            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--red);">— Likely to slip</span>
+            <button class="btn btn-accent">Draft note</button>
+          </div>
+        </div>
+
+        <div class="well attn">
+          <div class="well-head">
+            <span class="well-name">Northwind Logistics</span>
+            <span class="well-meta">PROOF · DAY 9 · $112K</span>
+          </div>
+          <div class="well-layers">
+            <span class="well-layer-key">Signal</span>
+            <span class="well-layer-val">Pilot ran clean. No readout scheduled.</span>
+            <span class="well-layer-key">Reason</span>
+            <span class="well-layer-val">Readout owner field is empty after five days. Freshness expires at fourteen.</span>
+            <span class="well-layer-key move">Move</span>
+            <span class="well-layer-val heavy">Name a readout owner before the pilot ages out.</span>
+          </div>
+          <div class="well-foot">
+            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--amber);">— No readout owner</span>
+            <button class="btn btn-primary">Assign owner</button>
+          </div>
+        </div>
+
+        <div class="well healthy">
+          <div class="well-head">
+            <span class="well-name">Helix Robotics</span>
+            <span class="well-meta">NEGOTIATION · DAY 4 · $240K</span>
+          </div>
+          <div class="well-body">CFO meeting Thursday. Pre-read due Wednesday morning. Champion threaded the EB last week. On track.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 - shell with depressed nav -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">02</span>
+      <div class="section-head-text">
+        <h2>The shell.</h2>
+        <p>The summary cells are wells. The active nav item depresses into the rail. Buttons stay raised because they are what acts.</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="nav">
+        <div class="nav-mark">Antaeus</div>
+        <div class="nav-group">Today</div>
+        <div class="nav-item active">Dashboard <span class="ct">12</span></div>
+        <div class="nav-item">Briefing <span class="ct">3</span></div>
+        <div class="nav-item">Signal Console <span class="ct">37</span></div>
+        <div class="nav-group">Pipeline</div>
+        <div class="nav-item">Deal Workspace</div>
+        <div class="nav-item">Future Autopsy</div>
+        <div class="nav-item">PoC Framework</div>
+      </aside>
+      <main class="main">
+        <div class="main-topline">
+          <div>
+            <div class="eyebrow">DASHBOARD · TUESDAY MORNING</div>
+            <h3>Where the motion is today.</h3>
+          </div>
+          <span class="main-meta">09:12 CT · ⌘K</span>
+        </div>
+
+        <div class="summary">
+          <div class="summary-cell">
+            <div class="summary-label">Active deals</div>
+            <div class="summary-val">37</div>
+            <div class="summary-trail">+2 since Monday</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Critical</div>
+            <div class="summary-val risk">3</div>
+            <div class="summary-trail">All in proposal</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Stale &gt; 14d</div>
+            <div class="summary-val attn">8</div>
+            <div class="summary-trail">2 with Friday movement</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Win rate</div>
+            <div class="summary-val">22%</div>
+            <div class="summary-trail">Last 90 days</div>
+          </div>
+        </div>
+
+        <div class="queue">
+          <div class="queue-row">
+            <div><div class="queue-name">Acme Corp.</div><div class="queue-ctx">Champion silent · procurement re-opened pricing</div></div>
+            <div class="queue-num">$84,000</div>
+            <span class="queue-sig risk">At risk</span>
+            <button class="btn btn-accent">Draft</button>
+          </div>
+          <div class="queue-row">
+            <div><div class="queue-name">Northwind Logistics</div><div class="queue-ctx">Pilot pending readout</div></div>
+            <div class="queue-num">$112,000</div>
+            <span class="queue-sig attn">Attn</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="queue-row">
+            <div><div class="queue-name">Cordillera Health</div><div class="queue-ctx">Legal stalled on residency</div></div>
+            <div class="queue-num">$340,000</div>
+            <span class="queue-sig risk">Exec</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="queue-row">
+            <div><div class="queue-name">Helix Robotics</div><div class="queue-ctx">CFO meeting Thursday</div></div>
+            <div class="queue-num">$240,000</div>
+            <span class="queue-sig healthy">Track</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- 03 - inputs + AI answer well -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">03</span>
+      <div class="section-head-text">
+        <h2>Sunken inputs. The Answer Well.</h2>
+        <p>Inputs feel pressed into the form. The AI's recommendation renders inside a tinted Answer Well — set into the surface, not floating above it.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="surface" style="padding:26px 28px;">
+        <div class="vstack" style="gap:18px;">
+          <div class="field">
+            <label class="field-label">Buying group minimum</label>
+            <input class="input" value="5">
+            <div class="field-help">Typical 3–7 decision-makers for most B2B teams.</div>
+          </div>
+          <div class="field">
+            <label class="field-label">Champion identified</label>
+            <input class="input" value="Sarah Chen · VP Operations">
+          </div>
+          <div class="field">
+            <label class="field-label">Notes</label>
+            <textarea class="input" rows="3" style="resize:vertical; font-family:inherit;">Procurement re-opened pricing on Nov 3. Champion has not relayed.</textarea>
+          </div>
+          <div class="hstack">
+            <span class="hstack" style="gap:10px;">
+              <span class="toggle on"></span>
+              <span style="font-size:13px;">Show in brief</span>
+            </span>
+            <button class="btn btn-primary" style="margin-left:auto;">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="surface" style="padding:26px 28px;">
+        <div class="answer-well">
+          <div class="answer-well-eyebrow">— Antaeus' read</div>
+          <h4 class="answer-well-claim">CFO has not seen the redline.</h4>
+          <p class="answer-well-body">Pattern matches three prior closed-lost deals where procurement re-opened pricing after the demo. Each ended the same way: champion got squeezed, the CFO never saw the revised proposal, the deal died at quarter-end.</p>
+          <div class="hstack">
+            <button class="btn btn-accent">Draft note to CFO</button>
+            <button class="btn btn-ghost">Carry to Tasha</button>
+          </div>
+        </div>
+
+        <div style="margin-top:18px; font-size:12px; color:var(--ink-soft); line-height:1.55;">
+          The recommendation reads as set into the workspace — visible because of color and shadow, but never lifting off the surface to demand attention.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin:0 0 10px;">
+      <strong>Inset Console.</strong> Content lives in shallow wells with inner shadow and a faint highlight on the bottom edge. Inputs feel pressed into the form. The active nav item depresses into the rail. Tables are rows in shallow grooves. AI recommendations render inside tinted answer wells — set into the workspace, never floating above. Buttons stay raised because they are the things that act; raised against the recessed surface gives them obvious affordance.
+    </p>
+    <p style="margin:0;">
+      <strong>Canon preserved.</strong> Bright field (slightly cooler tint for the recessed look). DM Serif Display for headlines and stats. Public Sans for body and controls. JetBrains Mono for codes, IDs, and the Signal / Reason / Move labels. Orange as the rationed accent for the dominant move and the answer well. Shallow, matte, spacious — too much inset reads old-school; the discipline is restraint.
+    </p>
+  </aside>
+
+</div>
+</body>
+</html>

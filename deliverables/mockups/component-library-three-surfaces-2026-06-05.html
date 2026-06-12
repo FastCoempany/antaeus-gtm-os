@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Surfaces — Briefing · Workbench · Ledger</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFAF6;
+    --field: #F4F5F1;
+    --workbench: #F9FAFB;
+    --workbench-field: #F2F4F8;
+    --tray: rgba(10, 28, 64, 0.04);
+    --tray-act: rgba(230, 112, 30, 0.07);
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --rule: rgba(10, 28, 64, 0.14);
+    --rule-soft: rgba(10, 28, 64, 0.08);
+    --rule-strong: rgba(10, 28, 64, 0.22);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", serif; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  /* ============================ */
+  /* MASTHEAD                      */
+  /* ============================ */
+  .masthead-wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 72px 40px 32px;
+  }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 20px 0 16px;
+  }
+  .masthead-sub { font-size: 18px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 24px; }
+  .masthead-body { font-size: 15px; line-height: 1.7; max-width: 60ch; margin: 0; }
+  .masthead-body strong { font-weight: 600; }
+  .surfaces-row {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .surfaces-chip {
+    padding: 6px 14px;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .surfaces-chip strong { color: var(--ink); font-weight: 700; }
+  .surfaces-chip.accent strong { color: var(--orange); }
+
+  /* ============================ */
+  /* SURFACE DELIMITER             */
+  /* ============================ */
+  .surface-mark {
+    max-width: 920px;
+    margin: 96px auto 32px;
+    padding: 0 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .surface-mark-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .surface-mark-info h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.05;
+    margin: 0 0 6px;
+  }
+  .surface-mark-info p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+  }
+  .surface-mark-info p strong { color: var(--ink); font-weight: 600; }
+
+  /* ============================ */
+  /* SURFACE 01 — BRIEFING         */
+  /* ============================ */
+  .surface-briefing {
+    background: var(--paper);
+    padding: 72px 0;
+  }
+  .briefing-column { max-width: 720px; margin: 0 auto; padding: 0 40px; }
+  .briefing-head {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .briefing-head-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .briefing-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+  }
+  .briefing-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1.05;
+    margin: 0 0 20px;
+  }
+  .briefing-opener {
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 0 0 40px;
+  }
+  .situation {
+    margin-bottom: 36px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 20px;
+    align-items: baseline;
+  }
+  .situation-num {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    color: var(--orange);
+    text-align: right;
+  }
+  .situation-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .situation-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 0 0 12px;
+  }
+  .situation-implication {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+  .recommendation {
+    margin: 40px 0 24px;
+    padding: 28px 0 24px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 20px;
+  }
+  .recommendation-marker {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    color: var(--orange);
+    text-align: right;
+    padding-top: 4px;
+  }
+  .recommendation-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .recommendation-text {
+    font-family: "DM Serif Display", serif;
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0 0 18px;
+  }
+  .recommendation-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn-dark {
+    background: var(--ink);
+    color: var(--paper);
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-link {
+    background: transparent;
+    color: var(--ink-soft);
+    border: none;
+    font: inherit;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--ink-quiet);
+    padding: 0 0 1px;
+  }
+
+  /* Handoff between surfaces */
+  .handoff {
+    max-width: 720px;
+    margin: 48px auto 0;
+    padding: 14px 24px;
+    background: rgba(230, 112, 30, 0.05);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .handoff-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .handoff-text strong { font-weight: 600; }
+  .handoff-action {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  /* ============================ */
+  /* SURFACE 02 — WORKBENCH        */
+  /* ============================ */
+  .surface-workbench {
+    background: var(--workbench-field);
+    padding: 72px 40px;
+  }
+  .workbench-frame {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .workbench {
+    background: var(--workbench);
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .object-head {
+    padding: 18px 24px;
+    border-bottom: 1.5px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .object-head h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .object-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+  .zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    min-height: 380px;
+  }
+  .zone {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-right: 1px solid var(--rule);
+  }
+  .zone:last-child { border-right: none; }
+  .zone.diagnosis { background: var(--tray); }
+  .zone.move { background: var(--tray-act); }
+  .zone-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .zone-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .zone-name.act { color: var(--orange); }
+  .zone-count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .item {
+    padding: 6px 0 8px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .item:last-child { border-bottom: none; }
+  .item-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .item-tag.risk { color: var(--red); }
+  .item-tag.act { color: var(--orange); font-weight: 600; }
+  .item-title {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .item-title.recommended {
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    line-height: 1.3;
+    font-weight: 400;
+  }
+  .item-meta {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .proof-strip {
+    padding: 14px 24px;
+    border-top: 1.5px solid var(--ink);
+    background: var(--workbench);
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+  }
+  .proof-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .proof-strip-rows { display: flex; flex-direction: column; gap: 4px; }
+  .proof-row { display: grid; grid-template-columns: 100px 1fr; gap: 16px; font-size: 12px; }
+  .proof-row-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .proof-row-text { color: var(--ink-soft); }
+  .command-slot {
+    padding: 12px 24px;
+    border-top: 1px solid var(--rule);
+    background: var(--workbench);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .command-input {
+    flex: 1;
+    padding: 8px 14px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 5px;
+    background: white;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .btn-accent {
+    background: var(--orange);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* ============================ */
+  /* SURFACE 03 — LEDGER           */
+  /* ============================ */
+  .surface-ledger {
+    background: var(--paper);
+    padding: 72px 0;
+  }
+  .ledger-column { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+  .ledger-head-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .ledger-head-meta strong { color: var(--ink); font-weight: 600; }
+  .ledger-head {
+    display: grid;
+    grid-template-columns: 200px 200px 1fr 100px;
+    gap: 24px;
+    padding: 10px 0 8px;
+    border-bottom: 2px solid var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 200px 200px 1fr 100px;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: baseline;
+  }
+  .entry:last-child { border-bottom: 1px solid var(--rule); }
+  .entry-account { font-family: "DM Serif Display", serif; font-size: 17px; line-height: 1.15; }
+  .entry-account-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 3px;
+  }
+  .entry-signal { font-size: 13px; line-height: 1.45; color: var(--ink); }
+  .entry-signal-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+  .entry-move { font-size: 13px; line-height: 1.45; color: var(--ink); font-weight: 500; }
+  .entry-move-action {
+    margin-top: 4px;
+    font-family: "Public Sans", sans-serif;
+    font-size: 12px;
+    color: var(--orange);
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 1px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+  }
+  .entry-state {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .entry-state.risk { color: var(--red); }
+  .entry-state.attn { color: var(--amber); }
+  .entry-state.exec { color: var(--ink); }
+  .entry-state.healthy { color: #15803D; }
+  .entry-state.acted { color: var(--orange); }
+  .sub-row {
+    display: grid;
+    grid-template-columns: 200px 200px 1fr 100px;
+    gap: 24px;
+    padding: 3px 0;
+  }
+  .sub-row-key {
+    grid-column: 2 / 3;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: right;
+    padding-right: 4px;
+  }
+  .sub-row-val {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    padding-left: 10px;
+    border-left: 1px solid var(--rule-soft);
+  }
+  .sub-row-val strong { color: var(--ink); font-weight: 500; }
+
+  /* Concept footer */
+  .concept {
+    max-width: 920px;
+    margin: 96px auto 96px;
+    padding: 28px 40px;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .concept strong { color: var(--ink); }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .concept-grid > div { padding-right: 16px; border-right: 1px solid var(--rule); }
+  .concept-grid > div:last-child { border-right: none; }
+  .concept-grid h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .concept-grid h4 .pct {
+    background: var(--orange);
+    color: white;
+    padding: 1px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead-wrap">
+  <p class="eyebrow">THREE SURFACES · WORKBENCH + BRIEFING + LEDGER · 2026·06·05</p>
+  <h1>Three surfaces, three cognitive modes.</h1>
+  <p class="masthead-sub">Briefing for judgment. Workbench for thinking. Ledger for memory.</p>
+  <p class="masthead-body">
+    A GTM operating system should not be a gallery of cards. It should give the operator three distinct surfaces for three distinct kinds of work. The <strong>Briefing</strong> arrives in the morning to tell the operator what the system has concluded. The <strong>Workbench</strong> is where the operator drills into one account, sees the source / diagnosis / move spatially, and acts. The <strong>Ledger</strong> is where everything settles into the running record the inheritor reads. The same content lives across all three, expressed in the form each surface requires.
+  </p>
+  <div class="surfaces-row">
+    <span class="surfaces-chip"><strong>01</strong> · BRIEFING — system judgment</span>
+    <span class="surfaces-chip"><strong>02</strong> · WORKBENCH — active thinking</span>
+    <span class="surfaces-chip accent"><strong>03</strong> · LEDGER — durable memory</span>
+  </div>
+</header>
+
+<!-- ===================================== -->
+<!-- SURFACE 01 — BRIEFING                 -->
+<!-- ===================================== -->
+<div class="surface-mark">
+  <div class="surface-mark-num">01</div>
+  <div class="surface-mark-info">
+    <h2>Briefing — system judgment</h2>
+    <p>Mornings open here. The system has read overnight signals, found pattern, and tells the operator what it sees. <strong>Situation → Implication → Pattern weight → Recommended move.</strong> The operator reads, accepts the read, and acts.</p>
+  </div>
+</div>
+
+<section class="surface-briefing">
+  <div class="briefing-column">
+
+    <div class="briefing-head">
+      <span class="briefing-head-eyebrow">— Today's GTM read</span>
+      <span class="briefing-head-meta">Briefing 142 · 09:12 CT</span>
+    </div>
+
+    <h1 class="briefing-title">Three deals share one shape. Executive absence is the cause.</h1>
+
+    <p class="briefing-opener">
+      Acme, Cordillera, and Stonebridge are all slipping for the same underlying reason. The presenting issues differ — pricing, legal, possible champion turnover — but the pattern is the same. Below: what the system sees and what it recommends.
+    </p>
+
+    <div class="situation">
+      <div class="situation-num">1.</div>
+      <div>
+        <div class="situation-label">— Situation</div>
+        <h2 class="situation-text">Pipeline risk is concentrated in late-stage operational friction.</h2>
+        <p class="situation-implication">Acme at day 18, Cordillera at day 47, Stonebridge at day 22. Each has a different presenting issue; each has the same shape underneath.</p>
+      </div>
+    </div>
+
+    <div class="situation">
+      <div class="situation-num">2.</div>
+      <div>
+        <div class="situation-label">— Implication</div>
+        <h2 class="situation-text">The common cause is executive absence, not declining interest.</h2>
+        <p class="situation-implication">None of the three has a live economic-buyer thread. The friction looks operational. It is structural — nobody is carrying the deal upstairs.</p>
+      </div>
+    </div>
+
+    <div class="situation">
+      <div class="situation-num">3.</div>
+      <div>
+        <div class="situation-label">— Pattern weight</div>
+        <h2 class="situation-text">Three of the last six closed-lost deals followed this shape.</h2>
+        <p class="situation-implication">Castor, Ridgeline, Falconer — autopsies on the record. This is not noise.</p>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <div class="recommendation-marker">⇒</div>
+      <div>
+        <div class="recommendation-label">— Recommended move</div>
+        <p class="recommendation-text">Run a CFO-facing reframe across all three before next forecast.</p>
+        <div class="recommendation-action">
+          <button class="btn-dark">Open Acme on the Workbench</button>
+          <button class="btn-link">Draft all three notes</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="handoff">
+    <span class="handoff-text">The system identifies <strong>Acme</strong> as the most-pressured of the three — start there.</span>
+    <button class="handoff-action">— OPEN ON THE WORKBENCH ↓</button>
+  </div>
+</section>
+
+<!-- ===================================== -->
+<!-- SURFACE 02 — WORKBENCH                -->
+<!-- ===================================== -->
+<div class="surface-mark">
+  <div class="surface-mark-num">02</div>
+  <div class="surface-mark-info">
+    <h2>Workbench — active thinking</h2>
+    <p>The operator drills into one account. The page is divided into spatial zones: <strong>Source · Diagnosis · Move</strong>. Raw signals on the left. What the system thinks in the middle. Recommended action on the right. Proof at the foot.</p>
+  </div>
+</div>
+
+<section class="surface-workbench">
+  <div class="workbench-frame">
+    <div class="workbench">
+
+      <div class="object-head">
+        <div>
+          <h3>Acme Corp.</h3>
+          <div class="eyebrow" style="margin-top:4px;">PROPOSAL · DAY 18 · $84,000 · ENTERPRISE</div>
+        </div>
+        <div class="object-head-meta">UPDATED 09:08 CT</div>
+      </div>
+
+      <div class="zones">
+
+        <div class="zone source">
+          <div class="zone-head">
+            <span class="zone-name">— Source</span>
+            <span class="zone-count">5 inputs</span>
+          </div>
+          <div class="item">
+            <div class="item-tag">SLACK · NOV 3</div>
+            <div class="item-title">Procurement re-opened pricing</div>
+            <div class="item-meta">Marcus from procurement asked about volume discount tiers.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag">EMAIL · NOV 1</div>
+            <div class="item-title">Champion went silent</div>
+            <div class="item-meta">Last reply on demo follow-up. No response since.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag">CRM</div>
+            <div class="item-title">EB unconfirmed</div>
+            <div class="item-meta">CFO Marcus Reed listed; never threaded directly.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag">BRIEFING · TODAY</div>
+            <div class="item-title">Late-stage pricing pattern surfaced</div>
+            <div class="item-meta">Pattern across 2 ICP segments. Affects framing.</div>
+          </div>
+        </div>
+
+        <div class="zone diagnosis">
+          <div class="zone-head">
+            <span class="zone-name">— Diagnosis</span>
+            <span class="zone-count">3 reads</span>
+          </div>
+          <div class="item">
+            <div class="item-tag risk">— PRIMARY RISK</div>
+            <div class="item-title">Deal slips if CFO doesn't see the redline by Friday.</div>
+            <div class="item-meta">Champion silence + reopened pricing + EB never threaded = three prior closed-lost shape.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag">— CONSTRAINT</div>
+            <div class="item-title">No live thread to the economic buyer.</div>
+            <div class="item-meta">Champion is the only relationship inside the account.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag">— PATTERN</div>
+            <div class="item-title">Procurement-reopens-pricing shape is repeating.</div>
+            <div class="item-meta">Castor, Ridgeline, Falconer — 3 autopsies match.</div>
+          </div>
+        </div>
+
+        <div class="zone move">
+          <div class="zone-head">
+            <span class="zone-name act">— Move</span>
+            <span class="zone-count">2 queued</span>
+          </div>
+          <div class="item">
+            <div class="item-tag act">— RECOMMENDED</div>
+            <div class="item-title recommended">Send the revised proposal directly to the CFO. Before EOW.</div>
+            <div class="item-meta">Draft is queued. Framed against pricing-momentum pattern.</div>
+          </div>
+          <div class="item">
+            <div class="item-tag act">— PAIRED</div>
+            <div class="item-title">Backchannel via Tasha as air cover.</div>
+            <div class="item-meta">Advisor has CFO-office opening. Cooldown clean.</div>
+          </div>
+          <div style="margin-top:auto; display:flex; gap:8px; padding-top:8px;">
+            <button class="btn-accent">Draft CFO note</button>
+            <button class="btn-link">Carry to Tasha</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="proof-strip">
+        <div class="proof-key">— Proof &amp; timeline</div>
+        <div class="proof-strip-rows">
+          <div class="proof-row">
+            <span class="proof-row-time">14 NOV 09:08</span>
+            <span class="proof-row-text">Champion silence crossed 12-day threshold. System updated read.</span>
+          </div>
+          <div class="proof-row">
+            <span class="proof-row-time">14 NOV 08:14</span>
+            <span class="proof-row-text">Briefing surfaced late-stage pricing pattern. Linked to Acme.</span>
+          </div>
+          <div class="proof-row">
+            <span class="proof-row-time">03 NOV 11:22</span>
+            <span class="proof-row-text">Procurement reopened pricing in Slack. Logged from CRM.</span>
+          </div>
+          <div class="proof-row">
+            <span class="proof-row-time">01 NOV 16:40</span>
+            <span class="proof-row-text">Champion sent final reply. No response since.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="command-slot">
+        <span class="eyebrow">⌘ COMMAND</span>
+        <input class="command-input" placeholder="Type a move, a note, or a question — or ⌘K for the palette" />
+        <button class="btn-accent">Run</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="handoff" style="background: rgba(10, 28, 64, 0.04); border-left-color: var(--ink);">
+    <span class="handoff-text">The note is drafted; the move is acted. Every action gets written to the <strong>Ledger</strong>.</span>
+    <button class="handoff-action" style="color: var(--ink);">— OPEN THE LEDGER ↓</button>
+  </div>
+</section>
+
+<!-- ===================================== -->
+<!-- SURFACE 03 — LEDGER                   -->
+<!-- ===================================== -->
+<div class="surface-mark">
+  <div class="surface-mark-num">03</div>
+  <div class="surface-mark-info">
+    <h2>Ledger — durable memory</h2>
+    <p>Everything settles here. The running record of accounts, signals, moves, owners, evidence. Scanned top-to-bottom by the operator; read like a book by the inheritor. <strong>Account · Signal · Move · State</strong> on every row; Evidence, Owner, Due indented below.</p>
+  </div>
+</div>
+
+<section class="surface-ledger">
+  <div class="ledger-column">
+
+    <div class="ledger-head-meta">
+      <span><strong>At risk · 3 entries · $476K</strong> · written from today's Briefing + Workbench actions</span>
+      <span>Updated 09:14 CT</span>
+    </div>
+
+    <div class="ledger-head">
+      <div>Account</div>
+      <div>Signal</div>
+      <div>Move</div>
+      <div style="text-align:right;">State</div>
+    </div>
+
+    <div class="entry">
+      <div>
+        <div class="entry-account">Acme Corp.</div>
+        <div class="entry-account-meta">Proposal · day 18 · $84K</div>
+      </div>
+      <div>
+        <div class="entry-signal-kind">SIGNAL</div>
+        <div class="entry-signal">Champion silent twelve days. Procurement re-opened pricing.</div>
+      </div>
+      <div>
+        <div class="entry-move">CFO note drafted. Tasha backchannel queued.</div>
+        <span class="entry-move-action">View draft ↗</span>
+      </div>
+      <div class="entry-state acted">Move acted</div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Evidence</div>
+      <div class="sub-row-val">Procurement Slack thread Nov 3. Pattern: Castor, Ridgeline, Falconer.</div>
+      <div></div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Owner</div>
+      <div class="sub-row-val"><strong>Founder</strong> · paired with Tasha (advisor)</div>
+      <div></div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Due</div>
+      <div class="sub-row-val"><strong>Friday EOW</strong></div>
+      <div></div>
+    </div>
+
+    <div class="entry">
+      <div>
+        <div class="entry-account">Cordillera Health</div>
+        <div class="entry-account-meta">Negotiation · day 47 · $340K</div>
+      </div>
+      <div>
+        <div class="entry-signal-kind">CONSTRAINT</div>
+        <div class="entry-signal">Legal stalled on data residency. No exec sponsor.</div>
+      </div>
+      <div>
+        <div class="entry-move">Backchannel via Tasha to the CTO.</div>
+        <span class="entry-move-action">Carry to advisor ↗</span>
+      </div>
+      <div class="entry-state exec">Executive required</div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Evidence</div>
+      <div class="sub-row-val">Legal opened 26 May. CTO uninvolved in last three meetings. Tasha open next week.</div>
+      <div></div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Owner</div>
+      <div class="sub-row-val"><strong>Founder</strong> · paired with advisor</div>
+      <div></div>
+    </div>
+
+    <div class="entry">
+      <div>
+        <div class="entry-account">Stonebridge Capital</div>
+        <div class="entry-account-meta">Discovery · day 22 · $56K</div>
+      </div>
+      <div>
+        <div class="entry-signal-kind">DRIFT</div>
+        <div class="entry-signal">Champion silent seven days. May be out of seat.</div>
+      </div>
+      <div>
+        <div class="entry-move">Verify champion in role before reframing.</div>
+        <span class="entry-move-action">Check LinkedIn ↗</span>
+      </div>
+      <div class="entry-state attn">Silent</div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Evidence</div>
+      <div class="sub-row-val">Last reply 29 May. LinkedIn title updated last week.</div>
+      <div></div>
+    </div>
+    <div class="sub-row">
+      <div></div>
+      <div class="sub-row-key">— Owner</div>
+      <div class="sub-row-val"><strong>RevOps</strong></div>
+      <div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Concept summary -->
+<aside class="concept">
+  <div class="concept-eyebrow">The composition</div>
+  <p style="margin:0 0 14px;">
+    <strong>Three surfaces, one operating system.</strong> Not three modes pasted onto one card-grid. Three distinct rendering forms — each with its own native primitives, each serving a different cognitive mode. The same content (Acme, Cordillera, Stonebridge) lives across all three, expressed in the form each surface requires.
+  </p>
+  <div class="concept-grid">
+    <div>
+      <h4><span class="pct">01</span>BRIEFING</h4>
+      <p style="margin:0; font-size:13px;">System judgment. Rhetorical structure — Situation · Implication · Pattern weight · Recommended move. Numbered claims. Serif-led. Where mornings open.</p>
+    </div>
+    <div>
+      <h4><span class="pct">02</span>WORKBENCH</h4>
+      <p style="margin:0; font-size:13px;">Active thinking. Spatial zones — Source · Diagnosis · Move. Proof strip at the foot. Command slot. Where the operator drills in and acts.</p>
+    </div>
+    <div>
+      <h4><span class="pct">03</span>LEDGER</h4>
+      <p style="margin:0; font-size:13px;">Durable memory. Ruled rows — Account · Signal · Move · State — with Evidence indented below. Scanned by the operator; read by the inheritor.</p>
+    </div>
+  </div>
+  <p style="margin:18px 0 0;">
+    <strong>The native primitives across all three.</strong> Signal · Constraint · Move · Evidence · Owner · Due · State. These replace the SaaS-default Card · Badge · Table · Modal. Each surface expresses them differently — as numbered situations in the Briefing, as zoned items in the Workbench, as ruled entries with sub-rows in the Ledger.
+  </p>
+  <p style="margin:14px 0 0;">
+    <strong>Canon preserved throughout.</strong> Slightly warmed paper for the Briefing and Ledger; cooler workbench surface for the active-thinking mode. DM Serif Display for headlines, claims, and account names. Public Sans for body. JetBrains Mono for section labels, codes, timestamps. Orange as the rationed accent for the dominant move and the recommendation marker.
+  </p>
+</aside>
+
+</body>
+</html>

@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signalground — A quiet component grammar for Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --field: #F6F8FC;
+    --surface: #FFFFFF;
+    --surface-warm: #FBFAF6;
+    --surface-sunk: #EFF2F8;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.20);
+    --hair: rgba(10, 28, 64, 0.08);
+    --hair-strong: rgba(10, 28, 64, 0.14);
+    --orange: #E6701E;
+    --orange-soft: rgba(230, 112, 30, 0.10);
+    --blue: #2563EB;
+    --blue-soft: rgba(37, 99, 235, 0.08);
+    --green: #22C55E;
+    --green-soft: rgba(34, 197, 94, 0.10);
+    --amber: #F59E0B;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+    --red: #EF4444;
+    --red-soft: rgba(239, 68, 68, 0.08);
+    --shadow-rest: 0 1px 2px rgba(10, 28, 64, 0.03), 0 6px 18px rgba(10, 28, 64, 0.05);
+    --shadow-lift: 0 1px 2px rgba(10, 28, 64, 0.04), 0 12px 32px rgba(10, 28, 64, 0.07);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; }
+  .mono { font-family: "JetBrains Mono", monospace; font-weight: 500; }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px 56px 160px;
+  }
+
+  /* ============================= */
+  /* MASTHEAD                      */
+  /* ============================= */
+  .masthead {
+    margin-bottom: 144px;
+    max-width: 760px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 32px;
+  }
+  .masthead h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 72px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    margin: 0 0 24px;
+  }
+  .masthead-sub {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin: 0 0 40px;
+    font-weight: 400;
+  }
+  .masthead-body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .masthead-body strong { font-weight: 600; }
+
+  /* ============================= */
+  /* SECTION HEADS                 */
+  /* ============================= */
+  .section { margin-bottom: 144px; }
+  .section-head {
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .section-head-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .section-head-text h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 44px;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+  .section-head-text p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+
+  /* ============================= */
+  /* QUIET COMMAND — BASE SHELL    */
+  /* ============================= */
+  .shell {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    box-shadow: var(--shadow-rest);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 540px;
+  }
+  .shell-nav {
+    background: var(--surface-warm);
+    padding: 24px 16px;
+    border-right: 1px solid var(--hair);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .shell-nav-mark {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    color: var(--ink);
+    padding: 0 8px 24px;
+  }
+  .shell-nav-group {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding: 16px 8px 6px;
+  }
+  .shell-nav-item {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .shell-nav-item:hover { color: var(--ink); }
+  .shell-nav-item.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(10, 28, 64, 0.04);
+  }
+  .shell-nav-item .count {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+  .shell-nav-item.active .count { color: var(--orange); }
+
+  .shell-main {
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .shell-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .shell-topline-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .shell-topline-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 32px;
+    line-height: 1.1;
+    margin: 6px 0 0;
+  }
+  .shell-topline-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--ink-faint);
+  }
+
+  .shell-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 4px 0 8px;
+  }
+  .summary-cell .summary-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .summary-cell .summary-val {
+    font-family: "DM Serif Display", serif;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .summary-cell .summary-val.attn { color: var(--amber); }
+  .summary-cell .summary-val.risk { color: var(--red); }
+  .summary-cell .summary-trail {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .shell-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ============================= */
+  /* GROUNDED SIGNAL — CARDS       */
+  /* ============================= */
+
+  /* The Anchored Card (the signature) */
+  .card {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-rest);
+    position: relative;
+    border: 1px solid var(--hair);
+    overflow: hidden;
+  }
+  /* Spine — the signal indicator (left edge) */
+  .card.spine::before {
+    content: '';
+    position: absolute;
+    top: 14px; bottom: 14px; left: 0;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+  }
+  .card.spine--neutral::before { background: var(--ink-quiet); }
+  .card.spine--healthy::before { background: var(--green); }
+  .card.spine--attn::before { background: var(--amber); }
+  .card.spine--risk::before { background: var(--red); }
+  .card.spine--exec::before { background: var(--ink); }
+  .card.spine--act::before { background: var(--orange); }
+
+  /* Heavy anchor — the load-bearing edge */
+  .card.anchor {
+    border-bottom: 3px solid var(--ink);
+  }
+  .card.anchor--orange { border-bottom-color: var(--orange); }
+  .card.anchor--red { border-bottom-color: var(--red); }
+  .card.anchor--amber { border-bottom-color: var(--amber); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .card-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .card-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .card-context {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+
+  /* Stacked layer rows — signal/cause/next */
+  .layers {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    gap: 4px 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    margin: 0 0 16px;
+  }
+  .layer-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .layer-val {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .layer-val.heavy { font-weight: 600; }
+
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* ============================= */
+  /* CHIPS                         */
+  /* ============================= */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface-sunk);
+    color: var(--ink-soft);
+    border: 1px solid transparent;
+  }
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .chip--healthy { color: #15803D; background: var(--green-soft); }
+  .chip--attn { color: #B45309; background: var(--amber-soft); }
+  .chip--risk { color: #B91C1C; background: var(--red-soft); }
+  .chip--signal { color: #1D4ED8; background: var(--blue-soft); }
+  .chip--neutral { color: var(--ink-soft); background: var(--surface-sunk); }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ============================= */
+  /* JUDGMENT STAMP                */
+  /* ============================= */
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 3px 0;
+  }
+  .stamp::before, .stamp::after {
+    content: '';
+    width: 8px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    display: inline-block;
+  }
+  .stamp::before { margin-right: 8px; }
+  .stamp::after { margin-left: 8px; }
+  .stamp--risk { color: var(--red); }
+  .stamp--attn { color: var(--amber); }
+  .stamp--exec { color: var(--ink); }
+  .stamp--act { color: var(--orange); }
+
+  /* ============================= */
+  /* DECISION RAIL                 */
+  /* ============================= */
+  .rail {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow-rest);
+  }
+  .rail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .rail-head-title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .rail-head-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+  .rail-stages {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: relative;
+    gap: 0;
+  }
+  .rail-line {
+    position: absolute;
+    top: 14px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: var(--hair-strong);
+    z-index: 0;
+  }
+  .rail-stage {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 0 4px;
+  }
+  .rail-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--ink-quiet);
+    margin: 0 auto 16px;
+  }
+  .rail-stage.done .rail-dot { background: var(--ink); border-color: var(--ink); }
+  .rail-stage.now .rail-dot { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 4px var(--orange-soft); }
+  .rail-stage.pending .rail-dot { background: var(--surface); border-color: var(--ink-quiet); }
+  .rail-stage-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .rail-stage.now .rail-stage-label { color: var(--orange); }
+  .rail-stage.done .rail-stage-label { color: var(--ink); }
+  .rail-stage-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .rail-stage.pending .rail-stage-text { color: var(--ink-faint); }
+
+  /* ============================= */
+  /* INSCRIPTION HEADER            */
+  /* ============================= */
+  .inscription {
+    background: transparent;
+    padding: 32px 0;
+  }
+  .inscription-rule-top {
+    height: 1px;
+    background: var(--ink);
+    margin-bottom: 28px;
+    max-width: 64px;
+  }
+  .inscription-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .inscription-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 40px;
+    line-height: 1.05;
+    margin: 0 0 32px;
+    letter-spacing: -0.01em;
+  }
+  .inscription-fields {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px 32px;
+    padding: 20px 0 24px;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .inscription-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .inscription-val {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .inscription-val.heavy {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+  }
+  .inscription-attribution {
+    margin-top: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+  }
+
+  /* ============================= */
+  /* BUTTONS                       */
+  /* ============================= */
+  .btn {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.08s, box-shadow 0.12s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.10);
+  }
+  .btn-primary:hover { background: var(--ink-700); }
+  .btn-accent {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.10);
+  }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--hair-strong);
+    box-shadow: 0 1px 0 rgba(10,28,64,0.04);
+  }
+  .btn-secondary:hover { border-color: var(--ink-quiet); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 8px 12px;
+  }
+  .btn-ghost:hover { color: var(--ink); background: var(--surface-sunk); }
+  .btn-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--hair-strong);
+    background: var(--surface);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  /* ============================= */
+  /* TABS / SEATED                 */
+  /* ============================= */
+  .tabs {
+    display: inline-flex;
+    background: var(--surface-sunk);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(10, 28, 64, 0.05);
+  }
+
+  /* ============================= */
+  /* INPUTS                        */
+  /* ============================= */
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .field-help {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 6px;
+    background: var(--surface);
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.12s, box-shadow 0.12s;
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px var(--orange-soft);
+  }
+  .toggle {
+    display: inline-flex;
+    width: 36px; height: 20px;
+    border-radius: 99px;
+    background: var(--ink-quiet);
+    padding: 2px;
+    cursor: pointer;
+    transition: background 0.16s;
+  }
+  .toggle::after {
+    content: '';
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.16s;
+    box-shadow: 0 1px 2px rgba(10,28,64,0.20);
+  }
+  .toggle.on { background: var(--orange); }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* ============================= */
+  /* GENERAL LAYOUT                */
+  /* ============================= */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  .vstack { display: flex; flex-direction: column; gap: 20px; }
+  .hstack { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+  /* ============================= */
+  /* TOAST / ALERT                 */
+  /* ============================= */
+  .toast {
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+    box-shadow: var(--shadow-lift);
+    max-width: 480px;
+  }
+  .toast-mark {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .alert {
+    background: var(--surface);
+    border-left: 3px solid var(--amber);
+    padding: 12px 18px;
+    border-radius: 6px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    box-shadow: var(--shadow-rest);
+  }
+  .alert-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--amber);
+    text-transform: uppercase;
+    font-weight: 600;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .alert-body { font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .alert.blue { border-left-color: var(--blue); }
+  .alert.blue .alert-key { color: var(--blue); }
+
+  /* Palette */
+  .palette {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    box-shadow: var(--shadow-lift);
+    overflow: hidden;
+    max-width: 440px;
+  }
+  .palette-input {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+  }
+  .palette-input::before {
+    content: '⌘K';
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    padding: 1px 6px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 4px;
+  }
+  .palette-row {
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .palette-row.hl { background: var(--orange-soft); }
+  .palette-row-kind {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    min-width: 48px;
+  }
+  .palette-row.hl .palette-row-kind { color: var(--orange); }
+  .palette-row-key {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  /* Account list inside shell */
+  .account-row {
+    display: grid;
+    grid-template-columns: 4px 1fr auto auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .account-row:last-child { border-bottom: none; }
+  .account-spine {
+    width: 3px;
+    height: 24px;
+    border-radius: 2px;
+    background: var(--ink-quiet);
+  }
+  .account-spine.risk { background: var(--red); }
+  .account-spine.attn { background: var(--amber); }
+  .account-spine.healthy { background: var(--green); }
+  .account-row-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .account-row-context {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .account-row-stat {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* Brief stamp row (lighter than judgment stamp) */
+  .stamp-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Brief micro-card grid */
+  .micro {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-rest);
+  }
+  .micro-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .micro-content {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Section quote / pull */
+  .pull {
+    border-left: 3px solid var(--orange);
+    padding: 4px 0 4px 20px;
+    margin: 24px 0;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--ink);
+    max-width: 60ch;
+  }
+
+  /* density compare */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .compare-cell {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-rest);
+  }
+  .compare-cell-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* Footer */
+  .colophon {
+    margin-top: 144px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hair);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    line-height: 1.65;
+  }
+  .colophon-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">SIGNALGROUND · A WORKING DRAFT · 2026·06·05</p>
+    <h1>Signalground</h1>
+    <p class="masthead-sub">A quiet component grammar for Antaeus.</p>
+    <p class="masthead-body">
+      Three layers, working together. <strong>Quiet Command</strong> does the base work — a clean modular operating system any VP of Sales would recognize as a working tool. <strong>Grounded Signal</strong> carries the distinctive flavor through anchored cards, signal spines, decision rails, and a weight hierarchy that says what matters. <strong>Modern Inscription</strong> lifts the moments that earn weight — the strategic brief, the judgment, the handoff memo. The mood is calm, sturdy, executive, and unmistakably Antaeus without ever looking like a museum or a cockpit.
+    </p>
+  </header>
+
+  <!-- ============================== -->
+  <!-- 01 / QUIET COMMAND             -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">ONE</span>
+      <div class="section-head-text">
+        <h2>The base. Quiet Command.</h2>
+        <p>The operating shell. Clean modular SaaS, strong vertical rhythm, no decorative clutter. Modern sans does most of the work; mono recedes to IDs and timestamps. Motion is fast and almost invisible.</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="shell-nav">
+        <div class="shell-nav-mark">Antaeus</div>
+        <div class="shell-nav-group">Today</div>
+        <div class="shell-nav-item active">Dashboard <span class="count">12</span></div>
+        <div class="shell-nav-item">Briefing <span class="count">3</span></div>
+        <div class="shell-nav-item">Signal Console <span class="count">37</span></div>
+        <div class="shell-nav-group">Pipeline</div>
+        <div class="shell-nav-item">Deal Workspace</div>
+        <div class="shell-nav-item">Future Autopsy</div>
+        <div class="shell-nav-item">PoC Framework</div>
+        <div class="shell-nav-group">Outbound</div>
+        <div class="shell-nav-item">Outbound Studio</div>
+        <div class="shell-nav-item">Call Planner</div>
+      </aside>
+
+      <main class="shell-main">
+        <div class="shell-topline">
+          <div>
+            <div class="shell-topline-eyebrow">Dashboard · Tuesday morning</div>
+            <h3 class="shell-topline-title">Where the motion is today.</h3>
+          </div>
+          <div class="shell-topline-meta">09:12 CT</div>
+        </div>
+
+        <div class="shell-summary">
+          <div class="summary-cell">
+            <div class="summary-label">Active deals</div>
+            <div class="summary-val">37</div>
+            <div class="summary-trail">+2 since Monday</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Critical</div>
+            <div class="summary-val risk">3</div>
+            <div class="summary-trail">All in proposal</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Stale &gt; 14d</div>
+            <div class="summary-val attn">8</div>
+            <div class="summary-trail">Two with movement Friday</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Win rate</div>
+            <div class="summary-val">22%</div>
+            <div class="summary-trail">Last 90 days</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="tabs">
+            <div class="tab active">Today's read</div>
+            <div class="tab">This week</div>
+            <div class="tab">All open</div>
+          </div>
+          <div class="hstack">
+            <button class="btn btn-ghost">Filter</button>
+            <button class="btn btn-secondary">Export</button>
+            <button class="btn btn-accent">Open recovery queue</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="account-row">
+            <div class="account-spine risk"></div>
+            <div>
+              <div class="account-row-name">Acme Corp.</div>
+              <div class="account-row-context">Stalled 18d at proposal · Champion silent since Nov 3</div>
+            </div>
+            <div class="account-row-stat">$84K</div>
+            <span class="chip chip--risk"><span class="chip-dot"></span>At risk</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="account-row">
+            <div class="account-spine attn"></div>
+            <div>
+              <div class="account-row-name">Northwind Logistics</div>
+              <div class="account-row-context">Proof pending readout · Owner unset</div>
+            </div>
+            <div class="account-row-stat">$112K</div>
+            <span class="chip chip--attn"><span class="chip-dot"></span>Needs attention</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+          <div class="account-row">
+            <div class="account-spine healthy"></div>
+            <div>
+              <div class="account-row-name">Helix Robotics</div>
+              <div class="account-row-context">Negotiation · CFO meeting Thursday</div>
+            </div>
+            <div class="account-row-stat">$240K</div>
+            <span class="chip chip--healthy"><span class="chip-dot"></span>On track</span>
+            <button class="btn btn-secondary">Open</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- 02 / GROUNDED SIGNAL           -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">TWO</span>
+      <div class="section-head-text">
+        <h2>The flavor. Grounded Signal.</h2>
+        <p>The signature. Anchored cards with one weighted edge. Signal spines that carry state. Decision rails that show where the work is in its operating flow. Layered status that names the signal, the cause, and the next move.</p>
+      </div>
+    </div>
+
+    <p class="pull">
+      Every major object has a quiet grounding edge. This is not just content. This matters.
+    </p>
+
+    <div class="grid-2" style="margin-top:48px;">
+
+      <div class="card spine spine--risk anchor anchor--red">
+        <div class="card-head">
+          <span class="card-name">Acme Corp.</span>
+          <span class="card-meta">$84K · DAY 18</span>
+        </div>
+        <div class="card-context">Enterprise · Proposal stage</div>
+        <div class="layers">
+          <span class="layer-key">Signal</span>
+          <span class="layer-val">Champion silent for 12 days</span>
+          <span class="layer-key">Cause</span>
+          <span class="layer-val">Procurement re-opened pricing terms</span>
+          <span class="layer-key">Next</span>
+          <span class="layer-val heavy">Send revised proposal to CFO before EOW</span>
+        </div>
+        <div class="card-foot">
+          <span class="stamp stamp--risk">Likely to slip</span>
+          <button class="btn btn-accent">Open recovery</button>
+        </div>
+      </div>
+
+      <div class="card spine spine--attn anchor anchor--amber">
+        <div class="card-head">
+          <span class="card-name">Northwind Logistics</span>
+          <span class="card-meta">$112K · DAY 9</span>
+        </div>
+        <div class="card-context">Mid-market · Proof stage</div>
+        <div class="layers">
+          <span class="layer-key">Signal</span>
+          <span class="layer-val">Pilot ran clean; no readout scheduled</span>
+          <span class="layer-key">Cause</span>
+          <span class="layer-val">Readout owner unassigned</span>
+          <span class="layer-key">Next</span>
+          <span class="layer-val heavy">Name a readout owner before pilot age &gt; 14d</span>
+        </div>
+        <div class="card-foot">
+          <span class="stamp stamp--attn">No readout owner</span>
+          <button class="btn btn-secondary">Open proof</button>
+        </div>
+      </div>
+
+      <div class="card spine spine--exec anchor">
+        <div class="card-head">
+          <span class="card-name">Cordillera Health</span>
+          <span class="card-meta">$340K · DAY 47</span>
+        </div>
+        <div class="card-context">Strategic · Negotiation</div>
+        <div class="layers">
+          <span class="layer-key">Signal</span>
+          <span class="layer-val">Legal stalled on data residency clause</span>
+          <span class="layer-key">Cause</span>
+          <span class="layer-val">No exec sponsor inside customer org</span>
+          <span class="layer-key">Next</span>
+          <span class="layer-val heavy">Backchannel via board advisor to CTO</span>
+        </div>
+        <div class="card-foot">
+          <span class="stamp stamp--exec">Executive decision required</span>
+          <button class="btn btn-primary">Carry to advisor</button>
+        </div>
+      </div>
+
+      <div class="card spine spine--healthy">
+        <div class="card-head">
+          <span class="card-name">Helix Robotics</span>
+          <span class="card-meta">$240K · DAY 4</span>
+        </div>
+        <div class="card-context">Mid-market · Negotiation</div>
+        <div class="layers">
+          <span class="layer-key">Signal</span>
+          <span class="layer-val">CFO meeting confirmed for Thursday</span>
+          <span class="layer-key">Cause</span>
+          <span class="layer-val">Champion threaded EB last week</span>
+          <span class="layer-key">Next</span>
+          <span class="layer-val heavy">Send pre-read 24 hours before the meeting</span>
+        </div>
+        <div class="card-foot">
+          <span class="chip chip--healthy"><span class="chip-dot"></span>On track</span>
+          <button class="btn btn-secondary">Open</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Decision rail -->
+    <div style="margin-top:48px;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-head-title">Acme Corp. — recovery rail</span>
+          <span class="rail-head-meta">UPDATED · 09:08 CT · DAY 18</span>
+        </div>
+        <div class="rail-stages">
+          <div class="rail-line"></div>
+          <div class="rail-stage done">
+            <div class="rail-dot"></div>
+            <div class="rail-stage-label">Observe</div>
+            <div class="rail-stage-text">Usage down 22% in last 30 days. Champion silent since Nov 3.</div>
+          </div>
+          <div class="rail-stage done">
+            <div class="rail-dot"></div>
+            <div class="rail-stage-label">Diagnose</div>
+            <div class="rail-stage-text">Economic buyer absent from QBR. Procurement re-opened pricing.</div>
+          </div>
+          <div class="rail-stage now">
+            <div class="rail-dot"></div>
+            <div class="rail-stage-label">Decide</div>
+            <div class="rail-stage-text">Escalate with value recap. Backchannel to CFO via board advisor.</div>
+          </div>
+          <div class="rail-stage pending">
+            <div class="rail-dot"></div>
+            <div class="rail-stage-label">Act</div>
+            <div class="rail-stage-text">Draft the CFO-facing note. Owner: you.</div>
+          </div>
+          <div class="rail-stage pending">
+            <div class="rail-dot"></div>
+            <div class="rail-stage-label">Verify</div>
+            <div class="rail-stage-text">Confirm reply within 5 business days.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weight hierarchy demo -->
+    <div style="margin-top:48px;">
+      <div class="grid-3">
+        <div class="micro">
+          <div class="micro-eyebrow">Light · context</div>
+          <div class="micro-content" style="color:var(--ink-soft);">Acme bought the security add-on in Q2. Their renewal date is March 14.</div>
+        </div>
+        <div class="micro" style="border-color:var(--hair-strong);">
+          <div class="micro-eyebrow">Medium · useful</div>
+          <div class="micro-content">Champion has been responsive most of the cycle. Pricing was discussed in the demo but never landed in writing.</div>
+        </div>
+        <div class="micro" style="border-color:var(--ink); box-shadow:var(--shadow-lift);">
+          <div class="micro-eyebrow" style="color:var(--orange);">Heavy · decision-critical</div>
+          <div class="micro-content" style="font-weight:500;">The CFO has not received the revised proposal. If they do not see it before Friday, this deal slips.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- 03 / MODERN INSCRIPTION        -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">THREE</span>
+      <div class="section-head-text">
+        <h2>The moments. Modern Inscription.</h2>
+        <p>Reserved for surfaces the system has earned: the strategic brief, the autopsy verdict, the handoff memo, the board-ready summary. Used sparingly so it carries weight when it shows up. No drama. Restrained typography, fine inset rules, and a sense that what is written here will be referenced again.</p>
+      </div>
+    </div>
+
+    <div class="inscription">
+      <div class="inscription-rule-top"></div>
+      <div class="inscription-eyebrow">Strategic Account Brief · v3 · drawn 2026·06·05</div>
+      <h3 class="inscription-title">Applied Systems</h3>
+      <div class="inscription-fields">
+        <div class="inscription-key">Customer</div>
+        <div class="inscription-val heavy">Applied Systems · global insurance technology</div>
+        <div class="inscription-key">Stage</div>
+        <div class="inscription-val">Expansion · post-renewal, pre-platform commit</div>
+        <div class="inscription-key">Constraint</div>
+        <div class="inscription-val">Legal / Security · data residency in EU is the open question</div>
+        <div class="inscription-key">Posture</div>
+        <div class="inscription-val">Executive alignment · multi-thread to CISO + CFO before next QBR</div>
+        <div class="inscription-key">Recommendation</div>
+        <div class="inscription-val">Carry an advisor-backchannel ahead of the procurement conversation; surface the residency answer with documented evidence rather than reassurance.</div>
+      </div>
+      <div class="inscription-attribution">— Drawn by Founder · for handoff to the first CRO hire · 2026·06·05</div>
+    </div>
+
+    <div style="margin-top:48px;" class="stamp-row">
+      <span class="stamp stamp--risk">Likely to slip</span>
+      <span class="stamp stamp--exec">No executive access</span>
+      <span class="stamp stamp--attn">Multi-threading required</span>
+      <span class="stamp stamp--act">Carry to advisor</span>
+    </div>
+    <p style="margin-top:16px; font-size:13px; color:var(--ink-soft); max-width:64ch;">
+      Judgment stamps used sparingly inside cards and briefs. Letter-spaced, bracketed by hairlines, colored by severity. They become Antaeus when they show up — and stay Antaeus by staying rare.
+    </p>
+  </section>
+
+  <!-- ============================== -->
+  <!-- 04 / COMPONENT GRAMMAR          -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FOUR</span>
+      <div class="section-head-text">
+        <h2>The grammar at a glance.</h2>
+        <p>The same primitives the system uses, shown briefly so a reviewer can scan the alphabet without losing the throughline. Same three layers above; this is the lookup.</p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="margin-bottom:48px;">
+      <div class="eyebrow" style="margin-bottom:16px;">Actions</div>
+      <div class="hstack" style="gap:14px;">
+        <button class="btn btn-accent">Open recovery</button>
+        <button class="btn btn-primary">Cast proof</button>
+        <button class="btn btn-secondary">Save draft</button>
+        <button class="btn btn-ghost">Dismiss</button>
+        <button class="btn-icon">⌘</button>
+        <button class="btn-icon">↗</button>
+        <span class="toggle on"></span>
+        <span class="toggle"></span>
+      </div>
+    </div>
+
+    <!-- Chips -->
+    <div style="margin-bottom:48px;">
+      <div class="eyebrow" style="margin-bottom:16px;">Signals</div>
+      <div class="hstack" style="gap:10px;">
+        <span class="chip chip--healthy"><span class="chip-dot"></span>On track</span>
+        <span class="chip chip--signal"><span class="chip-dot"></span>New signal</span>
+        <span class="chip chip--attn"><span class="chip-dot"></span>Needs attention</span>
+        <span class="chip chip--risk"><span class="chip-dot"></span>At risk</span>
+        <span class="chip chip--neutral"><span class="chip-dot"></span>Awaiting</span>
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div style="margin-bottom:48px;" class="grid-2">
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;">Form field</div>
+        <div class="field-label">Buying group minimum</div>
+        <input class="input" value="5">
+        <div class="field-help">How many decision-makers typically have to agree before a deal closes?</div>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:16px;">Search · ⌘K</div>
+        <div class="palette">
+          <div class="palette-input">whats at risk_</div>
+          <div class="palette-row hl">
+            <span class="palette-row-kind">Skill</span>
+            <span>What's at risk this week</span>
+            <span class="palette-row-key">↵</span>
+          </div>
+          <div class="palette-row">
+            <span class="palette-row-kind">Room</span>
+            <span>Deal Workspace</span>
+            <span class="palette-row-key">⌘1</span>
+          </div>
+          <div class="palette-row">
+            <span class="palette-row-kind">Room</span>
+            <span>Future Autopsy</span>
+            <span class="palette-row-key">⌘2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    <div style="margin-bottom:48px;">
+      <div class="eyebrow" style="margin-bottom:16px;">Feedback</div>
+      <div class="vstack">
+        <div class="toast">
+          <span class="toast-mark">✓</span>
+          <span>Proof cast. Linked to Acme — Q4 expansion.</span>
+        </div>
+        <div class="alert">
+          <span class="alert-key">Stale</span>
+          <span class="alert-body">It's been twelve days since the last brief was synthesized.</span>
+        </div>
+        <div class="alert blue">
+          <span class="alert-key">From Briefing</span>
+          <span class="alert-body">Refresh the objection handler for Acme pricing pushback.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- 05 / DENSITY                   -->
+  <!-- ============================== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-head-num">FIVE</span>
+      <div class="section-head-text">
+        <h2>Density — Show me how / Step back.</h2>
+        <p>One operating reality, two render targets. The same primitive, the same voice, decompressed for the day-one operator and trim for Sarah-day-90. Voice constant; quantity adjusts.</p>
+      </div>
+    </div>
+
+    <div class="compare">
+
+      <div class="compare-cell">
+        <div class="compare-cell-tag">Show me how</div>
+        <div class="card spine spine--risk anchor anchor--red" style="box-shadow:none;">
+          <div class="card-head">
+            <span class="card-name">Acme Corp.</span>
+            <span class="card-meta">$84K · DAY 18</span>
+          </div>
+          <div class="card-context">Enterprise · Proposal stage. This deal sits first on rounds today because the system ranks it under the highest pressure — a composite of how long it's been stalled, the deal size, and how late in the stage it should have moved by now.</div>
+          <div class="layers">
+            <span class="layer-key">Signal</span>
+            <span class="layer-val">Champion silent for 12 days. The pattern matches three prior closed-lost deals where procurement re-opened pricing after the demo.</span>
+            <span class="layer-key">Cause</span>
+            <span class="layer-val">Procurement re-opened pricing terms in a Slack message on Nov 3; the champion has not relayed it back to the CFO.</span>
+            <span class="layer-key">Next</span>
+            <span class="layer-val heavy">Send the revised proposal directly to the CFO before EOW. The board advisor can be enlisted to backchannel if you want air cover.</span>
+          </div>
+          <div class="card-foot">
+            <span class="stamp stamp--risk">Likely to slip</span>
+            <button class="btn btn-accent">Open recovery</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-cell">
+        <div class="compare-cell-tag">Step back</div>
+        <div class="card spine spine--risk anchor anchor--red" style="box-shadow:none;">
+          <div class="card-head">
+            <span class="card-name">Acme Corp.</span>
+            <span class="card-meta">$84K · DAY 18</span>
+          </div>
+          <div class="layers">
+            <span class="layer-key">Signal</span>
+            <span class="layer-val">Champion silent 12d.</span>
+            <span class="layer-key">Cause</span>
+            <span class="layer-val">Procurement re-opened pricing.</span>
+            <span class="layer-key">Next</span>
+            <span class="layer-val heavy">Revised proposal to CFO before EOW.</span>
+          </div>
+          <div class="card-foot">
+            <span class="stamp stamp--risk">Likely to slip</span>
+            <button class="btn btn-accent">Open</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <p>
+      Signalground — a quiet component grammar for Antaeus. Quiet Command does the base work. Grounded Signal carries the distinctive flavor. Modern Inscription lifts the moments that earn weight. Colors inherit canon Part II §3; typography inherits §2 (DM Serif Display, Public Sans, JetBrains Mono).
+    </p>
+    <div class="colophon-stamp">Draft · 2026·06·05</div>
+  </footer>
+
+</div>
+
+</body>
+</html>

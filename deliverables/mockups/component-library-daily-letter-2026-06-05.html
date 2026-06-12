@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily Letter — Antaeus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF8F2;
+    --paper-warm: #F5F1E6;
+    --inset: #FFFFFF;
+    --ink: #0A1C40;
+    --ink-700: #142949;
+    --ink-soft: rgba(10, 28, 64, 0.66);
+    --ink-faint: rgba(10, 28, 64, 0.42);
+    --ink-quiet: rgba(10, 28, 64, 0.22);
+    --hair: rgba(10, 28, 64, 0.10);
+    --hair-strong: rgba(10, 28, 64, 0.18);
+    --orange: #E6701E;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .serif { font-family: "DM Serif Display", serif; }
+
+  /* The reading column — narrow, generous */
+  .column {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 96px 32px 144px;
+  }
+
+  /* Letterhead */
+  .letterhead {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .letterhead-wordmark {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .letterhead-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  /* Date heading */
+  .date-line {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 24px;
+  }
+  .salutation {
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 56px;
+  }
+
+  /* Letter body */
+  p {
+    margin: 0 0 32px;
+    font-size: 17px;
+    line-height: 1.78;
+  }
+  p:last-of-type { margin-bottom: 0; }
+  strong { font-weight: 600; }
+
+  /* Inline callouts — the only "card" the system uses */
+  .callout {
+    margin: 40px 0;
+    padding: 22px 26px;
+    background: var(--inset);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 4px 4px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    box-shadow: 0 1px 2px rgba(10,28,64,0.04), 0 6px 18px rgba(10,28,64,0.05);
+  }
+  .callout-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .callout-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .callout-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .callout-body {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .callout-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--hair);
+  }
+  .callout-stamp {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+  .callout--risk { border-left-color: var(--red); }
+  .callout--risk .callout-stamp { color: var(--red); }
+  .callout--attn { border-left-color: var(--amber); }
+  .callout--attn .callout-stamp { color: var(--amber); }
+  .callout--act { border-left-color: var(--orange); }
+  .callout--act .callout-stamp { color: var(--orange); }
+  .callout--healthy { border-left-color: var(--green); }
+  .callout--healthy .callout-stamp { color: var(--green); }
+  .btn {
+    background: var(--ink);
+    color: var(--paper);
+    font: inherit;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .btn--accent { background: var(--orange); }
+
+  /* Section divider — sparse */
+  .divider {
+    text-align: center;
+    margin: 56px 0;
+    color: var(--ink-quiet);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    letter-spacing: 0.40em;
+  }
+
+  /* Signoff */
+  .signoff {
+    margin-top: 64px;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    font-style: normal;
+  }
+  .signoff-line {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 12px;
+  }
+
+  /* Previous letters archive */
+  .archive {
+    margin-top: 144px;
+    padding-top: 40px;
+    border-top: 1px solid var(--hair-strong);
+  }
+  .archive-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .archive-letter {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hair);
+    align-items: baseline;
+    cursor: pointer;
+  }
+  .archive-letter:hover .archive-headline { color: var(--orange); }
+  .archive-date {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .archive-headline {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .archive-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* Concept note */
+  .concept {
+    margin-top: 144px;
+    padding: 32px;
+    background: var(--paper-warm);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .concept-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .concept strong { color: var(--ink); }
+
+  /* Quiet hover for inline links */
+  .link {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 1px;
+    cursor: pointer;
+  }
+  .link:hover { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<div class="column">
+
+  <header class="letterhead">
+    <div class="letterhead-wordmark">Antaeus</div>
+    <div class="letterhead-meta">Letter № 142 · Tuesday, 5 June 2026 · 09:12 CT</div>
+  </header>
+
+  <div class="date-line">— FROM ANTAEUS · GOOD MORNING</div>
+  <h1 class="salutation">Three deals moved overnight. One of them is Acme.</h1>
+
+  <p>
+    Good morning, Founder. The motion is uneven this week. Three deals shifted between Monday and now: <a class="link">Acme</a> went from a soft stall to an active risk, <a class="link">Northwind</a>'s pilot ran clean but is missing a readout owner, and <a class="link">Helix</a> confirmed the CFO meeting for Thursday. I'm starting with Acme because it's the deal under the most pressure and the one where doing nothing has the worst downside.
+  </p>
+
+  <div class="callout callout--risk">
+    <div class="callout-head">
+      <span class="callout-name">Acme Corp.</span>
+      <span class="callout-meta">$84,000 · proposal · day 18</span>
+    </div>
+    <div class="callout-body">
+      Champion silent for twelve days. Procurement re-opened pricing terms on Slack on Nov 3; your champion has not relayed it to the CFO. The CFO has not received the revised proposal. If she does not see it before Friday, this deal slips by Q-end.
+    </div>
+    <div class="callout-foot">
+      <span class="callout-stamp">— Likely to slip</span>
+      <button class="btn btn--accent">Draft CFO note</button>
+    </div>
+  </div>
+
+  <p>
+    The pattern matches three prior closed-lost deals where procurement re-opened pricing after the demo. Each one ended the same way: champion got squeezed, CFO never saw the redline, the deal died at quarter-end. I'd rather we treat that pattern as a hypothesis you can falsify than as a forecast we accept. Sending the revised proposal directly is one option. Backchanneling through Tasha — your board advisor with relationships into Acme's CFO office — is another. Both can run in parallel.
+  </p>
+
+  <p>
+    Northwind is the smaller story but the simpler fix. The pilot completed Friday; the readout owner is still unset. If it sits another week the freshness expires and the pilot becomes a piece of evidence nobody references.
+  </p>
+
+  <div class="callout callout--attn">
+    <div class="callout-head">
+      <span class="callout-name">Northwind Logistics</span>
+      <span class="callout-meta">$112,000 · proof · day 9</span>
+    </div>
+    <div class="callout-body">
+      Pilot ran clean. No readout scheduled. The owner field is empty.
+      The next move is small and obvious: name a readout owner this morning, before the pilot age crosses 14 days and you have to defend why nobody owned it.
+    </div>
+    <div class="callout-foot">
+      <span class="callout-stamp">— No readout owner</span>
+      <button class="btn">Assign owner</button>
+    </div>
+  </div>
+
+  <p>
+    Helix is what good looks like. The CFO meeting is locked for Thursday; the champion threaded the economic buyer last week; the pre-read is due 24 hours before. None of this needs your morning. I'm noting it so you know the deal is alive and so the inheritor — when you eventually hand this off — can see that you've been doing this work right at least once a quarter.
+  </p>
+
+  <div class="callout callout--healthy">
+    <div class="callout-head">
+      <span class="callout-name">Helix Robotics</span>
+      <span class="callout-meta">$240,000 · negotiation · day 4</span>
+    </div>
+    <div class="callout-body">
+      CFO meeting Thursday at 10:00 CT. Pre-read due Wednesday morning. Champion has already threaded the EB. No action required from you today; I will surface a reminder tomorrow if the pre-read drafts haven't moved.
+    </div>
+    <div class="callout-foot">
+      <span class="callout-stamp">— On track</span>
+      <button class="btn">Open deal</button>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <p>
+    Three other things, briefly. The Briefing pipeline has a fresh pattern read about late-stage price pressure across two ICP segments — I'd like you to look at it before the Acme draft goes out, because the pattern affects what you say to the CFO. The proof you cast on Cordillera last week has not been carried into the negotiation rehearsal; the rehearsal is queued. And your readiness state ticked up overnight from <em>Building</em> to <em>Inheritable with guardrails</em> — there's a longer note about that further down, but the short version is that the kit is getting closer to something a successor could actually use.
+  </p>
+
+  <p>
+    That's what changed since yesterday. The recovery queue is below, in order of pressure. Sign off when you're done with Acme; I'll write again tomorrow.
+  </p>
+
+  <div class="signoff">— Antaeus</div>
+  <div class="signoff-line">Letter № 142 · sent 09:12 CT · read time ~3:40</div>
+
+  <!-- ARCHIVE -->
+  <section class="archive">
+    <div class="archive-head">Previous letters · the inheritor will read these</div>
+
+    <div class="archive-letter">
+      <div class="archive-date">04 Jun · Mon</div>
+      <div class="archive-headline">Northwind's pilot is ready. Acme isn't.</div>
+      <div class="archive-meta">№ 141 · 3:12 read</div>
+    </div>
+    <div class="archive-letter">
+      <div class="archive-date">03 Jun · Sun</div>
+      <div class="archive-headline">Quiet day. Tasha pinged about Cordillera.</div>
+      <div class="archive-meta">№ 140 · 1:40 read</div>
+    </div>
+    <div class="archive-letter">
+      <div class="archive-date">31 May · Fri</div>
+      <div class="archive-headline">The Helix CFO meeting is locked.</div>
+      <div class="archive-meta">№ 139 · 2:10 read</div>
+    </div>
+    <div class="archive-letter">
+      <div class="archive-date">30 May · Thu</div>
+      <div class="archive-headline">Pricing pattern across two segments — worth a read.</div>
+      <div class="archive-meta">№ 138 · 4:20 read</div>
+    </div>
+    <div class="archive-letter">
+      <div class="archive-date">29 May · Wed</div>
+      <div class="archive-headline">Three things to do before Friday.</div>
+      <div class="archive-meta">№ 137 · 2:50 read</div>
+    </div>
+  </section>
+
+  <!-- Concept note -->
+  <aside class="concept">
+    <div class="concept-eyebrow">The idea</div>
+    <p style="margin-bottom:12px;">
+      <strong>The Daily Letter.</strong> The workspace is correspondence. The system writes; the operator reads, acts inline, and signs off. No dashboard grid, no rooms competing for attention — one long-form document arrives every morning, addressed by name, dated, archived. Old letters stay; the inheritor reads them backward to learn the motion before they ever open a single room.
+    </p>
+    <p style="margin-bottom:12px;">
+      <strong>Motion comes from reading.</strong> The vertical scroll IS the motion. The eye descends through the day in the order the system thinks matters. Cards exist only as inline callouts that interrupt the flow when a decision needs to land — not as objects on a board the operator scans.
+    </p>
+    <p style="margin:0;">
+      <strong>What stays canon.</strong> Bright field (cream-warmed). DM Serif Display for the salutation. Public Sans for body. JetBrains Mono for codes and timestamps. Orange for the dominant move, the canon color roles intact. Voice rule honored throughout — the letter sounds like a peer operator with B2B sales scars writing in plain English.
+    </p>
+  </aside>
+
+</div>
+
+</body>
+</html>

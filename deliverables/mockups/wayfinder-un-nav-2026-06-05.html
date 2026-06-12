@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wayfinder — un-nav · Antaeus GTM OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --ink: #0a1c40;
+    --ink-2: #1c2f54;
+    --ink-3: #4a5a78;
+    --ink-4: #8895ad;
+    --rule: rgba(10, 28, 64, 0.12);
+    --rule-2: rgba(10, 28, 64, 0.06);
+    --paper: #ffffff;
+    --cream: #fbf6ef;
+    --orange: #e6701e;
+    --orange-soft: rgba(230, 112, 30, 0.06);
+    --blue: #2563eb;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: "Public Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: 0 0 80px; }
+
+  /* tight intro */
+  .intro {
+    max-width: 1320px; margin: 0 auto;
+    padding: 36px 40px 24px;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: end; gap: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .intro-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-3); margin: 0; line-height: 1.6;
+  }
+  .intro-line {
+    font-size: 14px; line-height: 1.55; color: var(--ink-2);
+    margin: 0; max-width: 560px;
+  }
+  .intro-line b { color: var(--ink); font-weight: 600; }
+  .intro-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; color: var(--ink-4); letter-spacing: 0.12em;
+    text-align: right; line-height: 1.6;
+  }
+
+  /* state */
+  .state { max-width: 1320px; margin: 0 auto; padding: 36px 40px 0; }
+  .state-tag {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .state-tag-num { color: var(--orange); font-weight: 600; }
+  .state-tag-name { color: var(--ink); font-weight: 600; }
+  .state-tag-note { color: var(--ink-4); margin-left: auto; text-transform: none; letter-spacing: 0.08em; font-weight: 400; font-style: italic; }
+
+  /* workspace frame */
+  .frame {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(10, 28, 64, 0.04);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* THE WAYFINDER */
+  .wayfinder {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  .wf-bar {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(220px, 1fr) minmax(420px, 1.7fr);
+  }
+  .wf-cell {
+    padding: 14px 22px;
+    display: flex; flex-direction: column; gap: 4px;
+    justify-content: center; min-height: 64px;
+  }
+  .wf-cell + .wf-cell { border-left: 1px solid var(--rule-2); }
+  .wf-cell--pulling {
+    background: linear-gradient(90deg, var(--orange-soft), rgba(230, 112, 30, 0.10));
+    position: relative;
+  }
+  .wf-cell--pulling::after {
+    content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 3px; background: var(--orange);
+  }
+  .wf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-4); margin: 0; font-weight: 500;
+  }
+  .wf-trail {
+    display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+    font-size: 13px; line-height: 1.4;
+  }
+  .wf-crumb { color: var(--ink-3); text-decoration: none; border-bottom: 1px dotted transparent; cursor: pointer; }
+  .wf-crumb:hover { border-bottom-color: var(--ink-3); color: var(--ink); }
+  .wf-crumb--last { color: var(--ink-4); font-style: italic; }
+  .wf-sep { color: var(--ink-4); font-family: "JetBrains Mono", monospace; font-size: 10.5px; }
+  .wf-here { font-size: 14px; color: var(--ink); font-weight: 500; }
+  .wf-here--soft { color: var(--ink-3); font-weight: 400; }
+  .wf-here-meta { font-size: 11.5px; color: var(--ink-4); margin-top: 2px; }
+  .wf-pulling { display: flex; align-items: center; gap: 14px; }
+  .wf-pulling .verb {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px; color: var(--orange); line-height: 1; font-weight: 400;
+  }
+  .wf-pulling .obj { font-size: 14.5px; color: var(--ink); line-height: 1.4; flex: 1; }
+  .wf-why {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-3);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px 9px; cursor: pointer; white-space: nowrap;
+  }
+  .wf-why .chev {
+    width: 8px; height: 8px;
+    border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg); margin-top: -2px; transition: transform .15s;
+  }
+  .wf-why.open .chev { transform: rotate(225deg); margin-top: 2px; }
+
+  /* expanded disclosure */
+  .wf-disclose {
+    border-top: 1px solid var(--rule-2);
+    padding: 24px 36px 28px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 44px;
+    background: linear-gradient(180deg, rgba(230, 112, 30, 0.025), transparent 70%);
+  }
+  .wf-d-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 500; margin: 0 0 10px;
+  }
+  .wf-d-reason {
+    font-size: 16px; line-height: 1.55; color: var(--ink);
+    margin: 0 0 14px; max-width: 56ch;
+  }
+  .wf-d-reason b { color: var(--ink); font-weight: 600; }
+  .wf-d-evidence {
+    display: grid; grid-template-columns: auto 1fr; gap: 8px 16px;
+    padding: 10px 0 14px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+    margin: 0 0 16px;
+  }
+  .wf-d-evidence dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 500; padding-top: 3px;
+  }
+  .wf-d-evidence dd { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.5; }
+  .wf-d-evidence dd b { color: var(--ink); font-weight: 600; }
+  .wf-commit { display: flex; gap: 10px; align-items: center; }
+  .wf-btn {
+    font-family: "Public Sans"; font-size: 13.5px; font-weight: 600;
+    padding: 9px 16px; border-radius: 3px;
+    border: 1px solid var(--orange); background: var(--orange); color: white;
+    cursor: pointer;
+  }
+  .wf-btn--ghost { background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 500; }
+  .wf-commit-hint { font-size: 12px; color: var(--ink-4); font-style: italic; margin-left: 4px; }
+
+  .wf-d-alts { border-left: 1px solid var(--rule); padding-left: 32px; }
+  .wf-alt + .wf-alt { border-top: 1px solid var(--rule-2); margin-top: 14px; padding-top: 14px; }
+  .wf-alt-head {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 600; margin: 0 0 6px;
+  }
+  .wf-alt-head--sharpen { color: var(--blue); }
+  .wf-alt-head--first  { color: var(--amber); }
+  .wf-alt-head--pulse  { color: var(--orange); }
+  .wf-alt-line {
+    font-size: 14px; line-height: 1.45; color: var(--ink);
+    margin: 0 0 4px; cursor: pointer;
+  }
+  .wf-alt-line:hover { text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  .wf-alt-why { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; margin: 0; }
+
+  /* CANVAS */
+  .canvas {
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    padding: 40px 44px 56px;
+    min-height: 380px;
+    display: flex; flex-direction: column; gap: 24px;
+    position: relative;
+  }
+  .canvas-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-4); margin: 0;
+  }
+  .canvas-hello {
+    font-family: "DM Serif Display", serif;
+    font-size: 34px; line-height: 1.05; letter-spacing: -0.01em;
+    margin: 0; color: var(--ink);
+  }
+  .canvas-line {
+    font-size: 14.5px; color: var(--ink-3); margin: 0;
+    max-width: 540px; line-height: 1.55;
+  }
+  .canvas-status {
+    margin-top: 8px;
+    display: grid; grid-template-columns: auto 1fr; gap: 6px 22px;
+    padding: 14px 18px;
+    background: rgba(10, 28, 64, 0.02);
+    border-left: 2px solid var(--rule);
+    max-width: 640px;
+  }
+  .canvas-status dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 500; padding-top: 3px;
+  }
+  .canvas-status dd { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.5; }
+  .canvas-status dd b { color: var(--ink); font-weight: 600; }
+  .canvas-status dd em { color: var(--orange); font-style: normal; font-weight: 600; }
+
+  .canvas-cmdk {
+    position: absolute; bottom: 18px; right: 28px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--ink-4);
+    display: inline-flex; align-items: center; gap: 8px;
+    pointer-events: none;
+  }
+  .canvas-cmdk kbd {
+    display: inline-block; padding: 3px 7px;
+    border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px;
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    background: var(--paper); color: var(--ink-2);
+  }
+
+  /* SMART CTRL+K */
+  .overlay {
+    position: relative;
+    background: rgba(10, 28, 64, 0.32);
+    backdrop-filter: blur(2.5px);
+    -webkit-backdrop-filter: blur(2.5px);
+    padding: 56px 44px; min-height: 540px;
+  }
+  .palette {
+    max-width: 720px; margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid rgba(10, 28, 64, 0.2);
+    border-radius: 5px;
+    box-shadow: 0 30px 60px -16px rgba(10, 28, 64, 0.35);
+    overflow: hidden;
+  }
+  .p-input {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .p-prompt {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px; color: var(--orange); line-height: 1;
+  }
+  .p-field {
+    flex: 1;
+    font-family: "Public Sans", sans-serif;
+    font-size: 16px; color: var(--ink);
+    background: transparent; border: none; outline: none;
+  }
+  .p-field::placeholder { color: var(--ink-4); font-style: italic; }
+  .p-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-4);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .p-section + .p-section { border-top: 1px solid var(--rule-2); }
+  .p-section-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 500;
+    padding: 9px 20px 4px; margin: 0;
+  }
+  .p-row {
+    display: grid; grid-template-columns: 88px 1fr auto;
+    align-items: baseline; gap: 12px;
+    padding: 9px 20px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .p-row:hover { background: rgba(10, 28, 64, 0.025); }
+  .p-row.is-active {
+    background: rgba(230, 112, 30, 0.05);
+    border-left-color: var(--orange);
+  }
+  .p-verb {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px; color: var(--orange); line-height: 1;
+  }
+  .p-verb--neutral { color: var(--ink); font-family: "Public Sans"; font-weight: 600; font-size: 13px; text-transform: lowercase; }
+  .p-line { font-size: 14px; color: var(--ink); line-height: 1.4; }
+  .p-line .ref { color: var(--ink-3); font-style: italic; }
+  .p-why {
+    grid-column: 2;
+    font-size: 12px; color: var(--ink-3);
+    margin-top: 3px; line-height: 1.45;
+  }
+  .p-key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-4); letter-spacing: 0.1em;
+  }
+  .p-key kbd {
+    display: inline-block; padding: 2px 5px;
+    border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--paper); color: var(--ink-2);
+  }
+  .p-foot {
+    display: flex; align-items: center; gap: 16px;
+    padding: 9px 20px;
+    border-top: 1px solid var(--rule);
+    background: rgba(10, 28, 64, 0.015);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-3);
+  }
+  .p-foot span + span { padding-left: 14px; border-left: 1px solid var(--rule); }
+  .p-foot kbd {
+    display: inline-block; padding: 1px 5px;
+    border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--paper); color: var(--ink-2); margin: 0 2px;
+  }
+
+  /* ROOM SURFACE */
+  .room {
+    background: var(--paper);
+    padding: 28px 36px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 36px;
+  }
+  .room-head {
+    grid-column: 1 / -1;
+    display: flex; align-items: baseline; gap: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .room-kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 500;
+  }
+  .room-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 28px; line-height: 1; margin: 0; color: var(--ink);
+  }
+  .room-stage {
+    margin-left: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em;
+  }
+  .room-stage b { color: var(--orange); }
+  .room-col h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-4); margin: 0 0 12px; font-weight: 500;
+  }
+  .room-deal-summary {
+    display: grid; grid-template-columns: auto 1fr; gap: 6px 18px;
+    margin-bottom: 22px;
+  }
+  .room-deal-summary dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-4); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .room-deal-summary dd { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.5; }
+  .room-deal-summary dd b { color: var(--ink); font-weight: 600; }
+  .room-pilot-card {
+    background: var(--cream);
+    border-left: 3px solid var(--orange);
+    padding: 16px 18px;
+    border-radius: 0 4px 4px 0;
+  }
+  .room-pilot-card h5 {
+    font-family: "DM Serif Display", serif;
+    font-size: 18px; line-height: 1.3; margin: 0 0 8px; color: var(--ink);
+    font-weight: 400;
+  }
+  .room-pilot-card p { font-size: 13px; color: var(--ink-2); margin: 0 0 6px; line-height: 1.5; }
+  .room-pilot-card p:last-child { margin: 0; color: var(--ink-3); font-style: italic; }
+
+  .room-draft-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .room-draft-card h4 { margin: 0 0 4px; }
+  .room-draft-body {
+    font-size: 14px; line-height: 1.55; color: var(--ink); margin: 0;
+    padding: 12px 14px;
+    background: rgba(10, 28, 64, 0.02);
+    border-left: 2px solid var(--rule);
+    font-family: "Public Sans";
+  }
+  .room-draft-foot { display: flex; gap: 10px; align-items: center; }
+  .room-cmdk-hint {
+    margin-top: auto;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; color: var(--ink-4);
+  }
+  .room-cmdk-hint kbd {
+    display: inline-block; padding: 2px 5px;
+    border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--paper); color: var(--ink-2);
+  }
+
+  /* annotation strip */
+  .annot {
+    margin-top: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-3); line-height: 1.6;
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+  }
+  .annot b { color: var(--ink); font-weight: 600; }
+  .annot span { white-space: nowrap; }
+
+  /* rules block */
+  .rules {
+    max-width: 1320px; margin: 56px auto 0; padding: 28px 40px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+  }
+  .rules h3 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-3); margin: 0; font-weight: 600;
+  }
+  .rules ul {
+    margin: 0; padding: 0; list-style: none;
+    display: grid; gap: 8px;
+    font-size: 13.5px; line-height: 1.6; color: var(--ink-2);
+  }
+  .rules li { padding-left: 18px; position: relative; }
+  .rules li::before { content: "—"; position: absolute; left: 0; color: var(--ink-4); }
+  .rules li b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="intro-tag">Wayfinder<br/>un-nav · build</p>
+  <p class="intro-line">
+    Same bar at the top of the workspace. Four moments. <b>Same operator, same morning, same orange line at the top — it just does different things at each moment.</b>
+    Click "why" to expand. Press Ctrl+K to ask. Commit to land in a room. The bar stays with you.
+  </p>
+  <p class="intro-meta">2026-06-07<br/>built for Sarah-CRO walk</p>
+</header>
+
+<!-- STATE 1 — RESTING -->
+<section class="state">
+  <p class="state-tag">
+    <span class="state-tag-num">01</span>
+    <span class="state-tag-name">Resting</span>
+    <span class="state-tag-note">the operator just opened the app · nothing is open · the bar shows what it sees</span>
+  </p>
+
+  <div class="frame">
+    <div class="wayfinder">
+      <div class="wf-bar">
+        <div class="wf-cell">
+          <p class="wf-label">Trail · where you were</p>
+          <div class="wf-trail">
+            <a class="wf-crumb">Northwind discovery call</a>
+            <span class="wf-sep">›</span>
+            <a class="wf-crumb">Northwind deal</a>
+            <span class="wf-sep">›</span>
+            <span class="wf-crumb wf-crumb--last">canvas</span>
+          </div>
+        </div>
+        <div class="wf-cell">
+          <p class="wf-label">Here · where you are</p>
+          <p class="wf-here wf-here--soft">Canvas. Nothing open.</p>
+          <p class="wf-here-meta">Tuesday · 8:47 AM Central</p>
+        </div>
+        <div class="wf-cell wf-cell--pulling">
+          <p class="wf-label">Pulling · what the system sees next</p>
+          <div class="wf-pulling">
+            <span class="verb">Send</span>
+            <span class="obj">the Northwind pilot results to Sarah Chen before Friday.</span>
+            <button class="wf-why"><span>Why</span><span class="chev"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas">
+      <p class="canvas-meta">Workspace · canvas</p>
+      <h2 class="canvas-hello">Good morning.</h2>
+      <p class="canvas-line">Nothing open yet. The bar above is showing what it sees — pick it up or don't.</p>
+
+      <dl class="canvas-status">
+        <dt>Deals open</dt><dd><b>11</b> — <em>three at risk this week</em></dd>
+        <dt>New signals (7d)</dt><dd><b>23</b> — four on accounts you're working</dd>
+        <dt>Pilots running</dt><dd><b>2</b> — Northwind presents Friday · Lumana presents Monday</dd>
+        <dt>Calls this week</dt><dd><b>3</b> — one still needs prep</dd>
+      </dl>
+
+      <span class="canvas-cmdk"><kbd>Ctrl</kbd><kbd>K</kbd> &nbsp;ask the system what's next</span>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>1 bar, 3 cells.</b> trail · here · pulling</span>
+    <span><b>orange edge</b> only on the pulling cell — the dominant move</span>
+    <span><b>resting workspace is neutral</b> — no ranked queue, no auto-open</span>
+    <span><b>Ctrl+K hint</b> calmly bottom-right — operator agency intact</span>
+  </div>
+</section>
+
+<!-- STATE 2 — WHY PRESSED -->
+<section class="state">
+  <p class="state-tag">
+    <span class="state-tag-num">02</span>
+    <span class="state-tag-name">Why pressed</span>
+    <span class="state-tag-note">operator clicked "why" · the bar grows in place · reasoning + alternatives</span>
+  </p>
+
+  <div class="frame">
+    <div class="wayfinder">
+      <div class="wf-bar">
+        <div class="wf-cell">
+          <p class="wf-label">Trail</p>
+          <div class="wf-trail">
+            <a class="wf-crumb">Northwind discovery call</a>
+            <span class="wf-sep">›</span>
+            <a class="wf-crumb">Northwind deal</a>
+            <span class="wf-sep">›</span>
+            <span class="wf-crumb wf-crumb--last">canvas</span>
+          </div>
+        </div>
+        <div class="wf-cell">
+          <p class="wf-label">Here</p>
+          <p class="wf-here wf-here--soft">Canvas. Nothing open.</p>
+        </div>
+        <div class="wf-cell wf-cell--pulling">
+          <p class="wf-label">Pulling</p>
+          <div class="wf-pulling">
+            <span class="verb">Send</span>
+            <span class="obj">the Northwind pilot results to Sarah Chen before Friday.</span>
+            <button class="wf-why open"><span>Close</span><span class="chev"></span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-disclose">
+        <div>
+          <p class="wf-d-label">Why this is the pick</p>
+          <p class="wf-d-reason">
+            You finished writing up the Northwind pilot on Monday. It's been sitting on Sarah Chen's desk for three days and she hasn't said anything. Her calendar opens Thursday afternoon. <b>When pilots sit this long at this stage, you tend to lose them quietly.</b>
+          </p>
+          <dl class="wf-d-evidence">
+            <dt>Pilot</dt><dd>Written up Monday. Sarah Chen signs off. <b>She hasn't read it.</b></dd>
+            <dt>Deal</dt><dd><b>$184k</b>. Pilot stage. Eleven days since anything moved.</dd>
+            <dt>Pattern</dt><dd>Of the last six deals you lost at this stage, <b>five went quiet for three or more days</b> while the pilot was sitting.</dd>
+            <dt>Window</dt><dd>Sarah has <b>1.5 free hours Thursday 2–4 Central</b>.</dd>
+          </dl>
+          <div class="wf-commit">
+            <button class="wf-btn">Send it now</button>
+            <button class="wf-btn wf-btn--ghost">Skip this</button>
+            <span class="wf-commit-hint">Skip closes the bar. Nothing sends. You stay here.</span>
+          </div>
+        </div>
+
+        <aside class="wf-d-alts">
+          <p class="wf-d-label">What else the system saw</p>
+
+          <div class="wf-alt">
+            <p class="wf-alt-head wf-alt-head--sharpen">Sharpen the pick</p>
+            <p class="wf-alt-line">Send to Marcus Patel too — he's who actually decides.</p>
+            <p class="wf-alt-why">Sarah is the editor. Marcus is the one who signs the contract. If you only send to Sarah, she has to walk it down to him. One more handoff, one more place for it to stall.</p>
+          </div>
+
+          <div class="wf-alt">
+            <p class="wf-alt-head wf-alt-head--first">First do this</p>
+            <p class="wf-alt-line">Tighten the headline number before you send it.</p>
+            <p class="wf-alt-why">The pilot wrote up "about 40% faster onboarding." Northwind's stated bar was 50%. Sarah will push back on that gap before she sends it on.</p>
+          </div>
+
+          <div class="wf-alt">
+            <p class="wf-alt-head wf-alt-head--pulse">Worth knowing</p>
+            <p class="wf-alt-line">Lumana's CFO posted about pricing pressure this morning.</p>
+            <p class="wf-alt-why">Different account, different stage. Not on this trail. Surfaced because you flagged Lumana as hot last week.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="canvas" style="opacity: 0.65;">
+      <p class="canvas-meta">Workspace · canvas</p>
+      <h2 class="canvas-hello">Good morning.</h2>
+      <p class="canvas-line">The bar above is showing its reasoning. Send it, sharpen it, or close it and stay here.</p>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>inline disclosure</b> — bar grows downward, no popover, no modal</span>
+    <span><b>explicit gesture</b> — clicking "Why" is the commit to see reasoning</span>
+    <span><b>alternatives only when warranted</b> — sharpen + first-do + worth-knowing</span>
+    <span><b>"skip" closes the bar without sending</b> — operator stays in control</span>
+  </div>
+</section>
+
+<!-- STATE 3 — CTRL+K -->
+<section class="state">
+  <p class="state-tag">
+    <span class="state-tag-num">03</span>
+    <span class="state-tag-name">Smart Ctrl+K</span>
+    <span class="state-tag-note">operator pressed Ctrl+K · verbs first · contextual reads on top · search falls back below</span>
+  </p>
+
+  <div class="frame">
+    <div class="wayfinder">
+      <div class="wf-bar">
+        <div class="wf-cell">
+          <p class="wf-label">Trail</p>
+          <div class="wf-trail">
+            <a class="wf-crumb">Northwind discovery call</a>
+            <span class="wf-sep">›</span>
+            <a class="wf-crumb">Northwind deal</a>
+            <span class="wf-sep">›</span>
+            <span class="wf-crumb wf-crumb--last">canvas</span>
+          </div>
+        </div>
+        <div class="wf-cell">
+          <p class="wf-label">Here</p>
+          <p class="wf-here wf-here--soft">Canvas. Nothing open.</p>
+        </div>
+        <div class="wf-cell wf-cell--pulling">
+          <p class="wf-label">Pulling</p>
+          <div class="wf-pulling">
+            <span class="verb">Send</span>
+            <span class="obj">the Northwind pilot results to Sarah Chen before Friday.</span>
+            <button class="wf-why"><span>Why</span><span class="chev"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay">
+      <div class="palette">
+        <div class="p-input">
+          <span class="p-prompt">›</span>
+          <input class="p-field" placeholder="Type a verb — send, prep, tighten — or a name." />
+          <span class="p-meta">verb first · search falls back</span>
+        </div>
+
+        <div class="p-section">
+          <p class="p-section-label">What the system reads as next · 3 picks</p>
+          <div class="p-row is-active">
+            <span class="p-verb">Send</span>
+            <div>
+              <p class="p-line">the Northwind pilot results to <span class="ref">Sarah Chen</span>.</p>
+              <p class="p-why">Same pick the bar is showing. Lands you in the Northwind deal with the pilot results open.</p>
+            </div>
+            <span class="p-key"><kbd>↵</kbd></span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb">Prep</span>
+            <div>
+              <p class="p-line">Thursday's call with <span class="ref">Lumana · Marcus Patel</span> — agenda's empty.</p>
+              <p class="p-why">Call is 48 hours out. No notes, no questions, no ask logged.</p>
+            </div>
+            <span class="p-key"><kbd>↵</kbd></span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb">Tighten</span>
+            <div>
+              <p class="p-line">the headline number on the Northwind pilot — it's under buyer's threshold.</p>
+              <p class="p-why">Do this before sending. Sarah will push back on the gap otherwise.</p>
+            </div>
+            <span class="p-key"><kbd>↵</kbd></span>
+          </div>
+        </div>
+
+        <div class="p-section">
+          <p class="p-section-label">Type a verb to do something · always available</p>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">draft</span>
+            <div><p class="p-line">a new outreach — email, LinkedIn, or cold call</p></div>
+            <span class="p-key">type to filter</span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">write up</span>
+            <div><p class="p-line">pilot evidence for an open deal — claim, owner, what we'll measure, stop rule</p></div>
+            <span class="p-key">type to filter</span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">ask</span>
+            <div><p class="p-line">an advisor for a backchannel introduction on a deal</p></div>
+            <span class="p-key">type to filter</span>
+          </div>
+        </div>
+
+        <div class="p-section">
+          <p class="p-section-label">Go to a room · 22 in the system · summoned, not browsed</p>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">go to</span>
+            <div><p class="p-line">Signal Console — 23 new this week</p></div>
+            <span class="p-key">↵</span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">go to</span>
+            <div><p class="p-line">Future Autopsy — 6 deals pinned · last looked at 4 days ago</p></div>
+            <span class="p-key">↵</span>
+          </div>
+          <div class="p-row">
+            <span class="p-verb p-verb--neutral">go to</span>
+            <div><p class="p-line">Founding GTM — 4 of 7 sections ready</p></div>
+            <span class="p-key">↵</span>
+          </div>
+        </div>
+
+        <div class="p-foot">
+          <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+          <span><kbd>↵</kbd> commit</span>
+          <span><kbd>Tab</kbd> sharpen the verb</span>
+          <span><kbd>Esc</kbd> close · stay where you are</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>top section</b> is the system reading what's next — picks, not options</span>
+    <span><b>verbs first</b> — type "send" to act, type a name to find</span>
+    <span><b>rooms summoned</b> at the bottom — never a list to browse</span>
+    <span><b>Esc closes nothing</b> — committing requires Enter</span>
+  </div>
+</section>
+
+<!-- STATE 4 — AFTER COMMITTING -->
+<section class="state">
+  <p class="state-tag">
+    <span class="state-tag-num">04</span>
+    <span class="state-tag-name">After committing</span>
+    <span class="state-tag-note">operator pressed Enter on "Send" · landed inside the deal · the bar stayed with them and updated</span>
+  </p>
+
+  <div class="frame">
+    <div class="wayfinder">
+      <div class="wf-bar">
+        <div class="wf-cell">
+          <p class="wf-label">Trail</p>
+          <div class="wf-trail">
+            <a class="wf-crumb">Northwind discovery call</a>
+            <span class="wf-sep">›</span>
+            <a class="wf-crumb">canvas</a>
+            <span class="wf-sep">›</span>
+            <span class="wf-crumb wf-crumb--last">Northwind deal</span>
+          </div>
+        </div>
+        <div class="wf-cell">
+          <p class="wf-label">Here</p>
+          <p class="wf-here">Deal · Northwind</p>
+          <p class="wf-here-meta">opened from Ctrl+K · 8:48 AM</p>
+        </div>
+        <div class="wf-cell wf-cell--pulling">
+          <p class="wf-label">Pulling · next move in this flow</p>
+          <div class="wf-pulling">
+            <span class="verb">Write</span>
+            <span class="obj">a 2-line note to Sarah — introduce what's in the pilot and ask for Thursday.</span>
+            <button class="wf-why"><span>Why</span><span class="chev"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room">
+      <div class="room-head">
+        <span class="room-kicker">Deal Workspace</span>
+        <h3 class="room-title">Northwind</h3>
+        <span class="room-stage">stage <b>pilot</b> · $184k · 11 days since last move</span>
+      </div>
+
+      <div class="room-col">
+        <h4>What we measured</h4>
+        <dl class="room-deal-summary">
+          <dt>Buyer</dt><dd><b>Sarah Chen</b> — head of operations · signs off · hasn't read yet</dd>
+          <dt>Decides</dt><dd><b>Marcus Patel</b> — VP eng · final sign-off</dd>
+          <dt>Their bar</dt><dd>50% faster onboarding · we wrote 40% · gap of one notch</dd>
+          <dt>Stop rule</dt><dd>If onboarding doesn't clear 40% by week 3, they walk</dd>
+          <dt>Sent</dt><dd>Pilot written up Monday · still sitting</dd>
+        </dl>
+
+        <div class="room-pilot-card">
+          <h5>The pilot write-up sits ready.</h5>
+          <p>Two-page summary. Headline number. What we measured, who ran it, what would stop the deal. Sarah hasn't opened it.</p>
+          <p>Open the file to read it before you send.</p>
+        </div>
+      </div>
+
+      <div class="room-col">
+        <div class="room-draft-card">
+          <h4>The note the bar is asking you to write</h4>
+          <p class="room-draft-body">Sarah — the Northwind pilot results are in. Headline: 40% faster onboarding through the first three teams. One number didn't quite clear your bar; I'd rather walk you through it than send it cold. Thursday 2–4 Central is open on your side — can I grab 30 minutes?</p>
+          <div class="room-draft-foot">
+            <button class="wf-btn">Send to Sarah</button>
+            <button class="wf-btn wf-btn--ghost">Edit first</button>
+          </div>
+          <p class="room-cmdk-hint">
+            <kbd>Ctrl</kbd> <kbd>K</kbd> &nbsp;summon anywhere · the bar above stays with you
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <span><b>bar persists across rooms</b> — same component, new context</span>
+    <span><b>trail extended</b> · canvas slid back, Northwind deal is now "here"</span>
+    <span><b>pulling cell adapts</b> — the next micro-move inside the act just committed to</span>
+    <span><b>this is the Birdseye Float, elevated</b> — no corner widget, no separate floating icon</span>
+  </div>
+</section>
+
+<section class="rules">
+  <h3>The rules<br/>this is testing</h3>
+  <ul>
+    <li><b>The hallway is gone.</b> No left rail. The Wayfinder replaces both nav and triage with one ranked read of where the work is, always visible, never insistent. The 22 rooms exist; they're summoned through Ctrl+K, not browsed.</li>
+    <li><b>Agency stays with the operator.</b> The bar shows a read, never opens a room without an explicit commit. The resting workspace is genuinely neutral. Click-deeper is an explicit gesture — hover does nothing.</li>
+    <li><b>Verbs first. Search falls back.</b> Ctrl+K is "what's next?" not "where do I go?" Top section is the system's contextual picks. Below that, verbs the operator can type to act on anything. Below that, rooms to go to.</li>
+    <li><b>The bar persists across rooms.</b> Birdseye Float gets promoted from a corner widget to the primary wayfinding element. There is no corner icon. The bar at the top is doing that job, more legibly.</li>
+    <li><b>Voice rule.</b> No compound nouns the product invented to feel important. "Pilot results," not "cast proof." "Two-line note," not "outbound motion." Written so it sounds like the operator next to you talking.</li>
+  </ul>
+</section>
+
+<script>
+  document.querySelectorAll('.wf-why').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      btn.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>
