@@ -1,0 +1,29 @@
+/**
+ * The Antaeus component library (design-system spec 03).
+ *
+ * A composition language, not a kit of parts: four systems (Pulse,
+ * Ribbon, Grounded, Offset), the un-nav (Wayfinder + Ctrl+K +
+ * HandoffStrip), and a catalog where every component declares its
+ * Family, its voice posture, and its density behavior (03 §4.2).
+ *
+ * The visual source of truth is the locked mockup at
+ * deliverables/mockups/component-library-un-nav-full-2026-06-07.html;
+ * tokens come from src/styles/tokens.css; consumers import
+ * src/components/components.css once per page.
+ *
+ * Strings: components never invent operator copy. Every operator-
+ * facing string arrives from the caller already declared through t()
+ * (the few built-in defaults here are themselves declared).
+ */
+export * from "./contract";
+export { Kicker, Heading, Stat, StatusChip, Gauge } from "./display";
+export type { HeadingLevel } from "./display";
+export { Button, IconButton, CrossRoomLink, Toggle } from "./action";
+export type { ButtonVariant } from "./action";
+export { TextInput, Select, FormField } from "./input";
+export { Card } from "./card";
+export type { CardProps } from "./card";
+export { Toast, Alert, Drawer, Modal } from "./feedback";
+export type { AlertTone } from "./feedback";
+export { WayfinderBar, SegmentedControl } from "./navigation";
+export { Meter } from "./meter";

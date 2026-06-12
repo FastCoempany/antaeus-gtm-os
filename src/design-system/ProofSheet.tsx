@@ -1,0 +1,315 @@
+import type { JSX } from "preact";
+import { useState } from "preact/hooks";
+import { t } from "@/lib/voice/t";
+import {
+    Alert,
+    Button,
+    Card,
+    CrossRoomLink,
+    Drawer,
+    FormField,
+    Heading,
+    IconButton,
+    Kicker,
+    Meter,
+    Modal,
+    SegmentedControl,
+    Select,
+    Stat,
+    StatusChip,
+    TextInput,
+    Toggle,
+    WayfinderBar
+} from "@/components";
+import { Icon } from "@/icons";
+
+/**
+ * The component-library proof sheet, served at /design-system/.
+ *
+ * The built library composed in one place so the founder reacts to
+ * the IMPLEMENTATION the way the icon inventory sheet works for
+ * glyphs. Internal — not linked from any room. The locked mockup
+ * stays the visual source of truth; this page is the check that the
+ * code faithfully renders it.
+ */
+
+function Section(props: {
+    readonly code: string;
+    readonly title: string;
+    readonly children: JSX.Element | JSX.Element[];
+}): JSX.Element {
+    return (
+        <section style="margin-top:48px;border-top:1px solid rgba(10,28,64,0.14);padding-top:20px">
+            <Kicker>{props.code}</Kicker>
+            <div style="margin:6px 0 18px">
+                <Heading level="title">{props.title}</Heading>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:18px;max-width:760px">
+                {props.children}
+            </div>
+        </section>
+    );
+}
+
+export function ProofSheet(): JSX.Element {
+    const [seg, setSeg] = useState<"brief" | "spotlight" | "queue">("brief");
+    const [toggleOn, setToggleOn] = useState(true);
+    const [text, setText] = useState("");
+    const [sel, setSel] = useState("warm");
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    return (
+        <div>
+            <WayfinderBar room={t("DESIGN SYSTEM")} tail={t("proof sheet")} />
+            <main style="max-width:1040px;margin:0 auto;padding:40px 40px 120px">
+                <Kicker>{t("ANTAEUS DESIGN SYSTEM · BUILT LIBRARY")}</Kicker>
+                <Heading level="display">
+                    {t("The components, as code.", { class: "body" })}
+                </Heading>
+                <p style="font:15px/1.6 'Public Sans',sans-serif;color:rgba(10,28,64,0.66);max-width:70ch">
+                    {t(
+                        "Every primitive below is the real implementation — typed, tested, token-fed, voice-gated. The locked mockup stays the visual source of truth; this sheet is the check that the code renders it faithfully.",
+                        { class: "body" }
+                    )}
+                </p>
+
+                <Section code={t("DISPLAY")} title={t("Headings, stat, chips, gauge")}>
+                    <div style="display:flex;gap:32px;align-items:flex-end;flex-wrap:wrap">
+                        <Stat value="2.4×" label={t("coverage")} />
+                        <Stat value={14} label={t("accounts")} />
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                            <StatusChip label={t("Ready now")} tone="green" />
+                            <StatusChip label={t("At risk")} tone="red" />
+                            <StatusChip label={t("Workable")} tone="amber" />
+                            <StatusChip label={t("Compounding")} tone="blue" />
+                            <StatusChip label={t("Thin")} />
+                        </div>
+                    </div>
+                </Section>
+
+                <Section code={t("GROUNDED")} title={t("The card in five data states")}>
+                    <Card
+                        kicker={t("DEAL · RECOVERY")}
+                        title="Acme Industries"
+                        tone="red"
+                        offset
+                        footer={
+                            <>
+                                <Button variant="accent">{t("Open the deal")}</Button>
+                                <Button variant="ghost">{t("Pre-mortem it")}</Button>
+                            </>
+                        }
+                    >
+                        <p class="ds-card__copy">
+                            {t(
+                                "Champion quiet for twelve days, and the close date is inside the month. This is the one card breaking rank.",
+                                { class: "body" }
+                            )}
+                        </p>
+                    </Card>
+                    <Card kicker={t("SIGNAL")} title="Meridian Logistics" tone="blue" unsaved>
+                        <p class="ds-card__copy">
+                            {t("Two fresh signals this week; the heat is real.", {
+                                class: "body"
+                            })}
+                        </p>
+                    </Card>
+                    <Card title={t("Loading state")} state="loading">
+                        <p class="ds-card__copy">held silhouette</p>
+                    </Card>
+                    <Card
+                        state="empty"
+                        kicker={t("SIGNALS")}
+                        emptyWhy={t(
+                            "When an account you're watching moves, it shows up here.",
+                            { class: "body" }
+                        )}
+                        emptyMove={
+                            <Button variant="accent">{t("Add your first account")}</Button>
+                        }
+                    />
+                    <Card
+                        state="error"
+                        errorText={t(
+                            "The save didn't reach the workspace. Your edits are still here.",
+                            { class: "body" }
+                        )}
+                        errorRetry={<Button>{t("Try the save again")}</Button>}
+                    />
+                </Section>
+
+                <Section code={t("ACTION")} title={t("Buttons, toggle, links")}>
+                    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                        <Button variant="accent">{t("Send it")}</Button>
+                        <Button variant="primary">{t("Save deal")}</Button>
+                        <Button>{t("Plan call")}</Button>
+                        <Button variant="ghost">{t("Skip for now")}</Button>
+                        <IconButton icon="find" label={t("Find an account")} />
+                        <Toggle
+                            pressed={toggleOn}
+                            onToggle={setToggleOn}
+                            label={t("No-ask mode")}
+                        />
+                        <CrossRoomLink href="/signal-console/">
+                            {t("Check the signals")}
+                        </CrossRoomLink>
+                    </div>
+                    <div>
+                        <Button
+                            disabled
+                            disabledWhy={t("Add a buyer before this can send.", {
+                                class: "body"
+                            })}
+                        >
+                            {t("Send")}
+                        </Button>
+                    </div>
+                </Section>
+
+                <Section code={t("INPUT")} title={t("The composed form field")}>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+                        <FormField
+                            label={t("Account name")}
+                            microcopy={t("Signal Console accounts auto-suggest.", {
+                                class: "body"
+                            })}
+                        >
+                            <TextInput
+                                value={text}
+                                onInput={setText}
+                                placeholder={t("e.g. Acme Industries", { class: "body" })}
+                            />
+                        </FormField>
+                        <FormField
+                            label={t("Temperature")}
+                            error={
+                                text === "" && sel === "hot"
+                                    ? t("Name the account before marking it hot.", {
+                                          class: "body"
+                                      })
+                                    : undefined
+                            }
+                        >
+                            <Select
+                                value={sel}
+                                onChange={setSel}
+                                options={[
+                                    { value: "cool", label: t("Cool") },
+                                    { value: "warm", label: t("Warm") },
+                                    { value: "hot", label: t("Hot") }
+                                ]}
+                            />
+                        </FormField>
+                    </div>
+                </Section>
+
+                <Section code={t("FEEDBACK")} title={t("Alert, drawer, modal")}>
+                    <Alert tone="red" move={<Button>{t("Open the deal")}</Button>}>
+                        {t(
+                            "Two deals will close-lost if nothing moves this week.",
+                            { class: "body" }
+                        )}
+                    </Alert>
+                    <Alert tone="blue">
+                        {t("The system noticed three reads since yesterday.", {
+                            class: "body"
+                        })}
+                    </Alert>
+                    <Alert>
+                        {t("Coverage is below the plan's target.", { class: "body" })}
+                    </Alert>
+                    <div style="display:flex;gap:12px">
+                        <Button onClick={() => setDrawerOpen(true)}>
+                            {t("Open the drawer")}
+                        </Button>
+                        <Button onClick={() => setModalOpen(true)}>
+                            {t("Open the modal")}
+                        </Button>
+                    </div>
+                </Section>
+
+                <Section code={t("NAVIGATION")} title={t("Segmented lenses")}>
+                    <SegmentedControl
+                        label={t("Command mode")}
+                        active={seg}
+                        onChange={setSeg}
+                        options={[
+                            { key: "brief", label: t("Read") },
+                            { key: "spotlight", label: t("Focus") },
+                            { key: "queue", label: t("Triage") }
+                        ]}
+                    />
+                </Section>
+
+                <Section code={t("DATA")} title={t("Meter — the one admitted chart")}>
+                    <Meter
+                        ratio={0.8}
+                        tone="green"
+                        label={t("Pipeline coverage")}
+                        read={t(
+                            "2.4× of the 3× the plan calls for — close, and closing.",
+                            { class: "body" }
+                        )}
+                    />
+                    <Meter
+                        ratio={0.3}
+                        tone="amber"
+                        label={t("Discovery depth")}
+                        read={t("Three call plans built; the gate wants eight.", {
+                            class: "body"
+                        })}
+                    />
+                </Section>
+
+                <Section code={t("ICONS")} title={t("The set, in the components")}>
+                    <div style="display:flex;gap:14px;color:#0a1c40">
+                        <Icon name="signal" size={20} />
+                        <Icon name="deal" size={20} />
+                        <Icon name="proof" size={20} />
+                        <Icon name="send" size={20} />
+                        <Icon name="readiness" size={20} />
+                        <Icon name="wayfinder" size={20} />
+                    </div>
+                </Section>
+            </main>
+
+            <Drawer
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                label={t("Readiness")}
+            >
+                <Kicker>{t("DRAWER")}</Kicker>
+                <Heading level="title">
+                    {t("Depth slides in over the page.")}
+                </Heading>
+                <p style="font:15px/1.6 'Public Sans',sans-serif;color:rgba(10,28,64,0.66)">
+                    {t(
+                        "Never a route change. Esc, the scrim, and the close button all close it.",
+                        { class: "body" }
+                    )}
+                </p>
+                <Button onClick={() => setDrawerOpen(false)}>{t("Close")}</Button>
+            </Drawer>
+
+            <Modal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                label={t("Delete workspace")}
+                confirm={
+                    <Button variant="accent" onClick={() => setModalOpen(false)}>
+                        {t("Delete it")}
+                    </Button>
+                }
+            >
+                <Heading level="title">{t("Delete this workspace?")}</Heading>
+                <p style="font:15px/1.6 'Public Sans',sans-serif;color:rgba(10,28,64,0.66)">
+                    {t(
+                        "This removes every room's local data. The cloud workspace stays.",
+                        { class: "body" }
+                    )}
+                </p>
+            </Modal>
+        </div>
+    );
+}

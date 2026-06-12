@@ -5,6 +5,27 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.1.0 — 2026-06-12
+
+Additive: the component library exists as code.
+
+- `src/components/` — the spec 03 catalog's core, implemented: Kicker,
+  Heading (display/title/control), Stat, StatusChip, Gauge, Card (the
+  Grounded primitive with all five data states + the offset variant +
+  the unsaved marker), Button (accent/primary/secondary/ghost with
+  disabled-why), IconButton, CrossRoomLink, Toggle, TextInput, Select,
+  FormField (density-aware microcopy + inline error), Toast, Alert,
+  Drawer, Modal, WayfinderBar (the locked un-nav, summoning the
+  existing Ctrl+K palette), SegmentedControl, and Meter (the one
+  admitted data-viz, bar + read sentence). Each declares the §4.2
+  contract; interaction states per §4.8 live in components.css; every
+  built-in string is t()-declared.
+- `/design-system/` — the proof sheet: the built library composed on
+  one internal page, the implementation-review counterpart to the
+  icon inventory sheet.
+- One additive token: `--ds-space-45` (18px), already named in the
+  spec's spacing scale, previously missing from tokens.css.
+
 ## 1.0.0 — 2026-06-08
 
 The first locked release. Establishes the baseline:

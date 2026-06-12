@@ -861,4 +861,20 @@ test.describe("room boot smoke tests", () => {
             `page errors during boot:\n${errors.join("\n")}`
         ).toEqual([]);
     });
+
+    test("Design-system proof sheet — /design-system/ renders the built library", async ({
+        page
+    }) => {
+        const errors: string[] = [];
+        page.on("pageerror", (e) => errors.push(String(e)));
+        await page.goto("/design-system/");
+        await expect(page.locator(".ds-wayfinder")).toBeVisible();
+        await expect(page.locator(".ds-card").first()).toBeVisible();
+        await expect(page.locator(".ds-meter").first()).toBeVisible();
+        // The five card data states all render on the sheet.
+        await expect(page.locator(".ds-card--loading")).toBeVisible();
+        await expect(page.locator(".ds-empty")).toBeVisible();
+        await expect(page.locator(".ds-error")).toBeVisible();
+        expect(errors).toEqual([]);
+    });
 });
