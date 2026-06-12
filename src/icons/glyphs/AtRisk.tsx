@@ -2,8 +2,8 @@
  * AtRisk — "at risk" glyph. GENERATED — do not hand-edit; the
  * iconography mockup is the master and the generator propagates it
  * (tools/design-system/generate-icons.py). Spec 09 construction:
- * 24px grid, 2px keyline, flat terminals, miter joins. Placeholder
- * quality until the production redraw lands in the mockup.
+ * 24px grid, 2px keyline, flat terminals, miter joins — the
+ * Grounded-A construction, confirmed by brand round 1 (2026-06-12).
  */
 import type { GlyphProps } from "../glyph";
 
@@ -20,7 +20,7 @@ export function AtRiskGlyph({ size }: GlyphProps) {
             stroke-linecap="butt"
             stroke-linejoin="miter"
         >
-            <path d="M12 3L2 20h20z" stroke="var(--ds-icon-accent, currentColor)"/><path d="M12 10v5" stroke="var(--ds-icon-accent, currentColor)"/><path d="M12 17.5v0.5" stroke="var(--ds-icon-accent, currentColor)"/>
+            <path d="M12 3L2 20h20z" stroke="var(--ds-icon-accent, currentColor)"/><path d="M12 10v5" stroke="var(--ds-icon-accent, currentColor)"/><path d="M12 16.5v2" stroke="var(--ds-icon-accent, currentColor)"/>
         </svg>
     );
 }
