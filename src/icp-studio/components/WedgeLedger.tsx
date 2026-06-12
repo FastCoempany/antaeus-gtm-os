@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     effectiveBuyer,
@@ -175,9 +176,9 @@ function paneState(pain: string): LedgerState {
 export function WedgeLedger(): JSX.Element {
     const rows = buildLedger();
     return (
-        <section class="icp-ledger" aria-label="ICP ledger">
+        <section class="icp-ledger" aria-label={t("ICP ledger")}>
             <header class="icp-ledger__head">
-                <p class="icp-ledger__kicker">ICP LEDGER</p>
+                <p class="icp-ledger__kicker">{t("ICP LEDGER")}</p>
                 <h2 class="icp-ledger__title">
                     Seven fields. One ICP the rest of the system can trust.
                 </h2>

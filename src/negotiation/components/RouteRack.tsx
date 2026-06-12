@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     linkedDeals,
@@ -51,9 +52,9 @@ export function RouteRack(): JSX.Element {
     const d = draft.value;
     const deals = linkedDeals.value;
     return (
-        <section class="ng-route-rack" aria-label="Negotiation route">
+        <section class="ng-route-rack" aria-label={t("Negotiation route")}>
             <div class="ng-route-rack__cell">
-                <p class="ng-cell__label">Deal</p>
+                <p class="ng-cell__label">{t("Deal")}</p>
                 <select
                     class="ng-cell__select"
                     value={d.dealId ?? ""}
@@ -62,7 +63,7 @@ export function RouteRack(): JSX.Element {
                         setDealId(v || null);
                     }}
                 >
-                    <option value="">Select deal…</option>
+                    <option value="">{t("Select deal…")}</option>
                     {deals.map((dl) => (
                         <option value={dl.id} key={dl.id}>
                             {dl.accountName} · {dl.stage}
@@ -71,7 +72,7 @@ export function RouteRack(): JSX.Element {
                 </select>
             </div>
             <div class="ng-route-rack__cell">
-                <p class="ng-cell__label">Counterparty</p>
+                <p class="ng-cell__label">{t("Counterparty")}</p>
                 <div class="ng-role-strip" role="tablist">
                     {ROLES.map((r) => (
                         <button
@@ -90,11 +91,11 @@ export function RouteRack(): JSX.Element {
                 </div>
             </div>
             <div class="ng-route-rack__cell">
-                <p class="ng-cell__label">Person on the other side</p>
+                <p class="ng-cell__label">{t("Person on the other side")}</p>
                 <input
                     type="text"
                     class="ng-cell__input"
-                    placeholder="Name / title"
+                    placeholder={t("Name / title")}
                     value={d.counterpartyName}
                     onInput={(e) =>
                         setCounterpartyName((e.currentTarget as HTMLInputElement).value)
@@ -102,7 +103,7 @@ export function RouteRack(): JSX.Element {
                 />
             </div>
             <div class="ng-route-rack__cell ng-route-rack__cell--full">
-                <p class="ng-cell__label">Ask moment</p>
+                <p class="ng-cell__label">{t("Ask moment")}</p>
                 <select
                     class="ng-cell__select"
                     value={d.askMoment}

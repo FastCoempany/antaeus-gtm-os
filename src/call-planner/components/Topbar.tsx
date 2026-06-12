@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { currentCompany, draft } from "../state";
 
 /**
@@ -22,7 +23,7 @@ export function Topbar(): JSX.Element {
     if (contact.length >= 2) parts.push(contact);
     const kicker = parts.join(" · ");
     return (
-        <header class="cp-topbar" aria-label="Call Planner header">
+        <header class="cp-topbar" aria-label={t("Call Planner header")}>
             <p class="cp-topbar__kicker">{kicker}</p>
             <h1 class="cp-topbar__title">
                 Walk into the call with conviction, not hope.

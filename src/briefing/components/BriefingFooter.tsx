@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { costSummary, costSummaryLoaded } from "../state";
 import { stateLabel } from "../lib/cost/tracker";
 import type { CostState } from "../lib/cost/tracker";
@@ -47,9 +48,9 @@ export function BriefingFooter(): JSX.Element | null {
     const label = stateLabel(summary.state);
 
     return (
-        <footer class="bf-cost" aria-label="Cost this week">
+        <footer class="bf-cost" aria-label={t("Cost this week")}>
             <div class="bf-cost__row">
-                <span class="bf-cost__kicker">Cost this week</span>
+                <span class="bf-cost__kicker">{t("Cost this week")}</span>
                 <span class="bf-cost__amount">
                     ${summary.weekly_cost_usd.toFixed(2)} / ${summary.ceiling_usd.toFixed(2)} ·{" "}
                     {realPct}%

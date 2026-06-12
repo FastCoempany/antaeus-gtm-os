@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { hottestAccount, stats } from "../state";
 
 /**
@@ -22,7 +23,7 @@ export function Topbar(): JSX.Element {
     const s = stats.value;
     const acct = hottestAccount.value;
     return (
-        <header class="lp-topbar" aria-label="LinkedIn Playbook header">
+        <header class="lp-topbar" aria-label={t("LinkedIn Playbook header")}>
             <p class="lp-topbar__kicker">
                 LINKEDIN PLAYBOOK ·{" "}
                 {s.total > 0

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     type ParseTriggerResponse,
@@ -84,7 +85,7 @@ export function AddTriggerFlow({ onDone }: { onDone: () => void }): JSX.Element 
                 id="bf-trigger-input"
                 class="bf-addtrigger__input"
                 rows={3}
-                placeholder="e.g. Tell me when two or more EOR competitors launch a new product within 30 days"
+                placeholder={t("e.g. Tell me when two or more EOR competitors launch a new product within 30 days", { class: "body" })}
                 value={text}
                 disabled={parsing || arming}
                 onInput={(e) => setText((e.target as HTMLTextAreaElement).value)}

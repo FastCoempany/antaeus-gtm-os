@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { nextStepLock, setNextStepField, type NextStepLock } from "../state";
 
 /**
@@ -23,7 +24,7 @@ export function NextStepDocket(): JSX.Element {
     return (
         <section
             class={`ds-next-step-docket is-${status}`}
-            aria-label="Next-step docket"
+            aria-label={t("Next-step docket")}
         >
             <header class="ds-next-step-docket__header">
                 Next-step lock
@@ -34,34 +35,34 @@ export function NextStepDocket(): JSX.Element {
             <div class="ds-next-step-docket__grid">
                 <Field
                     field="date"
-                    label="Date"
+                    label={t("Date")}
                     value={lock.date}
                     placeholder="2026-05-01"
                 />
                 <Field
                     field="owner"
-                    label="Owner"
+                    label={t("Owner")}
                     value={lock.owner}
-                    placeholder="Buyer-side decision owner"
+                    placeholder={t("Buyer-side decision owner")}
                 />
                 <Field
                     field="attendees"
-                    label="Attendees"
+                    label={t("Attendees")}
                     value={lock.attendees}
-                    placeholder="Who else will be there"
+                    placeholder={t("Who else will be there")}
                 />
                 <Field
                     field="purpose"
-                    label="Purpose"
+                    label={t("Purpose")}
                     value={lock.purpose}
-                    placeholder="Specific outcome to advance"
+                    placeholder={t("Specific outcome to advance")}
                     wide
                 />
                 <Field
                     field="reason"
-                    label="Reason"
+                    label={t("Reason")}
                     value={lock.reason}
-                    placeholder="Why this is the right next step now"
+                    placeholder={t("Why this is the right next step now", { class: "body" })}
                     wide
                 />
             </div>

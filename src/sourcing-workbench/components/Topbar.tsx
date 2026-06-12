@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { inboundFocus, stats } from "../state";
 
 /**
@@ -22,17 +23,17 @@ export function Topbar(): JSX.Element {
         ? `${baseKicker} · sourcing against: ${focus}`
         : baseKicker;
     return (
-        <header class="sw-topbar" aria-label="Sourcing Workbench header">
+        <header class="sw-topbar" aria-label={t("Sourcing Workbench header")}>
             <p class="sw-topbar__kicker">{kicker}</p>
             <h1 class="sw-topbar__title">
                 Push only the names the territory will respect.
             </h1>
-            <div class="sw-topbar__stats" role="group" aria-label="Workbench stats">
-                <Stat label="Captured" value={s.captured} />
-                <Stat label="Researched" value={s.researched} />
-                <Stat label="Ready to push" value={s.ready} accent />
-                <Stat label="Pushed" value={s.pushed} />
-                <Stat label="Total" value={s.total} muted />
+            <div class="sw-topbar__stats" role="group" aria-label={t("Workbench stats")}>
+                <Stat label={t("Captured")} value={s.captured} />
+                <Stat label={t("Researched")} value={s.researched} />
+                <Stat label={t("Ready to push")} value={s.ready} accent />
+                <Stat label={t("Pushed")} value={s.pushed} />
+                <Stat label={t("Total")} value={s.total} muted />
             </div>
         </header>
     );

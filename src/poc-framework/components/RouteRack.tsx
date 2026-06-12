@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft, linkedDeal } from "../state";
 import {
     hrefToAdvisorDeploy,
@@ -32,8 +33,8 @@ export function RouteRack(): JSX.Element {
         : "#";
 
     return (
-        <nav class="poc-route-rack" aria-label="Route rack">
-            <span class="poc-route-rack__kicker">CARRY THE PROOF</span>
+        <nav class="poc-route-rack" aria-label={t("Route rack")}>
+            <span class="poc-route-rack__kicker">{t("CARRY THE PROOF")}</span>
             <div class="poc-route-rack__list">
                 <a
                     class={`poc-route-rack__cta poc-route-rack__cta--primary${
@@ -58,7 +59,7 @@ export function RouteRack(): JSX.Element {
                     href={autopsyHref}
                     aria-disabled={!hasAccount}
                 >
-                    <span class="poc-route-rack__label">Pre-mortem this deal</span>
+                    <span class="poc-route-rack__label">{t("Pre-mortem this deal")}</span>
                     <span class="poc-route-rack__reason">
                         Stress-test what would kill this proof.
                     </span>
@@ -70,7 +71,7 @@ export function RouteRack(): JSX.Element {
                     href={advisorHref}
                     aria-disabled={!hasAccount}
                 >
-                    <span class="poc-route-rack__label">Carry to an advisor</span>
+                    <span class="poc-route-rack__label">{t("Carry to an advisor")}</span>
                     <span class="poc-route-rack__reason">
                         Portable evidence for backchannel asks.
                     </span>
@@ -82,7 +83,7 @@ export function RouteRack(): JSX.Element {
                     href={negotiationHref}
                     aria-disabled={!hasAccount}
                 >
-                    <span class="poc-route-rack__label">Rehearse the negotiation</span>
+                    <span class="poc-route-rack__label">{t("Rehearse the negotiation")}</span>
                     <span class="poc-route-rack__reason">
                         Carry proof state into a pricing or terms conversation.
                     </span>

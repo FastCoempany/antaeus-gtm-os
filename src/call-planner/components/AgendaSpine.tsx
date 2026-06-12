@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     linkedDeal,
@@ -65,15 +66,15 @@ export function AgendaSpine(): JSX.Element {
     const advanceQuote = advance.ask;
 
     return (
-        <section class="cp-spine" aria-label="Agenda spine">
-            <p class="cp-spine__kicker">AGENDA</p>
-            <h2 class="cp-spine__title">Run the call in this order.</h2>
+        <section class="cp-spine" aria-label={t("Call agenda")}>
+            <p class="cp-spine__kicker">{t("AGENDA")}</p>
+            <h2 class="cp-spine__title">{t("Run the call in this order.")}</h2>
             <ol class="cp-spine__strips">
                 <li class="cp-strip" data-cp-strip="open">
                     <p class="cp-strip__num">1.</p>
-                    <p class="cp-strip__name">Open</p>
+                    <p class="cp-strip__name">{t("Open")}</p>
                     <div class="cp-strip__body">
-                        <p class="cp-strip__title">Open from the operating burden.</p>
+                        <p class="cp-strip__title">{t("Open from the operating burden.")}</p>
                         <p class="cp-strip__copy">{openerScript}</p>
                         <em class="cp-strip__quote">"{openerQuote}"</em>
                         <p class="cp-strip__note">
@@ -85,7 +86,7 @@ export function AgendaSpine(): JSX.Element {
 
                 <li class="cp-strip" data-cp-strip="reason-now">
                     <p class="cp-strip__num">2.</p>
-                    <p class="cp-strip__name">Reason now</p>
+                    <p class="cp-strip__name">{t("Reason now")}</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">{whyNowTitle}</p>
                         <p class="cp-strip__copy">{whyNowCopy}</p>
@@ -96,7 +97,7 @@ export function AgendaSpine(): JSX.Element {
 
                 <li class="cp-strip" data-cp-strip="probe">
                     <p class="cp-strip__num">3.</p>
-                    <p class="cp-strip__name">Probe</p>
+                    <p class="cp-strip__name">{t("Probe")}</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">
                             Ask only what the meeting can carry.
@@ -123,7 +124,7 @@ export function AgendaSpine(): JSX.Element {
 
                 <li class="cp-strip" data-cp-strip="advance">
                     <p class="cp-strip__num">4.</p>
-                    <p class="cp-strip__name">Advance ask</p>
+                    <p class="cp-strip__name">{t("Advance ask")}</p>
                     <div class="cp-strip__body">
                         <p class="cp-strip__title">
                             Leave with a move the board can trust.

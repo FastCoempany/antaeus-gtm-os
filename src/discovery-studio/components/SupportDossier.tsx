@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     inboundQuestionHandlers,
     objectionLibrary,
@@ -29,8 +30,8 @@ export function SupportDossier(): JSX.Element {
         dossier.length > 0 || objections.length > 0 || inbound.length > 0;
 
     return (
-        <aside class="ds-support-dossier" aria-label="Support dossier">
-            <header class="ds-support-dossier__header">Dossier</header>
+        <aside class="ds-support-dossier" aria-label={t("Support dossier")}>
+            <header class="ds-support-dossier__header">{t("Dossier")}</header>
             {!hasContent ? (
                 <p class="ds-support-dossier__empty">
                     Pick a framework above to load its proof, objection,

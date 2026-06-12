@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeFramework,
     frameworkRegistry,
@@ -25,12 +26,12 @@ export function FrameworkRail(): JSX.Element {
 
     if (frameworks.length === 0) {
         return (
-            <p class="ds-framework-rail__empty">Loading frameworks…</p>
+            <p class="ds-framework-rail__empty">{t("Loading frameworks…")}</p>
         );
     }
 
     return (
-        <nav class="ds-framework-rail" aria-label="Discovery framework selector">
+        <nav class="ds-framework-rail" aria-label={t("Discovery framework selector")}>
             <ul class="ds-framework-rail__list">
                 {frameworks.map((fw) => {
                     const isActive = active === fw.id;

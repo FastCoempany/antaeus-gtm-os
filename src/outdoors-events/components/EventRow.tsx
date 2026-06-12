@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { busyRowId, changeStatus, removeEvent } from "../state";
 import {
     OUTDOORS_EVENT_STATUSES,
@@ -93,7 +94,7 @@ export function EventRow({
             </div>
             <div class="oe-row__actions">
                 <label class="oe-row__status-label">
-                    <span class="oe-row__status-tag">STATUS</span>
+                    <span class="oe-row__status-tag">{t("STATUS")}</span>
                     <select
                         class="oe-row__status-select"
                         value={event.status}

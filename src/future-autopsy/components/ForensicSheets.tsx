@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     currentAutopsy,
     currentVerdictMode
@@ -26,7 +27,7 @@ export function ForensicSheets(): JSX.Element {
 
     if (!doc) {
         return (
-            <section class="fa-sheet fa-sheet--empty" aria-label="Forensic sheets">
+            <section class="fa-sheet fa-sheet--empty" aria-label={t("Forensic sheets")}>
                 <p class="fa-sheet__empty">
                     No diagnosis to render. Pin a deal to light up the
                     evidence stack.
@@ -40,7 +41,7 @@ export function ForensicSheets(): JSX.Element {
     return (
         <section
             class={`fa-sheet fa-sheet--stacked fa-sheet--${mode}`}
-            aria-label="Forensic sheets"
+            aria-label={t("Forensic sheets")}
         >
             {/*
              * Program 6 / PR 7 — each sheet carries a tone-colored tab
@@ -54,7 +55,7 @@ export function ForensicSheets(): JSX.Element {
             {/* Sheet 1 — Visible symptom (orange tab) */}
             <article
                 class="fa-stack-sheet fa-stack-sheet--risk"
-                aria-label="Visible symptom sheet"
+                aria-label={t("Visible symptom sheet")}
             >
                 <header class="fa-stack-sheet__head">
                     <span class="fa-stack-sheet__label fa-stack-sheet__label--orange">
@@ -68,7 +69,7 @@ export function ForensicSheets(): JSX.Element {
             {/* Sheet 2 — What sits underneath (blue tab) */}
             <article
                 class="fa-stack-sheet fa-stack-sheet--proof"
-                aria-label="What sits underneath sheet"
+                aria-label={t("What sits underneath sheet")}
             >
                 <header class="fa-stack-sheet__head">
                     <span class="fa-stack-sheet__label fa-stack-sheet__label--blue">
@@ -82,7 +83,7 @@ export function ForensicSheets(): JSX.Element {
             {/* Sheet 3 — Failure pattern (green tab) */}
             <article
                 class="fa-stack-sheet fa-stack-sheet--motion"
-                aria-label="Failure pattern sheet"
+                aria-label={t("Failure pattern sheet")}
             >
                 <header class="fa-stack-sheet__head">
                     <span class="fa-stack-sheet__label fa-stack-sheet__label--green">

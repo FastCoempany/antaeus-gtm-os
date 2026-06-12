@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     INDUSTRY_OPTIONS,
     PRODUCT_CATEGORY_OPTIONS,
@@ -29,9 +30,9 @@ import { persistOnboardingToCloud } from "../lib/cloud";
 export function IntroStep(): JSX.Element {
     return (
         <StepShell
-            kicker="STEP 1 OF 7 — WELCOME"
-            title="Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening."
-            subtitle="It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live."
+            kicker={t("STEP 1 OF 7 — WELCOME")}
+            title={t("Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.", { class: "body" })}
+            subtitle={t("It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.", { class: "body" })}
             onNext={() => nextStep()}
             nextLabel="Begin"
             hideBack
@@ -39,17 +40,17 @@ export function IntroStep(): JSX.Element {
             <div class="ob-intro">
                 <ul class="ob-intro__points">
                     <li>
-                        <strong>The dashboard wakes up live.</strong> Every
+                        <strong>{t("The dashboard wakes up live.")}</strong> Every
                         answer here turns into a real Brief item before you
                         leave Onboarding.
                     </li>
                     <li>
-                        <strong>You can skip any step except the first.</strong>{" "}
+                        <strong>{t("You can skip any step except the first.", { class: "body" })}</strong>{" "}
                         The first ask is a one-line ICP — everything else
                         the system does compounds off of it.
                     </li>
                     <li>
-                        <strong>Nothing is sent anywhere.</strong> Everything
+                        <strong>{t("Nothing is sent anywhere.")}</strong> Everything
                         below stays on this device until you decide to wire
                         cloud sync from Settings.
                     </li>
@@ -63,14 +64,14 @@ export function CompanyStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="STEP 2 OF 7 — COMPANY"
-            title="Your company name?"
-            subtitle="Lowest-friction question first. Everything else stays optional."
+            kicker={t("STEP 2 OF 7 — COMPANY")}
+            title={t("Your company name?")}
+            subtitle={t("Lowest-friction question first. Everything else stays optional.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
         >
             <label class="ob-field">
-                <span class="ob-field__label">Company name</span>
+                <span class="ob-field__label">{t("Company name")}</span>
                 <input
                     class="ob-input"
                     type="text"
@@ -81,7 +82,7 @@ export function CompanyStep(): JSX.Element {
                                 .value
                         })
                     }
-                    placeholder="e.g., Antaeus GTM"
+                    placeholder={t("e.g., Antaeus GTM")}
                     autoFocus
                 />
                 <span class="ob-field__hint">
@@ -97,14 +98,14 @@ export function RoleStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="STEP 3 OF 7 — ROLE"
-            title="Which seat are you in?"
-            subtitle="Role decides which surface the Dashboard centers first. You can change this anytime from Settings."
+            kicker={t("STEP 3 OF 7 — ROLE")}
+            title={t("Which seat are you in?")}
+            subtitle={t("Role decides which surface the Dashboard centers first. You can change this anytime from Settings.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.role === null}
         >
-            <ul class="ob-options" role="radiogroup" aria-label="Role">
+            <ul class="ob-options" role="radiogroup" aria-label={t("Role")}>
                 {ROLE_OPTIONS.map((r) => (
                     <li key={r.key}>
                         <button
@@ -149,21 +150,21 @@ export function CategoryStep(): JSX.Element {
 
     return (
         <StepShell
-            kicker="STEP 4 OF 7 — CATEGORY & INDUSTRIES"
-            title="What do you sell, and who do you sell it to?"
-            subtitle="Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic."
+            kicker={t("STEP 4 OF 7 — CATEGORY & INDUSTRIES", { class: "body" })}
+            title={t("What do you sell, and who do you sell it to?", { class: "body" })}
+            subtitle={t("Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={!canContinue}
         >
             <div class="ob-fieldset">
                 <p class="ob-field__legend">
-                    The product category you sell <em>from</em>
+                    The product category you sell <em>{t("from")}</em>
                 </p>
                 <ul
                     class="ob-options ob-options--grid"
                     role="radiogroup"
-                    aria-label="Product category"
+                    aria-label={t("Product category")}
                 >
                     {PRODUCT_CATEGORY_OPTIONS.map((c) => (
                         <li key={c.key}>
@@ -187,7 +188,7 @@ export function CategoryStep(): JSX.Element {
 
             <div class="ob-fieldset">
                 <p class="ob-field__legend">
-                    The industries you sell <em>into</em>
+                    The industries you sell <em>{t("into")}</em>
                 </p>
                 <label class="ob-toggle">
                     <input
@@ -208,7 +209,7 @@ export function CategoryStep(): JSX.Element {
                     <ul
                         class="ob-options ob-options--grid"
                         role="group"
-                        aria-label="Industries"
+                        aria-label={t("Industries")}
                     >
                         {INDUSTRY_OPTIONS.map((i) => {
                             const selected = d.industries.includes(i.key);
@@ -245,15 +246,15 @@ export function IcpStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="STEP 5 OF 7 — ICP"
-            title="Write one sharp ICP."
-            subtitle="One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition every other room in the app runs against."
+            kicker={t("STEP 5 OF 7 — ICP")}
+            title={t("Write one sharp ICP.")}
+            subtitle={t("One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition every other room in the app runs against.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}
         >
             <label class="ob-field">
-                <span class="ob-field__label">Who is this for?</span>
+                <span class="ob-field__label">{t("Who is this for?")}</span>
                 <textarea
                     class="ob-input"
                     rows={2}
@@ -264,7 +265,7 @@ export function IcpStep(): JSX.Element {
                                 .value
                         })
                     }
-                    placeholder="e.g., Mid-market freight forwarders in EU expanding past their first compliance audit."
+                    placeholder={t("e.g., Mid-market freight forwarders in EU expanding past their first compliance audit.", { class: "body" })}
                 />
             </label>
             <label class="ob-field">
@@ -280,7 +281,7 @@ export function IcpStep(): JSX.Element {
                             icpPain: (e.currentTarget as HTMLTextAreaElement).value
                         })
                     }
-                    placeholder="e.g., Compliance prep is a 3-month manual scramble."
+                    placeholder={t("e.g., Compliance prep is a 3-month manual scramble.", { class: "body" })}
                 />
             </label>
         </StepShell>
@@ -291,14 +292,14 @@ export function AccountStep(): JSX.Element {
     const d = draft.value;
     return (
         <StepShell
-            kicker="STEP 6 OF 7 — FIRST ACCOUNT"
-            title="Pick one company that fits the ICP."
-            subtitle="Optional, but the workspace feels real once a named account lands in Signal Console."
+            kicker={t("STEP 6 OF 7 — FIRST ACCOUNT", { class: "body" })}
+            title={t("Pick one company that fits the ICP.", { class: "body" })}
+            subtitle={t("Optional, but the workspace feels real once a named account lands in Signal Console.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
         >
             <label class="ob-field">
-                <span class="ob-field__label">Account name (optional)</span>
+                <span class="ob-field__label">{t("Account name (optional)")}</span>
                 <input
                     class="ob-input"
                     type="text"
@@ -309,7 +310,7 @@ export function AccountStep(): JSX.Element {
                                 .value
                         })
                     }
-                    placeholder="e.g., Meridian Logistics"
+                    placeholder={t("e.g., Meridian Logistics")}
                 />
             </label>
             <label class="ob-field">
@@ -326,7 +327,7 @@ export function AccountStep(): JSX.Element {
                                 .value
                         })
                     }
-                    placeholder="e.g., Just announced EU expansion."
+                    placeholder={t("e.g., Just announced EU expansion.")}
                 />
             </label>
         </StepShell>
@@ -345,9 +346,9 @@ export function QuotaStep(): JSX.Element {
     }
     return (
         <StepShell
-            kicker="STEP 7 OF 7 — QUOTA"
-            title="What revenue does the year owe?"
-            subtitle="Quota Workback turns these into a weekly execution plan. Optional — you can fill it later."
+            kicker={t("STEP 7 OF 7 — QUOTA")}
+            title={t("What revenue does the year owe?")}
+            subtitle={t("Quota Workback turns these into a weekly execution plan. Optional — you can fill it later.", { class: "body" })}
             onNext={() => {
                 finishAndSeed();
                 // ADR-007: mirror completion + answers to the cloud
@@ -373,7 +374,7 @@ export function QuotaStep(): JSX.Element {
         >
             <div class="ob-form-row">
                 <label class="ob-field">
-                    <span class="ob-field__label">Annual quota ($)</span>
+                    <span class="ob-field__label">{t("Annual quota ($)")}</span>
                     <input
                         class="ob-input"
                         type="text"
@@ -384,7 +385,7 @@ export function QuotaStep(): JSX.Element {
                     />
                 </label>
                 <label class="ob-field">
-                    <span class="ob-field__label">Avg deal size ($)</span>
+                    <span class="ob-field__label">{t("Avg deal size ($)")}</span>
                     <input
                         class="ob-input"
                         type="text"
@@ -410,8 +411,8 @@ export function CompleteStep(): JSX.Element {
     const ok = seeded.value;
     return (
         <StepShell
-            kicker="ONBOARDING COMPLETE"
-            title="The workspace is live."
+            kicker={t("ONBOARDING COMPLETE")}
+            title={t("The workspace is live.")}
             subtitle={
                 ok
                     ? "Your answers seeded an ICP, an account, and a quota plan. Welcome will guide the next real moves."
@@ -428,9 +429,9 @@ export function CompleteStep(): JSX.Element {
                 </a>
                 <p class="ob-complete__alt">
                     Or jump straight to{" "}
-                    <a href="/dashboard/">the Dashboard</a>,{" "}
-                    <a href="/quota-workback/">Quota Workback</a>, or{" "}
-                    <a href="/settings/">Settings</a>.
+                    <a href="/dashboard/">{t("the Dashboard")}</a>,{" "}
+                    <a href="/quota-workback/">{t("Quota Workback")}</a>, or{" "}
+                    <a href="/settings/">{t("Settings")}</a>.
                 </p>
             </div>
         </StepShell>

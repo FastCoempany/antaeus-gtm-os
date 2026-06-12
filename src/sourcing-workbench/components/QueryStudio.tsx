@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     PLATFORM_LABELS,
     PLATFORMS,
@@ -35,10 +36,10 @@ export function QueryStudio(): JSX.Element {
     }
 
     return (
-        <section class="sw-querystudio" aria-label="Query studio">
+        <section class="sw-querystudio" aria-label={t("Query studio")}>
             <header class="sw-section__head">
-                <p class="sw-section__kicker">QUERY CARDS</p>
-                <h2 class="sw-section__title">Build a search query.</h2>
+                <p class="sw-section__kicker">{t("QUERY CARDS")}</p>
+                <h2 class="sw-section__title">{t("Build a search query.")}</h2>
                 <p class="sw-section__sub">
                     One platform, one query, one intent — saved so you can
                     re-run it as the territory shifts.
@@ -47,7 +48,7 @@ export function QueryStudio(): JSX.Element {
 
             <form class="sw-qs-form" onSubmit={onSubmit}>
                 <label class="sw-field">
-                    <span class="sw-field__label">Platform</span>
+                    <span class="sw-field__label">{t("Platform")}</span>
                     <select
                         class="sw-field__control"
                         value={draft.platform}
@@ -67,7 +68,7 @@ export function QueryStudio(): JSX.Element {
                 </label>
 
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Query string</span>
+                    <span class="sw-field__label">{t("Query string")}</span>
                     <textarea
                         class="sw-field__control sw-field__control--mono"
                         placeholder='e.g., ("VP Operations" OR "Director Compliance") AND "logistics" AND "EU expansion"'
@@ -83,11 +84,11 @@ export function QueryStudio(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Intent</span>
+                    <span class="sw-field__label">{t("Intent")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="What are you hoping to surface?"
+                        placeholder={t("What are you hoping to surface?")}
                         value={draft.intent}
                         onInput={(e) =>
                             patchQueryCardDraft({
@@ -99,11 +100,11 @@ export function QueryStudio(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Target ICP</span>
+                    <span class="sw-field__label">{t("Target ICP")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., Mid-market freight forwarders, EU"
+                        placeholder={t("e.g., Mid-market freight forwarders, EU")}
                         value={draft.targetIcp}
                         onInput={(e) =>
                             patchQueryCardDraft({
@@ -115,11 +116,11 @@ export function QueryStudio(): JSX.Element {
                 </label>
 
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Notes</span>
+                    <span class="sw-field__label">{t("Notes")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="Refinements, exclusions, context"
+                        placeholder={t("Refinements, exclusions, context")}
                         value={draft.notes}
                         onInput={(e) =>
                             patchQueryCardDraft({
@@ -147,7 +148,7 @@ export function QueryStudio(): JSX.Element {
                     prospects you push next.
                 </p>
             ) : (
-                <ul class="sw-qs-list" aria-label="Saved query cards">
+                <ul class="sw-qs-list" aria-label={t("Saved query cards")}>
                     {cards.map((card) => (
                         <li key={card.id} class="sw-qs-card">
                             <div class="sw-qs-card__head">
@@ -171,13 +172,13 @@ export function QueryStudio(): JSX.Element {
                             <div class="sw-qs-card__query">{card.query}</div>
                             {card.intent ? (
                                 <div class="sw-qs-card__intent">
-                                    <span class="sw-mono">Intent</span>{" "}
+                                    <span class="sw-mono">{t("Intent")}</span>{" "}
                                     {card.intent}
                                 </div>
                             ) : null}
                             {card.targetIcp ? (
                                 <div class="sw-qs-card__icp">
-                                    <span class="sw-mono">ICP</span>{" "}
+                                    <span class="sw-mono">{t("ICP")}</span>{" "}
                                     {card.targetIcp}
                                 </div>
                             ) : null}

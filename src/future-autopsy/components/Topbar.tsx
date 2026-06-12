@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { autopsyUniverse } from "../state";
 import { DEFAULT_HORIZON_DAYS } from "../lib/types";
 
@@ -20,7 +21,7 @@ export function Topbar(): JSX.Element {
             <p class="fa-topbar__kicker">
                 FUTURE AUTOPSY · {DEFAULT_HORIZON_DAYS} days out · {tail}
             </p>
-            <h1 class="fa-topbar__title">The deal is pinned as evidence.</h1>
+            <h1 class="fa-topbar__title">{t("The deal is pinned as evidence.")}</h1>
             <p class="fa-topbar__thesis">
                 Bring one deal into focus. Decide what kills it — or what
                 wins it — in the next {DEFAULT_HORIZON_DAYS} days.

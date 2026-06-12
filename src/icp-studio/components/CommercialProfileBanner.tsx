@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     profileDirty,
     profileDraft,
@@ -60,11 +61,11 @@ export function CommercialProfileBanner(): JSX.Element {
 
             <div class="icp-profile__fields">
                 <label class="icp-profile__field">
-                    <span class="icp-profile__label">Product category</span>
+                    <span class="icp-profile__label">{t("Product category")}</span>
                     <input
                         type="text"
                         class="icp-profile__input"
-                        placeholder="e.g. founder-to-first-operator revenue OS"
+                        placeholder={t("e.g. founder-to-first-operator revenue OS")}
                         value={draft.productCategory}
                         disabled={!loaded}
                         onInput={(e) =>
@@ -76,11 +77,11 @@ export function CommercialProfileBanner(): JSX.Element {
                 </label>
 
                 <label class="icp-profile__field">
-                    <span class="icp-profile__label">What you sell</span>
+                    <span class="icp-profile__label">{t("What you sell")}</span>
                     <input
                         type="text"
                         class="icp-profile__input"
-                        placeholder="e.g. a GTM operating system for founder-led teams"
+                        placeholder={t("e.g. a GTM operating system for founder-led teams", { class: "body" })}
                         value={draft.whatWeSell}
                         disabled={!loaded}
                         onInput={(e) =>
@@ -92,11 +93,11 @@ export function CommercialProfileBanner(): JSX.Element {
                 </label>
 
                 <label class="icp-profile__field icp-profile__field--wide">
-                    <span class="icp-profile__label">Value proposition</span>
+                    <span class="icp-profile__label">{t("Value proposition")}</span>
                     <textarea
                         class="icp-profile__textarea"
                         rows={2}
-                        placeholder="The core promise — what changes for the buyer because they bought you."
+                        placeholder={t("The core promise — what changes for the buyer because they bought you.", { class: "body" })}
                         value={draft.valueProp}
                         disabled={!loaded}
                         onInput={(e) =>

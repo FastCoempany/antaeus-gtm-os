@@ -1,9 +1,10 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 export function Topbar(): JSX.Element {
     return (
         <header class="oe-topbar">
-            <p class="oe-topbar__kicker">OUTDOORS EVENTS</p>
+            <p class="oe-topbar__kicker">{t("OUTDOORS EVENTS")}</p>
             <h1 class="oe-topbar__title">
                 Where people are gathering, found for you.
             </h1>

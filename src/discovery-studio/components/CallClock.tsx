@@ -1,5 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { callClock, startCallClock, stopCallClock } from "../state";
 
 /**
@@ -61,7 +62,7 @@ export function CallClock(): JSX.Element {
                 isOver ? " ds-call-clock--over" : " ds-call-clock--running"
             }`}
         >
-            <span class="ds-call-clock__label">Call clock</span>
+            <span class="ds-call-clock__label">{t("Call clock")}</span>
             <span class="ds-call-clock__time">
                 {String(minutes).padStart(2, "0")}:
                 {String(seconds).padStart(2, "0")}

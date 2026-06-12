@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft } from "../state";
 
 /**
@@ -13,7 +14,7 @@ import { draft } from "../state";
 export function PushbackSheet(): JSX.Element {
     const list = draft.value.pushbacks;
     return (
-        <section class="ng-pushbacks" aria-label="Pushback templates">
+        <section class="ng-pushbacks" aria-label={t("Pushback templates")}>
             <h2 class="ng-section__title">
                 When they say this, you say this.
             </h2>
@@ -21,11 +22,11 @@ export function PushbackSheet(): JSX.Element {
                 {list.map((p) => (
                     <li class="ng-pushback" key={p.id}>
                         <p class="ng-pushback__trigger">
-                            <span class="ng-pushback__label">They say</span>
+                            <span class="ng-pushback__label">{t("They say")}</span>
                             <em>{p.trigger}</em>
                         </p>
                         <p class="ng-pushback__response">
-                            <span class="ng-pushback__label">You say</span>
+                            <span class="ng-pushback__label">{t("You say")}</span>
                             {p.response}
                         </p>
                     </li>

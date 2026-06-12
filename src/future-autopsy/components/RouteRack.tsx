@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import type { ActionPlan, ActionRoute } from "../lib/types";
 
 interface Props {
@@ -19,8 +20,8 @@ export function RouteRack({ plan }: Props): JSX.Element {
     const visible = slots.filter((s): s is ActionRoute => s !== null);
     if (visible.length === 0) return <></>;
     return (
-        <nav class="fa-route-rack" aria-label="Action plan">
-            <span class="fa-route-rack__kicker">INTERVENE</span>
+        <nav class="fa-route-rack" aria-label={t("Action plan")}>
+            <span class="fa-route-rack__kicker">{t("INTERVENE")}</span>
             <div class="fa-route-rack__list">
                 {visible.map((route) => (
                     <a

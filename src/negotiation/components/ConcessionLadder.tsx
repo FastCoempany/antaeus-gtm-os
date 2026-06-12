@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { draft } from "../state";
 import type { ConcessionStep } from "../lib/types";
 
@@ -20,7 +21,7 @@ const COST_LABEL: Record<ConcessionStep["cost"], string> = {
 export function ConcessionLadder(): JSX.Element {
     const ladder = draft.value.concessionLadder;
     return (
-        <section class="ng-ladder" aria-label="Concession ladder">
+        <section class="ng-ladder" aria-label={t("Concession ladder")}>
             <h2 class="ng-section__title">
                 The ladder. Whatever we give, we give for something.
             </h2>
@@ -38,11 +39,11 @@ export function ConcessionLadder(): JSX.Element {
                         </span>
                         <div class="ng-ladder__pair">
                             <p class="ng-ladder__give">
-                                <span class="ng-ladder__give-label">GIVE</span>
+                                <span class="ng-ladder__give-label">{t("GIVE")}</span>
                                 {s.give}
                             </p>
                             <p class="ng-ladder__ask">
-                                <span class="ng-ladder__ask-label">ASK</span>
+                                <span class="ng-ladder__ask-label">{t("ASK")}</span>
                                 {s.ask}
                             </p>
                         </div>

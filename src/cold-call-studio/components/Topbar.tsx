@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { callStats, selectedAccountName } from "../state";
 
 /**
@@ -20,7 +21,7 @@ export function Topbar(): JSX.Element {
     const stats = callStats.value;
     const account = selectedAccountName.value;
     return (
-        <header class="cc-topbar" aria-label="Cold Call Studio header">
+        <header class="cc-topbar" aria-label={t("Cold Call Studio header")}>
             <p class="cc-topbar__kicker">
                 COLD CALL STUDIO ·{" "}
                 {stats.total > 0

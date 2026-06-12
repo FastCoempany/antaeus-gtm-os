@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * OutdoorsEventsChip — a small navigation chip on the Briefing's World
@@ -13,7 +14,7 @@ import type { JSX } from "preact";
 export function OutdoorsEventsChip(): JSX.Element {
     return (
         <a class="bf-events-chip" href="/outdoors-events/">
-            <span class="bf-events-chip__kicker">ALSO OUT THERE</span>
+            <span class="bf-events-chip__kicker">{t("ALSO OUT THERE")}</span>
             <span class="bf-events-chip__label">
                 Outdoors Events — gatherings the system found for your category
             </span>

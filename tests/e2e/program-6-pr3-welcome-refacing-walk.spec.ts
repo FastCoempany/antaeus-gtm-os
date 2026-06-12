@@ -64,7 +64,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
             const joined = labels.join(" · ");
             expect(joined).toContain("Where you are");
             expect(joined).toContain("What is missing");
-            expect(joined).toContain("What unlocks next");
+            expect(joined).toContain("What opens up next");
             expect(joined).toContain("Return behavior");
         } finally {
             await ctx.close();

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { focusedAccount, nextStepLock } from "../state";
 import {
     hrefToCallPlanner,
@@ -38,15 +39,15 @@ export function HandoffStrip(): JSX.Element {
             : "Lock the next step above before handing off.";
 
     return (
-        <section class="ds-handoff" aria-label="Carry the call forward">
+        <section class="ds-handoff" aria-label={t("Carry the call forward")}>
             <header class="ds-handoff__head">
-                <p class="ds-handoff__kicker">CARRY THE CALL FORWARD</p>
+                <p class="ds-handoff__kicker">{t("CARRY THE CALL FORWARD")}</p>
                 <h2 class="ds-handoff__title">
                     Push the deal, or set up what's next.
                 </h2>
                 <p class="ds-handoff__sub">{lockStatus}</p>
             </header>
-            <nav class="ds-handoff__row" aria-label="Cross-room handoff">
+            <nav class="ds-handoff__row" aria-label={t("Cross-room handoff")}>
                 <a
                     class="ds-handoff__cta ds-handoff__cta--primary"
                     href={hrefToDealWorkspace(account)}

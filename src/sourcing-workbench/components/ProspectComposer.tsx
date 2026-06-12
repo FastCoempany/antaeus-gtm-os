@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     LEVERAGE_LABELS,
     type LeverageKey,
@@ -37,10 +38,10 @@ export function ProspectComposer(): JSX.Element {
     }
 
     return (
-        <section class="sw-prospect-composer" aria-label="Add prospect">
+        <section class="sw-prospect-composer" aria-label={t("Add prospect")}>
             <header class="sw-section__head">
-                <p class="sw-section__kicker">PROSPECTS</p>
-                <h2 class="sw-section__title">Add a prospect.</h2>
+                <p class="sw-section__kicker">{t("PROSPECTS")}</p>
+                <h2 class="sw-section__title">{t("Add a prospect.")}</h2>
                 <p class="sw-section__sub">
                     The stronger the entry — contact, leverage, entry
                     point, approach — the further along the board it
@@ -50,11 +51,11 @@ export function ProspectComposer(): JSX.Element {
 
             <form class="sw-pc-form" onSubmit={onSubmit}>
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Account name *</span>
+                    <span class="sw-field__label">{t("Account name *")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., Meridian Logistics"
+                        placeholder={t("e.g., Meridian Logistics")}
                         value={draft.accountName}
                         onInput={(e) =>
                             patchProspectDraft({
@@ -66,11 +67,11 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Contact name</span>
+                    <span class="sw-field__label">{t("Contact name")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., Sarah Chen"
+                        placeholder={t("e.g., Sarah Chen")}
                         value={draft.contactName}
                         onInput={(e) =>
                             patchProspectDraft({
@@ -82,11 +83,11 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Contact title</span>
+                    <span class="sw-field__label">{t("Contact title")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., VP Operations"
+                        placeholder={t("e.g., VP Operations")}
                         value={draft.contactTitle}
                         onInput={(e) =>
                             patchProspectDraft({
@@ -98,7 +99,7 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Source query</span>
+                    <span class="sw-field__label">{t("Source query")}</span>
                     <select
                         class="sw-field__control"
                         value={draft.sourceQueryId}
@@ -109,7 +110,7 @@ export function ProspectComposer(): JSX.Element {
                             })
                         }
                     >
-                        <option value="">— None —</option>
+                        <option value="">{t("— None —")}</option>
                         {cards.map((c) => (
                             <option key={c.id} value={c.id}>
                                 {labelForCard(c.platform, c.intent || c.query)}
@@ -119,7 +120,7 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field">
-                    <span class="sw-field__label">Leverage</span>
+                    <span class="sw-field__label">{t("Entry point")}</span>
                     <select
                         class="sw-field__control"
                         value={draft.leverage}
@@ -139,11 +140,11 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Entry point</span>
+                    <span class="sw-field__label">{t("Entry point")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., Warm intro from advisor at TechCrunch"
+                        placeholder={t("e.g., Warm intro from advisor at TechCrunch", { class: "body" })}
                         value={draft.entryPoint}
                         onInput={(e) =>
                             patchProspectDraft({
@@ -155,11 +156,11 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Approach</span>
+                    <span class="sw-field__label">{t("Approach")}</span>
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder="e.g., Reference Acme proof; lead with EU compliance angle"
+                        placeholder={t("e.g., Reference Acme proof; lead with EU compliance angle", { class: "body" })}
                         value={draft.approach}
                         onInput={(e) =>
                             patchProspectDraft({
@@ -171,11 +172,11 @@ export function ProspectComposer(): JSX.Element {
                 </label>
 
                 <label class="sw-field sw-field--span2">
-                    <span class="sw-field__label">Research notes</span>
+                    <span class="sw-field__label">{t("Research notes")}</span>
                     <textarea
                         class="sw-field__control"
                         rows={3}
-                        placeholder="What did the research turn up? A real paragraph here advances the prospect further."
+                        placeholder={t("What did the research turn up? A real paragraph here advances the prospect further.", { class: "body" })}
                         value={draft.notes}
                         onInput={(e) =>
                             patchProspectDraft({

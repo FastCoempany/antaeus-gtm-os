@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 
 /**
  * Founding GTM topbar — kicker + serif headline + maturity band.
@@ -40,7 +41,7 @@ export function Topbar(props: TopbarProps): JSX.Element {
             {props.verdictLabel && (
                 <div class="fg-topbar__rail">
                     <div class="fg-readiness-tag">
-                        <span class="fg-readiness-tag__kicker">READINESS</span>
+                        <span class="fg-readiness-tag__kicker">{t("READINESS")}</span>
                         <span class="fg-readiness-tag__label">
                             {props.verdictLabel}
                         </span>

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { actions } from "../state";
 import { hrefForActionDestination } from "../lib/handoff";
 
@@ -11,10 +12,10 @@ import { hrefForActionDestination } from "../lib/handoff";
 export function ActionStack(): JSX.Element {
     const list = actions.value;
     return (
-        <section class="wel-actions" aria-label="Next moves">
+        <section class="wel-actions" aria-label={t("Next moves")}>
             <header class="wel-section__head">
-                <p class="wel-section__kicker">NEXT MOVES</p>
-                <h2 class="wel-section__title">Pick the move that compounds.</h2>
+                <p class="wel-section__kicker">{t("NEXT MOVES")}</p>
+                <h2 class="wel-section__title">{t("Pick the action that compounds.")}</h2>
                 <p class="wel-section__sub">
                     The first card is the strongest move from where you
                     are. The rest stay queued, in order.
@@ -46,12 +47,12 @@ export function ActionStack(): JSX.Element {
                         ) : null}
                         {a.why ? (
                             <p class="wel-action__why">
-                                <span class="wel-mono">Why</span> {a.why}
+                                <span class="wel-mono">{t("Why")}</span> {a.why}
                             </p>
                         ) : null}
                         {a.unlocks ? (
                             <p class="wel-action__unlocks">
-                                <span class="wel-mono">Unlocks</span> {a.unlocks}
+                                <span class="wel-mono">{t("Opens up")}</span> {a.unlocks}
                             </p>
                         ) : null}
                         <a

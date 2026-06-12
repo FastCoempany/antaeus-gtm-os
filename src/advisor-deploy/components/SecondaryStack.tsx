@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeDeals,
     advisorDraft,
@@ -71,11 +72,11 @@ export function SecondaryStack(): JSX.Element {
     }
 
     return (
-        <section class="ad-secondary" aria-label="Advisor secondary sheets">
+        <section class="ad-secondary" aria-label={t("Advisor secondary sheets")}>
             <article class="ad-sheet">
                 <header class="ad-sheet__head">
                     <div>
-                        <p class="ad-sheet__kicker">ADVISORS</p>
+                        <p class="ad-sheet__kicker">{t("ADVISORS")}</p>
                         <h2 class="ad-sheet__title">
                             Register the people whose trust you can deploy.
                         </h2>
@@ -83,11 +84,11 @@ export function SecondaryStack(): JSX.Element {
                 </header>
                 <form class="ad-form" onSubmit={onSubmit}>
                     <label class="ad-form__field">
-                        <span class="ad-form__label">Name</span>
+                        <span class="ad-form__label">{t("Name")}</span>
                         <input
                             class="ad-input"
                             type="text"
-                            placeholder="Sarah Chen"
+                            placeholder={t("Sarah Chen")}
                             value={draft.name}
                             onInput={(e) =>
                                 patchAdvisorDraft({
@@ -99,11 +100,11 @@ export function SecondaryStack(): JSX.Element {
                         />
                     </label>
                     <label class="ad-form__field">
-                        <span class="ad-form__label">Role</span>
+                        <span class="ad-form__label">{t("Role")}</span>
                         <input
                             class="ad-input"
                             type="text"
-                            placeholder="Board member, operator, customer"
+                            placeholder={t("Board member, operator, customer")}
                             value={draft.title}
                             onInput={(e) =>
                                 patchAdvisorDraft({
@@ -115,7 +116,7 @@ export function SecondaryStack(): JSX.Element {
                         />
                     </label>
                     <label class="ad-form__field">
-                        <span class="ad-form__label">Tier</span>
+                        <span class="ad-form__label">{t("Tier")}</span>
                         <select
                             class="ad-select"
                             value={draft.tier}
@@ -135,11 +136,11 @@ export function SecondaryStack(): JSX.Element {
                         </select>
                     </label>
                     <label class="ad-form__field">
-                        <span class="ad-form__label">Expertise</span>
+                        <span class="ad-form__label">{t("Expertise")}</span>
                         <input
                             class="ad-input"
                             type="text"
-                            placeholder="Enterprise SaaS, CX, procurement"
+                            placeholder={t("Enterprise SaaS, CX, procurement")}
                             value={draft.expertise}
                             onInput={(e) =>
                                 patchAdvisorDraft({
@@ -157,7 +158,7 @@ export function SecondaryStack(): JSX.Element {
                         <input
                             class="ad-input"
                             type="text"
-                            placeholder="Meridian Logistics, Northstar Financial"
+                            placeholder={t("Meridian Logistics, Northstar Financial")}
                             value={draft.companies}
                             onInput={(e) =>
                                 patchAdvisorDraft({
@@ -169,10 +170,10 @@ export function SecondaryStack(): JSX.Element {
                         />
                     </label>
                     <label class="ad-form__field ad-form__field--full">
-                        <span class="ad-form__label">Notes</span>
+                        <span class="ad-form__label">{t("Notes")}</span>
                         <textarea
                             class="ad-textarea"
-                            placeholder="What kind of ask should this person carry?"
+                            placeholder={t("What kind of ask should this person carry?", { class: "body" })}
                             value={draft.notes}
                             onInput={(e) =>
                                 patchAdvisorDraft({
@@ -242,7 +243,7 @@ export function SecondaryStack(): JSX.Element {
             <article class="ad-sheet">
                 <header class="ad-sheet__head">
                     <div>
-                        <p class="ad-sheet__kicker">ASK LOG</p>
+                        <p class="ad-sheet__kicker">{t("ASK LOG")}</p>
                         <h2 class="ad-sheet__title">
                             Every ask should return as a deal update.
                         </h2>
@@ -302,7 +303,7 @@ export function SecondaryStack(): JSX.Element {
             <article class="ad-sheet ad-sheet--wide">
                 <header class="ad-sheet__head">
                     <div>
-                        <p class="ad-sheet__kicker">DESK READ</p>
+                        <p class="ad-sheet__kicker">{t("DESK READ")}</p>
                         <h2 class="ad-sheet__title">
                             How outside leverage is paying off.
                         </h2>
@@ -332,8 +333,8 @@ export function SecondaryStack(): JSX.Element {
                         </div>
                     ))}
                 </div>
-                <p class="ad-handoff__kicker">CARRY THE ASK FORWARD</p>
-                <nav class="ad-handoff" aria-label="Cross-room handoff">
+                <p class="ad-handoff__kicker">{t("CARRY THE ASK FORWARD")}</p>
+                <nav class="ad-handoff" aria-label={t("Cross-room handoff")}>
                     <a
                         class="ad-btn ad-btn--blue"
                         href={hrefToDealWorkspace(

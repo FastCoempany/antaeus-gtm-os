@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     currentCompany,
     dealOptions,
@@ -52,10 +53,10 @@ export function Witness(): JSX.Element {
           : "No matching account with live signals yet.";
 
     return (
-        <aside class="cp-witness" aria-label="Witness rail">
+        <aside class="cp-witness" aria-label={t("Witness rail")}>
             <div class="cp-witness__head">
                 <div class="cp-witness__head-lead">
-                    <p class="cp-witness__kicker">CONTACT</p>
+                    <p class="cp-witness__kicker">{t("CONTACT")}</p>
                     <h2 class="cp-witness__name">
                         {d.contactName.trim() || "Add a contact."}
                     </h2>
@@ -80,11 +81,11 @@ export function Witness(): JSX.Element {
             </div>
 
             <label class="cp-field">
-                <span class="cp-field__label">Contact</span>
+                <span class="cp-field__label">{t("Contact")}</span>
                 <input
                     type="text"
                     class="cp-field__input"
-                    placeholder="Name or role"
+                    placeholder={t("Name or role")}
                     autoComplete="off"
                     value={d.contactName}
                     onInput={(e) =>
@@ -95,8 +96,8 @@ export function Witness(): JSX.Element {
                 />
             </label>
 
-            <fieldset class="cp-personas" aria-label="Persona">
-                <legend class="cp-field__label">Persona</legend>
+            <fieldset class="cp-personas" aria-label={t("Persona")}>
+                <legend class="cp-field__label">{t("Persona")}</legend>
                 {PERSONA_KEYS.map((p: PersonaKey) => (
                     <button
                         key={p}
@@ -111,11 +112,11 @@ export function Witness(): JSX.Element {
             </fieldset>
 
             <label class="cp-field">
-                <span class="cp-field__label">LinkedIn URL</span>
+                <span class="cp-field__label">{t("LinkedIn URL")}</span>
                 <input
                     type="url"
                     class="cp-field__input"
-                    placeholder="https://linkedin.com/in/…"
+                    placeholder={t("https://linkedin.com/in/…")}
                     autoComplete="off"
                     value={d.linkedinUrl}
                     onInput={(e) =>
@@ -127,11 +128,11 @@ export function Witness(): JSX.Element {
             </label>
 
             <label class="cp-field">
-                <span class="cp-field__label">Custom notes (why now)</span>
+                <span class="cp-field__label">{t("Custom notes (why now)")}</span>
                 <textarea
                     class="cp-field__textarea"
                     rows={4}
-                    placeholder="Manual context if no live signal yet — what is making this meeting worth running?"
+                    placeholder={t("Manual context if no live signal yet — what is making this meeting worth running?", { class: "body" })}
                     value={d.customNotes}
                     onInput={(e) =>
                         setCustomNotes(
@@ -142,7 +143,7 @@ export function Witness(): JSX.Element {
             </label>
 
             <label class="cp-field">
-                <span class="cp-field__label">Linked deal</span>
+                <span class="cp-field__label">{t("Linked deal")}</span>
                 <select
                     class="cp-field__select"
                     value={d.linkedDealId}
@@ -153,7 +154,7 @@ export function Witness(): JSX.Element {
                     }
                     disabled={deals.length === 0}
                 >
-                    <option value="">— Not linked —</option>
+                    <option value="">{t("— Not linked —")}</option>
                     {deals.map((deal) => (
                         <option key={deal.id} value={deal.id}>
                             {deal.accountName} · {deal.stage}
@@ -168,7 +169,7 @@ export function Witness(): JSX.Element {
             </label>
 
             <div class="cp-witness__support">
-                <p class="cp-witness__support-kicker">DOSSIER</p>
+                <p class="cp-witness__support-kicker">{t("DOSSIER")}</p>
                 <p class="cp-witness__support-line">{supportLine}</p>
                 {top ? (
                     <p class="cp-witness__support-line">

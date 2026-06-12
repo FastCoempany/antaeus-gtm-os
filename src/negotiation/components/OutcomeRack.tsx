@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     appendLearning,
     draft,
@@ -31,7 +32,7 @@ export function OutcomeRack(): JSX.Element {
     const d = draft.value;
     const recent = learnings.value.slice(0, 5);
     return (
-        <section class="ng-outcome" aria-label="Outcome + learnings">
+        <section class="ng-outcome" aria-label={t("Outcome + learnings")}>
             <h2 class="ng-section__title">
                 After the conversation: what actually happened.
             </h2>
@@ -43,7 +44,7 @@ export function OutcomeRack(): JSX.Element {
                         class="ng-outcome__notes-textarea"
                         rows={4}
                         value={d.notes}
-                        placeholder="What surprised you? Where did pressure come from? What did they say after the third pushback?"
+                        placeholder={t("What surprised you? Where did pressure come from? What did they say after the third pushback?", { class: "body" })}
                         onInput={(e) =>
                             setNotes((e.currentTarget as HTMLTextAreaElement).value)
                         }
@@ -52,7 +53,7 @@ export function OutcomeRack(): JSX.Element {
             </div>
 
             <div class="ng-outcome__row">
-                <p class="ng-outcome__label">Outcome</p>
+                <p class="ng-outcome__label">{t("Outcome")}</p>
                 <div class="ng-outcome__buttons">
                     {OUTCOMES.map((o) => (
                         <button
@@ -70,7 +71,7 @@ export function OutcomeRack(): JSX.Element {
             </div>
 
             <div class="ng-outcome__learning">
-                <p class="ng-outcome__label">"We won't repeat this."</p>
+                <p class="ng-outcome__label">{t("\"We won't repeat this.\"")}</p>
                 <LearningInput />
                 {recent.length > 0 && (
                     <ul class="ng-learning__list">
@@ -113,7 +114,7 @@ function LearningInput(): JSX.Element {
             <input
                 type="text"
                 class="ng-learning__input"
-                placeholder="Lesson — one sentence."
+                placeholder={t("Lesson — one sentence.")}
             />
             <button type="submit" class="ng-learning__submit">
                 Log

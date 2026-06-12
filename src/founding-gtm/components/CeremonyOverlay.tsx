@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useEffect } from "preact/hooks";
 import { closeCeremony } from "../state";
 
@@ -37,7 +38,7 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
         <div class="fg-ceremony" role="dialog" aria-modal="true">
             <div class="fg-ceremony__backdrop" aria-hidden="true" />
             <div class="fg-ceremony__panel">
-                <p class="fg-ceremony__kicker">MILESTONE</p>
+                <p class="fg-ceremony__kicker">{t("MILESTONE")}</p>
                 <h2 class="fg-ceremony__headline">
                     The kit just became real.
                 </h2>
@@ -51,14 +52,14 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
                         <span class="fg-ceremony__count-num">
                             {props.sectionsBefore}/7
                         </span>
-                        <span class="fg-ceremony__count-cap">before</span>
+                        <span class="fg-ceremony__count-cap">{t("before")}</span>
                     </div>
                     <span class="fg-ceremony__arrow">→</span>
                     <div class="fg-ceremony__count-cell fg-ceremony__count-cell--after">
                         <span class="fg-ceremony__count-num">
                             {props.sectionsAfter}/7
                         </span>
-                        <span class="fg-ceremony__count-cap">now</span>
+                        <span class="fg-ceremony__count-cap">{t("now")}</span>
                     </div>
                 </div>
                 <div class="fg-ceremony__actions">

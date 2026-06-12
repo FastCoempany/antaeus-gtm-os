@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import { armedTriggers, disableArmedTrigger, recentFires, triggersLoaded } from "../state";
 import {
@@ -92,9 +93,9 @@ export function WatchList(): JSX.Element | null {
     const armed = armedTriggers.value;
 
     return (
-        <section class="bf-watch" aria-label="Watch list">
+        <section class="bf-watch" aria-label={t("Watch list")}>
             <div class="bf-watch__head">
-                <p class="bf-watch__kicker">Watch list</p>
+                <p class="bf-watch__kicker">{t("Watch list")}</p>
                 {!adding && (
                     <button
                         type="button"
@@ -110,7 +111,7 @@ export function WatchList(): JSX.Element | null {
 
             {fires.length > 0 && (
                 <div class="bf-watch__block">
-                    <p class="bf-watch__sub">Fired this week</p>
+                    <p class="bf-watch__sub">{t("Fired this week")}</p>
                     <ul class="bf-fires">
                         {fires.map((f) => (
                             <FireRow fire={f} key={f.id} />

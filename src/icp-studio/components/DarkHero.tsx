@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     draft,
     effectiveBuyer,
@@ -59,11 +60,11 @@ export function DarkHero(): JSX.Element {
             : "ICP STUDIO";
 
     return (
-        <section class="icp-hero" aria-label="ICP Studio hero">
+        <section class="icp-hero" aria-label={t("ICP Studio hero")}>
             <div class="icp-hero__inner">
                 <p class="icp-hero__kicker">{kicker}</p>
                 <h1 class="icp-hero__title">
-                    Sharpen <span>one</span> ICP before scale compounds the
+                    Sharpen <span>{t("one")}</span> ICP before scale compounds the
                     wrong things.
                 </h1>
                 <p class="icp-hero__note">

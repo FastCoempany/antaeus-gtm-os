@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     accountOptions,
     draft,
@@ -24,9 +25,9 @@ export function AccountRow(): JSX.Element {
     const d = draft.value;
 
     return (
-        <section class="cc-account-row" aria-label="Account context">
+        <section class="cc-account-row" aria-label={t("Account context")}>
             <label class="cc-field">
-                <span class="cc-field__label">Account</span>
+                <span class="cc-field__label">{t("Account")}</span>
                 <select
                     class="cc-field__select"
                     value={selected}
@@ -35,7 +36,7 @@ export function AccountRow(): JSX.Element {
                         setSelectedAccount(v.length === 0 ? null : v);
                     }}
                 >
-                    <option value="">Select account…</option>
+                    <option value="">{t("Select account…")}</option>
                     {options.map((a) => (
                         <option key={a.id} value={a.name}>
                             {a.name}
@@ -45,12 +46,12 @@ export function AccountRow(): JSX.Element {
                 </select>
             </label>
             <label class="cc-field">
-                <span class="cc-field__label">Contact</span>
+                <span class="cc-field__label">{t("Contact")}</span>
                 <input
                     class="cc-field__input"
                     type="text"
                     value={d.contactName}
-                    placeholder="Name or role on the line"
+                    placeholder={t("Name or role on the line")}
                     onInput={(e) =>
                         patchDraft({
                             contactName: (e.currentTarget as HTMLInputElement)

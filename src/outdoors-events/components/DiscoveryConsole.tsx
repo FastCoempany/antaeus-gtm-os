@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     discoveryBusy,
     discoveryError,
@@ -41,7 +42,7 @@ export function DiscoveryConsole(): JSX.Element {
     const busy = discoveryBusy.value;
     const err = discoveryError.value;
     return (
-        <section class="oe-console" aria-label="Discovery console">
+        <section class="oe-console" aria-label={t("Discovery console")}>
             <div class="oe-console__main">
                 <button
                     type="button"

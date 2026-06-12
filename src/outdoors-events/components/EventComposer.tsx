@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     composerBusy,
     composerError,
@@ -47,14 +48,14 @@ export function EventComposer(): JSX.Element {
     const busy = composerBusy.value;
     const err = composerError.value;
     return (
-        <section class="oe-composer oe-composer--open" aria-label="New event">
+        <section class="oe-composer oe-composer--open" aria-label={t("New event")}>
             <header class="oe-composer__head">
-                <p class="oe-composer__kicker">NEW EVENT</p>
+                <p class="oe-composer__kicker">{t("NEW EVENT")}</p>
                 <button
                     type="button"
                     class="oe-composer__close-btn"
                     onClick={closeComposer}
-                    aria-label="Cancel"
+                    aria-label={t("Cancel")}
                     disabled={busy}
                 >
                     ×
@@ -69,7 +70,7 @@ export function EventComposer(): JSX.Element {
 
             <div class="oe-composer__grid">
                 <label class="oe-composer__field oe-composer__field--wide">
-                    <span class="oe-composer__label">Event name</span>
+                    <span class="oe-composer__label">{t("Event name")}</span>
                     <input
                         type="text"
                         class="oe-composer__input"
@@ -79,12 +80,12 @@ export function EventComposer(): JSX.Element {
                                 name: (e.target as HTMLInputElement).value
                             })
                         }
-                        placeholder="e.g. RSA Conference 2026"
+                        placeholder={t("e.g. RSA Conference 2026")}
                     />
                 </label>
 
                 <label class="oe-composer__field">
-                    <span class="oe-composer__label">Kind</span>
+                    <span class="oe-composer__label">{t("Kind")}</span>
                     <input
                         type="text"
                         class="oe-composer__input"
@@ -94,12 +95,12 @@ export function EventComposer(): JSX.Element {
                                 kind: (e.target as HTMLInputElement).value
                             })
                         }
-                        placeholder="conference / mixer / show / hang…"
+                        placeholder={t("conference / mixer / show / hang…", { class: "body" })}
                     />
                 </label>
 
                 <label class="oe-composer__field">
-                    <span class="oe-composer__label">Where</span>
+                    <span class="oe-composer__label">{t("Where")}</span>
                     <input
                         type="text"
                         class="oe-composer__input"
@@ -109,12 +110,12 @@ export function EventComposer(): JSX.Element {
                                 whereAt: (e.target as HTMLInputElement).value
                             })
                         }
-                        placeholder="San Francisco, CA"
+                        placeholder={t("San Francisco, CA")}
                     />
                 </label>
 
                 <label class="oe-composer__field">
-                    <span class="oe-composer__label">Starts</span>
+                    <span class="oe-composer__label">{t("Starts")}</span>
                     <input
                         type="date"
                         class="oe-composer__input"
@@ -128,7 +129,7 @@ export function EventComposer(): JSX.Element {
                 </label>
 
                 <label class="oe-composer__field">
-                    <span class="oe-composer__label">Ends</span>
+                    <span class="oe-composer__label">{t("Ends")}</span>
                     <input
                         type="date"
                         class="oe-composer__input"
@@ -142,7 +143,7 @@ export function EventComposer(): JSX.Element {
                 </label>
 
                 <label class="oe-composer__field">
-                    <span class="oe-composer__label">Status</span>
+                    <span class="oe-composer__label">{t("Status")}</span>
                     <select
                         class="oe-composer__input"
                         value={d.status}
@@ -162,7 +163,7 @@ export function EventComposer(): JSX.Element {
                 </label>
 
                 <label class="oe-composer__field oe-composer__field--wide">
-                    <span class="oe-composer__label">Tags</span>
+                    <span class="oe-composer__label">{t("Tags")}</span>
                     <input
                         type="text"
                         class="oe-composer__input"
@@ -174,12 +175,12 @@ export function EventComposer(): JSX.Element {
                                 )
                             })
                         }
-                        placeholder="CRO, fintech, west-coast — comma-separated"
+                        placeholder={t("CRO, fintech, west-coast — comma-separated")}
                     />
                 </label>
 
                 <label class="oe-composer__field oe-composer__field--wide">
-                    <span class="oe-composer__label">Source URL</span>
+                    <span class="oe-composer__label">{t("Source URL")}</span>
                     <input
                         type="url"
                         class="oe-composer__input"
@@ -189,12 +190,12 @@ export function EventComposer(): JSX.Element {
                                 sourceUrl: (e.target as HTMLInputElement).value
                             })
                         }
-                        placeholder="https://"
+                        placeholder={t("https://")}
                     />
                 </label>
 
                 <label class="oe-composer__field oe-composer__field--wide">
-                    <span class="oe-composer__label">Notes</span>
+                    <span class="oe-composer__label">{t("Notes")}</span>
                     <textarea
                         class="oe-composer__textarea"
                         value={d.notes}
@@ -203,7 +204,7 @@ export function EventComposer(): JSX.Element {
                                 notes: (e.target as HTMLTextAreaElement).value
                             })
                         }
-                        placeholder="Who you want to see there, what you're scoping…"
+                        placeholder={t("Who you want to see there, what you're scoping…", { class: "body" })}
                         rows={3}
                     />
                 </label>

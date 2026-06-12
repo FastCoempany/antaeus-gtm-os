@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { Wordmark } from "./wordmark";
 import { BackButton } from "./back-button";
 import { PaletteTrigger } from "./palette/PaletteTrigger";
@@ -30,11 +31,11 @@ import "./room-chrome.css";
  *
  * Usage:
  *
- *     <RoomChrome kicker="DEAL WORKSPACE" />
+ *     <RoomChrome kicker={t("DEAL WORKSPACE")} />
  *
  * Or with a workspace name:
  *
- *     <RoomChrome kicker="DASHBOARD" workspace="Antaeus" />
+ *     <RoomChrome kicker={t("DASHBOARD")} workspace="Antaeus" />
  *
  * `aux` lets a room slot extra chrome-level affordances between the
  * BackButton and the wordmark (rarely needed; reserved for future
@@ -84,7 +85,7 @@ function PaletteHintButton(): JSX.Element {
         <button
             type="button"
             class="ant-room-chrome__palette-hint"
-            aria-label="Jump to a room (press cmd+K)"
+            aria-label={t("Jump to a room (press cmd+K)")}
             onClick={() => {
                 // Lazy import to avoid the palette UI being on the
                 // critical render path before it's needed.
@@ -92,7 +93,7 @@ function PaletteHintButton(): JSX.Element {
             }}
         >
             <span class="ant-room-chrome__palette-hint-icon" aria-hidden="true">⌘K</span>
-            <span class="ant-room-chrome__palette-hint-label">Jump</span>
+            <span class="ant-room-chrome__palette-hint-label">{t("Jump")}</span>
         </button>
     );
 }

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { model } from "../state";
 
 /**
@@ -10,10 +11,10 @@ export function MilestoneLadder(): JSX.Element {
     const m = model.value;
     const nextKey = m.nextMilestone?.key ?? null;
     return (
-        <section class="wel-ladder" aria-label="Activation anchors">
+        <section class="wel-ladder" aria-label={t("Activation anchors")}>
             <header class="wel-section__head">
-                <p class="wel-section__kicker">ANCHORS</p>
-                <h2 class="wel-section__title">What week one is asking for.</h2>
+                <p class="wel-section__kicker">{t("ANCHORS")}</p>
+                <h2 class="wel-section__title">{t("What week one is asking for.")}</h2>
                 <p class="wel-section__sub">
                     Each anchor lights up another part of the workspace.
                     Hit them in order; the system gets sharper as you go.

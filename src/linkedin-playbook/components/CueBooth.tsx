@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeCueIndex,
     bestIcp,
@@ -63,7 +64,7 @@ export function CueBooth(): JSX.Element {
     }
 
     return (
-        <section class="lp-booth" aria-label="LinkedIn cue booth">
+        <section class="lp-booth" aria-label={t("LinkedIn cue booth")}>
             {/*
               LinkedIn Playbook audit (2026-05):
                 - Duplicate H2 ("Enter only when the room gives a cue.")
@@ -78,7 +79,7 @@ export function CueBooth(): JSX.Element {
             </div>
 
             <div class="lp-booth__layout">
-                <aside class="lp-booth__strip" aria-label="Cue ladder">
+                <aside class="lp-booth__strip" aria-label={t("Cue ladder")}>
                     {CUES.map((c) => {
                         const state =
                             c.index < idx
@@ -109,7 +110,7 @@ export function CueBooth(): JSX.Element {
                     })}
                 </aside>
 
-                <section class="lp-stage" aria-label="Live cue stage">
+                <section class="lp-stage" aria-label={t("Live cue stage")}>
                     <div class="lp-stage__script">
                         <p class="lp-stage__scene">
                             Live cue / {focusLabel}
@@ -122,7 +123,7 @@ export function CueBooth(): JSX.Element {
                     </div>
                     <div class="lp-stage__console">
                         <div>
-                            <p class="lp-stage__console-label">Say first</p>
+                            <p class="lp-stage__console-label">{t("Say first")}</p>
                             <strong>{cue.console}</strong>
                         </div>
                         <div>
@@ -132,7 +133,7 @@ export function CueBooth(): JSX.Element {
                             <strong>{motion.nextMove}</strong>
                         </div>
                         <div>
-                            <p class="lp-stage__console-label">If silent</p>
+                            <p class="lp-stage__console-label">{t("If silent")}</p>
                             <strong>
                                 Do not chase. Let Outbound carry the next
                                 move while LinkedIn stays visible.
@@ -141,8 +142,8 @@ export function CueBooth(): JSX.Element {
                     </div>
                 </section>
 
-                <aside class="lp-read" aria-label="Booth read">
-                    <p class="lp-read__kicker">BOOTH READ</p>
+                <aside class="lp-read" aria-label={t("Booth read")}>
+                    <p class="lp-read__kicker">{t("BOOTH READ")}</p>
                     <h3 class="lp-read__title">{motion.label}</h3>
                     <p class="lp-read__copy">{motion.context}</p>
                     <div
@@ -151,7 +152,7 @@ export function CueBooth(): JSX.Element {
                         aria-label={`Channel posture score ${score}`}
                     />
                     <div class="lp-read__rule">
-                        <p class="lp-read__rule-kicker">Current cue</p>
+                        <p class="lp-read__rule-kicker">{t("Current cue")}</p>
                         <strong>{cue.name}</strong>
                     </div>
                     {/*
@@ -162,18 +163,18 @@ export function CueBooth(): JSX.Element {
                       canon §4.8 recovery principle.
                     */}
                     <div class="lp-read__rule lp-read__rule--recovery">
-                        <p class="lp-read__rule-kicker">If they push back</p>
+                        <p class="lp-read__rule-kicker">{t("If they push back")}</p>
                         <strong>{motion.recovery}</strong>
                     </div>
                     <div class="lp-read__rule">
-                        <p class="lp-read__rule-kicker">One-session win</p>
+                        <p class="lp-read__rule-kicker">{t("One-session win")}</p>
                         <strong>{motion.oneSession}</strong>
                     </div>
                     <div class="lp-read__rule">
-                        <p class="lp-read__rule-kicker">Channel standard</p>
+                        <p class="lp-read__rule-kicker">{t("Channel standard")}</p>
                         <strong>{motion.thresholds}</strong>
                     </div>
-                    <nav class="lp-read__cta" aria-label="Cross-room handoff">
+                    <nav class="lp-read__cta" aria-label={t("Cross-room handoff")}>
                         <a
                             class="lp-handoff lp-handoff--ghost"
                             href={hrefToSignalConsole(motion.accountName)}

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useEffect } from "preact/hooks";
 import {
     decidePendingProposal,
@@ -47,16 +48,16 @@ export function SuggestionsSection(): JSX.Element | null {
             class="bf-suggestion"
             aria-labelledby="bf-suggestion-heading"
         >
-            <p class="bf-suggestion__kicker">A SUGGESTION</p>
+            <p class="bf-suggestion__kicker">{t("A SUGGESTION")}</p>
             <h2 id="bf-suggestion-heading" class="bf-suggestion__title">
                 {next.title}
             </h2>
             <p class="bf-suggestion__noticed">
-                <span class="bf-suggestion__label">What I noticed:</span>{" "}
+                <span class="bf-suggestion__label">{t("What I noticed:")}</span>{" "}
                 {next.whatNoticed}
             </p>
             <p class="bf-suggestion__changes">
-                <span class="bf-suggestion__label">What would change:</span>{" "}
+                <span class="bf-suggestion__label">{t("What would change:")}</span>{" "}
                 {next.whatChanges}
             </p>
             <div class="bf-suggestion__actions">

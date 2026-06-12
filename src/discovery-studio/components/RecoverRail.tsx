@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     activeFramework,
     activeInterrupt,
@@ -27,8 +28,8 @@ export function RecoverRail(): JSX.Element {
         : [];
 
     return (
-        <section class="ds-recover-rail" aria-label="Recover the call">
-            <header class="ds-recover-rail__header">Recover</header>
+        <section class="ds-recover-rail" aria-label={t("Recover the call")}>
+            <header class="ds-recover-rail__header">{t("Recover")}</header>
             {interrupts.length === 0 ? (
                 <p class="ds-recover-rail__empty">
                     No recovery moves loaded for this framework.

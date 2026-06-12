@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import {
     deployFact,
     factStatusFor,
@@ -42,7 +43,7 @@ export function LearnedTruthLedger(): JSX.Element {
     return (
         <section
             class="ds-learned-truth-ledger"
-            aria-label="Learned truth ledger"
+            aria-label={t("Learned truth ledger")}
         >
             <header class="ds-learned-truth-ledger__header">
                 Learned truth
@@ -71,7 +72,7 @@ export function LearnedTruthLedger(): JSX.Element {
                                         type="button"
                                         class="ds-learned-truth-ledger__jump"
                                         onClick={() => handleJump(f.nodeId)}
-                                        title="Jump to source node"
+                                        title={t("Jump to source node")}
                                     >
                                         <span class="ds-learned-truth-ledger__fact">
                                             {f.fact}

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { useState } from "preact/hooks";
 import {
     currentCompany,
@@ -124,11 +125,11 @@ export function Handoff(): JSX.Element {
     return (
         <section
             class="cp-handoff"
-            aria-label="Cross-room handoff + outcomes"
+            aria-label={t("Cross-room handoff + outcomes")}
         >
             <header class="cp-handoff__head">
                 <div>
-                    <p class="cp-handoff__kicker">HAND OFF</p>
+                    <p class="cp-handoff__kicker">{t("HAND OFF")}</p>
                     <h2 class="cp-handoff__title">
                         Carry the agenda into the call.
                     </h2>
@@ -141,7 +142,7 @@ export function Handoff(): JSX.Element {
                 ) : null}
             </header>
 
-            <nav class="cp-routes" aria-label="Cross-room routes">
+            <nav class="cp-routes" aria-label={t("Cross-room routes")}>
                 <button
                     type="button"
                     class="cp-route cp-route--primary"
@@ -171,11 +172,11 @@ export function Handoff(): JSX.Element {
             <hr class="cp-handoff__rule" aria-hidden="true" />
 
             <div class="cp-outcome-section">
-                <p class="cp-outcome-section__label">Log call outcome</p>
+                <p class="cp-outcome-section__label">{t("Log call outcome")}</p>
                 <div
                     class="cp-outcomes"
                     role="group"
-                    aria-label="Log call outcome"
+                    aria-label={t("Log call outcome")}
                 >
                     {OUTCOMES.map((o) => (
                         <button

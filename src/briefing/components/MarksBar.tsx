@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { patternMarks, clearMarkForPattern, setMarkForPattern } from "../state";
 import type { PatternMark } from "../lib/marks-client";
 
@@ -52,8 +53,8 @@ function buttonClass(mark: PatternMark, isActive: boolean): string {
 export function MarksBar({ patternId }: MarksBarProps): JSX.Element {
     const currentMark = patternMarks.value.get(patternId) ?? null;
     return (
-        <div class="bf-marks" role="group" aria-label="Rate this read">
-            <span class="bf-marks__label">Did this help?</span>
+        <div class="bf-marks" role="group" aria-label={t("Rate this read")}>
+            <span class="bf-marks__label">{t("Did this help?")}</span>
             {(["used", "met", "noise"] as ReadonlyArray<PatternMark>).map((mark) => {
                 const isActive = currentMark === mark;
                 return (

@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 import {
     dismissObservation,
@@ -123,9 +124,9 @@ export function WorkspaceReads(): JSX.Element {
         return (
             <section
                 class="bf-workspace bf-workspace--error"
-                aria-label="Workspace reads"
+                aria-label={t("Workspace reads")}
             >
-                <p class="bf-workspace__kicker">WORKSPACE</p>
+                <p class="bf-workspace__kicker">{t("WORKSPACE")}</p>
                 <p class="bf-workspace__error" role="alert">
                     {error}
                 </p>
@@ -138,18 +139,18 @@ export function WorkspaceReads(): JSX.Element {
             <section
                 class="bf-workspace bf-workspace--loading"
                 aria-busy="true"
-                aria-label="Workspace reads"
+                aria-label={t("Workspace reads")}
             >
-                <p class="bf-workspace__kicker">WORKSPACE</p>
-                <p class="bf-workspace__loading">Reading your work…</p>
+                <p class="bf-workspace__kicker">{t("WORKSPACE")}</p>
+                <p class="bf-workspace__loading">{t("Reading your work…")}</p>
             </section>
         );
     }
 
     if (undeduped.length === 0) {
         return (
-            <section class="bf-workspace bf-workspace--empty" aria-label="Workspace reads">
-                <p class="bf-workspace__kicker">WORKSPACE · NOTHING TO SURFACE</p>
+            <section class="bf-workspace bf-workspace--empty" aria-label={t("Workspace reads")}>
+                <p class="bf-workspace__kicker">{t("WORKSPACE · NOTHING TO SURFACE")}</p>
                 <h2 class="bf-workspace__empty-headline">
                     The system has nothing to flag in your work right now.
                 </h2>
@@ -164,9 +165,9 @@ export function WorkspaceReads(): JSX.Element {
     }
 
     return (
-        <section class="bf-workspace" aria-label="Workspace reads">
+        <section class="bf-workspace" aria-label={t("Workspace reads")}>
             <header class="bf-workspace__head">
-                <p class="bf-workspace__kicker">YOUR WORK · THIS WEEK</p>
+                <p class="bf-workspace__kicker">{t("YOUR WORK · THIS WEEK")}</p>
                 <p class="bf-workspace__count">
                     {undeduped.length} read{undeduped.length === 1 ? "" : "s"}{" "}
                     surfaced
@@ -216,7 +217,7 @@ export function WorkspaceReads(): JSX.Element {
                                             disabled={
                                                 dismissingSignal.value === row.id
                                             }
-                                            aria-label="Dismiss this read"
+                                            aria-label={t("Dismiss this read")}
                                         >
                                             {dismissingSignal.value === row.id
                                                 ? "…"

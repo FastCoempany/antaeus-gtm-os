@@ -1,4 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
+import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 import { trackEvent } from "@/lib/observability";
 import { createDataClient, type DataClient } from "@/lib/data-client";
@@ -168,9 +169,9 @@ export function SharePanel() {
 
     if (demo) {
         return (
-            <section class="fg-share fg-share--demo" aria-label="Share this kit">
+            <section class="fg-share fg-share--demo" aria-label={t("Share this kit")}>
                 <header class="fg-share__head">
-                    <p class="fg-share__kicker">SHARE THIS KIT</p>
+                    <p class="fg-share__kicker">{t("SHARE THIS KIT")}</p>
                     <h2 class="fg-share__title">
                         Sign in to share the kit with a hire
                     </h2>
@@ -186,10 +187,10 @@ export function SharePanel() {
 
     if (!client) {
         return (
-            <section class="fg-share fg-share--disabled" aria-label="Share this kit">
+            <section class="fg-share fg-share--disabled" aria-label={t("Share this kit")}>
                 <header class="fg-share__head">
-                    <p class="fg-share__kicker">SHARE THIS KIT</p>
-                    <h2 class="fg-share__title">Share links unavailable</h2>
+                    <p class="fg-share__kicker">{t("SHARE THIS KIT")}</p>
+                    <h2 class="fg-share__title">{t("Share links unavailable")}</h2>
                     <p class="fg-share__demo-body">
                         The cloud sync isn't configured for this build. Share
                         links need a connected workspace.
@@ -206,9 +207,9 @@ export function SharePanel() {
     const isLoading = loadingSignal.value;
 
     return (
-        <section class="fg-share" aria-label="Share this kit">
+        <section class="fg-share" aria-label={t("Share this kit")}>
             <header class="fg-share__head">
-                <p class="fg-share__kicker">SHARE THIS KIT</p>
+                <p class="fg-share__kicker">{t("SHARE THIS KIT")}</p>
                 <h2 class="fg-share__title">
                     Send the kit to a hire as a read-only link
                 </h2>
@@ -236,7 +237,7 @@ export function SharePanel() {
                         onInput={(e) =>
                             setLabelInput((e.target as HTMLInputElement).value)
                         }
-                        placeholder="e.g. Sarah Chen, week 12"
+                        placeholder={t("e.g. Sarah Chen, week 12")}
                         maxLength={120}
                         disabled={busy === "create"}
                     />
@@ -253,7 +254,7 @@ export function SharePanel() {
 
             <div class="fg-share__list-wrap">
                 {isLoading && shares.length === 0 ? (
-                    <p class="fg-share__empty">Loading existing links…</p>
+                    <p class="fg-share__empty">{t("Loading existing links…")}</p>
                 ) : shares.length === 0 ? (
                     <p class="fg-share__empty">
                         No share links yet. Create one above when the kit is
@@ -263,7 +264,7 @@ export function SharePanel() {
                     <>
                         {active.length > 0 && (
                             <ShareList
-                                title="Active"
+                                title={t("Active")}
                                 items={active}
                                 busy={busy}
                                 copiedToken={copiedToken}
@@ -274,7 +275,7 @@ export function SharePanel() {
                         )}
                         {revoked.length > 0 && (
                             <ShareList
-                                title="Revoked"
+                                title={t("Revoked")}
                                 items={revoked}
                                 busy={busy}
                                 copiedToken={null}
