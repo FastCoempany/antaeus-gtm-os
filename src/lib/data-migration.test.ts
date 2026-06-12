@@ -414,11 +414,14 @@ describe("pass-through migrators", () => {
     });
 
     it("preserves non-JSON values as raw strings in the blob (no error)", async () => {
-        // Some legacy localStorage keys (e.g. gtmos_handoff_exported) were
-        // written as bare strings, not JSON-wrapped. The migrator must not
-        // error on these — it preserves them verbatim so the data isn't lost.
+        // Some legacy localStorage keys were written as bare strings, not
+        // JSON-wrapped. The migrator must not error on these — it preserves
+        // them verbatim so the data isn't lost. (The fixture used to be
+        // gtmos_handoff_exported; that key was dropped from the config on
+        // 2026-06-12 as orphaned, so the same behavior is exercised through
+        // a deals-table key instead.)
         const storage = makeStorage({
-            gtmos_handoff_exported: "2026-04-20T12:34:56.789Z"
+            gtmos_deal_stage_history: "2026-04-20T12:34:56.789Z"
         });
         const { client, calls } = makeSpyDataClient();
         const report = await runDataMigration({
@@ -427,19 +430,17 @@ describe("pass-through migrators", () => {
             __bypassFlag: true
         });
 
-        const handoff = report.tables.find(
-            (t) => t.table === "handoff_artifacts"
-        );
-        expect(handoff).toBeDefined();
-        expect(handoff?.errors).toHaveLength(0);
-        expect(handoff?.rowsInserted).toBe(1);
+        const deals = report.tables.find((t) => t.table === "deals");
+        expect(deals).toBeDefined();
+        expect(deals?.errors).toHaveLength(0);
+        expect(deals?.rowsInserted).toBe(1);
 
-        const row = calls.handoffArtifacts![0] as {
+        const row = calls.deals![0] as {
             data: { migrated_from_localstorage: Record<string, unknown> };
         };
-        expect(row.data.migrated_from_localstorage.gtmos_handoff_exported).toBe(
-            "2026-04-20T12:34:56.789Z"
-        );
+        expect(
+            row.data.migrated_from_localstorage.gtmos_deal_stage_history
+        ).toBe("2026-04-20T12:34:56.789Z");
     });
 
     it("dryRun does not call insert but still counts transforms", async () => {
