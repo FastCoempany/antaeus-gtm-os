@@ -2,8 +2,8 @@
  * Back — "back" glyph. GENERATED — do not hand-edit; the
  * iconography mockup is the master and the generator propagates it
  * (tools/design-system/generate-icons.py). Spec 09 construction:
- * 24px grid, 2px keyline, flat terminals, miter joins. Placeholder
- * quality until the production redraw lands in the mockup.
+ * 24px grid, 2px keyline, flat terminals, miter joins — the
+ * Grounded-A construction, confirmed by brand round 1 (2026-06-12).
  */
 import type { GlyphProps } from "../glyph";
 

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Antaeus — Brand identity, round 2: refining the Grounded A</title>
+<style>
+  :root{
+    --navy:#0A1C40; --orange:#E6701E; --field:#F6F8FC;
+    --hair:rgba(10,28,64,0.07); --hair-strong:rgba(10,28,64,0.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--field);color:var(--navy);font:16px/1.55 "Public Sans",system-ui,sans-serif;padding:56px 48px 96px}
+  .h1{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(34px,4.5vw,54px);line-height:1.08;max-width:21ch}
+  .sub{margin-top:14px;max-width:78ch;color:rgba(10,28,64,0.78)}
+  .kicker{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:0.14em;text-transform:uppercase;color:rgba(10,28,64,0.55);margin-bottom:10px}
+  section{margin-top:64px;border-top:1px solid var(--hair-strong);padding-top:28px}
+  .sec-title{font-family:"DM Serif Display",Georgia,serif;font-size:26px;margin-bottom:6px}
+  .sec-desc{max-width:78ch;color:rgba(10,28,64,0.78);margin-bottom:22px}
+  .row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-end}
+  .spec{background:#fff;border:1px solid var(--hair);padding:22px 24px;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .spec .lab{font:600 10px/1.4 "JetBrains Mono",monospace;letter-spacing:0.1em;text-transform:uppercase;color:rgba(10,28,64,0.5);text-align:center}
+  .pick{outline:3px solid var(--orange);outline-offset:3px}
+  .dark{background:var(--navy)}
+  .dark .lab{color:rgba(255,255,255,0.55)}
+  .lockup{display:flex;align-items:center;gap:14px}
+  .word{font-family:"DM Serif Display",Georgia,serif;font-size:30px;letter-spacing:0.02em}
+  .word--caps{font-size:22px;letter-spacing:0.22em;font-family:"Public Sans",system-ui,sans-serif;font-weight:700}
+  .insitu{background:#fff;border:1px solid var(--hair);padding:0;overflow:hidden;width:520px}
+  .insitu .cap{font:600 10px/1.4 "JetBrains Mono",monospace;letter-spacing:0.1em;text-transform:uppercase;color:rgba(10,28,64,0.5);padding:10px 14px;border-top:1px solid var(--hair)}
+  .wayfinder{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--hair-strong);background:#fff}
+  .wayfinder .crumb{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:0.1em;color:rgba(10,28,64,0.55)}
+  .wayfinder .spacer{flex:1}
+  .wayfinder .ctrlk{font:600 11px/1 "JetBrains Mono",monospace;color:rgba(10,28,64,0.45);border:1px solid var(--hair-strong);padding:4px 8px}
+  .landing-hero{padding:44px 36px 36px;background:linear-gradient(180deg,#fff, #F2F5FB)}
+  .landing-hero .lh-title{font-family:"DM Serif Display",Georgia,serif;font-size:30px;line-height:1.12;max-width:18ch;margin-top:18px}
+  .favrow{display:flex;gap:18px;align-items:center}
+  .favslot{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .tabchrome{display:flex;align-items:center;gap:8px;background:#E8ECF4;border:1px solid var(--hair-strong);padding:6px 12px;width:240px}
+  .tabchrome span{font:12px/1 system-ui;color:rgba(10,28,64,0.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .note{margin-top:26px;background:#fff;border-left:4px solid var(--orange);border-top:1px solid var(--hair);border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:18px 20px;max-width:86ch}
+  .note b{font-weight:700}
+</style>
+</head>
+<body>
+
+<p class="kicker">ANTAEUS · BRAND IDENTITY · ROUND 2 · 2026-06-12</p>
+<h1 class="h1">Refining the Grounded A.</h1>
+<p class="sub">Round 1 picked Direction A — the drafted capital A standing on a ground line that extends past its feet, in the icon set's construction (flat terminals, mitered joins, low crossbar like a gauge reading). Round 2 settles four things: the stroke weight at each size, the proportions (crossbar height + ground-line overhang), the favicon at real size, and how the mark sits in the two places it will live first — the landing page and the Wayfinder corner. <b>React to each section; round 3 locks the survivors into sibling spec 10.</b></p>
+
+<!-- ── 1 · WEIGHT ─────────────────────────────────────────── -->
+<section>
+  <p class="kicker">SECTION 1 · STROKE WEIGHT AT DISPLAY SIZE</p>
+  <h2 class="sec-title">How heavy the mark is when it's big.</h2>
+  <p class="sec-desc">Three weights at 72px. The icon keyline is 2px-on-24 (≈8.3% of the box); W2 matches that ratio at mark scale, W1 is lighter (more drafted), W3 is heavier (more stamp). My read: <b>W2</b> — the mark and the glyph set read as one hand without the mark going delicate.</p>
+  <div class="row">
+    <div class="spec"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="2.8" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="lab">W1 · 2.8</span></div>
+    <div class="spec pick"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="lab">W2 · 3.2 (round-1 weight)</span></div>
+    <div class="spec"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.8" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="lab">W3 · 3.8</span></div>
+  </div>
+</section>
+
+<!-- ── 2 · PROPORTIONS ────────────────────────────────────── -->
+<section>
+  <p class="kicker">SECTION 2 · CROSSBAR + OVERHANG</p>
+  <h2 class="sec-title">Where the bar sits, how far the ground runs.</h2>
+  <p class="sec-desc">The crossbar is the gauge reading; lower = more loaded. The ground-line overhang is the "extends past its feet" of the pick; longer = more horizon, shorter = more pedestal. My read: <b>P2</b> — crossbar at the round-1 height, overhang slightly longer so the ground reads as ground, not underline.</p>
+  <div class="row">
+    <div class="spec"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M17 31h14"/><path d="M8 38h32"/></svg><span class="lab">P1 · bar lower · short overhang</span></div>
+    <div class="spec pick"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg><span class="lab">P2 · round-1 bar · long overhang</span></div>
+    <div class="spec"><svg width="72" height="72" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M19.5 24h9"/><path d="M4 38h40"/></svg><span class="lab">P3 · bar higher · round-1 overhang</span></div>
+  </div>
+</section>
+
+<!-- ── 3 · FAVICON AT REAL SIZE ───────────────────────────── -->
+<section>
+  <p class="kicker">SECTION 3 · THE MARK AT 32 / 24 / 16</p>
+  <h2 class="sec-title">Does it survive the browser tab?</h2>
+  <p class="sec-desc">Small sizes need heavier strokes (the round-1 ratios: 4 at 24px, 5 at 16px) and at 16px the crossbar goes — three strokes on a 16-pixel box is one too many. The 16px mark is legs + ground only; it still reads as the Grounded A because the ground line is the signature, not the bar. Shown at true size next to a fake tab.</p>
+  <div class="row">
+    <div class="spec"><div class="favrow">
+      <div class="favslot"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.6" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="lab">32</span></div>
+      <div class="favslot"><svg width="24" height="24" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="lab">24</span></div>
+      <div class="favslot"><svg width="16" height="16" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="6" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M4 38h40"/></svg><span class="lab">16 · no bar</span></div>
+    </div><span class="lab">TRUE-SIZE LADDER</span></div>
+    <div class="spec"><div class="tabchrome"><svg width="16" height="16" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="6" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M4 38h40"/></svg><span>Antaeus — Dashboard</span></div><span class="lab">IN A TAB</span></div>
+  </div>
+</section>
+
+<!-- ── 4 · WORDMARK LOCKUP ────────────────────────────────── -->
+<section>
+  <p class="kicker">SECTION 4 · LOCKUP</p>
+  <h2 class="sec-title">The mark next to the name.</h2>
+  <p class="sec-desc">Two lockups: the serif name (the face's own DM Serif Display — the mark and the headline voice are the same voice) and a letterspaced caps utility lockup for chrome contexts where serif at small size goes mushy. My read: <b>L1 for the landing page, L2 for product chrome</b> — they're a pair, not competitors.</p>
+  <div class="row">
+    <div class="spec pick"><div class="lockup"><svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="word">Antaeus</span></div><span class="lab">L1 · SERIF · LANDING + DOCS</span></div>
+    <div class="spec pick"><div class="lockup"><svg width="30" height="30" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.8" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="word--caps">ANTAEUS</span></div><span class="lab">L2 · CAPS · PRODUCT CHROME</span></div>
+    <div class="spec dark"><div class="lockup"><svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="word" style="color:#fff">Antaeus</span></div><span class="lab">L1 · REVERSED (legal/footer only)</span></div>
+  </div>
+</section>
+
+<!-- ── 5 · IN SITU ───────────────────────────────────────── -->
+<section>
+  <p class="kicker">SECTION 5 · WHERE IT LIVES FIRST</p>
+  <h2 class="sec-title">On the landing page and in the Wayfinder corner.</h2>
+  <p class="sec-desc">The two first placements. Landing: L1 lockup top-left, mark at 44px. Wayfinder: the mark alone at 20px sits as the home affordance at the far left of the bar — the wordmark text stays in the bar only on wide viewports.</p>
+  <div class="row">
+    <div class="insitu">
+      <div class="landing-hero">
+        <div class="lockup"><svg width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="3.4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg><span class="word" style="font-size:24px">Antaeus</span></div>
+        <p class="lh-title">See what is actually happening in your revenue motion.</p>
+      </div>
+      <p class="cap">LANDING · HERO CORNER</p>
+    </div>
+    <div class="insitu">
+      <div class="wayfinder">
+        <svg width="20" height="20" viewBox="0 0 48 48" fill="none" stroke="#0A1C40" stroke-width="4.4" stroke-linecap="butt" stroke-linejoin="miter"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M4 38h40"/></svg>
+        <span class="crumb">DASHBOARD</span>
+        <span class="spacer"></span>
+        <span class="ctrlk">⌘K</span>
+      </div>
+      <div style="height:120px;background:linear-gradient(180deg,#F6F8FC,#F2F5FB)"></div>
+      <p class="cap">WAYFINDER · HOME AFFORDANCE AT 20PX</p>
+    </div>
+  </div>
+  <div class="note"><b>What round 3 needs from you:</b> pick a weight (W), a proportion (P), confirm the no-bar-at-16 favicon, and confirm the L1/L2 pairing. Round 3 then locks the geometry into sibling spec 10 with exact coordinates, ships the real favicon files, and replaces the wordmark in RoomChrome + the landing page.</div>
+</section>
+
+</body>
+</html>
