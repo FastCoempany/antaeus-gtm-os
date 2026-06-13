@@ -367,7 +367,17 @@
   background: var(--ds-surface);
   border-bottom: 1px solid var(--ds-hair-strong);
 }
-.ds-wayfinder__mark { display: inline-flex; align-items: center; color: var(--ds-ink); }
+.ds-wayfinder__mark { display: inline-flex; align-items: center; color: var(--ds-ink); text-decoration: none; }
+
+/* The L2 lockup (spec 10): mark + letterspaced caps for chrome. */
+.ds-lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--ds-ink); }
+.ds-lockup__name {
+  font: 700 12px/1 var(--ds-font-sans);
+  letter-spacing: 0.22em;
+}
+@media (max-width: 720px) {
+  .ds-lockup__name { display: none; }
+}
 .ds-wayfinder__crumb {
   font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
   letter-spacing: var(--ds-tracking-kicker);
@@ -420,3 +430,150 @@
 .ds-meter--blue .ds-meter__fill { background: var(--ds-blue); }
 .ds-meter--orange .ds-meter__fill { background: var(--ds-orange); }
 .ds-meter__read { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* ── Catalog tail (03 §4.1) ───────────────────────────────────── */
+
+.ds-stamp {
+  display: inline-flex;
+  align-items: center;
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-soft);
+  border-top: 1px solid var(--ds-hair-strong);
+  border-bottom: 1px solid var(--ds-hair-strong);
+  padding: var(--ds-space-1) var(--ds-space-2);
+}
+.ds-stamp--green { color: var(--ds-green); border-color: var(--ds-green); }
+.ds-stamp--red { color: var(--ds-red); border-color: var(--ds-red); }
+.ds-stamp--amber { color: var(--ds-amber); border-color: var(--ds-amber); }
+.ds-stamp--blue { color: var(--ds-blue); border-color: var(--ds-blue); }
+.ds-stamp--orange { color: var(--ds-orange); border-color: var(--ds-orange); }
+
+.ds-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-surface-sunk);
+  border: 1px solid var(--ds-hair-strong);
+  color: var(--ds-ink-soft);
+  font: 700 11px/1 var(--ds-font-sans);
+  letter-spacing: 0.04em;
+}
+.ds-avatar--orange { border-color: var(--ds-orange); color: var(--ds-orange); background: var(--ds-orange-tint); }
+.ds-avatar--blue { border-color: var(--ds-blue); color: var(--ds-blue); background: var(--ds-blue-soft); }
+
+.ds-tooltip { position: relative; display: inline-flex; }
+.ds-tooltip__bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--ds-z-toast);
+  background: var(--ds-ink);
+  color: #fff;
+  font: 12px/1.45 var(--ds-font-sans);
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border-radius: var(--ds-radius-control);
+  white-space: nowrap;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ds-motion-quick) var(--ds-ease-standard);
+}
+.ds-tooltip:hover .ds-tooltip__bubble,
+.ds-tooltip:focus-visible .ds-tooltip__bubble {
+  opacity: 1;
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--ds-type-body) / 1.45 var(--ds-font-sans);
+  color: var(--ds-ink);
+}
+.ds-table th {
+  font: 600 var(--ds-type-kicker) / 1.2 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-faint);
+  text-align: left;
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border-bottom: 1px solid var(--ds-hair-strong);
+}
+.ds-table td {
+  padding: var(--ds-space-3);
+  border-bottom: 1px solid var(--ds-hair);
+}
+.ds-table__num { text-align: right; font-variant-numeric: tabular-nums; }
+.ds-table tbody tr[tabindex]:hover { background: var(--ds-surface-sub); cursor: pointer; }
+.ds-table tbody tr:focus-visible { outline: 3px solid var(--ds-orange-soft); outline-offset: -3px; }
+.ds-table__row--selected { background: var(--ds-orange-tint); }
+.ds-table__row--offset {
+  background: var(--ds-surface);
+  box-shadow: var(--ds-shadow-lift);
+  position: relative;
+}
+.ds-table__row--offset td { border-bottom-color: var(--ds-rule); border-top: 1px solid var(--ds-rule); }
+.ds-table__row--offset td:first-child { border-left: 3px solid var(--ds-orange); }
+
+.ds-progress { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.ds-progress__count { font: 600 var(--ds-type-label) / 1.4 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.ds-progress__ladder { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ds-progress__step {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  font: var(--ds-type-body) / 1.4 var(--ds-font-sans);
+  color: var(--ds-ink-faint);
+}
+.ds-progress__step.is-done { color: var(--ds-ink); }
+.ds-progress__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--ds-radius-pill);
+  border: 1px solid var(--ds-hair-strong);
+  font: 700 10px/1 var(--ds-font-sans);
+  color: var(--ds-green);
+  flex: none;
+}
+.ds-progress__step.is-done .ds-progress__mark { border-color: var(--ds-green); background: var(--ds-green-soft); }
+
+/* ── System cards (03 §4.1 System) ────────────────────────────── */
+
+.ds-pattern__claim { color: var(--ds-ink); }
+.ds-pattern__evidence {
+  margin: 0;
+  padding-left: var(--ds-space-4);
+  font: 13.5px/1.55 var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+.ds-pattern__sure {
+  font: 600 12px/1.4 var(--ds-font-sans);
+  color: var(--ds-blue);
+  margin: 0;
+}
+.ds-proposal__change { color: var(--ds-ink); }
+
+.ds-readiness { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ds-readiness__state {
+  font-family: var(--ds-font-serif);
+  font-size: var(--ds-type-title);
+  color: var(--ds-ink);
+  margin: 0;
+}
+.ds-readiness__read {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+  max-width: 60ch;
+}

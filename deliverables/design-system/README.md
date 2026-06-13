@@ -1,6 +1,6 @@
 # Antaeus Design System — Index & Governance
 
-**Version:** 1.1.0 (see VERSION + CHANGELOG.md; model in Part IV).
+**Version:** 1.2.0 (see VERSION + CHANGELOG.md; model in Part IV).
 
 **Status:** DRAFT for founder review.
 **Date:** 2026-06-07.
@@ -68,6 +68,9 @@ The animation grammar. Four duration tokens (0 / 120 / 200 / 320ms), two deceler
 
 ### 09 — Iconography (`09-iconography-2026-06-07.md`)
 The icon system and the proprietary set. A 24px construction grid with a 2px keyline, flat terminals and miter joins (the deliberate departure from generic round-cap libraries), two signature elements (the edge-rule, the rationed tick), semantic-only, color rationed to roles. Complete inventory: 11 nouns · 17 verbs · 11 system & wayfinding · 7 status. Three sizes (16 / 20 / 24). Visual source of truth: `mockups/iconography-2026-06-07.html`.
+
+### 10 — Brand Identity (`10-brand-identity-2026-06-12.md`)
+The Grounded A, locked: a drafted capital A on a ground line extending past its feet, in the icon set's construction. The geometry (48 viewBox, the weight ladder, the no-bar-at-16 rule), the L1 serif / L2 caps lockups, the shipped favicon files, and the usage rules. Implementation: `src/components/brand.tsx`; decided rounds 1–2, 2026-06-12.
 
 ---
 

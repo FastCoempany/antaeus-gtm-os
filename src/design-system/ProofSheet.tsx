@@ -17,9 +17,19 @@ import {
     Select,
     Stat,
     StatusChip,
+    Stamp,
+    Table,
     TextInput,
     Toggle,
-    WayfinderBar
+    Tooltip,
+    WayfinderBar,
+    Avatar,
+    BrandLockup,
+    BrandMark,
+    PatternCard,
+    Progress,
+    ProposalCard,
+    ReadinessReadout
 } from "@/components";
 import { Icon } from "@/icons";
 
@@ -259,6 +269,132 @@ export function ProofSheet(): JSX.Element {
                         read={t("Three call plans built; the gate wants eight.", {
                             class: "body"
                         })}
+                    />
+                </Section>
+
+                <Section code={t("BRAND")} title={t("The Grounded A, in chrome")}>
+                    <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap">
+                        <BrandMark size={48} />
+                        <BrandMark size={32} />
+                        <BrandMark size={20} />
+                        <BrandMark size={16} />
+                        <BrandLockup size={20} />
+                    </div>
+                    <p style="font:13px/1.5 'Public Sans',sans-serif;color:rgba(10,28,64,0.42)">
+                        {t(
+                            "Stroke steps up as the mark gets smaller; at 16 the crossbar drops — the ground line is the signature.",
+                            { class: "body" }
+                        )}
+                    </p>
+                </Section>
+
+                <Section code={t("TAIL")} title={t("Stamp, avatar, tooltip")}>
+                    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+                        <Stamp tone="green">{t("CORRECTED")}</Stamp>
+                        <Stamp tone="red">{t("LEFT ALONE")}</Stamp>
+                        <Stamp>{t("ON FILE")}</Stamp>
+                        <Avatar name="Sarah Chen" role="decider" />
+                        <Avatar name="Marcus Reed" role="advisor" />
+                        <Avatar name="Jordan Diaz" />
+                        <Tooltip
+                            text={t("Present in Show me how; gone in Step back.", {
+                                class: "body"
+                            })}
+                        >
+                            <Button variant="ghost">{t("Hover me")}</Button>
+                        </Tooltip>
+                    </div>
+                </Section>
+
+                <Section code={t("STRUCTURE")} title={t("Table and the milestone ladder")}>
+                    <Table
+                        label={t("Recovery queue")}
+                        columns={[
+                            { key: "account", label: t("Account") },
+                            { key: "cause", label: t("Cause") },
+                            { key: "value", label: t("Value"), numeric: true }
+                        ]}
+                        rows={[
+                            {
+                                id: "1",
+                                offset: true,
+                                cells: {
+                                    account: "Acme Industries",
+                                    cause: t("No dated next step"),
+                                    value: "$120k"
+                                }
+                            },
+                            {
+                                id: "2",
+                                cells: {
+                                    account: "Meridian Logistics",
+                                    cause: t("Champion quiet"),
+                                    value: "$64k"
+                                }
+                            },
+                            {
+                                id: "3",
+                                cells: {
+                                    account: "Harbor Freight Co",
+                                    cause: t("Use case thin"),
+                                    value: "$38k"
+                                }
+                            }
+                        ]}
+                    />
+                    <Progress
+                        label={t("Handoff kit")}
+                        count={t("4 of 7 sections ready")}
+                        milestones={[
+                            { label: t("Who hits, who misses"), done: true },
+                            { label: t("The rails that worked"), done: true },
+                            { label: t("Questions that won meetings"), done: true },
+                            { label: t("Where deals leak"), done: true },
+                            { label: t("The losses we paid for"), done: false },
+                            { label: t("Why we win"), done: false },
+                            { label: t("Day-one rhythm"), done: false }
+                        ]}
+                    />
+                </Section>
+
+                <Section code={t("SYSTEM")} title={t("The cross-room cards")}>
+                    <PatternCard
+                        claim={t(
+                            "Two of your watched accounts went quiet the same week their category got funded — that pattern usually means a competitor is in the building.",
+                            { class: "body" }
+                        )}
+                        evidence={[
+                            t("Acme: no signal in 16 days after weekly cadence", {
+                                class: "body"
+                            }),
+                            t("Meridian: champion stopped replying on the 4th", {
+                                class: "body"
+                            })
+                        ]}
+                        howSure={t("Fairly sure — two independent reads agree.", {
+                            class: "body"
+                        })}
+                        moves={<Button>{t("Check the signals")}</Button>}
+                    />
+                    <ProposalCard
+                        noticed={t(
+                            "You've run whats-at-risk every Friday for five weeks.",
+                            { class: "body" }
+                        )}
+                        change={t(
+                            "Make Friday 9am its standing schedule, so it's waiting for you.",
+                            { class: "body" }
+                        )}
+                        onAccept={() => undefined}
+                        onSnooze={() => undefined}
+                        onDismiss={() => undefined}
+                    />
+                    <ReadinessReadout
+                        state={t("Inheritable with guardrails")}
+                        read={t(
+                            "A hire could run this if you're around for sanity-checks.",
+                            { class: "body" }
+                        )}
                     />
                 </Section>
 

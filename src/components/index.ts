@@ -16,14 +16,18 @@
  * (the few built-in defaults here are themselves declared).
  */
 export * from "./contract";
-export { Kicker, Heading, Stat, StatusChip, Gauge } from "./display";
+export { Kicker, Heading, Stat, StatusChip, Gauge, Stamp, Avatar } from "./display";
 export type { HeadingLevel } from "./display";
 export { Button, IconButton, CrossRoomLink, Toggle } from "./action";
 export type { ButtonVariant } from "./action";
 export { TextInput, Select, FormField } from "./input";
 export { Card } from "./card";
 export type { CardProps } from "./card";
-export { Toast, Alert, Drawer, Modal } from "./feedback";
+export { Toast, Alert, Drawer, Modal, Tooltip } from "./feedback";
 export type { AlertTone } from "./feedback";
 export { WayfinderBar, SegmentedControl } from "./navigation";
 export { Meter } from "./meter";
+export { BrandMark, BrandLockup } from "./brand";
+export { Table, Progress } from "./data";
+export type { TableColumn, TableRow, Milestone } from "./data";
+export { PatternCard, ProposalCard, ReadinessReadout } from "./system";

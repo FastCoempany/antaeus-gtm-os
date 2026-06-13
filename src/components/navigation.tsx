@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
-import { Icon } from "@/icons";
 import { openPalette } from "@/lib/palette/Palette";
+import { BrandLockup } from "./brand";
 
 /**
  * Navigation primitives (03 Part III). The rail is dead; the
@@ -25,7 +25,7 @@ export function WayfinderBar(props: {
                 href={props.homeHref ?? "/dashboard/"}
                 aria-label={t("Home")}
             >
-                <Icon name="wayfinder" size={20} />
+                <BrandLockup size={20} />
             </a>
             <span class="ds-wayfinder__crumb">
                 {props.room}

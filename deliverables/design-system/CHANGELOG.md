@@ -5,6 +5,25 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.2.0 — 2026-06-12
+
+Additive: brand round 3 + the catalog tail.
+
+- Sibling spec 10 (brand identity) — the Grounded A's locked geometry,
+  weight ladder, lockups, favicon files, usage rules.
+- `src/components/brand.tsx` — BrandMark (size-aware stroke ladder,
+  no-bar at 16) + BrandLockup (L2 caps); the WayfinderBar's home
+  affordance now carries the lockup.
+- Favicons shipped: `public/favicon.svg` + 32/16 PNGs +
+  apple-touch-icon; linked from every entry HTML (31 files).
+- Catalog tail: Stamp, Avatar (initials only; orange decider, blue
+  advisor), Tooltip (gone in Step back), Table (one offset row may
+  break rank), Progress (milestone ladder + real-things count), and
+  the System cards — PatternCard (claim + evidence + how-sure),
+  ProposalCard (accept / snooze / dismiss), ReadinessReadout
+  (plain-sentence state, no bars).
+- Proof sheet gains BRAND / TAIL / STRUCTURE / SYSTEM sections.
+
 ## 1.1.0 — 2026-06-12
 
 Additive: the component library exists as code.
