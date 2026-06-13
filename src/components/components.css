@@ -684,3 +684,156 @@
   color: var(--ds-ink-soft);
   margin: 0;
 }
+
+/* ── Wayfinder: the three cells + Pulling + Why (spec 03 §3.2) ──── */
+
+.ds-wayfinder-shell {
+  position: sticky;
+  top: 0;
+  z-index: var(--ds-z-wayfinder);
+  background: var(--ds-surface);
+  border-bottom: 1px solid var(--ds-hair-strong);
+}
+.ds-wayfinder-shell .ds-wayfinder {
+  position: static;
+  border-bottom: none;
+}
+
+.ds-wayfinder__trail { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+.ds-wayfinder__trail-crumb {
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-quiet);
+  text-decoration: none;
+}
+.ds-wayfinder__trail-crumb::after { content: "›"; margin-left: var(--ds-space-2); color: var(--ds-ink-quiet); }
+.ds-wayfinder__trail-crumb:hover { color: var(--ds-ink-soft); }
+
+/* The Pulling cell — the only orange on the bar. */
+.ds-wayfinder__pulling {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: 6px var(--ds-space-3) 6px var(--ds-space-2);
+  border: 1px solid var(--ds-hair-strong);
+  border-radius: var(--ds-radius-control);
+  background: var(--ds-surface-sub);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.ds-wayfinder__pulling:hover { border-color: var(--ds-rule); }
+.ds-wayfinder__pulling-gauge {
+  width: 3px;
+  align-self: stretch;
+  margin: -6px var(--ds-space-1) -6px -2px;
+  background: var(--ds-orange);
+  border-radius: 2px;
+}
+.ds-wayfinder__pulling-verb {
+  font-family: var(--ds-font-serif);
+  font-size: 15px;
+  color: var(--ds-ink);
+}
+.ds-wayfinder__pulling-object {
+  font: var(--ds-type-label) / 1.3 var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  max-width: 30ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-wayfinder__why {
+  font: 600 12px/1 var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+.ds-wayfinder__why:hover { color: var(--ds-ink); }
+.ds-wayfinder__why:focus-visible { outline: 3px solid var(--ds-orange-soft); outline-offset: 1px; }
+
+.ds-wayfinder__why-panel {
+  max-width: var(--ds-page-max);
+  margin: 0 auto;
+  padding: var(--ds-space-4) var(--ds-page-gutter) var(--ds-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  animation: ds-why-grow var(--ds-motion-base) var(--ds-ease-standard);
+  overflow: hidden;
+}
+@keyframes ds-why-grow {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-wayfinder__why-panel { animation: none; }
+}
+.ds-wayfinder__why-commit { display: flex; gap: var(--ds-space-3); align-items: center; }
+
+/* ── Pulse + Ribbon (spec 03 §2.1, §2.2) ──────────────────────── */
+
+.ds-ribbon {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  margin-bottom: var(--ds-space-3);
+}
+.ds-ribbon__label {
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-soft);
+  white-space: nowrap;
+}
+.ds-ribbon__rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--ds-hair-strong), transparent);
+}
+.ds-ribbon__suffix {
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-faint);
+  white-space: nowrap;
+}
+.ds-ribbon--orange .ds-ribbon__label { color: var(--ds-orange); }
+.ds-ribbon--red .ds-ribbon__label { color: var(--ds-red); }
+.ds-ribbon--amber .ds-ribbon__label { color: var(--ds-amber); }
+.ds-ribbon--blue .ds-ribbon__label { color: var(--ds-blue); }
+.ds-ribbon--green .ds-ribbon__label { color: var(--ds-green); }
+
+.ds-pulse { display: flex; flex-direction: column; gap: var(--ds-space-7); }
+
+.ds-pulse-zone__items { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+/* Older zones recede: tighter rhythm + a quieted field. */
+.ds-pulse-zone--compressed { opacity: 0.82; }
+.ds-pulse-zone--compressed .ds-pulse-zone__items { gap: var(--ds-space-2); }
+
+.ds-pulse-horizon {
+  display: flex;
+  gap: var(--ds-space-6);
+  flex-wrap: wrap;
+  margin-top: var(--ds-space-6);
+  padding-top: var(--ds-space-4);
+  border-top: 1px solid var(--ds-hair-strong);
+}
+.ds-pulse-horizon__cell { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ds-pulse-horizon__value {
+  font-family: var(--ds-font-serif);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ds-ink);
+}
+.ds-pulse-horizon__label {
+  font: 600 var(--ds-type-kicker) / 1.2 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-faint);
+}

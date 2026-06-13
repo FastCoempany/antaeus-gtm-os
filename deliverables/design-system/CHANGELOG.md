@@ -5,6 +5,36 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.5.0 — 2026-06-13
+
+Additive: Dashboard-arc part 0 — the two foundational pieces the
+pre-Dashboard readiness check found the arc would otherwise improvise.
+
+- Pulse + Ribbon — the two remaining composition systems (03 Part II),
+  now built: `src/components/pulse.tsx` — Ribbon (the section thread:
+  mono label + fading rule + count/state suffix), PulseZone (a
+  time-zone with its ribbon + items; `compressed` recedes older zones;
+  empty zones collapse), PulseTimeline (the vertical time axis), and
+  PulseHorizon (the closing strip of counts). This is the Dashboard's
+  Queue read (spec 04 §3.2): NOW / THIS WEEK / GONE QUIET zones, the
+  past compressing rather than piling up, silence surfaced deliberately.
+- The full three-cell Wayfinder bar (03 §3.2). The bar was the minimal
+  one-cell version; it now carries Trail (the continuity-param
+  breadcrumb), Here (the room crumb + state), and Pulling (the system's
+  one next move — serif verb + plain-sentence object + the only orange
+  on the bar as a left gauge, with a `Why` that grows the reasoning
+  inline: the read + a commit row + "Skip — stay here" that sends
+  nothing). The Pulling cell is the ADR-011 Birdseye Float promoted to
+  the bar; it travels every room. The minimal call (room + tail) still
+  works, so no existing caller breaks.
+- Proof sheet gains PULSE + RIBBON sections and the top bar now shows
+  all three cells + the inline Why.
+
+After this, the Dashboard build is pure composition of a finished
+foundation — Brief (SingleColumn + density), Spotlight (FocalRail),
+Queue (PulseTimeline), the week's-reads band, and the Wayfinder
+pulling cell wired to the command-intelligence engine.
+
 ## 1.4.0 — 2026-06-13
 
 Additive: the composition layer (step 5.5, part 2) — the density

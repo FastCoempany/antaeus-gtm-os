@@ -39,7 +39,11 @@ import {
     FocalRail,
     ObjectControls,
     HandoffStrip,
-    RiskCard
+    RiskCard,
+    Ribbon,
+    PulseTimeline,
+    PulseZone,
+    PulseHorizon
 } from "./index";
 import { paletteOpen } from "@/lib/palette/Palette";
 
@@ -597,5 +601,114 @@ describe("RiskCard (spec 03 §4.1 System)", () => {
             "84"
         );
         expect(getByText("Open the deal")).toBeTruthy();
+    });
+});
+
+describe("Wayfinder — the full three cells (spec 03 §3.2)", () => {
+    it("renders Trail crumbs, the Here crumb, and the Pulling cell", () => {
+        const { container, getByText } = render(
+            <WayfinderBar
+                room="DASHBOARD"
+                tail="3 ranked"
+                trail={[{ label: "SIGNAL", href: "/signal-console/" }]}
+                pulling={{
+                    verb: "Recover",
+                    object: "Acme — stalled 18d",
+                    href: "/deal-workspace/"
+                }}
+            />
+        );
+        expect(container.querySelector(".ds-wayfinder__trail-crumb")?.textContent).toBe(
+            "SIGNAL"
+        );
+        expect(container.textContent).toContain("DASHBOARD · 3 ranked");
+        expect(getByText("Recover")).toBeTruthy();
+        // The Pulling cell is the only orange on the bar (the gauge).
+        expect(container.querySelector(".ds-wayfinder__pulling-gauge")).not.toBeNull();
+    });
+
+    it("the minimal bar (no trail/pulling) still works for every room", () => {
+        const { container } = render(<WayfinderBar room="SETTINGS" />);
+        expect(container.querySelector(".ds-wayfinder__crumb")?.textContent).toBe(
+            "SETTINGS"
+        );
+        expect(container.querySelector(".ds-wayfinder__pulling")).toBeNull();
+        expect(container.querySelector(".ds-wayfinder__why")).toBeNull();
+    });
+
+    it("Why grows the reasoning inline and Skip closes it", () => {
+        const { container, getByText, queryByText } = render(
+            <WayfinderBar
+                room="DASHBOARD"
+                pulling={{
+                    verb: "Send",
+                    object: "the revised proposal",
+                    href: "/outbound-studio/",
+                    why: <p>Sarah's budget review is Wednesday.</p>
+                }}
+            />
+        );
+        expect(container.querySelector(".ds-wayfinder__why-panel")).toBeNull();
+        fireEvent.click(getByText(/Why/));
+        expect(
+            container.querySelector(".ds-wayfinder__why-panel")
+        ).not.toBeNull();
+        expect(getByText("Sarah's budget review is Wednesday.")).toBeTruthy();
+        fireEvent.click(getByText("Skip — stay here"));
+        expect(queryByText("Sarah's budget review is Wednesday.")).toBeNull();
+    });
+});
+
+describe("Pulse + Ribbon (spec 03 §2.1, §2.2)", () => {
+    it("Ribbon marks a zone seam with label + suffix", () => {
+        const { container } = render(<Ribbon label="NOW" suffix="3 deals" tone="red" />);
+        expect(container.querySelector(".ds-ribbon--red")).not.toBeNull();
+        expect(container.querySelector(".ds-ribbon__label")?.textContent).toBe("NOW");
+        expect(container.querySelector(".ds-ribbon__suffix")?.textContent).toBe(
+            "3 deals"
+        );
+    });
+
+    it("PulseZone renders its ribbon + items; an empty zone collapses", () => {
+        const showLater = false;
+        const { container } = render(
+            <PulseTimeline label="Ranked pipeline">
+                <PulseZone label="NOW" suffix="1">
+                    <div class="pz-item">Acme</div>
+                </PulseZone>
+                <PulseZone label="GONE QUIET" compressed>
+                    {showLater && <div class="pz-item">later</div>}
+                </PulseZone>
+            </PulseTimeline>
+        );
+        // NOW renders; the empty GONE QUIET zone renders nothing.
+        expect(container.querySelectorAll(".ds-pulse-zone")).toHaveLength(1);
+        expect(container.querySelectorAll(".pz-item")).toHaveLength(1);
+    });
+
+    it("a compressed zone recedes (carries the compressed class)", () => {
+        const { container } = render(
+            <PulseTimeline label="Pipeline">
+                <PulseZone label="YESTERDAY" compressed>
+                    <div>x</div>
+                </PulseZone>
+            </PulseTimeline>
+        );
+        expect(
+            container.querySelector(".ds-pulse-zone--compressed")
+        ).not.toBeNull();
+    });
+
+    it("PulseHorizon closes the page with a strip of counts", () => {
+        const { container, getByText } = render(
+            <PulseHorizon
+                counts={[
+                    { label: "active", value: 14 },
+                    { label: "at risk", value: 3 }
+                ]}
+            />
+        );
+        expect(container.querySelectorAll(".ds-pulse-horizon__cell")).toHaveLength(2);
+        expect(getByText("14")).toBeTruthy();
     });
 });
