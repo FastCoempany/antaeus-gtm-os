@@ -1,6 +1,6 @@
 # Antaeus Design System — Index & Governance
 
-**Version:** 1.4.0 (see VERSION + CHANGELOG.md; model in Part IV).
+**Version:** 1.5.0 (see VERSION + CHANGELOG.md; model in Part IV).
 
 **Status:** DRAFT for founder review.
 **Date:** 2026-06-07.

@@ -36,7 +36,11 @@ import {
     GridCell,
     FocalRail,
     ObjectControls,
-    Measure
+    Measure,
+    Ribbon,
+    PulseTimeline,
+    PulseZone,
+    PulseHorizon
 } from "@/components";
 import { Icon } from "@/icons";
 import {
@@ -84,7 +88,24 @@ export function ProofSheet(): JSX.Element {
 
     return (
         <div>
-            <WayfinderBar room={t("DESIGN SYSTEM")} tail={t("proof sheet")} />
+            <WayfinderBar
+                room={t("DESIGN SYSTEM")}
+                tail={t("proof sheet")}
+                trail={[{ label: t("SIGNAL"), href: "/signal-console/" }]}
+                pulling={{
+                    verb: t("Recover"),
+                    object: t("Acme — stalled 18d at proposal"),
+                    href: "/deal-workspace/",
+                    why: (
+                        <p>
+                            {t(
+                                "Acme hasn't moved in eighteen days and the champion has been quiet since the demo. It's the most-pressured deal on the board right now.",
+                                { class: "body" }
+                            )}
+                        </p>
+                    )
+                }}
+            />
             <main style="max-width:1040px;margin:0 auto;padding:40px 40px 120px">
                 <Kicker>{t("ANTAEUS DESIGN SYSTEM · BUILT LIBRARY")}</Kicker>
                 <Heading level="display">
@@ -406,7 +427,45 @@ export function ProofSheet(): JSX.Element {
                     />
                 </Section>
 
-                                <Section code={t("BRAND")} title={t("The Grounded A, in chrome")}>
+                                <Section code={t("PULSE")} title={t("The page is time — Queue read", { class: "body" })}>
+                    <PulseTimeline label={t("Ranked pipeline")}>
+                        <PulseZone label={t("NOW")} suffix={t("2 deals")} tone="red">
+                            <RiskCard
+                                title="Acme Industries"
+                                cause={t("Champion quiet for twelve days.", { class: "body" })}
+                                score={84}
+                                actions={<Button variant="accent">{t("Open the deal")}</Button>}
+                            />
+                            <Card kicker={t("DEAL")} title="Meridian Logistics" tone="amber">
+                                <p class="ds-card__copy">{t("Proposal out; awaiting sign-off.")}</p>
+                            </Card>
+                        </PulseZone>
+                        <PulseZone label={t("THIS WEEK")} suffix={t("1 deal")} compressed>
+                            <Card kicker={t("DEAL")} title="Harbor Freight Co">
+                                <p class="ds-card__copy">{t("Moving on schedule.")}</p>
+                            </Card>
+                        </PulseZone>
+                        <PulseZone label={t("GONE QUIET")} suffix={t("1 deal")} compressed tone="amber">
+                            <Card kicker={t("DEAL · 21D SILENT")} title="Delta Logistics" tone="amber">
+                                <p class="ds-card__copy">{t("No reply since the pricing call.")}</p>
+                            </Card>
+                        </PulseZone>
+                    </PulseTimeline>
+                    <PulseHorizon
+                        counts={[
+                            { label: t("active"), value: 14 },
+                            { label: t("at risk"), value: 3 },
+                            { label: t("gone quiet"), value: 2 }
+                        ]}
+                    />
+                </Section>
+
+                <Section code={t("RIBBON")} title={t("The section thread")}>
+                    <Ribbon label={t("RECOVERY QUEUE")} suffix={t("3 deals")} tone="red" />
+                    <Ribbon label={t("COMPOUNDING")} suffix={t("on track")} tone="green" />
+                </Section>
+
+                <Section code={t("BRAND")} title={t("The Grounded A, in chrome")}>
                     <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap">
                         <BrandMark size={48} />
                         <BrandMark size={32} />

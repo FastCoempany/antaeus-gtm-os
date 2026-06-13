@@ -26,7 +26,13 @@ export type { CardProps } from "./card";
 export { Toast, Alert, Drawer, Modal, Tooltip } from "./feedback";
 export type { AlertTone } from "./feedback";
 export { WayfinderBar, SegmentedControl, HandoffStrip } from "./navigation";
-export type { HandoffRoute } from "./navigation";
+export type { HandoffRoute, WayfinderCrumb, WayfinderPull } from "./navigation";
+export {
+    Ribbon,
+    PulseTimeline,
+    PulseZone,
+    PulseHorizon
+} from "./pulse";
 export { Meter } from "./meter";
 export { BrandMark, BrandLockup } from "./brand";
 export { Table, Progress } from "./data";
