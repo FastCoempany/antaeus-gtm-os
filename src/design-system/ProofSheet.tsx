@@ -138,6 +138,7 @@ export function ProofSheet(): JSX.Element {
                         title="Acme Industries"
                         tone="red"
                         offset
+                        offsetTag={t("— Today's most pressured")}
                         footer={
                             <>
                                 <Button variant="accent">{t("Open the deal")}</Button>
@@ -440,12 +441,12 @@ export function ProofSheet(): JSX.Element {
                                 <p class="ds-card__copy">{t("Proposal out; awaiting sign-off.")}</p>
                             </Card>
                         </PulseZone>
-                        <PulseZone label={t("THIS WEEK")} suffix={t("1 deal")} compressed>
+                        <PulseZone label={t("THIS WEEK")} suffix={t("1 deal")} depth={1}>
                             <Card kicker={t("DEAL")} title="Harbor Freight Co">
                                 <p class="ds-card__copy">{t("Moving on schedule.")}</p>
                             </Card>
                         </PulseZone>
-                        <PulseZone label={t("GONE QUIET")} suffix={t("1 deal")} compressed tone="amber">
+                        <PulseZone label={t("GONE QUIET")} suffix={t("1 deal")} depth={2} tone="amber">
                             <Card kicker={t("DEAL · 21D SILENT")} title="Delta Logistics" tone="amber">
                                 <p class="ds-card__copy">{t("No reply since the pricing call.")}</p>
                             </Card>

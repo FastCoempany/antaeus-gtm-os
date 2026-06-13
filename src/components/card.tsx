@@ -5,15 +5,21 @@ import { Gauge, Heading, Kicker } from "./display";
 
 /**
  * Card — the Grounded primitive (03 §2.3): the card has gravity. It
- * rests on the field with a real (subtle) shadow; the gauge on its
- * left edge carries its state as color; at most ONE card per zone
- * breaks rank as `offset` (03 §2.4) and may carry the offset action.
+ * carries weight through TWO devices — a **gauge** (the 3px left rule)
+ * AND an **anchored edge** (the 3px bottom rule), both in the color of
+ * the work's state. Color is rationed: a card at rest with no `tone`
+ * carries a quiet neutral edge, and color is spent only where state is
+ * real (the same discipline as the gauge).
+ *
+ * At most ONE card per zone breaks rank as `offset` (03 §2.4): its tag
+ * sits *outside* the card at top-left, the card lifts with a heavier
+ * shadow and an orange anchored edge, and its action extends *below*
+ * the card's bottom border — the eye's single guaranteed landing place.
  *
  * The five data states (03 §4.4) are part of the component, not the
  * room: loading holds the silhouette; empty is directional (why it
- * matters + one move), supplied by the caller as emptyWhy/emptyMove;
- * error is honest and recoverable; unsaved work carries the quiet
- * amber marker so a save is never ambiguous.
+ * matters + one move); error is honest and recoverable; unsaved work
+ * carries the quiet amber marker so a save is never ambiguous.
  */
 
 export interface CardProps {
@@ -21,6 +27,8 @@ export interface CardProps {
     readonly title?: string;
     readonly tone?: AccentRole;
     readonly offset?: boolean;
+    /** Offset only: the tag that sits outside the card, top-left. */
+    readonly offsetTag?: string;
     readonly state?: DataState;
     /** Empty state: why the surface matters, in a sentence. */
     readonly emptyWhy?: string;
@@ -58,11 +66,15 @@ export function Card(props: CardProps): JSX.Element {
         );
     }
 
-    return (
+    // The anchored edge (03 §2.3): a quiet neutral edge at rest, the
+    // role color where state is real. Offset forces the orange edge.
+    const edge = props.offset ? "orange" : props.tone;
+
+    const card = (
         <article
             class={`ds-card${props.offset ? " ds-card--offset" : ""}${
-                state === "loading" ? " ds-card--loading" : ""
-            }`}
+                edge ? ` ds-card--edge-${edge}` : ""
+            }${state === "loading" ? " ds-card--loading" : ""}`}
             aria-busy={state === "loading"}
         >
             <Gauge tone={props.tone} />
@@ -85,4 +97,20 @@ export function Card(props: CardProps): JSX.Element {
             </div>
         </article>
     );
+
+    // Offset (03 §2.4): the tag sits OUTSIDE the card, top-left; the
+    // action extends BELOW the bottom border (the foot's offset
+    // treatment lives in components.css). The wrapper carries the tag.
+    if (props.offset) {
+        return (
+            <div class="ds-offset">
+                {props.offsetTag ? (
+                    <span class="ds-offset__tag">{props.offsetTag}</span>
+                ) : null}
+                {card}
+            </div>
+        );
+    }
+
+    return card;
 }

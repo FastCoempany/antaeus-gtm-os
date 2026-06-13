@@ -40,25 +40,29 @@ export function Ribbon(props: {
 
 /**
  * PulseZone — one time-zone of the timeline: a Ribbon header over its
- * stacked items. `compressed` reduces the zone's vertical weight, the
- * way older zones recede beneath NOW (the room assigns which zones
- * compress; this is the mechanism). An empty zone renders nothing —
- * the past compresses, it never piles up as empty padding.
+ * stacked items. `depth` recedes the zone PROGRESSIVELY (03 §2.1 —
+ * "older zones compress progressively beneath"): depth 0 is NOW at
+ * full weight, and each step up (1, 2, 3) quiets and tightens the zone
+ * further, capped at 3. The room assigns each zone's depth by age. An
+ * empty zone renders nothing — the past compresses, it never piles up
+ * as empty padding.
  */
 export function PulseZone(props: {
     readonly label: string;
     readonly suffix?: string;
     readonly tone?: AccentRole;
-    readonly compressed?: boolean;
+    /** Recession depth: 0 = NOW (full); 1–3 progressively recede. */
+    readonly depth?: number;
     readonly children?: ComponentChildren;
 }): JSX.Element | null {
     const items = (
         Array.isArray(props.children) ? props.children : [props.children]
     ).filter((c) => c !== null && c !== undefined && c !== false);
     if (items.length === 0) return null;
+    const depth = Math.max(0, Math.min(3, props.depth ?? 0));
     return (
         <section
-            class={`ds-pulse-zone${props.compressed ? " ds-pulse-zone--compressed" : ""}`}
+            class={`ds-pulse-zone${depth > 0 ? ` ds-pulse-zone--depth-${depth}` : ""}`}
         >
             <Ribbon label={props.label} suffix={props.suffix} tone={props.tone} />
             <div class="ds-pulse-zone__items">{items}</div>

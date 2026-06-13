@@ -5,6 +5,38 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.6.0 — 2026-06-13
+
+Defect fixes from the 2026-06-13 adversarial self-audit. These close
+spec-fidelity gaps in already-shipped primitives — the kind the
+in-isolation readiness checks missed because they only inspected NEW
+work, never re-audited the core.
+
+- The Grounded Card was missing HALF its weight system. Spec 03 §2.3
+  names two devices — the gauge (left rule) AND the anchored edge
+  (3px bottom rule in the state color). The card shipped (1.1.0) with
+  only the gauge. Now it carries the anchored edge too: a quiet
+  neutral edge at rest, the role color where state is real, the same
+  rationing as the gauge.
+- Offset was elevation cosplay, not the §2.4 structure. It shipped as
+  box-shadow + a 2px lift. Spec §2.4: the tag sits OUTSIDE the card
+  top-left (new `offsetTag` prop), the card lifts with a heavier
+  shadow AND an orange anchored edge, and its action extends BELOW the
+  card's bottom border. Now it does all three.
+- Pulse compression was binary, not progressive. Spec §2.1 says older
+  zones "compress progressively." PulseZone's `compressed: boolean`
+  becomes `depth: 0–3` — each step quiets and tightens the zone
+  further.
+
+Left as-is (judged correct, not a defect): the Wayfinder Why-open
+state is a module-level signal — the established singleton pattern for
+a per-page bar (the same as the Cmd+K palette). Over-scoping it to
+per-instance state would reintroduce the hook-name transform issue for
+no real gain, since there is one Wayfinder bar per page by design.
+
+No new components. The Dashboard build is next; it consumes these
+corrected primitives.
+
 ## 1.5.0 — 2026-06-13
 
 Additive: Dashboard-arc part 0 — the two foundational pieces the

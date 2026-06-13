@@ -245,6 +245,36 @@ describe("Card — the Grounded primitive with its five data states", () => {
         const { container } = render(<Card title="Acme" unsaved />);
         expect(container.querySelector(".ds-card__unsaved")).not.toBeNull();
     });
+
+    it("carries the anchored edge: quiet neutral at rest, role color when toned (03 §2.3)", () => {
+        const rest = render(<Card title="Quiet" />);
+        // At rest: no edge-tone class → the CSS quiet-neutral default.
+        expect(rest.container.querySelector("[class*='ds-card--edge-']")).toBeNull();
+        const toned = render(<Card title="Acme" tone="red" />);
+        expect(toned.container.querySelector(".ds-card--edge-red")).not.toBeNull();
+    });
+
+    it("offset renders the real §2.4 structure: tag outside, orange edge, wrapper", () => {
+        const { container, getByText } = render(
+            <Card
+                title="Acme Industries"
+                tone="red"
+                offset
+                offsetTag="— Today's most pressured"
+                footer={<Button variant="accent">Open the deal</Button>}
+            />
+        );
+        // The tag sits OUTSIDE the card, in the offset wrapper.
+        expect(container.querySelector(".ds-offset__tag")).not.toBeNull();
+        expect(getByText("— Today's most pressured")).toBeTruthy();
+        // Offset forces the orange anchored edge regardless of tone.
+        expect(container.querySelector(".ds-card--edge-orange")).not.toBeNull();
+        expect(container.querySelector(".ds-card--edge-red")).toBeNull();
+        // The wrapper holds the lifted card.
+        expect(
+            container.querySelector(".ds-offset > .ds-card--offset")
+        ).not.toBeNull();
+    });
 });
 
 describe("feedback & overlays", () => {
@@ -676,7 +706,7 @@ describe("Pulse + Ribbon (spec 03 §2.1, §2.2)", () => {
                 <PulseZone label="NOW" suffix="1">
                     <div class="pz-item">Acme</div>
                 </PulseZone>
-                <PulseZone label="GONE QUIET" compressed>
+                <PulseZone label="GONE QUIET" depth={2}>
                     {showLater && <div class="pz-item">later</div>}
                 </PulseZone>
             </PulseTimeline>
@@ -686,16 +716,16 @@ describe("Pulse + Ribbon (spec 03 §2.1, §2.2)", () => {
         expect(container.querySelectorAll(".pz-item")).toHaveLength(1);
     });
 
-    it("a compressed zone recedes (carries the compressed class)", () => {
+    it("a zone recedes progressively (carries its depth class)", () => {
         const { container } = render(
             <PulseTimeline label="Pipeline">
-                <PulseZone label="YESTERDAY" compressed>
+                <PulseZone label="YESTERDAY" depth={1}>
                     <div>x</div>
                 </PulseZone>
             </PulseTimeline>
         );
         expect(
-            container.querySelector(".ds-pulse-zone--compressed")
+            container.querySelector(".ds-pulse-zone--depth-1")
         ).not.toBeNull();
     });
 
