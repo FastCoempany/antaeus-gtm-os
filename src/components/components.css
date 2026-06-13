@@ -191,9 +191,9 @@
 }
 .ds-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.ds-btn--accent { background: var(--ds-orange); color: #fff; }
-.ds-btn--accent:hover:not(:disabled) { background: #d4661b; }
-.ds-btn--primary { background: var(--ds-ink); color: #fff; }
+.ds-btn--accent { background: var(--ds-orange); color: var(--ds-on-ink); }
+.ds-btn--accent:hover:not(:disabled) { background: var(--ds-orange-strong); }
+.ds-btn--primary { background: var(--ds-ink); color: var(--ds-on-ink); }
 .ds-btn--primary:hover:not(:disabled) { background: var(--ds-ink-700); }
 .ds-btn--secondary {
   background: var(--ds-surface);
@@ -292,7 +292,7 @@
   align-items: center;
   gap: var(--ds-space-3);
   background: var(--ds-ink);
-  color: #fff;
+  color: var(--ds-on-ink);
   font: var(--ds-type-label) / 1.4 var(--ds-font-sans);
   padding: var(--ds-space-3) var(--ds-space-4);
   border-radius: var(--ds-radius-card);
@@ -317,7 +317,7 @@
 .ds-scrim {
   position: fixed;
   inset: 0;
-  background: rgba(10, 28, 64, 0.35);
+  background: var(--ds-scrim);
 }
 .ds-drawer { z-index: var(--ds-z-drawer); position: fixed; inset: 0; }
 .ds-drawer__panel {
@@ -407,7 +407,7 @@
   cursor: pointer;
 }
 .ds-seg__btn:hover { color: var(--ds-ink); }
-.ds-seg__btn[aria-pressed="true"] { background: var(--ds-ink); color: #fff; }
+.ds-seg__btn[aria-pressed="true"] { background: var(--ds-ink); color: var(--ds-on-ink); }
 
 /* ── Data & structure (03 §4.1, §4.5) ─────────────────────────── */
 
@@ -474,7 +474,7 @@
   transform: translateX(-50%);
   z-index: var(--ds-z-toast);
   background: var(--ds-ink);
-  color: #fff;
+  color: var(--ds-on-ink);
   font: 12px/1.45 var(--ds-font-sans);
   padding: var(--ds-space-2) var(--ds-space-3);
   border-radius: var(--ds-radius-control);
@@ -576,4 +576,111 @@
   color: var(--ds-ink-soft);
   margin: 0;
   max-width: 60ch;
+}
+
+/* ── Layout & grid (spec 05) ──────────────────────────────────── */
+
+/* The page frame: full-bleed bar above, centered capped column here. */
+.ds-frame { width: 100%; }
+.ds-frame__column {
+  max-width: var(--ds-page-max);
+  margin: 0 auto;
+  padding: 0 var(--ds-page-gutter);
+}
+/* Below 1024 the product is unsupported (05 §2.1): a calm notice, not
+   a half-reflowed room. Hidden above 1024; replaces the column below. */
+.ds-frame__unsupported {
+  display: none;
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  max-width: var(--ds-measure);
+  margin: var(--ds-space-12) auto;
+  padding: 0 var(--ds-page-gutter);
+}
+@media (max-width: 1023px) {
+  .ds-frame__column { display: none; }
+  .ds-frame__unsupported { display: block; }
+}
+
+.ds-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--ds-grid-gap);
+}
+@media (max-width: 1023px) {
+  .ds-grid { grid-template-columns: 1fr; }
+  .ds-grid__cell { grid-column: 1 / -1 !important; }
+}
+
+.ds-measure { max-width: var(--ds-measure); }
+
+.ds-bandstack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-8);
+}
+
+.ds-arch-single {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-6);
+}
+
+/* Focal + rail: the 8/4 split, collapsing to single column < 1024. */
+.ds-arch-focalrail {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--ds-grid-gap);
+  align-items: start;
+}
+.ds-arch-focalrail__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+@media (max-width: 1023px) {
+  .ds-arch-focalrail { grid-template-columns: 1fr; }
+}
+
+/* Object + controls: the object dominant, the controls subordinate. */
+.ds-arch-objectcontrols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--ds-grid-gap);
+  align-items: start;
+}
+.ds-arch-objectcontrols__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+@media (max-width: 1023px) {
+  .ds-arch-objectcontrols { grid-template-columns: 1fr; }
+}
+
+/* ── HandoffStrip — routing onward (spec 03 §3.4) ─────────────── */
+
+.ds-handoff {
+  border-top: 1px solid var(--ds-hair-strong);
+  padding-top: var(--ds-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+.ds-handoff__head { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ds-handoff__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: var(--ds-measure); }
+.ds-handoff__routes { display: flex; gap: var(--ds-space-3); flex-wrap: wrap; }
+
+/* ── RiskCard — a Grounded card at recovery scale (spec 03 §4.1) ── */
+
+.ds-riskcard__score {
+  font-family: var(--ds-font-serif);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ds-red);
+}
+.ds-riskcard__cause {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
 }

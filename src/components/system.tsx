@@ -93,3 +93,37 @@ export function ReadinessReadout(props: {
         </div>
     );
 }
+
+/**
+ * RiskCard — a Grounded card at recovery scale (03 §4.1 System). The
+ * Dashboard's risk slice and the Deal Workspace recovery queue render
+ * one of these per decaying object: the account, the cause, a risk
+ * score, and the act-or-inspect moves. Sarah's hand-reach intent on a
+ * risk card is to OPEN the object at the gate that's broken, so the
+ * primary action is the operator's verb, not a label.
+ */
+export function RiskCard(props: {
+    /** The object under pressure — usually an account or deal name. */
+    readonly title: string;
+    /** The cause, in plain words ("Champion quiet for twelve days"). */
+    readonly cause: string;
+    /** Risk score, shown as a serif numeral. */
+    readonly score: number;
+    readonly kicker?: string;
+    /** The dominant move (orange) + any secondary moves. */
+    readonly actions: ComponentChildren;
+}): JSX.Element {
+    return (
+        <Card
+            kicker={props.kicker ?? t("AT RISK")}
+            title={props.title}
+            tone="red"
+            footer={props.actions}
+        >
+            <div class="ds-card__head">
+                <p class="ds-riskcard__cause">{props.cause}</p>
+                <span class="ds-riskcard__score">{Math.round(props.score)}</span>
+            </div>
+        </Card>
+    );
+}
