@@ -39,6 +39,12 @@ import {
     Measure
 } from "@/components";
 import { Icon } from "@/icons";
+import {
+    densityState,
+    setDensityState,
+    pickByDensity,
+    type DensityState
+} from "@/lib/density";
 
 /**
  * The component-library proof sheet, served at /design-system/.
@@ -219,6 +225,46 @@ export function ProofSheet(): JSX.Element {
                             />
                         </FormField>
                     </div>
+                </Section>
+
+                <Section code={t("DENSITY")} title={t("Show me how / Step back")}>
+                    <SegmentedControl
+                        label={t("Density")}
+                        active={densityState.value}
+                        onChange={(d: DensityState) => setDensityState(d)}
+                        options={[
+                            { key: "show_me_how" as DensityState, label: t("Show me how") },
+                            { key: "step_back" as DensityState, label: t("Step back") }
+                        ]}
+                    />
+                    <Card kicker={t("DEAL · RANKED FIRST")} title="Acme Industries" tone="amber">
+                        <p class="ds-card__copy">
+                            {pickByDensity({
+                                verbose: t(
+                                    "The Acme deal hasn't moved in eighteen days, and the champion has been quiet since the demo. It ranks first because it carries the most pressure right now — a mix of how long it's stalled, how big it is, and how late in the stage it should have moved by now.",
+                                    { class: "body" }
+                                ),
+                                terse: t("Acme — stalled 18d at proposal. Recovery options inside.", {
+                                    class: "body"
+                                })
+                            })}
+                        </p>
+                    </Card>
+                    <FormField
+                        label={t("Buying group minimum")}
+                        microcopy={t(
+                            "How many decision-makers typically agree before a deal closes? Most B2B teams find this is three to seven.",
+                            { class: "body" }
+                        )}
+                    >
+                        <TextInput value="" onInput={() => undefined} placeholder={t("e.g. 4")} />
+                    </FormField>
+                    <p style="font:13px/1.5 'Public Sans',sans-serif;color:rgba(10,28,64,0.42)">
+                        {t(
+                            "Flip the toggle: the sentence count compresses and the field microcopy drops — same primitives, same voice, less of it.",
+                            { class: "body" }
+                        )}
+                    </p>
                 </Section>
 
                 <Section code={t("FEEDBACK")} title={t("Alert, drawer, modal")}>

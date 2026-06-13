@@ -2170,6 +2170,7 @@ export type Database = {
         Row: {
           created_at: string
           data: Json
+          density_state: string
           onboarding_answers: Json
           onboarding_completed: boolean
           phase_f_proposals_enabled: boolean | null
@@ -2182,6 +2183,7 @@ export type Database = {
         Insert: {
           created_at?: string
           data?: Json
+          density_state?: string
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null
@@ -2194,6 +2196,7 @@ export type Database = {
         Update: {
           created_at?: string
           data?: Json
+          density_state?: string
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null

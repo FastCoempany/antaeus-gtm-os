@@ -67,6 +67,12 @@ export const phaseFLoaded: Signal<boolean> = signal(false);
 export const phaseFSaving: Signal<boolean> = signal(false);
 export const phaseFError: Signal<string | null> = signal(null);
 
+// Density gradient (spec 02). The live state lives in @/lib/density's
+// signal; these are the Settings-local load/save status wrappers.
+export const densityLoaded: Signal<boolean> = signal(false);
+export const densitySaving: Signal<boolean> = signal(false);
+export const densityError: Signal<string | null> = signal(null);
+
 // Phase 2.9 introduced an inboundReturn signal here. Program 6 / PR 1
 // retired it in favor of the canonical RoomChrome + BackButton pair
 // — same continuity-param read, same safeReturnTo guard, applied
@@ -93,6 +99,7 @@ export function refreshAll(): void {
     demo.value = loadDemoState();
     backup.value = readBackup();
     void refreshPhaseFToggle();
+    void refreshDensity();
 }
 
 export function setCategory(next: ProductCategory): void {
@@ -423,4 +430,35 @@ export function __setCloudConnectionForTests(
 }
 export function __setCloudCountsForTests(next: CloudRowCounts): void {
     cloudCounts.value = next;
+}
+
+// ── Density gradient actions (spec 02) ────────────────────────────
+
+import { bootDensity, saveDensityState } from "@/lib/density";
+import type { DensityState } from "@/lib/density";
+
+export async function refreshDensity(): Promise<void> {
+    await bootDensity();
+    densityLoaded.value = true;
+}
+
+export async function setDensity(next: DensityState): Promise<void> {
+    if (densitySaving.value) return;
+    densitySaving.value = true;
+    densityError.value = null;
+    try {
+        const result = await saveDensityState(next);
+        if (!result.ok) {
+            densityError.value = result.error ?? "Could not save your choice.";
+            return;
+        }
+        flashToast(
+            "good",
+            next === "show_me_how"
+                ? "The system will walk you through every surface."
+                : "The system will step back and trust your way around."
+        );
+    } finally {
+        densitySaving.value = false;
+    }
 }

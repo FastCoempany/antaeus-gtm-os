@@ -16,8 +16,12 @@
 /** The four composition systems (03 Part II). */
 export type CompositionFamily = "pulse" | "ribbon" | "grounded" | "offset";
 
-/** The density gradient's two operator-facing states (02 §4.1). */
-export type DensityState = "show-me-how" | "step-back";
+/**
+ * The density gradient's two states (02 §2.1). Re-exported from the
+ * canonical density module so a component and the persistence layer
+ * never disagree on the spelling (the DB stores the snake-case enum).
+ */
+export type { DensityState } from "@/lib/density/types";
 
 /**
  * The five data conditions every surface treats explicitly

@@ -16,6 +16,7 @@ function makeRow(overrides: Partial<WorkspaceProfile> = {}): WorkspaceProfile {
         what_we_sell: "a GTM operating system",
         value_prop: "make the motion inheritable",
         onboarding_completed: true,
+        density_state: "show_me_how",
         onboarding_answers: {},
         phase_f_proposals_enabled: null,
         data: {},

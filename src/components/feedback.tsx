@@ -1,6 +1,8 @@
 import type { ComponentChildren, JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import { t } from "@/lib/voice/t";
+import { densityState, showsAnnotations } from "@/lib/density";
+import type { DensityState } from "./contract";
 
 /**
  * Feedback & overlay primitives (03 §4.1).
@@ -107,9 +109,9 @@ export function Modal(props: {
 export function Tooltip(props: {
     readonly text: string;
     readonly children: ComponentChildren;
-    readonly density?: "show-me-how" | "step-back";
+    readonly density?: DensityState;
 }): JSX.Element {
-    if ((props.density ?? "show-me-how") === "step-back") {
+    if (!showsAnnotations(props.density ?? densityState.value)) {
         return <>{props.children}</>;
     }
     return (

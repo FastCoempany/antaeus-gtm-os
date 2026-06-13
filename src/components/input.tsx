@@ -5,11 +5,12 @@ import type { JSX } from "preact";
  *
  * FormField composes label + control + microcopy; the microcopy is
  * the first thing the density gradient drops in Step back (02), so it
- * renders only when `density` is "show-me-how" (the default). Inline
+ * renders only in Show me how (the live density state by default). Inline
  * errors say what's needed in plain words and never lose the
  * operator's edits (03 §4.4 Error).
  */
 import type { DensityState } from "./contract";
+import { densityState, showsAnnotations } from "@/lib/density";
 
 export function TextInput(props: {
     readonly value: string;
@@ -72,7 +73,7 @@ export function FormField(props: {
     readonly error?: string;
     readonly density?: DensityState;
 }): JSX.Element {
-    const density = props.density ?? "show-me-how";
+    const density = props.density ?? densityState.value;
     return (
         <label class={`ds-field${props.error ? " ds-field--error" : ""}`}>
             <span class="ds-field__label">{props.label}</span>
@@ -81,7 +82,7 @@ export function FormField(props: {
                 <p class="ds-field__error" role="alert">
                     {props.error}
                 </p>
-            ) : props.microcopy && density === "show-me-how" ? (
+            ) : props.microcopy && showsAnnotations(density) ? (
                 <p class="ds-field__micro">{props.microcopy}</p>
             ) : null}
         </label>
