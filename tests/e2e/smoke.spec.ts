@@ -557,11 +557,11 @@ test.describe("room boot smoke tests", () => {
             "SETTINGS"
         );
         await expect(page.locator(".st-grid")).toBeAttached();
-        // Eight cards: CloudSync (PR #43) + CloudExport (pre-beta hygiene,
+        // Nine cards: CloudSync (PR #43) + CloudExport (pre-beta hygiene,
         // 2026-06-02) + Backup + Category + PhaseF (ADR-017 PR 3,
-        // 2026-06-02) + Demo + Role + DeleteCloudData (PR #69,
-        // 2026-05-15).
-        await expect(page.locator(".st-card")).toHaveCount(8);
+        // 2026-06-02) + Density (spec 02, 2026-06-13) + Demo + Role +
+        // DeleteCloudData (PR #69, 2026-05-15).
+        await expect(page.locator(".st-card")).toHaveCount(9);
 
         expect(
             errors,

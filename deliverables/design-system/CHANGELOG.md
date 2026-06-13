@@ -5,6 +5,38 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.4.0 — 2026-06-13
+
+Additive: the composition layer (step 5.5, part 2) — the density
+system. Closes the second half of the gap the adversarial pass found:
+density was a dead prop on two components; it is now a real system.
+
+- Migration `20260613000000_density_state.sql`: adds
+  `workspace_profile.density_state` (check + default show_me_how,
+  one-time backfill to step_back for existing workspaces), and extends
+  the Phase F `proposed_modifications.kind` check with `density_change`.
+- `src/lib/density/` — the canonical module: DensityState (snake, the
+  DB enum) + the five-milestone + DensityChangePayload types; the live
+  `densityState` signal + `isStepBack`; the four-dimension helpers
+  `pickByDensity({verbose, terse})` (sentence count), `sliceAffordances`
+  (affordance count, consuming the contract's `affordanceSliceIndex`
+  that was dead until now), `showsAnnotations` (annotation density);
+  and persistence (`bootDensity` realtime-synced read, `saveDensityState`
+  optimistic write).
+- The component library reconciles to the canonical snake DensityState;
+  FormField + Tooltip read the live signal (annotation density wired).
+- Settings gains a DensityCard ("How the system shows up" — Show me how
+  / Step back, persists immediately).
+- Phase F apply path (`phase-f-apply.ts`) gains the `density_change`
+  branch: an accepted proposal writes `to_state` to the profile.
+- Proof sheet gains a live DENSITY section (toggle flips the card's
+  sentence count + drops the field microcopy).
+
+Deferred (per-room migration, rides each room's design-system pass):
+flipping each room's `densityResponsive` + booting density on mount,
+and the five milestone detection generators that FIRE density
+proposals (heartbeat generators, spec 02 §2.4).
+
 ## 1.3.0 — 2026-06-13
 
 Additive: the composition layer (step 5.5, part 1). Closes the gap the

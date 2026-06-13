@@ -170,7 +170,7 @@ describe("input primitives", () => {
             <FormField
                 label="Annual quota"
                 microcopy="Your personal target"
-                density="step-back"
+                density="step_back"
             >
                 <TextInput value="" onInput={() => undefined} />
             </FormField>
@@ -390,7 +390,7 @@ describe("catalog tail", () => {
         );
         expect(a.container.querySelector(".ds-tooltip__bubble")).not.toBeNull();
         const b = render(
-            <Tooltip text="help here" density="step-back">
+            <Tooltip text="help here" density="step_back">
                 <button>x</button>
             </Tooltip>
         );

@@ -56,6 +56,9 @@ export async function applyAcceptedProposal(
         if (row.kind === "observation_generator") {
             return applyObservationGenerator(data, row);
         }
+        if (row.kind === "density_change") {
+            return applyDensityChange(data, row);
+        }
         return { ok: false, error: `Unknown proposal kind: ${row.kind}` };
     } catch (err) {
         reportError(err, { op: "briefing.applyAcceptedProposal", proposalId });
@@ -163,6 +166,38 @@ async function applyObservationGenerator(
             op: "briefing.applyObservationGenerator",
             generator_id: generatorId,
             variant_name: variantName
+        });
+        return {
+            ok: false,
+            error: err instanceof Error ? err.message : String(err)
+        };
+    }
+}
+
+async function applyDensityChange(
+    data: DataClient,
+    row: { id: string; payload: Json; workspace_id: string }
+): Promise<ApplyResult> {
+    // Density gradient (spec 02 §2.3): an accepted density_change
+    // proposal writes its `to_state` to the workspace profile. The same
+    // column Settings writes; realtime sync (spec §2.5) carries the
+    // change to every open surface.
+    const payload = row.payload as unknown as {
+        to_state?: string;
+    } | null;
+    const toState = payload?.to_state;
+    if (toState !== "show_me_how" && toState !== "step_back") {
+        return { ok: false, error: "Density proposal payload missing a valid to_state." };
+    }
+    try {
+        await data.workspaceProfile.update(row.workspace_id, {
+            density_state: toState
+        } as never);
+        return { ok: true, error: null };
+    } catch (err) {
+        reportError(err, {
+            op: "briefing.applyDensityChange",
+            to_state: toState
         });
         return {
             ok: false,

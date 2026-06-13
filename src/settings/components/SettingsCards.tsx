@@ -1,4 +1,5 @@
 import { useRef, useState } from "preact/hooks";
+import { densityState } from "@/lib/density";
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import {
@@ -30,7 +31,11 @@ import {
     phaseFSaving,
     refreshCloudStatus,
     setCategory,
-    togglePhaseF
+    togglePhaseF,
+    densityLoaded,
+    densitySaving,
+    densityError,
+    setDensity,
 } from "../state";
 
 /**
@@ -53,6 +58,7 @@ export function SettingsCards(): JSX.Element {
             <BackupCard />
             <CategoryCard />
             <PhaseFCard />
+            <DensityCard />
             <DemoCard />
             <RoleCard />
             <DeleteCloudDataCard />
@@ -652,6 +658,72 @@ function RoleCard(): JSX.Element {
             <p class="st-card__help">
                 Re-running onboarding retunes the workspace without
                 deleting your ICPs, deals, signals, or motions.
+            </p>
+        </article>
+    );
+}
+
+function DensityCard(): JSX.Element {
+    const state = densityState.value;
+    const loaded = densityLoaded.value;
+    const saving = densitySaving.value;
+    const err = densityError.value;
+    const isShowMeHow = state === "show_me_how";
+
+    return (
+        <article class="st-card">
+            <header class="st-card__head">
+                <span class="st-scope st-scope--workspace">{t("Workspace-level")}</span>
+                <h2 class="st-card__title">{t("How the system shows up")}</h2>
+            </header>
+            <p class="st-card__desc">
+                Show me how — the system walks you through every surface,
+                with explanations and tips. Step back — the system trusts
+                you to know your way around and gets dense and immediate.
+                You can switch any time.
+            </p>
+            <ul class="st-status-list">
+                <li>
+                    <span>{t("Right now")}</span>
+                    <strong class={isShowMeHow ? "is-warn" : "is-good"}>
+                        {loaded
+                            ? isShowMeHow
+                                ? "Show me how"
+                                : "Step back"
+                            : "Checking…"}
+                    </strong>
+                </li>
+            </ul>
+            <div class="st-card__actions">
+                <button
+                    type="button"
+                    class={
+                        isShowMeHow
+                            ? "st-btn st-btn--primary"
+                            : "st-btn st-btn--ghost"
+                    }
+                    onClick={() => void setDensity("show_me_how")}
+                    disabled={!loaded || saving || isShowMeHow}
+                >
+                    {t("Show me how")}
+                </button>
+                <button
+                    type="button"
+                    class={
+                        !isShowMeHow
+                            ? "st-btn st-btn--primary"
+                            : "st-btn st-btn--ghost"
+                    }
+                    onClick={() => void setDensity("step_back")}
+                    disabled={!loaded || saving || !isShowMeHow}
+                >
+                    {t("Step back")}
+                </button>
+            </div>
+            {err ? <p class="st-card__error">{err}</p> : null}
+            <p class="st-card__help">
+                Your choice is remembered for this workspace and follows
+                you across devices.
             </p>
         </article>
     );
