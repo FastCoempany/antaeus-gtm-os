@@ -101,15 +101,48 @@
   gap: var(--ds-space-35);
   background: var(--ds-surface);
   border: 1px solid var(--ds-hair-strong);
+  /* The anchored edge (03 §2.3): the second weight device beside the
+     gauge — a 3px bottom rule, quiet neutral at rest, role color when
+     state is real (set by ds-card--edge-*). */
+  border-bottom: 3px solid var(--ds-ink-quiet);
   border-radius: var(--ds-radius-card);
   box-shadow: var(--ds-shadow-rest);
   padding: var(--ds-space-4) var(--ds-space-45);
   transition: box-shadow var(--ds-motion-base) var(--ds-ease-standard);
 }
+.ds-card--edge-orange { border-bottom-color: var(--ds-orange); }
+.ds-card--edge-blue { border-bottom-color: var(--ds-blue); }
+.ds-card--edge-green { border-bottom-color: var(--ds-green); }
+.ds-card--edge-amber { border-bottom-color: var(--ds-amber); }
+.ds-card--edge-red { border-bottom-color: var(--ds-red); }
+/* Offset (03 §2.4): one item breaks rank. The wrapper holds the tag
+   outside the card top-left; the card lifts with a heavier shadow + an
+   orange anchored edge; its action extends below the bottom border. */
+.ds-offset {
+  position: relative;
+  padding-top: var(--ds-space-4);
+  /* Reserve room for the action that protrudes below the card. */
+  padding-bottom: var(--ds-space-6);
+}
+.ds-offset__tag {
+  position: absolute;
+  top: -2px;
+  left: var(--ds-space-3);
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-orange);
+}
 .ds-card--offset {
   box-shadow: var(--ds-shadow-offset);
   border-color: var(--ds-rule);
-  transform: translateY(-2px);
+}
+.ds-card--offset { overflow: visible; }
+/* The action extends below the card's bottom border (03 §2.4) — the
+   foot translates down to straddle the anchored edge. */
+.ds-card--offset .ds-card__foot {
+  transform: translateY(calc(50% + var(--ds-space-3)));
+  margin-top: var(--ds-space-1);
 }
 .ds-card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
 .ds-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
@@ -812,9 +845,14 @@
 .ds-pulse { display: flex; flex-direction: column; gap: var(--ds-space-7); }
 
 .ds-pulse-zone__items { display: flex; flex-direction: column; gap: var(--ds-space-3); }
-/* Older zones recede: tighter rhythm + a quieted field. */
-.ds-pulse-zone--compressed { opacity: 0.82; }
-.ds-pulse-zone--compressed .ds-pulse-zone__items { gap: var(--ds-space-2); }
+/* Older zones recede progressively (03 §2.1): each depth step quiets
+   and tightens the zone further. */
+.ds-pulse-zone--depth-1 { opacity: 0.86; }
+.ds-pulse-zone--depth-1 .ds-pulse-zone__items { gap: var(--ds-space-2); }
+.ds-pulse-zone--depth-2 { opacity: 0.72; }
+.ds-pulse-zone--depth-2 .ds-pulse-zone__items { gap: var(--ds-space-2); }
+.ds-pulse-zone--depth-3 { opacity: 0.6; }
+.ds-pulse-zone--depth-3 .ds-pulse-zone__items { gap: var(--ds-space-1); }
 
 .ds-pulse-horizon {
   display: flex;
