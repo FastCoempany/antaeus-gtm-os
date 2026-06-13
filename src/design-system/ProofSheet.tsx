@@ -29,7 +29,14 @@ import {
     PatternCard,
     Progress,
     ProposalCard,
-    ReadinessReadout
+    ReadinessReadout,
+    RiskCard,
+    HandoffStrip,
+    Grid,
+    GridCell,
+    FocalRail,
+    ObjectControls,
+    Measure
 } from "@/components";
 import { Icon } from "@/icons";
 
@@ -272,7 +279,88 @@ export function ProofSheet(): JSX.Element {
                     />
                 </Section>
 
-                <Section code={t("BRAND")} title={t("The Grounded A, in chrome")}>
+                <Section code={t("LAYOUT")} title={t("Grid, archetypes, measure")}>
+                    <Grid>
+                        <GridCell span={7}>
+                            <Card kicker={t("BRIEF")} title={t("Seven columns")}>
+                                <Measure>
+                                    <p class="ds-card__copy">
+                                        {t(
+                                            "Running prose never exceeds 66 characters per line, regardless of how many columns are available — long lines are where reading turns into work.",
+                                            { class: "body" }
+                                        )}
+                                    </p>
+                                </Measure>
+                            </Card>
+                        </GridCell>
+                        <GridCell span={5}>
+                            <Card kicker={t("RAIL")} title={t("Five columns")} tone="blue">
+                                <p class="ds-card__copy">
+                                    {t("The grid aligns; it doesn't pack.", {
+                                        class: "body"
+                                    })}
+                                </p>
+                            </Card>
+                        </GridCell>
+                    </Grid>
+                    <FocalRail
+                        railLabel={t("Ranked pressure")}
+                        focal={
+                            <Card kicker={t("FOCAL · 8")} title={t("Object at full depth")} tone="red">
+                                <p class="ds-card__copy">
+                                    {t("The two-thirds focal pane carries one object.", {
+                                        class: "body"
+                                    })}
+                                </p>
+                            </Card>
+                        }
+                        rail={
+                            <>
+                                <Card kicker={t("RAIL · 4")} title="Meridian">
+                                    <p class="ds-card__copy">{t("the quiet remainder")}</p>
+                                </Card>
+                                <Card kicker={t("RAIL · 4")} title="Harbor">
+                                    <p class="ds-card__copy">{t("as a ranked list")}</p>
+                                </Card>
+                            </>
+                        }
+                    />
+                    <ObjectControls
+                        controlsLabel={t("Builder controls")}
+                        object={
+                            <Card kicker={t("THE OBJECT")} title={t("Object out-weighs controls")} tone="amber">
+                                <p class="ds-card__copy">
+                                    {t("The made thing dominates; the making recedes.", {
+                                        class: "body"
+                                    })}
+                                </p>
+                            </Card>
+                        }
+                        controls={
+                            <Card kicker={t("CONTROLS")} title={t("Subordinate")}>
+                                <p class="ds-card__copy">{t("the inputs that shape it")}</p>
+                            </Card>
+                        }
+                    />
+                </Section>
+
+                <Section code={t("RISK")} title={t("RiskCard — recovery scale")}>
+                    <RiskCard
+                        title="Acme Industries"
+                        cause={t("Champion quiet for twelve days; close date inside the month.", {
+                            class: "body"
+                        })}
+                        score={84}
+                        actions={
+                            <>
+                                <Button variant="accent">{t("Open the deal")}</Button>
+                                <Button variant="ghost">{t("Pre-mortem it")}</Button>
+                            </>
+                        }
+                    />
+                </Section>
+
+                                <Section code={t("BRAND")} title={t("The Grounded A, in chrome")}>
                     <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap">
                         <BrandMark size={48} />
                         <BrandMark size={32} />
@@ -408,6 +496,18 @@ export function ProofSheet(): JSX.Element {
                         <Icon name="wayfinder" size={20} />
                     </div>
                 </Section>
+
+                <HandoffStrip
+                    label={t("Carry the work forward")}
+                    kicker={t("CARRY THE WORK FORWARD")}
+                    title={t("A room ends without ending the work.", { class: "body" })}
+                    sub={t("One primary route in orange; the rest secondary. Each threads the continuity params so context travels.", { class: "body" })}
+                    routes={[
+                        { label: t("Pre-mortem this deal"), href: "/future-autopsy/", primary: true },
+                        { label: t("Forge a proof"), href: "/poc-framework/" },
+                        { label: t("Deploy an advisor"), href: "/advisor-deploy/" }
+                    ]}
+                />
             </main>
 
             <Drawer

@@ -5,6 +5,32 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.3.0 — 2026-06-13
+
+Additive: the composition layer (step 5.5, part 1). Closes the gap the
+2026-06-13 adversarial pass found — the leaf catalog was built but the
+geometry the rooms sit on was not.
+
+- Layout & grid primitives (spec 05): `src/components/layout.tsx` —
+  PageFrame (centered 1200px column + 40px gutter + the calm sub-1024
+  desktop notice), Grid + GridCell (the 12-column alignment grid,
+  24px gutters, span clamped 1–12), Measure (the 66ch reading cap),
+  BandStack (vertical rhythm, absent bands collapse), and the three
+  archetypes — SingleColumn, FocalRail (8/4), ObjectControls — each
+  collapsing to single column below 1024.
+- HandoffStrip (spec 03 §3.4) — the missing Navigation catalog member:
+  verb-shape cross-room routes, one primary (orange), the rest
+  secondary, each threading continuity params.
+- RiskCard (spec 03 §4.1 System) — the missing System catalog member:
+  a Grounded card at recovery scale (account + cause + score + move).
+- Token cleanup: `--ds-orange-strong`, `--ds-on-ink`, `--ds-scrim`
+  declared; the three literal colors in components.css retired.
+- Proof sheet gains LAYOUT / RISK sections + a HandoffStrip footer.
+
+Still owed for step 5.5 part 2: the density system (spec 02 §249 —
+`workspace_profile.density_state`, `src/lib/density/`, the Settings
+toggle, the Phase F handler, wiring `affordanceSliceIndex`).
+
 ## 1.2.0 — 2026-06-12
 
 Additive: brand round 3 + the catalog tail.

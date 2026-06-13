@@ -25,9 +25,20 @@ export { Card } from "./card";
 export type { CardProps } from "./card";
 export { Toast, Alert, Drawer, Modal, Tooltip } from "./feedback";
 export type { AlertTone } from "./feedback";
-export { WayfinderBar, SegmentedControl } from "./navigation";
+export { WayfinderBar, SegmentedControl, HandoffStrip } from "./navigation";
+export type { HandoffRoute } from "./navigation";
 export { Meter } from "./meter";
 export { BrandMark, BrandLockup } from "./brand";
 export { Table, Progress } from "./data";
 export type { TableColumn, TableRow, Milestone } from "./data";
-export { PatternCard, ProposalCard, ReadinessReadout } from "./system";
+export { PatternCard, ProposalCard, ReadinessReadout, RiskCard } from "./system";
+export {
+    PageFrame,
+    Grid,
+    GridCell,
+    Measure,
+    BandStack,
+    SingleColumn,
+    FocalRail,
+    ObjectControls
+} from "./layout";

@@ -33,6 +33,8 @@
   --ds-ink-soft: rgba(10, 28, 64, 0.66);
   --ds-ink-faint: rgba(10, 28, 64, 0.42);
   --ds-ink-quiet: rgba(10, 28, 64, 0.22);
+  --ds-on-ink: #ffffff; /* text on a navy/ink surface */
+  --ds-scrim: rgba(10, 28, 64, 0.35);
   --ds-hair: rgba(10, 28, 64, 0.07);
   --ds-hair-strong: rgba(10, 28, 64, 0.14);
   --ds-rule: rgba(10, 28, 64, 0.16);
@@ -42,6 +44,7 @@
      green = real health · amber = caution · red = real risk.
      Referenced by role, never picked for hue. */
   --ds-orange: #e6701e;
+  --ds-orange-strong: #d4661b; /* the move, hover/pressed */
   --ds-orange-soft: rgba(230, 112, 30, 0.1);
   --ds-orange-tint: rgba(230, 112, 30, 0.05);
   --ds-blue: #2563eb;

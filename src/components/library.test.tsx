@@ -30,7 +30,16 @@ import {
     ProposalCard,
     ReadinessReadout,
     Stamp,
-    Table
+    Table,
+    PageFrame,
+    Grid,
+    GridCell,
+    Measure,
+    BandStack,
+    FocalRail,
+    ObjectControls,
+    HandoffStrip,
+    RiskCard
 } from "./index";
 import { paletteOpen } from "@/lib/palette/Palette";
 
@@ -468,5 +477,125 @@ describe("system cards", () => {
         );
         expect(getByText("Inheritable with guardrails")).toBeTruthy();
         expect(container.querySelector("[role='progressbar']")).toBeNull();
+    });
+});
+
+describe("layout & grid (spec 05)", () => {
+    it("PageFrame renders the centered column + the sub-1024 notice", () => {
+        const { container } = render(
+            <PageFrame>
+                <p>work</p>
+            </PageFrame>
+        );
+        expect(container.querySelector(".ds-frame__column")?.textContent).toBe(
+            "work"
+        );
+        // The unsupported notice is always in the DOM; CSS shows it < 1024.
+        expect(container.querySelector(".ds-frame__unsupported")).not.toBeNull();
+    });
+
+    it("GridCell clamps its span to 1–12", () => {
+        const { container } = render(
+            <Grid>
+                <GridCell span={7}>
+                    <p>brief</p>
+                </GridCell>
+                <GridCell span={99}>
+                    <p>over</p>
+                </GridCell>
+            </Grid>
+        );
+        const cells = container.querySelectorAll(".ds-grid__cell");
+        expect((cells[0] as HTMLElement).style.gridColumn).toBe("span 7");
+        expect((cells[1] as HTMLElement).style.gridColumn).toBe("span 12");
+    });
+
+    it("BandStack collapses absent bands (no placeholder gap)", () => {
+        const showSecond = false;
+        const { container } = render(
+            <BandStack>
+                <p class="band">one</p>
+                {showSecond && <p class="band">two</p>}
+                <p class="band">three</p>
+            </BandStack>
+        );
+        expect(container.querySelectorAll(".band")).toHaveLength(2);
+    });
+
+    it("FocalRail renders both panes with the rail labelled", () => {
+        const { container, getByText } = render(
+            <FocalRail
+                railLabel="Ranked pressure"
+                focal={<p>focal object</p>}
+                rail={<p>the rest</p>}
+            />
+        );
+        expect(getByText("focal object")).toBeTruthy();
+        expect(
+            container.querySelector("[aria-label='Ranked pressure']")
+        ).not.toBeNull();
+    });
+
+    it("ObjectControls keeps the object and the labelled controls", () => {
+        const { container, getByText } = render(
+            <ObjectControls
+                controlsLabel="ICP inputs"
+                object={<p>the ICP</p>}
+                controls={<p>inputs</p>}
+            />
+        );
+        expect(getByText("the ICP")).toBeTruthy();
+        expect(
+            container.querySelector(".ds-arch-objectcontrols__controls")
+        ).not.toBeNull();
+    });
+
+    it("Measure caps prose width", () => {
+        const { container } = render(
+            <Measure>
+                <p>a long read</p>
+            </Measure>
+        );
+        expect(container.querySelector(".ds-measure")).not.toBeNull();
+    });
+});
+
+describe("HandoffStrip (spec 03 §3.4)", () => {
+    it("renders one primary (orange) route and the rest secondary", () => {
+        const { container } = render(
+            <HandoffStrip
+                label="Carry the work forward"
+                kicker="CARRY THE WORK FORWARD"
+                title="Push Acme into intervention."
+                routes={[
+                    { label: "Pre-mortem this deal", href: "/future-autopsy/?x=1", primary: true },
+                    { label: "Forge a proof", href: "/poc-framework/?x=1" }
+                ]}
+            />
+        );
+        expect(container.querySelectorAll(".ds-btn--accent")).toHaveLength(1);
+        expect(container.querySelectorAll(".ds-btn--secondary")).toHaveLength(1);
+        expect(
+            container.querySelector(".ds-btn--accent")?.getAttribute("href")
+        ).toBe("/future-autopsy/?x=1");
+    });
+});
+
+describe("RiskCard (spec 03 §4.1 System)", () => {
+    it("is a red Grounded card carrying cause + score + the move", () => {
+        const { container, getByText } = render(
+            <RiskCard
+                title="Acme Industries"
+                cause="Champion quiet for twelve days"
+                score={84}
+                actions={<Button variant="accent">Open the deal</Button>}
+            />
+        );
+        expect(container.querySelector(".ds-gauge--red")).not.toBeNull();
+        expect(getByText("Champion quiet for twelve days")).toBeTruthy();
+        expect(container.querySelector(".ds-riskcard__score")?.textContent).toBe(
+            "84"
+        );
+        expect(getByText("Open the deal")).toBeTruthy();
     });
 });
