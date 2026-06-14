@@ -1,0 +1,71 @@
+/* The today surface (spec 04) — composed on the design system; only
+   the surface-specific rhythm lives here, everything else is library
+   primitives + tokens. */
+
+.dbt {
+  min-height: 100vh;
+  background: var(--ds-field);
+}
+
+.dbt .ds-frame__column {
+  padding-top: var(--ds-space-8);
+  padding-bottom: var(--ds-space-12);
+}
+
+.dbt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+}
+.dbt-head__lead { display: flex; align-items: center; gap: var(--ds-space-3); }
+.dbt-verdict { background: transparent; border: none; padding: 0; cursor: pointer; }
+
+/* The Brief — the resting body. */
+.dbt-brief { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.dbt-brief__line {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+.dbt-brief__move { margin-top: var(--ds-space-2); }
+.dbt-brief__insight {
+  margin-top: var(--ds-space-2);
+  padding-left: var(--ds-space-3);
+  border-left: 3px solid var(--ds-orange);
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink);
+  max-width: var(--ds-measure);
+}
+.dbt-brief__insight-mark {
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-orange);
+}
+
+.dbt-queue { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+
+.dbt-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* Empty state. */
+.dbt-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-8) 0;
+  max-width: var(--ds-measure);
+}
+.dbt-empty__title {
+  font-family: var(--ds-font-serif);
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--ds-ink);
+  margin: 0;
+}
+.dbt-empty__sub {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+.dbt-empty__moves { display: flex; gap: var(--ds-space-3); flex-wrap: wrap; margin-top: var(--ds-space-3); }

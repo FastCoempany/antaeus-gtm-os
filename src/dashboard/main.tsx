@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { Dashboard } from "./Dashboard";
+import { TodaySurface } from "./today/TodaySurface";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./today/today.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import {
     bootMode,
@@ -52,7 +57,28 @@ if (!flagOn) {
     );
 }
 
-render(<Dashboard />, root);
+// Design-system migration (canon §6, Dashboard first): the today
+// surface composes the library when room_dashboard_today_v3 is on;
+// the existing Dashboard renders otherwise. The engine + state + data
+// layer below are shared and unchanged.
+// `?today=1` is a preview escape-hatch (mirrors ?demo=1 / ?qa=1) so the
+// today surface can be previewed without the Posthog flag; otherwise
+// the flag drives it.
+const todayParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("today") === "1";
+    } catch {
+        return false;
+    }
+})();
+const todaySurfaceOn =
+    todayParam || isFeatureEnabled("room_dashboard_today_v3");
+render(todaySurfaceOn ? <TodaySurface /> : <Dashboard />, root);
+
+// Boot the density gradient so the today surface's primitives render
+// at the workspace's chosen density (defensive — no-ops without a
+// Supabase session).
+void bootDensity();
 
 // Self-heal missing snapshot keys before the aggregator's first read.
 // Covers the demo-seed lane (raw nouns landed but sibling rooms

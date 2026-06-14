@@ -5,6 +5,33 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.7.0 — 2026-06-13
+
+The first consumer. The Dashboard today surface (spec 04) composed from
+the library — the design system stops being infrastructure and becomes
+a room. Behind `room_dashboard_today_v3` (previewable via `?today=1`);
+the existing Dashboard renders when the flag is off. The command-
+intelligence engine, the readiness drawer, and the data substrate are
+untouched — this is presentation composed on the foundation.
+
+- `src/dashboard/today/` — TodaySurface (PageFrame + the full Wayfinder
+  bar with the Pulling cell wired to the engine's spotlight + Why) and
+  the three reads: Brief (SingleColumn + Measure + the serif headline +
+  the one-move button + insight), Spotlight (FocalRail 8/4), Queue (the
+  Pulse timeline — NOW / THIS WEEK / GONE QUIET zones, one offset card,
+  the horizon counts).
+- Pure adapters (`today/lib/adapters.ts`, tested) map CommandObjects →
+  RiskCard/Card props, the Wayfinder pull, and the Pulse zones. The
+  real consumer revealed one refinement, fixed in-flight: `isQuiet`
+  keys off `nextStepOverdue` OR a staleness phrase, so GONE QUIET
+  catches stalled deals instead of staying empty.
+- The empty state is directional (spec 04 §3.1); the sub-1024 desktop
+  notice holds (the PageFrame, spec 05 §2.1); density boots on mount.
+
+Verified headless with seeded engine data across all three reads, zero
+pageerrors. This is the canon §6 radiation start — Signal Console +
+Deal Workspace (the Dashboard's feeders) are next.
+
 ## 1.6.0 — 2026-06-13
 
 Defect fixes from the 2026-06-13 adversarial self-audit. These close

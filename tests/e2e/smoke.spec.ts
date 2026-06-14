@@ -136,6 +136,29 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
+    test("Dashboard today surface — /dashboard/?today=1 composes the library cleanly", async ({
+        page
+    }) => {
+        // The design-system migration of the Dashboard (spec 04), behind
+        // room_dashboard_today_v3 and previewable via ?today=1. On an
+        // empty workspace it shows the directional empty state inside the
+        // PageFrame, under the full Wayfinder bar — all library classes.
+        const errors: string[] = [];
+        page.on("pageerror", (err) => errors.push(err.message));
+
+        await page.goto("/dashboard/?today=1");
+        await page.waitForLoadState("networkidle");
+
+        await expect(page.locator(".ds-wayfinder").first()).toBeAttached();
+        await expect(page.locator(".ds-frame__column")).toBeAttached();
+        await expect(page.locator(".dbt-empty")).toBeAttached();
+
+        expect(
+            errors,
+            `page errors during today-surface boot:\n${errors.join("\n")}`
+        ).toEqual([]);
+    });
+
     test("Phase B — Dashboard 'this week's reads' card mounts with 14/7 toggle", async ({
         page
     }) => {
