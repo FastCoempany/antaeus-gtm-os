@@ -1,0 +1,30 @@
+/* Welcome DS (canon §4.1) — the Threshold composed on the design
+   system; only the surface-specific rhythm here. Bright per canon
+   Part II §1. Invitational, composed. */
+
+.weld { min-height: 100vh; background: var(--ds-field); }
+.weld .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* The commanding statement. */
+.weld-hero { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.weld-hero__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 60ch; }
+.weld-hero__chips { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; margin-top: var(--ds-space-1); }
+
+/* The ranked actions (focal). */
+.weld-actions { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.weld-actions__head { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.weld-kicker { font: 600 var(--ds-type-label) / 1.2 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); margin: 0; }
+.weld-actions__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-6); }
+.weld-action__title { font-family: var(--ds-font-serif); font-size: 20px; line-height: 1.25; color: var(--ds-ink); margin: 0 0 var(--ds-space-1); }
+.weld-action__body { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.weld-action__meta { list-style: none; margin: var(--ds-space-2) 0 0; padding: 0; display: flex; gap: var(--ds-space-2); flex-wrap: wrap; }
+.weld-action__meta li { font: 600 11px/1.2 var(--ds-font-mono); letter-spacing: 0.04em; color: var(--ds-ink-soft); text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--ds-rule); border-radius: 999px; }
+.weld-action__why, .weld-action__unlocks { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: var(--ds-space-2) 0 0; }
+.weld-mono { font: 600 10px/1 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); text-transform: uppercase; margin-right: var(--ds-space-1); }
+.weld-cta { margin-top: var(--ds-space-1); }
+
+/* The progress rail. */
+.weld-progress { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+
+/* Wayfinder Why reasons. */
+.weld-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
