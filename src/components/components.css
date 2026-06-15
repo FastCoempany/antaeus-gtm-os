@@ -732,6 +732,14 @@
   color: var(--ds-ink-soft);
   margin: 0;
 }
+/* The corrective route (Diagnosis Table — the move is obvious). */
+.ds-riskcard__move {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink);
+  margin: 0;
+  padding-left: var(--ds-space-3);
+  border-left: 3px solid var(--ds-orange);
+}
 
 /* ── Wayfinder: the three cells + Pulling + Why (spec 03 §3.2) ──── */
 

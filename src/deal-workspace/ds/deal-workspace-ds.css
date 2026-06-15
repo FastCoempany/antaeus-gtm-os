@@ -1,0 +1,65 @@
+/* Deal Workspace DS (canon §4.13) — composed on the design system; only
+   the surface-specific rhythm lives here, everything else is library
+   primitives + tokens. */
+
+.dwd {
+  min-height: 100vh;
+  background: var(--ds-field);
+}
+.dwd .ds-frame__column {
+  padding-top: var(--ds-space-8);
+  padding-bottom: var(--ds-space-12);
+}
+
+/* Recovery pulse — the working-console top. */
+.dwd-health {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-6);
+  flex-wrap: wrap;
+  padding: 0 0 var(--ds-space-4);
+  border-bottom: 1px solid var(--ds-rule);
+}
+
+/* The board. */
+.dwd-board { display: flex; flex-direction: column; gap: var(--ds-space-6); }
+.dwd-zone { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.dwd-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: var(--ds-space-4);
+}
+.dwd-board__empty {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+
+/* The dominant-move button carries its glyph inline. */
+.dwd-btn-row { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+
+/* Empty state. */
+.dwd-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  max-width: var(--ds-measure);
+  padding: var(--ds-space-6) 0;
+  align-items: flex-start;
+}
+.dwd-empty__head { display: flex; align-items: center; gap: var(--ds-space-3); color: var(--ds-ink-soft); }
+.dwd-empty__title { font-family: var(--ds-font-serif); font-size: 26px; line-height: 1.2; color: var(--ds-ink); margin: 0; }
+.dwd-empty__body {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+
+/* The deal editor inside the library Drawer. */
+.dwd-drawer { padding: var(--ds-space-6); }
+
+/* Wayfinder Why reasons. */
+.dwd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

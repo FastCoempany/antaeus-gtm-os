@@ -113,6 +113,13 @@ export function RiskCard(props: {
     readonly kicker?: string;
     /** The object's glyph; defaults to the at-risk mark. */
     readonly icon?: IconName;
+    /**
+     * The corrective route (Diagnosis Table law — the next move is
+     * obvious). Rendered as the move line under the cause.
+     */
+    readonly move?: string;
+    /** red = real risk / intervention; amber = at-risk caution. Default red. */
+    readonly tone?: "red" | "amber";
     /** The dominant move (orange) + any secondary moves. */
     readonly actions: ComponentChildren;
 }): JSX.Element {
@@ -121,13 +128,14 @@ export function RiskCard(props: {
             kicker={props.kicker ?? t("AT RISK")}
             icon={props.icon ?? "at-risk"}
             title={props.title}
-            tone="red"
+            tone={props.tone ?? "red"}
             footer={props.actions}
         >
             <div class="ds-card__head">
                 <p class="ds-riskcard__cause">{props.cause}</p>
                 <span class="ds-riskcard__score">{Math.round(props.score)}</span>
             </div>
+            {props.move ? <p class="ds-riskcard__move">{props.move}</p> : null}
         </Card>
     );
 }
