@@ -61,3 +61,25 @@ export function BrandLockup(props: { readonly size?: number }): JSX.Element {
         </span>
     );
 }
+
+/**
+ * The L1 lockup — mark + "Antaeus" in DM Serif Display, for the landing
+ * page + docs (spec 10 §3). The mark and the headline voice are the
+ * same voice. `reversed` is the white-on-navy variant, for legal/footer
+ * contexts only (the product field is bright; that's the one exception).
+ */
+export function BrandLockupSerif(props: {
+    readonly size?: number;
+    readonly reversed?: boolean;
+}): JSX.Element {
+    return (
+        <span
+            class={`ds-lockup ds-lockup--serif${
+                props.reversed ? " ds-lockup--reversed" : ""
+            }`}
+        >
+            <BrandMark size={props.size ?? 28} />
+            <span class="ds-lockup__name-serif">Antaeus</span>
+        </span>
+    );
+}

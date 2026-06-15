@@ -35,6 +35,7 @@ export function QueueRead(): JSX.Element {
                             key={o.id}
                             object={o}
                             offset={i === 0}
+                            pulse={i === 0}
                             offsetTag={
                                 i === 0 && annotate
                                     ? t("— Most pressured")

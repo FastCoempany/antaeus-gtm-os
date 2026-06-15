@@ -37,6 +37,12 @@ export interface CardProps {
     readonly offset?: boolean;
     /** Offset only: the tag that sits outside the card, top-left. */
     readonly offsetTag?: string;
+    /**
+     * The ambient pulse (spec 08 §3.6): a single shimmer dot beside the
+     * offset tag marking the most-pressured object. Exactly one per
+     * surface — only the surface's top-ranked offset card sets it.
+     */
+    readonly pulse?: boolean;
     readonly state?: DataState;
     /** Empty state: why the surface matters, in a sentence. */
     readonly emptyWhy?: string;
@@ -121,8 +127,13 @@ export function Card(props: CardProps): JSX.Element {
     if (props.offset) {
         return (
             <div class="ds-offset">
-                {props.offsetTag ? (
-                    <span class="ds-offset__tag">{props.offsetTag}</span>
+                {props.offsetTag || props.pulse ? (
+                    <span class="ds-offset__tag">
+                        {props.pulse ? (
+                            <span class="ds-pulse-dot" aria-hidden="true" />
+                        ) : null}
+                        {props.offsetTag}
+                    </span>
                 ) : null}
                 {card}
             </div>

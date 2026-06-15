@@ -85,11 +85,19 @@ export function Measure(props: { readonly children: ComponentChildren }): JSX.El
  */
 export function BandStack(props: {
     readonly children: ComponentChildren;
+    /**
+     * First-load staging (spec 08 §3.1): the bands arrive in stack order
+     * on the 40ms stagger, once, on first compose. Opt-in — a surface's
+     * top-level region stack stages; nested stacks usually do not.
+     */
+    readonly stage?: boolean;
 }): JSX.Element {
     const bands = (Array.isArray(props.children) ? props.children : [props.children]).filter(
         (c) => c !== null && c !== undefined && c !== false
     );
-    return <div class="ds-bandstack">{bands}</div>;
+    return (
+        <div class={`ds-bandstack${props.stage ? " ds-stage" : ""}`}>{bands}</div>
+    );
 }
 
 // ─── The three multi-pane archetypes (05 Part III) ─────────────────

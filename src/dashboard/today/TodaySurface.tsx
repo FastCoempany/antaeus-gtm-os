@@ -72,7 +72,7 @@ export function TodaySurface(): JSX.Element {
                 }
             />
             <PageFrame>
-                <BandStack>
+                <BandStack stage>
                     <header class="dbt-head">
                         <div class="dbt-head__lead">
                             {showVerdict ? (
@@ -101,7 +101,13 @@ export function TodaySurface(): JSX.Element {
                         ) : null}
                     </header>
 
-                    {isEmpty ? <EmptyToday /> : <ActiveRead mode={mode} />}
+                    {isEmpty ? (
+                        <EmptyToday />
+                    ) : (
+                        <div class="ds-read" key={mode}>
+                            <ActiveRead mode={mode} />
+                        </div>
+                    )}
 
                     {!isEmpty ? <WeekReads /> : null}
                 </BandStack>

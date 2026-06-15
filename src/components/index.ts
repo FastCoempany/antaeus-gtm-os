@@ -34,7 +34,7 @@ export {
     PulseHorizon
 } from "./pulse";
 export { Meter } from "./meter";
-export { BrandMark, BrandLockup } from "./brand";
+export { BrandMark, BrandLockup, BrandLockupSerif } from "./brand";
 export { Table, Progress } from "./data";
 export type { TableColumn, TableRow, Milestone } from "./data";
 export { PatternCard, ProposalCard, ReadinessReadout, RiskCard } from "./system";

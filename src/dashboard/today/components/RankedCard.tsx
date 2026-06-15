@@ -32,6 +32,8 @@ export function RankedCard(props: {
     readonly object: CommandObject;
     readonly offset?: boolean;
     readonly offsetTag?: string;
+    /** The one ambient pulse (spec 08 §3.6) — the surface's top item. */
+    readonly pulse?: boolean;
 }): JSX.Element {
     const o = props.object;
     const primary = o.actions.find((a) => a.variant === "primary") ?? o.actions[0];
@@ -70,6 +72,7 @@ export function RankedCard(props: {
             tone={toneOf(o)}
             offset={props.offset}
             offsetTag={props.offsetTag}
+            pulse={props.pulse}
             footer={actions}
         >
             {o.copy ? <p class="ds-card__copy">{o.copy}</p> : null}

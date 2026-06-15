@@ -12,6 +12,11 @@
  * (persistent orange on-state, distinct from hover).
  */
 
+/* The motion layer (spec 08) — the cross-cutting named-motion
+   vocabulary. Imported here so every page that loads components.css
+   gets the grammar at one import point. */
+@import "./motion.css";
+
 /* ── Display ──────────────────────────────────────────────────── */
 
 .ds-kicker {
@@ -413,6 +418,14 @@
 @media (max-width: 720px) {
   .ds-lockup__name { display: none; }
 }
+/* L1 — serif lockup (spec 10 §3): the mark beside "Antaeus" in the
+   headline voice, for the landing page + docs. */
+.ds-lockup__name-serif {
+  font: 400 28px/1 var(--ds-font-serif);
+  color: var(--ds-ink);
+}
+.ds-lockup--reversed { color: var(--ds-on-ink); }
+.ds-lockup--reversed .ds-lockup__name-serif { color: var(--ds-on-ink); }
 .ds-wayfinder__crumb {
   font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
   letter-spacing: var(--ds-tracking-kicker);

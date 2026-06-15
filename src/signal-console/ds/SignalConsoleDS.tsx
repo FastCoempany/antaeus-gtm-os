@@ -59,7 +59,7 @@ export function SignalConsoleDS(): JSX.Element {
                 }
             />
             <PageFrame>
-                <BandStack>
+                <BandStack stage>
                     <HealthStrip />
                     <GridControlsDS />
                     <AccountGridDS />
