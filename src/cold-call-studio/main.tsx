@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { ColdCallStudio } from "./ColdCallStudio";
+import { ColdCallStudioDS } from "./ds/ColdCallStudioDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/cold-call-studio-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import {
@@ -72,7 +77,25 @@ if (requested) {
 
 startCallLogPersistence();
 
-render(<ColdCallStudio />, root);
+// Design-system migration (canon §6, outbound flow: Cold Call Studio
+// after Outbound Studio). The DS surface composes the component library;
+// the existing room renders otherwise. The thread spine, the score,
+// persistence, and the handoffs are shared and unchanged. `?ds=1` is a
+// preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_cold_call_v3");
+
+render(dsSurfaceOn ? <ColdCallStudioDS /> : <ColdCallStudio />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Async cloud load for call log. Doesn't block first paint.
 void (async (): Promise<void> => {
