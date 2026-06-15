@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { Onboarding } from "./Onboarding";
+import { OnboardingDS } from "./ds/OnboardingDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/onboarding-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { isOnboardingCompleteInCloud } from "./lib/cloud";
@@ -21,7 +26,24 @@ if (!flagOn) {
     );
 }
 
-render(<Onboarding />, root);
+// Design-system migration (canon §6, foundation flow). The DS surface
+// composes the component library; the existing room renders otherwise.
+// The seed pipeline, validation, and cloud mirror are shared and
+// unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_onboarding_v3");
+
+render(dsSurfaceOn ? <OnboardingDS /> : <Onboarding />, root);
+
+// Boot the density gradient so the DS surface's primitives render at
+// the workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // ADR-007 cross-device gate. If this workspace already completed
 // onboarding (recorded in workspace_profile.onboarding_completed) but
