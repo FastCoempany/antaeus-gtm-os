@@ -1,5 +1,6 @@
 import type { ComponentChildren, JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import { Icon, type IconName } from "@/icons";
 import type { AccentRole, DataState } from "./contract";
 import { Gauge, Heading, Kicker } from "./display";
 
@@ -24,6 +25,13 @@ import { Gauge, Heading, Kicker } from "./display";
 
 export interface CardProps {
     readonly kicker?: string;
+    /**
+     * The object's glyph (spec 09), rendered beside the kicker. Sacred
+     * nouns carry their own mark — a deal card wears the deal glyph, a
+     * signal the signal glyph. Aria-hidden: it sits next to the kicker
+     * text, which names it.
+     */
+    readonly icon?: IconName;
     readonly title?: string;
     readonly tone?: AccentRole;
     readonly offset?: boolean;
@@ -79,7 +87,16 @@ export function Card(props: CardProps): JSX.Element {
         >
             <Gauge tone={props.tone} />
             <div class="ds-card__body">
-                {props.kicker ? <Kicker>{props.kicker}</Kicker> : null}
+                {props.icon || props.kicker ? (
+                    <div class="ds-card__kicker-row">
+                        {props.icon ? (
+                            <span class="ds-card__icon">
+                                <Icon name={props.icon} size={16} />
+                            </span>
+                        ) : null}
+                        {props.kicker ? <Kicker>{props.kicker}</Kicker> : null}
+                    </div>
+                ) : null}
                 {props.title ? (
                     <div class="ds-card__head">
                         <Heading level="title">{props.title}</Heading>

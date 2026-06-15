@@ -145,6 +145,8 @@
   margin-top: var(--ds-space-1);
 }
 .ds-card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ds-card__kicker-row { display: flex; align-items: center; gap: var(--ds-space-2); }
+.ds-card__icon { display: inline-flex; color: var(--ds-ink-soft); }
 .ds-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
 .ds-card__copy { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
 .ds-card__foot { display: flex; align-items: center; gap: var(--ds-space-3); margin-top: var(--ds-space-1); }

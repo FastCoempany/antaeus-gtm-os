@@ -1,5 +1,6 @@
 import type { ComponentChildren, JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import type { IconName } from "@/icons";
 import { Button } from "./action";
 import { Card } from "./card";
 import { Kicker } from "./display";
@@ -110,12 +111,15 @@ export function RiskCard(props: {
     /** Risk score, shown as a serif numeral. */
     readonly score: number;
     readonly kicker?: string;
+    /** The object's glyph; defaults to the at-risk mark. */
+    readonly icon?: IconName;
     /** The dominant move (orange) + any secondary moves. */
     readonly actions: ComponentChildren;
 }): JSX.Element {
     return (
         <Card
             kicker={props.kicker ?? t("AT RISK")}
+            icon={props.icon ?? "at-risk"}
             title={props.title}
             tone="red"
             footer={props.actions}
