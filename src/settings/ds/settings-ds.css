@@ -1,0 +1,31 @@
+/* Settings DS (canon §4.20) — the Trust Annex composed on the design
+   system; only the surface-specific rhythm here. Bright per canon
+   Part II §1. Calm utility — no drama. */
+
+.stgd { min-height: 100vh; background: var(--ds-field); }
+.stgd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* The trust-state head. */
+.stgd-head { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.stgd-head__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 60ch; }
+.stgd-stats { display: flex; gap: var(--ds-space-8); flex-wrap: wrap; margin-top: var(--ds-space-3); }
+
+/* The card grid. */
+.stgd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--ds-space-4); margin-top: var(--ds-space-6); align-items: start; }
+
+/* Status rows inside a card. */
+.stgd-rows { margin: var(--ds-space-2) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.stgd-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); padding: var(--ds-space-1) 0; border-bottom: 1px solid var(--ds-rule); }
+.stgd-row:last-child { border-bottom: 0; }
+.stgd-row dt { font: 600 var(--ds-type-label) / 1.35 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.stgd-row dd { font: var(--ds-type-body) / 1.35 var(--ds-font-sans); color: var(--ds-ink); margin: 0; text-align: right; }
+
+/* Card actions row. */
+.stgd-actions { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; margin-top: var(--ds-space-3); }
+
+.stgd-error { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-red); margin: var(--ds-space-2) 0 0; }
+
+/* Delete confirm. */
+.stgd-confirm { display: flex; flex-direction: column; gap: var(--ds-space-2); margin-top: var(--ds-space-3); }
+.stgd-confirm__label { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); }
+.stgd-confirm__label code { font-family: var(--ds-font-mono); color: var(--ds-ink); }
