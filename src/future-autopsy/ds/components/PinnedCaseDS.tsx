@@ -10,6 +10,7 @@ import {
 } from "@/components";
 import { Icon } from "@/icons";
 import { t } from "@/lib/voice/t";
+import { pickByDensity, showsAnnotations } from "@/lib/density";
 import {
     currentAutopsy,
     currentVerdictMode,
@@ -74,10 +75,13 @@ export function PinnedCaseDS(): JSX.Element {
             primary: r.tone === "primary"
         }));
     const story = mode === "corrected" ? doc.winStory : doc.loseStory;
-    const subLine =
+    // The horizon is the doc's, not a hardcoded 45 (it's prefs-driven).
+    const horizon = String(doc.horizonDays ?? 45);
+    const subLine = (
         mode === "corrected"
-            ? t("What wins this in 45 days.")
-            : t("What kills this in 45 days.");
+            ? t("What wins this in {days} days.")
+            : t("What kills this in {days} days.")
+    ).replace("{days}", horizon);
 
     return (
         <section class="fad-pinned" aria-label={`Pinned case: ${v.name}`}>
@@ -90,6 +94,7 @@ export function PinnedCaseDS(): JSX.Element {
                     <StatusChip label={`Risk ${v.riskScore}/100`} tone={riskTone(v.riskScore)} />
                     <StatusChip label={`Qual ${v.qualScore}/18`} />
                     <StatusChip label={`${v.staleDays}d quiet`} />
+                    <StatusChip label={`${horizon}d horizon`} tone="blue" />
                 </div>
             </header>
 
@@ -127,7 +132,9 @@ export function PinnedCaseDS(): JSX.Element {
 
                 <Card kicker={t("WHAT SITS UNDERNEATH")} icon="observation" title={titles.underneath} tone="blue">
                     <p class="ds-card__copy">{story}</p>
-                    {doc.winConditions.length > 0 ? (
+                    {/* The win-condition detail is annotation — present in
+                        Show me how, dropped in Step back. */}
+                    {showsAnnotations() && doc.winConditions.length > 0 ? (
                         <ul class="fad-sheet__list">
                             {doc.winConditions.slice(0, 3).map((w) => (
                                 <li key={w.id}>
@@ -142,8 +149,14 @@ export function PinnedCaseDS(): JSX.Element {
                 </Card>
 
                 <Card kicker={t("FAILURE PATTERN")} icon="deal" title={titles.pattern} tone="red">
+                    {/* Evidence-row count is a density dimension: the full
+                        eight in Show me how, the four that matter in Step
+                        back. */}
                     <ul class="fad-sheet__list fad-sheet__list--evidence">
-                        {evidenceRows(v).map((r) => (
+                        {pickByDensity({
+                            verbose: evidenceRows(v),
+                            terse: evidenceRows(v).slice(0, 4)
+                        }).map((r) => (
                             <li key={r.label}>
                                 <span class="fad-sheet__label">{r.label}</span>
                                 <span class="fad-sheet__text">{r.value}</span>
