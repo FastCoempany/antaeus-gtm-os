@@ -11,24 +11,15 @@
   padding-bottom: var(--ds-space-12);
 }
 
-/* The radar header. */
-.scd-header { display: flex; flex-direction: column; gap: var(--ds-space-3); }
-.scd-header__kicker { display: flex; align-items: center; gap: var(--ds-space-2); color: var(--ds-blue); }
-.scd-header__sub {
-  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
-  color: var(--ds-ink-soft);
-  margin: 0;
-  max-width: var(--ds-measure);
-}
-
-/* Workspace-health pulse. */
+/* Workspace-health pulse — the working-console top of the room (Live
+   Instrument law). No serif room-meaning header; the Wayfinder crumb
+   names the room, this carries the count + posture. */
 .scd-health {
   display: flex;
   align-items: center;
   gap: var(--ds-space-6);
   flex-wrap: wrap;
-  padding: var(--ds-space-4) 0;
-  border-top: 1px solid var(--ds-rule);
+  padding: 0 0 var(--ds-space-4);
   border-bottom: 1px solid var(--ds-rule);
 }
 

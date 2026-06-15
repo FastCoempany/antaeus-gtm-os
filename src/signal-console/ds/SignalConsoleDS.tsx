@@ -8,7 +8,6 @@ import { ScheduleModal } from "@/skills/ScheduleModal";
 import { BriefingDraftBanner } from "@/lib/briefing-draft-banner";
 import { allAccounts } from "../state";
 import { toPulling } from "./lib/adapters";
-import { RadarHeader } from "./components/RadarHeader";
 import { HealthStrip } from "./components/HealthStrip";
 import { GridControlsDS } from "./components/GridControlsDS";
 import { AccountGridDS } from "./components/AccountGridDS";
@@ -61,7 +60,6 @@ export function SignalConsoleDS(): JSX.Element {
             />
             <PageFrame>
                 <BandStack>
-                    <RadarHeader />
                     <HealthStrip />
                     <GridControlsDS />
                     <AccountGridDS />
