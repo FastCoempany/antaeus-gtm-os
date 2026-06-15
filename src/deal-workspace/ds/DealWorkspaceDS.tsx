@@ -19,7 +19,7 @@ import { HealthStrip } from "./components/HealthStrip";
 import { FilterChips } from "./components/FilterChips";
 import { RecoveryBoard } from "./components/RecoveryBoard";
 import { DealDrawer } from "./components/DealDrawer";
-import { LossReasonModal } from "../components/LossReasonModal";
+import { LossReasonModalDS } from "./components/LossReasonModalDS";
 
 /**
  * DealWorkspaceDS — the Deal Workspace (canon §4.13) composed on the
@@ -110,7 +110,7 @@ export function DealWorkspaceDS(): JSX.Element {
             <BriefingDraftBanner />
 
             <DealDrawer />
-            <LossReasonModal />
+            <LossReasonModalDS />
         </div>
     );
 }

@@ -2,8 +2,8 @@ import type { JSX } from "preact";
 import { TextInput } from "@/components";
 import { t } from "@/lib/voice/t";
 import { allAccounts, searchQuery, setSearchQuery } from "../../state";
-import { AddAccountForm } from "../../components/AddAccountForm";
-import { EnrichAllButton } from "../../components/EnrichAllButton";
+import { AddAccountFormDS } from "./AddAccountFormDS";
+import { EnrichAllButtonDS } from "./EnrichAllButtonDS";
 
 /**
  * GridControlsDS — Add + Enrich + filter row above the radar. Hidden on
@@ -19,8 +19,8 @@ export function GridControlsDS(): JSX.Element | null {
 
     return (
         <nav class="scd-controls" aria-label={t("Account list controls")}>
-            <AddAccountForm />
-            <EnrichAllButton />
+            <AddAccountFormDS />
+            <EnrichAllButtonDS />
             <div class="scd-controls__filter">
                 <span class="ds-kicker">{t("FILTER")}</span>
                 <TextInput

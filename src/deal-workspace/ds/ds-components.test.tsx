@@ -1,14 +1,7 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/preact";
 import type { Deal } from "../lib/deal-shape";
 import { assessDeal } from "../lib/recovery";
-
-// The 9-field form + the loss-reason modal are the legacy hook-based
-// surfaces (shared with the classic room). They trip vitest's dev-only
-// hook-name transform when pulled into a render graph; stub them.
-vi.mock("../components/DealHealthForm", () => ({ DealHealthForm: () => null }));
-vi.mock("../components/LossReasonModal", () => ({ LossReasonModal: () => null }));
-
 import { __setAllDealsForTests, resetSession } from "../state";
 import { DealCard } from "./components/DealCard";
 import { DealWorkspaceDS } from "./DealWorkspaceDS";

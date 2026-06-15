@@ -1,15 +1,6 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/preact";
 import type { Account, Signal } from "../lib/types";
-
-// AddAccountForm is the legacy hook-based composer (shared with the
-// classic room). It trips vitest's dev-only hook-name transform when
-// pulled into a render graph; mock it to a stub so the DS surface
-// renders deterministically. Production build is unaffected.
-vi.mock("../components/AddAccountForm", () => ({
-    AddAccountForm: () => null
-}));
-
 import { __setAllAccountsForTests, resetSession } from "../state";
 import { AccountCardDS } from "./components/AccountCardDS";
 import { SignalConsoleDS } from "./SignalConsoleDS";

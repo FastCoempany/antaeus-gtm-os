@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { Drawer } from "@/components";
 import { t } from "@/lib/voice/t";
 import { closeDealEditor, editingDeal } from "../../state";
-import { DealHealthForm } from "../../components/DealHealthForm";
+import { DealHealthFormDS } from "./DealHealthFormDS";
 
 /**
  * DealDrawer — the 9-field deal-health editor (canon §4.13) in a library
@@ -19,7 +19,7 @@ export function DealDrawer(): JSX.Element {
             label={t("Deal health")}
         >
             <div class="dwd-drawer">
-                <DealHealthForm />
+                <DealHealthFormDS />
             </div>
         </Drawer>
     );

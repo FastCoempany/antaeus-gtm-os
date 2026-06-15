@@ -4,7 +4,7 @@ import { Icon } from "@/icons";
 import { t } from "@/lib/voice/t";
 import { allAccounts, inboundFocus, visibleAccounts } from "../../state";
 import { rankByHeat } from "../../lib/heat";
-import { AddAccountForm } from "../../components/AddAccountForm";
+import { AddAccountFormDS } from "./AddAccountFormDS";
 import { AccountCardDS } from "./AccountCardDS";
 
 /**
@@ -44,7 +44,7 @@ export function AccountGridDS(): JSX.Element {
                         { class: "body" }
                     )}
                 </p>
-                <AddAccountForm embedded />
+                <AddAccountFormDS embedded />
             </section>
         );
     }

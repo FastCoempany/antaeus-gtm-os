@@ -316,6 +316,7 @@
   width: 100%;
 }
 .ds-input::placeholder { color: var(--ds-ink-quiet); }
+.ds-textarea { min-height: 64px; resize: vertical; line-height: var(--ds-leading-body); }
 .ds-input:hover:not(:disabled) { border-color: var(--ds-rule); }
 .ds-input:focus { outline: 3px solid var(--ds-orange-soft); outline-offset: 0; border-color: var(--ds-orange); }
 .ds-input:disabled { opacity: 0.55; background: var(--ds-surface-sunk); cursor: not-allowed; }
