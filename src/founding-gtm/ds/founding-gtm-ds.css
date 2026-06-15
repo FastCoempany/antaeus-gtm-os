@@ -1,0 +1,33 @@
+/* Founding GTM DS (canon §4.19) — the day-one Handoff Kit System Ledger
+   composed on the design system; only the surface-specific rhythm here.
+   Bright per canon Part II §1. */
+
+.fgd { min-height: 100vh; background: var(--ds-field); }
+.fgd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* The synthesis state — kit readiness. */
+.fgd-summary { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-5); background: var(--ds-surface-sub); border-left: 3px solid var(--ds-orange); border-radius: var(--ds-radius-control); }
+.fgd-summary__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.fgd-summary__read { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: var(--ds-measure); }
+
+/* Each authored section. */
+.fgd-section { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fgd-section__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
+.fgd-section__title { font-family: var(--ds-font-serif); font-size: 22px; line-height: 1.3; color: var(--ds-ink); margin: 0; }
+.fgd-section__body { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.fgd-section__para { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: 0; max-width: var(--ds-measure); }
+.fgd-section__empty { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; font-style: italic; }
+.fgd-section__evidence { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.fgd-section__evidence li { font: 500 13px/1.45 var(--ds-font-mono); color: var(--ds-ink-soft); padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-rule); }
+
+/* The surprise callout — the cross-room read. */
+.fgd-surprise { position: relative; display: flex; flex-direction: column; gap: var(--ds-space-1); padding: var(--ds-space-4); padding-left: var(--ds-space-5); background: var(--ds-field); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.fgd-surprise__rule { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: var(--ds-radius-control) 0 0 var(--ds-radius-control); }
+.fgd-surprise__rule[data-tone="green"] { background: var(--ds-green); }
+.fgd-surprise__rule[data-tone="amber"] { background: var(--ds-amber); }
+.fgd-surprise__rule[data-tone="blue"] { background: var(--ds-blue); }
+.fgd-surprise__headline { font: 600 var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.fgd-surprise__body { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* Wayfinder Why reasons. */
+.fgd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
