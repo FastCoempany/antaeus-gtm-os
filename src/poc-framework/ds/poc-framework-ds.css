@@ -1,0 +1,42 @@
+/* PoC Framework DS (canon §4.15) — the proof-forge Decision Bench
+   composed on the design system; only the surface-specific rhythm here.
+   The legacy dark forge half is retired — bright per canon Part II §1. */
+
+.pocd { min-height: 100vh; background: var(--ds-field); }
+.pocd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* ── The cast proof (object) ────────────────────────────────────────── */
+.pocd-object { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* The quality read — the bench top. */
+.pocd-read { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.pocd-read__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.pocd-read__score { font-family: var(--ds-font-serif); font-size: 28px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.pocd-read__cap { font-size: 13px; color: var(--ds-ink-soft); }
+.pocd-read__title { font-family: var(--ds-font-serif); font-size: 22px; line-height: 1.3; color: var(--ds-ink); margin: 0; }
+.pocd-read__ingot { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: var(--ds-measure); }
+
+/* The heat ledger. */
+.pocd-heat { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-4); background: var(--ds-surface-sub); border-radius: var(--ds-radius-control); }
+
+/* The five molds. */
+.pocd-molds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--ds-space-3); }
+.pocd-mold { min-width: 0; }
+
+/* Weakest mold. */
+.pocd-weakest { display: flex; flex-direction: column; gap: var(--ds-space-1); padding-left: var(--ds-space-3); border-left: 3px solid var(--ds-orange); }
+.pocd-weakest__title { font: 600 var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.pocd-weakest__copy { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* Documents. */
+.pocd-docs { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-top: var(--ds-space-3); border-top: 1px solid var(--ds-rule); }
+.pocd-docs__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.pocd-docs__flash { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-green); }
+.pocd-docs__body { font: 12px/1.6 var(--ds-font-mono); color: var(--ds-ink); background: var(--ds-surface-sub); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); padding: var(--ds-space-4); margin: 0; max-height: 360px; overflow: auto; white-space: pre-wrap; }
+.pocd-docs__copy { align-self: flex-start; }
+
+/* ── The forge controls (subordinate) ───────────────────────────────── */
+.pocd-forge { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+
+/* Wayfinder Why reasons. */
+.pocd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
