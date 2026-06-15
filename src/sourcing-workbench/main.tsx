@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { SourcingWorkbench } from "./SourcingWorkbench";
+import { SourcingWorkbenchDS } from "./ds/SourcingWorkbenchDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/sourcing-workbench-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
@@ -67,7 +72,25 @@ if (ctx.focusObject) {
 
 startPersistence();
 
-render(<SourcingWorkbench />, root);
+// Design-system migration (canon §6, strategy flow: Sourcing Workbench
+// after Territory Architect — finishing the strategy flow). The DS
+// surface composes the component library; the existing room renders
+// otherwise. The read + quality engine, persistence, and the handoffs
+// are shared and unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_sourcing_workbench_v3");
+
+render(dsSurfaceOn ? <SourcingWorkbenchDS /> : <SourcingWorkbench />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Async cloud load. Doesn't block first paint.
 void (async (): Promise<void> => {

@@ -1,0 +1,49 @@
+/* Sourcing Workbench DS (canon §4.6) — the Decision Bench composed on the
+   design system; only the surface-specific rhythm lives here. */
+
+.swd { min-height: 100vh; background: var(--ds-field); }
+.swd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+.swd-object { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* The workbench read — the bench top. */
+.swd-read { display: flex; flex-direction: column; gap: var(--ds-space-2); padding-bottom: var(--ds-space-4); border-bottom: 1px solid var(--ds-rule); }
+.swd-read__head { display: flex; align-items: center; gap: var(--ds-space-3); flex-wrap: wrap; }
+.swd-read__score { font-family: var(--ds-font-serif); font-size: 32px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.swd-read__cap { font-size: 14px; color: var(--ds-ink-soft); }
+.swd-read__line { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: 0; max-width: var(--ds-measure); }
+.swd-read__move { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: var(--ds-space-1) 0 0; padding-left: var(--ds-space-3); border-left: 3px solid var(--ds-orange); }
+.swd-read__move-mark { font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono); letter-spacing: var(--ds-tracking-kicker); text-transform: uppercase; color: var(--ds-orange); }
+
+/* Pipeline shape. */
+.swd-stats { display: flex; align-items: center; gap: var(--ds-space-6); flex-wrap: wrap; }
+
+/* The staged pipeline. */
+.swd-pipeline { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+.swd-zone { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.swd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--ds-space-3); }
+.swd-card__contact { font: var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.swd-card__chips { display: flex; align-items: center; gap: var(--ds-space-2); flex-wrap: wrap; }
+.swd-card__entry { font: 500 11px/1.3 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.swd-card__gaps { list-style: none; margin: 0; padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-amber); display: flex; flex-direction: column; gap: 2px; font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); }
+.swd .ds-card__foot .ds-input { max-width: 150px; }
+.swd .ds-card__foot .ds-btn { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+
+/* Empty state. */
+.swd-empty { display: flex; flex-direction: column; gap: var(--ds-space-3); max-width: var(--ds-measure); padding: var(--ds-space-4) 0; }
+.swd-empty__head { display: flex; align-items: center; gap: var(--ds-space-3); color: var(--ds-ink-soft); }
+.swd-empty__title { font-family: var(--ds-font-serif); font-size: 24px; line-height: 1.25; color: var(--ds-ink); margin: 0; }
+.swd-empty__body { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* The subordinate builders. */
+.swd-builder { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+.swd-form { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-bottom: var(--ds-space-4); border-bottom: 1px solid var(--ds-rule); }
+.swd-form:last-child { border-bottom: none; padding-bottom: 0; }
+.swd-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-3); }
+.swd-cards { list-style: none; margin: var(--ds-space-1) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.swd-cards__row { display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-2); align-items: baseline; }
+.swd-cards__platform { font: 600 11px/1.3 var(--ds-font-mono); color: var(--ds-blue); text-transform: uppercase; letter-spacing: 0.02em; }
+.swd-cards__query { font: var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Wayfinder Why reasons. */
+.swd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
