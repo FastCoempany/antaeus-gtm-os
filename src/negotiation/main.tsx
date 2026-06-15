@@ -1,6 +1,11 @@
 import { render } from "preact";
 import { computed, effect } from "@preact/signals";
 import { Negotiation } from "./Negotiation";
+import { NegotiationDS } from "./ds/NegotiationDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/negotiation-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
@@ -76,7 +81,26 @@ if (typeof window !== "undefined") {
     }
 }
 
-render(<Negotiation />, root);
+// Design-system migration (canon §6, recovery flow — completes the
+// Deal Workspace ↔ Negotiation ↔ Advisor Deploy triangle on the
+// library). The DS surface composes the component library; the existing
+// room renders otherwise. The seed scripts, the persistence, the
+// cross-room handoff, and the cloud sync are shared and unchanged.
+// `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_negotiation_v3");
+
+render(dsSurfaceOn ? <NegotiationDS /> : <Negotiation />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Persistence effects — mirror state to localStorage on change.
 effect(() => {

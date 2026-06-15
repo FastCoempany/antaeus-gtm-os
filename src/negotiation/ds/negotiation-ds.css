@@ -1,0 +1,59 @@
+/* Negotiation DS (canon §4.16b) — the rehearsal Decision-Bench-shaped
+   Live Instrument composed on the design system; only the surface-
+   specific rhythm here. Bright per canon Part II §1. */
+
+.ngd { min-height: 100vh; background: var(--ds-field); }
+.ngd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* ── The made object (dominant) ─────────────────────────────────────── */
+.ngd-object { display: flex; flex-direction: column; gap: var(--ds-space-6); }
+
+/* The rehearsal read — the bench top. */
+.ngd-read { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ngd-read__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.ngd-read__score { font-family: var(--ds-font-serif); font-size: 28px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.ngd-read__cap { font-size: 13px; color: var(--ds-ink-soft); }
+.ngd-read__title { font-family: var(--ds-font-serif); font-size: 22px; line-height: 1.2; color: var(--ds-ink); margin: 0; }
+.ngd-read__move { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.ngd-read__gaps { list-style: none; margin: var(--ds-space-1) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ngd-read__gaps li { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-rule); }
+
+/* The opening line — the actual first words. */
+.ngd-opening { display: flex; flex-direction: column; gap: var(--ds-space-2); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+.ngd-opening__line { font-family: var(--ds-font-serif); font-size: 20px; line-height: 1.35; color: var(--ds-ink); margin: 0; }
+.ngd-opening__empty { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* The concession ladder — ascending cost. */
+.ngd-ladder { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+.ngd-ladder__note { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: calc(-1 * var(--ds-space-2)) 0 0; }
+.ngd-ladder__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.ngd-give, .ngd-ask { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.ngd-ask { color: var(--ds-ink-soft); }
+.ngd-give__label, .ngd-ask__label { display: inline-block; font: 700 10px/1 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); margin-right: var(--ds-space-2); }
+
+/* The pushback sheet — dialogue map. */
+.ngd-pushbacks { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+.ngd-pushbacks__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.ngd-pushback { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ngd-pushback__trigger, .ngd-pushback__response { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.ngd-pushback__response { color: var(--ds-ink-soft); }
+.ngd-pushback__label { display: inline-block; font: 700 10px/1 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); margin-right: var(--ds-space-2); }
+
+/* The outcome capture. */
+.ngd-outcome { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+.ngd-outcome__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.ngd-flash { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-green); }
+.ngd-outcome__pick { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ngd-outcome__buttons { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; }
+.ngd-learning { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ngd-learning__form { display: flex; gap: var(--ds-space-2); }
+.ngd-learning__input { flex: 1; }
+.ngd-learning__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.ngd-learning__list li { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-rule); }
+
+/* ── The route controls (subordinate) ───────────────────────────────── */
+.ngd-controls { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.ngd-controls__positions { display: flex; flex-direction: column; gap: var(--ds-space-4); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+
+/* Wayfinder Why reasons. */
+.ngd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
