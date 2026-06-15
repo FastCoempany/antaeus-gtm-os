@@ -1,0 +1,62 @@
+/* Advisor Deploy DS (canon §4.16) — the backchannel-desk Live Instrument
+   composed on the design system; only the surface-specific rhythm here.
+   The legacy dark proof blotter is retired — bright per canon Part II §1. */
+
+.add { min-height: 100vh; background: var(--ds-field); }
+.add .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* ── The desk (focal) ───────────────────────────────────────────────── */
+.add-desk { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* Spend read. */
+.add-read { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.add-read__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.add-read__score { font-family: var(--ds-font-serif); font-size: 28px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+
+/* Route controls. */
+.add-route { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--ds-space-4); }
+
+/* The prepared ask. */
+.add-proof { font: 600 var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.add-ask__carrier { font: 500 12px/1.4 var(--ds-font-mono); color: var(--ds-ink-soft); margin: 0 0 var(--ds-space-2); }
+
+/* Stamps. */
+.add-stamps { display: flex; flex-direction: column; gap: var(--ds-space-2); padding-top: var(--ds-space-3); border-top: 1px solid var(--ds-rule); }
+.add-stamps__row { display: flex; gap: var(--ds-space-3); flex-wrap: wrap; }
+
+/* ── The rail (subordinate) ─────────────────────────────────────────── */
+.add-side { display: flex; flex-direction: column; gap: var(--ds-space-6); }
+.add-empty { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+.add-rolodex, .add-registry, .add-log, .add-impact { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+
+/* Rolodex. */
+.add-rolodex__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.add-rolodex__tab { width: 100%; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--ds-space-1) var(--ds-space-2); padding: var(--ds-space-3); border: 1px solid var(--ds-rule); border-left: 3px solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-surface); cursor: pointer; text-align: left; }
+.add-rolodex__tab:hover { border-color: var(--ds-hair-strong); }
+.add-rolodex__tab.is-active { border-left-color: var(--ds-orange); background: var(--ds-surface-sub); }
+.add-rolodex__tab:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 2px; }
+.add-rolodex__name { font: 600 var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink); }
+.add-rolodex__meta { grid-column: 1; font: 500 11px/1.3 var(--ds-font-mono); color: var(--ds-ink-soft); }
+
+/* Registry list. */
+.add-registry__list { list-style: none; margin: var(--ds-space-2) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.add-registry__row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: var(--ds-space-2); padding: var(--ds-space-2) 0; border-top: 1px solid var(--ds-rule); }
+.add-registry__row:first-child { border-top: none; }
+.add-registry__name { font: 600 var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink); }
+
+/* Ask log. */
+.add-log__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.add-log__row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--ds-space-2); padding: var(--ds-space-2) 0; border-top: 1px solid var(--ds-rule); }
+.add-log__row:first-child { border-top: none; }
+.add-log__row .ds-input { grid-column: 1 / -1; max-width: 100%; }
+.add-log__body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.add-log__deal { font: 600 var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink); }
+.add-log__meta { font: 500 11px/1.3 var(--ds-font-mono); color: var(--ds-ink-soft); }
+
+/* Desk read. */
+.add-impact__cells { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ds-space-3); }
+.add-impact__rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+
+/* Wayfinder Why reasons. */
+.add-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
