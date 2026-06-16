@@ -1,0 +1,49 @@
+/* Discovery Studio DS (canon §4.12) — the Ledger Spine control face
+   composed on the design system; only the surface-specific rhythm here.
+   The dense control-face components keep their own .ds-* styling
+   (discovery-studio.css, still loaded). Bright per canon Part II §1.
+   A live console runs full-bleed — it wants width. */
+
+.dsd { min-height: 100vh; background: var(--ds-field); }
+.dsd-stage { max-width: 1440px; margin: 0 auto; padding: var(--ds-space-6) var(--ds-space-8) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* The mast. */
+.dsd-mast { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* The control band — clock + compression, the on-call laws. */
+.dsd-control-band { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-4); flex-wrap: wrap; padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+
+.dsd-clock { display: flex; align-items: center; gap: var(--ds-space-3); }
+.dsd-clock__kicker { font: 600 11px/1 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); }
+.dsd-clock__time { font-family: var(--ds-font-mono); font-size: 22px; line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
+.dsd-clock__time.is-over { color: var(--ds-amber); }
+.dsd-clock__hint { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-ink-soft); }
+
+.dsd-field { display: flex; align-items: center; gap: var(--ds-space-2); }
+.dsd-field__label { font: 600 var(--ds-type-label) / 1.2 var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* The 3-column board — the Ledger Spine layout. */
+.dsd-board { display: grid; grid-template-columns: 206px minmax(0, 1fr) 320px; gap: var(--ds-space-5); align-items: start; }
+.dsd-board__rail { position: sticky; top: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.dsd-board__rail-note { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.dsd-board__main { display: flex; flex-direction: column; gap: var(--ds-space-4); min-width: 0; }
+.dsd-board__main-title { font-family: var(--ds-font-serif); font-size: 18px; line-height: 1.3; color: var(--ds-ink); margin: 0; }
+.dsd-board__dock { position: sticky; top: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-4); }
+
+@media (max-width: 1100px) {
+    .dsd-board { grid-template-columns: 1fr; }
+    .dsd-board__rail, .dsd-board__dock { position: static; }
+}
+
+/* The next-step docket. */
+.dsd-docket { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.dsd-docket__head { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); }
+.dsd-docket__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-3); }
+.dsd-docket__wide { grid-column: 1 / -1; }
+@media (max-width: 700px) { .dsd-docket__grid { grid-template-columns: 1fr; } }
+
+/* The footer. */
+.dsd-footer { display: flex; flex-direction: column; gap: var(--ds-space-5); padding-top: var(--ds-space-5); border-top: 1px solid var(--ds-rule); }
+
+/* Wayfinder Why reasons. */
+.dsd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

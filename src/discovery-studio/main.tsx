@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { DiscoveryStudio } from "./DiscoveryStudio";
+import { DiscoveryStudioDS } from "./ds/DiscoveryStudioDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/discovery-studio-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
@@ -71,7 +76,25 @@ if (!flagOn) {
     );
 }
 
-render(<DiscoveryStudio />, root);
+// Design-system migration (canon §6, discovery flow — the final room).
+// The DS surface composes the shell + the discrete chrome controls on
+// the component library; the dense, primitive-faithful control-face
+// components (the 21 primitives + the on-call control laws) are reused
+// unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_discovery_v3");
+
+render(dsSurfaceOn ? <DiscoveryStudioDS /> : <DiscoveryStudio />, root);
+
+// Boot the density gradient so the DS surface's primitives render at
+// the workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Per-call log. Wired synchronously (no cloud round-trip — local
 // localStorage) so a completed call commits even if cloud persistence
