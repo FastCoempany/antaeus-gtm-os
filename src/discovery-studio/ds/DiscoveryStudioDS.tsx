@@ -28,6 +28,7 @@ import { RecoverRail } from "../components/RecoverRail";
 import { SupportDossier } from "../components/SupportDossier";
 // The discrete chrome controls are rebuilt on the library.
 import { CompressionToggleDS } from "./components/CompressionToggleDS";
+import { CallReadDS } from "./components/CallReadDS";
 import { NextStepDocketDS } from "./components/NextStepDocketDS";
 import { HandoffStripDS } from "./components/HandoffStripDS";
 
@@ -97,6 +98,7 @@ export function DiscoveryStudioDS(): JSX.Element {
 
                 <div class="dsd-control-band">
                     <CompressionToggleDS />
+                    <CallReadDS />
                 </div>
 
                 {interrupt ? (

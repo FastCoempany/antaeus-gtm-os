@@ -456,7 +456,14 @@
   cursor: pointer;
 }
 .ds-seg__btn:hover { color: var(--ds-ink); }
-.ds-seg__btn[aria-pressed="true"] { background: var(--ds-ink); color: var(--ds-on-ink); }
+/* Always lean bright (founder, 2026-06-16): no dark-navy pills. The
+   selected segment is a raised white pill with orange ink — unmistakable
+   against the soft track, with none of the dark-navy weight. */
+.ds-seg__btn[aria-pressed="true"] {
+  background: var(--ds-surface);
+  color: var(--ds-orange);
+  box-shadow: var(--ds-shadow-rest);
+}
 
 /* ── Data & structure (03 §4.1, §4.5) ─────────────────────────── */
 
