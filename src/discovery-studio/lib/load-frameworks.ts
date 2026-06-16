@@ -117,6 +117,10 @@ interface LegacyInterrupt {
     readonly id?: string;
     readonly label?: string;
     readonly tone?: string;
+    // The authored runtime data names the recover guidance `reply`
+    // (both the base seed + every framework-specific override). `recover`
+    // is kept as a defensive fallback for any future data shape.
+    readonly reply?: string;
     readonly recover?: string;
 }
 
@@ -282,7 +286,11 @@ function projectInterrupt(legacy: LegacyInterrupt): Interrupt | null {
         id,
         label,
         tone: toBranchTone(legacy.tone) ?? "blu",
-        recover: stringOr(legacy.recover, "")
+        // The authored field is `reply`; `recover` is the defensive
+        // fallback. Reading only `recover` (the old behaviour) dropped
+        // every interrupt's recover guidance across all 9 frameworks —
+        // the recover rail (a §4.12 on-call control law) rendered blank.
+        recover: stringOr(legacy.reply ?? legacy.recover, "")
     };
 }
 
