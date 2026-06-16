@@ -11,13 +11,7 @@
 .dsd-mast { display: flex; flex-direction: column; gap: var(--ds-space-1); }
 
 /* The control band — clock + compression, the on-call laws. */
-.dsd-control-band { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-4); flex-wrap: wrap; padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
-
-.dsd-clock { display: flex; align-items: center; gap: var(--ds-space-3); }
-.dsd-clock__kicker { font: 600 11px/1 var(--ds-font-mono); letter-spacing: 0.08em; color: var(--ds-ink-soft); }
-.dsd-clock__time { font-family: var(--ds-font-mono); font-size: 22px; line-height: 1; color: var(--ds-ink); font-variant-numeric: tabular-nums; }
-.dsd-clock__time.is-over { color: var(--ds-amber); }
-.dsd-clock__hint { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.dsd-control-band { display: flex; align-items: center; gap: var(--ds-space-4); flex-wrap: wrap; padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
 
 .dsd-field { display: flex; align-items: center; gap: var(--ds-space-2); }
 .dsd-field__label { font: 600 var(--ds-type-label) / 1.2 var(--ds-font-sans); color: var(--ds-ink-soft); }
@@ -47,6 +41,13 @@
 
 /* Recover-interrupt jump actions (route the seller to the segment). */
 .dsd-interrupt-actions { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; align-items: center; }
+
+/* Emergency = rescue: the recover moves hoisted to the front of the
+   center column when the call is going sideways. Red-ruled so it reads
+   as the panic surface; the spine collapses to the active segment. */
+.dsd-rescue-panel { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-4); margin-bottom: var(--ds-space-2); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-left: 4px solid var(--ds-red); border-radius: var(--ds-radius-control); }
+.dsd-rescue-panel__lead { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.dsd--rescue .dsd-control-band { border-left: 4px solid var(--ds-red); }
 
 /* Wayfinder Why reasons. */
 .dsd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

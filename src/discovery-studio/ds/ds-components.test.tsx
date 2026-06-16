@@ -5,29 +5,20 @@ import {
     focusedAccount,
     nextStepLock,
     resetSession,
-    setNextStepField,
-    startCallClock,
-    stopCallClock
+    setNextStepField
 } from "../state";
-import {
-    clockRead,
-    docketLabel,
-    docketStatus,
-    docketTone,
-    toPulling
-} from "./lib/adapters";
+import { docketLabel, docketStatus, docketTone } from "./lib/adapters";
 import { CompressionToggleDS } from "./components/CompressionToggleDS";
-import { CallClockDS } from "./components/CallClockDS";
 import { NextStepDocketDS } from "./components/NextStepDocketDS";
 import { HandoffStripDS } from "./components/HandoffStripDS";
 
 /**
  * The DS-chrome components are hook-free and render in vitest. The
- * DiscoveryStudioDS root composes the hook-using, primitive-faithful
- * control-face components (SkipAheadTray, CallClock-legacy) that can't
- * transform under preact:transform-hook-names — the same reason those
- * components carry no render tests. The root is exercised by the ?ds=1
- * Playwright smoke instead.
+ * DiscoveryStudioDS root composes the hook-using control-face components
+ * (SkipAheadTray etc.) that can't transform under
+ * preact:transform-hook-names — so the root is exercised by the ?ds=1
+ * Playwright smoke instead. No clock / no pull (founder direction
+ * 2026-06-16) — those adapters were removed.
  */
 
 beforeEach(() => {
@@ -46,47 +37,17 @@ describe("adapters", () => {
         expect(docketTone("partial")).toBe("amber");
         expect(docketLabel("locked")).toBe("Locked");
     });
-
-    it("clockRead is idle until the clock starts, then live", () => {
-        expect(clockRead().live).toBe(false);
-        expect(clockRead().mmss).toBe("00:00");
-        startCallClock();
-        expect(clockRead().live).toBe(true);
-        stopCallClock();
-        expect(clockRead().live).toBe(false);
-    });
-
-    it("toPulling is absent until an account is in focus, then pushes to the deal", () => {
-        expect(toPulling()).toBeUndefined();
-        focusedAccount.value = "Northwind Robotics";
-        const p = toPulling();
-        expect(p).toBeDefined();
-        expect(p!.verb).toBe("Push to the deal");
-        expect(p!.object).toBe("Northwind Robotics");
-        expect(p!.href).toContain("/deal-workspace/");
-    });
 });
 
 describe("CompressionToggleDS", () => {
-    it("drives compressionMode through the library SegmentedControl", () => {
+    it("drives compressionMode through the library SegmentedControl — including the rescue (Emergency) state", () => {
         const { container, getByText } = render(<CompressionToggleDS />);
         expect(container.querySelector(".ds-seg")).not.toBeNull();
         expect(compressionMode.value).toBe("off");
         fireEvent.click(getByText("Essentials"));
         expect(compressionMode.value).toBe("essentials");
-    });
-});
-
-describe("CallClockDS", () => {
-    it("shows Start when idle and a live MM:SS + Stop when running", () => {
-        const idle = render(<CallClockDS />);
-        expect(idle.getByText("Start call")).not.toBeNull();
-        cleanup();
-        startCallClock();
-        const live = render(<CallClockDS />);
-        expect(live.container.querySelector(".dsd-clock__time")).not.toBeNull();
-        expect(live.getByText("Stop")).not.toBeNull();
-        stopCallClock();
+        fireEvent.click(getByText("Emergency"));
+        expect(compressionMode.value).toBe("emergency");
     });
 });
 

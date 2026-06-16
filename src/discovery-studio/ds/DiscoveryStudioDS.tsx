@@ -11,13 +11,14 @@ import {
     activeFramework,
     activeInterrupt,
     clearInterrupt,
+    compressionMode,
     focusedAccount,
     frameworkRegistry,
     jumpToInterruptTarget
 } from "../state";
 // The dense, primitive-faithful control-face components are reused
 // unchanged (canon §4.12 forbids flattening the 21 primitives + the
-// on-call control laws — they live inside these surfaces).
+// control laws — they live inside these surfaces).
 import { FrameworkRail } from "../components/FrameworkRail";
 import { SegmentRail } from "../components/SegmentRail";
 import { SkipAheadTray } from "../components/SkipAheadTray";
@@ -26,26 +27,27 @@ import { LearnedTruthLedger } from "../components/LearnedTruthLedger";
 import { RecoverRail } from "../components/RecoverRail";
 import { SupportDossier } from "../components/SupportDossier";
 // The discrete chrome controls are rebuilt on the library.
-import { CallClockDS } from "./components/CallClockDS";
 import { CompressionToggleDS } from "./components/CompressionToggleDS";
 import { NextStepDocketDS } from "./components/NextStepDocketDS";
 import { HandoffStripDS } from "./components/HandoffStripDS";
-import { toPulling } from "./lib/adapters";
 
 /**
  * DiscoveryStudioDS — Discovery Studio (canon §4.12) composed on the
  * design system as a Live Instrument. The most strictly-specified room
- * in the codebase: 21 primitives, the 9-framework × 10-segment Ledger
- * Spine, and seven on-call control laws that must never be flattened.
- * So the radiation composes the SHELL + the discrete chrome controls on
- * the library — the WayfinderBar (Grounded-A lockup + room crumb +
- * active-framework tail + the push-to-the-deal pull), the mast as a
- * Kicker + serif Heading, the call clock + compression toggle on the
- * library, the next-step lock on FormFields, the interrupt as an Alert,
- * the handoff on the library HandoffStrip — and REUSES the dense,
- * primitive-faithful, already-bright control-face components (the
- * framework rail, the segment spine, the on-call dock, the support
- * dossier) so the 21 primitives + the control laws stay intact.
+ * in the codebase: 21 primitives + the 9-framework × 10-segment spine.
+ * The radiation composes the SHELL + the discrete chrome on the library
+ * (the WayfinderBar, the mast, the compression toggle, the next-step lock
+ * on FormFields, the interrupt as an Alert with its jump-actions, the
+ * handoff on the library HandoffStrip) and REUSES the dense, primitive-
+ * faithful control-face components (the framework rail, the segment
+ * spine, the on-call dock, the support dossier).
+ *
+ * Founder direction 2026-06-16: a discovery call is human-driven and
+ * unpredictable. So there is no clock, no tempo, and no "push to the
+ * deal" pull — the room answers whatever the buyer does, it does not
+ * pace the call or presume its outcome. Compression's third state is the
+ * RESCUE mode: when the call goes sideways, Emergency brings the recover
+ * moves front and center.
  *
  * A live console wants width, so this room runs full-bleed rather than
  * inside the centered PageFrame the narrower rooms use.
@@ -71,7 +73,7 @@ export function DiscoveryStudioDS(): JSX.Element {
         ? frameworkRegistry.value.find((f) => f.id === fid)
         : null;
     const account = focusedAccount.value.trim();
-    const pulling = toPulling();
+    const rescue = compressionMode.value === "emergency";
 
     const stamp = !fwLoaded
         ? t("loading…")
@@ -82,37 +84,18 @@ export function DiscoveryStudioDS(): JSX.Element {
     if (account) tailParts.push(account);
 
     return (
-        <div class="dsd">
-            <WayfinderBar
-                room={t("DISCOVERY STUDIO")}
-                tail={tailParts.join(" · ")}
-                pulling={
-                    pulling
-                        ? {
-                              verb: pulling.verb,
-                              object: pulling.object,
-                              href: pulling.href,
-                              why:
-                                  pulling.reasons.length > 0 ? (
-                                      <ul class="dsd-why">
-                                          {pulling.reasons.map((r) => (
-                                              <li key={r}>{r}</li>
-                                          ))}
-                                      </ul>
-                                  ) : undefined
-                          }
-                        : undefined
-                }
-            />
+        <div class={`dsd${rescue ? " dsd--rescue" : ""}`}>
+            <WayfinderBar room={t("DISCOVERY STUDIO")} tail={tailParts.join(" · ")} />
 
             <div class="dsd-stage">
                 <header class="dsd-mast">
                     <Kicker>{t("DISCOVERY STUDIO · CONTROL FACE")}</Kicker>
-                    <Heading level="title">{t("Run the call live.")}</Heading>
+                    <Heading level="title">
+                        {t("Whatever they say, your next move.", { class: "body" })}
+                    </Heading>
                 </header>
 
                 <div class="dsd-control-band">
-                    <CallClockDS />
                     <CompressionToggleDS />
                 </div>
 
@@ -153,6 +136,18 @@ export function DiscoveryStudioDS(): JSX.Element {
                         </p>
                     </aside>
                     <section class="dsd-board__main">
+                        {rescue ? (
+                            // Rescue mode — the recover moves come to the
+                            // front, the spine collapses to the segment you're
+                            // in (handled in SegmentRail). The panic button.
+                            <section class="dsd-rescue-panel" aria-label={t("Recover the call")}>
+                                <Kicker>{t("RECOVER THE CALL")}</Kicker>
+                                <p class="dsd-rescue-panel__lead">
+                                    {t("The call is going sideways. Here's how to get it back.", { class: "body" })}
+                                </p>
+                                <RecoverRail />
+                            </section>
+                        ) : null}
                         <p class="dsd-board__main-title">
                             {t("Open one segment. Run the call from there.", { class: "body" })}
                         </p>
@@ -163,7 +158,9 @@ export function DiscoveryStudioDS(): JSX.Element {
                         <SkipAheadTray />
                         <WorkedMemory />
                         <LearnedTruthLedger />
-                        <RecoverRail />
+                        {/* In rescue mode the recover rail is hoisted into
+                            the center; don't duplicate it in the dock. */}
+                        {rescue ? null : <RecoverRail />}
                     </aside>
                 </main>
 
