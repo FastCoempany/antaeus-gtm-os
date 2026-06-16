@@ -79,7 +79,14 @@ const LEGAL_LEGACY = {
         {
             id: "demo",
             label: "Demo request",
-            reply: "Map it to one live workflow first so the screen is not generic."
+            reply: "Map it to one live workflow first so the screen is not generic.",
+            actions: [
+                {
+                    label: "Open current-state",
+                    target: "node:current-state--probe",
+                    tone: "blu"
+                }
+            ]
         }
     ]
 };
@@ -183,6 +190,13 @@ describe("loadFrameworks", () => {
         expect(interrupts[0]?.recover).toBe(
             "Map it to one live workflow first so the screen is not generic."
         );
+        // The recover jump-actions (jumpNode) route the seller to the
+        // segment where the recovery runs — they must survive projection.
+        expect(interrupts[0]?.actions).toHaveLength(1);
+        expect(interrupts[0]?.actions[0]?.target).toBe(
+            "node:current-state--probe"
+        );
+        expect(interrupts[0]?.actions[0]?.label).toBe("Open current-state");
     });
 
     it("only loads frameworks whose id is in FRAMEWORK_IDS", () => {

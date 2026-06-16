@@ -116,7 +116,7 @@ const FIXTURE: Framework = {
     ],
     skipAheadHandlers: [{ trigger: "asks for pricing", reply: "Pricing follows fit." }],
     interrupts: [
-        { id: "demo", label: "Demo request", tone: "blu", recover: "..." }
+        { id: "demo", label: "Demo request", tone: "blu", recover: "...", actions: [] }
     ]
 };
 
@@ -354,7 +354,8 @@ describe("state — Wave 3 interrupt handling", () => {
             id: "demo",
             label: "Demo request",
             tone: "blu" as const,
-            recover: "Walk through how a demo would land..."
+            recover: "Walk through how a demo would land...",
+            actions: []
         };
         triggerInterrupt(it);
         expect(activeInterrupt.value).toEqual(it);
@@ -365,7 +366,8 @@ describe("state — Wave 3 interrupt handling", () => {
             id: "x",
             label: "x",
             tone: "blu",
-            recover: "x"
+            recover: "x",
+            actions: []
         });
         clearInterrupt();
         expect(activeInterrupt.value).toBeNull();
@@ -376,7 +378,8 @@ describe("state — Wave 3 interrupt handling", () => {
             id: "x",
             label: "x",
             tone: "blu",
-            recover: "x"
+            recover: "x",
+            actions: []
         });
         resetSession();
         expect(activeInterrupt.value).toBeNull();

@@ -12,7 +12,8 @@ import {
     activeInterrupt,
     clearInterrupt,
     focusedAccount,
-    frameworkRegistry
+    frameworkRegistry,
+    jumpToInterruptTarget
 } from "../state";
 // The dense, primitive-faithful control-face components are reused
 // unchanged (canon §4.12 forbids flattening the 21 primitives + the
@@ -119,9 +120,24 @@ export function DiscoveryStudioDS(): JSX.Element {
                     <Alert
                         tone={INTERRUPT_TONE[interrupt.tone] ?? "amber"}
                         move={
-                            <Button variant="ghost" onClick={clearInterrupt}>
-                                {t("Dismiss")}
-                            </Button>
+                            <div class="dsd-interrupt-actions">
+                                {interrupt.actions
+                                    .filter((a) => a.target.startsWith("node:"))
+                                    .map((a) => (
+                                        <Button
+                                            key={a.target}
+                                            variant="secondary"
+                                            onClick={() =>
+                                                jumpToInterruptTarget(a.target)
+                                            }
+                                        >
+                                            {a.label}
+                                        </Button>
+                                    ))}
+                                <Button variant="ghost" onClick={clearInterrupt}>
+                                    {t("Dismiss")}
+                                </Button>
+                            </div>
                         }
                     >
                         <strong>{interrupt.label}</strong> — {interrupt.recover}
