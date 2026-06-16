@@ -47,3 +47,29 @@
 
 /* Wayfinder Why reasons. */
 .dsd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* Decision 1 (founder, 2026-06-16): no hard dark-navy areas. The reused
+   control-face components invert their ACTIVE state to a dark navy panel
+   (.is-active → background: var(--ds-ink)). In the DS surface those flip
+   to a bright "active" treatment — white surface, navy ink, an orange
+   "you're here" rule — so the active object stays unmistakable without a
+   dark panel. Scoped to .dsd so the legacy surface is untouched. The
+   branch picker inside the active node already carries its own white
+   surface, so only the node's own text + the badge/note need flipping. */
+.dsd .ds-framework-rail__btn.is-active,
+.dsd .ds-recover-rail__btn.is-active {
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    border-color: var(--ds-orange);
+    box-shadow: inset 3px 0 0 var(--ds-orange);
+}
+.dsd .ds-segment-rail__node.is-active {
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    border-color: var(--ds-rule);
+    box-shadow: inset 4px 0 0 var(--ds-orange), 0 6px 18px rgba(10, 28, 64, 0.08);
+}
+.dsd .ds-segment-rail__node.is-active .ds-segment-rail__node-badge,
+.dsd .ds-segment-rail__node.is-active .ds-segment-rail__node-note {
+    color: var(--ds-ink-soft);
+}
