@@ -116,6 +116,7 @@ export function RoleStepDS(): JSX.Element {
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.role === null}
+            nextDisabledWhy={t("Pick a role first.")}
         >
             <ul class="obd-options" role="radiogroup" aria-label={t("Role")}>
                 {ROLE_OPTIONS.map((r) => (
@@ -160,6 +161,7 @@ export function CategoryStepDS(): JSX.Element {
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={!canContinue}
+            nextDisabledWhy={t("Pick a category and at least one industry.", { class: "body" })}
         >
             <div class="obd-fieldset">
                 <p class="obd-legend">{t("The category you sell from")}</p>
@@ -220,6 +222,7 @@ export function IcpStepDS(): JSX.Element {
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}
+            nextDisabledWhy={t("Write one sharp ICP sentence first.", { class: "body" })}
         >
             <FormField label={t("Who is this for?")}>
                 <Textarea
@@ -301,6 +304,7 @@ export function QuotaStepDS(): JSX.Element {
             onBack={() => prevStep()}
             nextLabel={t("Finish onboarding")}
             nextDisabled={!v.canSeedAnything}
+            nextDisabledWhy={t("Fill in at least one field to finish.", { class: "body" })}
         >
             <div class="obd-form-row">
                 <FormField label={t("Annual quota ($)")}>

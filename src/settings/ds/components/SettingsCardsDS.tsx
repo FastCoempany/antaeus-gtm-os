@@ -311,6 +311,17 @@ function PhaseFCard(): JSX.Element {
     );
 }
 
+function densityWhy(
+    loaded: boolean,
+    saving: boolean,
+    isCurrent: boolean
+): string | undefined {
+    if (!loaded) return t("Checking…");
+    if (saving) return t("Saving…");
+    if (isCurrent) return t("Already on");
+    return undefined;
+}
+
 function DensityCard(): JSX.Element {
     const state = densityState.value;
     const loaded = densityLoaded.value;
@@ -344,6 +355,7 @@ function DensityCard(): JSX.Element {
                     variant={isShowMeHow ? "primary" : "ghost"}
                     onClick={() => void setDensity("show_me_how")}
                     disabled={!loaded || saving || isShowMeHow}
+                    disabledWhy={densityWhy(loaded, saving, isShowMeHow)}
                 >
                     {t("Show me how")}
                 </Button>
@@ -351,6 +363,7 @@ function DensityCard(): JSX.Element {
                     variant={!isShowMeHow ? "primary" : "ghost"}
                     onClick={() => void setDensity("step_back")}
                     disabled={!loaded || saving || !isShowMeHow}
+                    disabledWhy={densityWhy(loaded, saving, !isShowMeHow)}
                 >
                     {t("Step back")}
                 </Button>

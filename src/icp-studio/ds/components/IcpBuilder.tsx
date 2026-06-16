@@ -66,14 +66,18 @@ export function IcpBuilder(): JSX.Element {
         <div class="icpd-builder">
             <Kicker>{t("SHARPEN THE ICP")}</Kicker>
 
-            <FormField label={t("Operating role")}>
+            {/* A button group, not a single control — NOT wrapped in a
+                FormField <label> (a label forwards clicks to its first
+                labelable descendant, hijacking the segment selection). */}
+            <div class="ds-field">
+                <span class="ds-field__label">{t("Operating role")}</span>
                 <SegmentedControl<RoleKey>
                     label={t("Operating role")}
                     active={d.role}
                     onChange={setRole}
                     options={ROLE_OPTIONS}
                 />
-            </FormField>
+            </div>
 
             <FormField label={t("Industry")}>
                 <Select

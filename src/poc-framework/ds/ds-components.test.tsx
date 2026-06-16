@@ -33,6 +33,14 @@ describe("ForgeForm", () => {
         expect(container.querySelectorAll(".ds-field").length).toBeGreaterThanOrEqual(6);
         expect(getByText("Cast the proof")).not.toBeNull();
     });
+    it("the pilot-window toggle selects the non-first segment (not hijacked by a label)", () => {
+        const { getByText } = render(<ForgeForm />);
+        // Regression: the SegmentedControl must NOT be wrapped in a
+        // FormField <label> — a label forwards clicks to its first
+        // segment, so "14-day" would never select.
+        fireEvent.click(getByText("14-day"));
+        expect(draft.value.durationDays).toBe(14);
+    });
     it("drives the account through the draft", () => {
         const { container } = render(<ForgeForm />);
         const input = container.querySelector(

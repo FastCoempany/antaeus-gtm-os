@@ -121,14 +121,18 @@ export function ForgeForm(): JSX.Element {
                 />
             </FormField>
 
-            <FormField label={t("Pilot window")}>
+            {/* A button group, not a single control — NOT wrapped in a
+                FormField <label> (a label forwards clicks to its first
+                labelable descendant, hijacking the segment selection). */}
+            <div class="ds-field">
+                <span class="ds-field__label">{t("Pilot window")}</span>
                 <SegmentedControl<string>
                     label={t("Pilot window")}
                     active={String(d.durationDays)}
                     onChange={(v) => setDurationDays(Number(v) as DurationDays)}
                     options={DURATION_OPTS}
                 />
-            </FormField>
+            </div>
 
             <FormField label={t("Outcome")}>
                 <Select

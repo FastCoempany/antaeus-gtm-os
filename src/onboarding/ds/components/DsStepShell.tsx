@@ -12,6 +12,8 @@ export interface DsStepShellProps {
     readonly onBack?: () => void;
     readonly nextLabel?: string;
     readonly nextDisabled?: boolean;
+    /** Plain-words reason the Continue button is locked (spec 03 §4.8). */
+    readonly nextDisabledWhy?: string;
     readonly hideBack?: boolean;
 }
 
@@ -46,6 +48,9 @@ export function DsStepShell(props: DsStepShellProps): JSX.Element {
                         variant="accent"
                         onClick={() => props.onNext?.()}
                         disabled={props.nextDisabled}
+                        disabledWhy={
+                            props.nextDisabled ? props.nextDisabledWhy : undefined
+                        }
                     >
                         {props.nextLabel ?? t("Continue")}
                     </Button>

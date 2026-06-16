@@ -1,7 +1,12 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/preact";
+import { render, cleanup, fireEvent } from "@testing-library/preact";
 import type { IcpDraft } from "../lib/types";
-import { __setDraftForTests, __setSavedIcpsForTests, resetDraft } from "../state";
+import {
+    __setDraftForTests,
+    __setSavedIcpsForTests,
+    draft,
+    resetDraft
+} from "../state";
 import { IcpObject } from "./components/IcpObject";
 import { IcpBuilder } from "./components/IcpBuilder";
 import { IcpStudioDS } from "./IcpStudioDS";
@@ -51,6 +56,16 @@ describe("IcpBuilder", () => {
         const save = container.querySelector(".ds-btn--accent");
         expect(save).not.toBeNull();
         expect((save as HTMLButtonElement).disabled).toBe(false);
+    });
+
+    it("the role toggle selects the non-first segment (not hijacked by a label)", () => {
+        __setDraftForTests({ ...SHARP, role: "founder" });
+        const { getByText } = render(<IcpBuilder />);
+        // Regression: the SegmentedControl must NOT be wrapped in a
+        // FormField <label> — a label forwards clicks to its first
+        // segment, so "First AE" would never select.
+        fireEvent.click(getByText("First AE"));
+        expect(draft.value.role).toBe("firstae");
     });
 
     it("disables Save until industry + size + buyer are set", () => {

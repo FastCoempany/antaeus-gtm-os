@@ -164,7 +164,12 @@ export function DealHealthFormDS(): JSX.Element | null {
             </section>
 
             <footer class="dwd-form__foot">
-                <Button variant="ghost" onClick={closeDealEditor} disabled={busy}>
+                <Button
+                    variant="ghost"
+                    onClick={closeDealEditor}
+                    disabled={busy}
+                    disabledWhy={busy ? t("Saving…") : undefined}
+                >
                     {t("Back")}
                 </Button>
                 <Button variant="accent" onClick={() => void handleSave()} disabled={busy}>
