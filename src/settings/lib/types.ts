@@ -29,8 +29,10 @@ export const PRODUCT_CATEGORIES: ReadonlyArray<{
     { key: "manufacturing", label: "Manufacturing / Supply Chain" },
     { key: "data-intelligence", label: "Data Intelligence Infrastructure" },
     { key: "govtech", label: "GovTech / Compliance" },
-    { key: "gcm", label: "Global Contractor Management / EOR" },
-    { key: "support", label: "Customer Support / Operations" }
+    { key: "gcm", label: "Global Contractor Management / EOR" }
+    // "support" kept in the type for backward-compat with stored values,
+    // but dropped from the displayed list — the cxai category ("CX AI —
+    // Customer Experience & Support") now covers it (2026-06-16).
 ];
 
 export interface BackupSnapshot {

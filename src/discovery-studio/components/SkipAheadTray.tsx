@@ -12,7 +12,7 @@ import { skipAheadHandlers } from "../state";
  * short suggested reply.
  *
  * Per the Lumana on-call control lock spec, this is a required
- * surface — the rep should be able to reach skip-ahead handlers
+ * surface — the seller should be able to reach skip-ahead handlers
  * without leaving their active segment.
  *
  * Wave 5 keeps the tray collapsed by default (lower attentional cost)
