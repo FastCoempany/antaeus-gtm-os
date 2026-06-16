@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { Briefing } from "./Briefing";
+import { BriefingDS } from "./ds/BriefingDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/briefing-ds.css";
 import {
     bootBriefingLead,
     bootContrarian,
@@ -33,7 +38,24 @@ if (!flagOn) {
     );
 }
 
-render(<Briefing />, root);
+// Design-system migration (canon §6, Intelligence Surface). The DS
+// surface composes the room shell + chrome on the component library; the
+// already-bright, LLM-pipeline-governed stream content is reused
+// unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds") === "1";
+    } catch {
+        return false;
+    }
+})();
+const dsSurfaceOn = dsParam || isFeatureEnabled("room_briefing_v3");
+
+render(dsSurfaceOn ? <BriefingDS /> : <Briefing />, root);
+
+// Boot the density gradient so the DS surface's primitives render at
+// the workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Load the latest run's Patterns after first paint. Defensive inside
 // loadStandardPatterns — failures degrade to the empty state.
