@@ -71,8 +71,9 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
                 ".ds-board__rail .ds-framework-rail__btn"
             );
             const count = await fwBtns.count();
-            // Per canon §4.12 — 9 frameworks.
-            expect(count).toBe(9);
+            // Per canon §4.12 — 10 frameworks (CX AI restored +
+            // global contractor management added, 2026-06-16).
+            expect(count).toBe(10);
 
             // Each button has a dot + name structure.
             const firstBtn = fwBtns.first();

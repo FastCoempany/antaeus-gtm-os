@@ -33,7 +33,8 @@ export const FRAMEWORK_IDS = [
     "sales-revenue",
     "manufacturing",
     "data-intelligence",
-    "ai-native"
+    "ai-native",
+    "global-contractor-management"
 ] as const;
 
 export type FrameworkId = (typeof FRAMEWORK_IDS)[number];
