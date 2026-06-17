@@ -10,6 +10,7 @@ import {
     WayfinderBar
 } from "@/components";
 import { SECTION_TITLE } from "../lib/types";
+import { buildFoundingGtmHref } from "../lib/handoff";
 import { t } from "@/lib/voice/t";
 import { PaletteTrigger } from "@/lib/palette/PaletteTrigger";
 import { BirdseyeFloat } from "@/birdseye/BirdseyeFloat";
@@ -123,9 +124,9 @@ export function FoundingGtmDS(): JSX.Element {
                         title={t("Run the daily rhythm. Sharpen the math.", { class: "body" })}
                         sub={t("The kit is read-mode here — real updates come from the rooms that feed it.", { class: "body" })}
                         routes={[
-                            { label: t("Open the Dashboard"), href: "/dashboard/", primary: true },
-                            { label: t("Refine the quota math"), href: "/quota-workback/" },
-                            { label: t("Re-run onboarding"), href: "/onboarding/" }
+                            { label: t("Open the Dashboard"), href: buildFoundingGtmHref("/dashboard/"), primary: true },
+                            { label: t("Refine the quota math"), href: buildFoundingGtmHref("/quota-workback/") },
+                            { label: t("Re-run onboarding"), href: buildFoundingGtmHref("/onboarding/") }
                         ]}
                     />
                 </BandStack>
