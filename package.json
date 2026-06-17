@@ -35,5 +35,5 @@
     "posthog-js": "^1.371.2",
     "preact": "^10.29.1"
   },
-  "antaeusDesignSystem": "1.8.0"
+  "antaeusDesignSystem": "1.9.0"
 }

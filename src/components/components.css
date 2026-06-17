@@ -233,8 +233,12 @@
 
 .ds-btn--accent { background: var(--ds-orange); color: var(--ds-on-ink); }
 .ds-btn--accent:hover:not(:disabled) { background: var(--ds-orange-strong); }
-.ds-btn--primary { background: var(--ds-ink); color: var(--ds-on-ink); }
-.ds-btn--primary:hover:not(:disabled) { background: var(--ds-ink-700); }
+/* Primary = the strong secondary action (the dominant move is orange
+   --accent). Brightened from navy ink to the brand blue 2026-06-17
+   (founder: "always lean bright") — blue is the system/secondary-action
+   role (canon §3), so this reads bright without competing with orange. */
+.ds-btn--primary { background: var(--ds-blue); color: var(--ds-on-ink); }
+.ds-btn--primary:hover:not(:disabled) { background: var(--ds-blue-strong); }
 .ds-btn--secondary {
   background: var(--ds-surface);
   color: var(--ds-ink);

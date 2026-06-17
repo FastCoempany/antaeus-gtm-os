@@ -5,6 +5,19 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.9.0 — 2026-06-17
+
+Brighten toward the always-bright field (founder direction). Two changes:
+the global `ScheduleFloat` (ADR-013) flips from a navy card to the bright
+field — white surface, navy ink, hairline border, orange accents kept —
+so no room carries a dark-navy surface anymore. And `.ds-btn--primary`
+moves from navy ink to the brand blue: new additive token
+`--ds-blue-strong` (`#1d4ed8`, the hover/pressed sibling to `--ds-blue`,
+mirroring `--ds-orange-strong`); the primary button now reads
+`--ds-blue` → `--ds-blue-strong`. Semantics preserved: orange is still the
+one dominant move (`--accent`); blue is the system / strong-secondary role
+(canon §3), which is what `--primary` always was. Additive, non-breaking.
+
 ## 1.8.0 — 2026-06-15
 
 The motion layer (spec 08). The half-built axis is squared away: the
