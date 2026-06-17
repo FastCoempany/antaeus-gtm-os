@@ -670,7 +670,7 @@ test.describe("room boot smoke tests", () => {
 
         // Wave 2: at least one framework button rendered (proves the
         // legacy <script> tags loaded + loadFrameworks() projected the
-        // global into the typed registry). Expect 9 frameworks in prod.
+        // global into the typed registry). Expect 10 frameworks in prod.
         await expect(page.locator(".ds-framework-rail__btn").first()).toBeVisible();
 
         expect(

@@ -3,6 +3,14 @@ import { test, expect } from "@playwright/test";
 /**
  * Program 6 / PR 4 — Discovery Studio refacing walk.
  *
+ * Pinned to the LEGACY surface via `?ds=0`. As of 2026-06-16 the new
+ * design-system surface (DiscoveryStudioDS) is the production default
+ * (founder direction — the legacy surface still carries the retired call
+ * clock). The legacy surface stays shipped as the two-state safety net,
+ * so this walk keeps verifying it; the new default is covered by the
+ * smoke suite's reused-rail assertions. A dedicated DS-surface walk is
+ * owed.
+ *
  * Verifies the Ledger Spine Canonical structural additions:
  *   - Mast at the top (kicker + serif "Ledger spine." brand + stamp)
  *   - Board layout: vertical FrameworkRail (206px left) + main +
@@ -26,7 +34,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -56,7 +64,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -71,8 +79,9 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
                 ".ds-board__rail .ds-framework-rail__btn"
             );
             const count = await fwBtns.count();
-            // Per canon §4.12 — 9 frameworks.
-            expect(count).toBe(9);
+            // Per canon §4.12 — 10 frameworks (CX AI restored +
+            // global contractor management added, 2026-06-16).
+            expect(count).toBe(10);
 
             // Each button has a dot + name structure.
             const firstBtn = fwBtns.first();
@@ -93,7 +102,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -113,7 +122,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -170,7 +179,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -215,7 +224,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -241,7 +250,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -259,7 +268,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -271,7 +280,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
 
             // With continuity params, the back-pill renders.
             await page.goto(
-                "/discovery-studio/?returnTo=%2Fcall-planner%2F&returnLabel=Back+to+Call+Planner",
+                "/discovery-studio/?ds=0&returnTo=%2Fcall-planner%2F&returnLabel=Back+to+Call+Planner",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(400);
@@ -287,7 +296,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/discovery-studio/", {
+            await page.goto("/discovery-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);

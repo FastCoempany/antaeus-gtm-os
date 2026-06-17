@@ -21,7 +21,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             await expect(page.locator(".cp-board")).toBeAttached();
@@ -41,7 +41,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             const chip = page.locator(".cp-witness__credibility");
@@ -67,7 +67,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Fill contact + persona + LinkedIn (context gate) +
@@ -108,7 +108,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             const strips = page.locator(".cp-spine .cp-strip");
@@ -134,7 +134,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Quality block stays — it's the analytical 5-gate
@@ -151,7 +151,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Handoff inside the aside.
@@ -176,7 +176,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Type a contact name; the cp-witness__name should reflect it.
@@ -198,7 +198,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/call-planner/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/call-planner/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);
@@ -220,7 +220,7 @@ test.describe("Program 6 / PR 8 — Call Planner refacing (Pressure Script V01)"
         });
         const page = await ctx.newPage();
         try {
-            await page.goto("/call-planner/", { waitUntil: "domcontentloaded" });
+            await page.goto("/call-planner/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // At < 1100px the board becomes single-column.

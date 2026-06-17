@@ -72,7 +72,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
                 },
                 { advisors: T1_ADVISOR_REGISTRY, deals: DEAL_REGISTRY }
             );
-            await page.goto("/advisor-deploy/", {
+            await page.goto("/advisor-deploy/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -101,7 +101,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
                 },
                 { advisors: T1_ADVISOR_REGISTRY, deals: DEAL_REGISTRY }
             );
-            await page.goto("/advisor-deploy/", {
+            await page.goto("/advisor-deploy/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -128,7 +128,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
                 },
                 { advisors: T1_ADVISOR_REGISTRY, deals: DEAL_REGISTRY }
             );
-            await page.goto("/advisor-deploy/", {
+            await page.goto("/advisor-deploy/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -159,7 +159,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/advisor-deploy/", {
+            await page.goto("/advisor-deploy/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -185,7 +185,7 @@ test.describe("Program 6 / PR 15 — Advisor Deploy refacing (Backchannel Desk V
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/advisor-deploy/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/advisor-deploy/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

@@ -12,6 +12,11 @@
  * (persistent orange on-state, distinct from hover).
  */
 
+/* The motion layer (spec 08) — the cross-cutting named-motion
+   vocabulary. Imported here so every page that loads components.css
+   gets the grammar at one import point. */
+@import "./motion.css";
+
 /* ── Display ──────────────────────────────────────────────────── */
 
 .ds-kicker {
@@ -145,6 +150,8 @@
   margin-top: var(--ds-space-1);
 }
 .ds-card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.ds-card__kicker-row { display: flex; align-items: center; gap: var(--ds-space-2); }
+.ds-card__icon { display: inline-flex; color: var(--ds-ink-soft); }
 .ds-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-3); }
 .ds-card__copy { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
 .ds-card__foot { display: flex; align-items: center; gap: var(--ds-space-3); margin-top: var(--ds-space-1); }
@@ -226,8 +233,12 @@
 
 .ds-btn--accent { background: var(--ds-orange); color: var(--ds-on-ink); }
 .ds-btn--accent:hover:not(:disabled) { background: var(--ds-orange-strong); }
-.ds-btn--primary { background: var(--ds-ink); color: var(--ds-on-ink); }
-.ds-btn--primary:hover:not(:disabled) { background: var(--ds-ink-700); }
+/* Primary = the strong secondary action (the dominant move is orange
+   --accent). Brightened from navy ink to the brand blue 2026-06-17
+   (founder: "always lean bright") — blue is the system/secondary-action
+   role (canon §3), so this reads bright without competing with orange. */
+.ds-btn--primary { background: var(--ds-blue); color: var(--ds-on-ink); }
+.ds-btn--primary:hover:not(:disabled) { background: var(--ds-blue-strong); }
 .ds-btn--secondary {
   background: var(--ds-surface);
   color: var(--ds-ink);
@@ -309,6 +320,7 @@
   width: 100%;
 }
 .ds-input::placeholder { color: var(--ds-ink-quiet); }
+.ds-textarea { min-height: 64px; resize: vertical; line-height: var(--ds-leading-body); }
 .ds-input:hover:not(:disabled) { border-color: var(--ds-rule); }
 .ds-input:focus { outline: 3px solid var(--ds-orange-soft); outline-offset: 0; border-color: var(--ds-orange); }
 .ds-input:disabled { opacity: 0.55; background: var(--ds-surface-sunk); cursor: not-allowed; }
@@ -411,6 +423,14 @@
 @media (max-width: 720px) {
   .ds-lockup__name { display: none; }
 }
+/* L1 — serif lockup (spec 10 §3): the mark beside "Antaeus" in the
+   headline voice, for the landing page + docs. */
+.ds-lockup__name-serif {
+  font: 400 28px/1 var(--ds-font-serif);
+  color: var(--ds-ink);
+}
+.ds-lockup--reversed { color: var(--ds-on-ink); }
+.ds-lockup--reversed .ds-lockup__name-serif { color: var(--ds-on-ink); }
 .ds-wayfinder__crumb {
   font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
   letter-spacing: var(--ds-tracking-kicker);
@@ -440,7 +460,14 @@
   cursor: pointer;
 }
 .ds-seg__btn:hover { color: var(--ds-ink); }
-.ds-seg__btn[aria-pressed="true"] { background: var(--ds-ink); color: var(--ds-on-ink); }
+/* Always lean bright (founder, 2026-06-16): no dark-navy pills. The
+   selected segment is a raised white pill with orange ink — unmistakable
+   against the soft track, with none of the dark-navy weight. */
+.ds-seg__btn[aria-pressed="true"] {
+  background: var(--ds-surface);
+  color: var(--ds-orange);
+  box-shadow: var(--ds-shadow-rest);
+}
 
 /* ── Data & structure (03 §4.1, §4.5) ─────────────────────────── */
 
@@ -716,6 +743,14 @@
   font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
   color: var(--ds-ink-soft);
   margin: 0;
+}
+/* The corrective route (Diagnosis Table — the move is obvious). */
+.ds-riskcard__move {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink);
+  margin: 0;
+  padding-left: var(--ds-space-3);
+  border-left: 3px solid var(--ds-orange);
 }
 
 /* ── Wayfinder: the three cells + Pulling + Why (spec 03 §3.2) ──── */

@@ -75,7 +75,7 @@ const DEAL_HEALTH = {
 };
 
 async function seedDashboard(page: import("@playwright/test").Page): Promise<void> {
-    await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+    await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
     await page.evaluate(
         ({ deals, health }) => {
             localStorage.setItem(
@@ -264,7 +264,7 @@ test.describe("Program 6 / PR 2 — Dashboard refacing (Slice 01 Soft Cut)", () 
         const page = await ctx.newPage();
         try {
             // Cold landing, no seeded data.
-            await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+            await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // EmptyDashboard renders, NOT the grid.

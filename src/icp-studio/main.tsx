@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { IcpStudio } from "./IcpStudio";
+import { IcpStudioDS } from "./ds/IcpStudioDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/icp-studio-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
@@ -47,7 +52,34 @@ if (ctx.focusObject) {
     patchDraft({ industry: "custom", industryCustom: ctx.focusObject });
 }
 
-render(<IcpStudio />, root);
+// Design-system migration (canon §6, radiation order: ICP Studio opens
+// the Decision Bench family + the strategy flow). The DS surface composes
+// the component library; the existing room renders otherwise. The build +
+// quality engine, persistence, and the commercial profile are shared and
+// unchanged. `?ds=1` is a preview escape-hatch (mirrors ?demo=1 / ?qa=1).
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_icp_studio_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_icp_studio_legacy");
+}
+
+render(useDsSurface ? <IcpStudioDS /> : <IcpStudio />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Step 2 — async cloud load. Doesn't block first paint. If cloud has
 // rows, replace local state (cloud is canonical). If cloud is empty

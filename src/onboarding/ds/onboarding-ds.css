@@ -1,0 +1,49 @@
+/* Onboarding DS (canon §4.3) — the Threshold flow composed on the
+   design system; only the surface-specific rhythm here. Bright per canon
+   Part II §1. One step at a time, focused. */
+
+.obd { min-height: 100vh; background: var(--ds-field); }
+.obd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* Centered, focused flow column. */
+.obd-flow { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--ds-space-6); }
+.obd-progress { display: flex; flex-direction: column; }
+
+/* The step. */
+.obd-step { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+.obd-step__head { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.obd-step__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 60ch; }
+.obd-step__body { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.obd-step__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+
+/* Intro points. */
+.obd-intro { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.obd-intro li { font: var(--ds-type-body) / 1.5 var(--ds-font-sans); color: var(--ds-ink-soft); padding-left: var(--ds-space-4); border-left: 2px solid var(--ds-rule); }
+.obd-intro strong { color: var(--ds-ink); }
+
+/* Selectable options (the library has no selectable-option primitive). */
+.obd-fieldset { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.obd-legend { font: 600 var(--ds-type-label) / 1.35 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.obd-options { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.obd-options--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--ds-space-2); }
+.obd-option { display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; padding: var(--ds-space-3); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); cursor: pointer; transition: border-color 120ms ease, background 120ms ease; }
+.obd-option:hover { border-color: var(--ds-ink-soft); }
+.obd-option:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 2px; }
+.obd-option.is-selected { border-color: var(--ds-orange); background: var(--ds-surface-sub); }
+.obd-option--compact { padding: var(--ds-space-2) var(--ds-space-3); }
+.obd-option__label { font: 600 14px/1.3 var(--ds-font-sans); color: var(--ds-ink); }
+.obd-option__copy { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* Industry-agnostic toggle. */
+.obd-toggle { display: flex; align-items: center; gap: var(--ds-space-2); font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink); cursor: pointer; }
+
+/* Quota row. */
+.obd-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-4); }
+@media (max-width: 560px) { .obd-form-row { grid-template-columns: 1fr; } }
+
+.obd-coach { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-amber); }
+
+/* Completion. */
+.obd-complete { display: flex; flex-direction: column; gap: var(--ds-space-3); align-items: flex-start; }
+.obd-complete__alt { font: var(--ds-type-body) / 1.5 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.obd-complete__alt a { color: var(--ds-blue); }

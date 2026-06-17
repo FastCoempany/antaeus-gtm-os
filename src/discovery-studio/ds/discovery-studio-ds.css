@@ -1,0 +1,86 @@
+/* Discovery Studio DS (canon §4.12) — the Ledger Spine control face
+   composed on the design system; only the surface-specific rhythm here.
+   The dense control-face components keep their own .ds-* styling
+   (discovery-studio.css, still loaded). Bright per canon Part II §1.
+   A live console runs full-bleed — it wants width. */
+
+.dsd { min-height: 100vh; background: var(--ds-field); }
+.dsd-stage { max-width: 1440px; margin: 0 auto; padding: var(--ds-space-6) var(--ds-space-8) var(--ds-space-12); display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* The mast. */
+.dsd-mast { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* The control band — compression + the live call read, the on-call laws.
+   No clock, no tempo (founder 2026-06-16): the read carries call STATE
+   (where the next-step lock stands, how much truth is captured), not a
+   timer. The read sits to the right; on narrow widths it wraps below. */
+.dsd-control-band { display: flex; align-items: center; gap: var(--ds-space-4); flex-wrap: wrap; padding: var(--ds-space-3) var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.dsd-call-read { display: flex; align-items: center; gap: var(--ds-space-2); margin-left: auto; }
+.dsd-call-read__lead { font: 600 var(--ds-type-label) / 1.2 var(--ds-font-sans); color: var(--ds-ink-soft); }
+.dsd-call-read__facts { font: var(--ds-type-body) / 1.2 var(--ds-font-sans); color: var(--ds-ink-soft); }
+@media (max-width: 560px) { .dsd-call-read { margin-left: 0; } }
+
+.dsd-field { display: flex; align-items: center; gap: var(--ds-space-2); }
+.dsd-field__label { font: 600 var(--ds-type-label) / 1.2 var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* The 3-column board — the Ledger Spine layout. */
+.dsd-board { display: grid; grid-template-columns: 206px minmax(0, 1fr) 320px; gap: var(--ds-space-5); align-items: start; }
+.dsd-board__rail { position: sticky; top: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.dsd-board__rail-note { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.dsd-board__main { display: flex; flex-direction: column; gap: var(--ds-space-4); min-width: 0; }
+.dsd-board__main-title { font-family: var(--ds-font-serif); font-size: 18px; line-height: 1.3; color: var(--ds-ink); margin: 0; }
+.dsd-board__dock { position: sticky; top: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-4); }
+
+@media (max-width: 1100px) {
+    .dsd-board { grid-template-columns: 1fr; }
+    .dsd-board__rail, .dsd-board__dock { position: static; }
+}
+
+/* The next-step docket. */
+.dsd-docket { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.dsd-docket__head { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-3); }
+.dsd-docket__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-3); }
+.dsd-docket__wide { grid-column: 1 / -1; }
+@media (max-width: 700px) { .dsd-docket__grid { grid-template-columns: 1fr; } }
+
+/* The footer. */
+.dsd-footer { display: flex; flex-direction: column; gap: var(--ds-space-5); padding-top: var(--ds-space-5); border-top: 1px solid var(--ds-rule); }
+
+/* Recover-interrupt jump actions (route the seller to the segment). */
+.dsd-interrupt-actions { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; align-items: center; }
+
+/* Emergency = rescue: the recover moves hoisted to the front of the
+   center column when the call is going sideways. Red-ruled so it reads
+   as the panic surface; the spine collapses to the active segment. */
+.dsd-rescue-panel { display: flex; flex-direction: column; gap: var(--ds-space-3); padding: var(--ds-space-4); margin-bottom: var(--ds-space-2); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-left: 4px solid var(--ds-red); border-radius: var(--ds-radius-control); }
+.dsd-rescue-panel__lead { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.dsd--rescue .dsd-control-band { border-left: 4px solid var(--ds-red); }
+
+/* Wayfinder Why reasons. */
+.dsd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* Decision 1 (founder, 2026-06-16): no hard dark-navy areas. The reused
+   control-face components invert their ACTIVE state to a dark navy panel
+   (.is-active → background: var(--ds-ink)). In the DS surface those flip
+   to a bright "active" treatment — white surface, navy ink, an orange
+   "you're here" rule — so the active object stays unmistakable without a
+   dark panel. Scoped to .dsd so the legacy surface is untouched. The
+   branch picker inside the active node already carries its own white
+   surface, so only the node's own text + the badge/note need flipping. */
+.dsd .ds-framework-rail__btn.is-active,
+.dsd .ds-recover-rail__btn.is-active {
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    border-color: var(--ds-orange);
+    box-shadow: inset 3px 0 0 var(--ds-orange);
+}
+.dsd .ds-segment-rail__node.is-active {
+    background: var(--ds-surface);
+    color: var(--ds-ink);
+    border-color: var(--ds-rule);
+    box-shadow: inset 4px 0 0 var(--ds-orange), 0 6px 18px rgba(10, 28, 64, 0.08);
+}
+.dsd .ds-segment-rail__node.is-active .ds-segment-rail__node-badge,
+.dsd .ds-segment-rail__node.is-active .ds-segment-rail__node-note {
+    color: var(--ds-ink-soft);
+}

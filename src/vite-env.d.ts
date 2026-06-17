@@ -27,6 +27,15 @@ interface ImportMetaEnv {
      * actions. Separate from VITE_SENTRY_ENV so the two can diverge if needed.
      */
     readonly VITE_APP_ENV?: string;
+
+    /**
+     * Set to "1" only by the e2e build (npm run test:e2e) to force every
+     * room's gate onto the legacy surface — the Playwright walk suite was
+     * written against the legacy surfaces, which remain shipped as each
+     * room's safety net. Unset in the production build, so production
+     * serves the new design-system surfaces.
+     */
+    readonly VITE_E2E_FORCE_LEGACY?: string;
 }
 
 interface ImportMeta {

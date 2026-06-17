@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { TerritoryArchitect } from "./TerritoryArchitect";
+import { TerritoryArchitectDS } from "./ds/TerritoryArchitectDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/territory-architect-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
@@ -53,7 +58,34 @@ if (ctx.focusObject) {
     focusedIcp.value = ctx.focusObject;
 }
 
-render(<TerritoryArchitect />, root);
+// Design-system migration (canon §6, strategy flow: Territory Architect
+// after ICP Studio). The DS surface composes the component library; the
+// existing room renders otherwise. The field-read + allocation engine,
+// persistence, and the handoffs are shared and unchanged. `?ds=1` is a
+// preview escape-hatch (mirrors ?demo=1 / ?qa=1).
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_territory_architect_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_territory_architect_legacy");
+}
+
+render(useDsSurface ? <TerritoryArchitectDS /> : <TerritoryArchitect />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Async cloud load for focuses + approaches + accounts. Doesn't block
 // first paint. Replaces local state if cloud has rows; migrates local

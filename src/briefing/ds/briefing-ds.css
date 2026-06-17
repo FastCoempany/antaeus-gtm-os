@@ -1,0 +1,21 @@
+/* Briefing DS (canon §4.21) — the Intelligence Surface shell + chrome
+   composed on the design system. The stream content keeps its own
+   already-bright .bf-* styling (briefing.css, still imported); this file
+   only carries the DS shell rhythm. Bright per canon Part II §1. */
+
+.bfd { min-height: 100vh; background: var(--ds-field); }
+.bfd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* The thesis head. */
+.bfd-head { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.bfd-head__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 64ch; }
+
+/* The Workspace / World toggle sits prominent — the organizing axis. */
+.bfd-toggle { display: flex; }
+
+/* The cost meter footer. */
+.bfd-cost { padding-top: var(--ds-space-4); border-top: 1px solid var(--ds-rule); }
+
+/* The reused stream content stacks on the BandStack gap; trim the
+   legacy .bf-room outer padding when nested in the DS frame. */
+.bfd #bfd-room-main { display: block; }

@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
+import { SignalConsoleDS } from "./ds/SignalConsoleDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/signal-console-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { readContinuity } from "@/lib/continuity";
@@ -86,7 +91,35 @@ publishHealthSnapshot(seeded);
 // transparently throughout the cloud-sync rollout.
 startExternalPublishing();
 
-render(<SignalConsole />, root);
+// Design-system migration (canon §6, radiation order: Signal Console
+// after the Dashboard). The DS surface composes the component library;
+// the existing room renders otherwise. The engine + state + cloud layer
+// below are shared and unchanged. `?ds=1` is a preview escape-hatch
+// (mirrors ?demo=1 / ?qa=1) so the surface can be previewed without the
+// Posthog flag.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_signal_console_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_signal_console_legacy");
+}
+
+render(useDsSurface ? <SignalConsoleDS /> : <SignalConsole />, root);
+
+// Boot the density gradient so the DS surface's primitives render at
+// the workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Step 3 — async cloud load. Doesn't block first paint. If the
 // cloud has rows, replace local state (cloud is canonical). If the

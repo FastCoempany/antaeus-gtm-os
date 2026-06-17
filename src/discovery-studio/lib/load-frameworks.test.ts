@@ -73,7 +73,21 @@ const LEGAL_LEGACY = {
         { trigger: "asks for pricing too early", reply: "Pricing makes sense..." }
     ],
     interrupts: [
-        { id: "demo", label: "Demo request", tone: "blu", recover: "..." }
+        // The real runtime data names the recover guidance `reply` (not
+        // `recover`) and authors no tone — match that shape so the
+        // fixture reflects reality and the recover rail actually fills.
+        {
+            id: "demo",
+            label: "Demo request",
+            reply: "Map it to one live workflow first so the screen is not generic.",
+            actions: [
+                {
+                    label: "Open current-state",
+                    target: "node:current-state--probe",
+                    tone: "blu"
+                }
+            ]
+        }
     ]
 };
 
@@ -168,7 +182,21 @@ describe("loadFrameworks", () => {
         const interrupts = result[0]!.interrupts;
         expect(interrupts).toHaveLength(1);
         expect(interrupts[0]?.id).toBe("demo");
+        // Default tone when the data authors none.
         expect(interrupts[0]?.tone).toBe("blu");
+        // Regression: the recover guidance is authored under `reply` in
+        // the real data. Reading only `recover` dropped it for all 9
+        // frameworks (45 responses) — the recover rail rendered blank.
+        expect(interrupts[0]?.recover).toBe(
+            "Map it to one live workflow first so the screen is not generic."
+        );
+        // The recover jump-actions (jumpNode) route the seller to the
+        // segment where the recovery runs — they must survive projection.
+        expect(interrupts[0]?.actions).toHaveLength(1);
+        expect(interrupts[0]?.actions[0]?.target).toBe(
+            "node:current-state--probe"
+        );
+        expect(interrupts[0]?.actions[0]?.label).toBe("Open current-state");
     });
 
     it("only loads frameworks whose id is in FRAMEWORK_IDS", () => {

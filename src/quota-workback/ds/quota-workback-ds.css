@@ -1,0 +1,47 @@
+/* Quota Workback DS (canon §4.18) — the weekly-pressure System Ledger
+   composed on the design system; only the surface-specific rhythm here.
+   Bright per canon Part II §1. */
+
+.qwd { min-height: 100vh; background: var(--ds-field); }
+.qwd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* ── The plan ledger (object) ───────────────────────────────────────── */
+.qwd-ledger { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* The dominant summary — daily touch pressure. */
+.qwd-hero { display: flex; flex-direction: column; gap: var(--ds-space-2); padding: var(--ds-space-5); background: var(--ds-surface-sub); border-left: 3px solid var(--ds-orange); border-radius: var(--ds-radius-control); }
+.qwd-hero__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.qwd-hero__stat { display: flex; align-items: baseline; gap: var(--ds-space-2); }
+.qwd-hero__value { font-family: var(--ds-font-serif); font-size: clamp(48px, 7vw, 84px); line-height: 1; color: var(--ds-ink); }
+.qwd-hero__unit { font: 600 var(--ds-type-body) / 1 var(--ds-font-mono); text-transform: uppercase; letter-spacing: var(--ds-tracking-kicker); color: var(--ds-ink-soft); }
+.qwd-hero__read { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: var(--ds-measure); }
+
+/* The cascade. */
+.qwd-cascade { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--ds-space-3); }
+
+/* Coverage. */
+.qwd-coverage { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.qwd-coverage__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.qwd-coverage__ratio { font: 600 var(--ds-type-body) / 1 var(--ds-font-mono); color: var(--ds-ink); margin-left: auto; }
+.qwd-coverage__empty { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.qwd-coverage__meta { display: flex; gap: var(--ds-space-4); font: 500 12px/1.4 var(--ds-font-mono); color: var(--ds-ink-soft); flex-wrap: wrap; }
+.qwd-coverage__meta .is-bad { color: var(--ds-red); }
+.qwd-coverage__meta .is-good { color: var(--ds-green); }
+
+/* The raw math. */
+.qwd-math { border-top: 1px solid var(--ds-rule); padding-top: var(--ds-space-3); }
+.qwd-math summary { font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono); letter-spacing: var(--ds-tracking-kicker); text-transform: uppercase; color: var(--ds-ink-soft); cursor: pointer; }
+.qwd-math__rows { display: flex; flex-direction: column; gap: var(--ds-space-1); margin-top: var(--ds-space-3); }
+.qwd-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-4); padding: var(--ds-space-1) 0; border-bottom: 1px solid var(--ds-rule); }
+.qwd-row__label { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); }
+.qwd-row__value { font: 600 var(--ds-type-body) / 1.4 var(--ds-font-mono); color: var(--ds-ink); }
+
+/* ── The targets controls (subordinate) ─────────────────────────────── */
+.qwd-form { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.qwd-bench { display: flex; flex-direction: column; gap: var(--ds-space-2); padding: var(--ds-space-3); background: var(--ds-surface-sub); border-radius: var(--ds-radius-control); }
+.qwd-bench__copy { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.qwd-adv summary { font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono); letter-spacing: var(--ds-tracking-kicker); text-transform: uppercase; color: var(--ds-ink-soft); cursor: pointer; }
+.qwd-adv__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--ds-space-3); margin-top: var(--ds-space-3); }
+
+/* Wayfinder Why reasons. */
+.qwd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

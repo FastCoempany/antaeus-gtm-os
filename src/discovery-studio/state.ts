@@ -33,7 +33,8 @@ export const FRAMEWORK_IDS = [
     "sales-revenue",
     "manufacturing",
     "data-intelligence",
-    "ai-native"
+    "ai-native",
+    "global-contractor-management"
 ] as const;
 
 export type FrameworkId = (typeof FRAMEWORK_IDS)[number];
@@ -139,11 +140,24 @@ export interface SkipAheadHandler {
     readonly reply: string;
 }
 
+export interface InterruptAction {
+    readonly label: string;
+    /** Legacy target convention: "node:<segment>--<slug>" or "room:<id>". */
+    readonly target: string;
+    readonly tone: BranchTone;
+}
+
 export interface Interrupt {
     readonly id: string;
     readonly label: string;
     readonly tone: BranchTone;
     readonly recover: string;
+    /**
+     * Recover jumps — the segment(s) the interrupt routes the seller to
+     * so they can run the recovery from the right place, not just read a
+     * line. Authored as `actions` (jumpNode) in the runtime data.
+     */
+    readonly actions: ReadonlyArray<InterruptAction>;
 }
 
 export interface Framework {
@@ -493,6 +507,23 @@ export function triggerInterrupt(it: Interrupt): void {
 
 export function clearInterrupt(): void {
     activeInterrupt.value = null;
+}
+
+/**
+ * Route a recover jump-action to where it points. A "node:<seg>--<slug>"
+ * target opens that segment + node so the seller runs the recovery from
+ * the right place; the interrupt clears once routed. "room:<id>" targets
+ * are cross-room and handled by the caller's continuity-param navigation;
+ * they no-op here. Returns true when the jump resolved to a real node.
+ */
+export function jumpToInterruptTarget(target: string): boolean {
+    if (!target.startsWith("node:")) return false;
+    const nodeId = target.slice("node:".length);
+    const segmentKey = getSegmentKeyForNode(nodeId);
+    if (!segmentKey) return false;
+    setActiveNode(segmentKey, nodeId);
+    clearInterrupt();
+    return true;
 }
 
 // ─── Wave 5 — tieback hold / deploy ────────────────────────────────────

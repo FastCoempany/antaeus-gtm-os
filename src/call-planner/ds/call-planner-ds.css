@@ -1,0 +1,51 @@
+/* Call Planner DS (canon §4.11) — the prepared-agenda Decision-Bench-
+   shaped Live Instrument composed on the design system; only the
+   surface-specific rhythm here. Bright per canon Part II §1. */
+
+.cpd { min-height: 100vh; background: var(--ds-field); }
+.cpd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* ── The made object (dominant) ─────────────────────────────────────── */
+.cpd-object { display: flex; flex-direction: column; gap: var(--ds-space-6); }
+
+/* The quality read — the bench top. */
+.cpd-quality { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.cpd-quality__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.cpd-quality__score { font-family: var(--ds-font-serif); font-size: 28px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.cpd-quality__cap { font-size: 13px; color: var(--ds-ink-soft); }
+
+.cpd-gates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.cpd-gate { display: flex; align-items: center; gap: var(--ds-space-2); }
+.cpd-gate__mark { display: inline-flex; }
+.cpd-gate__mark--met { color: var(--ds-green); }
+.cpd-gate__mark--unmet { color: var(--ds-amber); }
+.cpd-gate__text { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* The four stops. */
+.cpd-stops { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.cpd-probes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.cpd-probe { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: var(--ds-space-2); }
+.cpd-probe__num { font: 700 11px/1 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.cpd-probe__text { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); }
+.cpd-advance__note { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: var(--ds-space-1) 0 0; padding-left: var(--ds-space-3); border-left: 2px solid var(--ds-rule); }
+
+/* The outcomes. */
+.cpd-outcomes { display: flex; flex-direction: column; gap: var(--ds-space-2); padding-top: var(--ds-space-3); border-top: 1px solid var(--ds-rule); }
+.cpd-outcomes__head { display: flex; align-items: center; gap: var(--ds-space-3); }
+.cpd-flash { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-green); }
+.cpd-outcomes__row { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; }
+
+/* Cross-room routes. */
+.cpd-routes { display: flex; flex-direction: column; gap: var(--ds-space-3); padding-top: var(--ds-space-3); border-top: 1px solid var(--ds-rule); }
+.cpd-routes__head { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.cpd-routes__copy { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.cpd-routes__row { display: flex; gap: var(--ds-space-3); flex-wrap: wrap; }
+
+/* ── The witness controls (subordinate) ─────────────────────────────── */
+.cpd-witness { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.cpd-dossier { display: flex; flex-direction: column; gap: var(--ds-space-1); padding: var(--ds-space-4); background: var(--ds-surface-sub); border-left: 3px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.cpd-dossier__line { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.cpd-dossier__line strong { color: var(--ds-ink); }
+
+/* Wayfinder Why reasons. */
+.cpd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

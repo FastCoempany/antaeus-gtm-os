@@ -1,0 +1,99 @@
+/* Future Autopsy DS (canon §4.14) — the forensic light-table composed on
+   the design system; only the surface-specific rhythm lives here. */
+
+.fad {
+  min-height: 100vh;
+  background: var(--ds-field);
+}
+.fad .ds-frame__column {
+  padding-top: var(--ds-space-8);
+  padding-bottom: var(--ds-space-12);
+}
+
+/* The focal pinned case. */
+.fad-pinned { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+.fad-pinned__head { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fad-pinned__vitals { display: flex; gap: var(--ds-space-2); flex-wrap: wrap; }
+
+.fad-pinned--empty,
+.fad-ledger--empty { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fad-pinned__empty-head { display: flex; align-items: center; gap: var(--ds-space-3); color: var(--ds-ink-soft); }
+.fad-empty__title { font-family: var(--ds-font-serif); font-size: 24px; line-height: 1.2; color: var(--ds-ink); margin: 0; }
+.fad-empty__body {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+  max-width: var(--ds-measure);
+}
+
+/* Verdict toggle. */
+.fad-verdict { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.fad-verdict__sub {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+
+/* The evidence sheets. */
+.fad-sheets { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fad-sheet__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.fad-sheet__list > li { display: flex; flex-direction: column; gap: 2px; }
+.fad-sheet__list--evidence { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--ds-space-2); }
+.fad-sheet__list--evidence > li { flex-direction: row; justify-content: space-between; gap: var(--ds-space-2); }
+.fad-sheet__label {
+  font: 600 11px/1.3 var(--ds-font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ds-ink-soft);
+}
+.fad-sheet__text {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink);
+}
+
+/* Countermeasure docket. */
+.fad-docket { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fad-docket__row { display: flex; flex-direction: column; gap: 2px; }
+.fad-docket__row.is-done .fad-docket__label { text-decoration: line-through; color: var(--ds-ink-soft); }
+.fad-docket__check { display: flex; align-items: center; gap: var(--ds-space-2); cursor: pointer; }
+.fad-docket__check input { accent-color: var(--ds-orange); width: 16px; height: 16px; }
+.fad-docket__label { font: 600 var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink); }
+.fad-docket__why {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  padding-left: calc(16px + var(--ds-space-2));
+}
+
+/* The ledger rail. */
+.fad-ledger { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.fad-ledger__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-2); }
+.fad-ledger__count { font: 500 11px/1 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.fad-ledger__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.fad-ledger__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-3);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-rule);
+  border-left: 3px solid transparent;
+  border-radius: var(--ds-radius-control);
+  cursor: pointer;
+  text-align: left;
+}
+.fad-ledger__row:hover { border-color: var(--ds-hair-strong); }
+.fad-ledger__row.is-active { border-left-color: var(--ds-orange); background: var(--ds-surface-sub); }
+.fad-ledger__row:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 2px; }
+.fad-ledger__mark { display: inline-flex; color: var(--ds-red); }
+.fad-ledger__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.fad-ledger__name { font: 600 var(--ds-type-body) / 1.2 var(--ds-font-sans); color: var(--ds-ink); }
+.fad-ledger__meta { font: 500 11px/1.2 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.fad-ledger__empty {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: 0;
+}
+
+/* Wayfinder Why reasons. */
+.fad-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

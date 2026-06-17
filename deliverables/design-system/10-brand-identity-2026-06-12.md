@@ -63,8 +63,12 @@ Shipped in `public/` (Vite copies to the dist root; every entry HTML links them)
 - One mark per surface: the Wayfinder carries it in-product; the landing hero carries L1. Nothing else needs it.
 - The construction (terminals, joins, the ground overhang) is shared with the icon set (09); a change to one is a change to both — founder-approved, version-bumped.
 
-## 6. Still open (the brand pass's back half)
+## 6. The back half — now spec'd, build deferred
 
-- The `visitor` voice register (decision #7) — validator configuration for the public face.
-- The marketing visual system — how the mark + face extend to the landing/social/docs surfaces.
-- L1 placement on the landing page ships with the public-face refresh, not before it.
+The brand pass's back half is closed as a *system*; what remains is the build, which waits for a reason to launch (we are building, not launching).
+
+- The `visitor` voice register (decision #7) — **configured** in `src/lib/voice/family-temperatures.ts` (the eighth register). Its application to live public surfaces ships with the public-face refresh.
+- The marketing visual system — **spec'd** in sibling `11-marketing-visual-system-2026-06-15.md`: how the mark + face extend to the landing / positioning / auth / legal / social / docs surfaces, against the Marcus-Reed visitor persona.
+- L1 — **built** as `BrandLockupSerif` (`src/components/brand.tsx`). Its placement on the landing hero ships with the public-face refresh, not before it.
+
+Brand identity is therefore complete as a system: the mark, its kit, the lockups, the favicons, the usage rules, and (via sibling 11) the language for the public face. The unbuilt piece is the public-face refresh build itself, deferred by design.

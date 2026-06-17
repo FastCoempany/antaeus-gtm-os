@@ -42,7 +42,7 @@ const SEED_DEALS = [
 ];
 
 async function seed(page: import("@playwright/test").Page): Promise<void> {
-    await page.goto("/future-autopsy/", { waitUntil: "domcontentloaded" });
+    await page.goto("/future-autopsy/?ds=0", { waitUntil: "domcontentloaded" });
     await page.evaluate((deals) => {
         localStorage.setItem(
             "gtmos_deal_workspaces",
@@ -295,7 +295,7 @@ test.describe("Program 6 / PR 7 — Future Autopsy (Forensic Light Table polish)
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/future-autopsy/?returnTo=%2Fdeal-workspace%2F&returnLabel=Back+to+Deal+Workspace",
+                "/future-autopsy/?ds=0&returnTo=%2Fdeal-workspace%2F&returnLabel=Back+to+Deal+Workspace",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

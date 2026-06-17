@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { LinkedinPlaybook } from "./LinkedinPlaybook";
+import { LinkedinPlaybookDS } from "./ds/LinkedinPlaybookDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/linkedin-playbook-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import {
@@ -74,7 +79,34 @@ if (inbound) patchDraft({ accountName: inbound });
 
 startActionsPersistence();
 
-render(<LinkedinPlaybook />, root);
+// Design-system migration (canon §6, outbound flow: LinkedIn Playbook
+// after Cold Call Studio). The DS surface composes the component library;
+// the existing room renders otherwise. The cue ladder, the motion engine,
+// persistence, and the handoffs are shared and unchanged. `?ds=1` is a
+// preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_linkedin_playbook_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_linkedin_playbook_legacy");
+}
+
+render(useDsSurface ? <LinkedinPlaybookDS /> : <LinkedinPlaybook />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Async cloud load for action history. Doesn't block first paint.
 void (async (): Promise<void> => {

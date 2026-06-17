@@ -1,0 +1,77 @@
+/* ICP Studio DS (canon §4.4) — the Decision Bench composed on the design
+   system; only the surface-specific rhythm lives here. */
+
+.icpd {
+  min-height: 100vh;
+  background: var(--ds-field);
+}
+.icpd .ds-frame__column {
+  padding-top: var(--ds-space-8);
+  padding-bottom: var(--ds-space-12);
+}
+
+/* The dominant shaped object. */
+.icpd-object { display: flex; flex-direction: column; gap: var(--ds-space-5); }
+
+/* Quality readout — what truth is being improved (the bench top). */
+.icpd-quality {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  padding-bottom: var(--ds-space-4);
+  border-bottom: 1px solid var(--ds-rule);
+}
+.icpd-quality__head { display: flex; align-items: center; gap: var(--ds-space-3); flex-wrap: wrap; }
+.icpd-quality__score { font-family: var(--ds-font-serif); font-size: 32px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.icpd-quality__cap { font-size: 14px; color: var(--ds-ink-soft); }
+.icpd-quality__summary {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink);
+  margin: 0;
+  max-width: var(--ds-measure);
+}
+.icpd-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.icpd-check { display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-2); align-items: start; }
+.icpd-check__mark { display: inline-flex; padding-top: 1px; }
+.icpd-check__mark--green { color: var(--ds-green); }
+.icpd-check__mark--amber { color: var(--ds-amber); }
+.icpd-check__mark--red { color: var(--ds-red); }
+.icpd-check__text { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* The statement. */
+.icpd-statement {
+  font-family: var(--ds-font-serif);
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--ds-ink);
+  margin: 0;
+}
+.icpd-statement__hint {
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  margin: var(--ds-space-2) 0 0;
+}
+
+/* Outputs. */
+.icpd-outputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--ds-space-3); }
+.icpd-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-1); font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* Saved library. */
+.icpd-saved { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.icpd-saved__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.icpd-saved__row { display: grid; grid-template-columns: auto 1fr; gap: var(--ds-space-3); align-items: center; }
+.icpd-saved__text { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink); }
+
+/* The subordinate builder. */
+.icpd-builder { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.icpd-profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  margin-top: var(--ds-space-4);
+  padding-top: var(--ds-space-4);
+  border-top: 1px solid var(--ds-rule);
+}
+
+/* Wayfinder Why reasons. */
+.icpd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

@@ -48,6 +48,7 @@
   --ds-orange-soft: rgba(230, 112, 30, 0.1);
   --ds-orange-tint: rgba(230, 112, 30, 0.05);
   --ds-blue: #2563eb;
+  --ds-blue-strong: #1d4ed8; /* blue action, hover/pressed */
   --ds-blue-soft: rgba(37, 99, 235, 0.08);
   --ds-green: #22c55e;
   --ds-green-soft: rgba(34, 197, 94, 0.1);

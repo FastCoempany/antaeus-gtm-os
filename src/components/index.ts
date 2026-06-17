@@ -20,7 +20,7 @@ export { Kicker, Heading, Stat, StatusChip, Gauge, Stamp, Avatar } from "./displ
 export type { HeadingLevel } from "./display";
 export { Button, IconButton, CrossRoomLink, Toggle } from "./action";
 export type { ButtonVariant } from "./action";
-export { TextInput, Select, FormField } from "./input";
+export { TextInput, Textarea, Select, FormField } from "./input";
 export { Card } from "./card";
 export type { CardProps } from "./card";
 export { Toast, Alert, Drawer, Modal, Tooltip } from "./feedback";
@@ -34,7 +34,7 @@ export {
     PulseHorizon
 } from "./pulse";
 export { Meter } from "./meter";
-export { BrandMark, BrandLockup } from "./brand";
+export { BrandMark, BrandLockup, BrandLockupSerif } from "./brand";
 export { Table, Progress } from "./data";
 export type { TableColumn, TableRow, Milestone } from "./data";
 export { PatternCard, ProposalCard, ReadinessReadout, RiskCard } from "./system";

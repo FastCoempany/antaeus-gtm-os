@@ -1,0 +1,69 @@
+/* Outbound Studio DS (canon §4.8) — the Live Instrument console composed
+   on the design system; only the surface-specific rhythm lives here. */
+
+.osd { min-height: 100vh; background: var(--ds-field); }
+.osd .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+/* The routed line — the dominant readout. */
+.osd-line { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.osd-line__head { display: flex; align-items: center; gap: var(--ds-space-3); flex-wrap: wrap; }
+.osd-line__score { font-family: var(--ds-font-serif); font-size: 28px; line-height: 1; color: var(--ds-ink); margin-left: auto; }
+.osd-line__cap { font-size: 13px; color: var(--ds-ink-soft); }
+.osd-line__content {
+  font: var(--ds-type-body) / 1.6 var(--ds-font-sans);
+  color: var(--ds-ink);
+  margin: 0;
+  white-space: pre-wrap;
+  padding: var(--ds-space-4);
+  background: var(--ds-surface-sub);
+  border-left: 3px solid var(--ds-orange);
+  border-radius: var(--ds-radius-control);
+  max-width: var(--ds-measure);
+}
+.osd-line__chips { display: flex; align-items: center; gap: var(--ds-space-2); flex-wrap: wrap; }
+.osd-line__foot { display: flex; align-items: center; gap: var(--ds-space-3); flex-wrap: wrap; }
+.osd-btn-row { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+.osd-line__flash { font: 500 12px/1 var(--ds-font-mono); color: var(--ds-green); }
+
+/* Empty line state. */
+.osd-line--empty { gap: var(--ds-space-3); max-width: var(--ds-measure); }
+.osd-line__empty-head { display: flex; align-items: center; gap: var(--ds-space-3); color: var(--ds-ink-soft); }
+.osd-empty__title { font-family: var(--ds-font-serif); font-size: 24px; line-height: 1.25; color: var(--ds-ink); margin: 0; }
+.osd-empty__body { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* The rack — proximal controls. */
+.osd-rack { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.osd-rack__toggle { display: flex; align-items: center; gap: var(--ds-space-3); }
+.osd-rack__toggle-label { font: var(--ds-type-body) / 1.3 var(--ds-font-sans); color: var(--ds-ink-soft); }
+
+/* The touch log — the recovery cable. */
+.osd-log { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.osd-log__head { display: flex; align-items: baseline; gap: var(--ds-space-3); }
+.osd-log__count { font: 500 11px/1 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.osd-log__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.osd-log__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-3) 0;
+  border-top: 1px solid var(--ds-rule);
+}
+.osd-log__row:first-child { border-top: none; }
+.osd-log__body { display: flex; flex-direction: column; gap: var(--ds-space-1); min-width: 0; }
+.osd-log__line {
+  font: var(--ds-type-body) / 1.4 var(--ds-font-sans);
+  color: var(--ds-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.osd-log__meta { display: flex; align-items: center; gap: var(--ds-space-2); flex-wrap: wrap; }
+.osd-log__temp { font: 500 11px/1.3 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.osd-log__row .ds-input { max-width: 160px; }
+.osd-log__empty { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+
+/* Wayfinder Why reasons. */
+.osd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }

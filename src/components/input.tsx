@@ -35,6 +35,29 @@ export function TextInput(props: {
     );
 }
 
+export function Textarea(props: {
+    readonly value: string;
+    readonly onInput: (next: string) => void;
+    readonly placeholder?: string;
+    readonly rows?: number;
+    readonly disabled?: boolean;
+    readonly id?: string;
+}): JSX.Element {
+    return (
+        <textarea
+            id={props.id}
+            class="ds-input ds-textarea"
+            rows={props.rows ?? 3}
+            value={props.value}
+            placeholder={props.placeholder}
+            disabled={props.disabled}
+            onInput={(e) =>
+                props.onInput((e.currentTarget as HTMLTextAreaElement).value)
+            }
+        />
+    );
+}
+
 export function Select(props: {
     readonly value: string;
     readonly onChange: (next: string) => void;

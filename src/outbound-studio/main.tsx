@@ -1,6 +1,11 @@
 import { render } from "preact";
 import { computed } from "@preact/signals";
 import { OutboundStudio } from "./OutboundStudio";
+import { OutboundStudioDS } from "./ds/OutboundStudioDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/outbound-studio-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
@@ -68,7 +73,33 @@ if (Object.keys(inbound).length > 0) {
     patchRack(inbound);
 }
 
-render(<OutboundStudio />, root);
+// Design-system migration (canon §6, outbound flow: Outbound Studio
+// first). The DS surface composes the component library; the existing
+// room renders otherwise. The send-line generator, persistence, and the
+// handoffs are shared and unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_outbound_studio_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_outbound_studio_legacy");
+}
+
+render(useDsSurface ? <OutboundStudioDS /> : <OutboundStudio />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Phase 5 of ADR-003 (pre-beta hygiene §5.5.1) — wire unsaved-changes
 // guard. Operator rack draft (account / contact / persona / temperature

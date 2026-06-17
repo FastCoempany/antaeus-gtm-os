@@ -1,6 +1,11 @@
 import { render } from "preact";
 import { computed } from "@preact/signals";
 import { CallPlanner } from "./CallPlanner";
+import { CallPlannerDS } from "./ds/CallPlannerDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/call-planner-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { createDataClient } from "@/lib/data-client";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
@@ -89,7 +94,34 @@ const witnessDirty = computed(() => {
 });
 startUnsavedGuard(witnessDirty, "Call Planner");
 
-render(<CallPlanner />, root);
+// Design-system migration (canon §6, outbound flow: Call Planner closes
+// the flow after the Live Instruments). The DS surface composes the
+// component library; the existing room renders otherwise. The four-stop
+// spine, the quality engine, persistence, and the handoffs are shared and
+// unchanged. `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_call_planner_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_call_planner_legacy");
+}
+
+render(useDsSurface ? <CallPlannerDS /> : <CallPlanner />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Async cloud load. If the cloud has a recent agenda saved from
 // another device, hydrate the draft from it (cloud is canonical

@@ -1,5 +1,10 @@
 import { render } from "preact";
 import { FoundingGtm } from "./FoundingGtm";
+import { FoundingGtmDS } from "./ds/FoundingGtmDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/founding-gtm-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { startUnsavedGuard } from "@/lib/unsaved-guard";
 import {
@@ -87,7 +92,34 @@ if (typeof window !== "undefined") {
     });
 }
 
-render(<FoundingGtm />, root);
+// Design-system migration (canon §6, synthesis flow — the culmination
+// room). The DS surface composes the component library; the existing room
+// renders otherwise. The seven authoring engines, the cross-room readers,
+// the health publisher, and the ceremony moment are shared and unchanged.
+// `?ds=1` is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_founding_gtm_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_founding_gtm_legacy");
+}
+
+render(useDsSurface ? <FoundingGtmDS /> : <FoundingGtm />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Unsaved-changes guard — when the share-link composer is open, the
 // operator may be mid-typing the recipient email or note. Bounce them

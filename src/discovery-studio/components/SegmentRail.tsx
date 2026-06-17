@@ -16,24 +16,6 @@ import {
 } from "../state";
 
 /**
- * Static tempo hints per segment key — guidance, not enforcement.
- * 30-minute call distributed proportionally: pain + current-state get
- * the most time, openers + post-call routing the least. Total ≈ 30.
- */
-const TEMPO_HINTS: Record<string, number> = {
-    "opening-frame": 2,
-    "current-state-truth": 5,
-    "pain-and-consequence": 5,
-    "trigger-and-urgency": 3,
-    "stakeholder-and-ownership": 3,
-    "proof-threshold": 3,
-    "current-vendor-and-displacement": 3,
-    "decision-architecture": 3,
-    "next-step-lock": 2,
-    "post-call-routing": 1
-};
-
-/**
  * SegmentRail — Program 6 / PR 4 refacing.
  *
  * The 10-stop spine, vertically stacked. Adopts the Ledger Spine
@@ -47,9 +29,11 @@ const TEMPO_HINTS: Record<string, number> = {
  * makes the segment expand. Clicking the expanded segment's header
  * again collapses it (clears activeNode).
  *
- * Compression mode still filters NODES inside the active segment;
- * segments themselves are not hidden by compression mode (they're
- * always 10 rows, just compressed when not active).
+ * Compression mode filters NODES inside the active segment (Off shows
+ * all, Essentials shows the must-hit nodes). EMERGENCY is the rescue
+ * state: it collapses the spine to just the segment you're in (founder
+ * direction 2026-06-16) so the surface tunnels onto the live moment
+ * while the recover moves are hoisted to the front in DiscoveryStudioDS.
  *
  * Previous (Wave 2) model showed every segment with all visible
  * nodes + branches inline at once — that read as a long scrolling
@@ -88,20 +72,22 @@ export function SegmentRail(): JSX.Element {
 
     const filterNode = (nodeId: string): boolean =>
         mode === "off" ? true : essentials.includes(nodeId);
+    // Emergency = rescue: tunnel onto the segment you're in. When a
+    // segment is active, hide every other segment; when none is active,
+    // still show all so the seller can pick where to recover from.
+    const rescue = mode === "emergency";
 
     return (
         <section class="ds-segment-rail" aria-label={t("Discovery segments")}>
             <ol class="ds-segment-rail__list">
                 {fw.segments.map((seg) => {
+                    if (rescue && activeSegmentKey && seg.key !== activeSegmentKey) {
+                        return null;
+                    }
                     const visibleNodes = seg.nodes.filter((n) =>
                         filterNode(n.id)
                     );
                     if (visibleNodes.length === 0) return null;
-                    // Wave 5 — phase tempo hint. 30-min target divided
-                    // across 10 segments = 3 min per segment baseline. Pain
-                    // and current-state segments get extra weight, openers
-                    // and routing get less. Static hint, not enforced.
-                    const tempoMinutes = TEMPO_HINTS[seg.key] ?? 3;
                     // Ledger Spine: one segment expanded at a time.
                     const isSegmentActive = activeSegmentKey === seg.key;
                     // Clicking a collapsed segment header selects its
@@ -137,9 +123,6 @@ export function SegmentRail(): JSX.Element {
                                 </span>
                                 <span class="ds-segment-rail__segment-title">
                                     {seg.title}
-                                </span>
-                                <span class="ds-segment-rail__segment-tempo">
-                                    ~{tempoMinutes}m
                                 </span>
                             </button>
                             {isSegmentActive && seg.cue ? (

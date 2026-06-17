@@ -172,6 +172,18 @@ export function clearUser(): void {
 
 // For feature flags (Phase 3+ rolling migration).
 export function isFeatureEnabled(flagKey: string): boolean {
+    // E2E builds force the per-room legacy surfaces. The Playwright walk
+    // suite was written against the legacy surfaces, which remain shipped
+    // as each room's safety net (the new design-system surface is the
+    // production default). Setting VITE_E2E_FORCE_LEGACY=1 at build time
+    // turns every `room_*_legacy` kill-switch ON so the gates resolve to
+    // legacy. Inert in the production build, where the var is unset.
+    if (
+        import.meta.env.VITE_E2E_FORCE_LEGACY === "1" &&
+        flagKey.endsWith("_legacy")
+    ) {
+        return true;
+    }
     if (!posthogInitialized) return false;
     return posthog.isFeatureEnabled(flagKey) ?? false;
 }

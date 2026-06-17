@@ -6,7 +6,9 @@ import {
     StatusChip,
     WayfinderBar
 } from "@/components";
+import { Icon } from "@/icons";
 import { t } from "@/lib/voice/t";
+import { pickByDensity } from "@/lib/density";
 import {
     closeReadinessDrawer,
     commandMode,
@@ -17,8 +19,8 @@ import {
     setCommandMode
 } from "../state";
 import { COMMAND_MODE_LABELS, COMMAND_MODES, type CommandMode } from "../lib/types";
-import { ReadinessDrawer } from "../components/ReadinessDrawer";
-import { WeekReadsCard } from "../components/WeekReadsCard";
+import { ReadinessPanel } from "./components/ReadinessPanel";
+import { WeekReads } from "./components/WeekReads";
 import { toPulling } from "./lib/adapters";
 import { BriefRead } from "./components/BriefRead";
 import { SpotlightRead } from "./components/SpotlightRead";
@@ -70,7 +72,7 @@ export function TodaySurface(): JSX.Element {
                 }
             />
             <PageFrame>
-                <BandStack>
+                <BandStack stage>
                     <header class="dbt-head">
                         <div class="dbt-head__lead">
                             {showVerdict ? (
@@ -99,18 +101,23 @@ export function TodaySurface(): JSX.Element {
                         ) : null}
                     </header>
 
-                    {isEmpty ? <EmptyToday /> : <ActiveRead mode={mode} />}
+                    {isEmpty ? (
+                        <EmptyToday />
+                    ) : (
+                        <div class="ds-read" key={mode}>
+                            <ActiveRead mode={mode} />
+                        </div>
+                    )}
 
-                    {!isEmpty ? <WeekReadsCard /> : null}
+                    {!isEmpty ? <WeekReads /> : null}
                 </BandStack>
             </PageFrame>
 
-            {readinessDrawerOpen.value ? (
-                <ReadinessDrawer
-                    summary={verdict}
-                    onClose={closeReadinessDrawer}
-                />
-            ) : null}
+            <ReadinessPanel
+                open={readinessDrawerOpen.value}
+                summary={verdict}
+                onClose={closeReadinessDrawer}
+            />
         </div>
     );
 }
@@ -127,6 +134,17 @@ function ActiveRead(props: { readonly mode: CommandMode }): JSX.Element {
  * Threshold-calm register, with one move each.
  */
 function EmptyToday(): JSX.Element {
+    // Sentence count is a density dimension (02 §3.1): the full
+    // orientation, or the terse one-liner for the fluent operator.
+    const sub = pickByDensity({
+        verbose: t(
+            "The ranking waits on three kinds of input — targets, signals, and deals. Start with whichever you have a few minutes for.",
+            { class: "body" }
+        ),
+        terse: t("The ranking waits on targets, signals, and deals.", {
+            class: "body"
+        })
+    });
     return (
         <section class="dbt-empty">
             <p class="ds-kicker">{t("THE BOARD IS QUIET")}</p>
@@ -136,21 +154,16 @@ function EmptyToday(): JSX.Element {
                     { class: "body" }
                 )}
             </h2>
-            <p class="dbt-empty__sub">
-                {t(
-                    "The ranking waits on three kinds of input — targets, signals, and deals. Start with whichever you have a few minutes for.",
-                    { class: "body" }
-                )}
-            </p>
+            <p class="dbt-empty__sub">{sub}</p>
             <div class="dbt-empty__moves">
                 <a class="ds-btn ds-btn--accent" href="/signal-console/">
-                    {t("Add an account to the radar")}
+                    <Icon name="account" size={16} /> {t("Add an account to the radar")}
                 </a>
                 <a class="ds-btn ds-btn--secondary" href="/deal-workspace/">
-                    {t("Load a live deal")}
+                    <Icon name="deal" size={16} /> {t("Load a live deal")}
                 </a>
                 <a class="ds-btn ds-btn--secondary" href="/sourcing-workbench/">
-                    {t("Push prospects into the funnel")}
+                    <Icon name="find" size={16} /> {t("Push prospects into the funnel")}
                 </a>
             </div>
         </section>

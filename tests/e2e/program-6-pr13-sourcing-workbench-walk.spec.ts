@@ -21,7 +21,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -52,7 +52,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -84,7 +84,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
                     /* noop */
                 }
             });
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -108,7 +108,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -135,7 +135,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
                     /* noop */
                 }
             });
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -155,7 +155,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -179,7 +179,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         });
         const page = await ctx.newPage();
         try {
-            await page.goto("/sourcing-workbench/", {
+            await page.goto("/sourcing-workbench/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -203,7 +203,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/sourcing-workbench/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/sourcing-workbench/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

@@ -66,7 +66,7 @@ const FIXTURE: Framework = {
     inboundQuestionHandlers: [],
     skipAheadHandlers: [],
     interrupts: [
-        { id: "demo", label: "Demo", tone: "blu", recover: "..." }
+        { id: "demo", label: "Demo", tone: "blu", recover: "...", actions: [] }
     ]
 };
 

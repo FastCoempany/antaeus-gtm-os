@@ -1,0 +1,43 @@
+/* Outdoors Events DS (canon §4.22) — the discovery Live Instrument
+   composed on the design system; only the surface-specific rhythm here.
+   Bright per canon Part II §1. */
+
+.oed { min-height: 100vh; background: var(--ds-field); }
+.oed .ds-frame__column { padding-top: var(--ds-space-8); padding-bottom: var(--ds-space-12); }
+
+.oed-head { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.oed-head__sub { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 64ch; }
+
+/* The discovery console — the action surface, orange left-rule. */
+.oed-console { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-4); padding: var(--ds-space-5); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-left: 4px solid var(--ds-orange); border-radius: var(--ds-radius-control); }
+.oed-console__main { display: flex; flex-direction: column; gap: var(--ds-space-2); max-width: 52ch; }
+.oed-console__hint { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.oed-console__run { display: flex; flex-direction: column; gap: var(--ds-space-1); align-items: flex-end; }
+.oed-console__run-meta { font: 500 12px/1.4 var(--ds-font-mono); color: var(--ds-ink-soft); }
+.oed-console__run-error, .oed-console__error { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-red); margin: 0; }
+
+/* The tier-grouped list. */
+.oed-list { display: flex; flex-direction: column; gap: var(--ds-space-8); }
+.oed-list__loading { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); }
+.oed-list__group { display: flex; flex-direction: column; gap: var(--ds-space-3); }
+.oed-list__hint { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); margin: calc(-1 * var(--ds-space-2)) 0 0; }
+.oed-list__rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--ds-space-4); align-items: start; }
+
+/* Event card internals. */
+.oed-event__name { font-family: var(--ds-font-serif); font-size: 18px; line-height: 1.3; color: var(--ds-ink); margin: 0; }
+.oed-event__meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); margin: var(--ds-space-1) 0 0; }
+.oed-event__meta span:not(:last-child)::after { content: "·"; margin-left: var(--ds-space-2); color: var(--ds-rule); }
+.oed-event__reason { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink); margin: var(--ds-space-2) 0 0; font-style: italic; }
+.oed-event__notes { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: var(--ds-space-1) 0 0; }
+.oed-event__tags { display: flex; flex-wrap: wrap; gap: var(--ds-space-1); margin: var(--ds-space-2) 0 0; }
+.oed-event__foot { display: flex; align-items: center; gap: var(--ds-space-2); flex-wrap: wrap; margin: var(--ds-space-3) 0 0; padding-top: var(--ds-space-3); border-top: 1px solid var(--ds-rule); }
+.oed-event__src { margin-left: auto; font: 600 12px/1 var(--ds-font-mono); }
+
+/* The demoted composer. */
+.oed-composer__closed { display: flex; flex-direction: column; gap: var(--ds-space-2); align-items: flex-start; padding-top: var(--ds-space-4); border-top: 1px dashed var(--ds-rule); }
+.oed-composer__nudge { font: var(--ds-type-body) / 1.45 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; max-width: 58ch; }
+.oed-composer__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ds-space-3); }
+.oed-composer__wide { grid-column: 1 / -1; }
+.oed-composer__actions { display: flex; gap: var(--ds-space-2); margin-top: var(--ds-space-3); }
+.oed-composer__error { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-red); margin: var(--ds-space-2) 0 0; }
+@media (max-width: 560px) { .oed-composer__grid { grid-template-columns: 1fr; } }

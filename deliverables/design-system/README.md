@@ -1,18 +1,18 @@
 # Antaeus Design System — Index & Governance
 
-**Version:** 1.7.0 (see VERSION + CHANGELOG.md; model in Part IV).
+**Version:** 1.9.0 (see VERSION + CHANGELOG.md; model in Part IV).
 
 **Status:** DRAFT for founder review.
 **Date:** 2026-06-07.
 **Author:** Claude, working session with the founder (mrcoe7@gmail.com).
 **Branch:** `claude/antaeus-gtmos-design-system`.
-**Scope:** This is the front door of the design system: what it is, what each of its ten siblings governs, how they fit together, how a change to any of them is made, what the system explicitly does *not* try to cover, and where the brand layer lives instead. A cold reader opens this first; a returning session uses it as the map; a contributor reads the governance model here before opening a pull request that changes a word, a color, a token, or a rule. This document does not invent rules; it consolidates and points.
+**Scope:** This is the front door of the design system: what it is, what each of its eleven siblings governs, how they fit together, how a change to any of them is made, what the system explicitly does *not* try to cover, and where the brand layer lives instead. A cold reader opens this first; a returning session uses it as the map; a contributor reads the governance model here before opening a pull request that changes a word, a color, a token, or a rule. This document does not invent rules; it consolidates and points.
 
 ---
 
 ## 0. Why this exists
 
-The design system was built sibling by sibling, each spec written to govern the layer in front of it. That worked — but it left no document at the level above, naming what the set is, what order it was built in, how it composes, how to change it, or what is deliberately out of scope. A future session opening this folder cold would have to reassemble the map from ten files, the way a session opening the vocabulary cold had to reassemble it from a dozen places before the lexicon (`07`) gave it one home. This document is the same fix at one altitude up. It is deliberately short because its job is to point — at the docs that argue and at the canon that decides — not to repeat what the siblings say.
+The design system was built sibling by sibling, each spec written to govern the layer in front of it. That worked — but it left no document at the level above, naming what the set is, what order it was built in, how it composes, how to change it, or what is deliberately out of scope. A future session opening this folder cold would have to reassemble the map from eleven files, the way a session opening the vocabulary cold had to reassemble it from a dozen places before the lexicon (`07`) gave it one home. This document is the same fix at one altitude up. It is deliberately short because its job is to point — at the docs that argue and at the canon that decides — not to repeat what the siblings say.
 
 Honest note: this should have existed earlier. The set was substantially navigable by sibling 04 and could have stayed living from then on. It got built late because each sibling pass focused on the content of the new doc rather than on whether the system, viewed from outside, was still navigable. Going forward, an index update is part of any sibling change.
 
@@ -35,7 +35,7 @@ The system is **deliberately small** at every level. Three layout archetypes, no
 
 ---
 
-## Part II — The ten siblings
+## Part II — The eleven siblings
 
 In dependency order — read top to bottom on a first pass.
 
@@ -71,6 +71,9 @@ The icon system and the proprietary set. A 24px construction grid with a 2px key
 
 ### 10 — Brand Identity (`10-brand-identity-2026-06-12.md`)
 The Grounded A, locked: a drafted capital A on a ground line extending past its feet, in the icon set's construction. The geometry (48 viewBox, the weight ladder, the no-bar-at-16 rule), the L1 serif / L2 caps lockups, the shipped favicon files, and the usage rules. Implementation: `src/components/brand.tsx`; decided rounds 1–2, 2026-06-12.
+
+### 11 — Marketing Visual System (`11-marketing-visual-system-2026-06-15.md`)
+The visitor face: how the mark + face extend to the surfaces a prospect sees before becoming an operator — landing, positioning, the auth boundary, legal, social share cards, docs. One DNA with the operator face (bright field, navy ink, orange rationed, the type trio, the Grounded-A mark), more room to make the argument; measured against the Marcus-Reed visitor persona and the Test 4 / Test 5 rubric. The spec is the design language; the public-face refresh is the build that consumes it, deferred by design. Closes brand identity (`10` §6) as a system.
 
 ---
 

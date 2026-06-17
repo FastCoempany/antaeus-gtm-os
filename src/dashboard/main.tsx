@@ -66,14 +66,22 @@ if (!flagOn) {
 // the flag drives it.
 const todayParam = (() => {
     try {
-        return new URLSearchParams(window.location.search).get("today") === "1";
+        return new URLSearchParams(window.location.search).get("today");
     } catch {
-        return false;
+        return null;
     }
 })();
-const todaySurfaceOn =
-    todayParam || isFeatureEnabled("room_dashboard_today_v3");
-render(todaySurfaceOn ? <TodaySurface /> : <Dashboard />, root);
+let useTodaySurface: boolean;
+if (todayParam === "1") {
+    useTodaySurface = true;
+} else if (todayParam === "0") {
+    useTodaySurface = false;
+} else {
+    // Default to the new today surface; the legacy Dashboard is the safety
+    // net, reachable by flipping room_dashboard_today_legacy ON in Posthog.
+    useTodaySurface = !isFeatureEnabled("room_dashboard_today_legacy");
+}
+render(useTodaySurface ? <TodaySurface /> : <Dashboard />, root);
 
 // Boot the density gradient so the today surface's primitives render
 // at the workspace's chosen density (defensive — no-ops without a

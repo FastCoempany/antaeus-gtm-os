@@ -33,7 +33,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -60,7 +60,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -83,7 +83,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
             await page.addInitScript((inputs) => {
                 localStorage.setItem("gtmos_qw_inputs", inputs);
             }, POPULATED_INPUTS);
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(400);
@@ -152,7 +152,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
                     /* noop */
                 }
             });
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -181,7 +181,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -202,7 +202,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/quota-workback/", {
+            await page.goto("/quota-workback/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -221,7 +221,7 @@ test.describe("Program 6 / PR 17 — Quota Workback refacing (Variant 01 AI-sele
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/quota-workback/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/quota-workback/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

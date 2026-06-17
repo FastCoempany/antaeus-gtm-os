@@ -1,5 +1,6 @@
 import type { ComponentChildren, JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import { Icon, type IconName } from "@/icons";
 import type { AccentRole, DataState } from "./contract";
 import { Gauge, Heading, Kicker } from "./display";
 
@@ -24,11 +25,24 @@ import { Gauge, Heading, Kicker } from "./display";
 
 export interface CardProps {
     readonly kicker?: string;
+    /**
+     * The object's glyph (spec 09), rendered beside the kicker. Sacred
+     * nouns carry their own mark — a deal card wears the deal glyph, a
+     * signal the signal glyph. Aria-hidden: it sits next to the kicker
+     * text, which names it.
+     */
+    readonly icon?: IconName;
     readonly title?: string;
     readonly tone?: AccentRole;
     readonly offset?: boolean;
     /** Offset only: the tag that sits outside the card, top-left. */
     readonly offsetTag?: string;
+    /**
+     * The ambient pulse (spec 08 §3.6): a single shimmer dot beside the
+     * offset tag marking the most-pressured object. Exactly one per
+     * surface — only the surface's top-ranked offset card sets it.
+     */
+    readonly pulse?: boolean;
     readonly state?: DataState;
     /** Empty state: why the surface matters, in a sentence. */
     readonly emptyWhy?: string;
@@ -79,7 +93,16 @@ export function Card(props: CardProps): JSX.Element {
         >
             <Gauge tone={props.tone} />
             <div class="ds-card__body">
-                {props.kicker ? <Kicker>{props.kicker}</Kicker> : null}
+                {props.icon || props.kicker ? (
+                    <div class="ds-card__kicker-row">
+                        {props.icon ? (
+                            <span class="ds-card__icon">
+                                <Icon name={props.icon} size={16} />
+                            </span>
+                        ) : null}
+                        {props.kicker ? <Kicker>{props.kicker}</Kicker> : null}
+                    </div>
+                ) : null}
                 {props.title ? (
                     <div class="ds-card__head">
                         <Heading level="title">{props.title}</Heading>
@@ -104,8 +127,13 @@ export function Card(props: CardProps): JSX.Element {
     if (props.offset) {
         return (
             <div class="ds-offset">
-                {props.offsetTag ? (
-                    <span class="ds-offset__tag">{props.offsetTag}</span>
+                {props.offsetTag || props.pulse ? (
+                    <span class="ds-offset__tag">
+                        {props.pulse ? (
+                            <span class="ds-pulse-dot" aria-hidden="true" />
+                        ) : null}
+                        {props.offsetTag}
+                    </span>
                 ) : null}
                 {card}
             </div>

@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { PulseHorizon, PulseTimeline, PulseZone } from "@/components";
+import { showsAnnotations } from "@/lib/density";
 import { t } from "@/lib/voice/t";
 import { commandSummary } from "../../state";
 import { toZones } from "../lib/adapters";
@@ -16,6 +17,10 @@ export function QueueRead(): JSX.Element {
     const summary = commandSummary.value;
     const zones = toZones(summary.ranked);
     const ranked = summary.ranked;
+    // The "most pressured" tag is an annotation (02 §3.4) — present in
+    // Show me how, gone in Step back. The card still breaks rank either
+    // way; only the label recedes.
+    const annotate = showsAnnotations();
 
     return (
         <div class="dbt-queue">
@@ -30,7 +35,12 @@ export function QueueRead(): JSX.Element {
                             key={o.id}
                             object={o}
                             offset={i === 0}
-                            offsetTag={i === 0 ? t("— Most pressured") : undefined}
+                            pulse={i === 0}
+                            offsetTag={
+                                i === 0 && annotate
+                                    ? t("— Most pressured")
+                                    : undefined
+                            }
                         />
                     ))}
                 </PulseZone>

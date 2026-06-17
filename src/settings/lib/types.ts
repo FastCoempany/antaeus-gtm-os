@@ -14,13 +14,14 @@ export type ProductCategory =
     | "manufacturing"
     | "data-intelligence"
     | "govtech"
-    | "support";
+    | "support"
+    | "gcm";
 
 export const PRODUCT_CATEGORIES: ReadonlyArray<{
     readonly key: ProductCategory;
     readonly label: string;
 }> = [
-    { key: "cxai", label: "CX AI / Support Automation" },
+    { key: "cxai", label: "CX AI — Customer Experience & Support" },
     { key: "cdp", label: "Customer Data Platform" },
     { key: "legal", label: "Legal AI" },
     { key: "revenue", label: "Revenue Intelligence AI" },
@@ -28,7 +29,10 @@ export const PRODUCT_CATEGORIES: ReadonlyArray<{
     { key: "manufacturing", label: "Manufacturing / Supply Chain" },
     { key: "data-intelligence", label: "Data Intelligence Infrastructure" },
     { key: "govtech", label: "GovTech / Compliance" },
-    { key: "support", label: "Customer Support / Operations" }
+    { key: "gcm", label: "Global Contractor Management / EOR" }
+    // "support" kept in the type for backward-compat with stored values,
+    // but dropped from the displayed list — the cxai category ("CX AI —
+    // Customer Experience & Support") now covers it (2026-06-16).
 ];
 
 export interface BackupSnapshot {

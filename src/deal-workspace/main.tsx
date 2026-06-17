@@ -1,6 +1,11 @@
 import { render } from "preact";
 import { computed } from "@preact/signals";
 import { DealWorkspace } from "./DealWorkspace";
+import { DealWorkspaceDS } from "./ds/DealWorkspaceDS";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/deal-workspace-ds.css";
 import { initObservability, isFeatureEnabled } from "@/lib/observability";
 import { readContinuity } from "@/lib/continuity";
 import { createDataClient } from "@/lib/data-client";
@@ -43,7 +48,34 @@ if (!flagOn) {
     );
 }
 
-render(<DealWorkspace />, root);
+// Design-system migration (canon §6, radiation order: Deal Workspace
+// after the Dashboard + Signal Console). The DS surface composes the
+// component library; the existing room renders otherwise. The recovery
+// engine + state + cloud layer below are shared and unchanged. `?ds=1`
+// is a preview escape-hatch (mirrors ?demo=1 / ?qa=1).
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_deal_workspace_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_deal_workspace_legacy");
+}
+
+render(useDsSurface ? <DealWorkspaceDS /> : <DealWorkspace />, root);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
 
 // Unsaved-changes guard — fire beforeunload while the inline deal-
 // health form is open (editingDeal !== null). The form's draft state

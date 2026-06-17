@@ -5,6 +5,41 @@ Part IV and the scoping doc (deliverables/plans/design-system-deployment-
 and-brand-scoping-2026-06-07.md Part VI) — major = breaking, minor =
 additive, patch = non-functional.
 
+## 1.9.0 — 2026-06-17
+
+Brighten toward the always-bright field (founder direction). Two changes:
+the global `ScheduleFloat` (ADR-013) flips from a navy card to the bright
+field — white surface, navy ink, hairline border, orange accents kept —
+so no room carries a dark-navy surface anymore. And `.ds-btn--primary`
+moves from navy ink to the brand blue: new additive token
+`--ds-blue-strong` (`#1d4ed8`, the hover/pressed sibling to `--ds-blue`,
+mirroring `--ds-orange-strong`); the primary button now reads
+`--ds-blue` → `--ds-blue-strong`. Semantics preserved: orange is still the
+one dominant move (`--accent`); blue is the system / strong-secondary role
+(canon §3), which is what `--primary` always was. Additive, non-breaking.
+
+## 1.8.0 — 2026-06-15
+
+The motion layer (spec 08). The half-built axis is squared away: the
+tokens and reduced-motion floor already existed, but the cross-cutting
+named-motion vocabulary did not. `src/components/motion.css` now owns
+the closed Part III grammar — first-load staging (the 40ms stagger),
+the read switch, the state-settle, region collapse, the single ambient
+pulse, and escalation — every duration a `--ds-motion-*` token, the
+looping pulse hard-stopped under `prefers-reduced-motion`. Imported once
+through `components.css`.
+
+- `BandStack` gains `stage` (first-load staging as a property of the
+  region stack); wired into the Dashboard today surface + Signal Console.
+- `Card` gains `pulse` (the one ambient dot, one per surface); the
+  today Queue sets it on the most-pressured NOW card.
+- The Dashboard reads cross-fade on switch (the `.ds-read` key-remount).
+- `motion.test.ts` enforces the §4.2 contract: the vocabulary classes
+  exist, every duration is token-driven (no raw ms in a rule), only the
+  two approved easings appear, the pulse is the single loop, and reduced
+  motion stops it. Verified live: staging + read + one pulse dot render
+  on the today surface, staging on Signal Console, 0 page errors.
+
 ## 1.7.0 — 2026-06-13
 
 The first consumer. The Dashboard today surface (spec 04) composed from
