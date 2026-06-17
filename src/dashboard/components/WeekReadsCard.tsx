@@ -2,6 +2,7 @@ import { signal, type Signal } from "@preact/signals";
 import { useEffect, useState } from "preact/hooks";
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import { reportError } from "@/lib/observability";
 import { listObservations, dismissObservation } from "@/lib/observations/reader";
 import {
     EMPTY_BRIEFING_PATTERN_INDEX,
@@ -51,10 +52,10 @@ async function refresh(): Promise<void> {
         const rows = await listObservations({ limit: 40 });
         observationsSignal.value = rows;
     } catch (err) {
-        errorSignal.value =
-            err instanceof Error
-                ? err.message
-                : "Couldn't load this week's reads.";
+        // Don't leak the raw error (internal architecture language) into
+        // the UI — log it, show a calm read. (canon §10)
+        reportError(err, { surface: "dashboard-week-reads-legacy" });
+        errorSignal.value = "Couldn't load this week's reads.";
     } finally {
         loadingSignal.value = false;
     }

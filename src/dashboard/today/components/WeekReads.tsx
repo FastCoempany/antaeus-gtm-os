@@ -3,6 +3,7 @@ import type { JSX } from "preact";
 import { Card, IconButton, SegmentedControl } from "@/components";
 import { Icon } from "@/icons";
 import { t } from "@/lib/voice/t";
+import { reportError } from "@/lib/observability";
 import { showsAnnotations } from "@/lib/density";
 import { listObservations, dismissObservation } from "@/lib/observations/reader";
 import {
@@ -50,8 +51,13 @@ async function refresh(): Promise<void> {
     try {
         observationsSignal.value = await listObservations({ limit: 40 });
     } catch (err) {
-        errorSignal.value =
-            err instanceof Error ? err.message : "Couldn't load this week's reads.";
+        // Never surface the raw error to the operator (it leaks internal
+        // architecture language — e.g. a Supabase-config message — which
+        // canon §10 forbids in the UI). Log it, show a calm read.
+        reportError(err, { surface: "dashboard-week-reads" });
+        errorSignal.value = t("Couldn't load this week's reads.", {
+            class: "body"
+        });
     } finally {
         loadingSignal.value = false;
     }
