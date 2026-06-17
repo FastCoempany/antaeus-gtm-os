@@ -102,7 +102,6 @@ const SEAMS: ReadonlyArray<Seam> = [
     },
     {
         room: "founding-gtm",
-        continuity: false,
         routes: [
             { dest: "/dashboard/", label: "Open the Dashboard", primary: true },
             { dest: "/quota-workback/", label: "Refine the quota math" },

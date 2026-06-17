@@ -77,7 +77,12 @@ describe("toPulling", () => {
         const p = toPulling();
         expect(p).toBeDefined();
         expect(p!.verb).toBe("Open the dashboard");
-        expect(p!.href).toBe("/dashboard/");
+        // The pulling href threads the continuity params back to the kit
+        // room, same as the HandoffStrip routes.
+        const u = new URL(p!.href, "http://x");
+        expect(u.pathname).toBe("/dashboard/");
+        expect(u.searchParams.get("returnTo")).toBe("/founding-gtm/");
+        expect(u.searchParams.get("fromSurface")).toBe("founding-gtm");
         expect(p!.reasons.length).toBeGreaterThan(0);
     });
 });
