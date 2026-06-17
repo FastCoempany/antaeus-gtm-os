@@ -2,6 +2,7 @@ import type { AccentRole } from "@/components";
 import type { SectionStatus, SurpriseCallout } from "../../lib/types";
 import { authoredSections } from "../../state";
 import { countReady } from "../../lib/sections";
+import { buildFoundingGtmHref } from "../../lib/handoff";
 
 /**
  * Pure adapters — map the Founding GTM section engine onto the design-
@@ -52,7 +53,7 @@ export function toPulling(): PullingData | undefined {
     return {
         verb: "Open the dashboard",
         object: "the daily rhythm",
-        href: "/dashboard/",
+        href: buildFoundingGtmHref("/dashboard/"),
         reasons: [
             `${counts.ready} of 7 sections ready to hand off`,
             "The kit is read-mode — updates come from the rooms"
