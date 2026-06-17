@@ -24,7 +24,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             const ledger = page.locator(".icp-ledger");
@@ -67,7 +67,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             // Cold start: every field empty → at least 3 risk pills.
@@ -89,7 +89,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             const docket = page.locator(".icp-docket");
@@ -125,7 +125,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             const weakestBlock = page.locator(".icp-docket__block").first();
@@ -142,7 +142,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             const readout = page.locator(".icp-work__readout");
@@ -161,7 +161,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             await expect(page.locator(".icp-hero")).toBeAttached();
@@ -180,7 +180,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             // The previous unstructured check list shouldn't render.
@@ -198,7 +198,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/icp-studio/?returnTo=%2Fterritory-architect%2F&returnLabel=Back+to+Territory",
+                "/icp-studio/?ds=0&returnTo=%2Fterritory-architect%2F&returnLabel=Back+to+Territory",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(400);
@@ -219,7 +219,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/icp-studio/", { waitUntil: "domcontentloaded" });
+            await page.goto("/icp-studio/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(400);
 
             // Click the first template — it prefills the form.

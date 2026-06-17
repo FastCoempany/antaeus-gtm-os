@@ -101,14 +101,23 @@ startUnsavedGuard(witnessDirty, "Call Planner");
 // unchanged. `?ds=1` is a preview escape-hatch.
 const dsParam = (() => {
     try {
-        return new URLSearchParams(window.location.search).get("ds") === "1";
+        return new URLSearchParams(window.location.search).get("ds");
     } catch {
-        return false;
+        return null;
     }
 })();
-const dsSurfaceOn = dsParam || isFeatureEnabled("room_call_planner_v3");
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_call_planner_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_call_planner_legacy");
+}
 
-render(dsSurfaceOn ? <CallPlannerDS /> : <CallPlanner />, root);
+render(useDsSurface ? <CallPlannerDS /> : <CallPlanner />, root);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

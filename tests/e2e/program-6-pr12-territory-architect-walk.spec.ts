@@ -22,7 +22,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -41,7 +41,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -75,7 +75,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
                     /* noop */
                 }
             });
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -106,7 +106,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
                     /* noop */
                 }
             });
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -141,7 +141,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -163,7 +163,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -184,7 +184,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         });
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/", {
+            await page.goto("/territory-architect/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -208,7 +208,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/territory-architect/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/territory-architect/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

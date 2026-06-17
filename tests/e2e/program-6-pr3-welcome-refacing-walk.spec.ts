@@ -22,7 +22,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             const stamp = page.locator(".wel-hero__stamp");
@@ -40,7 +40,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             const folio = page.locator(".wel-folio");
@@ -77,7 +77,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Default cold-start (no anchors live) → the locked variant
@@ -94,7 +94,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const page = await ctx.newPage();
         try {
             // Seed all four milestone sources so completed === total.
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.evaluate(() => {
                 localStorage.setItem(
                     "gtmos_icp_analytics",
@@ -144,7 +144,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             await expect(page.locator(".wel-ladder")).toBeAttached();
@@ -162,7 +162,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // DOM order: Hero → LaunchFolio → grid (Ladder + ActionStack).
@@ -190,7 +190,7 @@ test.describe("Program 6 / PR 3 — Welcome refacing (Launch Folio · Commission
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/welcome/", { waitUntil: "domcontentloaded" });
+            await page.goto("/welcome/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             await expect(page.locator(".ant-room-chrome")).toBeAttached();

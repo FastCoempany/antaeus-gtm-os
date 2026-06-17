@@ -195,7 +195,7 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+            await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Palette is NOT mounted on cold landing.
@@ -237,7 +237,7 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+            await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
             await page.keyboard.press("Meta+k");
             await page.waitForTimeout(120);
 
@@ -256,7 +256,7 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+            await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
             await page.keyboard.press("Meta+k");
             await page.waitForTimeout(120);
 
@@ -275,7 +275,7 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/dashboard/", { waitUntil: "domcontentloaded" });
+            await page.goto("/dashboard/?today=0", { waitUntil: "domcontentloaded" });
             await page.keyboard.press("Meta+k");
             await page.waitForTimeout(120);
             await expect(page.locator(".ant-palette")).toBeAttached();

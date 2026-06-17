@@ -20,7 +20,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -49,7 +49,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -81,7 +81,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -105,7 +105,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -124,7 +124,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -150,7 +150,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -173,7 +173,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -192,7 +192,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/outbound-studio/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/outbound-studio/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);
@@ -214,7 +214,7 @@ test.describe("Program 6 / PR 9 — Outbound Studio refacing (Switchboard Loft V
         });
         const page = await ctx.newPage();
         try {
-            await page.goto("/outbound-studio/", {
+            await page.goto("/outbound-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);

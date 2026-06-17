@@ -38,14 +38,23 @@ refreshAll();
 // engines are shared and unchanged. `?ds=1` is a preview escape-hatch.
 const dsParam = (() => {
     try {
-        return new URLSearchParams(window.location.search).get("ds") === "1";
+        return new URLSearchParams(window.location.search).get("ds");
     } catch {
-        return false;
+        return null;
     }
 })();
-const dsSurfaceOn = dsParam || isFeatureEnabled("room_settings_v3");
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_settings_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_settings_legacy");
+}
 
-render(dsSurfaceOn ? <SettingsDS /> : <Settings />, root);
+render(useDsSurface ? <SettingsDS /> : <Settings />, root);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).

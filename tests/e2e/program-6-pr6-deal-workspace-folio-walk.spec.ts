@@ -60,7 +60,7 @@ const SEED_DEALS = [
 ];
 
 async function seed(page: import("@playwright/test").Page): Promise<void> {
-    await page.goto("/deal-workspace/", { waitUntil: "domcontentloaded" });
+    await page.goto("/deal-workspace/?ds=0", { waitUntil: "domcontentloaded" });
     await page.evaluate((deals) => {
         localStorage.setItem(
             "gtmos_deal_workspaces",
@@ -249,7 +249,7 @@ test.describe("Program 6 / PR 6 — Deal Workspace Intervention Rail", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/deal-workspace/", {
+            await page.goto("/deal-workspace/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -294,7 +294,7 @@ test.describe("Program 6 / PR 6 — Deal Workspace Intervention Rail", () => {
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/deal-workspace/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/deal-workspace/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);

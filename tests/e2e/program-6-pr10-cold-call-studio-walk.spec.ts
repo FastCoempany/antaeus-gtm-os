@@ -23,7 +23,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -41,7 +41,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -67,7 +67,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -108,7 +108,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -132,7 +132,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -157,7 +157,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/cold-call-studio/", {
+            await page.goto("/cold-call-studio/?ds=0", {
                 waitUntil: "domcontentloaded"
             });
             await page.waitForTimeout(300);
@@ -180,7 +180,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
         const page = await ctx.newPage();
         try {
             await page.goto(
-                "/cold-call-studio/?returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
+                "/cold-call-studio/?ds=0&returnTo=%2Fdashboard%2F&returnLabel=Back+to+Dashboard",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(300);
