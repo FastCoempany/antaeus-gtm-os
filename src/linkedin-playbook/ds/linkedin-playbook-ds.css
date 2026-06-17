@@ -59,3 +59,19 @@
 
 /* Wayfinder Why reasons. */
 .lpd-why { margin: 0; padding-left: var(--ds-space-4); display: flex; flex-direction: column; gap: var(--ds-space-1); }
+
+/* Method sheets — the secondary reference panel (canon §4.10). Bright
+   cards, the four message archetypes with copy buttons; [token] blanks
+   marked in orange so the operator scans them. Ported back 2026-06-17. */
+.lpd-method { display: flex; flex-direction: column; gap: var(--ds-space-4); }
+.lpd-method__head { display: flex; flex-direction: column; gap: var(--ds-space-1); }
+.lpd-method__copy { font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.lpd-method__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--ds-space-3); }
+.lpd-method__card { display: flex; flex-direction: column; gap: var(--ds-space-2); padding: var(--ds-space-4); background: var(--ds-surface); border: 1px solid var(--ds-rule); border-radius: var(--ds-radius-control); }
+.lpd-method__kicker { font: 800 var(--ds-type-kicker) / 1 var(--ds-font-mono); letter-spacing: var(--ds-tracking-kicker); text-transform: uppercase; color: var(--ds-orange); margin: 0; }
+.lpd-method__heading { font: 600 15px / 1.3 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.lpd-method__small { font: var(--ds-type-body) / 1.4 var(--ds-font-sans); color: var(--ds-ink-soft); margin: 0; }
+.lpd-method__body { font: var(--ds-type-body) / 1.5 var(--ds-font-sans); color: var(--ds-ink); margin: 0; }
+.lpd-method__token { font-style: normal; color: var(--ds-orange); font-weight: 600; }
+.lpd-method__foot { display: flex; align-items: center; gap: var(--ds-space-2); margin-top: var(--ds-space-1); }
+.lpd-method__flash { font: var(--ds-type-label) / 1 var(--ds-font-sans); color: var(--ds-green); }

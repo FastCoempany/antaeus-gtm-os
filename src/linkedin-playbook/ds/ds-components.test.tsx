@@ -11,6 +11,7 @@ import { MotionRead } from "./components/MotionRead";
 import { CueStage } from "./components/CueStage";
 import { CueLadder } from "./components/CueLadder";
 import { ChannelBoard } from "./components/ChannelBoard";
+import { MethodSheetsDS } from "./components/MethodSheetsDS";
 import { LinkedinPlaybookDS } from "./LinkedinPlaybookDS";
 
 function action(over: Partial<ActionEntry> = {}): ActionEntry {
@@ -86,6 +87,34 @@ describe("ChannelBoard", () => {
     });
 });
 
+describe("MethodSheetsDS", () => {
+    it("renders the four method-template cards, each with a copy button + marked tokens", () => {
+        const { container, getAllByText } = render(<MethodSheetsDS />);
+        const cards = container.querySelectorAll(".lpd-method__card");
+        expect(cards.length).toBe(4);
+        // each card carries a copy button
+        expect(getAllByText("Copy line").length).toBe(4);
+        // the [token] blanks are marked (not rendered as plain brackets only)
+        expect(
+            container.querySelectorAll(".lpd-method__token").length
+        ).toBeGreaterThan(0);
+        // the four archetypes are present by kicker
+        for (const kicker of ["Connection", "Public cue", "Give-first", "Ask"]) {
+            expect(
+                [...container.querySelectorAll(".lpd-method__kicker")].some(
+                    (el) => el.textContent === kicker
+                )
+            ).toBe(true);
+        }
+    });
+
+    it("copy is wired (clicking the button does not throw without a clipboard)", () => {
+        const { getAllByText } = render(<MethodSheetsDS />);
+        // jsdom has no clipboard by default — the handler must degrade, not throw
+        expect(() => fireEvent.click(getAllByText("Copy line")[0])).not.toThrow();
+    });
+});
+
 describe("LinkedinPlaybookDS", () => {
     it("composes the Wayfinder (with the brand lockup) over the cue ladder", () => {
         const { container } = render(<LinkedinPlaybookDS />);
@@ -94,5 +123,7 @@ describe("LinkedinPlaybookDS", () => {
         expect(container.querySelector(".ds-arch-focalrail")).not.toBeNull();
         // bright — no legacy dark stage
         expect(container.querySelector(".lp-stage")).toBeNull();
+        // the method-sheets reference panel is restored
+        expect(container.querySelector(".lpd-method")).not.toBeNull();
     });
 });

@@ -12,6 +12,7 @@ import { MotionRead } from "./components/MotionRead";
 import { CueStage } from "./components/CueStage";
 import { CueLadder } from "./components/CueLadder";
 import { ChannelBoard } from "./components/ChannelBoard";
+import { MethodSheetsDS } from "./components/MethodSheetsDS";
 
 /**
  * LinkedinPlaybookDS — LinkedIn Playbook (canon §4.10) composed on the
@@ -63,6 +64,7 @@ export function LinkedinPlaybookDS(): JSX.Element {
                         rail={<CueLadder />}
                     />
                     <ChannelBoard />
+                    <MethodSheetsDS />
                 </BandStack>
             </PageFrame>
 
