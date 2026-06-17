@@ -172,17 +172,36 @@ export function clearUser(): void {
 
 // For feature flags (Phase 3+ rolling migration).
 export function isFeatureEnabled(flagKey: string): boolean {
-    // E2E builds force the per-room legacy surfaces. The Playwright walk
-    // suite was written against the legacy surfaces, which remain shipped
-    // as each room's safety net (the new design-system surface is the
-    // production default). Setting VITE_E2E_FORCE_LEGACY=1 at build time
-    // turns every `room_*_legacy` kill-switch ON so the gates resolve to
-    // legacy. Inert in the production build, where the var is unset.
-    if (
-        import.meta.env.VITE_E2E_FORCE_LEGACY === "1" &&
-        flagKey.endsWith("_legacy")
-    ) {
-        return true;
+    if (flagKey.endsWith("_legacy")) {
+        // E2E per-test override: force the NEW surfaces even inside the
+        // force-legacy build. The new-surface seam walks navigate room-to-
+        // room by click, so a URL param can't follow them — instead they
+        // set sessionStorage.gtmos_e2e_force_new via an init script, and
+        // this wins over the build-level force-legacy below. sessionStorage
+        // (not localStorage) so the `?demo=1` localStorage namespace shim
+        // doesn't hide it, and it survives same-origin click navigations
+        // within the tab. Inert in production (the key is never set, and
+        // forcing a `_legacy` flag false there just keeps the new surface,
+        // which is already the default).
+        try {
+            if (
+                typeof sessionStorage !== "undefined" &&
+                sessionStorage.getItem("gtmos_e2e_force_new") === "1"
+            ) {
+                return false;
+            }
+        } catch {
+            // sessionStorage unavailable — fall through.
+        }
+        // E2E builds otherwise force the per-room legacy surfaces. The
+        // legacy walk + boot suites were written against them, and they
+        // remain shipped as each room's safety net (the new design-system
+        // surface is the production default). VITE_E2E_FORCE_LEGACY=1 (set
+        // only by `npm run test:e2e`) turns every `room_*_legacy` kill-
+        // switch ON so the gates resolve to legacy. Inert in production.
+        if (import.meta.env.VITE_E2E_FORCE_LEGACY === "1") {
+            return true;
+        }
     }
     if (!posthogInitialized) return false;
     return posthog.isFeatureEnabled(flagKey) ?? false;
