@@ -53,8 +53,9 @@ import { HandoffStripDS } from "./components/HandoffStripDS";
  * A live console wants width, so this room runs full-bleed rather than
  * inside the centered PageFrame the narrower rooms use.
  *
- * Flag-gated room_discovery_v3, previewable via ?ds=1; the existing room
- * renders when the flag is off.
+ * Production default (founder direction 2026-06-16). The legacy surface
+ * is the safety net — reachable via ?ds=0 or the room_discovery_legacy
+ * Posthog kill-switch; ?ds=1 forces this surface.
  */
 
 const INTERRUPT_TONE: Record<string, AlertTone> = {

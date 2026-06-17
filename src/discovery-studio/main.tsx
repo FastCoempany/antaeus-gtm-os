@@ -76,21 +76,35 @@ if (!flagOn) {
     );
 }
 
-// Design-system migration (canon §6, discovery flow — the final room).
-// The DS surface composes the shell + the discrete chrome controls on
-// the component library; the dense, primitive-faithful control-face
-// components (the 21 primitives + the on-call control laws) are reused
-// unchanged. `?ds=1` is a preview escape-hatch.
+// Design-system migration (canon §6, discovery flow). Founder direction
+// 2026-06-16: the new design-system surface is the PRODUCTION DEFAULT for
+// Discovery — the legacy surface still carries the retired call clock, and
+// the founder does not want it. The two-state safety net stays intact: the
+// old surface is one switch away. `?ds=1` forces new, `?ds=0` forces the
+// legacy surface, and the Posthog kill-switch `room_discovery_legacy`
+// rolls the whole room back to the old surface without a deploy. The DS
+// surface composes the shell + discrete chrome on the component library;
+// the dense, primitive-faithful control-face components (the 19 primitives
+// + the on-call control laws) are reused unchanged.
 const dsParam = (() => {
     try {
-        return new URLSearchParams(window.location.search).get("ds") === "1";
+        return new URLSearchParams(window.location.search).get("ds");
     } catch {
-        return false;
+        return null;
     }
 })();
-const dsSurfaceOn = dsParam || isFeatureEnabled("room_discovery_v3");
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new surface; the legacy surface is the safety net,
+    // reachable by flipping room_discovery_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_discovery_legacy");
+}
 
-render(dsSurfaceOn ? <DiscoveryStudioDS /> : <DiscoveryStudio />, root);
+render(useDsSurface ? <DiscoveryStudioDS /> : <DiscoveryStudio />, root);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).
