@@ -119,4 +119,27 @@ describe("hrefForActionDestination", () => {
         expect(u.searchParams.get("returnTo")).toBe("/welcome/");
         expect(u.searchParams.get("fromSurface")).toBe("welcome");
     });
+
+    it("preserves an account query on the outbound move + mirrors it to focusObject", () => {
+        const u = new URL(
+            hrefForActionDestination("/outbound-studio/?account=Deel"),
+            "http://x"
+        );
+        expect(u.pathname).toBe("/outbound-studio/");
+        // The account survives for Outbound's readInboundRack...
+        expect(u.searchParams.get("account")).toBe("Deel");
+        // ...and is mirrored into focusObject for the back-affordance.
+        expect(u.searchParams.get("focusObject")).toBe("Deel");
+        expect(u.searchParams.get("returnTo")).toBe("/welcome/");
+    });
+
+    it("bare outbound path still resolves with no account", () => {
+        const u = new URL(
+            hrefForActionDestination("/outbound-studio/"),
+            "http://x"
+        );
+        expect(u.pathname).toBe("/outbound-studio/");
+        expect(u.searchParams.get("account")).toBeNull();
+        expect(u.searchParams.get("focusRoom")).toBe("Outbound Studio");
+    });
 });

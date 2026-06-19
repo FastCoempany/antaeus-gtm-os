@@ -127,6 +127,30 @@ const ACTION_MOTION: Omit<NextAction, "state"> = {
     why: "Week one isn't complete until at least one real motion has run through the app.",
     unlocks: "Real Readiness evidence and a clearer weekly rhythm."
 };
+
+/**
+ * motionActionFor — the motion action, named to the account the operator
+ * seeded during onboarding. When a real account exists, working it
+ * (composing one outbound touch) is the genuine first move — the same
+ * move the Dashboard surfaces — not a generic "log a motion" prompt.
+ * The href carries `?account=` so Outbound Studio boots pre-loaded onto
+ * that account. Falls back to the generic action when no account is
+ * named yet.
+ */
+function motionActionFor(accountName: string | null): Omit<NextAction, "state"> {
+    const name = accountName?.trim();
+    if (!name) return ACTION_MOTION;
+    return {
+        key: "motion",
+        title: `Compose outbound to ${name}.`,
+        body: `${name} is already in Signal Console. Turn it into a real first touch — the app drafts the line and starts holding the activity instead of your memory.`,
+        href: `/outbound-studio/?account=${encodeURIComponent(name)}`,
+        cta: "Compose outbound",
+        meta: ["first real touch", "named account"],
+        why: `You named ${name} as your first target — working it is the real first step, not a second data-entry form.`,
+        unlocks: "A drafted outbound line, real Readiness evidence, and a clearer weekly rhythm."
+    };
+}
 const ACTION_PLANNER: Omit<NextAction, "state"> = {
     key: "planner",
     title: "Prep the next discovery call.",
@@ -178,7 +202,8 @@ const ACTION_DASHBOARD: Omit<NextAction, "state"> = {
  * the rest are "Ready".
  */
 export function buildActions(
-    counts: WorkspaceCounts = EMPTY_COUNTS
+    counts: WorkspaceCounts = EMPTY_COUNTS,
+    firstAccountName: string | null = null
 ): ReadonlyArray<NextAction> {
     const actions: Array<Omit<NextAction, "state">> = [];
     const seen = new Set<string>();
@@ -188,10 +213,28 @@ export function buildActions(
         actions.push(a);
     };
 
+    const hasAccount = counts.accounts > 0 || counts.signals > 0;
+    const noMotion = counts.touches + counts.calls === 0;
+    const noDeal = counts.deals === 0;
+
     if (counts.icps === 0) push(ACTION_ICP);
-    if (counts.accounts === 0 && counts.signals === 0) push(ACTION_SIGNAL);
-    if (counts.deals === 0) push(ACTION_DEAL);
-    if (counts.touches + counts.calls === 0) push(ACTION_MOTION);
+    if (!hasAccount) push(ACTION_SIGNAL);
+
+    // After-access activation: the real GTM first move is account →
+    // motion → deal. Once a named account is in the workspace but no
+    // motion has run, working that account (compose outbound) is the
+    // genuine first move — not typing in a deal that doesn't exist on
+    // day one. Motion leads the deal in that one transient state; the
+    // milestone ladder (engine §buildMilestones) keeps its deal-then-
+    // motion display order. Everywhere else the deal is the more
+    // pressing gap, so it leads.
+    if (hasAccount && noMotion) {
+        push(motionActionFor(firstAccountName));
+        if (noDeal) push(ACTION_DEAL);
+    } else {
+        if (noDeal) push(ACTION_DEAL);
+        if (noMotion) push(motionActionFor(firstAccountName));
+    }
 
     if (actions.length < 4 && counts.deals > 0) push(ACTION_PLANNER);
     if (actions.length < 4) push(ACTION_QUOTA);

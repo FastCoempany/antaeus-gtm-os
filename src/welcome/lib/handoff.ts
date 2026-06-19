@@ -100,11 +100,24 @@ export function hrefToIcpStudio(): string {
  * action having to know about continuity.
  */
 export function hrefForActionDestination(destPath: string): string {
-    switch (destPath) {
+    const [path, qs] = destPath.split("?");
+    // An action may carry its own query (e.g. the named-account outbound
+    // move routes `/outbound-studio/?account=Deel`). Preserve it, and
+    // mirror the account into focusObject so the back-affordance reads
+    // the account name.
+    const incoming = new URLSearchParams(qs ?? "");
+    const account = incoming.get("account")?.trim() || undefined;
+    switch (path) {
         case "/deal-workspace/":
             return hrefToDealWorkspace();
         case "/outbound-studio/":
-            return hrefToOutboundStudio();
+            return account
+                ? buildWelcomeHref({
+                      href: destPath,
+                      roomLabel: "Outbound Studio",
+                      focusObject: account
+                  })
+                : hrefToOutboundStudio();
         case "/quota-workback/":
             return hrefToQuotaWorkback();
         case "/settings/":

@@ -108,6 +108,31 @@ export function loadCounts(s?: StorageLike | null): WorkspaceCounts {
     };
 }
 
+/**
+ * loadFirstAccountName — the name of the first account in Signal
+ * Console (`gtmos_sc_v4.accounts[]`). Welcome uses it to name the
+ * first-move action ("Compose outbound to {account}") after onboarding
+ * seeds one. Returns null when no named account exists yet.
+ */
+export function loadFirstAccountName(s?: StorageLike | null): string | null {
+    const store = getStorage(s);
+    if (!store) return null;
+    const sc = readJson<{ accounts?: unknown }>(
+        store,
+        "gtmos_sc_v4",
+        "welcome.loadFirstAccountName"
+    );
+    for (const a of asArray(sc?.accounts)) {
+        if (a && typeof a === "object") {
+            const name = (a as { name?: unknown }).name;
+            if (typeof name === "string" && name.trim().length > 0) {
+                return name.trim();
+            }
+        }
+    }
+    return null;
+}
+
 export function loadActivationContext(
     s?: StorageLike | null
 ): ActivationContext {

@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { loadActivationContext, loadCounts } from "./loader";
+import {
+    loadActivationContext,
+    loadCounts,
+    loadFirstAccountName
+} from "./loader";
 
 class FakeStorage {
     private map = new Map<string, string>();
@@ -82,6 +86,41 @@ describe("loadCounts", () => {
         s.setItem("gtmos_icp_analytics", "{not json");
         expect(() => loadCounts(s)).not.toThrow();
         expect(loadCounts(s).icps).toBe(0);
+    });
+});
+
+describe("loadFirstAccountName", () => {
+    let s: FakeStorage;
+    beforeEach(() => {
+        s = new FakeStorage();
+    });
+
+    it("returns null when no account stored", () => {
+        expect(loadFirstAccountName(s)).toBeNull();
+    });
+
+    it("returns the first named account", () => {
+        s.setItem(
+            "gtmos_sc_v4",
+            JSON.stringify({ accounts: [{ id: "a", name: "Deel" }] })
+        );
+        expect(loadFirstAccountName(s)).toBe("Deel");
+    });
+
+    it("skips accounts with no usable name", () => {
+        s.setItem(
+            "gtmos_sc_v4",
+            JSON.stringify({
+                accounts: [{ id: "a" }, { id: "b", name: "   " }, { id: "c", name: "Remote" }]
+            })
+        );
+        expect(loadFirstAccountName(s)).toBe("Remote");
+    });
+
+    it("malformed JSON does not throw", () => {
+        s.setItem("gtmos_sc_v4", "{not json");
+        expect(() => loadFirstAccountName(s)).not.toThrow();
+        expect(loadFirstAccountName(s)).toBeNull();
     });
 });
 
