@@ -341,6 +341,27 @@ describe("navigation", () => {
         paletteOpen.value = false;
     });
 
+    it("WayfinderBar carries a help affordance that opens room-aware help (ADR-018)", () => {
+        const { container, getByText } = render(
+            <WayfinderBar room="DASHBOARD" />
+        );
+        const help = container.querySelector(".ds-wayfinder__help") as HTMLButtonElement;
+        expect(help).not.toBeNull();
+        // Closed by default.
+        expect(container.querySelector(".ds-wayfinder__help-panel")).toBeNull();
+        fireEvent.click(help);
+        const panel = container.querySelector(".ds-wayfinder__help-panel");
+        expect(panel).not.toBeNull();
+        // jsdom path is "/" → generic help; the three plain lines + the
+        // honest channel are all present.
+        expect(panel?.querySelectorAll("dd").length).toBe(3);
+        const mail = panel?.querySelector(".ds-wayfinder__help-mail");
+        expect(mail?.getAttribute("href")).toContain("mailto:");
+        // Closes again.
+        fireEvent.click(getByText("Close"));
+        expect(container.querySelector(".ds-wayfinder__help-panel")).toBeNull();
+    });
+
     it("SegmentedControl carries the selected state and reports changes", () => {
         const onChange = vi.fn();
         const { getByText, container } = render(
