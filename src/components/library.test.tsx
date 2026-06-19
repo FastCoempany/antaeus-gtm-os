@@ -341,6 +341,31 @@ describe("navigation", () => {
         paletteOpen.value = false;
     });
 
+    it("WayfinderBar derives a back-crumb from continuity params (canon §6)", () => {
+        const prev = window.location.href;
+        window.history.replaceState(
+            {},
+            "",
+            "/outbound-studio/?returnTo=%2Fwelcome%2F&returnLabel=Back+to+setup"
+        );
+        const { container } = render(<WayfinderBar room="OUTBOUND STUDIO" />);
+        const crumb = container.querySelector(
+            ".ds-wayfinder__trail-crumb"
+        ) as HTMLAnchorElement;
+        expect(crumb).not.toBeNull();
+        expect(crumb.getAttribute("href")).toBe("/welcome/");
+        expect(crumb.textContent).toContain("Back to setup");
+        window.history.replaceState({}, "", prev);
+    });
+
+    it("WayfinderBar renders no trail when loaded directly (no continuity params)", () => {
+        const prev = window.location.href;
+        window.history.replaceState({}, "", "/signal-console/");
+        const { container } = render(<WayfinderBar room="SIGNAL CONSOLE" />);
+        expect(container.querySelector(".ds-wayfinder__trail")).toBeNull();
+        window.history.replaceState({}, "", prev);
+    });
+
     it("WayfinderBar carries a help affordance that opens room-aware help (ADR-018)", () => {
         const { container, getByText } = render(
             <WayfinderBar room="DASHBOARD" />
