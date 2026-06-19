@@ -844,6 +844,83 @@
 }
 .ds-wayfinder__why-commit { display: flex; gap: var(--ds-space-3); align-items: center; }
 
+/* ── Operator help (ADR-018) ──────────────────────────────────── */
+
+.ds-wayfinder__help {
+  font: 600 13px/1 var(--ds-font-mono);
+  color: var(--ds-ink-faint);
+  border: 1px solid var(--ds-hair-strong);
+  border-radius: 50%;
+  background: var(--ds-surface);
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ds-wayfinder__help:hover { color: var(--ds-ink); border-color: var(--ds-rule); }
+.ds-wayfinder__help[aria-expanded="true"] {
+  color: var(--ds-blue);
+  border-color: var(--ds-blue);
+}
+.ds-wayfinder__help:focus-visible { outline: 3px solid var(--ds-orange-soft); outline-offset: 1px; }
+
+.ds-wayfinder__help-panel {
+  max-width: var(--ds-page-max);
+  margin: 0 auto;
+  padding: var(--ds-space-4) var(--ds-page-gutter) var(--ds-space-5);
+  /* The blue/intelligence role: help is the system explaining itself,
+     not a pressure move (orange) — a quiet left rule sets it apart. */
+  border-left: 3px solid var(--ds-blue);
+  animation: ds-why-grow var(--ds-motion-base) var(--ds-ease-standard);
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-wayfinder__help-panel { animation: none; }
+}
+.ds-wayfinder__help-list {
+  margin: 0;
+  display: grid;
+  gap: var(--ds-space-1) var(--ds-space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+.ds-wayfinder__help-list dt {
+  font: 600 var(--ds-type-kicker) / 1 var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ds-ink-faint);
+  margin-top: var(--ds-space-3);
+}
+.ds-wayfinder__help-list dt:first-child { margin-top: 0; }
+.ds-wayfinder__help-list dd {
+  margin: 2px 0 0;
+  font: var(--ds-type-body) / var(--ds-leading-body) var(--ds-font-sans);
+  color: var(--ds-ink-soft);
+  max-width: 64ch;
+}
+.ds-wayfinder__help-foot {
+  display: flex;
+  gap: var(--ds-space-4);
+  align-items: center;
+  margin-top: var(--ds-space-4);
+}
+.ds-wayfinder__help-mail {
+  font: 600 13px/1 var(--ds-font-sans);
+  color: var(--ds-blue);
+  text-decoration: none;
+}
+.ds-wayfinder__help-mail:hover { text-decoration: underline; }
+.ds-wayfinder__help-close {
+  font: 600 13px/1 var(--ds-font-sans);
+  color: var(--ds-ink-faint);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.ds-wayfinder__help-close:hover { color: var(--ds-ink); }
+
 /* ── Pulse + Ribbon (spec 03 §2.1, §2.2) ──────────────────────── */
 
 .ds-ribbon {

@@ -2,6 +2,7 @@ import type { ComponentChildren, JSX } from "preact";
 import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
 import { openPalette } from "@/lib/palette/Palette";
+import { helpForPath, supportMailto } from "@/lib/operator-help/registry";
 import { BrandLockup } from "./brand";
 import { Heading } from "./display";
 
@@ -57,6 +58,15 @@ export interface WayfinderPull {
 /** Wayfinder Why-disclosure open state (one bar per page; module-level
  * signal matching the palette pattern — no hooks in this leaf). */
 const wayfinderWhyOpen = signal(false);
+
+/** Operator-help disclosure open state (ADR-018). Same one-bar-per-page
+ * module-signal pattern as the Why panel. */
+const wayfinderHelpOpen = signal(false);
+
+function currentPathname(): string {
+    if (typeof window === "undefined") return "/";
+    return window.location.pathname;
+}
 
 export function WayfinderBar(props: {
     /** The current room, as the mono crumb — e.g. "DASHBOARD". */
@@ -115,6 +125,18 @@ export function WayfinderBar(props: {
                 ) : null}
                 <button
                     type="button"
+                    class="ds-wayfinder__help"
+                    aria-expanded={whyOpen ? false : wayfinderHelpOpen.value}
+                    aria-label={t("What is this room for?")}
+                    title={t("What is this room for?")}
+                    onClick={() => {
+                        wayfinderHelpOpen.value = !wayfinderHelpOpen.value;
+                    }}
+                >
+                    ?
+                </button>
+                <button
+                    type="button"
                     class="ds-wayfinder__k"
                     onClick={() => openPalette()}
                     title={t("Go anywhere — rooms and skills", { class: "body" })}
@@ -122,6 +144,9 @@ export function WayfinderBar(props: {
                     ⌘K
                 </button>
             </nav>
+            {wayfinderHelpOpen.value ? (
+                <WayfinderHelpPanel room={props.room} />
+            ) : null}
             {pull?.why && whyOpen ? (
                 <div class="ds-wayfinder__why-panel">
                     {pull.why}
@@ -139,6 +164,45 @@ export function WayfinderBar(props: {
                     </div>
                 </div>
             ) : null}
+        </div>
+    );
+}
+
+/**
+ * WayfinderHelpPanel — the operator-support disclosure (ADR-018). Calm,
+ * plainspoken, room-aware: three plain sentences about the room the
+ * operator is actually in (what it's for, the move it wants, what to do
+ * when it looks empty), plus one honest channel to a human. Grows inline
+ * below the bar, the same shape as the Why panel — never a popover,
+ * never a route change. Content comes from the canon §4 room minds via
+ * the help registry; the labels here are the only chrome.
+ */
+function WayfinderHelpPanel(props: { readonly room: string }): JSX.Element {
+    const help = helpForPath(currentPathname());
+    return (
+        <div class="ds-wayfinder__help-panel" role="region" aria-label={t("Room help")}>
+            <dl class="ds-wayfinder__help-list">
+                <dt>{t("What this room is for")}</dt>
+                <dd>{help.whatItIsFor}</dd>
+                <dt>{t("What to do here")}</dt>
+                <dd>{help.theMoveHere}</dd>
+                <dt>{t("If it looks empty or wrong")}</dt>
+                <dd>{help.ifStuck}</dd>
+            </dl>
+            <div class="ds-wayfinder__help-foot">
+                <a class="ds-wayfinder__help-mail" href={supportMailto(props.room)}>
+                    {t("Still stuck? Email us")}
+                </a>
+                <button
+                    type="button"
+                    class="ds-wayfinder__help-close"
+                    onClick={() => {
+                        wayfinderHelpOpen.value = false;
+                    }}
+                >
+                    {t("Close")}
+                </button>
+            </div>
         </div>
     );
 }
