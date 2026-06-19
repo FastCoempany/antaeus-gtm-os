@@ -82,6 +82,60 @@ describe("buildActions", () => {
     });
 });
 
+describe("buildActions — after-access first move", () => {
+    // Post-onboarding state: an ICP + one named account + a quota, but
+    // no motion and no deal. The first move should act on the account,
+    // not ask for a deal that doesn't exist on day one.
+    const postOnboarding = counts({ icps: 1, accounts: 1 });
+
+    it("leads with motion (not deal) once an account exists but no motion has run", () => {
+        const list = buildActions(postOnboarding);
+        expect(list[0]!.key).toBe("motion");
+        expect(list[0]!.state).toBe("now");
+        const deal = list.findIndex((a) => a.key === "deal");
+        const motion = list.findIndex((a) => a.key === "motion");
+        expect(motion).toBeLessThan(deal);
+    });
+
+    it("names the seeded account in the first move and routes pre-loaded", () => {
+        const list = buildActions(postOnboarding, "Deel");
+        const top = list[0]!;
+        expect(top.key).toBe("motion");
+        expect(top.title).toContain("Deel");
+        expect(top.cta).toBe("Compose outbound");
+        expect(top.href).toBe("/outbound-studio/?account=Deel");
+    });
+
+    it("url-encodes account names with spaces", () => {
+        const list = buildActions(postOnboarding, "Velocity Global");
+        const top = list[0]!;
+        expect(top.href).toBe("/outbound-studio/?account=Velocity%20Global");
+    });
+
+    it("falls back to the generic motion action when no account is named", () => {
+        const list = buildActions(postOnboarding, null);
+        const top = list[0]!;
+        expect(top.key).toBe("motion");
+        expect(top.title).toBe("Log the first motion.");
+        expect(top.href).toBe("/outbound-studio/");
+    });
+
+    it("keeps deal ahead of motion once a motion has already run", () => {
+        // Account + a logged touch but no deal: the deal is now the
+        // pressing gap, so it leads.
+        const list = buildActions(counts({ icps: 1, accounts: 1, touches: 1 }));
+        const deal = list.findIndex((a) => a.key === "deal");
+        expect(deal).toBe(0);
+        expect(list.find((a) => a.key === "motion")).toBeUndefined();
+    });
+
+    it("still leads with the account add when no account exists yet", () => {
+        // No account at all: adding one comes before any motion/deal.
+        const list = buildActions(counts({ icps: 1 }), null);
+        expect(list[0]!.key).toBe("signal");
+    });
+});
+
 describe("buildActions URL safety", () => {
     it("quota + backup actions point at legacy /app/ routes", () => {
         // These rooms (Quota Workback / Settings) are still in open

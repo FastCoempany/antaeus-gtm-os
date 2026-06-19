@@ -17,11 +17,16 @@ import {
     prettyRole,
     type ActivationModel
 } from "./lib/engine";
-import { loadActivationContext, loadCounts } from "./lib/loader";
+import {
+    loadActivationContext,
+    loadCounts,
+    loadFirstAccountName
+} from "./lib/loader";
 import { loadStamp, type StampValue } from "./lib/stamp";
 
 export const counts: Signal<WorkspaceCounts> = signal(EMPTY_COUNTS);
 export const activation: Signal<ActivationContext> = signal(EMPTY_ACTIVATION);
+export const firstAccount: Signal<string | null> = signal(null);
 export const stamp: Signal<StampValue> = signal({
     week: 1,
     day: 1,
@@ -34,7 +39,7 @@ export const model: ReadonlySignal<ActivationModel> = computed(() =>
 );
 
 export const actions: ReadonlySignal<ReadonlyArray<NextAction>> = computed(() =>
-    buildActions(counts.value)
+    buildActions(counts.value, firstAccount.value)
 );
 
 export const roleLabel: ReadonlySignal<string> = computed(() =>
@@ -52,6 +57,7 @@ export function setActivation(next: ActivationContext): void {
 export function refreshFromStorage(): void {
     counts.value = loadCounts();
     activation.value = loadActivationContext();
+    firstAccount.value = loadFirstAccountName();
     stamp.value = loadStamp();
     loaded.value = true;
 }
@@ -59,6 +65,7 @@ export function refreshFromStorage(): void {
 export function resetSession(): void {
     counts.value = EMPTY_COUNTS;
     activation.value = EMPTY_ACTIVATION;
+    firstAccount.value = null;
     loaded.value = false;
 }
 
@@ -68,4 +75,7 @@ export function __setCountsForTests(next: WorkspaceCounts): void {
 }
 export function __setActivationForTests(next: ActivationContext): void {
     activation.value = next;
+}
+export function __setFirstAccountForTests(next: string | null): void {
+    firstAccount.value = next;
 }
