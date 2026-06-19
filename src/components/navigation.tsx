@@ -3,6 +3,7 @@ import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
 import { openPalette } from "@/lib/palette/Palette";
 import { helpForPath, supportMailto } from "@/lib/operator-help/registry";
+import { readContinuity, safeReturnTo } from "@/lib/continuity";
 import { BrandLockup } from "./brand";
 import { Heading } from "./display";
 
@@ -68,6 +69,24 @@ function currentPathname(): string {
     return window.location.pathname;
 }
 
+/**
+ * Derive the Trail cell's back-crumb from the continuity params the
+ * handoff that brought the operator here wrote (returnTo + returnLabel,
+ * open-redirect-guarded by safeReturnTo). Returns an empty trail when
+ * the room was loaded directly — so a directly-loaded room looks exactly
+ * as it did before. This restores the back-affordance the legacy
+ * BackButton gave (canon §6 Birdseye navigation); the DS surfaces use
+ * the Wayfinder bar, not RoomChrome's BackButton, and none of them
+ * passed an explicit trail.
+ */
+function deriveBackTrail(): ReadonlyArray<WayfinderCrumb> {
+    const ctx = readContinuity();
+    const back = safeReturnTo(ctx.returnTo);
+    if (!back) return [];
+    const label = ctx.returnLabel ?? "Back";
+    return [{ label: `‹ ${label}`, href: back }];
+}
+
 export function WayfinderBar(props: {
     /** The current room, as the mono crumb — e.g. "DASHBOARD". */
     readonly room: string;
@@ -81,6 +100,10 @@ export function WayfinderBar(props: {
 }): JSX.Element {
     const whyOpen = wayfinderWhyOpen.value;
     const pull = props.pulling;
+    // Explicit trail wins; otherwise derive the back-crumb from the
+    // continuity params (restores the back-affordance on DS surfaces).
+    const trail =
+        props.trail && props.trail.length > 0 ? props.trail : deriveBackTrail();
 
     return (
         <div class="ds-wayfinder-shell">
@@ -92,9 +115,9 @@ export function WayfinderBar(props: {
                 >
                     <BrandLockup size={20} />
                 </a>
-                {props.trail && props.trail.length > 0 ? (
+                {trail.length > 0 ? (
                     <span class="ds-wayfinder__trail" aria-label={t("Trail")}>
-                        {props.trail.map((c) => (
+                        {trail.map((c) => (
                             <a key={c.href} class="ds-wayfinder__trail-crumb" href={c.href}>
                                 {c.label}
                             </a>
