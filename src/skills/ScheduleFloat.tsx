@@ -80,6 +80,13 @@ function toggleSettings(): void {
     settingsOpenSignal.value = !settingsOpenSignal.value;
 }
 
+function showSurface(): void {
+    // Recovery from the hidden nub. Bring the surface back; never a
+    // trap — "Surface visible: off" collapses to the nub, the nub
+    // brings it back.
+    patchPrefs({ surfaceVisible: true });
+}
+
 function patchPrefs(patch: Partial<FloatPrefs>): void {
     const next = { ...prefsSignal.value, ...patch };
     prefsSignal.value = next;
@@ -250,7 +257,11 @@ function snoozeStatusText(prefs: FloatPrefs, now: Date = new Date()): string | n
 
 export function ScheduleFloat(): JSX.Element | null {
     const prefs = prefsSignal.value;
-    if (!prefs.surfaceVisible || prefs.mode === "hidden") return null;
+    if (prefs.mode === "hidden") return null;
+    // "Surface visible: off" collapses to a tiny restore nub instead of
+    // vanishing entirely — turning it off from the settings panel used
+    // to remove the only control that could turn it back on (a trap).
+    if (!prefs.surfaceVisible) return renderHiddenNub();
     const minimized = prefs.mode === "minimized";
     return (
         <div
@@ -359,6 +370,26 @@ function renderExpanded(prefs: FloatPrefs): JSX.Element {
 
             {showSettings ? renderSettingsPanel(prefs) : null}
         </>
+    );
+}
+
+function renderHiddenNub(): JSX.Element {
+    return (
+        <div
+            class="ant-schedule-float ant-schedule-float--nub"
+            role="region"
+            aria-label="Scheduled skills (hidden)"
+        >
+            <button
+                type="button"
+                class="ant-schedule-float__nub"
+                onClick={showSurface}
+                aria-label="Show scheduled skills"
+                title="Show scheduled skills"
+            >
+                ⌃
+            </button>
+        </div>
     );
 }
 

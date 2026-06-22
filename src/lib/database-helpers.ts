@@ -37,6 +37,26 @@ export type UpdateRow<T extends TableName> =
 
 export type ViewRow<T extends ViewName> = Database["public"]["Views"][T]["Row"];
 
+/**
+ * Per-table primary key. Most tables key on `id`; a few don't —
+ * `workspace_profile` is keyed by `workspace_id` (one row per workspace,
+ * no surrogate `id`). The data clients' `get` / `update` / `remove`
+ * filter on the row's primary key, so they must use the right column.
+ *
+ * Before this map existed, `update(workspace_id, …)` on workspace_profile
+ * compiled to `where id = …` and threw "column workspace_profile.id does
+ * not exist", silently breaking every workspace_profile write (onboarding
+ * cloud mirror, density, ICP profile, Phase F toggle). Only Phase F
+ * surfaced it; the others fell back to localStorage.
+ */
+const PRIMARY_KEY: Partial<Record<TableName, string>> = {
+    workspace_profile: "workspace_id"
+};
+
+export function pkColumn(table: TableName): string {
+    return PRIMARY_KEY[table] ?? "id";
+}
+
 // ─── Named enum-like string unions ─────────────────────────────────────
 // The DB stores these as text columns (not Postgres enums), so the
 // generator emits them as `string | null`. Defining them as named

@@ -108,7 +108,7 @@ describe("ScheduleFloat", () => {
         expect(stored.showTooltipHints).toBe(false);
     });
 
-    it("hides surface entirely when surfaceVisible is off", () => {
+    it("collapses to a restore nub when surfaceVisible is off (no trap)", () => {
         const { container } = render(<ScheduleFloat />);
         fireEvent.click(
             container.querySelector(
@@ -120,7 +120,38 @@ describe("ScheduleFloat", () => {
                 'button[aria-label="Surface visible"]'
             ) as HTMLButtonElement
         );
-        expect(container.querySelector(".ant-schedule-float")).toBeNull();
+        // The full card is gone, but a nub remains so it's recoverable.
+        expect(container.querySelector(".ant-schedule-float__head")).toBeNull();
+        const nub = container.querySelector(
+            ".ant-schedule-float__nub"
+        ) as HTMLButtonElement;
+        expect(nub).not.toBeNull();
+    });
+
+    it("the restore nub brings the surface back (recovery from the off state)", () => {
+        const { container } = render(<ScheduleFloat />);
+        // Drive into the off state through the UI (the signal initializes
+        // once at module load, so we toggle rather than savePrefs).
+        fireEvent.click(
+            container.querySelector(
+                'button[aria-label="Open settings"]'
+            ) as HTMLButtonElement
+        );
+        fireEvent.click(
+            container.querySelector(
+                'button[aria-label="Surface visible"]'
+            ) as HTMLButtonElement
+        );
+        const nub = container.querySelector(
+            ".ant-schedule-float__nub"
+        ) as HTMLButtonElement;
+        expect(nub).not.toBeNull();
+        fireEvent.click(nub);
+        // Surface is back: the queue returns, the nub is gone.
+        expect(container.querySelector(".ant-schedule-float__nub")).toBeNull();
+        expect(
+            container.querySelector(".ant-schedule-float__queue")
+        ).not.toBeNull();
     });
 
     it("snooze 1h: stores a future ISO timestamp", () => {

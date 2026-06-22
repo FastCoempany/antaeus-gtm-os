@@ -72,10 +72,14 @@ export async function savePhaseFToggle(
         });
         return { ok: true, error: null };
     } catch (err) {
+        // Supabase/PostgREST errors are plain objects, not Error
+        // instances — `String(err)` on them renders "[object Object]"
+        // to the operator (canon §10 ban on cryptic UI errors). Keep the
+        // real error in Sentry; show the operator a calm, recoverable line.
         reportError(err, { op: "settings.savePhaseFToggle" });
         return {
             ok: false,
-            error: err instanceof Error ? err.message : String(err)
+            error: "Couldn't save that just now. Try again in a moment."
         };
     }
 }

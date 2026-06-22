@@ -124,7 +124,7 @@ describe("phase-f-toggle", () => {
         });
     });
 
-    it("returns ok:false on update failure", async () => {
+    it("returns ok:false with a calm message on update failure (canon §10)", async () => {
         const result = await savePhaseFToggle(false, {
             data: mockData({
                 rows: [{ workspace_id: "ws-1", phase_f_proposals_enabled: true }],
@@ -132,6 +132,26 @@ describe("phase-f-toggle", () => {
             })
         });
         expect(result.ok).toBe(false);
-        expect(result.error).toContain("rls-denied");
+        // The operator never sees the raw "rls-denied" technical string.
+        expect(result.error).toBe("Couldn't save that just now. Try again in a moment.");
+    });
+
+    it("never surfaces [object Object] when Supabase throws a plain object", async () => {
+        // Supabase/PostgREST errors are plain objects, not Error
+        // instances — the regression this guards against.
+        const data = {
+            workspaceProfile: {
+                list: vi.fn(async () => [
+                    { workspace_id: "ws-9", phase_f_proposals_enabled: true }
+                ]),
+                update: vi.fn(async () => {
+                    throw { message: "column missing", code: "42703" };
+                })
+            }
+        } as unknown as DataClient;
+        const result = await savePhaseFToggle(false, { data });
+        expect(result.ok).toBe(false);
+        expect(result.error).not.toContain("[object Object]");
+        expect(result.error).toBe("Couldn't save that just now. Try again in a moment.");
     });
 });

@@ -124,6 +124,41 @@ describe("makeDemoLocalNounAccessor", () => {
         ).rejects.toThrow(/row not found in deals/);
     });
 
+    it("resolves workspace_profile by workspace_id, not id (PK fix)", async () => {
+        // workspace_profile has no `id` column — it keys on workspace_id.
+        // Before the pkColumn fix, update(workspace_id, …) looked for an
+        // `id` match and threw "row not found", silently breaking the
+        // Phase F toggle, density, ICP profile, and onboarding mirror.
+        const wp = makeDemoLocalNounAccessor("workspace_profile", {
+            storage,
+            generateId: () => "should-not-be-used",
+            now: () => "2026-06-22T12:00:00Z"
+        });
+        await wp.insert({
+            workspace_id: "ws-77",
+            phase_f_proposals_enabled: true
+        } as never);
+
+        // get() finds it by workspace_id
+        const got = await wp.get("ws-77");
+        expect((got as unknown as { workspace_id: string }).workspace_id).toBe(
+            "ws-77"
+        );
+
+        // update() patches the row keyed by workspace_id (no throw)
+        const patched = await wp.update("ws-77", {
+            phase_f_proposals_enabled: false
+        } as never);
+        expect(
+            (patched as unknown as { phase_f_proposals_enabled: boolean })
+                .phase_f_proposals_enabled
+        ).toBe(false);
+
+        // remove() drops it by workspace_id
+        await wp.remove("ws-77");
+        expect(await wp.list()).toEqual([]);
+    });
+
     it("remove() drops the row from list()", async () => {
         const accessor = makeAccessor();
         await accessor.insert({ account_name: "A", stage: "prospect" } as never);
