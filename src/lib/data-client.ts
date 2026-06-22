@@ -10,6 +10,7 @@ import type {
     UpdateRow,
     Workspace
 } from "./database-helpers";
+import { pkColumn } from "./database-helpers";
 import { getSupabaseClient, type AntaeusSupabaseClient } from "./supabase-client";
 import { reportError, trackEvent } from "./observability";
 import {
@@ -316,6 +317,7 @@ function makeNounAccessor<T extends TableName>(
     sb: AntaeusSupabaseClient,
     table: T
 ): NounAccessor<T> {
+    const pk = pkColumn(table);
     // Supabase's strict per-table type inference breaks when `table` is a
     // generic parameter — it falls back to union-of-all-tables which then
     // fails narrowing at every query method. We type-erase at the boundary
@@ -366,7 +368,7 @@ function makeNounAccessor<T extends TableName>(
         async get(id: string): Promise<Row<T> | null> {
             const { data, error } = await from()
                 .select("*")
-                .eq("id", id)
+                .eq(pk, id)
                 .maybeSingle();
 
             if (error) {
@@ -393,7 +395,7 @@ function makeNounAccessor<T extends TableName>(
         async update(id: string, patch: UpdateRow<T>): Promise<Row<T>> {
             const { data, error } = await from()
                 .update(patch)
-                .eq("id", id)
+                .eq(pk, id)
                 .select("*")
                 .single();
 
@@ -408,7 +410,7 @@ function makeNounAccessor<T extends TableName>(
         async remove(id: string): Promise<void> {
             const { error } = await from()
                 .delete()
-                .eq("id", id);
+                .eq(pk, id);
 
             if (error) {
                 reportError(error, { op: "remove", table, id });

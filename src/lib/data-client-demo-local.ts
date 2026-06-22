@@ -3,6 +3,7 @@ import type {
     RealtimePostgresChangesPayload
 } from "@supabase/supabase-js";
 import type { InsertRow, Row, TableName, UpdateRow } from "./database-helpers";
+import { pkColumn } from "./database-helpers";
 import type { ListOptions, NounAccessor } from "./data-client";
 
 /**
@@ -141,6 +142,12 @@ export function makeDemoLocalNounAccessor<T extends TableName>(
     deps: Partial<DemoLocalDeps> = {}
 ): NounAccessor<T> {
     const { storage, generateId, now } = { ...defaultDeps(), ...deps };
+    // Match the network client: most tables key on `id`, but a few
+    // (workspace_profile) key on another column. get/update/remove
+    // resolve the row by the table's real primary key.
+    const pk = pkColumn(table);
+    const keyOf = (row: unknown): string | undefined =>
+        (row as Record<string, unknown>)[pk] as string | undefined;
 
     return {
         async list(options?: ListOptions<T>): Promise<Row<T>[]> {
@@ -153,11 +160,7 @@ export function makeDemoLocalNounAccessor<T extends TableName>(
 
         async get(id: string): Promise<Row<T> | null> {
             const rows = readAll(table, storage);
-            return (
-                rows.find(
-                    (row) => (row as unknown as { id?: string }).id === id
-                ) ?? null
-            );
+            return rows.find((row) => keyOf(row) === id) ?? null;
         },
 
         async insert(row: InsertRow<T>): Promise<Row<T>> {
@@ -182,9 +185,7 @@ export function makeDemoLocalNounAccessor<T extends TableName>(
 
         async update(id: string, patch: UpdateRow<T>): Promise<Row<T>> {
             const all = readAll(table, storage);
-            const idx = all.findIndex(
-                (row) => (row as unknown as { id?: string }).id === id
-            );
+            const idx = all.findIndex((row) => keyOf(row) === id);
             if (idx < 0) {
                 throw new Error(
                     `demo-local: row not found in ${String(table)}: ${id}`
@@ -202,9 +203,7 @@ export function makeDemoLocalNounAccessor<T extends TableName>(
 
         async remove(id: string): Promise<void> {
             const all = readAll(table, storage);
-            const next = all.filter(
-                (row) => (row as unknown as { id?: string }).id !== id
-            );
+            const next = all.filter((row) => keyOf(row) !== id);
             writeAll(table, storage, next);
         },
 
