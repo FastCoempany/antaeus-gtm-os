@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import { nextStep } from "../state";
 
 /**
  * Doorway — the honest compact (Earned Depth #4, #7). Before any work, we
@@ -29,6 +30,11 @@ export function Doorway(): JSX.Element {
                     "Do it once, and the system reads your motion back to you every morning — which deal is slipping, which move clears the most weight. The teams that do this work early are the ones that stop getting surprised. You're about to be one of them.",
                     { class: "body" }
                 )}
+            </div>
+            <div class="sd-foot">
+                <button type="button" class="sd-btn" onClick={() => nextStep()}>
+                    {t("Start →", { class: "body" })}
+                </button>
             </div>
         </section>
     );
