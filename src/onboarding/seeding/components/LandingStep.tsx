@@ -3,6 +3,7 @@ import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
 import { draft } from "../draft";
 import { writeSeedingDraft } from "../lib/seed-writer";
+import { mirrorSeedToCloud } from "../lib/cloud-mirror";
 import { enrichedAccounts } from "./WakeStep";
 
 /**
@@ -26,6 +27,9 @@ function persistOnce(): void {
         // writeSeedingDraft already reports; the operator still lands.
         persisted.value = true;
     }
+    // Cloud mirror, fire-and-forget — cross-device from the first morning.
+    // The localStorage seed above is the immediate path; this never blocks.
+    void mirrorSeedToCloud(draft.value, enrichedAccounts()).catch(() => undefined);
 }
 
 /** @internal test reset. */
