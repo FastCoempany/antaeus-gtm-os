@@ -68,7 +68,10 @@ const include = [
   "demo-c-story.html",
   // The seed-to-alive reveal — the dashboard waking up on the accounts
   // the operator named.
-  "demo-reveal.html"
+  "demo-reveal.html",
+  // Seeding flow, front half — doorway → ICP sharpening → accounts →
+  // half-awake wake-up, with the sourced evidence margin down the side.
+  "seeding-flow-front.html"
 ];
 
 function copyRecursive(src, dest) {
