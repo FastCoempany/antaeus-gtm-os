@@ -57,7 +57,7 @@ export const EVIDENCE: Record<SeedingStepId, EvidenceNote> = {
     },
     accounts: {
         note: t(
-            "Reps spend under 30% of the week actually selling — a real chunk of the rest is manual account research. Paste the names; the system does that part in a minute, and keeps doing it.",
+            "Sellers spend under 30% of the week actually selling — a real chunk of the rest is manual account research. Paste the names; the system does that part in a minute, and keeps doing it.",
             { class: "body" }
         ),
         source: SALESFORCE_STATE_OF_SALES
