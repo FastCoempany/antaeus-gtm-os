@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · The reveal — seed to alive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--blue:#2563eb;--green:#1f9d57;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--field);background-image:radial-gradient(circle at 10% 0%,rgba(37,99,235,.05),transparent 30%),radial-gradient(circle at 92% 4%,rgba(230,112,30,.045),transparent 26%);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+  .stage{position:fixed;inset:0;padding:40px 60px;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:baseline}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.8}
+  .phase{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink50);font-weight:700;transition:opacity .4s}
+  .phase b{color:var(--orange)}
+  .grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center;margin-top:8px}
+  /* ── brief column (assembles last) ── */
+  .brief{opacity:0;transform:translateY(16px);transition:opacity .8s,transform .8s}
+  .brief.show{opacity:1;transform:none}
+  .brief .vk{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .verdict-chip{font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--ink70);border:1px solid var(--ink10);border-radius:999px;padding:6px 14px;background:var(--raised)}
+  .brief .lead{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px}
+  .brief h1{font-family:var(--serif);font-size:clamp(2.2rem,4.2vw,3.7rem);line-height:1.0;letter-spacing:-.02em;min-height:1.05em}
+  .brief .sub{font-size:1.06rem;line-height:1.55;color:var(--ink70);margin-top:18px;max-width:40ch;min-height:2.8em}
+  .move{margin-top:26px;display:inline-flex;background:var(--orange);color:#fff;font-weight:600;font-size:1rem;padding:14px 24px;border-radius:11px;box-shadow:0 10px 26px rgba(230,112,30,.24);opacity:0;transform:translateY(8px);transition:all .5s}
+  .move.show{opacity:1;transform:none}
+  .insight{margin-top:24px;padding-left:14px;border-left:3px solid var(--orange);font-size:.96rem;color:var(--ink70);max-width:42ch;min-height:2.6em}
+  .insight .ik{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-right:8px}
+  /* ── account rail (enriches first) ── */
+  .rail{background:var(--raised);border:1px solid var(--ink10);border-radius:16px;padding:20px 22px;box-shadow:0 20px 50px rgba(10,28,64,.07)}
+  .rail h4{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px;transition:color .4s}
+  .acct{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border-radius:10px;border:1px solid transparent;margin-bottom:7px;transition:transform .7s cubic-bezier(.2,.7,.2,1),border-color .4s,background .4s}
+  .acct .L{min-width:0}
+  .acct .nm{font-weight:600;font-size:.95rem;white-space:nowrap}
+  .acct .sig{font-size:.78rem;color:var(--ink50);margin-top:3px;height:1em;opacity:0;transition:opacity .5s}
+  .acct .sig.show{opacity:1}
+  .acct .sig.live{color:var(--orange);font-weight:600}
+  .acct .heat{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--ink25);opacity:0;transition:opacity .5s}
+  .acct .heat.show{opacity:1}
+  .acct.reading{background:var(--field)}
+  .acct.reading .nm{position:relative}
+  .acct.scan{background:linear-gradient(90deg,transparent,rgba(37,99,235,.10),transparent);background-size:200% 100%;animation:scan 1s linear}
+  @keyframes scan{from{background-position:200% 0}to{background-position:-200% 0}}
+  .acct.hot{border-color:var(--orange);background:rgba(230,112,30,.05)}
+  .acct.hot .heat{color:var(--orange)}
+  /* ── close line ── */
+  .close{position:fixed;left:60px;bottom:54px;font-family:var(--serif);font-size:1.5rem;color:var(--ink);opacity:0;transition:opacity .8s}
+  .close.show{opacity:1}
+  .bar{position:fixed;left:0;bottom:0;height:3px;background:var(--orange);width:0;z-index:5}
+  .controls{position:fixed;right:22px;bottom:22px;z-index:6}
+  .controls button{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);background:var(--raised);border:1px solid var(--ink10);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .controls button:hover{color:var(--orange);border-color:var(--orange)}
+  .tag{position:fixed;right:22px;bottom:54px;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25);z-index:6}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top"><div class="mark">ANTAEUS</div><div class="phase" id="phase">Setting up your workspace</div></div>
+  <div class="grid">
+    <div class="brief" id="brief">
+      <div class="vk"><span class="verdict-chip" id="verdict">Reading your workspace…</span></div>
+      <div class="lead">The morning brief</div>
+      <h1 id="head"></h1>
+      <div class="sub" id="sub"></div>
+      <div class="move" id="move">Compose outbound</div>
+      <div class="insight" id="insight"></div>
+    </div>
+    <div class="rail">
+      <h4 id="railhead">What you typed</h4>
+      <div id="accts"></div>
+    </div>
+  </div>
+  <div class="close" id="close">You gave it six names. It did the rest.</div>
+</div>
+<div class="bar" id="bar"></div>
+<div class="tag">The reveal · seed → alive · ~26s</div>
+<div class="controls"><button id="replay">↻ Replay</button></div>
+
+<script>
+// The accounts they typed — plus what the system goes and finds on each.
+const SEED=[
+  {nm:'Northwind Logistics', sig:'opened a General Counsel search · 3d ago', heat:91, live:true},
+  {nm:'Apex Health',         sig:'named a new CFO · 2w ago',                 heat:64, live:true},
+  {nm:'Cobalt Freight',      sig:'closed a Series B · 5w ago',              heat:57, live:true},
+  {nm:'Brightwave',          sig:'opened a London office · 1w ago',         heat:46, live:true},
+  {nm:'Dunmore Legal',       sig:'hiring 4 ops roles',                      heat:33, live:false},
+  {nm:'Evermark',            sig:'quiet — nothing fresh yet',               heat:11, live:false},
+];
+const PHASE=document.getElementById('phase'),BRIEF=document.getElementById('brief'),HEAD=document.getElementById('head'),SUB=document.getElementById('sub'),MOVE=document.getElementById('move'),INSIGHT=document.getElementById('insight'),VERDICT=document.getElementById('verdict'),RAILHEAD=document.getElementById('railhead'),ACCTS=document.getElementById('accts'),BAR=document.getElementById('bar'),CLOSE=document.getElementById('close');
+let timers=[];
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+function phase(html){PHASE.style.opacity=0;setTimeout(()=>{PHASE.innerHTML=html;PHASE.style.opacity=1;},260);}
+function type(el,text,speed){return new Promise(res=>{el.textContent='';let i=0;(function s(){if(i<text.length){el.textContent+=text[i++];timers.push(setTimeout(s,speed));}else res();})();});}
+
+function build(){
+  ACCTS.innerHTML='';
+  SEED.forEach((a,i)=>{
+    const row=document.createElement('div');row.className='acct';row.dataset.i=i;
+    row.innerHTML=`<div class="L"><div class="nm">${a.nm}</div><div class="sig">${a.sig}</div></div><div class="heat">heat ${a.heat}</div>`;
+    ACCTS.appendChild(row);
+  });
+}
+function rows(){return [...ACCTS.children];}
+
+function play(){
+  clearAll();build();
+  BRIEF.classList.remove('show');HEAD.textContent='';SUB.textContent='';INSIGHT.innerHTML='';MOVE.classList.remove('show');
+  VERDICT.textContent='Reading your workspace…';RAILHEAD.textContent='What you typed';PHASE.innerHTML='Setting up your workspace';CLOSE.classList.remove('show');
+  BAR.style.transition='none';BAR.style.width='0';
+  const T=26000;at(40,()=>{BAR.style.transition='width '+T+'ms linear';BAR.style.width='100%';});
+
+  // Phase A — the raw names they gave it
+  at(700,()=>phase('<b>You gave it six names.</b>'));
+
+  // Phase B — the system reads each one, finds a signal, scores heat
+  at(2600,()=>{phase('The system goes to work — <b>reading the accounts you named</b>');RAILHEAD.style.color='var(--orange)';RAILHEAD.textContent='What it found';});
+  rows().forEach((row,i)=>{
+    const t=3000+i*900;
+    at(t,()=>row.classList.add('scan','reading'));
+    at(t+900,()=>{row.classList.remove('scan');row.querySelector('.sig').classList.add('show');if(SEED[i].live)row.querySelector('.sig').classList.add('live');row.querySelector('.heat').classList.add('show');});
+  });
+
+  // re-sort by heat (already sorted in SEED, but animate a settle on the hottest)
+  at(9200,()=>{rows()[0].classList.add('hot');});
+
+  // Phase C — the brief assembles from what it found
+  at(11000,()=>{phase('<b>Your dashboard, awake</b>');BRIEF.classList.add('show');});
+  at(11400,()=>{VERDICT.textContent='Readiness: you are the system';});
+  at(12000,()=>type(HEAD,'Outbound to Northwind Logistics.',34));
+  at(14600,()=>type(SUB,'They just opened a General Counsel search — that’s your trigger, and it’s the hottest thing on your board.',20));
+  at(18800,()=>MOVE.classList.add('show'));
+  at(19600,()=>{INSIGHT.innerHTML='<span class="ik">Why this</span>Six names in, the system found a live trigger on four of them — and ranked the one worth your morning.';});
+
+  // Phase D — land
+  at(23000,()=>{phase('The morning brief');CLOSE.classList.add('show');});
+}
+document.getElementById('replay').onclick=play;
+play();
+</script>
+</body>
+</html>

@@ -65,7 +65,10 @@ const include = [
   // Space / Story). Static, self-contained; viewable past the gate.
   "demo-a-time.html",
   "demo-b-space.html",
-  "demo-c-story.html"
+  "demo-c-story.html",
+  // The seed-to-alive reveal — the dashboard waking up on the accounts
+  // the operator named.
+  "demo-reveal.html"
 ];
 
 function copyRecursive(src, dest) {
