@@ -1,18 +1,16 @@
+import { getSupabaseClient } from "@/lib/supabase-client";
+import { reportError } from "@/lib/observability";
+
 /**
- * Account enrichment seam (ADR-019, slice 4).
+ * Account enrichment (ADR-019, slice 4).
  *
- * The real trigger-finder is the web-search-grounded backend (the same
- * pattern as Outdoors Events discovery + the Briefing pipeline) — a
- * SEPARATE engineering track. This module is the INTERFACE it implements,
- * plus a deterministic dev stub so the wake-up is demonstrable while the
- * flow is flag-off in internal preview. When the backend lands, swap
- * `enrichAccounts` to call it; the UI is unchanged.
- *
- * Honesty note: the stub's signals are ILLUSTRATIVE, derived from the
- * account name, not real reads. They never reach a production operator —
- * the seeding flow is gated behind room_onboarding_seeding (off). The
- * "quiet — nothing fresh yet" honest-miss state is real behaviour the
- * backend will also produce on genuine coverage gaps.
+ * `enrichAccounts` calls the `seeding-enrichment` Edge Function — the
+ * real web-search-grounded trigger-finder (one search pass per company,
+ * source-URL-gated, honest "quiet" when nothing's found). When the
+ * function isn't reachable (not deployed, no API key, network), it falls
+ * back to the deterministic dev stub so internal preview still works.
+ * The flow is flag-off in production, so operators only ever see the real
+ * results once the function is deployed.
  */
 
 export interface EnrichedAccount {
@@ -20,6 +18,8 @@ export interface EnrichedAccount {
     readonly signal: string;
     readonly heat: number;
     readonly cold: boolean;
+    /** Real source for the trigger (empty for quiet / stub). */
+    readonly sourceUrl?: string;
 }
 
 export interface EnrichmentRead {
@@ -32,6 +32,66 @@ export interface EnrichmentResult {
     readonly accounts: ReadonlyArray<EnrichedAccount>;
     readonly reads: ReadonlyArray<EnrichmentRead>;
 }
+
+// ── Real path ───────────────────────────────────────────────────────────
+
+function parseResult(res: unknown): EnrichmentResult | null {
+    if (!res || typeof res !== "object") return null;
+    const r = res as { ok?: unknown; accounts?: unknown; reads?: unknown };
+    if (r.ok !== true || !Array.isArray(r.accounts)) return null;
+    const accounts: EnrichedAccount[] = [];
+    for (const a of r.accounts) {
+        if (!a || typeof a !== "object") continue;
+        const o = a as Record<string, unknown>;
+        if (typeof o.name !== "string") continue;
+        accounts.push({
+            name: o.name,
+            signal: typeof o.signal === "string" ? o.signal : "",
+            heat: typeof o.heat === "number" ? o.heat : 30,
+            cold: o.cold === true,
+            sourceUrl: typeof o.sourceUrl === "string" ? o.sourceUrl : ""
+        });
+    }
+    const reads: EnrichmentRead[] = [];
+    if (Array.isArray(r.reads)) {
+        for (const rd of r.reads) {
+            if (!rd || typeof rd !== "object") continue;
+            const o = rd as Record<string, unknown>;
+            if (o.kind === "sees" || o.kind === "doesnt-fit" || o.kind === "missed") {
+                reads.push({
+                    kind: o.kind,
+                    title: typeof o.title === "string" ? o.title : "",
+                    body: typeof o.body === "string" ? o.body : ""
+                });
+            }
+        }
+    }
+    if (accounts.length === 0) return null;
+    return { accounts, reads };
+}
+
+export async function enrichAccounts(
+    names: ReadonlyArray<string>,
+    icp: string
+): Promise<EnrichmentResult> {
+    if (names.length === 0) return { accounts: [], reads: [] };
+    try {
+        const sb = getSupabaseClient();
+        const { data, error } = await sb.functions.invoke("seeding-enrichment", {
+            body: { accountNames: [...names], icp }
+        });
+        if (!error) {
+            const parsed = parseResult(data);
+            if (parsed) return parsed;
+        }
+    } catch (err) {
+        // Not deployed / no session / network — fall back to the stub.
+        reportError(err, { op: "seeding.enrichAccounts.fallback" });
+    }
+    return enrichAccountsStub(names, icp);
+}
+
+// ── Dev stub (fallback) ──────────────────────────────────────────────────
 
 const STUB_SIGNALS = [
     "opened a senior leadership search",
@@ -51,48 +111,32 @@ function hash(s: string): number {
 }
 
 /**
- * Enrich a list of account names against the ICP. Stub implementation;
- * the production backend implements the same async signature.
+ * Deterministic stub — illustrative signals derived from the name, NOT
+ * real reads. Powers internal preview while the flow is flag-off. The
+ * "quiet" honest-miss state is real behaviour the backend also produces.
  */
-export async function enrichAccounts(
+export async function enrichAccountsStub(
     names: ReadonlyArray<string>,
     _icp: string
 ): Promise<EnrichmentResult> {
     const ranked = names.map((name) => {
         const h = hash(name);
-        const heat = 20 + (h % 75); // 20–94
-        const signal = STUB_SIGNALS[h % STUB_SIGNALS.length]!;
-        return { name, heat, signal, cold: false };
+        return { name, heat: 20 + (h % 75), signal: STUB_SIGNALS[h % STUB_SIGNALS.length]!, cold: false };
     });
     ranked.sort((a, b) => b.heat - a.heat);
-    // The lowest reads honest-quiet — coverage gaps are a feature, not a hide.
     const accounts: EnrichedAccount[] = ranked.map((a, i) =>
         i === ranked.length - 1
             ? { ...a, heat: Math.min(a.heat, 14), signal: "quiet — nothing fresh yet", cold: true }
             : a
     );
-
     const reads: EnrichmentRead[] = [];
     if (accounts.length > 0) {
-        const top = accounts[0]!;
-        reads.push({
-            kind: "sees",
-            title: "It sees what's happening",
-            body: `${top.name} ${top.signal} — you never typed that. It's your hottest account now.`
-        });
+        reads.push({ kind: "sees", title: "It sees what's happening", body: `${accounts[0]!.name} ${accounts[0]!.signal} — you never typed that. It's your hottest account now.` });
     }
     if (accounts.length > 2) {
         const odd = accounts[Math.floor(accounts.length / 2)]!;
-        reads.push({
-            kind: "doesnt-fit",
-            title: "Harder to fool than you are",
-            body: `${odd.name} may not fit who you said you sell to. Want to take a second look — or drop it?`
-        });
+        reads.push({ kind: "doesnt-fit", title: "Harder to fool than you are", body: `${odd.name} may not fit who you said you sell to. Want to take a second look — or drop it?` });
     }
-    reads.push({
-        kind: "missed",
-        title: "Already ahead of you",
-        body: `There are companies you didn't list that fit your ICP better than some you did. The system will surface them as it watches the market.`
-    });
+    reads.push({ kind: "missed", title: "Already ahead of you", body: `There are companies you didn't list that fit your ICP better than some you did. The system surfaces them as it watches the market.` });
     return { accounts, reads };
 }
