@@ -28,6 +28,16 @@ function blank(s: string): boolean {
 }
 
 export function diagnoseDeal(deal: SeedDeal): Diagnosis {
+    // Stage unclear: name it honestly rather than letting them guess.
+    if (deal.stage === "unsure") {
+        return {
+            tone: "amber",
+            label: "Stage unclear",
+            read: "You're not sure where this sits — and if you can't place it, the buyer probably can't either. That ambiguity is the risk.",
+            move: "Pin down their actual next step and who owns it. That tells you the stage."
+        };
+    }
+
     const noSigner = blank(deal.whoSigns) || /not\s+named|unknown|\?/i.test(deal.whoSigns);
     const noChampion = blank(deal.champion);
     const late = isLate(deal.stage);

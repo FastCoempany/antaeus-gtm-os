@@ -1,6 +1,6 @@
 import { reportError } from "@/lib/observability";
 import { createDataClient, type DataClient } from "@/lib/data-client";
-import type { SeedingDraft } from "../draft";
+import { roomStage, type SeedingDraft } from "../draft";
 import type { EnrichedAccount } from "./enrichment";
 
 /**
@@ -101,7 +101,7 @@ export async function mirrorSeedToCloud(
         try {
             await data.deals.insert({
                 account_name: d.account,
-                stage: d.stage,
+                stage: roomStage(d.stage),
                 deal_value: d.value,
                 data: {
                     champion: d.champion,

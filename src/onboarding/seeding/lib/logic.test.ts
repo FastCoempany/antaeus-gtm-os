@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ICP_FORKS, assembleIcp } from "./icp";
 import { diagnoseDeal } from "./diagnose";
 import { dealsForCoverage } from "../components/QuotaStep";
-import { parseAccountNames } from "../draft";
+import { parseAccountEntries, parseAccountNames, roomStage } from "../draft";
 import type { SeedDeal } from "../draft";
 
 describe("assembleIcp", () => {
@@ -29,6 +29,39 @@ describe("parseAccountNames", () => {
             "Apex",
             "Cobalt"
         ]);
+    });
+    it("returns only the valid, normalized values", () => {
+        expect(parseAccountNames("apex.com, x, a@b.com, Northwind")).toEqual(["apex.com", "Northwind"]);
+    });
+});
+
+describe("parseAccountEntries", () => {
+    it("splits on newlines, commas, and semicolons", () => {
+        const e = parseAccountEntries("apex.com, Northwind Logistics; brightwave.io");
+        expect(e.map((x) => x.value)).toEqual(["apex.com", "Northwind Logistics", "brightwave.io"]);
+        expect(e.every((x) => x.valid)).toBe(true);
+    });
+    it("classifies and normalizes domains (strips protocol/www/path, lowercases)", () => {
+        const [e] = parseAccountEntries("https://www.Acme.com/careers");
+        expect(e).toMatchObject({ kind: "domain", valid: true, value: "acme.com" });
+    });
+    it("flags emails, too-short, and sentence-like junk with a reason", () => {
+        const e = parseAccountEntries("a@b.com\nx\nthis is clearly not a company name at all here");
+        expect(e.find((x) => x.raw.includes("@"))?.reason).toMatch(/email/);
+        expect(e.find((x) => x.raw === "x")?.reason).toMatch(/short/);
+        expect(e.find((x) => x.raw.startsWith("this is"))?.valid).toBe(false);
+    });
+    it("dedupes by normalized value", () => {
+        const e = parseAccountEntries("Apex\napex\nAPEX");
+        expect(e).toHaveLength(1);
+    });
+});
+
+describe("roomStage", () => {
+    it("maps 'unsure' to discovery and leaves real stages alone", () => {
+        expect(roomStage("unsure")).toBe("discovery");
+        expect(roomStage("proposal")).toBe("proposal");
+        expect(roomStage("prospect")).toBe("prospect");
     });
 });
 
@@ -67,6 +100,11 @@ describe("diagnoseDeal", () => {
     it("a well-qualified live deal reads green", () => {
         const d = diagnoseDeal(deal({ stage: "discovery", champion: "Champ", whoSigns: "CFO", stuck: "scheduling next call" }));
         expect(d.tone).toBe("green");
+    });
+    it("names a 'not sure yet' stage honestly (amber, stage unclear)", () => {
+        const d = diagnoseDeal(deal({ stage: "unsure" }));
+        expect(d.tone).toBe("amber");
+        expect(d.label).toMatch(/unclear/i);
     });
 });
 
