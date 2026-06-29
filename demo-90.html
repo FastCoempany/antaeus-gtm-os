@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · From your head to a machine they inherit — 90s</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--blue:#2563eb;--green:#1f9d57;--red:#cf3b34;--amber:#c8821a;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;--hand:'Caveat',cursive;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  /* the field starts dim/cool — a memory — and warms into a system */
+  body{background:#11203f;color:#e8edf6;font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;transition:background 2.2s ease,color 2.2s ease}
+  body.lit{background:var(--field);background-image:radial-gradient(circle at 11% 0%,rgba(37,99,235,.05),transparent 30%),radial-gradient(circle at 90% 4%,rgba(230,112,30,.045),transparent 26%);color:var(--ink)}
+  .stage{position:fixed;inset:0;padding:42px 60px;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:baseline;z-index:3}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.78}
+  .phase{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink50);font-weight:700;transition:opacity .4s}
+  body:not(.lit) .phase{color:#90a0c4}
+  .phase b{color:var(--orange)}
+  .scenes{position:relative;flex:1;margin-top:14px}
+  .scene{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease}
+  .scene.show{opacity:1;pointer-events:auto}
+
+  /* ── SCENE 1 — the head ── */
+  .frag{position:absolute;font-family:var(--hand);font-size:1.4rem;color:#aebbd6;max-width:24ch;line-height:1.18;opacity:0;transform:rotate(var(--r)) translateY(14px);transition:opacity .8s,transform .8s,filter .6s}
+  .frag.show{opacity:.94;transform:rotate(var(--r))}
+  .frag.gone{opacity:0;transform:rotate(0) scale(.6);filter:blur(3px)}
+  .promptwrap{position:absolute;left:0;right:0;top:46%;display:flex;justify-content:center;opacity:0;transition:opacity .6s}
+  .promptwrap.show{opacity:1}
+  .promptlead{position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#90a0c4;font-weight:700;white-space:nowrap}
+  .prompt{font-family:var(--serif);font-size:clamp(1.6rem,3.3vw,2.7rem);color:#fff;border-bottom:2px solid var(--orange);padding-bottom:10px;min-height:1.4em;text-align:center}
+  body.lit .prompt{color:var(--ink)}
+  .cursor{display:inline-block;width:.5ch;background:var(--orange);color:transparent;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* ── shared right-panel chrome (scenes 2 + 3) ── */
+  .duo{position:absolute;inset:0;display:grid;grid-template-columns:1.25fr 1fr;gap:46px;align-items:center}
+  .say{max-width:30ch}
+  .say .lead{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px}
+  .say .line{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.5rem);line-height:1.14;letter-spacing:-.01em;color:var(--ink);min-height:3.2em}
+  .panel{background:var(--raised);border:1px solid var(--ink10);border-radius:16px;padding:22px 24px;box-shadow:0 20px 50px rgba(10,28,64,.07)}
+  .panel h4{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px;transition:color .4s}
+
+  /* account rail */
+  .acct{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border-radius:10px;border:1px solid transparent;margin-bottom:7px;transition:transform .7s cubic-bezier(.2,.7,.2,1),border-color .4s,background .4s}
+  .acct .nm{font-weight:600;font-size:.95rem;white-space:nowrap}
+  .acct .sig{font-size:.78rem;color:var(--ink50);margin-top:3px;height:1em;opacity:0;transition:opacity .5s}
+  .acct .sig.show{opacity:1}
+  .acct .sig.live{color:var(--orange);font-weight:600}
+  .acct .heat{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--ink25);opacity:0;transition:opacity .5s}
+  .acct .heat.show{opacity:1}
+  .acct.scan{background:linear-gradient(90deg,transparent,rgba(37,99,235,.12),transparent);background-size:200% 100%;animation:scan 1s linear}
+  @keyframes scan{from{background-position:200% 0}to{background-position:-200% 0}}
+  .acct.hot{border-color:var(--orange);background:rgba(230,112,30,.05)}
+  .acct.hot .heat{color:var(--orange)}
+
+  /* discovery rail */
+  .seg{padding:10px 13px;border-left:3px solid var(--ink10);margin-bottom:6px;color:var(--ink50);font-size:.9rem;transition:all .4s}
+  .seg.active{border-left-color:var(--orange);color:var(--ink);font-weight:600}
+  .branch{margin:8px 0 0 14px;padding:9px 12px;background:var(--field);border-radius:8px;font-size:.84rem;color:var(--ink70);opacity:0;transform:translateX(-8px);transition:all .5s}
+  .branch.show{opacity:1;transform:none;border-left:2px solid var(--orange)}
+
+  /* autopsy deal */
+  .deal{padding:14px 16px;border:1px solid var(--ink10);border-radius:12px}
+  .deal .dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .deal .nm{font-family:var(--serif);font-size:1.3rem}
+  .deal .risk{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--red);opacity:0;transition:opacity .5s}
+  .deal .risk.show{opacity:1}
+  .cause{margin-top:10px;padding:10px 12px;background:rgba(207,59,52,.06);border-radius:8px;font-size:.86rem;color:var(--ink70);opacity:0;transition:opacity .6s}
+  .cause.show{opacity:1}
+
+  /* ── SCENE 3 — the climb ── */
+  .climb{position:absolute;inset:0;display:grid;grid-template-columns:1.5fr 1fr;gap:46px;align-items:center}
+  .cwrap{max-width:20ch}
+  .week{font-family:var(--mono);font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink50);font-weight:700;height:1.2em;transition:opacity .5s}
+  .rlabel{font-family:var(--mono);font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);font-weight:700;margin:26px 0 12px}
+  .state{font-family:var(--serif);font-size:clamp(2.3rem,4.8vw,4.6rem);line-height:.98;letter-spacing:-.02em;color:var(--ink);position:relative;min-height:1.7em}
+  .state .w{display:block;position:absolute;left:0;top:0;opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .state .w.show{opacity:1;transform:none;position:relative}
+  .state .w.out{opacity:0;transform:translateY(-16px)}
+  .csub{font-size:1.04rem;line-height:1.56;color:var(--ink70);margin-top:22px;max-width:34ch;min-height:3em;transition:opacity .5s}
+  .ledger .row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px solid var(--ink10)}
+  .ledger .row:first-of-type{border-top:none}
+  .ledger .k{font-size:.92rem;color:var(--ink70)}
+  .ledger .v{font-family:var(--serif);font-size:1.4rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .ledger .v.bump{animation:bump .5s}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.18);color:var(--orange)}100%{transform:scale(1)}}
+  .kit{display:flex;gap:5px;margin-top:4px}
+  .pip{width:15px;height:6px;border-radius:3px;background:var(--ink10);transition:background .5s}
+  .pip.on{background:var(--green)}
+
+  /* ── SCENE 4 — close ── */
+  .closewrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 4px}
+  .closewrap .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:18px}
+  .closewrap h1{font-family:var(--serif);font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.0;letter-spacing:-.02em;max-width:18ch}
+  .closewrap p{font-size:1.12rem;color:var(--ink70);margin-top:22px;max-width:48ch;line-height:1.6}
+  .cta{margin-top:32px;display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:#fff;text-decoration:none;font-family:var(--sans);font-weight:600;font-size:1.05rem;padding:16px 28px;border-radius:12px;width:max-content;box-shadow:0 12px 30px rgba(230,112,30,.28);transition:transform .2s}
+  .cta:hover{transform:translateY(-2px)}
+
+  /* chrome */
+  .bar{position:fixed;left:0;bottom:0;height:3px;background:var(--orange);width:0;z-index:6}
+  .controls{position:fixed;right:22px;bottom:22px;display:flex;gap:10px;z-index:7}
+  .controls a,.controls button{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);background:var(--raised);border:1px solid var(--ink10);border-radius:8px;padding:8px 12px;cursor:pointer;text-decoration:none}
+  body:not(.lit) .controls a,body:not(.lit) .controls button{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#bcc8e0}
+  .controls a:hover,.controls button:hover{color:var(--orange);border-color:var(--orange)}
+  .tag{position:fixed;left:60px;bottom:24px;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25);z-index:7}
+  body:not(.lit) .tag{color:#5b6c90}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top"><div class="mark">ANTAEUS</div><div class="phase" id="phase">Right now it lives in your head</div></div>
+  <div class="scenes" id="scenes">
+
+    <!-- SCENE 1 — the head -->
+    <div class="scene" id="s1">
+      <div class="frag" style="--r:-4deg;left:5%;top:10%">Northwind — talked to their GC in March? never followed up</div>
+      <div class="frag" style="--r:3deg;left:60%;top:7%">Apex deal stalled… why??</div>
+      <div class="frag" style="--r:-2deg;left:28%;top:32%">who's the actual champion at Cobalt</div>
+      <div class="frag" style="--r:5deg;left:64%;top:38%">Brightwave said budget "next quarter" — when??</div>
+      <div class="frag" style="--r:-6deg;left:8%;top:56%">that pilot went great but… no notes anywhere</div>
+      <div class="frag" style="--r:2deg;left:48%;top:64%">remember to ask Harbor about the security review</div>
+      <div class="promptwrap" id="promptwrap">
+        <div class="prompt" id="prompt"><span class="promptlead">Who you sell to — one sentence</span></div>
+      </div>
+    </div>
+
+    <!-- SCENE 2 — it goes to work -->
+    <div class="scene" id="s2">
+      <div class="duo" id="s2duo">
+        <div class="say"><div class="lead" id="s2lead">The system reads what you gave it</div><div class="line" id="s2line"></div></div>
+        <div class="panel" id="s2panel"><!-- swapped: account rail / discovery / autopsy --></div>
+      </div>
+    </div>
+
+    <!-- SCENE 3 — it compounds -->
+    <div class="scene" id="s3">
+      <div class="climb">
+        <div class="cwrap">
+          <div class="week" id="week">Week 1</div>
+          <div class="rlabel">Could a hire run this yet?</div>
+          <div class="state" id="state"></div>
+          <div class="csub" id="csub">Right now the motion lives in you. Watch what a few weeks of real work in here does to it.</div>
+        </div>
+        <div class="panel ledger">
+          <h4>Your workspace</h4>
+          <div class="row"><span class="k">Accounts in play</span><span class="v" id="acc">0</span></div>
+          <div class="row"><span class="k">Signals read</span><span class="v" id="sig">0</span></div>
+          <div class="row"><span class="k">Live deals</span><span class="v" id="deal">0</span></div>
+          <div class="row"><span class="k">Proof forged</span><span class="v" id="proof">0</span></div>
+          <div class="row"><span class="k">Handoff kit</span><span class="kit" id="kit"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 4 — close -->
+    <div class="scene" id="s4">
+      <div class="closewrap">
+        <div class="k">That's the whole point</div>
+        <h1>The work stops living in your head.</h1>
+        <p>What you build in here becomes a machine someone could inherit — not a memory only you can run. It starts the moment you put the real accounts in. The ten that matter this quarter.</p>
+        <a class="cta" href="/onboarding/?seeding=1">Seed the workspace →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="bar" id="bar"></div>
+<div class="tag">From your head to a machine they inherit · 90s</div>
+<div class="controls"><a href="/onboarding/?seeding=1">Skip → seed</a><button id="replay">↻ Replay</button></div>
+
+<script>
+const SEED=[
+  {nm:'Northwind Logistics', sig:'opened a General Counsel search · 3d ago', heat:91, live:true},
+  {nm:'Apex Health',         sig:'named a new CFO · 2w ago',                  heat:64, live:true},
+  {nm:'Cobalt Freight',      sig:'closed a Series B · 5w ago',               heat:57, live:true},
+  {nm:'Brightwave',          sig:'opened a London office · 1w ago',          heat:46, live:true},
+  {nm:'Harbor Point',        sig:'hiring 4 ops roles',                       heat:33, live:false},
+  {nm:'Evermark',            sig:'quiet — nothing fresh yet',                heat:11, live:false},
+];
+
+const $=id=>document.getElementById(id);
+const PHASE=$('phase'),BAR=$('bar'),BODY=document.body;
+const scenes={s1:$('s1'),s2:$('s2'),s3:$('s3'),s4:$('s4')};
+let timers=[];
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+function phase(html){PHASE.style.opacity=0;setTimeout(()=>{PHASE.innerHTML=html;PHASE.style.opacity=1;},240);}
+function show(id){for(const k in scenes)scenes[k].classList.toggle('show',k===id);}
+function type(el,text,speed){return new Promise(res=>{el.textContent='';let i=0;const c=document.createElement('span');c.className='cursor';c.textContent='|';el.appendChild(c);
+  (function s(){if(i<text.length){c.insertAdjacentText('beforebegin',text[i++]);timers.push(setTimeout(s,speed));}else{setTimeout(()=>c.remove(),450);res();}})();});}
+
+/* ── scene 2 panel builders ── */
+function railHTML(){
+  return '<h4 id="railh">What you typed</h4>'+SEED.map((a,i)=>
+    `<div class="acct" data-i="${i}"><div><div class="nm">${a.nm}</div><div class="sig">${a.sig}</div></div><div class="heat">heat ${a.heat}</div></div>`
+  ).join('');
+}
+function discoveryHTML(){
+  return '<h4>Discovery Studio · live call</h4>'+
+    '<div class="seg">Opening frame</div>'+
+    '<div class="seg">Current-state truth</div>'+
+    '<div class="seg active">Pain &amp; consequence<div class="branch" id="branch">Buyer said "we already have a tool." → pull the displacement question.</div></div>'+
+    '<div class="seg">Proof threshold</div>'+
+    '<div class="seg">Next-step lock</div>';
+}
+function autopsyHTML(){
+  return '<h4>Future Autopsy · before it dies</h4>'+
+    '<div class="deal"><div class="dh"><span class="nm">Cobalt Freight · $84k</span><span class="risk" id="risk">at risk</span></div>'+
+    '<div style="font-size:.84rem;color:var(--ink50)">Proposal · 18 days in stage</div>'+
+    '<div class="cause" id="cause">Pattern: pressure before clarity. The next step isn\'t dated and no one owns the proof — here\'s the smallest move that saves it.</div></div>';
+}
+
+/* ── scene 3 helpers ── */
+let curState=null;
+function setState(text){
+  const S=$('state');
+  if(curState){curState.classList.add('out');const old=curState;at(700,()=>old.remove());}
+  const w=document.createElement('span');w.className='w';w.textContent=text;S.appendChild(w);
+  requestAnimationFrame(()=>w.classList.add('show'));curState=w;
+}
+function tick(el,to,ms){
+  const from=parseInt(el.textContent)||0;const steps=Math.max(1,to-from);const dur=ms/steps;let i=from;
+  function step(){i++;el.textContent=i;el.classList.add('bump');setTimeout(()=>el.classList.remove('bump'),300);if(i<to)at(dur,step);}
+  if(to>from)at(0,step);
+}
+function csub(t){const C=$('csub');C.style.opacity=0;setTimeout(()=>{C.textContent=t;C.style.opacity=1;},260);}
+function week(t){const W=$('week');W.style.opacity=0;setTimeout(()=>{W.textContent=t;W.style.opacity=1;},300);}
+function kit(n,pips){pips.forEach((p,i)=>p.classList.toggle('on',i<n));}
+
+function play(){
+  clearAll();
+  BODY.classList.remove('lit');
+  show('s1');PHASE.innerHTML='Right now it lives in your head';
+  // reset scene 1
+  const frags=[...scenes.s1.querySelectorAll('.frag')];frags.forEach(f=>f.classList.remove('show','gone'));
+  $('promptwrap').classList.remove('show');$('prompt').querySelector('.cursor')?.remove();
+  // build prompt text node fresh (keep the lead label)
+  $('prompt').innerHTML='<span class="promptlead">Who you sell to — one sentence</span>';
+  curState=null;$('state').innerHTML='';$('acc').textContent='0';$('sig').textContent='0';$('deal').textContent='0';$('proof').textContent='0';
+  BAR.style.transition='none';BAR.style.width='0';
+  const T=90000;at(40,()=>{BAR.style.transition='width '+T+'ms linear';BAR.style.width='100%';});
+
+  // ======== ACT 1 — the head (0–18s) ========
+  frags.forEach((f,i)=>at(500+i*330,()=>f.classList.add('show')));
+  at(3600,()=>{phase('Give it <b>one sentence</b>');$('promptwrap').classList.add('show');});
+  at(4000,()=>{const p=$('prompt');const node=document.createTextNode('');p.appendChild(node);
+    type(p,'Mid-market ops teams past their first compliance audit.',34);});
+  at(10200,()=>phase('Watch it <b>organize itself</b>'));
+  at(10600,()=>{frags.forEach((f,i)=>at(i*70,()=>f.classList.add('gone')));});
+  at(11200,()=>BODY.classList.add('lit'));
+
+  // ======== ACT 2 — it goes to work (18–54s) ========
+  // 2a: read the accounts you named
+  at(17600,()=>{show('s2');$('s2panel').innerHTML=railHTML();$('s2lead').textContent='The system reads what you gave it';
+    phase('It reads <b>the accounts you named</b>');});
+  at(18200,()=>type($('s2line'),'Six names in. It goes out and reads each one against who you said you sell to.',24));
+  at(19000,()=>{
+    const rowsEl=[...$('s2panel').querySelectorAll('.acct')];
+    rowsEl.forEach((row,i)=>{
+      const t=i*820;
+      at(t,()=>row.classList.add('scan'));
+      at(t+820,()=>{row.classList.remove('scan');row.querySelector('.sig').classList.add('show');
+        if(SEED[i].live)row.querySelector('.sig').classList.add('live');row.querySelector('.heat').classList.add('show');});
+    });
+  });
+  at(25400,()=>{$('railh').textContent='What it found';$('railh').style.color='var(--orange)';
+    const rowsEl=[...$('s2panel').querySelectorAll('.acct')];rowsEl[0].classList.add('hot');
+    $('s2line').textContent='';type($('s2line'),'Northwind opened a General Counsel search — you never typed that. It\'s your hottest account now.',22);});
+
+  // 2b: discovery
+  at(34000,()=>{$('s2panel').innerHTML=discoveryHTML();$('s2lead').textContent='It sees what\'s happening on the call';
+    phase('<b>Harder to fool</b> than you are');$('s2line').textContent='';
+    at(700,()=>$('branch').classList.add('show'));
+    type($('s2line'),'When they said they already had a tool, the room handed you the one question that unseats it.',22);});
+
+  // 2c: future autopsy
+  at(44000,()=>{$('s2panel').innerHTML=autopsyHTML();$('s2lead').textContent='It catches what\'s decaying';
+    phase('It sees the deal <b>before it dies</b>');$('s2line').textContent='';
+    at(500,()=>$('risk').classList.add('show'));at(1000,()=>$('cause').classList.add('show'));
+    type($('s2line'),'This deal stalls in nine days if nothing changes — and it names the smallest move that saves it.',22);});
+
+  // ======== ACT 3 — it compounds (54–78s) ========
+  at(53600,()=>{show('s3');phase('Do it once — <b>it compounds every morning</b>');
+    const KIT=$('kit');KIT.innerHTML='';for(let i=0;i<7;i++){const p=document.createElement('span');p.className='pip';KIT.appendChild(p);}
+    const pips=[...KIT.children];
+    at(400,()=>setState('You are the system.'));
+    at(700,()=>{tick($('acc'),12,2600);tick($('sig'),21,2800);});
+    at(4200,()=>{week('Week 3');csub('First touches land. Replies come back. The first deal is real.');});
+    at(4800,()=>tick($('deal'),3,1500));
+    at(5600,()=>setState('Building.'));
+    at(10000,()=>{week('Week 6');csub('Pilots get forged into proof a buyer\'s boss can act on. The kit starts filling.');});
+    at(10600,()=>{tick($('deal'),6,1600);tick($('proof'),3,1600);});
+    at(11000,()=>kit(3,pips));
+    at(11800,()=>setState('Inheritable, with a hand on the wheel.'));
+    at(16400,()=>{week('Week 12');csub('Wins and losses both get studied. Advisors get spent. The motion repeats without you.');});
+    at(17000,()=>{tick($('deal'),9,1500);tick($('proof'),6,1500);});
+    at(17400,()=>kit(5,pips));
+    at(18400,()=>setState('Hire-ready.'));
+    at(21400,()=>csub('This is where the work goes. A machine, not a memory.'));
+  });
+
+  // ======== ACT 4 — close (78–90s) ========
+  at(77600,()=>{show('s4');phase('Until a hire could run it <b>without you</b>');});
+}
+$('replay').onclick=play;
+play();
+</script>
+</body>
+</html>

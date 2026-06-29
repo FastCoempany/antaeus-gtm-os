@@ -69,6 +69,10 @@ const include = [
   // The seed-to-alive reveal — the dashboard waking up on the accounts
   // the operator named.
   "demo-reveal.html",
+  // The 90-second combined cut — the head → it goes to work → it
+  // compounds → the work leaves your head, ending on the seed CTA. The
+  // film that precedes the doorway.
+  "demo-90.html",
   // Seeding flow, front half — doorway → ICP sharpening → accounts →
   // half-awake wake-up, with the sourced evidence margin down the side.
   "seeding-flow-front.html",
