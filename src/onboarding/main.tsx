@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { Onboarding } from "./Onboarding";
 import { OnboardingDS } from "./ds/OnboardingDS";
+import { SeedingFlow } from "./seeding/SeedingFlow";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -48,7 +49,30 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_onboarding_legacy");
 }
 
-render(useDsSurface ? <OnboardingDS /> : <Onboarding />, root);
+// ADR-019 — the Earned Depth seeding-flow rebuild. Opt-in: renders only
+// behind room_onboarding_seeding (or the ?seeding=1 preview hatch), so the
+// shipped onboarding above is untouched until the new flow is complete.
+const seedingParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("seeding");
+    } catch {
+        return null;
+    }
+})();
+const useSeeding =
+    seedingParam === "1" ||
+    (seedingParam !== "0" && isFeatureEnabled("room_onboarding_seeding"));
+
+render(
+    useSeeding ? (
+        <SeedingFlow />
+    ) : useDsSurface ? (
+        <OnboardingDS />
+    ) : (
+        <Onboarding />
+    ),
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).
