@@ -60,7 +60,25 @@ const include = [
   // landing provides" surface a visitor lands on when they want to
   // understand the category before signing up. Linked from
   // start.html "What this actually is" CTA.
-  "why-antaeus"
+  "why-antaeus",
+  // Activation-demo mockups (cinematic first-run explorations — Time /
+  // Space / Story). Static, self-contained; viewable past the gate.
+  "demo-a-time.html",
+  "demo-b-space.html",
+  "demo-c-story.html",
+  // The seed-to-alive reveal — the dashboard waking up on the accounts
+  // the operator named.
+  "demo-reveal.html",
+  // Seeding flow, front half — doorway → ICP sharpening → accounts →
+  // half-awake wake-up, with the sourced evidence margin down the side.
+  "seeding-flow-front.html",
+  // Seeding flow, the heavy middle — live deals entered one at a time,
+  // each waking a diagnosis, the "why ten" counter climbing to awake.
+  "seeding-flow-deals.html",
+  // The FULL seeding flow, stitched end to end — doorway → ICP (real
+  // choosing) → accounts → wake-up → live deals → quota → landing, with
+  // the sourced evidence margin the whole way.
+  "seeding-flow.html"
 ];
 
 function copyRecursive(src, dest) {

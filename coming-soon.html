@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet"
   />
   <script>
@@ -26,74 +26,43 @@
     // to skip the marketing splash.
   </script>
   <style>
+    /*
+     * Bright re-skin (2026) — retires the dark navy + gold/teal gate.
+     * The gate is the first surface a visitor sees; it used to contradict
+     * the bright product behind it (canon Part II §1: bright field, navy
+     * ink, orange accent, DM Serif Display). Now it matches start.html so
+     * first contact and the landing are continuous. Calm + still — the
+     * old glow/ring/breathe animations were marketing energy where an
+     * operator tool needs stillness (same call as the retired pulse).
+     */
     :root {
-      --bg-primary: #0a0e1a;
-      --bg-secondary: #0f172a;
-      --bg-tertiary: #1e293b;
-      --brand-gold: #d4a574;
-      --brand-gold-light: #e8c9a8;
-      --brand-teal: #2dd4bf;
-      --text-primary: #ffffff;
+      --field: #f6f8fc;
+      --raised: #ffffff;
+      --ink: #0a1c40;
+      --ink-70: rgba(10, 28, 64, 0.70);
+      --ink-50: rgba(10, 28, 64, 0.50);
+      --ink-25: rgba(10, 28, 64, 0.25);
+      --ink-10: rgba(10, 28, 64, 0.10);
+      --orange: #e6701e;
+      --orange-dark: #d05f12;
       --font-serif: 'DM Serif Display', Georgia, serif;
       --font-sans: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       min-height: 100%;
-      background:
-        radial-gradient(circle at 18% 24%, rgba(212, 165, 116, 0.14), transparent 24%),
-        radial-gradient(circle at 80% 74%, rgba(45, 212, 191, 0.12), transparent 20%),
-        linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 48%, #070b14 100%);
-      color: var(--text-primary);
+      background: var(--field);
+      background-image:
+        radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.05), transparent 30%),
+        radial-gradient(circle at 90% 6%, rgba(230, 112, 30, 0.045), transparent 28%);
+      color: var(--ink);
       font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
       overflow: hidden;
-    }
-
-    body::before,
-    body::after {
-      content: '';
-      position: fixed;
-      inset: auto;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(56px);
-    }
-
-    body::before {
-      top: -8vh;
-      left: -6vw;
-      width: 36vw;
-      height: 36vw;
-      background: radial-gradient(circle, rgba(212, 165, 116, 0.28) 0%, rgba(212, 165, 116, 0.06) 42%, transparent 72%);
-      animation: glowGold 6.6s ease-in-out infinite;
-    }
-
-    body::after {
-      right: -6vw;
-      bottom: -8vh;
-      width: 30vw;
-      height: 30vw;
-      background: radial-gradient(circle, rgba(45, 212, 191, 0.24) 0%, rgba(45, 212, 191, 0.04) 42%, transparent 72%);
-      animation: glowTeal 7.6s ease-in-out infinite;
-    }
-
-    .rings {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background:
-        radial-gradient(circle at 50% 48%, transparent 0 18%, rgba(255,255,255,0.04) 18.3%, transparent 19.1% 28%, rgba(255,255,255,0.025) 28.4%, transparent 29.1% 100%);
-      opacity: 0.72;
-      transform: scale(1.08);
-      animation: breathe 9s ease-in-out infinite;
     }
 
     .page {
@@ -106,83 +75,49 @@
     }
 
     h1 {
-      width: min(1320px, 100%);
+      width: min(1200px, 100%);
       margin: 0;
       text-align: center;
       font-family: var(--font-serif);
-      font-size: clamp(3rem, 6.2vw, 7rem);
-      line-height: 0.94;
-      letter-spacing: -0.045em;
+      font-size: clamp(2.8rem, 6vw, 6.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
       text-wrap: balance;
-      text-shadow: 0 0 28px rgba(255, 255, 255, 0.05);
+      color: var(--ink);
     }
 
     .pulse-word {
       display: inline-block;
-      color: var(--brand-gold-light);
-      text-shadow:
-        0 0 16px rgba(212, 165, 116, 0.24),
-        0 0 44px rgba(212, 165, 116, 0.12);
-      /* Per the first-90-seconds audit: pulse animation was decorative
-         and signalled marketing energy where an operator-tool needed
-         stillness. Color emphasis + text-shadow stay; the scale/opacity
-         pulse is retired. */
-    }
-
-    @keyframes glowGold {
-      0%, 100% { transform: scale(0.98); opacity: 0.8; }
-      50% { transform: scale(1.08); opacity: 1; }
-    }
-
-    @keyframes glowTeal {
-      0%, 100% { transform: scale(1) translate3d(0, 0, 0); opacity: 0.68; }
-      50% { transform: scale(1.08) translate3d(-2%, -1%, 0); opacity: 0.96; }
-    }
-
-    @keyframes breathe {
-      0%, 100% { transform: scale(1.06); opacity: 0.54; }
-      50% { transform: scale(1.12); opacity: 0.82; }
-    }
-
-    @keyframes pulseWord {
-      0%, 100% {
-        transform: scale(1);
-        opacity: 0.82;
-      }
-      50% {
-        transform: scale(1.045);
-        opacity: 1;
-      }
+      color: var(--orange);
+      font-style: italic;
     }
 
     @media (max-width: 760px) {
-      body {
-        overflow-y: auto;
-      }
-
+      body { overflow-y: auto; }
       h1 {
-        font-size: clamp(2.2rem, 9.6vw, 4.2rem);
-        line-height: 0.98;
+        font-size: clamp(2.1rem, 9.2vw, 4rem);
+        line-height: 1.0;
       }
     }
 
     /* ─── Pre-beta gate form ─────────────────────────────────────── */
 
     .gate {
-      margin: 36px auto 0;
-      width: min(360px, 100%);
+      margin: 40px auto 0;
+      width: min(380px, 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .gate__kicker {
-      font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+      font-family: var(--font-mono);
       font-size: 0.66rem;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.20em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.48);
+      font-weight: 700;
+      color: var(--orange);
       margin: 0;
     }
 
@@ -194,76 +129,74 @@
 
     .gate__input {
       flex: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 6px;
-      padding: 10px 14px;
-      color: var(--text-primary);
-      font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+      background: var(--raised);
+      border: 1px solid var(--ink-25);
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: var(--ink);
+      font-family: var(--font-mono);
       font-size: 1rem;
       letter-spacing: 0.16em;
       text-align: center;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
     }
 
     .gate__input:focus {
       outline: none;
-      border-color: var(--brand-gold);
-      box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.16);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(230, 112, 30, 0.14);
     }
 
     .gate__input::placeholder {
-      color: rgba(255, 255, 255, 0.32);
+      color: var(--ink-25);
       letter-spacing: 0.16em;
     }
 
     .gate__submit {
-      background: var(--brand-gold);
-      border: 1px solid var(--brand-gold);
-      color: #0a0e1a;
+      background: var(--orange);
+      border: 1px solid var(--orange);
+      color: #fff;
       font-family: var(--font-sans);
       font-weight: 600;
-      font-size: 0.92rem;
-      padding: 10px 18px;
-      border-radius: 6px;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border-radius: 9px;
       cursor: pointer;
-      transition: opacity 140ms ease;
+      transition: background 140ms ease, box-shadow 140ms ease;
     }
 
     .gate__submit:hover {
-      opacity: 0.88;
+      background: var(--orange-dark);
+      box-shadow: 0 6px 18px rgba(230, 112, 30, 0.22);
     }
 
     .gate__error {
       margin: 0;
       font-size: 0.82rem;
-      color: #fca5a5;
+      color: #cf3b34;
       text-align: center;
       min-height: 1.2em;
     }
 
     .gate__exit {
-      margin: 18px auto 0;
+      margin: 20px auto 0;
       max-width: 480px;
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       line-height: 1.6;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-50);
     }
 
     .gate__exit a {
-      color: var(--brand-gold-light);
+      color: var(--orange);
       text-decoration: none;
-      border-bottom: 1px dotted rgba(232, 201, 168, 0.4);
+      border-bottom: 1px dotted rgba(230, 112, 30, 0.4);
     }
 
-    .gate__exit a:hover {
-      opacity: 0.82;
-    }
+    .gate__exit a:hover { opacity: 0.82; }
   </style>
 </head>
 <body>
-  <div class="rings" aria-hidden="true"></div>
-
   <main class="page">
     <div>
       <h1>Your first go-to-market hire just became more <span class="pulse-word">predictable.</span></h1>

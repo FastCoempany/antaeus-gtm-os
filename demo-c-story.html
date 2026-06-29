@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · Activation demo — Variant C (Story / your head → a machine they inherit)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Caveat:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--green:#1f9d57;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;--hand:'Caveat',cursive;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  /* the field starts dim/cool (memory), brightens as it becomes a system */
+  body{background:#11203f;color:#e8edf6;font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;transition:background 2.4s ease,color 2.4s ease}
+  body.lit{background:var(--field);color:var(--ink)}
+  .stage{position:fixed;inset:0;padding:46px 60px;display:flex;flex-direction:column}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.7}
+  .scene{position:relative;flex:1;margin-top:18px}
+  /* phase 1 — scattered memory fragments */
+  .frag{position:absolute;font-family:var(--hand);font-size:1.35rem;color:#aebbd6;max-width:24ch;line-height:1.2;opacity:0;transform:rotate(var(--r)) translateY(14px);transition:opacity .8s,transform .8s}
+  .frag.show{opacity:.92;transform:rotate(var(--r))}
+  .frag.gone{opacity:0;transform:rotate(0) scale(.6);filter:blur(2px)}
+  /* the input line */
+  .promptwrap{position:absolute;left:0;right:0;top:48%;display:flex;justify-content:center;opacity:0;transition:opacity .6s}
+  .promptwrap.show{opacity:1}
+  .prompt{font-family:var(--serif);font-size:clamp(1.6rem,3.2vw,2.6rem);color:#fff;border-bottom:2px solid var(--orange);padding-bottom:8px;min-height:1.4em}
+  .prompt.lit{color:var(--ink)}
+  .cursor{display:inline-block;width:.5ch;background:var(--orange);color:transparent;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  /* phase 2 — structured rows snapping in */
+  .order{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;align-content:center;opacity:0;transition:opacity .8s;pointer-events:none}
+  .order.show{opacity:1}
+  .obj{display:flex;align-items:center;justify-content:space-between;background:var(--raised);border:1px solid var(--ink10);border-radius:11px;padding:13px 16px;box-shadow:0 10px 26px rgba(10,28,64,.06);opacity:0;transform:translateY(16px) scale(.96);transition:opacity .5s,transform .5s}
+  .obj.in{opacity:1;transform:none}
+  .obj .nm{font-weight:600;color:var(--ink)}
+  .obj .meta{font-family:var(--mono);font-size:.74rem;color:var(--ink50)}
+  .obj .meta.hot{color:var(--orange);font-weight:700}
+  /* phase 3 — day one / the hire reads the kit */
+  .dayone{position:absolute;inset:0;display:flex;align-items:center;gap:40px;opacity:0;transition:opacity 1s;pointer-events:none}
+  .dayone.show{opacity:1}
+  .kitcard{flex:1;max-width:440px;background:var(--raised);border:1px solid var(--ink10);border-radius:16px;padding:26px 28px;box-shadow:0 26px 60px rgba(10,28,64,.10)}
+  .kitcard .kk{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px}
+  .kitcard h3{font-family:var(--serif);font-size:1.5rem;color:var(--ink);line-height:1.1;margin-bottom:14px}
+  .kitcard .ln{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--ink10);color:var(--ink70);font-size:.92rem}
+  .kitcard .ln .d{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .dayone .who{max-width:24ch}
+  .dayone .who .lead{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:12px}
+  .dayone .who .say{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.14;color:var(--ink)}
+  /* close */
+  .close{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 60px;opacity:0;pointer-events:none;transition:opacity .9s}
+  .close.show{opacity:1}
+  .close .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:16px}
+  .close h1{font-family:var(--serif);font-size:clamp(2.2rem,4.6vw,4rem);line-height:1.02;max-width:19ch;color:var(--ink)}
+  .close p{font-size:1.08rem;color:var(--ink70);margin-top:20px;max-width:46ch;line-height:1.6}
+  .cta{margin-top:32px;background:var(--orange);color:#fff;font-weight:600;font-size:1rem;padding:15px 26px;border-radius:11px;width:max-content;box-shadow:0 10px 26px rgba(230,112,30,.26)}
+  .bar{position:fixed;left:0;bottom:0;height:3px;background:var(--orange);width:0;z-index:5}
+  .controls{position:fixed;right:22px;bottom:22px;z-index:6}
+  .controls button{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);background:var(--raised);border:1px solid var(--ink10);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .tag{position:fixed;left:60px;bottom:24px;font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25);z-index:6}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="mark">ANTAEUS</div>
+  <div class="scene" id="scene">
+    <div class="frag" style="--r:-4deg;left:6%;top:12%">Northwind — talked to their GC in March? never followed up</div>
+    <div class="frag" style="--r:3deg;left:58%;top:8%">Apex deal stalled… why??</div>
+    <div class="frag" style="--r:-2deg;left:30%;top:34%">who’s the actual champion at Cobalt</div>
+    <div class="frag" style="--r:5deg;left:64%;top:40%">Brightwave — said budget “next quarter” (when??)</div>
+    <div class="frag" style="--r:-6deg;left:9%;top:58%">that pilot went great but… no notes</div>
+    <div class="frag" style="--r:2deg;left:46%;top:66%">remember to ask Harbor about security review</div>
+
+    <div class="promptwrap" id="promptwrap"><div class="prompt" id="prompt"></div></div>
+
+    <div class="order" id="order">
+      <div class="obj"><span class="nm">Northwind Logistics</span><span class="meta hot">new GC · hot</span></div>
+      <div class="obj"><span class="nm">Apex Health</span><span class="meta">stalled · 18d</span></div>
+      <div class="obj"><span class="nm">Cobalt Freight</span><span class="meta">champion: VP Ops</span></div>
+      <div class="obj"><span class="nm">Brightwave</span><span class="meta">budget: Q3</span></div>
+      <div class="obj"><span class="nm">Harbor Point</span><span class="meta">security review</span></div>
+      <div class="obj"><span class="nm">Evermark</span><span class="meta">pilot → proof</span></div>
+    </div>
+
+    <div class="dayone" id="dayone">
+      <div class="kitcard">
+        <div class="kk">The handoff kit · day one</div>
+        <h3>Run the motion. Here’s everything.</h3>
+        <div class="ln"><span class="d"></span>Who closes, who doesn’t, and why</div>
+        <div class="ln"><span class="d"></span>The exact touches that converted</div>
+        <div class="ln"><span class="d"></span>The questions that won the next meeting</div>
+        <div class="ln"><span class="d"></span>Your Monday-to-Friday rhythm</div>
+      </div>
+      <div class="who"><div class="lead">Day one · your first hire</div><div class="say" id="hireSay"></div></div>
+    </div>
+
+    <div class="close" id="close">
+      <div class="k">That’s the whole point</div>
+      <h1>The work stops living in your head.</h1>
+      <p>What you build in here becomes a machine someone can inherit — not a memory only you can run. That starts the moment you put the real accounts in. The ten that matter this quarter.</p>
+      <div class="cta">Seed the workspace →</div>
+    </div>
+  </div>
+</div>
+<div class="bar" id="bar"></div>
+<div class="tag">Variant C · Story — your head → a machine they inherit · ~30s</div>
+<div class="controls"><button id="replay">↻ Replay</button></div>
+
+<script>
+const frags=[...document.querySelectorAll('.frag')],PW=document.getElementById('promptwrap'),PROMPT=document.getElementById('prompt');
+const ORDER=document.getElementById('order'),objs=[...document.querySelectorAll('.obj')],DAYONE=document.getElementById('dayone'),HIRE=document.getElementById('hireSay');
+const CLOSE=document.getElementById('close'),BAR=document.getElementById('bar');
+let timers=[];
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+function type(el,text,speed,lit){return new Promise(res=>{el.textContent='';let i=0;const c=document.createElement('span');c.className='cursor';c.textContent='|';el.appendChild(c);
+  (function step(){if(i<text.length){c.insertAdjacentText('beforebegin',text[i++]);timers.push(setTimeout(step,speed));}else{setTimeout(()=>c.remove(),500);res();}})();});}
+
+function play(){
+  clearAll();
+  document.body.classList.remove('lit');
+  frags.forEach(f=>f.classList.remove('show','gone'));
+  PW.classList.remove('show');PROMPT.textContent='';PROMPT.classList.remove('lit');
+  ORDER.classList.remove('show');objs.forEach(o=>o.classList.remove('in'));
+  DAYONE.classList.remove('show');HIRE.textContent='';CLOSE.classList.remove('show');
+  BAR.style.transition='none';BAR.style.width='0';
+  const T=30000;at(40,()=>{BAR.style.transition='width '+T+'ms linear';BAR.style.width='100%';});
+
+  // Phase 1 — the scattered head
+  frags.forEach((f,i)=>at(300+i*340,()=>f.classList.add('show')));
+
+  // The one line of input
+  at(3000,()=>PW.classList.add('show'));
+  at(3300,()=>type(PROMPT,'Mid-market ops teams past their first compliance audit.',34));
+
+  // The catch — fragments clear, field brightens, structure snaps in
+  at(7600,()=>{frags.forEach((f,i)=>at(i*70,()=>f.classList.add('gone')));});
+  at(8000,()=>{document.body.classList.add('lit');PROMPT.classList.add('lit');});
+  at(8400,()=>{PW.classList.remove('show');});
+  at(8900,()=>{ORDER.classList.add('show');objs.forEach((o,i)=>at(i*180,()=>o.classList.add('in')));});
+
+  // Phase 3 — day one, the hire reads the kit
+  at(15800,()=>{ORDER.classList.remove('show');});
+  at(16500,()=>{DAYONE.classList.add('show');});
+  at(17200,()=>type(HIRE,'They open this and don’t need you in the room.',32));
+
+  // Close
+  at(24200,()=>{DAYONE.classList.remove('show');});
+  at(25000,()=>CLOSE.classList.add('show'));
+}
+document.getElementById('replay').onclick=play;
+play();
+</script>
+</body>
+</html>
