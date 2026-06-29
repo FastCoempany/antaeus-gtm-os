@@ -74,7 +74,11 @@ const include = [
   "seeding-flow-front.html",
   // Seeding flow, the heavy middle — live deals entered one at a time,
   // each waking a diagnosis, the "why ten" counter climbing to awake.
-  "seeding-flow-deals.html"
+  "seeding-flow-deals.html",
+  // The FULL seeding flow, stitched end to end — doorway → ICP (real
+  // choosing) → accounts → wake-up → live deals → quota → landing, with
+  // the sourced evidence margin the whole way.
+  "seeding-flow.html"
 ];
 
 function copyRecursive(src, dest) {
