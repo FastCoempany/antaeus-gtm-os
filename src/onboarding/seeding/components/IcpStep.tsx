@@ -1,4 +1,5 @@
 import type { JSX } from "preact";
+import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
 import { draft, patchDraft } from "../draft";
 import { nextStep } from "../state";
@@ -7,12 +8,25 @@ import { ICP_FORKS, assembleIcp, type IcpOption } from "../lib/icp";
 /**
  * IcpStep (slice 2) — the app draws the ICP out of the operator in real
  * choices, then assembles THEIR picks into the sharp statement. The forks
- * are driven off draft.icpPicks so the step is resumable.
+ * are driven off draft.icpPicks so the step is resumable. Each fork also
+ * carries a write-in escape, so a motion the four chips don't cover isn't
+ * a dead-end — the operator's own words go straight into the sentence.
  */
-function pick(opt: IcpOption): void {
-    const picks = [...draft.value.icpPicks, opt.value];
+const otherOpen = signal(false);
+const otherText = signal("");
+
+function pick(value: string): void {
+    const picks = [...draft.value.icpPicks, value];
     const statement = picks.length >= ICP_FORKS.length ? assembleIcp(picks) : "";
     patchDraft({ icpPicks: picks, icpStatement: statement });
+    otherOpen.value = false;
+    otherText.value = "";
+}
+
+/** @internal test reset. */
+export function __resetIcpStepForTests(): void {
+    otherOpen.value = false;
+    otherText.value = "";
 }
 
 export function IcpStep(): JSX.Element {
@@ -26,7 +40,7 @@ export function IcpStep(): JSX.Element {
             <h1 class="sd-h1">{t("Let's get sharp about who you sell to.", { class: "body" })}</h1>
             <p class="sd-lede">
                 {t(
-                    "You said “ops teams at mid-market.” That's a start, not an answer. A few real choices and it's a target the system can actually hunt against.",
+                    "Three quick choices. Each one's a real call — and the system assembles them into a target it can actually hunt against. None of the chips fit? Write your own.",
                     { class: "body" }
                 )}
             </p>
@@ -36,17 +50,46 @@ export function IcpStep(): JSX.Element {
                     <>
                         <div class="sd-q">{fork.question}</div>
                         <div class="sd-opts">
-                            {fork.options.map((o) => (
+                            {fork.options.map((o: IcpOption) => (
                                 <button
                                     key={o.value}
                                     type="button"
                                     class="sd-opt"
-                                    onClick={() => pick(o)}
+                                    onClick={() => pick(o.value)}
                                 >
                                     {o.label}
                                 </button>
                             ))}
+                            <button
+                                type="button"
+                                class="sd-opt sd-opt--other"
+                                onClick={() => { otherOpen.value = true; }}
+                            >
+                                {t("Something else…", { class: "body" })}
+                            </button>
                         </div>
+                        {otherOpen.value ? (
+                            <div class="sd-other">
+                                <input
+                                    class="sd-other__i"
+                                    autofocus
+                                    value={otherText.value}
+                                    placeholder={t("In your own words…", { class: "body" })}
+                                    onInput={(e) => { otherText.value = (e.currentTarget as HTMLInputElement).value; }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && otherText.value.trim()) pick(otherText.value.trim());
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    class="sd-btn sd-btn--sm"
+                                    disabled={!otherText.value.trim()}
+                                    onClick={() => { if (otherText.value.trim()) pick(otherText.value.trim()); }}
+                                >
+                                    {t("Use this →", { class: "body" })}
+                                </button>
+                            </div>
+                        ) : null}
                     </>
                 ) : null}
 

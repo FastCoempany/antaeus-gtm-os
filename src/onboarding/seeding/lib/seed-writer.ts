@@ -1,5 +1,5 @@
 import { reportError } from "@/lib/observability";
-import type { SeedingDraft } from "../draft";
+import { roomStage, type SeedingDraft } from "../draft";
 import type { EnrichedAccount } from "./enrichment";
 
 /**
@@ -152,7 +152,7 @@ export function writeSeedingDraft(
             id: uid("deal", now, i),
             accountName: d.account,
             value: d.value,
-            stage: d.stage,
+            stage: roomStage(d.stage),
             champion: d.champion,
             economicBuyer: d.whoSigns,
             useCase: "",

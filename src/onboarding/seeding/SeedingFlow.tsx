@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
-import { SEEDING_STEPS, seedingIndex, seedingStep } from "./state";
+import { t } from "@/lib/voice/t";
+import { SEEDING_STEPS, seedingIndex, seedingStep, prevStep } from "./state";
 import { EvidenceMargin } from "./components/EvidenceMargin";
 import { Doorway } from "./components/Doorway";
 import { IcpStep } from "./components/IcpStep";
@@ -43,11 +44,21 @@ function StepBody(): JSX.Element {
 
 export function SeedingFlow(): JSX.Element {
     const idx = seedingIndex.value;
+    // Back travels every step except the doorway (nothing before it) and
+    // the landing (terminal — the workspace is already written).
+    const canGoBack = idx > 0 && seedingStep.value !== "landing";
     return (
         <div class="sd-frame">
             <div class="sd-main">
                 <header class="sd-top">
-                    <span class="sd-mark">ANTAEUS</span>
+                    <div class="sd-top__l">
+                        <span class="sd-mark">ANTAEUS</span>
+                        {canGoBack ? (
+                            <button type="button" class="sd-back" onClick={() => prevStep()}>
+                                {t("← Back", { class: "body" })}
+                            </button>
+                        ) : null}
+                    </div>
                     <div class="sd-rail" aria-hidden="true">
                         {SEEDING_STEPS.map((s, i) => (
                             <span
