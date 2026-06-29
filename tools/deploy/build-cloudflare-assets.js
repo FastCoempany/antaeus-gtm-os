@@ -60,7 +60,12 @@ const include = [
   // landing provides" surface a visitor lands on when they want to
   // understand the category before signing up. Linked from
   // start.html "What this actually is" CTA.
-  "why-antaeus"
+  "why-antaeus",
+  // Activation-demo mockups (cinematic first-run explorations — Time /
+  // Space / Story). Static, self-contained; viewable past the gate.
+  "demo-a-time.html",
+  "demo-b-space.html",
+  "demo-c-story.html"
 ];
 
 function copyRecursive(src, dest) {

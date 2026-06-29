@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · Activation demo — Variant B (Space / what the system sees)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--blue:#2563eb;--green:#1f9d57;--red:#cf3b34;--amber:#c8821a;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+  .stage{position:fixed;inset:0;padding:44px 60px;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:baseline}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.8}
+  .roomname{font-family:var(--mono);font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);font-weight:700}
+  .frames{position:relative;flex:1;margin-top:26px}
+  .frame{position:absolute;inset:0;opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:center}
+  .frame.show{opacity:1;transform:none}
+  .frame.past{opacity:0;transform:translateY(-26px)}
+  .panel{background:var(--raised);border:1px solid var(--ink10);border-radius:16px;padding:24px 26px;box-shadow:0 18px 44px rgba(10,28,64,.07)}
+  .observe{max-width:30ch}
+  .observe .lead{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px}
+  .observe .say{font-family:var(--serif);font-size:clamp(1.5rem,2.7vw,2.3rem);line-height:1.16;letter-spacing:-.01em;color:var(--ink);min-height:4em}
+  .cursor{display:inline-block;width:.55ch;background:var(--orange);animation:blink 1s steps(1) infinite;color:transparent}
+  @keyframes blink{50%{opacity:0}}
+  /* signal console rows */
+  .acct{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;border:1px solid var(--ink10);margin-bottom:8px;background:var(--field);transition:transform .6s cubic-bezier(.2,.7,.2,1),border-color .4s}
+  .acct .nm{font-weight:600;font-size:.96rem}
+  .acct .heat{font-family:var(--mono);font-size:.8rem;color:var(--ink50);font-weight:700}
+  .acct.hot{border-color:var(--orange);box-shadow:0 0 0 2px rgba(230,112,30,.14)}
+  .acct.hot .heat{color:var(--orange)}
+  /* discovery rail */
+  .seg{padding:11px 14px;border-left:3px solid var(--ink10);margin-bottom:7px;color:var(--ink50);font-size:.92rem;transition:all .4s}
+  .seg.active{border-left-color:var(--orange);color:var(--ink);font-weight:600}
+  .branch{margin:8px 0 0 16px;padding:9px 12px;background:var(--field);border-radius:8px;font-size:.86rem;color:var(--ink70);opacity:0;transform:translateX(-8px);transition:all .5s}
+  .branch.show{opacity:1;transform:none;border-left:2px solid var(--orange)}
+  /* autopsy */
+  .deal{padding:14px 16px;border:1px solid var(--ink10);border-radius:12px}
+  .deal .dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .deal .nm{font-family:var(--serif);font-size:1.3rem}
+  .deal .risk{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--red);opacity:0;transition:opacity .5s}
+  .deal .risk.show{opacity:1}
+  .cause{margin-top:10px;padding:10px 12px;background:rgba(207,59,52,.06);border-radius:8px;font-size:.88rem;color:var(--ink70);opacity:0;transition:opacity .6s}
+  .cause.show{opacity:1}
+  /* kit */
+  .ksec{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--ink10);opacity:.4;transition:opacity .5s}
+  .ksec:first-child{border-top:none}
+  .ksec.on{opacity:1}
+  .ksec .dot{width:9px;height:9px;border-radius:50%;background:var(--ink10);transition:background .5s}
+  .ksec.on .dot{background:var(--green)}
+  .ksec .lbl{font-size:.92rem}
+  .close{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 60px;background:var(--field);opacity:0;pointer-events:none;transition:opacity .8s}
+  .close.show{opacity:1}
+  .close .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:16px}
+  .close h1{font-family:var(--serif);font-size:clamp(2.2rem,4.4vw,3.8rem);line-height:1.04;max-width:20ch}
+  .close p{font-size:1.08rem;color:var(--ink70);margin-top:20px;max-width:46ch;line-height:1.6}
+  .cta{margin-top:32px;background:var(--orange);color:#fff;font-weight:600;font-size:1rem;padding:15px 26px;border-radius:11px;width:max-content;box-shadow:0 10px 26px rgba(230,112,30,.26)}
+  .bar{position:fixed;left:0;bottom:0;height:3px;background:var(--orange);width:0;z-index:5}
+  .controls{position:fixed;right:22px;bottom:22px;z-index:6}
+  .controls button{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);background:var(--raised);border:1px solid var(--ink10);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .controls button:hover{color:var(--orange);border-color:var(--orange)}
+  .tag{position:fixed;left:60px;bottom:24px;font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25);z-index:6}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top"><div class="mark">ANTAEUS</div><div class="roomname" id="roomname">Signal Console</div></div>
+  <div class="frames" id="frames">
+
+    <div class="frame" data-room="Signal Console">
+      <div class="panel" id="scPanel">
+        <div class="acct" data-h="38"><span class="nm">Apex Health</span><span class="heat">heat 38</span></div>
+        <div class="acct" data-h="91"><span class="nm">Northwind Logistics</span><span class="heat">heat 91</span></div>
+        <div class="acct" data-h="54"><span class="nm">Cobalt Freight</span><span class="heat">heat 54</span></div>
+        <div class="acct" data-h="22"><span class="nm">Brightwave</span><span class="heat">heat 22</span></div>
+      </div>
+      <div class="observe"><div class="lead">The system sees</div><div class="say" data-say="Northwind just posted a GC role. That’s your trigger — it’s the hottest account on your board now."></div></div>
+    </div>
+
+    <div class="frame" data-room="Discovery Studio">
+      <div class="panel">
+        <div class="seg">Opening frame</div>
+        <div class="seg">Current-state truth</div>
+        <div class="seg active" id="segPain">Pain &amp; consequence
+          <div class="branch" id="branch">Buyer said: “we already have a tool.” → pull the displacement question.</div>
+        </div>
+        <div class="seg">Proof threshold</div>
+        <div class="seg">Next-step lock</div>
+      </div>
+      <div class="observe"><div class="lead">The system sees</div><div class="say" data-say="When they said they already had a tool, the room handed you the one question that unseats it."></div></div>
+    </div>
+
+    <div class="frame" data-room="Future Autopsy">
+      <div class="panel">
+        <div class="deal">
+          <div class="dh"><span class="nm">Cobalt Freight · $84k</span><span class="risk" id="risk">at risk</span></div>
+          <div style="font-size:.86rem;color:var(--ink50)">Proposal · 18 days in stage</div>
+          <div class="cause" id="cause">Pattern: pressure before clarity. The next step isn’t dated and no one owns the proof. Fix the agenda before the call.</div>
+        </div>
+      </div>
+      <div class="observe"><div class="lead">The system sees</div><div class="say" data-say="This deal stalls in nine days if nothing changes — and it names the smallest move that saves it."></div></div>
+    </div>
+
+    <div class="frame" data-room="Founding GTM · the kit">
+      <div class="panel" id="kitPanel">
+        <div class="ksec"><span class="dot"></span><span class="lbl">Who hits, who misses, and why</span></div>
+        <div class="ksec"><span class="dot"></span><span class="lbl">The rails that actually converted</span></div>
+        <div class="ksec"><span class="dot"></span><span class="lbl">The questions that won the next meeting</span></div>
+        <div class="ksec"><span class="dot"></span><span class="lbl">Where deals are won — and where they leak</span></div>
+        <div class="ksec"><span class="dot"></span><span class="lbl">Day-one operating rhythm</span></div>
+      </div>
+      <div class="observe"><div class="lead">The system sees</div><div class="say" data-say="Five sections are ready. A hire could open this and run your motion on day one — without you in the room."></div></div>
+    </div>
+
+  </div>
+  <div class="close" id="close">
+    <div class="k">That’s the lay of the land</div>
+    <h1>Every room sharpens the one before it.</h1>
+    <p>Signals become calls. Calls become deals. Deals become proof. Proof becomes a motion a hire inherits. None of it works on an empty workspace — so let’s make it yours.</p>
+    <div class="cta">Seed the workspace →</div>
+  </div>
+</div>
+<div class="bar" id="bar"></div>
+<div class="tag">Variant B · Space — what the system sees · ~30s</div>
+<div class="controls"><button id="replay">↻ Replay</button></div>
+
+<script>
+const frames=[...document.querySelectorAll('.frame')],roomname=document.getElementById('roomname');
+const BAR=document.getElementById('bar'),CLOSE=document.getElementById('close');
+let timers=[];
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+function type(el,text,speed){return new Promise(res=>{el.textContent='';let i=0;const cur=document.createElement('span');cur.className='cursor';cur.textContent='|';el.appendChild(cur);
+  (function step(){if(i<text.length){cur.insertAdjacentText('beforebegin',text[i++]);timers.push(setTimeout(step,speed));}else{setTimeout(()=>cur.remove(),500);res();}})();});}
+function showFrame(idx){frames.forEach((f,i)=>{f.classList.remove('show','past');if(i<idx)f.classList.add('past');});const f=frames[idx];f.classList.add('show');roomname.textContent=f.dataset.room;}
+
+function play(){
+  clearAll();frames.forEach(f=>{f.classList.remove('show','past');f.querySelector('.say').textContent='';});
+  CLOSE.classList.remove('show');BAR.style.transition='none';BAR.style.width='0';
+  const T=30000;at(40,()=>{BAR.style.transition='width '+T+'ms linear';BAR.style.width='100%';});
+
+  // Frame 1 — Signal Console: re-sort by heat, light hottest, type
+  at(300,()=>{showFrame(0);
+    const p=document.getElementById('scPanel');const rows=[...p.children].sort((a,b)=>b.dataset.h-a.dataset.h);
+    setTimeout(()=>{rows.forEach(r=>p.appendChild(r));rows[0].classList.add('hot');},700);});
+  at(1600,()=>type(frames[0].querySelector('.say'),frames[0].querySelector('.say').dataset.say,26));
+
+  // Frame 2 — Discovery
+  at(7600,()=>{showFrame(1);setTimeout(()=>document.getElementById('branch').classList.add('show'),900);});
+  at(8900,()=>type(frames[1].querySelector('.say'),frames[1].querySelector('.say').dataset.say,26));
+
+  // Frame 3 — Future Autopsy
+  at(14600,()=>{showFrame(2);setTimeout(()=>document.getElementById('risk').classList.add('show'),600);setTimeout(()=>document.getElementById('cause').classList.add('show'),1100);});
+  at(15900,()=>type(frames[2].querySelector('.say'),frames[2].querySelector('.say').dataset.say,25));
+
+  // Frame 4 — Kit
+  at(21600,()=>{showFrame(3);const secs=[...document.querySelectorAll('#kitPanel .ksec')];secs.forEach((s,i)=>setTimeout(()=>s.classList.add('on'),350+i*340));});
+  at(22900,()=>type(frames[3].querySelector('.say'),frames[3].querySelector('.say').dataset.say,24));
+
+  at(28200,()=>CLOSE.classList.add('show'));
+}
+document.getElementById('replay').onclick=play;
+play();
+</script>
+</body>
+</html>
