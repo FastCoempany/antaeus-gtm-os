@@ -112,6 +112,63 @@
   .lnode .n{font-family:var(--serif);font-size:1.15rem}
   .lnode .x{font-size:.78rem;color:var(--ink50);margin-top:3px}
   .larrow{color:var(--orange);font-weight:800;padding:0 8px}
+
+  /* ── Wave 1 ─────────────────────────────────────────────────────── */
+  /* section header: headline left + a real element on the right (no dead air) */
+  .shead{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:end;margin-bottom:32px}
+  .shead .deck{color:var(--ink70);font-size:1.06rem;line-height:1.5;max-width:42ch;padding-bottom:6px}
+  .shead .deck b{color:var(--ink)}
+  @media(max-width:900px){.shead{grid-template-columns:1fr;gap:14px}}
+  /* shared icon style — our glyph language */
+  .ic{width:24px;height:24px;flex:none}
+  .ic path,.ic circle,.ic rect{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  /* mascot grounded/lifted cluster (the unranked, at-risk pile) */
+  .pile{background:var(--surface);border:1px solid var(--ink10);border-radius:18px;padding:24px;box-shadow:0 20px 48px rgba(10,28,64,.08)}
+  .pile .pl{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:16px}
+  .pile .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:12px 10px}
+  .lm{width:26px;height:26px;color:var(--ink25)}
+  .lm path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter}
+  .lm.lift{transform:rotate(var(--r,7deg)) translateY(-2px);opacity:.5;color:var(--red)}
+  .pile .cap{margin-top:16px;font-size:.9rem;color:var(--ink70)}
+  .pile .cap b{color:var(--red)}
+  /* rhythm: icons + stagger */
+  .day{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
+  .day.in{opacity:1;transform:none}
+  .day .di{color:var(--forest);margin-bottom:11px}
+  .day .di .ic{width:24px;height:24px;color:var(--forest)}
+  /* loop: icons + pulse-in-sequence */
+  .lnode{display:flex;flex-direction:column;align-items:center;transition:border-color .4s,box-shadow .4s}
+  .lnode .li{margin-bottom:9px;color:var(--ink25);transition:color .4s,transform .4s}
+  .lnode.lit{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange-tint)}
+  .lnode.lit .li{color:var(--orange);transform:translateY(-2px)}
+  .larrow{color:var(--ink10);transition:color .4s,transform .4s}
+  .larrow.lit{color:var(--orange);transform:scale(1.25)}
+  /* capability rows: living center-spine that threads the zigzag */
+  .rows-z{position:relative;margin-top:8px}
+  .rows-z::before{content:"";position:absolute;left:50%;top:14px;bottom:14px;width:3px;transform:translateX(-50%);background:var(--ink10);border-radius:2px}
+  .rows-z .zfill{position:absolute;left:50%;top:14px;width:3px;transform:translateX(-50%);background:var(--orange);height:0;border-radius:2px;transition:height 1.5s cubic-bezier(.2,.7,.2,1);z-index:0}
+  .rows-z.go .zfill{height:calc(100% - 28px)}
+  .crow{position:relative;z-index:1;opacity:0;transition:opacity .6s ease}
+  .crow.lit{opacity:1}
+  .crow .cdot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:var(--field);border:3px solid var(--ink10);z-index:2;transition:border-color .45s,background .45s}
+  .crow.lit .cdot{border-color:var(--orange);background:var(--orange)}
+  .crow .chead{display:flex;align-items:center;gap:12px}
+  .crow .cnum{font-family:var(--serif);font-size:1.5rem;color:var(--orange);line-height:1}
+  .crow .cic{color:var(--forest)}
+  /* carousel — validation, low (testimonial zone) */
+  .proof{padding:80px 0 84px;border-top:1px solid var(--ink10)}
+  .proof .ph{text-align:center;max-width:62ch;margin:0 auto 30px}
+  .proof .ph h2{font-family:var(--serif);font-size:clamp(1.8rem,3.6vw,2.8rem);line-height:1.08;letter-spacing:-.01em}
+  .proof .ph p{color:var(--ink70);font-size:1.05rem;margin-top:12px}
+  .proof .ph p b{color:var(--ink)}
+  .track{position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .marquee{display:flex;gap:34px;width:max-content;animation:slide 46s linear infinite}
+  .marquee:hover{animation-play-state:paused}
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .mi{display:flex;align-items:baseline;gap:8px;white-space:nowrap;flex-shrink:0}
+  .mi .mn{font-family:var(--serif);font-size:1.15rem;color:var(--ink)}
+  .mi .mv{font-family:var(--mono);font-size:.62rem;color:var(--forest);font-weight:700}
+  .msep{color:var(--ink25)}
   /* capability rows */
   .crow{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;padding:46px 0;border-top:1px solid var(--ink10)}
   .crow:nth-child(even) .txt{order:2}
@@ -202,53 +259,84 @@
 <div class="cred"><div class="wrap rv"><div class="big">Teams chasing a <b>broad</b> ICP lose more deals and close slower than teams with a sharp one.</div><div class="src">Salesforce · Research</div></div></div>
 
 <section class="blk wrap">
-  <div class="eyer rv"><span class="kick">Monday, 8:47 AM</span><h2 class="big">You open the week and have no idea where to start.</h2></div>
-  <p class="lede rv">Forty open deals. No ranking. The loudest one wins your morning — not the one that's actually slipping.</p>
-</section>
-
-<section class="blk wrap" style="padding-top:0">
-  <div class="eyer rv"><span class="kick">The week, on rails</span><h2 class="big">A rhythm, not a scramble.</h2></div>
-  <div class="rhythm rv">
-    <div class="day"><div class="dn">Mon</div><div class="dt">The top three risks, ranked.</div></div>
-    <div class="day"><div class="dn">Tue</div><div class="dt">Outbound, on the hottest accounts.</div></div>
-    <div class="day"><div class="dn">Wed</div><div class="dt">Discovery prep, then calls.</div></div>
-    <div class="day"><div class="dn">Thu</div><div class="dt">Move the deals that are drifting.</div></div>
-    <div class="day"><div class="dn">Fri</div><div class="dt">What changed. What's next.</div></div>
-  </div>
-</section>
-
-<section class="blk wrap" style="padding-top:0">
-  <div class="eyer rv"><span class="kick">The loop, moving</span><h2 class="big">Catch it before it goes quiet.</h2></div>
-  <div class="loop rv">
-    <div class="lnode"><div class="n">Signal</div><div class="x">a live trigger</div></div><div class="larrow">→</div>
-    <div class="lnode"><div class="n">Motion</div><div class="x">the right line</div></div><div class="larrow">→</div>
-    <div class="lnode"><div class="n">Deal</div><div class="x">under pressure</div></div><div class="larrow">→</div>
-    <div class="lnode"><div class="n">Proof</div><div class="x">a boss can act on</div></div><div class="larrow">→</div>
-    <div class="lnode"><div class="n">Handoff</div><div class="x">they inherit it</div></div>
-  </div>
-</section>
-
-<section class="blk wrap" style="padding-top:0">
-  <div class="crow rv">
-    <div class="txt"><h3>Ranked, not stored.</h3><p>It tells you the one to act on, with the reason it came up first. You stop hunting for what's wrong — it's already at the top.</p></div>
-    <div class="frag"><div class="fl">Today · ranked</div>
-      <div class="acct hot"><span class="an">Northwind Logistics</span><span class="ah">91</span></div>
-      <div class="acct"><span class="an">Apex Health</span><span class="ah">64</span></div>
-      <div class="acct"><span class="an">Cobalt Freight</span><span class="ah">57</span></div>
+  <div class="shead">
+    <div class="rv">
+      <span class="kick">Monday, 8:47 AM</span>
+      <h2 class="big">You open the week and have no idea where to start.</h2>
+      <p class="lede" style="margin-top:16px">Forty open deals. No ranking. The loudest one wins your morning — not the one that's actually slipping.</p>
+    </div>
+    <div class="pile rv">
+      <div class="pl">Your pipeline · unranked</div>
+      <div class="grid" id="pile"></div>
+      <div class="cap">Forty deals, every one <b>lifted off the ground</b> — at risk, and you can't tell which.</div>
     </div>
   </div>
-  <div class="crow rv">
-    <div class="txt"><h3>Signals that mean something.</h3><p>A new GC search, a fresh CFO — surfaced, scored, and ranked against who you actually sell to. You never typed them.</p></div>
-    <div class="frag"><div class="fl">What it found</div>
-      <div class="acct hot"><span class="an">Northwind</span><span class="as">opened a GC search · 3d ago</span></div>
-      <div class="acct"><span class="an">Apex</span><span class="as">named a new CFO · 2w ago</span></div>
-    </div>
+</section>
+
+<section class="blk wrap" style="padding-top:0">
+  <div class="shead">
+    <div class="rv"><span class="kick">The week, on rails</span><h2 class="big">A rhythm, not a scramble.</h2></div>
+    <div class="deck rv">The same five moves, in the same order, every week — so the work stops being a scramble and becomes a <b>system a hire could step into.</b></div>
   </div>
-  <div class="crow rv">
-    <div class="txt"><h3>Deals that don't die quietly.</h3><p>It names the deal nine days before it stalls — and the smallest move that saves it. Stage isn't truth unless the next step backs it up.</p></div>
-    <div class="frag"><div class="fl">Before it dies</div>
-      <div class="acct" style="border-color:var(--red)"><span class="an">Cobalt Freight · $84k</span><span class="as" style="color:var(--red)">stalls in 9 days</span></div>
-      <div style="font-size:.86rem;color:var(--ink70);margin-top:8px;line-height:1.4">Pressure before clarity — no dated next step. Rebuild the agenda before the call.</div>
+  <div class="rhythm" id="rhythm">
+    <div class="day"><div class="di"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3L2 20h20z"/><path d="M12 10v5"/><path d="M12 16.5v2"/></svg></div><div class="dn">Mon</div><div class="dt">The top three risks, ranked.</div></div>
+    <div class="day"><div class="di"><svg class="ic" viewBox="0 0 24 24"><path d="M5 19L19 5"/><path d="M10 5h9v9"/></svg></div><div class="dn">Tue</div><div class="dt">Outbound, on the hottest accounts.</div></div>
+    <div class="day"><div class="di"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2 1.2a10 10 0 0 0 4.8 4.8L15 13l5 2v4a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg></div><div class="dn">Wed</div><div class="dt">Discovery prep, then calls.</div></div>
+    <div class="day"><div class="di"><svg class="ic" viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="18"/><path d="M10 8h6M10 12h6M10 16h3"/></svg></div><div class="dn">Thu</div><div class="dt">Move the deals that are drifting.</div></div>
+    <div class="day"><div class="di"><svg class="ic" viewBox="0 0 24 24"><path d="M4 18l5-5 4 4 7-9"/><path d="M20 12V8h-4"/></svg></div><div class="dn">Fri</div><div class="dt">What changed. What's next.</div></div>
+  </div>
+</section>
+
+<section class="blk wrap" style="padding-top:0">
+  <div class="shead">
+    <div class="rv"><span class="kick">The loop, moving</span><h2 class="big">Catch it before it goes quiet.</h2></div>
+    <div class="deck rv">Nothing closes and disappears. Each step becomes the next open move — a signal becomes a motion, a deal, proof, and finally <b>a handoff a hire inherits.</b></div>
+  </div>
+  <div class="loop" id="loop">
+    <div class="lnode"><div class="li"><svg class="ic" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="12" r="1.6"/></svg></div><div class="n">Signal</div><div class="x">a live trigger</div></div><div class="larrow">→</div>
+    <div class="lnode"><div class="li"><svg class="ic" viewBox="0 0 24 24"><path d="M5 19L19 5"/><path d="M10 5h9v9"/></svg></div><div class="n">Motion</div><div class="x">the right line</div></div><div class="larrow">→</div>
+    <div class="lnode"><div class="li"><svg class="ic" viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="18"/><path d="M10 8h6M10 12h6M10 16h3"/></svg></div><div class="n">Deal</div><div class="x">under pressure</div></div><div class="larrow">→</div>
+    <div class="lnode"><div class="li"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.8-3.4 8-7 10-3.6-2-7-5.2-7-10V6z"/><path d="M9 11.5l2 2 4-4.5"/></svg></div><div class="n">Proof</div><div class="x">a boss can act on</div></div><div class="larrow">→</div>
+    <div class="lnode"><div class="li"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9h11"/><path d="M10 5l5 4-5 4"/><path d="M21 15H10"/><path d="M14 11l-5 4 5 4"/></svg></div><div class="n">Handoff</div><div class="x">they inherit it</div></div>
+  </div>
+</section>
+
+<section class="blk wrap" style="padding-top:0">
+  <div class="rows-z" id="rowsz">
+    <span class="zfill"></span>
+    <div class="crow">
+      <span class="cdot"></span>
+      <div class="txt">
+        <div class="chead"><span class="cnum">01</span><svg class="ic cic" viewBox="0 0 24 24"><path d="M4 18l5-5 4 4 7-9"/><path d="M20 12V8h-4"/></svg></div>
+        <h3>Ranked, not stored.</h3><p>It tells you the one to act on, with the reason it came up first. You stop hunting for what's wrong — it's already at the top.</p>
+      </div>
+      <div class="frag"><div class="fl">Today · ranked</div>
+        <div class="acct hot"><span class="an">Northwind Logistics</span><span class="ah">91</span></div>
+        <div class="acct"><span class="an">Apex Health</span><span class="ah">64</span></div>
+        <div class="acct"><span class="an">Cobalt Freight</span><span class="ah">57</span></div>
+      </div>
+    </div>
+    <div class="crow">
+      <span class="cdot"></span>
+      <div class="txt">
+        <div class="chead"><span class="cnum">02</span><svg class="ic cic" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="12" r="1.6"/></svg></div>
+        <h3>Signals that mean something.</h3><p>A new GC search, a fresh CFO — surfaced, scored, and ranked against who you actually sell to. You never typed them.</p>
+      </div>
+      <div class="frag"><div class="fl">What it found</div>
+        <div class="acct hot"><span class="an">Northwind</span><span class="as">opened a GC search · 3d ago</span></div>
+        <div class="acct"><span class="an">Apex</span><span class="as">named a new CFO · 2w ago</span></div>
+      </div>
+    </div>
+    <div class="crow">
+      <span class="cdot"></span>
+      <div class="txt">
+        <div class="chead"><span class="cnum">03</span><svg class="ic cic" viewBox="0 0 24 24"><path d="M12 3L2 20h20z"/><path d="M12 10v5"/><path d="M12 16.5v2"/></svg></div>
+        <h3>Deals that don't die quietly.</h3><p>It names the deal nine days before it stalls — and the smallest move that saves it. Stage isn't truth unless the next step backs it up.</p>
+      </div>
+      <div class="frag"><div class="fl">Before it dies</div>
+        <div class="acct" style="border-color:var(--red)"><span class="an">Cobalt Freight · $84k</span><span class="as" style="color:var(--red)">stalls in 9 days</span></div>
+        <div style="font-size:.86rem;color:var(--ink70);margin-top:8px;line-height:1.4">Pressure before clarity — no dated next step. Rebuild the agenda before the call.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -272,6 +360,18 @@
         <div class="lrung"><span class="dot"></span><div class="t">Hire-ready, repeatable</div><div class="d">The wins repeat without you in the room.</div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="ph rv">
+      <h2>Validated by founders and sales leaders at companies worth $20B+</h2>
+      <p><b>25 companies. Seed to Series E.</b> Every founder said the same thing: <b>"I needed this 12 months ago."</b></p>
+    </div>
+  </div>
+  <div class="track">
+    <div class="marquee" id="marquee"></div>
   </div>
 </section>
 
@@ -383,6 +483,41 @@
       track.classList.add('go'); rungs.forEach((r,i)=>setTimeout(()=>r.classList.add('lit'),260*i)); lio.disconnect();}});},{threshold:.4});
     lio.observe(track);
   }
+
+  // ── Wave 1 motion ──────────────────────────────────────────────
+  // the lifted pile — the mascot's at-risk device (unranked chaos)
+  (function(){
+    const pile=document.getElementById('pile'); if(!pile) return;
+    const lift=(r)=>`<svg class="lm lift" style="--r:${r}deg" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>`;
+    let html=''; for(let i=0;i<24;i++){ html+=lift(((i*37)%13)-6); } pile.innerHTML=html;
+  })();
+  // validation marquee (duplicated for a seamless loop)
+  (function(){
+    const m=document.getElementById('marquee'); if(!m) return;
+    const C=[['Harvey','$8B'],['Pendo','$2.6B'],['Job&Talent','$2.35B'],['OpenGov','$1.8B'],['Scribe','$1.3B'],['Superhuman','acq.'],['CADDi','$470M'],['Filevine','$400M'],['Aisera','acq.'],['k-ID','$51M'],['Lorikeet','$51M'],['Craft','$42M'],['Smokeball','$30M'],['Rally UXR','$20M'],['Parable','$16.5M'],['Clearbrief',''],['Sybill',''],['Newscatcher','']];
+    const item=([n,v])=>`<span class="mi"><span class="mn">${n}</span>${v?`<span class="mv">${v}</span>`:''}</span><span class="msep">/</span>`;
+    m.innerHTML=(C.map(item).join('')).repeat(2);
+  })();
+  // rhythm: stagger the days in
+  (function(){
+    const r=document.getElementById('rhythm'); if(!r) return; const days=[...r.querySelectorAll('.day')]; let done=false;
+    const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;days.forEach((d,i)=>setTimeout(()=>d.classList.add('in'),120*i));o.disconnect();}});},{threshold:.3});
+    o.observe(r); setTimeout(()=>days.forEach(d=>d.classList.add('in')),6000);
+  })();
+  // loop: an orange pulse travels Signal → Handoff, on repeat
+  (function(){
+    const lp=document.getElementById('loop'); if(!lp) return; const nodes=[...lp.querySelectorAll('.lnode')], arrows=[...lp.querySelectorAll('.larrow')]; let started=false;
+    function wave(){ nodes.forEach(n=>n.classList.remove('lit')); arrows.forEach(a=>a.classList.remove('lit'));
+      nodes.forEach((n,i)=>setTimeout(()=>{ n.classList.add('lit'); if(arrows[i])arrows[i].classList.add('lit'); },300*i)); }
+    const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!started){started=true;wave();setInterval(wave,300*nodes.length+2200);o.disconnect();}});},{threshold:.4});
+    o.observe(lp);
+  })();
+  // capability rows: fill the spine + light each node top-to-bottom (guides the zigzag)
+  (function(){
+    const z=document.getElementById('rowsz'); if(!z) return; const rows=[...z.querySelectorAll('.crow')]; let done=false;
+    const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;z.classList.add('go');rows.forEach((r,i)=>setTimeout(()=>r.classList.add('lit'),360*i));o.disconnect();}});},{threshold:.2});
+    o.observe(z); setTimeout(()=>{z.classList.add('go');rows.forEach(r=>r.classList.add('lit'));},6000);
+  })();
 
   // ── subtle cursor parallax on the hero card (barely there) ──
   const card=document.getElementById('rankcard');
