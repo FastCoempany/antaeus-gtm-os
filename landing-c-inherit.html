@@ -42,11 +42,11 @@
   .hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,6.4rem);line-height:.95;letter-spacing:-.03em;margin:22px 0 0}
   .hero .sub{font-size:1.22rem;line-height:1.5;color:var(--ink70);max-width:40ch;margin-top:26px}
   .hero .cta{margin-top:36px}
-  /* credibility */
-  .cred{background:var(--ink);color:#fff;padding:48px 0}
-  .cred .big{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.14;max-width:28ch}
+  /* credibility — bright, orange-ruled */
+  .cred{background:var(--surface);border-top:1px solid var(--ink10);border-bottom:1px solid var(--ink10);padding:48px 0}
+  .cred .big{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.14;max-width:28ch;color:var(--ink);border-left:4px solid var(--orange);padding-left:22px}
   .cred .big b{color:var(--orange);font-weight:400}
-  .cred .src{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:16px}
+  .cred .src{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink50);margin-top:16px;padding-left:22px}
   section.blk{padding:92px 0}
   .eyer{display:flex;flex-direction:column;gap:16px;margin-bottom:42px}
   h2.big{font-family:var(--serif);font-size:clamp(2.2rem,4.6vw,3.8rem);line-height:1.03;letter-spacing:-.02em;max-width:20ch}
@@ -73,20 +73,21 @@
   .kcell .ix{font-family:var(--serif);font-size:1.8rem;color:var(--orange);line-height:1;flex:none}
   .kcell .kt{font-family:var(--serif);font-size:1.45rem;line-height:1.12}
   .kcell .kd{color:var(--ink70);font-size:.92rem;margin-top:4px}
-  .kcell.wide{grid-column:1/-1;background:var(--ink);color:#fff}
-  .kcell.wide .kt{color:#fff}.kcell.wide .kd{color:rgba(255,255,255,.66)}.kcell.wide .ix{color:var(--orange)}
-  /* before/after navy band */
-  .band{background:var(--ink);color:#fff;padding:100px 0}
+  .kcell.wide{grid-column:1/-1;border-left:4px solid var(--orange)}
+  .kcell.wide .kt{color:var(--ink)}.kcell.wide .kd{color:var(--ink70)}.kcell.wide .ix{color:var(--orange)}
+  /* before/after band — bright; the contrast carries it, not a dark fill */
+  .band{background:var(--field);border-top:1px solid var(--ink10);border-bottom:1px solid var(--ink10);padding:100px 0}
   .band .ba{display:flex;align-items:center;gap:30px;flex-wrap:wrap}
   .band .side{flex:1;min-width:260px}
   .band .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
-  .band .from .l{color:rgba(255,255,255,.5)}
+  .band .from .l{color:var(--ink50)}
   .band .to .l{color:var(--orange)}
   .band .ph{font-family:var(--serif);font-size:clamp(1.8rem,3.6vw,3rem);line-height:1.06}
-  .band .from .ph{color:rgba(255,255,255,.55)}
+  .band .from .ph{color:var(--ink25)}
+  .band .to .ph{color:var(--ink)}
   .band .arrow{font-size:2.4rem;color:var(--orange);font-weight:800}
-  .band .note{margin-top:36px;font-size:1.15rem;color:rgba(255,255,255,.72);max-width:46ch}
-  .band .note b{color:#fff}
+  .band .note{margin-top:36px;font-size:1.15rem;color:var(--ink70);max-width:46ch}
+  .band .note b{color:var(--ink)}
   /* outcome */
   .out{padding:92px 0}
   .out h2{max-width:22ch}

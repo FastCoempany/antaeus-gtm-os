@@ -68,11 +68,11 @@
   .qrow .qn{font-weight:600;font-size:.9rem}
   .qrow .qx{font-size:.76rem;color:var(--ink50)}
   .qrow .qh{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink25)}
-  /* credibility */
-  .cred{background:var(--ink);color:#fff;padding:46px 0}
-  .cred .big{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,2.8rem);line-height:1.12;max-width:26ch}
+  /* credibility — bright, orange-ruled */
+  .cred{background:var(--surface);border-top:1px solid var(--ink10);border-bottom:1px solid var(--ink10);padding:46px 0}
+  .cred .big{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,2.8rem);line-height:1.12;max-width:26ch;color:var(--ink);border-left:4px solid var(--orange);padding-left:22px}
   .cred .big b{color:var(--orange);font-weight:400}
-  .cred .src{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:16px}
+  .cred .src{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink50);margin-top:16px;padding-left:22px}
   section.blk{padding:84px 0}
   .eyer{display:flex;flex-direction:column;gap:14px;margin-bottom:40px}
   h2.big{font-family:var(--serif);font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.04;letter-spacing:-.02em;max-width:20ch}
@@ -101,19 +101,19 @@
   .acct .as{font-size:.74rem;color:var(--orange);font-weight:600}
   .acct .ah{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--ink25)}
   .acct.hot .ah{color:var(--orange)}
-  /* instrument full width */
-  .inst{background:var(--ink);color:#fff;padding:90px 0}
-  .inst h2{color:#fff}.inst .kick{color:var(--orange)}.inst .lede{color:rgba(255,255,255,.7)}
+  /* instrument full width — bright, the way the real product renders */
+  .inst{background:var(--field);border-top:1px solid var(--ink10);border-bottom:1px solid var(--ink10);padding:90px 0}
+  .inst h2{color:var(--ink)}.inst .kick{color:var(--orange)}.inst .lede{color:var(--ink70)}
   .board{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:34px}
-  .bmain{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:24px}
+  .bmain{background:var(--surface);border:1px solid var(--ink10);border-radius:18px;padding:24px;box-shadow:0 24px 56px rgba(10,28,64,.10)}
   .bmain .lab{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:700}
-  .bmain .nm{font-family:var(--serif);font-size:2.1rem;margin-top:8px}
-  .bmain .why{color:rgba(255,255,255,.74);margin-top:10px;font-size:1rem;line-height:1.5;max-width:42ch}
+  .bmain .nm{font-family:var(--serif);font-size:2.1rem;margin-top:8px;color:var(--ink)}
+  .bmain .why{color:var(--ink70);margin-top:10px;font-size:1rem;line-height:1.5;max-width:42ch}
   .bmain .move{margin-top:18px;background:var(--orange);color:#fff;font-weight:700;border-radius:11px;padding:13px 18px;display:inline-flex;gap:8px}
   .bside{display:flex;flex-direction:column;gap:10px}
-  .brow{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center}
-  .brow .bn{font-weight:600;font-size:.92rem}.brow .bx{font-size:.74rem;color:rgba(255,255,255,.5)}
-  .brow .bh{font-family:var(--mono);font-size:.72rem;font-weight:700;color:rgba(255,255,255,.4)}
+  .brow{background:var(--surface);border:1px solid var(--ink10);border-radius:12px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center}
+  .brow .bn{font-weight:600;font-size:.92rem;color:var(--ink)}.brow .bx{font-size:.74rem;color:var(--ink50)}
+  .brow .bh{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--ink25)}
   /* crm */
   .crm{padding:84px 0}
   .crm .statement{font-family:var(--serif);font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.06;letter-spacing:-.02em;max-width:20ch}
@@ -228,7 +228,7 @@
 
 <section class="inst" id="inst">
   <div class="wrap">
-    <div class="eyer rv"><span class="kick">Your morning, ranked</span><h2 class="big">This is the actual surface. Not a screenshot.</h2><p class="lede rv">One focal object. The reason it's first. One move. Everything else, in line behind it.</p></div>
+    <div class="eyer rv"><span class="kick">Your morning, ranked</span><h2 class="big">One move, ranked above everything else.</h2><p class="lede rv">One focal object. The reason it's first. One move. Everything else, in line behind it.</p></div>
     <div class="board rv">
       <div class="bmain">
         <div class="lab">Pulling hardest</div>
