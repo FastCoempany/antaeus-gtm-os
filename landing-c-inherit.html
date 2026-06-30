@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · Inherit the machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--surface:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--orange-strong:#cf5f13;--blue:#2563eb;--green:#1f9d57;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 44px}
+  .kick{font-family:var(--mono);font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;font-weight:700;color:var(--orange)}
+  a{color:inherit;text-decoration:none}
+  .mark{width:26px;height:26px;color:var(--ink);flex:none}
+  .mark path{stroke:currentColor;stroke-width:3.2;fill:none;stroke-linecap:butt;stroke-linejoin:miter}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;font-weight:700;font-size:.95rem;padding:12px 22px;border-radius:11px;border:none;cursor:pointer;box-shadow:0 8px 22px rgba(230,112,30,.24);transition:transform .15s,background .15s}
+  .btn:hover{background:var(--orange-strong);transform:translateY(-1px)}
+  .btn--lg{font-size:1.08rem;padding:16px 30px}
+  nav{position:sticky;top:0;z-index:50;background:rgba(246,248,252,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink10)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .wm{font-family:var(--serif);letter-spacing:.16em;font-size:1.1rem}
+  .nlinks{display:flex;align-items:center;gap:28px;font-size:.92rem;font-weight:600}
+  .nlinks a.q{color:var(--ink70)}
+  .rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  /* hero — giant mark */
+  .hero{position:relative;padding:90px 0 80px;overflow:hidden}
+  .ghost{position:absolute;right:-6%;top:-8%;width:62vh;height:62vh;color:var(--ink);opacity:.05;pointer-events:none}
+  .ghost path{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter}
+  .hero .inner{position:relative;max-width:24ch}
+  .hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,6.4rem);line-height:.95;letter-spacing:-.03em;margin:22px 0 0}
+  .hero .sub{font-size:1.22rem;line-height:1.5;color:var(--ink70);max-width:40ch;margin-top:26px}
+  .hero .cta{margin-top:36px}
+  /* credibility */
+  .cred{background:var(--ink);color:#fff;padding:48px 0}
+  .cred .big{font-family:var(--serif);font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.14;max-width:28ch}
+  .cred .big b{color:var(--orange);font-weight:400}
+  .cred .src{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:16px}
+  section.blk{padding:92px 0}
+  .eyer{display:flex;flex-direction:column;gap:16px;margin-bottom:42px}
+  h2.big{font-family:var(--serif);font-size:clamp(2.2rem,4.6vw,3.8rem);line-height:1.03;letter-spacing:-.02em;max-width:20ch}
+  .lede{color:var(--ink70);font-size:1.15rem;max-width:50ch}
+  /* problem */
+  .liab{font-family:var(--serif);font-size:clamp(1.8rem,3.8vw,3rem);line-height:1.1;letter-spacing:-.01em;max-width:22ch}
+  .liab b{color:var(--orange);font-weight:400}
+  .liab + p{margin-top:22px;font-size:1.15rem;color:var(--ink70);max-width:46ch}
+  /* how it works — steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:10px}
+  .stp{background:var(--surface);border:1px solid var(--ink10);border-radius:16px;padding:24px 20px}
+  .stp .si{font-family:var(--serif);font-size:2.4rem;color:var(--orange);line-height:1}
+  .stp .st{font-weight:700;margin-top:12px;font-size:1.05rem}
+  .stp .sx{color:var(--ink70);font-size:.94rem;margin-top:6px}
+  /* capability rows */
+  .crow{display:grid;grid-template-columns:.4fr 1fr;gap:30px;align-items:start;padding:42px 0;border-top:1px solid var(--ink10)}
+  .crow h3{font-family:var(--serif);font-size:1.9rem;line-height:1.08}
+  .crow p{color:var(--ink70);font-size:1.08rem;margin-top:8px;max-width:48ch}
+  /* the kit — premium object */
+  .kitsec{background:var(--surface);border-top:1px solid var(--ink10);border-bottom:1px solid var(--ink10);padding:96px 0}
+  .kgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--ink10);border:1px solid var(--ink10);border-radius:18px;overflow:hidden;margin-top:32px}
+  .kcell{background:var(--surface);padding:30px 28px;min-height:120px;display:flex;gap:18px;align-items:flex-start;transition:background .3s}
+  .kcell:hover{background:#fbfcfe}
+  .kcell .ix{font-family:var(--serif);font-size:1.8rem;color:var(--orange);line-height:1;flex:none}
+  .kcell .kt{font-family:var(--serif);font-size:1.45rem;line-height:1.12}
+  .kcell .kd{color:var(--ink70);font-size:.92rem;margin-top:4px}
+  .kcell.wide{grid-column:1/-1;background:var(--ink);color:#fff}
+  .kcell.wide .kt{color:#fff}.kcell.wide .kd{color:rgba(255,255,255,.66)}.kcell.wide .ix{color:var(--orange)}
+  /* before/after navy band */
+  .band{background:var(--ink);color:#fff;padding:100px 0}
+  .band .ba{display:flex;align-items:center;gap:30px;flex-wrap:wrap}
+  .band .side{flex:1;min-width:260px}
+  .band .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .band .from .l{color:rgba(255,255,255,.5)}
+  .band .to .l{color:var(--orange)}
+  .band .ph{font-family:var(--serif);font-size:clamp(1.8rem,3.6vw,3rem);line-height:1.06}
+  .band .from .ph{color:rgba(255,255,255,.55)}
+  .band .arrow{font-size:2.4rem;color:var(--orange);font-weight:800}
+  .band .note{margin-top:36px;font-size:1.15rem;color:rgba(255,255,255,.72);max-width:46ch}
+  .band .note b{color:#fff}
+  /* outcome */
+  .out{padding:92px 0}
+  .out h2{max-width:22ch}
+  /* access + final + footer */
+  .access{padding:78px 0;text-align:center}
+  .access .price{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem)}
+  .access .sub{color:var(--ink70);font-size:1.05rem;margin-top:10px}
+  .final{position:relative;background:var(--orange);color:#fff;padding:110px 0;text-align:center;overflow:hidden}
+  .final .ghost2{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70vh;height:70vh;color:#fff;opacity:.10;pointer-events:none}
+  .final .ghost2 path{stroke:currentColor;fill:none;stroke-width:2;stroke-linejoin:miter}
+  .final h2{position:relative;font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.4rem);line-height:1.02;color:#fff;max-width:22ch;margin:0 auto}
+  .final .btn{position:relative;background:#fff;color:var(--ink);box-shadow:0 14px 34px rgba(0,0,0,.2);margin-top:34px}
+  footer{padding:64px 0 70px}
+  footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  footer .bigmark{display:flex;align-items:center;gap:14px}
+  footer .bigmark .mk{width:48px;height:48px}
+  footer .bigmark .wm{font-family:var(--serif);letter-spacing:.18em;font-size:1.5rem}
+  footer .flinks{display:flex;gap:22px;font-size:.9rem;color:var(--ink70);font-weight:600}
+  .tagchip{position:fixed;right:16px;bottom:16px;z-index:60;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);background:var(--surface);border:1px solid var(--ink10);border-radius:8px;padding:7px 11px}
+  @media(max-width:900px){.steps,.kgrid{grid-template-columns:1fr}.crow{grid-template-columns:1fr;gap:8px}.ghost{display:none}.band .arrow{transform:rotate(90deg)}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><svg class="mark" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg><span class="wm">ANTAEUS</span></a>
+    <div class="nlinks"><a class="q" href="/why-antaeus/">Why Antaeus</a><a class="q" href="/login.html">Sign in</a><a class="btn" href="/signup.html">Start the build →</a></div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="ghost" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
+  <div class="wrap"><div class="inner rv in">
+    <span class="kick">Before scale compounds the wrong things</span>
+    <h1>Build the machine. Not the memory.</h1>
+    <p class="sub">Your first GTM hire should walk into a system they can run on day one — not a login and a shrug. Antaeus is where your revenue motion becomes something you can hand off.</p>
+    <div class="cta"><a class="btn btn--lg" href="/signup.html">Start the build →</a></div>
+  </div></div>
+</header>
+
+<div class="cred"><div class="wrap rv"><div class="big">Teams with one sharp, written ICP <b>win more and close faster</b> than teams chasing a broad one.</div><div class="src">Salesforce · Research</div></div></div>
+
+<section class="blk wrap">
+  <div class="eyer rv"><span class="kick">The cost of it living in your head</span></div>
+  <div class="liab rv">A motion only you can run isn't an asset. <b>It's a liability with good months.</b></div>
+  <p class="rv">When you hire, they inherit confusion. When you scale, you scale the wrong things.</p>
+</section>
+
+<section class="blk wrap" style="padding-top:0">
+  <div class="eyer rv"><span class="kick">How it gets built</span><h2 class="big">You run the motion. It becomes the machine.</h2></div>
+  <div class="steps rv">
+    <div class="stp"><div class="si">1</div><div class="st">Capture as you work</div><div class="sx">No data entry. The work itself is the input.</div></div>
+    <div class="stp"><div class="si">2</div><div class="st">It ranks and watches</div><div class="sx">Pressure, signals, what's slipping — surfaced.</div></div>
+    <div class="stp"><div class="si">3</div><div class="st">The kit assembles itself</div><div class="sx">Authored from what actually happened.</div></div>
+    <div class="stp"><div class="si">4</div><div class="st">A hire inherits it</div><div class="sx">They open it Monday and run.</div></div>
+  </div>
+</section>
+
+<section class="blk wrap" style="padding-top:0">
+  <div class="crow rv"><div><span class="kick">01</span></div><div><h3>Authored, not aggregated.</h3><p>Not a bullet dump. The hard-won read on who buys, why you win, and what makes a deal winnable.</p></div></div>
+  <div class="crow rv"><div><span class="kick">02</span></div><div><h3>Cross-room truth.</h3><p>It catches what no single screen could — like your stated ICP versus the deals that actually closed.</p></div></div>
+  <div class="crow rv"><div><span class="kick">03</span></div><div><h3>Surprising on purpose.</h3><p>The questions you stopped asking. The channels you never tried. The habits you quietly dropped.</p></div></div>
+</section>
+
+<section class="kitsec">
+  <div class="wrap">
+    <div class="eyer rv"><span class="kick">What they inherit</span><h2 class="big">Seven sections. One day-one read.</h2></div>
+    <div class="kgrid rv">
+      <div class="kcell"><span class="ix">01</span><div><div class="kt">Who closes & why</div><div class="kd">The combinations that actually win.</div></div></div>
+      <div class="kcell"><span class="ix">02</span><div><div class="kt">The rails that worked</div><div class="kd">The exact touches that converted.</div></div></div>
+      <div class="kcell"><span class="ix">03</span><div><div class="kt">The questions that won the next meeting</div><div class="kd">The lines that moved deals forward.</div></div></div>
+      <div class="kcell"><span class="ix">04</span><div><div class="kt">Where deals leak</div><div class="kd">The stage that costs you the most.</div></div></div>
+      <div class="kcell"><span class="ix">05</span><div><div class="kt">The losses you paid for</div><div class="kd">Real autopsies, not anecdotes.</div></div></div>
+      <div class="kcell"><span class="ix">06</span><div><div class="kt">Why you win</div><div class="kd">The wins as patterns.</div></div></div>
+      <div class="kcell wide"><span class="ix">07</span><div><div class="kt">The day-one operating rhythm</div><div class="kd">A prescriptive Monday-to-Friday cadence, from your own quota math — the section the new hire prints out.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap rv">
+    <div class="ba">
+      <div class="side from"><div class="l">Today</div><div class="ph">A memory only you can run.</div></div>
+      <div class="arrow">→</div>
+      <div class="side to"><div class="l">With Antaeus</div><div class="ph">A machine someone can inherit.</div></div>
+    </div>
+    <div class="note">That's the whole difference. <b>A CRM never gets you across it</b> — it stores what you type; it doesn't make the motion transferable.</div>
+  </div>
+</section>
+
+<section class="out wrap"><div class="eyer rv"><span class="kick">The outcome</span><h2 class="big">A workspace a stranger could run on Monday.</h2></div><p class="lede rv">Not an export. Not a doc. The thing itself — sharpened by what you did this quarter, ready to inherit.</p></section>
+
+<section class="access wrap"><div class="rv"><div class="price">Free during operator preview.</div><div class="sub">No card. $299/year when it opens up.</div></div></section>
+
+<section class="final">
+  <svg class="ghost2" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
+  <div class="wrap rv"><h2>The teams that do this early stop getting surprised.</h2><a class="btn btn--lg" href="/signup.html">Start the build →</a></div>
+</section>
+
+<footer><div class="wrap">
+  <div class="bigmark"><svg class="mark mk" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg><span class="wm">ANTAEUS</span></div>
+  <div class="flinks"><a href="/why-antaeus/">Why Antaeus</a><a href="/login.html">Sign in</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="mailto:hello@antaeus.app">Contact</a></div>
+</div></footer>
+
+<div class="tagchip">Concept C · Inherit the machine</div>
+
+<script>
+  const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.16});
+  const _rv=[...document.querySelectorAll('.rv')];
+  if('IntersectionObserver' in window){_rv.forEach(el=>io.observe(el));}else{_rv.forEach(el=>el.classList.add('in'));}
+  setTimeout(()=>_rv.forEach(el=>el.classList.add('in')),5000);
+</script>
+</body>
+</html>
