@@ -80,10 +80,13 @@ const include = [
   "landing-a-system.html",
   "landing-b-monday.html",
   "landing-c-inherit.html",
-  // B, elevated — the surprise-and-delight pass: the hero ranks itself
-  // live (scan → re-sort by heat → spotlight → typed read → orange
-  // ignition), Forest (#1B5138) as the single ignition beat at the close.
+  // The surprise-and-delight pass — each page demonstrates the one thing
+  // it sells, Forest (#1B5138) as the single ignition beat. B ranks
+  // itself live, A judges you (interactive verdict), C authors itself
+  // (mark draws + kit composes).
   "landing-b-alive.html",
+  "landing-a-alive.html",
+  "landing-c-alive.html",
   // Seeding flow, front half — doorway → ICP sharpening → accounts →
   // half-awake wake-up, with the sourced evidence margin down the side.
   "seeding-flow-front.html",
