@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
+import { BrandMark } from "@/components/brand";
 import type { Verdict } from "@/lib/readiness";
 
 /**
@@ -29,6 +30,12 @@ export interface ReadinessAnchorProps {
 
 export function ReadinessAnchor(props: ReadinessAnchorProps): JSX.Element {
     const tone = VERDICT_TONE[props.verdict];
+    // The Living Mark grounds as the verdict climbs (canon Part II §3).
+    // Lifted = the motion still lives in your head; grounded once the
+    // workspace would survive a hire taking it over.
+    const grounded =
+        props.verdict === "hire_ready" ||
+        props.verdict === "hire_ready_repeatable";
     return (
         <button
             type="button"
@@ -36,6 +43,9 @@ export function ReadinessAnchor(props: ReadinessAnchorProps): JSX.Element {
             onClick={props.onOpen}
             aria-label={`Readiness: ${props.verdictLabel}. Open drawer.`}
         >
+            <span class="db-readiness-anchor__mark" aria-hidden="true">
+                <BrandMark size={18} lifted={!grounded} />
+            </span>
             <span class="db-readiness-anchor__kicker">{t("READINESS")}</span>
             <span class="db-readiness-anchor__label">{props.verdictLabel}</span>
             <span class="db-readiness-anchor__chevron" aria-hidden="true">›</span>
