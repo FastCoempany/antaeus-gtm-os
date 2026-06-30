@@ -73,6 +73,13 @@ const include = [
   // compounds → the work leaves your head, ending on the seed CTA. The
   // film that precedes the doorway.
   "demo-90.html",
+  // New sales-landing explorations (3 concepts, full top-to-bottom
+  // pages). A = "You are the system" (readiness ladder), B = "The Monday
+  // machine" (live ranked instrument), C = "Inherit the machine" (giant
+  // Grounded-A mark). Static, self-contained.
+  "landing-a-system.html",
+  "landing-b-monday.html",
+  "landing-c-inherit.html",
   // Seeding flow, front half — doorway → ICP sharpening → accounts →
   // half-awake wake-up, with the sourced evidence margin down the side.
   "seeding-flow-front.html",
