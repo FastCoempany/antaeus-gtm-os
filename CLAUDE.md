@@ -512,14 +512,15 @@ The legacy `/app/<room>/` shell still has dark Readiness Score and Founding GTM 
 | **Amber** | caution / needs sharpening | mid-weight warnings |
 | **Red** | real risk / real failure / intervention needed | decaying deals, destructive actions |
 | **Gold** | reserved emphasis / premium / consequential states | reserved; not a default accent |
+| **Forest** | warm-dark depth / premium emphasis | `#1B5138`. Reserved warm-dark accent (added 2026, founder-picked): one ignition beat, a footer, an accent rule. Money-coded, not "eco". Deliberately deep so it is never read as the health-green. Rationed like gold. |
 
 Every color carries a semantic role. If a color appears without carrying meaning, remove or recolor it.
 
 **Rationing rules:**
 - Orange is the most powerful color; use it on the one primary move per surface, and only once
-- Green must be genuine — never a default "looks positive" color
+- Green must be genuine — never a default "looks positive" color; Forest is a *deep* accent, never the bright health-green and never a "looks positive" fill
 - Amber is more common than red; red is the last-resort intervention color
-- Gold and blue should not compete as co-dominant accents
+- Gold, Forest, and blue should not compete as co-dominant accents; the new dark is depth, not a second move
 
 ---
 
