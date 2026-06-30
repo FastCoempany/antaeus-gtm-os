@@ -57,6 +57,15 @@
   --ds-red: #ef4444;
   --ds-red-soft: rgba(239, 68, 68, 0.07);
 
+  /* Forest — reserved warm-dark accent (00 Part II §3). Depth + premium
+     emphasis: one ignition beat, a footer, an accent rule. Money-coded,
+     not "eco". Deliberately deep so it is NEVER confused with the bright
+     health-green. Rationed like gold; orange stays the one move. */
+  --ds-forest: #1b5138;
+  --ds-forest-strong: #15402b; /* hover/pressed, or a deeper ground */
+  --ds-forest-soft: rgba(27, 81, 56, 0.08);
+  --ds-on-forest: #ffffff; /* text on a forest surface */
+
   /* ── Type · the five-step ramp (03 §4.3) ──────────────────────── */
   --ds-font-serif: "DM Serif Display", serif;
   --ds-font-sans: "Public Sans", -apple-system, system-ui, sans-serif;
