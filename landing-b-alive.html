@@ -143,6 +143,8 @@
   .lnode.lit .li{color:var(--orange);transform:translateY(-2px)}
   .larrow{color:var(--ink10);transition:color .4s,transform .4s}
   .larrow.lit{color:var(--orange);transform:scale(1.25)}
+  .lnode.spark{box-shadow:0 0 0 3px rgba(230,112,30,.20)}
+  .lnode.spark .li{transform:scale(1.3)}
   /* capability rows: living center-spine that threads the zigzag */
   .rows-z{position:relative;margin-top:8px}
   .rows-z::before{content:"";position:absolute;left:50%;top:14px;bottom:14px;width:3px;transform:translateX(-50%);background:var(--ink10);border-radius:2px}
@@ -231,16 +233,16 @@
 <nav>
   <div class="wrap">
     <a class="brand" href="#top"><svg class="mark mark--draw" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg><span class="wm">ANTAEUS</span></a>
-    <div class="nlinks"><a class="q" href="/why-antaeus/">Why Antaeus</a><a class="q" href="/login.html">Sign in</a><a class="btn" href="/signup.html">Create your workspace →</a></div>
+    <div class="nlinks"><a class="q" href="/why-antaeus/">Why Antaeus</a><a class="q" href="/login.html">Sign in</a><a class="btn" href="/signup.html">Run your first morning →</a></div>
   </div>
 </nav>
 
 <header class="hero wrap" id="top">
   <div class="rv in">
-    <span class="kick">No browsing. No guessing.</span>
+    <span class="kick">Stop opening Monday blind.</span>
     <h1>The first thing you open Monday. The last thing you check Friday.</h1>
-    <p class="sub">Antaeus ranks every deal, signal, and proof under pressure — and names the one move that clears the most weight today. Watch it work. →</p>
-    <div class="cta"><a class="btn btn--lg" href="/signup.html">Create your workspace →</a><a class="btn btn--ghost btn--lg" href="#" id="replayBtn">↻ Watch it rank</a></div>
+    <p class="sub">It ranks every deal, signal, and proof under pressure and names the one move that clears the most weight today — so you always know exactly where to start.</p>
+    <div class="cta"><a class="btn btn--lg" href="/signup.html">Run your first morning →</a><a class="btn btn--ghost btn--lg" href="#" id="replayBtn">↻ Watch it rank</a></div>
   </div>
 
   <div class="rankcard rv in" id="rankcard">
@@ -268,7 +270,7 @@
     <div class="pile rv">
       <div class="pl">Your pipeline · unranked</div>
       <div class="grid" id="pile"></div>
-      <div class="cap">Forty deals, every one <b>lifted off the ground</b> — at risk, and you can't tell which.</div>
+      <div class="cap"><b>Lifted off the ground = at risk.</b> One sits grounded — the rest are off the floor, and you can't tell which is slipping.</div>
     </div>
   </div>
 </section>
@@ -379,7 +381,7 @@
 
 <section class="final">
   <svg class="ghost" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
-  <div class="wrap rv"><h2>Do the hard part once. It plays back every morning.</h2><a class="btn btn--lg" href="/signup.html">Create your workspace →</a></div>
+  <div class="wrap rv"><h2>Do the hard part once. It plays back every morning.</h2><a class="btn btn--lg" href="/signup.html">Run your first morning →</a></div>
 </section>
 
 <footer><div class="wrap">
@@ -485,11 +487,14 @@
   }
 
   // ── Wave 1 motion ──────────────────────────────────────────────
-  // the lifted pile — the mascot's at-risk device (unranked chaos)
+  // the lifted pile — the mascot's at-risk device; one grounded mark for contrast
   (function(){
     const pile=document.getElementById('pile'); if(!pile) return;
-    const lift=(r)=>`<svg class="lm lift" style="--r:${r}deg" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>`;
-    let html=''; for(let i=0;i<24;i++){ html+=lift(((i*37)%13)-6); } pile.innerHTML=html;
+    const A='<path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/>';
+    const lift=(r)=>`<svg class="lm lift" style="--r:${r}deg" viewBox="0 0 48 48">${A}</svg>`;
+    const ground=()=>`<svg class="lm" viewBox="0 0 48 48">${A}</svg>`;
+    const GROUNDED=new Set([10]); // one stands on the ground — the rest are lifted
+    let html=''; for(let i=0;i<24;i++){ html+= GROUNDED.has(i) ? ground() : lift(((i*37)%13)-6); } pile.innerHTML=html;
   })();
   // validation marquee (duplicated for a seamless loop)
   (function(){
@@ -504,12 +509,14 @@
     const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;days.forEach((d,i)=>setTimeout(()=>d.classList.add('in'),120*i));o.disconnect();}});},{threshold:.3});
     o.observe(r); setTimeout(()=>days.forEach(d=>d.classList.add('in')),6000);
   })();
-  // loop: an orange pulse travels Signal → Handoff, on repeat
+  // loop: light it once (stays lit), then a deliberate spark travels through it
   (function(){
-    const lp=document.getElementById('loop'); if(!lp) return; const nodes=[...lp.querySelectorAll('.lnode')], arrows=[...lp.querySelectorAll('.larrow')]; let started=false;
-    function wave(){ nodes.forEach(n=>n.classList.remove('lit')); arrows.forEach(a=>a.classList.remove('lit'));
-      nodes.forEach((n,i)=>setTimeout(()=>{ n.classList.add('lit'); if(arrows[i])arrows[i].classList.add('lit'); },300*i)); }
-    const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!started){started=true;wave();setInterval(wave,300*nodes.length+2200);o.disconnect();}});},{threshold:.4});
+    const lp=document.getElementById('loop'); if(!lp) return;
+    const nodes=[...lp.querySelectorAll('.lnode')], arrows=[...lp.querySelectorAll('.larrow')]; let started=false;
+    function light(){ nodes.forEach((n,i)=>setTimeout(()=>{ n.classList.add('lit'); if(arrows[i])arrows[i].classList.add('lit'); },240*i)); }
+    function travel(){ nodes.forEach((n,i)=>setTimeout(()=>{ n.classList.add('spark'); setTimeout(()=>n.classList.remove('spark'),420); },520*i)); }
+    const o=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!started){started=true; light();
+      setTimeout(()=>{ travel(); setInterval(travel,520*nodes.length+1600); }, 240*nodes.length+500); o.disconnect();}});},{threshold:.4});
     o.observe(lp);
   })();
   // capability rows: fill the spine + light each node top-to-bottom (guides the zigzag)
