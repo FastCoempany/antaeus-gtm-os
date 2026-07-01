@@ -36,7 +36,7 @@ export function ForgePanel(): JSX.Element {
     const quality = computeQuality(drft, linked);
 
     return (
-        <section class="poc-forge" aria-label={t("Proof forge")}>
+        <section class="poc-forge" aria-label={t("Evidence forge")}>
             <header class="poc-forge__header">
                 <p class="poc-forge__kicker">{t("FORGE")}</p>
                 <h2 class="poc-forge__title">{t("Shape the molds.")}</h2>

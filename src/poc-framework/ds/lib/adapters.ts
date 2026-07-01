@@ -56,7 +56,7 @@ export function toPulling(): PullingData | undefined {
     const q = quality();
     const linked = linkedDeal.value;
     return {
-        verb: "Carry the proof",
+        verb: "Carry the evidence",
         object: d.account.trim(),
         href: hrefToDealWorkspace(d.account.trim(), linked?.id),
         reasons: [q.title, `${q.weakest.title}: ${q.weakest.copy}`]

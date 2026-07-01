@@ -37,12 +37,12 @@ const STAGES: ReadonlyArray<StageDef> = [
     {
         key: "cast",
         label: "Cast",
-        headline: "Freeze the proof. The pilot starts on a clock."
+        headline: "Freeze the evidence. The pilot starts on a clock."
     },
     {
         key: "readout",
         label: "Readout",
-        headline: "Carry the proof into the decision room."
+        headline: "Carry the evidence into the decision room."
     }
 ];
 
@@ -87,7 +87,7 @@ export function StageStrip(): JSX.Element {
         <nav
             class="poc-stage-strip"
             role="navigation"
-            aria-label={t("Proof event sequence")}
+            aria-label={t("Evidence event sequence")}
         >
             {STAGES.map((s, i) => {
                 const state = stateFor(s.key, forgeStarted, castReady, hasReadout);

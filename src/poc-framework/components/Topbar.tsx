@@ -10,12 +10,12 @@ import { allProofs } from "../state";
  */
 export function Topbar(): JSX.Element {
     const count = allProofs.value.length;
-    const proofLabel = count === 1 ? "proof" : "proofs";
+    const savedLabel = count === 1 ? "piece of evidence" : "pieces of evidence";
     return (
         <header class="poc-topbar">
             <p class="poc-topbar__kicker">
                 POC FRAMEWORK ·{" "}
-                {count > 0 ? `${count} ${proofLabel} saved` : "no proofs yet"}
+                {count > 0 ? `${count} ${savedLabel} saved` : "no evidence yet"}
             </p>
             <h1 class="poc-topbar__title">
                 Make the pilot results clear enough that the buyer's boss can act on them.

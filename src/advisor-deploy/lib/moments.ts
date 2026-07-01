@@ -27,15 +27,15 @@ export const MOMENTS: ReadonlyArray<Moment> = [
         name: "Executive bridge",
         short: "Champion is alive, but executive authority is not in the thread.",
         ask: "Could you send [buyer] a short note that this deserves executive visibility at [company]?",
-        proof: "Pain and proof exist. Authority is the missing bridge.",
+        proof: "Pain and evidence exist. Authority is the missing bridge.",
         advisorLine: "This is a signal that the work is worth executive attention, not a request to sell it for us.",
         outcome: "Executive meeting or named budget owner."
     },
     {
         id: "poc_stall",
-        name: "Post-proof stall",
-        short: "Proof landed, but the deal went quiet.",
-        ask: "Could you ask whether the proof from [company] is still moving forward or if timing changed?",
+        name: "Post-evidence stall",
+        short: "Evidence landed, but the deal went quiet.",
+        ask: "Could you ask whether the evidence from [company] is still moving forward or if timing changed?",
         proof: "The product proved itself. The silence is a prioritization problem.",
         advisorLine: "A neutral check from you will get a clearer answer than another founder follow-up.",
         outcome: "Next step revived or closed cleanly."
@@ -70,7 +70,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     {
         id: "budget_kill",
         name: "Budget freeze",
-        short: "The deal has proof but lost the budget fight.",
+        short: "The deal has evidence but lost the budget fight.",
         ask: "Could you help us frame whether [company] should phase this instead of freezing it?",
         proof: "The work may still be valuable, but the spend path got compressed.",
         advisorLine: "The ask is a smaller path forward, not a plea for budget.",
@@ -87,7 +87,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "reference",
-        name: "Reference proof",
+        name: "Reference evidence",
         short: "The buyer wants independent validation.",
         ask: "Could you speak with [buyer] for fifteen minutes and share what matters from your operator view?",
         proof: "The buyer needs confidence from someone who has lived the problem.",

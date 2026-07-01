@@ -40,7 +40,7 @@ const BAND_COPY: Readonly<Record<SpendBand, string>> = {
     ask_ready:
         "Specific enough to send, and small enough that it won't cost you trust with the advisor.",
     narrow_first:
-        "A path exists. Tighten the buyer or proof line before sending.",
+        "A path exists. Tighten the buyer or evidence line before sending.",
     not_ready:
         "Don't ask an advisor for help yet — the deal and the ask still aren't clear enough."
 };

@@ -31,7 +31,7 @@ describe("ForgeForm", () => {
     it("renders the forge controls", () => {
         const { container, getByText } = render(<ForgeForm />);
         expect(container.querySelectorAll(".ds-field").length).toBeGreaterThanOrEqual(6);
-        expect(getByText("Cast the proof")).not.toBeNull();
+        expect(getByText("Cast the evidence")).not.toBeNull();
     });
     it("the pilot-window toggle selects the non-first segment (not hijacked by a label)", () => {
         const { getByText } = render(<ForgeForm />);

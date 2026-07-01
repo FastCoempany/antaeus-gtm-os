@@ -168,8 +168,8 @@ export function ProofObject(): JSX.Element {
 
             {drft.account.trim() ? (
                 <HandoffStrip
-                    label={t("Carry the proof into the deal")}
-                    kicker={t("CARRY THE PROOF")}
+                    label={t("Carry the evidence into the deal")}
+                    kicker={t("CARRY THE EVIDENCE")}
                     title={t("Make the pilot evidence the deal can use.", { class: "body" })}
                     routes={[
                         {
