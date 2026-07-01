@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · Sign up — The Read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--surface:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--orange-strong:#cf5f13;--orange-tint:rgba(230,112,30,.06);--blue:#2563eb;--green:#1f9d57;--red:#cf3b34;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.5;display:flex;flex-direction:column;
+    background-image:radial-gradient(circle at 90% -4%,rgba(230,112,30,.05),transparent 24%),radial-gradient(circle at 4% 2%,rgba(37,99,235,.045),transparent 22%)}
+  a{color:inherit;text-decoration:none}
+  .mark{width:26px;height:26px;color:var(--ink);flex:none}
+  .mark path{stroke:currentColor;stroke-width:3.2;fill:none;stroke-linecap:butt;stroke-linejoin:miter}
+  nav{max-width:960px;width:100%;margin:0 auto;padding:26px 40px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:11px}.brand .wm{font-family:var(--serif);letter-spacing:.15em;font-size:1.05rem}
+  .navr{display:flex;gap:22px;align-items:center;font-size:.9rem;font-weight:600}
+  .navr a.q{color:var(--ink70)}.navr a.q:hover{color:var(--orange)}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 40px 50px}
+  .stage{max-width:640px;width:100%;text-align:center}
+  .kick{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);font-weight:700}
+  h1{font-family:var(--serif);font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.02;letter-spacing:-.02em;margin:18px 0 0}
+  .sub{font-size:1.16rem;color:var(--ink70);max-width:40ch;margin:18px auto 0;line-height:1.5}
+  .cta{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:32px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--orange);color:#fff;font-weight:700;font-size:1.05rem;padding:15px 28px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 12px 28px rgba(230,112,30,.26);transition:transform .15s,background .15s}
+  .btn:hover{background:var(--orange-strong);transform:translateY(-1px)}
+  .btn--ghost{background:transparent;color:var(--ink);box-shadow:none;border:1px solid var(--ink25)}
+  .btn--ghost:hover{border-color:var(--orange);color:var(--orange)}
+  .skip{margin-top:20px;font-size:.92rem;color:var(--ink50)}
+  .skip a{color:var(--orange);font-weight:600}
+  /* the read */
+  .prog{height:4px;border-radius:2px;background:var(--ink10);overflow:hidden;max-width:380px;margin:0 auto 4px}
+  .prog i{display:block;height:100%;background:var(--orange);width:0;transition:width .4s ease;border-radius:2px}
+  .qn{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:14px}
+  .q{font-family:var(--serif);font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.12;letter-spacing:-.01em;max-width:20ch;margin:0 auto}
+  .ans{display:flex;gap:14px;justify-content:center;margin-top:30px}
+  .ans button{font-size:1.05rem;font-weight:700;padding:15px 34px;border-radius:12px;cursor:pointer;transition:all .14s;background:var(--surface);border:1px solid var(--ink25);color:var(--ink)}
+  .ans .yes:hover{border-color:var(--green);color:var(--green)}
+  .ans .no:hover{border-color:var(--orange);color:var(--orange)}
+  /* verdict */
+  .vk{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink50);font-weight:700}
+  .verdict{font-family:var(--serif);font-size:clamp(2.4rem,5.4vw,4rem);line-height:1;letter-spacing:-.02em;margin:14px 0 0;color:var(--ink)}
+  .vsub{font-size:1.1rem;color:var(--ink70);max-width:38ch;margin:16px auto 0}
+  .move{margin:26px auto 0;max-width:44ch;background:var(--surface);border:1px solid var(--ink10);border-left:4px solid var(--orange);border-radius:14px;padding:18px 20px;text-align:left;box-shadow:0 16px 40px rgba(10,28,64,.07)}
+  .move .ml{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:6px}
+  .move .mt{font-size:1.04rem;line-height:1.4;font-weight:500}
+  .keep{margin-top:22px;font-size:.94rem;color:var(--ink50)}
+  .hide{display:none}
+  .tag{position:fixed;right:16px;bottom:16px;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);background:var(--surface);border:1px solid var(--ink10);border-radius:8px;padding:7px 11px}
+  .fade{animation:fade .45s cubic-bezier(.2,.7,.2,1)}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/start.html"><svg class="mark" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg><span class="wm">ANTAEUS</span></a>
+  <div class="navr"><a class="q" href="/login.html">Sign in</a><a class="btn" href="/onboarding/?seeding=1">Start your workspace →</a></div>
+</nav>
+
+<main>
+  <!-- INTRO -->
+  <div class="stage" id="intro">
+    <span class="kick">Before you sign up</span>
+    <h1>Could a hire run your motion tomorrow?</h1>
+    <p class="sub">Most founders are the system — and don't feel it until they hire and it stalls. Take the 20-second read. No signup, no email. Just an honest answer.</p>
+    <div class="cta">
+      <button class="btn" id="startRead">Take the read →</button>
+      <a class="btn btn--ghost" href="/onboarding/?seeding=1">Skip — start my workspace</a>
+    </div>
+    <div class="skip">It's the exact question Antaeus is built to answer.</div>
+  </div>
+
+  <!-- THE READ -->
+  <div class="stage hide" id="read">
+    <div class="prog"><i id="progFill"></i></div>
+    <div class="qn" id="qnum">Question 1 of 5</div>
+    <div class="q" id="qtext"></div>
+    <div class="ans">
+      <button class="yes" id="yesBtn">Yes</button>
+      <button class="no" id="noBtn">Not really</button>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="stage hide" id="result">
+    <div class="vk">Your read · keep it</div>
+    <div class="verdict" id="verdict"></div>
+    <div class="vsub" id="vsub"></div>
+    <div class="move"><div class="ml">The one thing that'd change it most</div><div class="mt" id="moveText"></div></div>
+    <div class="cta">
+      <a class="btn" href="/onboarding/?seeding=1" id="resultCta">Start your workspace →</a>
+      <button class="btn btn--ghost" id="retake">Take it again</button>
+    </div>
+    <div class="keep">That gap is exactly what Antaeus turns into a system a hire can run.</div>
+  </div>
+</main>
+
+<div class="tag">Signup C · The Read</div>
+
+<script>
+  const QS = [
+    { q: "If you took two weeks off, would the motion keep running?", move: "Write down the one move that clears the most weight each morning — so someone else could make it." },
+    { q: "Could a new hire tell which deal is slipping — without asking you?", move: "Rank your deals by pressure, not by who's loudest. The slipping one should be obvious at a glance." },
+    { q: "Is who you sell to written down, sharp, somewhere but your head?", move: "Put your ICP in one sharp sentence. Everything downstream — signals, outreach, qualification — gets easier." },
+    { q: "Do you know which of your wins were repeatable, and why?", move: "Name the shared trait of your last three wins. That pattern is your repeatable motion." },
+    { q: "Does every live deal have a dated next step?", move: "Date the next step on every open deal. Undated means drifting — and drifting is how deals die quietly." }
+  ];
+  const VERDICTS = [
+    { min: 0, label: "You are the system.", sub: "Right now the whole motion lives in your head. If you stepped away, it would stall — and a hire would inherit confusion, not a system." },
+    { min: 2, label: "Building.", sub: "There's real activity, but a hire would still be guessing. The motion works because you're in every loop." },
+    { min: 4, label: "Inheritable, with a hand on the wheel.", sub: "A hire could run most of it with you on call for the sharp calls. You're close." },
+    { min: 5, label: "Hire-ready.", sub: "The motion would survive you taking two weeks off. Rare — and worth protecting." }
+  ];
+  let i = 0, score = 0, firstNo = -1;
+  const $ = id => document.getElementById(id);
+  function showQ(){
+    $('qnum').textContent = `Question ${i+1} of ${QS.length}`;
+    $('qtext').textContent = QS[i].q;
+    $('progFill').style.width = `${(i/QS.length)*100}%`;
+    $('qtext').classList.remove('fade'); void $('qtext').offsetWidth; $('qtext').classList.add('fade');
+  }
+  function answer(yes){
+    if(yes) score++; else if(firstNo === -1) firstNo = i;
+    i++;
+    if(i < QS.length){ showQ(); }
+    else { finish(); }
+  }
+  function finish(){
+    $('progFill').style.width = '100%';
+    const v = [...VERDICTS].reverse().find(v => score >= v.min);
+    $('verdict').textContent = v.label;
+    $('vsub').textContent = v.sub;
+    // the one move = the first thing they answered "not really" (their weakest),
+    // or, if they said yes to everything, the highest-leverage habit to protect.
+    const moveIdx = firstNo === -1 ? 4 : firstNo;
+    $('moveText').textContent = QS[moveIdx].move;
+    $('read').classList.add('hide');
+    $('result').classList.remove('hide');
+    $('result').classList.add('fade');
+  }
+  $('startRead').addEventListener('click',()=>{ $('intro').classList.add('hide'); $('read').classList.remove('hide'); $('read').classList.add('fade'); showQ(); });
+  $('yesBtn').addEventListener('click',()=>answer(true));
+  $('noBtn').addEventListener('click',()=>answer(false));
+  $('retake').addEventListener('click',()=>{ i=0;score=0;firstNo=-1; $('result').classList.add('hide'); $('intro').classList.remove('hide'); });
+</script>
+</body>
+</html>
