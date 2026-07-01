@@ -221,21 +221,20 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            // Chrome aux carries a "Why Antaeus" link to /why-antaeus/.
-            const chromeLink = page.locator(
-                '.chrome__aux a[href="/why-antaeus/"]'
+            // The nav carries a "Why Antaeus" link to /why-antaeus/.
+            const navLink = page.locator(
+                'nav .nlinks a[href="/why-antaeus/"]'
             );
-            expect(await chromeLink.count()).toBe(1);
+            expect(await navLink.count()).toBe(1);
 
-            // The deeper-read card below the anchors also leads here —
-            // the canonical progressive-disclosure path for Marcus.
-            const deeperLink = page.locator(
-                '.deeper__link[href="/why-antaeus/"]'
+            // The footer also leads here — the progressive-disclosure path.
+            const footLink = page.locator(
+                'footer .flinks a[href="/why-antaeus/"]'
             );
-            expect(await deeperLink.count()).toBe(1);
+            expect(await footLink.count()).toBe(1);
 
-            // Click the deeper link → land on /why-antaeus/.
-            await deeperLink.click();
+            // Click the nav link → land on /why-antaeus/.
+            await navLink.click();
             await page.waitForURL("**/why-antaeus/**");
             expect(await page.locator(".hero__title").count()).toBe(1);
         } finally {
@@ -249,15 +248,14 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            // Phase 5.4 adds chrome "Why Antaeus" + deeper-read card —
-            // neither must break Phase 5.1's Walk C guarantee (exactly
-            // one primary CTA in the hero's CTA cluster).
+            // The nav "Why Antaeus" link must not break Phase 5.1's Walk C
+            // guarantee (exactly one dominant primary CTA in the hero).
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
-            const heroCtas = page.locator(".hero__ctas .btn");
+            const heroCtas = page.locator(".hero .cta .btn");
             expect(await heroCtas.count()).toBe(2); // primary + ghost only
 
             const primaryCount = await page
-                .locator(".hero__ctas .btn--primary")
+                .locator(".hero .cta .btn:not(.btn--ghost)")
                 .count();
             expect(primaryCount).toBe(1);
         } finally {
