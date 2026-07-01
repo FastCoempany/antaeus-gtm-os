@@ -48,7 +48,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             expect(await back.count()).toBe(1);
             expect(await back.getAttribute("href")).toBe("/start.html");
 
-            // The chrome carries a primary "Create your workspace" CTA so
+            // The chrome carries a primary "Run your first morning" CTA so
             // Marcus can sign up directly from any scroll position.
             const chromeBtn = page.locator(".chrome .btn--primary");
             expect(await chromeBtn.count()).toBe(1);
@@ -153,7 +153,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         }
     });
 
-    test("closing CTA — one dominant move (Create workspace), sign-in secondary", async ({
+    test("closing CTA — one dominant move (Run your first morning), sign-in secondary", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -163,8 +163,9 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             const primaryCta = page.locator(".closing .btn--primary");
             expect(await primaryCta.count()).toBe(1);
             expect(await primaryCta.getAttribute("href")).toBe("/signup.html");
+            // Unified with the corridor CTA voice (was "Create your workspace").
             expect(await primaryCta.textContent()).toMatch(
-                /create your workspace/i
+                /run your first morning/i
             );
 
             const ghost = page.locator(".closing .btn--ghost");

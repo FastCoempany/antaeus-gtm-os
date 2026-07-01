@@ -1,210 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pick up the operating thread · Antaeus</title>
-    <link rel="stylesheet" href="/css/auth.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pick up the operating thread · Antaeus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/auth-split.css" />
 </head>
 <body class="auth-page">
-    <div class="auth-container">
-        <header class="auth-chrome">
-            <a href="/start.html" class="auth-chrome__wordmark" aria-label="Antaeus — home">
-                <span class="auth-chrome__mark">ANTAEUS</span>
-                <span class="auth-chrome__divider" aria-hidden="true">·</span>
-                <span class="auth-chrome__kicker">Operator preview</span>
-            </a>
-            <a href="/start.html" class="auth-chrome__back" aria-label="Back to operator preview">← Back to preview</a>
-        </header>
-        <section class="auth-shell">
-            <section class="auth-corridor">
-                <div class="auth-kicker">Return to workspace</div>
-                <h1 class="auth-title">Pick up the operating thread without losing your place.</h1>
-                <p class="auth-copy">Sign in returns you to the same ranked workspace, the same Brief, the same open loops you left. Nothing resets; nothing rearranges.</p>
-                <div class="auth-grid">
-                    <div class="auth-metric">
-                        <span class="auth-metric-kicker">What waits for you</span>
-                        <div class="auth-metric-value">Your ranked Brief, the deals under pressure, the proofs in flight, the next moves the system already lined up.</div>
-                    </div>
-                    <div class="auth-metric">
-                        <span class="auth-metric-kicker">Demo still available</span>
-                        <div class="auth-metric-value">Want to show the system to someone without touching your live workspace? Use the demo lane after signing in.</div>
-                    </div>
-                </div>
-                <div class="auth-notes">
-                    <div class="auth-note"><strong>Same email as checkout</strong>If you already paid, sign in with the email that owns the workspace. Post-auth routing handles the rest.</div>
-                    <div class="auth-note"><strong>Forgot your password?</strong>Use the recovery lane under the form. Reset links are single-use, expire in an hour, and never touch workspace data.</div>
-                </div>
-            </section>
-            <section class="auth-card">
-                <div class="auth-card-header">
-                    <div class="auth-logo">ANTAEUS</div>
-                    <div class="auth-card-kicker">Workspace access</div>
-                    <p class="auth-subtitle">Sign in to continue the same operating system.</p>
-                    <p class="auth-card-copy">Use the same email that owns the workspace. If checkout already happened, the post-auth route should still land in the correct live product state.</p>
-                </div>
-                <div id="contextMessage" class="callout mb-md hidden"></div>
+  <header class="chrome">
+    <a class="auth-chrome__wordmark" href="/start.html" aria-label="Antaeus — home">
+      <svg class="mark" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
+      <span class="auth-chrome__mark">ANTAEUS</span>
+    </a>
+    <a class="auth-chrome__back" href="/start.html" aria-label="Back to operator preview">← Back to preview</a>
+  </header>
 
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input type="email" id="email" class="form-input" placeholder="you@company.com" required autocomplete="email">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
-                    </div>
-
-                    <div id="errorMessage" class="callout callout-danger mb-md hidden">
-                        <div id="errorText"></div>
-                        <div id="errorAction" class="hidden"></div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
-                        <span id="btnText">Sign In</span>
-                        <div class="spinner hidden" id="btnSpinner"></div>
-                    </button>
-
-                    <div class="auth-aux">
-                        <a href="forgot-password.html">Forgot password?</a>
-                    </div>
-                </form>
-
-                <div class="auth-footer">
-                    Don't have an account? <a href="signup.html">Create one</a>
-                </div>
-                <div class="auth-cta-stack">
-                    <button type="button" class="btn btn-ghost btn-sm btn-block" onclick="enterInteractiveDemo()">
-                        Launch Interactive Demo
-                    </button>
-                    <div class="auth-cta-copy">
-                        Uses isolated sample data and starts from the demo lane without touching the real workspace.
-                    </div>
-                </div>
-            </section>
-        </section>
+  <div class="split">
+    <!-- LEFT · what's waiting when you're back -->
+    <div class="promise">
+      <div class="body">
+        <span class="kick">Return to workspace</span>
+        <h1>Pick up the operating thread without losing your place.</h1>
+        <p class="p">Sign in returns you to the same ranked Brief, the same open loops you left. Nothing resets; nothing rearranges.</p>
+        <div class="rank">
+          <div class="rl">Waiting for you</div>
+          <div class="rrow"><span class="rd"></span><span class="rt">Your ranked Brief — the one move that clears the most weight today.</span></div>
+          <div class="rrow"><span class="rd"></span><span class="rt">The deals under pressure and the proofs in flight.</span></div>
+          <div class="rrow"><span class="rd"></span><span class="rt">The next moves the system already lined up while you were gone.</span></div>
+        </div>
+      </div>
+      <div class="foot">the motion, made inheritable</div>
     </div>
 
-    <script src="js/analytics-site-config.js"></script>
-    <script src="js/analytics.js"></script>
-    <script src="js/auth-ui.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js"></script>
-<script src="js/workspace-guard.js"></script>
-    <script src="js/onboarding.js"></script>
-    <script>
-        async function routeAfterAuth(session) {
-            try {
-                if (typeof window.resolvePostAuthRoute === 'function') {
-                    window.location.href = await window.resolvePostAuthRoute(session, { force: true });
-                    return;
-                }
-            } catch (e) {
-                console.error('Post-auth routing failed:', e);
-            }
+    <!-- RIGHT · the form -->
+    <div class="form">
+      <div class="top"><a href="/signup.html">New here? Create one</a></div>
+      <div class="fwrap">
+        <h2>Sign in to continue the same operating system.</h2>
+        <p class="lede">Use the same email that owns the workspace. If checkout already happened, you'll land in the right live state.</p>
 
-            if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) {
-                window.location.href = '/onboarding/';
-                return;
-            }
+        <div class="ctx hide" id="contextMessage"></div>
 
-            window.location.href = '/dashboard/';
+        <form id="loginForm" novalidate>
+          <label class="f"><span class="f__l">Email</span><input class="f__i" id="email" type="email" placeholder="you@company.com" autocomplete="email" required /></label>
+          <label class="f"><span class="f__l">Password</span><input class="f__i" id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required /></label>
+
+          <div class="err hide" id="errorMessage"><span id="errorText"></span><span id="errorAction"></span></div>
+
+          <button class="btn" id="submitBtn" type="submit"><span id="btnText">Sign in →</span><span class="spinner hide" id="btnSpinner"></span></button>
+        </form>
+
+        <div class="aux"><a href="/forgot-password.html">Forgot password?</a></div>
+        <div class="alt">Don't have an account? <a href="/signup.html">Create one</a></div>
+        <div class="demo">
+          <button type="button" class="btn btn--ghost" onclick="enterInteractiveDemo()">Launch interactive demo</button>
+          <div class="demo-copy">Isolated sample data — starts from the demo lane without touching the real workspace.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/analytics-site-config.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/workspace-guard.js"></script>
+  <script src="js/onboarding.js"></script>
+  <script>
+    async function routeAfterAuth(session) {
+      try {
+        if (typeof window.resolvePostAuthRoute === 'function') {
+          window.location.href = await window.resolvePostAuthRoute(session, { force: true });
+          return;
         }
+      } catch (e) { console.error('Post-auth routing failed:', e); }
+      if (window.gtmOnboarding && !window.gtmOnboarding.isCompleted()) { window.location.href = '/onboarding/'; return; }
+      window.location.href = '/dashboard/';
+    }
 
-        function enterInteractiveDemo() {
-            if (window.gtmAnalytics) window.gtmAnalytics.track('demo_entry_click', { cta_zone: 'login', href: '/demo-seed.html' });
-            try { sessionStorage.setItem('gtmos_env_mode', 'demo'); } catch (e) {}
-            window.location.href = '/demo-seed.html';
+    function enterInteractiveDemo() {
+      if (window.gtmAnalytics) window.gtmAnalytics.track('demo_entry_click', { cta_zone: 'login', href: '/demo-seed.html' });
+      try { sessionStorage.setItem('gtmos_env_mode', 'demo'); } catch (e) {}
+      window.location.href = '/demo-seed.html';
+    }
+
+    function withTimeout(promise, ms) {
+      return Promise.race([promise, new Promise(function(_, reject){ setTimeout(function(){ reject(new Error('Request timed out. Please check your internet connection and try again.')); }, ms); })]);
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        var params = new URLSearchParams(window.location.search || '');
+        var source = (params.get('source') || '').toLowerCase();
+        var emailPrefill = (params.get('email') || '').trim();
+        if (emailPrefill) document.getElementById('email').value = emailPrefill;
+        if (source === 'checkout') {
+          var ctx = document.getElementById('contextMessage');
+          ctx.innerHTML = '<strong>Already paid?</strong> Sign in with the same email you used at checkout — the app routes you into the workspace.';
+          ctx.classList.remove('hide');
         }
+      } catch (e) { /* ignore */ }
 
-        function withTimeout(promise, ms) {
-            return Promise.race([
-                promise,
-                new Promise(function(_, reject) {
-                    setTimeout(function() { reject(new Error('Request timed out. Please check your internet connection and try again.')); }, ms);
-                })
-            ]);
-        }
+      try {
+        var demoParam = (new URLSearchParams(window.location.search || '').get('demo') || '').toLowerCase();
+        sessionStorage.setItem('gtmos_env_mode', (demoParam === '1' || demoParam === 'true') ? 'demo' : 'prod');
+      } catch (e) {}
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                var params = new URLSearchParams(window.location.search || '');
-                var source = (params.get('source') || '').toLowerCase();
-                var emailPrefill = (params.get('email') || '').trim();
-                var contextMessage = document.getElementById('contextMessage');
-                if (emailPrefill) document.getElementById('email').value = emailPrefill;
-                if (source === 'checkout') {
-                    contextMessage.className = 'callout callout-info mb-md';
-                    contextMessage.innerHTML = '<strong>Already paid?</strong><br>Sign in with the same email you used at checkout and the app will route you into the workspace.';
-                }
-            } catch (e) { /* ignore */ }
+      var noAuth = false;
+      try { noAuth = typeof window.isAuthBypassEnabled === 'function' && window.isAuthBypassEnabled(); } catch (e) {}
 
-            try {
-                var modeParams = new URLSearchParams(window.location.search || '');
-                var demoParam = (modeParams.get('demo') || '').toLowerCase();
-                if (demoParam === '1' || demoParam === 'true') {
-                    sessionStorage.setItem('gtmos_env_mode', 'demo');
-                } else {
-                    sessionStorage.setItem('gtmos_env_mode', 'prod');
-                }
-            } catch (e) {}
+      if (!noAuth && (!window.supabase || !window.supabase.createClient)) {
+        document.getElementById('errorText').textContent = 'Unable to connect. Check your internet and try again.';
+        document.getElementById('errorMessage').classList.remove('hide');
+        document.getElementById('submitBtn').disabled = true;
+        return;
+      }
 
-            var noAuth = false;
-            try {
-                noAuth = typeof window.isAuthBypassEnabled === 'function' && window.isAuthBypassEnabled();
-            } catch (e) {}
+      initSupabase();
+      try { const session = await auth.getSession(); if (session) await routeAfterAuth(session); } catch (e) {}
+    });
 
-            if (!noAuth && (!window.supabase || !window.supabase.createClient)) {
-                document.getElementById('errorText').textContent = 'Unable to connect. Check your internet and try again.';
-                document.getElementById('errorMessage').classList.remove('hidden');
-                document.getElementById('submitBtn').disabled = true;
-                return;
-            }
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (window.gtmAnalytics) window.gtmAnalytics.track('login_submit', { form: 'login' });
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const errorMessage = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+      const errorAction = document.getElementById('errorAction');
 
-            initSupabase();
-            try {
-                const session = await auth.getSession();
-                if (session) { await routeAfterAuth(session); }
-            } catch (e) {}
-        });
+      errorMessage.classList.add('hide'); errorAction.innerHTML = '';
+      submitBtn.disabled = true; btnText.textContent = 'Signing in…'; btnSpinner.classList.remove('hide');
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (window.gtmAnalytics) window.gtmAnalytics.track('login_submit', { form: 'login' });
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
-            const errorMessage = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            const errorAction = document.getElementById('errorAction');
-
-            errorMessage.classList.add('hidden');
-            errorAction.classList.add('hidden');
-            errorAction.innerHTML = '';
-            submitBtn.disabled = true;
-            btnText.textContent = 'Signing in...';
-            btnSpinner.classList.remove('hidden');
-
-            try {
-                const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
-                if (error) throw error;
-                if (window.gtmAnalytics) window.gtmAnalytics.track('login_success', { form: 'login' });
-                await routeAfterAuth(data && data.session ? data.session : null);
-            } catch (error) {
-                var msg = (error && error.message) ? error.message : '';
-                var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(error, 'login') : { message: msg || 'Invalid email or password' };
-                errorText.textContent = normalized.message;
-                if (window.gtmAuthUi) window.gtmAuthUi.renderAction(errorAction, normalized);
-                if (window.gtmAnalytics) window.gtmAnalytics.track('login_error', { form: 'login', message: msg || 'Invalid email or password' });
-                errorMessage.classList.remove('hidden');
-                submitBtn.disabled = false;
-                btnText.textContent = 'Sign In';
-                btnSpinner.classList.add('hidden');
-            }
-        });
-    </script>
+      try {
+        const { data, error } = await withTimeout(auth.signIn(email, password), 10000);
+        if (error) throw error;
+        if (window.gtmAnalytics) window.gtmAnalytics.track('login_success', { form: 'login' });
+        await routeAfterAuth(data && data.session ? data.session : null);
+      } catch (error) {
+        var msg = (error && error.message) ? error.message : '';
+        var normalized = window.gtmAuthUi ? window.gtmAuthUi.normalizeError(error, 'login') : { message: msg || 'Invalid email or password' };
+        errorText.textContent = normalized.message;
+        if (window.gtmAuthUi) window.gtmAuthUi.renderAction(errorAction, normalized);
+        if (window.gtmAnalytics) window.gtmAnalytics.track('login_error', { form: 'login', message: msg || 'Invalid email or password' });
+        errorMessage.classList.remove('hide');
+        submitBtn.disabled = false; btnText.textContent = 'Sign in →'; btnSpinner.classList.add('hide');
+      }
+    });
+  </script>
 </body>
 </html>
