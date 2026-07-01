@@ -25,6 +25,29 @@ function shortName(statement: string): string {
     return s.length <= 64 ? s : `${s.slice(0, 61)}…`;
 }
 
+/**
+ * A unique-constraint violation (Postgres 23505) means the row is already
+ * in the workspace — the desired end state when the operator re-runs the
+ * seeding flow. Treat it as a silent no-op, not a reportable error, so a
+ * re-seed doesn't spam Sentry with expected duplicates.
+ */
+function isDuplicate(err: unknown): boolean {
+    const e = err as { code?: unknown; message?: unknown } | null;
+    const code = typeof e?.code === "string" ? e.code : "";
+    const msg = (typeof e?.message === "string" ? e.message : "").toLowerCase();
+    return (
+        code === "23505" ||
+        msg.includes("duplicate key") ||
+        msg.includes("already exists") ||
+        msg.includes("unique constraint")
+    );
+}
+
+/** Report only genuine failures; expected re-seed duplicates stay quiet. */
+function reportMirror(err: unknown, op: string): void {
+    if (!isDuplicate(err)) reportError(err, { op });
+}
+
 export interface MirrorResult {
     readonly icps: number;
     readonly accounts: number;
@@ -59,7 +82,7 @@ export async function mirrorSeedToCloud(
             } as never);
             icps = 1;
         } catch (err) {
-            reportError(err, { op: "seeding.mirror.icp" });
+            reportMirror(err, "seeding.mirror.icp");
         }
     }
 
@@ -88,11 +111,11 @@ export async function mirrorSeedToCloud(
                         data: { source: "seeding-v1" } as never
                     } as never);
                 } catch (err) {
-                    reportError(err, { op: "seeding.mirror.signal" });
+                    reportMirror(err, "seeding.mirror.signal");
                 }
             }
         } catch (err) {
-            reportError(err, { op: "seeding.mirror.account" });
+            reportMirror(err, "seeding.mirror.account");
         }
     }
 
@@ -112,7 +135,7 @@ export async function mirrorSeedToCloud(
             } as never);
             deals += 1;
         } catch (err) {
-            reportError(err, { op: "seeding.mirror.deal" });
+            reportMirror(err, "seeding.mirror.deal");
         }
     }
 
