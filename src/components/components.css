@@ -438,16 +438,6 @@
   color: var(--ds-ink-soft);
 }
 .ds-wayfinder__spacer { flex: 1; }
-.ds-wayfinder__k {
-  font: 600 11px/1 var(--ds-font-mono);
-  color: var(--ds-ink-faint);
-  border: 1px solid var(--ds-hair-strong);
-  border-radius: var(--ds-radius-control);
-  background: var(--ds-surface);
-  padding: 6px 10px;
-  cursor: pointer;
-}
-.ds-wayfinder__k:hover { color: var(--ds-ink); border-color: var(--ds-rule); }
 
 .ds-seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--ds-hair-strong); border-radius: var(--ds-radius-pill); background: var(--ds-surface-sub); }
 .ds-seg__btn {

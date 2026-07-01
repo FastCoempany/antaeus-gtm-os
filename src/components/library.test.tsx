@@ -45,7 +45,6 @@ import {
     PulseZone,
     PulseHorizon
 } from "./index";
-import { paletteOpen } from "@/lib/palette/Palette";
 
 describe("display primitives", () => {
     it("Heading renders the ramp's tag per level with the level class", () => {
@@ -329,16 +328,15 @@ describe("feedback & overlays", () => {
 });
 
 describe("navigation", () => {
-    it("WayfinderBar renders mark + crumb and summons the palette", () => {
-        paletteOpen.value = false;
-        const { container, getByText } = render(
+    it("WayfinderBar renders mark + crumb, no palette key", () => {
+        const { container } = render(
             <WayfinderBar room="DASHBOARD" tail="3 ranked" />
         );
         expect(container.querySelector(".ds-wayfinder__mark")).not.toBeNull();
         expect(container.textContent).toContain("DASHBOARD · 3 ranked");
-        fireEvent.click(getByText("⌘K"));
-        expect(paletteOpen.value).toBe(true);
-        paletteOpen.value = false;
+        // The ⌘K affordance was retired from the Wayfinder — it was dead on
+        // the DS surfaces (no PaletteTrigger mounted) and not wanted.
+        expect(container.querySelector(".ds-wayfinder__k")).toBeNull();
     });
 
     it("WayfinderBar derives a back-crumb from continuity params (canon §6)", () => {

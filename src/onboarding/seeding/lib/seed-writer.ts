@@ -225,6 +225,12 @@ export function writeSeedingDraft(
     );
     trySet(store, "gtmos_onboarding_completed_at", iso);
 
+    // A freshly-seeded workspace opens on Brief — the calm morning read —
+    // never on Triage (Queue). Reset the persisted command mode so a
+    // leftover "queue" from an earlier session can't drop a new operator
+    // into the dense triage list on their first morning.
+    trySet(store, "gtmos_dashboard_command_mode", "brief");
+
     return {
         seeded: true,
         icps: draft.icpStatement.trim() ? 1 : 0,
