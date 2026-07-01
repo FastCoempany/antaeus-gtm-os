@@ -44,8 +44,9 @@
   .q{font-family:var(--serif);font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.12;letter-spacing:-.01em;max-width:20ch;margin:0 auto}
   .ans{display:flex;gap:14px;justify-content:center;margin-top:30px}
   .ans button{font-size:1.05rem;font-weight:700;padding:15px 34px;border-radius:12px;cursor:pointer;transition:all .14s;background:var(--surface);border:1px solid var(--ink25);color:var(--ink)}
-  .ans .yes:hover{border-color:var(--green);color:var(--green)}
-  .ans .no:hover{border-color:var(--orange);color:var(--orange)}
+  /* Just two choices — neutral. Green is health-only and orange is the one
+     move; neither belongs on a plain answer button (canon §3). */
+  .ans button:hover{border-color:var(--ink);color:var(--ink);background:#fff;box-shadow:0 6px 18px rgba(10,28,64,.08)}
   /* verdict */
   .vk{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink50);font-weight:700}
   .verdict{font-family:var(--serif);font-size:clamp(2.4rem,5.4vw,4rem);line-height:1;letter-spacing:-.02em;margin:14px 0 0;color:var(--ink)}
