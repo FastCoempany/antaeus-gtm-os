@@ -1,7 +1,6 @@
 import type { ComponentChildren, JSX } from "preact";
 import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
-import { openPalette } from "@/lib/palette/Palette";
 import { helpForPath, supportMailto } from "@/lib/operator-help/registry";
 import { readContinuity, safeReturnTo } from "@/lib/continuity";
 import { BrandLockup } from "./brand";
@@ -10,7 +9,7 @@ import { Heading } from "./display";
 /**
  * Navigation primitives (03 Part III). The rail is dead; the
  * Wayfinder bar is the locked un-nav primitive (Approach A): the mark
- * as the home affordance, the room crumb, and the summoned Ctrl+K —
+ * as the home affordance, the room crumb, and the room-aware help —
  * never a hallway of doors. SegmentedControl is in-room lenses onto
  * one object, never a door between rooms.
  */
@@ -45,7 +44,7 @@ export interface WayfinderPull {
 
 /**
  * The Wayfinder bar (03 §3.2) — the locked un-nav. One thin strip
- * across the top of every surface, in three cells plus a Ctrl+K key:
+ * across the top of every surface, in three cells:
  *
  *   Trail   — where you were (the breadcrumb of continuity params)
  *   Here    — where you are (the room + its one-line state)
@@ -157,14 +156,6 @@ export function WayfinderBar(props: {
                     }}
                 >
                     ?
-                </button>
-                <button
-                    type="button"
-                    class="ds-wayfinder__k"
-                    onClick={() => openPalette()}
-                    title={t("Go anywhere — rooms and skills", { class: "body" })}
-                >
-                    ⌘K
                 </button>
             </nav>
             {wayfinderHelpOpen.value ? (

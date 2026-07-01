@@ -339,7 +339,7 @@ function renderExpanded(prefs: FloatPrefs): JSX.Element {
                 <div class="ant-schedule-float__queue-head">QUEUED</div>
                 {schedules.length === 0 ? (
                     <p class="ant-schedule-float__empty">
-                        Nothing scheduled. Press Ctrl+K to schedule a skill.
+                        Nothing scheduled yet.
                     </p>
                 ) : (
                     <>
