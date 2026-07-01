@@ -73,7 +73,7 @@ interface GroupView {
 const GENERATOR_LABELS: Record<string, string> = {
     deal_decay: "Deals going stale",
     signal_decay: "Accounts going quiet",
-    proof_staleness: "Proofs past their readout",
+    proof_staleness: "Evidence past its readout",
     discovery_rhythm: "Discovery rhythm"
 };
 

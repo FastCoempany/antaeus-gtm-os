@@ -101,7 +101,7 @@ export function ForensicSheets(): JSX.Element {
  * Generate sentence-shaped sheet titles from the autopsy doc.
  *
  * Replaces the legacy categorical labels ("Causal pattern",
- * "Proof + decision", "Symptom evidence") with authored sentences
+ * "Evidence + decision", "Symptom evidence") with authored sentences
  * tuned to the deal's specific shape. Reads like a forensic write-up.
  */
 function sentenceTitlesFor(doc: AutopsyDoc): {

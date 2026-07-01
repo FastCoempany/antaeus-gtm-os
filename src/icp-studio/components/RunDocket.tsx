@@ -83,7 +83,7 @@ function findWeakest(): WeakestField | null {
     }
     if (d.proofWindow.trim().length === 0) {
         return {
-            headline: "Proof window is unset.",
+            headline: "Evidence window is unset.",
             copy: "Pick a window the buyer can hold in their head. Something like a quarter is the right size."
         };
     }

@@ -445,7 +445,7 @@ function reserveLabelFor(
     assessment: RecoveryAssessment
 ): string {
     if (!deal.nextStep || !deal.nextStep.trim()) return t("Stale");
-    if (!deal.useCase || !deal.useCase.trim()) return t("Thin proof");
+    if (!deal.useCase || !deal.useCase.trim()) return t("Thin evidence");
     if (assessment.lane === "at-risk") return t("At risk");
     return t("Healthy");
 }

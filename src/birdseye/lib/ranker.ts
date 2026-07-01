@@ -71,7 +71,7 @@ function deriveObservationLabel(obs: ObservationView): string {
         case "phase-b/signal-decay":
             return "Refresh signal coverage";
         case "phase-b/proof-staleness":
-            return "Close out the overdue proof";
+            return "Close out the overdue evidence";
         case "phase-b/discovery-rhythm":
             return "Run a discovery call this week";
         default:

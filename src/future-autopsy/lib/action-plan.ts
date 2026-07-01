@@ -66,7 +66,7 @@ function buildRoute(
             };
         case "poc":
             return {
-                label: "Forge a proof",
+                label: "Forge the evidence",
                 href: hrefToPoC(accountName),
                 roomLabel: "PoC Framework",
                 tone,

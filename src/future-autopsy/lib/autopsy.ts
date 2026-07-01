@@ -72,7 +72,7 @@ export function generateAutopsy(
             .slice(0, 3)
             .map((w) => w.story)
             .join(" ") +
-        " You forced proof early, so the close became an execution step, not a hope exercise.";
+        " You forced the evidence early, so the close became an execution step, not a hope exercise.";
 
     return {
         deal: vitals as Vitals,

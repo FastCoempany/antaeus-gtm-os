@@ -24,7 +24,7 @@ const OUTCOME_LABELS: Record<Outcome, string> = {
 /**
  * ForgePanel — Wave 3 implementation. Left, dark "forge" half.
  *
- * Per canon §4.15: "the proof object gets forged here." The form
+ * Per canon §4.15: "the evidence gets forged here." The form
  * inputs (account / vendor / owner / success criteria / kill rules /
  * duration / outcome / linked deal) drive computeQuality, which
  * lights up the heat ledger below the form.

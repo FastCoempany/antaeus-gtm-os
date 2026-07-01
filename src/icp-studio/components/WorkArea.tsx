@@ -312,7 +312,7 @@ function FormFields(): JSX.Element {
             </FormField>
 
             <FormField
-                label={t("Proof window")}
+                label={t("Evidence window")}
                 hint={t("How fast you can demonstrate value (matters a lot early stage).", { class: "body" })}
             >
                 <select
