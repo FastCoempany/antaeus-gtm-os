@@ -137,7 +137,7 @@ function setWelcomeSeen(seen, profile, session) {
 
 function computeWorkspaceRoute(profile, session, onboardingState) {
     var completed = !!(profile && profile.onboarding_completed === true) || !!(onboardingState && onboardingState.completed === true);
-    if (!completed) return '/app/onboarding/';
+    if (!completed) return '/onboarding/?seeding=1';
     return hasSeenWelcome(profile, session) ? '/app/dashboard/' : '/app/welcome/';
 }
 var STAGE_QW_DEFAULTS = {
@@ -846,7 +846,7 @@ async function ensureUserWorkspace(sessionOverride, options) {
 
 async function resolvePostAuthRoute(sessionOverride, options) {
     var workspace = await ensureUserWorkspace(sessionOverride, options);
-    return (workspace && workspace.route) ? workspace.route : '/app/onboarding/';
+    return (workspace && workspace.route) ? workspace.route : '/onboarding/?seeding=1';
 }
 
 async function updateWorkspaceProfile(fields, sessionOverride, options) {

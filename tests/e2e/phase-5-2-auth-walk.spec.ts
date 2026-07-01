@@ -191,9 +191,10 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
         const page = await ctx.newPage();
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
-            // Click the primary CTA — should land on signup.html.
+            // The primary (non-ghost) hero CTA should land on signup.html.
             const ctaHref = await page
-                .locator(".hero__ctas .btn--primary")
+                .locator(".hero .cta .btn:not(.btn--ghost)")
+                .first()
                 .getAttribute("href");
             expect(ctaHref).toBe("/signup.html");
 
