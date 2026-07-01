@@ -96,21 +96,26 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
         }
     });
 
-    test("signup.html — first-five-minutes copy lights up the activation arc", async ({
+    test("signup.html — promise panel sells the morning-ranked payoff", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
             await page.goto("/signup.html", { waitUntil: "domcontentloaded" });
-            const corridor =
-                (await page.locator(".auth-corridor").textContent()) ?? "";
-            // The "first five minutes" frame replaces the generic
-            // "Path" kicker — names the actual operator arc.
-            expect(corridor.toLowerCase()).toContain("first five minutes");
-            expect(corridor.toLowerCase()).toContain("brief");
+            // The "Promise + form" design (Signup B): the left panel sells
+            // what's waiting inside — a morning that ranks the deal under
+            // the most pressure.
+            const promise =
+                (await page.locator(".promise").textContent()) ?? "";
+            expect(promise.toLowerCase()).toContain("what's waiting inside");
+            expect(promise.toLowerCase()).toContain("ranks the one deal");
+            // Two-field promise: name + role are deferred into onboarding.
+            const form = (await page.locator(".form").textContent()) ?? "";
+            expect(form.toLowerCase()).toContain("two fields now");
             // Trust note for the visitor-to-operator boundary.
-            expect(corridor.toLowerCase()).toContain("no card");
+            const body = (await page.locator("body").textContent()) ?? "";
+            expect(body.toLowerCase()).toContain("no card");
         } finally {
             await ctx.close();
         }
