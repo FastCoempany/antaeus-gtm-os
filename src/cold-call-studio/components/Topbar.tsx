@@ -33,7 +33,7 @@ export function Topbar(): JSX.Element {
                     : "no calls yet"}
             </p>
             <h1 class="cc-topbar__title">
-                Weave opener, objection, proof, and ask into one live route.
+                Weave opener, objection, evidence, and ask into one live route.
             </h1>
             {account ? (
                 <p class="cc-topbar__on-line" role="status">

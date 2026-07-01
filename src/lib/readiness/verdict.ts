@@ -59,7 +59,7 @@ function gateHireReadyRepeatable(
 
     if (input.closedWonDeals < 1) {
         blockers.push(
-            t("Close-won a deal so the kit has a real proof point.", {
+            t("Close-won a deal so the kit has real evidence.", {
                 class: "body"
             })
         );
@@ -72,7 +72,7 @@ function gateHireReadyRepeatable(
         );
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
+        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
     }
     if (input.advisorDeployments < 1) {
         blockers.push(
@@ -131,7 +131,7 @@ function gateHireReady(
         blockers.push(t("Run a Future Autopsy.", { class: "body" }));
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
+        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -168,7 +168,7 @@ function gateInheritable(
     }
 
     if (input.castProofs < 1) {
-        blockers.push(t("Cast a proof in PoC Framework.", { class: "body" }));
+        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };

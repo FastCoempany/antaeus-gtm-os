@@ -22,7 +22,7 @@ import {
  * Negotiation ↔ Advisor Deploy is now lit on the high-pressure
  * phase of a deal per canon §4.16b):
  *   - Pre-mortem this deal (primary)   → /future-autopsy/
- *   - Forge a proof                    → /poc-framework/
+ *   - Forge the evidence                    → /poc-framework/
  *   - Rehearse the negotiation         → /negotiation/
  *   - Deploy an advisor                → /advisor-deploy/
  *
@@ -73,7 +73,7 @@ export function HandoffStrip(): JSX.Element {
                     href={hrefToPocFramework(focusName)}
                     data-dw-handoff="poc-framework"
                 >
-                    {t("Forge a proof")}
+                    {t("Forge the evidence")}
                 </a>
                 <a
                     class="dw-handoff__cta"

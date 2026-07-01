@@ -53,7 +53,7 @@ export function SystemHealth(): JSX.Element {
     if (compounding.length === 0) {
         compounding.push(
             t(
-                "The room is asking the right questions about the plan. The plan itself still needs harder proof before you should bet the quarter on it.",
+                "The room is asking the right questions about the plan. The plan itself still needs harder evidence before you should bet the quarter on it.",
                 { class: "body" }
             )
         );
@@ -70,7 +70,7 @@ export function SystemHealth(): JSX.Element {
     if (fitCount < 2) {
         fragile.push(
             t(
-                "Too many of the assumptions have drifted away from typical ranges. Custom numbers can be right, but they need stronger proof before they should run the quarter.",
+                "Too many of the assumptions have drifted away from typical ranges. Custom numbers can be right, but they need stronger evidence before they should run the quarter.",
                 { class: "body" }
             )
         );

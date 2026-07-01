@@ -293,7 +293,7 @@ export function RehearsalObject(): JSX.Element {
                         dataHandoff: "advisor-deploy"
                     },
                     {
-                        label: t("Sharpen the proof"),
+                        label: t("Sharpen the evidence"),
                         href: hrefToPocFramework(dealId, accountName),
                         dataHandoff: "poc-framework"
                     }

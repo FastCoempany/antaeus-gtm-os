@@ -63,7 +63,7 @@ export function ForgeForm(): JSX.Element {
 
     return (
         <div class="pocd-forge">
-            <Kicker>{t("FORGE THE PROOF")}</Kicker>
+            <Kicker>{t("FORGE THE EVIDENCE")}</Kicker>
 
             <FormField label={t("Account")}>
                 <TextInput
@@ -152,7 +152,7 @@ export function ForgeForm(): JSX.Element {
                         : undefined
                 }
             >
-                {t("Cast the proof")}
+                {t("Cast the evidence")}
             </Button>
         </div>
     );

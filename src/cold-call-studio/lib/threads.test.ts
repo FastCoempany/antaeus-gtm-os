@@ -77,7 +77,7 @@ describe("THREADS spine", () => {
 
 describe("findThread", () => {
     it("returns the thread by id", () => {
-        expect(findThread("proof").label).toBe("Proof thread");
+        expect(findThread("proof").label).toBe("Evidence thread");
     });
 
     it("falls back to prep when id is unknown", () => {

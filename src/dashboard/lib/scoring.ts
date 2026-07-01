@@ -24,7 +24,7 @@ export function buildRiskReasons(
     if (profile.risk) pushReason(reasons, "risk " + profile.risk);
     if (profile.staleDays) pushReason(reasons, profile.staleDays + "d stale");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
-    if (profile.proofThin) pushReason(reasons, "proof thin");
+    if (profile.proofThin) pushReason(reasons, "evidence thin");
     if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
     if (profile.recoveryCount) pushReason(reasons, "in the recovery queue");
     if (profile.missingChampion) pushReason(reasons, "no champion yet");
@@ -59,7 +59,7 @@ export function buildMoveReasons(
     if (profile.highConfidenceCount >= 2) pushReason(reasons, "high-conf cluster");
     if (profile.recentCount >= 2) pushReason(reasons, "fresh signals");
     if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
-    if (profile.proofThin) pushReason(reasons, "proof thin");
+    if (profile.proofThin) pushReason(reasons, "evidence thin");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
     if (profile.missingNextStep) pushReason(reasons, "no next step set");
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");

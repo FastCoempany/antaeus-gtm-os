@@ -57,7 +57,7 @@ describe("WorkspaceReads", () => {
         expect(groups.length).toBe(3);
         expect(container.textContent).toContain("Deals going stale");
         expect(container.textContent).toContain("Accounts going quiet");
-        expect(container.textContent).toContain("Proofs past their readout");
+        expect(container.textContent).toContain("Evidence past its readout");
     });
 
     it("renders observation text + the surfaced count", () => {

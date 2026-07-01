@@ -46,7 +46,7 @@ describe("toPulling", () => {
         patchDraft({ account: "Acme Industries" });
         const p = toPulling();
         expect(p).toBeDefined();
-        expect(p!.verb).toBe("Carry the proof");
+        expect(p!.verb).toBe("Carry the evidence");
         expect(p!.object).toBe("Acme Industries");
         expect(p!.href).toContain("/deal-workspace/");
         expect(p!.reasons.length).toBeGreaterThan(0);

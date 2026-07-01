@@ -25,7 +25,7 @@ export const CHAPTERS: Readonly<Record<CauseId, string>> = {
         "You fought an invisible opponent and lost narrative control.",
     stage_stuck: "Elapsed time became a proxy for hidden no.",
     poc_no_criteria:
-        "The pilot produced activity, not decision-ready proof.",
+        "The pilot produced activity, not decision-ready evidence.",
     single_threaded:
         "One contact got busy and the entire deal went dark.",
     next_step_overdue:
@@ -87,7 +87,7 @@ export const STAGE_LEADS: Readonly<Record<string, string>> = {
         "45 days later, legal and procurement widened the blast radius because the decision path and budget owner were never tightly controlled. Each unanswered dependency created a new delay.",
     verbal: "45 days later, the verbal commit dissolved because paper process wasn't pre-cleared. Legal found new issues, procurement re-scoped, and the urgency that closed the deal evaporated.",
     _default:
-        "45 days later, momentum faded because critical proof never materialized early enough to force a committed buying process."
+        "45 days later, momentum faded because critical evidence never materialized early enough to force a committed buying process."
 };
 
 export const CAUSE_LEADS: Readonly<
@@ -128,7 +128,7 @@ export const STAGE_WIN_LEADS: Readonly<Record<string, string>> = {
         "45 days later, you won because decision process and budget authority were mapped early, reducing legal/procurement drag and preserving end-game momentum.",
     verbal: "45 days later, you won because the paper process was pre-cleared before verbal commit, compressing legal review to days instead of weeks.",
     _default:
-        "45 days later, you won because proof tasks were completed early and decision risk was surfaced before it became terminal."
+        "45 days later, you won because evidence tasks were completed early and decision risk was surfaced before it became terminal."
 };
 
 export function stageLead(stageRaw: string, topCauseId: CauseId | ""): string {

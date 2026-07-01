@@ -34,7 +34,7 @@ export function CastPanel(): JSX.Element {
     const [activeDoc, setActiveDoc] = useState<keyof ProofDocs>("scope");
 
     return (
-        <section class="poc-cast" aria-label={t("The proof, finished")}>
+        <section class="poc-cast" aria-label={t("The evidence, finished")}>
             <header class="poc-cast__header">
                 <p class="poc-cast__kicker">{t("WHAT THE BUYER'S BOSS WILL SEE")}</p>
                 <h2 class="poc-cast__title">{quality.title}</h2>
@@ -51,7 +51,7 @@ export function CastPanel(): JSX.Element {
                   glance read so the operator doesn't have to scan all
                   five rows.
                 */}
-                <p class="poc-cast__ingot-read" aria-label={t("Where the proof stands")}>
+                <p class="poc-cast__ingot-read" aria-label={t("Where the evidence stands")}>
                     {ingotRead}
                 </p>
             </header>
@@ -107,7 +107,7 @@ function DocsRack({ docs, active, onSelect }: DocsRackProps): JSX.Element {
     }
 
     return (
-        <section class="poc-docs" aria-label={t("Proof documents")}>
+        <section class="poc-docs" aria-label={t("Evidence documents")}>
             <header class="poc-docs__header">
                 <p class="poc-docs__kicker">{t("DOCUMENTS")}</p>
                 <button type="button" class="poc-docs__copy" onClick={copy}>

@@ -155,11 +155,11 @@ function buildLedger(): ReadonlyArray<LedgerRow> {
         },
         {
             num: 7,
-            field: "Proof window",
+            field: "Evidence window",
             state: nonEmpty(d.proofWindow) ? "clear" : "thin",
             copy: nonEmpty(d.proofWindow)
                 ? `${labelFor(d.proofWindow, PROOF_WINDOW_OPTIONS)} — the buyer can see value inside this window.`
-                : "Pick a proof window. The buyer needs to feel speed-to-value."
+                : "Pick an evidence window. The buyer needs to feel speed-to-value."
         }
     ];
 }

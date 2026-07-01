@@ -471,7 +471,7 @@ function DeleteCloudDataCard(): JSX.Element {
         <Card kicker={t("WORKSPACE-LEVEL · DELETE MY DATA")} tone="red">
             <p class="ds-card__copy">
                 {t(
-                    "Permanently delete every row in your workspace — ICPs, deals, proofs, signals, advisor deployments, discovery call logs, and supporting artifacts. Your account stays intact. This is irreversible. Export a backup first if you want a copy.",
+                    "Permanently delete every row in your workspace — ICPs, deals, pilot evidence, signals, advisor deployments, discovery call logs, and supporting artifacts. Your account stays intact. This is irreversible. Export a backup first if you want a copy.",
                     { class: "body" }
                 )}
             </p>

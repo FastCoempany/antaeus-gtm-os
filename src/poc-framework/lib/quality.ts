@@ -107,7 +107,7 @@ const WEAKEST_MAP: Record<string, MoldDiagnosis> = {
     account: {
         id: "account",
         title: "Account",
-        copy: "Name the account before scoping proof."
+        copy: "Name the account before scoping the evidence."
     },
     owner: {
         id: "owner",
@@ -127,7 +127,7 @@ const WEAKEST_MAP: Record<string, MoldDiagnosis> = {
     readout: {
         id: "readout",
         title: "Readout",
-        copy: "Carry the proof into the decision meeting."
+        copy: "Carry the evidence into the decision meeting."
     }
 };
 
@@ -149,8 +149,8 @@ export function weakestMold(inputs: WeakestInputs): MoldDiagnosis {
 // ─── Quality score + band ─────────────────────────────────────────────
 
 const BAND_TITLE: Record<QualityBand, string> = {
-    ready: "The proof is ready. The buyer's boss could act on this.",
-    workable: "The proof is hot, but the buyer can't carry it into the room yet.",
+    ready: "The evidence is ready. The buyer's boss could act on this.",
+    workable: "The evidence is hot, but the buyer can't carry it into the room yet.",
     thin: "There's interest, but you can't take this to the buyer's boss yet."
 };
 
@@ -250,7 +250,7 @@ export function deriveMolds(
     return [
         {
             label: "Claim",
-            value: firstBullet(drft.successCriteria, "Name the proof claim"),
+            value: firstBullet(drft.successCriteria, "Name the evidence claim"),
             state: quality.successCount > 0 ? "hot" : "red"
         },
         {
@@ -322,11 +322,11 @@ export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
 
     // All locked → ready to carry.
     if (cast.length === molds.length) {
-        return "All five molds are locked. The proof is ready — the buyer's boss could act on this.";
+        return "All five molds are locked. The evidence is ready — the buyer's boss could act on this.";
     }
     // Nothing started → empty foundry.
     if (cast.length === 0 && hot.length === 0) {
-        return "All five molds are still empty. The proof has not been forged yet.";
+        return "All five molds are still empty. The evidence has not been forged yet.";
     }
 
     const clauses: string[] = [];

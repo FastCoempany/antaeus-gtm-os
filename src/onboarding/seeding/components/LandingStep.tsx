@@ -68,7 +68,7 @@ export function LandingStep(): JSX.Element {
                     <div class="sd-r2__k">{t("What's left — later, no rush", { class: "body" })}</div>
                     <div class="sd-r2__t">
                         {t(
-                            "Over the coming days it'll ask for your proof, your advisors, and your wins and losses. Each one wakes another room. You've done the hard part today.",
+                            "Over the coming days it'll ask for your evidence, your advisors, and your wins and losses. Each one wakes another room. You've done the hard part today.",
                             { class: "body" }
                         )}
                     </div>

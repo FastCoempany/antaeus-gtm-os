@@ -145,7 +145,7 @@ export function IcpBuilder(): JSX.Element {
                 />
             </FormField>
 
-            <FormField label={t("Proof window")}>
+            <FormField label={t("Evidence window")}>
                 <Select
                     value={d.proofWindow}
                     onChange={(proofWindow) => patchDraft({ proofWindow })}

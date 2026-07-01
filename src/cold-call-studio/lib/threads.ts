@@ -107,13 +107,13 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "proof",
         num: "04",
-        label: "Proof thread",
+        label: "Evidence thread",
         verb: "trade",
         color: "var(--cc-orange)",
-        title: "Trade one proof point for one admission.",
-        copy: "Proof should create permission, not become a deck.",
-        say: "The pattern we usually see is [proof point]. When that shows up, teams either absorb it manually or redesign the workflow. Which is happening there?",
-        coach: "One proof point. Then stop.",
+        title: "Trade one piece of evidence for one admission.",
+        copy: "Evidence should create permission, not become a deck.",
+        say: "The pattern we usually see is [evidence]. When that shows up, teams either absorb it manually or redesign the workflow. Which is happening there?",
+        coach: "One piece of evidence. Then stop.",
         replies: [
             {
                 id: "manual",
@@ -144,7 +144,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         title: "Ask for the smallest real next move.",
         copy: "The ask should match what the call earned.",
         say: "It sounds specific enough to look at together. Would it make sense to spend 20 minutes this week mapping whether the same pattern applies to [account]?",
-        coach: "Ask for time only after pressure and proof are both alive.",
+        coach: "Ask for time only after pressure and evidence are both alive.",
         replies: [
             {
                 id: "yes",

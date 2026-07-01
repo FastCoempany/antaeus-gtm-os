@@ -111,7 +111,7 @@ export const PERSONA_DATA: Readonly<Record<Persona, PersonaSpec>> = {
         label: "VP / Director",
         sentenceRange: [4, 6],
         guidance:
-            "4-6 sentences. Can include proof point. Reference comparable company. Design assets for forwarding."
+            "4-6 sentences. Can include a piece of evidence. Reference comparable company. Design assets for forwarding."
     },
     ic: {
         key: "ic",

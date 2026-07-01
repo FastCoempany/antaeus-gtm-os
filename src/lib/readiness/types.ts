@@ -60,7 +60,7 @@ export const DIMENSION_LABEL: Record<DimensionId, string> = {
     outreach: t("Outreach"),
     discovery: t("Discovery"),
     deals: t("Deal motion"),
-    proof: t("Proof & memory")
+    proof: t("Evidence & memory")
 };
 
 /**

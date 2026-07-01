@@ -176,10 +176,10 @@ describe("requiredCorrectionCopy", () => {
 
     it("prescribes trade-proof-for-admission on pressure/proof threads", () => {
         expect(requiredCorrectionCopy(true, "pressure")).toContain(
-            "Trade one proof point"
+            "Trade one piece of evidence"
         );
         expect(requiredCorrectionCopy(true, "proof")).toContain(
-            "Trade one proof point"
+            "Trade one piece of evidence"
         );
     });
 
