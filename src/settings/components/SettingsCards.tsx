@@ -110,7 +110,7 @@ function DeleteCloudDataCard(): JSX.Element {
             </header>
             <p class="st-card__desc">
                 Permanently delete every row in your workspace — ICPs,
-                deals, proofs, signals, advisor deployments, discovery
+                deals, pilot evidence, signals, advisor deployments, discovery
                 call logs, and supporting artifacts. Your account stays
                 intact; you can keep signing in. This action is
                 irreversible. Export a backup first if you want a copy.
@@ -431,7 +431,7 @@ function CloudExportCard(): JSX.Element {
             </header>
             <p class="st-card__desc">
                 Download every row from your workspace as a JSON file —
-                ICPs, deals, proofs, signals, advisor deployments,
+                ICPs, deals, pilot evidence, signals, advisor deployments,
                 discovery call logs, the works. This is the portable
                 copy of what's actually durable. The local "Backup and
                 restore" card below only captures the browser cache.

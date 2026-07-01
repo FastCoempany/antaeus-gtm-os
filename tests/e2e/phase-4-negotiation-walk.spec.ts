@@ -124,7 +124,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
             expect(joined).toContain("Update the deal");
             expect(joined).toContain("Pre-mortem this deal");
             expect(joined).toContain("Carry to an advisor");
-            expect(joined).toContain("Sharpen the proof");
+            expect(joined).toContain("Sharpen the evidence");
 
             // Primary CTA = "Update the deal" (orange variant).
             const primary = page.locator(".ng-handoff__cta--primary");

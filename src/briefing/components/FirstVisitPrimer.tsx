@@ -82,7 +82,7 @@ export function FirstVisitPrimer(): JSX.Element | null {
             <p class="bf-primer__body">
                 Open it daily. The toggle at the top picks between two
                 views: <strong>{t("Workspace")}</strong> (what's moving in your
-                own deals, signals, proofs — refreshed every 30 minutes)
+                own deals, signals, pilot evidence — refreshed every 30 minutes)
                 and <strong>{t("World")}</strong> (what's moving in the market
                 you sell into — refreshed Monday mornings).
             </p>
@@ -90,7 +90,7 @@ export function FirstVisitPrimer(): JSX.Element | null {
                 <li>
                     <strong>{t("Workspace")}</strong> — heartbeat-fresh reads
                     about your deals going stale, accounts going quiet,
-                    proofs past their readout. Dismiss what doesn't matter;
+                    evidence past its readout. Dismiss what doesn't matter;
                     the rest tells you where to look first.
                 </li>
                 <li>

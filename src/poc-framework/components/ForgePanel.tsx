@@ -145,7 +145,7 @@ export function ForgePanel(): JSX.Element {
                             void saveProof(proof);
                         }}
                     >
-                        Cast proof
+                        Cast the evidence
                     </button>
                 </div>
             </div>

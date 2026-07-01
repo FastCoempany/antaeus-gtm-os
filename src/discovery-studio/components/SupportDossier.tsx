@@ -10,7 +10,7 @@ import {
  * SupportDossier — Wave 2.
  *
  * Three sections of reference content for the active framework:
- *   - Proof + decision anchors (the supportDossier topics)
+ *   - Evidence + decision anchors (the supportDossier topics)
  *   - Objection library (trigger → reply)
  *   - Inbound question handlers (question → bridge)
  *
@@ -34,7 +34,7 @@ export function SupportDossier(): JSX.Element {
             <header class="ds-support-dossier__header">{t("Dossier")}</header>
             {!hasContent ? (
                 <p class="ds-support-dossier__empty">
-                    Pick a framework above to load its proof, objection,
+                    Pick a framework above to load its evidence, objection,
                     and inbound-question dossier.
                 </p>
             ) : (
@@ -42,7 +42,7 @@ export function SupportDossier(): JSX.Element {
                     {dossier.length > 0 ? (
                         <section class="ds-support-dossier__section">
                             <h3 class="ds-support-dossier__section-title">
-                                Proof + decision anchors
+                                Evidence + decision anchors
                             </h3>
                             {dossier.map((topic, i) => (
                                 <div key={i} class="ds-support-dossier__topic">

@@ -156,7 +156,7 @@ export function WorkspaceReads(): JSX.Element {
                 </h2>
                 <p class="bf-workspace__empty-body">
                     Workspace reads fire on the heartbeat — every 30 minutes
-                    against your deals, signals, proofs, and discovery
+                    against your deals, signals, pilot evidence, and discovery
                     cadence. When something starts decaying, it will show
                     up here.
                 </p>
