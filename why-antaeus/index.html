@@ -36,6 +36,7 @@
     --accent-blue: #2563eb;
     --accent-green: #22c55e;
     --accent-red: #ef4444;
+    --forest: #1B5138;
     --font-serif: 'DM Serif Display', Georgia, serif;
     --font-sans: 'Public Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -75,7 +76,9 @@ a { color: inherit; text-decoration: none; }
     align-items: center;
 }
 
-.wordmark { display: inline-flex; align-items: baseline; gap: 10px; line-height: 1; }
+.wordmark { display: inline-flex; align-items: center; gap: 9px; line-height: 1; }
+.wordmark__svg { width: 22px; height: 22px; flex: none; }
+.wordmark__svg path { stroke: var(--ink); stroke-width: 3.2; fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
 .wordmark__mark { font-family: var(--font-serif); font-size: 1.05rem; letter-spacing: 0.16em; color: var(--ink); }
 .wordmark__divider { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-25); }
 .wordmark__kicker { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--ink-50); }
@@ -347,10 +350,13 @@ a { color: inherit; text-decoration: none; }
 /* ── Closing CTA ─────────────────────────────────────────────── */
 
 .closing {
-    padding: 72px 0 80px;
+    padding: 96px 0;
     text-align: center;
-    border-top: 1px solid var(--ink-10);
+    background: var(--forest);
 }
+.closing .wrap, .closing > * { position: relative; }
+.closing .btn--ghost { color: #fff; border-color: rgba(255,255,255,0.4); background: transparent; }
+.closing .btn--ghost:hover { color: #fff; border-color: #fff; background: transparent; }
 
 .closing__title {
     font-family: var(--font-serif);
@@ -358,7 +364,7 @@ a { color: inherit; text-decoration: none; }
     line-height: 1.06;
     letter-spacing: -0.018em;
     margin-bottom: 16px;
-    color: var(--ink);
+    color: #fff;
     max-width: 22ch;
     margin-left: auto;
     margin-right: auto;
@@ -367,7 +373,7 @@ a { color: inherit; text-decoration: none; }
 .closing__sub {
     font-size: 1.04rem;
     line-height: 1.6;
-    color: var(--ink-70);
+    color: rgba(255, 255, 255, 0.72);
     max-width: 56ch;
     margin: 0 auto 30px;
 }
@@ -397,7 +403,7 @@ a { color: inherit; text-decoration: none; }
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.06em;
-    color: var(--ink-50);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Footer ──────────────────────────────────────────────────── */
@@ -424,13 +430,14 @@ a { color: inherit; text-decoration: none; }
 <header class="chrome">
     <div class="chrome__inner">
         <a href="/start.html" class="wordmark" aria-label="Antaeus — home">
+            <svg class="wordmark__svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
             <span class="wordmark__mark">ANTAEUS</span>
             <span class="wordmark__divider" aria-hidden="true">·</span>
             <span class="wordmark__kicker">Operator preview</span>
         </a>
         <nav class="chrome__aux" aria-label="Account">
             <a href="/start.html" class="chrome__back">← Back to preview</a>
-            <a href="/signup.html" class="btn btn--primary">Create your workspace</a>
+            <a href="/signup.html" class="btn btn--primary">Run your first morning →</a>
         </nav>
     </div>
 </header>
@@ -564,7 +571,7 @@ a { color: inherit; text-decoration: none; }
             Signup takes a few minutes. Onboarding sharpens your first ICP and seeds your first ranked Brief. By the end of setup you're not browsing features — you're already using the system.
         </p>
         <div class="closing__ctas">
-            <a class="btn btn--primary btn--lg" href="/signup.html">Create your workspace</a>
+            <a class="btn btn--primary btn--lg" href="/signup.html">Run your first morning →</a>
             <a class="btn btn--ghost btn--lg" href="/login.html">Sign in</a>
         </div>
         <p class="closing__note">Free during operator preview · no card</p>
