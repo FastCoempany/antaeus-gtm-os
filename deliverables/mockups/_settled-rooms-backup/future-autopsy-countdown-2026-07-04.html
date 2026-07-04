@@ -1,0 +1,301 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future Autopsy · The Countdown (thorough)</title>
+<style>
+:root{--field:#F6F8FC;--paper:#fff;--ink:#0e1b33;--ink-2:#3a4a66;--ink-3:#5b6b86;--ink-soft:#8a97b0;
+--line:#e6eaf2;--line-2:#d5dce8;--line-3:#c2ccdd;--orange:#e6701e;--blue:#2563eb;
+--forest:#1b5e3f;--forest-strong:#164c33;--amber:#c98a1a;--grey:#8a97b0;--red:#d1483a;--red-deep:#a8382c;
+--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--sans:'Public Sans',-apple-system,Segoe UI,Roboto,sans-serif;--serif:'DM Serif Display',Georgia,serif;}
+*{box-sizing:border-box;min-width:0}body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:0 0 90px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 34px;border-bottom:1px solid var(--line-2)}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}.brand b{color:var(--ink);font-weight:700}.mk{width:16px;height:16px}
+.tstat{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--red)}
+.pad{padding:26px 34px 0}
+/* STEPPER */
+.stepper{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.stepper .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.arrow{width:38px;height:38px;border-radius:50%;border:1px solid var(--line-2);background:var(--paper);color:var(--ink-2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.arrow:hover{border-color:var(--ink);color:var(--ink)}.arrow:disabled{opacity:.3;cursor:default}
+.ticks{display:flex;gap:7px;align-items:center}
+.tick{display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:20px;border:1px solid var(--line-2);background:var(--paper);cursor:pointer;font-size:12px;font-weight:600}
+.tick .rk{font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;border-radius:20px;padding:2px 7px}
+.tick.on{border-color:var(--ink);box-shadow:0 2px 0 var(--ink)}
+.tick.saved{border-color:var(--forest)}
+.tick .d{font-family:var(--mono);font-size:9.5px;color:var(--ink-soft);font-weight:400}
+.pos{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-2)}.pos b{color:var(--ink)}.pos .hint{color:var(--ink-soft)}
+/* SCENE */
+#scene{transition:opacity .22s ease}#scene.sw{opacity:0}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:9px}.kick::before{content:"";width:26px;height:2px;background:var(--red)}
+.kick.won{color:var(--forest)}.kick.won::before{background:var(--forest)}
+.flowin{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-top:8px;letter-spacing:.03em}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.6vw,56px);line-height:1.0;letter-spacing:-.02em;margin:12px 0 0;max-width:21ch}h1 .r{color:var(--red)}h1 .g{color:var(--forest)}
+.sub{font-size:14.5px;color:var(--ink-2);margin:14px 0 0;max-width:60ch;line-height:1.5}.sub b{color:var(--ink)}
+/* TIMELINE */
+.reglbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.reglbl.do{color:var(--forest);margin:40px 0 0}
+.reglbl.dont{color:var(--red-deep);margin:8px 0 0}
+.tl{position:relative;margin:6px 0 0}
+.tl svg{display:block;width:100%;height:auto;overflow:visible}
+.pill{position:absolute;transform:translateX(-50%);text-align:center;width:196px}
+.pill .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:22px;border:1px solid var(--line-2);background:var(--paper);font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;box-shadow:0 1px 2px rgba(14,27,51,.05)}
+.pill.done .btn{border-color:var(--forest);color:var(--forest-strong)}
+.pill .btn .n{width:20px;height:20px;border-radius:50%;background:var(--paper);border:2px solid var(--forest);color:var(--forest);font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.pill.done .btn .n{background:var(--forest);border-color:var(--forest);color:#fff}
+.pill .cap{font-size:11px;color:var(--ink-soft);margin-top:6px;line-height:1.35}
+/* RECOVERY METER */
+.meter{margin-top:20px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px}
+.meter .bar{flex:0 0 200px;height:6px;border-radius:4px;background:var(--line-2);overflow:hidden}
+.meter .fill{height:100%;background:var(--amber);transition:width .3s ease,background .3s ease}
+.meter.won .fill{background:var(--forest)}
+.meter .txt{color:var(--amber);font-weight:600}.meter.won .txt{color:var(--forest)}
+/* EVIDENCE STRIP */
+.evid{margin-top:26px;border-top:1px solid var(--line-2);padding-top:20px;display:grid;grid-template-columns:1.3fr 1fr;gap:44px}
+.evid .h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.abs{display:flex;gap:11px;padding:8px 0;border-top:1px solid var(--line);align-items:baseline}
+.abs:first-of-type{border-top:0}
+.abs .x{color:var(--red);font-weight:700;font-size:14px;flex:0 0 auto;line-height:1.2}
+.abs.on .x{color:var(--forest)}
+.abs .t{font-weight:600;font-size:13.5px}.abs .w{font-size:12px;color:var(--ink-soft);margin-left:6px;font-weight:400}
+.abs.on .t{color:var(--forest-strong)}
+.vit .h{color:var(--ink-soft)}
+.vitrow{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--mono);font-size:12px}
+.vitrow .v{display:flex;flex-direction:column;gap:3px}
+.vitrow .v .k{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.vitrow .v .n{font-size:14px;font-weight:600;color:var(--ink);font-family:var(--sans)}
+.vitrow .v .n.risk{color:var(--red)}.vitrow .v .n.warn{color:var(--amber)}
+/* DOCKET — work the cuts */
+.docket{margin-top:26px;border-top:1px solid var(--line-2);padding-top:18px}
+.docket .h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:6px}
+.docket .hint{font-size:12px;color:var(--ink-soft);margin-bottom:12px}
+.crow{border-top:1px solid var(--line);padding:12px 0}
+.crow .top{display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-3);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;margin-top:1px}
+.crow.done .chk{border-color:var(--forest);background:var(--forest);color:#fff}
+.crow .lab{font-weight:700;font-size:14.5px}.crow.done .lab{color:var(--forest-strong)}
+.crow .why{font-size:12.5px;color:var(--ink-soft);margin-top:1px}
+.crow .exp{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--blue);white-space:nowrap;margin-top:3px}
+.script{margin:10px 0 0 34px;display:none;border-left:2px solid var(--blue);padding:10px 0 10px 13px}
+.crow.open .script{display:block}
+.script .s{font-size:13px;color:var(--ink-2);line-height:1.5;font-style:italic}
+.script .cp{margin-top:8px;font-family:var(--sans);font-weight:600;font-size:12px;padding:6px 13px;border:1px solid var(--line-2);border-radius:5px;background:var(--paper);color:var(--ink);cursor:pointer}
+.script .cp:hover{border-color:var(--ink)}
+/* FINDING */
+.finding{margin-top:28px;display:grid;grid-template-columns:1fr 300px;gap:40px;border-top:1px solid var(--line-2);padding-top:22px}
+.finding .c{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.finding .pat{font-family:var(--serif);font-size:22px;letter-spacing:-.01em}
+.finding p{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:10px 0 0;max-width:52ch}.finding p b{color:var(--ink)}
+.walk .c{color:var(--amber)}.walk p{border-left:2px solid var(--amber);padding-left:12px;font-size:12.5px}
+.intervene{margin-top:26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid var(--line-2);padding-top:20px}
+.intervene .primary{font-family:var(--sans);font-weight:600;font-size:14px;padding:13px 22px;border:0;border-radius:6px;background:var(--orange);color:#fff;cursor:pointer}
+.intervene .brief{font-family:var(--mono);font-size:11.5px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--line-3);padding-bottom:1px}
+.intervene .brief:hover{border-color:var(--ink)}
+.intervene .rr{margin-left:auto;display:flex;gap:16px}.intervene .rr a{font-family:var(--mono);font-size:11px;color:var(--ink-2);cursor:pointer;text-decoration:none;border-bottom:1px solid var(--line-2)}
+.nextline{margin-top:22px;font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}.nextline .go{color:var(--red);cursor:pointer;font-weight:600}.nextline .go:hover{text-decoration:underline}
+.inv{margin-top:30px;border-top:1px solid var(--line);padding-top:14px}.inv .h{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.inv ul{columns:3;column-gap:26px;margin:10px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}.inv li{margin:0 0 5px;padding-left:14px;position:relative;break-inside:avoid}.inv li::before{content:"▪";position:absolute;left:0;color:var(--forest)}.inv li s{color:var(--ink-soft)}
+.foot{margin:22px 34px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.05em}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:10px 18px;border-radius:6px;opacity:0;pointer-events:none;transition:all .2s ease}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head><body><div class="wrap">
+<div class="topbar"><div class="brand"><svg class="mk" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0e1b33" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0e1b33" stroke-width="3.4"/><path d="M2 38h44" stroke="#0e1b33" stroke-width="3.4"/></svg><span><b>ANTAEUS</b> · Future Autopsy</span></div><div class="tstat" id="tstat"></div></div>
+<div class="pad">
+  <div class="stepper">
+    <span class="lbl">Pre-mortem · worst first</span>
+    <button class="arrow" id="prev" title="previous (←)">‹</button>
+    <div class="ticks" id="ticks"></div>
+    <button class="arrow" id="next" title="next (→)">›</button>
+    <div class="pos" id="pos"></div>
+  </div>
+  <div id="scene"></div>
+
+  <div class="inv"><div class="h">Full inventory — Future Autopsy</div><ul>
+    <li><b>Steps through every dying deal</b> · worst first</li><li>Each scene is state-driven, not a template</li><li>One decay line · both futures at once</li>
+    <li>Horizon · the projected time of death</li><li>Causal pattern · the failure named</li><li>Evidence · the absences + vitals that kill it</li>
+    <li>The cuts · checkable, they bend the line</li><li>Each cut carries the line to send</li><li>When to walk away · the kill switch</li>
+    <li>Copy brief · carry it out of the room</li><li>In ← Deal Workspace / Discovery / Pilot</li><li>Out → reroute to the fixing room</li>
+  </ul></div>
+</div>
+<div class="foot" id="foot"></div>
+<div class="toast" id="toast"></div>
+<script>
+const DEALS=[
+ {id:'nw',name:'Northwind Robotics',value:120,risk:63,
+  head:'Northwind Robotics is <span class="r">close-lost in 20 days.</span>',
+  headWon:'Northwind Robotics is <span class="g">back on track to close-won.</span>',
+  sub:'<b>$120k — your biggest open deal.</b> Nobody\'s moving it, and the clock is already running. Here\'s exactly how it dies, and the three cuts that stop it.',
+  nowDay:9,startCap:'No dated next step',nowCap:'Momentum gone',
+  deaths:[{day:14,cap:'Slips to committee'},{day:20,cap:'Budget moves on'}],
+  vitals:{qual:'6/20',stage:'Pilot',close:'20 days',quiet:'9 days'},
+  absences:[
+    {t:'No champion',w:'no one inside carries the deal when you\'re off the call'},
+    {t:'No economic buyer',w:'the budget owner never entered the thread'},
+    {t:'No success criteria',w:'the buyer can\'t take a result to their boss'},
+    {t:'No dated next step',w:'every follow-up became a maybe'}],
+  cuts:[
+    {t:'Set success criteria',s:'so the boss can act on the result',script:'Before we expand the pilot, can we agree on the one number your team would call a win? I\'ll put it in writing so your boss can act on it without me in the room.'},
+    {t:'Name a champion',s:'someone who pushes the deal when you\'re not on the call',script:'Who on your side takes this to the finish line when I\'m not on the call? I want to make their internal case easy to carry.'},
+    {t:'Book the results meeting',s:'a date kills the "let\'s circle back" slide',script:'Let\'s lock a meeting for the 14th to walk through the pilot results — I\'ll bring them against the number we set. Does 30 minutes that morning work?'}],
+  pattern:'Pilot purgatory.',
+  prose:'A pilot with <b>no success criteria</b> and <b>no champion</b> drifts until the quarter closes and the budget moves on. No economic buyer ever entered the thread — the loss won\'t be dramatic, it\'ll be procedural, then inevitable.',
+  walk:'If they won\'t name a champion or agree to success criteria after two asks, it isn\'t a real pilot — set it aside.',
+  primary:'Set the next step now'},
+ {id:'br',name:'Brex',value:150,risk:58,
+  head:'Brex said <span class="g">yes.</span> That yes <span class="r">rots in 5 days.</span>',
+  headWon:'Brex is <span class="g">locked — projected close-won.</span>',
+  sub:'<b>$150k — a verbal yes with no signature date.</b> Champion and economic buyer are in, but the calendar is the killer now. Here\'s the decay, and the two cuts that stop it.',
+  nowDay:0,startCap:'No signature date',nowCap:'No signature date',
+  deaths:[{day:3,cap:'Legal reopens scope'},{day:5,cap:'Quarter closes, slips'}],
+  vitals:{qual:'15/20',stage:'Verbal yes',close:'5 days',quiet:'0 days'},
+  absences:[
+    {t:'No signature date',w:'a yes with no date is a maybe'},
+    {t:'Legal not pre-cleared',w:'scope can reopen the moment paper moves'},
+    {t:'Procurement not started',w:'the slowest desk hasn\'t begun'}],
+  cuts:[
+    {t:'Lock the signature date',s:'a date is the whole game now',script:'You\'re a yes — thank you. Can we put the signature on the calendar for Thursday, so legal and procurement have a target to work back from?'},
+    {t:'Pre-clear legal + procurement',s:'kill the surprises early',script:'To protect Thursday, can you loop in legal and procurement now? I\'ll send the MSA and security packet today so nothing surprises us late.'}],
+  pattern:'Verbal-yes drift.',
+  prose:'A verbal yes with <b>no signature date</b> decays fast. Legal reopens scope, procurement re-scopes, and the quarter closes before the paperwork does. The fit isn\'t the risk here — the calendar is.',
+  walk:'If the signature keeps sliding a week at a time with no reason, the yes wasn\'t real — press for the blocker.',
+  primary:'Lock the signature date'},
+ {id:'ra',name:'Ramp',value:84,risk:55,
+  head:'Ramp is <span class="r">close-lost in 11 days.</span>',
+  headWon:'Ramp is <span class="g">moving again — projected close-won.</span>',
+  sub:'<b>$84k — in negotiation, and the redlines went quiet.</b> Champion and economic buyer are engaged; the risk is momentum, not fit. Here\'s how the silence kills it, and the two cuts that stop it.',
+  nowDay:2,startCap:'Redlines sent',nowCap:'Went quiet',
+  deaths:[{day:6,cap:'Momentum cools'},{day:11,cap:'Close date passes'}],
+  vitals:{qual:'14/20',stage:'Negotiation',close:'11 days',quiet:'2 days'},
+  absences:[
+    {t:'Redlines unanswered',w:'two days of silence and counting'},
+    {t:'EB hasn\'t counter-signed',w:'terms aren\'t locked while it\'s warm'}],
+  cuts:[
+    {t:'Send the redlines today',s:'stop the silence',script:'Sending our markup back now — I flagged the two clauses that matter and accepted the rest. Can your team turn it around by Thursday?'},
+    {t:'Get the EB to counter-sign',s:'lock terms while it\'s warm',script:'While terms are warm, can we get the budget owner to counter-sign the pricing exhibit? It locks the deal before the quarter pulls attention elsewhere.'}],
+  pattern:'Terms stall.',
+  prose:'The redlines went quiet <b>two days ago</b>. In a negotiation, no reply is the risk — the buyer moves on, other priorities take over, and the close date passes with the terms still open.',
+  walk:'If procurement stalls with no counter after a week, escalate through your champion or the terms keep drifting.',
+  primary:'Send the redlines'}
+];
+let idx=0;
+const $=id=>document.getElementById(id);
+const rkClass=r=>r>=60?'#d1483a':r>=50?'#c98a1a':'#1b5e3f';
+// persisted done-state (the room's only saved state)
+const LSKEY='gtmos_fa_mock_v2';
+let done=(()=>{try{return JSON.parse(localStorage.getItem(LSKEY))||{}}catch(e){return{}}})();
+const doneSet=id=>done[id]||(done[id]=[]);
+const isDone=(id,i)=>doneSet(id).includes(i);
+const save=()=>{try{localStorage.setItem(LSKEY,JSON.stringify(done))}catch(e){}};
+let openScript=null;
+function toggleCut(i){const id=DEALS[idx].id;const arr=doneSet(id);const p=arr.indexOf(i);if(p<0)arr.push(i);else arr.splice(p,1);save();render();}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+
+// timeline geometry (one SVG, one baseline — everything aligns)
+const VBW=1160,VBH=300,BASE=205,LEFT=100,RIGHT=1000,XPOS=1062;
+function timeline(d,recovered){
+  const nodes=[];const isNow0=d.nowDay===0;
+  nodes.push({day:0,cap:isNow0?d.nowCap:d.startCap,kind:isNow0?'now':'start'});
+  if(!isNow0) nodes.push({day:d.nowDay,cap:d.nowCap,kind:'now'});
+  d.deaths.forEach(e=>nodes.push({day:e.day,cap:e.cap,kind:'death'}));
+  nodes.sort((a,b)=>a.day-b.day);
+  const H=d.deaths[d.deaths.length-1].day;
+  const xFor=day=>LEFT+(day/H)*(RIGHT-LEFT);
+  const xNow=xFor(d.nowDay);
+  const n=d.cuts.length;
+  const cutX=d.cuts.map((c,i)=>LEFT+((i+1)/(n+1))*(RIGHT-LEFT));
+  const tail=recovered?'#1b5e3f':'#d1483a';
+  let s=`<svg viewBox="0 0 ${VBW} ${VBH}" preserveAspectRatio="xMidYMid meet">`;
+  s+=`<line x1="${LEFT}" y1="${BASE}" x2="${xNow}" y2="${BASE}" stroke="#c2ccdd" stroke-width="2.5"/>`;
+  s+=`<line x1="${xNow}" y1="${BASE}" x2="${XPOS-16}" y2="${BASE}" stroke="${tail}" stroke-width="2.5"/>`;
+  cutX.forEach((x,i)=>{const dn=isDone(d.id,i);const col=dn?'#1b5e3f':'#8a97b0';s+=`<line x1="${x}" y1="${BASE-30}" x2="${x}" y2="${BASE}" stroke="${col}" stroke-width="1"/><circle cx="${x}" cy="${BASE}" r="2.5" fill="${col}"/>`;});
+  nodes.forEach(nd=>{
+    const x=xFor(nd.day);
+    if(nd.kind==='now'){
+      s+=`<circle cx="${x}" cy="${BASE}" r="13" fill="#e6701e" opacity="0.16"/><circle cx="${x}" cy="${BASE}" r="6" fill="#fff" stroke="#0e1b33" stroke-width="3"/>`;
+      s+=`<text x="${x}" y="${BASE-20}" text-anchor="middle" font-family="var(--mono)" font-size="10.5" letter-spacing="0.06em" fill="#a8382c" font-weight="700">DAY ${nd.day} · NOW</text>`;
+      s+=`<text x="${x}" y="${BASE+30}" text-anchor="middle" font-family="var(--sans)" font-size="13" fill="#0e1b33" font-weight="700">${nd.cap}</text>`;
+    }else if(nd.kind==='death'){
+      const col=recovered?'#c2ccdd':'#d1483a';const lc=recovered?'#8a97b0':'#a8382c';const deco=recovered?'line-through':'none';
+      s+=`<circle cx="${x}" cy="${BASE}" r="6" fill="#fff" stroke="${col}" stroke-width="2.5"/>`;
+      s+=`<text x="${x}" y="${BASE-20}" text-anchor="middle" font-family="var(--mono)" font-size="10" letter-spacing="0.06em" fill="${lc}" text-decoration="${deco}">DAY ${nd.day}</text>`;
+      s+=`<text x="${x}" y="${BASE+30}" text-anchor="middle" font-family="var(--sans)" font-size="12.5" fill="${lc}" text-decoration="${deco}">${nd.cap}</text>`;
+    }else{
+      s+=`<circle cx="${x}" cy="${BASE}" r="6" fill="#fff" stroke="#c2ccdd" stroke-width="2.5"/>`;
+      s+=`<text x="${x}" y="${BASE-20}" text-anchor="middle" font-family="var(--mono)" font-size="10" letter-spacing="0.06em" fill="#8a97b0">DAY ${nd.day}</text>`;
+      s+=`<text x="${x}" y="${BASE+30}" text-anchor="middle" font-family="var(--sans)" font-size="12.5" fill="#8a97b0">${nd.cap}</text>`;
+    }
+  });
+  if(recovered){
+    s+=`<line x1="${XPOS-9}" y1="${BASE-9}" x2="${XPOS+9}" y2="${BASE+9}" stroke="#1b5e3f" stroke-width="0"/>`;
+    s+=`<path d="M${XPOS-9},${BASE} l6,7 l12,-15" fill="none" stroke="#1b5e3f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s+=`<text x="${XPOS+20}" y="${BASE+4}" font-family="var(--mono)" font-size="11" letter-spacing="0.1em" fill="#1b5e3f" font-weight="700">CLOSE-WON</text>`;
+  }else{
+    s+=`<line x1="${XPOS-9}" y1="${BASE-9}" x2="${XPOS+9}" y2="${BASE+9}" stroke="#a8382c" stroke-width="3.2" stroke-linecap="round"/>`;
+    s+=`<line x1="${XPOS-9}" y1="${BASE+9}" x2="${XPOS+9}" y2="${BASE-9}" stroke="#a8382c" stroke-width="3.2" stroke-linecap="round"/>`;
+    s+=`<text x="${XPOS+20}" y="${BASE+4}" font-family="var(--mono)" font-size="11" letter-spacing="0.1em" fill="#a8382c" font-weight="700">CLOSE-LOST</text>`;
+  }
+  s+=`</svg>`;
+  const pills=d.cuts.map((c,i)=>{
+    const leftPct=(cutX[i]/VBW)*100;const topPct=((BASE-30-96)/VBH)*100;const dn=isDone(d.id,i);
+    return `<div class="pill ${dn?'done':''}" style="left:${leftPct}%;top:${topPct}%"><span class="btn"><span class="n">${dn?'✓':(i+1)}</span>${c.t}</span><div class="cap">${c.s}</div></div>`;
+  }).join('');
+  return {svg:s,pills};
+}
+function renderTicks(){
+  $('ticks').innerHTML=DEALS.map((d,i)=>{const rec=doneSet(d.id).length===d.cuts.length;return `<span class="tick ${i===idx?'on':''} ${rec?'saved':''}" data-i="${i}"><span class="rk" style="background:${rec?'#1b5e3f':rkClass(d.risk)}">${rec?'✓':d.risk}</span>${d.name}<span class="d">${d.deaths[d.deaths.length-1].day}d</span></span>`}).join('');
+  document.querySelectorAll('.tick').forEach(t=>t.addEventListener('click',()=>go(+t.dataset.i)));
+}
+function copyBrief(d,recovered){
+  const cuts=d.cuts.map((c,i)=>`  ${i+1}. ${c.t} — ${c.s}`).join('\n');
+  const brief=`FUTURE AUTOPSY — ${d.name} ($${d.value}k)\nProjected: ${recovered?'back on track to close-won':'close-lost in '+d.deaths[d.deaths.length-1].day+' days'}\nPattern: ${d.pattern}\n\nThe cuts that stop it:\n${cuts}\n\nWalk away if: ${d.walk}`;
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(brief).then(()=>toast('Brief copied')).catch(()=>toast('Copy unavailable'));}else toast('Copy unavailable');
+}
+function render(){
+  const d=DEALS[idx];const dn=doneSet(d.id);const recovered=dn.length===d.cuts.length;const prog=Math.round(dn.length/d.cuts.length*100);
+  $('tstat').textContent=DEALS.length+' deals are dying right now';
+  $('pos').innerHTML='<b>'+(idx+1)+' of '+DEALS.length+'</b> <span class="hint">· use ← → keys</span>';
+  $('prev').disabled=idx===0;$('next').disabled=idx===DEALS.length-1;
+  renderTicks();
+  const nxt=DEALS[idx+1];
+  const sc=$('scene');sc.classList.add('sw');
+  setTimeout(()=>{
+    const tl=timeline(d,recovered);
+    const meterTxt=recovered?'✓ All '+d.cuts.length+' cuts made — the decay is broken. Projected close-won.':(dn.length?dn.length+' of '+d.cuts.length+' cuts made — still close-lost. Finish them.':'0 of '+d.cuts.length+' cuts made — this is the do-nothing path.');
+    const absHtml=d.absences.map((a,i)=>{const on=recovered||i<dn.length;return `<div class="abs ${on?'on':''}"><span class="x">${on?'✓':'✕'}</span><span><span class="t">${a.t}</span><span class="w">${a.w}</span></span></div>`}).join('');
+    const vit=d.vitals;
+    const vitHtml=`<div class="vitrow"><div class="v"><span class="k">Risk</span><span class="n risk">${d.risk}/100</span></div><div class="v"><span class="k">Qualification</span><span class="n warn">${vit.qual}</span></div><div class="v"><span class="k">Stage</span><span class="n">${vit.stage}</span></div><div class="v"><span class="k">Close date</span><span class="n">${vit.close}</span></div><div class="v"><span class="k">Days quiet</span><span class="n">${vit.quiet}</span></div></div>`;
+    const docket=d.cuts.map((c,i)=>{const cd=isDone(d.id,i);const op=openScript===i;return `<div class="crow ${cd?'done':''} ${op?'open':''}"><div class="top" data-cut="${i}"><span class="chk">✓</span><span><span class="lab">${i+1} · ${c.t}</span><div class="why">${c.s}</div></span><span class="exp" data-exp="${i}">${op?'hide the line':'▸ the line to send'}</span></div><div class="script"><div class="s">"${c.script}"</div><button class="cp" data-cp="${i}">Copy the line</button></div></div>`}).join('');
+    sc.innerHTML=`
+      <div class="kick ${recovered?'won':''}">Projected cause of death · case ${idx+1}</div>
+      <div class="flowin">Pulled from Deal Workspace (pressure + stage) · Discovery gaps · pilot state</div>
+      <h1>${recovered?d.headWon:d.head}</h1>
+      <div class="sub">${d.sub}</div>
+      <div class="reglbl do">↑ Break the decay — do these</div>
+      <div class="tl">${tl.svg}${tl.pills}</div>
+      <div class="reglbl dont">↓ If you do nothing</div>
+      <div class="meter ${recovered?'won':''}"><div class="bar"><div class="fill" style="width:${prog}%"></div></div><span class="txt">${meterTxt}</span></div>
+      <div class="evid">
+        <div><div class="h">The evidence — what's killing it</div>${absHtml}</div>
+        <div class="vit"><div class="h">Vitals</div>${vitHtml}</div>
+      </div>
+      <div class="docket"><div class="h">Work the cuts</div><div class="hint">Tick a cut when it's done — it's saved, and it bends the line above. Open each for the exact line to send.</div>${docket}</div>
+      <div class="finding">
+        <div class="cause"><div class="c">The pattern that kills it</div><div class="pat">${d.pattern}</div><p>${d.prose}</p></div>
+        <div class="walk"><div class="c">When to walk away</div><p>${d.walk}</p></div>
+      </div>
+      <div class="intervene"><button class="primary">${d.primary} →</button><span class="brief" id="brief">Copy brief</span><div class="rr"><a>Run a pilot</a><a>Run discovery again</a><a>Plan the next call</a><a>Rehearse the negotiation</a></div></div>
+      <div class="nextline">${nxt?'Next, worse to less-bad: <span class="go" id="nextdeal">'+nxt.name+' — dies in '+nxt.deaths[nxt.deaths.length-1].day+' days →</span>':'That\'s the last dying deal. Everything else is holding.'}</div>`;
+    // wire interactions
+    document.querySelectorAll('.crow .top').forEach(el=>el.addEventListener('click',e=>{if(e.target.closest('[data-exp]'))return;toggleCut(+el.dataset.cut);}));
+    document.querySelectorAll('[data-exp]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();const i=+el.dataset.exp;openScript=openScript===i?null:i;render();}));
+    document.querySelectorAll('[data-cp]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();navigator.clipboard&&navigator.clipboard.writeText(d.cuts[+el.dataset.cp].script).then(()=>toast('Line copied')).catch(()=>toast('Copy unavailable'));}));
+    const bf=$('brief');if(bf)bf.addEventListener('click',()=>copyBrief(d,recovered));
+    const nd=$('nextdeal');if(nd)nd.addEventListener('click',()=>go(idx+1));
+    sc.classList.remove('sw');
+  },140);
+  $('foot').textContent='MOCKUP · not wired · design-only · FUTURE AUTOPSY — The Countdown (thorough) · evidence + checkable cuts + copy-lines + copy-brief · ticks persist & bend the line';
+}
+function go(i){if(i<0||i>=DEALS.length)return;idx=i;openScript=null;render();}
+$('prev').addEventListener('click',()=>go(idx-1));$('next').addEventListener('click',()=>go(idx+1));
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')go(idx+1);if(e.key==='ArrowLeft')go(idx-1);});
+render();
+</script>
+</body></html>

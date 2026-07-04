@@ -1,0 +1,536 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Territory Architect — Axis-Morphing Floor</title>
+<style>
+:root{
+  --field:#F6F8FC; --paper:#fff; --ink:#0e1b33; --ink-2:#3a4a66; --ink-3:#5b6b86; --ink-soft:#8a97b0;
+  --line:#e0e5ef; --line-2:#cdd6e6; --line-3:#bcc7db;
+  --orange:#e6701e; --orange-soft:rgba(230,112,30,.08);
+  --blue:#2563eb; --blue-soft:rgba(37,99,235,.08);
+  --forest:#1b5e3f; --forest-strong:#164c33; --forest-soft:rgba(27,94,63,.09);
+  --amber:#c98a1a; --grey:#8a97b0; --red:#d1483a;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sans:'Public Sans',-apple-system,Segoe UI,Roboto,sans-serif;
+  --serif:'DM Serif Display',Georgia,serif;
+  --t-strategic:#164c33; --t-core:#2563eb; --t-develop:#c98a1a; --t-watch:#8a97b0;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--field);color:var(--ink);font-family:var(--sans);min-height:100vh;
+  background-image:radial-gradient(1100px 560px at 82% -8%,rgba(37,99,235,.045),transparent),
+    radial-gradient(820px 460px at -8% 108%,rgba(230,112,30,.04),transparent);}
+.wrap{max-width:1200px;margin:0 auto;padding:0 0 100px}
+
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 30px;border-bottom:1px solid var(--line-2);background:rgba(246,248,252,.85);backdrop-filter:blur(6px);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.brand b{color:var(--ink);font-weight:700}
+.brand .mk{width:16px;height:16px;display:inline-block}
+.tgauge{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.tgauge b{color:var(--ink);font-size:15px} .tgauge b i{color:var(--orange);font-style:normal}
+
+.pad{padding:26px 30px 0}
+
+/* AXIS RAIL — the organizing choice */
+.axishdr{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:11px}
+.axisrail{display:flex;gap:8px;flex-wrap:wrap}
+.ax{flex:1;min-width:150px;display:flex;flex-direction:column;gap:6px;padding:13px 15px;border:1px solid var(--line-2);border-radius:5px;background:var(--paper);cursor:pointer;transition:border-color .16s,box-shadow .16s,transform .12s;position:relative;overflow:hidden}
+.ax:hover{border-color:var(--line-3);transform:translateY(-1px)}
+.ax .g{font-size:19px;line-height:1}
+.ax .n{font-weight:700;font-size:14px;letter-spacing:-.01em}
+.ax .d{font-size:11px;color:var(--ink-soft);line-height:1.3}
+.ax.on{border-color:var(--ink);box-shadow:0 3px 0 var(--ink);background:#fff}
+.ax.on::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--forest)}
+.ax.on .n{color:var(--ink)}
+.axmeta{margin:12px 0 0;font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:9px}
+.axmeta .reg{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--forest);border:1px solid var(--forest-soft);background:var(--forest-soft);padding:3px 8px;border-radius:3px}
+
+/* ALLOCATION SPINE — constant across axes */
+.spine{margin:20px 0 6px;border:1px solid var(--ink);border-radius:5px;background:var(--paper);overflow:hidden}
+.spine .sh{display:flex;align-items:center;justify-content:space-between;padding:13px 18px 11px}
+.spine .sh .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.spine .sh .r{font-family:var(--mono);text-align:right}
+.spine .sh .r b{font-size:22px;font-weight:600} .spine .sh .r b i{color:var(--orange);font-style:normal}
+.spine .sh .r span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:1px}
+.allocbar{display:flex;height:30px;border-top:1px solid var(--line)}
+.aseg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:#fff;border-right:2px solid var(--paper);transition:flex .4s cubic-bezier(.4,0,.2,1);min-width:0;overflow:hidden;white-space:nowrap}
+.aseg.free{background:repeating-linear-gradient(45deg,#eef1f7,#eef1f7 6px,#e5eaf3 6px,#e5eaf3 12px);color:var(--ink-soft);border-right:0}
+.ascale{display:flex;padding:7px 18px 10px;gap:18px;font-family:var(--mono);font-size:10px;color:var(--ink-soft);flex-wrap:wrap}
+.ascale i{font-style:normal} .ascale .o{color:var(--red)} .ascale .dot{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+/* STAGE — morphs by axis */
+#stage{margin-top:22px;transition:opacity .28s ease,transform .28s ease}
+#stage.morphing{opacity:0;transform:translateY(8px)}
+.stagehdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px}
+.stagehdr .t{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+.stagehdr .cyc{font-family:var(--mono);font-size:11px;color:var(--ink-soft)} .stagehdr .cyc b{color:var(--ink-2)}
+
+/* shared division bits */
+.tierchip{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;padding:3px 7px;border-radius:2px;color:#fff;white-space:nowrap}
+.cnt{font-family:var(--mono)} .cnt b{font-weight:600;color:var(--ink)}
+.charter{margin-top:11px;display:grid;grid-template-columns:auto 1fr;gap:5px 10px;align-items:start}
+.charter dt{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
+.charter dd{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.whynow{margin-top:9px;font-size:12.5px;color:var(--ink-2);border-left:2px solid var(--orange);padding:2px 0 2px 10px;background:linear-gradient(90deg,var(--orange-soft),transparent)}
+.whynow b{color:var(--orange);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:1px}
+.whynow.opt{border-left-color:var(--line-2);background:none} .whynow.opt b{color:var(--ink-soft)}
+.appr{font-family:var(--mono);font-size:10.5px;color:var(--blue);margin-top:9px}
+.blendchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.bchip{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;padding:3px 8px;border:1px solid var(--line-2);border-radius:3px;color:var(--ink-2);background:var(--paper)}
+.bchip .ax{padding:0;border:0;background:none;display:inline;color:var(--ink-soft)}
+.bchip b{color:var(--ink)}
+.bchip.add{border-style:dashed;color:var(--ink-soft);cursor:pointer}
+.acts{display:flex;gap:6px;margin-top:12px}
+.mini{font-family:var(--mono);font-size:10.5px;padding:6px 10px;border:1px solid var(--line-2);border-radius:3px;color:var(--ink-2);background:var(--paper);cursor:pointer}
+.mini:hover{border-color:var(--ink-soft);color:var(--ink)}
+.mini.sw{border-color:rgba(230,112,30,.4);color:var(--orange)}
+
+/* GEO register — regions, cartographic */
+[data-axis="geo"] .divs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+[data-axis="geo"] .div{border:1px solid var(--line);border-radius:5px;background:var(--paper);padding:0;overflow:hidden;position:relative}
+[data-axis="geo"] .div::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(14,27,51,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(14,27,51,.02) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+[data-axis="geo"] .gtop{display:flex;align-items:flex-start;justify-content:space-between;padding:15px 17px 8px;position:relative}
+[data-axis="geo"] .pin{font-size:15px;margin-right:8px}
+[data-axis="geo"] .rname{font-weight:700;font-size:17px;letter-spacing:-.01em;display:flex;align-items:center}
+[data-axis="geo"] .metros{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--ink-soft);margin-top:3px;margin-left:23px}
+[data-axis="geo"] .gbody{padding:2px 17px 15px 40px;position:relative}
+[data-axis="geo"] .coord{position:absolute;right:14px;bottom:10px;font-family:var(--mono);font-size:9px;color:var(--line-3)}
+
+/* VERTICAL register — industry lanes */
+[data-axis="vertical"] .divs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+[data-axis="vertical"] .div{border:1px solid var(--line);border-top:3px solid var(--tc);border-radius:5px;background:var(--paper);padding:15px 17px}
+[data-axis="vertical"] .vtop{display:flex;align-items:center;justify-content:space-between}
+[data-axis="vertical"] .vname{font-weight:700;font-size:17px;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+[data-axis="vertical"] .vg{font-size:18px}
+
+/* SEGMENT register — size ladder */
+[data-axis="segment"] .divs{display:flex;flex-direction:column;gap:10px}
+[data-axis="segment"] .div{border:1px solid var(--line);border-radius:5px;background:var(--paper);display:grid;grid-template-columns:var(--w) 1fr;overflow:hidden;min-height:96px}
+[data-axis="segment"] .weight{background:linear-gradient(120deg,var(--tc),color-mix(in srgb,var(--tc) 78%,#000));color:#fff;padding:15px 17px;display:flex;flex-direction:column;justify-content:center}
+[data-axis="segment"] .weight .rng{font-family:var(--mono);font-size:10px;letter-spacing:.1em;opacity:.85;text-transform:uppercase}
+[data-axis="segment"] .weight .sname{font-family:var(--serif);font-size:21px;margin-top:3px;line-height:1.05}
+[data-axis="segment"] .weight .acv{font-family:var(--mono);font-size:11px;margin-top:6px;opacity:.9}
+[data-axis="segment"] .sbody{padding:14px 18px}
+
+/* NAMED register — account roster */
+[data-axis="named"] .divs{display:flex;flex-direction:column;gap:12px}
+[data-axis="named"] .div{border:1px solid var(--line);border-left:3px solid var(--tc);border-radius:5px;background:var(--paper);padding:15px 18px}
+[data-axis="named"] .ntop{display:flex;align-items:center;justify-content:space-between}
+[data-axis="named"] .lname{font-weight:700;font-size:16px;letter-spacing:-.01em}
+[data-axis="named"] .roster{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+[data-axis="named"] .logo{font-family:var(--sans);font-size:12px;font-weight:600;padding:5px 11px;border:1px solid var(--line-2);border-radius:20px;color:var(--ink-2);background:var(--field);display:flex;align-items:center;gap:6px}
+[data-axis="named"] .logo .d{width:6px;height:6px;border-radius:50%;background:var(--tc)}
+[data-axis="named"] .logo.more{border-style:dashed;color:var(--ink-soft)}
+
+/* TRIGGER register — pressure charters */
+[data-axis="trigger"] .divs{display:flex;flex-direction:column;gap:11px}
+[data-axis="trigger"] .div{border:1px solid var(--line);border-radius:5px;background:var(--paper);display:grid;grid-template-columns:6px 1fr 148px;overflow:hidden}
+[data-axis="trigger"] .tk{background:var(--tc)}
+[data-axis="trigger"] .tbody{padding:15px 18px}
+[data-axis="trigger"] .ttop{display:flex;align-items:center;justify-content:space-between}
+[data-axis="trigger"] .tname{font-weight:700;font-size:16.5px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+[data-axis="trigger"] .tside{border-left:1px solid var(--line);padding:15px 14px;display:flex;flex-direction:column;gap:7px;justify-content:center}
+
+/* BLEND register — funnel cards, mixed primaries grouped legibly */
+[data-axis="blend"] .divs{display:flex;flex-direction:column;gap:12px}
+[data-axis="blend"] .div{border:1px solid var(--line);border-radius:5px;background:var(--paper);padding:0;overflow:hidden}
+[data-axis="blend"] .btop{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 11px;border-bottom:1px solid var(--line)}
+[data-axis="blend"] .primary{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:#fff;background:var(--forest);padding:3px 8px;border-radius:3px;margin-right:9px}
+[data-axis="blend"] .bname{font-weight:700;font-size:16px;letter-spacing:-.01em}
+[data-axis="blend"] .bmid{padding:13px 18px;display:grid;grid-template-columns:1fr 300px;gap:18px}
+[data-axis="blend"] .cuts .cl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px}
+[data-axis="blend"] .funnel{border-left:1px solid var(--line);padding-left:18px}
+[data-axis="blend"] .fstep{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--ink-2);margin-bottom:6px}
+[data-axis="blend"] .fstep .fb{height:9px;border-radius:5px;background:var(--tc);opacity:.85}
+[data-axis="blend"] .fstep.dim .fb{opacity:.3} [data-axis="blend"] .fstep b{color:var(--ink);font-weight:600}
+
+/* empty / scorch state */
+.empty{border:1.5px dashed var(--line-2);border-radius:6px;background:linear-gradient(var(--forest-soft),transparent);padding:34px 30px;text-align:center}
+.empty h3{font-family:var(--serif);font-weight:400;font-size:23px;margin:0}
+.empty p{font-size:13px;color:var(--ink-2);max-width:520px;margin:8px auto 0}
+
+/* CARVE DOCK — the one move, morphs its form */
+.carve{margin-top:18px;border:1.5px dashed var(--line-2);border-radius:6px;background:linear-gradient(var(--forest-soft),transparent);padding:0;overflow:hidden}
+.carve .ch{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer}
+.carve .ch h3{margin:0;font-family:var(--serif);font-weight:400;font-size:19px}
+.carve .ch p{margin:3px 0 0;font-size:12.5px;color:var(--ink-2)}
+.carve .ch p b{color:var(--forest)}
+.carve .ch button{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 20px;border:0;border-radius:4px;background:var(--orange);color:#fff;cursor:pointer;white-space:nowrap;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.carve .form{display:none;padding:4px 20px 20px;border-top:1px solid var(--line-2)}
+.carve.open .form{display:block}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px;margin-top:14px}
+.fld label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:5px}
+.fld label .req{color:var(--orange);margin-left:4px}
+.fld input,.fld select,.fld textarea{width:100%;font-family:var(--sans);font-size:13px;padding:9px 11px;border:1px solid var(--line-2);border-radius:4px;background:var(--paper);color:var(--ink)}
+.fld.wide{grid-column:1 / -1}
+.whynow-slot{grid-column:1 / -1}
+.whynow-opt-toggle{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;padding:4px 0}
+.fld textarea{resize:vertical;min-height:44px}
+.fhint{font-size:11px;color:var(--ink-soft);margin-top:5px}
+
+/* approach ledger + flows */
+.ledger{margin-top:26px;border:1px solid var(--line);border-radius:5px;background:var(--paper);overflow:hidden}
+.ledger .lh{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding:11px 18px;border-bottom:1px solid var(--line)}
+.lrow{display:grid;grid-template-columns:210px 1fr 110px;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);font-size:12.5px;align-items:center}
+.lrow:last-child{border-bottom:0}
+.lrow .a{font-weight:600;color:var(--ink)} .lrow .u{color:var(--ink-2)} .lrow .c{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-align:right}
+.flows{display:flex;gap:10px;margin-top:14px}
+.flowcard{flex:1;border:1px solid var(--line);border-left:2px solid var(--blue);border-radius:4px;background:var(--paper);padding:11px 15px}
+.flowcard .k{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue)}
+.flowcard .t{font-size:12.5px;color:var(--ink-2);margin-top:4px} .flowcard .t b{color:var(--ink)}
+
+.inv{margin-top:32px;border-top:1px solid var(--line);padding-top:14px}
+.inv .h{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.inv ul{columns:3;column-gap:26px;margin:10px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}
+.inv li{margin:0 0 5px;padding-left:14px;position:relative;break-inside:avoid}
+.inv li::before{content:"▪";position:absolute;left:0;color:var(--forest)}
+.inv li s{color:var(--ink-soft)}
+.foot{margin:24px 30px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.05em}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg class="mk" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0e1b33" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0e1b33" stroke-width="3.4"/><path d="M2 38h44" stroke="#0e1b33" stroke-width="3.4"/></svg>
+      <span><b>ANTAEUS</b> · Territory Architect</span>
+    </div>
+    <div class="tgauge" id="tgauge"></div>
+  </div>
+
+  <div class="pad">
+    <div class="axishdr">How is this territory cut?</div>
+    <div class="axisrail" id="axisrail"></div>
+    <div class="axmeta" id="axmeta"></div>
+
+    <div class="spine">
+      <div class="sh">
+        <div class="l" id="spineLabel">Coverage budget — 300 seats across four tiers</div>
+        <div class="r"><b id="spineBig"></b><span>allocated · <i id="spineFree"></i> open</span></div>
+      </div>
+      <div class="allocbar" id="allocbar"></div>
+      <div class="ascale" id="ascale"></div>
+    </div>
+
+    <div id="stage" data-axis="segment"></div>
+
+    <div class="carve" id="carve">
+      <div class="ch" id="carveHead">
+        <div class="l"><h3 id="carveTitle">Carve a new division</h3><p id="carveSub"></p></div>
+        <button id="carveBtn">+ Carve division</button>
+      </div>
+      <div class="form" id="carveForm"></div>
+    </div>
+
+    <div class="ledger">
+      <div class="lh">Approach ledger · how each division gets opened</div>
+      <div id="approaches"></div>
+    </div>
+
+    <div class="flows">
+      <div class="flowcard"><div class="k">Built from</div><div class="t"><b>ICP Studio</b> — every division draws its accounts from ICP match</div></div>
+      <div class="flowcard"><div class="k">Fills from</div><div class="t"><b>Sourcing Workbench</b> — pull named prospects into open seats</div></div>
+      <div class="flowcard"><div class="k">Flows to</div><div class="t"><b>Signal Console</b> — covered accounts get watched for live signals</div></div>
+    </div>
+
+    <div class="inv">
+      <div class="h">Full canon inventory — Territory Architect</div>
+      <ul>
+        <li>Carve axis — geo / vertical / segment / named / trigger, <b>blendable</b> <s>(morphs the room)</s></li>
+        <li>Sales-cycle calibration <s>(72d)</s></li>
+        <li>Focuses = named divisions</li>
+        <li>Charter: why-you (always) + why-now (axis-conditional)</li>
+        <li>Four tiers · 30/90/120/60 = 300</li>
+        <li>Count-vs-target per tier</li>
+        <li>300-cap as coverage budget</li>
+        <li>Swap when a lane is over</li>
+        <li>Approach ledger</li>
+        <li>Account-to-division tagging</li>
+        <li>Tier intensity <s>(division accent)</s></li>
+        <li>Built from ICP match <s>(flows in)</s></li>
+        <li>Promote / demote across tiers</li>
+        <li>Fill from Sourcing <s>(flows in)</s></li>
+        <li>Flows out → Sourcing + Signal Console</li>
+        <li>Scorch-the-earth empty state</li>
+        <li>Blend funnel — legible, not chaos</li>
+        <li>No Save button — persists continuously</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">MOCKUP · not wired · design-only · click an axis to watch the room morph · why-now adapts to the axis · convergence build</div>
+</div>
+
+<script>
+const TIERS = {
+  strategic:{label:'Strategic',target:30,color:'var(--t-strategic)',hex:'#164c33'},
+  core:{label:'Core',target:90,color:'var(--t-core)',hex:'#2563eb'},
+  develop:{label:'Develop',target:120,color:'var(--t-develop)',hex:'#c98a1a'},
+  watch:{label:'Watch',target:60,color:'var(--t-watch)',hex:'#8a97b0'}
+};
+const AXES = {
+  geo:{glyph:'📍',name:'Geography',desc:'Regions, metros, hubs',register:'Cut by where they are — regions and hubs',
+    carveField:'Region or hub', carvePlaceholder:'e.g. West Coast tech hub', whyNow:'optional'},
+  vertical:{glyph:'▤',name:'Vertical',desc:'Industries you specialize in',register:'Cut by industry — the pitch and the proof differ per vertical',
+    carveField:'Industry / vertical', carvePlaceholder:'e.g. FinTech', whyNow:'optional'},
+  segment:{glyph:'▦',name:'Segment',desc:'Size · ACV · company stage',register:'Cut by size — enterprise down to early-stage',
+    carveField:'Size / ACV / stage band', carvePlaceholder:'e.g. Mid-market · 200–999', whyNow:'optional'},
+  named:{glyph:'◈',name:'Named accounts',desc:'Hand-picked whale lists',register:'Cut by name — the accounts you already know you want',
+    carveField:'List name', carvePlaceholder:'e.g. Strategic 25', whyNow:'optional'},
+  trigger:{glyph:'⚡',name:'Trigger',desc:'Signal-driven behavior',register:'Cut by pressure — who is moving right now, and why',
+    carveField:'Trigger / behavior', carvePlaceholder:'e.g. Missed-quarter RevOps', whyNow:'required'},
+  blend:{glyph:'⧉',name:'Blend',desc:'Stack cuts across axes',register:'Cut on more than one axis at once — legible, not chaos',
+    carveField:'Primary axis + cuts', carvePlaceholder:'e.g. West Coast × FinTech × Series B+', whyNow:'optional'}
+};
+
+const DATA = {
+  geo:[
+    {name:'West Coast tech hub',sub:'SF · Seattle · LA',tier:'strategic',count:22,pin:'📍',coord:'37.77 N · 122.41 W',
+      whyYou:'You closed your first ten logos here — the density is your home-field advantage',approach:'Founder-to-VP warm intro',blend:['Vertical · SaaS']},
+    {name:'NYC metro',sub:'Manhattan · Brooklyn · NJ',tier:'core',count:40,pin:'📍',coord:'40.71 N · 74.00 W',
+      whyYou:'FinServ and media density fits your two strongest case studies',approach:'Cold open on the deadline'},
+    {name:'EMEA · London first',sub:'London · Berlin · Amsterdam',tier:'develop',count:30,pin:'📍',coord:'51.50 N · 0.12 W',
+      whyYou:'English-first entry; one AE can cover the timezone overlap',whyNow:'GDPR-adjacent compliance push opening doors this half',approach:'Give-first, then ask'},
+    {name:'Texas triangle',sub:'Austin · Dallas · Houston',tier:'develop',count:18,pin:'📍',coord:'30.26 N · 97.74 W',
+      whyYou:'Fast-relocating HQs; lower CAC than the coasts',approach:'Cold open on the deadline'},
+    {name:'APAC',sub:'Singapore · Sydney',tier:'watch',count:12,pin:'📍',coord:'1.35 N · 103.81 E',
+      whyYou:'Right shape, no local presence yet — parked until a beachhead',approach:'Watch only — no motion'}
+  ],
+  vertical:[
+    {name:'FinTech',tier:'strategic',count:34,vg:'💳',whyYou:'Your SOC-2 onboarding story lands hardest here',whyNow:'A wave of new audit deadlines this half',approach:'Cold open on the deadline'},
+    {name:'HealthTech',tier:'core',count:48,vg:'🩺',whyYou:'HIPAA workflow is a proven wedge; two reference logos in-vertical',approach:'Give-first, then ask'},
+    {name:'Manufacturing',tier:'develop',count:40,vg:'🏭',whyYou:'Legacy-tool replacement; long cycle but high retention',approach:'Founder-to-VP warm intro'},
+    {name:'GovTech',tier:'watch',count:20,vg:'🏛️',whyYou:'Right fit, procurement is slow — watch until a champion appears',approach:'Watch only — no motion'}
+  ],
+  segment:[
+    {name:'Enterprise',tier:'strategic',count:30,rng:'1,000+ employees',acv:'$120k+ ACV · 90-day cycle',w:'46%',
+      whyYou:'Your platform depth only pays off at this scale',approach:'Founder-to-VP warm intro'},
+    {name:'Mid-market',tier:'core',count:88,rng:'200–999 employees',acv:'$35–80k ACV · 60-day cycle',w:'34%',
+      whyYou:'The sweet spot — fast enough to close, big enough to matter',approach:'Cold open on the deadline'},
+    {name:'SMB',tier:'develop',count:96,rng:'50–199 employees',acv:'$8–20k ACV · 30-day cycle',w:'24%',
+      whyYou:'Self-serve-adjacent; volume play to build proof and pipeline',approach:'Give-first, then ask'},
+    {name:'Early-stage',tier:'watch',count:33,rng:'Under 50 employees',acv:'$3–6k ACV · watch',w:'16%',
+      whyYou:'Same fit, not ready to spend — promote when they raise',approach:'Watch only — no motion'}
+  ],
+  named:[
+    {name:'Strategic 25',tier:'strategic',count:25,whyYou:'The 25 logos that would change your fundraise narrative',approach:'Founder-to-VP warm intro',
+      logos:['Ramp','Vanta','Rippling','Deel','Brex','Mercury','Notion','Linear','+18 more']},
+    {name:'Competitive displacements',tier:'core',count:30,whyYou:'On a rival tool, contract renewing within two quarters',whyNow:'Renewal windows opening — timing is the whole play',approach:'Cold open on the deadline',
+      logos:['Gusto','Justworks','TriNet','Bamboo','Paylocity','+25 more']},
+    {name:'Land-and-expand',tier:'develop',count:22,whyYou:'One team already live — expansion into the rest of the org',approach:'Give-first, then ask',
+      logos:['Datadog','Snowflake','Airtable','+19 more']}
+  ],
+  trigger:[
+    {name:'Missed-quarter RevOps',tier:'strategic',count:35,tg:'⚡',whyYou:"You've rebuilt three of these motions from scratch",whyNow:'Board pressure to rebuild the forecast before H2',approach:'Founder-to-VP warm intro'},
+    {name:'Compliance-forced FinTech',tier:'core',count:40,tg:'⚡',whyYou:'Your onboarding halves their audit prep',whyNow:'SOC-2 audit clock just started',approach:'Cold open on the deadline'},
+    {name:'Post-layoff efficiency',tier:'develop',count:52,tg:'⚡',whyYou:'You replace two headcount worth of manual work',whyNow:'Do-more-with-less mandate is live this half',approach:'Give-first, then ask'},
+    {name:'New-CRO transitions',tier:'develop',count:30,tg:'⚡',whyYou:'A new CRO re-tools in the first 90 days — you fit the rebuild',whyNow:'CRO started in the last quarter; the toolset is up for grabs',approach:'Founder-to-VP warm intro'},
+    {name:'Adjacent / not warm yet',tier:'watch',count:34,tg:'⚡',whyYou:'Same fit, wrong moment — parked until a signal fires',approach:'Watch only — no motion'}
+  ],
+  blend:[
+    {name:'West Coast growth FinTech',primary:'Geo',tier:'strategic',count:35,
+      cuts:[['Geo','West Coast'],['Vertical','FinTech'],['Segment','Series B+']],
+      funnel:[['In ICP match',312,100],['Match the cuts',142,45],['Covering now',35,11]],
+      whyYou:'Home-field density × your strongest vertical story',approach:'Founder-to-VP warm intro'},
+    {name:'Enterprise HealthTech',primary:'Vertical',tier:'core',count:48,
+      cuts:[['Vertical','HealthTech'],['Segment','Enterprise 1000+']],
+      funnel:[['In ICP match',210,100],['Match the cuts',96,46],['Covering now',48,23]],
+      whyYou:'HIPAA wedge only pays off at enterprise scale',approach:'Give-first, then ask'},
+    {name:'Missed-quarter RevOps · EMEA',primary:'Trigger',tier:'develop',count:22,
+      cuts:[['Trigger','Missed-quarter RevOps'],['Geo','EMEA']],
+      funnel:[['In ICP match',180,100],['Match the cuts',54,30],['Covering now',22,12]],
+      whyYou:'Live pressure narrowed to a timezone one AE can own',whyNow:'Board pressure to rebuild the forecast before H2',approach:'Cold open on the deadline'}
+  ]
+};
+
+const APPROACHES = [
+  ['Founder-to-VP warm intro','Board-level intro before the AE ever emails','Strategic'],
+  ['Cold open on the deadline',"Lead with their clock, not your product",'Core'],
+  ['Give-first, then ask','Send the teardown before any call','Develop'],
+  ['Watch only — no motion','No outreach until a signal promotes the account','Watch']
+];
+
+let currentAxis = 'segment';
+const el = id => document.getElementById(id);
+
+function tierChip(t){const T=TIERS[t];return `<span class="tierchip" style="background:${T.color}">${T.label}</span>`;}
+function charterBlock(d){
+  let h = `<dl class="charter"><dt>Why you</dt><dd>${d.whyYou}</dd></dl>`;
+  if(d.whyNow){h += `<div class="whynow"><b>Why now</b>${d.whyNow}</div>`;}
+  return h;
+}
+function whyNowOptCard(d){ // structural axes: show why-now only if present, quiet
+  return d.whyNow ? `<div class="whynow opt"><b>Why now (optional)</b>${d.whyNow}</div>` : '';
+}
+function blendChips(d){
+  if(!d.blend) return '';
+  return `<div class="blendchips">${d.blend.map(b=>`<span class="bchip">${b}</span>`).join('')}<span class="bchip add">+ blend a cut</span></div>`;
+}
+
+function computeAlloc(axis){
+  const divs = DATA[axis]||[];
+  const by={strategic:0,core:0,develop:0,watch:0};
+  divs.forEach(d=>by[d.tier]+=d.count);
+  return by;
+}
+
+function renderSpine(axis){
+  const by = computeAlloc(axis);
+  const total = by.strategic+by.core+by.develop+by.watch;
+  const free = Math.max(0,300-total);
+  el('spineBig').innerHTML = `<i>${total}</i> / 300`;
+  el('spineFree').textContent = free;
+  // bar
+  const order=['strategic','core','develop','watch'];
+  let bar='';
+  order.forEach(t=>{ if(by[t]>0) bar+=`<div class="aseg" style="flex:${by[t]};background:${TIERS[t].hex}">${by[t]}</div>`; });
+  if(free>0) bar+=`<div class="aseg free" style="flex:${free}">${free} open</div>`;
+  el('allocbar').innerHTML=bar;
+  // scale w/ over-target flags
+  el('ascale').innerHTML = order.map(t=>{
+    const T=TIERS[t]; const over=by[t]-T.target;
+    const tag = over>0?`<i class="o"> +${over} over</i>`:(by[t]<T.target?` · ${T.target-by[t]} open`:` · full`);
+    return `<span><span class="dot" style="background:${T.hex}"></span>${T.label} <i>${by[t]}/${T.target}</i>${tag}</span>`;
+  }).join('');
+}
+
+/* ---- per-axis stage renderers ---- */
+function stageGeo(divs){
+  return `<div class="stagehdr"><div class="t">Regions · ${divs.length} carved · coverage by tier intensity</div><div class="cyc">cycle <b>72d</b> · recalibrate</div></div>
+  <div class="divs">${divs.map(d=>`
+    <div class="div" style="--tc:${TIERS[d.tier].color}">
+      <div class="gtop"><div><div class="rname"><span class="pin">${d.pin}</span>${d.name}</div><div class="metros">${d.sub}</div></div>${tierChip(d.tier)}</div>
+      <div class="gbody">
+        <div class="cnt"><b>${d.count}</b> accounts · <span style="color:var(--blue);font-size:11px">▸ ${d.approach}</span></div>
+        ${charterBlock({whyYou:d.whyYou})}
+        ${whyNowOptCard(d)}
+        ${blendChips(d)}
+        <div class="acts"><span class="mini">Open accounts</span>${d.tier==='watch'?'<span class="mini">Promote</span>':'<span class="mini">Fill from Sourcing</span>'}</div>
+        <div class="coord">${d.coord}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function stageVertical(divs){
+  return `<div class="stagehdr"><div class="t">Industries · ${divs.length} carved · the pitch differs per vertical</div><div class="cyc">cycle <b>72d</b></div></div>
+  <div class="divs">${divs.map(d=>`
+    <div class="div" style="--tc:${TIERS[d.tier].color}">
+      <div class="vtop"><div class="vname"><span class="vg">${d.vg}</span>${d.name}</div>${tierChip(d.tier)}</div>
+      <div class="cnt" style="margin-top:9px"><b>${d.count}</b> accounts · <span style="color:var(--blue);font-size:11px">▸ ${d.approach}</span></div>
+      ${charterBlock({whyYou:d.whyYou})}
+      ${whyNowOptCard(d)}
+      <div class="acts"><span class="mini">Open accounts</span>${d.tier==='watch'?'<span class="mini">Promote</span>':'<span class="mini">Fill from Sourcing</span>'}</div>
+    </div>`).join('')}</div>`;
+}
+function stageSegment(divs){
+  return `<div class="stagehdr"><div class="t">Segments · ${divs.length} bands · weight = ACV intensity</div><div class="cyc">cycle <b>72d</b> · recalibrate</div></div>
+  <div class="divs">${divs.map(d=>`
+    <div class="div" style="--tc:${TIERS[d.tier].color};--w:${d.w}">
+      <div class="weight"><div class="rng">${d.rng}</div><div class="sname">${d.name}</div><div class="acv">${d.acv}</div></div>
+      <div class="sbody">
+        <div style="display:flex;align-items:center;justify-content:space-between"><div class="cnt"><b>${d.count}</b> accounts</div>${tierChip(d.tier)}</div>
+        ${charterBlock({whyYou:d.whyYou})}
+        ${whyNowOptCard(d)}
+        <div style="font-family:var(--mono);font-size:10.5px;color:var(--blue);margin-top:9px">▸ ${d.approach}</div>
+        <div class="acts"><span class="mini">Open accounts</span>${d.tier==='watch'?'<span class="mini">Promote</span>':'<span class="mini">Fill from Sourcing</span>'}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function stageNamed(divs){
+  return `<div class="stagehdr"><div class="t">Named lists · ${divs.length} rosters · account-level coverage</div><div class="cyc">cycle <b>72d</b></div></div>
+  <div class="divs">${divs.map(d=>`
+    <div class="div" style="--tc:${TIERS[d.tier].color}">
+      <div class="ntop"><div class="lname">${d.name}</div><div style="display:flex;gap:9px;align-items:center"><span class="cnt"><b>${d.count}</b> accounts</span>${tierChip(d.tier)}</div></div>
+      ${charterBlock({whyYou:d.whyYou})}
+      ${whyNowOptCard(d)}
+      <div class="roster">${d.logos.map(l=>`<span class="logo ${l.includes('more')?'more':''}">${l.includes('more')?'':'<span class="d"></span>'}${l}</span>`).join('')}</div>
+      <div style="font-family:var(--mono);font-size:10.5px;color:var(--blue);margin-top:11px">▸ ${d.approach}</div>
+      <div class="acts"><span class="mini">Open roster</span><span class="mini">+ Add account</span></div>
+    </div>`).join('')}</div>`;
+}
+function stageTrigger(divs){
+  return `<div class="stagehdr"><div class="t">Live triggers · ${divs.length} carved · why-now is the whole play</div><div class="cyc">cycle <b>72d</b></div></div>
+  <div class="divs">${divs.map(d=>`
+    <div class="div" style="--tc:${TIERS[d.tier].color}">
+      <div class="tk"></div>
+      <div class="tbody">
+        <div class="ttop"><div class="tname"><span>${d.tg}</span>${d.name}</div>${tierChip(d.tier)}</div>
+        ${d.whyNow?`<div class="whynow"><b>Why now</b>${d.whyNow}</div>`:''}
+        ${charterBlock({whyYou:d.whyYou})}
+      </div>
+      <div class="tside"><div class="cnt"><b>${d.count}</b><br><span style="font-size:10px;color:var(--ink-soft)">accounts</span></div><span class="mini">Open</span>${d.tier==='watch'?'<span class="mini">Promote</span>':'<span class="mini sw">Fill</span>'}</div>
+    </div>`).join('')}</div>`;
+}
+function stageBlend(divs){
+  return `<div class="stagehdr"><div class="t">Blended divisions · ${divs.length} · primary axis + stacked cuts · the funnel keeps it honest</div><div class="cyc">cycle <b>72d</b></div></div>
+  <div class="divs">${divs.map(d=>{
+    const maxN = d.funnel[0][1];
+    return `<div class="div" style="--tc:${TIERS[d.tier].color}">
+      <div class="btop"><div style="display:flex;align-items:center"><span class="primary">${d.primary}</span><span class="bname">${d.name}</span></div>${tierChip(d.tier)}</div>
+      <div class="bmid">
+        <div class="left">
+          <div class="cuts"><div class="cl">Cuts stacked</div><div class="blendchips">${d.cuts.map(c=>`<span class="bchip"><span class="ax">${c[0]} ·</span> <b>${c[1]}</b></span>`).join('')}<span class="bchip add">+ blend a cut</span></div></div>
+          ${charterBlock({whyYou:d.whyYou, whyNow:d.whyNow})}
+          <div style="font-family:var(--mono);font-size:10.5px;color:var(--blue);margin-top:11px">▸ ${d.approach}</div>
+        </div>
+        <div class="funnel">
+          <div class="cl" style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:9px">Coverage funnel</div>
+          ${d.funnel.map((f,i)=>`<div class="fstep ${i===d.funnel.length-1?'':'dim'}"><span class="fb" style="width:${Math.max(14,f[2])}px"></span><span>${f[0]} <b>${f[1]}</b></span></div>`).join('')}
+        </div>
+      </div>
+    </div>`;}).join('')}</div>`;
+}
+
+const RENDERERS = {geo:stageGeo,vertical:stageVertical,segment:stageSegment,named:stageNamed,trigger:stageTrigger,blend:stageBlend};
+
+/* ---- carve form morph ---- */
+function renderCarveForm(axis){
+  const A = AXES[axis];
+  const whyNowFld = A.whyNow==='required'
+    ? `<div class="fld whynow-slot"><label>Why now — what pressure is live?<span class="req">required</span></label><textarea placeholder="What is forcing this group to move right now?"></textarea><div class="fhint">Trigger divisions live or die on this — it's the reason the outreach lands today.</div></div>`
+    : `<div class="fld whynow-slot"><div class="whynow-opt-toggle" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">+ Add why they're moving now (optional)</div><div style="display:none"><label>Why now <span style="color:var(--ink-soft);text-transform:none;letter-spacing:0">— optional</span></label><textarea placeholder="If there's a live reason they're moving, name it. Structural divisions don't need one."></textarea></div></div>`;
+  el('carveForm').innerHTML = `
+    <div class="fgrid">
+      <div class="fld"><label>${A.carveField}</label><input placeholder="${A.carvePlaceholder}"></div>
+      <div class="fld"><label>Coverage tier</label><select><option>Strategic — must-win</option><option selected>Core — recurring</option><option>Develop — research-led</option><option>Watch — monitor only</option></select></div>
+      <div class="fld wide"><label>Why you — why you're the right team<span class="req">required</span></label><input placeholder="What makes you the team that wins this group?"></div>
+      ${whyNowFld}
+      <div class="fld"><label>Approach</label><input placeholder="How you open them — e.g. warm intro"></div>
+      <div class="fld"><label>Blend another cut (optional)</label><select><option>— none —</option><option>+ Geography</option><option>+ Vertical</option><option>+ Segment</option><option>+ Named list</option><option>+ Trigger</option></select></div>
+    </div>`;
+}
+
+/* ---- master render ---- */
+function render(axis, animate){
+  currentAxis = axis;
+  const A = AXES[axis];
+  // axis rail active
+  document.querySelectorAll('.ax').forEach(a=>a.classList.toggle('on', a.dataset.ax===axis));
+  el('axmeta').innerHTML = `<span class="reg">${A.name}</span><span>${A.register}.</span>`;
+  el('tgauge').innerHTML = `<b><i>${Object.values(computeAlloc(axis)).reduce((a,b)=>a+b,0)}</i> / 300</b> covered`;
+  renderSpine(axis);
+  el('carveTitle').textContent = `Carve a ${A.name.toLowerCase()==='blend'?'blended':A.name.toLowerCase()} division`;
+  el('carveSub').innerHTML = `Name it, set a tier, say <b>why you</b>${A.whyNow==='required'?' and <b>why now</b>':''}. It draws its first accounts from ICP match — spend from your open seats.`;
+  el('carveBtn').textContent = `+ Carve ${A.name.toLowerCase()==='named accounts'?'a list':'division'}`;
+  renderCarveForm(axis);
+  const stage = el('stage');
+  const paint = ()=>{
+    stage.dataset.axis = axis;
+    stage.innerHTML = (DATA[axis]&&DATA[axis].length) ? RENDERERS[axis](DATA[axis])
+      : `<div class="empty"><h3>Carve your first division.</h3><p>Nothing here yet — most teams start in scorch-the-earth mode. Pick how you think about your market above, then name one group of buyers worth covering. The 300-cap and the tiers do the rest.</p></div>`;
+    requestAnimationFrame(()=>stage.classList.remove('morphing'));
+  };
+  if(animate){ stage.classList.add('morphing'); setTimeout(paint,190); } else paint();
+}
+
+/* build axis rail */
+el('axisrail').innerHTML = Object.entries(AXES).map(([id,A])=>`
+  <div class="ax" data-ax="${id}"><div class="g">${A.glyph}</div><div class="n">${A.name}</div><div class="d">${A.desc}</div></div>`).join('');
+document.querySelectorAll('.ax').forEach(a=>a.addEventListener('click',()=>{ if(a.dataset.ax!==currentAxis) render(a.dataset.ax,true); }));
+
+/* carve open/close */
+el('carveBtn').addEventListener('click',(e)=>{e.stopPropagation();el('carve').classList.toggle('open');});
+el('carveHead').addEventListener('click',()=>el('carve').classList.toggle('open'));
+
+/* approaches */
+el('approaches').innerHTML = APPROACHES.map(a=>`<div class="lrow"><span class="a">${a[0]}</span><span class="u">${a[1]}</span><span class="c">${a[2]}</span></div>`).join('');
+
+render('segment',false);
+</script>
+</body></html>

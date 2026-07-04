@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Signal Console — The Attention Router (converged)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+    --field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.13);
+    --orange:#e6701e;--blue:#2563eb;--green:#22c55e;
+    --ember:#c86a2a;--ember-hot:#d0491f;
+    --serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);
+    -webkit-font-smoothing:antialiased;padding:30px 34px 64px}
+  .wrap{max-width:1020px;margin:0 auto}
+  .bar{display:flex;align-items:center;gap:14px;margin-bottom:14px;opacity:0;transform:translateY(6px);animation:rise .5s var(--ease) .02s forwards}
+  .bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+  .posture{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);background:var(--surface);border:1px solid var(--hair-2);border-radius:99px;padding:5px 12px}
+  .posture b{color:var(--ember-hot);font-weight:600}
+  .pdot{width:7px;height:7px;border-radius:50%;background:var(--ember-hot);position:relative}
+  .pdot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--ember-hot);animation:ping 2.4s var(--ease) infinite;opacity:.5}
+  .bar__r{margin-left:auto;display:flex;gap:14px;align-items:center}
+  .enrich{font-size:12.5px;font-weight:500;color:var(--blue);cursor:pointer}
+  .count{font-family:var(--mono);font-size:12px;color:var(--ink-4)}
+
+  /* shape-of-attention strip */
+  .shape{margin-bottom:8px;opacity:0;animation:rise .55s var(--ease) .1s forwards}
+  .shape__bar{display:flex;height:12px;border-radius:99px;overflow:hidden;gap:3px}
+  .seg{position:relative;transition:flex-grow .3s var(--ease)}
+  .seg i{position:absolute;inset:0;border-radius:99px;transform-origin:left;transform:scaleX(0);animation:draw .8s var(--ease) var(--sd) forwards}
+  .seg.now i{background:var(--ember-hot)}.seg.warm i{background:var(--ember)}
+  .seg.emrg i{background:var(--blue)}.seg.cold i{background:rgba(10,28,64,.16)}
+  .shape__key{display:flex;gap:20px;margin-top:9px;font-size:11.5px;color:var(--ink-3)}
+  .shape__key span{display:inline-flex;align-items:center;gap:6px}
+  .kd{width:8px;height:8px;border-radius:2px}
+  .kd.now{background:var(--ember-hot)}.kd.warm{background:var(--ember)}.kd.emrg{background:var(--blue)}.kd.cold{background:rgba(10,28,64,.16)}
+  .shape__key b{color:var(--ink);font-weight:600}
+  .sub{font-size:13px;color:var(--ink-3);margin:16px 0 20px;opacity:0;animation:rise .5s var(--ease) .16s forwards}
+
+  .band{margin-bottom:20px;opacity:0;transform:translateY(9px);animation:rise .55s var(--ease) var(--bd) forwards}
+  .bhead{display:flex;align-items:baseline;gap:12px;margin-bottom:11px}
+  .blabel{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase}
+  .bwhy{font-size:12.5px;color:var(--ink-3)}
+  .bn{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-4);margin-left:auto}
+  .lane{display:flex;flex-wrap:wrap;gap:10px}
+
+  .chip{position:relative;background:var(--surface);border:1px solid var(--hair-2);border-radius:12px;padding:12px 14px 12px;cursor:pointer;
+    width:236px;transition:transform .18s var(--ease),box-shadow .18s var(--ease);
+    opacity:0;transform:translateY(7px);animation:rise .45s var(--ease) var(--cd) forwards}
+  .chip:hover{transform:translateY(-2px);box-shadow:0 6px 16px -6px rgba(10,28,64,.2);z-index:3}
+  .chip.open{width:100%;box-shadow:0 6px 22px -8px rgba(10,28,64,.24);z-index:4}
+  .chead{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .heatbar{width:40px;height:5px;border-radius:99px;background:rgba(10,28,64,.08);overflow:hidden;flex:none}
+  .heatbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ember),var(--ember-hot));width:0;animation:grow .8s var(--ease) var(--cd) forwards}
+  .cheat{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-3)}
+  .tdot{width:7px;height:7px;border-radius:50%;margin-left:auto;background:var(--ink-4)}
+  .tdot.live{background:var(--green)}.tdot.touch{background:var(--blue)}
+  .cname{font-size:14.5px;font-weight:600;letter-spacing:-.005em}
+  .csig{font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.35}
+  .cage{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:7px;display:inline-flex;align-items:center;gap:6px}
+  .cage.fresh{color:var(--ember-hot)}
+  .cage .live{color:var(--green);font-weight:600}
+  .chip.glow::after{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 0 0 1.5px rgba(208,73,31,.38);animation:glow 2.3s var(--ease) infinite;pointer-events:none}
+
+  /* expand-in-place */
+  .detail{overflow:hidden;max-height:0;opacity:0;transition:max-height .3s var(--ease),opacity .3s var(--ease),margin .3s var(--ease)}
+  .chip.open .detail{max-height:600px;opacity:1;margin-top:12px}
+  .detail__in{border-top:1px solid var(--hair);padding-top:11px}
+  .dsig{display:flex;gap:10px;align-items:baseline;padding:5px 0;font-size:13px;color:var(--ink-2)}
+  .dsig b{color:var(--ink);font-weight:600}.dsig .dage{font-family:var(--mono);font-size:11px;color:var(--ink-4);margin-left:auto}
+  .rack{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+  .btn{font-size:12.5px;font-weight:500;cursor:pointer;border-radius:8px;padding:8px 13px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-3);transition:all .18s}
+  .btn:hover{border-color:var(--ink-4);color:var(--ink)}
+  .btn.go{background:var(--orange);border-color:var(--orange);color:#fff}.btn.go:hover{background:#d4661b}
+
+  .cmove{position:absolute;right:10px;bottom:11px;font-size:11.5px;font-weight:600;color:#fff;background:var(--orange);border:none;border-radius:7px;padding:5px 10px;cursor:pointer;opacity:0;transform:translateX(4px);transition:all .16s var(--ease)}
+  .chip:hover .cmove{opacity:1;transform:none}.chip.open .cmove{display:none}
+
+  .band--now .blabel{color:var(--ember-hot)}
+  .band--now .chip{border-left:3px solid var(--ember-hot);background:linear-gradient(150deg,rgba(208,73,31,.055),var(--surface) 68%)}
+  .band--warm .blabel{color:var(--ember)}.band--warm .chip{border-left:3px solid var(--ember)}
+  .band--emrg .blabel{color:var(--blue)}.band--emrg .chip{border-left:3px solid var(--blue)}
+  .band--cold{opacity:.66}.band--cold .blabel{color:var(--ink-4)}
+  .band--cold .chip{width:172px;padding:9px 12px}.band--cold .csig,.band--cold .cage{display:none}
+  .band--cold .chip:hover{width:236px}.band--cold .chip:hover .csig,.band--cold .chip:hover .cage{display:block}
+
+  /* header controls */
+  .search{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--hair-2);border-radius:99px;padding:6px 12px;color:var(--ink-4)}
+  .search input{border:none;background:transparent;font-family:var(--sans);font-size:12.5px;color:var(--ink);outline:none;width:132px}
+  .search input::placeholder{color:var(--ink-4)}
+  .watchbtn{font-size:12.5px;font-weight:600;color:#fff;background:var(--ink);border:none;border-radius:99px;padding:7px 14px;cursor:pointer}
+  .watchbtn:hover{background:#132a5c}
+  .health{font-size:12px;color:var(--ink-3);margin:0 0 20px}.health b{color:var(--ink);font-weight:600}
+  /* add-account composer — flush, de-carded */
+  .composer{max-height:0;overflow:hidden;opacity:0;transition:max-height .3s var(--ease),opacity .3s var(--ease),margin .3s var(--ease)}
+  .composer.open{max-height:220px;opacity:1;margin:6px 0 18px}
+  .composer__in{border-top:1px solid var(--hair-2);border-bottom:1px solid var(--hair-2);padding:16px 2px;display:flex;flex-direction:column;gap:11px}
+  .composer__row{display:flex;gap:10px;flex-wrap:wrap}
+  .cinput{flex:1;min-width:150px;border:1px solid var(--hair-2);border-radius:8px;padding:9px 12px;font-family:var(--sans);font-size:13px;color:var(--ink);outline:none;background:var(--surface)}
+  .cinput:focus{border-color:var(--ink-4)}.cinput--wide{flex-basis:100%}
+  .composer__foot{display:flex;align-items:center;gap:12px}
+  .composer__hint{font-size:12px;color:var(--ink-4)}
+  /* control-panel additions */
+  .cp__label{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-4);margin:12px 0 6px}
+  .dsig .dx{color:var(--ink-4);cursor:pointer;margin-left:10px;font-size:11px}.dsig:hover .dx{color:var(--ember-hot)}
+  .addsig{display:flex;gap:7px;margin-top:6px}
+  .addsig input{flex:1;border:1px solid var(--hair-2);border-radius:8px;padding:7px 11px;font-size:12.5px;outline:none;font-family:var(--sans)}
+  .notes{width:100%;border:1px solid var(--hair-2);border-radius:8px;padding:8px 11px;font-family:var(--sans);font-size:12.5px;color:var(--ink);outline:none;resize:none;margin-top:2px}
+  .stopwatch{font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;background:transparent;border:1px solid var(--hair-2);border-radius:8px;padding:8px 13px;margin-left:auto}
+  .stopwatch:hover{color:var(--ember-hot);border-color:rgba(208,73,31,.4)}
+  @keyframes rise{to{opacity:1;transform:none}}@keyframes grow{to{width:var(--h)}}@keyframes draw{to{transform:scaleX(1)}}
+  @keyframes ping{0%{transform:scale(.8);opacity:.5}70%{transform:scale(2.3);opacity:0}100%{opacity:0}}
+  @keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <span class="bname">Signal Console</span>
+    <span class="posture"><span class="pdot"></span>Motion-ready — <b>4 need action now</b></span>
+    <span class="bar__r">
+      <span class="search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="search" placeholder="Find an account…" /></span>
+      <span class="enrich">Enrich all ↻</span>
+      <button class="watchbtn" id="watchbtn">+ Watch a company</button>
+    </span>
+  </div>
+  <div class="composer" id="composer">
+    <div class="composer__in">
+      <div class="composer__row">
+        <input class="cinput" placeholder="Account name — e.g. Acme Robotics" />
+        <input class="cinput" placeholder="acme.com" />
+        <input class="cinput" placeholder="Industry" />
+      </div>
+      <input class="cinput cinput--wide" placeholder="Why they're on your radar — the trigger that brought them up" />
+      <div class="composer__foot"><button class="btn go" id="savewatch">Watch this company</button><span class="composer__hint">A new watch lands in Emerging until its signals build heat.</span></div>
+    </div>
+  </div>
+
+  <div class="shape">
+    <div class="shape__bar">
+      <span class="seg now" style="flex:4" ><i style="--sd:.2s"></i></span>
+      <span class="seg warm" style="flex:4"><i style="--sd:.28s"></i></span>
+      <span class="seg emrg" style="flex:3"><i style="--sd:.36s"></i></span>
+      <span class="seg cold" style="flex:5"><i style="--sd:.44s"></i></span>
+    </div>
+    <div class="shape__key">
+      <span><i class="kd now"></i><b>4</b>&nbsp;act now</span>
+      <span><i class="kd warm"></i><b>4</b>&nbsp;reach while warm</span>
+      <span><i class="kd emrg"></i><b>3</b>&nbsp;emerging</span>
+      <span><i class="kd cold"></i><b>5</b>&nbsp;going cold</span>
+    </div>
+  </div>
+  <p class="sub">The shape of your attention today. Scan the bands, open any account in place, strike where it's ripe.</p>
+  <p class="health"><b>16</b> accounts watched · <b>34</b> signals this week · <b>8</b> compounding, <b>5</b> still weak</p>
+
+  <div id="bands"></div>
+</div>
+<script>
+  var BANDS=[
+   {k:"now",label:"Act now",why:"hot, and something just moved",accts:[
+     {n:"Snowflake",h:94,t:"live",fresh:1,sig:"Hired a new VP of Sales",age:"2h ago",move:"Compose",sigs:[["Hired a new VP of Sales","LinkedIn","2h"],["Posted 12 AE roles","Jobs","3d"],["‘GTM rebuild’ on earnings","Call","18d"]]},
+     {n:"Vanta",h:90,fresh:1,sig:"Acquired a smaller competitor",age:"3h ago",move:"Compose",sigs:[["Acquired a competitor","Press","3h"],["New CRO announced","LinkedIn","12d"]]},
+     {n:"Ramp",h:88,t:"touch",fresh:1,sig:"Posted 12 AE roles this week",age:"6h ago",move:"Compose",sigs:[["Posted 12 AE roles","Jobs","6h"],["New RevOps lead","LinkedIn","6d"]]},
+     {n:"Notion",h:82,fresh:1,sig:"Closed a $50M round",age:"1d ago",move:"Compose",sigs:[["Closed a $50M round","Press","1d"],["Hiring enterprise AE","Jobs","4d"]]},
+   ]},
+   {k:"warm",label:"Reach while warm",why:"still hot, but the signal is aging — go before it cools",accts:[
+     {n:"Databricks",h:85,t:"live",sig:"Champion moved to a competitor",age:"1d ago",move:"Open deal",sigs:[["Champion left for a competitor","LinkedIn","1d"],["New exec sponsor","Press","9d"]]},
+     {n:"Retool",h:71,t:"touch",sig:"New CRO started this month",age:"2d ago",move:"Compose",sigs:[["New CRO started","LinkedIn","2d"]]},
+     {n:"Figma",h:68,sig:"Shipped enterprise SSO",age:"2d ago",move:"Compose",sigs:[["Shipped enterprise SSO","Changelog","2d"]]},
+     {n:"Rippling",h:61,sig:"Opened a NYC office",age:"3d ago",move:"Compose",sigs:[["Opened a NYC office","Press","3d"]]},
+   ]},
+   {k:"emrg",label:"Emerging",why:"a fresh trigger, heat still building — get in early",accts:[
+     {n:"Sierra",h:54,fresh:1,sig:"Came out of stealth",age:"1d ago",move:"Research",sigs:[["Came out of stealth","Press","1d"]]},
+     {n:"Baseten",h:47,sig:"Announced a marquee customer",age:"2d ago",move:"Research",sigs:[["Marquee customer named","Press","2d"]]},
+     {n:"Linear",h:64,sig:"Raised a Series C",age:"4d ago",move:"Compose",sigs:[["Raised a Series C","Press","4d"]]},
+   ]},
+   {k:"cold",label:"Going cold",why:"was warm, now quiet",accts:[
+     {n:"Vercel",h:49,sig:"Hiring a RevOps lead",age:"8d",move:"Research",sigs:[["Hiring a RevOps lead","Jobs","8d"]]},
+     {n:"Clay",h:44,sig:"New funding rumor",age:"9d",move:"Research",sigs:[["Funding rumor","Press","9d"]]},
+     {n:"Webflow",h:41,sig:"Podcast mention",age:"11d",move:"Research",sigs:[["Podcast mention","Podcast","11d"]]},
+     {n:"Deel",h:37,sig:"Expanded to LATAM",age:"14d",move:"Research",sigs:[["Expanded to LATAM","Press","14d"]]},
+     {n:"Remote",h:33,sig:"Named a new CFO",age:"18d",move:"Research",sigs:[["New CFO","LinkedIn","18d"]]},
+   ]},
+  ];
+  var root=document.getElementById('bands');var ci=0;
+  BANDS.forEach(function(b,bi){
+    var el=document.createElement('div');el.className='band band--'+b.k;el.style.setProperty('--bd',(0.2+bi*0.1).toFixed(2)+'s');
+    var lane='';
+    b.accts.forEach(function(a){ci+=1;
+      var td=a.t==='live'?'live':(a.t==='touch'?'touch':'');
+      var age=a.t==='live'?'<span class="live">● replied</span> · '+a.age:a.age;
+      var sigrows=a.sigs.map(function(s){return '<div class="dsig"><span>·</span><span><b>'+s[0]+'</b> — '+s[1]+'</span><span class="dage">'+s[2]+'</span><span class="dx" data-rmsig>✕</span></div>'}).join('');
+      lane+='<div class="chip'+(a.fresh?' glow':'')+'" style="--cd:'+(0.24+ci*0.025).toFixed(2)+'s;--h:'+a.h+'%">'+
+        '<div class="chead"><span class="heatbar"><i></i></span><span class="cheat">'+a.h+'</span><span class="tdot '+td+'"></span></div>'+
+        '<div class="cname">'+a.n+'</div><div class="csig">'+a.sig+'</div>'+
+        '<div class="cage'+(a.fresh?' fresh':'')+'">'+age+'</div>'+
+        '<button class="cmove">'+a.move+'</button>'+
+        '<div class="detail"><div class="detail__in">'+
+          '<div class="cp__label">Signals</div><div class="sigs">'+sigrows+'</div>'+
+          '<div class="addsig"><input placeholder="Add a signal by hand…" /><button class="btn">Add</button></div>'+
+          '<div class="cp__label">Notes · why they\'re on the radar</div><textarea class="notes" rows="2" placeholder="One line on why this account matters…"></textarea>'+
+          '<div class="rack"><button class="btn go">'+a.move+'</button><button class="btn">Plan a call</button><button class="btn">Cold call</button><button class="btn">Open deal</button><button class="stopwatch">Stop watching</button></div>'+
+        '</div></div></div>';
+    });
+    el.innerHTML='<div class="bhead"><span class="blabel">'+b.label+'</span><span class="bwhy">— '+b.why+'</span><span class="bn">'+b.accts.length+'</span></div><div class="lane">'+lane+'</div>';
+    root.appendChild(el);
+  });
+  document.getElementById('bands').addEventListener('click',function(e){
+    var chip=e.target.closest('.chip');
+    var dx=e.target.closest('[data-rmsig]');if(dx){dx.closest('.dsig').remove();return;}
+    if(e.target.closest('.stopwatch')){if(chip)chip.remove();return;}
+    if(e.target.classList.contains('btn')&&e.target.textContent==='Add'){var inp=e.target.closest('.addsig').querySelector('input');var v=(inp.value||'').trim();if(v&&chip){var d=document.createElement('div');d.className='dsig';d.innerHTML='<span>·</span><span><b>'+v+'</b> — added by hand</span><span class="dage">now</span><span class="dx" data-rmsig>✕</span>';chip.querySelector('.sigs').appendChild(d);inp.value='';}return;}
+    if(e.target.closest('.cmove'))return;
+    if(e.target.closest('.detail'))return;
+    if(!chip)return;
+    var was=chip.classList.contains('open');
+    document.querySelectorAll('.chip.open').forEach(function(x){x.classList.remove('open')});
+    if(!was)chip.classList.add('open');
+  });
+
+  /* search */
+  document.getElementById('search').addEventListener('input',function(e){var q=e.target.value.toLowerCase();document.querySelectorAll('.chip').forEach(function(c){var nm=c.querySelector('.cname');if(!nm)return;c.style.display=nm.textContent.toLowerCase().indexOf(q)>=0?'':'none';});});
+  /* watch a company */
+  var composer=document.getElementById('composer');
+  document.getElementById('watchbtn').addEventListener('click',function(){composer.classList.toggle('open');if(composer.classList.contains('open'))composer.querySelector('.cinput').focus();});
+  document.getElementById('savewatch').addEventListener('click',function(){
+    var ins=composer.querySelectorAll('.cinput');var name=(ins[0].value||'').trim();if(!name){ins[0].focus();return;}
+    var why=(ins[3].value||'Just added — watching for signals').trim();
+    var lane=document.querySelector('.band--emrg .lane');
+    var chip=document.createElement('div');chip.className='chip';chip.style.opacity='1';chip.style.transform='none';
+    chip.innerHTML='<div class="chead"><span class="heatbar"><i style="width:28%"></i></span><span class="cheat">28</span><span class="tdot"></span></div>'+
+      '<div class="cname">'+name+'</div><div class="csig">'+why+'</div><div class="cage">just now · you added this</div>'+
+      '<button class="cmove">Research</button>'+
+      '<div class="detail"><div class="detail__in"><div class="cp__label">Signals</div><div class="sigs"></div>'+
+      '<div class="addsig"><input placeholder="Add a signal by hand…" /><button class="btn">Add</button></div>'+
+      '<div class="cp__label">Notes · why they\'re on the radar</div><textarea class="notes" rows="2">'+why+'</textarea>'+
+      '<div class="rack"><button class="btn go">Research</button><button class="btn">Plan a call</button><button class="stopwatch">Stop watching</button></div></div></div>';
+    lane.insertBefore(chip,lane.firstChild);
+    ins.forEach(function(i){i.value='';});composer.classList.remove('open');
+    var bn=document.querySelector('.band--emrg .bn');if(bn)bn.textContent=parseInt(bn.textContent,10)+1;
+  });
+</script>
+</body>
+</html>

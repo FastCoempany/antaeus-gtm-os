@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ICP Studio — Combo · 1 Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0a1c40;--ink-2:rgba(10,28,64,.63);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+    --field:#eef1f7;--surface:#fff;--surface-sub:#f4f6fb;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+    --orange:#e6701e;--orange-soft:rgba(230,112,30,.10);--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.10);
+    --amber:#b5790f;--red:#b83232;
+    --serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box}body{margin:0;font-family:var(--sans);color:var(--ink);
+    background:radial-gradient(1000px 440px at 12% -6%,var(--orange-soft),transparent 58%),var(--field);
+    -webkit-font-smoothing:antialiased;padding:28px 40px 60px}
+  .wrap{max-width:940px;margin:0 auto}
+  .anim{opacity:0;transform:translateY(7px);animation:rise .5s var(--ease) forwards}@keyframes rise{to{opacity:1;transform:none}}
+  .bar{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+  .qpill{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--blue);background:rgba(37,99,235,.09);border-radius:99px;padding:5px 13px}
+  .bar__r{margin-left:auto;display:flex;gap:12px;align-items:center}
+  .switch{font-size:12.5px;color:var(--ink-2);cursor:pointer;border:1px solid var(--hair-2);border-radius:8px;padding:6px 11px;background:var(--surface)}.switch b{color:var(--ink);font-weight:600}
+  .newicp{font-size:12.5px;font-weight:600;color:var(--blue);cursor:pointer;background:transparent;border:none}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .stmt{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.32;letter-spacing:-.01em;margin:0 0 16px}
+  .stmt .p{border-bottom:2px solid var(--orange);cursor:pointer;padding-bottom:1px;transition:background .16s}
+  .stmt .p:hover{background:var(--orange-soft)}
+  .sharpen{font-size:14px;color:var(--ink-2);line-height:1.55;margin:0 0 24px;max-width:64ch}.sharpen b{color:var(--ink);font-weight:600}
+  .ladder{display:flex;gap:5px;margin-bottom:28px}
+  .tier{flex:1;text-align:center;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);padding:8px 4px;border-radius:7px;background:rgba(10,28,64,.05)}
+  .tier.on{color:#fff;background:var(--blue)}.tier.goal{color:var(--forest);background:var(--forest-soft);border:1px dashed rgba(27,94,63,.4)}
+  .sec__l{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
+  .chk{display:flex;align-items:baseline;gap:9px;padding:7px 0;font-size:13.5px;color:var(--ink-2);border-top:1px solid var(--hair)}.chk:first-of-type{border-top:none}
+  .chk .m{font-size:12px;font-weight:700;flex:none;width:14px}.chk.ok .m{color:var(--forest)}.chk.no .m{color:var(--red)}.chk.no{color:var(--ink)}
+  .seg{display:flex;height:38px;border-radius:8px;overflow:hidden;margin-bottom:8px}
+  .seg span{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;font-weight:600;transform-origin:left;animation:draw .8s var(--ease) forwards}
+  .seg .s{background:var(--blue)}.seg .l{background:var(--amber)}.seg .r{background:rgba(10,28,64,.20)}
+  @keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .seglab{display:flex;gap:22px;font-size:12px;color:var(--ink-3);margin-bottom:22px}.seglab b{color:var(--ink);font-weight:600}
+  .egrid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:28px}
+  .ecol__l{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin:0 0 11px}
+  .ecol.sharp .ecol__l{color:var(--blue)}.ecol.rej .ecol__l{color:var(--ink-4)}
+  .erow{display:flex;align-items:baseline;gap:9px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}.erow:first-of-type{border-top:none}
+  .erow b{font-weight:600}.erow small{color:var(--ink-3);font-size:12px}.ecol.rej .erow{color:var(--ink-3)}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px}.ecol.sharp .dot{background:var(--blue)}.ecol.rej .dot{background:var(--ink-4)}
+  .builder{border-top:1px solid var(--hair-2);padding-top:20px;margin-bottom:22px}
+  .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .fld{display:flex;flex-direction:column;gap:4px}.fld.wide{grid-column:span 2}.fld span{font-size:11px;color:var(--ink-3)}
+  .fld input{border:1px solid var(--hair-2);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--ink);outline:none;background:var(--surface);font-family:var(--sans)}
+  .fld.miss input{border-color:var(--red);background:rgba(184,50,50,.08)}
+  .bg{margin-top:12px;font-size:12.5px;color:var(--ink-2)}.bg b{color:var(--ink);font-weight:600}
+  .focus{background:var(--surface-sub);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 15px;font-size:13.5px;margin-bottom:22px}
+  .focus .l{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:4px}.focus b{font-weight:600}
+  .foot{display:flex;align-items:center;gap:14px;border-top:1px solid var(--hair);padding-top:16px}
+  .flows{font-size:12px;color:var(--ink-3);line-height:1.5}.flows b{color:var(--ink);font-weight:600}
+  .save{margin-left:auto;font-size:13px;font-weight:600;color:#fff;background:var(--orange);border:none;border-radius:9px;padding:10px 18px;cursor:pointer;white-space:nowrap}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar anim" style="animation-delay:.02s"><span class="bname">ICP Studio</span><span class="qpill">Sharp · 78 / 100</span><span class="bar__r"><span class="switch"><b>RevOps</b> · primary ▾</span><button class="newicp">+ New ICP</button></span></div>
+  <p class="eyebrow anim" style="animation-delay:.08s">Who you sell to — the one definition every room filters against</p>
+  <h1 class="stmt anim" style="animation-delay:.1s">You sell to the <span class="p">Head of RevOps</span> at <span class="p">Series B–C B2B SaaS, 200–800 people</span>, who <span class="p">can't trust their forecast</span>, right after <span class="p">a missed quarter or a new CRO</span> — and you can show the value <span class="p">within a quarter</span>.</h1>
+  <p class="sharpen anim" style="animation-delay:.16s">It's sharp, but not airtight yet. Two things would tighten it: <b>name what only you do here</b>, and <b>cut the industries you'd never win</b> — the definition still lets in too many.</p>
+  <div class="ladder anim" style="animation-delay:.18s"><span class="tier">Too broad</span><span class="tier">Workable</span><span class="tier on">Sharp</span><span class="tier goal">Airtight</span></div>
+
+  <p class="sec__l anim" style="animation-delay:.22s">What makes it sharp — 6 of 8</p>
+  <div class="anim" style="animation-delay:.24s">
+    <div class="chk ok"><span class="m">✓</span><span>One owner named (Head of RevOps)</span></div>
+    <div class="chk ok"><span class="m">✓</span><span>Tight company band (stage + size)</span></div>
+    <div class="chk ok"><span class="m">✓</span><span>A single, specific pain</span></div>
+    <div class="chk ok"><span class="m">✓</span><span>A named trigger event</span></div>
+    <div class="chk ok"><span class="m">✓</span><span>A time-to-value you can hit</span></div>
+    <div class="chk ok"><span class="m">✓</span><span>Buying group defined</span></div>
+    <div class="chk no"><span class="m">✕</span><span>No differentiator — why you, here?</span></div>
+    <div class="chk no"><span class="m">✕</span><span>Exclusions too loose — 3 industries you'd never win</span></div>
+  </div>
+
+  <p class="sec__l anim" style="margin-top:28px;animation-delay:.28s">Its bite — how your 340 accounts fit</p>
+  <div class="seg anim" style="animation-delay:.3s"><span class="s" style="flex:34">34</span><span class="l" style="flex:88">88</span><span class="r" style="flex:218">218 rejected</span></div>
+  <div class="seglab anim" style="animation-delay:.34s"><span><b>34</b> sharp — act here now</span><span><b>88</b> loose — watch</span><span><b>218</b> not your buyer</span></div>
+  <div class="egrid anim" style="animation-delay:.36s">
+    <div class="ecol sharp"><p class="ecol__l">Sharp matches — where it bites</p>
+      <div class="erow"><span class="dot"></span><span><b>Ramp</b> — Series C, missed Q2, new CRO. <small>textbook.</small></span></div>
+      <div class="erow"><span class="dot"></span><span><b>Vanta</b> — 400 people, forecast pain public. <small>trigger live.</small></span></div>
+      <div class="erow"><span class="dot"></span><span><b>Retool</b> — new CRO last month. <small>reach now.</small></span></div>
+      <div class="erow"><span class="dot"></span><span>+ 31 more scored sharp across the workspace</span></div></div>
+    <div class="ecol rej"><p class="ecol__l">Rejected — and why (good)</p>
+      <div class="erow"><span class="dot"></span><span><b>Home Depot</b> — enterprise, wrong size band.</span></div>
+      <div class="erow"><span class="dot"></span><span><b>Webflow</b> — no forecast pain, no trigger.</span></div>
+      <div class="erow"><span class="dot"></span><span>+ 216 more the definition keeps you out of — that's the point.</span></div></div>
+  </div>
+
+  <div class="builder anim" style="animation-delay:.4s"><p class="sec__l">Sharpen the pieces</p>
+    <div class="bgrid">
+      <label class="fld"><span>Owner (role)</span><input value="Head of RevOps"/></label>
+      <label class="fld wide"><span>Company — stage &amp; size</span><input value="Series B–C B2B SaaS, 200–800 employees"/></label>
+      <label class="fld"><span>The pain</span><input value="Can't trust their forecast"/></label>
+      <label class="fld"><span>The trigger</span><input value="A missed quarter or a new CRO"/></label>
+      <label class="fld"><span>Time to value</span><input value="One quarter"/></label>
+      <label class="fld wide miss"><span>Differentiator — why you, here</span><input placeholder="the thing only you do for this buyer…"/></label>
+      <label class="fld"><span>Exclusions</span><input placeholder="industries to cut"/></label>
+    </div>
+    <p class="bg">Buying group minimum: <b>Champion + Economic buyer + one Finance blocker</b> — anything thinner isn't a real deal.</p>
+  </div>
+  <div class="focus anim" style="animation-delay:.44s"><span class="l">Focus recommendation</span>Lead with the <b>missed-quarter</b> trigger — your fastest path to a win, and where both closed-wons came from.</div>
+  <div class="foot anim" style="animation-delay:.48s"><p class="flows">This definition scores <b>every account</b> in Territory · Sourcing · Signal Console · Outbound · Discovery, and feeds Readiness + the Handoff Kit.</p><button class="save">Save this ICP</button></div>
+</div>
+</body>
+</html>
