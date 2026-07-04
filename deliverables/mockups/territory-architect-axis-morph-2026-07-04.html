@@ -43,6 +43,27 @@ body{background:var(--field);color:var(--ink);font-family:var(--sans);min-height
 .ax.on .n{color:var(--ink)}
 .axmeta{margin:12px 0 0;font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:9px}
 .axmeta .reg{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--forest);border:1px solid var(--forest-soft);background:var(--forest-soft);padding:3px 8px;border-radius:3px}
+/* field read — where the territory stands (self-read) */
+.fieldread{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:14px 0 0;padding:11px 0 0;border-top:1px solid var(--line)}
+.fieldread .band{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 9px;border-radius:3px;white-space:nowrap}
+.fieldread .band.runnable{background:var(--forest)}.fieldread .band.tight{background:var(--t-core)}.fieldread .band.loose{background:var(--amber)}.fieldread .band.empty{background:var(--grey)}
+.fieldread .sc{font-family:var(--mono);font-size:13px;color:var(--ink)}.fieldread .sc b{font-weight:600}
+.fieldread .rk{font-size:12.5px;color:var(--ink-2)}.fieldread .rk b{color:var(--ink)}
+.fieldread .mv{margin-left:auto;font-size:12px;color:var(--ink-2);border-left:2px solid var(--orange);padding-left:11px;line-height:1.35}.fieldread .mv b{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:1px}
+/* account drawer — disposition / retier / tagging */
+.scrim{position:fixed;inset:0;background:rgba(14,27,51,.28);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:40}.scrim.on{opacity:1;pointer-events:auto}
+.acctdrawer{position:fixed;top:0;right:0;bottom:0;width:min(540px,94vw);background:var(--paper);border-left:1px solid var(--line-2);transform:translateX(100%);transition:transform .24s ease;z-index:41;overflow-y:auto;box-shadow:-8px 0 40px rgba(14,27,51,.12)}.acctdrawer.on{transform:translateX(0)}
+.adh{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line-2);padding:18px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.adh .t{font-family:var(--serif);font-size:22px;line-height:1.05}.adh .m{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-top:6px}
+.adh .x{border:0;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1}
+.adbody{padding:8px 22px 30px}
+.arow2{display:grid;grid-template-columns:1fr 118px 132px 26px;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.arow2 .nm{font-weight:600;font-size:13.5px}.arow2 .nm .tag{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--ink-soft);margin-top:2px}
+.arow2 select{width:100%;font-family:var(--sans);font-size:11.5px;padding:6px 8px;border:1px solid var(--line-2);border-radius:4px;background:var(--paper);color:var(--ink)}
+.arow2 select:focus{outline:none;border-color:var(--blue)}
+.arow2 .promote{border:0;background:transparent;color:var(--forest);cursor:pointer;font-size:15px}
+.adnote{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-top:14px;line-height:1.5}
+.adtoast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:10px 18px;border-radius:6px;opacity:0;pointer-events:none;transition:all .2s ease;z-index:44}.adtoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ALLOCATION SPINE — constant across axes */
 .spine{margin:20px 0 6px;border:1px solid var(--ink);border-radius:5px;background:var(--paper);overflow:hidden}
@@ -201,6 +222,8 @@ body{background:var(--field);color:var(--ink);font-family:var(--sans);min-height
     <div class="axisrail" id="axisrail"></div>
     <div class="axmeta" id="axmeta"></div>
 
+    <div class="fieldread" id="fieldread"></div>
+
     <div class="spine">
       <div class="sh">
         <div class="l" id="spineLabel">Coverage budget — 300 seats across four tiers</div>
@@ -257,6 +280,9 @@ body{background:var(--field);color:var(--ink);font-family:var(--sans);min-height
   </div>
   <div class="foot">MOCKUP · not wired · design-only · click an axis to watch the room morph · why-now adapts to the axis · convergence build</div>
 </div>
+<div class="scrim" id="scrim"></div>
+<div class="acctdrawer" id="acctdrawer"></div>
+<div class="adtoast" id="adtoast"></div>
 
 <script>
 const TIERS = {
@@ -391,6 +417,58 @@ function renderSpine(axis){
   }).join('');
 }
 
+/* ---- field read: where the territory stands ---- */
+function computeFieldRead(axis){
+  const by=computeAlloc(axis); const total=by.strategic+by.core+by.develop+by.watch;
+  const free=300-total; const divs=DATA[axis]||[];
+  const over=['strategic','core','develop','watch'].filter(t=>by[t]>TIERS[t].target);
+  let score=30 + Math.min(divs.length,5)*7 + (total>=150?12:total>0?6:0) + (over.length===0?9:0);
+  if(by.watch>total*0.4 && total>0) score-=8;
+  if(total>300) score-=10;
+  score=Math.max(0,Math.min(92,score));
+  let band,label,risk,move;
+  if(divs.length===0){band='empty';label='Empty';risk='No divisions carved yet.';move='Carve your first division.';}
+  else if(total>300){band='loose';label='Over cap';risk='Over the 300 ceiling by '+(total-300)+'.';move='Swap an account out of an over-target tier.';}
+  else if(over.length){band=score>=75?'runnable':'tight';label=score>=75?'Runnable':'Tight';risk=TIERS[over[0]].label+' is '+(by[over[0]]-TIERS[over[0]].target)+' over target.';move='Swap or retier an account in '+TIERS[over[0]].label+'.';}
+  else if(by.watch>total*0.4){band='tight';label='Tight';risk='Too much parked in Watch — '+by.watch+' of '+total+'.';move='Promote a Watch account that\'s showing signal.';}
+  else if(free>150){band='loose';label='Thin';risk='Under-covered — '+free+' seats still open.';move='Fill open seats from Sourcing.';}
+  else{band='runnable';label='Runnable';risk='Balanced — every tier inside its target.';move='Open accounts and keep the motion going.';}
+  return {score,band,label,risk,free,move};
+}
+function renderFieldRead(axis){
+  const r=computeFieldRead(axis);
+  el('fieldread').innerHTML='<span class="band '+r.band+'">'+r.label+'</span>'+
+    '<span class="sc">where the territory stands · <b>'+r.score+'</b>/92</span>'+
+    '<span class="rk">'+r.risk+' · <b>'+r.free+'</b> seats open</span>'+
+    '<span class="mv"><b>Next</b>'+r.move+'</span>';
+}
+
+/* ---- account drawer: disposition / retier / tagging ---- */
+const ACCT_POOL=['Ramp','Vanta','Rippling','Deel','Brex','Mercury','Notion','Linear','Datadog','Snowflake','Airtable','Gusto','Figma','Retool'];
+const DISPOSITIONS=['Active','Paused','Closed-won','Closed-lost','Reroute'];
+function adToast(m){const t=el('adtoast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);}
+function openAccounts(name,tier){
+  const A=AXES[currentAxis]; const n=Math.min(6,3+(name.length%4));
+  let rows='';
+  for(let i=0;i<n;i++){
+    const acct=ACCT_POOL[(name.length+i*3)%ACCT_POOL.length];
+    const disp=i===0?'Active':i===1?'Active':i===n-1?'Paused':'Active';
+    rows+='<div class="arow2"><div class="nm">'+acct+'<span class="tag">'+name+' · '+(tier||'core')+'</span></div>'+
+      '<select data-disp>'+DISPOSITIONS.map(d=>'<option '+(d===disp?'selected':'')+'>'+d+'</option>').join('')+'</select>'+
+      '<select data-tier>'+Object.values(TIERS).map(T=>'<option '+(T.label.toLowerCase()===(tier||'core')?'selected':'')+'>'+T.label+'</option>').join('')+'</select>'+
+      '<button class="promote" title="promote a tier">▲</button></div>';
+  }
+  el('acctdrawer').innerHTML='<div class="adh"><div><div class="t">'+name+'</div><div class="m">'+A.name.toUpperCase()+' DIVISION · set disposition, retier, or promote — accounts stay tagged to this division</div></div><button class="x" id="adx">×</button></div>'+
+    '<div class="adbody">'+rows+
+    '<div class="adnote">Every account carries its <b>disposition</b> (active / paused / won / lost / reroute) and its <b>tier</b> — retier here and the 300-cap allocation above re-reads. The division tag is how the account flows to Sourcing and Signal Console.</div></div>';
+  el('scrim').classList.add('on');el('acctdrawer').classList.add('on');
+  el('adx').onclick=closeAcct;el('scrim').onclick=closeAcct;
+  el('acctdrawer').querySelectorAll('[data-disp]').forEach(s=>s.onchange=()=>adToast('Disposition → '+s.value));
+  el('acctdrawer').querySelectorAll('[data-tier]').forEach(s=>s.onchange=()=>adToast('Retiered → '+s.value+' · allocation re-reads'));
+  el('acctdrawer').querySelectorAll('.promote').forEach(b=>b.onclick=()=>adToast('Promoted a tier'));
+}
+function closeAcct(){el('scrim').classList.remove('on');el('acctdrawer').classList.remove('on');}
+
 /* ---- per-axis stage renderers ---- */
 function stageGeo(divs){
   return `<div class="stagehdr"><div class="t">Regions · ${divs.length} carved · coverage by tier intensity</div><div class="cyc">cycle <b>72d</b> · recalibrate</div></div>
@@ -505,6 +583,7 @@ function render(axis, animate){
   el('axmeta').innerHTML = `<span class="reg">${A.name}</span><span>${A.register}.</span>`;
   el('tgauge').innerHTML = `<b><i>${Object.values(computeAlloc(axis)).reduce((a,b)=>a+b,0)}</i> / 300</b> covered`;
   renderSpine(axis);
+  renderFieldRead(axis);
   el('carveTitle').textContent = `Carve a ${A.name.toLowerCase()==='blend'?'blended':A.name.toLowerCase()} division`;
   el('carveSub').innerHTML = `Name it, set a tier, say <b>why you</b>${A.whyNow==='required'?' and <b>why now</b>':''}. It draws its first accounts from ICP match — spend from your open seats.`;
   el('carveBtn').textContent = `+ Carve ${A.name.toLowerCase()==='named accounts'?'a list':'division'}`;
@@ -530,6 +609,18 @@ el('carveHead').addEventListener('click',()=>el('carve').classList.toggle('open'
 
 /* approaches */
 el('approaches').innerHTML = APPROACHES.map(a=>`<div class="lrow"><span class="a">${a[0]}</span><span class="u">${a[1]}</span><span class="c">${a[2]}</span></div>`).join('');
+
+/* delegated: "Open accounts / Open roster" opens the account drawer (disposition/retier/tag) */
+el('stage').addEventListener('click',(e)=>{
+  const m=e.target.closest('.mini'); if(!m) return;
+  if(!/open account|open roster/i.test(m.textContent)) return;
+  const card=e.target.closest('.div'); if(!card) return;
+  const nameEl=card.querySelector('.rname,.vname,.sname,.lname,.tname,.bname');
+  const name=nameEl?nameEl.textContent.trim():'Division';
+  const chip=card.querySelector('.tierchip'); const tier=chip?chip.textContent.trim().toLowerCase():'core';
+  openAccounts(name,tier);
+});
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeAcct();});
 
 render('segment',false);
 </script>

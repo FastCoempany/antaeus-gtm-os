@@ -13,6 +13,12 @@
 .pad{padding:22px 30px 0}
 .lead{font-family:var(--serif);font-size:22px;margin:0 0 3px;letter-spacing:-.01em}
 .leadsub{font-size:12.5px;color:var(--ink-2);margin-bottom:8px}.leadsub b{color:var(--ink)}
+.deskread{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:2px 0 4px;padding:10px 0 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.deskread .band{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.deskread .band.shipping{background:var(--forest)}.deskread .band.working{background:var(--blue-strong)}.deskread .band.loose{background:var(--amber)}.deskread .band.empty{background:var(--grey)}
+.deskread .sc{font-family:var(--mono);font-size:13px;color:var(--ink)}.deskread .sc b{font-weight:600}
+.deskread .rd{font-size:12.5px;color:var(--ink-2)}.deskread .rd b{color:var(--ink)}
+.deskread .mv{margin-left:auto;font-size:12px;color:var(--ink-2);border-left:2px solid var(--orange);padding-left:11px;line-height:1.35}.deskread .mv b{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:1px}
 .demoflag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--forest);background:var(--forest-soft);border:1px solid rgba(27,94,63,.2);border-radius:20px;padding:4px 11px;margin-bottom:6px}
 .stagebar{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
 .stagebar .num{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
@@ -83,6 +89,7 @@
   <div class="demoflag">◆ interactive — run a search, click an account, answer the last question, send it</div>
   <h1 class="lead">One funnel, top to bottom — find, confirm, send.</h1>
   <div class="leadsub">Accounts enter at the top and only leave once you've confirmed them. <b>Follow it straight down.</b></div>
+  <div class="deskread" id="deskread"></div>
 
   <div class="stagebar"><span class="num">1</span><span class="t">Find</span><span class="d">— describe who you want; Antaeus searches the open web and brings back companies, cited</span><span class="line"></span></div>
   <div class="describe">
@@ -186,9 +193,27 @@ function sendConfirming(){
 function setAside(){const c=confirming();if(!c)return;c.stage='dropped';toast(c.name+' set aside — not who we\'re targeting.');const nxt=by('added')[0];if(nxt)nxt.stage='confirming';render();}
 function sendReady(id){const a=accounts.find(x=>x.id===id);if(!a)return;a.stage='sent';toast(a.name+' sent to <b>Signal Console</b>.');render();}
 
+/* bench read — "where the desk stands" (self-read, like the shipped loom read) */
+function renderDeskRead(added,ready,sent,conf){
+  const dropped=by('dropped').length;
+  const total=accounts.length-dropped;
+  let score=18 + ready.length*11 + sent.length*7 + (conf?6:0) + Math.min(total,10)*2;
+  if(added.length>=4 && ready.length===0) score-=10;   // pile-up, nothing shipping
+  score=Math.max(0,Math.min(92,score));
+  let band,label,week,move;
+  if(total===0){band='empty';label='Empty';week='Nothing on the desk yet.';move='Run a search to bring companies in.';}
+  else if(score>=70){band='shipping';label='Shipping';week=(sent.length+' sent to Signal Console, '+ready.length+' more ready.');move=(ready.length?'Send the '+ready.length+' ready — then confirm the next.':'Confirm the next account in line.');}
+  else if(score>=50){band='working';label='Working';week=(added.length+' waiting to confirm, '+ready.length+' ready to send.');move=(conf?'Finish confirming '+conf.name+' — one question left.':'Pick an account and confirm it.');}
+  else{band='loose';label='Loose';week=(added.length+' unconfirmed, only '+ready.length+' ready.');move='Confirm accounts before the pile goes stale.';}
+  $('deskread').innerHTML='<span class="band '+band+'">'+label+'</span>'+
+    '<span class="sc">where the desk stands · <b>'+score+'</b>/92</span>'+
+    '<span class="rd">'+week+'</span>'+
+    '<span class="mv"><b>Next</b>'+move+'</span>';
+}
 function render(){
   const added=by('added'),ready=by('ready'),sent=by('sent'),conf=confirming();
   $('tstat').innerHTML='<b>'+ready.length+'</b> ready to send · <b>'+(added.length+(conf?1:0))+'</b> being confirmed';
+  renderDeskRead(added,ready,sent,conf);
   $('addedCount').textContent=added.length;$('readyCount').textContent=ready.length;
   // just added
   $('addedList').innerHTML = added.length?added.map(a=>`<div class="rr" onclick="pickAccount('${a.id}')"><div class="a">${a.name} <span class="sc">${a.q}</span></div><div class="c">${a.contact}</div>${a.note?`<div class="note">${a.note}</div>`:`<div class="note" style="color:var(--ink-soft)">click to confirm</div>`}</div>`).join(''):`<div class="emptyr">Nothing waiting. Run a search above to add companies.</div>`;

@@ -61,6 +61,30 @@
 .closed{margin-top:22px;display:flex;align-items:center;gap:20px;padding:13px 16px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:12.5px;color:var(--ink-2)}.closed b{color:var(--ink)}.closed .won{color:var(--forest)}.closed .lost{color:var(--red)}.closed .exp{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}
 .handoff{margin-top:18px;border-top:1px solid var(--line);padding-top:15px}.handoff .h{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:11px}.hrow{display:flex;gap:10px;flex-wrap:wrap}.hbtn{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:10px 16px;border:1px solid var(--line-2);border-radius:5px;background:var(--paper);color:var(--ink-2);cursor:pointer}.hbtn:hover{border-color:var(--ink-3);color:var(--ink)}
 .foot{margin:22px 30px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.05em}
+/* health-snapshot visibility (load-bearing: feeds Dashboard/Readiness + Founding GTM/Future Autopsy) */
+.snap{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);line-height:1.65}.snap b{color:var(--forest)}.snap .fb{color:var(--red)}
+/* 9-field editor drawer */
+.scrim{position:fixed;inset:0;background:rgba(14,27,51,.3);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:60}.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,95vw);background:var(--paper);border-left:1px solid var(--line-2);transform:translateX(100%);transition:transform .24s ease;z-index:61;overflow-y:auto;box-shadow:-8px 0 40px rgba(14,27,51,.13)}.drawer.on{transform:translateX(0)}
+.dhd{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line-2);padding:18px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.dhd .t{font-family:var(--serif);font-size:24px;line-height:1}.dhd .m{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-top:7px}
+.dhd .x{border:0;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1}
+.dbd{padding:20px 24px 36px}
+.dgrp{margin-bottom:20px}.dgrp .gl{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:11px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.df{margin-bottom:12px}.df label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+.df input,.df select,.df textarea{width:100%;font-family:var(--sans);font-size:13.5px;color:var(--ink);padding:9px 11px;border:1px solid var(--line-2);border-radius:6px;background:var(--paper)}
+.df textarea{resize:vertical;min-height:50px;line-height:1.45}.df input:focus,.df select:focus,.df textarea:focus{outline:none;border-color:var(--blue)}
+.d2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stk{display:flex;gap:8px;align-items:center;margin-bottom:8px}.stk input{flex:1}.stk select{flex:0 0 128px}.stk .eng{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--ink-soft);white-space:nowrap}.stk .rm{border:0;background:transparent;color:var(--red);cursor:pointer;font-size:16px}
+.addstk{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;background:transparent;border:0;padding:4px 0}
+.dsv{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line-2);padding:15px 24px;display:flex;gap:12px;align-items:center}.dsv .save{font-family:var(--sans);font-weight:600;font-size:14px;padding:11px 22px;border:0;border-radius:6px;background:var(--orange);color:#fff;cursor:pointer}.dsv .note{font-family:var(--mono);font-size:10px;color:var(--ink-soft)}
+/* loss-reason capture modal */
+.lossmodal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;background:rgba(14,27,51,.42)}.lossmodal.on{display:flex}
+.lossbox{background:var(--paper);border-radius:10px;width:min(490px,93vw);padding:28px 30px;border-top:4px solid var(--red)}
+.lossbox .lh{font-family:var(--serif);font-size:24px;line-height:1.05}.lossbox .ls{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.5}.lossbox .ls b{color:var(--red)}
+.lopt{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);cursor:pointer;font-size:14px}.lopt input{accent-color:var(--red)}
+.lossbox textarea{width:100%;margin-top:12px;font-family:var(--sans);font-size:13px;padding:9px 11px;border:1px solid var(--line-2);border-radius:6px;min-height:56px;resize:vertical}
+.lact{margin-top:18px;display:flex;gap:12px;align-items:center}.lact .save{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 20px;border:0;border-radius:6px;background:var(--red);color:#fff;cursor:pointer}.lact .skip{font-family:var(--mono);font-size:11px;color:var(--ink-soft);cursor:pointer}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:8px;opacity:0;transition:.3s;z-index:50;box-shadow:0 8px 30px -10px rgba(14,27,51,.5)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#7fd1a3}
 </style></head><body><div class="wrap">
 <div class="topbar"><div class="brand"><svg class="mk" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0e1b33" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0e1b33" stroke-width="3.4"/><path d="M2 38h44" stroke="#0e1b33" stroke-width="3.4"/></svg><span><b>ANTAEUS</b> · Deal Workspace</span></div><div class="tstat" id="tstat"></div></div>
@@ -76,9 +100,13 @@
 
   <div class="closed" id="closed"></div>
   <div class="handoff"><div class="h">Take a deal somewhere it gets resolved</div><div class="hrow"><button class="hbtn">Pre-mortem a deal</button><button class="hbtn">Run a pilot</button><button class="hbtn">Deploy an advisor</button><button class="hbtn">Prep the next call</button><button class="hbtn">Rehearse the negotiation</button></div></div>
+  <div class="snap" id="snap"></div>
   <div class="foot" id="foot"></div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer"></div>
+<div class="lossmodal" id="lossmodal"></div>
 <script>
 let VIEW='focus', focalId='nw';
 let deals=[
@@ -197,11 +225,63 @@ function viewTimeline(){
   '<div class="track"><div class="v1"></div><div class="v2"></div><div class="now"></div><div class="nowl">now</div>'+pills+'</div></div>'+detail;
 }
 function render(){
- renderHero();renderClosed();
+ renderHero();renderClosed();renderSnap();
  const v=$('view');v.classList.add('sw');
  setTimeout(()=>{v.innerHTML=VIEW==='list'?viewList():VIEW==='timeline'?viewTimeline():viewFocus();v.classList.remove('sw');},120);
  $('foot').textContent='MOCKUP · not wired · design-only · DEAL WORKSPACE · toggleable views (Focus · Timeline · List) off one shared recovery engine · '+VIEW.toUpperCase();
 }
+/* ---- 9-field editor + stakeholders + loss-reason capture (load-bearing) ---- */
+const STAGES9=['Prospect','Discovery','Solution Fit','PoC / Pilot','Negotiation','Verbal Commit','Closed Won','Closed Lost'];
+const ROLES=['Champion','Economic buyer','Technical','Legal','Exec sponsor','End user'];
+const LOSS=[['competitor','Lost to a competitor'],['no_decision','No decision / status quo'],['budget','Budget pulled'],['champion_left','Champion left'],['timing','Timing / not now']];
+deals.forEach(d=>{if(!d.stakeholders)d.stakeholders=[];if(d.notes===undefined)d.notes='';if(d.forecast===undefined)d.forecast=d.momentum==='strong'?'Commit':d.momentum==='stalling'?'Pipeline':'Best case';});
+(function(){const ra=deals.find(d=>d.id==='ra');if(ra&&!ra.stakeholders.length)ra.stakeholders=[{name:'Sarah Chen',role:'Champion',engaged:true},{name:'CFO',role:'Economic buyer',engaged:false}];const br=deals.find(d=>d.id==='br');if(br&&!br.stakeholders.length)br.stakeholders=[{name:'Dana Wu',role:'Champion',engaged:true}];})();
+function resolvedFocalId(){const r=ranked();let f=r.find(x=>x.d.id===focalId);if(!f)f=r[0];return f?f.d.id:null;}
+function renderSnap(){
+ const act=active();const pipe=act.reduce((t,d)=>t+d.value,0);const r=ranked();const slip=r.filter(x=>x.a.lane!=='holding').length;
+ const won=deals.filter(d=>d.status==='won').length,lost=deals.filter(d=>d.status==='lost').length;
+ $('snap').innerHTML='This board publishes a <b>health snapshot</b> ('+act.length+' active · $'+pipe+'k pipeline · '+slip+' slipping) → <b>Dashboard</b> + <b>Readiness</b> read it live.<br>Closed-lost <span class="fb">loss reasons</span> → <span class="fb">Founding GTM</span> (win/loss) + <span class="fb">Future Autopsy</span>. So far: '+won+' won · '+lost+' lost.';
+}
+function openEditor(id){const d=deals.find(x=>x.id===id);if(!d)return;
+ const stk=d.stakeholders.map((s,i)=>'<div class="stk"><input value="'+(s.name||'')+'" data-stk="'+i+'" data-k="name" placeholder="Name"><select data-stk="'+i+'" data-k="role">'+ROLES.map(r=>'<option '+(r===s.role?'selected':'')+'>'+r+'</option>').join('')+'</select><label class="eng"><input type="checkbox" data-stk="'+i+'" data-k="engaged" '+(s.engaged?'checked':'')+'>engaged</label><button class="rm" data-rmstk="'+i+'">×</button></div>').join('');
+ $('drawer').innerHTML='<div class="dhd"><div><div class="t">'+d.name+'</div><div class="m">'+money(d.value)+' · '+d.stage+' · the 9 fields that make it a real deal</div></div><button class="x" id="dx">×</button></div>'+
+  '<div class="dbd">'+
+   '<div class="dgrp"><div class="gl">Account &amp; stage</div><div class="d2"><div class="df"><label>Value ($k)</label><input type="number" data-f="value" value="'+d.value+'"></div><div class="df"><label>Stage</label><select data-f="stage">'+STAGES9.map(s=>'<option '+(s===d.stage?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div></div>'+
+   '<div class="dgrp"><div class="gl">The next move</div><div class="d2"><div class="df"><label>Forecast</label><select data-f="forecast">'+['Pipeline','Best case','Commit'].map(s=>'<option '+(s===d.forecast?'selected':'')+'>'+s+'</option>').join('')+'</select></div><div class="df"><label>Momentum</label><select data-f="momentum">'+['strong','neutral','stalling'].map(s=>'<option '+(s===d.momentum?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div></div>'+
+   '<div class="dgrp"><div class="gl">The buying group</div><div class="d2"><div class="df"><label>Champion</label><input data-f="champion" value="'+(d.champion||'')+'" placeholder="who carries it inside"></div><div class="df"><label>Economic buyer</label><input data-f="economicBuyer" value="'+(d.economicBuyer||'')+'" placeholder="who owns the budget"></div></div><div class="df"><label>Stakeholders</label><div id="stklist">'+(stk||'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-soft)">none yet</div>')+'</div><button class="addstk" id="addstk">+ add a stakeholder</button></div></div>'+
+   '<div class="dgrp"><div class="gl">The deal intel</div><div class="df"><label>Use case</label><input data-f="useCase" value="'+(d.useCase||'')+'"></div><div class="df"><label>Pain</label><input data-f="pain" value="'+(d.pain||'')+'"></div><div class="df"><label>Competition</label><input data-f="competition" value="'+(d.competition||'')+'"></div><div class="df"><label>Decision process</label><input data-f="decisionProcess" value="'+(d.decisionProcess||'')+'"></div><div class="df"><label>Notes</label><textarea data-f="notes">'+(d.notes||'')+'</textarea></div></div>'+
+  '</div>'+
+  '<div class="dsv"><button class="save" id="dsave">Save the deal</button><span class="note">champion · EB · use case · pain · competition · process · notes · forecast · momentum</span></div>';
+ $('scrim').classList.add('on');$('drawer').classList.add('on');
+ $('dx').onclick=closeDrawer;$('scrim').onclick=closeDrawer;
+ $('addstk').onclick=()=>{d.stakeholders.push({name:'',role:'Champion',engaged:false});openEditor(id);};
+ $('drawer').querySelectorAll('[data-rmstk]').forEach(b=>b.onclick=()=>{d.stakeholders.splice(+b.dataset.rmstk,1);openEditor(id);});
+ $('dsave').onclick=()=>saveEditor(id);
+}
+function closeDrawer(){$('scrim').classList.remove('on');$('drawer').classList.remove('on');}
+function saveEditor(id){const d=deals.find(x=>x.id===id);if(!d)return;const prev=d.stage;
+ $('drawer').querySelectorAll('[data-f]').forEach(el=>{const k=el.dataset.f;d[k]=el.type==='number'?+el.value:el.value;});
+ $('drawer').querySelectorAll('[data-stk]').forEach(el=>{const i=+el.dataset.stk,k=el.dataset.k;if(d.stakeholders[i])d.stakeholders[i][k]=el.type==='checkbox'?el.checked:el.value;});
+ if(d.champion)d.hasNextStep=d.hasNextStep;
+ closeDrawer();
+ if(d.stage==='Closed Lost'&&prev!=='Closed Lost'){d.status='lost';openLoss(id);return;}
+ if(d.stage==='Closed Won'){d.status='won';}
+ toast('<b>'+d.name+'</b> saved · health snapshot published');render();
+}
+function openLoss(id){const d=deals.find(x=>x.id===id);if(!d)return;
+ $('lossmodal').innerHTML='<div class="lossbox"><div class="lh">Why did '+d.name+' close-lost?</div><div class="ls">The one field the whole system leans on. <b>The reason feeds Founding GTM (win/loss) and Future Autopsy.</b> Skip it and the next hire inherits a loss with no lesson.</div>'+
+  '<div class="lopts">'+LOSS.map((l,i)=>'<label class="lopt"><input type="radio" name="loss" value="'+l[0]+'" '+(i===0?'checked':'')+'>'+l[1]+'</label>').join('')+'</div>'+
+  '<textarea id="lnotes" placeholder="What actually happened? (optional but valuable)"></textarea>'+
+  '<div class="lact"><button class="save" id="lsave">Save the reason</button><span class="skip" id="lskip">Skip — leave it unexplained</span></div></div>';
+ $('lossmodal').classList.add('on');
+ $('lsave').onclick=()=>{d.lossReason=$('lossmodal').querySelector('input[name=loss]:checked').value;d.lossNotes=$('lnotes').value;$('lossmodal').classList.remove('on');toast('Loss reason saved → Founding GTM + Future Autopsy');render();};
+ $('lskip').onclick=()=>{$('lossmodal').classList.remove('on');toast(d.name+' lost — reason left unexplained');render();};
+}
+/* open the editor from "edit all 9 →" or "Open full deal" */
+$('view').addEventListener('click',(e)=>{const t=e.target;
+ if(t.classList.contains('e')||(t.classList.contains('gh')&&/open full deal/i.test(t.textContent))){const id=resolvedFocalId();if(id)openEditor(id);}
+});
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){closeDrawer();$('lossmodal').classList.remove('on');}});
 function syncToggle(){document.querySelectorAll('#vtoggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===VIEW));}
 document.querySelectorAll('#vtoggle button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;syncToggle();render();}));
 syncToggle();render();
