@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — the command + standing cockpit (interactive)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--gold:#b08414;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 70px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:20px 0 6px}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+/* MASTHEAD — where your whole motion stands */
+.mast{padding:18px 0 4px;border-bottom:1px solid var(--hair-2)}
+.mast .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.gate{display:flex;gap:0;margin:16px 0 0}
+.g{flex:1;text-align:center;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-4);padding:7px 4px}
+.g .bar{height:4px;border-radius:3px;background:rgba(10,28,64,.1);margin-bottom:8px}
+.g.done .bar{background:var(--forest)}.g.on .bar{background:var(--amber)}.g.on{color:var(--amber)}.g.done{color:var(--forest)}
+.g.next .bar{background:repeating-linear-gradient(90deg,rgba(37,99,235,.35),rgba(37,99,235,.35) 5px,transparent 5px,transparent 10px)}.g.next{color:var(--blue)}
+.mast h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6.4vw,74px);line-height:.98;letter-spacing:-.02em;margin:22px 0 0}.mast h1 em{font-style:normal;color:var(--amber)}
+.mast .sub{display:flex;align-items:flex-start;gap:22px;margin-top:16px;flex-wrap:wrap}
+.mast .next{font-size:15px;color:var(--ink-2);line-height:1.5;max-width:52ch;border-left:2px solid var(--amber);padding-left:14px}.mast .next b{color:var(--ink)}.mast .next .l{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.mast .open{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;white-space:nowrap;margin-top:4px}
+/* THE ONE MOVE (subordinate) */
+.move{padding:24px 0 22px;border-bottom:1px solid var(--hair-2)}
+.move .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px}.move .k .n{color:var(--ink-4)}
+.move .row{display:flex;align-items:center;gap:22px;margin-top:13px;flex-wrap:wrap}
+.move h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.05;letter-spacing:-.01em;margin:0;transition:opacity .16s}
+.move .go{font-family:var(--sans);font-weight:600;font-size:14px;padding:12px 22px;border:0;border-radius:8px;background:var(--orange);color:#fff;cursor:pointer;margin-left:auto}
+.move .why{font-size:14px;color:var(--ink-2);margin:11px 0 0;max-width:66ch;line-height:1.5;transition:opacity .16s}.move .why b{color:var(--ink)}
+.move .conf{font-family:var(--mono);font-size:11px;color:var(--forest);display:inline-flex;align-items:center;gap:7px;margin-top:12px}.move .conf .d{width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.move .conf .skip{color:var(--blue);cursor:pointer;margin-left:14px;border-bottom:1px solid transparent}.move .conf .skip:hover{border-color:var(--blue)}
+.move .conf .q{color:var(--ink-4);margin-left:12px}
+.move.sw h2,.move.sw .why{opacity:0}
+/* WHERE EACH PART STANDS */
+.standhd{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:22px}
+.stand{display:flex;gap:0;margin-top:12px;flex-wrap:wrap}
+.vit{flex:1;min-width:150px;padding:4px 18px;border-left:1px solid var(--hair);cursor:pointer}
+.vit:first-child{padding-left:0;border-left:0}.vit:hover .vn{color:var(--orange)}
+.vit .vk{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.vit .vn{font-size:18px;font-weight:600;letter-spacing:-.01em;margin-top:7px}.vit .vs{font-size:11px;color:var(--ink-3);margin-top:2px}.vit .door{font-family:var(--mono);font-size:9px;color:var(--ink-4);margin-top:7px}
+.vit.bad .vn{color:var(--red)}.vit.warn .vn{color:var(--amber)}
+.foot{max-width:1080px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Dashboard</span><span class="r">where your motion stands · all day</span></div>
+
+  <div class="mast">
+    <div class="k">Where your whole motion stands</div>
+    <div class="gate" id="gate"></div>
+    <h1>You're <em>Building.</em></h1>
+    <div class="sub">
+      <div class="next"><span class="l">What gets you to the next stage</span>Run <b>one pilot</b> that gives a buyer's boss a result they can act on, and get the other parts of your sales motion moving. Then a hire could run this <b>with you just checking in</b>.</div>
+      <span class="open" id="seeall">See the whole thing →</span>
+    </div>
+  </div>
+
+  <div class="move" id="move"></div>
+
+  <div class="standhd">Where each part stands right now</div>
+  <div class="stand" id="stand"></div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · DASHBOARD — the command + standing cockpit (interactive) · leads with where your whole motion stands · one move underneath (cycle it with "show me the next"), never leading · each part is a door · nothing here re-does Signal Console, Briefing, or Future Autopsy</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+
+// gate ladder — the 5 stages, current = Building
+const GATES=[['You are the system','done'],['Building','on'],['Inheritable','next'],['Hire-ready',''],['Repeatable','']];
+$('gate').innerHTML=GATES.map(([label,st])=>`<div class="g ${st}"><div class="bar"></div>${label}</div>`).join('');
+
+// the cross-object ranked moves (this is the command engine's output — spans every room)
+const MOVES=[
+ {n:'#1 of 14',title:'Outbound to Ramp.',cta:'Compose the outbound',room:'Outbound Studio',conf:'clearly the top one',
+  why:'Sarah Chen just started as CRO and they posted 12 AE roles this week — the account is running hot. It\'s the most valuable thing you could do right now, and reaching out is the part of your motion that\'s furthest behind.'},
+ {n:'#2 of 14',title:'Steady Northwind.',cta:'Open the deal',room:'Deal Workspace',conf:'clear',
+  why:'Your biggest deal is drifting — no one inside is carrying it and there\'s no next meeting set. It slips this week if nothing changes.'},
+ {n:'#3 of 14',title:'Look at Datadog before it goes.',cta:'See what\'s killing it',room:'Future Autopsy',conf:'clear',
+  why:'It\'s 16 days from being lost — the close date already passed and the terms are still open. Worth a hard look now, not later.'},
+ {n:'#4 of 14',title:'Run a pilot with Brex.',cta:'Set up a pilot',room:'Pilot room',conf:'clear',
+  why:'They\'ve said yes but haven\'t seen a real result yet. A quick pilot is the one thing standing between you and a motion a hire could run.'},
+ {n:'#5 of 14',title:'Reach out to Snowflake.',cta:'Compose the outbound',room:'Signal Console',conf:'worth a look',
+  why:'They just hired a VP of Sales — a fresh reason to reach out while it\'s warm.'}
+];
+let mi=0;
+function renderMove(){
+  const m=MOVES[mi];const nextTwo=[MOVES[(mi+1)%MOVES.length],MOVES[(mi+2)%MOVES.length]].map(x=>x.title.replace(/\.$/,'')).join(' · ');
+  const el=$('move');el.classList.add('sw');
+  setTimeout(()=>{
+    el.innerHTML=`<div class="k">The most valuable move on your board <span class="n">· ${m.n}</span></div>
+      <div class="row"><h2>${m.title}</h2><button class="go" id="go">${m.cta} →</button></div>
+      <div class="why">${m.why}</div>
+      <div class="conf"><span class="d"></span>${m.conf}<span class="skip" id="skip">not now — show me the next</span><span class="q">· then: ${nextTwo}</span></div>`;
+    $('go').onclick=()=>toast(m.title.replace(/\.$/,'')+' → <b>'+m.room+'</b> (carrying the account with you)');
+    $('skip').onclick=()=>{mi=(mi+1)%MOVES.length;renderMove();};
+    el.classList.remove('sw');
+  },140);
+}
+renderMove();
+
+// where each part stands — every item a door, none re-does the room
+const STAND=[
+ {k:'Deals',n:'3 will slip',s:'$480k of pipeline this week',tone:'bad',room:'Deal Workspace'},
+ {k:'Hottest',n:'Ramp · 88',s:'4 accounts ready to reach',tone:'',room:'Signal Console'},
+ {k:'Pace',n:'Behind',s:'not enough pipeline yet',tone:'warn',room:'Quota Workback'},
+ {k:'Dying',n:'Datadog · 16d',s:'your worst open deal',tone:'bad',room:'Future Autopsy'},
+ {k:'Handoff',n:'2 / 7',s:'a hire could inherit',tone:'warn',room:'Founding GTM'}
+];
+$('stand').innerHTML=STAND.map(v=>`<div class="vit ${v.tone}" data-room="${v.room}"><div class="vk">${v.k}</div><div class="vn">${v.n}</div><div class="vs">${v.s}</div><div class="door">${v.room} ↗</div></div>`).join('');
+document.querySelectorAll('.vit').forEach(el=>el.onclick=()=>toast('→ <b>'+el.dataset.room+'</b>'));
+$('seeall').onclick=()=>toast('Opening the full read on where you stand → <b>readiness</b>');
+</script>
+</body></html>
