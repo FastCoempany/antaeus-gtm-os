@@ -1073,13 +1073,65 @@ we are uprooting.
   conversation* / *your opening line* / *the first message*; "earned" /
   "earns" → *qualifies for* / *is ready for*.
 - **"proof" / "proofs" (added 2026-07-03 — also retired as a sacred noun,
-  §2):** AI-language. Say *the pilot* / *the pilot's results* / *what the
-  pilot showed* / *the evidence*. The PoC Framework object is renamed to
-  match; "PoC" (proof-of-concept) as a room/stage name is a candidate for
-  renaming to "Pilot" when that room is redesigned.
+  §2; hard-banned 2026-07-04):** AI-language a normal person does not use
+  for a sales pilot. Never appears in user-facing copy. Say *the pilot* /
+  *the pilot's results* / *what the pilot showed* / *a result the buyer's
+  boss can act on*. The PoC Framework object is renamed to match; "PoC"
+  (proof-of-concept) as a room/stage name is a candidate for renaming to
+  "Pilot" when that room is redesigned.
+- **"cast" / "cast a proof" (added 2026-07-04 — hard-banned):** insider
+  verb; nobody outside says they "cast" a pilot. Never appears in
+  user-facing copy. Say *run a pilot* / *set up a pilot* / *get a real
+  result from a pilot*.
+- **"sanity-check" / "sanity-checking" (added 2026-07-04 — hard-banned):**
+  in-house casual; reads as flippant, and a newcomer wouldn't use it. Say
+  *with you checking in* / *with you keeping an eye on it* / *with you there
+  to answer questions*. (Canon §4.17's internal "sanity-checks" wording for
+  the Inheritable verdict is reworded to match when that room is built.)
 - **Claims of live activity that aren't:** "researching now" implies the
   system is off doing a live search — say *Confirming* (the operator's own
   act) unless a search is genuinely running.
+
+**Words that must never appear naked (added 2026-07-04).** Some words aren't
+outright banned but carry *zero meaning* to a reader from outside our world
+— a founder new to sales tools, or a VC skimming the app between meetings.
+Used bare, they read as filler or in-house code. Each must either be
+replaced, or wrapped in plain words that say what it actually means, right
+there in the sentence:
+
+- **"gap"** — never bare. Say *the one thing standing between you and X* /
+  *what's left before a hire could run this*. Name the thing.
+- **"evidence"** — never bare. Say *a result the buyer's boss could act on
+  without you in the room*. Say what the evidence IS.
+- **"dimension"** — never bare. It's internal scoring language. Name the
+  actual part of the motion (*your targeting*, *your outreach*, *your
+  discovery calls*, *your open deals*, *your pilot results*).
+- **"dimension off zero"** — three words that must never be strung together
+  in front of a user. Banned outright. Say *getting each part of your sales
+  motion started*.
+- **"live work" / "your live work"** — never bare. Say *the work you're
+  already doing every day*.
+- **"vitals" / "the live vitals" (banned outright, 2026-07-04):** a person
+  reads "vital" as *status of life* — hospital language, wrong register.
+  Even bare "vitals" fails. Say *where each part stands right now* / *the
+  live read on your motion* / *what's true right now*.
+- **"verdict" (banned user-facing, 2026-07-04 — already on the §11
+  abandoned list):** an invented word that sounds like a courtroom. It may
+  stay as an *internal* engine/code name (the readiness engine computes a
+  "verdict"), but the user never sees the word. User-facing copy names the
+  **state itself** — *You're Building* / *Inheritable with guardrails* /
+  *Hire-ready* — never "your verdict is…".
+
+**Forbidden sentence styling — never narrate the machine to the user
+(2026-07-04).** Do not describe the system's internal machinery in
+user-facing copy. The user hears *what is true*, stated directly — never
+*how the system arrived at it*. Banned constructions and their kin:
+
+- "the state the verdict is reading" — banned outright.
+- "what the system is computing / scoring / evaluating," "the inputs the
+  engine reads," "the signals feeding the score." The plumbing is invisible
+  to the operator; say the plain fact instead (*3 deals will slip this
+  week*), not the fact-about-the-fact.
 
 **Worked rewrites (from the Prospecting Desk lineup, 2026-07-03):**
 "the three things that qualify a name" → *three questions to answer before
@@ -1091,6 +1143,35 @@ conversation, and Vanta is ready to send to Signal Console*; "capture from
 a query card" → *add an account from a saved search*; "one click sends
 them" → *send each with one click* (each account sends individually — never
 imply a batch).
+
+**The canonical what-NOT-to-do example (2026-07-04, from a Dashboard
+mockup).** This paragraph is preserved as the worst case — the exact style,
+diction, and syntax the whole app is being scrubbed of:
+
+- Before (banned — jargon stacked into a sentence no outsider could parse):
+  > You have no cast proof. Cast a proof → PoC. Not a single deal has
+  > evidence its buyer's boss could act on. That's the one hard blocker to
+  > inheritable with guardrails — the rest of the gap is just getting each
+  > dimension off zero, which your live work already does.
+- After (plain, conversational, legible to anyone cold):
+  > No pilot has produced a real result yet. Run a pilot → Pilot room. None
+  > of your deals has run a small pilot that gives the buyer's boss
+  > something they can act on without you in the room. That's the one thing
+  > keeping a new hire from being able to run this. Everything else is just
+  > getting the other parts of your sales motion moving — and the work
+  > you're doing every day is already doing that.
+
+The tell in the "before": "cast proof," "evidence," "hard blocker,"
+"inheritable with guardrails," "the gap," "each dimension off zero," "live
+work" — seven pieces of in-house code in four sentences. Read it out loud to
+someone who doesn't work in sales; if they blink, it fails.
+
+**App-wide scrub (standing directive, 2026-07-04).** This is not a
+one-mockup fix. Every page, every room, every label / button / empty state /
+error / tooltip / headline gets read against §13 and §11 and rewritten in
+this voice. As each room comes up for its redesign, the language scrub is
+part of the work, not an afterthought — and no new surface ships copy that
+would make a first-timer, or a VC skimming cold, stop and decode.
 
 **Elementary, not dumbed-down.** Spoon-fed is about reading level and
 zero-decode clarity, not removing substance. The severe, high-consequence
