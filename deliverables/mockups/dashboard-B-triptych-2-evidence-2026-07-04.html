@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard B2 — Verdict + evidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--gold:#b08414;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 70px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:20px 0 6px}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.mast{padding:18px 0 6px}
+.mast .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.gate{display:flex;gap:0;margin:16px 0 0}
+.g{flex:1;text-align:center;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-4);padding:7px 4px}
+.g .bar{height:4px;border-radius:3px;background:rgba(10,28,64,.1);margin-bottom:8px}
+.g.done .bar{background:var(--forest)}.g.on .bar{background:var(--amber)}.g.on{color:var(--amber)}.g.done{color:var(--forest)}
+.g.next .bar{background:repeating-linear-gradient(90deg,rgba(37,99,235,.35),rgba(37,99,235,.35) 5px,transparent 5px,transparent 10px)}.g.next{color:var(--blue)}
+.mast h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6.4vw,74px);line-height:.98;letter-spacing:-.02em;margin:22px 0 8px}.mast h1 em{font-style:normal;color:var(--amber)}
+.because{font-size:16px;color:var(--ink-2);line-height:1.5;max-width:60ch}.because b{color:var(--ink);font-weight:600}
+/* evidence ledger — the vitals ARE the reasons */
+.evh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:30px;border-top:2px solid var(--ink);padding-top:16px;display:flex}
+.evh .r{margin-left:auto;color:var(--ink-4)}
+.ev{display:grid;grid-template-columns:118px 1fr auto;gap:18px;align-items:center;padding:15px 0;border-top:1px solid var(--hair);cursor:pointer}
+.ev:hover{background:rgba(10,28,64,.02)}
+.ev .lab{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:8px}.ev .lab .dot{width:7px;height:7px;border-radius:50%}
+.ev .mid .big{font-size:17px;font-weight:600;letter-spacing:-.01em}.ev .mid .small{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.ev .mid .big.bad{color:var(--red)}.ev .mid .big.warn{color:var(--amber)}
+.ev .why{font-size:12.5px;color:var(--ink-2);text-align:right;max-width:30ch;line-height:1.4}.ev .why .gate{display:inline;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);background:rgba(192,57,43,.08);padding:2px 6px;border-radius:4px;margin-left:0}
+.ev .arw{font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+.evrow{display:grid;grid-template-columns:118px 1fr auto 16px;gap:18px;align-items:center}
+.foot{max-width:1020px;margin:30px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Dashboard</span><span class="r">where your motion stands · all day</span></div>
+  <div class="mast">
+    <div class="k">Where your whole motion stands</div>
+    <div class="gate">
+      <div class="g done"><div class="bar"></div>You are the system</div>
+      <div class="g on"><div class="bar"></div>Building</div>
+      <div class="g next"><div class="bar"></div>Inheritable</div>
+      <div class="g"><div class="bar"></div>Hire-ready</div>
+      <div class="g"><div class="bar"></div>Repeatable</div>
+    </div>
+    <h1>You're <em>Building.</em></h1>
+    <div class="because">Not <b>inheritable</b> yet — and here's exactly what's holding it. Each line is the real state, and the door into the room that changes it.</div>
+  </div>
+  <div class="evh"><span>The evidence behind the verdict</span><span class="r">tap any line to go fix it</span></div>
+  <div class="evrow ev">
+    <span class="lab"><span class="dot" style="background:var(--red)"></span>Proof</span>
+    <span class="mid"><div class="big bad">No cast proof yet</div><div class="small">not a single deal has evidence its boss could act on</div></span>
+    <span class="why"><span class="gate">hard gate</span> the one thing between you and Inheritable</span>
+    <span class="arw">↗</span>
+  </div>
+  <div class="evrow ev">
+    <span class="lab"><span class="dot" style="background:var(--red)"></span>Deals</span>
+    <span class="mid"><div class="big bad">3 will slip</div><div class="small">$480k of pipeline going cold this week</div></span>
+    <span class="why">pressure that keeps the deals dimension thin</span>
+    <span class="arw">↗</span>
+  </div>
+  <div class="evrow ev">
+    <span class="lab"><span class="dot" style="background:var(--amber)"></span>Pace</span>
+    <span class="mid"><div class="big warn">1.2× of 3.5×</div><div class="small">coverage · thin against the number</div></span>
+    <span class="why">not enough pipeline to hit quota yet</span>
+    <span class="arw">↗</span>
+  </div>
+  <div class="evrow ev">
+    <span class="lab"><span class="dot" style="background:var(--amber)"></span>Handoff</span>
+    <span class="mid"><div class="big warn">2 / 7 sections</div><div class="small">of the kit a hire would inherit</div></span>
+    <span class="why">the inheritance surface is still mostly empty</span>
+    <span class="arw">↗</span>
+  </div>
+  <div class="evrow ev">
+    <span class="lab"><span class="dot" style="background:var(--forest)"></span>Signal</span>
+    <span class="mid"><div class="big">Ramp hottest · 88</div><div class="small">4 accounts motion-ready right now</div></span>
+    <span class="why">this part is compounding — keep feeding it</span>
+    <span class="arw">↗</span>
+  </div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · DASHBOARD B2 — verdict + evidence · the verdict and its reasons fused: the vitals ARE the gating evidence, each a door into the room that changes it · no "do this first" command · FA/proof/deal/quota/handoff each read a published snapshot</div>
+</body></html>
