@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pilot Desk — the guided pilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.62);--ink-3:rgba(10,28,64,.4);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.1);--hair-2:rgba(10,28,64,.16);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.1);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.1);--amber:#b5790f;--amber-soft:rgba(181,121,15,.11);--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 56px}
+.wrap{max-width:920px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.where{display:flex;align-items:baseline;gap:12px;margin:22px 0 16px}
+.where .who{font-family:var(--serif);font-size:20px}.where .deal{font-family:var(--mono);font-size:10px;color:var(--blue)}.where .wk{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+.band{border:1px solid var(--hair-2);border-radius:12px;background:var(--surface);padding:16px 20px;margin-bottom:16px}
+.band .bh{display:flex;align-items:baseline;gap:10px;margin-bottom:11px}
+.band .bh .t{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.band .bh .r{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--forest)}
+.sizenote{font-size:11.5px;color:var(--ink-3);font-style:italic;margin-bottom:13px}
+.faces{display:flex;flex-wrap:wrap;gap:8px}
+.face{display:flex;align-items:center;gap:7px;padding:5px 11px;border:1px solid var(--hair-2);border-radius:20px;font-size:12.5px;font-weight:600}
+.face .d{width:7px;height:7px;border-radius:50%}.face .d.on{background:var(--forest)}.face .d.off{background:var(--amber)}.face .d.na{background:var(--ink-4)}
+.face .rl{font-weight:400;color:var(--ink-3);font-size:11px}
+/* who's-missing — OUT of the box, on the field, keep the left line */
+.gaps{border-left:3px solid var(--amber);padding:0 0 0 17px;margin:4px 6px 20px}
+.gaps .gt{font-size:14px;font-weight:700;margin-bottom:10px}
+.grow{padding:9px 0;font-size:13px;border-top:1px solid var(--hair)}.grow:first-of-type{border-top:0}
+.grow .top-r{display:flex;align-items:baseline;gap:9px}
+.grow .q{font-weight:600}.grow .why{color:var(--ink-2);font-size:12.5px}.grow .find{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--blue);cursor:pointer;white-space:nowrap}
+.findbox{display:none;margin-top:9px;padding:11px 13px;background:var(--surface);border:1px solid var(--hair);border-radius:8px}
+.grow.open .findbox{display:block}
+.findbox .fl{font-size:11.5px;color:var(--ink-2);margin-bottom:7px}
+.findbox input{font-family:var(--sans);font-size:12.5px;padding:6px 10px;border:1px solid var(--hair-2);border-radius:6px;width:200px;margin-right:8px}
+.findbox .intro{font-family:var(--mono);font-size:10.5px;color:var(--blue);cursor:pointer}
+/* share kit — collapsible */
+.kit .bh{cursor:pointer;margin-bottom:0}
+.kit .bh .r{color:var(--blue)}
+.kit .knud{font-size:12.5px;color:var(--amber);margin:11px 0 0}.kit .knud b{color:var(--ink)}
+.assets{display:none;grid-template-columns:1fr 1fr;gap:1px 22px;margin-top:12px;border-top:1px solid var(--hair);padding-top:6px}
+.assets.open{display:grid}
+.asset{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--hair);font-size:13px}.asset:first-child,.asset:nth-child(2){border-top:0}
+.asset .ic{font-size:14px;flex:none}.asset .an{font-weight:500}.asset .an .sub{display:block;font-size:11px;color:var(--ink-3);font-weight:400}
+.asset .send{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--blue);cursor:pointer;white-space:nowrap}
+.asset.hot{background:var(--amber-soft);border-radius:7px;margin:0 -8px;padding:9px 8px}
+.asset.mutual .ic{color:var(--forest)}
+/* journey */
+.path{position:relative;padding-left:34px;margin-top:22px}
+.path::before{content:'';position:absolute;left:11px;top:8px;bottom:16px;width:2px;background:var(--hair-2)}
+.mv{position:relative;padding:0 0 18px}
+.mv .node{position:absolute;left:-28px;top:1px;width:22px;height:22px;border-radius:50%;background:var(--field);border:2px solid var(--hair-2);z-index:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--ink-4)}
+.mv.done .node{background:var(--forest);border-color:var(--forest);color:#fff}
+.mv.now .node{border-color:var(--orange);background:var(--orange);color:#fff;box-shadow:0 0 0 5px var(--orange-soft)}
+.mv .ttl{font-size:15px;font-weight:600;display:flex;align-items:baseline;gap:10px}.mv.done .ttl{color:var(--ink-3)}
+.mv .ttl .tag{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4)}.mv.done .ttl .tag{color:var(--forest)}.mv.now .ttl .tag{color:var(--orange)}
+.mv .summ{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.mv .panel{display:none}.mv.now .panel{display:block;margin-top:14px;border-left:3px solid var(--orange);padding:2px 0 2px 18px}
+.panel .h{font-family:var(--serif);font-size:24px;line-height:1.22;margin-bottom:10px}
+.panel .why{font-size:13.5px;line-height:1.55;color:var(--ink-2);border-left:2px solid var(--blue);padding-left:13px;margin-bottom:15px}.panel .why b{color:var(--ink)}
+.adopt{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:6px}.adopt .cl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}.adopt .cv{font-size:14px;font-weight:600;margin-top:3px}.adopt .cv.warn{color:var(--amber)}.adopt .cv.good{color:var(--forest)}
+.src{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);margin:0 0 15px}
+.steps{list-style:none;padding:0;margin:0 0 15px}.steps li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--hair);font-size:14px}
+.steps li .ck{width:18px;height:18px;border-radius:5px;border:2px solid var(--hair-2);flex:none;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent}
+.steps li.done .ck{background:var(--forest);border-color:var(--forest);color:#fff}.steps li.done{color:var(--ink-3)}
+.steps li.lock{opacity:.45}.steps li.lock .ck{cursor:not-allowed;border-style:dashed}
+.steps li .tt .sub{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.steps li .tt .share{color:var(--blue);cursor:pointer}
+.steps li .tt .lockhint{display:none;font-family:var(--mono);font-size:9.5px;color:var(--ink-4)}
+.steps li.lock .tt .lockhint{display:inline}
+.btn{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:8px;border:0;background:var(--orange);color:#fff;cursor:pointer;box-shadow:0 8px 20px -12px rgba(230,112,30,.85)}
+.foot{max-width:920px;margin:22px auto 0;padding:0 40px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Pilot Desk</span><span class="r">the guided pilot</span></div>
+  <div class="where"><span class="who">Ramp pilot</span><span class="deal">◆ $48k deal</span><span class="wk">Day 6 of 14 · about halfway</span></div>
+
+  <!-- circle band: just the names -->
+  <div class="band">
+    <div class="bh"><span class="t">The circle — who's hands-on with the pilot</span><span class="r">4 people in · aim 4–6 for this sale ✓</span></div>
+    <div class="sizenote">A small group is right for this kind of sale, not a crowd. A tighter, single-owner deal would need fewer — the desk sizes this to your deal.</div>
+    <div class="faces">
+      <span class="face"><span class="d on"></span>Priya <span class="rl">ops · using it</span></span>
+      <span class="face"><span class="d on"></span>Marco <span class="rl">analyst · using it</span></span>
+      <span class="face"><span class="d off"></span>Jen <span class="rl">coord. · not started</span></span>
+      <span class="face"><span class="d na"></span>Dana <span class="rl">your champion</span></span>
+    </div>
+  </div>
+
+  <!-- who's missing — out of the box, on the field, amber left line -->
+  <div class="gaps">
+    <div class="gt">Two people the pilot still needs — it stalls without them.</div>
+    <div class="grow" id="g1"><div class="top-r"><span class="q">Someone from IT</span><span class="why">Who controls the data your tool reads from? Marco already said IT owns that pipeline.</span><span class="find" data-g="g1">Find them →</span></div>
+      <div class="findbox"><div class="fl">Know who it is? Add them.</div><input placeholder="Name + title"><span class="intro">Don't know them? Ask Dana to introduce you → Draft the intro</span></div>
+    </div>
+    <div class="grow" id="g2"><div class="top-r"><span class="q">A day-to-day driver on their side</span><span class="why">Who keeps the pilot alive between check-ins? A project-lead type, hands-on enough to use it, senior enough to nudge the others.</span><span class="find" data-g="g2">Find them →</span></div>
+      <div class="findbox"><div class="fl">Know who it is? Add them.</div><input placeholder="Name + title"><span class="intro">Don't know them? Ask Dana to introduce you → Draft the intro</span></div>
+    </div>
+  </div>
+
+  <!-- share kit band — collapsible -->
+  <div class="band kit">
+    <div class="bh" id="kithead"><span class="t">Share kit — what to send the team so they actually use it</span><span class="r">9 things to share for pilot conversion ▾</span></div>
+    <div class="knud">Right now: <b>Jen hasn't started.</b> Send her the 5-minute getting-started so your next check-in is about wins, not setup.</div>
+    <div class="assets" id="assets">
+      <div class="asset hot"><span class="ic">🎬</span><span class="an">Getting-started video <span class="sub">5 min — send to Jen first</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">📄</span><span class="an">Quick-start per role <span class="sub">analyst vs coordinator</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">🏆</span><span class="an">Case study <span class="sub">a company like Ramp that ran this</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">💬</span><span class="an">"Why you're in this pilot" note <span class="sub">context per person</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">🤝</span><span class="an">Champion kit for Dana <span class="sub">sell it when you're not there</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">📣</span><span class="an">Kickoff announcement <span class="sub">Dana posts it to the team</span></span><span class="send">Copy →</span></div>
+      <div class="asset"><span class="ic">❓</span><span class="an">FAQ <span class="sub">answers for the internal skeptic</span></span><span class="send">Send →</span></div>
+      <div class="asset"><span class="ic">🔗</span><span class="an">Reference-customer intro <span class="sub">connect a stuck user to a happy one</span></span><span class="send">Ask →</span></div>
+      <div class="asset mutual"><span class="ic">📋</span><span class="an">Mutual pilot plan <span class="sub">you + Dana agree the goal, the steps, and the results meeting — you both own it</span></span><span class="send">Build together →</span></div>
+    </div>
+  </div>
+
+  <!-- journey -->
+  <div class="path">
+    <div class="mv done"><span class="node">✓</span><div class="ttl">Set it up <span class="tag">done</span></div><div class="summ">14-day window · shows a forecast-error cut · Dana signs off.</div></div>
+    <div class="mv done"><span class="node">✓</span><div class="ttl">Bring in the first people <span class="tag">done · keep widening ↑</span></div><div class="summ">Your hands-on users + champion. The circle above is where you keep growing it.</div></div>
+    <div class="mv now"><span class="node">3</span>
+      <div class="ttl">Keep the pilot moving <span class="tag">you're here</span></div>
+      <div class="summ">Hold their hand between check-ins — is the product getting used, and who else can you pull in?</div>
+      <div class="panel">
+        <div class="h">Get Jen using the product before your next check-in with Dana.</div>
+        <div class="why">Two of the three people you enrolled are active. <b>Jen hasn't opened it</b> — and she moves the data, so the pilot stalls without her.</div>
+        <div class="adopt"><div><div class="cl">Actually using it</div><div class="cv warn">2 of 3 enrolled</div></div><div><div class="cl">Actions taken</div><div class="cv good">10 this check-in</div></div></div>
+        <div class="src">how we know: pulled from your product's usage · or mark it by hand</div>
+        <ul class="steps" id="steps">
+          <li data-i="0"><span class="ck"></span><span class="tt">Message Priya + Marco a quick "nice work"<span class="sub">keeps your two active users warm</span></span></li>
+          <li class="lock" data-i="1"><span class="ck"></span><span class="tt">Get Jen to her first real action <span class="share">→ send her the 5-min start</span> <span class="lockhint">— finish the step above first</span></span></li>
+          <li class="lock" data-i="2"><span class="ck"></span><span class="tt">Set the next check-in with Dana <span class="lockhint">— unlocks once Jen's going</span></span></li>
+        </ul>
+        <button class="btn" id="done">Log this check-in →</button>
+      </div>
+    </div>
+    <div class="mv"><span class="node">4</span><div class="ttl">Read the adoption <span class="tag">ahead</span></div><div class="summ">Are enough of the right people actually using the product day-to-day to give the pilot a fair shot?</div></div>
+    <div class="mv"><span class="node">5</span><div class="ttl">Write up what it showed, for Dana to carry <span class="tag">ahead</span></div><div class="summ">Turn the pilot into a short write-up Dana can take to her boss and defend on her own — without you in the room.</div></div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+// find-them inline
+document.querySelectorAll('.find').forEach(f=>f.onclick=()=>document.getElementById(f.dataset.g).classList.toggle('open'));
+document.querySelectorAll('.intro').forEach(i=>i.onclick=()=>toast('Drafts a short intro ask you send <b>Dana</b>'));
+// share kit collapse
+$('kithead').onclick=()=>{const a=$('assets');a.classList.toggle('open');const r=$('kithead').querySelector('.r');r.textContent=r.textContent.replace(/[▾▴]/,a.classList.contains('open')?'▴':'▾');};
+document.querySelectorAll('.asset .send').forEach(s=>s.onclick=()=>toast('Shares this with the team'));
+// gated checklist
+const steps=[...document.querySelectorAll('#steps li')];
+function refresh(){steps.forEach((li,i)=>{const prevDone=i===0||steps[i-1].classList.contains('done');li.classList.toggle('lock',!prevDone&&!li.classList.contains('done'));});}
+steps.forEach(li=>li.querySelector('.ck').onclick=()=>{if(li.classList.contains('lock'))return;li.classList.toggle('done');refresh();});
+refresh();
+document.querySelectorAll('.share').forEach(s=>s.onclick=(e)=>{e.stopPropagation();toast('Opens the <b>Share kit</b> → getting-started for Jen');});
+$('done').onclick=()=>toast('Check-in logged → the desk sets up the next move');
+$('foot').textContent='MOCKUP · not wired · design-only · PILOT DESK — the guided pilot (V1) · who’s-missing on the field · collapsible share kit for pilot conversion · mutual pilot plan · adoption from product usage · gated steps · plain language';
+</script>
+</body></html>
