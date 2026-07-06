@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outbound Studio — where you are with them (complete)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 14px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.who{font-size:14.5px;color:var(--ink-2);padding:18px 0 4px}.who b{color:var(--ink);font-weight:600}.who .ed{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:8px;cursor:pointer}
+.spinel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 10px}
+.spine{display:flex;gap:6px}
+.stage{flex:1;text-align:center;cursor:pointer;padding:11px 6px 10px;border-radius:9px;background:var(--surface);border:1px solid var(--hair-2);transition:all .15s}
+.stage .sn{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--ink-4);text-transform:uppercase}
+.stage .st{font-size:12.5px;font-weight:600;margin-top:5px;line-height:1.2}
+.stage:hover{border-color:var(--ink-3)}
+.stage.on{background:#fff;border-color:var(--orange);box-shadow:inset 4px 0 0 var(--orange),0 3px 0 rgba(230,112,30,.25)}.stage.on .sn{color:var(--orange)}.stage.on .st{color:var(--ink)}
+.stage.done{background:var(--forest-soft);border-color:rgba(27,94,63,.25)}.stage.done .sn{color:rgba(27,94,63,.6)}.stage.done .st{color:var(--forest)}
+.body{display:grid;grid-template-columns:1fr 280px;gap:30px;margin-top:22px;align-items:start}
+.msghd{display:flex;align-items:baseline;margin-bottom:10px}.msghd .h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}.msghd .ready{margin-left:auto;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--forest);display:inline-flex;align-items:center;gap:6px}.msghd .ready .d{width:6px;height:6px;border-radius:50%;background:var(--forest)}
+.msg{background:var(--surface);border:1px solid var(--hair-2);border-radius:12px;padding:22px 26px;font-size:16px;line-height:1.62;color:var(--ink);box-shadow:0 6px 22px -14px rgba(10,28,64,.28);transition:opacity .16s}
+.msg.sw{opacity:0}
+.msg .sig{background:var(--orange-soft);border-bottom:1.5px solid rgba(230,112,30,.4)}
+.msg p{margin:0 0 12px}.msg p:last-child{margin:0}
+.acts{display:flex;gap:11px;margin-top:18px;align-items:center;flex-wrap:wrap}
+.acts .send{font-family:var(--sans);font-weight:600;font-size:14px;padding:12px 20px;border:0;border-radius:8px;background:var(--orange);color:#fff;cursor:pointer}
+.acts .g{font-family:var(--sans);font-weight:500;font-size:12.5px;padding:11px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.acts .g.on{border-color:var(--forest);color:var(--forest);background:var(--forest-soft)}
+.acts .save{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer}
+.rail .why{border:1px solid var(--hair-2);border-left:3px solid var(--forest);border-radius:0 10px 10px 0;background:var(--surface);padding:12px 14px}
+.rail .why .wl{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);display:flex}.rail .why .wl .src{margin-left:auto;color:var(--blue);text-transform:none;letter-spacing:0}
+.rail .why .wt{font-size:13px;margin-top:6px;line-height:1.45}.rail .why .wt b{font-weight:600}
+.rail .tip{margin-top:16px;font-size:12.5px;color:var(--ink-2);line-height:1.5;border-left:2px solid var(--amber);padding-left:12px}.rail .tip b{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.rail .how{margin-top:18px}.rail .how .r{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:12.5px}.rail .how .r:first-child{border-top:0}.rail .how .r .k{color:var(--ink-3);white-space:nowrap}.rail .how .r .v{font-weight:600;text-align:right}
+.rail .sent{margin-top:18px}.rail .sent .sh{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.rail .sr{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--hair);font-size:11.5px}.rail .sr .d{font-family:var(--mono);font-size:10px;color:var(--ink-3)}.rail .sr .o{font-family:var(--mono);font-size:9.5px;font-weight:600}.rail .sr .o.good{color:var(--forest)}.rail .sr .o.none{color:var(--ink-4)}.rail .sr .o.sent{color:var(--blue)}
+.foot{max-width:1040px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Outbound Studio</span><span class="r">one real message · not a blast</span></div>
+  <div class="who">Writing to <b>Sarah Chen</b>, a <b>VP</b> at <b>Ramp</b>.<span class="ed" id="change">change ▾</span></div>
+  <div class="spinel">Where are you with them?</div>
+  <div class="spine" id="spine"></div>
+  <div class="body">
+    <div>
+      <div class="msghd"><span class="h" id="mh">The message</span><span class="ready"><span class="d"></span>Ready to send</span></div>
+      <div class="msg" id="msg"></div>
+      <div class="acts">
+        <button class="send" id="copy">Copy the message</button>
+        <button class="g" id="marksent">Mark it sent</button>
+        <button class="g" id="valueonly">Give value only</button>
+        <span class="save" id="save">★ Save this one</span>
+      </div>
+    </div>
+    <div class="rail">
+      <div class="why"><div class="wl">Why now — what's happening<span class="src">◆ Signal Console</span></div><div class="wt">Ramp <b>opened 12 AE roles this week</b> · <b>new CRO started</b></div></div>
+      <div class="tip" id="tip"></div>
+      <div class="how" id="how"></div>
+      <div class="sent"><div class="sh">Sent to Ramp</div><div id="sentlist"></div></div>
+    </div>
+  </div>
+</div>
+<div class="foot" id="foot"></div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2000);}
+const SIG='Saw <span class="sig">Ramp opened 12 AE roles this week</span>.';
+/* the 5 conversation stages — each writes a genuinely different real message */
+const STAGES=[
+ {label:'First time reaching out',
+  body:['Sarah — congrats on the CRO seat.',SIG+' Hiring that fast usually means the forecast gets a lot harder to trust right as the team doubles — the moment most RevOps leads get blamed for numbers they couldn\'t see coming.','We keep the forecast reliable through that kind of scale. Two teams your size went from "hope" to "commit" in a quarter.'],
+  ask:'Worth 20 minutes next week to compare notes on how you\'re planning to scale the motion?',
+  tipHd:'On a first message',tip:'Lead with what\'s happening at their company, not what you sell. One clear ask, easy to say yes to.',
+  by:'Email',attach:'Forecast one-pager',askShort:'20 min next week'},
+ {label:'Following up',
+  body:['Sarah — circling back on this.','Still think the 12-AE ramp is going to put real pressure on the forecast this quarter. I won\'t clog your inbox, so I\'ll keep it short: two RevOps leads I work with hit exactly this wall and got out of it fast.'],
+  ask:'Happy to share how — 15 minutes — or I can just send the playbook if that\'s easier?',
+  tipHd:'Following up',tip:'Shorter than the first one. Add one new thing, and give them an easy out — "or I\'ll just send it."',
+  by:'Email',attach:'—',askShort:'15 min, or send the playbook'},
+ {label:'They replied',
+  body:['Thanks Sarah — glad it landed.','Here\'s the one-pager on how a team your size kept the forecast trustworthy through a similar ramp. The part most relevant to you is the first-90-days section on page 2.'],
+  ask:'Would Thursday or Friday work for a quick walkthrough? I\'ll keep it to 20 minutes and bring the benchmark for teams your size.',
+  tipHd:'They replied',tip:'Move fast — they\'re warm. Give them the exact thing they asked about, then offer two concrete times.',
+  by:'Email',attach:'Forecast one-pager',askShort:'Thu or Fri, 20 min'},
+ {label:'Back and forth',
+  body:['Sounds good, Sarah — I\'ll send an invite for Thursday at 11.','I\'ll bring the forecast-accuracy benchmark for teams your size and a short before/after from the team that ran this during their AE ramp. If it helps, I can pull in our solutions lead so you get into the how, not just the what.'],
+  ask:'Anything specific you want me to come ready to answer?',
+  tipHd:'In a back-and-forth',tip:'Keep the momentum. Confirm the next step, make the meeting worth more, and open the door to the rest of their team.',
+  by:'Email',attach:'—',askShort:'confirm + what to prep'},
+ {label:'About to close',
+  body:['Sarah — we\'re close, and I\'d love to get this in before quarter-end.','What would you need from me to make that work — a security review, a tighter pricing summary for finance, references from teams your size? I can turn any of those around today.'],
+  ask:'Happy to jump on a 15-minute call to knock out whatever\'s left.',
+  tipHd:'About to close',tip:'Name the deadline. Ask what they need to say yes and make it effortless to remove. Offer a call to close the gap.',
+  by:'Email or a call',attach:'—',askShort:'what\'s needed to close + a call today'}
+];
+let idx=0, valueOnly=false;
+let sent=[['Jun 28','replied ✓','good'],['Jun 12','no reply','none']];
+function renderSpine(){
+  $('spine').innerHTML=STAGES.map((s,i)=>`<div class="stage ${i===idx?'on':(i<idx?'done':'')}" data-i="${i}"><div class="sn">Stage ${i+1}</div><div class="st">${s.label}</div></div>`).join('');
+  document.querySelectorAll('.stage').forEach(el=>el.onclick=()=>{idx=+el.dataset.i;render();});
+}
+function renderMsg(){
+  const s=STAGES[idx];const el=$('msg');el.classList.add('sw');
+  setTimeout(()=>{
+    const paras=s.body.slice();if(!valueOnly)paras.push(s.ask);
+    el.innerHTML=paras.map(p=>`<p>${p}</p>`).join('');
+    $('mh').textContent='The message · '+s.label.toLowerCase();
+    $('tip').innerHTML='<b>'+s.tipHd+'</b>'+s.tip;
+    $('how').innerHTML=`<div class="r"><span class="k">Send by</span><span class="v">${s.by}</span></div>`+
+      (s.attach!=='—'?`<div class="r"><span class="k">Attach</span><span class="v">${s.attach}</span></div>`:'')+
+      `<div class="r"><span class="k">The ask</span><span class="v">${valueOnly?'nothing — just value':s.askShort}</span></div>`;
+    el.classList.remove('sw');
+  },140);
+}
+function renderSent(){$('sentlist').innerHTML=sent.map(([d,o,c])=>`<div class="sr"><span class="d">${d}</span><span class="o ${c}">${o}</span></div>`).join('');}
+function render(){renderSpine();renderMsg();renderSent();
+  $('valueonly').classList.toggle('on',valueOnly);
+  $('foot').textContent='MOCKUP · not wired · design-only · OUTBOUND STUDIO — where you are with them (complete) · pick a stage and the message + coaching + how-to-send adapt · the real signal is pulled in · "give value only" drops the ask · mark-it-sent logs it · plain language, bright-only';
+}
+$('copy').onclick=()=>toast('Message copied — <b>'+STAGES[idx].label+'</b>');
+$('marksent').onclick=()=>{sent.unshift(['just now','sent →','sent']);toast('Logged as sent to <b>Ramp</b>');renderSent();};
+$('valueonly').onclick=()=>{valueOnly=!valueOnly;renderMsg();$('valueonly').classList.toggle('on',valueOnly);toast(valueOnly?'Dropped the ask — value only':'Ask added back');};
+$('save').onclick=()=>toast('Saved to reuse ★');
+$('change').onclick=()=>toast('Pick a different account or person');
+render();
+</script>
+</body></html>
