@@ -19,3 +19,4 @@ lost to an ephemeral-scratchpad wipe again. Do not delete.
 | Cold Call Studio | cold-call-studio-gameplan-2026-07-06.html | The game plan (prep-before / log-after) |
 | LinkedIn Playbook | linkedin-playbook-one-move-2026-07-06.html | The one move (air-cover, public-first ladder) |
 | Pilot Desk | pilot-desk-guided-2026-07-06.html | The guided pilot (movements + adoption meter + circle + share kit) |
+| Call in a Favor | call-in-a-favor-toprail-2026-07-06.html | The relay (you → your person → the buyer) + top-rail deal queue |
