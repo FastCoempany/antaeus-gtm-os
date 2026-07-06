@@ -17,3 +17,4 @@ lost to an ephemeral-scratchpad wipe again. Do not delete.
 | Dashboard | dashboard-CHOSEN-complete-2026-07-04.html | Verdict masthead (whole-motion standing + one move) |
 | Outbound Studio | outbound-studio-CHOSEN-complete-2026-07-04.html | Conversation-stage spine |
 | Cold Call Studio | cold-call-studio-gameplan-2026-07-06.html | The game plan (prep-before / log-after) |
+| LinkedIn Playbook | linkedin-playbook-one-move-2026-07-06.html | The one move (air-cover, public-first ladder) |

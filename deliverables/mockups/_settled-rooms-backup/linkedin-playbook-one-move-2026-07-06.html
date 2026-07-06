@@ -1,0 +1,110 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LinkedIn Playbook — A · the one move</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.62);--ink-3:rgba(10,28,64,.4);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 56px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.thesis{font-family:var(--serif);font-size:23px;line-height:1.3;margin:20px 0 3px;max-width:760px}.thesis .q{color:var(--ink-3)}
+.sub{font-size:13px;color:var(--ink-2);margin-bottom:20px}
+/* the one move card */
+.move{border:1px solid var(--hair-2);border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 12px 30px -20px rgba(10,28,64,.4)}
+.move .hd{display:flex;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid var(--hair)}
+.move .hd .who{font-family:var(--serif);font-size:22px}.move .hd .who b{color:var(--ink)}
+.move .hd .src{font-family:var(--mono);font-size:10px;color:var(--blue);background:var(--blue-soft);border:1px solid rgba(37,99,235,.2);border-radius:20px;padding:3px 9px}
+.move .hd .heat{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--red);border:1px solid rgba(192,57,43,.28);border-radius:20px;padding:3px 9px}
+/* ladder spine */
+.spine{display:flex;align-items:center;gap:0;padding:15px 22px 4px}
+.spine .rung{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.spine .rung::before{content:'';position:absolute;top:7px;left:-50%;width:100%;height:2px;background:var(--hair-2)}
+.spine .rung:first-child::before{display:none}
+.spine .rung.done::before{background:var(--forest)}
+.spine .dot{width:15px;height:15px;border-radius:50%;background:var(--surface);border:2px solid var(--hair-2);z-index:1}
+.spine .rung.done .dot{background:var(--forest);border-color:var(--forest)}
+.spine .rung.here .dot{border-color:var(--orange);background:var(--orange);box-shadow:0 0 0 4px var(--orange-soft)}
+.spine .rl{font-family:var(--mono);font-size:9px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink-3);text-align:center;line-height:1.25;max-width:92px}
+.spine .rung.here .rl{color:var(--orange);font-weight:600}.spine .rung.done .rl{color:var(--forest)}
+.pos{padding:2px 22px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}.pos b{color:var(--orange)}
+/* the actual move */
+.act{padding:16px 22px 20px}
+.act .cue{font-family:var(--serif);font-size:26px;line-height:1.25;letter-spacing:-.01em}
+.act .why{font-size:13.5px;color:var(--ink-2);margin:9px 0 0;border-left:3px solid var(--blue);padding:2px 0 2px 12px}.act .why b{color:var(--ink)}
+.script{margin-top:15px;border:1px solid var(--hair);border-radius:10px;background:var(--field);padding:13px 15px}
+.script .sl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.script .body{font-size:14.5px;line-height:1.5}.script .body .tok{background:var(--orange-soft);border-bottom:1.5px solid rgba(230,112,30,.35);border-radius:2px;padding:0 2px}
+.row{display:flex;align-items:center;gap:10px;margin-top:15px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:9px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer}.btn:hover{border-color:var(--ink-3);color:var(--ink)}
+.btn.pri{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 8px 20px -12px rgba(230,112,30,.8)}
+.win{margin-left:auto;font-size:12px;color:var(--ink-3)}.win b{color:var(--forest)}
+/* next up */
+.next{margin-top:22px}
+.next .nh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.acct{display:flex;align-items:center;gap:12px;padding:12px 15px;border:1px solid var(--hair);border-radius:10px;background:var(--surface);cursor:pointer;margin-bottom:8px}.acct:hover{border-color:var(--hair-2)}
+.acct .nm{font-weight:600;font-size:14.5px}.acct .src{font-family:var(--mono);font-size:9px;color:var(--blue);background:var(--blue-soft);border-radius:20px;padding:2px 7px}
+.acct .mini{display:flex;gap:4px;margin-left:auto}.acct .mini i{width:8px;height:8px;border-radius:50%;background:var(--hair-2);display:block}.acct .mini i.d{background:var(--forest)}.acct .mini i.h{background:var(--orange)}
+.acct .nx{font-size:12.5px;color:var(--ink-2);min-width:150px;text-align:right}
+/* footer refs */
+.refs{margin-top:22px;border-top:1px solid var(--hair);padding-top:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.refs .drawer{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}.refs .drawer:hover{text-decoration:underline}
+.refs .score{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}.refs .score b{color:var(--ink)}
+.foot{max-width:1000px;margin:22px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">LinkedIn Playbook</span><span class="r">A · the one move</span></div>
+  <div class="thesis">LinkedIn warms your name so your calls and emails land. <span class="q">Not where you pitch — where they start to know you.</span></div>
+  <div class="sub">One account at a time. Here's your move on the one that's hottest right now.</div>
+
+  <div class="move">
+    <div class="hd"><span class="who">Your move on <b>Ramp</b></span><span class="src">◆ from Signal Console</span><span class="heat">HOT · 82</span></div>
+    <div class="spine">
+      <div class="rung here"><span class="dot"></span><span class="rl">Find their post</span></div>
+      <div class="rung"><span class="dot"></span><span class="rl">Leave a comment</span></div>
+      <div class="rung"><span class="dot"></span><span class="rl">Send the request</span></div>
+      <div class="rung"><span class="dot"></span><span class="rl">Give something useful</span></div>
+      <div class="rung"><span class="dot"></span><span class="rl">Ask for 15 min</span></div>
+    </div>
+    <div class="pos">You're at the <b>start</b> with Ramp — they don't know your name yet. Warm it before you ask for anything.</div>
+    <div class="act">
+      <div class="cue">Find the CRO's post about the AE hiring push, and be ready to comment.</div>
+      <div class="why">Why now: <b>Signal Console</b> says Ramp opened 12 AE roles this week and a new CRO just started. That's a public moment — get seen in it before your cold email lands.</div>
+      <div class="script">
+        <div class="sl">what to comment <span style="color:var(--ink-4)">· say one useful thing, then leave — no pitch</span></div>
+        <div class="body">"Ramping <span class="tok">12 AEs</span> at once — the forecast usually gets shaky right when the board leans on it hardest. The teams that hold it steady tend to lock their qualification bar before the reps start, not after."</div>
+      </div>
+      <div class="row">
+        <button class="btn pri" id="log">Mark it done →</button>
+        <button class="btn">Copy the comment</button>
+        <span class="win">One good comment today. That's the whole job. <b>Ask comes later.</b></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="next">
+    <div class="nh">Other accounts you're warming</div>
+    <div class="acct"><span class="nm">Vanta</span><span class="src">◆ Signal Console</span><span class="mini"><i class="d"></i><i class="d"></i><i class="h"></i><i></i><i></i></span><span class="nx">Ready to connect →</span></div>
+    <div class="acct"><span class="nm">Brex</span><span class="src">◆ Outbound</span><span class="mini"><i class="d"></i><i class="d"></i><i class="d"></i><i class="h"></i><i></i></span><span class="nx">Send something useful →</span></div>
+  </div>
+
+  <div class="refs">
+    <span class="drawer" id="drw">⌵ Message templates (connect · comment · give · ask)</span>
+    <span class="score">This week: <b>9</b> touches · <b>4</b> accepted · <b>2</b> replied</span>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2000);}
+$('log').onclick=()=>toast('Logged on <b>Ramp</b> — next move: leave a comment');
+$('drw').onclick=()=>toast('Templates drawer would open here');
+document.querySelectorAll('.acct').forEach(a=>a.onclick=()=>toast('Switch to <b>'+a.querySelector('.nm').textContent+'</b>'));
+$('foot').textContent='MOCKUP · not wired · design-only · LINKEDIN PLAYBOOK — A (the one move) · warm-up layer for accounts already lit in Signal Console + Outbound · public-first ladder · no pitch, ask last · seller/you · plain language';
+</script>
+</body></html>
