@@ -1,6 +1,6 @@
-# Settled new-room designs — durable backup (2026-07-04)
+# Settled new-room designs — durable backup (2026-07)
 
-The 7 settled per-room redesigns from the 2026-07 design arc. DESIGN-ONLY
+The settled per-room redesigns from the 2026-07 design arc. DESIGN-ONLY
 mockups (self-contained HTML, not wired, not production). Backed up here in
 addition to the canonical copies in `deliverables/mockups/` so they cannot be
 lost to an ephemeral-scratchpad wipe again. Do not delete.
@@ -14,3 +14,6 @@ lost to an ephemeral-scratchpad wipe again. Do not delete.
 | Deal Workspace | deal-workspace-toggleable-views-2026-07-04.html | Focus / Timeline / List |
 | Future Autopsy | future-autopsy-countdown-2026-07-04.html | Countdown (decay line) |
 | Briefing | briefing-vivid-2026-07-04.html | Vivid (ticker + world + weather) |
+| Dashboard | dashboard-CHOSEN-complete-2026-07-04.html | Verdict masthead (whole-motion standing + one move) |
+| Outbound Studio | outbound-studio-CHOSEN-complete-2026-07-04.html | Conversation-stage spine |
+| Cold Call Studio | cold-call-studio-gameplan-2026-07-06.html | The game plan (prep-before / log-after) |
