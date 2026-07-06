@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outbound Studio C — where you are with them</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 14px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+/* who line */
+.who{font-size:14.5px;color:var(--ink-2);padding:18px 0 4px}.who b{color:var(--ink);font-weight:600}.who .ed{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:8px;cursor:pointer}
+/* stage spine */
+.spinel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 10px}
+.spine{display:flex;gap:6px}
+.stage{flex:1;text-align:center;cursor:pointer;padding:11px 6px 10px;border-radius:9px;background:var(--surface);border:1px solid var(--hair-2);transition:all .15s}
+.stage .sn{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--ink-4);text-transform:uppercase}
+.stage .st{font-size:12.5px;font-weight:600;margin-top:5px;line-height:1.2}
+.stage:hover{border-color:var(--ink-3)}
+.stage.on{background:#fff;border-color:var(--orange);box-shadow:inset 4px 0 0 var(--orange),0 3px 0 rgba(230,112,30,.25)}.stage.on .sn{color:var(--orange)}.stage.on .st{color:var(--ink)}
+.stage.done{background:var(--forest-soft);border-color:rgba(27,94,63,.25)}.stage.done .st{color:var(--forest)}
+/* body: message + why */
+.body{display:grid;grid-template-columns:1fr 280px;gap:30px;margin-top:22px;align-items:start}
+.msghd{display:flex;align-items:baseline;margin-bottom:10px}.msghd .h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}.msghd .ready{margin-left:auto;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--forest);display:inline-flex;align-items:center;gap:6px}.msghd .ready .d{width:6px;height:6px;border-radius:50%;background:var(--forest)}
+.msg{background:var(--surface);border:1px solid var(--hair-2);border-radius:12px;padding:22px 26px;font-size:16px;line-height:1.62;color:var(--ink);box-shadow:0 6px 22px -14px rgba(10,28,64,.28)}
+.msg .sig{background:var(--orange-soft);border-bottom:1.5px solid rgba(230,112,30,.4)}
+.msg p{margin:0 0 12px}.msg p:last-child{margin:0}
+.acts{display:flex;gap:11px;margin-top:18px;align-items:center;flex-wrap:wrap}
+.acts .send{font-family:var(--sans);font-weight:600;font-size:14px;padding:12px 20px;border:0;border-radius:8px;background:var(--orange);color:#fff;cursor:pointer}
+.acts .g{font-family:var(--sans);font-weight:500;font-size:12.5px;padding:11px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.acts .save{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer}
+/* right rail */
+.rail .why{border:1px solid var(--hair-2);border-left:3px solid var(--forest);border-radius:0 10px 10px 0;background:var(--surface);padding:12px 14px}
+.rail .why .wl{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);display:flex}.rail .why .wl .src{margin-left:auto;color:var(--blue);text-transform:none;letter-spacing:0}
+.rail .why .wt{font-size:13px;margin-top:6px;line-height:1.45}.rail .why .wt b{font-weight:600}
+.rail .tip{margin-top:16px;font-size:12.5px;color:var(--ink-2);line-height:1.5;border-left:2px solid var(--amber);padding-left:12px}.rail .tip b{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.rail .how{margin-top:18px}.rail .how .r{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--hair);font-size:12.5px}.rail .how .r:first-child{border-top:0}.rail .how .r .k{color:var(--ink-3)}.rail .how .r .v{font-weight:600}
+.rail .sent{margin-top:18px}.rail .sent .sh{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.rail .sr{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--hair);font-size:11.5px}.rail .sr .d{font-family:var(--mono);font-size:10px;color:var(--ink-3)}.rail .sr .o{font-family:var(--mono);font-size:9.5px;font-weight:600}.rail .sr .o.good{color:var(--forest)}.rail .sr .o.none{color:var(--ink-4)}
+.foot{max-width:1040px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Outbound Studio</span><span class="r">one real message · not a blast</span></div>
+
+  <div class="who">Writing to <b>Sarah Chen</b>, a <b>VP</b> at <b>Ramp</b>.<span class="ed">change ▾</span></div>
+
+  <div class="spinel">Where are you with them?</div>
+  <div class="spine">
+    <div class="stage on"><div class="sn">Stage 1</div><div class="st">First time reaching out</div></div>
+    <div class="stage"><div class="sn">Stage 2</div><div class="st">Following up</div></div>
+    <div class="stage"><div class="sn">Stage 3</div><div class="st">They replied</div></div>
+    <div class="stage"><div class="sn">Stage 4</div><div class="st">Back and forth</div></div>
+    <div class="stage"><div class="sn">Stage 5</div><div class="st">About to close</div></div>
+  </div>
+
+  <div class="body">
+    <div>
+      <div class="msghd"><span class="h">The message · first time reaching out</span><span class="ready"><span class="d"></span>Ready to send</span></div>
+      <div class="msg">
+        <p>Sarah — congrats on the CRO seat.</p>
+        <p>Saw <span class="sig">Ramp opened 12 AE roles this week</span>. Hiring that fast usually means the forecast gets a lot harder to trust right as the team doubles — the moment most RevOps leads get blamed for numbers they couldn't see coming.</p>
+        <p>We keep the forecast reliable through that kind of scale. Two teams your size went from "hope" to "commit" in a quarter.</p>
+        <p>Worth 20 minutes next week to compare notes on how you're planning to scale the motion?</p>
+      </div>
+      <div class="acts">
+        <button class="send">Copy the message</button>
+        <button class="g">Mark it sent</button>
+        <button class="g">Give value only</button>
+        <span class="save">★ Save this one</span>
+      </div>
+    </div>
+    <div class="rail">
+      <div class="why"><div class="wl">Why now — what's happening<span class="src">◆ Signal Console</span></div><div class="wt">Ramp <b>opened 12 AE roles this week</b> · <b>new CRO started</b></div></div>
+      <div class="tip"><b>On a first message</b>Lead with what's happening at their company, not what you sell. One clear ask, easy to say yes to.</div>
+      <div class="how">
+        <div class="r"><span class="k">Send by</span><span class="v">Email</span></div>
+        <div class="r"><span class="k">Attach</span><span class="v">Forecast one-pager</span></div>
+        <div class="r"><span class="k">The ask</span><span class="v">20 min next week</span></div>
+      </div>
+      <div class="sent"><div class="sh">Sent to Ramp</div>
+        <div class="sr"><span class="d">Jun 28</span><span class="o good">replied ✓</span></div>
+        <div class="sr"><span class="d">Jun 12</span><span class="o none">no reply</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">MOCKUP · not wired · design-only · OUTBOUND STUDIO C — where you are with them · the conversation stage is the spine · pick the stage and the message + the coaching adapt to it · the real signal is pulled in · plain language, no insider jargon</div>
+</div>
+</body></html>
