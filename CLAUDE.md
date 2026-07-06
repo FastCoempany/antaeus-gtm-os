@@ -234,12 +234,14 @@ Note on handoff: the full cross-room compounding matrix lives in the Phase-7 Pre
 
 ### 4.9 Cold Call Studio — Live Instrument
 
-- **Purpose:** narrow pressure thread-by-thread during a live cold call; turn script archives into one pulled thread at a time.
-- **Strategic logic:** six named threads (Prep → Opener → Pressure → Proof → Ask → Exit) each with buyer-might-say branches and recommended next lines. A cold call is won by narrowing pressure, not widening explanation. The seller lives in one thread at a time.
-- **Primitives:** thread sequence, buyer-response branches, say-next capture panel, outcome logging (meeting_booked, callback_scheduled, referral, etc.), score read, call memory table.
-- **Flows in:** signal account from Signal Console; ICP persona.
-- **Flows out:** on `meeting_booked`, creates a Deal record; call outcomes into Dashboard, Deal Workspace, Readiness, Handoff.
-- **Must never be flattened:** live-call consequence; never becomes a script library.
+- **Purpose:** help the seller walk into a cold call ready — the opener, the pain to find, how to show it's real, the ask, and the pushback they're likely to hit — and capture what happened after. It **prepares** the call and **logs** the result; it does not ask the seller to operate the app during the call.
+- **No live-call operation (founder direction 2026-07-04):** a cold call is wildly unpredictable — the seller cannot follow a clock, click buttons, or check boxes mid-call while keeping up with a real conversation. The room is a **prep surface + an after-the-call capture surface**, never a during-call console. Same doctrine that de-paced Discovery Studio (§4.12): no clock, no mid-call tempo, no "keep up with the screen."
+- **Strategic logic:** the call has a shape — get ready → open → find the pain → show it's real → ask for the meeting → wrap up — and each part has the pushback a buyer is likely to give with a line ready for it. The seller reviews the shape and the likely branches **beforehand** so they walk in with conviction, makes the call, and logs the outcome **after**. Won by walking in prepared, not by reading a screen mid-call.
+- **Primitives:** the call's shape (the ordered steps); likely-pushback branches, each with a ready line; the get-ready checklist; after-call outcome capture (meeting booked, callback, referral, voicemail, rejected, hung up, no answer); a plain after-call read (what went well / what to sharpen next time); the log of recent calls.
+- **Flows in:** account + what's happening from Signal Console; who to call (the person + their role).
+- **Flows out:** on a booked meeting, creates a Deal; call outcomes into Dashboard, Deal Workspace, Readiness, Handoff Kit.
+- **Voice (§13):** plain, mid-sales-legible — never "thread / loom / pull / pressure / proof / say-next / call memory / the move." The user is the **seller** (or *you*), never "rep."
+- **Must never be flattened:** the deal-creation on a booked meeting; the prep-then-capture shape; the live consequence of a real call. Never a script library — and never a during-call clicker.
 
 ### 4.10 LinkedIn Playbook — Live Instrument
 
@@ -1073,12 +1075,19 @@ we are uprooting.
   conversation* / *your opening line* / *the first message*; "earned" /
   "earns" → *qualifies for* / *is ready for*.
 - **"proof" / "proofs" (added 2026-07-03 — also retired as a sacred noun,
-  §2; hard-banned 2026-07-04):** AI-language a normal person does not use
-  for a sales pilot. Never appears in user-facing copy. Say *the pilot* /
-  *the pilot's results* / *what the pilot showed* / *a result the buyer's
-  boss can act on*. The PoC Framework object is renamed to match; "PoC"
-  (proof-of-concept) as a room/stage name is a candidate for renaming to
-  "Pilot" when that room is redesigned.
+  §2; hard-banned 2026-07-04; ERADICATION SWEEP 2026-07-04):** AI-language a
+  normal person does not use for a sales pilot. Say *the pilot* / *the
+  pilot's results* / *what the pilot showed* / *a result the buyer's boss
+  can act on*. **This is an active removal, not just a "don't add new ones"
+  rule (founder direction):** every existing user-facing instance of "proof"
+  is removed from the face of every surface of the app — the Cold Call
+  "Proof" step, the **PoC Framework room (renamed to "Pilot room")**, the
+  Readiness "proof" dimension label, Deal Workspace / Future Autopsy /
+  Dashboard copy, all of it. Full stop, no residue. Code enum keys and
+  identifiers (`"proof"` ThreadId, the readiness `proof` dimension key,
+  table columns) may stay to avoid a data migration, but **no user ever sees
+  the word.** The sweep runs per-room as each room is redesigned and as a
+  standing scrub over already-shipped surfaces.
 - **"cast" / "cast a proof" (added 2026-07-04 — hard-banned):** insider
   verb; nobody outside says they "cast" a pilot. Never appears in
   user-facing copy. Say *run a pilot* / *set up a pilot* / *get a real
