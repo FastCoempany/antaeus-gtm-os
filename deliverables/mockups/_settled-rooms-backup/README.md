@@ -22,3 +22,4 @@ lost to an ephemeral-scratchpad wipe again. Do not delete.
 | Call in a Favor | call-in-a-favor-toprail-2026-07-06.html | The relay (you → your person → the buyer) + top-rail deal queue |
 | Getting to Signed | getting-to-signed-faceoff-2026-07-07.html | Face-off + ledger (the blocker as their-side ⟷ your-line, then the positions ledger with coverage-map deep-dive) |
 | Quota Workback | quota-workback-pace-strands-2026-07-07.html | Pace + fused strands (projected landing vs target, needs-vs-are, believability + pipeline welded into each column) |
+| Founding GTM / Handoff Kit | founding-gtm-open-book-2026-07-07.html | The open book (two-pane bound reader — contents + readiness left, one authored part in full serif right; the handoff document a hire reads day one) |
