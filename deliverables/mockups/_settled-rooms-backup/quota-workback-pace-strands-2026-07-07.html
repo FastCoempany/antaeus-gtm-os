@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quota Workback — pace + fused strands (subtle lines)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.62);--ink-3:rgba(10,28,64,.4);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.1);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.1);--amber:#b5790f;--amber-soft:rgba(181,121,15,.12);--red:#c0392b;--red-soft:rgba(192,57,43,.07);
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 56px}
+.wrap{max-width:900px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.verd{padding:24px 0 6px}.verd .k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.verd .h{font-family:var(--serif);font-size:34px;line-height:1.12;letter-spacing:-.01em;max-width:720px}.verd .h b{color:var(--red);font-style:normal}
+.verd .s{font-size:14px;color:var(--ink-2);margin-top:12px;line-height:1.55;max-width:700px}.verd .s b{color:var(--ink)}
+.track{margin:22px 0 4px}
+.tk{position:relative;height:44px;background:var(--surface);border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+.tk .proj{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(192,57,43,.14),rgba(192,57,43,.06));border-right:2px solid var(--red)}
+.tk .tgt{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.tk .lbl{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10.5px;font-weight:600;padding:0 10px}
+.tk .lbl.p{color:var(--red)}.tk .lbl.t{color:var(--ink);right:8px}
+.tkx{display:flex;justify-content:space-between;margin-top:7px;font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+.dv{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:26px 0 0;border-top:1px solid var(--hair-2)}
+.col{padding:16px 22px 6px 0}.col:last-child{padding-left:22px;border-left:1px solid var(--hair)}
+.col .cl{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:12px}
+.col.need .cl{color:var(--ink-3)}.col.real .cl{color:var(--blue)}
+.line{display:flex;align-items:baseline;gap:10px;padding:11px 0;border-top:1px solid var(--hair)}
+.line .ln{font-family:var(--serif);font-size:22px;min-width:74px}.line .lt{font-size:12.5px;color:var(--ink-2);line-height:1.4}.line .lt b{color:var(--ink)}
+.line .bad{color:var(--red)}.line .good{color:var(--forest)}
+.line .gp{margin-left:auto;align-self:center;font-family:var(--mono);font-size:9px;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.gp.behind{color:var(--red);background:var(--red-soft)}.gp.ok{color:var(--forest);background:var(--forest-soft)}
+/* the two panels */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+.panel{border:1px solid var(--hair);border-radius:12px;background:var(--surface);padding:17px 19px}
+.panel.bel{border-top:3px solid var(--amber)}.panel.cov{border-top:3px solid var(--red)}
+.panel .ph{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}.panel .pt{font-family:var(--serif);font-size:18px}
+.panel .rr{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.panel .pb{font-size:12.5px;color:var(--ink-2);line-height:1.55}.panel .pb b{color:var(--ink)}
+.panel .cost{font-size:12px;color:var(--ink-2);margin-top:9px;padding-top:9px;border-top:1px solid var(--hair)}.panel.bel .cost b{color:var(--amber)}
+.mini{height:10px;border-radius:5px;background:var(--field);overflow:hidden;margin:10px 0 9px;position:relative}.mini .f{height:100%;background:var(--red)}.mini .m{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.panel .link{margin-top:11px;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;display:inline-block}
+.back{margin:16px 0 0;display:flex;align-items:baseline;gap:12px;padding:14px 18px;border:1px solid var(--hair);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;background:var(--surface)}
+.back .bt{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);white-space:nowrap}
+.back .bb{font-size:13px;color:var(--ink-2);line-height:1.5}.back .bb b{color:var(--ink)}
+.hand{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--hair-2)}
+.hl{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:4px}
+.btn{font-family:var(--sans);font-weight:600;font-size:13px;padding:9px 16px;border-radius:8px;border:0;background:var(--orange);color:#fff;cursor:pointer;box-shadow:0 8px 20px -12px rgba(230,112,30,.85)}
+.gh{font-family:var(--sans);font-weight:500;font-size:12.5px;padding:8px 13px;border-radius:8px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.foot{max-width:900px;margin:22px auto 0;padding:0 40px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+
+/* fused strands — subtle lines (no colored rules, quiet center divider) */
+.strands{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:26px;border-top:1px solid var(--hair-2)}
+.st2{padding:16px 26px 0 0}.st2.real{padding:16px 0 0 26px;border-left:1px solid var(--hair)}
+.st2 .cl3{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}
+.st2.need .cl3{color:var(--ink-3)}.st2.real .cl3{color:var(--blue)}
+.st2 .line{display:flex;align-items:baseline;gap:10px;padding:11px 0;border-top:1px solid var(--hair)}
+.st2 .ln{font-family:var(--serif);font-size:21px;min-width:66px}.st2 .lt{font-size:12.5px;color:var(--ink-2);line-height:1.4}.st2 .lt b{color:var(--ink)}
+.st2 .bad{color:var(--red)}.st2 .good{color:var(--forest)}
+.st2 .gp{margin-left:auto;align-self:center;font-family:var(--mono);font-size:9px;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.gp.behind{color:var(--red);background:var(--red-soft)}.gp.ok{color:var(--forest);background:var(--forest-soft)}
+.st2 .judge{margin-top:16px;padding-top:16px;border-top:1px solid var(--hair)}
+.st2 .jh{font-family:var(--serif);font-size:18px;margin-bottom:9px;display:flex;align-items:baseline;gap:9px}.st2 .jh .rr3{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.st2 .jb{font-size:12.5px;color:var(--ink-2);line-height:1.55}.st2 .jb b{color:var(--ink)}
+.st2 .jc{font-size:12px;color:var(--ink-2);margin-top:9px}.st2.need .jc b{color:var(--amber)}
+.mini3{height:9px;border-radius:5px;background:var(--field);overflow:hidden;margin:10px 0 9px;position:relative}.mini3 .f{height:100%;background:var(--red)}.mini3 .m{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.st2 .link3{margin-top:11px;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;display:inline-block}
+</style></head><body>
+  <div class="wrap">
+  <div class="top"><span class="bname">Quota Workback</span><span class="r">pace · $1.2M by year-end</span></div>
+
+  <div class="verd">
+    <div class="k">Where today's pace lands you</div>
+    <div class="h">At the rate you're working, you finish the year around <b>$940k</b> — about <b>$260k short.</b></div>
+    <div class="s">Not because the number is wrong. Because you're doing <b>7 outreach a day</b> and the number needs <b>12</b>. Close that gap and the year adds up.</div>
+  </div>
+
+  <div class="track">
+    <div class="tk"><span class="proj" style="width:78%"><span class="lbl p">on pace for $940k</span></span><span class="tgt" style="left:100%"></span><span class="lbl t">$1.2M</span></div>
+    <div class="tkx"><span>$0</span><span>your target →</span></div>
+  </div>
+
+  <div class="strands">
+    <div class="st2 need">
+      <div class="cl3">What your number needs</div>
+      <div class="line"><span class="ln">12</span><span class="lt">outreach <b>a day</b></span></div>
+      <div class="line"><span class="ln">25</span><span class="lt">first meetings <b>a month</b></span></div>
+      <div class="line"><span class="ln">3.5×</span><span class="lt">your number <b>in open deals</b></span></div>
+      <div class="line"><span class="ln">2</span><span class="lt">deals closed <b>a month</b></span></div>
+      <div class="judge">
+        <div class="jh">Is the plan real?</div>
+        <div class="jb">Win rate, deal size, and cycle all match what mid-market teams actually see. The one stretch: you're assuming <b>40% of first meetings</b> become real opportunities — usually it's <b>35%</b>.</div>
+        <div class="jc">At 35% that's <b>3 more meetings a month</b> — plan for ~1½ more outreach a day now, not in month three.</div>
+        <span class="link3">Set it to 35% and re-run →</span>
+      </div>
+    </div>
+    <div class="st2 real">
+      <div class="cl3">Where you actually are</div>
+      <div class="line"><span class="ln bad">7</span><span class="lt">a day this month</span><span class="gp behind">5 short</span></div>
+      <div class="line"><span class="ln bad">15</span><span class="lt">booked so far</span><span class="gp behind">behind</span></div>
+      <div class="line"><span class="ln bad">2.1×</span><span class="lt">$1.3M in flight</span><span class="gp behind">light</span></div>
+      <div class="line"><span class="ln good">1</span><span class="lt">closed this month</span><span class="gp ok">on track</span></div>
+      <div class="judge">
+        <div class="jh">Do you have the pipeline?<span class="rr3">2.1× / 3.5×</span></div>
+        <div class="mini3"><span class="f" style="width:60%"></span><span class="m" style="left:100%"></span></div>
+        <div class="jb">You have <b>$1.3M</b> in open deals. Your number wants about <b>$2.1M</b> in flight to be safe — roughly <b>$780k short</b>. The daily number is how you close it.</div>
+        <span class="link3">See the open deals in Deal Workspace →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="back" style="margin-top:24px"><span class="bt">Back on pace</span><span class="bb"><b>5 more outreach a day</b>, plus close the pipeline gap. The closes are fine — it's the top of the funnel that's light.</span></div>
+
+  <div class="hand">
+    <span class="hl">Close the gap</span>
+    <button class="btn">Run today's outreach →</button>
+    <button class="gh">Build more pipeline</button>
+    <button class="gh">Check the pipeline</button>
+    <button class="gh">Adjust the plan</button>
+  </div>
+  <div class="foot" id="foot"></div>
+  </div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+document.querySelectorAll('.btn,.gh').forEach(b=>b.onclick=()=>toast('Route: '+b.textContent.trim()));
+document.querySelectorAll('.link3').forEach(l=>l.onclick=()=>toast(l.textContent.trim()));
+$('foot').textContent='MOCKUP · not wired · design-only · QUOTA WORKBACK — pace + fused strands (subtle lines) · two parallel columns fusing numbers with judgment · quiet hairlines, no heavy rules';
+</script>
+</body></html>
