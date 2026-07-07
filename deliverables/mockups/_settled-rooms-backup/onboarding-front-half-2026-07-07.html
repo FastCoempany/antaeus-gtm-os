@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · Seeding flow — front half (doorway → ICP → accounts → wake-up)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--orange-d:#d05f12;--blue:#2563eb;--green:#1f9d57;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--field);background-image:radial-gradient(circle at 8% 0%,rgba(37,99,235,.05),transparent 30%),radial-gradient(circle at 94% 2%,rgba(230,112,30,.04),transparent 26%);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+  .frame{position:fixed;inset:0;display:grid;grid-template-columns:1fr 320px}
+  /* main column */
+  .main{position:relative;padding:40px 56px 100px;display:flex;flex-direction:column;overflow:hidden}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.85}
+  .rail{display:flex;gap:7px;align-items:center}
+  .pip{width:30px;height:4px;border-radius:2px;background:var(--ink10);transition:background .4s}
+  .pip.done{background:var(--green)}.pip.on{background:var(--orange)}
+  .body{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:760px}
+  .step{display:none}.step.active{display:block;animation:rise .6s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:18px}
+  h1{font-family:var(--serif);font-size:clamp(2.1rem,3.8vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin-bottom:18px}
+  .lede{font-size:1.1rem;line-height:1.6;color:var(--ink70);max-width:54ch}
+  .compact{margin-top:22px;padding-left:16px;border-left:3px solid var(--orange);font-size:1.02rem;line-height:1.55;color:var(--ink70);max-width:52ch}
+  /* icp sharpen */
+  .ex{margin-top:24px;max-width:60ch}
+  .bub{padding:14px 18px;border-radius:12px;margin-bottom:12px;font-size:1.04rem;line-height:1.5;opacity:0;transform:translateY(8px);transition:all .5s}
+  .bub.show{opacity:1;transform:none}
+  .bub.you{background:var(--raised);border:1px solid var(--ink10);color:var(--ink)}
+  .bub.app{background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.18);color:var(--ink)}
+  .bub .who{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;display:block;margin-bottom:6px}
+  .bub.you .who{color:var(--ink50)}.bub.app .who{color:var(--blue)}
+  .bub.sharp{background:var(--raised);border:1px solid var(--orange);border-left:4px solid var(--orange)}
+  .bub.sharp .who{color:var(--orange)}
+  /* accounts */
+  .ta{margin-top:22px;width:100%;max-width:560px;min-height:170px;background:var(--raised);border:1px solid var(--ink10);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:.92rem;line-height:1.9;color:var(--ink);resize:none}
+  .hint{margin-top:10px;font-size:.9rem;color:var(--ink50)}
+  /* wake-up */
+  .wake-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start;max-width:900px}
+  .accts{background:var(--raised);border:1px solid var(--ink10);border-radius:14px;padding:16px 18px;box-shadow:0 16px 40px rgba(10,28,64,.06)}
+  .accts h4{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:12px}
+  .ac{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:9px;border:1px solid transparent;margin-bottom:5px;transition:all .5s}
+  .ac .nm{font-weight:600;font-size:.9rem}
+  .ac .sg{font-size:.74rem;color:var(--orange);font-weight:600;margin-top:2px;opacity:0;transition:opacity .5s}
+  .ac .sg.show{opacity:1}.ac .sg.cold{color:var(--ink50);font-weight:400}
+  .ac .ht{font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--ink25);opacity:0;transition:opacity .5s}
+  .ac .ht.show{opacity:1}
+  .ac.hot{border-color:var(--orange);background:rgba(230,112,30,.05)}.ac.hot .ht{color:var(--orange)}
+  .reads{display:flex;flex-direction:column;gap:12px}
+  .read{background:var(--raised);border:1px solid var(--ink10);border-left:3px solid var(--blue);border-radius:10px;padding:13px 15px;opacity:0;transform:translateX(10px);transition:all .55s}
+  .read.show{opacity:1;transform:none}
+  .read .rk{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:5px}
+  .read .rt{font-size:.92rem;line-height:1.4;color:var(--ink)}
+  .read.warn{border-left-color:var(--orange)}.read.warn .rk{color:var(--orange)}
+  /* footer / button */
+  .foot{position:absolute;left:56px;right:56px;bottom:34px;display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;gap:9px;background:var(--orange);color:#fff;font-family:var(--sans);font-weight:600;font-size:1rem;padding:14px 26px;border-radius:11px;border:none;cursor:pointer;transition:all .14s;box-shadow:0 10px 26px rgba(230,112,30,.24)}
+  .btn:hover{background:var(--orange-d)}
+  .btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--ink25);box-shadow:none}
+  .btn--ghost:hover{border-color:var(--orange);background:var(--raised)}
+  .btn--big{font-size:1.05rem;padding:17px 30px;animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-3px)}}
+  .foot .note{font-size:.86rem;color:var(--ink50)}
+  /* evidence margin */
+  .margin{background:var(--raised);border-left:1px solid var(--ink10);padding:40px 30px;display:flex;flex-direction:column}
+  .margin .mk{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:16px}
+  .margin .mnote{font-size:1.0rem;line-height:1.62;color:var(--ink);transition:opacity .4s}
+  .margin .msrc{margin-top:auto;padding-top:20px;border-top:1px solid var(--ink10)}
+  .margin .msrc a{font-size:.8rem;color:var(--blue);text-decoration:none;line-height:1.45;display:block}
+  .margin .msrc a:hover{text-decoration:underline}
+  .margin .msrc .lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:8px}
+  .tag{position:fixed;left:56px;bottom:8px;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25)}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="main">
+    <div class="top">
+      <div class="mark">ANTAEUS</div>
+      <div class="rail" id="rail"></div>
+    </div>
+    <div class="body">
+
+      <section class="step active" data-step="0">
+        <div class="k">Before the easy part — the honest part</div>
+        <h1>This asks real work of you. Here’s the deal.</h1>
+        <p class="lede">Most setup flows pretend they’re effortless. This one won’t. You’re going to put in the thinking that lives in your head and nowhere else — who you sell to, who you’re chasing, where your deals really stand.</p>
+        <div class="compact">Do it once, and the system reads your motion back to you every morning — which deal is slipping, which move clears the most weight. The teams that do this work early are the ones that stop getting surprised. You’re about to be one of them.</div>
+      </section>
+
+      <section class="step" data-step="1">
+        <div class="k">The lens · who you sell to</div>
+        <h1>Who do you actually sell to?</h1>
+        <p class="lede">Not the form-field version. The real one. The sharper this is, the sharper everything the system does next.</p>
+        <div class="ex" id="icpEx">
+          <div class="bub you" data-d="200"><span class="who">You</span>Ops teams at mid-market companies.</div>
+          <div class="bub app" data-d="1400"><span class="who">Antaeus</span>That’s still broad. “Mid-market” is a wide range, and “ops” is three different buyers who don’t sign the same way. Who actually owns the budget?</div>
+          <div class="bub you" data-d="3400"><span class="who">You</span>Heads of Revenue Operations.</div>
+          <div class="bub sharp" data-d="4800"><span class="who">Sharpened</span>Heads of RevOps at 200–800-person B2B SaaS companies, past their Series B, where the GTM team has outgrown the founder’s spreadsheets. <em>Now</em> the signals mean something.</div>
+        </div>
+      </section>
+
+      <section class="step" data-step="2">
+        <div class="k">The list · who you’re chasing</div>
+        <h1>Now — who are you chasing?</h1>
+        <p class="lede">Just the names. Don’t research them, don’t fill in fields. Paste who’s on your mind right now and the system goes and finds the rest.</p>
+        <textarea class="ta" id="ta" spellcheck="false">Northwind Logistics
+Apex Health
+Cobalt Freight
+Brightwave
+Dunmore Legal
+Harbor Point
+Evermark
+Stagecoach Bio
+Vantage Mills
+Redpoint Freight
+Lumen Tasking
+Oakhurst Group</textarea>
+        <p class="hint">12 pasted. Even 50 is a two-minute job — breadth is cheap here.</p>
+      </section>
+
+      <section class="step" data-step="3">
+        <div class="k">Half awake</div>
+        <h1>It read your list. Here’s what it already sees.</h1>
+        <div class="wake-grid">
+          <div class="accts" id="wakeAccts">
+            <h4>Your list · ranked by what’s live</h4>
+          </div>
+          <div class="reads" id="wakeReads"></div>
+        </div>
+      </section>
+
+    </div>
+    <div class="foot" id="foot"></div>
+    <div class="tag">Seeding flow · front half · clickable</div>
+  </div>
+
+  <aside class="margin">
+    <div class="mk">Why we ask</div>
+    <div class="mnote" id="mNote"></div>
+    <div class="msrc" id="mSrc"></div>
+  </aside>
+</div>
+
+<script>
+const STEPS=[
+  { note:"Everything we ask, we ask for a reason — and we show you the reason, right here, the whole way through. Nothing in this flow is busywork.",
+    src:null,
+    btn:[{label:"Start →",act:"next"}] },
+  { note:"Teams with one documented, sharp ICP report higher win rates and shorter sales cycles than teams chasing a broad one. Narrow isn’t a limitation — it’s the unlock that makes every signal downstream mean something.",
+    src:{lbl:"Salesforce · Ideal Customer Profile",url:"https://www.salesforce.com/sales/ideal-customer-profile/"},
+    btn:[{label:"That’s us →",act:"next"}] },
+  { note:"Reps spend under 30% of the week actually selling — a real chunk of the rest is manual account research. Paste the names; the system does that part in a minute, and keeps doing it after you’ve moved on.",
+    src:{lbl:"Salesforce · State of Sales",url:"https://www.salesforce.com/news/stories/sales-research-2023/"},
+    btn:[{label:"Enrich these →",act:"wake"}] },
+  { note:"This is the easy half — it only read your target list. A real motion carries about ten live deals at once. That’s where it stops being a list and starts telling you which deal is about to slip before you’d have felt it.",
+    src:{lbl:"Pipeline coverage · Gradient Works",url:"https://www.gradient.works/blog/2025-b2b-sales-performance-benchmarks"},
+    btn:[{label:"Make it rise up to meet you every morning →",act:"none",big:true}] },
+];
+const ACCTS=[
+  {nm:'Northwind Logistics',sg:'opened a General Counsel search · 3d ago',ht:91,hot:true},
+  {nm:'Apex Health',sg:'named a new CFO · 2w ago',ht:64},
+  {nm:'Cobalt Freight',sg:'closed a Series B · 5w ago',ht:57},
+  {nm:'Brightwave',sg:'opened a London office · 1w ago',ht:46},
+  {nm:'Harbor Point',sg:'hiring 3 RevOps roles',ht:38},
+  {nm:'Evermark',sg:'quiet — nothing fresh yet',ht:12,cold:true},
+];
+const READS=[
+  {k:'It sees what’s happening',t:'Northwind opened a General Counsel search 3 days ago — you never typed that. It’s your hottest account now.',cls:''},
+  {k:'Harder to fool than you are',t:'Oakhurst Group doesn’t fit who you said you sell to — 40 people, no RevOps function. Want to drop it?',cls:'warn'},
+  {k:'Already ahead of you',t:'You didn’t list Tideway Software. They just hired a VP RevOps and fit your ICP better than half your list. Add them?',cls:''},
+];
+let cur=0;
+const rail=document.getElementById('rail');STEPS.forEach(()=>{const p=document.createElement('span');p.className='pip';rail.appendChild(p);});
+const pips=[...rail.children];
+const mNote=document.getElementById('mNote'),mSrc=document.getElementById('mSrc'),foot=document.getElementById('foot');
+let timers=[];const at=(ms,fn)=>timers.push(setTimeout(fn,ms));const clearAll=()=>{timers.forEach(clearTimeout);timers=[];};
+
+function paintMargin(s){
+  mNote.style.opacity=0;
+  setTimeout(()=>{mNote.textContent=s.note;mNote.style.opacity=1;
+    mSrc.innerHTML = s.src ? `<div class="lbl">The evidence</div><a href="${s.src.url}" target="_blank" rel="noopener">${s.src.lbl} ↗</a>` : '';
+  },180);
+}
+function paintFoot(s){
+  foot.innerHTML='';
+  s.btn.forEach(b=>{
+    const el=document.createElement('button');
+    el.className='btn'+(b.label.indexOf('rise up')>-1?' btn--big':'')+(b.act==='back'?' btn--ghost':'');
+    el.textContent=b.label;el.onclick=()=>action(b.act);
+    foot.appendChild(el);
+  });
+}
+function show(i){
+  clearAll();
+  document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===i));
+  pips.forEach((p,j)=>{p.className='pip'+(j<i?' done':j===i?' on':'');});
+  paintMargin(STEPS[i]);paintFoot(STEPS[i]);
+  if(i===1)playIcp();
+  if(i===3)playWake();
+}
+function action(a){
+  if(a==='next'){cur++;show(cur);}
+  else if(a==='wake'){cur=3;show(cur);}
+}
+function playIcp(){
+  const bubs=[...document.querySelectorAll('#icpEx .bub')];
+  bubs.forEach(b=>b.classList.remove('show'));
+  bubs.forEach(b=>at(+b.dataset.d,()=>b.classList.add('show')));
+}
+function playWake(){
+  const host=document.getElementById('wakeAccts');
+  host.querySelectorAll('.ac').forEach(n=>n.remove());
+  ACCTS.forEach(a=>{
+    const r=document.createElement('div');r.className='ac';
+    r.innerHTML=`<div><div class="nm">${a.nm}</div><div class="sg${a.cold?' cold':''}">${a.sg}</div></div><div class="ht">heat ${a.ht}</div>`;
+    host.appendChild(r);
+  });
+  const rows=[...host.querySelectorAll('.ac')];
+  rows.forEach((r,i)=>{at(500+i*520,()=>{r.querySelector('.sg').classList.add('show');r.querySelector('.ht').classList.add('show');if(ACCTS[i].hot)r.classList.add('hot');});});
+  const reads=document.getElementById('wakeReads');reads.innerHTML='';
+  READS.forEach((rd,i)=>{
+    const el=document.createElement('div');el.className='read '+rd.cls;
+    el.innerHTML=`<div class="rk">${rd.k}</div><div class="rt">${rd.t}</div>`;reads.appendChild(el);
+    at(3600+i*900,()=>el.classList.add('show'));
+  });
+}
+show(0);
+</script>
+</body>
+</html>
