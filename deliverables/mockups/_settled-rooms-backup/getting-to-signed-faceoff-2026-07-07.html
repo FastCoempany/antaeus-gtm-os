@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Getting to Signed — 1 · face-off + ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.62);--ink-3:rgba(10,28,64,.4);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.1);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.1);--amber:#b5790f;--amber-soft:rgba(181,121,15,.12);--red:#c0392b;--red-soft:rgba(192,57,43,.07);
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 56px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 38px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.read{display:flex;align-items:baseline;gap:14px;margin:20px 0 10px;flex-wrap:wrap}
+.read .who{font-family:var(--serif);font-size:22px}.read .m{font-family:var(--mono);font-size:10px;color:var(--blue)}.read .to{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.strip{display:flex;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--hair-2);border-radius:20px;font-size:12px;font-weight:600}
+.chip .d{width:7px;height:7px;border-radius:50%}.chip .d.warm{background:var(--forest)}.chip .d.quiet{background:var(--amber)}.chip .d.new{background:var(--blue)}.chip .rl{font-weight:400;color:var(--ink-3);font-size:10.5px}.chip.quiet{border-color:var(--amber);background:var(--amber-soft)}
+.strip .sp{margin-left:auto;font-size:11.5px;color:var(--ink-3)}.strip .sp b{color:var(--forest)}.strip .sp .cta{color:var(--blue);cursor:pointer;font-family:var(--mono);font-size:11px}
+.blockhd{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:9px}
+.faceoff{display:grid;grid-template-columns:1fr 54px 1fr;align-items:stretch;margin-bottom:12px}
+.side{border:1px solid var(--hair);border-radius:12px;background:var(--surface);padding:16px 18px}
+.side.them{border-top:3px solid var(--red)}.side.you{border-top:3px solid var(--forest)}
+.side .sl{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:7px}.side.them .sl{color:var(--red)}.side.you .sl{color:var(--forest)}
+.side .sv{font-size:15px;font-weight:600;line-height:1.35}.side .sd{font-size:12px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+.gap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.gap .vs{font-family:var(--serif);font-size:18px;color:var(--ink-3)}.gap .gl{font-family:var(--mono);font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);writing-mode:vertical-rl;transform:rotate(180deg)}
+.why{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0 0 12px;max-width:860px}.why b{color:var(--ink)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}
+.opt{display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid var(--hair-2);border-radius:9px;background:var(--surface);font-size:12.5px}
+.opt .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:20px}.opt .k.hold{color:var(--forest);background:var(--forest-soft)}.opt .k.trade{color:var(--blue);background:var(--blue-soft)}.opt .k.walk{color:var(--red);background:var(--red-soft)}.opt b{color:var(--ink)}
+.arow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.btn{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:8px;border:0;background:var(--orange);color:#fff;cursor:pointer;box-shadow:0 8px 20px -12px rgba(230,112,30,.85)}
+.link{font-family:var(--mono);font-size:11px;color:var(--blue);background:0;border:0;cursor:pointer}
+/* ledger for the rest */
+.lh{display:grid;grid-template-columns:108px 1fr 130px 74px;gap:0 14px;padding:0 10px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--hair-2)}
+.row{display:grid;grid-template-columns:108px 1fr 130px 74px;gap:0 14px;padding:14px 10px;border-bottom:1px solid var(--hair);align-items:center;cursor:pointer}
+.row:hover{background:rgba(10,28,64,.015)}.row.on{background:var(--surface);border-radius:10px;box-shadow:0 10px 30px -18px rgba(10,28,64,.35);border-bottom:1px solid transparent;margin:4px 0}
+.tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-2)}
+.tag .dt{width:8px;height:8px;border-radius:2px}.tag.sec .dt{background:#7c5cff}.tag.fin .dt{background:#1f9d6b}.tag.biz .dt{background:var(--amber)}
+.thread .th{font-weight:600;font-size:14.5px}.thread .pos{font-size:12px;color:var(--ink-2);margin-top:3px}.thread .pos .them{color:var(--red)}.thread .pos .you{color:var(--forest)}.thread .pos .arr{color:var(--ink-4);margin:0 5px}
+.stat{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;text-transform:uppercase;padding:3px 9px;border-radius:20px;justify-self:start;white-space:nowrap}.stat.wip{color:var(--blue);background:var(--blue-soft)}.stat.open{color:var(--ink-3);border:1px solid var(--hair-2)}.stat.warm{color:var(--amber);background:var(--amber-soft)}
+.drill{justify-self:end;font-family:var(--mono);font-size:10px;color:var(--blue)}
+.dd{grid-column:1/-1;display:none;padding:14px 4px 6px;margin-top:8px;border-top:1px solid var(--hair)}.row.on .dd{display:block}
+.dd .pl{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin-bottom:12px}.dd .pl b{color:var(--ink)}
+.cov{background:var(--field);border-radius:11px;padding:15px 16px;margin-bottom:13px}.cov .ct{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.covbar{display:flex;height:24px;border-radius:6px;overflow:hidden;margin-bottom:9px}.covbar .g{background:var(--forest);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600}.covbar .a{background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600}
+.covby{font-size:12px;color:var(--ink-2)}.covby b{color:var(--forest)}
+.ddrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.foot{max-width:1000px;margin:22px auto 0;padding:0 38px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Getting to Signed</span><span class="r">1 · face-off + ledger</span></div>
+  <div class="read"><span class="who">Meridian Bank</span><span class="m">◆ $180k</span><span class="to">to signed by month-end · day 14</span></div>
+  <div class="strip">
+    <span class="chip"><span class="d warm"></span>Dana <span class="rl">champion</span></span>
+    <span class="chip quiet"><span class="d quiet"></span>Ellis (CFO) <span class="rl">quiet 8d</span></span>
+    <span class="chip"><span class="d new"></span>Priya <span class="rl">security · new</span></span>
+    <span class="sp">Papers ready: <b>SOC 2 · subprocessor list · pen-test · DPA</b> · <span class="cta">send the plan-to-signed →</span></span>
+  </div>
+
+  <div class="blockhd">The one thing blocking — settle this and finance is next</div>
+  <div class="faceoff">
+    <div class="side them"><div class="sl">Their side · Legal</div><div class="sv">Unlimited liability on a data breach</div><div class="sd">Their counsel is holding the contract on it.</div></div>
+    <div class="gap"><span class="gl">the gap</span><span class="vs">vs</span></div>
+    <div class="side you"><div class="sl">Your line</div><div class="sv">12-month-fees cap + a 2× super-cap just for a breach</div><div class="sd">Market-standard. No unlimited — that's the line.</div></div>
+  </div>
+  <div class="why"><b>Unlimited isn't the norm</b> — a 12-month-fees cap is, with a breach usually getting its own higher "super-cap." And it's <b>linked to their indemnification ask</b>: a broad promise is worthless if the cap is tiny, so settle them together.</div>
+  <div class="opts">
+    <div class="opt"><span class="k hold">hold</span><b>12-mo + 2× super-cap</b> — your counter</div>
+    <div class="opt"><span class="k trade">trade</span>go to <b>3×</b> only if they countersign this month</div>
+    <div class="opt"><span class="k walk">line</span><b>no unlimited</b></div>
+  </div>
+  <div class="arow"><button class="btn">Send the counter-position →</button><button class="link">Loop in an advisor who's won this fight</button></div>
+
+  <div class="lh"><span>Team</span><span>Everything else open · their ask → your line</span><span>Status</span><span></span></div>
+
+  <div class="row on" data-t="sec">
+    <span class="tag sec"><span class="dt"></span>Security</span>
+    <div class="thread"><div class="th">150-question checklist</div><div class="pos"><span class="them">wants all 150 answered</span><span class="arr">→</span><span class="you">your papers answer 120</span></div></div>
+    <span class="stat wip">clearing</span><span class="drill">close ▴</span>
+    <div class="dd">
+      <div class="pl">Don't fill 150 lines by hand — <b>most of it is already answered by papers you hold.</b></div>
+      <div class="cov"><div class="ct">Coverage · what your papers already answer</div><div class="covbar"><span class="g" style="flex:120">120 covered</span><span class="a" style="flex:30">30 open</span></div><div class="covby">Covered by <b>SOC 2 Type II</b> (88) · <b>Subprocessor list</b> (19) · <b>Pen-test</b> (13). Of the 30 left, 27 have saved answers you've used before; 3 need a word from engineering.</div></div>
+      <div class="ddrow"><button class="btn">Send the 3 papers + 27 saved answers →</button><button class="link">See the 30 open</button></div>
+    </div>
+  </div>
+
+  <div class="row" data-t="fin">
+    <span class="tag fin"><span class="dt"></span>Finance</span>
+    <div class="thread"><div class="th">Payment terms</div><div class="pos"><span class="them">wants net-90</span><span class="arr">→</span><span class="you">net-60, or trade for a discount</span></div></div>
+    <span class="stat open">to do</span><span class="drill">open ▾</span>
+    <div class="dd"><div class="pl">Net-90 is a give — <b>get something for it.</b> Offer three, let them pick: <b>net-60 flat</b> · <b>net-30 for a 3% cut</b> · <b>15% off for annual up-front.</b> Line: no net-90 on an unpaid balance.</div><div class="ddrow"><button class="btn">Send the three options →</button></div></div>
+  </div>
+
+  <div class="row" data-t="biz">
+    <span class="tag biz"><span class="dt"></span>Business</span>
+    <div class="thread"><div class="th">Keep the committee moving</div><div class="pos"><span class="them">Ellis (CFO) quiet 8 days</span><span class="arr">→</span><span class="you">build a shared plan-to-signed</span></div></div>
+    <span class="stat warm">at risk</span><span class="drill">open ▾</span>
+    <div class="dd"><div class="pl">This is the front that actually kills deals. Build a shared plan-to-signed with Dana — dated steps, named owners — and give Ellis a reason to re-engage (the plan + the payment options), not a "just checking in."</div><div class="ddrow"><button class="btn">Build the plan-to-signed with Dana →</button><button class="link">Draft the re-engage to Ellis</button></div></div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+document.querySelectorAll('.row').forEach(r=>r.onclick=(e)=>{if(e.target.closest('.btn,.link'))return;const open=r.classList.contains('on');document.querySelectorAll('.row').forEach(x=>{x.classList.remove('on');x.querySelector('.drill').textContent='open ▾';});if(!open){r.classList.add('on');r.querySelector('.drill').textContent='close ▴';}});
+document.querySelectorAll('.btn').forEach(b=>b.onclick=(e)=>{e.stopPropagation();toast('Drafts it & logs the move on the deal');});
+document.querySelectorAll('.link,.cta').forEach(l=>l.onclick=(e)=>{e.stopPropagation();toast(l.textContent.trim());});
+$('foot').textContent='MOCKUP · not wired · design-only · GETTING TO SIGNED — 1 (face-off + ledger) · the blocker as a face-off up top, everything else as the positions ledger · deep-dive the coverage map · plain language';
+</script>
+</body></html>

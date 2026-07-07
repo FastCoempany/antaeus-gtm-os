@@ -20,3 +20,4 @@ lost to an ephemeral-scratchpad wipe again. Do not delete.
 | LinkedIn Playbook | linkedin-playbook-one-move-2026-07-06.html | The one move (air-cover, public-first ladder) |
 | Pilot Desk | pilot-desk-guided-2026-07-06.html | The guided pilot (movements + adoption meter + circle + share kit) |
 | Call in a Favor | call-in-a-favor-toprail-2026-07-06.html | The relay (you → your person → the buyer) + top-rail deal queue |
+| Getting to Signed | getting-to-signed-faceoff-2026-07-07.html | Face-off + ledger (the blocker as their-side ⟷ your-line, then the positions ledger with coverage-map deep-dive) |
