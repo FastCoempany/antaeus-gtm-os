@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welcome — the flow's landing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.66);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.22);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.08);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--red-soft:rgba(192,57,43,.06);
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:840px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.state{padding:46px 0 8px}
+.state .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:15px}
+.state .h{font-family:var(--serif);font-size:42px;line-height:1.1;letter-spacing:-.01em;max-width:700px}
+.state .sub{font-family:var(--read);font-size:17px;line-height:1.58;color:var(--ink-2);margin-top:15px;max-width:600px}.state .sub b{color:var(--ink)}
+/* the one move */
+.move{margin:28px 0 0;padding:24px 26px;border:1px solid var(--hair);border-left:3px solid var(--orange);border-radius:0 14px 14px 0;background:var(--surface);max-width:660px}
+.move .mk{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:9px}
+.move .mt{font-family:var(--serif);font-size:25px;line-height:1.18;margin-bottom:8px}
+.move .mb{font-size:14px;color:var(--ink-2);line-height:1.55;margin-bottom:16px}.move .mb b{color:var(--ink)}
+.go{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-weight:600;font-size:14px;padding:11px 20px;border-radius:9px;border:0;background:var(--orange);color:#fff;cursor:pointer;box-shadow:0 10px 24px -12px rgba(230,112,30,.9)}
+.ghost{font-family:var(--mono);font-size:11.5px;color:var(--blue);cursor:pointer;background:0;border:0}
+/* what the system saw overnight */
+.saw{margin-top:34px}
+.sl{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:0 14px;align-items:baseline;padding:12px 0;border-top:1px solid var(--hair)}
+.row .dt{width:8px;height:8px;border-radius:50%;align-self:center}.dt.up{background:var(--forest)}.dt.warn{background:var(--amber)}.dt.due{background:var(--blue)}
+.row .cx{font-size:13.5px;line-height:1.45}.row .cx b{font-weight:600}.row .cx .q{color:var(--ink-2)}
+.row .tm{font-family:var(--mono);font-size:10px;color:var(--ink-3);white-space:nowrap}
+.more{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}
+/* operating line */
+.oper{margin-top:32px;padding-top:20px;border-top:1px solid var(--hair);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.oper .st{display:flex;align-items:baseline;gap:7px}.oper .st b{font-family:var(--serif);font-size:19px;color:var(--ink);font-weight:400}
+.oper .sep{color:var(--hair-2)}
+.foot{max-width:840px;margin:24px auto 0;padding:0 40px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Welcome</span><span class="r">the workspace is awake · Sarah</span></div>
+
+  <div class="state">
+    <div class="k">You did the hard work — here's the first morning it pays back</div>
+    <div class="h">The workspace is awake. It already found the one deal that needs you first.</div>
+    <div class="sub">You seeded <b>10 deals and 12 accounts.</b> Overnight the system read every one — the heat, the silence, the next steps — so you don't walk in cold. This is the dividend the setup promised, starting today.</div>
+  </div>
+
+  <div class="move">
+    <div class="mk">Start here · the system's pick</div>
+    <div class="mt">Northwind is closest to slipping</div>
+    <div class="mb">18 days silent in Proposal, no one named who signs, next step undated. <b>The smallest move that saves it:</b> get a name on who signs and a date on the next step — before it goes cold.</div>
+    <div class="go"><button class="btn">Work Northwind →</button><button class="ghost">or see the full Dashboard</button></div>
+  </div>
+
+  <div class="saw">
+    <div class="sl">What the system saw while you were away</div>
+    <div class="row"><span class="dt up"></span><span class="cx"><b>Apex Health's</b> new CFO is two weeks in <span class="q">— reach while the change is warm.</span></span><span class="tm">2w</span></div>
+    <div class="row"><span class="dt warn"></span><span class="cx"><b>Three deals</b> have no dated next step <span class="q">— the pattern that stalls them.</span></span><span class="tm">now</span></div>
+    <div class="row"><span class="dt due"></span><span class="cx">Your <b>quota pace</b> needs 12 messages &amp; calls a day <span class="q">— today's is untouched.</span></span><span class="tm">today</span></div>
+    <span class="more">See all of it on the Dashboard →</span>
+  </div>
+
+  <div class="oper">
+    <span class="st"><b>12</b> accounts watched</span><span class="sep">·</span>
+    <span class="st"><b>10</b> live deals</span><span class="sep">·</span>
+    <span class="st"><b>$840k</b> in flight</span><span class="sep">·</span>
+    <span>the workspace is running — this is just the morning door into it.</span>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+document.querySelectorAll('.btn,.ghost,.more').forEach(b=>b.onclick=()=>toast(b.textContent.trim()));
+$('foot').textContent="MOCKUP · not wired · design-only · WELCOME — the flow's landing · the payback the doorway promised: a full workspace read overnight + the one move · re-entry reuses this shape (headline becomes what moved since you left) · never a finish line";
+</script>
+</body></html>
