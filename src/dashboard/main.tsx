@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { Dashboard } from "./Dashboard";
 import { TodaySurface } from "./today/TodaySurface";
+import { DashboardV4 } from "./v4/DashboardV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -81,7 +82,26 @@ if (todayParam === "1") {
     // net, reachable by flipping room_dashboard_today_legacy ON in Posthog.
     useTodaySurface = !isFeatureEnabled("room_dashboard_today_legacy");
 }
-render(useTodaySurface ? <TodaySurface /> : <Dashboard />, root);
+
+// 2026-07 wire-up (canon §4.2) — the command + standing cockpit is the
+// production Dashboard. Default on; room_dashboard_v4_off is the
+// kill-switch back to the today surface (one Posthog toggle, no
+// redeploy). ?v4=0 previews the today surface, ?v4=1 forces the cockpit.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_dashboard_v4_off"));
+
+render(
+    useV4 ? <DashboardV4 /> : useTodaySurface ? <TodaySurface /> : <Dashboard />,
+    root
+);
 
 // Boot the density gradient so the today surface's primitives render
 // at the workspace's chosen density (defensive — no-ops without a
