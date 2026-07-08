@@ -1,5 +1,6 @@
 import type { ReadinessSummary, Verdict } from "@/lib/readiness";
 import { VERDICT_RANK } from "@/lib/readiness";
+import { t } from "@/lib/voice/t";
 
 /**
  * Dashboard v4 cockpit model (canon §4.2) — the "command + standing
@@ -19,11 +20,11 @@ export interface Gate {
 }
 
 const GATE_LABELS: ReadonlyArray<string> = [
-    "You are the system",
-    "Building",
-    "Inheritable",
-    "Hire-ready",
-    "Repeatable"
+    t("You are the system"),
+    t("Building"),
+    t("Inheritable"),
+    t("Hire-ready"),
+    t("Repeatable")
 ];
 
 export interface Masthead {
@@ -44,19 +45,21 @@ export function buildMasthead(summary: ReadinessSummary): Masthead {
             pos < rank ? "done" : pos === rank ? "on" : pos === rank + 1 ? "next" : "todo";
         return { label, state };
     });
+    // gateBlockers are engine strings (already t()-wrapped + §13-scrubbed
+    // at the source in verdict.ts); the fallbacks are local prose.
     const nextStage =
         summary.gateBlockers && summary.gateBlockers.length > 0
             ? summary.gateBlockers[0]!
             : summary.nextVerdict
-              ? "Everything the next stage needs is in place — it'll settle the next time you save a change in any room."
-              : "You're at the top — multiple wins, losses analyzed, and the handoff kit composed.";
+              ? t("Everything the next stage needs is in place — it'll settle the next time you save a change in any room.", { class: "body" })
+              : t("You're at the top — multiple wins, losses analyzed, and the handoff kit composed.", { class: "body" });
     // "You're {label}." reads wrong for the base verdict ("You are the
     // system"), so compose a grammatical headline per verdict.
     const isBase = summary.verdict === "you_are_the_system";
     return {
         verdictLabel: summary.verdictLabel,
-        headlinePre: isBase ? "Right now," : "You're",
-        headlineEm: isBase ? "you're the system" : summary.verdictLabel,
+        headlinePre: isBase ? t("Right now,") : t("You're"),
+        headlineEm: isBase ? t("you're the system") : summary.verdictLabel,
         gates,
         nextStage
     };
@@ -107,31 +110,35 @@ function door(path: string): string {
     return `${path}?returnTo=%2Fdashboard%2F&returnLabel=Dashboard&fromMode=room&fromSurface=dashboard`;
 }
 
+// Shapes MATCH the shipped publishers (verified against the health-
+// snapshot / persistence sources — not guessed):
+//   gtmos_deal_workspace_health  → pipeline_value, top_pressure[{accountName,stage,score,cause}]
+//   gtmos_signal_room_health     → topAccountName, topHeat, readyCount
+//   gtmos_quota_targets          → monthly_target, coverage_target
+//   gtmos_founding_gtm_health    → sections_ready
 interface DealHealth {
     readonly pipeline_value?: number;
     readonly top_pressure?: ReadonlyArray<{
-        readonly title?: string;
-        readonly name?: string;
+        readonly accountName?: string;
+        readonly stage?: string;
+        readonly score?: number;
         readonly cause?: string;
-        readonly meta?: ReadonlyArray<string>;
     }>;
 }
 interface SignalHealth {
-    readonly topName?: string;
+    readonly topAccountName?: string;
     readonly topHeat?: number;
     readonly readyCount?: number;
 }
 interface QuotaTargets {
-    readonly onPace?: boolean;
-    readonly behind?: boolean;
-    readonly coverageOk?: boolean;
+    readonly monthly_target?: number;
+    readonly coverage_target?: number;
 }
 interface FoundingHealth {
-    readonly readyCount?: number;
-    readonly ready?: number;
+    readonly sections_ready?: number;
 }
 
-/** The 5 standing doors, derived defensively from the health snapshots. */
+/** The 5 standing doors, derived defensively from the shipped health snapshots. */
 export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> {
     const store = getStorage(s);
     const deal = readJson<DealHealth>(store, "gtmos_deal_workspace_health") ?? {};
@@ -143,55 +150,76 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
     const slipN = pressure.length;
     const pipeline = typeof deal.pipeline_value === "number" ? deal.pipeline_value : 0;
 
+    // Worst deal = the top-pressure row's real accountName; pull a day
+    // count out of its cause text if one is there (the snapshot carries
+    // no explicit days field).
     const worst = pressure[0];
-    const worstName = worst?.title ?? worst?.name ?? null;
-    const worstDays =
-        (worst?.meta ?? [])
-            .map((m: string) => m.match(/(\d+)\s*d/i)?.[1])
-            .find(Boolean) ?? null;
+    const worstName =
+        worst && typeof worst.accountName === "string" && worst.accountName.trim()
+            ? worst.accountName.trim()
+            : null;
+    const worstDays = worst?.cause?.match(/(\d+)\s*d(?:ays?)?\b/i)?.[1] ?? null;
 
     const handoffReady =
-        typeof founding.readyCount === "number"
-            ? founding.readyCount
-            : typeof founding.ready === "number"
-              ? founding.ready
-              : 0;
+        typeof founding.sections_ready === "number" ? founding.sections_ready : 0;
 
-    const behind = quota.behind === true || quota.onPace === false || quota.coverageOk === false;
+    // Pace "behind" is a REAL coverage check: is open pipeline below the
+    // number × the coverage multiple? Only judged when a quota is set;
+    // never claims "on pace" on an empty quota.
+    const hasQuota = typeof quota.monthly_target === "number" && quota.monthly_target > 0;
+    const coverageNeeded = hasQuota
+        ? quota.monthly_target! * (typeof quota.coverage_target === "number" && quota.coverage_target > 0 ? quota.coverage_target : 3)
+        : 0;
+    const behind = hasQuota && pipeline < coverageNeeded;
+
+    const hotName =
+        typeof signal.topAccountName === "string" && signal.topAccountName.trim()
+            ? signal.topAccountName.trim()
+            : null;
+    const ready = typeof signal.readyCount === "number" ? signal.readyCount : 0;
 
     return [
         {
-            key: "Deals",
-            value: slipN > 0 ? `${slipN} will slip` : "Holding",
-            sub: slipN > 0 && pipeline > 0 ? `${money(pipeline)} of pipeline this week` : "pipeline is steady",
+            key: t("Deals"),
+            value: slipN > 0 ? `${slipN} ${t("will slip")}` : t("Holding"),
+            sub:
+                slipN > 0 && pipeline > 0
+                    ? `${money(pipeline)} ${t("of pipeline this week")}`
+                    : t("pipeline is steady"),
             tone: slipN > 0 ? "bad" : "good",
             href: door("/deal-workspace/")
         },
         {
-            key: "Hottest",
-            value: signal.topName ? `${signal.topName}${signal.topHeat != null ? ` · ${signal.topHeat}` : ""}` : "None yet",
-            sub: signal.readyCount ? `${signal.readyCount} accounts ready to reach` : "no hot accounts yet",
+            key: t("Hottest"),
+            value: hotName
+                ? `${hotName}${typeof signal.topHeat === "number" && signal.topHeat > 0 ? ` · ${signal.topHeat}` : ""}`
+                : t("None yet"),
+            sub: ready > 0 ? `${ready} ${t("accounts ready to reach")}` : t("no hot accounts yet"),
             tone: "",
             href: door("/signal-console/")
         },
         {
-            key: "Pace",
-            value: Object.keys(quota).length === 0 ? "Not set" : behind ? "Behind" : "On pace",
-            sub: Object.keys(quota).length === 0 ? "set your number" : behind ? "not enough pipeline yet" : "pipeline covers the number",
-            tone: Object.keys(quota).length === 0 ? "warn" : behind ? "warn" : "good",
+            key: t("Pace"),
+            value: !hasQuota ? t("Not set") : behind ? t("Behind") : t("On pace"),
+            sub: !hasQuota
+                ? t("set your number")
+                : behind
+                  ? t("not enough pipeline yet")
+                  : t("pipeline covers the number"),
+            tone: !hasQuota ? "warn" : behind ? "warn" : "good",
             href: door("/quota-workback/")
         },
         {
-            key: "Dying",
-            value: worstName ? `${worstName}${worstDays ? ` · ${worstDays}d` : ""}` : "None",
-            sub: worstName ? "your worst open deal" : "nothing critical",
+            key: t("Dying"),
+            value: worstName ? `${worstName}${worstDays ? ` · ${worstDays}d` : ""}` : t("None"),
+            sub: worstName ? t("your worst open deal") : t("nothing critical"),
             tone: worstName ? "bad" : "good",
             href: door("/future-autopsy/")
         },
         {
-            key: "Handoff",
+            key: t("Handoff"),
             value: `${handoffReady} / 7`,
-            sub: "a hire could inherit",
+            sub: t("a hire could inherit"),
             tone: handoffReady >= 5 ? "good" : "warn",
             href: door("/founding-gtm/")
         }

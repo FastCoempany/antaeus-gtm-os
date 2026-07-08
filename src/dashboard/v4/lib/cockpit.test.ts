@@ -56,35 +56,59 @@ describe("buildMasthead", () => {
 });
 
 describe("buildStanding", () => {
-    it("derives the five doors from the health snapshots", () => {
+    it("derives the five doors from the REAL publisher snapshot shapes", () => {
         const s = new FakeStorage();
+        // shapes match the shipped publishers exactly (deal-workspace/
+        // signal-console/founding-gtm/quota-workback health-snapshots)
         s.setItem(
             "gtmos_deal_workspace_health",
             JSON.stringify({
                 pipeline_value: 480000,
                 top_pressure: [
-                    { title: "Datadog", meta: ["16d"] },
-                    { title: "Northwind", meta: ["8d"] }
+                    { accountName: "Datadog", stage: "negotiation", score: 90, cause: "16 days from lost" },
+                    { accountName: "Northwind", stage: "proposal", score: 70, cause: "drifting" }
                 ]
             })
         );
         s.setItem(
             "gtmos_signal_room_health",
-            JSON.stringify({ topName: "Ramp", topHeat: 88, readyCount: 4 })
+            JSON.stringify({ topAccountName: "Ramp", topHeat: 88, readyCount: 4 })
         );
-        s.setItem("gtmos_founding_gtm_health", JSON.stringify({ readyCount: 2 }));
+        s.setItem("gtmos_founding_gtm_health", JSON.stringify({ sections_ready: 2 }));
+        s.setItem(
+            "gtmos_quota_targets",
+            JSON.stringify({ monthly_target: 100000, coverage_target: 3.5 })
+        );
         const items = buildStanding(s);
         expect(items).toHaveLength(5);
-        expect(items[0]!.key).toBe("Deals");
         expect(items[0]!.value).toBe("2 will slip");
         expect(items[0]!.tone).toBe("bad");
+        // Hottest reads the real topAccountName field
         expect(items[1]!.value).toContain("Ramp");
-        expect(items[3]!.key).toBe("Dying");
-        expect(items[3]!.value).toContain("Datadog");
+        expect(items[1]!.sub).toContain("4");
+        // Pace: pipeline 480k < 100k×3.5=350k? no → on pace (good)
+        expect(items[2]!.value).toBe("On pace");
+        expect(items[2]!.tone).toBe("good");
+        // Dying reads the real accountName + pulls days from the cause
+        expect(items[3]!.value).toBe("Datadog · 16d");
+        expect(items[3]!.tone).toBe("bad");
+        // Handoff reads the real sections_ready field
         expect(items[4]!.value).toBe("2 / 7");
-        expect(items[4]!.tone).toBe("warn"); // < 5
-        // every door carries continuity params
+        expect(items[4]!.tone).toBe("warn");
         for (const it of items) expect(it.href).toContain("returnTo");
+    });
+
+    it("marks Pace behind when pipeline is below coverage", () => {
+        const s = new FakeStorage();
+        s.setItem("gtmos_deal_workspace_health", JSON.stringify({ pipeline_value: 100000 }));
+        s.setItem(
+            "gtmos_quota_targets",
+            JSON.stringify({ monthly_target: 100000, coverage_target: 3.5 })
+        );
+        const items = buildStanding(s);
+        // 100k < 350k needed → Behind
+        expect(items[2]!.value).toBe("Behind");
+        expect(items[2]!.tone).toBe("warn");
     });
 
     it("degrades to calm defaults on an empty workspace", () => {

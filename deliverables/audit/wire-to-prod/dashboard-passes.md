@@ -23,9 +23,21 @@ Net-new build composing the existing engines unchanged: the command-intelligence
 - Boots clean (0 pageerrors) with seeded data across the masthead + board + standing + drawer trigger. `buildStanding` degrades to calm defaults on an empty workspace (Holding / Not set / 0 of 7) — no throw. Skip cycles safely at board length 0/1. Money formatter + snapshot reads defensive.
 - 6/6 cockpit tests, typecheck clean, voice gate green.
 
-## Follow-ups
-- The **climb drawer** (settled Readiness design) replaces the bars drawer when Readiness (Wave B/4) ships — Dashboard's "See the whole thing" will point at it with no Dashboard change.
-- A fresh adversarial reviewer is running; any confirmed findings get a follow-up fix commit (kill-switch protects prod).
+## Fresh-reviewer pass: NO-GO → fixed → GO
+
+The fresh adversarial reviewer returned **NO-GO** with one critical + several real findings — all fixed and re-verified.
+
+- **FIXED [HIGH — the big one] The standing row read guessed snapshot shapes; 4 of 5 doors were false-green on real data.** `buildStanding` invented `topName` / `title`+`meta` / `onPace` / `readyCount` fields that no shipped publisher writes — so Hottest, Pace, Dying, and Handoff rendered empty or false-green (e.g. "On pace" for any workspace, worst deal never surfacing) — the exact "green unit test, broken live" trap (my test fed the guessed shapes). Now aligned to the **real** publishers: `topAccountName` (signal), `sections_ready` (founding), `top_pressure[].accountName`+`cause` (deal), and Pace is a **real coverage check** (pipeline vs `monthly_target × coverage_target`) instead of a nonexistent flag. The test now uses the real publisher shapes so it would catch a future drift.
+- **FIXED [MED — §13 leak on the masthead] The next-stage line rendered raw `gateBlockers` from the readiness engine, which contained hard-bans** — "Cast a proof in PoC Framework." / "Deploy an advisor…" / the dimension label "Proof & memory". Scrubbed at the **engine source** (`src/lib/readiness/verdict.ts` + `types.ts`) → "Run a pilot that gives a buyer's boss a result they can act on." / "Call in a favor — a backchannel ask on a real deal." / "Pilot evidence". This fixes both the Dashboard masthead AND the future Readiness room; readiness tests still green.
+- **FIXED [MED — voice] `cockpit.ts` bypassed `t()` entirely.** All gate labels, door keys, and value/sub copy now go through `t()` (voice gate covers them).
+- Deferred (low): `nextTwo` repeats the current move at exactly board length 2; standing doors route to the room not the specific object.
+
+## Reconcile with founder (Part IV §4 — capability-map vs the locked mockup)
+The settled 2026-07-04 cockpit mockup (founder-locked) **does not** carry two things the 07-07 capability map lists under "must never be flatten":
+1. The **Brief / Spotlight / Queue** density-mode switcher — the cockpit folds them into one surface (verdict read = Brief, the one move = Spotlight, skip-the-board = Queue) but has no explicit mode toggle.
+2. The **"this week's reads"** workspace-observations surface (the prior today surface had it).
+
+The wire-up matches the **locked mockup**. Whether the cockpit *supersedes* those primitives (update the capability map + canon §4.2) or should restore them is a founder call — flagged, not silently resolved.
 
 ## Ship state
-Flipped to default with `room_dashboard_v4_off` kill-switch (reverts to the today surface, then legacy).
+Flipped to default with `room_dashboard_v4_off` kill-switch (reverts to the today surface, then legacy). Standing row verified against real publisher shapes; masthead §13-clean; 8/8 cockpit tests + readiness suite green.
