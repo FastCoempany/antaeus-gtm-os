@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Readiness — the climb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.66);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.22);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.08);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field)}
+.bg{position:fixed;inset:0;background:var(--field);padding:40px}
+.bgtop{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--hair);border-radius:10px;max-width:500px}
+.bgtop .nm{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}.bgtop .an{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px}.bgtop .an .k{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}.bgtop .an .l{color:var(--amber);font-weight:600}
+.bgn{font-family:var(--mono);font-size:11px;color:var(--ink-3);max-width:340px;line-height:1.7;margin-top:18px}
+.drawer{position:fixed;inset:0;z-index:40;display:flex;justify-content:flex-end}
+.scrim{position:absolute;inset:0;background:rgba(10,28,64,.28)}
+.panel{position:relative;width:min(540px,100%);height:100%;background:var(--surface);border-left:1px solid var(--hair);overflow-y:auto;box-shadow:-24px 0 60px rgba(10,28,64,.18)}
+.hero{padding:28px 30px 22px;border-bottom:1px solid var(--hair);position:relative;background:linear-gradient(180deg,rgba(181,121,15,.06),transparent)}
+.hero .k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:11px}
+.hero .v{font-family:var(--serif);font-size:36px;line-height:1.06;margin-bottom:9px}
+.hero .s{font-family:var(--read);font-size:15px;line-height:1.5;color:var(--ink-2);max-width:40ch}
+.x{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;border:1px solid var(--hair);background:var(--surface);color:var(--ink-3);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sec{padding:22px 30px 6px}
+.sl{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+
+.climb{position:relative;margin-top:2px}
+.climb:before{content:"";position:absolute;left:8px;top:12px;bottom:16px;width:2px;background:var(--hair-2)}
+.rung{position:relative;padding:0 0 20px 30px}
+.rung .node{position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:2px solid var(--hair-2);z-index:2}
+.rung.done .node{background:var(--forest);border-color:var(--forest)}
+.rung.done:before{content:"";position:absolute;left:8px;top:-12px;height:14px;width:2px;background:var(--forest)}
+.rung.here .node{border-color:var(--amber);background:var(--amber-soft)}.rung.here .node:after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--amber)}
+.rung .rn{font-size:15px;font-weight:600;line-height:1.2}.rung.done .rn{color:var(--forest)}.rung.future .rn{color:var(--ink-3)}
+.rung .rm{font-size:12.5px;color:var(--ink-2);line-height:1.45;margin-top:3px}.rung.future .rm{color:var(--ink-4)}
+.rung .rt{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;margin-top:5px;display:inline-block}
+.rung.done .rt{color:var(--forest)}.rung.here .rt{color:var(--amber)}.rung.future .rt{color:var(--ink-4)}
+.rung.here{background:rgba(181,121,15,.04);border-radius:0 12px 12px 0;padding:12px 14px 14px 30px;margin-left:-0px}
+.next{margin:8px 30px 0;padding:16px 18px;border:1px solid var(--hair);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;background:var(--surface)}
+.next .nt{font-family:var(--serif);font-size:17px;margin-bottom:9px}
+.next ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.next li{font-size:13px;color:var(--ink);line-height:1.45;padding-left:16px;position:relative}.next li:before{content:"→";position:absolute;left:0;color:var(--amber)}
+.holding{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.hp{font-family:var(--sans);font-size:11.5px;padding:5px 10px;border-radius:20px;border:1px solid var(--hair-2);color:var(--ink-2)}
+.hp.ok{border-color:var(--forest);color:var(--forest);background:var(--forest-soft)}
+.hp.thin{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
+
+.foot{display:flex;gap:10px;flex-wrap:wrap;padding:20px 30px 28px;border-top:1px solid var(--hair);margin-top:16px}
+.fb{font-family:var(--sans);font-weight:500;font-size:12px;padding:8px 14px;border-radius:8px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.fb.share{border-color:var(--forest);color:var(--forest);font-weight:600}
+.tag{font-family:var(--mono);font-size:10px;color:var(--ink-4);position:fixed;bottom:8px;left:16px}
+</style></head><body>
+<div class="bg"><div class="bgtop"><span class="nm">Dashboard</span><span class="an"><span class="k">Readiness</span><span class="l">Building ›</span></span></div><div class="bgn">Readiness is a topbar anchor → this drawer overlay (no route change). Redesign — verdict-dominant, no score bars, the over-time climb, plain language.</div></div>
+<div class="drawer"><div class="scrim"></div><aside class="panel">
+
+  <header class="hero"><div class="k">Readiness · could a hire run this yet?</div><div class="v">Building</div><div class="s">A hire could pick up parts of this, but they'd still be improvising the system on day one.</div><button class="x">×</button></header>
+  <section class="sec"><div class="sl">The climb — where the workspace has been, and where it goes next</div>
+    <div class="climb">
+      <div class="rung done"><span class="node"></span><div class="rn">You are the system</div><div class="rm">It all lived in your head — nothing to inherit.</div><span class="rt">Left behind · 3 weeks ago</span></div>
+      <div class="rung here"><span class="node"></span><div class="rn">Building</div><div class="rm">Real activity is on the board, but a hire would still be improvising the motion.</div><span class="rt">You are here</span></div>
+      <div class="rung future"><span class="node"></span><div class="rn">Inheritable with guardrails</div><div class="rm">A hire could run it with you there to answer questions.</div><span class="rt">Next</span></div>
+      <div class="rung future"><span class="node"></span><div class="rn">Hire-ready</div><div class="rm">The motion survives you taking two weeks off.</div><span class="rt">Later</span></div>
+      <div class="rung future"><span class="node"></span><div class="rn">Hire-ready, repeatable</div><div class="rm">Wins and losses both feed the machine; the handoff kit is written.</div><span class="rt">The summit</span></div>
+    </div>
+  </section>
+  <div class="next"><div class="nt">To reach Inheritable</div><ul>
+    <li>Log 3 more discovery calls — it's the one part still thin.</li>
+    <li>Sharpen your targeting to one persona — it's closest to solid.</li>
+    <li>Get one pilot to a result the buyer's boss could act on.</li>
+  </ul></div>
+  <section class="sec"><div class="sl">What's carrying the verdict right now</div>
+    <div class="holding">
+      <span class="hp ok">Targeting — solid</span><span class="hp ok">Open deals — solid</span><span class="hp ok">Outreach — workable</span>
+      <span class="hp thin">Discovery — thin</span><span class="hp thin">Pilot evidence — none yet</span>
+    </div>
+  </section>
+  <footer class="foot"><button class="fb share">Share read-only with a hire</button><button class="fb">Export readiness + history</button></footer>
+
+</aside></div>
+<div class="tag">RS-1 · the climb · verdict-dominant + the over-time ladder (past rungs forest/durable, next = the goal) + plain what-moves-it · no bars, no scores</div>
+</body></html>
