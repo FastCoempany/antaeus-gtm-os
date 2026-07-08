@@ -1,0 +1,222 @@
+/*
+ * Welcome v4 — the flow's landing (canon §4.1). Ported from the settled
+ * mockup welcome-flow-landing-2026-07-07.html, scoped under .wl4. Bright
+ * Threshold: one commanding statement, one dominant move, the payback
+ * made visible, a recessive operating line. Tokens from tokens.css.
+ */
+.wl4 {
+    --wl-read: "Newsreader", Georgia, serif;
+    min-height: 100vh;
+    background: var(--ds-field, #eef1f7);
+    color: var(--ds-ink, #0a1c40);
+    font-family: var(--ds-sans, "Inter", system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 60px;
+}
+.wl4-wrap {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+.wl4-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 0 13px;
+    border-bottom: 1px solid var(--ds-hair-2, rgba(10, 28, 64, 0.15));
+}
+.wl4-bname {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+.wl4-r {
+    margin-left: auto;
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 11px;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+}
+.wl4-state {
+    padding: 46px 0 8px;
+}
+.wl4-k {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ds-orange, #e6701e);
+    margin-bottom: 15px;
+}
+.wl4-h {
+    font-family: var(--ds-serif, "DM Serif Display", Georgia, serif);
+    font-size: 42px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    max-width: 700px;
+}
+.wl4-sub {
+    font-family: var(--wl-read);
+    font-size: 17px;
+    line-height: 1.58;
+    color: var(--ds-ink-2, rgba(10, 28, 64, 0.66));
+    margin-top: 15px;
+    max-width: 600px;
+}
+.wl4-sub b {
+    color: var(--ds-ink, #0a1c40);
+}
+/* the one move */
+.wl4-move {
+    margin: 28px 0 0;
+    padding: 24px 26px;
+    border: 1px solid var(--ds-hair, rgba(10, 28, 64, 0.09));
+    border-left: 3px solid var(--ds-orange, #e6701e);
+    border-radius: 0 14px 14px 0;
+    background: var(--ds-surface, #fff);
+    max-width: 660px;
+}
+.wl4-move--calm {
+    border-left-color: var(--ds-blue, #2563eb);
+}
+.wl4-mk {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ds-orange, #e6701e);
+    margin-bottom: 9px;
+}
+.wl4-move--calm .wl4-mk {
+    color: var(--ds-blue, #2563eb);
+}
+.wl4-mt {
+    font-family: var(--ds-serif, "DM Serif Display", Georgia, serif);
+    font-size: 25px;
+    line-height: 1.18;
+    margin-bottom: 8px;
+}
+.wl4-mb {
+    font-size: 14px;
+    color: var(--ds-ink-2, rgba(10, 28, 64, 0.66));
+    line-height: 1.55;
+    margin-bottom: 16px;
+}
+.wl4-mb b {
+    color: var(--ds-ink, #0a1c40);
+}
+.wl4-go {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.wl4-btn {
+    font-family: var(--ds-sans, "Inter", system-ui, sans-serif);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 9px;
+    border: 0;
+    background: var(--ds-orange, #e6701e);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 10px 24px -12px rgba(230, 112, 30, 0.9);
+}
+.wl4-ghost {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 11.5px;
+    color: var(--ds-blue, #2563eb);
+    cursor: pointer;
+    background: 0;
+    border: 0;
+    text-decoration: none;
+}
+/* what the system saw */
+.wl4-saw {
+    margin-top: 34px;
+}
+.wl4-sl {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 9.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+    margin-bottom: 4px;
+}
+.wl4-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0 14px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-top: 1px solid var(--ds-hair, rgba(10, 28, 64, 0.09));
+}
+.wl4-dt {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    align-self: center;
+}
+.wl4-dt--up {
+    background: var(--ds-forest, #1b5e3f);
+}
+.wl4-dt--warn {
+    background: var(--ds-amber, #b5790f);
+}
+.wl4-dt--due {
+    background: var(--ds-blue, #2563eb);
+}
+.wl4-cx {
+    font-size: 13.5px;
+    line-height: 1.45;
+}
+.wl4-cx b {
+    font-weight: 600;
+}
+.wl4-q {
+    color: var(--ds-ink-2, rgba(10, 28, 64, 0.66));
+}
+.wl4-tm {
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 10px;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+    white-space: nowrap;
+}
+.wl4-more {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 11px;
+    color: var(--ds-blue, #2563eb);
+    cursor: pointer;
+    text-decoration: none;
+}
+/* operating line */
+.wl4-oper {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ds-hair, rgba(10, 28, 64, 0.09));
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ds-ink-2, rgba(10, 28, 64, 0.66));
+}
+.wl4-st {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+}
+.wl4-st b {
+    font-family: var(--ds-serif, "DM Serif Display", Georgia, serif);
+    font-size: 19px;
+    color: var(--ds-ink, #0a1c40);
+    font-weight: 400;
+}
+.wl4-sep {
+    color: var(--ds-hair-2, rgba(10, 28, 64, 0.15));
+}
