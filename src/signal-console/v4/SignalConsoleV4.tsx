@@ -92,7 +92,12 @@ function Chip({ account, heat, ageLabel, band }: {
     return (
         <div
             class={`sc4-chip${open ? " is-open" : ""}${band === "now" ? " sc4-chip--glow" : ""}`}
-            onClick={() => selectAccount(open ? null : account.id)}
+            onClick={() => {
+                // Clear the add-signal draft when switching chips so
+                // unsaved text never bleeds into the next account.
+                addSigDraft.value = "";
+                selectAccount(open ? null : account.id);
+            }}
         >
             <div class="sc4-chead">
                 <span class="sc4-heatbar">

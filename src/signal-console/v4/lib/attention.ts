@@ -70,7 +70,15 @@ export function freshestDays(account: Account, now: number): number | null {
     return Math.min(...candidates);
 }
 
-/** Classify one account into an attention band (heat × freshness). */
+/**
+ * Classify one account into an attention band (heat × freshness).
+ *
+ * Thresholds (78 act-now / 60 warm) are attention gates, deliberately
+ * distinct from the raw heat bands (91 Hot / 75 Active / 50 Watch): a
+ * band answers "where should my attention go," which folds recency in,
+ * not "how hot is the raw score." A brand-new watch (fresh, low heat)
+ * lands in Emerging so it never falls straight to Going cold.
+ */
 export function classifyBand(account: Account, now: number = Date.now()): AttentionBand {
     const h = heatOf(account, now);
     const fd = freshestDays(account, now);

@@ -20,3 +20,10 @@ Net-new build. The heat engine (`heat`/`recency`/`rankByHeat`), account+signal C
 
 ## Ship state
 Flipped to default with `room_signal_console_v4_off` kill-switch. Protected-room reviewer running; any confirmed findings get a follow-up fix commit.
+
+## Fresh-reviewer pass (protected room): GO — all 3 passes PASS
+The substrate kill-condition was verified INTACT: `publishHealthSnapshot` + `startExternalPublishing` run before render, independent of the surface choice, so the Dashboard's Hottest door + the Briefing substrate stay fed. Heat-formula fidelity confirmed (reuses the real `heat`/`rankByHeat`, not reinvented); account-to-motion + signal interpretation preserved (not a badge list); 221/221 room tests + voice gate green.
+
+Applied post-review polish: the add-signal draft now clears when switching chips (no bleed); the 78/60 attention thresholds are documented as deliberate (distinct from the raw heat bands).
+
+**Follow-up (cross-room handoff sweep, not blocking):** `hrefToDiscoveryAgenda` in the shared `lib/handoff.ts` still routes to `/call-planner/`, a room canon §4.11 retired 2026-07-06 (absorbed into Discovery Studio). Affects multiple rooms' handoffs → belongs to a dedicated handoff sweep, tracked here.
