@@ -193,32 +193,33 @@ export function buildLanding(options: BuildLandingOptions = {}): Landing {
     // The pick's noun follows the actual spotlight family, so the
     // commanding statement never promises "a deal" when the top move is
     // an outbound touch (risk family = a deal; everything else = a move).
+    const body = { class: "body" } as const;
     const pickNoun =
         spotlight?.commandFamily === "risk"
-            ? t("the one deal that needs you first")
-            : t("the first move that needs you");
+            ? t("the one deal that needs you first", body)
+            : t("the first move that needs you", body);
 
     const kicker = reEntry
-        ? t("Welcome back · what moved since you left")
-        : t("You did the hard work — here's the first morning it pays back");
+        ? t("Welcome back · what moved since you left", body)
+        : t("You did the hard work — here's the first morning it pays back", body);
 
     const headline = reEntry
         ? move
-            ? t("Here's what moved — and the one that needs you first.")
-            : t("Welcome back. Here's where the workspace stands.")
+            ? t("Here's what moved — and the one that needs you first.", body)
+            : t("Welcome back. Here's where the workspace stands.", body)
         : move
-          ? `${t("The workspace is awake. It already found")} ${pickNoun}.`
-          : t("The workspace is awake.");
+          ? `${t("The workspace is awake. It already found", body)} ${pickNoun}.`
+          : t("The workspace is awake.", body);
 
     // The seeded workspace is deep on the canonical path, but the
     // kill-switch / preview / re-run paths can reach a thin workspace —
     // never fabricate a dividend on 0 counts.
     const nothingSeeded = counts.deals === 0 && counts.accounts === 0;
     const sub = reEntry
-        ? `${t("The system kept reading while you were gone — the heat, the silence, the next steps")}${who}. ${t("Here's the one move that clears the most weight today.")}`
+        ? `${t("The system kept reading while you were gone — the heat, the silence, the next steps", body)}${who}. ${t("Here's the one move that clears the most weight today.", body)}`
         : nothingSeeded
-          ? t("Your workspace is set up. As you add deals and accounts, the system reads them back to you here each morning — which deal is slipping, which move clears the most weight.")
-          : `${t("You added")} ${counts.deals} ${counts.deals === 1 ? t("deal") : t("deals")} ${t("and")} ${counts.accounts} ${counts.accounts === 1 ? t("account") : t("accounts")}. ${t("Overnight the system read every one — the heat, the silence, the next steps — so you don't walk in cold. This is the dividend the setup promised, starting today.")}`;
+          ? t("Your workspace is set up. As you add deals and accounts, the system reads them back to you here each morning — which deal is slipping, which move clears the most weight.", body)
+          : `${t("You added", body)} ${counts.deals} ${counts.deals === 1 ? t("deal", body) : t("deals", body)} ${t("and", body)} ${counts.accounts} ${counts.accounts === 1 ? t("account", body) : t("accounts", body)}. ${t("Overnight the system read every one — the heat, the silence, the next steps — so you don't walk in cold. This is the dividend the setup promised, starting today.", body)}`;
 
     return {
         lifecycle: reEntry ? "re_entry" : "day_one",
