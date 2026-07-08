@@ -21,3 +21,11 @@ Net-new build. Three toggleable views (Focus / Timeline / List) off ONE shared r
 
 ## Ship state
 Flipped to default with `room_deal_workspace_v4_off` kill-switch. Reviewer running; findings get a follow-up fix commit.
+
+## Fresh-reviewer pass: NO-GO → fixed → GO
+Two real blockers, both fixed + verified:
+- **HIGH — money formatter 1000× bug:** the local `money = ($${v}k)` appended "k", but `Deal.value` is raw dollars everywhere (100000, not 120) — so a $100k deal rendered "$100000k". My seed used thousands-style values, masking it (same class as the Dashboard standing-row trap). Fixed: reuse the shipped `fmtMoney` (÷1000). Re-booted with real raw-dollar values → "$120k / $84k / $150k / $354k pipeline", 1000× bug gone. Test seeds updated to the raw-dollar convention so a future drift is caught.
+- **HIGH — voice gate RED (CI blocker):** two 7-word `t()` strings ("Act this week — the red zone" / "Take a deal somewhere it gets resolved") were classified as labels (6-word cap). Reclassed as body. Gate green.
+- LOW: empty-state copy now filter-aware ("No live deals yet…" when filter=all).
+
+Loss-reason capture confirmed firing on closed-lost; all 3 views confirmed sharing the one recovery engine. 7/7 v4 tests + 76/76 room suite + voice gate green, typecheck clean, boots clean with real-shaped data. **GO.**

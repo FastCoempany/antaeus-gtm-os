@@ -14,7 +14,7 @@ import {
     type DealFilter
 } from "../state";
 import type { RecoveryAssessment } from "../lib/recovery";
-import { applyFilter } from "../ds/lib/adapters";
+import { applyFilter, fmtMoney } from "../ds/lib/adapters";
 import { DealDrawer } from "../ds/components/DealDrawer";
 import { LossReasonModalDS } from "../ds/components/LossReasonModalDS";
 import {
@@ -46,7 +46,9 @@ import "./deal-workspace-v4.css";
  */
 
 const dwView = signal<DwView>("focus");
-const money = (v: number): string => `$${v}k`;
+// Deal.value is raw dollars everywhere in the codebase — use the
+// shipped fmtMoney (÷1000 → "$84k"), never a naive "+k".
+const money = fmtMoney;
 
 const FILTERS: ReadonlyArray<{ key: DealFilter; label: string }> = [
     { key: "all", label: t("All") },
@@ -215,7 +217,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
             </div>
             {red.length > 0 ? (
                 <>
-                    <div class="dw4-acthd">{t("Act this week — the red zone")}</div>
+                    <div class="dw4-acthd">{t("Act this week — the red zone", { class: "body" })}</div>
                     {red.map((a) => (
                         <div class="dw4-arow" key={a.deal.id}>
                             <div class="dw4-tick" style="background:var(--ds-red,#c0392b)" />
@@ -285,7 +287,9 @@ export function DealWorkspaceV4(): JSX.Element {
 
                 <div class="dw4-view">
                     {items.length === 0 ? (
-                        <div class="dw4-calmnote">{t("No deals match the current filter.", { class: "body" })}</div>
+                        <div class="dw4-calmnote">{dealFilter.value === "all"
+                            ? t("No live deals yet. Add one, or wait for one from a cold call.", { class: "body" })
+                            : t("No deals match the current filter.", { class: "body" })}</div>
                     ) : view === "list" ? (
                         <ListView items={items} />
                     ) : view === "timeline" ? (
@@ -302,7 +306,7 @@ export function DealWorkspaceV4(): JSX.Element {
                 </div>
 
                 <div class="dw4-handoff">
-                    <div class="dw4-hoh">{t("Take a deal somewhere it gets resolved")}</div>
+                    <div class="dw4-hoh">{t("Take a deal somewhere it gets resolved", { class: "body" })}</div>
                     <div class="dw4-hrow">
                         <a class="dw4-hbtn" href={hrefToFutureAutopsy()}>{t("Pre-mortem a deal")}</a>
                         <a class="dw4-hbtn" href={hrefToPocFramework()}>{t("Run a pilot")}</a>

@@ -6,7 +6,7 @@ function deal(p: Partial<Deal>): Deal {
     return {
         id: p.id ?? "d",
         accountName: p.accountName ?? "Acme",
-        value: p.value ?? 40,
+        value: p.value ?? 40000,
         stage: p.stage ?? "discovery",
         ...p
     } as Deal;
@@ -18,7 +18,7 @@ function deal(p: Partial<Deal>): Deal {
 const stale = deal({
     id: "stale",
     accountName: "Northwind",
-    value: 120,
+    value: 120000,
     stage: "negotiation",
     nextStep: "",
     nextStepDate: "",
@@ -27,7 +27,7 @@ const stale = deal({
 const healthy = deal({
     id: "ok",
     accountName: "Brex",
-    value: 60,
+    value: 60000,
     stage: "verbal",
     nextStep: "Sign Tuesday",
     nextStepDate: "2099-01-01",
@@ -40,10 +40,10 @@ describe("buildHero", () => {
     it("counts at-risk deals + their value", () => {
         const hero = buildHero([stale, healthy]);
         expect(hero.liveCount).toBe(2);
-        expect(hero.pipelineValue).toBe(180);
+        expect(hero.pipelineValue).toBe(180000);
         // stale is not healthy → at risk
         expect(hero.atRiskCount).toBeGreaterThanOrEqual(1);
-        expect(hero.atRiskValue).toBeGreaterThanOrEqual(120);
+        expect(hero.atRiskValue).toBeGreaterThanOrEqual(120000);
         expect(hero.calm).toBe(false);
     });
 
