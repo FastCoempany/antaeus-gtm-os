@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
 import { SignalConsoleDS } from "./ds/SignalConsoleDS";
+import { SignalConsoleV4 } from "./v4/SignalConsoleV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -115,7 +116,23 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_signal_console_legacy");
 }
 
-render(useDsSurface ? <SignalConsoleDS /> : <SignalConsole />, root);
+// 2026-07 wire-up (canon §4.7) — the Attention Router is the production
+// Signal Console. Default on; room_signal_console_v4_off is the
+// kill-switch back to the DS surface. ?v4=0 previews the DS surface.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_signal_console_v4_off"));
+render(
+    useV4 ? <SignalConsoleV4 /> : useDsSurface ? <SignalConsoleDS /> : <SignalConsole />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).
