@@ -94,10 +94,10 @@
 <div class="pagehd">
   <div class="k">Design exploration · not wired · reimagining the jump-to-any-room mechanism</div>
   <h1>Jump to any room, from anywhere.</h1>
-  <p>Today this is a ⌘K command palette — a searchable list of all 22 rooms + skills, grouped by family. It works, but it predates the 2026-07 redesign and reads like the old shell. Three directions for what it could become, in the new language. Click to compare.</p>
+  <p>Today this is a Ctrl+K command palette — a searchable list of all 22 rooms + skills, grouped by family. It works, but it predates the 2026-07 redesign and reads like the old shell. Three directions for what it could become (shortcut shown as Ctrl+K for Windows/Linux; it renders ⌘K on Mac), in the new language. Click to compare.</p>
   <div class="switch">
     <button class="on" data-p="a">A · <b>The motion map</b> — see the whole GTM motion, jump by where you are in it</button>
-    <button data-p="b">B · <b>The command line, reborn</b> — the ⌘K palette in the new language, smarter default</button>
+    <button data-p="b">B · <b>The command line, reborn</b> — the Ctrl+K palette in the new language, smarter default</button>
     <button data-p="c">C · <b>The persistent switcher</b> — an always-there rail, never summoned</button>
   </div>
 </div>
@@ -105,8 +105,8 @@
 
   <!-- ============ A ============ -->
   <div class="pane on" id="pane-a">
-    <p class="lead"><b>The motion map.</b> Instead of an alphabetical list, the 22 rooms are laid out as your <b>actual GTM motion</b> — left to right, entry → strategy → find & work → advance → diagnose → hand off. You see where you are, where the system thinks you should go next, and the whole shape at once. Summoned with ⌘K as a bright overlay; type to filter, or just point at the stage you want.</p>
-    <div class="frame"><div class="appbar"><b>ANTAEUS</b> · jump<span class="r">⌘K · type to filter · Esc to close</span></div>
+    <p class="lead"><b>The motion map.</b> Instead of an alphabetical list, the 22 rooms are laid out as your <b>actual GTM motion</b> — left to right, entry → strategy → find & work → advance → diagnose → hand off. You see where you are, where the system thinks you should go next, and the whole shape at once. Summoned with Ctrl+K as a bright overlay; type to filter, or just point at the stage you want.</p>
+    <div class="frame"><div class="appbar"><b>ANTAEUS</b> · jump<span class="r">Ctrl+K · type to filter · Esc to close</span></div>
     <div class="scrim">
       <div class="map__q">Where do you want to go?</div>
       <div class="map__t">Your whole motion, at a glance.</div>
@@ -119,25 +119,25 @@
 
   <!-- ============ B ============ -->
   <div class="pane" id="pane-b">
-    <p class="lead"><b>The command line, reborn.</b> The ⌘K palette you have — but in the new language: a serif prompt, de-carded rows, each room named in spoon-fed words with its family tag, skills woven in with a round blue mark. The empty state is <b>smart</b> — your recent rooms + the one room the system thinks you need next, before you type a letter. Keyboard-first and fast.</p>
+    <p class="lead"><b>The command line, reborn.</b> The Ctrl+K palette you have — but in the new language: a serif prompt, de-carded rows, each room named in spoon-fed words with its family tag, skills woven in with a round blue mark. The empty state is <b>smart</b> — your recent rooms + the one room the system thinks you need next, before you type a letter. Keyboard-first and fast.</p>
     <div class="frame"><div class="appbar"><b>ANTAEUS</b> · jump<span class="r">↑↓ to move · ↵ to jump · Esc to close</span></div>
-      <div class="cl__prompt"><span class="cl__caret">›</span><input class="cl__input" placeholder="Go to a room, or run a skill…" value=""><span class="cl__hint">⌘K</span></div>
+      <div class="cl__prompt"><span class="cl__caret">›</span><input class="cl__input" placeholder="Go to a room, or run a skill…" value=""><span class="cl__hint">Ctrl+K</span></div>
       <div class="cl__body" id="clBody"></div>
     </div>
-    <div class="note">B — the smallest leap from today; keeps the muscle memory (⌘K, type, Enter) but dresses it in the redesign + adds a smart default so most jumps need zero typing. Risk: still a "list", just a nicer one.</div>
+    <div class="note">B — the smallest leap from today; keeps the muscle memory (Ctrl+K, type, Enter) but dresses it in the redesign + adds a smart default so most jumps need zero typing. Risk: still a "list", just a nicer one.</div>
   </div>
 
   <!-- ============ C ============ -->
   <div class="pane" id="pane-c">
-    <p class="lead"><b>The persistent switcher.</b> Not summoned at all — a slim, collapsible rail that's <b>always there</b> on the left edge. The 8 families as a compact spine, your current room lit, the system's suggested next room pinned at the top. One click to jump; you never lose track of where you are. It folds today's three separate organs — the ⌘K palette, the birdseye "what to look at next" float, and the back-trail — into <b>one nav organ</b>.</p>
+    <p class="lead"><b>The persistent switcher.</b> Not summoned at all — a slim, collapsible rail that's <b>always there</b> on the left edge. The 8 families as a compact spine, your current room lit, the system's suggested next room pinned at the top. One click to jump; you never lose track of where you are. It folds today's three separate organs — the Ctrl+K palette, the birdseye "what to look at next" float, and the back-trail — into <b>one nav organ</b>.</p>
     <div class="frame"><div class="appbar"><b>ANTAEUS</b><span class="r">the rail is always here · click ‹ to collapse to icons</span></div>
       <div class="railwrap">
         <div class="rail" id="railNav"></div>
         <div class="railmain">
           <div class="k">The room you're in</div>
           <h2>Deal Workspace</h2>
-          <p>The rail stays put while you work. Glance left to see where you are in the motion, where the system says to go next, and jump anywhere in one click — no ⌘K, no summon, no "where was I."</p>
-          <span class="pill">⌘K still works — it just focuses the rail's filter instead of opening a separate overlay.</span>
+          <p>The rail stays put while you work. Glance left to see where you are in the motion, where the system says to go next, and jump anywhere in one click — no Ctrl+K, no summon, no "where was I."</p>
+          <span class="pill">Ctrl+K still works — it just focuses the rail's filter instead of opening a separate overlay.</span>
         </div>
       </div>
     </div>
