@@ -7,11 +7,13 @@ import {
     setSearchQuery,
     selectedAccountId,
     selectAccount,
-    buildManualAccount,
-    upsertAccount,
-    removeAccount,
-    addSignalToAccount
+    buildManualAccount
 } from "../state";
+import {
+    saveAccount,
+    deleteAccount,
+    addSignal as addSignalEverywhere
+} from "../lib/cloud-persistence";
 import type { Account } from "../lib/types";
 import { getAccountExecutionContext } from "../lib/execution-context";
 import { runEnrichAll } from "../lib/enrich-actions";
@@ -51,7 +53,9 @@ function saveWatch(): void {
         industry: cIndustry.value.trim() || undefined,
         notes
     });
-    upsertAccount(account);
+    // Through the cloud orchestrator (local upsert + Supabase write) —
+    // a local-only write is clobbered when cloud replaces local on boot.
+    void saveAccount(account);
     cName.value = "";
     cDomain.value = "";
     cIndustry.value = "";
@@ -62,7 +66,7 @@ function saveWatch(): void {
 function addSignal(accountId: string): void {
     const headline = addSigDraft.value.trim();
     if (!headline) return;
-    addSignalToAccount(accountId, {
+    void addSignalEverywhere(accountId, {
         id: `sig_${Date.now()}_${Math.round(performance.now())}`,
         headline,
         source: "By hand",
@@ -156,7 +160,7 @@ function Chip({ account, heat, ageLabel, band }: {
                         <button
                             type="button"
                             class="sc4-stopwatch"
-                            onClick={() => removeAccount(account.id)}
+                            onClick={() => void deleteAccount(account.id)}
                         >
                             {t("Stop watching")}
                         </button>

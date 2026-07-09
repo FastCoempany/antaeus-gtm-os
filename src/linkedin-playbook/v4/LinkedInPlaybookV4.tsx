@@ -16,6 +16,7 @@ import { CUES, findCue } from "../lib/cues";
 import { deriveMotion } from "../lib/motion";
 import { cueScript, METHOD_TEMPLATES } from "../lib/scripts";
 import { hrefToSignalConsole } from "../lib/handoff";
+import { saveAction } from "../lib/cloud-persistence";
 import type { ActionEntry, CueIndex } from "../lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./linkedin-playbook-v4.css";
@@ -148,6 +149,9 @@ export function LinkedInPlaybookV4(): JSX.Element {
         const entry = logCue();
         setActiveCue(null);
         if (entry) {
+            // Cloud write too — a local-only log is clobbered when
+            // cloud replaces local on boot.
+            void saveAction(entry);
             if (here === 4) {
                 toast(`${t("Logged on")} ${focusName} — ${t("the ladder's run. The next touch belongs in Outbound.", { class: "body" })}`);
             } else {

@@ -11,6 +11,7 @@ import {
     linkedDeals
 } from "../state";
 import { hrefToDealWorkspace } from "../lib/handoff";
+import { saveProof } from "../lib/cloud-persistence";
 import {
     loadExtras,
     saveExtras,
@@ -389,7 +390,9 @@ export function PilotDeskV4(): JSX.Element {
                                 <button type="button" class="pk4-btn"
                                     disabled={!d.account.trim() || !d.successCriteria.trim()}
                                     onClick={() => {
-                                        saveDraft();
+                                        // Cloud write too — a local-only save is
+                                        // clobbered when cloud replaces local on boot.
+                                        void saveProof(saveDraft());
                                         if (!extras.value.startedAt) patchExtras({ startedAt: new Date().toISOString() });
                                         toast(t("Pilot set — now bring in the people.", { class: "body" }));
                                     }}>

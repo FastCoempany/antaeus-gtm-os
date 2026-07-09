@@ -25,6 +25,8 @@ import { computeSpendRead } from "../lib/score";
 import { getCooldownStatus } from "../lib/cooldown";
 import { advisorsForDeal, recommendedAdvisor, recommendedMomentForDeal } from "../lib/recommend";
 import { TIERS } from "../lib/tiers";
+import { saveDeployment } from "../lib/cloud-persistence";
+import { saveAdvisor } from "../lib/cloud-persistence-profile";
 import { TIER_IDS } from "../lib/types";
 import type { AdvisorDeal, DeploymentOutcome, MomentId, TierId } from "../lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
@@ -123,6 +125,9 @@ export function CallInAFavorV4(): JSX.Element {
     function sendAndLog(logged: boolean): void {
         const dep = logDeployment("pending");
         if (!dep) return;
+        // Cloud write too — a local-only log is clobbered when cloud
+        // replaces local on boot.
+        void saveDeployment(dep);
         editAsk.value = false;
         toast(
             logged
@@ -171,7 +176,7 @@ export function CallInAFavorV4(): JSX.Element {
                         <input value={draft.companies} placeholder={t("accounts they carry weight with (comma-separated)", { class: "body" })}
                             onInput={(e) => patchAdvisorDraft({ companies: (e.currentTarget as HTMLInputElement).value })} />
                         <button type="button" disabled={!draft.name.trim()}
-                            onClick={() => { const saved = saveAdvisorFromDraft(); if (saved) { toast(`${saved.name} ${t("added to your corner.")}`); addOpen.value = false; } }}>
+                            onClick={() => { const saved = saveAdvisorFromDraft(); if (saved) { void saveAdvisor(saved); toast(`${saved.name} ${t("added to your corner.")}`); addOpen.value = false; } }}>
                             {t("Add")}
                         </button>
                     </div>
@@ -299,7 +304,7 @@ export function CallInAFavorV4(): JSX.Element {
                                 <span class="cf4-ln">{dep.advisorName.split(" ")[0]}</span>
                                 <span class="cf4-lm">{dep.momentName.toLowerCase()} · {dep.dealName}</span>
                                 <select value={dep.outcome}
-                                    onChange={(e) => { updateDeploymentOutcome(dep.id, (e.currentTarget as HTMLSelectElement).value as DeploymentOutcome); toast(t("Loop closed on the deal.")); }}>
+                                    onChange={(e) => { const updated = updateDeploymentOutcome(dep.id, (e.currentTarget as HTMLSelectElement).value as DeploymentOutcome); if (updated) void saveDeployment(updated); toast(t("Loop closed on the deal.")); }}>
                                     {(Object.keys(OUTCOME_LABEL) as DeploymentOutcome[]).map((o) => (
                                         <option value={o} key={o}>{OUTCOME_LABEL[o]}</option>
                                     ))}
