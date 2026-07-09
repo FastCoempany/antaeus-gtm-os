@@ -1,0 +1,289 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The summon — three ways to call the motion map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased}
+.pagehd{max-width:1140px;margin:0 auto;padding:30px 34px 0}
+.pagehd .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.pagehd h1{font-family:var(--serif);font-size:30px;margin:9px 0 4px;font-weight:400}
+.pagehd p{font-size:14px;color:var(--ink-2);line-height:1.58;max-width:800px;margin:0 0 4px}
+.pagehd p b{color:var(--ink)}
+.switch{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
+.switch button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:9px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.switch button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stage{max-width:1140px;margin:14px auto 0;padding:0 34px 70px}
+.pane{display:none}.pane.on{display:block;animation:rise .4s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{font-size:13.5px;color:var(--ink-2);line-height:1.62;margin:0 0 14px;max-width:860px}.lead b{color:var(--ink)}
+.note{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.7}
+
+/* the demo frame — a fake room the mechanism lives in */
+.frame{position:relative;background:var(--surface);border:1px solid var(--hair-2);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,28,64,.4);height:600px}
+.room{position:absolute;inset:0;padding:26px 34px;transition:transform .55s var(--ease),opacity .45s var(--ease),filter .45s var(--ease)}
+.rtop{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-4)}
+.rtop b{color:var(--ink);letter-spacing:.2em;display:inline-flex;align-items:center;gap:8px}
+.rtop .amark{cursor:pointer}
+.rtop .r{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
+.rh1{font-family:var(--serif);font-size:26px;margin:26px 0 4px}.rh1 b{color:var(--red)}
+.rrow{display:flex;gap:16px;align-items:baseline;border-top:1px solid var(--hair);padding:13px 2px;font-size:13.5px;color:var(--ink-2)}
+.rrow b{color:var(--ink);font-weight:600;min-width:170px}
+.rrow .mono{font-family:var(--mono);font-size:11px;color:var(--ink-4);margin-left:auto}
+
+/* the motion map (shared) */
+.mapbody{padding:24px 30px}
+.map__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.map__t{font-family:var(--serif);font-size:20px;margin:5px 0 2px}
+.map__s{font-size:12px;color:var(--ink-3);margin-bottom:16px}.map__s b{color:var(--ink)}
+.map__filter{font-family:var(--read);font-size:16px;border:0;border-bottom:1px solid var(--hair-2);outline:0;background:0;width:100%;max-width:380px;padding:4px 0;margin-bottom:16px;color:var(--ink)}
+.map__filter::placeholder{color:var(--ink-4)}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0}
+.scol{border-left:1px solid var(--hair);padding:0 10px}.scol:first-child{border-left:0;padding-left:0}
+.slab{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:9px;height:20px}
+.rm{display:block;padding:7px 9px;border-radius:7px;border:1px solid transparent;margin-bottom:5px;cursor:pointer;position:relative;transition:all .14s var(--ease)}
+.rm:hover{background:var(--field);border-color:var(--hair)}
+.rm .rn{font-size:12px;font-weight:600;letter-spacing:-.005em}
+.rm .rd{font-size:10px;color:var(--ink-3);line-height:1.3;margin-top:1px}
+.rm.here{background:var(--ink);border-color:var(--ink)}.rm.here .rn{color:#fff}.rm.here .rd{color:rgba(255,255,255,.6)}
+.rm.next{border-color:var(--orange);border-style:dashed;background:rgba(230,112,30,.05)}.rm.next .rn{color:var(--orange)}
+.rm.dim{opacity:.25}
+
+/* ============ G1 — THE GROUND ============ */
+.groundline{position:absolute;left:0;right:0;bottom:0;height:26px;cursor:pointer;z-index:5}
+.groundline .gl{position:absolute;left:0;right:0;bottom:10px;height:2.5px;background:var(--ink);opacity:.55;transition:all .2s var(--ease)}
+.groundline .ga{position:absolute;left:26px;bottom:12.5px;transition:all .2s var(--ease)}
+.groundline .whisper{position:absolute;right:28px;bottom:18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--ink-4);opacity:0;transition:opacity .2s;text-transform:uppercase}
+.groundline:hover .gl{height:3.5px;opacity:.9}
+.groundline:hover .whisper{opacity:1}
+.groundpanel{position:absolute;left:0;right:0;bottom:0;max-height:88%;background:var(--surface);border-top:2.5px solid var(--ink);box-shadow:0 -18px 50px -18px rgba(10,28,64,.35);transform:translateY(102%);transition:transform .5s var(--ease);z-index:6;overflow:auto}
+.groundpanel.up{transform:translateY(0)}
+.gscrim{position:absolute;inset:0;background:rgba(10,28,64,.14);opacity:0;pointer-events:none;transition:opacity .4s;z-index:4}
+.gscrim.on{opacity:1;pointer-events:auto}
+
+/* ============ G2 — BIRDSEYE ============ */
+.sky{position:absolute;inset:0;background:var(--field);opacity:0;pointer-events:none;transition:opacity .5s var(--ease);z-index:3;overflow:auto}
+.sky.on{opacity:1;pointer-events:auto}
+.frame.risen .room{transform:scale(.6) translateY(-16%);opacity:0;filter:blur(2px);pointer-events:none}
+.riselab{position:absolute;top:14px;right:20px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}
+
+/* ============ G3 — THE COMPASS ============ */
+.holdhint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}
+.compass{position:absolute;z-index:8;display:none;transform:translate(-50%,-50%)}
+.compass.on{display:block;animation:bloom .22s var(--ease)}
+@keyframes bloom{from{opacity:0;transform:translate(-50%,-50%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.cring{position:relative;width:340px;height:340px}
+.chub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px -8px rgba(10,28,64,.5)}
+.spoke{position:absolute;left:50%;top:50%;padding:8px 13px;border-radius:20px;background:var(--surface);border:1.5px solid var(--hair-2);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;white-space:nowrap;box-shadow:0 8px 22px -10px rgba(10,28,64,.35);transition:all .14s}
+.spoke:hover,.spoke.hot{background:var(--ink);color:#fff;border-color:var(--ink)}
+.spokerooms{position:absolute;z-index:9;background:var(--surface);border:1px solid var(--hair-2);border-radius:12px;box-shadow:0 16px 44px -16px rgba(10,28,64,.45);padding:8px;display:none;min-width:210px}
+.spokerooms.on{display:block;animation:bloom .16s var(--ease)}
+.spokerooms .rm{margin-bottom:2px}
+.cscrim{position:absolute;inset:0;z-index:7;display:none}
+.cscrim.on{display:block}
+</style></head><body>
+<div class="pagehd">
+  <div class="k">Design exploration · not wired · the SUMMON itself, reimagined — no Ctrl+K, no chord, no rail</div>
+  <h1>How you call the map matters as much as the map.</h1>
+  <p>Ctrl+K is the generic developer idiom — every SaaS has it. Antaeus can do better, and the answer is sitting in the brand: <b>Antaeus was unbeatable while he touched the ground</b> — and the brand mark's signature element is literally <b>the ground line</b>. Three summons, all mouse-first, all summoned-then-gone, none a rail. Each demo is live — try the gesture.</p>
+  <div class="switch">
+    <button class="on" data-p="g1">G1 · <b>The Ground</b> — touch the ground line, the map rises from beneath</button>
+    <button data-p="g2">G2 · <b>Birdseye</b> — click the mark, the room lifts away and you see the whole motion</button>
+    <button data-p="g3">G3 · <b>The Compass</b> — press and hold anywhere, it blooms at your cursor</button>
+  </div>
+</div>
+<div class="stage">
+
+  <!-- ============ G1 THE GROUND ============ -->
+  <div class="pane on" id="pane-g1">
+    <p class="lead"><b>The Ground.</b> Every room quietly stands on a ground line — the same stroke the brand mark stands on, almost invisible, at the very foot of the screen. When you need your bearings, <b>touch the ground</b>: click the line (or press <b>G</b>) and the motion map <b>rises from beneath the room</b> — because the map IS the ground the rooms are built on. Click a room or press Esc and it sinks back. The myth is the mechanism: touching the ground is how Antaeus gets his strength back.</p>
+    <div class="frame" id="f1">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">a normal working room</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> next step 2 days overdue <span class="mono">$84k</span></div>
+      </div>
+      <div class="gscrim" id="gscrim"></div>
+      <div class="groundline" id="groundline" title="Touch the ground — see the whole motion">
+        <span class="ga"><svg width="13" height="13" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/></svg></span>
+        <span class="gl"></span>
+        <span class="whisper">touch the ground · see the whole motion · G</span>
+      </div>
+      <div class="groundpanel" id="groundpanel">
+        <div class="mapbody">
+          <div class="map__k">The ground — your whole motion</div>
+          <div class="map__t">Where do you want to stand?</div>
+          <div class="map__s">You're in <b>Deal Workspace</b> · the system suggests <b>Getting to Signed</b> — Ramp is at the terms stage</div>
+          <input class="map__filter" id="gfilter" placeholder="…or just start typing a room">
+          <div class="flow" id="gflow"></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">G1 — the strongest brand story: the mark's signature stroke becomes the app's one navigation gesture. Nearly invisible until wanted (no rail, no chrome). Rises from BELOW — nothing else in the app does that, so the motion itself means "ground." Keyboard: G or Esc. Risk: the line must stay whisper-quiet so it never reads as chrome.</div>
+  </div>
+
+  <!-- ============ G2 BIRDSEYE ============ -->
+  <div class="pane" id="pane-g2">
+    <p class="lead"><b>Birdseye.</b> No overlay at all — an <b>altitude change</b>. Click the Antaeus mark (top-left of every room) or press Esc, and the room you're in <b>lifts away beneath you</b>: it shrinks back into its place on the motion map and the whole territory fades in around it, you-are-here lit. Click any room to descend into it. This makes the app one continuous place instead of pages — and it makes the existing "birdseye" idea literal: the float you already have becomes real altitude. Navigation and the "what should I look at next" read become the same view.</p>
+    <div class="frame" id="f2">
+      <div class="room" id="room2">
+        <div class="rtop"><b><span class="amark" id="amark" title="Rise to birdseye"><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg></span>ANTAEUS</b> · DEAL WORKSPACE<span class="r">click the mark ← to rise · Esc works too</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> next step 2 days overdue <span class="mono">$84k</span></div>
+      </div>
+      <div class="sky" id="sky">
+        <div class="riselab">birdseye · click a room to descend · Esc returns</div>
+        <div class="mapbody">
+          <div class="map__k">Birdseye — the whole motion beneath you</div>
+          <div class="map__t">The room you left is still warm.</div>
+          <div class="map__s">You rose out of <b>Deal Workspace</b> · the system suggests <b>Getting to Signed</b> — Ramp is at the terms stage</div>
+          <div class="flow" id="bflow"></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">G2 — the most conceptually radical: rooms stop being pages and become places on one map; navigating = changing altitude. Unifies the birdseye float + the map into ONE organ (the float's "what to look at next" is simply what glows when you rise). Risk: the lift animation must be fast + optional (reduced-motion falls back to a crossfade); Esc-to-rise needs care inside inputs.</div>
+  </div>
+
+  <!-- ============ G3 THE COMPASS ============ -->
+  <div class="pane" id="pane-g3">
+    <p class="lead"><b>The Compass.</b> Nothing on screen at all. <b>Press and hold anywhere</b> on the open field (a beat, ~a quarter second) and a compass blooms <b>at your cursor</b> — the six stages of the motion around a hub. Slide to a stage and its rooms fan out; click to jump; release on empty space and it's gone. The menu comes to where your hand already is — zero travel, zero chrome, and with muscle memory it becomes the fastest jump possible.</p>
+    <div class="frame" id="f3">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">press &amp; hold anywhere below</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> next step 2 days overdue <span class="mono">$84k</span></div>
+        <div class="holdhint">press &amp; hold anywhere · the compass blooms at your cursor</div>
+      </div>
+      <div class="cscrim" id="cscrim"></div>
+      <div class="compass" id="compass">
+        <div class="cring" id="cring">
+          <div class="chub"><svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#fff" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#fff" stroke-width="3.4"/><path d="M2 38h44" stroke="#fff" stroke-width="3.4"/></svg></div>
+        </div>
+      </div>
+      <div class="spokerooms" id="spokerooms"></div>
+    </div>
+    <div class="note">G3 — the most gestural + the fastest for a power operator (marking-menu research says repeat use goes sub-second). Fully mouse-native. Risks: discoverability (needs a one-time teach), and press-and-hold must never fight text selection or drags — it only arms on the open field, never on controls.</div>
+  </div>
+
+</div>
+<script>
+// ---- shared data: the 22 rooms on the motion ----
+var R=[
+ {n:'Welcome',d:'the morning landing',s:0},{n:'Onboarding',d:'seed the workspace',s:0},{n:'Dashboard',d:'the one move, ranked',s:0},
+ {n:'ICP Studio',d:'who you sell to',s:1},{n:'Territory Architect',d:'carve the market',s:1},{n:'Prospecting Desk',d:'find real accounts',s:1},
+ {n:'Signal Console',d:'watch the heat',s:2},{n:'Briefing',d:'what the system saw',s:2},{n:'Outdoors Events',d:'where buyers gather',s:2},
+ {n:'Outbound Studio',d:'the send line',s:3},{n:'Cold Call Studio',d:'walk in ready',s:3},{n:'LinkedIn Playbook',d:'air cover',s:3},{n:'Discovery Studio',d:'run the live call',s:3},
+ {n:'Deal Workspace',d:'what will slip',s:4,here:1},{n:'Pilot Desk',d:'run a pilot',s:4},{n:'Getting to Signed',d:'run to signature',s:4,next:1},{n:'Call in a Favor',d:'mobilize your people',s:4},
+ {n:'Future Autopsy',d:'why it will die',s:5},{n:'Quota Workback',d:'your daily number',s:5},{n:'Readiness Score',d:'inheritable yet?',s:5},{n:'Founding GTM',d:'the handoff kit',s:5},{n:'Settings',d:'keep it safe',s:5}
+];
+var STAGES=['Enter','Strategy','Find & watch','Work the account','Advance the deal','Diagnose · hand off'];
+function flowHtml(filter){
+ var q=(filter||'').toLowerCase();var h='';
+ for(var s=0;s<6;s++){
+  h+='<div class="scol"><div class="slab">'+STAGES[s]+'</div>';
+  R.filter(function(r){return r.s===s}).forEach(function(r){
+   var dim=q&&r.n.toLowerCase().indexOf(q)<0&&r.d.indexOf(q)<0;
+   h+='<div class="rm'+(r.here?' here':'')+(r.next?' next':'')+(dim?' dim':'')+'"><div class="rn">'+r.n+'</div><div class="rd">'+r.d+'</div></div>';
+  });
+  h+='</div>';
+ }
+ return h;
+}
+// tab switch
+var active='g1';
+document.querySelectorAll('.switch button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.switch button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});
+ active=b.dataset.p;document.getElementById('pane-'+active).classList.add('on');
+};});
+
+// ---- G1 the ground ----
+var gp=document.getElementById('groundpanel'),gs=document.getElementById('gscrim'),gf=document.getElementById('gfilter');
+document.getElementById('gflow').innerHTML=flowHtml('');
+function groundUp(){gp.classList.add('up');gs.classList.add('on');setTimeout(function(){gf.focus()},320);}
+function groundDown(){gp.classList.remove('up');gs.classList.remove('on');gf.value='';document.getElementById('gflow').innerHTML=flowHtml('');}
+document.getElementById('groundline').onclick=groundUp;
+gs.onclick=groundDown;
+gf.addEventListener('input',function(){document.getElementById('gflow').innerHTML=flowHtml(gf.value)});
+document.getElementById('gflow').addEventListener('click',function(e){if(e.target.closest('.rm'))groundDown();});
+
+// ---- G2 birdseye ----
+var f2=document.getElementById('f2'),sky=document.getElementById('sky');
+document.getElementById('bflow').innerHTML=flowHtml('');
+function rise(){f2.classList.add('risen');sky.classList.add('on');}
+function descend(){f2.classList.remove('risen');sky.classList.remove('on');}
+document.getElementById('amark').onclick=rise;
+document.getElementById('bflow').addEventListener('click',function(e){if(e.target.closest('.rm'))descend();});
+
+// ---- G3 the compass ----
+var f3=document.getElementById('f3'),comp=document.getElementById('compass'),cring=document.getElementById('cring'),
+    csc=document.getElementById('cscrim'),srooms=document.getElementById('spokerooms');
+var holdTimer=null,compOpen=false;
+// build 6 spokes on a ring
+(function(){
+ var RAD=128;
+ for(var i=0;i<6;i++){
+  var ang=(-90+i*60)*Math.PI/180;
+  var x=170+Math.cos(ang)*RAD, y=170+Math.sin(ang)*RAD;
+  var sp=document.createElement('div');sp.className='spoke';sp.dataset.s=i;sp.textContent=STAGES[i];
+  sp.style.left=x+'px';sp.style.top=y+'px';sp.style.transform='translate(-50%,-50%)';
+  cring.appendChild(sp);
+ }
+})();
+function openCompass(x,y){
+ var r=f3.getBoundingClientRect();
+ var cx=Math.max(180,Math.min(r.width-180,x)), cy=Math.max(180,Math.min(r.height-180,y));
+ comp.style.left=cx+'px';comp.style.top=cy+'px';
+ comp.classList.add('on');csc.classList.add('on');compOpen=true;
+}
+function closeCompass(){comp.classList.remove('on');csc.classList.remove('on');srooms.classList.remove('on');
+ document.querySelectorAll('.spoke').forEach(function(s){s.classList.remove('hot')});compOpen=false;}
+f3.addEventListener('mousedown',function(e){
+ if(active!=='g3'||compOpen)return;
+ if(e.target.closest('.compass')||e.target.closest('.spokerooms'))return;
+ var r=f3.getBoundingClientRect();var x=e.clientX-r.left,y=e.clientY-r.top;
+ holdTimer=setTimeout(function(){openCompass(x,y)},260);
+});
+f3.addEventListener('mouseup',function(){clearTimeout(holdTimer)});
+f3.addEventListener('mouseleave',function(){clearTimeout(holdTimer)});
+csc.addEventListener('click',function(e){if(!e.target.closest('.compass'))closeCompass();});
+cring.addEventListener('click',function(e){
+ var sp=e.target.closest('.spoke');if(!sp)return;
+ document.querySelectorAll('.spoke').forEach(function(s){s.classList.remove('hot')});sp.classList.add('hot');
+ var s=+sp.dataset.s;var h='';
+ R.filter(function(r){return r.s===s}).forEach(function(r){
+  h+='<div class="rm'+(r.here?' here':'')+(r.next?' next':'')+'"><div class="rn">'+r.n+'</div><div class="rd">'+r.d+'</div></div>';
+ });
+ srooms.innerHTML=h;
+ // place the room list near the compass edge on the spoke's side
+ var compRect=comp.getBoundingClientRect(),fRect=f3.getBoundingClientRect();
+ var spRect=sp.getBoundingClientRect();
+ var lx=spRect.left-fRect.left+spRect.width/2, ly=spRect.top-fRect.top+spRect.height/2;
+ var right=lx>fRect.width/2;
+ srooms.style.left=right?(lx-230)+'px':(lx+26)+'px';
+ srooms.style.top=Math.max(12,Math.min(fRect.height-220,ly-40))+'px';
+ srooms.classList.add('on');
+});
+srooms.addEventListener('click',function(e){if(e.target.closest('.rm'))closeCompass();});
+
+// keys per pane
+document.addEventListener('keydown',function(e){
+ var tag=(document.activeElement&&document.activeElement.tagName)||'';
+ if(active==='g1'){
+  if(e.key==='Escape')groundDown();
+  if((e.key==='g'||e.key==='G')&&tag!=='INPUT')groundUp();
+ }
+ if(active==='g2'&&e.key==='Escape'){f2.classList.contains('risen')?descend():rise();}
+ if(active==='g3'&&e.key==='Escape')closeCompass();
+});
+</script>
+</body></html>
