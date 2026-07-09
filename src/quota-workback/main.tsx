@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { QuotaWorkback } from "./QuotaWorkback";
 import { QuotaWorkbackDS } from "./ds/QuotaWorkbackDS";
+import { QuotaWorkbackV4 } from "./v4/QuotaWorkbackV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -86,7 +87,23 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_quota_workback_legacy");
 }
 
-render(useDsSurface ? <QuotaWorkbackDS /> : <QuotaWorkback />, root);
+// 2026-07 wire-up (canon §4.18) — pace + fused strands is the production
+// Quota Workback. Default on; room_quota_workback_v4_off is the
+// kill-switch back to the DS surface. ?v4=0 previews the DS surface.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_quota_workback_v4_off"));
+render(
+    useV4 ? <QuotaWorkbackV4 /> : useDsSurface ? <QuotaWorkbackDS /> : <QuotaWorkback />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).
