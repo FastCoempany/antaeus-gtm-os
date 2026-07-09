@@ -16,6 +16,8 @@
 .switch button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:9px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
 .switch button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .switch button b{color:inherit;font-weight:600}
+.switch button.rej{opacity:.6;cursor:not-allowed;text-decoration:none;border-style:dashed}
+.switch button.rej s{color:var(--red)}
 .stage{max-width:1120px;margin:16px auto 0;padding:0 34px 70px}
 .pane{display:none}.pane.on{display:block;animation:rise .4s var(--ease)}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -94,11 +96,11 @@
 <div class="pagehd">
   <div class="k">Design exploration · not wired · reimagining the jump-to-any-room mechanism</div>
   <h1>Jump to any room, from anywhere.</h1>
-  <p>Today this is a Ctrl+K command palette — a searchable list of all 22 rooms + skills, grouped by family. It works, but it predates the 2026-07 redesign and reads like the old shell. Three directions for what it could become (shortcut shown as Ctrl+K for Windows/Linux; it renders ⌘K on Mac), in the new language. Click to compare.</p>
+  <p>Today this is a Ctrl+K command palette — a searchable list of all 22 rooms + skills, grouped by family. It works, but it predates the 2026-07 redesign and reads like the old shell. The hard constraint (canon §6, the hallway problem): room access is <b>summoned + secondary — never a persistent rail</b> that competes with the work. This app is command-first, not nav-first. So both live directions are Ctrl+K overlays (⌘K on Mac); a standing rail is a hard-reject and is struck below.</p>
   <div class="switch">
-    <button class="on" data-p="a">A · <b>The motion map</b> — see the whole GTM motion, jump by where you are in it</button>
-    <button data-p="b">B · <b>The command line, reborn</b> — the Ctrl+K palette in the new language, smarter default</button>
-    <button data-p="c">C · <b>The persistent switcher</b> — an always-there rail, never summoned</button>
+    <button class="on" data-p="a">A · <b>The motion map</b> — a summoned Ctrl+K overlay: the whole GTM motion, jump by where you are</button>
+    <button data-p="b">B · <b>The command line, reborn</b> — the Ctrl+K palette in the new language, smart default</button>
+    <button class="rej" disabled>C · <s>The persistent rail</s> — REJECTED: this is the hallway the app is built against (canon §6)</button>
   </div>
 </div>
 <div class="stage">
@@ -127,21 +129,15 @@
     <div class="note">B — the smallest leap from today; keeps the muscle memory (Ctrl+K, type, Enter) but dresses it in the redesign + adds a smart default so most jumps need zero typing. Risk: still a "list", just a nicer one.</div>
   </div>
 
-  <!-- ============ C ============ -->
+  <!-- ============ C — REJECTED ============ -->
   <div class="pane" id="pane-c">
-    <p class="lead"><b>The persistent switcher.</b> Not summoned at all — a slim, collapsible rail that's <b>always there</b> on the left edge. The 8 families as a compact spine, your current room lit, the system's suggested next room pinned at the top. One click to jump; you never lose track of where you are. It folds today's three separate organs — the Ctrl+K palette, the birdseye "what to look at next" float, and the back-trail — into <b>one nav organ</b>.</p>
-    <div class="frame"><div class="appbar"><b>ANTAEUS</b><span class="r">the rail is always here · click ‹ to collapse to icons</span></div>
-      <div class="railwrap">
-        <div class="rail" id="railNav"></div>
-        <div class="railmain">
-          <div class="k">The room you're in</div>
-          <h2>Deal Workspace</h2>
-          <p>The rail stays put while you work. Glance left to see where you are in the motion, where the system says to go next, and jump anywhere in one click — no Ctrl+K, no summon, no "where was I."</p>
-          <span class="pill">Ctrl+K still works — it just focuses the rail's filter instead of opening a separate overlay.</span>
-        </div>
+    <p class="lead"><b>C is off the table — kept here only as the record of what NOT to do.</b> A persistent, always-there rail listing every room is the <b>hallway</b>: equal-weight doors standing on screen, competing with the work, making the operator repeatedly decide "where do I go now." Canon Part III §6 + Architectural truth #2 forbid it — the app is <b>command-first, not nav-first</b>; room access is <b>secondary and summoned</b>, never central. Whatever we build is a Ctrl+K overlay you call up and dismiss, not a fixture.</p>
+    <div class="frame" style="opacity:.5"><div class="appbar"><b>ANTAEUS</b><span class="r" style="color:var(--red)">✗ hard-reject · a standing rail is the hallway (canon §6)</span></div>
+      <div class="scrim" style="padding:40px;text-align:center">
+        <div style="font-family:var(--serif);font-size:22px;color:var(--red);margin-bottom:8px">Not a persistent rail.</div>
+        <div style="font-size:13px;color:var(--ink-2);max-width:60ch;margin:0 auto;line-height:1.6">"Anything that revives equal-weight destinations is hallway behavior and fails." — the app replaced the hallway with a smarter front door; navigation stays summoned.</div>
       </div>
     </div>
-    <div class="note">C — the most ambitious: a standing presence that unifies navigation + "what's next" + "where I came from." Strongest for never-lost orientation. Risk: takes permanent screen real-estate; every room's layout must budget for it (collapsible mitigates).</div>
   </div>
 
 </div>
