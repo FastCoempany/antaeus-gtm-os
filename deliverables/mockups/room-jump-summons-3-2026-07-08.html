@@ -1,0 +1,270 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The summon, round 3 — three stranger ones, for fun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased}
+.pagehd{max-width:1140px;margin:0 auto;padding:30px 34px 0}
+.pagehd .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.pagehd h1{font-family:var(--serif);font-size:30px;margin:9px 0 4px;font-weight:400}
+.pagehd p{font-size:14px;color:var(--ink-2);line-height:1.58;max-width:830px;margin:0 0 4px}
+.pagehd p b{color:var(--ink)}
+.switch{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
+.switch button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:9px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.switch button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stage{max-width:1140px;margin:14px auto 0;padding:0 34px 70px}
+.pane{display:none}.pane.on{display:block;animation:rise .4s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{font-size:13.5px;color:var(--ink-2);line-height:1.62;margin:0 0 14px;max-width:880px}.lead b{color:var(--ink)}
+.lead i{font-family:var(--read)}
+.note{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.7}
+.frame{position:relative;background:var(--surface);border:1px solid var(--hair-2);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,28,64,.4);height:620px;user-select:none}
+.room{position:absolute;inset:0;padding:26px 34px;background:var(--surface);z-index:2}
+.rtop{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-4)}
+.rtop b{color:var(--ink);letter-spacing:.2em;display:inline-flex;align-items:center;gap:8px}
+.rtop .r{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
+.rh1{font-family:var(--serif);font-size:26px;margin:26px 0 4px}.rh1 b{color:var(--red)}
+.rrow{display:flex;gap:16px;align-items:baseline;border-top:1px solid var(--hair);padding:14px 10px;font-size:13.5px;color:var(--ink-2)}
+.rrow b{color:var(--ink);font-weight:600;min-width:180px}
+.rrow .mono{font-family:var(--mono);font-size:11px;color:var(--ink-4);margin-left:auto}
+.toast{position:absolute;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:11.5px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s;z-index:40;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+
+/* ===== G7 THE CURRENT ===== */
+.nextword{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:5;font-family:var(--serif);font-size:19px;color:var(--ink-3);cursor:pointer;transition:all .2s;border-bottom:1px solid transparent;background:0;border-top:0;border-left:0;border-right:0;padding:0 2px 2px}
+.nextword:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.nextword .kbd{font-family:var(--mono);font-size:9px;color:var(--ink-4);vertical-align:8px;margin-left:6px;letter-spacing:.08em}
+.carrylayer{position:absolute;inset:0;z-index:20;background:var(--field);display:none;align-items:center;justify-content:center;text-align:center}
+.carrylayer.on{display:flex;animation:rise .3s var(--ease)}
+.carry__in{max-width:560px;padding:0 30px}
+.carry__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.carry__t{font-family:var(--serif);font-size:34px;line-height:1.12;margin:12px 0 10px}
+.carry__t em{font-style:normal;color:var(--orange)}
+.carry__why{font-family:var(--read);font-size:15.5px;color:var(--ink-2);line-height:1.55}
+.carry__why b{color:var(--ink)}
+.carry__foot{margin-top:22px;font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.06em}
+.carry__bar{height:2.5px;background:var(--hair);border-radius:3px;margin:16px auto 0;width:220px;overflow:hidden}
+.carry__bar i{display:block;height:100%;width:0;background:var(--orange);transition:width 1.15s linear}
+.arrived .rtop .roomname{color:var(--orange)}
+
+/* ===== G8 THIN WALLS ===== */
+.wall{position:absolute;z-index:6;cursor:pointer}
+.wall.right{right:0;top:0;bottom:0;width:26px}
+.wall.top{top:0;left:0;right:0;height:24px}
+.wall.left{left:0;top:0;bottom:0;width:26px}
+.wallglow{position:absolute;inset:0;opacity:.75;transition:opacity .25s}
+.wall.right .wallglow{background:linear-gradient(270deg,rgba(192,57,43,.5),rgba(192,57,43,.12) 55%,transparent);animation:breathe 2.6s var(--ease) infinite}
+.wall.top .wallglow{background:linear-gradient(180deg,rgba(181,121,15,.45),rgba(181,121,15,.1) 55%,transparent);animation:breathe 3.4s var(--ease) infinite .5s}
+.wall.left .wallglow{background:linear-gradient(90deg,rgba(37,99,235,.38),rgba(37,99,235,.1) 55%,transparent);animation:breathe 4.2s var(--ease) infinite 1s}
+@keyframes breathe{0%,100%{opacity:.4}50%{opacity:.95}}
+.wallwhisper{position:absolute;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:9px 13px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .2s;z-index:7;box-shadow:0 12px 30px -10px rgba(10,28,64,.5)}
+.wallwhisper b{color:#e6a271}
+.wall:hover .wallwhisper{opacity:1}
+.wall.right .wallwhisper{right:34px;top:42%}
+.wall.top .wallwhisper{top:32px;left:38%}
+.wall.left .wallwhisper{left:34px;top:58%}
+.quietnote{position:absolute;bottom:16px;right:20px;font-family:var(--mono);font-size:9.5px;color:var(--ink-4);letter-spacing:.06em;text-transform:uppercase;z-index:3}
+
+/* ===== G9 FOLLOW THE OBJECT ===== */
+.obj{color:var(--ink);font-weight:600;border-bottom:1.5px dotted var(--ink-4);cursor:pointer;transition:all .15s}
+.obj:hover{color:var(--blue);border-bottom-color:var(--blue)}
+.threadlayer{position:absolute;inset:0;z-index:22;background:rgba(238,241,247,.95);display:none;padding:40px 54px;overflow:auto}
+.threadlayer.on{display:block;animation:rise .28s var(--ease)}
+.th__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.th__t{font-family:var(--serif);font-size:32px;margin:8px 0 2px}
+.th__s{font-size:12.5px;color:var(--ink-3);margin-bottom:20px}
+.th__close{position:absolute;top:18px;right:22px;font-family:var(--mono);font-size:10px;color:var(--ink-4);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;background:0;border:0}
+.thread{position:relative;max-width:640px;padding-left:26px}
+.thread::before{content:"";position:absolute;left:7px;top:8px;bottom:14px;width:2px;background:linear-gradient(180deg,var(--orange),var(--hair-2))}
+.tstop{position:relative;padding:11px 14px;margin-bottom:8px;border-radius:11px;cursor:pointer;transition:background .14s;background:transparent}
+.tstop:hover{background:#fff;box-shadow:0 10px 26px -16px rgba(10,28,64,.3)}
+.tstop::before{content:"";position:absolute;left:-24px;top:19px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink-3)}
+.tstop.hot::before{border-color:var(--orange);background:var(--orange)}
+.tstop .tr{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4)}
+.tstop.hot .tr{color:var(--orange)}
+.tstop .tt{font-size:14.5px;font-weight:600;margin-top:2px}
+.tstop .td{font-size:12px;color:var(--ink-3);margin-top:1px}
+.tstop .go{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:9.5px;color:var(--ink-4)}
+.tstop:hover .go{color:var(--orange)}
+</style></head><body>
+<div class="pagehd">
+  <div class="k">Design exploration · round 3 · not wired — three stranger ones, for fun</div>
+  <h1>Round three: who's doing the navigating?</h1>
+  <p>Round 1 changed the <b>gesture</b>. Round 2 changed the <b>philosophy</b>. Round 3 changes <b>who initiates</b> — one where you surrender the choice entirely, one where the house calls <i>you</i>, and one where the door isn't a room at all — it's the <b>object's own life</b>. All live.</p>
+  <div class="switch">
+    <button class="on" data-p="g7">G7 · <b>The Current</b> — one word of navigation: “next.” The system carries you</button>
+    <button data-p="g8">G8 · <b>Thin Walls</b> — pressure glows through the walls; the rooms call you</button>
+    <button data-p="g9">G9 · <b>Follow the Object</b> — every name is a door into that object's whole life</button>
+  </div>
+</div>
+<div class="stage">
+
+  <!-- ===== G7 THE CURRENT ===== -->
+  <div class="pane on" id="pane-g7">
+    <p class="lead"><b>The Current.</b> The most radical reduction possible: <b>navigation collapses to one word.</b> You never choose a room. When you're done where you are, you say <i>next</i> — one quiet word at the foot of every room (or tap <b>N</b>) — and the current carries you to wherever the pressure is highest, telling you <b>why</b> as you travel. The command engine already ranks the whole workspace; this makes that ranking the ONLY navigation. Total surrender to command-first: the system is harder to fool than you are, so let it drive.</p>
+    <div class="frame" id="f7">
+      <div class="room" id="room7">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · <span class="roomname" id="rn7">DEAL WORKSPACE</span><span class="r">finish here, then say “next”</span></div>
+        <div class="rh1" id="rh7"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div id="rows7">
+          <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+          <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+          <div class="rrow"><b>Ramp</b> verbal yes · terms on the table <span class="mono">$84k</span></div>
+        </div>
+      </div>
+      <button class="nextword" id="nextword">next →<span class="kbd">N</span></button>
+      <div class="carrylayer" id="carry7">
+        <div class="carry__in">
+          <div class="carry__k">The current has you</div>
+          <div class="carry__t" id="carryT">Carrying you to <em>Getting to Signed.</em></div>
+          <div class="carry__why" id="carryW"><b>Ramp said yes and the terms are sitting on the table</b> — it's the hottest thing in your whole workspace right now, and every day it sits, it cools.</div>
+          <div class="carry__bar"><i id="carryBar"></i></div>
+          <div class="carry__foot">say “next” anywhere · the system explains every carry · Esc steps off the current</div>
+        </div>
+      </div>
+      <div class="toast" id="toast7"></div>
+    </div>
+    <div class="note">G7 — peak command-first: the ranked board becomes the ONLY door. Beautiful discipline: you stop deciding "where do I go" forever (the exact cognitive loop canon calls the hallway). It pairs with ANY map summon as the escape hatch. Risk: surrender needs trust — the carry must always say why, and stepping off must always be one key.</div>
+  </div>
+
+  <!-- ===== G8 THIN WALLS ===== -->
+  <div class="pane" id="pane-g8">
+    <p class="lead"><b>Thin Walls.</b> Navigation you never initiate. The other rooms are always there, on the other side of the walls — and <b>when something in one of them needs you, its pressure bleeds through</b>: a red glow on the right wall is a deal dying in Future Autopsy; amber above is your pace slipping in Quota Workback; blue on the left is the Briefing holding three reads you haven't seen. Rest on a glow and the wall whispers what's behind it; press through and you're there. The house is quiet when nothing needs you — <b>silence is the healthy state.</b></p>
+    <div class="frame" id="f8">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">the walls are glowing — rest on one</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> next step 2 days overdue <span class="mono">$84k</span></div>
+        <div class="quietnote">3 walls glowing · a quiet house means nothing needs you</div>
+      </div>
+      <div class="wall right" data-to="Future Autopsy"><div class="wallglow"></div><div class="wallwhisper"><b>Datadog is 16 days from lost</b> — Future Autopsy, through this wall</div></div>
+      <div class="wall top" data-to="Quota Workback"><div class="wallglow"></div><div class="wallwhisper"><b>Your pace slipped behind this week</b> — Quota Workback, above</div></div>
+      <div class="wall left" data-to="Briefing"><div class="wallglow"></div><div class="wallwhisper"><b>3 reads you haven't seen</b> — the Briefing, through this wall</div></div>
+      <div class="toast" id="toast8"></div>
+    </div>
+    <div class="note">G8 — the inverse of every other summon: the SYSTEM initiates, ambiently, with light instead of notifications. Deeply canon-native — escalation only when real (rule 7), pressure legible before words, and the calm state is genuinely calm (a quiet house). Could layer UNDER any chosen summon. Risk: glows must be rationed ruthlessly or they become the noise they replaced.</div>
+  </div>
+
+  <!-- ===== G9 FOLLOW THE OBJECT ===== -->
+  <div class="pane" id="pane-g9">
+    <p class="lead"><b>Follow the Object.</b> The door isn't a room — <b>it's the object's own life.</b> Every account or deal name, anywhere it appears, is a quiet door: click <i>Ramp</i> and you see Ramp's <b>whole thread through the house</b> — its heat in Signal Console, its touches in Outbound, the discovery call it came from, the deal at terms, the favor you could call in. One thread, every room that holds a piece of it, jump to any stop. Canon says objects carry context between rooms — this makes the object itself the hallway-killer: <b>you don't browse rooms, you follow the thing you care about.</b></p>
+    <div class="frame" id="f9">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">every underlined name is a door — click one</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b><span class="obj" data-o="northwind">Northwind Robotics</span></b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b><span class="obj" data-o="mercury">Mercury</span></b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b><span class="obj" data-o="ramp">Ramp</span></b> verbal yes · terms on the table <span class="mono">$84k</span></div>
+      </div>
+      <div class="threadlayer" id="thread9">
+        <button class="th__close" id="thclose">Esc · close</button>
+        <div class="th__k">One object · its whole thread through the house</div>
+        <div class="th__t" id="tht">Ramp</div>
+        <div class="th__s" id="ths">$84k · verbal yes · the system's next stop is glowing</div>
+        <div class="thread" id="thstops"></div>
+      </div>
+      <div class="toast" id="toast9"></div>
+    </div>
+    <div class="note">G9 — object-first taken to its logical end: rooms become invisible plumbing and the object's thread is the navigation. The inverse of G4 (carry = push the object somewhere; follow = trace where it already lives). Kills "where was that thing" forever. Risk: needs the cross-room reads to be live (they are — the rooms already publish them); and room-level jumps still need a fallback summon.</div>
+  </div>
+
+</div>
+<script>
+function toast(id,html){var t=document.getElementById(id);t.innerHTML=html;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2600);}
+var active='g7';
+document.querySelectorAll('.switch button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.switch button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});
+ active=b.dataset.p;document.getElementById('pane-'+active).classList.add('on');};});
+
+/* ===== G7 the current ===== */
+var CARRIES=[
+ {room:'GETTING TO SIGNED',t:'Getting to Signed.',w:'<b>Ramp said yes and the terms are sitting on the table</b> — it\'s the hottest thing in your whole workspace right now, and every day it sits, it cools.',
+  h1:'<b>Ramp</b> — their legal wants a lower cap. Your line is ready.',
+  rows:[['Their ask','12-month fees cap, no super-cap','blocking'],['Your line','cap + a data-breach super-cap','ready'],['The trade','net-30 for a point off','open']]},
+ {room:'FUTURE AUTOPSY',t:'Future Autopsy.',w:'<b>Datadog is 16 days from lost</b> — the close date passed and the terms are still open. Worth the hard look now, not later.',
+  h1:'<b>Datadog</b> — pinned as evidence. 16 days out.',
+  rows:[['The pattern','pressure before clarity','cause'],['The route','rebuild the agenda','open'],['The stop rule','no signer named by Friday','armed']]},
+ {room:'SIGNAL CONSOLE',t:'Signal Console.',w:'<b>Snowflake hired a new VP of Sales two hours ago</b> — the account is running hot and nobody has reached out yet.',
+  h1:'<b>Snowflake · 94</b> — hot, and something just moved.',
+  rows:[['The signal','new VP of Sales, 2h ago','fresh'],['The way in','the hiring surge line','ready'],['The window','reach while the change is warm','open']]}
+];
+var ci=0,carrying7=false;
+function goNext(){
+ if(carrying7)return;carrying7=true;
+ var c=CARRIES[ci%CARRIES.length];ci++;
+ var lay=document.getElementById('carry7');
+ document.getElementById('carryT').innerHTML='Carrying you to <em>'+c.t+'</em>';
+ document.getElementById('carryW').innerHTML=c.w;
+ lay.classList.add('on');
+ var bar=document.getElementById('carryBar');bar.style.width='0';
+ requestAnimationFrame(function(){requestAnimationFrame(function(){bar.style.width='100%';});});
+ setTimeout(function(){
+  lay.classList.remove('on');carrying7=false;
+  document.getElementById('rn7').textContent=c.room;
+  document.getElementById('rh7').innerHTML=c.h1;
+  document.getElementById('rows7').innerHTML=c.rows.map(function(r){return '<div class="rrow"><b>'+r[0]+'</b> '+r[1]+' <span class="mono">'+r[2]+'</span></div>';}).join('');
+  document.getElementById('f7').classList.add('arrived');
+  toast('toast7','arrived — <b>'+c.room.toLowerCase()+'</b> · say next when you\'re done here');
+ },1350);
+}
+document.getElementById('nextword').onclick=goNext;
+document.addEventListener('keydown',function(e){
+ if(active!=='g7')return;
+ if((e.key==='n'||e.key==='N'))goNext();
+ if(e.key==='Escape'){document.getElementById('carry7').classList.remove('on');carrying7=false;}
+});
+
+/* ===== G8 thin walls ===== */
+document.querySelectorAll('#f8 .wall').forEach(function(w){
+ w.addEventListener('click',function(){toast('toast8','through the wall → <b>'+w.dataset.to+'</b> · the reason travels with you');});
+});
+
+/* ===== G9 follow the object ===== */
+var THREADS={
+ ramp:{t:'Ramp',s:'$84k · verbal yes · the system\'s next stop is glowing',stops:[
+  ['Signal Console','Running hot — 88','replied 2 days ago · new RevOps lead announced',0],
+  ['Outbound Studio','3 touches, last one landed','they replied to the hiring-surge line',0],
+  ['Discovery Studio','The call that made it real','Jun 30 — champion named, pain confirmed',0],
+  ['Deal Workspace','$84k · verbal yes','next step: send the redlines (2 days overdue)',0],
+  ['Getting to Signed','Terms on the table','their legal wants a lower cap — your line is ready',1],
+  ['Call in a Favor','Marcus knows their CFO','one warm word could unstick procurement',0]]},
+ northwind:{t:'Northwind Robotics',s:'$120k · going quiet · the thread shows where it frayed',stops:[
+  ['Signal Console','Cooling — 41','last signal 20 days ago',0],
+  ['Discovery Studio','The gap started here','no one who signs was ever named',1],
+  ['Deal Workspace','$120k · 20 days quiet','no next step on the calendar',0],
+  ['Future Autopsy','Worth pinning now','the pattern reads: pressure before clarity',0],
+  ['Pilot Desk','A pilot could restart it','they never saw a result they could act on',0]]},
+ mercury:{t:'Mercury',s:'$40k · stalled in discovery',stops:[
+  ['Signal Console','Quiet — 33','nothing new in 18 days',0],
+  ['Discovery Studio','Stalled here','second call never got booked',1],
+  ['Deal Workspace','$40k · early','restart it, or set it aside honestly',0]]}
+};
+var tl=document.getElementById('thread9');
+document.querySelectorAll('#f9 .obj').forEach(function(o){
+ o.addEventListener('click',function(){
+  var th=THREADS[o.dataset.o];if(!th)return;
+  document.getElementById('tht').textContent=th.t;
+  document.getElementById('ths').textContent=th.s;
+  document.getElementById('thstops').innerHTML=th.stops.map(function(s){
+   return '<div class="tstop'+(s[3]?' hot':'')+'"><div class="tr">'+s[0]+(s[3]?' · the system\'s pick':'')+'</div><div class="tt">'+s[1]+'</div><div class="td">'+s[2]+'</div><span class="go">jump ↵</span></div>';
+  }).join('');
+  tl.classList.add('on');
+ });
+});
+function closeThread(){tl.classList.remove('on');}
+document.getElementById('thclose').onclick=closeThread;
+document.getElementById('thstops').addEventListener('click',function(e){
+ var s=e.target.closest('.tstop');if(!s)return;
+ toast('toast9','→ <b>'+s.querySelector('.tr').textContent.replace(' · the system\'s pick','')+'</b> · landing on '+document.getElementById('tht').textContent);
+ closeThread();
+});
+document.addEventListener('keydown',function(e){if(active==='g9'&&e.key==='Escape')closeThread();});
+</script>
+</body></html>
