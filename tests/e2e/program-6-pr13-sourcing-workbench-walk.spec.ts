@@ -143,7 +143,7 @@ test.describe("Program 6 / PR 13 — Sourcing Workbench refacing (Ticket Loom V0
             const moveCopy = await page
                 .locator(".sw-loom-read__line--move .sw-loom-read__line-copy")
                 .textContent();
-            expect(moveCopy?.toLowerCase()).toContain("capture the first");
+            expect(moveCopy?.toLowerCase()).toContain("add the first company");
         } finally {
             await ctx.close();
         }

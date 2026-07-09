@@ -129,7 +129,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
                 .locator(".ta-field-read__line-copy")
                 .textContent();
             expect(risk?.toLowerCase()).not.toContain("no focuses");
-            expect(risk?.toLowerCase()).toContain("single focus");
+            expect(risk?.toLowerCase()).toContain("one division covers everything");
         } finally {
             await ctx.close();
         }
