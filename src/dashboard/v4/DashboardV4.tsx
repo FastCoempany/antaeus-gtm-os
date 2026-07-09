@@ -12,6 +12,7 @@ import {
 } from "../state";
 import { ReadinessDrawer } from "../components/ReadinessDrawer";
 import { buildMasthead, buildStanding } from "./lib/cockpit";
+import { GroundLine } from "@/lib/ground/GroundLine";
 import "./dashboard-v4.css";
 
 /**
@@ -147,6 +148,11 @@ export function DashboardV4(): JSX.Element {
             {readinessDrawerOpen.value ? (
                 <ReadinessDrawer summary={readiness} onClose={closeReadinessDrawer} />
             ) : null}
+            {/* The Ground — the app's one jump summon (2026-07-08):
+                touch the ground line (or press G) and the motion map
+                rises from beneath the room. */}
+            <GroundLine />
+
         </div>
     );
 }

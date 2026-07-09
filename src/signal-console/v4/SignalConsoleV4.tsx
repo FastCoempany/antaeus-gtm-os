@@ -22,6 +22,7 @@ import {
     hrefToColdCall
 } from "../lib/handoff";
 import { buildAttentionField, type AttentionBand } from "./lib/attention";
+import { GroundLine } from "@/lib/ground/GroundLine";
 import "./signal-console-v4.css";
 
 /**
@@ -275,6 +276,11 @@ export function SignalConsoleV4(): JSX.Element {
                         ))
                 )}
             </div>
+            {/* The Ground — the app's one jump summon (2026-07-08):
+                touch the ground line (or press G) and the motion map
+                rises from beneath the room. */}
+            <GroundLine />
+
         </div>
     );
 }

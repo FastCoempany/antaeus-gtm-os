@@ -1,0 +1,211 @@
+/*
+ * The Ground — the app's one jump summon (founder-locked 2026-07-08).
+ * A near-invisible ground line at the foot of the viewport; touch it and
+ * the motion map rises from beneath the room. Scoped under .gnd.
+ */
+.gnd-line {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 26px;
+    z-index: 900;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+.gnd-stroke {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 9px;
+    height: 2.5px;
+    background: var(--ds-ink, #0a1c40);
+    opacity: 0.4;
+    transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.gnd-mark {
+    position: absolute;
+    left: 24px;
+    bottom: 11.5px;
+    color: var(--ds-ink, #0a1c40);
+    opacity: 0.65;
+    transition: opacity 0.2s;
+    line-height: 0;
+}
+.gnd-whisper {
+    position: absolute;
+    right: 26px;
+    bottom: 17px;
+    font-family: var(--ds-mono, "JetBrains Mono", monospace);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ds-ink-4, rgba(10, 28, 64, 0.24));
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.gnd-line:hover .gnd-stroke {
+    height: 3.5px;
+    opacity: 0.85;
+}
+.gnd-line:hover .gnd-whisper {
+    opacity: 1;
+}
+.gnd-line:focus-visible .gnd-stroke {
+    height: 3.5px;
+    opacity: 0.85;
+    outline: 2px solid var(--ds-orange, #e6701e);
+}
+
+.gnd-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 28, 64, 0.16);
+    z-index: 901;
+}
+.gnd-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 86vh;
+    background: var(--ds-surface, #fff);
+    border-top: 2.5px solid var(--ds-ink, #0a1c40);
+    box-shadow: 0 -18px 50px -18px rgba(10, 28, 64, 0.35);
+    transform: translateY(103%);
+    transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+    z-index: 902;
+    overflow: auto;
+}
+.gnd-panel.is-up {
+    transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+    .gnd-panel {
+        transition: none;
+    }
+}
+.gnd-body {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 24px 34px 30px;
+}
+.gnd-k {
+    font-family: var(--ds-mono, monospace);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+}
+.gnd-t {
+    font-family: var(--ds-serif, "DM Serif Display", Georgia, serif);
+    font-size: 21px;
+    margin: 5px 0 2px;
+    color: var(--ds-ink, #0a1c40);
+}
+.gnd-s {
+    font-size: 12px;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+    margin-bottom: 14px;
+    max-width: 90ch;
+}
+.gnd-s b {
+    color: var(--ds-ink, #0a1c40);
+}
+.gnd-s .gnd-sug {
+    color: var(--ds-orange, #e6701e);
+}
+.gnd-filter {
+    font-family: var(--ds-sans, "Inter", sans-serif);
+    font-size: 15px;
+    border: 0;
+    border-bottom: 1px solid var(--ds-hair-2, rgba(10, 28, 64, 0.15));
+    outline: 0;
+    background: 0;
+    width: 100%;
+    max-width: 380px;
+    padding: 4px 0 6px;
+    margin-bottom: 16px;
+    color: var(--ds-ink, #0a1c40);
+}
+.gnd-filter::placeholder {
+    color: var(--ds-ink-4, rgba(10, 28, 64, 0.24));
+}
+.gnd-flow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+}
+@media (max-width: 1023px) {
+    .gnd-flow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.gnd-scol {
+    border-left: 1px solid var(--ds-hair, rgba(10, 28, 64, 0.09));
+    padding: 0 10px;
+}
+.gnd-scol:first-child {
+    border-left: 0;
+    padding-left: 0;
+}
+.gnd-slab {
+    font-family: var(--ds-mono, monospace);
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ds-ink-4, rgba(10, 28, 64, 0.24));
+    margin-bottom: 9px;
+    min-height: 20px;
+}
+.gnd-rm {
+    display: block;
+    padding: 7px 9px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.14s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.gnd-rm:hover {
+    background: var(--ds-field, #eef1f7);
+    border-color: var(--ds-hair, rgba(10, 28, 64, 0.09));
+}
+.gnd-rn {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ds-ink, #0a1c40);
+    letter-spacing: -0.005em;
+}
+.gnd-rd {
+    display: block;
+    font-size: 10px;
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+    line-height: 1.3;
+    margin-top: 1px;
+}
+.gnd-rm.is-here {
+    background: var(--ds-ink, #0a1c40);
+    border-color: var(--ds-ink, #0a1c40);
+}
+.gnd-rm.is-here .gnd-rn {
+    color: #fff;
+}
+.gnd-rm.is-here .gnd-rd {
+    color: rgba(255, 255, 255, 0.6);
+}
+.gnd-rm.is-next {
+    border-color: var(--ds-orange, #e6701e);
+    border-style: dashed;
+    background: rgba(230, 112, 30, 0.05);
+}
+.gnd-rm.is-next .gnd-rn {
+    color: var(--ds-orange, #e6701e);
+}
+.gnd-rm.is-dim {
+    opacity: 0.22;
+}

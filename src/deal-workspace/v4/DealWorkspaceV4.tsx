@@ -34,6 +34,7 @@ import {
     type DwView
 } from "./lib/views";
 import "./deal-workspace-v4.css";
+import { GroundLine } from "@/lib/ground/GroundLine";
 
 /**
  * DealWorkspaceV4 — the Diagnosis Table (canon §4.13), wired to
@@ -319,6 +320,11 @@ export function DealWorkspaceV4(): JSX.Element {
 
             <DealDrawer />
             <LossReasonModalDS />
+            {/* The Ground — the app's one jump summon (2026-07-08):
+                touch the ground line (or press G) and the motion map
+                rises from beneath the room. */}
+            <GroundLine />
+
         </div>
     );
 }

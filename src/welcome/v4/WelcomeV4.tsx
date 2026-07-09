@@ -1,6 +1,7 @@
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import { landing, initWelcomeV4 } from "./state";
+import { GroundLine } from "@/lib/ground/GroundLine";
 import "./welcome-v4.css";
 
 /**
@@ -117,6 +118,11 @@ export function WelcomeV4(): JSX.Element {
                     </span>
                 </div>
             </div>
+            {/* The Ground — the app's one jump summon (2026-07-08):
+                touch the ground line (or press G) and the motion map
+                rises from beneath the room. */}
+            <GroundLine />
+
         </div>
     );
 }

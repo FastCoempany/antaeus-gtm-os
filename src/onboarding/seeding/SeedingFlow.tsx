@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import { SEEDING_STEPS, seedingIndex, seedingStep, prevStep } from "./state";
 import { EvidenceMargin } from "./components/EvidenceMargin";
+import { GroundLine } from "@/lib/ground/GroundLine";
 import { Doorway } from "./components/Doorway";
 import { IcpStep } from "./components/IcpStep";
 import { AccountsStep } from "./components/AccountsStep";
@@ -73,6 +74,8 @@ export function SeedingFlow(): JSX.Element {
                 </div>
             </div>
             <EvidenceMargin />
+            {/* The Ground — the one jump summon (2026-07-08). */}
+            <GroundLine />
         </div>
     );
 }
