@@ -80,37 +80,40 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
         const page = await ctx.newPage();
         try {
             await page.goto("/login.html", { waitUntil: "domcontentloaded" });
-            const title = await page.locator(".auth-title").textContent();
-            // Sarah-returning copy hint: "operating thread" + "your
-            // place" rather than form-ish "without losing context".
-            expect(title?.toLowerCase()).toContain("operating thread");
-            expect(title?.toLowerCase()).toContain("your place");
-
-            // The corridor copy should mention the Brief (the operator
-            // surface Sarah comes back for).
-            const copy =
-                (await page.locator(".auth-corridor").textContent()) ?? "";
-            expect(copy.toLowerCase()).toContain("brief");
+            // Forest-split design (matches Signup B): the returning-user
+            // copy lives in the .promise panel. Sarah-returning hints:
+            // "operating thread" + "your place" + the Brief she comes back
+            // for.
+            const promise =
+                (await page.locator(".promise").textContent()) ?? "";
+            expect(promise.toLowerCase()).toContain("operating thread");
+            expect(promise.toLowerCase()).toContain("your place");
+            expect(promise.toLowerCase()).toContain("brief");
         } finally {
             await ctx.close();
         }
     });
 
-    test("signup.html — first-five-minutes copy lights up the activation arc", async ({
+    test("signup.html — promise panel sells the morning-ranked payoff", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
             await page.goto("/signup.html", { waitUntil: "domcontentloaded" });
-            const corridor =
-                (await page.locator(".auth-corridor").textContent()) ?? "";
-            // The "first five minutes" frame replaces the generic
-            // "Path" kicker — names the actual operator arc.
-            expect(corridor.toLowerCase()).toContain("first five minutes");
-            expect(corridor.toLowerCase()).toContain("brief");
+            // The "Promise + form" design (Signup B): the left panel sells
+            // what's waiting inside — a morning that ranks the deal under
+            // the most pressure.
+            const promise =
+                (await page.locator(".promise").textContent()) ?? "";
+            expect(promise.toLowerCase()).toContain("what's waiting inside");
+            expect(promise.toLowerCase()).toContain("ranks the one deal");
+            // Two-field promise: name + role are deferred into onboarding.
+            const form = (await page.locator(".form").textContent()) ?? "";
+            expect(form.toLowerCase()).toContain("two fields now");
             // Trust note for the visitor-to-operator boundary.
-            expect(corridor.toLowerCase()).toContain("no card");
+            const body = (await page.locator("body").textContent()) ?? "";
+            expect(body.toLowerCase()).toContain("no card");
         } finally {
             await ctx.close();
         }
@@ -125,11 +128,11 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
             await page.goto("/forgot-password.html", {
                 waitUntil: "domcontentloaded"
             });
-            const corridor =
-                (await page.locator(".auth-corridor").textContent()) ?? "";
+            const promise =
+                (await page.locator(".promise").textContent()) ?? "";
             // Per Trust Annex laws — recovery copy should explicitly
             // note we don't confirm account existence out loud.
-            expect(corridor.toLowerCase()).toContain(
+            expect(promise.toLowerCase()).toContain(
                 "won't say so out loud"
             );
         } finally {
@@ -146,11 +149,11 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
             await page.goto("/reset-password.html", {
                 waitUntil: "domcontentloaded"
             });
-            const corridor =
-                (await page.locator(".auth-corridor").textContent()) ?? "";
-            // Both states have explicit copy in the corridor.
-            expect(corridor.toLowerCase()).toContain("if the link is valid");
-            expect(corridor.toLowerCase()).toContain("if the link expired");
+            const promise =
+                (await page.locator(".promise").textContent()) ?? "";
+            // Both states have explicit copy in the promise panel.
+            expect(promise.toLowerCase()).toContain("if the link is valid");
+            expect(promise.toLowerCase()).toContain("if the link expired");
         } finally {
             await ctx.close();
         }
@@ -191,9 +194,10 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
         const page = await ctx.newPage();
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
-            // Click the primary CTA — should land on signup.html.
+            // The primary (non-ghost) hero CTA should land on signup.html.
             const ctaHref = await page
-                .locator(".hero__ctas .btn--primary")
+                .locator(".hero .cta .btn:not(.btn--ghost)")
+                .first()
                 .getAttribute("href");
             expect(ctaHref).toBe("/signup.html");
 

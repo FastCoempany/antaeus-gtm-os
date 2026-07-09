@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { mirrorSeedToCloud } from "./cloud-mirror";
 import type { SeedingDraft } from "../draft";
 import type { DataClient } from "@/lib/data-client";
+import { reportError } from "@/lib/observability";
 
 vi.mock("@/lib/observability", () => ({ reportError: vi.fn(), trackEvent: vi.fn() }));
 
@@ -73,6 +74,36 @@ describe("mirrorSeedToCloud", () => {
             stage: "proposal",
             deal_value: 120000
         });
+    });
+
+    it("a re-seed duplicate (23505) is silent — no reportError", async () => {
+        vi.mocked(reportError).mockClear();
+        const { data, acctInsert } = mockClient();
+        // The account already exists in the workspace on a re-run.
+        (acctInsert as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+            Object.assign(new Error('duplicate key value violates unique constraint "signal_console_accounts_user_key_idx"'), {
+                code: "23505"
+            })
+        );
+        const r = await mirrorSeedToCloud(
+            draftOf({ accountNames: ["Northwind"] }),
+            [{ name: "Northwind", signal: "", heat: 40, cold: false, sourceUrl: "" }],
+            { data }
+        );
+        expect(r.accounts).toBe(0); // the dup didn't count
+        expect(reportError).not.toHaveBeenCalled(); // and stayed quiet
+    });
+
+    it("a genuine (non-duplicate) insert failure IS reported", async () => {
+        vi.mocked(reportError).mockClear();
+        const { data } = mockClient();
+        (data.deals.insert as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("rls denied"));
+        await mirrorSeedToCloud(
+            draftOf({ deals: [{ id: "d", account: "A", value: 1, stage: "discovery", champion: "c", whoSigns: "s", stuck: "" }] }),
+            [],
+            { data }
+        );
+        expect(reportError).toHaveBeenCalled();
     });
 
     it("a single insert failure doesn't abort the rest", async () => {

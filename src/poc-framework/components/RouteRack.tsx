@@ -34,7 +34,7 @@ export function RouteRack(): JSX.Element {
 
     return (
         <nav class="poc-route-rack" aria-label={t("Route rack")}>
-            <span class="poc-route-rack__kicker">{t("CARRY THE PROOF")}</span>
+            <span class="poc-route-rack__kicker">{t("CARRY THE EVIDENCE")}</span>
             <div class="poc-route-rack__list">
                 <a
                     class={`poc-route-rack__cta poc-route-rack__cta--primary${
@@ -61,7 +61,7 @@ export function RouteRack(): JSX.Element {
                 >
                     <span class="poc-route-rack__label">{t("Pre-mortem this deal")}</span>
                     <span class="poc-route-rack__reason">
-                        Stress-test what would kill this proof.
+                        Stress-test what would kill this evidence.
                     </span>
                 </a>
                 <a
@@ -85,7 +85,7 @@ export function RouteRack(): JSX.Element {
                 >
                     <span class="poc-route-rack__label">{t("Rehearse the negotiation")}</span>
                     <span class="poc-route-rack__reason">
-                        Carry proof state into a pricing or terms conversation.
+                        Carry the evidence into a pricing or terms conversation.
                     </span>
                 </a>
             </div>

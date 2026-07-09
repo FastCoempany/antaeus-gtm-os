@@ -160,7 +160,7 @@ export function ProspectComposer(): JSX.Element {
                     <input
                         class="sw-field__control"
                         type="text"
-                        placeholder={t("e.g., Reference Acme proof; lead with EU compliance angle", { class: "body" })}
+                        placeholder={t("e.g., Reference Acme evidence; lead with EU compliance angle", { class: "body" })}
                         value={draft.approach}
                         onInput={(e) =>
                             patchProspectDraft({

@@ -26,10 +26,19 @@ export function BrandMark(props: {
     readonly size?: number;
     /** currentColor by default; pass a color for fixed contexts. */
     readonly color?: string;
+    /**
+     * The Living Mark "lifted" state (canon Part II §3 — the mascot).
+     * Antaeus is strong while grounded; lifted off the earth, he weakens.
+     * `lifted` raises the A off its ground line — tilted and hollowed —
+     * to read as weak / at-risk (a deal going dark, a motion that lives
+     * only in one head). The ground line stays put. Defaults to grounded.
+     */
+    readonly lifted?: boolean;
 }): JSX.Element {
     const size = props.size ?? 20;
     const sw = strokeFor(size);
     const dropBar = size <= 16;
+    const lifted = props.lifted === true;
     return (
         <svg
             viewBox="0 0 48 48"
@@ -42,8 +51,14 @@ export function BrandMark(props: {
             stroke-linecap="butt"
             stroke-linejoin="miter"
         >
-            <path d="M14 38L24 10l10 28" />
-            {dropBar ? null : <path d="M18.2 28h11.6" />}
+            <g
+                transform={lifted ? "translate(1 -7) rotate(6 24 24)" : undefined}
+                opacity={lifted ? 0.42 : 1}
+                style="transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity .5s ease"
+            >
+                <path d="M14 38L24 10l10 28" />
+                {dropBar ? null : <path d="M18.2 28h11.6" />}
+            </g>
             <path d="M2 38h44" />
         </svg>
     );

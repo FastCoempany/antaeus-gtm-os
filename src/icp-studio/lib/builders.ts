@@ -18,7 +18,7 @@ import {
 
 const EMPTY_STATEMENT: IcpStatement = {
     text: "Fill the inputs above to generate a Thin ICP statement.",
-    hint: "Tip: choose one owner, one pain, one trigger, one proof window."
+    hint: "Tip: choose one owner, one pain, one trigger, one evidence window."
 };
 
 const WIN_HINT = "If you cannot list 50 accounts that match this, thin it again.";

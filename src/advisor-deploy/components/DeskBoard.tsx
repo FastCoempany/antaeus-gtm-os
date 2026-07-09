@@ -217,8 +217,8 @@ export function DeskBoard(): JSX.Element {
             </div>
 
             <div class="ad-desktop">
-                <article class="ad-blotter" aria-label={t("Proof blotter")}>
-                    <p class="ad-blotter__kicker">{t("PROOF BLOTTER")}</p>
+                <article class="ad-blotter" aria-label={t("Evidence blotter")}>
+                    <p class="ad-blotter__kicker">{t("EVIDENCE BLOTTER")}</p>
                     <h3 class="ad-blotter__title">{generated.proof}</h3>
                     <p class="ad-blotter__copy">{dealPressure(deal)}</p>
                     <div class="ad-blotter__chips">
@@ -335,7 +335,7 @@ export function DeskBoard(): JSX.Element {
                     <div>
                         <p class="ad-route__label">{t("Input")}</p>
                         <h3>
-                            {deal ? `${deal.accountName} proof line` : "No live deal"}
+                            {deal ? `${deal.accountName} evidence line` : "No live deal"}
                         </h3>
                     </div>
                     <div>

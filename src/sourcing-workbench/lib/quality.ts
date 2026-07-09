@@ -31,7 +31,7 @@ const LEVERAGE_POINTS: Record<string, number> = {
 
 const LEVERAGE_LABELS: Record<string, string> = {
     "network-connection": "network leverage",
-    "existing-proof-point": "proof leverage",
+    "existing-proof-point": "evidence angle",
     "market-signal": "live signal leverage",
     "geographic-advantage": "geographic leverage",
     cold: "cold entry only"

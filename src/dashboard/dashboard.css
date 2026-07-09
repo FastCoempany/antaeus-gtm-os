@@ -222,6 +222,15 @@ button {
     transform: translateY(-1px);
 }
 
+/* The Living Mark — grounds as the verdict climbs (canon Part II §3). */
+.db-readiness-anchor__mark {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    vertical-align: middle;
+    color: var(--db-ink);
+}
+
 .db-readiness-anchor__kicker {
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;

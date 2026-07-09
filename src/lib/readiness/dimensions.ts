@@ -320,13 +320,13 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
     const proofs = saturate(input.castProofs, 3, 5);
     if (proofs >= 2) {
         evidence.push(
-            t("{n} cast proofs", { class: "body" }).replace(
+            t("{n} pieces of cast evidence", { class: "body" }).replace(
                 "{n}",
                 String(input.castProofs)
             )
         );
     } else {
-        gaps.push(t("Cast 3+ proofs in PoC Framework", { class: "body" }));
+        gaps.push(t("Cast 3+ pieces of evidence in PoC Framework", { class: "body" }));
     }
 
     const autopsies = saturate(input.futureAutopsiesRun, 3, 5);

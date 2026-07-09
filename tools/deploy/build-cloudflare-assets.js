@@ -80,6 +80,20 @@ const include = [
   "landing-a-system.html",
   "landing-b-monday.html",
   "landing-c-inherit.html",
+  // The surprise-and-delight pass — each page demonstrates the one thing
+  // it sells, Forest (#1B5138) as the single ignition beat. B ranks
+  // itself live, A judges you (interactive verdict), C authors itself
+  // (mark draws + kit composes).
+  "landing-b-alive.html",
+  "landing-a-alive.html",
+  "landing-c-alive.html",
+  // Signup reimagining (3 mockups). A = Momentum (minimal form), B =
+  // Promise + form (live ranked card beside a frictionless form), C =
+  // The Read (the "could a hire run this?" self-check → verdict takeaway
+  // for the not-ready browser, then the CTA). Static, self-contained.
+  "signup-a-momentum.html",
+  "signup-b-promise.html",
+  "signup-c-read.html",
   // Seeding flow, front half — doorway → ICP sharpening → accounts →
   // half-awake wake-up, with the sourced evidence margin down the side.
   "seeding-flow-front.html",

@@ -103,7 +103,7 @@ export function requiredCorrectionCopy(
         return "Force the strain before talking product.";
     }
     if (threadId === "pressure" || threadId === "proof") {
-        return "Trade one proof point for one admission.";
+        return "Trade one piece of evidence for one admission.";
     }
     return "Lock the dated move with owner and reason.";
 }

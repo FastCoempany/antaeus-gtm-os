@@ -109,7 +109,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
     },
     "/cold-call-studio/": {
         whatItIsFor:
-            "Cold Call Studio walks a live cold call one thread at a time — opener, pressure, proof, ask — so you narrow instead of explain.",
+            "Cold Call Studio walks a live cold call one thread at a time — opener, pressure, evidence, ask — so you narrow instead of explain.",
         theMoveHere:
             "Stay in one thread. Pick what the buyer just said and the room hands you the next line.",
         ifStuck:
@@ -161,7 +161,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         theMoveHere:
             "Forge the four molds for a linked deal. The weakest one is called out for you.",
         ifStuck:
-            "Interest isn't proof until it can be carried without you in the room. Start with the claim and who signs off on it."
+            "Interest isn't evidence until it can be carried without you in the room. Start with the claim and who signs off on it."
     },
     "/advisor-deploy/": {
         whatItIsFor:

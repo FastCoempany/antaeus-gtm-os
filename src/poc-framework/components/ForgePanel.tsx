@@ -24,7 +24,7 @@ const OUTCOME_LABELS: Record<Outcome, string> = {
 /**
  * ForgePanel — Wave 3 implementation. Left, dark "forge" half.
  *
- * Per canon §4.15: "the proof object gets forged here." The form
+ * Per canon §4.15: "the evidence gets forged here." The form
  * inputs (account / vendor / owner / success criteria / kill rules /
  * duration / outcome / linked deal) drive computeQuality, which
  * lights up the heat ledger below the form.
@@ -36,7 +36,7 @@ export function ForgePanel(): JSX.Element {
     const quality = computeQuality(drft, linked);
 
     return (
-        <section class="poc-forge" aria-label={t("Proof forge")}>
+        <section class="poc-forge" aria-label={t("Evidence forge")}>
             <header class="poc-forge__header">
                 <p class="poc-forge__kicker">{t("FORGE")}</p>
                 <h2 class="poc-forge__title">{t("Shape the molds.")}</h2>
@@ -145,7 +145,7 @@ export function ForgePanel(): JSX.Element {
                             void saveProof(proof);
                         }}
                     >
-                        Cast proof
+                        Cast the evidence
                     </button>
                 </div>
             </div>

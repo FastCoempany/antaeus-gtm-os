@@ -167,10 +167,10 @@ test.describe("Phase 5.3 — Privacy + Terms (bright re-skin)", () => {
             // (Phase 5.1 already wired this; this test guards against
             // regressions when the legal pages were rewritten in 5.3).
             const privacyLink = page.locator(
-                '.foot__links a[href="/privacy.html"]'
+                'footer .flinks a[href="/privacy.html"]'
             );
             const termsLink = page.locator(
-                '.foot__links a[href="/terms.html"]'
+                'footer .flinks a[href="/terms.html"]'
             );
             expect(await privacyLink.count()).toBe(1);
             expect(await termsLink.count()).toBe(1);

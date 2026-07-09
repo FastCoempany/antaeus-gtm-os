@@ -35,4 +35,21 @@ describe("brand lockups (spec 10 §3)", () => {
         expect(container.querySelector(".ds-lockup--reversed")).not.toBeNull();
         cleanup();
     });
+
+    it("the Living Mark lifts off its ground line for the at-risk state (canon §3)", () => {
+        // grounded by default — no lift transform, full opacity
+        const grounded = render(<BrandMark size={28} />);
+        const gg = grounded.container.querySelector("g");
+        expect(gg?.getAttribute("transform")).toBeNull();
+        expect(gg?.getAttribute("opacity")).toBe("1");
+        cleanup();
+        // lifted — raised + tilted + hollowed; the ground line stays put
+        const lifted = render(<BrandMark size={28} lifted />);
+        const gl = lifted.container.querySelector("g");
+        expect(gl?.getAttribute("transform")).toContain("translate");
+        expect(gl?.getAttribute("opacity")).toBe("0.42");
+        // still 3 paths (legs + crossbar in the group, ground outside it)
+        expect(lifted.container.querySelectorAll("path").length).toBe(3);
+        cleanup();
+    });
 });

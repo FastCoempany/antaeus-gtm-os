@@ -45,7 +45,7 @@ const SEAMS: ReadonlyArray<Seam> = [
         room: "deal-workspace",
         routes: [
             { dest: "/future-autopsy/", label: "Pre-mortem a deal", primary: true },
-            { dest: "/poc-framework/", label: "Forge the proof" },
+            { dest: "/poc-framework/", label: "Forge the evidence" },
             { dest: "/advisor-deploy/", label: "Deploy an advisor" },
             { dest: "/negotiation/", label: "Rehearse the negotiation" }
         ]
@@ -71,7 +71,7 @@ const SEAMS: ReadonlyArray<Seam> = [
         routes: [
             { dest: "/deal-workspace/", label: "Update the deal", primary: true },
             { dest: "/future-autopsy/", label: "Pre-mortem the deal" },
-            { dest: "/poc-framework/", label: "Forge a proof" },
+            { dest: "/poc-framework/", label: "Forge the evidence" },
             { dest: "/negotiation/", label: "Rehearse the negotiation" }
         ]
     },
@@ -81,7 +81,7 @@ const SEAMS: ReadonlyArray<Seam> = [
             { dest: "/deal-workspace/", label: "Update the deal", primary: true },
             { dest: "/future-autopsy/", label: "Pre-mortem this deal" },
             { dest: "/advisor-deploy/", label: "Carry to an advisor" },
-            { dest: "/poc-framework/", label: "Sharpen the proof" }
+            { dest: "/poc-framework/", label: "Sharpen the evidence" }
         ]
     },
     {

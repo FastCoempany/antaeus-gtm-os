@@ -25,31 +25,27 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            // What — hero title must mention "inherit" (the operator-
-            // facing headline from canon §1).
-            const heroTitle = await page.locator(".hero__title").textContent();
-            expect(heroTitle?.toLowerCase()).toContain("inherit");
+            // What — the hero states the ranking promise without scroll.
+            const heroTitle = await page.locator(".hero h1").textContent();
+            expect(heroTitle?.toLowerCase()).toContain("monday");
 
-            // Who — kicker addresses the founder persona explicitly.
-            const heroKicker = await page
-                .locator(".hero__kicker")
-                .textContent();
-            expect(heroKicker?.toLowerCase()).toContain("founder");
+            // Who / why — the hero frames the operator's problem and what
+            // the system does about it (rank + name the one move).
+            const heroText =
+                (await page.locator(".hero").textContent())?.toLowerCase() ?? "";
+            expect(heroText).toMatch(/ranks|one move|where to start/);
 
-            // Next — there is exactly one primary CTA in the hero CTA
-            // cluster. Secondary (sign-in) is allowed but visually
-            // distinct.
-            const primaryCtas = page.locator(".hero__ctas .btn--primary");
+            // Next — exactly one primary (non-ghost, orange) CTA in the
+            // hero cluster, and it leads to signup.
+            const primaryCtas = page.locator(".hero .cta .btn:not(.btn--ghost)");
             expect(await primaryCtas.count()).toBe(1);
-            expect(await primaryCtas.textContent()).toMatch(
-                /create your workspace/i
-            );
+            expect(await primaryCtas.getAttribute("href")).toBe("/signup.html");
         } finally {
             await ctx.close();
         }
     });
 
-    test("Walk B — 90s scan: 3 anchor cards exist, each with a distinct kicker", async ({
+    test("Walk B — 90s scan: distinct value sections, each with its own kicker", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -57,16 +53,16 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            const anchors = page.locator(".anchor");
-            expect(await anchors.count()).toBe(3);
+            // The 90-second scan is carried by the value sections, each
+            // with its own mono kicker — at least three, all distinct.
+            const kickers = (
+                await page.locator(".blk .kick").allTextContents()
+            ).map((k) => k.trim());
+            expect(kickers.length).toBeGreaterThanOrEqual(3);
+            expect(new Set(kickers).size).toBe(kickers.length);
 
-            const kickers = await page.locator(".anchor__kicker").allTextContents();
-            // Three distinct kickers, no repeats.
-            expect(new Set(kickers).size).toBe(3);
-            // Each kicker captures a distinct operator promise.
-            expect(kickers.join(" · ")).toContain("SEES WHAT'S REAL");
-            expect(kickers.join(" · ")).toContain("HARDER TO FOOL");
-            expect(kickers.join(" · ")).toContain("BUILT FOR HANDOFF");
+            // The weekly rhythm is the scannable spine — five named days.
+            expect(await page.locator(".rhythm .day").count()).toBe(5);
         } finally {
             await ctx.close();
         }
@@ -80,23 +76,24 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            // Hero CTAs: exactly 2 buttons (signup + signin), no third.
-            const ctaButtons = page.locator(".hero__ctas .btn");
+            // Hero CTAs: exactly 2 buttons, and only one is the orange
+            // primary — the dominant move, no competing third path.
+            const ctaButtons = page.locator(".hero .cta .btn");
             expect(await ctaButtons.count()).toBe(2);
 
-            // Primary CTA is signup (visually weighted with orange).
-            const primary = page.locator(".hero__ctas .btn--primary");
-            const primaryHref = await primary.getAttribute("href");
-            expect(primaryHref).toBe("/signup.html");
+            const primary = page.locator(".hero .cta .btn:not(.btn--ghost)");
+            expect(await primary.count()).toBe(1);
+            expect(await primary.getAttribute("href")).toBe("/signup.html");
 
-            // Secondary (ghost) CTA is sign-in.
-            const ghost = page.locator(".hero__ctas .btn--ghost");
-            const ghostHref = await ghost.getAttribute("href");
-            expect(ghostHref).toBe("/login.html");
+            // Sign-in lives in the nav, not competing in the hero.
+            expect(
+                await page.locator('nav .nlinks a[href="/login.html"]').count()
+            ).toBe(1);
 
             // The "no card / free during preview" trust note is present.
-            const note = await page.locator(".hero__cta-note").textContent();
-            expect(note?.toLowerCase()).toContain("no card");
+            const body =
+                (await page.locator("body").textContent())?.toLowerCase() ?? "";
+            expect(body).toContain("no card");
         } finally {
             await ctx.close();
         }
@@ -128,21 +125,22 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         }
     });
 
-    test("Test 5 — trust test: no unattributed quotes or stock-style superlatives in anchors", async ({
+    test("Test 5 — trust test: no fabricated testimonials or stock superlatives", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
-            const anchorsCopy =
-                (await page.locator(".anchors").textContent()) ?? "";
+            const copy = (await page.locator("body").textContent()) ?? "";
 
-            // Trust-test failure signals.
-            expect(anchorsCopy).not.toMatch(/"/); // no decorative quote marks
-            expect(anchorsCopy).not.toMatch(/world-class/i);
-            expect(anchorsCopy).not.toMatch(/best-in-class/i);
-            expect(anchorsCopy).not.toMatch(/trusted by/i);
+            // Trust-test failure signals: fake social proof + stock
+            // superlatives. (Decorative-quote check is intentionally not
+            // here — the page legitimately quotes a buyer objection as a
+            // demo of the product, which is honest, not marketing fluff.)
+            expect(copy).not.toMatch(/world-class/i);
+            expect(copy).not.toMatch(/best-in-class/i);
+            expect(copy).not.toMatch(/trusted by/i);
         } finally {
             await ctx.close();
         }
@@ -167,7 +165,7 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         }
     });
 
-    test("Chrome wordmark renders + sign-in path in topbar is reachable", async ({
+    test("Chrome wordmark renders + sign-in path in nav is reachable", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -175,28 +173,26 @@ test.describe("Phase 5.1 — Landing (start.html)", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            // Wordmark anchor present + linked to /start.html.
-            const wordmark = page.locator(".wordmark");
+            // Wordmark present in the nav brand.
+            const wordmark = page.locator("nav .brand .wm");
             expect(await wordmark.count()).toBe(1);
-            expect(await wordmark.getAttribute("href")).toBe("/start.html");
-            const wordmarkText = await wordmark.textContent();
-            expect(wordmarkText).toContain("ANTAEUS");
-            expect(wordmarkText?.toLowerCase()).toContain("operator preview");
+            expect(await wordmark.textContent()).toContain("ANTAEUS");
 
-            // Topbar sign-in link (separate from hero CTA).
-            const topbarSignin = page
-                .locator(".chrome__aux a", { hasText: "Sign in" })
-                .first();
-            expect(await topbarSignin.getAttribute("href")).toBe("/login.html");
+            // Nav sign-in link → /login.html (separate from the hero CTA).
+            expect(
+                await page.locator('nav .nlinks a[href="/login.html"]').count()
+            ).toBe(1);
 
             // Footer legal links present.
             expect(
                 await page
-                    .locator('.foot__links a[href="/privacy.html"]')
+                    .locator('footer .flinks a[href="/privacy.html"]')
                     .count()
             ).toBe(1);
             expect(
-                await page.locator('.foot__links a[href="/terms.html"]').count()
+                await page
+                    .locator('footer .flinks a[href="/terms.html"]')
+                    .count()
             ).toBe(1);
         } finally {
             await ctx.close();

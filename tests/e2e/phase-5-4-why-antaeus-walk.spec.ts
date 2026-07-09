@@ -48,7 +48,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             expect(await back.count()).toBe(1);
             expect(await back.getAttribute("href")).toBe("/start.html");
 
-            // The chrome carries a primary "Create your workspace" CTA so
+            // The chrome carries a primary "Run your first morning" CTA so
             // Marcus can sign up directly from any scroll position.
             const chromeBtn = page.locator(".chrome .btn--primary");
             expect(await chromeBtn.count()).toBe(1);
@@ -153,7 +153,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         }
     });
 
-    test("closing CTA — one dominant move (Create workspace), sign-in secondary", async ({
+    test("closing CTA — one dominant move (Run your first morning), sign-in secondary", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -163,8 +163,9 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             const primaryCta = page.locator(".closing .btn--primary");
             expect(await primaryCta.count()).toBe(1);
             expect(await primaryCta.getAttribute("href")).toBe("/signup.html");
+            // Unified with the corridor CTA voice (was "Create your workspace").
             expect(await primaryCta.textContent()).toMatch(
-                /create your workspace/i
+                /run your first morning/i
             );
 
             const ghost = page.locator(".closing .btn--ghost");
@@ -221,21 +222,20 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         try {
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
 
-            // Chrome aux carries a "Why Antaeus" link to /why-antaeus/.
-            const chromeLink = page.locator(
-                '.chrome__aux a[href="/why-antaeus/"]'
+            // The nav carries a "Why Antaeus" link to /why-antaeus/.
+            const navLink = page.locator(
+                'nav .nlinks a[href="/why-antaeus/"]'
             );
-            expect(await chromeLink.count()).toBe(1);
+            expect(await navLink.count()).toBe(1);
 
-            // The deeper-read card below the anchors also leads here —
-            // the canonical progressive-disclosure path for Marcus.
-            const deeperLink = page.locator(
-                '.deeper__link[href="/why-antaeus/"]'
+            // The footer also leads here — the progressive-disclosure path.
+            const footLink = page.locator(
+                'footer .flinks a[href="/why-antaeus/"]'
             );
-            expect(await deeperLink.count()).toBe(1);
+            expect(await footLink.count()).toBe(1);
 
-            // Click the deeper link → land on /why-antaeus/.
-            await deeperLink.click();
+            // Click the nav link → land on /why-antaeus/.
+            await navLink.click();
             await page.waitForURL("**/why-antaeus/**");
             expect(await page.locator(".hero__title").count()).toBe(1);
         } finally {
@@ -249,15 +249,14 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            // Phase 5.4 adds chrome "Why Antaeus" + deeper-read card —
-            // neither must break Phase 5.1's Walk C guarantee (exactly
-            // one primary CTA in the hero's CTA cluster).
+            // The nav "Why Antaeus" link must not break Phase 5.1's Walk C
+            // guarantee (exactly one dominant primary CTA in the hero).
             await page.goto("/start.html", { waitUntil: "domcontentloaded" });
-            const heroCtas = page.locator(".hero__ctas .btn");
+            const heroCtas = page.locator(".hero .cta .btn");
             expect(await heroCtas.count()).toBe(2); // primary + ghost only
 
             const primaryCount = await page
-                .locator(".hero__ctas .btn--primary")
+                .locator(".hero .cta .btn:not(.btn--ghost)")
                 .count();
             expect(primaryCount).toBe(1);
         } finally {

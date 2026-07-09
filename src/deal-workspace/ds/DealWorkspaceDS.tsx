@@ -86,7 +86,7 @@ export function DealWorkspaceDS(): JSX.Element {
                                     primary: true
                                 },
                                 {
-                                    label: t("Forge the proof"),
+                                    label: t("Forge the evidence"),
                                     href: hrefToPocFramework(focusName)
                                 },
                                 {

@@ -38,7 +38,7 @@ export type LeverageKey =
 
 export const LEVERAGE_LABELS: Readonly<Record<LeverageKey, string>> = {
     "network-connection": "Network leverage",
-    "existing-proof-point": "Proof leverage",
+    "existing-proof-point": "Existing evidence",
     "market-signal": "Live signal leverage",
     "geographic-advantage": "Geographic leverage",
     cold: "Cold entry only"

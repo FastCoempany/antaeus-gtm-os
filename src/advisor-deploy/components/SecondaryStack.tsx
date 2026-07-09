@@ -363,7 +363,7 @@ export function SecondaryStack(): JSX.Element {
                         )}
                         data-ad-handoff="poc-framework"
                     >
-                        Forge a proof
+                        Forge the evidence
                     </a>
                     <a
                         class="ad-btn"

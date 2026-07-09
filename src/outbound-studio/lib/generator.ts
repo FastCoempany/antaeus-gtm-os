@@ -236,7 +236,7 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
             );
         } else {
             lines.push(
-                `Here's the ${assetLabel.toLowerCase()} we discussed. I've included the proof points most relevant to ${account}'s situation and a suggested mutual action plan for the path from here to decision.`
+                `Here's the ${assetLabel.toLowerCase()} we discussed. I've included the evidence most relevant to ${account}'s situation and a suggested mutual action plan for the path from here to decision.`
             );
             lines.push("");
             lines.push(

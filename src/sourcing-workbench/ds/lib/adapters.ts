@@ -21,7 +21,7 @@ import { hrefToSignalConsole } from "../../lib/handoff";
  */
 export const EDGE_LABELS: Record<LeverageKey, string> = {
     "network-connection": t("Network intro"),
-    "existing-proof-point": t("Proof point"),
+    "existing-proof-point": t("Evidence"),
     "market-signal": t("Live signal"),
     "geographic-advantage": t("Local advantage"),
     cold: t("Cold entry")

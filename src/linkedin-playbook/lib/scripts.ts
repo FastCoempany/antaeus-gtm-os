@@ -72,7 +72,7 @@ export const METHOD_TEMPLATES: ReadonlyArray<MethodTemplate> = [
         key: "ask",
         kicker: "Ask",
         heading: "Ask only when it's warranted.",
-        small: "The calendar request comes after familiarity and proof.",
+        small: "The calendar request comes after familiarity and the help you've already given.",
         body: "Based on what you shared about [pressure], I think there is a concrete conversation worth having. Would [day] or [day] work for 15 minutes?"
     }
 ];

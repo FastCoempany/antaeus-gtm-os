@@ -549,6 +549,7 @@ The legacy `/app/<room>/` shell still has dark Readiness Score and Founding GTM 
 | **Amber** | caution / needs sharpening | mid-weight warnings |
 | **Red** | real risk / real failure / intervention needed | decaying deals, destructive actions |
 | **Gold** | reserved emphasis / premium / consequential states | reserved; not a default accent |
+| **Forest** | warm-dark depth / premium emphasis | `#1B5138`. Reserved warm-dark accent (added 2026, founder-picked): one ignition beat, a footer, an accent rule. Money-coded, not "eco". Deliberately deep so it is never read as the health-green. Rationed like gold. |
 
 Every color carries a semantic role. If a color appears without carrying meaning, remove or recolor it.
 
@@ -559,9 +560,20 @@ Every color carries a semantic role. If a color appears without carrying meaning
 **Rationing rules:**
 - Orange is the most powerful color; use it on the one primary move per surface, and only once
 - Green must be genuine — never a default "looks positive" color
-- Forest green is rationed like gold — reserved for genuine compounding/durability/inheritance, never a second "positive" accent for warmth. If it's not about something that has held or matured *over time*, it's the wrong green.
+- Forest green is rationed like gold — reserved for genuine compounding/durability/inheritance, never a second "positive" accent for warmth. If it's not about something that has held or matured *over time*, it's the wrong green. Forest is a *deep* accent, never the bright health-green and never a "looks positive" fill.
 - Amber is more common than red; red is the last-resort intervention color
-- Gold and blue should not compete as co-dominant accents
+- Gold, Forest, and blue should not compete as co-dominant accents; the new dark is depth, not a second move
+
+### The mark + the Living Mark (mascot)
+
+The brand mark is the **Grounded-A**: a drafted capital A standing on a ground line that extends past its feet — flat terminals, mitered joins, the low crossbar reading like a gauge. Geometry is locked in `public/favicon.svg` + `src/components/brand.tsx` (48-viewBox: legs `M14 38L24 10l10 28`, crossbar `M18.2 28h11.6`, ground `M2 38h44`). The mark is **navy or `currentColor` only — it never takes the orange** (orange is the move; the mark is not a move). Forest is permitted on the mark as the reserved depth accent.
+
+**The mascot is the Living Mark** (founder-picked 2026, "the myth"): we do not draw a separate character. The Grounded-A *is* the mascot, and it earns life through one device drawn straight from the Antaeus myth — Antaeus was invincible while he touched the earth; lifted off it, he weakened:
+
+- **Grounded** — the mark sits solid on the ground line. Means: strong, healthy, **inheritable/transferable**.
+- **Lifted** — the same mark raised off the ground line, tilted and hollowed (lower opacity). Means: weak, **at-risk**, a motion that lives only in one head.
+
+This grounded↔lifted pair is a **storytelling device usable across the whole product, not just the landing** — a deal "lifts" as it goes at-risk and "grounds" as it recovers; readiness "grounds" as it climbs toward hire-ready. Severe and authored, never cute — it can't go cute, because it is the logo. Rationale: a mascot for a severe B2B brand normally reads playful and off-brand; the Living Mark sidesteps that entirely and is universal for free (favicon, watermark, loading/empty/error states, OG image). The two rejected directions (a figurative "Giant" — the A wearing a head; a "Rooted" crest — roots into the earth) are archived; revisit only if a true character is ever wanted.
 
 ---
 

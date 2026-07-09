@@ -147,7 +147,7 @@ export function AskDesk(): JSX.Element {
             </div>
 
             {/* The prepared ask — the made thing. */}
-            <Card icon="proof" kicker={t("THE PROOF LINE")} tone={tone}>
+            <Card icon="proof" kicker={t("THE EVIDENCE LINE")} tone={tone}>
                 <p class="add-proof">{generated.proof}</p>
                 {annotate ? <p class="ds-card__copy">{dealPressure(deal)}</p> : null}
             </Card>
@@ -207,7 +207,7 @@ export function AskDesk(): JSX.Element {
                             primary: true
                         },
                         { label: t("Pre-mortem the deal"), href: hrefToFutureAutopsy(deal.id, deal.accountName) },
-                        { label: t("Forge a proof"), href: hrefToPocFramework(deal.id, deal.accountName) },
+                        { label: t("Forge the evidence"), href: hrefToPocFramework(deal.id, deal.accountName) },
                         { label: t("Rehearse the negotiation"), href: hrefToNegotiation(deal.id, deal.accountName) }
                     ]}
                 />

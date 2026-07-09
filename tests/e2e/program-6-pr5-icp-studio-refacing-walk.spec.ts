@@ -51,7 +51,7 @@ test.describe("Program 6 / PR 5 — ICP Studio refacing (Wedge Ledger)", () => {
                 "Geo",
                 "Pain",
                 "Trigger",
-                "Proof window"
+                "Evidence window"
             ];
             for (let i = 0; i < expected.length; i++) {
                 expect(fieldNames[i]).toContain(expected[i]!);

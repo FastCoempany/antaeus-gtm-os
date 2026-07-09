@@ -58,7 +58,7 @@
             (profile && profile.onboarding_completed === true) ||
             (onboarding && onboarding.completed === true)
           );
-          if (!completed) return '/onboarding/';
+          if (!completed) return '/onboarding/?seeding=1';
           return (seen === '1' || seen === 'true') ? '/dashboard/' : '/welcome/';
         } catch (e) {
           return '/start.html';

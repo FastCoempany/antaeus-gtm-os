@@ -175,17 +175,17 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
         if (proofWindow === "7 days" || proofWindow === "14 days") {
             good(
                 10,
-                "Proof window is aggressive enough to create fast first value."
+                "Evidence window is aggressive enough to create fast first value."
             );
         } else {
             good(
                 8,
-                "Proof window is defined. Qualification now has a real bar."
+                "Evidence window is defined. Qualification now has a real bar."
             );
         }
     } else {
         risk(
-            "Pick one proof window so the deal can be pressure-tested early."
+            "Pick one evidence window so the deal can be pressure-tested early."
         );
     }
 
