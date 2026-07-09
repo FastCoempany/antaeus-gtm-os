@@ -2,7 +2,7 @@
  * Territory Architect cross-room handoff helpers.
  *
  * Added in Phase 2.3 (Strategy flow audit). Previously the HandoffStrip
- * wrote raw href strings ("/sourcing-workbench/", "/signal-console/",
+ * wrote raw href strings ("/prospecting-desk/", "/signal-console/",
  * "/icp-studio/") with no continuity plumbing — destinations couldn't
  * render a "Back to Territory" affordance, focusObject didn't carry,
  * fromMode/fromSurface were absent.
@@ -52,8 +52,8 @@ export function buildTerritoryHref({
 
 export function hrefToSourcingWorkbench(focusObject?: string): string {
     return buildTerritoryHref({
-        href: "/sourcing-workbench/",
-        roomLabel: "Sourcing Workbench",
+        href: "/prospecting-desk/",
+        roomLabel: "Prospecting Desk",
         ...(focusObject ? { focusObject } : {})
     });
 }

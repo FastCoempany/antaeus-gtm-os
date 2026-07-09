@@ -48,12 +48,12 @@ const SAMPLE_ROOMS_FOR_BACKBUTTON: ReadonlyArray<{
         returnLabel: "Back to Deal Workspace"
     },
     {
-        path: "/poc-framework/",
+        path: "/pilot-desk/",
         returnTo: "/deal-workspace/",
         returnLabel: "Back to Deal Workspace"
     },
     {
-        path: "/advisor-deploy/",
+        path: "/call-in-a-favor/",
         returnTo: "/deal-workspace/",
         returnLabel: "Back to Deal Workspace"
     },
@@ -68,7 +68,7 @@ const SAMPLE_ROOMS_FOR_BACKBUTTON: ReadonlyArray<{
         returnLabel: "Back to ICP Studio"
     },
     {
-        path: "/sourcing-workbench/",
+        path: "/prospecting-desk/",
         returnTo: "/territory-architect/",
         returnLabel: "Back to Territory Architect"
     },
@@ -167,7 +167,7 @@ test.describe("Program 6 / PR 1 — back-pill regression closed", () => {
                 "/dashboard/",
                 "/signal-console/",
                 "/future-autopsy/",
-                "/negotiation/"
+                "/getting-to-signed/"
             ]) {
                 await page.goto(path, { waitUntil: "domcontentloaded" });
                 await page.waitForTimeout(200);
@@ -219,19 +219,21 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
             const roomRows = page.locator('[data-palette-kind="room"]');
             expect(await roomRows.count()).toBe(totalRooms);
 
-            // Filter to "negotiation" — single result (no skill matches it).
+            // Filter to "negotiation" — matches Getting to Signed via its
+            // keyword (the room renamed 2026-07-09; the old name stays a
+            // filter keyword).
             await page.fill(".ant-palette__input", "negotiation");
             await page.waitForTimeout(120);
             const filtered = page.locator(".ant-palette__result");
             expect(await filtered.count()).toBe(1);
             const filteredText = await filtered.first().textContent();
-            expect(filteredText?.toLowerCase()).toContain("negotiation");
+            expect(filteredText?.toLowerCase()).toContain("getting to signed");
         } finally {
             await ctx.close();
         }
     });
 
-    test("palette filters by keyword (e.g. 'indemnification' → Negotiation)", async ({
+    test("palette filters by keyword (e.g. 'indemnification' → Getting to Signed)", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -246,7 +248,7 @@ test.describe("Program 6 / PR 1 — cmd+K palette", () => {
 
             const result = page.locator(".ant-palette__result").first();
             const text = await result.textContent();
-            expect(text?.toLowerCase()).toContain("negotiation");
+            expect(text?.toLowerCase()).toContain("getting to signed");
         } finally {
             await ctx.close();
         }

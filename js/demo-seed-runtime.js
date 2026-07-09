@@ -67,9 +67,14 @@ function renderDemoLane(){
     '<div class="count" id="count"></div>';
 }
 
-document.title='Antaeus Demo Workspace';
+// Pages that carry their own static lane markup (the bright
+// 2026-07-09 rebuild of demo-seed.html) opt out of the injected
+// legacy card + title.
+if(!document.querySelector('[data-demo-lane="static"]')){
+  document.title='Antaeus Demo Workspace';
+  renderDemoLane();
+}
 ensureDemoAnalytics();
-renderDemoLane();
 
 function d(n){return new Date(Date.now()-n*86400000).toISOString()}
 function uid(pre){return(pre||'id')+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,6)}
@@ -830,20 +835,16 @@ function purgeVisibleGtmKeysFallback(){
 }
 function getScenarioMeta(mode){
   return mode==='ent'
-    ? {name:'Enterprise Demo',label:'enterprise',description:'Operator-scale deal motion with heavier proof, stakeholders, and handoff pressure.',redirect:'/app/dashboard/?demo=1'}
-    : {name:'Mid-Market Demo',label:'mid_market',description:'Founder-to-first-AE motion with expansion triggers, one win, one loss, and believable daily execution.',redirect:'/app/dashboard/?demo=1'};
+    ? {name:'Enterprise Demo',label:'enterprise',description:'Operator-scale deal motion with heavier proof, stakeholders, and handoff pressure.',redirect:'/dashboard/?demo=1'}
+    : {name:'Mid-Market Demo',label:'mid_market',description:'Founder-to-first-AE motion with expansion triggers, one win, one loss, and believable daily execution.',redirect:'/dashboard/?demo=1'};
 }
 
 function buildStatusMarkup(meta,data,shared,keys,returnUrl){
-  return keys+' demo keys written.<br>'
-    +data.accounts.length+' accounts - '
-    +data.deals.length+' deals - '
-    +data.advisors.length+' advisors - '
-    +shared.outboundTouches.touches.length+' touches - '
-    +shared.coldCallLog.calls.length+' calls<br><br>'
-    +'Loaded: '+meta.name+'<br>'
-    +meta.description+'<br><br>'
-    +'<a href="'+returnUrl+'" style="color:var(--accent);font-weight:700;">Open demo dashboard</a>';
+  return 'The sample workspace is loaded - '
+    +data.accounts.length+' accounts being watched, '
+    +data.deals.length+' live deals, '
+    +shared.coldCallLog.calls.length+' calls on the log.<br>'
+    +'<a href="'+returnUrl+'">Open the workspace &rarr;</a>';
 }
 
 window.seed=function(mode){

@@ -24,9 +24,9 @@ describe("buildIcpStudioHref", () => {
 
     it("preserves pre-existing query params", () => {
         const url = buildIcpStudioHref({
-            href: "/sourcing-workbench/?tier=t1",
+            href: "/prospecting-desk/?tier=t1",
             focusObject: "Logistics",
-            roomLabel: "Sourcing Workbench"
+            roomLabel: "Prospecting Desk"
         });
         expect(url).toContain("tier=t1");
         expect(url).toContain("returnTo=%2Ficp-studio%2F");
@@ -49,7 +49,7 @@ describe("convenience builders", () => {
             "/territory-architect/"
         );
         expect(hrefToSourcingWorkbench("Logistics")).toContain(
-            "/sourcing-workbench/"
+            "/prospecting-desk/"
         );
         expect(hrefToSignalConsole("Logistics")).toContain(
             "/signal-console/"

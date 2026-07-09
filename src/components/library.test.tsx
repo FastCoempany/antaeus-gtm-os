@@ -647,7 +647,7 @@ describe("HandoffStrip (spec 03 §3.4)", () => {
                 title="Push Acme into intervention."
                 routes={[
                     { label: "Pre-mortem this deal", href: "/future-autopsy/?x=1", primary: true },
-                    { label: "Forge a proof", href: "/poc-framework/?x=1" }
+                    { label: "Forge a proof", href: "/pilot-desk/?x=1" }
                 ]}
             />
         );

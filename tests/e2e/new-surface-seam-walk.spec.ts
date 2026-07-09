@@ -45,9 +45,9 @@ const SEAMS: ReadonlyArray<Seam> = [
         room: "deal-workspace",
         routes: [
             { dest: "/future-autopsy/", label: "Pre-mortem a deal", primary: true },
-            { dest: "/poc-framework/", label: "Forge the evidence" },
-            { dest: "/advisor-deploy/", label: "Deploy an advisor" },
-            { dest: "/negotiation/", label: "Rehearse the negotiation" }
+            { dest: "/pilot-desk/", label: "Forge the evidence" },
+            { dest: "/call-in-a-favor/", label: "Deploy an advisor" },
+            { dest: "/getting-to-signed/", label: "Rehearse the negotiation" }
         ]
     },
     {
@@ -67,25 +67,25 @@ const SEAMS: ReadonlyArray<Seam> = [
         ]
     },
     {
-        room: "advisor-deploy",
+        room: "call-in-a-favor",
         routes: [
             { dest: "/deal-workspace/", label: "Update the deal", primary: true },
             { dest: "/future-autopsy/", label: "Pre-mortem the deal" },
-            { dest: "/poc-framework/", label: "Forge the evidence" },
-            { dest: "/negotiation/", label: "Rehearse the negotiation" }
+            { dest: "/pilot-desk/", label: "Forge the evidence" },
+            { dest: "/getting-to-signed/", label: "Rehearse the negotiation" }
         ]
     },
     {
-        room: "negotiation",
+        room: "getting-to-signed",
         routes: [
             { dest: "/deal-workspace/", label: "Update the deal", primary: true },
             { dest: "/future-autopsy/", label: "Pre-mortem this deal" },
-            { dest: "/advisor-deploy/", label: "Carry to an advisor" },
-            { dest: "/poc-framework/", label: "Sharpen the evidence" }
+            { dest: "/call-in-a-favor/", label: "Carry to an advisor" },
+            { dest: "/pilot-desk/", label: "Sharpen the evidence" }
         ]
     },
     {
-        room: "sourcing-workbench",
+        room: "prospecting-desk",
         routes: [
             { dest: "/signal-console/", label: "Push to Signal Console", primary: true },
             { dest: "/outbound-studio/", label: "Compose outbound" }
@@ -186,7 +186,7 @@ test.describe("new-surface cross-room seam walk", () => {
     const CHAINS: ReadonlyArray<{ from: string; label: string; to: string }> = [
         { from: "deal-workspace", label: "Pre-mortem a deal", to: "/future-autopsy/" },
         { from: "future-autopsy", label: "Open the deal", to: "/deal-workspace/" },
-        { from: "sourcing-workbench", label: "Push to Signal Console", to: "/signal-console/" },
+        { from: "prospecting-desk", label: "Push to Signal Console", to: "/signal-console/" },
         { from: "quota-workback", label: "Run the outbound", to: "/outbound-studio/" }
     ];
 

@@ -61,7 +61,7 @@ describe("buildColdCallHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildColdCallHref({
-            href: "/poc-framework/",
+            href: "/pilot-desk/",
             focusObject: "Acme",
             roomLabel: "PoC",
             extra: { thread: "ask", blank: "" }

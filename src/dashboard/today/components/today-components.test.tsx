@@ -38,7 +38,7 @@ function obj(over: Partial<CommandObject> = {}): CommandObject {
         actions: [
             { label: "Open the deal", href: "/deal-workspace/", variant: "primary" },
             { label: "Plan the call", href: "/call-planner/", variant: "secondary" },
-            { label: "Cast a proof", href: "/poc-framework/", variant: "secondary" }
+            { label: "Cast a proof", href: "/pilot-desk/", variant: "secondary" }
         ],
         sheetKey: "",
         focusObject: "Acme Industries",

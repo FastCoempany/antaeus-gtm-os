@@ -4,77 +4,106 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Antaeus Demo Workspace</title>
+<title>Try Antaeus on a sample workspace</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06080d;--bg2:#0d1321;--accent:#c07850;--accent2:#d4a574;--teal:#2dd4bf;--text:#e8e4df;--text2:#a09a92;--text3:#605c56;--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+:root{
+  --field:#f6f8fc;--ink:#0e1f40;--ink-2:#44506b;--ink-3:#8a93a8;
+  --orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--red:#ef4444;
+  --hair:rgba(14,31,64,0.12);--hair-soft:rgba(14,31,64,0.07);
+  --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:radial-gradient(circle at 16% 18%,rgba(212,165,116,0.14),transparent 24%),radial-gradient(circle at 82% 76%,rgba(45,212,191,0.1),transparent 20%),linear-gradient(180deg,var(--bg2) 0%,var(--bg) 42%,#050812 100%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
-.card{max-width:1120px;width:100%;background:rgba(15,23,42,0.88);border:1px solid rgba(255,255,255,0.06);border-radius:28px;padding:44px;backdrop-filter:blur(18px);box-shadow:0 24px 80px rgba(0,0,0,0.28);}
-.eyebrow{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent);font-weight:700;margin-bottom:18px;}
-.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,0.9fr);gap:28px;align-items:start;}
-.hero-copy{text-align:left;}
-.hero-side{padding:24px;border-radius:22px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.06);}
-.logo{font-family:var(--serif);font-size:1.95rem;margin-bottom:4px;}
-.logo span{color:var(--accent);}
-.sub{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);font-weight:600;margin-bottom:18px;}
-h1{font-family:var(--serif);font-size:2.7rem;line-height:1.03;margin-bottom:12px;max-width:760px;}
-p{font-size:1rem;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:760px;}
-.note-list{display:grid;gap:12px;margin:24px 0 28px;}
-.note{padding:16px 18px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:0.88rem;color:var(--text2);line-height:1.55;}
-.note strong{display:block;color:var(--text);margin-bottom:4px;font-size:0.8rem;letter-spacing:0.03em;text-transform:uppercase;}
-.hero-side h2{font-family:var(--serif);font-size:1.35rem;margin-bottom:10px;}
-.hero-side p{font-size:0.9rem;margin-bottom:14px;}
-.proof-list{list-style:none;display:grid;gap:10px;margin-top:14px;}
-.proof-list li{font-size:0.86rem;color:var(--text2);line-height:1.5;padding-left:18px;position:relative;}
-.proof-list li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:50%;background:rgba(212,165,116,0.9);}
-.quick-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
-.link-chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.035);color:var(--text);text-decoration:none;font-size:0.82rem;font-weight:700;letter-spacing:0.02em;transition:all 0.2s;}
-.link-chip:hover{border-color:rgba(212,165,116,0.35);background:rgba(212,165,116,0.08);}
-.scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:34px 0 18px;}
-.btn{padding:22px 20px;border-radius:22px;font-size:0.96rem;font-weight:700;border:none;cursor:pointer;font-family:var(--sans);transition:all 0.2s;text-align:left;min-height:214px;}
-.btn .scenario-type{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;opacity:0.72;margin-bottom:10px;}
-.btn .scenario-title{display:block;font-size:1.2rem;margin-bottom:10px;}
-.btn .scenario-meta{display:block;font-size:0.78rem;font-weight:600;opacity:0.86;margin-bottom:12px;}
-.btn .scenario-body{display:block;font-size:0.88rem;font-weight:500;line-height:1.6;opacity:0.96;}
-.btn-mm{background:linear-gradient(145deg,rgba(192,120,80,0.18),rgba(192,120,80,0.06));color:#fff;border:1px solid rgba(192,120,80,0.28);}
-.btn-mm:hover{background:linear-gradient(145deg,rgba(192,120,80,0.24),rgba(192,120,80,0.1));transform:translateY(-2px);}
-.btn-ent{background:linear-gradient(145deg,rgba(45,212,191,0.14),rgba(45,212,191,0.05));color:#dffcf7;border:1px solid rgba(45,212,191,0.22);}
-.btn-ent:hover{background:linear-gradient(145deg,rgba(45,212,191,0.2),rgba(45,212,191,0.08));transform:translateY(-2px);}
-.toolbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
-.btn-clear{padding:10px 20px;border-radius:999px;font-size:0.78rem;font-weight:700;border:1px solid rgba(239,68,68,0.22);background:transparent;color:#ff8b82;cursor:pointer;font-family:var(--sans);}
-.btn-clear:hover{background:rgba(239,68,68,0.06);}
-.toolbar-copy{font-size:0.82rem;color:var(--text2);}
-.status{margin-top:20px;font-family:var(--mono);font-size:0.76rem;color:var(--text3);min-height:54px;line-height:1.7;padding:16px;border-radius:18px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);}
-.status.ok{color:#4a9e6e;}
-.count{font-family:var(--mono);font-size:0.68rem;color:var(--text3);margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);}
-.btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:34px 0 18px;}
-@media (max-width:900px){
-body{padding:20px;}
-.card{padding:28px;}
-.hero{grid-template-columns:1fr;}
-.scenario-grid,.btns{grid-template-columns:1fr;}
-h1{font-size:2rem;}
+body{
+  font-family:var(--sans);color:var(--ink);min-height:100vh;
+  background:
+    radial-gradient(1100px 600px at 12% -8%, rgba(37,99,235,0.06), transparent 60%),
+    radial-gradient(900px 520px at 95% 100%, rgba(230,112,30,0.05), transparent 55%),
+    linear-gradient(rgba(14,31,64,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,31,64,0.035) 1px, transparent 1px),
+    var(--field);
+  background-size:auto,auto,33px 33px,33px 33px,auto;
+  display:flex;align-items:center;justify-content:center;padding:48px 24px;
+}
+.lane{max-width:880px;width:100%;}
+.mark{display:flex;align-items:center;gap:10px;margin-bottom:34px;}
+.mark svg{width:30px;height:30px;color:var(--ink);}
+.mark .word{font-family:var(--serif);font-size:1.35rem;letter-spacing:0.01em;}
+.kick{font-family:var(--mono);font-size:0.66rem;font-weight:500;text-transform:uppercase;letter-spacing:0.16em;color:var(--ink-3);margin-bottom:14px;}
+h1{font-family:var(--serif);font-size:clamp(2.1rem,4.6vw,3.1rem);line-height:1.06;margin-bottom:14px;max-width:640px;}
+.lede{font-size:1.02rem;color:var(--ink-2);line-height:1.65;max-width:600px;margin-bottom:8px;}
+.honest{font-size:0.86rem;color:var(--ink-3);line-height:1.6;max-width:600px;}
+.honest b{color:var(--ink-2);font-weight:600;}
+.picks{margin:34px 0 8px;border-top:1px solid var(--hair);}
+.pick{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:24px 4px;border-bottom:1px solid var(--hair-soft);}
+.pick .pk{font-family:var(--mono);font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--ink-3);margin-bottom:6px;}
+.pick .pt{font-family:var(--serif);font-size:1.3rem;margin-bottom:6px;}
+.pick .pb{font-size:0.9rem;color:var(--ink-2);line-height:1.6;max-width:520px;}
+.go{
+  appearance:none;border:0;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:0.92rem;
+  background:var(--orange);color:#fff;padding:13px 22px;border-radius:8px;white-space:nowrap;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.go:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(230,112,30,0.28);}
+.go:disabled{opacity:0.55;cursor:default;transform:none;box-shadow:none;}
+.status{font-family:var(--mono);font-size:0.74rem;color:var(--ink-3);line-height:1.7;margin-top:18px;min-height:1.2em;}
+.status.ok{color:var(--forest);}
+.status a{color:var(--orange);font-weight:700;}
+.count{display:none;}
+.foot{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid var(--hair);}
+.foot .in{font-size:0.88rem;color:var(--ink-2);}
+.foot a{color:var(--blue);font-weight:600;text-decoration:none;}
+.foot a:hover{text-decoration:underline;}
+.reset{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--sans);font-size:0.8rem;color:var(--ink-3);text-decoration:underline;margin-left:auto;}
+.reset:hover{color:var(--red);}
+@media (max-width:680px){
+  .pick{grid-template-columns:1fr;}
+  .go{justify-self:start;}
 }
 </style>
 </head>
 <body>
-<div class="card">
-    <div class="eyebrow">Self-Serve Demo Lane</div>
-    <div class="logo">antaeus<span>.</span></div>
-    <div class="sub">Sample workspace, real system flow</div>
-    <h1>Pick the demo that makes Antaeus believable in one session.</h1>
-    <p>This is the guided sample workspace for seeing how signal, territory, outbound, discovery, deal motion, proof, and handoff all stack inside one operating system.</p>
-    <div class="btns">
-        <button class="btn btn-mm" onclick="seed('mm')">Mid-Market Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$80K ACV - $500K quota - 6 deals</span></button>
-        <button class="btn btn-ent" onclick="seed('ent')">Enterprise Demo<br><span style="font-size:0.65rem;font-weight:500;opacity:0.8;">$180K ACV - $1.2M quota - 7 deals</span></button>
+<div class="lane" data-demo-lane="static">
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2">
+      <path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/>
+    </svg>
+    <span class="word">antaeus</span>
+  </div>
+
+  <div class="kick">A sample workspace &middot; nothing here touches real data</div>
+  <h1>Try Antaeus on a working sales motion.</h1>
+  <p class="lede">Pick a sample company. A full workspace loads &mdash; accounts being watched, live deals, calls logged, a pilot in flight &mdash; and you land where a real operator starts the morning: the one move that matters most, already picked.</p>
+  <p class="honest"><b>What's sample:</b> the accounts, deals, and history. <b>What's real:</b> every room, every read, every move the system makes on that data.</p>
+
+  <div class="picks">
+    <div class="pick">
+      <div>
+        <div class="pk">Sample one</div>
+        <div class="pt">A founder selling $80k deals</div>
+        <div class="pb">A $500k number, six live deals, one win and one loss on the books &mdash; the founder-to-first-hire motion most teams start from.</div>
+      </div>
+      <button class="go" onclick="seed('mm')">Load it &rarr;</button>
     </div>
-    <div class="toolbar">
-        <div class="toolbar-copy">Choose one narrative, seed the workspace, and move straight into dashboard.</div>
-        <button class="btn-clear" onclick="clearAll()">Reset Demo Workspace</button>
+    <div class="pick">
+      <div>
+        <div class="pk">Sample two</div>
+        <div class="pt">A team selling $180k deals</div>
+        <div class="pb">A $1.2M number, seven live deals, more people in every room &mdash; longer cycles, heavier sign-off, a pilot that has to hold up.</div>
+      </div>
+      <button class="go" onclick="seed('ent')">Load it &rarr;</button>
     </div>
-    <div class="status" id="status"></div>
-    <div class="count" id="count"></div>
+  </div>
+
+  <div class="status" id="status"></div>
+  <div class="count" id="count"></div>
+
+  <div class="foot">
+    <span class="in">Have a workspace? <a href="/login.html">Sign in</a></span>
+    <span class="in"><a href="/start.html">What is Antaeus?</a></span>
+    <button class="reset" onclick="clearAll()">Clear the sample from this browser</button>
+  </div>
 </div>
 <script src="/js/demo-storage-bootstrap.js"></script>
 <script src="/js/demo-seed-runtime.js"></script>

@@ -64,7 +64,7 @@ describe("convenience builders", () => {
     });
 
     it("hrefToPoC targets poc-framework", () => {
-        expect(hrefToPoC("Acme").startsWith("/poc-framework/?")).toBe(true);
+        expect(hrefToPoC("Acme").startsWith("/pilot-desk/?")).toBe(true);
     });
 
     it("hrefToDiscoveryStudio targets discovery-studio + carries account", () => {

@@ -162,7 +162,7 @@ function EmptyToday(): JSX.Element {
                 <a class="ds-btn ds-btn--secondary" href="/deal-workspace/">
                     <Icon name="deal" size={16} /> {t("Load a live deal")}
                 </a>
-                <a class="ds-btn ds-btn--secondary" href="/sourcing-workbench/">
+                <a class="ds-btn ds-btn--secondary" href="/prospecting-desk/">
                     <Icon name="find" size={16} /> {t("Push prospects into the funnel")}
                 </a>
             </div>

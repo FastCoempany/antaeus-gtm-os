@@ -142,18 +142,18 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
     },
     {
         id: "advisor-deploy",
-        kicker: "ADVISOR DEPLOY",
-        label: "Advisor Deploy",
-        href: "/advisor-deploy/",
+        kicker: "CALL IN A FAVOR",
+        label: "Call in a Favor",
+        href: "/call-in-a-favor/",
         family: "live-instrument",
-        keywords: ["backchannel", "advisor", "investor", "introduction"],
+        keywords: ["backchannel", "advisor", "investor", "introduction", "favor"],
         description: "Route one backchannel ask before spending external trust."
     },
     {
         id: "negotiation",
-        kicker: "NEGOTIATION",
-        label: "Negotiation",
-        href: "/negotiation/",
+        kicker: "GETTING TO SIGNED",
+        label: "Getting to Signed",
+        href: "/getting-to-signed/",
         family: "live-instrument",
         keywords: [
             "cfo",
@@ -163,6 +163,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
             "pricing",
             "discount",
             "concession",
+            "negotiation",
             "terms",
             "objection",
             "indemnification"
@@ -191,20 +192,20 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
     },
     {
         id: "sourcing-workbench",
-        kicker: "SOURCING WORKBENCH",
-        label: "Sourcing Workbench",
-        href: "/sourcing-workbench/",
+        kicker: "PROSPECTING DESK",
+        label: "Prospecting Desk",
+        href: "/prospecting-desk/",
         family: "decision-bench",
-        keywords: ["prospect", "research", "query", "leverage"],
+        keywords: ["prospect", "research", "query", "sourcing"],
         description: "Push prospects from query card to qualified account."
     },
     {
         id: "poc-framework",
-        kicker: "POC FRAMEWORK",
-        label: "PoC Framework",
-        href: "/poc-framework/",
+        kicker: "PILOT DESK",
+        label: "Pilot Desk",
+        href: "/pilot-desk/",
         family: "decision-bench",
-        keywords: ["proof", "claim", "kill-rule", "metric"],
+        keywords: ["poc", "pilot", "adoption", "evidence"],
         description: "Turn a pilot into something the buyer's boss can act on — claim, owner, metric, kill rule."
     },
 

@@ -1,0 +1,173 @@
+import { render } from "preact";
+import { AdvisorDeploy } from "./AdvisorDeploy";
+import { AdvisorDeployDS } from "./ds/AdvisorDeployDS";
+import { CallInAFavorV4 } from "./v4/CallInAFavorV4";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/advisor-deploy-ds.css";
+import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
+import {
+    setAdvisors,
+    setDealId,
+    setDealOptions,
+    setDeployments,
+    startAdvisorPersistence,
+    startDeploymentPersistence
+} from "./state";
+import { loadAdvisors, loadDeployments } from "./lib/persistence";
+import { loadDeals } from "./lib/deal-loader";
+import { readInboundDealId } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { bootAdvisorProfileCloudPersistence } from "./lib/cloud-persistence-profile";
+
+/**
+ * Entry point for the Advisor Deploy Preact rebuild
+ * (Phase 4 / Room 10 per ADR-001 §6).
+ *
+ * Served at /call-in-a-favor/ in dev + prod. Behind Posthog feature
+ * flag `room_advisor_deploy_v2`. Wave 6 wires the legacy
+ * `app/call-in-a-favor/index.html` flag-redirect.
+ *
+ * Boot order:
+ *   1. initObservability — Sentry + Posthog
+ *   2. seed advisors + deployments from localStorage
+ *   3. start the persistence loops (mirror writes back)
+ *   4. render — Preact mounts the live desk
+ *
+ * Wave 5 adds the inbound cross-room context loaders + URL `?deal=`.
+ *
+ * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
+ */
+
+initObservability();
+
+const root = document.getElementById("app");
+if (!root) {
+    throw new Error(
+        "Call in a Favor could not mount: #app root element missing from index.html"
+    );
+}
+
+const flagOn = isFeatureEnabled("room_advisor_deploy_v2");
+if (!flagOn) {
+    console.info(
+        "[advisor-deploy] Feature flag room_advisor_deploy_v2 is OFF for this user. " +
+            "Rendering anyway (Waves 1-5 are internal-test only)."
+    );
+}
+
+setAdvisors(loadAdvisors());
+setDeployments(loadDeployments());
+
+// Wave 5 — seed deal options from Phase 4 / Room 1's mirror, then
+// honor URL inbound (?deal= or fallback ?focusObject=). When the
+// inbound value matches a deal, point the desk at it; otherwise
+// fall back to the first active deal so the rep lands on a routeable
+// surface (legacy lines 218 + 228-230: try-id-then-name).
+//
+// PR #26 Codex P2 fix: cross-room handoffs (e.g. PoC Framework →
+// Advisor Deploy) thread account name in `?focusObject=` without a
+// `deal=` param. Resolve by id first, then by accountName
+// (case-insensitive) so those handoffs land on the right deal
+// instead of falling through to "first active".
+const deals = loadDeals();
+setDealOptions(deals);
+const inboundValue = readInboundDealId();
+function resolveInboundDeal(value: string | null): string | null {
+    if (!value) return null;
+    const byId = deals.find((d) => d.id === value);
+    if (byId) return byId.id;
+    const lower = value.trim().toLowerCase();
+    if (!lower) return null;
+    const byName = deals.find(
+        (d) => d.accountName.trim().toLowerCase() === lower
+    );
+    return byName ? byName.id : null;
+}
+const inbound = resolveInboundDeal(inboundValue);
+if (inbound) {
+    setDealId(inbound);
+} else {
+    const firstActive = deals.find(
+        (d) => d.stage !== "closed-won" && d.stage !== "closed-lost"
+    );
+    if (firstActive) setDealId(firstActive.id);
+}
+
+startAdvisorPersistence();
+startDeploymentPersistence();
+
+// Design-system migration (canon §6, recovery flow). The DS surface
+// composes the component library; the existing room renders otherwise.
+// The spend-read engine, the ask builder, the recommend logic,
+// persistence, and the deal sync-back are shared and unchanged. `?ds=1`
+// is a preview escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_advisor_deploy_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_advisor_deploy_legacy");
+}
+
+// Wire-to-production v4 (canon §4.16, the guided backchannel, settled
+// 2026-07-06 — renamed Call in a Favor on the face; the served path
+// stays until the full path-rename sweep). Default ON;
+// room_call_in_a_favor_v4_off is the kill-switch; ?v4=0/1 hatches.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_call_in_a_favor_v4_off"));
+
+render(
+    useV4 ? (
+        <CallInAFavorV4 />
+    ) : useDsSurface ? (
+        <AdvisorDeployDS />
+    ) : (
+        <AdvisorDeploy />
+    ),
+    root
+);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
+
+// Async cloud load for both deployment history (advisor_deployments
+// table) and the advisor REGISTRY rolodex (studio_artifacts with
+// kind='advisor.profile'). Both run in parallel so first paint isn't
+// blocked. Each handles its own cloud / migrated / empty / local-only
+// path independently.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await Promise.all([
+            bootCloudPersistence(client),
+            bootAdvisorProfileCloudPersistence(client)
+        ]);
+    } catch (err) {
+        console.warn(
+            "[advisor-deploy] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

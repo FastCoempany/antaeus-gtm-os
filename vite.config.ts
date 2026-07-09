@@ -7,7 +7,8 @@ import {
     mkdirSync,
     readdirSync,
     rmSync,
-    statSync
+    statSync,
+    writeFileSync
 } from "fs";
 
 /**
@@ -57,6 +58,33 @@ function flattenSrcPages(): Plugin {
             });
 
             rmSync(distSrc, { recursive: true, force: true });
+
+            // 2026-07-09 room renames (canon §4.6/§4.15/§4.16/§4.16b):
+            // Sourcing Workbench → Prospecting Desk, PoC Framework →
+            // Pilot Desk, Negotiation → Getting to Signed, Advisor
+            // Deploy → Call in a Favor now serve at their plain-language
+            // paths. Emit redirect stubs at the retired paths so
+            // bookmarks and stored continuity params
+            // (returnTo=/poc-framework/ …) keep working. Query + hash
+            // are preserved.
+            const RENAMED_PATHS: ReadonlyArray<[string, string]> = [
+                ["sourcing-workbench", "prospecting-desk"],
+                ["poc-framework", "pilot-desk"],
+                ["negotiation", "getting-to-signed"],
+                ["advisor-deploy", "call-in-a-favor"]
+            ];
+            for (const [oldPath, newPath] of RENAMED_PATHS) {
+                const stubDir = resolve(__dirname, "dist", oldPath);
+                mkdirSync(stubDir, { recursive: true });
+                writeFileSync(
+                    resolve(stubDir, "index.html"),
+                    `<!doctype html><html><head><meta charset="utf-8">` +
+                        `<title>Moved</title>` +
+                        `<script>location.replace("/${newPath}/" + location.search + location.hash);</script>` +
+                        `<meta http-equiv="refresh" content="0;url=/${newPath}/">` +
+                        `</head><body></body></html>\n`
+                );
+            }
         }
     };
 }
@@ -153,13 +181,13 @@ export default defineConfig({
                 ),
 
                 // Phase 4 / Room 5 — PoC Framework Preact rebuild. Served
-                // at /poc-framework/. Behind Posthog feature flag
+                // at /pilot-desk/. Behind Posthog feature flag
                 // `room_poc_framework_v2`; legacy
                 // `app/poc-framework/index.html` redirects here when on
                 // (Wave 6 wires the redirect script).
-                "poc-framework": resolve(
+                "pilot-desk": resolve(
                     __dirname,
-                    "src/poc-framework/index.html"
+                    "src/pilot-desk/index.html"
                 ),
 
                 // Phase 4 / Room 6 — Outbound Studio Preact rebuild.
@@ -204,13 +232,13 @@ export default defineConfig({
                 ),
 
                 // Phase 4 / Room 10 — Advisor Deploy Preact rebuild.
-                // Served at /advisor-deploy/. Behind Posthog feature flag
+                // Served at /call-in-a-favor/. Behind Posthog feature flag
                 // `room_advisor_deploy_v2`; legacy
                 // `app/advisor-deploy/index.html` redirects here when on
                 // (Wave 6 wires the redirect script).
-                "advisor-deploy": resolve(
+                "call-in-a-favor": resolve(
                     __dirname,
-                    "src/advisor-deploy/index.html"
+                    "src/call-in-a-favor/index.html"
                 ),
 
                 // Phase 4 / Room 11 — ICP Studio Preact rebuild.
@@ -233,13 +261,13 @@ export default defineConfig({
                 ),
 
                 // Phase 4 / Room 13 — Sourcing Workbench Preact rebuild.
-                // Served at /sourcing-workbench/. Behind Posthog feature
+                // Served at /prospecting-desk/. Behind Posthog feature
                 // flag `room_sourcing_workbench_v2`; legacy
                 // `app/sourcing-workbench/index.html` redirects here when
                 // on.
-                "sourcing-workbench": resolve(
+                "prospecting-desk": resolve(
                     __dirname,
-                    "src/sourcing-workbench/index.html"
+                    "src/prospecting-desk/index.html"
                 ),
 
                 // Phase 4 / Room 14 — Quota Workback Preact rebuild.
@@ -290,12 +318,12 @@ export default defineConfig({
                 ),
 
                 // Phase 3 of ADR-003 — Negotiation rebuild (greenfield
-                // from canon §4.16b placeholder). Served at /negotiation/.
+                // from canon §4.16b placeholder). Served at /getting-to-signed/.
                 // Behind Posthog flag `room_negotiation_v2`. Carries
                 // forward procurement + finance scripts seeded from the
                 // legacy `antaeus_studio_cfo_v2` localStorage shape
                 // retired in the architecture-reset.
-                negotiation: resolve(__dirname, "src/negotiation/index.html"),
+                "getting-to-signed": resolve(__dirname, "src/getting-to-signed/index.html"),
 
                 // Briefing B.0b — intelligence surface scaffold per canon
                 // §4.21 + ADR-006. Served at /briefing/. Behind Posthog

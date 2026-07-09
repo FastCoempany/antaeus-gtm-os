@@ -5,7 +5,7 @@ description: Open PoC Framework with the top-pressure open deal pre-linked, read
 keywords: [proof, poc, deal, hottest, pressure]
 action:
   kind: compose-context-and-route
-  target: /poc-framework/
+  target: /pilot-desk/
   sources: source=top-pressure-open-deal|paramName=deal|required=true
 ---
 

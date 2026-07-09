@@ -28,9 +28,9 @@ const ROOM_FOR_TYPE: Partial<Record<FocusedObjectType, RoomTarget>> = {
     deal: { path: "/deal-workspace/", label: "Deal Workspace" },
     account: { path: "/signal-console/", label: "Signal Console" },
     signal: { path: "/signal-console/", label: "Signal Console" },
-    proof: { path: "/poc-framework/", label: "PoC Framework" },
+    proof: { path: "/pilot-desk/", label: "Pilot Desk" },
     call: { path: "/call-planner/", label: "Call Planner" },
-    advisor: { path: "/advisor-deploy/", label: "Advisor Deploy" },
+    advisor: { path: "/call-in-a-favor/", label: "Call in a Favor" },
     focus: { path: "/territory-architect/", label: "Territory Architect" },
     approach: { path: "/territory-architect/", label: "Territory Architect" }
 };

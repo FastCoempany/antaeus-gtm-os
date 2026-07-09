@@ -64,9 +64,9 @@ describe("buildObservationHref", () => {
         const r = buildObservationHref(
             mkObs({ relatedObjectType: "proof", relatedObjectId: "p_001" })
         );
-        expect(r!.roomLabel).toBe("PoC Framework");
+        expect(r!.roomLabel).toBe("Pilot Desk");
         const url = new URL(r!.href, "https://antaeus.app");
-        expect(url.pathname).toBe("/poc-framework/");
+        expect(url.pathname).toBe("/pilot-desk/");
     });
 
     it("routes calls to Call Planner", () => {
@@ -80,7 +80,7 @@ describe("buildObservationHref", () => {
         const r = buildObservationHref(
             mkObs({ relatedObjectType: "advisor", relatedObjectId: "adv_a" })
         );
-        expect(r!.roomLabel).toBe("Advisor Deploy");
+        expect(r!.roomLabel).toBe("Call in a Favor");
     });
 
     it("encodes special characters in the object id safely", () => {

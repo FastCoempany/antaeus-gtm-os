@@ -84,7 +84,7 @@ describe("toPulling", () => {
         expect(p).toBeDefined();
         expect(p!.verb).toBe("Source prospects");
         expect(p!.object).toBe("Software (B2B SaaS)");
-        expect(p!.href).toContain("/sourcing-workbench/");
+        expect(p!.href).toContain("/prospecting-desk/");
         expect(p!.reasons.length).toBeGreaterThan(0);
     });
 });

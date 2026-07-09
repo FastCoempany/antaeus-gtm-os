@@ -58,7 +58,7 @@ describe("buildLinkedInRoomHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildLinkedInRoomHref({
-            href: "/poc-framework/",
+            href: "/pilot-desk/",
             focusObject: "Acme",
             roomLabel: "PoC",
             extra: { stage: "demo", blank: "" }

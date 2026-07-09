@@ -143,7 +143,7 @@ export interface Believability {
     readonly read: string;
     readonly cost: string | null;
     /** The one optimistic input + the benchmark value to reset it to. */
-    readonly fix: { key: "win" | "m2o"; value: number } | null;
+    readonly fix: { key: "win" | "m2o" | "t2m"; value: number } | null;
 }
 
 export function buildBelievability(
@@ -151,12 +151,14 @@ export function buildBelievability(
     benchmark: Benchmark,
     metrics: PlanMetrics
 ): Believability {
-    // Relative optimism vs benchmark on the two assumptions a first-
-    // timer actually sets: win rate and meetings→real-opportunities.
+    // Relative optimism vs benchmark on the three assumptions a first-
+    // timer actually sets: win rate, meetings→real-opportunities, and
+    // touch→meeting (higher than benchmark = fewer touches assumed).
     const winOver = benchmark.winRate > 0 ? inputs.win / benchmark.winRate : 1;
     const m2oOver = benchmark.m2o > 0 ? inputs.m2o / benchmark.m2o : 1;
-    const worst = m2oOver >= winOver ? "m2o" : "win";
-    const over = Math.max(winOver, m2oOver);
+    const t2mOver = benchmark.t2m > 0 ? inputs.t2m / benchmark.t2m : 1;
+    const over = Math.max(winOver, m2oOver, t2mOver);
+    const worst = over === t2mOver ? "t2m" : over === m2oOver ? "m2o" : "win";
 
     if (over <= 1.1) {
         return {
@@ -167,6 +169,19 @@ export function buildBelievability(
             ),
             cost: null,
             fix: null
+        };
+    }
+    if (worst === "t2m") {
+        const honest = computeMetrics({ ...inputs, t2m: benchmark.t2m }, EMPTY_COVERAGE);
+        const moreADay = Math.max(0, Math.round((honest.touchesDay - metrics.touchesDay) * 2) / 2);
+        return {
+            solid: false,
+            read: `${t("The one stretch: you're assuming", { class: "body" })} ${inputs.t2m}% ${t("of your messages and calls turn into a first meeting — teams your size usually see about", { class: "body" })} ${benchmark.t2m}%.`,
+            cost:
+                moreADay > 0
+                    ? `${t("At", { class: "body" })} ${benchmark.t2m}% ${t("that means about", { class: "body" })} ${moreADay} ${t("more messages & calls a day — plan for it now, not in month three.", { class: "body" })}`
+                    : null,
+            fix: { key: "t2m", value: benchmark.t2m }
         };
     }
     if (worst === "m2o") {

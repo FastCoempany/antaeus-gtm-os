@@ -1,0 +1,152 @@
+import { render } from "preact";
+import { PocFramework } from "./PocFramework";
+import { PocFrameworkDS } from "./ds/PocFrameworkDS";
+import { PilotDeskV4, bootPilotExtras } from "./v4/PilotDeskV4";
+import { bootDensity } from "@/lib/density";
+import "@/styles/tokens.css";
+import "@/components/components.css";
+import "./ds/poc-framework-ds.css";
+import { initObservability, isFeatureEnabled } from "@/lib/observability";
+import { createDataClient } from "@/lib/data-client";
+import { readContinuity } from "@/lib/continuity";
+import {
+    linkedDeals,
+    patchDraft,
+    setAllProofs,
+    setLinkedDeals,
+    startProofPersistence
+} from "./state";
+import { loadProofs } from "./lib/persistence";
+import { loadDealsForLinking } from "./lib/deal-sync";
+import { readInboundDealId } from "./lib/handoff";
+import { bootCloudPersistence } from "./lib/cloud-persistence";
+
+/**
+ * Entry point for the PoC Framework Preact rebuild
+ * (Phase 4 / Room 5 per ADR-001 §6).
+ *
+ * Served at /pilot-desk/ in dev + prod. Behind Posthog feature
+ * flag `room_poc_framework_v2`. Wave 6 will wire the legacy
+ * `app/pilot-desk/index.html` flag-redirect.
+ *
+ * Boot order:
+ *   1. initObservability — Sentry + Posthog
+ *   2. render — Preact mounts; Wave 1 renders empty state until
+ *      Wave 4 wires persistence + Wave 5 wires deal sync
+ *
+ * Ref: deliverables/adr/adr-001-foundation-stack-migration-2026-04-21.md §6
+ */
+
+initObservability();
+
+const root = document.getElementById("app");
+if (!root) {
+    throw new Error(
+        "PoC Framework could not mount: #app root element missing from index.html"
+    );
+}
+
+const flagOn = isFeatureEnabled("room_poc_framework_v2");
+if (!flagOn) {
+    console.info(
+        "[poc-framework] Feature flag room_poc_framework_v2 is OFF for this user. " +
+            "Rendering anyway (Waves 1-5 are internal-test only)."
+    );
+}
+
+// Wave 4 — seed proofs from gtmos_poc_data, then wire the persistence
+// loop. Subsequent saveDraft/upsertProof calls write back automatically.
+setAllProofs(loadProofs());
+startProofPersistence();
+
+// Wave 5 — load Deal Workspace deals for the linked-deal dropdown +
+// honor inbound `?deal=<id>` URL param so a route-in from another room
+// auto-populates the form's linkedDealId.
+setLinkedDeals(loadDealsForLinking());
+const inboundDealId = readInboundDealId();
+if (inboundDealId) {
+    patchDraft({ linkedDealId: inboundDealId });
+} else {
+    // Fall back to the canonical `?focusObject=<account name>` pattern
+    // some upstream rooms thread (Future Autopsy / Advisor Deploy /
+    // Signal Console all pass an account name when the deal id isn't
+    // known to the source). Resolve the account name to a deal id by
+    // case-insensitive match against the loaded linked-deal list.
+    const ctx = readContinuity();
+    const focus = ctx.focusObject;
+    if (focus) {
+        const lower = focus.toLowerCase();
+        const match = linkedDeals.value.find(
+            (d) => d.accountName.toLowerCase() === lower
+        );
+        if (match) patchDraft({ linkedDealId: match.id });
+    }
+}
+
+// Design-system migration (canon §6, recovery flow). The DS surface
+// composes the component library; the existing room renders otherwise.
+// The quality engine, the heat ledger, the doc generators, persistence,
+// and the deal sync-back are shared and unchanged. `?ds=1` is a preview
+// escape-hatch.
+const dsParam = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("ds");
+    } catch {
+        return null;
+    }
+})();
+let useDsSurface: boolean;
+if (dsParam === "1") {
+    useDsSurface = true;
+} else if (dsParam === "0") {
+    useDsSurface = false;
+} else {
+    // Default to the new design-system surface; the legacy surface is the
+    // safety net, reachable by flipping room_poc_framework_legacy ON in Posthog.
+    useDsSurface = !isFeatureEnabled("room_poc_framework_legacy");
+}
+
+// Wire-to-production v4 (canon §4.15, the guided pilot, settled
+// 2026-07-06 — renamed Pilot Desk on the face; the served path stays
+// until the full path-rename sweep). Default ON; room_pilot_desk_v4_off
+// is the kill-switch back to the DS surface; ?v4=0/1 is the hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_pilot_desk_v4_off"));
+
+if (useV4) bootPilotExtras();
+render(
+    useV4 ? (
+        <PilotDeskV4 />
+    ) : useDsSurface ? (
+        <PocFrameworkDS />
+    ) : (
+        <PocFramework />
+    ),
+    root
+);
+
+// Boot the density gradient so the DS surface's primitives render at the
+// workspace's chosen density (defensive — no-ops without a session).
+void bootDensity();
+
+// Async cloud load — replaces local proof state if cloud has rows,
+// or migrates local up if cloud is empty. Doesn't block first paint.
+void (async (): Promise<void> => {
+    try {
+        const client = createDataClient();
+        await bootCloudPersistence(client);
+    } catch (err) {
+        console.warn(
+            "[poc-framework] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+})();

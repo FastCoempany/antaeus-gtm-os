@@ -52,6 +52,7 @@ export function applyBenchmark(): void {
         ...inputs.value,
         win: b.winRate,
         m2o: b.m2o,
+        t2m: b.t2m,
         cycle: b.cycle
     };
 }

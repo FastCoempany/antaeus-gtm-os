@@ -1,4 +1,5 @@
 import { reportError } from "@/lib/observability";
+import { benchmarkFor } from "./engine";
 import {
     DEFAULT_INPUTS,
     type AcvBand,
@@ -31,6 +32,17 @@ function asNumber(v: unknown, fallback = 0): number {
     return fallback;
 }
 
+/**
+ * The legacy default touch→meeting was 0.7% — a spray-and-pray cold
+ * rate that made the derived daily number absurd (~250 touches/day at
+ * benchmark inputs). Founder-corrected 2026-07-09: the default is the
+ * band benchmark (~2%). A stored 0.7 is the old default persisted on
+ * first load, not an operator's choice — normalize it forward.
+ */
+function normalizeT2m(v: number, acv: number): number {
+    return v === 0.7 ? benchmarkFor(acv).t2m : v;
+}
+
 export function loadInputs(s?: StorageLike | null): PlanInputs {
     const store = getStorage(s);
     if (!store) return DEFAULT_INPUTS;
@@ -41,12 +53,19 @@ export function loadInputs(s?: StorageLike | null): PlanInputs {
         const seed = seedRaw
             ? (JSON.parse(seedRaw) as Record<string, unknown>)
             : {};
+        const acv = asNumber(saved["acv"] ?? seed["avg_deal_size"], 50_000);
         return {
             quota: asNumber(saved["quota"] ?? seed["annual_quota"], 0),
-            acv: asNumber(saved["acv"] ?? seed["avg_deal_size"], 50_000),
+            acv,
             win: asNumber(saved["win"] ?? seed["win_rate"], 20),
             m2o: asNumber(saved["m2o"], 35),
-            t2m: asNumber(saved["t2m"] ?? seed["touch_to_meeting"], 0.7),
+            t2m: normalizeT2m(
+                asNumber(
+                    saved["t2m"] ?? seed["touch_to_meeting"],
+                    benchmarkFor(acv).t2m
+                ),
+                acv
+            ),
             show: asNumber(saved["show"] ?? seed["show_rate"], 80),
             days: asNumber(saved["days"], 20),
             tpa: asNumber(saved["tpa"], 8),

@@ -44,7 +44,7 @@ describe("the motion map registry", () => {
     });
 
     it("maps a targetUrl back to its room for the suggested glow", () => {
-        expect(roomIdForUrl("/negotiation/?deal=d1&returnTo=x")).toBe("getting-to-signed");
+        expect(roomIdForUrl("/getting-to-signed/?deal=d1&returnTo=x")).toBe("getting-to-signed");
         expect(roomIdForUrl("/dashboard/")).toBe("dashboard");
     });
 });

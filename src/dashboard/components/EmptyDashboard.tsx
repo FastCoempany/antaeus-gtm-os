@@ -59,7 +59,7 @@ export function EmptyDashboard(): JSX.Element {
                     </p>
                     <a
                         class="db-empty__path-cta"
-                        href="/sourcing-workbench/?returnTo=%2Fdashboard%2F&returnLabel=Back%20to%20Dashboard&fromMode=system&fromSurface=dashboard-empty"
+                        href="/prospecting-desk/?returnTo=%2Fdashboard%2F&returnLabel=Back%20to%20Dashboard&fromMode=system&fromSurface=dashboard-empty"
                     >
                         {t("Add prospects to the funnel")}
                     </a>

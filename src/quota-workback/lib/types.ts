@@ -32,7 +32,7 @@ export const DEFAULT_INPUTS: PlanInputs = {
     acv: 50_000,
     win: 20,
     m2o: 35,
-    t2m: 0.7,
+    t2m: 2,
     show: 80,
     days: 20,
     tpa: 8,
@@ -51,6 +51,12 @@ export interface Benchmark {
     readonly cycle: number;
     /** Meeting-to-opp, percentage. */
     readonly m2o: number;
+    /**
+     * Touch-to-meeting, percentage — of every 100 messages/calls, how
+     * many turn into a first meeting. Signal-driven outbound (the whole
+     * Antaeus premise) lands well above spray-and-pray cold rates.
+     */
+    readonly t2m: number;
     /** Coverage multiple (e.g., 3.0x). */
     readonly coverage: number;
     readonly winRange: string;
@@ -65,6 +71,7 @@ export const ACV_BENCHMARKS: Readonly<Record<AcvBand, Benchmark>> = {
         winRate: 25,
         cycle: 45,
         m2o: 40,
+        t2m: 2.5,
         coverage: 3.0,
         winRange: "20-30%",
         cycleRange: "30-60 days"
@@ -76,6 +83,7 @@ export const ACV_BENCHMARKS: Readonly<Record<AcvBand, Benchmark>> = {
         winRate: 20,
         cycle: 90,
         m2o: 35,
+        t2m: 2,
         coverage: 3.5,
         winRange: "15-25%",
         cycleRange: "60-120 days"
@@ -87,6 +95,7 @@ export const ACV_BENCHMARKS: Readonly<Record<AcvBand, Benchmark>> = {
         winRate: 15,
         cycle: 180,
         m2o: 30,
+        t2m: 1.5,
         coverage: 4.5,
         winRange: "10-18%",
         cycleRange: "120-270 days"
@@ -98,6 +107,7 @@ export const ACV_BENCHMARKS: Readonly<Record<AcvBand, Benchmark>> = {
         winRate: 12,
         cycle: 240,
         m2o: 25,
+        t2m: 1,
         coverage: 5.0,
         winRange: "8-15%",
         cycleRange: "180-360 days"

@@ -610,8 +610,8 @@ export function ProofSheet(): JSX.Element {
                     sub={t("One primary route in orange; the rest secondary. Each threads the continuity params so context travels.", { class: "body" })}
                     routes={[
                         { label: t("Pre-mortem this deal"), href: "/future-autopsy/", primary: true },
-                        { label: t("Forge a proof"), href: "/poc-framework/" },
-                        { label: t("Deploy an advisor"), href: "/advisor-deploy/" }
+                        { label: t("Forge a proof"), href: "/pilot-desk/" },
+                        { label: t("Deploy an advisor"), href: "/call-in-a-favor/" }
                     ]}
                 />
             </main>
