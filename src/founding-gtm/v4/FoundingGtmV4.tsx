@@ -41,8 +41,8 @@ const STATUS_WORD: Record<AuthoredSection["status"], string> = {
 export function FoundingGtmV4(): JSX.Element {
     const sections = authoredSections.value;
     const ready = countReady(sections).ready;
-    const idx = Math.max(0, SECTION_IDS.indexOf(openId.value));
     const open = sections.find((s) => s.id === openId.value) ?? sections[0];
+    const idx = open ? Math.max(0, SECTION_IDS.indexOf(open.id)) : 0;
     const verdict = readinessVerdictLabel.value;
 
     function page(delta: number): void {

@@ -81,9 +81,11 @@ export function FutureAutopsyV4(): JSX.Element {
         );
     }
 
-    const idx = Math.max(0, universe.findIndex((v) => v.id === vitals?.id));
-    const current = universe[idx]!;
-    if (!vitals) selectDeal(current.id);
+    // The scene ALWAYS follows selectedVitals (which is what the autopsy
+    // doc is generated from) — never a diverging universe index.
+    const current = vitals ?? universe[0]!;
+    const uIdx = universe.findIndex((v) => v.id === current.id);
+    const idx = uIdx >= 0 ? uIdx : 0;
 
     function step(delta: number): void {
         const next = universe[(idx + delta + universe.length) % universe.length];
@@ -142,7 +144,7 @@ export function FutureAutopsyV4(): JSX.Element {
                     {allDone ? (
                         <>{current.name} {t("is")} <b class="fa4-g">{t("back on a path to close-won.", { class: "body" })}</b></>
                     ) : (
-                        <>{current.name} {t("is")} <b class="fa4-rr">{t("close-lost in about")} {horizon} {t("days")}</b> {t("if nothing changes.")}</>
+                        <>{current.name} {t("is")} <b class="fa4-rr">{t("headed to close-lost")}</b> {t("— inside the next")} {horizon} {t("days if nothing changes.", { class: "body" })}</>
                     )}
                 </h1>
                 <p class="fa4-sub">
@@ -156,7 +158,7 @@ export function FutureAutopsyV4(): JSX.Element {
                 <div class="fa4-line">
                     <div class={`fa4-track${allDone ? " is-won" : ""}`}>
                         <span class="fa4-now" style={`left:${nowPct}%`}><i /><em>{t("now")}{quiet > 0 ? ` · ${t("quiet")} ${quiet}d` : ""}</em></span>
-                        <span class="fa4-death"><i /><em>{allDone ? t("close-won") : `${t("day")} ${horizon} · ${t("close-lost")}`}</em></span>
+                        <span class="fa4-death"><i /><em>{allDone ? t("close-won") : `${t("inside")} ${horizon}d · ${t("close-lost")}`}</em></span>
                     </div>
                 </div>
 
@@ -174,7 +176,10 @@ export function FutureAutopsyV4(): JSX.Element {
                     <div class="fa4-ah">{t("What kills it — the evidence", { class: "body" })}</div>
                     {doc.chapters.slice(0, 4).map((ch) => (
                         <div class="fa4-arow" key={ch.cause}>
-                            <span class="fa4-at">{ch.title}</span>
+                            <span class="fa4-at">
+                                {doc.causes.find((c) => c.id === ch.cause)?.label ??
+                                    ch.cause.replace(/_/g, " ")}
+                            </span>
                             <span class="fa4-aw">{ch.story}</span>
                         </div>
                     ))}

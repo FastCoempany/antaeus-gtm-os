@@ -153,7 +153,7 @@ export function SettingsV4(): JSX.Element {
                             {b.capturedAt ? <> {t("Last device export:")} {new Date(b.capturedAt).toLocaleDateString()}.</> : null}
                             <div class="st4-abrow">
                                 <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={exportBackup}>{t("Export this device")}</button>
-                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={clearAll}>{t("Clear this device")}</button>
+                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={() => { if (window.confirm(t("Clear this device's offline copy? Your cloud workspace is untouched.", { class: "body" }))) clearAll(); }}>{t("Clear this device")}</button>
                             </div>
                         </div>
                     </details>

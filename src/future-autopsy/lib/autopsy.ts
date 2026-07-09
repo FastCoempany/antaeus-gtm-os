@@ -63,8 +63,8 @@ export function generateAutopsy(
                   causes
                       .slice(0, 3)
                       .map((c) => (c.label ?? c.id).toLowerCase())
-                      .join(" ") +
-                  " The loss was not dramatic; it was procedural, then inevitable."
+                      .join("; ") +
+                  ". The loss was not dramatic; it was procedural, then inevitable."
             : "";
     const winTail =
         " Key win pattern: " +
@@ -72,7 +72,7 @@ export function generateAutopsy(
             .slice(0, 3)
             .map((w) => w.story)
             .join(" ") +
-        " You forced proof early, so the close became an execution step, not a hope exercise.";
+        " You put a real result in the buyer's hands early, so the close became an execution step, not a hope exercise.";
 
     return {
         deal: vitals as Vitals,

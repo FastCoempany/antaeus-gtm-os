@@ -67,7 +67,8 @@ function greetingWord(): string {
 
 export function BriefingV4(): JSX.Element {
     const view = activeBriefingView();
-    const tickerItems = patterns.value.slice(0, 8);
+    // Fewer than 3 titles makes a mostly-blank looping strip — skip it.
+    const tickerItems = patterns.value.length >= 3 ? patterns.value.slice(0, 8) : [];
 
     useEffect(() => {
         clock.value = fmtClock();

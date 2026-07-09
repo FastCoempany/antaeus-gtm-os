@@ -197,6 +197,79 @@ export interface CloudExportSnapshot {
     readonly totalRows: number;
 }
 
+
+export interface CloudRestoreResult {
+    readonly restoredRows: number;
+    readonly errors: ReadonlyArray<CloudExportTableErr>;
+}
+
+/**
+ * Put a cloud export back — upserts every row of every table in the
+ * snapshot through the raw supabase client. RLS scopes the writes to
+ * the operator's workspace; rows carry their original ids so re-running
+ * a restore is idempotent (upsert on the primary key). Defensive per
+ * table — one failing table doesn't abort the rest.
+ */
+export async function restoreCloudExport(
+    factory: () => DataClient,
+    snapshot: {
+        readonly tables: Readonly<Record<string, ReadonlyArray<unknown>>>;
+    }
+): Promise<CloudRestoreResult> {
+    let client: DataClient;
+    try {
+        client = factory();
+    } catch (err) {
+        reportError(err, { op: "settings.restoreCloudExport.factory" });
+        return {
+            restoredRows: 0,
+            errors: [
+                {
+                    table: "<client>",
+                    reason: err instanceof Error ? err.message : String(err)
+                }
+            ]
+        };
+    }
+    const raw = (client as unknown as { raw?: unknown }).raw ?? null;
+    const { getSupabaseClient } = await import("@/lib/supabase-client");
+    let sb: { from: (t: string) => { upsert: (rows: unknown[]) => Promise<{ error: { message: string } | null }> } };
+    try {
+        sb = (raw ??
+            getSupabaseClient()) as unknown as typeof sb;
+    } catch (err) {
+        reportError(err, { op: "settings.restoreCloudExport.client" });
+        return {
+            restoredRows: 0,
+            errors: [
+                {
+                    table: "<client>",
+                    reason: err instanceof Error ? err.message : String(err)
+                }
+            ]
+        };
+    }
+    let restoredRows = 0;
+    const errors: CloudExportTableErr[] = [];
+    for (const [table, rows] of Object.entries(snapshot.tables)) {
+        if (!Array.isArray(rows) || rows.length === 0) continue;
+        try {
+            const { error } = await sb.from(table).upsert(rows as unknown[]);
+            if (error) {
+                errors.push({ table, reason: error.message });
+            } else {
+                restoredRows += rows.length;
+            }
+        } catch (err) {
+            errors.push({
+                table,
+                reason: err instanceof Error ? err.message : String(err)
+            });
+        }
+    }
+    return { restoredRows, errors };
+}
+
 /**
  * Pull every row from every workspace-scoped table the operator
  * authored content into, plus the commercial-identity surfaces. The

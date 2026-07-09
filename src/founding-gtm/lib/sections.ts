@@ -583,7 +583,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     const lostById = new Map<string, DealRecord>();
     input.closedLost.forEach((d) => lostById.set(d.id, d));
 
-    // Per-deal autopsy snapshots (verdict + top cause + kill switch).
+    // Per-deal autopsy snapshots (verdict + top cause + walk-away point).
     // Future Autopsy regenerates these at render time when the operator
     // pins a deal; the snapshot key is the durable record. Joined by
     // dealId so §5 can show what the autopsy actually said.
@@ -599,7 +599,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
         body.push(
-            `${plural(killCount, "deal", "deals")} also fired a kill switch — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
+            `${plural(killCount, "deal", "deals")} also hit the moment where the right move was to walk — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
         );
     }
 

@@ -42,14 +42,19 @@ export async function weatherFor(
             cache.set(key, null);
             return null;
         }
+        // Compare CALENDAR dates (local), never timestamp diffs — an
+        // event happening today must still get its glance.
+        const localDay = (d: Date): string =>
+            `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
         const today = new Date();
-        const target = dateIso ? new Date(dateIso) : today;
-        const daysOut = Math.round((target.getTime() - today.getTime()) / 86_400_000);
-        if (daysOut < 0 || daysOut > 15) {
+        const day = dateIso ? dateIso.slice(0, 10) : localDay(today);
+        const daysOut = Math.round(
+            (Date.parse(`${day}T12:00:00`) - Date.parse(`${localDay(today)}T12:00:00`)) / 86_400_000
+        );
+        if (!Number.isFinite(daysOut) || daysOut < 0 || daysOut > 15) {
             cache.set(key, null);
             return null;
         }
-        const day = target.toISOString().slice(0, 10);
         const fc = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${hit.latitude}&longitude=${hit.longitude}&daily=weather_code,temperature_2m_max&start_date=${day}&end_date=${day}&timezone=auto`
         ).then((r) => r.json() as Promise<{ daily?: { weather_code?: number[]; temperature_2m_max?: number[] } }>);
@@ -82,13 +87,16 @@ export function hotelsHref(place: string, startIso: string | null): string {
 
 /** Build a downloadable .ics for the event — add to calendar, nothing stored. */
 export function calendarIcs(name: string, startIso: string | null, endIso: string | null, place: string | null): string {
+    const localYmd = (d: Date): string =>
+        `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
     const fmt = (iso: string): string => iso.slice(0, 10).replace(/-/g, "");
-    const start = startIso ? fmt(startIso) : fmt(new Date().toISOString());
+    const start = startIso ? fmt(startIso) : localYmd(new Date());
     const endSrc = endIso ?? startIso;
-    // DTEND is exclusive for all-day events — add a day.
-    const endDate = endSrc ? new Date(endSrc) : new Date();
+    // DTEND is exclusive for all-day events — add a day. Anchor at noon
+    // so timezone shifts can't move the calendar date.
+    const endDate = endSrc ? new Date(`${endSrc.slice(0, 10)}T12:00:00`) : new Date();
     endDate.setDate(endDate.getDate() + 1);
-    const end = fmt(endDate.toISOString());
+    const end = localYmd(endDate);
     const lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
