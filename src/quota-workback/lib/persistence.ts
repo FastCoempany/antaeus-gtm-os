@@ -1,4 +1,5 @@
 import { reportError } from "@/lib/observability";
+import { benchmarkFor } from "./engine";
 import {
     DEFAULT_INPUTS,
     type AcvBand,
@@ -38,8 +39,8 @@ function asNumber(v: unknown, fallback = 0): number {
  * band benchmark (~2%). A stored 0.7 is the old default persisted on
  * first load, not an operator's choice — normalize it forward.
  */
-function normalizeT2m(v: number): number {
-    return v === 0.7 ? 2 : v;
+function normalizeT2m(v: number, acv: number): number {
+    return v === 0.7 ? benchmarkFor(acv).t2m : v;
 }
 
 export function loadInputs(s?: StorageLike | null): PlanInputs {
@@ -52,13 +53,18 @@ export function loadInputs(s?: StorageLike | null): PlanInputs {
         const seed = seedRaw
             ? (JSON.parse(seedRaw) as Record<string, unknown>)
             : {};
+        const acv = asNumber(saved["acv"] ?? seed["avg_deal_size"], 50_000);
         return {
             quota: asNumber(saved["quota"] ?? seed["annual_quota"], 0),
-            acv: asNumber(saved["acv"] ?? seed["avg_deal_size"], 50_000),
+            acv,
             win: asNumber(saved["win"] ?? seed["win_rate"], 20),
             m2o: asNumber(saved["m2o"], 35),
             t2m: normalizeT2m(
-                asNumber(saved["t2m"] ?? seed["touch_to_meeting"], 2)
+                asNumber(
+                    saved["t2m"] ?? seed["touch_to_meeting"],
+                    benchmarkFor(acv).t2m
+                ),
+                acv
             ),
             show: asNumber(saved["show"] ?? seed["show_rate"], 80),
             days: asNumber(saved["days"], 20),
