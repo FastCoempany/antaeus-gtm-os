@@ -156,7 +156,7 @@ export function GroundLine(): JSX.Element {
                 </span>
                 <span class="gnd-stroke" />
                 <span class="gnd-whisper">
-                    {t("touch the ground · see the whole motion · G")}
+                    {t("touch the ground · see the whole motion · G", { class: "body" })}
                 </span>
             </button>
 
@@ -182,7 +182,7 @@ export function GroundLine(): JSX.Element {
                                 {t("You're in")} <b>{hereRoom.label}</b>
                             </>
                         ) : (
-                            t("The whole workspace, laid out as your motion")
+                            t("The whole workspace, laid out as your motion", { class: "body" })
                         )}
                         {sug && sugRoomId ? (
                             <>

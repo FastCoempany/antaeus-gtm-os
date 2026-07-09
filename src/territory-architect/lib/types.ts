@@ -58,6 +58,26 @@ export const EMPTY_TERRITORY_STATE: TerritoryState = {
 
 // ─── Focus + Approach ──────────────────────────────────────────────────
 
+/**
+ * The carve axis a division stands on (canon §4.5, 2026-07-03): geo /
+ * vertical / segment / named accounts / live trigger, blendable. Optional
+ * + additive — legacy focuses without an axis read as "segment".
+ */
+export type CarveAxis = "geo" | "vertical" | "segment" | "named" | "trigger" | "blend";
+
+export const CARVE_AXES: ReadonlyArray<CarveAxis> = [
+    "geo",
+    "vertical",
+    "segment",
+    "named",
+    "trigger",
+    "blend"
+];
+
+export function isCarveAxis(v: unknown): v is CarveAxis {
+    return typeof v === "string" && (CARVE_AXES as ReadonlyArray<string>).includes(v);
+}
+
 export interface Focus {
     readonly id: string;
     /** Focus name e.g. "Procurement consolidation Q2". */
@@ -69,6 +89,8 @@ export interface Focus {
     /** Why this team is the right seller. */
     readonly whyUs: string;
     readonly tier: TierId;
+    /** The axis this division is carved on (canon §4.5). Absent on legacy rows. */
+    readonly axis?: CarveAxis;
     /** Account ids tagged with this focus. */
     readonly accountIds: ReadonlyArray<string>;
     readonly createdAt: string;
@@ -119,6 +141,8 @@ export interface FocusDraft {
     readonly segment: string;
     readonly whyUs: string;
     readonly tier: TierId;
+    /** The axis this division is carved on (canon §4.5). */
+    readonly axis?: CarveAxis;
 }
 
 export const EMPTY_FOCUS_DRAFT: FocusDraft = {

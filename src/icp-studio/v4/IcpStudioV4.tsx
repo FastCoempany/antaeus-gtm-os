@@ -105,7 +105,7 @@ export function IcpStudioV4(): JSX.Element {
                     <span class={`icp4-qpill is-${quality.tier}`}>{quality.label}</span>
                 </div>
                 <p class="icp4-eyebrow">
-                    {t("Who you sell to — the one definition every room filters against")}
+                    {t("Who you sell to — the one definition every room filters against", { class: "body" })}
                 </p>
 
                 {complete ? (
@@ -203,7 +203,7 @@ export function IcpStudioV4(): JSX.Element {
                                 onInput={(e) => patchDraft({ pain: (e.currentTarget as HTMLInputElement).value })} />
                         </label>
                         <label class={`icp4-fld${d.trigger ? "" : " is-miss"}`}>
-                            <span>{t("The trigger — what makes it now")}</span>
+                            <span>{t("The trigger — what makes it now", { class: "body" })}</span>
                             <input value={d.trigger} placeholder={t("A missed quarter, a new CRO", { class: "body" })}
                                 onInput={(e) => patchDraft({ trigger: (e.currentTarget as HTMLInputElement).value })} />
                         </label>
@@ -229,7 +229,7 @@ export function IcpStudioV4(): JSX.Element {
 
                 <div class="icp4-foot">
                     <p class="icp4-flows">
-                        {t("This definition scores every account in", { class: "body" })} <b>{t("Territory · Prospecting · Signal Console · Outbound · Discovery")}</b>, {t("and feeds Readiness + the Handoff Kit.", { class: "body" })}
+                        {t("This definition scores every account in", { class: "body" })} <b>{t("Territory · Prospecting · Signal Console · Outbound · Discovery", { class: "body" })}</b>, {t("and feeds Readiness + the Handoff Kit.", { class: "body" })}
                     </p>
                     <button type="button" class="icp4-save" onClick={save} disabled={!complete}>
                         {t("Save this ICP")}

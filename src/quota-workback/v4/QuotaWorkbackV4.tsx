@@ -63,7 +63,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                 {!hasPlan ? (
                     <div class="qw4-verd">
                         <div class="qw4-k qw4-k--plan">{t("Start with the number")}</div>
-                        <div class="qw4-h">{t("What do you need to close this year?")}</div>
+                        <div class="qw4-h">{t("What do you need to close this year?", { class: "body" })}</div>
                         <div class="qw4-s">
                             {t("Give the number and your typical deal, and the room works it down to the one thing you control — what you do every working day.", { class: "body" })}
                         </div>
@@ -147,7 +147,7 @@ export function QuotaWorkbackV4(): JSX.Element {
 
                             {/* RIGHT: where you actually are + do you have the pipeline */}
                             <div class="qw4-st qw4-st--real">
-                                <div class="qw4-cl">{paceMode ? t("Where you actually are") : t("As you work, your real pace lands here")}</div>
+                                <div class="qw4-cl">{paceMode ? t("Where you actually are") : t("As you work, your real pace lands here", { class: "body" })}</div>
                                 {paceMode ? (
                                     <>
                                         <div class="qw4-line">
@@ -191,7 +191,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                                             t("No open deals yet — the daily number above is how the pipeline gets built.", { class: "body" })
                                         )}
                                     </div>
-                                    <a class="qw4-link" href={hrefToDealWorkspace()}>{t("See the open deals in Deal Workspace →")}</a>
+                                    <a class="qw4-link" href={hrefToDealWorkspace()}>{t("See the open deals in Deal Workspace →", { class: "body" })}</a>
                                 </div>
                             </div>
                         </div>

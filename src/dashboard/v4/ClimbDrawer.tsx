@@ -98,7 +98,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
             <div class="clmb-scrim" onClick={props.onClose} aria-hidden="true" />
             <aside class="clmb-panel">
                 <header class="clmb-hero">
-                    <div class="clmb-k">{t("Readiness · could a hire run this yet?")}</div>
+                    <div class="clmb-k">{t("Readiness · could a hire run this yet?", { class: "body" })}</div>
                     <div class="clmb-v">{props.summary.verdictLabel}</div>
                     <div class="clmb-s">{HERO_READ[props.summary.verdict]}</div>
                     <button type="button" class="clmb-x" onClick={props.onClose} aria-label={t("Close")}>
@@ -108,7 +108,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
 
                 <section class="clmb-sec">
                     <div class="clmb-sl">
-                        {t("The climb — where the workspace has been, and where it goes next")}
+                        {t("The climb — where the workspace has been, and where it goes next", { class: "body" })}
                     </div>
                     <div class="clmb-climb">
                         {LADDER.map((step, i) => {

@@ -155,6 +155,7 @@ export function saveThesisFromDraft(now: number = Date.now()): Focus | null {
         segment: d.segment.trim(),
         whyUs: d.whyUs.trim(),
         tier: d.tier,
+        ...(d.axis ? { axis: d.axis } : {}),
         accountIds: [],
         createdAt: iso,
         updatedAt: iso
