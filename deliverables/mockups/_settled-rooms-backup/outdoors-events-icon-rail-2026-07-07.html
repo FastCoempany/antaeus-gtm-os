@@ -1,0 +1,171 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outdoors Events — proximity + icon rail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.22);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.07);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 56px}
+svg.ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
+.wrap{max-width:940px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.console{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:22px 0 18px;border-bottom:1px solid var(--hair)}
+.console .lead{flex:1;min-width:260px}.console .h{font-family:var(--serif);font-size:26px;line-height:1.15}.console .sub{font-size:13px;color:var(--ink-2);margin-top:5px;line-height:1.45}
+.run{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:11px 18px;border-radius:9px;border:0;background:var(--orange);color:#fff;cursor:pointer;box-shadow:0 10px 22px -12px rgba(230,112,30,.85)}
+.lastrun{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.6;text-align:right}.lastrun b{color:var(--forest)}
+.mark{font-family:var(--sans);font-weight:500;font-size:12px;padding:6px 12px;border-radius:20px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.mark.on{border-color:var(--forest);background:var(--forest-soft);color:var(--forest);font-weight:600}
+.dismiss{font-family:var(--mono);font-size:15px;color:var(--ink-4);cursor:pointer;background:0;border:0;line-height:1}
+/* orbit */
+.orbit{margin-top:8px;position:relative}
+.orbit:before{content:"";position:absolute;left:8px;top:20px;bottom:30px;width:2px;background:linear-gradient(var(--orange),var(--blue),var(--ink-4))}
+.ring{position:relative;padding:22px 0 6px 40px}
+.ring .rl{position:absolute;left:0;top:24px}.ring .node{width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid var(--ink-4);z-index:2}
+.ring.direct .node{border-color:var(--orange)}.ring.adjacent .node{border-color:var(--blue)}
+.ring .rt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.ring.direct .rt{color:var(--orange)}.ring.adjacent .rt{color:var(--blue)}.ring.indirect .rt{color:var(--ink-3)}
+.ring .rd{font-size:12.5px;color:var(--ink-2);margin-top:3px;margin-bottom:8px;line-height:1.45}.ring.indirect{opacity:.85}
+.ev{padding:13px 2px;border-top:1px solid var(--hair)}
+.evmain{display:grid;grid-template-columns:64px 1fr auto;gap:0 16px;align-items:baseline}
+.ev .when{font-family:var(--mono);font-size:11px;color:var(--ink-2)}.ev .when b{color:var(--ink);font-weight:600;display:block;font-size:12px}
+.ev .nm{font-size:15px;font-weight:600;line-height:1.25}.ev .meta{font-size:11.5px;color:var(--ink-3);margin-top:2px}.ev .meta .src{color:var(--blue);text-decoration:none;cursor:pointer}
+.ev .why{font-size:12px;color:var(--ink-2);margin-top:5px;line-height:1.5}
+.ev .act{justify-self:end;display:flex;align-items:center;gap:8px}
+/* weather chip */
+.wx{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.wx .sun{color:var(--amber)}.wx .cloud{color:var(--ink-3)}.wx .rain{color:var(--blue)}
+.wx b{color:var(--ink);font-weight:600}
+/* getting-there utility */
+.gt{margin-top:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gtl{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+.ub{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-weight:500;font-size:12px;padding:6px 11px;border-radius:8px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer;text-decoration:none}
+.ub:hover{border-color:var(--blue);color:var(--blue)}.ub svg{color:inherit}
+.ext{font-size:9px;color:var(--ink-4);margin-left:1px}
+.byhand{margin-top:34px;padding-top:18px;border-top:1px solid var(--hair-2)}.byhand .bl{font-size:13px;color:var(--ink-2)}.byhand .bl b{color:var(--ink)}.byhand .add{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;margin-left:6px}
+.foot{max-width:940px;margin:22px auto 0;padding:0 40px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+
+.evmain{grid-template-columns:64px 1fr auto auto;gap:0 14px}
+.rail{display:flex;align-items:center;gap:3px;justify-self:end;margin-right:6px}
+.ri{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--ink-3);cursor:pointer;border:1px solid transparent}
+.ri:hover{color:var(--blue);background:var(--blue-soft)}
+.wxr{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-right:8px;white-space:nowrap}
+.wxr .sun{color:var(--amber)}.wxr .cloud{color:var(--ink-3)}.wxr .rain{color:var(--blue)}.wxr b{color:var(--ink)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="ic-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2Z"/></symbol>
+<symbol id="ic-bed" viewBox="0 0 24 24"><path d="M3 18v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5"/><path d="M3 14h18"/><path d="M7 11V8a1 1 0 0 1 1-1h3v4"/><path d="M3 18v2"/><path d="M21 18v2"/></symbol>
+<symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="ic-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol>
+<symbol id="ic-rain" viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 9"/><path d="M8 19v2M12 19v2M16 19v2"/></symbol>
+<symbol id="ic-badge" viewBox="0 0 24 24"><path d="M9 3h6l-1 3h-4Z"/><rect x="6" y="6" width="12" height="15" rx="2"/><path d="M9.5 11h5M9.5 14.5h3"/></symbol>
+<symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></symbol>
+<symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.7-6-10a6 6 0 1 1 12 0c0 4.3-6 10-6 10Z"/><circle cx="12" cy="11" r="2"/></symbol>
+<symbol id="ic-ticket" viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M9 7v1M9 11v1M9 15v1"/></symbol>
+</defs></svg>
+<div class="wrap">
+  <div class="top"><span class="bname">Outdoors Events</span><span class="r">every room, one tap from go</span></div>
+  <div class="console">
+    <div class="lead"><div class="h">Where people are gathering — found for you.</div><div class="sub">Arranged by how close each room sits to what you sell. Every event carries its live weather and one-tap flights, hotel, register, and calendar — so checking if you can go is instant.</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><button class="run">Run discovery now →</button><div class="lastrun">last swept <b>2h ago</b> · 9 found · $0.12</div></div>
+  </div>
+
+  <div class="orbit">
+    <div class="ring direct"><span class="rl"><span class="node"></span></span>
+      <div class="rt">Your category · closest in</div><div class="rd">Rooms about RevOps &amp; GTM tooling — your exact space.</div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>Mar 18</b>SF</div>
+      <div><div class="nm">RevOps Summit 2026</div><div class="meta">800+ RevOps leaders · <span class="src">revopssummit.com</span></div><div class="why">Your exact buyer in one room for two days.</div></div>
+      <div class="rail">
+        <span class="wxr sun"><svg class="ic"><use href="#ic-sun"/></svg><b>62°</b>/48°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark on">Attending</span><button class="dismiss">×</button></div>
+    </div></div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>Apr 9</b>NYC</div>
+      <div><div class="nm">Pavilion GTM Forum</div><div class="meta">GTM operators · <span class="src">joinpavilion.com</span></div><div class="why">Operators comparing tools like yours right now.</div></div>
+      <div class="rail">
+        <span class="wxr cloud"><svg class="ic"><use href="#ic-cloud"/></svg><b>58°</b>/44°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark">Watching</span><button class="dismiss">×</button></div>
+    </div></div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>May 2</b>Austin</div>
+      <div><div class="nm">Modern Sales Pros dinner</div><div class="meta">~30 RevOps leaders · <span class="src">modernsalespros.com</span></div><div class="why">Small, senior, exactly your persona.</div></div>
+      <div class="rail">
+        <span class="wxr sun"><svg class="ic"><use href="#ic-sun"/></svg><b>81°</b>/66°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark">Watching</span><button class="dismiss">×</button></div>
+    </div></div>
+    </div>
+    <div class="ring adjacent"><span class="rl"><span class="node"></span></span>
+      <div class="rt">Your buyers · one ring out</div><div class="rd">Not your category, but where the people you sell into gather.</div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>Sep 10</b>SF</div>
+      <div><div class="nm">SaaStr Annual</div><div class="meta">12,000 SaaS leaders · <span class="src">saastrannual.com</span></div><div class="why">Every VP Sales and RevOps lead you chase, walking the floor.</div></div>
+      <div class="rail">
+        <span class="wxr sun"><svg class="ic"><use href="#ic-sun"/></svg><b>70°</b>/55°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark">Watching</span><button class="dismiss">×</button></div>
+    </div></div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>Jun 24</b>Chicago</div>
+      <div><div class="nm">Sales Enablement Collective</div><div class="meta">enablement + ops · <span class="src">salesenablement.co</span></div><div class="why">Adjacent buyers who own the same budget line.</div></div>
+      <div class="rail">
+        <span class="wxr rain"><svg class="ic"><use href="#ic-rain"/></svg><b>68°</b>/54°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark">Watching</span><button class="dismiss">×</button></div>
+    </div></div>
+    </div>
+    <div class="ring indirect"><span class="rl"><span class="node"></span></span>
+      <div class="rt">Their orbit · the outer ring</div><div class="rd">Long shots — where your ICP might show up. Worth a glance.</div>
+      <div class="ev"><div class="evmain">
+      <div class="when"><b>Apr 30</b>NYC</div>
+      <div><div class="nm">Series B Founder Mixer</div><div class="meta">~60 founders · <span class="src">on Luma</span></div><div class="why">Companies about to hire the VP Sales that triggers your best deals.</div></div>
+      <div class="rail">
+        <span class="wxr cloud"><svg class="ic"><use href="#ic-cloud"/></svg><b>61°</b>/47°</span>
+        <span class="ri" title="Flights"><svg class="ic"><use href="#ic-plane"/></svg></span>
+        <span class="ri" title="Hotels"><svg class="ic"><use href="#ic-bed"/></svg></span>
+        <span class="ri" title="Register"><svg class="ic"><use href="#ic-badge"/></svg></span>
+        <span class="ri" title="Add to calendar"><svg class="ic"><use href="#ic-cal"/></svg></span>
+      </div>
+      <div class="act"><span class="mark">Watching</span><button class="dismiss">×</button></div>
+    </div></div>
+    </div>
+  </div>
+
+  <div class="byhand"><span class="bl"><b>Know about a private invite the scout missed?</b> Add it yourself.</span><span class="add">+ Add one by hand</span></div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+document.querySelectorAll('.mark').forEach(m=>m.onclick=()=>{m.classList.toggle('on');m.textContent=m.classList.contains('on')?'Attending':'Watching';toast(m.classList.contains('on')?'Marked attending — trip tools opened':'Back to watching');});
+document.querySelectorAll('.run,.src,.add,.dismiss,.ub').forEach(b=>b.onclick=(e)=>{e.preventDefault&&e.preventDefault();const x=b.textContent.trim();toast(x==='×'?'Passed — hidden':(x.length<2?'Opened':x)+' ↗');});
+$('foot').textContent="MOCKUP · design-only · OE2-C · proximity + a per-row icon rail (live weather + flights/hotel/register/calendar) on every event · icon-forward, one tap from go";
+</script>
+</body></html>

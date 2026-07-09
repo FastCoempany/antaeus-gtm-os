@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Briefing G — Vivid, controllable ticker, world zone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0a1c40;--ink-2:rgba(10,28,64,.62);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+    --field:#eef1f7;--surface:#fff;--surface-sub:#f4f6fb;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+    --orange:#e6701e;--blue:#3e5cad;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--go:#1a8f4e;
+    --amber:#b5790f;--amber-soft:rgba(181,121,15,.10);--hot:#d0491f;--hot-soft:rgba(208,73,31,.09);--mkt-soft:rgba(10,28,64,.05);
+    --serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box}html,body{margin:0}
+  body{font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  .anim{opacity:0;transform:translateY(7px);animation:rise .5s var(--ease) forwards}@keyframes rise{to{opacity:1;transform:none}}
+  .top{max-width:1040px;margin:0 auto;padding:26px 40px 0}
+  .bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .bar__name{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+  .bar__date{font-size:12.5px;color:var(--ink-3)}.bar__r{margin-left:auto}
+  .bell{position:relative;width:32px;height:32px;color:var(--ink-2);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .bell__dot{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--forest);border:2px solid var(--field);opacity:0;transition:opacity .2s var(--ease)}
+  .bell.has .bell__dot{opacity:1}
+  .noticed{display:flex;align-items:center;gap:11px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--ink-2);background:var(--forest-soft);border-radius:10px}
+  .noticed.hidden{display:none}
+  .noticed__l{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);white-space:nowrap}
+  .noticed__t{line-height:1.45}.noticed__t b{color:var(--ink);font-weight:600}
+  .noticed__b{margin-left:auto;display:inline-flex;gap:6px;align-items:center}
+  .sbtn{font-size:11.5px;font-weight:600;border-radius:7px;padding:5px 11px;cursor:pointer;border:1px solid rgba(27,94,63,.25);background:transparent;color:var(--forest)}
+  .sbtn.yes{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .noticed__x{color:var(--ink-4);cursor:pointer;font-size:14px;padding:2px 4px}
+  .addwrap{display:inline-flex;align-items:center;gap:6px}.addwrap.hide{display:none}
+  .addt{font-size:12.5px;font-weight:600;color:var(--blue);cursor:pointer;background:transparent;border:none;padding:0}
+  .addt__x{color:var(--ink-4);cursor:pointer;font-size:11px}
+  .addplus{display:none;width:22px;height:22px;border-radius:7px;border:1px dashed rgba(37,99,235,.35);background:transparent;color:var(--blue);cursor:pointer;font-size:14px;align-items:center;justify-content:center}.addplus.show{display:inline-flex}
+  .watch{display:flex;align-items:center;gap:16px;padding:10px 0;border-top:1px solid var(--hair-2);border-bottom:1px solid var(--hair);margin-bottom:6px;flex-wrap:wrap}
+  .watch__l{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .wchip{font-size:12.5px;color:var(--ink);display:inline-flex;gap:8px;align-items:center}
+  .wchip .b{width:7px;height:7px;border-radius:50%;background:var(--blue);position:relative}
+  .wchip .b::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--blue);animation:wpulse 2.8s var(--ease) infinite;opacity:.4}
+  .work__h{display:flex;align-items:baseline;gap:9px;margin:16px 0 2px}
+  .work__t{font-family:var(--serif);font-size:19px}.work__s{font-size:12px;color:var(--ink-3)}
+  .work__n{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-4)}
+  .scroll{max-height:340px;overflow-y:auto;padding-right:8px;margin-right:-8px}
+  .scroll::-webkit-scrollbar{width:7px}.scroll::-webkit-scrollbar-thumb{background:rgba(10,28,64,.14);border-radius:99px}
+  .read{padding:12px 0}.read + .read{border-top:1px solid var(--hair)}
+  .read.compound{border-left:2px solid var(--forest);padding-left:13px}
+  .read__top{display:flex;align-items:baseline;gap:10px}
+  .tag{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 6px;border-radius:5px;white-space:nowrap}
+  .t-hot{color:var(--hot);background:var(--hot-soft)}.t-amber{color:var(--amber);background:var(--amber-soft)}.t-forest{color:var(--forest);background:var(--forest-soft)}
+  .read__txt{font-size:14.5px;line-height:1.5}.read__txt b{font-weight:600}
+  /* green, pulsing action links */
+  .route{font-size:12px;font-weight:500;color:var(--go);cursor:pointer;margin-top:7px;display:inline-flex;gap:4px;animation:linkpulse 2.4s var(--ease) infinite}
+  .route .a{transition:transform .2s}.route:hover{animation:none}.route:hover .a{transform:translateX(3px)}
+  @keyframes linkpulse{0%,100%{opacity:.62}50%{opacity:1}}
+  .drafts{margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .drafts__l{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .dchip{background:var(--surface);border:1px solid var(--hair-2);border-radius:99px;padding:7px 8px 7px 13px;display:inline-flex;gap:9px;align-items:center;font-size:12.5px;box-shadow:0 4px 12px -8px rgba(10,28,64,.18)}
+  .dchip__o{font-size:11.5px;font-weight:600;color:#fff;background:var(--go);border-radius:99px;padding:4px 10px;cursor:pointer}
+
+  /* ── VIVID ATMOSPHERE ── */
+  .atmosphere{position:relative;width:100%;height:130px;overflow:hidden;margin-top:14px}
+  .sky{position:absolute;inset:0;z-index:0;-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%);mask-image:linear-gradient(180deg,transparent,#000 14%);transition:background .6s}
+  .atmo-inner{position:relative;z-index:2;max-width:1040px;margin:0 auto;padding:18px 40px 14px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:5px}
+  .greet{font-family:var(--serif);font-size:clamp(20px,2.4vw,27px);letter-spacing:-.01em;line-height:1.02}
+  .clock{font-family:var(--mono);font-size:11px;font-weight:600;color:rgba(10,28,64,.6);margin-top:2px}
+  .wxrow{display:flex;align-items:baseline;justify-content:space-between}
+  .wxtemp{font-size:25px;font-weight:600;letter-spacing:-.02em}
+  .wxcond{font-size:12.5px;color:rgba(10,28,64,.55);margin-left:8px}
+  .fcbtn{font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;background:rgba(255,255,255,.5);border:1px solid rgba(10,28,64,.14);border-radius:8px;padding:7px 13px}
+  .forecast{position:absolute;left:0;right:0;bottom:0;z-index:5;max-width:1040px;margin:0 auto;padding:16px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.6);backdrop-filter:blur(10px);transform:translateY(101%);transition:transform .32s var(--ease)}
+  .forecast.open{transform:none}
+  .fc-x{position:absolute;top:8px;right:14px;font-size:13px;color:var(--ink-4);cursor:pointer;border:none;background:transparent}.fc-x:hover{color:var(--ink-2)}
+  .fday{text-align:center;font-size:11px}.fday b{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-bottom:5px}
+  .fday .ic{font-size:16px}.fday .hi{font-weight:600;margin-top:4px}.fday .lo{color:var(--ink-4)}
+
+  /* ── CONTROLLABLE TICKER — bigger text ── */
+  .ticker{position:relative;width:100%;overflow:hidden;border-top:1px solid var(--hair-2);padding:15px 0;display:flex;align-items:center}
+  .ticker__l{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:0 22px 0 40px;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;flex:none;border-right:1px solid var(--hair-2)}
+  .ticker__l .d{width:6px;height:6px;border-radius:50%;background:var(--forest);animation:wpulse 2.6s var(--ease) infinite}
+  .ticker__win{flex:1;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 96%,transparent)}
+  .ticker__track{display:inline-flex;white-space:nowrap;will-change:transform}
+  .titem{display:inline-flex;align-items:center;gap:11px;padding:0 34px}.titem + .titem{border-left:1px solid var(--hair)}
+  .ttag{font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 7px;border-radius:5px;color:var(--ink-3);background:var(--mkt-soft)}
+  .ttxt{font-size:15.5px;color:var(--ink)}.ttxt b{font-weight:600}
+  .troute{font-size:13px;color:var(--blue);font-weight:500;cursor:pointer}
+  .tarrow{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid var(--hair-2);box-shadow:0 3px 10px -3px rgba(10,28,64,.24);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .18s var(--ease);z-index:6;color:var(--ink-2);font-size:17px}
+  .ticker:hover .tarrow{opacity:1}.tarrow:hover{color:var(--ink)}
+  .tarrow--l{left:150px}.tarrow--r{right:14px}
+
+  /* ── WORLD ZONE: events + coverage (real functionality, not filler) ── */
+  .world{max-width:1040px;margin:0 auto;padding:16px 40px 0;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .world__l{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .wevent{font-size:12.5px;color:var(--ink-2);display:inline-flex;gap:7px;align-items:center}
+  .wevent + .wevent{padding-left:16px;border-left:1px solid var(--hair)}
+  .wevent .dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
+  .wevent b{color:var(--ink);font-weight:600}
+  .wmore{font-size:12px;font-weight:600;color:var(--go);cursor:pointer;margin-left:auto}
+  .cover{max-width:1040px;width:100%;margin:16px auto 0;margin-top:auto;padding:12px 40px 24px;border-top:1px solid var(--hair);font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+
+  @keyframes wpulse{0%{transform:scale(.9);opacity:.4}70%{transform:scale(2);opacity:0}100%{opacity:0}}
+  .sky.clear{background:linear-gradient(165deg,#8fbef0,#d3e6fa 68%,#eef4fc)}
+  .sky.clouds{background:linear-gradient(165deg,#b7c2d1,#e6ebf2)}
+  .sky.rain{background:linear-gradient(165deg,#8493a8,#c2ccd8)}
+  .sky.snow{background:linear-gradient(165deg,#c2cddb,#eef2f7)}
+  .sun{position:absolute;top:14px;right:11%;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 42% 40%,#ffe89a,#ffb347);box-shadow:0 0 30px 9px rgba(255,197,92,.5);animation:sunpulse 4s var(--ease) infinite}
+  .sun::before{content:"";position:absolute;inset:-11px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,200,90,.42),transparent 22%,rgba(255,200,90,.42) 25%,transparent 47%,rgba(255,200,90,.42) 50%,transparent 72%,rgba(255,200,90,.42) 75%,transparent 97%);-webkit-mask:radial-gradient(circle,transparent 18px,#000 19px);mask:radial-gradient(circle,transparent 18px,#000 19px);animation:spin 24s linear infinite}
+  @keyframes sunpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}@keyframes spin{to{transform:rotate(360deg)}}
+  .cloud{position:absolute;height:20px;background:rgba(255,255,255,.82);border-radius:40px;filter:blur(4px);opacity:.75}
+  .cloud::before{content:"";position:absolute;width:32px;height:32px;background:inherit;border-radius:50%;top:-15px;left:10px}
+  .cloud::after{content:"";position:absolute;width:22px;height:22px;background:inherit;border-radius:50%;top:-9px;left:36px}
+  .cloud.c1{width:58px;top:20px;left:-80px;animation:drift 40s linear infinite}
+  .cloud.c2{width:42px;top:52px;left:-64px;opacity:.55;animation:drift 58s linear infinite 6s}
+  @keyframes drift{to{transform:translateX(118vw)}}
+  .drop{position:absolute;top:-16px;width:1.5px;height:16px;background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));animation:fall linear infinite}
+  @keyframes fall{to{transform:translateY(150px)}}
+  .flake{position:absolute;top:-8px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.9);animation:snowfall linear infinite}
+  @keyframes snowfall{to{transform:translateY(150px) translateX(16px)}}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important}}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="bar anim" style="animation-delay:.02s"><span class="bar__name">Briefing</span><span class="bar__date">Thursday, Jul 2</span><span class="bar__r"><button class="bell" id="bell"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="bell__dot"></span></button></span></div>
+    <div class="noticed anim" id="noticed" style="animation-delay:.06s"><span class="noticed__l">Noticed</span><span class="noticed__t">You always open <b>Signal Console</b> after I flag a quiet account — want me to just take you there?</span><span class="noticed__b"><button class="sbtn yes">Yes</button><button class="sbtn" data-dismiss>Later</button><span class="noticed__x" data-dismiss>✕</span></span></div>
+    <div class="watch anim" style="animation-delay:.1s"><span class="watch__l">Watching for</span><span class="wchip"><span class="b"></span> an account hires a VP of Sales</span><span class="wchip"><span class="b"></span> a deal goes quiet for two weeks</span><span class="wchip"><span class="b"></span> several fintech accounts moving at once</span><span class="addwrap" id="addwrap"><button class="addt">+ watch for something new</button><span class="addt__x" id="addx">✕</span></span><button class="addplus" id="addplus">+</button></div>
+    <div class="anim" style="animation-delay:.16s">
+      <div class="work__h"><span class="work__t">Your work</span><span class="work__s">inside your deals and accounts</span><span class="work__n">6</span></div>
+      <div class="scroll" id="work"></div>
+      <div class="drafts"><span class="drafts__l">Drafts</span><span class="dchip">✎ Battlecard for Deel's raise <span class="dchip__o">Open</span></span><span class="dchip">✎ Objection handler <span class="dchip__o">Open</span></span></div>
+    </div>
+  </div>
+  <div class="atmosphere anim" style="animation-delay:.24s">
+    <div class="sky clear" id="sky"></div>
+    <div class="atmo-inner">
+      <div><div class="greet" id="greet">Good morning, Antaeus</div><div class="clock" id="clock">—</div></div>
+      <div class="wxrow"><div><span class="wxtemp" id="temp">—°</span><span class="wxcond" id="cond">Chicago</span></div><button class="fcbtn" id="fcbtn">7-day forecast ↗</button></div>
+    </div>
+    <div class="forecast" id="forecast"><button class="fc-x" id="fcx" title="close">✕</button></div>
+  </div>
+
+  <div class="ticker" id="ticker">
+    <span class="ticker__l"><span class="d"></span>The market</span>
+    <button class="tarrow tarrow--l" id="tleft">‹</button>
+    <div class="ticker__win" id="twin"><div class="ticker__track" id="track"></div></div>
+    <button class="tarrow tarrow--r" id="tright">›</button>
+  </div>
+
+  <div class="world">
+    <span class="world__l">Where your world is gathering</span>
+    <span class="wevent"><span class="dot"></span><b>SaaStr Annual</b> · Sep · SF</span>
+    <span class="wevent"><span class="dot"></span><b>Chicago SaaS founders dinner</b> · Jul 18</span>
+    <span class="wevent"><span class="dot"></span><b>Fintech DevCon</b> · Aug · virtual</span>
+    <span class="wmore">3 more in Outdoors Events →</span>
+  </div>
+  <div class="cover">This week I read across 340 sources on your 42 watched accounts · next briefing tomorrow, 7am · $0.42 of your $2.00</div>
+
+<script>
+  var WORK=[{tag:"t-hot",tl:"21d",txt:"<b>Northwind</b> has sat at proposal for three weeks with no next step.",route:"Open the deal"},{tag:"t-hot",tl:"75d",txt:"<b>Hightouch</b> has gone 75 days without a signal.",route:"Open in Signal Console"},{tag:"t-amber",tl:"due",txt:"<b>Acme pilot</b> is past its readout date and still marked open.",route:"Open in PoC"},{tag:"t-amber",tl:"0 logged",txt:"No discovery calls logged this week — the rhythm's slipping.",route:"Open Call Planner"},{tag:"t-forest",tl:"60d",compound:1,txt:"<b>Databricks pilot</b> has held two months — the owner still signs off.",route:"Open in PoC"},{tag:"t-forest",tl:"↑",compound:1,txt:"<b>Readiness</b> climbed to Hire-ready with guardrails.",route:"Open Readiness"}];
+  var MKT=[{tag:"pattern",txt:"<b>Deel</b> raised $300M — three of your ICP accounts sell to the same buyer.",route:"Draft a battlecard →"},{tag:"challenge",txt:"Both closed-wons this quarter were enterprise, not mid-market.",route:"Revisit your ICP →"},{tag:"blind spot",txt:"<b>Ramp</b> keeps appearing next to your accounts — not on your list.",route:"Add to watchlist →"},{tag:"pattern",txt:"<b>Sierra</b> came out of stealth this week.",route:"Watch it →"},{tag:"pattern",txt:"Fintech hiring across your watchlist up 30% this quarter.",route:"See who →"},{tag:"pattern",txt:"<b>Rippling</b> opened a Chicago office.",route:"Watch it →"}];
+  var work=document.getElementById('work');WORK.forEach(function(r){var el=document.createElement('div');el.className='read'+(r.compound?' compound':'');el.innerHTML='<div class="read__top"><span class="tag '+r.tag+'">'+r.tl+'</span><span class="read__txt">'+r.txt+'</span></div><div class="route">'+r.route+' <span class="a">→</span></div>';work.appendChild(el);});
+  var track=document.getElementById('track');function ti(m){return '<span class="titem"><span class="ttag">'+m.tag+'</span><span class="ttxt">'+m.txt+'</span><span class="troute">'+m.route+'</span></span>';}track.innerHTML=MKT.map(ti).join('')+MKT.map(ti).join('');
+
+  /* controllable ticker */
+  var ticker=document.getElementById('ticker'),win=document.getElementById('twin');
+  var offset=0,half=0,paused=false,last=null,speed=0.045;
+  function measure(){half=track.scrollWidth/2;}
+  function apply(){track.style.transform='translateX('+offset+'px)';}
+  function wrap(){if(half){if(-offset>=half)offset+=half;if(offset>0)offset-=half;}}
+  function loop(ts){if(last===null)last=ts;var dt=ts-last;last=ts;if(!paused){offset-=speed*dt;wrap();apply();}requestAnimationFrame(loop);}
+  function nudge(px){offset+=px;wrap();track.style.transition='transform .35s var(--ease)';apply();setTimeout(function(){track.style.transition='none';},370);}
+  ticker.addEventListener('mouseenter',function(){paused=true;});
+  ticker.addEventListener('mouseleave',function(){paused=false;last=null;});
+  document.getElementById('tright').addEventListener('click',function(){nudge(-320);});
+  document.getElementById('tleft').addEventListener('click',function(){nudge(320);});
+  window.addEventListener('load',measure);setTimeout(measure,500);requestAnimationFrame(loop);
+
+  /* clock */
+  function tick(){var now=new Date();var t=now.toLocaleTimeString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit'});var hh=parseInt(now.toLocaleString('en-US',{timeZone:'America/Chicago',hour:'2-digit',hour12:false}),10);var g=hh<12?'Good morning':hh<18?'Good afternoon':'Good evening';document.getElementById('greet').textContent=g+', Antaeus';document.getElementById('clock').textContent=t+' · Chicago';}tick();setInterval(tick,1000);
+
+  /* weather */
+  var sky=document.getElementById('sky');
+  function scene(cond){sky.className='sky '+cond;sky.querySelectorAll('.sun,.cloud,.drop,.flake').forEach(function(n){n.remove();});if(cond==='clear'){var s=document.createElement('div');s.className='sun';sky.appendChild(s);}else if(cond==='clouds'){['c1','c2'].forEach(function(k){var c=document.createElement('div');c.className='cloud '+k;sky.appendChild(c);});}else if(cond==='rain'){for(var i=0;i<44;i++){var d=document.createElement('div');d.className='drop';d.style.left=(Math.random()*100)+'%';d.style.animationDuration=(0.5+Math.random()*0.5)+'s';d.style.animationDelay=(Math.random())+'s';sky.appendChild(d);}var c=document.createElement('div');c.className='cloud c1';sky.appendChild(c);}else if(cond==='snow'){for(var i=0;i<36;i++){var f=document.createElement('div');f.className='flake';f.style.left=(Math.random()*100)+'%';f.style.animationDuration=(2.4+Math.random()*2)+'s';f.style.animationDelay=(Math.random()*2)+'s';sky.appendChild(f);}}}
+  function codeToCond(c){if(c===0||c===1)return'clear';if(c>=71&&c<=77||c>=85&&c<=86)return'snow';if(c>=51&&c<=67||c>=80&&c<=82||c>=95)return'rain';return'clouds';}
+  function ic(cond){return cond==='clear'?'☀':cond==='rain'?'🌧':cond==='snow'?'❄':'☁';}
+  scene('clear');document.getElementById('temp').textContent='78°';document.getElementById('cond').textContent='Chicago · sample';
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=41.8781&longitude=-87.6298&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America/Chicago&forecast_days=7').then(function(r){return r.json()}).then(function(d){var cond=codeToCond(d.current.weather_code);scene(cond);document.getElementById('temp').textContent=Math.round(d.current.temperature_2m)+'°';document.getElementById('cond').textContent='Chicago · '+cond;var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],fc=document.getElementById('forecast'),html='<button class="fc-x" id="fcx" title="close">✕</button>';for(var i=0;i<7;i++){var dt=new Date(d.daily.time[i]+'T12:00');var cc=codeToCond(d.daily.weather_code[i]);html+='<div class="fday"><b>'+days[dt.getDay()]+'</b><div class="ic">'+ic(cc)+'</div><div class="hi">'+Math.round(d.daily.temperature_2m_max[i])+'°</div><div class="lo">'+Math.round(d.daily.temperature_2m_min[i])+'°</div></div>';}fc.innerHTML=html;wireX();}).catch(function(){var days=['Thu','Fri','Sat','Sun','Mon','Tue','Wed'],hi=[81,84,79,77,82,85,80],lo=[66,68,64,63,67,69,65],cc=['clear','clear','rain','clouds','clear','clear','rain'],fc=document.getElementById('forecast'),html='<button class="fc-x" id="fcx" title="close">✕</button>';for(var i=0;i<7;i++){html+='<div class="fday"><b>'+days[i]+'</b><div class="ic">'+ic(cc[i])+'</div><div class="hi">'+hi[i]+'°</div><div class="lo">'+lo[i]+'°</div></div>';}fc.innerHTML=html;wireX();});
+
+  /* forecast open/dismiss: button toggles · × closes · click-away closes · Esc closes */
+  var forecast=document.getElementById('forecast'),fcbtn=document.getElementById('fcbtn');
+  function openFC(){forecast.classList.add('open');}function closeFC(){forecast.classList.remove('open');}
+  fcbtn.addEventListener('click',function(e){e.stopPropagation();forecast.classList.toggle('open');});
+  function wireX(){var x=document.getElementById('fcx');if(x)x.addEventListener('click',function(e){e.stopPropagation();closeFC();});}
+  wireX();
+  document.addEventListener('click',function(e){if(forecast.classList.contains('open')&&!forecast.contains(e.target)&&e.target!==fcbtn)closeFC();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFC();});
+
+  /* noticed line + bell + add-watch */
+  var noticed=document.getElementById('noticed'),bell=document.getElementById('bell');
+  document.querySelectorAll('[data-dismiss]').forEach(function(b){b.addEventListener('click',function(){noticed.classList.add('hidden');bell.classList.add('has');});});
+  bell.addEventListener('click',function(){var hid=noticed.classList.toggle('hidden');bell.classList.toggle('has',hid);});
+  var addwrap=document.getElementById('addwrap'),addx=document.getElementById('addx'),addplus=document.getElementById('addplus');
+  addx.addEventListener('click',function(){addwrap.classList.add('hide');addplus.classList.add('show');});
+  addplus.addEventListener('click',function(){addwrap.classList.remove('hide');addplus.classList.remove('show');});
+</script>
+</body>
+</html>

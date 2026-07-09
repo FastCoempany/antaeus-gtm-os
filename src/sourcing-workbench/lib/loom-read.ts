@@ -1,4 +1,5 @@
 import type { Prospect, WorkbenchStats } from "./types";
+import { t } from "@/lib/voice/t";
 
 /**
  * Program 6 / PR 13 — Loom Read engine.
@@ -94,30 +95,30 @@ interface WeekReadInputs {
 
 function pickWeekRead(s: WeekReadInputs): string {
     if (s.stats.total === 0 && s.dropped === 0) {
-        return "No prospects in the workbench yet. The territory has nothing pushable.";
+        return t("Nothing in the funnel yet. Describe a search to bring companies in.", { class: "body" });
     }
     if (s.stats.total === 0 && s.dropped > 0) {
-        return "Every prospect has dropped off the bench. Reset the focus before adding more.";
+        return t("Everything so far has been set aside. Sharpen who you're targeting before adding more.", { class: "body" });
     }
-    // Stricter pile-up signal (5+ captures with no research) fires
-    // before the general "any captured with nothing researched" rule
-    // so the heavier-debt case gets the targeted prescription.
+    // Stricter pile-up signal (5+ adds with nothing confirmed) fires
+    // before the general "added but none confirmed" rule so the
+    // heavier-debt case gets the targeted prescription.
     if (s.stats.captured >= 5 && s.stats.researched === 0) {
-        return "Names are piling up but nothing has been researched yet. Tighten the bar before you capture more.";
+        return t("Companies are piling up unconfirmed. Confirm a few before you add more.", { class: "body" });
     }
     if (s.stats.ready === 0 && s.stats.captured > 0 && s.stats.researched === 0) {
-        return "Names are captured but none has been researched. Capturing is cheap; research is what actually moves them forward.";
+        return t("Companies are added but none is confirmed yet. Adding is cheap; confirming is what moves them forward.", { class: "body" });
     }
     if (s.dropped > 0 && s.dropped >= s.stats.total) {
-        return "More drops than keeps. The sourcing focus may be off — review the query cards before more captures.";
+        return t("More set aside than kept. The search may be off — sharpen it before adding more.", { class: "body" });
     }
     if (s.stats.ready >= 3) {
-        return `${s.stats.ready} ready to push. The workbench is producing this week.`;
+        return `${s.stats.ready} ${t("ready to send. The funnel is producing this week.", { class: "body" })}`;
     }
     if (s.stats.pushed >= s.stats.total - s.stats.pushed && s.stats.pushed > 0) {
-        return "Most prospects already pushed forward. The bench is short — backfill with new captures.";
+        return t("Most accounts are already in Signal Console. The funnel is short — bring in new companies.", { class: "body" });
     }
-    return "Workbench is moving. Keep researching captured names before adding more.";
+    return t("The funnel is moving. Keep confirming before you add more.", { class: "body" });
 }
 
 interface OperatorMoveInputs {
@@ -127,19 +128,19 @@ interface OperatorMoveInputs {
 
 function pickOperatorMove(s: OperatorMoveInputs): string {
     if (s.stats.total === 0) {
-        return "Capture the first name from QueryStudio.";
+        return t("Describe a search and add the first company.", { class: "body" });
     }
     if (s.stats.ready >= 1) {
-        return "Push the cleanest ready name to Signal Console.";
+        return t("Send the cleanest ready account to Signal Console.", { class: "body" });
     }
     if (s.stats.researched >= 3) {
-        return "Tighten one researched prospect into ready — the gap is usually the owner.";
+        return t("Finish confirming one account — the last question is usually how you'll reach out.", { class: "body" });
     }
     if (s.stats.captured >= 5 && s.stats.researched === 0) {
-        return "Research one captured prospect. Stop adding until one converts.";
+        return t("Confirm one account. Stop adding until one gets through.", { class: "body" });
     }
     if (s.stats.researched >= 1) {
-        return "Tighten the highest-quality researched prospect into ready.";
+        return t("Finish confirming the strongest account.", { class: "body" });
     }
-    return "Walk one prospect forward. The workbench rewards forward motion.";
+    return t("Walk one account forward. The funnel rewards forward motion.", { class: "body" });
 }

@@ -2,6 +2,7 @@ import { render } from "preact";
 import { computed } from "@preact/signals";
 import { OutboundStudio } from "./OutboundStudio";
 import { OutboundStudioDS } from "./ds/OutboundStudioDS";
+import { OutboundStudioV4 } from "./v4/OutboundStudioV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -95,7 +96,30 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_outbound_studio_legacy");
 }
 
-render(useDsSurface ? <OutboundStudioDS /> : <OutboundStudio />, root);
+// Wire-to-production v4 (canon §4.8, "where you are with them",
+// settled 2026-07-04). Default ON; room_outbound_studio_v4_off is the
+// kill-switch back to the DS surface; ?v4=0/1 is the preview hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_outbound_studio_v4_off"));
+
+render(
+    useV4 ? (
+        <OutboundStudioV4 />
+    ) : useDsSurface ? (
+        <OutboundStudioDS />
+    ) : (
+        <OutboundStudio />
+    ),
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

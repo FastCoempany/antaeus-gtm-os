@@ -32,7 +32,7 @@ describe("CUES ladder", () => {
         expect(CUES[4]?.action).toBe("dm");
     });
 
-    it("ask cue (last) is the only one whose name contains 'Ask only when earned'", () => {
+    it("ask cue (last) is the ask", () => {
         const askCue = CUES[4];
         expect(askCue?.name).toContain("Ask");
     });

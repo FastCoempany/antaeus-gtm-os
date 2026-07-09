@@ -172,6 +172,29 @@ export function clearUser(): void {
 
 // For feature flags (Phase 3+ rolling migration).
 export function isFeatureEnabled(flagKey: string): boolean {
+    if (flagKey.endsWith("_v4_off") || flagKey === "room_onboarding_seeding_off") {
+        // The wire-to-production v4 surfaces are the production default,
+        // gated by per-room `room_*_v4_off` kill-switches. The e2e walk +
+        // boot suites are still written against the DS surfaces, so both
+        // e2e contexts — the force-legacy build AND the force-new
+        // sessionStorage override the seam walks use — turn the v4
+        // kill-switch ON so the DS surfaces serve. Inert in production
+        // (neither the env var nor the sessionStorage key is ever set).
+        // The `?v4=1` preview hatch still wins in each room's gate.
+        try {
+            if (
+                typeof sessionStorage !== "undefined" &&
+                sessionStorage.getItem("gtmos_e2e_force_new") === "1"
+            ) {
+                return true;
+            }
+        } catch {
+            // sessionStorage unavailable — fall through.
+        }
+        if (import.meta.env.VITE_E2E_FORCE_LEGACY === "1") {
+            return true;
+        }
+    }
     if (flagKey.endsWith("_legacy")) {
         // E2E per-test override: force the NEW surfaces even inside the
         // force-legacy build. The new-surface seam walks navigate room-to-

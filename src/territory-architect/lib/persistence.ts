@@ -2,6 +2,7 @@ import { reportError } from "@/lib/observability";
 import {
     EMPTY_TERRITORY_STATE,
     TIER_IDS,
+    isCarveAxis,
     type Approach,
     type DispositionState,
     type TerritoryAccount,
@@ -93,6 +94,7 @@ function parseFocus(raw: unknown): Focus | null {
         segment: asString(r["segment"]),
         whyUs: asString(r["whyUs"]),
         tier: asTier(r["tier"]),
+        ...(isCarveAxis(r["axis"]) ? { axis: r["axis"] } : {}),
         accountIds: asStringArray(r["accountIds"]),
         createdAt: asString(r["createdAt"]) || new Date().toISOString(),
         updatedAt:

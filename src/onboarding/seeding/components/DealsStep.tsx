@@ -147,9 +147,18 @@ export function DealsStep(): JSX.Element {
                     <button type="button" class="sd-btn" onClick={() => nextStep()}>
                         {t("The math, then you're done →", { class: "body" })}
                     </button>
-                ) : (
+                ) : n > 0 ? (
                     <button type="button" class="sd-btn sd-btn--ghost" onClick={() => nextStep()}>
                         {t("I've added them all — even if it's under ten", { class: "body" })}
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        class="sd-btn sd-btn--ghost"
+                        disabled
+                        aria-disabled="true"
+                    >
+                        {t("Add at least one live deal to go on", { class: "body" })}
                     </button>
                 )}
                 {!enough && n > 0 ? (

@@ -1,3 +1,4 @@
+import { t } from "@/lib/voice/t";
 import type {
     AllocationReadout,
     Approach,
@@ -41,15 +42,12 @@ export interface FieldReadInputs {
     readonly allocation: AllocationReadout;
 }
 
-/**
- * Score band labels mirror the wireframe's diagnostic language —
- * "Runnable" at the top, "Empty" at the bottom.
- */
+/** Band labels — canon §10 state vocabulary, plain at a glance. */
 const BAND_LABELS: Readonly<Record<FieldReadBand, string>> = {
-    runnable: "Runnable",
-    tight: "Tight",
-    loose: "Loose",
-    empty: "Empty"
+    runnable: t("Operating"),
+    tight: t("Tight"),
+    loose: t("Loose"),
+    empty: t("Empty")
 };
 
 export function computeFieldRead(input: FieldReadInputs): FieldRead {
@@ -138,24 +136,24 @@ interface RiskInputs {
 
 function pickMainRisk(s: RiskInputs): string {
     if (s.focuses.length === 0) {
-        return "No focuses defined. The territory has no strategic bets to organize around.";
+        return t("You haven't carved a division yet, so there's nothing to organize the territory around.", { class: "body" });
     }
     if (s.focuses.length === 1) {
-        return "A single focus covers the whole territory. One miss sinks the field.";
+        return t("One division covers everything. If that one bet misses, the whole territory misses.", { class: "body" });
     }
     if (s.allocation.status === "over") {
-        return `Field is over the ${s.allocation.ceiling} ceiling. Retier or close to come back inside.`;
+        return `${t("You're over the", { class: "body" })} ${s.allocation.ceiling}${t("-account cap. Retier or close a few to come back inside.", { class: "body" })}`;
     }
     if (s.lost.length >= s.active.length && s.lost.length >= 3) {
-        return "More accounts have dropped off than are active. The territory is full of names that aren't going anywhere.";
+        return t("More accounts have been lost than are being worked. A lot of what's on the map isn't going anywhere.", { class: "body" });
     }
     if (s.paused.length >= 5) {
-        return "Watch-ring accounts still look too comfortable. Promote one or eject.";
+        return t("Several paused accounts are just sitting there. Pick one up again, or take it off the map.", { class: "body" });
     }
     if (s.active.length === 0) {
-        return "No active accounts in the field yet. The map is theoretical.";
+        return t("No accounts are being worked yet — the map is still theoretical.", { class: "body" });
     }
-    return "Field is operating. Keep tightening — drift is the leak to watch.";
+    return t("The territory is being worked. The thing to watch is accounts quietly going stale.", { class: "body" });
 }
 
 interface ReplacementInputs {
@@ -166,12 +164,12 @@ interface ReplacementInputs {
 function pickReplacement(s: ReplacementInputs): string {
     const backfillNeeded = s.lost.length + Math.floor(s.paused.length / 2);
     if (backfillNeeded === 0) {
-        return "No backfill needed this week. The field is holding.";
+        return t("Nothing needs replacing this week. The list is holding.", { class: "body" });
     }
     if (backfillNeeded === 1) {
-        return "One cleaner replacement should land this week.";
+        return t("One account should come off the list this week, with a better one added in its place.", { class: "body" });
     }
-    return `${backfillNeeded} cleaner replacements should land this week.`;
+    return `${backfillNeeded} ${t("accounts should come off the list this week, with better ones added in their place.", { class: "body" })}`;
 }
 
 interface OperatorMoveInputs {
@@ -184,19 +182,19 @@ interface OperatorMoveInputs {
 
 function pickOperatorMove(s: OperatorMoveInputs): string {
     if (s.focuses.length === 0) {
-        return "Start with one focus. Name the strategic bet.";
+        return t("Carve one division. Name the group of buyers you believe you can win.", { class: "body" });
     }
     if (s.approaches.length === 0) {
-        return "Add an approach for each focus. Approaches are the talk-tracks the field needs.";
+        return t("Write down how you'll open the conversation with each division.", { class: "body" });
     }
     if (s.allocation.status === "over") {
-        return "Retier or close enough accounts to bring the total back under the ceiling.";
+        return t("Retier or close enough accounts to get back under the cap.", { class: "body" });
     }
     if (s.lost.length >= 3) {
-        return "Remove the closed-lost rows. Drift accounts shouldn't carry slots.";
+        return t("Take the lost accounts off the map — they shouldn't hold a slot.", { class: "body" });
     }
     if (s.paused.length >= 3) {
-        return "Promote one watch-ring account or eject — the middle should feel unstable.";
+        return t("Pick one paused account back up, or take it off the map.", { class: "body" });
     }
-    return "Add the next high-conviction Tier 1, or sharpen an existing focus.";
+    return t("Add the next must-win account, or sharpen one of your divisions.", { class: "body" });
 }

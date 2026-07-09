@@ -26,7 +26,8 @@ import {
     type CloudConnectionState,
     type CloudDeleteResult,
     type CloudExportSnapshot,
-    type CloudRowCounts
+    type CloudRowCounts,
+    restoreCloudExport
 } from "./lib/cloud-sync";
 
 export type ToastTone = "good" | "warn" | "bad" | "info";
@@ -149,6 +150,33 @@ export async function importBackupFromFile(file: File): Promise<void> {
     try {
         const text = await file.text();
         const parsed = JSON.parse(text) as unknown;
+        // A cloud export ("Download my workspace") restores through the
+        // cloud — upserted row by row, idempotent — not localStorage.
+        if (
+            parsed &&
+            typeof parsed === "object" &&
+            (parsed as { source?: unknown }).source === "antaeus-cloud-export-v1" &&
+            typeof (parsed as { tables?: unknown }).tables === "object"
+        ) {
+            const result = await restoreCloudExport(
+                () => createDataClient(),
+                parsed as { tables: Readonly<Record<string, ReadonlyArray<unknown>>> }
+            );
+            if (result.restoredRows > 0) {
+                flashToast(
+                    "good",
+                    `Workspace restored — ${result.restoredRows} rows back in place${
+                        result.errors.length > 0 ? `, ${result.errors.length} tables had trouble` : ""
+                    }.`
+                );
+            } else {
+                flashToast(
+                    "bad",
+                    "Couldn't put the copy back — check your connection and try again."
+                );
+            }
+            return;
+        }
         if (
             !parsed ||
             typeof parsed !== "object" ||

@@ -1,0 +1,68 @@
+/*
+ * Dashboard v4 — the command + standing cockpit (canon §4.2). Ported
+ * from dashboard-CHOSEN-complete-2026-07-04.html, scoped under .db4.
+ * Tokens from tokens.css. The readiness drawer reuses the shipped
+ * ReadinessDrawer styles.
+ */
+.db4 {
+    background: var(--ds-field, #eef1f7);
+    color: var(--ds-ink, #0a1c40);
+    font-family: var(--ds-sans, "Inter", system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: 0 0 70px;
+}
+.db4-wrap { max-width: 1080px; margin: 0 auto; padding: 0 34px; }
+.db4-top { display: flex; align-items: center; gap: 14px; padding: 20px 0 6px; }
+.db4-bname { font-family: var(--ds-mono, monospace); font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+.db4-r { margin-left: auto; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.42)); }
+
+/* MASTHEAD */
+.db4-mast { padding: 18px 0 4px; border-bottom: 1px solid var(--ds-hair-2, rgba(10,28,64,.14)); }
+.db4-mk { font-family: var(--ds-mono, monospace); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.42)); }
+.db4-gate { display: flex; gap: 0; margin: 16px 0 0; }
+.db4-g { flex: 1; text-align: center; font-family: var(--ds-mono, monospace); font-size: 9.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ds-ink-4, rgba(10,28,64,.26)); padding: 7px 4px; }
+.db4-bar { height: 4px; border-radius: 3px; background: rgba(10,28,64,.1); margin-bottom: 8px; }
+.db4-g.is-done .db4-bar { background: var(--ds-forest, #1b5e3f); }
+.db4-g.is-done { color: var(--ds-forest, #1b5e3f); }
+.db4-g.is-on .db4-bar { background: var(--ds-amber, #b5790f); }
+.db4-g.is-on { color: var(--ds-amber, #b5790f); }
+.db4-g.is-next .db4-bar { background: repeating-linear-gradient(90deg, rgba(37,99,235,.35), rgba(37,99,235,.35) 5px, transparent 5px, transparent 10px); }
+.db4-g.is-next { color: var(--ds-blue, #2563eb); }
+.db4-h1 { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 74px); line-height: 0.98; letter-spacing: -0.02em; margin: 22px 0 0; }
+.db4-h1 em { font-style: normal; color: var(--ds-amber, #b5790f); }
+.db4-sub { display: flex; align-items: flex-start; gap: 22px; margin-top: 16px; flex-wrap: wrap; }
+.db4-next { font-size: 15px; color: var(--ds-ink-2, rgba(10,28,64,.64)); line-height: 1.5; max-width: 52ch; border-left: 2px solid var(--ds-amber, #b5790f); padding-left: 14px; }
+.db4-next b { color: var(--ds-ink, #0a1c40); }
+.db4-nl { display: block; font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ds-amber, #b5790f); margin-bottom: 4px; }
+.db4-open { font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-blue, #2563eb); cursor: pointer; white-space: nowrap; margin-top: 4px; border: 0; background: 0; border-bottom: 1px solid transparent; padding: 0; }
+.db4-open:hover { border-color: var(--ds-blue, #2563eb); }
+
+/* THE ONE MOVE */
+.db4-move { padding: 24px 0 22px; border-bottom: 1px solid var(--ds-hair-2, rgba(10,28,64,.14)); }
+.db4-movek { font-family: var(--ds-mono, monospace); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ds-orange, #e6701e); display: flex; align-items: center; gap: 10px; }
+.db4-n { color: var(--ds-ink-4, rgba(10,28,64,.26)); }
+.db4-mrow { display: flex; align-items: center; gap: 22px; margin-top: 13px; flex-wrap: wrap; }
+.db4-mt { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.05; letter-spacing: -0.01em; margin: 0; }
+.db4-go { font-family: var(--ds-sans, sans-serif); font-weight: 600; font-size: 14px; padding: 12px 22px; border: 0; border-radius: 8px; background: var(--ds-orange, #e6701e); color: #fff; cursor: pointer; margin-left: auto; text-decoration: none; }
+.db4-why { font-size: 14px; color: var(--ds-ink-2, rgba(10,28,64,.64)); margin: 11px 0 0; max-width: 66ch; line-height: 1.5; }
+.db4-why b { color: var(--ds-ink, #0a1c40); }
+.db4-conf { font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-forest, #1b5e3f); display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; flex-wrap: wrap; }
+.db4-cd { width: 7px; height: 7px; border-radius: 50%; background: var(--ds-forest, #1b5e3f); }
+.db4-skip { color: var(--ds-blue, #2563eb); cursor: pointer; margin-left: 14px; border: 0; background: 0; border-bottom: 1px solid transparent; padding: 0; font-family: inherit; font-size: inherit; }
+.db4-skip:hover { border-color: var(--ds-blue, #2563eb); }
+.db4-q { color: var(--ds-ink-4, rgba(10,28,64,.26)); margin-left: 12px; }
+
+/* STANDING ROW */
+.db4-standhd { font-family: var(--ds-mono, monospace); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.42)); margin-top: 22px; }
+.db4-stand { display: flex; gap: 0; margin-top: 12px; flex-wrap: wrap; }
+.db4-vit { flex: 1; min-width: 150px; padding: 4px 18px; border-left: 1px solid var(--ds-hair, rgba(10,28,64,.09)); cursor: pointer; text-decoration: none; color: inherit; }
+.db4-vit:first-child { padding-left: 0; border-left: 0; }
+.db4-vit:hover .db4-vn { color: var(--ds-orange, #e6701e); }
+.db4-vit:hover .db4-door { color: var(--ds-orange, #e6701e); }
+.db4-vk { font-family: var(--ds-mono, monospace); font-size: 9px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.42)); }
+.db4-vn { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin-top: 7px; }
+.db4-vs { font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.42)); margin-top: 2px; }
+.db4-door { font-family: var(--ds-mono, monospace); font-size: 9px; color: var(--ds-ink-4, rgba(10,28,64,.26)); margin-top: 7px; }
+.db4-vit.is-bad .db4-vn { color: var(--ds-red, #c0392b); }
+.db4-vit.is-warn .db4-vn { color: var(--ds-amber, #b5790f); }

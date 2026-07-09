@@ -1,0 +1,289 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deal Workspace — interactive (toggleable views)</title>
+<style>
+:root{--field:#F6F8FC;--paper:#fff;--ink:#0e1b33;--ink-2:#3a4a66;--ink-3:#5b6b86;--ink-soft:#8a97b0;
+--line:#e6eaf2;--line-2:#d5dce8;--line-3:#c2ccdd;--orange:#e6701e;--blue:#2563eb;--blue-strong:#1d4ed8;--blue-soft:rgba(37,99,235,.06);
+--forest:#1b5e3f;--forest-strong:#164c33;--forest-soft:rgba(27,94,63,.07);--amber:#c98a1a;--amber-soft:rgba(201,138,26,.1);--grey:#8a97b0;--red:#d1483a;--red-soft:rgba(209,72,58,.07);
+--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--sans:'Public Sans',-apple-system,Segoe UI,Roboto,sans-serif;--serif:'DM Serif Display',Georgia,serif;}
+*{box-sizing:border-box;min-width:0}body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);min-height:100vh}
+.wrap{max-width:1160px;margin:0 auto;padding:0 0 90px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 30px;border-bottom:1px solid var(--line-2);background:rgba(246,248,252,.9);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}.brand b{color:var(--ink);font-weight:700}.mk{width:16px;height:16px}
+.tstat{font-family:var(--mono);font-size:12px;color:var(--ink-2)}.tstat b{color:var(--ink)}
+.pad{padding:22px 30px 0}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:27px;margin:0;letter-spacing:-.01em;line-height:1.1}.hero h1 b{color:var(--red)}
+.hero .r{text-align:right;font-family:var(--mono)}.hero .r .big{font-size:22px;font-weight:600;color:var(--red)}.hero .r .l2{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
+.hero.calm h1 b{color:var(--forest)}.hero.calm .r .big{color:var(--forest)}
+.bar{display:flex;align-items:center;gap:14px;margin:14px 0 6px;flex-wrap:wrap}
+.filters{display:flex;gap:8px}
+.chip{font-family:var(--mono);font-size:11px;padding:6px 12px;border:1px solid var(--line-2);border-radius:20px;background:var(--paper);color:var(--ink-2);cursor:pointer}.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.vtoggle{margin-left:auto;display:flex;border:1px solid var(--line-2);border-radius:7px;overflow:hidden;background:var(--paper)}
+.vtoggle button{font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:8px 14px;border:0;background:var(--paper);color:var(--ink-2);cursor:pointer;border-right:1px solid var(--line-2)}
+.vtoggle button:last-child{border-right:0}.vtoggle button.on{background:var(--ink);color:#fff}
+#view{margin-top:16px;transition:opacity .2s}#view.sw{opacity:0}
+/* shared bits */
+.fix{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:9px 14px;border:0;border-radius:5px;cursor:pointer;white-space:nowrap}
+.fix.hot{background:var(--orange);color:#fff}.fix.warm{background:var(--paper);color:var(--orange);border:1px solid rgba(230,112,30,.4)}.fix.calm{background:var(--paper);color:var(--forest);border:1px solid rgba(27,94,63,.3)}
+/* LIST view */
+.lane{margin-top:6px}
+.lanehd{display:flex;align-items:center;gap:10px;padding:12px 2px 8px}.lanehd .d{width:10px;height:10px;border-radius:50%;background:var(--lc)}.lanehd .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lc)}.lanehd .s{font-size:12px;color:var(--ink-soft)}.lanehd .n{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600}
+.crit{--lc:var(--red)}.risk{--lc:var(--amber)}.hold{--lc:var(--forest)}
+.lrow{display:grid;grid-template-columns:5px 200px 1fr 180px;gap:0 18px;align-items:center;border-top:1px solid var(--line);padding:13px 2px}
+.lrow .tick{width:5px;height:42px;border-radius:3px;background:var(--lc)}
+.lrow .a{font-weight:700;font-size:15.5px;letter-spacing:-.01em;cursor:pointer}.lrow .a:hover{color:var(--blue)}.lrow .v{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-top:2px}.lrow .stg{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--line-2);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:4px}
+.lrow .why{font-size:13px;color:var(--ink-2);line-height:1.4}.lrow .why b{color:var(--ink)}.lrow .why .c{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--lc);display:block;margin-bottom:3px}
+.lrow .act{display:flex;flex-direction:column;gap:6px;align-items:flex-end}.lrow .act .fix{width:100%;text-align:center}.lrow .sub{display:flex;gap:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft)}.lrow .sub a{cursor:pointer}.lrow .sub a:hover{color:var(--ink-2)}
+/* FOCUS view */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+.focal{border:1px solid var(--line-2);border-top:4px solid var(--lc);border-radius:9px;background:var(--paper);overflow:hidden}
+.focal .fhd{padding:15px 22px 10px;background:linear-gradient(180deg,var(--fsoft),transparent)}
+.focal .fl{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--lc);display:flex;align-items:center;gap:7px}.focal .fl .d{width:8px;height:8px;border-radius:50%;background:var(--lc)}
+.focal .nm{font-family:var(--serif);font-size:28px;line-height:1;margin-top:7px}.focal .nm .v{font-family:var(--mono);font-size:15px;color:var(--ink-2)}.focal .stg{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px}
+.diag{margin:13px 22px 0;padding:12px 15px;background:var(--fsoft);border-left:3px solid var(--lc);border-radius:5px}.diag .c{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--lc);margin-bottom:4px}.diag .t{font-size:14px;color:var(--ink);line-height:1.45}.diag .t b{font-weight:700}
+.actbar{display:flex;align-items:center;gap:12px;padding:14px 22px 4px}.actbar .gh{font-family:var(--mono);font-size:11px;color:var(--ink-soft);cursor:pointer}.actbar .gh:hover{color:var(--ink-2)}
+.health{padding:15px 22px 20px}.health .hh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:9px;margin-bottom:11px}.health .hh::after{content:"";flex:1;height:1px;background:var(--line)}.health .hh .e{color:var(--blue);cursor:pointer;letter-spacing:0;text-transform:none;font-size:11px}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px 22px}.hf{display:flex;flex-direction:column;gap:2px}.hf .k{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}.hf .val{font-size:13px;color:var(--ink);font-weight:600}.hf.gap .val{color:var(--red)}.hf.gap .val::before{content:"⚠ "}
+.queue{border:1px solid var(--line-2);border-radius:9px;background:var(--paper);overflow:hidden}.queue .qh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);padding:12px 16px;border-bottom:1px solid var(--line);display:flex}.queue .qh .n{margin-left:auto;color:var(--ink);font-weight:600}
+.qgl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px 2px;display:flex;align-items:center;gap:7px}.qgl .d{width:7px;height:7px;border-radius:50%}.qgl .n{margin-left:auto;color:var(--ink-soft)}
+.qr{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;border-left:3px solid var(--qc)}.qr:hover{background:var(--field)}.qr .a{font-weight:700;font-size:13.5px}.qr .why{font-size:10.5px;color:var(--ink-soft);margin-top:1px}.qr .v{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+/* TIMELINE view */
+.tlwrap{border:1px solid var(--line-2);border-radius:10px;background:var(--paper);overflow:hidden}
+.tlzones{display:grid;grid-template-columns:1.1fr 1fr 1.6fr;border-bottom:1px solid var(--line)}.zone{padding:10px 16px;border-right:1px solid var(--line)}.zone:last-child{border-right:0}.zone .zt{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600}.zone .zs{font-size:10.5px;color:var(--ink-soft);margin-top:2px}
+.zone.z1{background:linear-gradient(180deg,var(--red-soft),transparent)}.zone.z1 .zt{color:var(--red)}.zone.z2{background:linear-gradient(180deg,rgba(201,138,26,.08),transparent)}.zone.z2 .zt{color:var(--amber)}.zone.z3 .zt{color:var(--forest)}
+.track{position:relative;padding:16px;min-height:220px}.track .v1{position:absolute;top:0;bottom:0;left:29.7%;width:1px;background:var(--line)}.track .v2{position:absolute;top:0;bottom:0;left:56.7%;width:1px;background:var(--line)}
+.now{position:absolute;left:16px;top:12px;bottom:8px;width:2px;background:var(--red)}.nowl{position:absolute;left:20px;top:6px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.pill{position:absolute;display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:8px;border:1px solid var(--line-2);border-left:4px solid var(--pc);background:var(--paper);box-shadow:0 2px 8px -4px rgba(14,27,51,.12);cursor:pointer;white-space:nowrap}.pill .a{font-weight:700;font-size:14px;letter-spacing:-.01em}.pill .v{font-family:var(--mono);font-size:11px;color:var(--ink-2)}.pill .why{font-size:10px;color:var(--ink-soft)}
+.acthd{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin:22px 0 8px;display:flex;align-items:center;gap:9px}.acthd::after{content:"";flex:1;height:1px;background:var(--line)}
+.arow{display:grid;grid-template-columns:5px 190px 1fr 170px;gap:0 18px;align-items:center;border-top:1px solid var(--line);padding:13px 2px}.arow .tick{width:5px;height:38px;border-radius:3px;background:var(--red)}.arow .a{font-weight:700;font-size:15px;cursor:pointer}.arow .a:hover{color:var(--blue)}.arow .v{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-top:2px}.arow .why{font-size:13px;color:var(--ink-2);line-height:1.4}.arow .why .c{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:3px}.arow .fix{width:100%;text-align:center}
+.calmnote{padding:26px;text-align:center;font-size:13px;color:var(--ink-2)}.calmnote b{color:var(--forest)}
+/* shared footers */
+.closed{margin-top:22px;display:flex;align-items:center;gap:20px;padding:13px 16px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:12.5px;color:var(--ink-2)}.closed b{color:var(--ink)}.closed .won{color:var(--forest)}.closed .lost{color:var(--red)}.closed .exp{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}
+.handoff{margin-top:18px;border-top:1px solid var(--line);padding-top:15px}.handoff .h{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:11px}.hrow{display:flex;gap:10px;flex-wrap:wrap}.hbtn{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:10px 16px;border:1px solid var(--line-2);border-radius:5px;background:var(--paper);color:var(--ink-2);cursor:pointer}.hbtn:hover{border-color:var(--ink-3);color:var(--ink)}
+.foot{margin:22px 30px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.05em}
+/* health-snapshot visibility (load-bearing: feeds Dashboard/Readiness + Founding GTM/Future Autopsy) */
+.snap{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);line-height:1.65}.snap b{color:var(--forest)}.snap .fb{color:var(--red)}
+/* 9-field editor drawer */
+.scrim{position:fixed;inset:0;background:rgba(14,27,51,.3);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:60}.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,95vw);background:var(--paper);border-left:1px solid var(--line-2);transform:translateX(100%);transition:transform .24s ease;z-index:61;overflow-y:auto;box-shadow:-8px 0 40px rgba(14,27,51,.13)}.drawer.on{transform:translateX(0)}
+.dhd{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line-2);padding:18px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.dhd .t{font-family:var(--serif);font-size:24px;line-height:1}.dhd .m{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-top:7px}
+.dhd .x{border:0;background:transparent;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1}
+.dbd{padding:20px 24px 36px}
+.dgrp{margin-bottom:20px}.dgrp .gl{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:11px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.df{margin-bottom:12px}.df label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+.df input,.df select,.df textarea{width:100%;font-family:var(--sans);font-size:13.5px;color:var(--ink);padding:9px 11px;border:1px solid var(--line-2);border-radius:6px;background:var(--paper)}
+.df textarea{resize:vertical;min-height:50px;line-height:1.45}.df input:focus,.df select:focus,.df textarea:focus{outline:none;border-color:var(--blue)}
+.d2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stk{display:flex;gap:8px;align-items:center;margin-bottom:8px}.stk input{flex:1}.stk select{flex:0 0 128px}.stk .eng{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--ink-soft);white-space:nowrap}.stk .rm{border:0;background:transparent;color:var(--red);cursor:pointer;font-size:16px}
+.addstk{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;background:transparent;border:0;padding:4px 0}
+.dsv{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line-2);padding:15px 24px;display:flex;gap:12px;align-items:center}.dsv .save{font-family:var(--sans);font-weight:600;font-size:14px;padding:11px 22px;border:0;border-radius:6px;background:var(--orange);color:#fff;cursor:pointer}.dsv .note{font-family:var(--mono);font-size:10px;color:var(--ink-soft)}
+/* loss-reason capture modal */
+.lossmodal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:70;background:rgba(14,27,51,.42)}.lossmodal.on{display:flex}
+.lossbox{background:var(--paper);border-radius:10px;width:min(490px,93vw);padding:28px 30px;border-top:4px solid var(--red)}
+.lossbox .lh{font-family:var(--serif);font-size:24px;line-height:1.05}.lossbox .ls{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.5}.lossbox .ls b{color:var(--red)}
+.lopt{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);cursor:pointer;font-size:14px}.lopt input{accent-color:var(--red)}
+.lossbox textarea{width:100%;margin-top:12px;font-family:var(--sans);font-size:13px;padding:9px 11px;border:1px solid var(--line-2);border-radius:6px;min-height:56px;resize:vertical}
+.lact{margin-top:18px;display:flex;gap:12px;align-items:center}.lact .save{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:10px 20px;border:0;border-radius:6px;background:var(--red);color:#fff;cursor:pointer}.lact .skip{font-family:var(--mono);font-size:11px;color:var(--ink-soft);cursor:pointer}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:8px;opacity:0;transition:.3s;z-index:50;box-shadow:0 8px 30px -10px rgba(14,27,51,.5)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#7fd1a3}
+</style></head><body><div class="wrap">
+<div class="topbar"><div class="brand"><svg class="mk" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0e1b33" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0e1b33" stroke-width="3.4"/><path d="M2 38h44" stroke="#0e1b33" stroke-width="3.4"/></svg><span><b>ANTAEUS</b> · Deal Workspace</span></div><div class="tstat" id="tstat"></div></div>
+<div class="pad">
+  <div class="hero" id="hero"></div>
+  <div class="bar">
+    <div class="filters"><span class="chip on">All</span><span class="chip">At risk</span><span class="chip">Gone quiet</span><span class="chip">This quarter</span></div>
+    <div class="vtoggle" id="vtoggle">
+      <button data-v="focus">Focus</button><button data-v="timeline">Timeline</button><button data-v="list">List</button>
+    </div>
+  </div>
+  <div id="view"></div>
+
+  <div class="closed" id="closed"></div>
+  <div class="handoff"><div class="h">Take a deal somewhere it gets resolved</div><div class="hrow"><button class="hbtn">Pre-mortem a deal</button><button class="hbtn">Run a pilot</button><button class="hbtn">Deploy an advisor</button><button class="hbtn">Prep the next call</button><button class="hbtn">Rehearse the negotiation</button></div></div>
+  <div class="snap" id="snap"></div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer"></div>
+<div class="lossmodal" id="lossmodal"></div>
+<script>
+let VIEW='focus', focalId='nw';
+let deals=[
+ {id:'nw',name:'Northwind Robotics',value:120,stage:'PoC / Pilot',daysQuiet:9,hasNextStep:false,overdue:0,closeIn:20,momentum:'stalling',status:'active',
+  champion:'',economicBuyer:'',useCase:'Forecast rebuild',pain:'Missed Q2 number',competition:'Clay',decisionProcess:''},
+ {id:'me',name:'Mercury',value:40,stage:'Discovery',daysQuiet:18,hasNextStep:false,overdue:0,closeIn:60,momentum:'stalling',status:'active',
+  champion:'',economicBuyer:'',useCase:'',pain:'',competition:'',decisionProcess:''},
+ {id:'ra',name:'Ramp',value:84,stage:'Negotiation',daysQuiet:2,hasNextStep:true,overdue:2,closeIn:8,momentum:'neutral',status:'active',
+  champion:'Sarah Chen',economicBuyer:'CFO',useCase:'RevOps',pain:'Manual forecast',competition:'',decisionProcess:'Procurement + legal'},
+ {id:'br',name:'Brex',value:150,stage:'Verbal Commit',daysQuiet:0,hasNextStep:true,overdue:0,closeIn:5,momentum:'strong',status:'active',
+  champion:'Dana Wu',economicBuyer:'VP Finance',useCase:'Spend controls',pain:'No controls',competition:'',decisionProcess:'Signed off'},
+ {id:'va',name:'Vanta',value:56,stage:'Solution Fit',daysQuiet:1,hasNextStep:true,overdue:0,closeIn:35,momentum:'strong',status:'active',
+  champion:'Miguel Lopez',economicBuyer:'',useCase:'Compliance',pain:'SOC-2 deadline',competition:'',decisionProcess:''},
+ {id:'de',name:'Deel',value:30,stage:'Prospect',daysQuiet:0,hasNextStep:true,overdue:0,closeIn:90,momentum:'neutral',status:'active',
+  champion:'',economicBuyer:'',useCase:'',pain:'',competition:'',decisionProcess:''},
+ {id:'gu',name:'Gusto',value:22,stage:'Closed Won',status:'won'},
+ {id:'pl',name:'Plaid',value:44,stage:'Closed Lost',status:'lost',lossReason:'competitor'}
+];
+const $=id=>document.getElementById(id);
+const money=v=>'$'+v+'k';
+function assess(d){
+ let s=0;const cause=[];
+ if(!d.hasNextStep){s+=60;cause.push('no next step')}
+ if(d.daysQuiet>=14){s+=55;cause.push('quiet '+d.daysQuiet+' days')}
+ else if(d.daysQuiet>=7){s+=32;cause.push('quiet '+d.daysQuiet+' days')}
+ if(d.overdue>0){s+=42;cause.push('next step overdue '+d.overdue+'d')}
+ if(d.momentum==='stalling')s+=22;
+ if(d.closeIn<=10&&d.hasNextStep){s+=12;cause.push('closes in '+d.closeIn)}
+ const lane=s>=100?'critical':s>=42?'at-risk':'holding';
+ let days = lane==='critical'? Math.max(2,6-Math.floor(s/60)) : lane==='at-risk'? (d.closeIn<12?d.closeIn:11) : Math.min(45,14+Math.round(d.closeIn/3));
+ return {lane,cause:cause.join(' · '),days,score:s};
+}
+function whyText(d,a){
+ if(a.lane==='holding'){
+   if(d.closeIn<=6&&d.momentum==='strong')return 'Verbal yes, closing in '+d.closeIn+' days. Nothing wrong — just don\'t let it drift.';
+   if(d.momentum==='strong')return 'Moving well — champion engaged, next step booked. No action needed today.';
+   return 'Early and healthy. Let it run.';
+ }
+ if(d.id==='nw')return 'A '+money(d.value)+' pilot with <b>no next step</b> and <b>'+d.daysQuiet+' days of silence</b>. No champion, no economic buyer. Your biggest deal, going cold.';
+ if(d.id==='me')return 'Still in discovery after <b>'+d.daysQuiet+' quiet days</b>. Restart it with a real reason to meet, or set it aside so it stops flattering the pipeline.';
+ if(d.overdue>0)return 'Redlines were due '+d.overdue+' days ago and it closes in '+d.closeIn+'. Small fix, tight window.';
+ return 'Losing momentum — get a real next step on the calendar.';
+}
+function actionFor(d,a){
+ if(a.lane==='holding')return {label: d.closeIn<=6?'Get the signature':'Open the deal', kind:'calm'};
+ if(d.id==='me')return {label:'Restart it',kind:'hot'};
+ if(!d.hasNextStep)return {label:'Set the next step',kind:'hot'};
+ if(d.overdue>0)return {label:'Send the redlines',kind:'warm'};
+ return {label:'Set the next step',kind:'hot'};
+}
+function active(){return deals.filter(d=>d.status==='active')}
+function ranked(){return active().map(d=>({d,a:assess(d)})).sort((x,y)=>x.a.days-y.a.days)}
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400)}
+
+// actions
+function fixDeal(id){const d=deals.find(x=>x.id===id);if(!d)return;const a=assess(d);
+ if(a.lane==='holding'){toast(d.name+' — opened. Looking healthy.');return;}
+ d.hasNextStep=true;d.overdue=0;d.daysQuiet=0;if(d.momentum==='stalling')d.momentum='neutral';
+ toast('<b>'+d.name+'</b> — next step set. It just moved out of the red.');
+ if(focalId===id){const r=ranked().find(x=>assess(x.d).lane!=='holding');focalId=r?r.d.id:(ranked()[0]&&ranked()[0].d.id);}
+ render();
+}
+function setAside(id){const d=deals.find(x=>x.id===id);if(!d)return;d.status='aside';toast(d.name+' set aside — it stops flattering the pipeline.');if(focalId===id){const r=ranked()[0];focalId=r?r.d.id:null;}render();}
+function makeFocal(id){focalId=id;VIEW='focus';syncToggle();render();}
+
+function renderHero(){
+ const r=ranked();const atRisk=r.filter(x=>x.a.lane!=='holding');
+ const sum=atRisk.reduce((t,x)=>t+x.d.value,0);
+ const n=atRisk.length;
+ const h=$('hero');
+ if(n===0){h.className='hero calm';h.innerHTML='<h1><b>Nothing slipping.</b> Every live deal has a next step.</h1><div class="r"><div class="big">$0</div><div class="l2">at risk right now</div></div>';}
+ else{h.className='hero';h.innerHTML='<h1><b>'+(n===1?'One deal':n+' deals')+'</b> will slip this week<br>if you do nothing.</h1><div class="r"><div class="big">$'+sum+'k</div><div class="l2">at risk right now</div></div>';}
+ $('tstat').innerHTML='<b>'+active().length+'</b> live · <b>$'+active().reduce((t,d)=>t+d.value,0)+'k</b> pipeline';
+}
+function renderClosed(){const won=deals.filter(d=>d.status==='won'),lost=deals.filter(d=>d.status==='lost');
+ $('closed').innerHTML='<span><b class="won">'+won.length+' won</b> this quarter · '+won.map(d=>d.name+' '+money(d.value)).join(', ')+'</span><span><b class="lost">'+lost.length+' lost</b> · '+lost.map(d=>d.name+' '+money(d.value)).join(', ')+' — to a competitor</span><span class="exp">Export pipeline (CSV) ↓</span>';}
+
+function laneClass(l){return l==='critical'?'crit':l==='at-risk'?'risk':'hold'}
+function laneVars(l){return l==='critical'?'--lc:var(--red);--fsoft:var(--red-soft)':l==='at-risk'?'--lc:var(--amber);--fsoft:var(--amber-soft)':'--lc:var(--forest);--fsoft:var(--forest-soft)'}
+
+/* ---- LIST ---- */
+function viewList(){
+ const groups={critical:[],'at-risk':[],holding:[]};ranked().forEach(x=>groups[x.a.lane].push(x));
+ const lane=(key,cls,title,sub)=>{const items=groups[key];if(!items.length)return '';
+  return '<div class="lane '+cls+'"><div class="lanehd"><span class="d"></span><span class="t">'+title+'</span><span class="s">'+sub+'</span><span class="n">'+items.length+'</span></div>'+
+   items.map(({d,a})=>{const act=actionFor(d,a);
+    return '<div class="lrow '+cls+'"><div class="tick"></div><div><div class="a" onclick="makeFocal(\''+d.id+'\')">'+d.name+'</div><div class="v">'+money(d.value)+'</div><span class="stg">'+d.stage+'</span></div>'+
+     '<div class="why">'+(a.cause?'<span class="c">'+a.cause+'</span>':'')+whyText(d,a)+'</div>'+
+     '<div class="act"><button class="fix '+act.kind+'" onclick="fixDeal(\''+d.id+'\')">'+act.label+'</button><div class="sub"><a onclick="makeFocal(\''+d.id+'\')">Open</a>'+(a.lane!=='holding'?'<a onclick="setAside(\''+d.id+'\')">Set aside</a>':'')+'</div></div></div>';}).join('')+'</div>';};
+ return lane('critical','crit','Slipping now','— act this week or lose them')+lane('at-risk','risk','At risk','— one thing overdue')+lane('holding','hold','Holding','— on track');
+}
+/* ---- FOCUS ---- */
+function viewFocus(){
+ const r=ranked();if(!r.length)return '<div class="calmnote"><b>Nothing live.</b> Add a deal or wait for one from a cold call.</div>';
+ let f=r.find(x=>x.d.id===focalId);if(!f)f=r[0];const d=f.d,a=f.a;const act=actionFor(d,a);const gaps=[['Champion',d.champion],['Economic buyer',d.economicBuyer],['Use case',d.useCase],['Pain',d.pain],['Competition',d.competition],['Next step',d.hasNextStep?'set':''],['Decision process',d.decisionProcess],['Momentum',d.momentum]];
+ const rest=r.filter(x=>x.d.id!==d.id);
+ const grp=(key,cls,title)=>{const it=rest.filter(x=>x.a.lane===key);if(!it.length)return '';return '<div class="qgl '+cls+'"><span class="d" style="background:var(--lc)"></span>'+title+'<span class="n">'+it.length+'</span></div>'+it.map(({d,a})=>'<div class="qr" style="--qc:'+(cls==='crit'?'var(--red)':cls==='risk'?'var(--amber)':'var(--forest)')+'" onclick="makeFocal(\''+d.id+'\')"><div><div class="a">'+d.name+'</div><div class="why">'+(a.cause||'on track')+'</div></div><span class="v">'+money(d.value)+'</span></div>').join('');};
+ return '<div class="split"><div class="focal '+laneClass(a.lane)+'" style="'+laneVars(a.lane)+'">'+
+  '<div class="fhd"><div class="fl"><span class="d"></span>'+(a.lane==='holding'?'On track':'Slipping now')+(d.value>=100?' · your biggest deal':'')+'</div><div class="nm">'+d.name+' <span class="v">'+money(d.value)+'</span></div><div class="stg">'+d.stage+' · closes in '+d.closeIn+' days</div></div>'+
+  '<div class="diag"><div class="c">'+(a.lane==='holding'?'Where it stands':'Why it\'s slipping')+'</div><div class="t">'+whyText(d,a)+'</div></div>'+
+  '<div class="actbar"><button class="fix '+act.kind+'" onclick="fixDeal(\''+d.id+'\')">'+act.label+'</button><span class="gh">Open full deal</span><span class="gh">Pre-mortem</span>'+(a.lane!=='holding'?'<span class="gh" onclick="setAside(\''+d.id+'\')">Set aside</span>':'')+'</div>'+
+  '<div class="health"><div class="hh">Deal health <span class="e">edit all 9 →</span></div><div class="hgrid">'+
+   gaps.map(([k,v])=>'<div class="hf'+(v?'':' gap')+'"><span class="k">'+k+'</span><span class="val"'+(k==='Momentum'&&v==='stalling'?' style="color:var(--red)"':'')+'>'+(v||'not named')+'</span></div>').join('')+
+  '</div></div></div>'+
+  '<div class="queue"><div class="qh"><span>The rest, ranked</span><span class="n">'+rest.length+'</span></div>'+grp('critical','crit','Slipping / at risk')+grp('at-risk','risk','At risk')+grp('holding','hold','Holding')+'</div></div>';
+}
+/* ---- TIMELINE ---- */
+function viewTimeline(){
+ const r=ranked();const xFor=days=>4+Math.min(45,days)/45*88;
+ let pills='';const rows=[0,0,0];
+ r.forEach(({d,a},i)=>{const x=xFor(a.days);const yi=i%3;const y=14+yi*64;const pc=a.lane==='critical'?'var(--red)':a.lane==='at-risk'?'var(--amber)':'var(--forest)';
+  pills+='<div class="pill" style="left:'+x+'%;top:'+y+'px;--pc:'+pc+'" onclick="makeFocal(\''+d.id+'\')"><span class="a">'+d.name+'</span><span class="v">'+money(d.value)+'</span><span class="why">'+(a.cause?a.cause.split(' · ')[0]:(d.momentum==='strong'?'strong':'early'))+'</span></div>';});
+ const red=r.filter(x=>x.a.lane==='critical');
+ let detail=red.length? '<div class="acthd">Act this week — the red zone</div>'+red.map(({d,a})=>{const act=actionFor(d,a);return '<div class="arow"><div class="tick"></div><div><div class="a" onclick="makeFocal(\''+d.id+'\')">'+d.name+'</div><div class="v">'+money(d.value)+' · '+d.stage+'</div></div><div class="why"><span class="c">'+a.cause+'</span>'+whyText(d,a)+'</div><button class="fix '+act.kind+'" onclick="fixDeal(\''+d.id+'\')">'+act.label+'</button></div>';}).join(''):'<div class="calmnote"><b>Red zone clear.</b> Nothing slips this week — the pressure has moved to the right.</div>';
+ return '<div class="tlwrap"><div class="tlzones"><div class="zone z1"><div class="zt">Slips this week</div><div class="zs">act now or lose it</div></div><div class="zone z2"><div class="zt">Slips in ~2 weeks</div><div class="zs">one thing overdue</div></div><div class="zone z3"><div class="zt">Holding / on track</div><div class="zs">nothing needed today</div></div></div>'+
+  '<div class="track"><div class="v1"></div><div class="v2"></div><div class="now"></div><div class="nowl">now</div>'+pills+'</div></div>'+detail;
+}
+function render(){
+ renderHero();renderClosed();renderSnap();
+ const v=$('view');v.classList.add('sw');
+ setTimeout(()=>{v.innerHTML=VIEW==='list'?viewList():VIEW==='timeline'?viewTimeline():viewFocus();v.classList.remove('sw');},120);
+ $('foot').textContent='MOCKUP · not wired · design-only · DEAL WORKSPACE · toggleable views (Focus · Timeline · List) off one shared recovery engine · '+VIEW.toUpperCase();
+}
+/* ---- 9-field editor + stakeholders + loss-reason capture (load-bearing) ---- */
+const STAGES9=['Prospect','Discovery','Solution Fit','PoC / Pilot','Negotiation','Verbal Commit','Closed Won','Closed Lost'];
+const ROLES=['Champion','Economic buyer','Technical','Legal','Exec sponsor','End user'];
+const LOSS=[['competitor','Lost to a competitor'],['no_decision','No decision / status quo'],['budget','Budget pulled'],['champion_left','Champion left'],['timing','Timing / not now']];
+deals.forEach(d=>{if(!d.stakeholders)d.stakeholders=[];if(d.notes===undefined)d.notes='';if(d.forecast===undefined)d.forecast=d.momentum==='strong'?'Commit':d.momentum==='stalling'?'Pipeline':'Best case';});
+(function(){const ra=deals.find(d=>d.id==='ra');if(ra&&!ra.stakeholders.length)ra.stakeholders=[{name:'Sarah Chen',role:'Champion',engaged:true},{name:'CFO',role:'Economic buyer',engaged:false}];const br=deals.find(d=>d.id==='br');if(br&&!br.stakeholders.length)br.stakeholders=[{name:'Dana Wu',role:'Champion',engaged:true}];})();
+function resolvedFocalId(){const r=ranked();let f=r.find(x=>x.d.id===focalId);if(!f)f=r[0];return f?f.d.id:null;}
+function renderSnap(){
+ const act=active();const pipe=act.reduce((t,d)=>t+d.value,0);const r=ranked();const slip=r.filter(x=>x.a.lane!=='holding').length;
+ const won=deals.filter(d=>d.status==='won').length,lost=deals.filter(d=>d.status==='lost').length;
+ $('snap').innerHTML='This board publishes a <b>health snapshot</b> ('+act.length+' active · $'+pipe+'k pipeline · '+slip+' slipping) → <b>Dashboard</b> + <b>Readiness</b> read it live.<br>Closed-lost <span class="fb">loss reasons</span> → <span class="fb">Founding GTM</span> (win/loss) + <span class="fb">Future Autopsy</span>. So far: '+won+' won · '+lost+' lost.';
+}
+function openEditor(id){const d=deals.find(x=>x.id===id);if(!d)return;
+ const stk=d.stakeholders.map((s,i)=>'<div class="stk"><input value="'+(s.name||'')+'" data-stk="'+i+'" data-k="name" placeholder="Name"><select data-stk="'+i+'" data-k="role">'+ROLES.map(r=>'<option '+(r===s.role?'selected':'')+'>'+r+'</option>').join('')+'</select><label class="eng"><input type="checkbox" data-stk="'+i+'" data-k="engaged" '+(s.engaged?'checked':'')+'>engaged</label><button class="rm" data-rmstk="'+i+'">×</button></div>').join('');
+ $('drawer').innerHTML='<div class="dhd"><div><div class="t">'+d.name+'</div><div class="m">'+money(d.value)+' · '+d.stage+' · the 9 fields that make it a real deal</div></div><button class="x" id="dx">×</button></div>'+
+  '<div class="dbd">'+
+   '<div class="dgrp"><div class="gl">Account &amp; stage</div><div class="d2"><div class="df"><label>Value ($k)</label><input type="number" data-f="value" value="'+d.value+'"></div><div class="df"><label>Stage</label><select data-f="stage">'+STAGES9.map(s=>'<option '+(s===d.stage?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div></div>'+
+   '<div class="dgrp"><div class="gl">The next move</div><div class="d2"><div class="df"><label>Forecast</label><select data-f="forecast">'+['Pipeline','Best case','Commit'].map(s=>'<option '+(s===d.forecast?'selected':'')+'>'+s+'</option>').join('')+'</select></div><div class="df"><label>Momentum</label><select data-f="momentum">'+['strong','neutral','stalling'].map(s=>'<option '+(s===d.momentum?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div></div>'+
+   '<div class="dgrp"><div class="gl">The buying group</div><div class="d2"><div class="df"><label>Champion</label><input data-f="champion" value="'+(d.champion||'')+'" placeholder="who carries it inside"></div><div class="df"><label>Economic buyer</label><input data-f="economicBuyer" value="'+(d.economicBuyer||'')+'" placeholder="who owns the budget"></div></div><div class="df"><label>Stakeholders</label><div id="stklist">'+(stk||'<div style="font-family:var(--mono);font-size:11px;color:var(--ink-soft)">none yet</div>')+'</div><button class="addstk" id="addstk">+ add a stakeholder</button></div></div>'+
+   '<div class="dgrp"><div class="gl">The deal intel</div><div class="df"><label>Use case</label><input data-f="useCase" value="'+(d.useCase||'')+'"></div><div class="df"><label>Pain</label><input data-f="pain" value="'+(d.pain||'')+'"></div><div class="df"><label>Competition</label><input data-f="competition" value="'+(d.competition||'')+'"></div><div class="df"><label>Decision process</label><input data-f="decisionProcess" value="'+(d.decisionProcess||'')+'"></div><div class="df"><label>Notes</label><textarea data-f="notes">'+(d.notes||'')+'</textarea></div></div>'+
+  '</div>'+
+  '<div class="dsv"><button class="save" id="dsave">Save the deal</button><span class="note">champion · EB · use case · pain · competition · process · notes · forecast · momentum</span></div>';
+ $('scrim').classList.add('on');$('drawer').classList.add('on');
+ $('dx').onclick=closeDrawer;$('scrim').onclick=closeDrawer;
+ $('addstk').onclick=()=>{d.stakeholders.push({name:'',role:'Champion',engaged:false});openEditor(id);};
+ $('drawer').querySelectorAll('[data-rmstk]').forEach(b=>b.onclick=()=>{d.stakeholders.splice(+b.dataset.rmstk,1);openEditor(id);});
+ $('dsave').onclick=()=>saveEditor(id);
+}
+function closeDrawer(){$('scrim').classList.remove('on');$('drawer').classList.remove('on');}
+function saveEditor(id){const d=deals.find(x=>x.id===id);if(!d)return;const prev=d.stage;
+ $('drawer').querySelectorAll('[data-f]').forEach(el=>{const k=el.dataset.f;d[k]=el.type==='number'?+el.value:el.value;});
+ $('drawer').querySelectorAll('[data-stk]').forEach(el=>{const i=+el.dataset.stk,k=el.dataset.k;if(d.stakeholders[i])d.stakeholders[i][k]=el.type==='checkbox'?el.checked:el.value;});
+ if(d.champion)d.hasNextStep=d.hasNextStep;
+ closeDrawer();
+ if(d.stage==='Closed Lost'&&prev!=='Closed Lost'){d.status='lost';openLoss(id);return;}
+ if(d.stage==='Closed Won'){d.status='won';}
+ toast('<b>'+d.name+'</b> saved · health snapshot published');render();
+}
+function openLoss(id){const d=deals.find(x=>x.id===id);if(!d)return;
+ $('lossmodal').innerHTML='<div class="lossbox"><div class="lh">Why did '+d.name+' close-lost?</div><div class="ls">The one field the whole system leans on. <b>The reason feeds Founding GTM (win/loss) and Future Autopsy.</b> Skip it and the next hire inherits a loss with no lesson.</div>'+
+  '<div class="lopts">'+LOSS.map((l,i)=>'<label class="lopt"><input type="radio" name="loss" value="'+l[0]+'" '+(i===0?'checked':'')+'>'+l[1]+'</label>').join('')+'</div>'+
+  '<textarea id="lnotes" placeholder="What actually happened? (optional but valuable)"></textarea>'+
+  '<div class="lact"><button class="save" id="lsave">Save the reason</button><span class="skip" id="lskip">Skip — leave it unexplained</span></div></div>';
+ $('lossmodal').classList.add('on');
+ $('lsave').onclick=()=>{d.lossReason=$('lossmodal').querySelector('input[name=loss]:checked').value;d.lossNotes=$('lnotes').value;$('lossmodal').classList.remove('on');toast('Loss reason saved → Founding GTM + Future Autopsy');render();};
+ $('lskip').onclick=()=>{$('lossmodal').classList.remove('on');toast(d.name+' lost — reason left unexplained');render();};
+}
+/* open the editor from "edit all 9 →" or "Open full deal" */
+$('view').addEventListener('click',(e)=>{const t=e.target;
+ if(t.classList.contains('e')||(t.classList.contains('gh')&&/open full deal/i.test(t.textContent))){const id=resolvedFocalId();if(id)openEditor(id);}
+});
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){closeDrawer();$('lossmodal').classList.remove('on');}});
+function syncToggle(){document.querySelectorAll('#vtoggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===VIEW));}
+document.querySelectorAll('#vtoggle button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;syncToggle();render();}));
+syncToggle();render();
+</script>
+</body></html>

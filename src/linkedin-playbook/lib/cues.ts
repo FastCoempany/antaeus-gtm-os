@@ -45,7 +45,7 @@ export const CUES: ReadonlyArray<Cue> = [
     },
     {
         index: 3,
-        name: "Give evidence before asking",
+        name: "Give something useful before asking",
         label: "Cue 04",
         color: "var(--lp-orange)",
         action: "dm",
@@ -55,7 +55,7 @@ export const CUES: ReadonlyArray<Cue> = [
     },
     {
         index: 4,
-        name: "Ask only when earned",
+        name: "Ask only when it's warranted",
         label: "Cue 05",
         color: "var(--lp-red)",
         action: "dm",

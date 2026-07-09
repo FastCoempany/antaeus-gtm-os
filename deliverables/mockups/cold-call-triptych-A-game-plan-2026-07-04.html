@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cold Call Studio A — the game plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.06);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 14px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+/* pre-flight bar */
+.pre{display:flex;gap:0;margin-top:18px;border:1px solid var(--hair-2);border-radius:11px;background:var(--surface);overflow:hidden}
+.pre .cell{flex:1;padding:13px 18px;border-left:1px solid var(--hair)}.pre .cell:first-child{border-left:0}
+.pre .k{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.pre .v{font-size:14px;font-weight:600;margin-top:5px}.pre .v .sub{font-weight:400;color:var(--ink-3);font-size:12px}
+.pre .cell.goal{background:var(--orange-soft)}.pre .cell.goal .k{color:var(--orange)}
+.pre .cell.sig .src{font-family:var(--mono);font-size:9px;color:var(--blue);font-weight:400;margin-left:6px}
+/* the plan */
+.planhd{display:flex;align-items:baseline;margin:26px 0 4px}.planhd .h{font-family:var(--serif);font-size:22px}.planhd .s{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.step{border-top:1px solid var(--hair-2);padding:18px 0}
+.step .sh{display:flex;align-items:center;gap:12px}
+.step .n{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none}
+.step .nm{font-size:16.5px;font-weight:600;letter-spacing:-.01em}.step .nm .par{color:var(--ink-3);font-weight:400;font-size:14px}
+.step .say{margin:11px 0 0 36px;font-size:15.5px;line-height:1.5;color:var(--ink);border-left:3px solid var(--forest);padding:2px 0 2px 13px}.step .say .sig{background:var(--orange-soft);border-bottom:1.5px solid rgba(230,112,30,.4)}
+.push{margin:12px 0 0 36px}
+.push .pl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.pb{display:grid;grid-template-columns:200px 1fr;gap:8px 14px;padding:6px 0;border-top:1px solid var(--hair);font-size:13px}
+.pb .q{color:var(--red);font-weight:500}.pb .q::before{content:'“'}.pb .q::after{content:'”'}
+.pb .a{color:var(--ink-2)}.pb .a b{color:var(--ink);font-weight:600}
+/* after the call */
+.after{margin-top:30px;border:1px solid var(--hair-2);border-top:3px solid var(--blue);border-radius:0 0 11px 11px;background:var(--surface);padding:18px 20px}
+.after .ah{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.outs{display:flex;gap:8px;flex-wrap:wrap}
+.out{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:9px 14px;border-radius:20px;border:1px solid var(--hair-2);background:var(--field);cursor:pointer}
+.out.book{background:var(--forest);color:#fff;border-color:var(--forest)}
+.after .recent{margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;gap:18px;flex-wrap:wrap}.after .recent b{color:var(--ink)}
+.inv{margin-top:28px;border-top:1px solid var(--hair);padding-top:14px}.inv .h{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4)}
+.inv ul{columns:3;column-gap:26px;margin:10px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}.inv li{margin:0 0 5px;padding-left:14px;position:relative;break-inside:avoid}.inv li::before{content:"▪";position:absolute;left:0;color:var(--forest)}
+.foot{max-width:1000px;margin:22px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Cold Call Studio</span><span class="r">walk in ready · log it after</span></div>
+
+  <div class="pre">
+    <div class="cell"><div class="k">Calling</div><div class="v">Sarah Chen <span class="sub">· a VP</span></div></div>
+    <div class="cell"><div class="k">At</div><div class="v">Ramp <span class="sub">· hot</span></div></div>
+    <div class="cell sig"><div class="k">What's happening <span class="src">◆ Signal Console</span></div><div class="v" style="font-size:13px">12 AE roles this week · new CRO</div></div>
+    <div class="cell goal"><div class="k">Your one goal</div><div class="v">Book 20 minutes</div></div>
+  </div>
+
+  <div class="planhd"><span class="h">Your game plan</span><span class="s">read it before you dial · then put the phone in your hand</span></div>
+
+  <div class="step">
+    <div class="sh"><span class="n">1</span><span class="nm">Open the call</span></div>
+    <div class="say">"Sarah? It's Alex from Antaeus — I know I'm an interruption. Give me 30 seconds and you can tell me to get lost?"</div>
+    <div class="push"><div class="pl">If they push back</div>
+      <div class="pb"><span class="q">I'm busy</span><span class="a">"Totally — <b>30 seconds</b>, then you decide."</span></div>
+      <div class="pb"><span class="q">We don't take sales calls</span><span class="a">"Fair — this isn't a pitch, it's about your AE ramp. 30 seconds?"</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="sh"><span class="n">2</span><span class="nm">Why it matters to them <span class="par">(what's the cost)</span></span></div>
+    <div class="say">"You just <span class="sig">opened 12 AE roles</span> — most RevOps leads tell me that's exactly when the forecast stops being trustworthy, right as the board starts leaning on it. Costs them the room's confidence. Sound familiar?"</div>
+    <div class="push"><div class="pl">If they push back</div>
+      <div class="pb"><span class="q">We've got it handled</span><span class="a">"What are you using to keep the forecast honest through a ramp that fast?"</span></div>
+      <div class="pb"><span class="q">Not really our issue</span><span class="a">Name a different cost, or wrap up cleanly — don't force it.</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="sh"><span class="n">3</span><span class="nm">Prove to them it's worked before</span></div>
+    <div class="say">"A team your size — Vanta — ran this during a 10-AE ramp and cut their forecast error in half in one quarter. I can show you exactly how they did it."</div>
+    <div class="push"><div class="pl">If they push back</div>
+      <div class="pb"><span class="q">We already use a tool for that</span><span class="a">"Most teams keep it and add this on top — it's the forecast layer, not a rip-and-replace."</span></div>
+      <div class="pb"><span class="q">How?</span><span class="a">"That's the 20-minute meeting — I'll walk you through it."</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="sh"><span class="n">4</span><span class="nm">Ask for the meeting</span></div>
+    <div class="say">"Worth 20 minutes next week to see if it fits how you're scaling? Thursday or Friday?"</div>
+    <div class="push"><div class="pl">If they push back</div>
+      <div class="pb"><span class="q">Just send me something</span><span class="a">"Happy to — and let's hold 20 min so it's not another unread PDF. Thursday?"</span></div>
+      <div class="pb"><span class="q">Not now</span><span class="a">"When's better — should I check back once the ramp kicks off?"</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="sh"><span class="n">5</span><span class="nm">Wrap up</span></div>
+    <div class="say">"Appreciate the 30 seconds either way, Sarah."</div>
+    <div class="push"><div class="pl">Before you hang up</div>
+      <div class="pb"><span class="q">No, thanks</span><span class="a">"Is there someone on your team who owns the forecast I should talk to instead?"</span></div>
+    </div>
+  </div>
+
+  <div class="after">
+    <div class="ah">After the call — how'd it go?</div>
+    <div class="outs">
+      <span class="out book">Meeting booked → creates a deal</span>
+      <span class="out">Call me back</span>
+      <span class="out">Gave a referral</span>
+      <span class="out">Voicemail</span>
+      <span class="out">Not interested</span>
+      <span class="out">Hung up</span>
+      <span class="out">No answer</span>
+    </div>
+    <div class="recent">Recent: <span><b>Brex</b> · booked ✓</span><span><b>Mercury</b> · voicemail</span><span><b>Deel</b> · call back Fri</span> · <b>14 calls</b> this week · <b>3 booked</b></div>
+  </div>
+
+  <div class="inv"><div class="h">Full inventory — Cold Call Studio</div><ul>
+    <li>Pre-flight: who · what's happening · your goal</li><li>The call's shape · 5 steps</li><li>What's happening, pulled from Signal Console</li>
+    <li><b>The line ready for each step</b></li><li>The pushback you'll hit + the answer</li><li>Read it before · phone in hand, not on screen</li>
+    <li>No clock · no clicking mid-call</li><li>After: log the outcome</li><li><b>Booked meeting → creates a deal</b></li>
+    <li>Recent calls + your numbers</li><li>In ← Signal Console</li><li>Out → Call Planner / Deal Workspace</li>
+  </ul></div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · COLD CALL STUDIO A — the game plan · the whole call on one page you read BEFORE you dial · no clock, no mid-call clicking · log the outcome after · plain language, no jargon, seller/you</div>
+</body></html>

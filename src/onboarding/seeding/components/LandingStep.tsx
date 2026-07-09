@@ -11,9 +11,8 @@ import { enrichedAccounts } from "./WakeStep";
  * is written into the living rooms (ICP Studio, Signal Console, Deal
  * Workspace, Quota Workback) so the Dashboard is already alive. Then an
  * honest read of where they stand, and the invited-tail handoff (proof /
- * advisors / win-loss come later). "Open my morning" routes to Welcome —
- * the Threshold on-ramp that walks a fresh operator into their first real
- * move — not straight into the dense Dashboard command surface.
+ * advisors / win-loss come later). "Open my morning" routes to the live
+ * Dashboard.
  */
 const persisted = signal(false);
 let wrote = false;
@@ -69,14 +68,14 @@ export function LandingStep(): JSX.Element {
                     <div class="sd-r2__k">{t("What's left — later, no rush", { class: "body" })}</div>
                     <div class="sd-r2__t">
                         {t(
-                            "Over the coming days it'll ask for your evidence, your advisors, and your wins and losses. Each one wakes another room. You've done the hard part today.",
+                            "Over the coming days it'll ask about your pilots, your advisors, and your wins and losses. Each one wakes another room. You've done the hard part today.",
                             { class: "body" }
                         )}
                     </div>
                 </div>
             </div>
             <div class="sd-foot">
-                <a class="sd-btn" href="/welcome/">
+                <a class="sd-btn" href="/dashboard/">
                     {t("Open my morning →", { class: "body" })}
                 </a>
             </div>

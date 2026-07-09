@@ -15,7 +15,7 @@ import type { Moment, MomentId } from "./types";
 export const MOMENTS: ReadonlyArray<Moment> = [
     {
         id: "intro",
-        name: "Warm introduction",
+        name: "Open the door",
         short: "No meeting yet. One trusted person can open the door for us.",
         ask: "Can you make a warm introduction to [buyer] at [company]? I drafted the two-line context below so this stays easy.",
         proof: "The account fits what we're going after, but we don't have a way in yet.",
@@ -24,25 +24,25 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "eb_bridge",
-        name: "Executive bridge",
+        name: "Get an exec involved",
         short: "Champion is alive, but executive authority is not in the thread.",
         ask: "Could you send [buyer] a short note that this deserves executive visibility at [company]?",
-        proof: "Pain and evidence exist. Authority is the missing bridge.",
+        proof: "The pain is real and the pilot showed it. Authority is the missing bridge.",
         advisorLine: "This is a signal that the work is worth executive attention, not a request to sell it for us.",
         outcome: "Executive meeting or named budget owner."
     },
     {
         id: "poc_stall",
-        name: "Post-evidence stall",
-        short: "Evidence landed, but the deal went quiet.",
-        ask: "Could you ask whether the evidence from [company] is still moving forward or if timing changed?",
+        name: "Nudge a stalled pilot",
+        short: "The pilot landed, but the deal went quiet.",
+        ask: "Could you ask whether the pilot at [company] is still moving forward or if timing changed?",
         proof: "The product proved itself. The silence is a prioritization problem.",
         advisorLine: "A neutral check from you will get a clearer answer than another founder follow-up.",
         outcome: "Next step revived or closed cleanly."
     },
     {
         id: "procurement",
-        name: "Procurement pressure",
+        name: "Unstick procurement",
         short: "Contract is stuck and nobody will name timing.",
         ask: "Could you ask [buyer] whether procurement timing is real or if the deal needs a different path?",
         proof: "The business case is no longer the blocker. Process opacity is.",
@@ -51,7 +51,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "competitor",
-        name: "Competitive frame",
+        name: "Reset the comparison",
         short: "A competitor entered and the buyer needs outside perspective.",
         ask: "Could you give [buyer] ten minutes of pattern recognition on what matters in this category?",
         proof: "The prospect is comparing options. Third-party credibility can reset the criteria.",
@@ -60,17 +60,17 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "champion_left",
-        name: "Champion loss",
-        short: "The internal carrier disappeared.",
+        name: "Lost your champion",
+        short: "The person moving it inside is gone.",
         ask: "Our champion at [company] left. Do you know another credible path into this account?",
-        proof: "The deal was real, but the thread lost its carrier.",
+        proof: "The deal was real, but the person moving it inside is gone.",
         advisorLine: "Speed matters more than perfection. We need one safe re-entry point.",
         outcome: "New internal owner or clean exit."
     },
     {
         id: "budget_kill",
-        name: "Budget freeze",
-        short: "The deal has evidence but lost the budget fight.",
+        name: "Save it from a budget freeze",
+        short: "The pilot held up, but the deal lost the budget fight.",
         ask: "Could you help us frame whether [company] should phase this instead of freezing it?",
         proof: "The work may still be valuable, but the spend path got compressed.",
         advisorLine: "The ask is a smaller path forward, not a plea for budget.",
@@ -78,16 +78,16 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "board_decision",
-        name: "Board signal",
+        name: "Signal you're a serious bet",
         short: "Approval needs board or C-suite confidence.",
         ask: "Could you signal to the executive path at [company] that this is a serious backed company?",
-        proof: "This is too expensive to spend casually. Use only when the deal merits it.",
+        proof: "The company is well backed and the work is real - a board-level word carries that weight.",
         advisorLine: "A board-level mention can change trust faster than another deck.",
         outcome: "Executive or board approval path opens."
     },
     {
         id: "reference",
-        name: "Reference evidence",
+        name: "Get a customer to vouch",
         short: "The buyer wants independent validation.",
         ask: "Could you speak with [buyer] for fifteen minutes and share what matters from your operator view?",
         proof: "The buyer needs confidence from someone who has lived the problem.",
@@ -96,7 +96,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     },
     {
         id: "renewal",
-        name: "Renewal expansion",
+        name: "Warm up a renewal",
         short: "Existing customer needs a strategic touch before the next phase.",
         ask: "Could you check in with [buyer] before renewal and tee up the expansion conversation?",
         proof: "The relationship is already live. The next phase needs executive oxygen.",

@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { AdvisorDeploy } from "./AdvisorDeploy";
 import { AdvisorDeployDS } from "./ds/AdvisorDeployDS";
+import { CallInAFavorV4 } from "./v4/CallInAFavorV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -121,7 +122,31 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_advisor_deploy_legacy");
 }
 
-render(useDsSurface ? <AdvisorDeployDS /> : <AdvisorDeploy />, root);
+// Wire-to-production v4 (canon §4.16, the guided backchannel, settled
+// 2026-07-06 — renamed Call in a Favor on the face; the served path
+// stays until the full path-rename sweep). Default ON;
+// room_call_in_a_favor_v4_off is the kill-switch; ?v4=0/1 hatches.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_call_in_a_favor_v4_off"));
+
+render(
+    useV4 ? (
+        <CallInAFavorV4 />
+    ) : useDsSurface ? (
+        <AdvisorDeployDS />
+    ) : (
+        <AdvisorDeploy />
+    ),
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

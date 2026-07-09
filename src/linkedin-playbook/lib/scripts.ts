@@ -64,15 +64,15 @@ export const METHOD_TEMPLATES: ReadonlyArray<MethodTemplate> = [
     {
         key: "give",
         kicker: "Give-first",
-        heading: "Send evidence before asking.",
+        heading: "Send proof before asking.",
         small: "The give must help whether or not they buy.",
         body: "[Name], saw this and thought it matched the pattern you mentioned: [benchmark/resource]. No ask - just seemed relevant to what your team is navigating."
     },
     {
         key: "ask",
         kicker: "Ask",
-        heading: "Ask only when earned.",
-        small: "The calendar request comes after familiarity and evidence.",
+        heading: "Ask only when it's warranted.",
+        small: "The calendar request comes after familiarity and the help you've already given.",
         body: "Based on what you shared about [pressure], I think there is a concrete conversation worth having. Would [day] or [day] work for 15 minutes?"
     }
 ];

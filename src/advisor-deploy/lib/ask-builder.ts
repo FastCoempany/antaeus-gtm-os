@@ -86,14 +86,14 @@ export function buildAsk(input: AskBuildInput): GeneratedAsk {
         `Hi ${advisorFirst},\n\n` +
         `${askLine}\n\n` +
         `Why now: ${dealPressure(deal)}\n\n` +
-        `Evidence line: ${moment.proof}\n\n` +
+        `Where it stands: ${moment.proof}\n\n` +
         "If you are open, the forwardable note is below. It should take less than two minutes to adapt.";
     const buyerOrPlaceholder = buyer === "the right owner" ? "[Buyer]" : buyer;
     const advisorName = advisor ? advisor.name : "[Advisor]";
     const forward =
         `Subject: Quick read on ${company}\n\n` +
         `${buyerOrPlaceholder} -\n\n` +
-        `I wanted to connect you with the Antaeus team because the work they are doing around this problem looks relevant to the thread at ${company}. ` +
+        `I wanted to connect you with [your company] because the work they are doing around this problem looks relevant to the thread at ${company}. ` +
         `${moment.advisorLine}\n\n` +
         "Worth a brief look?\n\n" +
         advisorName;

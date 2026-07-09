@@ -273,7 +273,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §3 The questions that earned the next meeting ────────────────────
+// ─── §3 The questions that won the next meeting ────────────────────
 
 export function authorSection3(input: SectionsInput): AuthoredSection {
     const id: SectionId = "questions_that_earned";
@@ -317,13 +317,13 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
 
         const body: string[] = [];
         body.push(
-            `${plural(totalLogged, "discovery call", "discovery calls")} logged, ${advancedCount} of which earned the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
+            `${plural(totalLogged, "discovery call", "discovery calls")} logged, ${advancedCount} of which won the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
         );
         if (advancingSegments.length > 0) {
             const top = advancingSegments[0]!;
             const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
             body.push(
-                `The thread that shows up on more advancing calls than any other is "${top[0]}" — pulled on ${topShare}% of the calls that earned a next meeting. That's the one to teach Monday morning.`
+                `The thread that shows up on more advancing calls than any other is "${top[0]}" — pulled on ${topShare}% of the calls that won a next meeting. That's the one to teach Monday morning.`
             );
         }
 
@@ -353,13 +353,13 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
             surprise = {
                 tone: "corrective",
                 headline: `You've stopped asking the questions that used to advance deals.`,
-                body: `${plural(droppedSegments.length, "thread", "threads")} earned advances on prior calls but didn't appear in any of your last 5 calls: ${droppedSegments.slice(0, 3).join(", ")}. Worth re-introducing before the hire absorbs the new pattern.`
+                body: `${plural(droppedSegments.length, "thread", "threads")} won advances on prior calls but didn't appear in any of your last 5 calls: ${droppedSegments.slice(0, 3).join(", ")}. Worth re-introducing before the hire absorbs the new pattern.`
             };
         } else if (advancedCount === 0) {
             surprise = {
                 tone: "corrective",
                 headline: `Discovery is happening, but it isn't moving deals.`,
-                body: `${plural(totalLogged, "call", "calls")} logged and not one earned a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+                body: `${plural(totalLogged, "call", "calls")} logged and not one won a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
             };
         } else if (advanceRate < 33) {
             surprise = {
@@ -400,7 +400,7 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
 
     const body: string[] = [];
     body.push(
-        `${plural(totalCalls, "discovery call", "discovery calls")} logged, ${advancedCalls} of which earned the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
+        `${plural(totalCalls, "discovery call", "discovery calls")} logged, ${advancedCalls} of which won the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
     );
     if (worked.length > 0) {
         body.push(
@@ -421,7 +421,7 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         surprise = {
             tone: "corrective",
             headline: `Discovery is happening, but it isn't moving deals.`,
-            body: `${plural(totalCalls, "call", "calls")} logged and not one has earned a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+            body: `${plural(totalCalls, "call", "calls")} logged and not one has won a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
         };
     } else if (advanceRate < 33) {
         surprise = {
@@ -583,7 +583,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     const lostById = new Map<string, DealRecord>();
     input.closedLost.forEach((d) => lostById.set(d.id, d));
 
-    // Per-deal autopsy snapshots (verdict + top cause + kill switch).
+    // Per-deal autopsy snapshots (verdict + top cause + walk-away point).
     // Future Autopsy regenerates these at render time when the operator
     // pins a deal; the snapshot key is the durable record. Joined by
     // dealId so §5 can show what the autopsy actually said.
@@ -599,7 +599,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
         body.push(
-            `${plural(killCount, "deal", "deals")} also fired a kill switch — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
+            `${plural(killCount, "deal", "deals")} also hit the moment where the right move was to walk — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
         );
     }
 

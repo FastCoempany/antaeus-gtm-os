@@ -66,9 +66,12 @@ export const currentSendLine: ReadonlySignal<GenerateOutput> = computed(() => {
     const account = accountOptions.value.find(
         (a) => a.name.toLowerCase() === r.accountName.trim().toLowerCase()
     );
+    // Pass the account's REAL signal headline (the loader carries it from
+    // gtmos_sc_v4). The earlier `account.name` here was a placeholder that
+    // made the message open with "Saw <company name>" — a plain bug.
     return generateSendLine({
         rack: r,
-        ...(account ? { signalHeadline: account.name } : {})
+        ...(account?.topSignal ? { signalHeadline: account.topSignal } : {})
     });
 });
 

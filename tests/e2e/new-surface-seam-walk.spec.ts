@@ -55,7 +55,7 @@ const SEAMS: ReadonlyArray<Seam> = [
         routes: [
             { dest: "/deal-workspace/", label: "Open the deal", primary: true },
             { dest: "/discovery-studio/", label: "Run discovery again" },
-            { dest: "/call-planner/", label: "Plan the next call" }
+            { dest: "/call-planner/", label: "Prep the next call" }
         ]
     },
     {

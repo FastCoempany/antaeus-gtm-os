@@ -1,0 +1,246 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prospecting Desk — interactive</title>
+<style>
+:root{--field:#F6F8FC;--paper:#fff;--ink:#0e1b33;--ink-2:#3a4a66;--ink-3:#5b6b86;--ink-soft:#8a97b0;
+--line:#e6eaf2;--line-2:#d5dce8;--line-3:#c2ccdd;--orange:#e6701e;--blue:#2563eb;--blue-strong:#1d4ed8;--blue-soft:rgba(37,99,235,.06);
+--forest:#1b5e3f;--forest-strong:#164c33;--forest-soft:rgba(27,94,63,.07);--amber:#c98a1a;--grey:#8a97b0;--red:#d1483a;
+--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--sans:'Public Sans',-apple-system,Segoe UI,Roboto,sans-serif;--serif:'DM Serif Display',Georgia,serif;}
+*{box-sizing:border-box;min-width:0}body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);min-height:100vh}
+.wrap{max-width:1120px;margin:0 auto;padding:0 0 90px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 30px;border-bottom:1px solid var(--line-2);background:rgba(246,248,252,.9);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}.brand b{color:var(--ink);font-weight:700}.mk{width:16px;height:16px}
+.tstat{font-family:var(--mono);font-size:12px;color:var(--ink-2)}.tstat b{color:var(--ink)}
+.pad{padding:22px 30px 0}
+.lead{font-family:var(--serif);font-size:22px;margin:0 0 3px;letter-spacing:-.01em}
+.leadsub{font-size:12.5px;color:var(--ink-2);margin-bottom:8px}.leadsub b{color:var(--ink)}
+.deskread{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:2px 0 4px;padding:10px 0 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.deskread .band{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.deskread .band.shipping{background:var(--forest)}.deskread .band.working{background:var(--blue-strong)}.deskread .band.loose{background:var(--amber)}.deskread .band.empty{background:var(--grey)}
+.deskread .sc{font-family:var(--mono);font-size:13px;color:var(--ink)}.deskread .sc b{font-weight:600}
+.deskread .rd{font-size:12.5px;color:var(--ink-2)}.deskread .rd b{color:var(--ink)}
+.deskread .mv{margin-left:auto;font-size:12px;color:var(--ink-2);border-left:2px solid var(--orange);padding-left:11px;line-height:1.35}.deskread .mv b{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:1px}
+.demoflag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--forest);background:var(--forest-soft);border:1px solid rgba(27,94,63,.2);border-radius:20px;padding:4px 11px;margin-bottom:6px}
+.stagebar{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
+.stagebar .num{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.stagebar .t{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink)}
+.stagebar .d{font-size:12px;color:var(--ink-soft)}.stagebar .line{flex:1;height:1px;background:var(--line)}
+.describe{border:1.5px solid var(--blue);border-radius:9px;background:linear-gradient(180deg,var(--blue-soft),#fff);padding:15px 18px}
+.describe .dl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-strong);margin-bottom:9px}
+.describe .row{display:flex;gap:10px;align-items:stretch}
+.describe input{flex:1;font-family:var(--sans);font-size:14px;padding:12px 14px;border:1px solid var(--line-2);border-radius:6px;background:var(--paper);color:var(--ink)}
+.describe .go{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:0 20px;border:0;border-radius:6px;background:var(--blue-strong);color:#fff;cursor:pointer;white-space:nowrap}
+.describe .hint{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.4}.describe .hint b{color:var(--ink-3)}
+.grp{margin-top:16px}
+.grptt{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:9px;padding:0 2px 8px;border-bottom:1px solid var(--line)}
+.grptt .n{color:var(--ink-soft)} .grptt .note{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px;color:var(--ink-soft)}
+.srow{display:flex;align-items:center;gap:16px;padding:13px 2px;border-bottom:1px solid var(--line)}
+.srow>.sd{flex:0 0 11px;width:11px;height:11px;border-radius:50%;background:var(--pc);box-shadow:0 0 0 4px var(--pcs)}
+.srow>.sbody{flex:1 1 auto;min-width:0}
+.srow .q{font-weight:700;font-size:14px;letter-spacing:-.01em}.srow .h{font-size:11px;color:var(--ink-soft);margin-top:2px}
+.srow>.smeter{flex:0 0 190px}
+.srow .bar{height:7px;border-radius:5px;background:var(--line);overflow:hidden;position:relative}.srow .bar i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:linear-gradient(90deg,var(--pc),color-mix(in srgb,var(--pc) 55%,#fff))}
+.srow .n{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:4px}.srow .n b{color:var(--ink)}.srow .n .wk{color:var(--forest);font-weight:600}
+.srow .run{flex:0 0 auto;font-family:var(--sans);font-weight:600;font-size:11.5px;padding:8px 12px;border-radius:5px;background:var(--paper);color:var(--blue-strong);border:1px solid var(--line-2);cursor:pointer;white-space:nowrap}
+.srow .run:hover{border-color:var(--blue)}
+.watched{background:var(--forest-soft);border:1px solid rgba(27,94,63,.16);border-radius:9px;padding:2px 14px;margin-top:10px}
+.watched .srow{border-bottom:0}
+.wstat{flex:0 0 auto;font-family:var(--mono);font-size:10.5px;color:var(--forest);border:1px solid rgba(27,94,63,.3);background:var(--paper);border-radius:20px;padding:7px 12px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}.wstat .p{width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.showswork{font-size:11.5px;color:var(--ink-soft);padding:12px 2px 0;line-height:1.4}.showswork b{color:var(--ink-2)}
+.research{display:grid;grid-template-columns:210px minmax(0,1fr) 210px;border:1px solid var(--line-2);border-radius:8px;background:var(--paper);overflow:hidden}
+.rail.l{border-right:1px solid var(--line-2)}.rail.r{border-left:1px solid var(--line-2)}
+.rh{padding:12px 15px 8px}.rh .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.rh .k .dot{width:7px;height:7px;border-radius:2px}.rh .k .n{margin-left:auto;color:var(--ink);font-weight:600;font-size:14px}.rh .s{font-size:10.5px;color:var(--ink-soft);margin-top:3px}
+.l .rh .k{color:var(--grey)}.l .rh .k .dot{background:var(--grey)}.r .rh .k{color:var(--forest)}.r .rh .k .dot{background:var(--forest)}
+.rr{padding:10px 15px;border-top:1px solid var(--line);cursor:pointer}.rr:hover{background:var(--field)}.rr .a{font-weight:700;font-size:13px;display:flex;justify-content:space-between}.rr .a .sc{font-family:var(--mono);font-size:12px;color:var(--grey)}.rr .c{font-size:10.5px;color:var(--ink-soft);margin-top:1px}.rr .note{font-size:10px;color:var(--amber);margin-top:3px}
+.rr.active{background:var(--blue-soft);border-left:2px solid var(--blue);padding-left:13px}
+.rr .send{margin-top:7px;font-family:var(--sans);font-weight:600;font-size:11px;padding:5px 11px;border:0;border-radius:4px;background:var(--orange);color:#fff;cursor:pointer}
+.subhead{padding:8px 15px 3px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-strong);border-top:1px solid var(--line)}.sent{font-family:var(--mono);font-size:10px;color:var(--forest-strong);margin-top:3px}
+.emptyr{padding:16px 15px;font-size:11.5px;color:var(--ink-soft);border-top:1px solid var(--line);font-style:italic}
+.mid{background:linear-gradient(180deg,var(--blue-soft),transparent)}
+.mhead{padding:15px 24px 11px;border-bottom:1px solid var(--line);text-align:center}.mhead .k{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--blue)}
+.mhead .name{font-family:var(--serif);font-size:30px;line-height:1;margin-top:7px}.mhead .c{font-size:12.5px;color:var(--ink-2);margin-top:5px}.mhead .meta{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--amber);margin-top:8px;border:1px solid rgba(201,138,26,.3);border-radius:20px;padding:3px 12px}
+.mhead .meta.ok{color:var(--forest);border-color:rgba(27,94,63,.35)}
+.persona{margin:13px 24px 0;padding:10px 14px;background:rgba(37,99,235,.06);border-radius:6px;font-size:12px;color:var(--ink-2);line-height:1.45}.persona b{color:var(--ink)}.persona .tg{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:3px}
+.qs{padding:4px 24px}.qs .q{display:grid;grid-template-columns:22px 1fr;gap:0 13px;padding:14px 0;border-bottom:1px solid var(--line)}
+.qs .q .box{width:18px;height:18px;border-radius:5px;border:2px solid var(--line-3);margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}.qs .q.done .box{background:var(--forest);border-color:var(--forest)}.qs .q.todo .box{border-color:var(--amber);border-style:dashed}
+.qs .q .qt{font-weight:700;font-size:14.5px;letter-spacing:-.01em}.qs .q .qa{font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.45}.qs .q.todo .qa{color:var(--amber)}
+.qs .q .fill{margin-top:8px;font-family:var(--sans);font-size:12.5px;padding:9px 11px;border:1px solid var(--line-2);border-radius:5px;width:100%;background:var(--paper);color:var(--ink)}
+.qs .q .fill:focus{outline:2px solid rgba(37,99,235,.3);border-color:var(--blue)}
+.mfoot{padding:15px 24px 18px;text-align:center}.mfoot .m{font-size:12.5px;color:var(--ink-2);margin-bottom:11px}.mfoot .m b{color:var(--amber)}.mfoot .m.ok b{color:var(--forest)}
+.mfoot .setaside{display:block;margin:0 auto 11px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);background:none;border:0;cursor:pointer;text-decoration:underline}
+.mfoot button.send{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:12px 24px;border:0;border-radius:6px;background:#eac6a8;color:#fff;cursor:not-allowed}
+.mfoot button.send.on{background:var(--orange);cursor:pointer}
+.mfoot .hint{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-top:8px}
+.midempty{padding:60px 24px;text-align:center}.midempty .e{font-family:var(--serif);font-size:22px}.midempty .es{font-size:12.5px;color:var(--ink-2);margin-top:6px}
+.fits{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:4px 2px}
+.node{display:flex;flex-direction:column;gap:1px;padding:9px 15px;border-radius:7px;background:var(--paper);border:1px solid var(--line-2);border-left:4px solid var(--nc);box-shadow:0 1px 0 rgba(14,27,51,.04)}
+.node .nk{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}.node .nn{font-weight:700;font-size:14px;letter-spacing:-.01em;color:var(--ink)}
+.node.from{--nc:var(--grey)}.node.to{--nc:var(--forest)}.node.here{--nc:var(--orange);background:#fff7f1;border-color:var(--orange)}.node.here .nk{color:var(--orange)}
+.arr{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--line-3)}.arr .g{font-size:17px;line-height:1;color:var(--ink-3)}.arr em{font-family:var(--mono);font-size:8.5px;font-style:normal;color:var(--ink-soft);letter-spacing:.02em}
+.branch{font-family:var(--mono);font-size:10px;color:var(--ink-soft);padding-left:6px;border-left:1px dashed var(--line-3)}.branch b{color:var(--ink-2)}
+.inv{margin-top:30px;border-top:1px solid var(--line);padding-top:14px}.inv .h{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.inv ul{columns:3;column-gap:26px;margin:10px 0 0;padding:0;list-style:none;font-size:11.5px;color:var(--ink-2)}.inv li{margin:0 0 5px;padding-left:14px;position:relative;break-inside:avoid}.inv li::before{content:"▪";position:absolute;left:0;color:var(--forest)}.inv li s{color:var(--ink-soft)}
+.foot{margin:22px 30px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.05em}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:8px;opacity:0;transition:.3s;z-index:50;box-shadow:0 8px 30px -10px rgba(14,27,51,.5)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body><div class="wrap">
+<div class="topbar"><div class="brand"><svg class="mk" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0e1b33" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0e1b33" stroke-width="3.4"/><path d="M2 38h44" stroke="#0e1b33" stroke-width="3.4"/></svg><span><b>ANTAEUS</b> · Prospecting Desk</span></div><div class="tstat" id="tstat"></div></div>
+<div class="pad">
+  <div class="demoflag">◆ interactive — run a search, click an account, answer the last question, send it</div>
+  <h1 class="lead">One funnel, top to bottom — find, confirm, send.</h1>
+  <div class="leadsub">Accounts enter at the top and only leave once you've confirmed them. <b>Follow it straight down.</b></div>
+  <div class="deskread" id="deskread"></div>
+
+  <div class="stagebar"><span class="num">1</span><span class="t">Find</span><span class="d">— describe who you want; Antaeus searches the open web and brings back companies, cited</span><span class="line"></span></div>
+  <div class="describe">
+    <div class="dl">◆ Describe who you want</div>
+    <div class="row"><input id="describeInput" placeholder="e.g. Series-B fintechs that just raised · RevOps leaders new in the seat · SaaS companies hiring 3+ AEs"><button class="go" onclick="runDescribe()">Run search ▸</button></div>
+    <div class="hint">Antaeus reads public news, funding, job posts and company pages, and brings back companies that match — <b>each with a link to where it found them.</b> It's our own research, not Sales Navigator and not bought data.</div>
+  </div>
+  <div class="grp">
+    <div class="grptt">Searches you've saved <span class="n">· 2</span><span class="note">re-run any time</span></div>
+    <div class="srow" style="--pc:#2563eb;--pcs:rgba(37,99,235,.14)"><span class="sd"></span><div class="sbody"><div class="q">Series-B & C fintechs that raised in the last six months</div><div class="h">reads funding announcements + press coverage</div></div><div class="smeter"><div class="bar"><i style="width:86%"></i></div><div class="n">found <b>24</b> · <span class="wk">12 new</span></div></div><button class="run" onclick="runSaved('funding')">Run search ▸</button></div>
+    <div class="srow" style="--pc:#1b5e3f;--pcs:rgba(27,94,63,.12)"><span class="sd"></span><div class="sbody"><div class="q">Fintechs that just named a new head of revenue</div><div class="h">scans press releases + public profile changes</div></div><div class="smeter"><div class="bar"><i style="width:42%"></i></div><div class="n">found <b>9</b> · <span class="wk">3 new</span></div></div><button class="run" onclick="runSaved('newhead')">Run search ▸</button></div>
+  </div>
+  <div class="grp">
+    <div class="grptt">Antaeus keeps these running for you <span class="n">· 1</span><span class="note">re-runs on its own, alerts on new hits</span></div>
+    <div class="watched"><div class="srow" style="--pc:#c98a1a;--pcs:rgba(201,138,26,.14)"><span class="sd"></span><div class="sbody"><div class="q">Fintechs announcing a SOC-2 audit</div><div class="h">a live watch — no button to press</div></div><div class="smeter"><div class="bar"><i style="width:55%"></i></div><div class="n">found <b>3</b> · <span class="wk">+2 this week</span></div></div><span class="wstat"><span class="p"></span>Watching</span></div></div>
+  </div>
+  <div class="showswork"><b>It shows its work</b> — every company links to where it was found. You confirm what's real in step 2 before anything goes to Signal Console.</div>
+
+  <div class="stagebar"><span class="num">2</span><span class="t">Confirm</span><span class="d">— the real work: confirm each account before it qualifies for Signal Console</span><span class="line"></span></div>
+  <div class="research">
+    <div class="rail l"><div class="rh"><div class="k"><span class="dot"></span>Just added<span class="n" id="addedCount">0</span></div><div class="s">Not confirmed yet — click one to work it.</div></div><div id="addedList"></div></div>
+    <div class="mid" id="confirmPanel"></div>
+    <div class="rail r"><div class="rh"><div class="k"><span class="dot"></span>Ready to send<span class="n" id="readyCount">0</span></div><div class="s">Send each with one click.</div></div><div id="readyList"></div></div>
+  </div>
+
+  <div class="stagebar"><span class="num">3</span><span class="t">Where this fits</span><span class="line"></span></div>
+  <div class="fits">
+    <div class="node from"><span class="nk">comes from</span><span class="nn">Territory</span></div>
+    <div class="arr"><span class="g">→</span><em>who we're targeting</em></div>
+    <div class="node here"><span class="nk">you are here</span><span class="nn">Prospecting Desk</span></div>
+    <div class="arr"><span class="g">→</span><em>confirmed accounts</em></div>
+    <div class="node to"><span class="nk">sends to</span><span class="nn">Signal Console</span></div>
+    <div class="branch">also to<br><b>Outbound Studio</b> — a ready account → first message</div>
+  </div>
+
+  <div class="inv"><div class="h">Full inventory — Prospecting Desk</div><ul>
+    <li>Describe a search · Antaeus runs it <s>(cited)</s></li><li>Saved searches + auto-watches</li><li>Add the companies it returns</li>
+    <li><b>Confirm — a real step</b> <s>(3 questions)</s></li><li>Quality score + what's missing</li><li>Just added → confirmed → ready → sent</li>
+    <li>Auto-moves as it qualifies</li><li>Who-to-target guidance</li><li>Dry-search flag</li>
+    <li>Counts per stage</li><li>Comes from Territory</li><li>Send → Signal Console</li>
+    <li>→ Outbound Studio</li><li>Set aside with a reason</li><li>No Save button — saves itself</li>
+  </ul></div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · PROSPECTING DESK · F1 built interactive · click through find → confirm → send</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let accounts = [
+  {id:'vanta',name:'Vanta',contact:'Miguel Lopez · Head of RevOps',q:86,stage:'confirming',
+   q1:'Yes — RevOps owns the forecast rebuild and they just raised a Series B.',
+   q2:'A shared investor sits on their board. We\'ll ask for the intro.',q3:''},
+  {id:'brex',name:'Brex',contact:'Dana Wu · RevOps Mgr',q:52,stage:'added',
+   q1:'Yes — mid-market fintech with a real RevOps function.',
+   q2:'Cold — no warm path yet. Lead with the funding news.',q3:''},
+  {id:'deel',name:'Deel',contact:'Priya Nair · CFO',q:52,stage:'added',note:'maybe not who we want',
+   q1:'Maybe — larger than our sweet spot, but worth a look.',
+   q2:'A customer of ours knows their VP of Ops.',q3:''},
+  {id:'gusto',name:'Gusto',contact:'Lee Park · RevOps',q:44,stage:'added',note:'not who we\'re targeting',
+   q1:'No — payroll-first, not our ICP. Probably set aside.',q2:'—',q3:''},
+  {id:'ramp',name:'Ramp',contact:'Sarah Chen · VP RevOps',q:88,stage:'ready',q1:'Yes',q2:'Warm intro via board',q3:'Open on the raise, ask for the intro'},
+  {id:'mercury',name:'Mercury',contact:'Tom Reed · Compliance Lead',q:88,stage:'ready',q1:'Yes',q2:'SOC-2 case study',q3:'Lead with the audit deadline'},
+  {id:'rippling',name:'Rippling',contact:'Alex Kim · VP Finance',q:88,stage:'sent',q1:'Yes',q2:'Investor intro',q3:'Board intro'}
+];
+const SEARCH_POOL = {
+  funding:[{name:'Stripe',contact:'Jamie Fox · VP RevOps',q:58},{name:'Plaid',contact:'Nina Roy · Head of RevOps',q:61},{name:'Ramp Ops',contact:'—',q:40}],
+  newhead:[{name:'Chime',contact:'Omar Diaz · new Head of Revenue',q:55},{name:'Marqeta',contact:'Ivy Sun · new VP RevOps',q:52}],
+  describe:[{name:'Modern Treasury',contact:'Cara Voss · Head of RevOps',q:57},{name:'Unit',contact:'Ben Ards · RevOps Lead',q:49}]
+};
+let uid=100;
+const $=id=>document.getElementById(id);
+const by=s=>accounts.filter(a=>a.stage===s);
+const confirming=()=>accounts.find(a=>a.stage==='confirming');
+
+function toast(html){const t=$('toast');t.innerHTML=html;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+
+function runDescribe(){const v=$('describeInput').value.trim();addFromPool('describe', v?('“'+v.slice(0,40)+(v.length>40?'…':'')+'”'):'your search');$('describeInput').value='';}
+function runSaved(key){addFromPool(key, key==='funding'?'the funding search':'the new-head-of-revenue search');}
+function addFromPool(key,label){
+  const pool=SEARCH_POOL[key]||[];const picks=pool.slice(0,2);
+  picks.forEach(p=>accounts.push({id:'a'+(uid++),name:p.name,contact:p.contact,q:p.q,stage:'added',q1:'',q2:'',q3:''}));
+  toast('Antaeus searched the web and added <b>'+picks.length+' companies</b> from '+label+' — cited, in “Just added.”');
+  render();
+}
+function pickAccount(id){
+  const cur=confirming();const next=accounts.find(a=>a.id===id);if(!next||next.stage!=='added')return;
+  if(cur)cur.stage='added';next.stage='confirming';render();
+}
+function updateQ3(v){const c=confirming();if(c){c.q3=v;refreshFoot();}}
+function refreshFoot(){
+  const c=confirming();if(!c)return;const ready=c.q3.trim().length>0;
+  const btn=$('sendBtn');if(btn){btn.classList.toggle('on',ready);btn.disabled=!ready;}
+  const m=$('footMsg');if(m){m.innerHTML=ready?'All three answered — <b class="ok">'+c.name+' is ready.</b>':'One question left: <b>how will we reach out?</b>';m.classList.toggle('ok',ready);}
+  const meta=$('confMeta');if(meta){meta.textContent=ready?'quality '+c.q+' · confirmed':'quality '+c.q+' · one question left';meta.classList.toggle('ok',ready);}
+  const box=$('q3box');if(box){box.className='box';box.innerHTML=ready?'✓':'';const qq=$('q3q');qq.className='q '+(ready?'done':'todo');}
+}
+function sendConfirming(){
+  const c=confirming();if(!c||!c.q3.trim())return;c.stage='sent';
+  toast(c.name+' sent to <b>Signal Console</b>.');
+  const nxt=by('added')[0];if(nxt)nxt.stage='confirming';render();
+}
+function setAside(){const c=confirming();if(!c)return;c.stage='dropped';toast(c.name+' set aside — not who we\'re targeting.');const nxt=by('added')[0];if(nxt)nxt.stage='confirming';render();}
+function sendReady(id){const a=accounts.find(x=>x.id===id);if(!a)return;a.stage='sent';toast(a.name+' sent to <b>Signal Console</b>.');render();}
+
+/* bench read — "where the desk stands" (self-read, like the shipped loom read) */
+function renderDeskRead(added,ready,sent,conf){
+  const dropped=by('dropped').length;
+  const total=accounts.length-dropped;
+  let score=18 + ready.length*11 + sent.length*7 + (conf?6:0) + Math.min(total,10)*2;
+  if(added.length>=4 && ready.length===0) score-=10;   // pile-up, nothing shipping
+  score=Math.max(0,Math.min(92,score));
+  let band,label,week,move;
+  if(total===0){band='empty';label='Empty';week='Nothing on the desk yet.';move='Run a search to bring companies in.';}
+  else if(score>=70){band='shipping';label='Shipping';week=(sent.length+' sent to Signal Console, '+ready.length+' more ready.');move=(ready.length?'Send the '+ready.length+' ready — then confirm the next.':'Confirm the next account in line.');}
+  else if(score>=50){band='working';label='Working';week=(added.length+' waiting to confirm, '+ready.length+' ready to send.');move=(conf?'Finish confirming '+conf.name+' — one question left.':'Pick an account and confirm it.');}
+  else{band='loose';label='Loose';week=(added.length+' unconfirmed, only '+ready.length+' ready.');move='Confirm accounts before the pile goes stale.';}
+  $('deskread').innerHTML='<span class="band '+band+'">'+label+'</span>'+
+    '<span class="sc">where the desk stands · <b>'+score+'</b>/92</span>'+
+    '<span class="rd">'+week+'</span>'+
+    '<span class="mv"><b>Next</b>'+move+'</span>';
+}
+function render(){
+  const added=by('added'),ready=by('ready'),sent=by('sent'),conf=confirming();
+  $('tstat').innerHTML='<b>'+ready.length+'</b> ready to send · <b>'+(added.length+(conf?1:0))+'</b> being confirmed';
+  renderDeskRead(added,ready,sent,conf);
+  $('addedCount').textContent=added.length;$('readyCount').textContent=ready.length;
+  // just added
+  $('addedList').innerHTML = added.length?added.map(a=>`<div class="rr" onclick="pickAccount('${a.id}')"><div class="a">${a.name} <span class="sc">${a.q}</span></div><div class="c">${a.contact}</div>${a.note?`<div class="note">${a.note}</div>`:`<div class="note" style="color:var(--ink-soft)">click to confirm</div>`}</div>`).join(''):`<div class="emptyr">Nothing waiting. Run a search above to add companies.</div>`;
+  // confirming
+  if(conf){
+    const ready3=conf.q3.trim().length>0;
+    $('confirmPanel').innerHTML=`
+      <div class="mhead"><div class="k">◆ Confirming</div><div class="name">${conf.name}</div><div class="c">${conf.contact}</div><div class="meta ${ready3?'ok':''}" id="confMeta">quality ${conf.q} · ${ready3?'confirmed':'one question left'}</div></div>
+      <div class="persona"><span class="tg">Who to target · Recently-funded fintech</span>Go for the <b>VP of RevOps who owns the forecast</b> — not the junior rep who just fills in the CRM.</div>
+      <div class="qs">
+        <div class="q ${conf.q1?'done':'todo'}"><div class="box">${conf.q1?'✓':''}</div><div><div class="qt">Are they who we're targeting?</div><div class="qa">${conf.q1||'Not answered yet.'}</div></div></div>
+        <div class="q ${conf.q2?'done':'todo'}"><div class="box">${conf.q2?'✓':''}</div><div><div class="qt">What's our way in to the account?</div><div class="qa">${conf.q2||'Not answered yet.'}</div></div></div>
+        <div class="q ${ready3?'done':'todo'}" id="q3q"><div class="box" id="q3box">${ready3?'✓':''}</div><div><div class="qt">How will we reach out?</div><div class="qa">Choose how you'll open the conversation and ${conf.name} is ready to send.</div><input class="fill" id="q3input" placeholder="e.g. Open on the raise, then ask for the board intro" value="${conf.q3.replace(/"/g,'&quot;')}" oninput="updateQ3(this.value)"></div></div>
+      </div>
+      <div class="mfoot"><div class="m ${ready3?'ok':''}" id="footMsg">${ready3?'All three answered — <b class="ok">'+conf.name+' is ready.</b>':'One question left: <b>how will we reach out?</b>'}</div>
+        <button class="setaside" onclick="setAside()">Set aside — not who we're targeting</button>
+        <button class="send ${ready3?'on':''}" id="sendBtn" ${ready3?'':'disabled'} onclick="sendConfirming()">Send ${conf.name} to Signal Console</button>
+        <div class="hint">answer all three to send</div></div>`;
+  } else {
+    $('confirmPanel').innerHTML=`<div class="midempty"><div class="e">Nothing to confirm.</div><div class="es">Click an account in “Just added,” or run a search to bring more in.</div></div>`;
+  }
+  // ready + sent
+  let rl = ready.map(a=>`<div class="rr"><div class="a">${a.name}</div><div class="c">${a.contact}</div><button class="send" onclick="sendReady('${a.id}')">Send →</button></div>`).join('');
+  if(!ready.length) rl=`<div class="emptyr">Nothing queued yet. Finish confirming an account and it lands here.</div>`;
+  if(sent.length){rl+=`<div class="subhead">Already sent · ${sent.length}</div>`+sent.map(a=>`<div class="rr" style="opacity:.7"><div class="a">${a.name}</div><div class="c">${a.contact}</div><div class="sent">in Signal Console ↗</div></div>`).join('');}
+  $('readyList').innerHTML=rl;
+}
+render();
+</script>
+</body></html>

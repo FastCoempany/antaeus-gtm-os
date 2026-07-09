@@ -13,6 +13,11 @@ import { nextStep } from "../state";
  * unambiguous for the web search. On advance we store the accepted values.
  */
 const raw = signal("");
+// One-time seed guard: hydrate the box from the draft on first mount only.
+// Without it, re-seeding whenever raw==="" makes the textarea un-clearable
+// after the first advance (the operator can edit around entries but can't
+// wipe the list). Set once; the operator owns the box after that.
+const seeded = signal(false);
 
 function advance(entries: ReturnType<typeof parseAccountEntries>): void {
     const names = entries.filter((e) => e.valid).map((e) => e.value);
@@ -23,12 +28,17 @@ function advance(entries: ReturnType<typeof parseAccountEntries>): void {
 /** @internal test reset. */
 export function __resetAccountsStepForTests(): void {
     raw.value = "";
+    seeded.value = false;
 }
 
 export function AccountsStep(): JSX.Element {
-    // Seed the box from any names already in the draft (resumable / back-nav).
-    if (raw.value === "" && draft.value.accountNames.length > 0) {
-        raw.value = draft.value.accountNames.join("\n");
+    // Seed the box from any names already in the draft (resumable / back-nav)
+    // — but only once, so the operator can later empty it.
+    if (!seeded.value) {
+        seeded.value = true;
+        if (raw.value === "" && draft.value.accountNames.length > 0) {
+            raw.value = draft.value.accountNames.join("\n");
+        }
     }
     const entries = parseAccountEntries(raw.value);
     const valid = entries.filter((e) => e.valid);

@@ -41,7 +41,8 @@
 
   /* ── Color · semantic accents, one meaning each (00 Part II §3) ─
      orange = the one dominant move · blue = system intelligence ·
-     green = real health · amber = caution · red = real risk.
+     green = real health, this moment · forest = durable/compounding,
+     over time · amber = caution · red = real risk.
      Referenced by role, never picked for hue. */
   --ds-orange: #e6701e;
   --ds-orange-strong: #d4661b; /* the move, hover/pressed */
@@ -50,8 +51,14 @@
   --ds-blue: #2563eb;
   --ds-blue-strong: #1d4ed8; /* blue action, hover/pressed */
   --ds-blue-soft: rgba(37, 99, 235, 0.08);
-  --ds-green: #22c55e;
+  --ds-green: #22c55e; /* healthy/live/ready — this moment (a derivative) */
   --ds-green-soft: rgba(34, 197, 94, 0.1);
+  /* Forest — durable/compounding/inheritable, an integral over time:
+     Readiness verdicts climbing, the Handoff Kit filling, a proof that
+     holds. NOT interchangeable with --ds-green. Rationed like gold. */
+  --ds-forest: #1b5e3f;
+  --ds-forest-strong: #164c33; /* forest emphasis, hover/pressed */
+  --ds-forest-soft: rgba(27, 94, 63, 0.1);
   --ds-amber: #f59e0b;
   --ds-amber-soft: rgba(245, 158, 11, 0.12);
   --ds-red: #ef4444;

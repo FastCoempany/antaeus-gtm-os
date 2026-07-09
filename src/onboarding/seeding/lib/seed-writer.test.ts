@@ -110,4 +110,37 @@ describe("writeSeedingDraft", () => {
         expect(names).toContain("Legacy Co");
         expect(names).toContain("Northwind");
     });
+
+    it("is idempotent — a re-run does not duplicate deals or the ICP", () => {
+        const s = new FakeStorage();
+        const draft = draftOf({
+            icpStatement: "Heads of RevOps at mid-market.",
+            deals: [
+                { id: "seed_deal_0", account: "Northwind", value: 40_000, stage: "discovery", champion: "Ana", whoSigns: "CFO", stuck: "no date" }
+            ]
+        });
+        writeSeedingDraft(draft, [], { storage: s, now: 1 });
+        writeSeedingDraft(draft, [], { storage: s, now: 2 }); // re-run onboarding
+        const deals = s.json("gtmos_deal_workspaces") as Array<{ id: string }>;
+        expect(deals.length).toBe(1);
+        const icp = s.json("gtmos_icp_analytics") as { icps: unknown[] };
+        expect(icp.icps.length).toBe(1);
+    });
+
+    it("preserves company / role / category already captured at signup", () => {
+        const s = new FakeStorage();
+        s.setItem(
+            "gtmos_activation_context",
+            JSON.stringify({ company: "Apex", role: "founder", categoryLabel: "Legal" })
+        );
+        writeSeedingDraft(draftOf({ icpStatement: "x" }), [], { storage: s, now: 1 });
+        const ac = s.json("gtmos_activation_context") as {
+            company: string;
+            role: string;
+            categoryLabel: string;
+        };
+        expect(ac.company).toBe("Apex");
+        expect(ac.role).toBe("founder");
+        expect(ac.categoryLabel).toBe("Legal");
+    });
 });

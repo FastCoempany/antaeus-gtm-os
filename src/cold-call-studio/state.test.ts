@@ -32,7 +32,7 @@ function makeEntry(p: Partial<CallLogEntry>): CallLogEntry {
         contactName: p.contactName ?? "Sarah",
         contactTitle: p.contactTitle ?? "",
         threadId: p.threadId ?? "opener",
-        threadTitle: p.threadTitle ?? "Earn permission in the first breath.",
+        threadTitle: p.threadTitle ?? "Get permission in the first breath.",
         buyerResponse: p.buyerResponse ?? "I am busy.",
         recommendedResponse: p.recommendedResponse ?? "Fair...",
         outcome: p.outcome ?? "logged",
@@ -215,7 +215,7 @@ describe("companyName + logCall", () => {
         expect(entry).not.toBeNull();
         expect(entry?.outcome).toBe("meeting_booked");
         expect(entry?.threadId).toBe("opener");
-        expect(entry?.threadTitle).toBe("Earn permission in the first breath.");
+        expect(entry?.threadTitle).toBe("Get permission in the first breath.");
         expect(entry?.buyerResponse).toBe("I am busy.");
         expect(entry?.recommendedResponse).toContain("Acme");
         expect(entry?.recommendedResponse).toContain("Funding raise");

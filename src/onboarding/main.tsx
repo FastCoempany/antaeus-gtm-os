@@ -49,9 +49,11 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_onboarding_legacy");
 }
 
-// ADR-019 — the Earned Depth seeding-flow rebuild. Opt-in: renders only
-// behind room_onboarding_seeding (or the ?seeding=1 preview hatch), so the
-// shipped onboarding above is untouched until the new flow is complete.
+// ADR-019 — the heavy-seeding onboarding rebuild (canon §4.3 + §12).
+// Wired to production 2026-07-07: the seeding flow IS the default
+// onboarding surface. room_onboarding_seeding_off is the kill-switch
+// back to the DS surface (a single Posthog toggle, no redeploy); the
+// ?seeding=0 hatch previews the DS surface directly.
 const seedingParam = (() => {
     try {
         return new URLSearchParams(window.location.search).get("seeding");
@@ -61,7 +63,7 @@ const seedingParam = (() => {
 })();
 const useSeeding =
     seedingParam === "1" ||
-    (seedingParam !== "0" && isFeatureEnabled("room_onboarding_seeding"));
+    (seedingParam !== "0" && !isFeatureEnabled("room_onboarding_seeding_off"));
 
 render(
     useSeeding ? (

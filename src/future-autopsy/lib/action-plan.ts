@@ -58,17 +58,17 @@ function buildRoute(
             };
         case "call":
             return {
-                label: "Plan the next call",
+                label: "Prep the next call",
                 href: hrefToCallPlanner(accountName),
-                roomLabel: "Call Planner",
+                roomLabel: "Discovery Studio",
                 tone,
                 reason
             };
         case "poc":
             return {
-                label: "Forge the evidence",
+                label: "Run a pilot",
                 href: hrefToPoC(accountName),
-                roomLabel: "PoC Framework",
+                roomLabel: "Pilot Desk",
                 tone,
                 reason
             };

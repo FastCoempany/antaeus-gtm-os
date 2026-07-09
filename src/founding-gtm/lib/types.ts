@@ -50,8 +50,8 @@ export const SECTION_KICKER: Record<SectionId, string> = {
 
 export const SECTION_TITLE: Record<SectionId, string> = {
     who_hits: "Who hits, who misses, why",
-    rails_that_worked: "The rails that worked",
-    questions_that_earned: "The questions that earned the next meeting",
+    rails_that_worked: "The outreach that actually landed",
+    questions_that_earned: "The questions that won the next meeting",
     won_and_leaked: "Where deals are won + where they leak",
     losses_paid_for: "The losses we paid for",
     why_we_win: "Why we win",

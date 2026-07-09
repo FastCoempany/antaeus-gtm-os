@@ -53,8 +53,8 @@ describe("computeLoomRead — empty board", () => {
             stats: statsFrom(prospects)
         });
         expect(r.band).toBe("empty");
-        expect(r.weekRead.toLowerCase()).toContain("no prospects");
-        expect(r.operatorMove.toLowerCase()).toContain("capture the first");
+        expect(r.weekRead.toLowerCase()).toContain("nothing in the funnel");
+        expect(r.operatorMove.toLowerCase()).toContain("add the first company");
     });
 });
 
@@ -65,7 +65,7 @@ describe("computeLoomRead — next-move priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("push the cleanest");
+        expect(r.operatorMove.toLowerCase()).toContain("send the cleanest");
     });
 
     it("prescribes tightening researched into ready when 3+ researched, 0 ready", () => {
@@ -78,8 +78,7 @@ describe("computeLoomRead — next-move priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("tighten");
-        expect(r.operatorMove.toLowerCase()).toContain("ready");
+        expect(r.operatorMove.toLowerCase()).toContain("finish confirming");
     });
 
     it("prescribes researching when 5+ captured pile up unworked", () => {
@@ -90,7 +89,7 @@ describe("computeLoomRead — next-move priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("research one captured");
+        expect(r.operatorMove.toLowerCase()).toContain("confirm one account");
     });
 });
 

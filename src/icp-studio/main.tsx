@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { IcpStudio } from "./IcpStudio";
 import { IcpStudioDS } from "./ds/IcpStudioDS";
+import { IcpStudioV4 } from "./v4/IcpStudioV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -75,7 +76,14 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_icp_studio_legacy");
 }
 
-render(useDsSurface ? <IcpStudioDS /> : <IcpStudio />, root);
+const v4Param = (() => {
+    try { return new URLSearchParams(window.location.search).get("v4"); } catch { return null; }
+})();
+const useV4 = v4Param === "1" || (v4Param !== "0" && !isFeatureEnabled("room_icp_studio_v4_off"));
+render(
+    useV4 ? <IcpStudioV4 /> : useDsSurface ? <IcpStudioDS /> : <IcpStudio />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

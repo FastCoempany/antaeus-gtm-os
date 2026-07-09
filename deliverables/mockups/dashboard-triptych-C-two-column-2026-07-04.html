@@ -1,0 +1,90 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard C — Two-column cockpit (act | assess)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--gold:#b08414;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 70px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:20px 0 16px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.cols{display:grid;grid-template-columns:1fr 372px;gap:0}
+.act{padding:24px 40px 0 0;border-right:1px solid var(--hair-2)}
+.assess{padding:24px 0 0 34px}
+.ck{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.act .ck{color:var(--orange);display:flex;align-items:center;gap:10px}.act .ck .n{color:var(--ink-4)}
+/* the one move */
+.act h1{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,46px);line-height:1.02;letter-spacing:-.02em;margin:12px 0 0}
+.act .why{font-size:14.5px;color:var(--ink-2);margin:12px 0 0;line-height:1.5}.act .why b{color:var(--ink)}
+.act .go{font-family:var(--sans);font-weight:600;font-size:14px;padding:12px 22px;border:0;border-radius:8px;background:var(--orange);color:#fff;cursor:pointer;margin-top:18px}
+.act .conf{font-family:var(--mono);font-size:11px;color:var(--forest);display:inline-flex;align-items:center;gap:7px;margin-left:16px}.act .conf .d{width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.queue{margin-top:26px}
+.ql{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:0 0 8px;border-top:1px solid var(--hair);padding-top:16px}
+.qr{display:grid;grid-template-columns:20px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--hair);cursor:pointer}.qr:hover{background:rgba(10,28,64,.02)}
+.qr .rk{font-family:var(--mono);font-size:12px;color:var(--ink-4)}.qr .t{font-size:13.5px}.qr .t b{font-weight:600}.qr .t .c{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px}
+.qr .fam{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:20px;white-space:nowrap}
+.qr .fam.risk{color:var(--red);background:rgba(192,57,43,.08)}.qr .fam.opp{color:var(--forest);background:var(--forest-soft)}.qr .fam.move{color:var(--blue);background:rgba(37,99,235,.08)}
+/* assess column */
+.assess .ck{color:var(--ink-3)}
+.verdict{margin-top:12px}
+.verdict .vh{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.4vw,42px);line-height:1;letter-spacing:-.01em}.verdict .vh em{font-style:normal;color:var(--amber)}
+.gate{display:flex;gap:4px;margin:14px 0 0}
+.g{flex:1;height:4px;border-radius:3px;background:rgba(10,28,64,.1)}.g.done{background:var(--forest)}.g.on{background:var(--amber)}.g.next{background:repeating-linear-gradient(90deg,rgba(37,99,235,.4),rgba(37,99,235,.4) 4px,transparent 4px,transparent 8px)}
+.gatelab{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:7px}.gatelab b{color:var(--amber)}
+.verdict .next{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin-top:14px;border-left:2px solid var(--amber);padding-left:12px}.verdict .next b{color:var(--ink)}.verdict .next .l{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:3px}
+.verdict .open{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;display:inline-block;margin-top:12px}
+/* vitals ledger */
+.vled{margin-top:24px;border-top:1px solid var(--hair-2)}
+.vlh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:14px 0 6px}
+.vr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--hair);cursor:pointer}.vr:hover .vn{color:var(--orange)}
+.vr .vk{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);width:74px;flex:none;display:flex;align-items:center;gap:6px}.vr .vk .dot{width:6px;height:6px;border-radius:50%}
+.vr .vmid{flex:1}.vr .vn{font-size:15px;font-weight:600;letter-spacing:-.01em}.vr .vs{font-size:11px;color:var(--ink-3);margin-top:1px}
+.vr .arw{font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+.vr.bad .vn{color:var(--red)}.vr.warn .vn{color:var(--amber)}
+.foot{max-width:1140px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+@media(max-width:820px){.cols{grid-template-columns:1fr}.act{border-right:0;padding-right:0}.assess{padding-left:0;border-top:1px solid var(--hair-2);margin-top:20px}}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Dashboard</span><span class="r">the command surface · not the daily read</span></div>
+  <div class="cols">
+    <!-- ACT -->
+    <div class="act">
+      <div class="ck">Do this first <span class="n">· #1 of 14 across everything</span></div>
+      <h1>Outbound to Ramp.</h1>
+      <div class="why">Sarah Chen just started as CRO and Ramp posted 12 AE roles this week — <b>heat 88</b>. The most valuable move on the board, and <b>outreach is your weakest readiness dimension</b>.</div>
+      <div><button class="go">Compose the outbound →</button><span class="conf"><span class="d"></span>stable lead</span></div>
+      <div class="queue">
+        <div class="ql">Next up, ranked across every room</div>
+        <div class="qr"><span class="rk">2</span><span class="t"><b>Northwind</b> pilot is drifting<span class="c">no champion · no next step · 9 days quiet</span></span><span class="fam risk">Risk</span></div>
+        <div class="qr"><span class="rk">3</span><span class="t"><b>Datadog</b> is 16 days from close-lost<span class="c">close date passed · terms open</span></span><span class="fam risk">Risk</span></div>
+        <div class="qr"><span class="rk">4</span><span class="t">Cast a proof for <b>Brex</b><span class="c">verbal yes · no evidence yet</span></span><span class="fam move">Move</span></div>
+        <div class="qr"><span class="rk">5</span><span class="t"><b>Snowflake</b> hired a VP of Sales<span class="c">reach while it's hot</span></span><span class="fam opp">Opp</span></div>
+      </div>
+    </div>
+    <!-- ASSESS -->
+    <div class="assess">
+      <div class="ck">Where you stand</div>
+      <div class="verdict">
+        <div class="vh">You're <em>Building.</em></div>
+        <div class="gate"><span class="g done"></span><span class="g on"></span><span class="g next"></span><span class="g"></span><span class="g"></span></div>
+        <div class="gatelab">You are the system → <b>Building</b> → Inheritable → Hire-ready → Repeatable</div>
+        <div class="next"><span class="l">What moves it next</span><b>Cast one proof</b> and get every dimension off zero — then a hire could run the motion with you sanity-checking.</div>
+        <span class="open">Open readiness ↗</span>
+      </div>
+      <div class="vled">
+        <div class="vlh">The live vitals</div>
+        <div class="vr bad"><span class="vk"><span class="dot" style="background:var(--red)"></span>Deals</span><span class="vmid"><div class="vn">3 will slip</div><div class="vs">$480k pipeline this week</div></span><span class="arw">↗</span></div>
+        <div class="vr"><span class="vk"><span class="dot" style="background:var(--orange)"></span>Hottest</span><span class="vmid"><div class="vn">Ramp · heat 88</div><div class="vs">4 accounts motion-ready</div></span><span class="arw">↗</span></div>
+        <div class="vr warn"><span class="vk"><span class="dot" style="background:var(--amber)"></span>Pace</span><span class="vmid"><div class="vn">1.2× of 3.5×</div><div class="vs">coverage · thin</div></span><span class="arw">↗</span></div>
+        <div class="vr bad"><span class="vk"><span class="dot" style="background:var(--red)"></span>Dying</span><span class="vmid"><div class="vn">Datadog · dies in 16d</div><div class="vs">your worst open deal</div></span><span class="arw">↗</span></div>
+        <div class="vr warn"><span class="vk"><span class="dot" style="background:var(--amber)"></span>Handoff</span><span class="vmid"><div class="vn">2 / 7 sections</div><div class="vs">ready to inherit</div></span><span class="arw">↗</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · DASHBOARD C — two-column cockpit · left = act (the one move + ranked queue) · right = assess (readiness verdict, loud + vitals ledger) · every vital is a door · FA vital reads a one-line published snapshot (no recompute)</div>
+</body></html>

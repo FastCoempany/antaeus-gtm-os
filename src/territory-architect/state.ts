@@ -155,6 +155,7 @@ export function saveThesisFromDraft(now: number = Date.now()): Focus | null {
         segment: d.segment.trim(),
         whyUs: d.whyUs.trim(),
         tier: d.tier,
+        ...(d.axis ? { axis: d.axis } : {}),
         accountIds: [],
         createdAt: iso,
         updatedAt: iso
@@ -227,6 +228,14 @@ export function setAccountDisposition(
 export function retierAccount(id: string, tier: TierId): void {
     accounts.value = accounts.value.map((a) =>
         a.id === id ? { ...a, tier, updatedAt: new Date().toISOString() } : a
+    );
+}
+
+/** Move an account to a different division (focus). */
+export function retagAccount(id: string, focusId: string): void {
+    if (!focusId) return;
+    accounts.value = accounts.value.map((a) =>
+        a.id === id ? { ...a, focusId, updatedAt: new Date().toISOString() } : a
     );
 }
 

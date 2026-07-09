@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Antaeus · The full seeding flow — doorway to awake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --field:#f6f8fc;--raised:#ffffff;--ink:#0a1c40;
+    --ink70:rgba(10,28,64,.70);--ink50:rgba(10,28,64,.50);--ink25:rgba(10,28,64,.25);--ink10:rgba(10,28,64,.10);
+    --orange:#e6701e;--orange-d:#d05f12;--blue:#2563eb;--green:#1f9d57;--red:#cf3b34;--amber:#c8821a;
+    --serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--field);background-image:radial-gradient(circle at 8% 0%,rgba(37,99,235,.05),transparent 30%),radial-gradient(circle at 94% 2%,rgba(230,112,30,.04),transparent 26%);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+  .frame{position:fixed;inset:0;display:grid;grid-template-columns:1fr 312px}
+  .main{position:relative;padding:34px 50px 96px;display:flex;flex-direction:column;overflow:hidden}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .mark{font-family:var(--serif);letter-spacing:.16em;font-size:1rem;opacity:.85}
+  .rail{display:flex;gap:6px}
+  .pip{width:24px;height:4px;border-radius:2px;background:var(--ink10);transition:background .4s}.pip.done{background:var(--green)}.pip.on{background:var(--orange)}
+  .body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+  .step{display:none}.step.active{display:block;animation:rise .55s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:14px}
+  h1{font-family:var(--serif);font-size:clamp(1.8rem,3.4vw,3rem);line-height:1.04;letter-spacing:-.02em;margin-bottom:16px}
+  .lede{font-size:1.06rem;line-height:1.55;color:var(--ink70);max-width:54ch}
+  .compact{margin-top:18px;padding-left:16px;border-left:3px solid var(--orange);font-size:1rem;line-height:1.5;color:var(--ink70);max-width:54ch}
+  /* icp choosing */
+  .qa{margin-top:22px;max-width:62ch}
+  .q{font-family:var(--serif);font-size:1.4rem;line-height:1.2;color:var(--ink);margin-bottom:16px;min-height:1.2em}
+  .opts{display:flex;flex-wrap:wrap;gap:10px}
+  .opt{font-size:.96rem;font-weight:600;color:var(--ink);background:var(--raised);border:1px solid var(--ink25);border-radius:11px;padding:12px 18px;cursor:pointer;transition:all .14s}
+  .opt:hover{border-color:var(--orange);color:var(--orange)}
+  .opt.picked{border-color:var(--orange);background:rgba(230,112,30,.07);color:var(--orange)}
+  .chosen{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+  .chip{font-family:var(--mono);font-size:.72rem;color:var(--ink50);opacity:0;transition:opacity .4s}.chip.show{opacity:1}
+  .chip b{color:var(--ink)}
+  .sharp{margin-top:18px;background:var(--raised);border:1px solid var(--orange);border-left:4px solid var(--orange);border-radius:12px;padding:16px 18px;opacity:0;transform:translateY(8px);transition:all .5s;max-width:60ch}
+  .sharp.show{opacity:1;transform:none}
+  .sharp .sl{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:6px}
+  .sharp .st{font-size:1.06rem;line-height:1.45;color:var(--ink)}
+  .sharp .st em{font-style:italic;color:var(--orange)}
+  /* accounts */
+  .ta{margin-top:18px;width:100%;max-width:560px;min-height:150px;background:var(--raised);border:1px solid var(--ink10);border-radius:12px;padding:15px 18px;font-family:var(--mono);font-size:.9rem;line-height:1.85;color:var(--ink);resize:none}
+  .hint{margin-top:9px;font-size:.88rem;color:var(--ink50)}
+  /* wake reads */
+  .wg{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:start;max-width:920px;margin-top:6px}
+  .accts{background:var(--raised);border:1px solid var(--ink10);border-radius:14px;padding:15px 17px;box-shadow:0 16px 40px rgba(10,28,64,.06)}
+  .accts h4{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:11px}
+  .ac{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:9px;border:1px solid transparent;margin-bottom:4px;transition:all .5s}
+  .ac .nm{font-weight:600;font-size:.88rem}.ac .sg{font-size:.72rem;color:var(--orange);font-weight:600;margin-top:2px;opacity:0;transition:opacity .5s}.ac .sg.show{opacity:1}.ac .sg.cold{color:var(--ink50);font-weight:400}
+  .ac .ht{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--ink25);opacity:0;transition:opacity .5s}.ac .ht.show{opacity:1}
+  .ac.hot{border-color:var(--orange);background:rgba(230,112,30,.05)}.ac.hot .ht{color:var(--orange)}
+  .reads{display:flex;flex-direction:column;gap:10px}
+  .read{background:var(--raised);border:1px solid var(--ink10);border-left:3px solid var(--blue);border-radius:10px;padding:12px 14px;opacity:0;transform:translateX(10px);transition:all .55s}.read.show{opacity:1;transform:none}
+  .read.warn{border-left-color:var(--orange)}
+  .read .rk{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:4px}.read.warn .rk{color:var(--orange)}
+  .read .rt{font-size:.9rem;line-height:1.4;color:var(--ink)}
+  /* deals */
+  .cols{display:grid;grid-template-columns:410px 1fr;gap:28px;align-items:start;margin-top:4px}
+  .entry{background:var(--raised);border:1px solid var(--ink10);border-radius:16px;padding:18px 20px;box-shadow:0 16px 40px rgba(10,28,64,.06)}
+  .entry.flash{animation:flash .5s}@keyframes flash{0%{transform:scale(1)}40%{transform:scale(.985)}100%{transform:scale(1)}}
+  .ahead{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:1px solid var(--ink10);margin-bottom:12px}
+  .ahead .nm{font-family:var(--serif);font-size:1.3rem;line-height:1.05}.ahead .enr{font-size:.72rem;color:var(--orange);font-weight:600;margin-top:3px}
+  .ahead .val{font-family:var(--mono);font-size:.88rem;font-weight:700;text-align:right}.ahead .stg{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);text-align:right;margin-top:3px}
+  .fld{padding:8px 0;border-bottom:1px solid rgba(10,28,64,.05)}.fld:last-of-type{border-bottom:none}
+  .fld .fl{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:2px}.fld .fv{font-size:.9rem;color:var(--ink)}.fld .fv.empty{color:var(--red);font-weight:600}
+  .youfill{margin-top:10px;font-size:.76rem;color:var(--ink50);font-style:italic}
+  .board{display:flex;flex-direction:column;min-height:0}
+  .bhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+  .bhead .bt{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink50);font-weight:700}.bhead .ct{font-family:var(--serif);font-size:1.2rem}.bhead .ct b{color:var(--orange)}
+  .track{height:5px;border-radius:3px;background:var(--ink10);overflow:hidden;margin-bottom:12px}.track .fill{height:100%;width:0;background:var(--orange);transition:width .5s}
+  .diags{display:flex;flex-direction:column;gap:9px}
+  .diag{background:var(--raised);border:1px solid var(--ink10);border-left:3px solid var(--ink25);border-radius:11px;padding:12px 15px;opacity:0;transform:translateY(12px);transition:all .5s}.diag.show{opacity:1;transform:none}
+  .diag.red{border-left-color:var(--red)}.diag.amber{border-left-color:var(--amber)}
+  .diag .dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}.diag .dn{font-weight:700;font-size:.92rem}.diag .dt{font-family:var(--mono);font-size:.6rem;font-weight:700;text-transform:uppercase}.diag.red .dt{color:var(--red)}.diag.amber .dt{color:var(--amber)}
+  .diag .dr{font-size:.85rem;color:var(--ink70);line-height:1.4}.diag .dm{font-size:.84rem;margin-top:5px}.diag .dm b{color:var(--orange)}
+  .awake{background:rgba(230,112,30,.06);border:1px solid var(--orange);border-radius:12px;padding:15px 17px;opacity:0;transform:translateY(12px);transition:all .6s}.awake.show{opacity:1;transform:none}
+  .awake .ak{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:5px}.awake .at{font-family:var(--serif);font-size:1.18rem;line-height:1.12}.awake .as{font-size:.86rem;color:var(--ink70);margin-top:7px;line-height:1.42}
+  /* quota */
+  .qrow{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .qf{background:var(--raised);border:1px solid var(--ink10);border-radius:12px;padding:13px 16px;min-width:150px}
+  .qf .ql{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:5px}
+  .qf .qv{font-family:var(--serif);font-size:1.5rem;color:var(--ink)}
+  .qread{margin-top:20px;padding-left:16px;border-left:3px solid var(--blue);font-size:1.02rem;line-height:1.5;color:var(--ink);max-width:52ch;opacity:0;transition:opacity .5s}.qread.show{opacity:1}
+  .qread b{color:var(--orange)}
+  /* landing */
+  .land{max-width:760px}
+  .land .lmove{margin-top:6px;background:var(--raised);border:1px solid var(--ink10);border-left:4px solid var(--orange);border-radius:13px;padding:18px 20px;box-shadow:0 16px 40px rgba(10,28,64,.06)}
+  .land .lmk{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-bottom:7px}
+  .land .lmt{font-family:var(--serif);font-size:1.5rem;line-height:1.1;color:var(--ink)}
+  .land .read2{margin-top:18px;display:flex;gap:24px;flex-wrap:wrap}
+  .land .r2{flex:1;min-width:240px}
+  .land .r2 .r2k{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:6px}
+  .land .r2 .r2t{font-size:.98rem;line-height:1.5;color:var(--ink70)}
+  .land .r2 .r2t b{color:var(--ink)}
+  /* footer + margin */
+  .foot{position:absolute;left:50px;bottom:30px;display:flex;gap:14px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:9px;background:var(--orange);color:#fff;font-family:var(--sans);font-weight:600;font-size:1rem;padding:14px 26px;border-radius:11px;border:none;cursor:pointer;transition:all .14s;box-shadow:0 10px 26px rgba(230,112,30,.24)}
+  .btn:hover{background:var(--orange-d)}.btn:disabled{opacity:.45;cursor:default}
+  .btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--ink25);box-shadow:none}.btn--ghost:hover{border-color:var(--orange);background:var(--raised)}
+  .btn--big{animation:nudge 2.4s ease-in-out infinite}@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-3px)}}
+  .margin{background:var(--raised);border-left:1px solid var(--ink10);padding:34px 28px;display:flex;flex-direction:column}
+  .margin .mk{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:16px}
+  .margin .mnote{font-size:.98rem;line-height:1.6;color:var(--ink);transition:opacity .35s}
+  .margin .msrc{margin-top:auto;padding-top:18px;border-top:1px solid var(--ink10)}
+  .margin .msrc .lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink50);font-weight:700;margin-bottom:7px}
+  .margin .msrc a{font-size:.8rem;color:var(--blue);text-decoration:none}.margin .msrc a:hover{text-decoration:underline}
+  .tag{position:fixed;left:50px;bottom:8px;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink25)}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="main">
+    <div class="top"><div class="mark">ANTAEUS</div><div class="rail" id="rail"></div></div>
+    <div class="body">
+
+      <section class="step" data-s="door">
+        <div class="k">Before the easy part — the honest part</div>
+        <h1>This asks real work of you. Here’s the deal.</h1>
+        <p class="lede">Most setup flows pretend they’re effortless. This one won’t. You’re going to put in the thinking that lives in your head and nowhere else — who you sell to, who you’re chasing, where your deals really stand.</p>
+        <div class="compact">Do it once, and the system reads your motion back to you every morning — which deal is slipping, which move clears the most weight. The teams that do this work early are the ones that stop getting surprised. You’re about to be one of them.</div>
+      </section>
+
+      <section class="step" data-s="icp">
+        <div class="k">The lens · who you sell to</div>
+        <h1>Let’s get sharp about who you sell to.</h1>
+        <p class="lede">You told us “ops teams at mid-market.” That’s a start, not an answer. A few quick choices and it’s a target the system can actually hunt against.</p>
+        <div class="qa">
+          <div class="q" id="icpQ"></div>
+          <div class="opts" id="icpOpts"></div>
+          <div class="chosen" id="icpChosen"></div>
+          <div class="sharp" id="icpSharp"><div class="sl">Your ICP — in your words</div><div class="st" id="icpSharpT"></div></div>
+        </div>
+      </section>
+
+      <section class="step" data-s="accounts">
+        <div class="k">The list · who you’re chasing</div>
+        <h1>Now — who are you chasing?</h1>
+        <p class="lede">Just the names. Don’t research them, don’t fill in fields. Paste who’s on your mind and the system goes and finds the rest.</p>
+        <textarea class="ta" id="ta" spellcheck="false">Northwind Logistics
+Apex Health
+Cobalt Freight
+Brightwave
+Dunmore Legal
+Harbor Point
+Evermark
+Vantage Mills
+Redpoint Freight
+Oakhurst Group</textarea>
+        <p class="hint">10 pasted. Even 50 is a two-minute job — breadth is cheap here.</p>
+      </section>
+
+      <section class="step" data-s="wake">
+        <div class="k">Half awake</div>
+        <h1>It read your list. Here’s what it already sees.</h1>
+        <div class="wg">
+          <div class="accts" id="wakeAccts"><h4>Your list · ranked by what’s live</h4></div>
+          <div class="reads" id="wakeReads"></div>
+        </div>
+      </section>
+
+      <section class="step" data-s="deals">
+        <div class="k" id="dealsKick">The heavy part · your live deals</div>
+        <h1 id="dealsHead">The part no software can do for you — and the part that pays you back every morning.</h1>
+        <div class="cols">
+          <div class="entry" id="entry"></div>
+          <div class="board">
+            <div class="bhead"><span class="bt">Waking up</span><span class="ct" id="counter"><b>0</b> of 10 in</span></div>
+            <div class="track"><div class="fill" id="fill"></div></div>
+            <div class="diags" id="diags"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" data-s="quota">
+        <div class="k">The math · ninety seconds</div>
+        <h1>What does the year owe you?</h1>
+        <p class="lede">Last quick thing. Drop your number in and the system turns it into weekly pressure — and tells you whether your ten deals actually cover it.</p>
+        <div class="qrow">
+          <div class="qf"><div class="ql">Annual target</div><div class="qv">$1.2M</div></div>
+          <div class="qf"><div class="ql">Avg deal</div><div class="qv">$50k</div></div>
+          <div class="qf"><div class="ql">Win rate</div><div class="qv">22%</div></div>
+          <div class="qf"><div class="ql">Cycle</div><div class="qv">90 days</div></div>
+        </div>
+        <div class="qread" id="qread">At a 22% win rate, $1.2M needs about <b>11 live deals</b> in motion at once to cover it. You seeded 10 — you’re one good week from covered, and the system will tell you the moment you slip under.</div>
+      </section>
+
+      <section class="step" data-s="landing">
+        <div class="k">Awake · your workspace</div>
+        <h1>This is yours now. It was thinking while you worked.</h1>
+        <div class="land">
+          <div class="lmove"><div class="lmk">The morning · your one move</div><div class="lmt">Northwind is closest to slipping — get a date on the next step today.</div></div>
+          <div class="read2">
+            <div class="r2"><div class="r2k">Where you stand</div><div class="r2t">Right now this all lives in <b>you</b>. The system can see it, rank it, and catch what’s decaying — but a hire couldn’t run it yet. <b>That climbs as you keep going.</b></div></div>
+            <div class="r2"><div class="r2k">What’s left — later, no rush</div><div class="r2t">Over the coming days it’ll ask for your <b>proof</b>, your <b>advisors</b>, and your <b>wins and losses</b>. Each one wakes another room. You’ve done the hard part today.</div></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <div class="foot" id="foot"></div>
+    <div class="tag">The full seeding flow · clickable</div>
+  </div>
+  <aside class="margin">
+    <div class="mk">Why we ask</div>
+    <div class="mnote" id="mnote"></div>
+    <div class="msrc" id="msrc"></div>
+  </aside>
+</div>
+
+<script>
+const ORDER=['door','icp','accounts','wake','deals','quota','landing'];
+const MARGIN={
+  door:{n:"Everything we ask, we ask for a reason — and we show you the reason, right here, the whole way through. Nothing in this flow is busywork.",s:null},
+  icp:{n:"Teams with one documented, sharp ICP report higher win rates and shorter sales cycles than teams chasing a broad one. Narrow isn’t a limit — it’s what makes every signal downstream mean something.",s:{l:"Salesforce · Ideal Customer Profile",u:"https://www.salesforce.com/sales/ideal-customer-profile/"}},
+  accounts:{n:"Reps spend under 30% of the week actually selling — a real chunk of the rest is manual account research. Paste the names; the system does that part in a minute, and keeps doing it.",s:{l:"Salesforce · State of Sales",u:"https://www.salesforce.com/news/stories/sales-research-2023/"}},
+  wake:{n:"This is the easy half — it only read your target list. A real motion carries about ten live deals at once. That’s where it stops being a list and starts telling you which deal is about to slip.",s:{l:"Pipeline coverage · Gradient Works",u:"https://www.gradient.works/blog/2025-b2b-sales-performance-benchmarks"}},
+  deals:{n:"This is the part that makes it not a prettier CRM. No tool can find this for you — it isn’t on the internet, it’s in your head: who’s really championing the deal, where it’s stuck, the truth about budget and timing.",s:{l:"Pipeline coverage · Gradient Works",u:"https://www.gradient.works/blog/2025-b2b-sales-performance-benchmarks"}},
+  quota:{n:"Healthy teams carry three to four times their quota in live pipeline. Put your number in and the system tells you weekly whether you’re actually covered, or just hoping.",s:{l:"Pipeline coverage · Gradient Works",u:"https://www.gradient.works/blog/2025-b2b-sales-performance-benchmarks"}},
+  landing:{n:"Teams that study their wins and losses win more — 63% see their rate climb, 84% once the habit is two years old. That’s the next thing the system will ask you for. Later. You’ve done enough today.",s:{l:"Clozd · 2025 State of Win-Loss",u:"https://www.clozd.com/guides/win-loss-analysis"}},
+};
+const FOOT={
+  door:[{l:"Start →",a:"next"}],
+  icp:[{l:"That’s us →",a:"next",gate:"icpDone"}],
+  accounts:[{l:"Enrich these →",a:"next"}],
+  wake:[{l:"Make it rise up to meet you every morning →",a:"next",big:true}],
+  quota:[{l:"See it all →",a:"next"}],
+  landing:[{l:"Open my morning →",a:"none"}],
+  // deals foot is managed by the deals controller
+};
+const rail=document.getElementById('rail');ORDER.forEach(()=>{const p=document.createElement('span');p.className='pip';rail.appendChild(p);});
+const pips=[...rail.children];
+const mnote=document.getElementById('mnote'),msrc=document.getElementById('msrc'),foot=document.getElementById('foot');
+let timers=[];const at=(ms,fn)=>timers.push(setTimeout(fn,ms));const clearAll=()=>{timers.forEach(clearTimeout);timers=[];};
+let si=0;
+
+function paintMargin(id){
+  const m=MARGIN[id];mnote.style.opacity=0;
+  setTimeout(()=>{mnote.textContent=m.n;mnote.style.opacity=1;msrc.innerHTML=m.s?`<div class="lbl">The evidence</div><a href="${m.s.u}" target="_blank" rel="noopener">${m.s.l} ↗</a>`:'';},170);
+}
+function paintFoot(id){
+  foot.innerHTML='';
+  if(id==='deals'){return;} // deals controls its own button
+  (FOOT[id]||[]).forEach(b=>{
+    const el=document.createElement('button');el.className='btn'+(b.big?' btn--big':'');
+    el.textContent=b.l;el.onclick=()=>{ if(b.a==='next') go(si+1); };
+    if(b.gate==='icpDone' && !icpDone){el.disabled=true;el.id='icpNext';}
+    foot.appendChild(el);
+  });
+}
+function go(i){
+  clearAll();si=Math.max(0,Math.min(ORDER.length-1,i));
+  const id=ORDER[si];
+  document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',s.dataset.s===id));
+  pips.forEach((p,j)=>p.className='pip'+(j<si?' done':j===si?' on':''));
+  paintMargin(id);paintFoot(id);
+  if(id==='icp')initIcp();
+  if(id==='wake')playWake();
+  if(id==='deals')initDeals();
+  if(id==='quota')at(500,()=>document.getElementById('qread').classList.add('show'));
+}
+
+/* ── ICP: real choosing ── */
+const FORKS=[
+  {q:"You said “ops teams.” Which one actually signs the check?",o:[{l:"Revenue Operations",v:"Heads of Revenue Operations"},{l:"Sales Operations",v:"Heads of Sales Operations"},{l:"The COO",v:"COOs"}]},
+  {q:"Good. And how big, really? “Mid-market” covers a lot.",o:[{l:"50–200 people",v:"50–200-person"},{l:"200–800 people",v:"200–800-person"},{l:"800–2,000 people",v:"800–2,000-person"}]},
+  {q:"Last one — what has to be true for them to need you now?",o:[{l:"Just raised, scaling fast",v:"are past a recent raise and scaling fast"},{l:"A new GTM leader landed",v:"just brought in a new GTM leader"},{l:"Outgrew their spreadsheets",v:"have outgrown their spreadsheets"}]},
+];
+let icpStep=0,icpPicks=[],icpDone=false;
+function initIcp(){
+  icpStep=0;icpPicks=[];icpDone=false;
+  document.getElementById('icpChosen').innerHTML='';document.getElementById('icpSharp').classList.remove('show');
+  renderFork();
+}
+function renderFork(){
+  const f=FORKS[icpStep];const Q=document.getElementById('icpQ'),O=document.getElementById('icpOpts');
+  Q.textContent=f.q;O.innerHTML='';
+  f.o.forEach(opt=>{const b=document.createElement('button');b.className='opt';b.textContent=opt.l;b.onclick=()=>pick(opt);O.appendChild(b);});
+}
+function pick(opt){
+  icpPicks.push(opt);
+  const ch=document.getElementById('icpChosen');
+  const c=document.createElement('div');c.className='chip';c.innerHTML=`✓ <b>${opt.l}</b>`;ch.appendChild(c);requestAnimationFrame(()=>c.classList.add('show'));
+  icpStep++;
+  if(icpStep<FORKS.length){at(260,renderFork);}
+  else{
+    document.getElementById('icpQ').textContent='';document.getElementById('icpOpts').innerHTML='';
+    const t=`${icpPicks[0].v} at ${icpPicks[1].v} B2B companies that ${icpPicks[2].v}. <em>Now</em> the signals mean something.`;
+    document.getElementById('icpSharpT').innerHTML=t;
+    at(200,()=>document.getElementById('icpSharp').classList.add('show'));
+    icpDone=true;const nb=document.getElementById('icpNext');if(nb)nb.disabled=false;
+  }
+}
+
+/* ── WAKE ── */
+const ACCTS=[
+  {nm:'Northwind Logistics',sg:'opened a GC search · 3d ago',ht:91,hot:true},
+  {nm:'Apex Health',sg:'named a new CFO · 2w ago',ht:64},
+  {nm:'Cobalt Freight',sg:'closed a Series B · 5w ago',ht:57},
+  {nm:'Brightwave',sg:'opened a London office · 1w ago',ht:46},
+  {nm:'Harbor Point',sg:'hiring 3 RevOps roles',ht:38},
+  {nm:'Evermark',sg:'quiet — nothing fresh yet',ht:12,cold:true},
+];
+const READS=[
+  {k:'It sees what’s happening',t:'Northwind opened a General Counsel search 3 days ago — you never typed that. It’s your hottest account now.',c:''},
+  {k:'Harder to fool than you are',t:'Oakhurst Group doesn’t fit who you said you sell to — 40 people, no RevOps. Want to drop it?',c:'warn'},
+  {k:'Already ahead of you',t:'You didn’t list Tideway Software — they just hired a VP RevOps and fit your ICP better than half your list. Add them?',c:''},
+];
+function playWake(){
+  const host=document.getElementById('wakeAccts');host.querySelectorAll('.ac').forEach(n=>n.remove());
+  ACCTS.forEach(a=>{const r=document.createElement('div');r.className='ac';r.innerHTML=`<div><div class="nm">${a.nm}</div><div class="sg${a.cold?' cold':''}">${a.sg}</div></div><div class="ht">heat ${a.ht}</div>`;host.appendChild(r);});
+  const rows=[...host.querySelectorAll('.ac')];
+  rows.forEach((r,i)=>at(450+i*460,()=>{r.querySelector('.sg').classList.add('show');r.querySelector('.ht').classList.add('show');if(ACCTS[i].hot)r.classList.add('hot');}));
+  const reads=document.getElementById('wakeReads');reads.innerHTML='';
+  READS.forEach((rd,i)=>{const el=document.createElement('div');el.className='read '+rd.c;el.innerHTML=`<div class="rk">${rd.k}</div><div class="rt">${rd.t}</div>`;reads.appendChild(el);at(3300+i*850,()=>el.classList.add('show'));});
+}
+
+/* ── DEALS ── */
+const DEALS=[
+  {nm:'Northwind Logistics',enr:'opened a GC search · 3d ago',val:'$120k',stg:'Proposal',flds:[['Champion','VP Legal Ops — strong'],['Who signs','— not named —',true],['Where it’s stuck','Sent pricing 18 days ago, silence'],['Budget / timeline','Likely / this quarter']],diag:{t:'At risk',tone:'red',r:'18 days silent in Proposal, no economic buyer named, next step undated.',m:'Move: <b>get a name on who signs and a date on the next step</b> before it goes cold.'}},
+  {nm:'Apex Health',enr:'named a new CFO · 2w ago',val:'$90k',stg:'Discovery',flds:[['Champion','Head of RevOps'],['Who signs','New CFO — just hired'],['Where it’s stuck','Two calls in, haven’t reached the CFO'],['Budget / timeline','High need / exploring']],diag:{t:'Early but live',tone:'amber',r:'The new CFO is both your trigger and your signer — and you haven’t reached them.',m:'Move: <b>ask your champion for the CFO intro this week.</b>'}},
+  {nm:'Cobalt Freight',enr:'closed a Series B · 5w ago',val:'$140k',stg:'Negotiation',flds:[['Champion','Director of Ops'],['Who signs','CFO — engaged'],['Where it’s stuck','Single-threaded — one contact'],['Budget / timeline','Confirmed / 30 days']],diag:{t:'Fragile',tone:'amber',r:'Single-threaded this late, and a competitor is in the room.',m:'Move: <b>multi-thread into the CFO’s team before terms land.</b>'}},
+  {nm:'Brightwave',enr:'opened a London office · 1w ago',val:'$60k',stg:'Proposal',flds:[['Champion','RevOps Lead — quiet'],['Who signs','VP Sales'],['Where it’s stuck','Champion dark since the London move'],['Budget / timeline','Slipped to next quarter']],diag:{t:'Slipping',tone:'amber',r:'Champion went dark after the expansion; timeline moved a quarter out.',m:'Move: <b>re-engage on the new priority, not the old timeline.</b>'}},
+];
+let dIdx=0,dCount=0;
+function initDeals(){
+  dIdx=0;dCount=0;document.getElementById('diags').innerHTML='';
+  setCount(0);renderEntry();
+  setDealBtn('Add this deal →',addOne,false);
+}
+function setDealBtn(label,fn,big){foot.innerHTML='';const el=document.createElement('button');el.className='btn'+(big?' btn--big':'');el.textContent=label;el.onclick=fn;el.id='dealBtn';foot.appendChild(el);}
+function renderEntry(){
+  const d=DEALS[dIdx];
+  document.getElementById('entry').innerHTML=`<div class="ahead"><div><div class="nm">${d.nm}</div><div class="enr">${d.enr} · found for you</div></div><div><div class="val">${d.val}</div><div class="stg">${d.stg}</div></div></div>${d.flds.map(f=>`<div class="fld"><div class="fl">${f[0]}</div><div class="fv${f[2]?' empty':''}">${f[1]}</div></div>`).join('')}<div class="youfill">The company came enriched. The judgment above — that part’s yours.</div>`;
+}
+function setCount(n){dCount=n;document.getElementById('counter').innerHTML=`<b>${n}</b> of 10 in`;document.getElementById('fill').style.width=(Math.min(n,10)*10)+'%';}
+function addDiag(d){const el=document.createElement('div');el.className='diag '+d.diag.tone;el.innerHTML=`<div class="dh"><span class="dn">${d.nm}</span><span class="dt">${d.diag.t}</span></div><div class="dr">${d.diag.r}</div><div class="dm">${d.diag.m}</div>`;document.getElementById('diags').appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));while(document.getElementById('diags').children.length>4)document.getElementById('diags').removeChild(document.getElementById('diags').firstChild);}
+function addOne(){
+  if(dIdx>=DEALS.length)return;
+  const e=document.getElementById('entry');e.classList.add('flash');const d=DEALS[dIdx];
+  at(150,()=>{addDiag(d);setCount(dCount+1);});dIdx++;
+  at(520,()=>{e.classList.remove('flash');
+    if(dIdx<DEALS.length){renderEntry();}
+    else{e.innerHTML='<div style="padding:26px 6px;text-align:center;color:var(--ink50)"><div style="font-family:var(--serif);font-size:1.2rem;color:var(--ink);margin-bottom:6px">Four in. Six to go.</div>Same shape each time — the company comes enriched, you add the judgment.</div>';setDealBtn('Add the other 6 →',fastForward,false);}
+  });
+}
+function fastForward(){
+  document.getElementById('dealBtn').disabled=true;let n=dCount;
+  (function step(){if(n<10){n++;setCount(n);timers.push(setTimeout(step,240));}else{dealsWake();}})();
+}
+function dealsWake(){
+  document.getElementById('dealsHead').textContent='Ten in. The board just woke up.';
+  document.getElementById('dealsKick').textContent='Awake · your morning board';
+  document.getElementById('entry').innerHTML='<div style="padding:26px 6px;text-align:center;color:var(--ink50)"><div style="font-family:var(--serif);font-size:1.2rem;color:var(--ink);margin-bottom:6px">All ten in.</div>That’s the heavy lift — done once, for good.</div>';
+  const el=document.createElement('div');el.className='awake';el.innerHTML=`<div class="ak">Every morning, from now on</div><div class="at">“Northwind is closest to slipping — get a date on the next step today.”</div><div class="as">It reads all ten while you sleep and hands you the one that needs you first. That’s what the work just bought you.</div>`;
+  document.getElementById('diags').appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));
+  while(document.getElementById('diags').children.length>3)document.getElementById('diags').removeChild(document.getElementById('diags').firstChild);
+  setDealBtn('The math, then you’re done →',()=>go(si+1),false);
+}
+
+go(0);
+</script>
+</body>
+</html>

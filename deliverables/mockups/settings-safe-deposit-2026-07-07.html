@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings — the safe deposit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.66);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.22);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.08);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--red-soft:rgba(192,57,43,.06);
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);padding:0 0 60px}
+.wrap{max-width:900px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:16px 0 12px;border-bottom:1px solid var(--hair-2)}.bn{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.btn{font-family:var(--sans);font-weight:600;font-size:13px;padding:9px 16px;border-radius:9px;border:0;background:var(--blue);color:#fff;cursor:pointer}
+.btn.ghost{background:var(--surface);border:1px solid var(--hair-2);color:var(--ink-2);font-weight:500}
+.btn.danger{background:var(--surface);border:1px solid var(--red);color:var(--red);font-weight:600}
+.sel{font-family:var(--sans);font-size:13px;padding:9px 12px;border:1px solid var(--hair-2);border-radius:9px;background:var(--surface)}
+.sl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.link{color:var(--blue);text-decoration:none;font-weight:500;cursor:pointer}
+
+.trust{padding:34px 0 26px;border-bottom:1px solid var(--hair)}
+.trust .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:13px;display:flex;align-items:center;gap:8px}
+.trust .k .dot{width:8px;height:8px;border-radius:50%;background:var(--forest)}
+.trust h1{font-family:var(--serif);font-size:38px;margin:0 0 13px;line-height:1.08}
+.trust p{font-family:var(--read);font-size:17px;line-height:1.55;color:var(--ink-2);max-width:620px;margin:0}
+.trust p b{color:var(--ink)}
+.trust .meta{margin-top:14px;font-size:12.5px;color:var(--ink-3)}.trust .meta b{color:var(--forest)}.trust .meta .v{color:var(--blue);cursor:pointer;margin-left:6px}
+.sec{padding:26px 0 4px;border-bottom:1px solid var(--hair)}
+.sec .sh{font-family:var(--serif);font-size:20px;margin:0 0 4px}.sec .sd{font-size:13px;color:var(--ink-2);margin-bottom:18px;max-width:560px;line-height:1.5}
+.item{display:grid;grid-template-columns:1fr auto;gap:14px 20px;align-items:center;padding:13px 0;border-top:1px solid var(--hair)}
+.item:first-of-type{border-top:0}
+.item .it{font-size:14.5px;font-weight:600}.item .id{font-size:12.5px;color:var(--ink-2);margin-top:2px;line-height:1.45}
+.item .ia{justify-self:end;display:flex;gap:8px;flex-wrap:wrap}
+.adv{margin-top:12px}.adv summary{font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer}.adv .ab{font-size:12px;color:var(--ink-2);padding:10px 0 2px;line-height:1.5}
+.danger-item{border-top:1px solid var(--hair);margin-top:4px;padding-top:16px}
+.danger-item .dh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}.danger-item .dt{font-size:14.5px;font-weight:600;color:var(--red)}
+.danger-item .dd{font-size:12.5px;color:var(--ink-2);line-height:1.5;max-width:560px;margin-bottom:12px}
+.danger-item .conf{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.danger-item .conf input{font-family:var(--sans);font-size:12.5px;padding:8px 11px;border:1px solid var(--hair-2);border-radius:8px;min-width:190px}
+.danger-item .conf .cl{font-size:11.5px;color:var(--ink-2)}.danger-item .conf code{font-family:var(--mono);font-size:11px;background:var(--field);padding:1px 5px;border-radius:4px}
+.acct{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:22px 0 0;font-size:13px;color:var(--ink-2)}
+.acct .who b{color:var(--ink)}.acct .sp{margin-left:auto;display:flex;gap:16px;align-items:center}
+
+.tag{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-top:26px}
+</style></head><body><div class="wrap">
+<div class="top"><span class="bn">Settings</span><span class="r">signed in · sarah@acme.co</span></div>
+
+<section class="trust"><div class="k"><span class="dot"></span>Your workspace is safe</div>
+  <h1>Everything you build is saved — not trapped on this laptop.</h1>
+  <p>As you work, every room saves to the cloud automatically. You're signed in as <b>sarah@acme.co</b> on the <b>Acme GTM</b> workspace, so your ICP, deals, calls, and the rest follow you to any device. You can take a full copy or wipe it whenever you want — it's yours.</p>
+  <div class="meta">Last saved <b>just now</b> · everything's in sync<span class="v">Check again →</span></div>
+</section>
+
+<section class="sec"><div class="sh">Your data</div><div class="sd">Take a copy of everything, put a copy back, or erase it all. Your call, any time.</div>
+  <div class="item"><div><div class="it">Download a copy of everything</div><div class="id">A full file of your whole workspace — take it anywhere, keep it as a backup.</div></div><div class="ia"><button class="btn">Download my workspace</button></div></div>
+  <div class="item"><div><div class="it">Put a copy back</div><div class="id">Restore your workspace from a file you downloaded before.</div></div><div class="ia"><button class="btn ghost">Restore from a file</button></div></div>
+  <details class="adv"><summary>Advanced — this device's offline copy</summary><div class="ab">The app also keeps a working copy in this browser for offline use. You can export or clear just this device's copy — it doesn't touch your cloud workspace.<div style="margin-top:9px;display:flex;gap:8px"><button class="btn ghost">Export this device</button><button class="btn ghost">Clear this device</button></div></div></details>
+  <div class="danger-item"><div class="dh"><span class="dt">Delete everything</span></div><div class="dd">Permanently erase your entire workspace — your ICP, deals, calls, pilot evidence, and everything else. Your account stays; the data is gone for good. Download a copy first if you might want it.</div><div class="conf"><span class="cl">Type <code>delete my workspace</code> to unlock:</span><input placeholder="delete my workspace"><button class="btn danger">Delete everything</button></div></div>
+</section>
+
+<section class="sec"><div class="sh">How the app works for you</div><div class="sd">Small preferences — change them any time.</div>
+  <div class="item"><div><div class="it">What you sell</div><div class="id">Loads the right discovery playbook for your live calls.</div></div><div class="ia"><select class="sel"><option>RevOps / GTM tooling</option><option>CX AI</option><option>Legal tech</option></select></div></div>
+  <div class="item"><div><div class="it">How much the app explains</div><div class="id"><b>Show me how</b> walks you through everything. <b>Step back</b> trusts you and gets dense.</div></div><div class="ia"><button class="btn">Show me how</button><button class="btn ghost">Step back</button></div></div>
+  <div class="item"><div><div class="it">Let the system suggest things</div><div class="id">It'll flag a pattern now and then. You always accept or dismiss — nothing changes on its own.</div></div><div class="ia"><button class="btn ghost">On</button></div></div>
+  <details class="adv"><summary>Try a sample workspace</summary><div class="ab">Load a demo workspace into this browser to explore — it never touches your real data.<div style="margin-top:9px;display:flex;gap:8px"><button class="btn ghost">Mid-market sample</button><button class="btn ghost">Enterprise sample</button></div></div></details>
+</section>
+
+<div class="acct"><span class="who">Signed in as <b>sarah@acme.co</b> · Acme GTM</span><span class="sp"><a class="link">Re-run onboarding</a><a class="link">Privacy</a><a class="link">Terms</a><button class="btn ghost">Sign out</button></span></div>
+
+<div class="tag">MOCKUP · design-only · ST-1 (the safe deposit) · trust statement + Your data (one copy / restore / delete) + quiet preferences + account row · dual export resolved, sign-out added, demo tucked, plain language</div>
+</div></body></html>

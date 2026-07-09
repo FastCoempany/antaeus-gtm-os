@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cold Call Studio B — before / after</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--blue-soft:rgba(37,99,235,.06);--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:960px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 14px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+/* mode toggle */
+.modes{display:flex;gap:0;margin-top:20px;border:1px solid var(--hair-2);border-radius:9px;overflow:hidden;width:max-content;background:var(--surface)}
+.modes button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 20px;border:0;background:transparent;color:var(--ink-3);cursor:pointer;border-right:1px solid var(--hair-2)}
+.modes button:last-child{border-right:0}.modes button.on{background:var(--ink);color:#fff}
+/* BEFORE */
+.ready{font-family:var(--serif);font-size:26px;margin:22px 0 4px}
+.readysub{font-size:13px;color:var(--ink-3);margin-bottom:16px}
+.pre{display:flex;gap:0;border:1px solid var(--hair-2);border-radius:11px;background:var(--surface);overflow:hidden;margin-bottom:20px}
+.pre .cell{flex:1;padding:12px 16px;border-left:1px solid var(--hair)}.pre .cell:first-child{border-left:0}
+.pre .k{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}.pre .v{font-size:13.5px;font-weight:600;margin-top:4px}
+.pre .cell.goal{background:var(--orange-soft)}.pre .cell.goal .k{color:var(--orange)}.pre .src{color:var(--blue);font-weight:400}
+.skimh{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.skim{border-top:1px solid var(--hair)}
+.sk{display:grid;grid-template-columns:26px 210px 1fr;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--hair)}
+.sk .n{font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+.sk .nm{font-size:14px;font-weight:600}.sk .nm .par{color:var(--ink-3);font-weight:400;font-size:12px;display:block}
+.sk .ln{font-size:13.5px;color:var(--ink-2);line-height:1.45}.sk .ln .sig{background:var(--orange-soft)}
+.watch{margin-top:18px;border-left:3px solid var(--amber);padding:2px 0 2px 14px}
+.watch .wl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+.watch .w{font-size:13px;color:var(--ink-2);margin-bottom:5px}.watch .w b{color:var(--ink);font-weight:600}.watch .w .q{color:var(--red)}
+.dial{margin-top:24px;display:flex;align-items:center;gap:16px}
+.dial .btn{font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 26px;border:0;border-radius:8px;background:var(--forest);color:#fff;cursor:pointer}
+.dial .note{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.dial .switch{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}
+/* AFTER preview */
+.afterprev{margin-top:34px;border-top:2px dashed var(--hair-2);padding-top:22px;opacity:.85}
+.afterprev .ph{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.afterprev h3{font-family:var(--serif);font-size:22px;margin:0 0 14px}
+.outs{display:flex;gap:8px;flex-wrap:wrap}
+.out{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:9px 14px;border-radius:20px;border:1px solid var(--hair-2);background:var(--field);cursor:pointer}.out.book{background:var(--forest);color:#fff;border-color:var(--forest)}
+.debrief{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.debrief .d{border:1px solid var(--hair);border-radius:9px;padding:12px 14px;background:var(--surface)}
+.debrief .dk{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px}.debrief .win .dk{color:var(--forest)}.debrief .fix .dk{color:var(--amber)}
+.debrief .dt{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.recent{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;gap:18px;flex-wrap:wrap}.recent b{color:var(--ink)}
+.foot{max-width:960px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Cold Call Studio</span><span class="r">get ready · make the call · log it after</span></div>
+
+  <div class="modes"><button class="on">Before the call</button><button>After the call</button></div>
+
+  <div class="ready">Ready to dial?</div>
+  <div class="readysub">A 20-second skim so you walk in with the plan in your head — then put the phone in your hand.</div>
+
+  <div class="pre">
+    <div class="cell"><div class="k">Calling</div><div class="v">Sarah Chen · a VP</div></div>
+    <div class="cell"><div class="k">At</div><div class="v">Ramp · hot</div></div>
+    <div class="cell"><div class="k">What's happening <span class="src">◆ Signal Console</span></div><div class="v" style="font-size:12.5px">12 AE roles · new CRO</div></div>
+    <div class="cell goal"><div class="k">Your one goal</div><div class="v">Book 20 minutes</div></div>
+  </div>
+
+  <div class="skimh">The call, in five moves</div>
+  <div class="skim">
+    <div class="sk"><span class="n">1</span><span class="nm">Open the call</span><span class="ln">"30 seconds and you can tell me to get lost?"</span></div>
+    <div class="sk"><span class="n">2</span><span class="nm">Why it matters to them<span class="par">(what's the cost)</span></span><span class="ln"><span class="sig">12 AE roles</span> → the forecast stops being trustworthy right as the board leans on it.</span></div>
+    <div class="sk"><span class="n">3</span><span class="nm">Prove it's worked before</span><span class="ln">Vanta cut forecast error in half during a 10-AE ramp.</span></div>
+    <div class="sk"><span class="n">4</span><span class="nm">Ask for the meeting</span><span class="ln">"Worth 20 minutes next week? Thursday or Friday?"</span></div>
+    <div class="sk"><span class="n">5</span><span class="nm">Wrap up</span><span class="ln">Get a name if it's a no.</span></div>
+  </div>
+
+  <div class="watch">
+    <div class="wl">The pushback you'll most likely hit</div>
+    <div class="w"><span class="q">"I'm busy"</span> → <b>"Totally — 30 seconds, then you decide."</b></div>
+    <div class="w"><span class="q">"We've got it handled"</span> → <b>"What are you using to keep the forecast honest through a ramp that fast?"</b></div>
+  </div>
+
+  <div class="dial"><button class="btn">I'm ready — dialing now</button><span class="note">the app steps back · your phone's in your hand</span><span class="switch">hung up already? → After the call</span></div>
+
+  <div class="afterprev">
+    <div class="ph">◆ After the call (the other mode)</div>
+    <h3>How'd it go?</h3>
+    <div class="outs">
+      <span class="out book">Meeting booked → creates a deal</span><span class="out">Call me back</span><span class="out">Referral</span><span class="out">Voicemail</span><span class="out">Not interested</span><span class="out">No answer</span>
+    </div>
+    <div class="debrief">
+      <div class="d win"><div class="dk">What went well</div><div class="dt">The AE-ramp opener landed — she stayed on. Keep leading with what's happening at the account.</div></div>
+      <div class="d fix"><div class="dk">What to sharpen next time</div><div class="dt">You jumped to the ask before the cost really landed. Let step 2 breathe.</div></div>
+    </div>
+    <div class="recent">Recent: <span><b>Brex</b> · booked ✓</span><span><b>Mercury</b> · voicemail</span> · <b>14 calls</b> this week · <b>3 booked</b></div>
+  </div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · COLD CALL STUDIO B — before / after · two moments, two modes · BEFORE = a 20-second readiness skim (not a wall to read mid-call) · AFTER = log the outcome + a short debrief · no clock, no clicking during the call · plain language, seller/you</div>
+</body></html>

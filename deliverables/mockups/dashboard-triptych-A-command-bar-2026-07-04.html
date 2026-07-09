@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard A — Command bar over instrument cluster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.26);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.14);--hair-3:rgba(10,28,64,.2);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.09);--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--red:#c0392b;--gold:#b08414;
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 70px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 34px}
+.top{display:flex;align-items:center;gap:14px;padding:20px 0 16px}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+/* ZONE 1 — the one move */
+.move{border-top:2px solid var(--ink);padding:20px 0 22px}
+.move .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px}
+.move .k .n{color:var(--ink-4);letter-spacing:.1em}
+.move h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.02em;margin:12px 0 0}
+.move .why{font-size:15px;color:var(--ink-2);margin:12px 0 0;max-width:60ch;line-height:1.5}.move .why b{color:var(--ink);font-weight:600}
+.move .act{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.move .go{font-family:var(--sans);font-weight:600;font-size:14.5px;padding:13px 24px;border:0;border-radius:8px;background:var(--orange);color:#fff;cursor:pointer}
+.move .conf{font-family:var(--mono);font-size:11px;color:var(--forest);display:inline-flex;align-items:center;gap:7px}.move .conf .d{width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.move .skip{font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer;margin-left:auto}
+/* queue */
+.queue{margin-top:6px}
+.ql{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:14px 0 8px;border-top:1px solid var(--hair)}
+.qr{display:grid;grid-template-columns:20px 1fr auto auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--hair);cursor:pointer}
+.qr:hover{background:rgba(10,28,64,.02)}
+.qr .rk{font-family:var(--mono);font-size:12px;color:var(--ink-4)}
+.qr .t{font-size:14px}.qr .t b{font-weight:600}
+.qr .fam{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:20px;background:rgba(10,28,64,.05);color:var(--ink-3)}
+.qr .fam.risk{color:var(--red);background:rgba(192,57,43,.08)}.qr .fam.opp{color:var(--forest);background:var(--forest-soft)}.qr .fam.move{color:var(--blue);background:rgba(37,99,235,.08)}
+.qr .arw{font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+/* ZONE 2 — where you stand */
+.stand{margin-top:30px;border-top:2px solid var(--ink);padding-top:22px}
+.stand .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.verdict{display:flex;align-items:flex-end;gap:20px;margin-top:12px;flex-wrap:wrap}
+.verdict .vh{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.4vw,46px);line-height:1;letter-spacing:-.01em}
+.verdict .vh em{font-style:normal;color:var(--amber)}
+.verdict .next{font-size:14px;color:var(--ink-2);line-height:1.45;max-width:44ch;border-left:2px solid var(--amber);padding-left:13px}.verdict .next b{color:var(--ink)}
+.verdict .open{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer;white-space:nowrap}
+/* vitals */
+.vitals{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:24px;border-top:1px solid var(--hair-2)}
+.vit{padding:15px 16px 15px 0;border-right:1px solid var(--hair);cursor:pointer}
+.vit:last-child{border-right:0}.vit:hover .vn{color:var(--orange)}
+.vit .vk{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+.vit .vk .dot{width:6px;height:6px;border-radius:50%}
+.vit .vn{font-size:19px;font-weight:600;letter-spacing:-.01em;margin-top:9px;line-height:1.1}
+.vit .vs{font-size:11.5px;color:var(--ink-3);margin-top:3px}
+.vit .door{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);margin-top:9px}
+.vit.bad .vn{color:var(--red)}.vit.warn .vn{color:var(--amber)}.vit.good .vn{color:var(--forest)}
+.foot{max-width:1080px;margin:26px auto 0;padding:0 34px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Dashboard</span><span class="r" id="clock">the command surface · not the daily read</span></div>
+
+  <!-- ZONE 1: THE ONE MOVE -->
+  <div class="move">
+    <div class="k">Do this first <span class="n">· #1 of 14 across everything</span></div>
+    <h1>Outbound to Ramp.</h1>
+    <div class="why">Sarah Chen just started as CRO and Ramp posted 12 AE roles this week — <b>heat 88</b>. It's the single most valuable move on the board, and <b>outreach is your weakest readiness dimension</b>.</div>
+    <div class="act"><button class="go">Compose the outbound →</button><span class="conf"><span class="d"></span>stable lead</span><span class="skip">not now — show the next</span></div>
+    <div class="queue">
+      <div class="ql">Next up, ranked across every room</div>
+      <div class="qr"><span class="rk">2</span><span class="t"><b>Northwind</b> pilot is drifting — no champion, no next step</span><span class="fam risk">Risk</span><span class="arw">Deal Workspace ↗</span></div>
+      <div class="qr"><span class="rk">3</span><span class="t"><b>Datadog</b> is 16 days from close-lost</span><span class="fam risk">Risk</span><span class="arw">Future Autopsy ↗</span></div>
+      <div class="qr"><span class="rk">4</span><span class="t">Cast a proof for <b>Brex</b> — verbal yes, no evidence yet</span><span class="fam move">Move</span><span class="arw">PoC Framework ↗</span></div>
+      <div class="qr"><span class="rk">5</span><span class="t"><b>Snowflake</b> hired a VP of Sales — reach while it's hot</span><span class="fam opp">Opportunity</span><span class="arw">Signal Console ↗</span></div>
+    </div>
+  </div>
+
+  <!-- ZONE 2: WHERE YOU STAND -->
+  <div class="stand">
+    <div class="k">Where your whole motion stands</div>
+    <div class="verdict">
+      <div class="vh">You're <em>Building.</em></div>
+      <div class="next"><b>Next: Inheritable with guardrails</b> — cast one proof and get every dimension off zero.</div>
+      <span class="open">Open readiness ↗</span>
+    </div>
+    <div class="vitals">
+      <div class="vit bad"><div class="vk"><span class="dot" style="background:var(--red)"></span>Deals</div><div class="vn">3 will slip</div><div class="vs">$480k pipeline this week</div><div class="door">Deal Workspace ↗</div></div>
+      <div class="vit"><div class="vk"><span class="dot" style="background:var(--orange)"></span>Hottest</div><div class="vn">Ramp · 88</div><div class="vs">4 accounts motion-ready</div><div class="door">Signal Console ↗</div></div>
+      <div class="vit warn"><div class="vk"><span class="dot" style="background:var(--amber)"></span>Pace</div><div class="vn">1.2× / 3.5×</div><div class="vs">coverage · thin</div><div class="door">Quota Workback ↗</div></div>
+      <div class="vit bad"><div class="vk"><span class="dot" style="background:var(--red)"></span>Dying</div><div class="vn">Datadog · 16d</div><div class="vs">your worst open deal</div><div class="door">Future Autopsy ↗</div></div>
+      <div class="vit warn"><div class="vk"><span class="dot" style="background:var(--amber)"></span>Handoff</div><div class="vn">2 / 7 ready</div><div class="vs">sections inheritable</div><div class="door">Founding GTM ↗</div></div>
+    </div>
+  </div>
+</div>
+<div class="foot">MOCKUP · not wired · design-only · DASHBOARD A — command bar over instrument cluster · Zone 1 = the one cross-object move (command engine) · Zone 2 = readiness verdict (loud) + live vitals · every vital is a door, never a list · FA vital reads a one-line published snapshot (no recompute)</div>
+</body></html>

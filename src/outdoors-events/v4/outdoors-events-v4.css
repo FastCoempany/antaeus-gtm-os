@@ -1,0 +1,58 @@
+/*
+ * Outdoors Events v4 — proximity + the get-there rail (canon §4.22).
+ * Ported from outdoors-events-icon-rail-2026-07-07.html, scoped .oe4.
+ * The relevance tiering felt as distance: orange (closest) → blue →
+ * grey. De-carded rows; the get-there rail is outbound links + a
+ * weather glance only.
+ */
+.oe4 { background: var(--ds-field, #eef1f7); color: var(--ds-ink, #0a1c40); font-family: var(--ds-sans, "Inter", system-ui, sans-serif); -webkit-font-smoothing: antialiased; min-height: 100vh; padding: 0 0 56px; }
+.oe4-wrap { max-width: 980px; margin: 0 auto; padding: 0 36px; }
+.oe4-top { display: flex; align-items: center; gap: 14px; padding: 18px 0 13px; border-bottom: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); }
+.oe4-bname { font-family: var(--ds-mono, monospace); font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+.oe4-r { margin-left: auto; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+
+.oe4-console { display: flex; align-items: center; gap: 18px; margin: 20px 0 22px; padding: 16px 20px; background: var(--ds-surface, #fff); border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); border-left: 3px solid var(--ds-orange, #e6701e); border-radius: 0 11px 11px 0; flex-wrap: wrap; }
+.oe4-ch { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-size: 18px; }
+.oe4-cs { font-family: var(--ds-mono, monospace); font-size: 10.5px; color: var(--ds-ink-3, rgba(10,28,64,.4)); margin-top: 4px; }
+.oe4-err { color: var(--ds-red, #c0392b); }
+.oe4-btn { margin-left: auto; font-family: var(--ds-sans, sans-serif); font-weight: 600; font-size: 13.5px; padding: 11px 19px; border-radius: 8px; border: 0; background: var(--ds-orange, #e6701e); color: #fff; cursor: pointer; box-shadow: 0 8px 20px -12px rgba(230,112,30,.85); }
+.oe4-btn:disabled { opacity: .55; cursor: wait; box-shadow: none; }
+
+.oe4-spine { position: relative; padding-left: 18px; }
+.oe4-spine::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 3px; border-radius: 2px; background: linear-gradient(180deg, var(--ds-orange, #e6701e), var(--ds-blue, #2563eb) 55%, var(--ds-ink-4, rgba(10,28,64,.24))); }
+.oe4-ring { margin-bottom: 22px; }
+.oe4-rh { display: flex; align-items: baseline; gap: 10px; padding-bottom: 7px; border-bottom: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); flex-wrap: wrap; }
+.oe4-rl { font-family: var(--ds-mono, monospace); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+.oe4-ring.is-r0 .oe4-rl { color: var(--ds-orange, #e6701e); }
+.oe4-ring.is-r1 .oe4-rl { color: var(--ds-blue, #2563eb); }
+.oe4-ring.is-r2 .oe4-rl { color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+.oe4-ring.is-hand .oe4-rl { color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+.oe4-rs { font-size: 11.5px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+.oe4-rn { margin-left: auto; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-2, rgba(10,28,64,.62)); }
+
+.oe4-row { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); }
+.oe4-when { flex: 0 0 92px; font-family: var(--ds-mono, monospace); font-size: 10.5px; color: var(--ds-ink-3, rgba(10,28,64,.4)); padding-top: 2px; }
+.oe4-body { flex: 1 1 auto; min-width: 0; }
+.oe4-name { font-weight: 700; font-size: 14.5px; }
+.oe4-where { font-weight: 400; color: var(--ds-ink-3, rgba(10,28,64,.4)); font-size: 12.5px; }
+.oe4-wx { margin-left: 9px; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-blue, #2563eb); font-weight: 400; }
+.oe4-reason { font-size: 12.5px; color: var(--ds-ink-2, rgba(10,28,64,.62)); margin-top: 2px; line-height: 1.45; }
+.oe4-src { font-family: var(--ds-mono, monospace); font-size: 10px; color: var(--ds-blue, #2563eb); text-decoration: none; display: inline-block; margin-top: 3px; }
+.oe4-rail { display: flex; gap: 4px; align-items: center; padding-top: 2px; }
+.oe4-ic { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--ds-hair, rgba(10,28,64,.09)); border-radius: 7px; background: var(--ds-surface, #fff); text-decoration: none; font-size: 13px; filter: grayscale(.2); }
+.oe4-ic:hover { border-color: var(--ds-blue, #2563eb); }
+.oe4-status { font-family: var(--ds-sans, sans-serif); font-size: 11.5px; padding: 6px 8px; border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); border-radius: 7px; background: var(--ds-surface, #fff); color: var(--ds-ink, #0a1c40); margin-top: 1px; }
+.oe4-x { background: 0; border: 0; color: var(--ds-ink-4, rgba(10,28,64,.24)); cursor: pointer; font-size: 15px; padding: 2px 4px; }
+.oe4-x:hover { color: var(--ds-red, #c0392b); }
+
+.oe4-empty { border: 1px dashed var(--ds-hair-2, rgba(10,28,64,.18)); border-radius: 14px; padding: 30px 24px; text-align: center; }
+.oe4-empty h3 { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-size: 21px; margin: 0 0 8px; font-weight: 400; }
+.oe4-empty p { font-size: 13px; color: var(--ds-ink-2, rgba(10,28,64,.62)); margin: 0; line-height: 1.55; }
+
+.oe4-hand { margin-top: 22px; border-top: 1px solid var(--ds-hair, rgba(10,28,64,.09)); padding-top: 14px; }
+.oe4-handbtn { font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.4)); background: 0; border: 0; cursor: pointer; }
+.oe4-handbtn:hover { color: var(--ds-blue, #2563eb); }
+.oe4-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.oe4-form input { font-family: var(--ds-sans, sans-serif); font-size: 12.5px; padding: 8px 10px; border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); border-radius: 7px; background: var(--ds-surface, #fff); color: var(--ds-ink, #0a1c40); outline: none; min-width: 150px; }
+.oe4-form input:focus { border-color: var(--ds-blue, #2563eb); }
+.oe4-ghost { font-family: var(--ds-sans, sans-serif); font-size: 12px; padding: 8px 12px; border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); border-radius: 7px; background: var(--ds-surface, #fff); color: var(--ds-ink-2, rgba(10,28,64,.62)); cursor: pointer; }

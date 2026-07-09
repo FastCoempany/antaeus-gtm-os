@@ -1,0 +1,142 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Founding GTM — the open book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.66);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.09);--amber:#b5790f;--amber-soft:rgba(181,121,15,.1);--red:#c0392b;--red-soft:rgba(192,57,43,.06);
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased;padding:0 0 40px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 40px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 13px;border-bottom:1px solid var(--hair-2)}
+.bname{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.top .r{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.book{display:grid;grid-template-columns:290px 1fr;gap:0;margin-top:24px;min-height:660px}
+/* left plate */
+.plate{padding:6px 34px 6px 0;border-right:1px solid var(--hair)}
+.plate .k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.plate .h{font-family:var(--serif);font-size:27px;line-height:1.12;margin-bottom:14px}
+.plate .lede{font-family:var(--read);font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-bottom:18px}
+.plate .stat{font-size:12.5px;color:var(--ink-2);margin-bottom:6px}.plate .stat b{color:var(--forest)}
+.rbar{height:6px;border-radius:3px;background:var(--field);overflow:hidden;margin:8px 0 20px;display:flex}
+.rbar .seg{height:100%;flex:1;margin-right:2px;border-radius:2px;background:var(--hair-2)}.rbar .seg:last-child{margin-right:0}.rbar .seg.on{background:var(--forest)}.rbar .seg.thin{background:var(--amber)}
+.contents{border-top:1px solid var(--hair)}
+.ci{display:grid;grid-template-columns:16px 1fr 10px;gap:10px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--hair);cursor:pointer}
+.ci:hover{background:rgba(10,28,64,.014)}.ci.here{background:rgba(230,112,30,.05)}
+.ci .num{font-family:var(--mono);font-size:10px;color:var(--ink-4)}
+.ci .ct{font-size:13.5px;font-weight:500;line-height:1.3}.ci.here .ct{font-weight:600;color:var(--orange)}
+.ci .sd{width:8px;height:8px;border-radius:50%;justify-self:end}.sd.on{background:var(--forest)}.sd.thin{background:var(--amber)}.sd.empty{background:var(--hair-2)}
+/* right page */
+.page{padding:6px 0 6px 44px}
+.leaf{display:none}.leaf.show{display:block}
+.leaf .sk{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.leaf .stt{font-family:var(--serif);font-size:32px;line-height:1.12;margin-bottom:8px;max-width:600px}
+.leaf .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:18px}
+.badge.on{color:var(--forest);background:var(--forest-soft)}.badge.thin{color:var(--amber);background:var(--amber-soft)}.badge.empty{color:var(--ink-3);background:var(--field)}
+.leaf p{font-family:var(--read);font-size:17px;line-height:1.66;color:var(--ink);margin:0 0 14px;max-width:600px}.leaf p .q{color:var(--ink-2)}
+.leaf .ev{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;margin:6px 0 0;padding-left:14px;border-left:2px solid var(--hair-2);max-width:580px}.leaf .ev b{color:var(--ink-2)}
+.note{margin:20px 0 2px;padding:16px 19px;border-radius:0 12px 12px 0;background:var(--surface);border:1px solid var(--hair);max-width:580px}
+.note.corrective{border-left:3px solid var(--red)}.note.neutral{border-left:3px solid var(--blue)}
+.note .nt{font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px}.note.corrective .nt{color:var(--red)}.note.neutral .nt{color:var(--blue)}
+.note .nh{font-weight:600;font-size:14.5px;line-height:1.4;margin-bottom:5px}.note .nb{font-size:13px;color:var(--ink-2);line-height:1.55}.note .nb b{color:var(--ink)}
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:6px 0 4px;max-width:600px;border-top:1px solid var(--hair)}
+.day{padding:11px 11px 11px 0;border-right:1px solid var(--hair)}.day:last-child{border-right:0;padding-right:0}
+.day .dn{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-bottom:6px}.day .dt{font-size:11.5px;color:var(--ink-2);line-height:1.42}.day .dt b{color:var(--ink)}
+.pgnav{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:18px;border-top:1px solid var(--hair)}
+.pgnav .nx{font-family:var(--mono);font-size:11px;color:var(--blue);cursor:pointer}.pgnav .sp{margin-left:auto}
+.btn{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:8px 15px;border-radius:8px;border:0;background:var(--orange);color:#fff;cursor:pointer}
+.foot{max-width:1120px;margin:20px auto 0;padding:0 40px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.6}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .2s;z-index:9}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bname">Founding GTM</span><span class="r">the handoff · read-mode</span></div>
+
+  <div class="book">
+    <aside class="plate">
+      <div class="k">If a hire started Monday</div>
+      <div class="h">The handoff</div>
+      <div class="lede">What the rooms watched you actually do, written as the one thing a first hire reads on day one.</div>
+      <div class="stat"><b>4 of 7</b> parts ready to hand off</div>
+      <div class="rbar"><span class="seg on"></span><span class="seg on"></span><span class="seg thin"></span><span class="seg on"></span><span class="seg thin"></span><span class="seg on"></span><span class="seg"></span></div>
+      <div class="contents" id="contents">
+        <div class="ci here" data-i="1"><span class="num">1</span><span class="ct">Who we win</span><span class="sd on"></span></div>
+        <div class="ci" data-i="2"><span class="num">2</span><span class="ct">Outreach that worked</span><span class="sd on"></span></div>
+        <div class="ci" data-i="3"><span class="num">3</span><span class="ct">Questions that won</span><span class="sd thin"></span></div>
+        <div class="ci" data-i="4"><span class="num">4</span><span class="ct">Won &amp; where we leak</span><span class="sd on"></span></div>
+        <div class="ci" data-i="5"><span class="num">5</span><span class="ct">The losses</span><span class="sd thin"></span></div>
+        <div class="ci" data-i="6"><span class="num">6</span><span class="ct">Why we win</span><span class="sd on"></span></div>
+        <div class="ci" data-i="7"><span class="num">7</span><span class="ct">The first week</span><span class="sd empty"></span></div>
+      </div>
+    </aside>
+
+    <div class="page" id="page">
+      <div class="leaf show" data-i="1">
+        <div class="sk">§1 · Who we win</div><div class="stt">Who hits, who misses, and why</div><span class="badge on">Ready to hand off</span>
+        <p>We win RevOps leaders at Series B–C companies who just hired a new VP of Sales. Every time. The new VP wants a number they can trust in 90 days, and RevOps is holding the bag — so they move fast and they have budget. That's the shape of every deal we've closed.</p>
+        <p class="q">The misses are the same mistake in reverse: a curious IC with no budget, at a company where nothing just changed. Good conversations, no close.</p>
+        <div class="ev">Won · <b>RevOps · new sales leadership · quarter-end</b> — 5 of 6 won<br>Miss · <b>IC / analyst · no trigger</b> — 4 of 5 lost</div>
+        <div class="note corrective"><div class="nt">One thing to notice</div><div class="nh">Your written ICP is broader than the deals you actually win.</div><div class="nb">Saved target is "B2B SaaS, 50–500." Every <b>win</b> was RevOps right after a sales-leadership change. Narrow it to what closes.</div></div>
+      </div>
+      <div class="leaf" data-i="2">
+        <div class="sk">§2 · Outreach that worked</div><div class="stt">The outreach that actually landed a meeting</div><span class="badge on">Ready to hand off</span>
+        <p>The opener that works names the new VP and references the leadership change out loud, then a call two days later off the email. Email alone gets ignored; the call alone doesn't work cold. It's the pair that lands — <b>34% reply</b> vs 6% for generic notes.</p>
+        <div class="ev">Top play · <b>email → call, leadership-change opener, RevOps</b> — 34% reply, 9 meetings</div>
+        <div class="note neutral"><div class="nt">One thing to notice</div><div class="nh">You've never tried LinkedIn on the people you actually win.</div><div class="nb">Your 3 hottest untouched accounts have RevOps leaders active on LinkedIn — and zero touches there.</div></div>
+      </div>
+      <div class="leaf" data-i="3">
+        <div class="sk">§3 · Questions that won</div><div class="stt">The questions that won the next meeting</div><span class="badge thin">Still thin — 3 more logged calls</span>
+        <p>Early signal: the calls that advanced almost all asked "what happens to the number if you do nothing this quarter?" — it makes the pain theirs, not ours. Not enough logged calls yet to call it a pattern a hire could trust.</p>
+        <div class="note corrective"><div class="nt">One thing to notice</div><div class="nh">Your last 4 calls skipped the question that won the early ones.</div><div class="nb">The "do nothing" question advanced every early win. Your four most recent calls didn't ask it.</div></div>
+      </div>
+      <div class="leaf" data-i="4">
+        <div class="sk">§4 · Won &amp; where we leak</div><div class="stt">Where deals are won, and where they leak</div><span class="badge on">Ready to hand off</span>
+        <p>Deals are won at the first meeting — if the person in the room owns the number, we close 60% of the time. We leak at security review: <b>4 of 6 losses</b> stalled there and never restarted. We don't lose the argument — we go quiet, and the deal cools.</p>
+        <div class="ev">Biggest leak · <b>security review</b> — 4 of 6 losses stalled, none advised</div>
+        <div class="note corrective"><div class="nt">One thing to notice</div><div class="nh">Every deal that leaked at security had no advisor on it.</div><div class="nb">You have investors who've cleared enterprise security reviews. None were pulled in on the four deals that died there.</div></div>
+      </div>
+      <div class="leaf" data-i="5">
+        <div class="sk">§5 · The losses</div><div class="stt">The losses we paid for</div><span class="badge thin">Partial — 3 more losses to pin</span>
+        <p><b>Meridian Bank</b> — verbal yes, died in procurement when the champion went quiet; we rested on the yes. <b>Corva</b> — lost to "no decision"; we never found the person who signs off.</p>
+        <div class="note corrective"><div class="nt">One thing to notice</div><div class="nh">Two open deals match Meridian's exact loss shape.</div><div class="nb">Both have a warm champion and no confirmed signer — precisely how Meridian slipped.</div></div>
+      </div>
+      <div class="leaf" data-i="6">
+        <div class="sk">§6 · Why we win</div><div class="stt">Why we win</div><span class="badge on">Ready to hand off</span>
+        <p>When we win, one thing is always true: <b>the champion is the person who owns the number.</b> They feel the pressure personally, so they pull the deal through their own procurement instead of waiting on us.</p>
+        <p class="q">If you remember one thing walking in: find the person who gets asked about the number, and make them your champion. Everything else follows.</p>
+        <div class="ev">Shared trait of every win · <b>champion owns the number + live trigger + dated next step from meeting one</b></div>
+      </div>
+      <div class="leaf" data-i="7">
+        <div class="sk">§7 · The first week</div><div class="stt">What your first week looks like</div><span class="badge empty">Not written yet — set the quota</span>
+        <div class="week">
+          <div class="day"><div class="dn">Mon</div><div class="dt">The <b>Dashboard's</b> top 3 at-risk deals first.</div></div>
+          <div class="day"><div class="dn">Tue</div><div class="dt">Outbound. <b>12 messages &amp; calls</b>, RevOps at freshly-changed accounts.</div></div>
+          <div class="day"><div class="dn">Wed</div><div class="dt">Discovery. Ask the "do nothing" question.</div></div>
+          <div class="day"><div class="dn">Thu</div><div class="dt">Every deal leaves with a <b>dated next step</b>.</div></div>
+          <div class="day"><div class="dn">Fri</div><div class="dt">Anything quiet 7+ days gets a backchannel.</div></div>
+        </div>
+        <p class="q" style="margin-top:14px">Set your quota and this becomes the real cadence — the touch count and cycle come straight from your own math.</p>
+      </div>
+
+      <div class="pgnav">
+        <span class="nx" id="prev">‹ back</span><span class="nx" id="next">next part ›</span>
+        <span class="sp"></span><button class="btn">Share read-only with a hire →</button>
+      </div>
+    </div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+function toast(h){const t=$('toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+let cur=1;const N=7;
+function go(i){cur=Math.max(1,Math.min(N,i));
+  document.querySelectorAll('.leaf').forEach(l=>l.classList.toggle('show',+l.dataset.i===cur));
+  document.querySelectorAll('.ci').forEach(c=>c.classList.toggle('here',+c.dataset.i===cur));
+  document.querySelector('.page').scrollIntoView({block:'nearest'});}
+document.querySelectorAll('.ci').forEach(c=>c.onclick=()=>go(+c.dataset.i));
+$('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
+document.querySelector('.btn').onclick=()=>toast('Share read-only with a hire');
+$('foot').textContent='MOCKUP · not wired · design-only · FOUNDING GTM — 3 (the open book) · persistent contents + readiness on the left, one part read full on the right · page through it like a bound handoff';
+</script>
+</body></html>

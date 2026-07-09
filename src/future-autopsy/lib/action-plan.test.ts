@@ -39,7 +39,7 @@ describe("buildActionPlan", () => {
             { now: NOW, storage: null }
         );
         const plan = buildActionPlan(generateAutopsy(v));
-        expect(plan.primary?.roomLabel).toBe("PoC Framework");
+        expect(plan.primary?.roomLabel).toBe("Pilot Desk");
     });
 
     it("routes to Call Planner when EB is missing", () => {
@@ -64,7 +64,7 @@ describe("buildActionPlan", () => {
         );
         const plan = buildActionPlan(generateAutopsy(v));
         // Top cause should be no_eb (since everything else is filled).
-        expect(plan.primary?.roomLabel).toBe("Call Planner");
+        expect(plan.primary?.roomLabel).toBe("Discovery Studio");
     });
 
     it("primary CTA carries continuity params", () => {

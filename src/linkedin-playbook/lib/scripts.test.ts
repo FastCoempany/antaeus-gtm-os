@@ -24,14 +24,14 @@ describe("cueScript", () => {
     });
 
     it("returns the give-first DM script for a non-Ask DM cue", () => {
-        const cue = findCue(3); // Cue 04 — Give proof before asking
+        const cue = findCue(3); // Cue 04 — Give something useful before asking
         const out = cueScript(cue, defaultMotion());
         expect(out).toContain("[benchmark]");
         expect(out).toContain("No ask");
     });
 
     it("returns the calendar-ask DM script for the Ask cue (last)", () => {
-        const cue = findCue(4); // Cue 05 — Ask only when earned
+        const cue = findCue(4); // Cue 05 — Ask only when it's warranted
         const out = cueScript(cue, defaultMotion());
         expect(out).toContain("[day]");
         expect(out).toContain("15 minutes");

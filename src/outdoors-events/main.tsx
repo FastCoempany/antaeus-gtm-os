@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { OutdoorsEvents } from "./OutdoorsEvents";
 import { OutdoorsEventsDS } from "./ds/OutdoorsEventsDS";
+import { OutdoorsEventsV4 } from "./v4/OutdoorsEventsV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -57,7 +58,24 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_outdoors_events_legacy");
 }
 
-render(useDsSurface ? <OutdoorsEventsDS /> : <OutdoorsEvents />, root);
+// Wire-to-production v4 (canon §4.22, proximity + the get-there rail,
+// settled 2026-07-07). Default ON; room_outdoors_events_v4_off is the
+// kill-switch back to the DS surface; ?v4=0/1 is the preview hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_outdoors_events_v4_off"));
+
+render(
+    useV4 ? <OutdoorsEventsV4 /> : useDsSurface ? <OutdoorsEventsDS /> : <OutdoorsEvents />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).

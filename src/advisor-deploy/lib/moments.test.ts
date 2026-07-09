@@ -40,7 +40,7 @@ describe("MOMENTS data", () => {
 
 describe("findMoment", () => {
     it("returns the moment by id", () => {
-        expect(findMoment("renewal").name).toContain("Renewal");
+        expect(findMoment("renewal").name).toContain("renewal");
     });
 
     it("falls back to intro when id is unknown", () => {

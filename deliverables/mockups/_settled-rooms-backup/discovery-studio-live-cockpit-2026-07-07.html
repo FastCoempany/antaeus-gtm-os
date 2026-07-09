@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Discovery Studio — the live cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.22);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.1);--hair-2:rgba(10,28,64,.16);
+--orange:#e6701e;--orange-soft:rgba(230,112,30,.08);--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.1);--amber:#b5790f;--amber-soft:rgba(181,121,15,.12);--red:#c0392b;--red-soft:rgba(192,57,43,.07);
+--serif:"DM Serif Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);min-height:100vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 34px;min-height:100vh;display:flex;flex-direction:column}
+/* topbar */
+.top{display:flex;align-items:center;gap:12px;padding:14px 0 11px;flex-wrap:wrap}
+.bn{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+.fwsel{font-family:var(--sans);font-size:12px;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid var(--orange);background:var(--orange-soft);color:var(--ink);cursor:pointer}
+.pre{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--forest);font-weight:500}.pre .d{width:7px;height:7px;border-radius:50%;background:var(--forest)}
+.comp{display:flex;gap:3px;background:var(--field);border-radius:8px;padding:3px;margin-left:auto}.comp button{font-size:11.5px;font-weight:500;padding:5px 11px;border-radius:6px;border:0;background:0;color:var(--ink-2);cursor:pointer}.comp button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(10,28,64,.1)}.comp button.emerg.on{color:var(--red)}
+/* always-on call-state line */
+.state{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:9px 14px;background:var(--surface);border:1px solid var(--hair);border-radius:10px;margin-bottom:10px;font-size:12px}
+.state .who{font-weight:600;font-size:13.5px}.state .why{color:var(--ink-2)}.state .why b{color:var(--amber)}
+.state .vit{margin-left:auto;display:flex;gap:12px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.state .vit .v b{color:var(--ink)}.state .vit .ok{color:var(--forest)}.state .vit .no{color:var(--amber)}
+/* segment spine */
+.spine{display:flex;gap:5px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.sp{display:flex;align-items:center;gap:6px;font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid var(--hair);background:var(--surface);color:var(--ink-3);cursor:pointer;white-space:nowrap}.sp .n{font-family:var(--mono);font-size:9px;color:var(--ink-4)}
+.sp.done{color:var(--forest);border-color:var(--forest-soft);background:var(--forest-soft)}.sp.ess .dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}.sp.on{border-color:var(--orange);background:var(--orange-soft);color:var(--ink);font-weight:600;border-width:2px}
+/* the moment */
+.moment{flex:1;padding:28px 0 14px}
+.seglbl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.q{font-family:var(--serif);font-size:31px;line-height:1.18;margin-bottom:9px;max-width:840px}
+.lens{font-size:13px;color:var(--ink-3);margin-bottom:24px}.lens b{color:var(--ink-2)}
+.listen{font-size:12.5px;color:var(--ink-2);line-height:1.5;margin-bottom:20px;padding-left:12px;border-left:2px solid var(--blue);max-width:720px}.listen .ll{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:8px}.listen b{color:var(--ink)}
+.hear{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:11px}
+.says{display:flex;gap:8px;flex-wrap:wrap}
+.say{font-size:13.5px;padding:9px 15px;border-radius:22px;border:1px solid var(--hair-2);background:var(--surface);color:var(--ink-2);cursor:pointer;transition:all .12s}
+.say:hover{border-color:var(--ink-3)}.say.picked{border-color:var(--red);background:var(--red-soft);color:var(--red);font-weight:600}
+.answer{margin-top:22px;padding:19px 22px;border-left:3px solid var(--forest);background:var(--surface);border:1px solid var(--hair);border-radius:0 14px 14px 0;max-width:760px;display:none}
+.answer.show{display:block;animation:rise .28s cubic-bezier(.2,.7,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.answer .al{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);margin-bottom:8px}
+.answer .at{font-size:19px;font-weight:600;line-height:1.4}
+.answer .aj{font-family:var(--mono);font-size:10.5px;color:var(--blue);cursor:pointer;margin-top:11px;display:inline-block}
+.hint{margin-top:22px;font-size:13px;color:var(--ink-3);font-style:italic}
+/* contextual drawer */
+.drawer{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--hair-2);margin:14px -34px 0;padding:0 34px;box-shadow:0 -16px 34px -24px rgba(10,28,64,.32)}
+.dtabs{display:flex;gap:2px;padding:8px 0 0;flex-wrap:wrap}
+.dt{font-family:var(--sans);font-size:11.5px;font-weight:500;padding:8px 13px;border-radius:8px 8px 0 0;border:0;background:0;color:var(--ink-3);cursor:pointer}
+.dt.on{background:var(--field);color:var(--ink);font-weight:600}
+.dt.recover.on{color:var(--red)}
+.dt .flag{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber);margin-left:6px}
+.dbody{background:var(--field);border-radius:0 12px 0 0;padding:14px 16px 18px;min-height:96px}
+.dlead{font-size:11.5px;color:var(--ink-3);margin-bottom:11px}.dlead b{color:var(--amber)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.oi{font-size:12.5px;line-height:1.45;color:var(--ink-2);padding:10px 12px;background:var(--surface);border:1px solid var(--hair);border-radius:9px}.oi b{color:var(--ink)}
+.rec{padding:9px 12px;background:var(--surface);border:1px solid var(--hair);border-left:3px solid var(--red);border-radius:0 9px 9px 0;margin-bottom:8px}.rec .rt{font-weight:600;color:var(--red);font-size:12.5px}.rec .rd{font-size:12px;color:var(--ink-2);margin-top:2px;line-height:1.4}.rec .rj{font-family:var(--mono);font-size:10px;color:var(--blue);cursor:pointer;margin-top:3px;display:inline-block}
+.grp3{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:2px 0 7px}.grp3 b{color:var(--ink)}.grp3:not(:first-child){margin-top:13px;padding-top:11px;border-top:1px solid var(--hair)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}.fact{font-size:12.5px;display:flex;gap:9px;padding:5px 0}.fact .fl{color:var(--ink-3);min-width:76px}.fact .fv{color:var(--ink);font-weight:500}.fact .fv.miss{color:var(--amber);font-weight:400}
+.docket{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end}.dcell .cl{font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}.dcell .cv{font-size:12.5px;color:var(--ink-4)}.dcell .cv.set{color:var(--ink);font-weight:500}
+.lockbtn{font-family:var(--sans);font-weight:600;font-size:12.5px;padding:9px 16px;border-radius:9px;border:0;background:var(--orange);color:#fff;cursor:pointer;margin-left:auto}
+.foot{font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.5;padding:11px 0 14px}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><span class="bn">Discovery Studio</span><button class="fwsel">CX AI ▾</button><span class="pre"><span class="d"></span>Ready to walk in — person · persona · why-now · deal all set</span>
+    <div class="comp"><button class="on" data-c="all">All</button><button data-c="ess">Essentials</button><button class="emerg" data-c="em">Emergency</button></div></div>
+
+  <div class="state"><span class="who">Momentum Support</span><span class="why">Priya · VP CX · why-now: <b>opened 12 support roles, 3d ago</b></span>
+    <span class="vit"><span class="v" style="color:var(--amber)">reading: <b style="color:var(--amber)">guarded</b></span><span class="v"><b>4</b>/7 truths</span><span class="v ok">champion ✓</span><span class="v no">signer —</span><span class="v"><b>next-step:</b> <span class="no">not set</span></span></span></div>
+
+  <div class="spine">
+    <span class="sp done"><span class="n">1</span>Opening</span><span class="sp done"><span class="n">2</span>Current state</span>
+    <span class="sp on"><span class="n">3</span>Pain &amp; consequence</span><span class="sp ess"><span class="n">4</span><span class="dot"></span>Trigger</span>
+    <span class="sp ess"><span class="n">5</span><span class="dot"></span>Stakeholders</span><span class="sp"><span class="n">6</span>Evidence</span>
+    <span class="sp"><span class="n">7</span>Vendor</span><span class="sp"><span class="n">8</span>Decision</span>
+    <span class="sp ess"><span class="n">9</span><span class="dot"></span>Next-step lock</span><span class="sp"><span class="n">10</span>Post-call</span>
+  </div>
+
+  <div class="moment">
+    <div class="seglbl">§3 · Pain &amp; consequence · make the status quo cost real</div>
+    <div class="q">Walk me through what happens when a ticket sits two hours during a spike.</div>
+    <div class="lens">Tuned for <b>Priya, VP of CX</b> — change the lens and the whole question set retunes.</div>
+    <div class="listen"><span class="ll">Listen for</span> whether this pain is really <b>theirs to fix</b>, or a polite nice-to-have — and who flinches when you name the cost.</div>
+    <div class="hear">When they answer, tap what you heard</div>
+    <div class="says">
+      <span class="say" data-say="a" data-line="Push for the number: &quot;When you cope, what does it cost — refunds, churn, an agent quitting?&quot;" data-jump="">It's annoying but we cope</span>
+      <span class="say" data-say="b" data-drawer="pushback" data-line="Reframe to unit economics: &quot;So the fix so far is headcount — what happens to that math at 2× volume?&quot;" data-jump="→ this opens Vendor &amp; displacement next">We just hired more agents</span>
+      <span class="say" data-say="c" data-line="Test the trigger: &quot;What would have to break for it to become a priority?&quot;" data-jump="→ this opens Trigger &amp; urgency next">Not a top priority</span>
+      <span class="say" data-say="d" data-line="Stay curious: &quot;Say more about that — what does it look like on a bad day?&quot;" data-jump="">+ something else</span>
+    </div>
+    <div class="answer" id="answer"><div class="al">Say this</div><div class="at" id="ansLine"></div><span class="aj" id="ansJump"></span></div>
+    <div class="hint" id="hint">Tap a response above to get your next line.</div>
+  </div>
+
+  <div class="drawer">
+    <div class="dtabs">
+      <button class="dt on" data-tab="pushback" id="tabPush">They pushed back</button>
+      <button class="dt" data-tab="ask">If they ask you</button>
+      <button class="dt" data-tab="evidence">Evidence</button>
+      <button class="dt recover" data-tab="recover">Recover &amp; skip</button>
+      <button class="dt" data-tab="know">Truth &amp; signals</button>
+      <button class="dt" data-tab="next">Next-step</button>
+    </div>
+    <div class="dbody" id="dbody"></div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const TABS={
+  pushback:{lead:'They leaned on <b>"we just hired more agents"</b> — here\'s the pushback that answers it:',html:'<div class="two"><div class="oi"><b>"AI feels risky on support"</b> → start in assist mode, human in the loop; prove it on overflow first.</div><div class="oi"><b>"We\'re mid-Zendesk contract"</b> → run alongside, no rip-and-replace; prove on the spike traffic.</div></div>'},
+  ask:{lead:'If the buyer turns a question back on you:',html:'<div class="two"><div class="oi"><b>"How\'s this different from Intercom Fin?"</b> → bridge to the outcome they just named, not features.</div><div class="oi"><b>"Do you integrate with our CRM?"</b> → yes — then straight back to the pain.</div></div>'},
+  evidence:{lead:'Proof anchors for this room — reach for one when they want to see it work:',html:'<div class="two"><div class="oi"><b>momos</b> — cut first-response 42% in 6 weeks.</div><div class="oi"><b>Decagon</b> — deflected 55% of tier-1 tickets.</div></div>'},
+  recover:{lead:'Get the call back, or handle a buyer who jumps:',html:'<div class="rec"><div class="rt">They\'ve gone quiet</div><div class="rd">Name it, hand back control: "I\'ve been talking — what\'s landing, what isn\'t?"<span class="rj">→ run at Pain</span></div></div><div class="rec"><div class="rt">They\'re rushing you</div><div class="rd">Collapse to one question: the trigger. Skip the rest.<span class="rj">→ jump to Trigger</span></div></div><div style="font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin:12px 0 8px">If they jump — skip-ahead handlers</div><div class="two"><div class="oi"><b>"Just send me info"</b> → anchor to the pain, ask for the next conversation, don\'t email into the void.</div><div class="oi"><b>"Can we see a demo?"</b> → yes — scope it to the pain they named, book it as the next step.</div><div class="oi"><b>"What\'s the price?"</b> → give a range, tie it to the cost of doing nothing, keep discovering.</div><div class="oi"><b>Wrong person / bad timing</b> → get the right name + a warm intro, or the real date to come back.</div></div>'},
+  know:{lead:'Three reads, kept apart — the facts you earned, the signals you\'re hearing, and what\'s ready to deploy:',html:'<div class="grp3">Facts earned · <b>4 of 7</b></div><div class="facts"><div class="fact"><span class="fl">Champion</span><span class="fv">Priya · VP CX</span></div><div class="fact"><span class="fl">Current tool</span><span class="fv">Zendesk + 2 contractors</span></div><div class="fact"><span class="fl">Pain</span><span class="fv">2-hr waits during spikes</span></div><div class="fact"><span class="fl">Who signs</span><span class="fv miss">— not named yet —</span></div></div><div class="grp3">Signals you\'re reading</div><div class="facts"><div class="fact"><span class="fl" style="color:var(--forest)">real pain</span><span class="fv">winced at "an agent quitting"</span></div><div class="fact"><span class="fl" style="color:var(--amber)">politics</span><span class="fv">deflected to "we hired more agents"</span></div></div><div class="grp3">Holding vs ready to deploy</div><div class="facts"><div class="fact"><span class="fl" style="color:var(--ink-3)">holding</span><span class="fv">the momos 42% proof — don\'t spend it yet</span></div><div class="fact"><span class="fl" style="color:var(--forest)">deploy now</span><span class="fv">the 2× unit-economics reframe</span></div></div>'},
+  next:{lead:'The one thing you can\'t hang up without — a dated next step with a named owner:',html:'<div class="docket"><div class="dcell"><div class="cl">Date</div><div class="cv">— not set —</div></div><div class="dcell"><div class="cl">Owner</div><div class="cv">— not set —</div></div><div class="dcell"><div class="cl">Purpose</div><div class="cv set">Technical eval scoping</div></div><button class="lockbtn">Lock the next step →</button></div>'}
+};
+function setTab(t){document.querySelectorAll('.dt').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));const d=TABS[t];$('dbody').innerHTML='<div class="dlead">'+d.lead+'</div>'+d.html;}
+document.querySelectorAll('.dt').forEach(b=>b.onclick=()=>{document.querySelectorAll('.dt .flag').forEach(f=>f.remove());setTab(b.dataset.tab);});
+document.querySelectorAll('.say').forEach(s=>s.onclick=()=>{
+  document.querySelectorAll('.say').forEach(x=>x.classList.remove('picked'));s.classList.add('picked');
+  $('ansLine').textContent=s.dataset.line.replace(/&quot;/g,'"');$('ansJump').innerHTML=s.dataset.jump||'';$('ansJump').style.display=s.dataset.jump?'inline-block':'none';
+  $('answer').classList.add('show');$('hint').style.display='none';
+  if(s.dataset.drawer){setTab(s.dataset.drawer);const tp=$('tabPush');if(!tp.querySelector('.flag')){const f=document.createElement('span');f.className='flag';tp.appendChild(f);}}
+});
+document.querySelectorAll('.comp button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.comp button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+setTab('pushback');
+$('tabPush').innerHTML='They pushed back<span class="flag"></span>';
+$('foot').textContent="MOCKUP · clickable · design-only · DISCOVERY STUDIO — the live cockpit · DS-1 structure (one focused column, jumpable spine, always-on call-state) + DS-3 interaction (tap what you heard → your line; the drawer surfaces what the moment needs) · every one of the 19 primitives reachable, re-ranked for the live glance";
+</script>
+</body></html>

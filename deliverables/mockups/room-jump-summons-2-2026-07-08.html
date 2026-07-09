@@ -1,0 +1,292 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The summon, round 2 — three more, three different philosophies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--amber:#b5790f;--red:#c0392b;
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased}
+.pagehd{max-width:1140px;margin:0 auto;padding:30px 34px 0}
+.pagehd .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.pagehd h1{font-family:var(--serif);font-size:30px;margin:9px 0 4px;font-weight:400}
+.pagehd p{font-size:14px;color:var(--ink-2);line-height:1.58;max-width:820px;margin:0 0 4px}
+.pagehd p b{color:var(--ink)}
+.switch{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
+.switch button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:9px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.switch button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stage{max-width:1140px;margin:14px auto 0;padding:0 34px 70px}
+.pane{display:none}.pane.on{display:block;animation:rise .4s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{font-size:13.5px;color:var(--ink-2);line-height:1.62;margin:0 0 14px;max-width:880px}.lead b{color:var(--ink)}
+.note{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.7}
+.frame{position:relative;background:var(--surface);border:1px solid var(--hair-2);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,28,64,.4);height:620px;user-select:none}
+.room{position:absolute;inset:0;padding:26px 34px;background:var(--surface);z-index:2;transition:filter .3s var(--ease),opacity .3s var(--ease)}
+.rtop{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-4)}
+.rtop b{color:var(--ink);letter-spacing:.2em;display:inline-flex;align-items:center;gap:8px}
+.rtop .r{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
+.rh1{font-family:var(--serif);font-size:26px;margin:26px 0 4px}.rh1 b{color:var(--red)}
+.rrow{display:flex;gap:16px;align-items:baseline;border-top:1px solid var(--hair);padding:14px 10px;font-size:13.5px;color:var(--ink-2);border-radius:8px}
+.rrow b{color:var(--ink);font-weight:600;min-width:180px}
+.rrow .mono{font-family:var(--mono);font-size:11px;color:var(--ink-4);margin-left:auto}
+.toast{position:absolute;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;font-family:var(--mono);font-size:11.5px;padding:11px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s;z-index:40;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast b{color:#e6a271}
+
+/* ===== G4 CARRY THE DEAL ===== */
+#f4 .rrow{cursor:grab}
+#f4 .rrow:hover{background:var(--field)}
+#f4 .rrow .grip{font-family:var(--mono);font-size:9px;color:var(--ink-4);letter-spacing:.05em;text-transform:uppercase;opacity:0;transition:opacity .15s}
+#f4 .rrow:hover .grip{opacity:1}
+#f4.carrying .room{filter:blur(1.5px) grayscale(.3);opacity:.45}
+.ghost{position:absolute;z-index:30;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:10px 16px;border-radius:10px;box-shadow:0 18px 40px -12px rgba(10,28,64,.6);display:none;transform:translate(-50%,-120%)}
+.ghost .g2{font-family:var(--mono);font-size:9px;font-weight:400;color:rgba(255,255,255,.6);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.zones{position:absolute;inset:0;z-index:20;display:none;pointer-events:none}
+#f4.carrying .zones{display:block}
+.zone{position:absolute;width:230px;padding:15px 17px;border-radius:13px;background:var(--surface);border:1.5px dashed var(--hair-2);pointer-events:auto;transition:all .15s var(--ease);opacity:0;animation:rise .3s var(--ease) forwards}
+.zone .zk{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-4)}
+.zone .zn{font-size:14.5px;font-weight:700;margin-top:3px}
+.zone .zd{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.35}
+.zone.hot{border-color:var(--orange);background:rgba(230,112,30,.05)}.zone.hot .zn{color:var(--orange)}.zone.hot .zk{color:var(--orange)}
+.zone.over{background:var(--ink);border-color:var(--ink);border-style:solid;transform:scale(1.04)}
+.zone.over .zn,.zone.over .zk,.zone.over .zd{color:#fff}
+.zone.wide{width:270px}
+
+/* ===== G5 SLIDE THE ROOM ===== */
+.under{position:absolute;inset:0;z-index:1;background:var(--field);padding:24px 30px;overflow:auto}
+.under .uk{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.under .ut{font-family:var(--serif);font-size:20px;margin:5px 0 2px}
+.under .us{font-size:12px;color:var(--ink-3);margin-bottom:16px}.under .us b{color:var(--ink)}
+#room5{cursor:grab;transition:none;box-shadow:0 10px 50px -18px rgba(10,28,64,.35)}
+#room5.snapping{transition:transform .45s var(--ease)}
+#room5.away{transition:transform .5s var(--ease)}
+.comeback{position:absolute;z-index:15;top:14px;left:14px;display:none;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border-radius:8px;cursor:pointer;box-shadow:0 12px 30px -10px rgba(10,28,64,.5)}
+.comeback.on{display:block}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0}
+.scol{border-left:1px solid var(--hair);padding:0 10px}.scol:first-child{border-left:0;padding-left:0}
+.slab{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:9px;height:20px}
+.rm{display:block;padding:7px 9px;border-radius:7px;border:1px solid transparent;margin-bottom:5px;cursor:pointer;transition:all .14s var(--ease)}
+.rm:hover{background:#fff;border-color:var(--hair)}
+.rm .rn{font-size:12px;font-weight:600}
+.rm .rd{font-size:10px;color:var(--ink-3);line-height:1.3;margin-top:1px}
+.rm.here{background:var(--ink);border-color:var(--ink)}.rm.here .rn{color:#fff}.rm.here .rd{color:rgba(255,255,255,.6)}
+.rm.next{border-color:var(--orange);border-style:dashed;background:rgba(230,112,30,.06)}.rm.next .rn{color:var(--orange)}
+
+/* ===== G6 SAY WHAT YOU NEED ===== */
+.saylayer{position:absolute;inset:0;z-index:25;display:none;background:rgba(238,241,247,.94);padding:60px 60px 30px}
+.saylayer.on{display:block;animation:rise .25s var(--ease)}
+.sayk{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.sayline{font-family:var(--read);font-size:40px;color:var(--ink);margin:10px 0 6px;min-height:54px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.sayline .caret{display:inline-block;width:2px;height:36px;background:var(--orange);vertical-align:-6px;margin-left:3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sayhint{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);letter-spacing:.05em;margin-bottom:22px}
+.ans{max-width:640px}
+.arow{display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:11px;cursor:pointer;transition:background .13s}
+.arow:hover{background:#fff}
+.arow.hot{background:#fff;box-shadow:inset 3px 0 0 var(--orange),0 10px 26px -14px rgba(10,28,64,.25)}
+.arow .verb{font-size:16px;font-weight:600}
+.arow .to{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px}
+.arow .to b{color:var(--ink)}
+.arow .carry{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--forest);white-space:nowrap}
+.whisper6{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);z-index:3;cursor:pointer}
+</style></head><body>
+<div class="pagehd">
+  <div class="k">Design exploration · round 2 · not wired — three MORE summons, three different philosophies</div>
+  <h1>Round one changed the gesture. Round two changes the philosophy.</h1>
+  <p>The Ground / Birdseye / Compass were three <b>gestures</b> for the same idea: summon a map. These three ask a harder question — <b>what if you never navigate by room name at all?</b> One navigates by <b>object</b> (take the deal somewhere), one by <b>physics</b> (the map isn't summoned, it's revealed), one by <b>language</b> (say what you need; the system routes you). All live — try them.</p>
+  <div class="switch">
+    <button class="on" data-p="g4">G4 · <b>Carry the deal</b> — pick up what you're working on, drop it where it goes next</button>
+    <button data-p="g5">G5 · <b>Slide the room</b> — shove the whole room aside; the map was under it all along</button>
+    <button data-p="g6">G6 · <b>Say what you need</b> — just type, in plain words; the system routes you</button>
+  </div>
+</div>
+<div class="stage">
+
+  <!-- ===== G4 CARRY THE DEAL ===== -->
+  <div class="pane on" id="pane-g4">
+    <p class="lead"><b>Carry the deal.</b> The deepest cut of all: <b>you never go to a room — you take an object somewhere.</b> Grab a deal (an account, a signal) and lift it off the page: the room falls away and the places that can <b>act on that object</b> appear as landing zones — run it to signature, pre-mortem it, run a pilot, get help on it. Drop it, and you land in that room <b>with the deal already in hand</b>. This is canon's first architectural truth ("object-first, not tab-first") turned into the navigation itself — the handoff strip made physical.</p>
+    <div class="frame" id="f4">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">grab a deal row and drag ↓</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow" data-deal="Northwind Robotics"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="grip">⠿ grab</span><span class="mono">$120k</span></div>
+        <div class="rrow" data-deal="Mercury"><b>Mercury</b> stalled in discovery <span class="grip">⠿ grab</span><span class="mono">$40k</span></div>
+        <div class="rrow" data-deal="Ramp"><b>Ramp</b> verbal yes · terms on the table <span class="grip">⠿ grab</span><span class="mono">$84k</span></div>
+      </div>
+      <div class="zones" id="zones4"></div>
+      <div class="ghost" id="ghost4"></div>
+      <div class="toast" id="toast4"></div>
+    </div>
+    <div class="note">G4 — navigation disappears into the work: the question is never "which room" but "what does this deal need next." The zones are the rooms that ACCEPT the object (the compounding map §6, live). The full map stays one drop away ("somewhere else…"). Risk: only covers object-carrying jumps — needs a companion summon (the Ground) for "just take me to Settings."</div>
+  </div>
+
+  <!-- ===== G5 SLIDE THE ROOM ===== -->
+  <div class="pane" id="pane-g5">
+    <p class="lead"><b>Slide the room.</b> No overlay, no panel, no summon at all — <b>the map is not a UI that appears; it's the surface everything sits on.</b> Grab the room anywhere on its open field and physically shove it — any direction, it follows your hand like a sheet of paper on a desk — and the motion map is simply <b>there underneath</b>, where it has been the whole time. Shove far enough and the room slides away; flick it back or tap "bring the room back." Nothing is ever "opened." You just look under the work.</p>
+    <div class="frame" id="f5">
+      <div class="under" id="under5">
+        <div class="uk">Under every room — the whole motion</div>
+        <div class="ut">It was here the whole time.</div>
+        <div class="us">You slid <b>Deal Workspace</b> aside · the system suggests <b>Getting to Signed</b> — Ramp is at the terms stage</div>
+        <div class="flow" id="flow5"></div>
+      </div>
+      <div class="room" id="room5">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">grab the open field and shove the room — any direction</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> next step 2 days overdue <span class="mono">$84k</span></div>
+      </div>
+      <button class="comeback" id="comeback5">← bring the room back</button>
+      <div class="toast" id="toast5"></div>
+    </div>
+    <div class="note">G5 — the most tactile: direct manipulation of the room itself, desk physics, zero chrome. Philosophically the inverse of a palette: the map is never summoned because it never left. Pairs beautifully with the Ground story (the rooms literally SIT ON the motion). Risk: the grab must only arm on the open field — never fight text selection, row drags, or scroll.</div>
+  </div>
+
+  <!-- ===== G6 SAY WHAT YOU NEED ===== -->
+  <div class="pane" id="pane-g6">
+    <p class="lead"><b>Say what you need.</b> No map, no zones, no metaphor — <b>language</b>. Just start typing, anywhere, in plain words: not a room name, but what you're trying to do — <i>"get ramp signed" · "who's gone quiet" · "prep the call."</i> The same command engine that ranks your board answers with <b>routed moves, not room names</b> — each one lands you in the right room with the right object already in hand. The most command-first navigation possible: you state intent, the system does the routing. Room names still work — they're just the shallow end.</p>
+    <div class="frame" id="f6">
+      <div class="room">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE<span class="r">just start typing — try “sign” or “quiet” or “call”</span></div>
+        <div class="rh1"><b>3 deals</b> will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no next step <span class="mono">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> stalled in discovery <span class="mono">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> verbal yes · terms on the table <span class="mono">$84k</span></div>
+      </div>
+      <div class="whisper6" id="whisper6">say what you need — just start typing</div>
+      <div class="saylayer" id="saylayer">
+        <div class="sayk">Say what you need — the system does the routing</div>
+        <div class="sayline"><span id="sayq"></span><span class="caret"></span></div>
+        <div class="sayhint">plain words · Esc to close · ↵ takes the top route</div>
+        <div class="ans" id="ans6"></div>
+      </div>
+      <div class="toast" id="toast6"></div>
+    </div>
+    <div class="note">G6 — navigation dissolves into intent. The router is the command-intelligence engine you already have — it knows Ramp is at terms, so "sign" routes to Getting to Signed WITH Ramp. Mouse-first fallback: the whisper at the foot of the room opens the same line. Risk: needs honest fallbacks when intent doesn't match (never a dead end — degrade to the map).</div>
+  </div>
+
+</div>
+<script>
+var R=[
+ {n:'Welcome',d:'the morning landing',s:0},{n:'Onboarding',d:'seed the workspace',s:0},{n:'Dashboard',d:'the one move, ranked',s:0},
+ {n:'ICP Studio',d:'who you sell to',s:1},{n:'Territory Architect',d:'carve the market',s:1},{n:'Prospecting Desk',d:'find real accounts',s:1},
+ {n:'Signal Console',d:'watch the heat',s:2},{n:'Briefing',d:'what the system saw',s:2},{n:'Outdoors Events',d:'where buyers gather',s:2},
+ {n:'Outbound Studio',d:'the send line',s:3},{n:'Cold Call Studio',d:'walk in ready',s:3},{n:'LinkedIn Playbook',d:'air cover',s:3},{n:'Discovery Studio',d:'run the live call',s:3},
+ {n:'Deal Workspace',d:'what will slip',s:4,here:1},{n:'Pilot Desk',d:'run a pilot',s:4},{n:'Getting to Signed',d:'run to signature',s:4,next:1},{n:'Call in a Favor',d:'mobilize your people',s:4},
+ {n:'Future Autopsy',d:'why it will die',s:5},{n:'Quota Workback',d:'your daily number',s:5},{n:'Readiness Score',d:'inheritable yet?',s:5},{n:'Founding GTM',d:'the handoff kit',s:5},{n:'Settings',d:'keep it safe',s:5}
+];
+var STAGES=['Enter','Strategy','Find & watch','Work the account','Advance the deal','Diagnose · hand off'];
+function flowHtml(){var h='';for(var s=0;s<6;s++){h+='<div class="scol"><div class="slab">'+STAGES[s]+'</div>';
+ R.filter(function(r){return r.s===s}).forEach(function(r){h+='<div class="rm'+(r.here?' here':'')+(r.next?' next':'')+'"><div class="rn">'+r.n+'</div><div class="rd">'+r.d+'</div></div>';});h+='</div>';}return h;}
+var active='g4';
+document.querySelectorAll('.switch button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.switch button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});
+ active=b.dataset.p;document.getElementById('pane-'+active).classList.add('on');closeSay();};});
+function toast(id,html){var t=document.getElementById(id);t.innerHTML=html;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2600);}
+
+/* ===== G4 carry the deal ===== */
+var f4=document.getElementById('f4'),ghost=document.getElementById('ghost4'),zonesEl=document.getElementById('zones4');
+var ZONES=[
+ {k:'Advance',n:'Getting to Signed',d:'run it to signature',hot:1,x:.66,y:.10},
+ {k:'Prove it',n:'Pilot Desk',d:'run a pilot on it',x:.66,y:.34},
+ {k:'Diagnose',n:'Future Autopsy',d:'pre-mortem it before it dies',x:.66,y:.58},
+ {k:'Get help',n:'Call in a Favor',d:'someone you know can move it',x:.06,y:.58,left:1},
+ {k:'Talk',n:'Discovery Studio',d:'prep + run the next live call',x:.06,y:.34,left:1},
+ {k:'Somewhere else',n:'The whole motion…',d:'every other room, one drop away',x:.06,y:.10,left:1,wide:1}
+];
+zonesEl.innerHTML=ZONES.map(function(z,i){return '<div class="zone'+(z.hot?' hot':'')+(z.wide?' wide':'')+'" data-z="'+i+'" style="left:'+(z.x*100)+'%;top:'+(z.y*100)+'%;animation-delay:'+(i*40)+'ms">'+
+ '<div class="zk">'+z.k+'</div><div class="zn">'+z.n+'</div><div class="zd">'+z.d+'</div></div>';}).join('');
+var carrying=null;
+f4.addEventListener('mousedown',function(e){
+ var row=e.target.closest('.rrow');if(!row||active!=='g4')return;
+ carrying=row.dataset.deal;
+ ghost.innerHTML=carrying+'<div class="g2">in hand · drop it where it goes next</div>';
+ ghost.style.display='block';f4.classList.add('carrying');
+ moveGhost(e);e.preventDefault();
+});
+function moveGhost(e){var r=f4.getBoundingClientRect();ghost.style.left=(e.clientX-r.left)+'px';ghost.style.top=(e.clientY-r.top)+'px';}
+f4.addEventListener('mousemove',function(e){if(!carrying)return;moveGhost(e);
+ var z=e.target.closest('.zone');document.querySelectorAll('#zones4 .zone').forEach(function(el){el.classList.toggle('over',el===z)});});
+document.addEventListener('mouseup',function(e){
+ if(!carrying)return;
+ var z=e.target.closest&&e.target.closest('.zone');
+ if(z&&f4.contains(z)){var zd=ZONES[+z.dataset.z];toast('toast4','<b>'+carrying+'</b> → '+zd.n+' · the deal travels with you');}
+ carrying=null;ghost.style.display='none';f4.classList.remove('carrying');
+ document.querySelectorAll('#zones4 .zone').forEach(function(el){el.classList.remove('over')});
+});
+
+/* ===== G5 slide the room ===== */
+document.getElementById('flow5').innerHTML=flowHtml();
+var f5=document.getElementById('f5'),room5=document.getElementById('room5'),cb5=document.getElementById('comeback5');
+var slid=false,g5drag=null;
+room5.addEventListener('mousedown',function(e){
+ if(active!=='g5'||slid)return;
+ if(e.target.closest('a,button'))return;
+ g5drag={x:e.clientX,y:e.clientY};room5.classList.remove('snapping');room5.style.cursor='grabbing';e.preventDefault();
+});
+document.addEventListener('mousemove',function(e){
+ if(!g5drag)return;
+ var dx=e.clientX-g5drag.x,dy=e.clientY-g5drag.y;
+ room5.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(dx*0.004)+'deg)';
+ g5drag.dx=dx;g5drag.dy=dy;
+});
+document.addEventListener('mouseup',function(){
+ if(!g5drag)return;
+ var dx=g5drag.dx||0,dy=g5drag.dy||0,dist=Math.hypot(dx,dy);
+ room5.style.cursor='grab';
+ if(dist>190){
+  var fx=dx*4.2,fy=dy*4.2;room5.classList.add('away');
+  room5.style.transform='translate('+fx+'px,'+fy+'px) rotate('+(dx*0.01)+'deg)';
+  slid=true;setTimeout(function(){cb5.classList.add('on')},260);
+ }else{
+  room5.classList.add('snapping');room5.style.transform='translate(0,0)';
+ }
+ g5drag=null;
+});
+function roomBack(){cb5.classList.remove('on');room5.classList.remove('away');room5.classList.add('snapping');room5.style.transform='translate(0,0)';slid=false;}
+cb5.onclick=roomBack;
+document.getElementById('under5').addEventListener('click',function(e){var rm=e.target.closest('.rm');if(rm){toast('toast5','→ <b>'+rm.querySelector('.rn').textContent+'</b>');setTimeout(roomBack,650);}});
+
+/* ===== G6 say what you need ===== */
+var say=document.getElementById('saylayer'),sayq=document.getElementById('sayq'),ans=document.getElementById('ans6');
+var q6='';
+var INTENTS=[
+ {kw:['sign','ramp','terms','close'],verb:'Get Ramp signed',to:'Getting to Signed',carry:'Ramp goes with you',hot:1},
+ {kw:['quiet','stall','slip','risk','stuck'],verb:"See who's gone quiet",to:'Deal Workspace',carry:'filtered to the quiet ones'},
+ {kw:['call','prep','meeting','disco'],verb:'Prep the next call',to:'Discovery Studio',carry:'agenda pre-loaded'},
+ {kw:['pilot','prove','try'],verb:'Run a pilot on Northwind',to:'Pilot Desk',carry:'Northwind goes with you'},
+ {kw:['help','favor','intro','advisor'],verb:'Get help on a stuck deal',to:'Call in a Favor',carry:'the stuck list ready'},
+ {kw:['hot','heat','account','watch'],verb:"See what's running hot",to:'Signal Console',carry:'sorted by attention'},
+ {kw:['number','quota','pace'],verb:'Check your pace',to:'Quota Workback',carry:'the daily number'},
+ {kw:['saw','read','brief','news'],verb:'What the system saw',to:'Briefing',carry:'today’s read'}
+];
+function renderAns(){
+ var q=q6.toLowerCase().trim();
+ var hits=q?INTENTS.filter(function(i){return i.kw.some(function(k){return k.indexOf(q)===0||q.indexOf(k)>=0})}):[];
+ var roomHits=q?R.filter(function(r){return r.n.toLowerCase().indexOf(q)>=0}).slice(0,2):[];
+ var h='';
+ hits.slice(0,3).forEach(function(i,ix){
+  h+='<div class="arow'+(ix===0?' hot':'')+'"><div><div class="verb">'+i.verb+'</div><div class="to">→ <b>'+i.to+'</b></div></div><span class="carry">'+i.carry+'</span></div>';
+ });
+ roomHits.forEach(function(r){h+='<div class="arow"><div><div class="verb" style="font-weight:450">'+r.n+'</div><div class="to">the room itself</div></div></div>';});
+ if(q&&!h)h='<div class="arow"><div><div class="verb" style="font-weight:450">Show me the whole motion</div><div class="to">the map — never a dead end</div></div></div>';
+ ans.innerHTML=h;
+}
+function openSay(){say.classList.add('on');}
+function closeSay(){say.classList.remove('on');q6='';sayq.textContent='';ans.innerHTML='';}
+document.getElementById('whisper6').onclick=openSay;
+ans.addEventListener('click',function(e){var a=e.target.closest('.arow');if(a){toast('toast6',a.querySelector('.verb').textContent+' → <b>'+((a.querySelector('.to b')||{}).textContent||'the map')+'</b>');closeSay();}});
+document.addEventListener('keydown',function(e){
+ if(active!=='g6')return;
+ if(e.key==='Escape'){closeSay();return;}
+ if(e.key==='Backspace'){q6=q6.slice(0,-1);sayq.textContent=q6;renderAns();if(!q6)closeSay();e.preventDefault();return;}
+ if(e.key==='Enter'){var top=ans.querySelector('.arow');if(top)top.click();return;}
+ if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+  if(!say.classList.contains('on'))openSay();
+  q6+=e.key;sayq.textContent=q6;renderAns();e.preventDefault();
+ }
+});
+</script>
+</body></html>

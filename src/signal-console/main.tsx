@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { SignalConsole } from "./SignalConsole";
 import { SignalConsoleDS } from "./ds/SignalConsoleDS";
+import { SignalConsoleV4 } from "./v4/SignalConsoleV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -15,8 +16,10 @@ import {
     startExternalPublishing
 } from "./state";
 import { loadAccounts } from "./lib/persistence";
-import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { bootCloudPersistence, saveAccount } from "./lib/cloud-persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
+import { buildManualAccount, allAccounts } from "./state";
+import { clearInboundQueue, readInboundQueue } from "./lib/inbound-queue";
 
 /**
  * Entry point for the Signal Console Preact rebuild
@@ -115,7 +118,23 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_signal_console_legacy");
 }
 
-render(useDsSurface ? <SignalConsoleDS /> : <SignalConsole />, root);
+// 2026-07 wire-up (canon §4.7) — the Attention Router is the production
+// Signal Console. Default on; room_signal_console_v4_off is the
+// kill-switch back to the DS surface. ?v4=0 previews the DS surface.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_signal_console_v4_off"));
+render(
+    useV4 ? <SignalConsoleV4 /> : useDsSurface ? <SignalConsoleDS /> : <SignalConsole />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).
@@ -129,15 +148,49 @@ void bootDensity();
 // localStorage seeded — no degradation, just no cross-device sync
 // until the next session retries.
 void (async (): Promise<void> => {
+    let cloudMode: string | null = null;
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const boot = await bootCloudPersistence(client);
+        cloudMode = boot.mode;
     } catch (err) {
         // Synchronous throw from createDataClient (env-var missing) —
         // surface a plain warning, not a Sentry report, since this is
         // expected in dev without Supabase configured.
         console.warn(
             "[signal-console] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+    // Drain the cross-room inbound queue (Prospecting Desk sends land
+    // here). Runs AFTER cloud boot so the new accounts survive the
+    // cloud-replaces-local step, and goes through saveAccount so each
+    // one persists to the cloud + mirror through the canonical path.
+    // Skip when the cloud list FAILED ("local-only" with a live client)
+    // — draining then could insert cloud duplicates of accounts the
+    // cloud already has; the queue simply waits for the next clean boot.
+    if (cloudMode === "local-only") return;
+    try {
+        const queue = readInboundQueue();
+        if (queue.length > 0) {
+            const existing = new Set(
+                allAccounts.value.map((a) => a.name.toLowerCase())
+            );
+            for (const entry of queue) {
+                if (existing.has(entry.name.toLowerCase())) continue;
+                const account = buildManualAccount({
+                    name: entry.name,
+                    industry: entry.industry,
+                    notes: entry.note
+                });
+                await saveAccount(account);
+                existing.add(entry.name.toLowerCase());
+            }
+            clearInboundQueue();
+        }
+    } catch (err) {
+        console.warn(
+            "[signal-console] Inbound queue drain failed:",
             err instanceof Error ? err.message : String(err)
         );
     }

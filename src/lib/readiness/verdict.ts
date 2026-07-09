@@ -50,7 +50,7 @@ function gateHireReadyRepeatable(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's the weakest dimension.", {
+                t("Tighten {dimension} — it's the weakest part of your motion.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -59,7 +59,7 @@ function gateHireReadyRepeatable(
 
     if (input.closedWonDeals < 1) {
         blockers.push(
-            t("Close-won a deal so the kit has real evidence.", {
+            t("Close-won a deal so the kit has a real result a buyer's boss can act on.", {
                 class: "body"
             })
         );
@@ -72,11 +72,11 @@ function gateHireReadyRepeatable(
         );
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
+        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
     }
     if (input.advisorDeployments < 1) {
         blockers.push(
-            t("Deploy an advisor — backchannel ask on a real deal.", {
+            t("Call in a favor — a backchannel ask on a real deal.", {
                 class: "body"
             })
         );
@@ -117,7 +117,7 @@ function gateHireReady(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's holding the gate.", {
+                t("Tighten {dimension} — it's what's holding you here.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -131,7 +131,7 @@ function gateHireReady(
         blockers.push(t("Run a Future Autopsy.", { class: "body" }));
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
+        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -168,7 +168,7 @@ function gateInheritable(
     }
 
     if (input.castProofs < 1) {
-        blockers.push(t("Cast evidence in PoC Framework.", { class: "body" }));
+        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -182,7 +182,7 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     if (aboveEight < 2) {
         blockers.push(
             t(
-                "Get two dimensions warming up — start with an ICP + the first outbound touches.",
+                "Get two parts of your motion moving — start with who you sell to + the first outreach.",
                 { class: "body" }
             )
         );

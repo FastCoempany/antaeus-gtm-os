@@ -76,10 +76,24 @@ export function writeSeedingDraft(
         };
         const existing = readJson<Record<string, unknown>>(store, "gtmos_icp_analytics");
         const existingIcps = Array.isArray(existing?.["icps"]) ? (existing!["icps"] as unknown[]) : [];
+        // Idempotent: a re-run of onboarding must not append a duplicate
+        // ICP. Skip the write when an ICP with the same statement is
+        // already on file.
+        const dupIcp = existingIcps.some(
+            (e) =>
+                e != null &&
+                typeof e === "object" &&
+                String((e as { statement?: unknown }).statement ?? "").trim() ===
+                    icp.statement
+        );
         trySet(
             store,
             "gtmos_icp_analytics",
-            JSON.stringify({ ...(existing ?? {}), icps: [...existingIcps, icp], updatedAt: iso })
+            JSON.stringify({
+                ...(existing ?? {}),
+                icps: dupIcp ? existingIcps : [...existingIcps, icp],
+                updatedAt: iso
+            })
         );
     }
 
@@ -173,7 +187,23 @@ export function writeSeedingDraft(
             : Array.isArray((existing as Record<string, unknown>)?.["deals"])
               ? ((existing as Record<string, unknown>)["deals"] as unknown[])
               : [];
-        trySet(store, "gtmos_deal_workspaces", JSON.stringify([...existingDeals, ...deals]));
+        // Idempotent: deal ids are timestamped (non-deterministic across
+        // runs), so dedupe on a stable content signature — a re-run of
+        // onboarding must not duplicate the pipeline. Signature =
+        // account + value + stage (account case-insensitive).
+        const sig = (d: { accountName?: unknown; value?: unknown; stage?: unknown }): string =>
+            `${String(d.accountName ?? "").trim().toLowerCase()}|${String(d.value ?? "")}|${String(d.stage ?? "")}`;
+        const existingSigs = new Set(
+            existingDeals
+                .filter((e) => e != null && typeof e === "object")
+                .map((e) => sig(e as { accountName?: unknown; value?: unknown; stage?: unknown }))
+        );
+        const freshDeals = deals.filter((d) => !existingSigs.has(sig(d)));
+        trySet(
+            store,
+            "gtmos_deal_workspaces",
+            JSON.stringify([...existingDeals, ...freshDeals])
+        );
     }
 
     // ── Quota → Quota Workback + outbound seed ───────────────────────
@@ -208,11 +238,20 @@ export function writeSeedingDraft(
     }
 
     // ── Activation context + completion marker ───────────────────────
+    // Preserve any company / role / product-category that signup already
+    // captured as new-user context (capability map §5 flow-in). The old
+    // hardcoded `company: null` clobbered the company name Welcome greets
+    // the operator by; merge instead of overwrite.
+    const existingActivation =
+        readJson<Record<string, unknown>>(store, "gtmos_activation_context") ?? {};
     trySet(
         store,
         "gtmos_activation_context",
         JSON.stringify({
-            company: null,
+            ...existingActivation,
+            company: existingActivation["company"] ?? null,
+            role: existingActivation["role"] ?? null,
+            categoryLabel: existingActivation["categoryLabel"] ?? null,
             stageLabel: "Activating the workspace",
             seededAt: iso,
             source: "seeding-v1"
