@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { SourcingWorkbench } from "./SourcingWorkbench";
 import { SourcingWorkbenchDS } from "./ds/SourcingWorkbenchDS";
+import { ProspectingDeskV4 } from "./v4/ProspectingDeskV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -95,7 +96,31 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_sourcing_workbench_legacy");
 }
 
-render(useDsSurface ? <SourcingWorkbenchDS /> : <SourcingWorkbench />, root);
+// Wire-to-production v4 (canon §4.6, the Funnel, settled 2026-07-04;
+// renamed Prospecting Desk on the face — the served path stays until
+// the full path-rename sweep). Default ON; room_prospecting_desk_v4_off
+// is the kill-switch back to the DS surface; ?v4=0/1 is the hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_prospecting_desk_v4_off"));
+
+render(
+    useV4 ? (
+        <ProspectingDeskV4 />
+    ) : useDsSurface ? (
+        <SourcingWorkbenchDS />
+    ) : (
+        <SourcingWorkbench />
+    ),
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

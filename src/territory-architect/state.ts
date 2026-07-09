@@ -231,6 +231,14 @@ export function retierAccount(id: string, tier: TierId): void {
     );
 }
 
+/** Move an account to a different division (focus). */
+export function retagAccount(id: string, focusId: string): void {
+    if (!focusId) return;
+    accounts.value = accounts.value.map((a) =>
+        a.id === id ? { ...a, focusId, updatedAt: new Date().toISOString() } : a
+    );
+}
+
 export function removeThesis(id: string): void {
     focuses.value = focuses.value.filter((t) => t.id !== id);
     approaches.value = approaches.value.filter((a) => a.focusId !== id);

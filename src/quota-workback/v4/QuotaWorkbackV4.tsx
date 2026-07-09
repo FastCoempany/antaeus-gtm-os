@@ -1,4 +1,6 @@
 import type { JSX } from "preact";
+import { useMemo } from "preact/hooks";
+import { signal } from "@preact/signals";
 import { t } from "@/lib/voice/t";
 import { inputs, coverage, benchmark, metrics, patchInputs } from "../state";
 import {
@@ -26,12 +28,16 @@ import "./quota-workback-v4.css";
  * and persistence are reused unchanged. §13-clean: messages & calls a
  * day, real opportunities, first meetings — no funnel jargon.
  */
+const adjustOpen = signal(false);
+
 export function QuotaWorkbackV4(): JSX.Element {
     const inp = inputs.value;
     const bench = benchmark.value;
     const m = metrics.value;
     const cov = coverage.value;
-    const actuals = readActuals();
+    // The activity logs don't change mid-visit — read them once per
+    // mount instead of re-parsing four JSON blobs on every keystroke.
+    const actuals = useMemo(() => readActuals(), []);
     const believe = buildBelievability(inp, bench, m);
     const pace = buildPace(inp.quota, actuals, cov);
     const hasPlan = inp.quota > 0;
@@ -109,6 +115,38 @@ export function QuotaWorkbackV4(): JSX.Element {
                                     {t("Not because the number is wrong. Because you're doing", { class: "body" })}{" "}
                                     <b>{actuals.outreachPerDay} {t("outreach a day")}</b> {t("and the number needs", { class: "body" })}{" "}
                                     <b>{m.touchesDay}</b>. {t("Close that gap and the year adds up.", { class: "body" })}
+                                </div>
+                            ) : null}
+                            <button type="button" class="qw4-link qw4-adjust" onClick={() => (adjustOpen.value = !adjustOpen.value)}>
+                                {adjustOpen.value ? t("Done adjusting") : t("Change the number or assumptions", { class: "body" })}
+                            </button>
+                            {adjustOpen.value ? (
+                                <div class="qw4-planform">
+                                    <label class="qw4-pf">
+                                        <span>{t("Your number for the year ($)")}</span>
+                                        <input type="number" value={inp.quota || ""}
+                                            onInput={(e) => patchInputs({ quota: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
+                                    </label>
+                                    <label class="qw4-pf">
+                                        <span>{t("Your typical deal ($)")}</span>
+                                        <input type="number" value={inp.acv || ""}
+                                            onInput={(e) => patchInputs({ acv: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
+                                    </label>
+                                    <label class="qw4-pf">
+                                        <span>{t("How often you win (%)")}</span>
+                                        <input type="number" value={inp.win || ""}
+                                            onInput={(e) => patchInputs({ win: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
+                                    </label>
+                                    <label class="qw4-pf">
+                                        <span>{t("Meetings that become real opportunities (%)", { class: "body" })}</span>
+                                        <input type="number" value={inp.m2o || ""}
+                                            onInput={(e) => patchInputs({ m2o: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
+                                    </label>
+                                    <label class="qw4-pf">
+                                        <span>{t("How long a deal takes (days)")}</span>
+                                        <input type="number" value={inp.days || ""}
+                                            onInput={(e) => patchInputs({ days: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
+                                    </label>
                                 </div>
                             ) : null}
                         </div>

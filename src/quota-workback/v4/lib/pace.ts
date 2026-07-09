@@ -106,7 +106,11 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     for (const d of deals) {
         const stage = String(d["stage"] ?? "");
         if (stage !== "closed-won") continue;
-        const ts = stamp(d["updated_at"]) ?? stamp(d["updatedAt"]) ?? stamp(d["created_at"]);
+        const ts =
+            stamp(d["updated_at"]) ??
+            stamp(d["updatedAt"]) ??
+            stamp(d["created_at"]) ??
+            stamp(d["createdAt"]);
         const value = typeof d["value"] === "number" ? (d["value"] as number) : 0;
         if (ts != null && ts >= yStart) closedWonYtd += value;
         if (ts != null && ts >= mStart) closedThisMonth += 1;
@@ -171,7 +175,10 @@ export function buildBelievability(
         return {
             solid: false,
             read: `${t("The one stretch: you're assuming", { class: "body" })} ${inputs.m2o}% ${t("of first meetings become real opportunities — teams your size usually see", { class: "body" })} ${benchmark.m2o}%.`,
-            cost: `${t("At", { class: "body" })} ${benchmark.m2o}% ${t("that means about", { class: "body" })} ${moreADay} ${t("more messages & calls a day — plan for it now, not in month three.", { class: "body" })}`,
+            cost:
+                moreADay > 0
+                    ? `${t("At", { class: "body" })} ${benchmark.m2o}% ${t("that means about", { class: "body" })} ${moreADay} ${t("more messages & calls a day — plan for it now, not in month three.", { class: "body" })}`
+                    : null,
             fix: { key: "m2o", value: benchmark.m2o }
         };
     }
@@ -180,7 +187,10 @@ export function buildBelievability(
     return {
         solid: false,
         read: `${t("The one stretch: you're assuming you win", { class: "body" })} ${inputs.win}% ${t("of real opportunities — teams your size usually land near", { class: "body" })} ${benchmark.winRate}%.`,
-        cost: `${t("At", { class: "body" })} ${benchmark.winRate}% ${t("that means about", { class: "body" })} ${moreADayW} ${t("more messages & calls a day to hit the same number.", { class: "body" })}`,
+        cost:
+            moreADayW > 0
+                ? `${t("At", { class: "body" })} ${benchmark.winRate}% ${t("that means about", { class: "body" })} ${moreADayW} ${t("more messages & calls a day to hit the same number.", { class: "body" })}`
+                : null,
         fix: { key: "win", value: benchmark.winRate }
     };
 }

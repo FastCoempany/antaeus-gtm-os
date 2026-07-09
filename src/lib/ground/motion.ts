@@ -50,14 +50,15 @@ export const MOTION_ROOMS: ReadonlyArray<MotionRoom> = [
     { id: "call-in-a-favor", label: t("Call in a Favor"), desc: t("mobilize your people"), href: "/advisor-deploy/", stage: 4, keywords: ["advisor", "favor", "intro", "network"] },
     { id: "future-autopsy", label: t("Future Autopsy"), desc: t("why it will die"), href: "/future-autopsy/", stage: 5, keywords: ["premortem", "autopsy", "risk"] },
     { id: "quota-workback", label: t("Quota Workback"), desc: t("your daily number"), href: "/quota-workback/", stage: 5, keywords: ["quota", "pace", "number", "target"] },
-    { id: "readiness", label: t("Readiness Score"), desc: t("inheritable yet?"), href: "/dashboard/?readiness=1", stage: 5, keywords: ["readiness", "hire", "verdict"] },
+    { id: "readiness", label: t("Readiness Score"), desc: t("inheritable yet?"), href: "/dashboard/?readiness=1", stage: 5, keywords: ["readiness", "hire", "ready"] },
     { id: "founding-gtm", label: t("Founding GTM"), desc: t("the handoff kit"), href: "/founding-gtm/", stage: 5, keywords: ["handoff", "kit", "hire", "inherit"] },
     { id: "settings", label: t("Settings"), desc: t("keep it safe"), href: "/settings/", stage: 5, keywords: ["backup", "export", "account", "delete"] }
 ];
 
 /** The room whose href matches the current pathname (you-are-here). */
 export function currentRoomId(pathname: string): string | null {
-    const clean = pathname.replace(/\/+$/, "/") || "/";
+    // Normalize to a trailing slash so "/dashboard" matches "/dashboard/".
+    const clean = `${pathname.replace(/\/+$/, "")}/`;
     for (const r of MOTION_ROOMS) {
         const base = r.href.split("?")[0]!;
         if (clean === base || clean.startsWith(base)) return r.id;
@@ -89,13 +90,20 @@ export function roomIdForUrl(url: string): string | null {
 
 /** Jump href with continuity params from the current room. */
 export function groundHref(room: MotionRoom, fromPath: string, fromLabel: string): string {
-    const base = room.href;
-    const sep = base.includes("?") ? "&" : "?";
-    const params = new URLSearchParams({
-        returnTo: fromPath,
-        returnLabel: fromLabel,
-        fromMode: "room",
-        fromSurface: "ground"
-    });
-    return `${base}${sep}${params.toString()}`;
+    return withContinuity(room.href, fromPath, fromLabel);
+}
+
+/**
+ * Append the canonical continuity params (CLAUDE.md §2) to any target
+ * URL that doesn't already carry them — used for the ranker's suggested
+ * move so the glowing room keeps the way back like every other tile.
+ */
+export function withContinuity(url: string, fromPath: string, fromLabel: string): string {
+    const [base, query = ""] = url.split("?");
+    const params = new URLSearchParams(query);
+    if (!params.has("returnTo")) params.set("returnTo", fromPath);
+    if (!params.has("returnLabel")) params.set("returnLabel", fromLabel);
+    if (!params.has("fromMode")) params.set("fromMode", "room");
+    params.set("fromSurface", "ground");
+    return `${base}?${params.toString()}`;
 }

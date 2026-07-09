@@ -131,8 +131,8 @@ export function IcpStudioV4(): JSX.Element {
                 <p class="icp4-secl">{t("What makes it sharp")} — {passed} {t("of")} {quality.checks.length}</p>
                 <div class="icp4-checks">
                     {quality.checks.map((c) => (
-                        <div class={`icp4-chk is-${c.tone === "good" ? "ok" : "no"}`} key={c.text}>
-                            <span class="icp4-m">{c.tone === "good" ? "✓" : "✕"}</span>
+                        <div class={`icp4-chk is-${c.tone === "good" ? "ok" : c.tone === "warn" ? "warn" : "no"}`} key={c.text}>
+                            <span class="icp4-m">{c.tone === "good" ? "✓" : c.tone === "warn" ? "!" : "✕"}</span>
                             <span>{c.text}</span>
                         </div>
                     ))}
@@ -176,6 +176,23 @@ export function IcpStudioV4(): JSX.Element {
 
                 <div class="icp4-builder">
                     <p class="icp4-secl">{t("Sharpen the pieces")}</p>
+                    <div class="icp4-role">
+                        <span class="icp4-rolel">{t("Who's running the motion?")}</span>
+                        <button
+                            type="button"
+                            class={`icp4-roleb${d.role === "founder" ? " is-on" : ""}`}
+                            onClick={() => patchDraft({ role: "founder" })}
+                        >
+                            {t("The founder")}
+                        </button>
+                        <button
+                            type="button"
+                            class={`icp4-roleb${d.role === "firstae" ? " is-on" : ""}`}
+                            onClick={() => patchDraft({ role: "firstae" })}
+                        >
+                            {t("The first seller hired", { class: "body" })}
+                        </button>
+                    </div>
                     <div class="icp4-bgrid">
                         <label class={`icp4-fld${buyer ? "" : " is-miss"}`}>
                             <span>{t("Who owns the problem (role)")}</span>

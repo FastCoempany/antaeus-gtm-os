@@ -15,7 +15,8 @@ import {
     currentRoomId,
     filterMotionRooms,
     groundHref,
-    roomIdForUrl
+    roomIdForUrl,
+    withContinuity
 } from "./motion";
 import "./ground.css";
 
@@ -39,11 +40,10 @@ const groundQuery = signal("");
 const suggested = signal<NextMove | null>(null);
 
 let keysBound = false;
-let suggestionLoaded = false;
 
 async function loadSuggestion(): Promise<void> {
-    if (suggestionLoaded) return;
-    suggestionLoaded = true;
+    // Re-rank on every open — the loaders are cheap localStorage reads
+    // and the workspace can move mid-session.
     try {
         const observations = await loadObservationsForRanking().catch(() => []);
         const result = rankNextMove({
@@ -96,6 +96,9 @@ function bindKeys(): void {
     keysBound = true;
     document.addEventListener("keydown", (e: KeyboardEvent) => {
         if (e.key === "Escape" && groundOpen.value) {
+            // The Ground sits above whatever is open beneath it — stop the
+            // event so a drawer under the map doesn't also close.
+            e.stopPropagation();
             closeGround();
             return;
         }
@@ -120,7 +123,6 @@ export function __resetGroundForTests(): void {
     groundOpen.value = false;
     groundQuery.value = "";
     suggested.value = null;
-    suggestionLoaded = false;
 }
 
 export function GroundLine(): JSX.Element {
@@ -216,7 +218,7 @@ export function GroundLine(): JSX.Element {
                                             key={r.id}
                                             href={
                                                 isSug && sug
-                                                    ? sug.targetUrl
+                                                    ? withContinuity(sug.targetUrl, fromPath, fromLabel)
                                                     : groundHref(r, fromPath, fromLabel)
                                             }
                                             onClick={closeGround}

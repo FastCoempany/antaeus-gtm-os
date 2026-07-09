@@ -16,8 +16,10 @@ import {
     startExternalPublishing
 } from "./state";
 import { loadAccounts } from "./lib/persistence";
-import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { bootCloudPersistence, saveAccount } from "./lib/cloud-persistence";
 import { publishHealthSnapshot } from "./lib/health-snapshot";
+import { buildManualAccount, allAccounts } from "./state";
+import { clearInboundQueue, readInboundQueue } from "./lib/inbound-queue";
 
 /**
  * Entry point for the Signal Console Preact rebuild
@@ -155,6 +157,34 @@ void (async (): Promise<void> => {
         // expected in dev without Supabase configured.
         console.warn(
             "[signal-console] Cloud sync disabled:",
+            err instanceof Error ? err.message : String(err)
+        );
+    }
+    // Drain the cross-room inbound queue (Prospecting Desk sends land
+    // here). Runs AFTER cloud boot so the new accounts survive the
+    // cloud-replaces-local step, and goes through saveAccount so each
+    // one persists to the cloud + mirror through the canonical path.
+    try {
+        const queue = readInboundQueue();
+        if (queue.length > 0) {
+            const existing = new Set(
+                allAccounts.value.map((a) => a.name.toLowerCase())
+            );
+            for (const entry of queue) {
+                if (existing.has(entry.name.toLowerCase())) continue;
+                const account = buildManualAccount({
+                    name: entry.name,
+                    industry: entry.industry,
+                    notes: entry.note
+                });
+                await saveAccount(account);
+                existing.add(entry.name.toLowerCase());
+            }
+            clearInboundQueue();
+        }
+    } catch (err) {
+        console.warn(
+            "[signal-console] Inbound queue drain failed:",
             err instanceof Error ? err.message : String(err)
         );
     }

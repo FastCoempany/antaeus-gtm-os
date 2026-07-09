@@ -50,7 +50,7 @@ describe("workbenchRead", () => {
     it("reads empty with no prospects", () => {
         const r = workbenchRead();
         expect(r.band).toBe("empty");
-        expect(r.operatorMove.toLowerCase()).toContain("capture");
+        expect(r.operatorMove.toLowerCase()).toContain("add the first company");
     });
     it("scores up as prospects reach ready", () => {
         setProspects([

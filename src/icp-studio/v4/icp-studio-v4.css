@@ -22,6 +22,12 @@
 .icp4-chk.is-ok .icp4-m { color: var(--ds-forest, #1b5e3f); }
 .icp4-chk.is-no .icp4-m { color: var(--ds-red, #b83232); }
 .icp4-chk.is-no { color: var(--ds-ink, #0a1c40); }
+.icp4-chk.is-warn .icp4-m { color: var(--ds-amber, #b5790f); }
+.icp4-chk.is-warn { color: var(--ds-ink, #0a1c40); }
+.icp4-role { display: flex; align-items: center; gap: 8px; margin: 2px 0 12px; }
+.icp4-rolel { font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.4)); margin-right: 4px; }
+.icp4-roleb { font-family: var(--ds-sans, sans-serif); font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); background: var(--ds-surface, #fff); color: var(--ds-ink-2, rgba(10,28,64,.62)); cursor: pointer; }
+.icp4-roleb.is-on { border-color: var(--ds-orange, #e6701e); color: var(--ds-orange, #e6701e); font-weight: 600; }
 .icp4-seg { display: flex; height: 38px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
 .icp4-seg span { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12.5px; font-weight: 600; min-width: 26px; }
 .icp4-s { background: var(--ds-blue, #2563eb); }

@@ -65,6 +65,8 @@
 .qw4-f { display: block; height: 100%; background: var(--ds-red, #c0392b); }
 .qw4-m { position: absolute; top: -3px; bottom: -3px; right: 0; width: 2px; background: var(--ds-ink, #0a1c40); }
 .qw4-link { margin-top: 11px; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-blue, #2563eb); cursor: pointer; display: inline-block; background: 0; border: 0; padding: 0; text-decoration: none; }
+.qw4-adjust { margin-top: 14px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+.qw4-adjust:hover { color: var(--ds-blue, #2563eb); }
 
 .qw4-back { margin-top: 24px; display: flex; align-items: baseline; gap: 12px; padding: 14px 18px; border: 1px solid var(--ds-hair, rgba(10,28,64,.09)); border-left: 3px solid var(--ds-orange, #e6701e); border-radius: 0 10px 10px 0; background: var(--ds-surface, #fff); }
 .qw4-bt { font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-orange, #e6701e); white-space: nowrap; }

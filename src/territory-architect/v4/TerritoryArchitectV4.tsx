@@ -9,10 +9,17 @@ import {
     accountsByThesis,
     approachesByThesis,
     focusDraft,
+    approachDraft,
+    accountDraft,
     patchThesisDraft,
+    patchApproachDraft,
+    patchAccountDraft,
     saveThesisFromDraft,
+    saveApproachFromDraft,
+    saveAccountFromDraft,
     setAccountDisposition,
-    retierAccount
+    retierAccount,
+    retagAccount
 } from "../state";
 import {
     TIER_IDS,
@@ -268,13 +275,39 @@ export function TerritoryArchitectV4(): JSX.Element {
                     </div>
                 )}
 
-                {/* approaches ledger */}
-                {approaches.value.length > 0 ? (
+                {/* approaches ledger + authoring */}
+                {allFocuses.length > 0 ? (
                     <div class="ta4-appro">
                         <p class="ta4-secl">{t("Approaches — how each division gets opened", { class: "body" })}</p>
-                        {approaches.value.slice(0, 6).map((a) => (
-                            <div class="ta4-lrow" key={a.id}><span class="ta4-a">{a.name}</span><span class="ta4-u">{a.trigger}</span></div>
+                        {approaches.value.slice(0, 6).map((ap) => (
+                            <div class="ta4-lrow" key={ap.id}><span class="ta4-a">{ap.name}</span><span class="ta4-u">{ap.trigger}</span></div>
                         ))}
+                        <div class="ta4-aprow">
+                            <input
+                                class="ta4-apin"
+                                value={approachDraft.value.name}
+                                placeholder={t("e.g. Open on the raise, ask for the board intro", { class: "body" })}
+                                onInput={(e) => patchApproachDraft({ name: (e.currentTarget as HTMLInputElement).value })}
+                            />
+                            <select
+                                class="ta4-apsel"
+                                value={approachDraft.value.focusId}
+                                onChange={(e) => patchApproachDraft({ focusId: (e.currentTarget as HTMLSelectElement).value })}
+                            >
+                                <option value="">{t("For which division?")}</option>
+                                {allFocuses.map((f) => (
+                                    <option value={f.id} key={f.id}>{f.title}</option>
+                                ))}
+                            </select>
+                            <button
+                                type="button"
+                                class="ta4-mini"
+                                disabled={!approachDraft.value.name.trim() || !approachDraft.value.focusId}
+                                onClick={() => saveApproachFromDraft()}
+                            >
+                                {t("Add approach")}
+                            </button>
+                        </div>
                     </div>
                 ) : null}
             </div>
@@ -293,7 +326,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                         </div>
                         <div class="ta4-adbody">
                             {drawerAccounts.length === 0 ? (
-                                <p class="ta4-adempty">{t("No accounts tagged to this division yet — fill from Prospecting.", { class: "body" })}</p>
+                                <p class="ta4-adempty">{t("No accounts tagged to this division yet — add one below, or fill from Prospecting.", { class: "body" })}</p>
                             ) : (
                                 drawerAccounts.map((a) => (
                                     <div class="ta4-arow" key={a.id}>
@@ -304,9 +337,34 @@ export function TerritoryArchitectV4(): JSX.Element {
                                         <select value={a.tier} onChange={(e) => retierAccount(a.id, (e.currentTarget as HTMLSelectElement).value as TierId)}>
                                             {TIER_IDS.map((tid) => <option value={tid} key={tid}>{TIER_LABELS[tid]}</option>)}
                                         </select>
+                                        <select value={a.focusId} title={t("Move to another division")} onChange={(e) => retagAccount(a.id, (e.currentTarget as HTMLSelectElement).value)}>
+                                            {allFocuses.map((f) => <option value={f.id} key={f.id}>{f.title}</option>)}
+                                        </select>
                                     </div>
                                 ))
                             )}
+                            <div class="ta4-adadd">
+                                <input
+                                    value={accountDraft.value.name}
+                                    placeholder={t("Add an account to this division", { class: "body" })}
+                                    onInput={(e) =>
+                                        patchAccountDraft({
+                                            name: (e.currentTarget as HTMLInputElement).value,
+                                            focusId: drawerFocus.id,
+                                            tier: drawerFocus.tier
+                                        })
+                                    }
+                                    onKeyDown={(e) => { if (e.key === "Enter") saveAccountFromDraft(); }}
+                                />
+                                <button
+                                    type="button"
+                                    class="ta4-mini"
+                                    disabled={!accountDraft.value.name.trim() || alloc.total >= alloc.ceiling}
+                                    onClick={() => saveAccountFromDraft()}
+                                >
+                                    {alloc.total >= alloc.ceiling ? t("At the cap") : t("Add")}
+                                </button>
+                            </div>
                             <p class="ta4-adnote">{t("Retier here and the 300-cap above re-reads. The division tag is how the account flows to Prospecting and Signal Console.", { class: "body" })}</p>
                         </div>
                     </div>

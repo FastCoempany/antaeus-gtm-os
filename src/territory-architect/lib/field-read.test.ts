@@ -86,8 +86,8 @@ describe("computeFieldRead — empty board", () => {
             allocation: makeAllocation()
         });
         expect(r.band).toBe("empty");
-        expect(r.mainRisk.toLowerCase()).toContain("no focuses");
-        expect(r.operatorMove.toLowerCase()).toContain("start with one focus");
+        expect(r.mainRisk.toLowerCase()).toContain("haven't carved a division");
+        expect(r.operatorMove.toLowerCase()).toContain("carve one division");
     });
 
     it("returns empty band when focuses exist but no active accounts", () => {
@@ -98,7 +98,7 @@ describe("computeFieldRead — empty board", () => {
             allocation: makeAllocation()
         });
         expect(r.band).toBe("empty");
-        expect(r.operatorMove.toLowerCase()).toContain("approach");
+        expect(r.operatorMove.toLowerCase()).toContain("open the conversation");
     });
 });
 
@@ -110,7 +110,7 @@ describe("computeFieldRead — next-move priority chain", () => {
             approaches: [],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.operatorMove.toLowerCase()).toContain("approach");
+        expect(r.operatorMove.toLowerCase()).toContain("open the conversation");
     });
 
     it("prescribes retier when over cap", () => {
@@ -141,7 +141,7 @@ describe("computeFieldRead — next-move priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.operatorMove.toLowerCase()).toContain("closed-lost");
+        expect(r.operatorMove.toLowerCase()).toContain("lost accounts off the map");
     });
 });
 
@@ -153,7 +153,7 @@ describe("computeFieldRead — what-is-loose priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.mainRisk.toLowerCase()).toContain("single focus");
+        expect(r.mainRisk.toLowerCase()).toContain("one division covers everything");
     });
 
     it("flags watch-ring (>=5 paused) when no higher risk fires", () => {
@@ -171,7 +171,7 @@ describe("computeFieldRead — what-is-loose priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
-        expect(r.mainRisk.toLowerCase()).toContain("watch-ring");
+        expect(r.mainRisk.toLowerCase()).toContain("paused accounts");
     });
 });
 
@@ -183,7 +183,7 @@ describe("computeFieldRead — replacement pressure", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
-        expect(r.replacement.toLowerCase()).toContain("no backfill");
+        expect(r.replacement.toLowerCase()).toContain("nothing needs replacing");
     });
 
     it("counts closed-lost + half of paused as backfill pressure", () => {
