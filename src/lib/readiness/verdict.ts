@@ -50,7 +50,7 @@ function gateHireReadyRepeatable(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's the weakest dimension.", {
+                t("Tighten {dimension} — it's the weakest part of your motion.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -117,7 +117,7 @@ function gateHireReady(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's holding the gate.", {
+                t("Tighten {dimension} — it's what's holding you here.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -182,7 +182,7 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     if (aboveEight < 2) {
         blockers.push(
             t(
-                "Get two dimensions warming up — start with an ICP + the first outbound touches.",
+                "Get two parts of your motion moving — start with who you sell to + the first outreach.",
                 { class: "body" }
             )
         );
