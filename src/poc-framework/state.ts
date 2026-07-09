@@ -51,10 +51,14 @@ export const linkedDeal: ReadonlySignal<LinkedDealSummary | null> = computed(() 
 export const activeProof: ReadonlySignal<Proof | null> = computed(() => {
     const { account, vendor } = draft.value;
     if (!account) return null;
+    // Match by account+vendor; an EMPTY draft vendor matches any vendor
+    // so pilots saved on the older surface (which set a vendor) still
+    // read as this account's active pilot instead of spawning a duplicate.
+    const wantVendor = (vendor ?? "").toLowerCase();
     const matches = allProofs.value.filter(
         (p) =>
             p.account.toLowerCase() === account.toLowerCase() &&
-            p.vendor.toLowerCase() === (vendor ?? "").toLowerCase()
+            (wantVendor === "" || p.vendor.toLowerCase() === wantVendor)
     );
     if (matches.length === 0) return null;
     return matches.reduce((latest, p) =>

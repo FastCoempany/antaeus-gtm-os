@@ -146,7 +146,10 @@ export function GettingToSignedV4(): JSX.Element {
     ].filter(Boolean) as string[];
     const cov = state.coverage;
     const covOpen = Math.max(0, cov.total - cov.covered);
-    const ledgerFronts = FRONT_IDS.filter((id) => id !== blocking);
+    // Every front stays in the ledger — the face-off is the hero view of
+    // the blocking one, but its depth (status, the coverage map, the
+    // plan-to-signed) must never become unreachable while it blocks.
+    const ledgerFronts = FRONT_IDS;
 
     return (
         <div class="gs4">
@@ -187,6 +190,8 @@ export function GettingToSignedV4(): JSX.Element {
                                     {m.kind === "champion" ? t("champion") : m.kind === "signer" ? t("signs off") : m.role || t("committee")}
                                     {read.band === "quiet" ? ` · ${t("quiet")} ${read.days}d` : read.band === "new" ? ` · ${t("new")}` : ""}
                                 </span>
+                                <button type="button" class="gs4-mx" title={t("Remove")}
+                                    onClick={(ev) => { ev.stopPropagation(); patchGts({ committee: state.committee.filter((x) => x.id !== m.id) }); }}>×</button>
                             </span>
                         );
                     })}
@@ -243,6 +248,7 @@ export function GettingToSignedV4(): JSX.Element {
                                 {t("Send the counter-position →")}
                             </button>
                             <a class="gs4-link" href={hrefToAdvisorDeploy(deal?.id)}>{t("Loop in someone who's won this fight", { class: "body" })}</a>
+                            <button type="button" class="gs4-link" onClick={() => (openFront.value = openFront.value === blocking ? null : blocking)}>{t("Work this front ▾")}</button>
                             <button type="button" class="gs4-link" onClick={() => patchFront(blocking, { status: "settled" })}>{t("Mark it settled")}</button>
                         </div>
                     </>
@@ -254,7 +260,7 @@ export function GettingToSignedV4(): JSX.Element {
                 )}
 
                 {/* the positions ledger */}
-                <div class="gs4-lh"><span>{t("Team")}</span><span>{t("Everything else open · their ask → your line", { class: "body" })}</span><span>{t("Status")}</span><span /></div>
+                <div class="gs4-lh"><span>{t("Team")}</span><span>{t("All four fronts · their ask → your line", { class: "body" })}</span><span>{t("Status")}</span><span /></div>
                 {ledgerFronts.map((id) => {
                     const f = state.fronts[id];
                     const open = openFront.value === id;

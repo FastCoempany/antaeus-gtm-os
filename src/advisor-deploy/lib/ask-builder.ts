@@ -93,7 +93,7 @@ export function buildAsk(input: AskBuildInput): GeneratedAsk {
     const forward =
         `Subject: Quick read on ${company}\n\n` +
         `${buyerOrPlaceholder} -\n\n` +
-        `I wanted to connect you with the Antaeus team because the work they are doing around this problem looks relevant to the thread at ${company}. ` +
+        `I wanted to connect you with [your company] because the work they are doing around this problem looks relevant to the thread at ${company}. ` +
         `${moment.advisorLine}\n\n` +
         "Worth a brief look?\n\n" +
         advisorName;

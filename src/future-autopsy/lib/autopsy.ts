@@ -104,7 +104,7 @@ export function killSwitchFor(
     if (recommended) {
         return "Low value + stale + weak qualification + high risk — recommend closing this out.";
     }
-    return "Criteria not fully met for kill switch.";
+    return "Not there yet - keep working it, and walk away only if the cuts above go nowhere.";
 }
 
 /**

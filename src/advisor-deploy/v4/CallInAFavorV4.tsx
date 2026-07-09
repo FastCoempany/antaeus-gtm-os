@@ -67,9 +67,12 @@ const OUTCOME_LABEL: Record<DeploymentOutcome, string> = {
 /** How stuck a deal reads — overdue next step first, then no next step. */
 function stuckness(d: AdvisorDeal, now: number): { score: number; read: string } {
     if (d.nextStepDate) {
-        const days = Math.floor((now - Date.parse(d.nextStepDate)) / 86_400_000);
-        if (days > 0) return { score: 100 + days, read: `${t("Next step overdue")} ${days}d` };
-        return { score: 10, read: t("On track — a favor could still speed it", { class: "body" }) };
+        const ts = Date.parse(d.nextStepDate);
+        if (Number.isFinite(ts)) {
+            const days = Math.floor((now - ts) / 86_400_000);
+            if (days > 0) return { score: 100 + days, read: `${t("Next step overdue")} ${days}d` };
+            return { score: 10, read: t("On track — a favor could still speed it", { class: "body" }) };
+        }
     }
     if (!d.nextStep.trim()) return { score: 80, read: t("No next step on the books") };
     return { score: 40, read: t("Next step has no date") };

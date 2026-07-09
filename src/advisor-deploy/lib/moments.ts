@@ -81,7 +81,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
         name: "Signal you're a serious bet",
         short: "Approval needs board or C-suite confidence.",
         ask: "Could you signal to the executive path at [company] that this is a serious backed company?",
-        proof: "This is too expensive to spend casually. Use only when the deal merits it.",
+        proof: "The company is well backed and the work is real - a board-level word carries that weight.",
         advisorLine: "A board-level mention can change trust faster than another deck.",
         outcome: "Executive or board approval path opens."
     },

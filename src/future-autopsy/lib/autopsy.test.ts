@@ -103,7 +103,7 @@ describe("killSwitchFor", () => {
             { now: NOW, storage: STORAGE }
         );
         const result = killSwitchFor(v);
-        expect(result).toMatch(/not fully met/i);
+        expect(result).toMatch(/not there yet/i);
     });
 });
 

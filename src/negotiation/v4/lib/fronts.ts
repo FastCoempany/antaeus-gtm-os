@@ -223,7 +223,9 @@ export function engagementRead(
     now: number = Date.now()
 ): { band: "warm" | "quiet" | "new"; days: number } {
     if (!m.lastTouch) return { band: "new", days: 0 };
-    const days = Math.floor((now - Date.parse(m.lastTouch)) / 86_400_000);
+    const ts = Date.parse(m.lastTouch);
+    if (!Number.isFinite(ts)) return { band: "new", days: 0 };
+    const days = Math.floor((now - ts) / 86_400_000);
     return days >= 7 ? { band: "quiet", days } : { band: "warm", days };
 }
 

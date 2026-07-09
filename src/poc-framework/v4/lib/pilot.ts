@@ -30,6 +30,8 @@ export interface CheckIn {
 }
 
 export interface PilotExtras {
+    /** ISO when the spec was first locked — the window's day counter. */
+    readonly startedAt: string | null;
     readonly circle: ReadonlyArray<CirclePerson>;
     readonly checkins: ReadonlyArray<CheckIn>;
     /** Kit item keys already shared. */
@@ -44,6 +46,7 @@ export interface PilotExtras {
 }
 
 export const EMPTY_EXTRAS: PilotExtras = {
+    startedAt: null,
     circle: [],
     checkins: [],
     shared: [],
@@ -114,6 +117,7 @@ function parseExtras(raw: unknown): PilotExtras {
         Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
     const stage = r["stage"];
     return {
+        startedAt: typeof r["startedAt"] === "string" ? r["startedAt"] : null,
         circle,
         checkins,
         shared: strArr(r["shared"]),
@@ -129,6 +133,20 @@ function parseExtras(raw: unknown): PilotExtras {
 
 function accountKey(account: string): string {
     return account.trim().toLowerCase();
+}
+
+/** True when the extras carry nothing worth persisting yet. */
+export function extrasEmpty(e: PilotExtras): boolean {
+    return (
+        e.circle.length === 0 &&
+        e.checkins.length === 0 &&
+        e.shared.length === 0 &&
+        e.closedGaps.length === 0 &&
+        e.stepsDone === 0 &&
+        e.stage === 3 &&
+        !e.writeup.trim() &&
+        !e.startedAt
+    );
 }
 
 export function loadExtras(account: string, s?: StorageLike | null): PilotExtras {

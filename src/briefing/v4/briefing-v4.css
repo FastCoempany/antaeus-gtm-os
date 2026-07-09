@@ -1,0 +1,21 @@
+/*
+ * Briefing v4 — the vivid layer (canon §4.21). The shipped room's
+ * structure is untouched; this adds the ambient greeting + the
+ * controllable ticker per the settled 2026-07 design. De-carded —
+ * the greeting and ticker live on the field, not in boxes.
+ */
+.bfv4-greet { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 22px 0 4px; }
+.bfv4-hello { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-size: 30px; letter-spacing: -0.01em; }
+.bfv4-sub { font-size: 13px; color: var(--ds-ink-2, rgba(10,28,64,.62)); }
+.bfv4-clock { margin-left: auto; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+
+.bfv4-ticker { overflow: hidden; border-top: 1px solid var(--ds-hair, rgba(10,28,64,.09)); border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); margin: 12px 0 6px; padding: 8px 0; white-space: nowrap; }
+.bfv4-tape { display: inline-flex; gap: 34px; animation: bfv4-scroll 55s linear infinite; will-change: transform; }
+.bfv4-ticker:hover .bfv4-tape { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .bfv4-tape { animation: none; } }
+.bfv4-tk { font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-2, rgba(10,28,64,.62)); display: inline-flex; align-items: center; gap: 8px; }
+.bfv4-td { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-blue, #2563eb); flex: none; }
+@keyframes bfv4-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}

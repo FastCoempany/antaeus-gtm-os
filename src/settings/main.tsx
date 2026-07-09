@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { Settings } from "./Settings";
 import { SettingsDS } from "./ds/SettingsDS";
+import { SettingsV4 } from "./v4/SettingsV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -54,7 +55,24 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_settings_legacy");
 }
 
-render(useDsSurface ? <SettingsDS /> : <Settings />, root);
+// Wire-to-production v4 (canon §4.20, the safe deposit, settled
+// 2026-07-07). Default ON; room_settings_v4_off is the kill-switch
+// back to the DS surface; ?v4=0/1 is the preview hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_settings_v4_off"));
+
+render(
+    useV4 ? <SettingsV4 /> : useDsSurface ? <SettingsDS /> : <Settings />,
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at
 // the workspace's chosen density (defensive — no-ops without a session).

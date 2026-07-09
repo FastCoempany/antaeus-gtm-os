@@ -14,6 +14,7 @@ import { hrefToDealWorkspace } from "../lib/handoff";
 import {
     loadExtras,
     saveExtras,
+    extrasEmpty,
     personId,
     circleTarget,
     readAdoption,
@@ -58,29 +59,37 @@ function toast(msg: string): void {
     toastTimer = setTimeout(() => (toastMsg.value = null), 2400);
 }
 
-/** Boot the per-account extras + persistence loop. Called from main. */
+/** The pilot's storage key — the deal id when linked (stable across
+ * account-name edits), else the account name. */
+function extrasKey(): string {
+    const d = draft.value;
+    return d.linkedDealId.trim() || d.account;
+}
+
+/** Boot the per-pilot extras + persistence loop. Called from main. */
 export function bootPilotExtras(): void {
-    const account = draft.value.account;
-    extrasAccount.value = account;
-    extras.value = loadExtras(account);
+    extrasAccount.value = extrasKey();
+    extras.value = loadExtras(extrasAccount.value);
     if (!persistStarted) {
         persistStarted = true;
         let first = true;
         effect(() => {
             const e = extras.value;
-            const acct = extrasAccount.value;
+            const key = extrasAccount.value;
             if (first) {
                 first = false;
                 return;
             }
-            if (acct.trim()) saveExtras(acct, e);
+            // Never persist an untouched pilot — typing an account name
+            // character by character must not litter prefix keys.
+            if (key.trim() && !extrasEmpty(e)) saveExtras(key, e);
         });
-        // Account switch (deal change) reloads that account's pilot.
+        // Deal/account switch reloads that pilot.
         effect(() => {
-            const acct = draft.value.account;
-            if (acct !== extrasAccount.value) {
-                extrasAccount.value = acct;
-                extras.value = loadExtras(acct);
+            const key = extrasKey();
+            if (key !== extrasAccount.value) {
+                extrasAccount.value = key;
+                extras.value = loadExtras(key);
             }
         });
     }
@@ -169,9 +178,11 @@ export function PilotDeskV4(): JSX.Element {
     const m2Done = handsOn.length >= 2 && champion !== null;
     const current: 1 | 2 | 3 | 4 | 5 = !m1Done ? 1 : !m2Done ? 2 : e.stage;
 
-    // Day count from the saved spec.
-    const dayOf = proof
-        ? Math.max(1, Math.ceil((Date.now() - Date.parse(proof.updatedAt)) / 86_400_000))
+    // Day count from when the spec was FIRST locked (re-saving the spec
+    // must not reset the window clock).
+    const startTs = e.startedAt ? Date.parse(e.startedAt) : proof ? Date.parse(proof.updatedAt) : NaN;
+    const dayOf = Number.isFinite(startTs)
+        ? Math.max(1, Math.ceil((Date.now() - startTs) / 86_400_000))
         : 0;
 
     // The gated check-in steps (movement 3), generated from circle state.
@@ -377,7 +388,11 @@ export function PilotDeskV4(): JSX.Element {
                                 </div>
                                 <button type="button" class="pk4-btn"
                                     disabled={!d.account.trim() || !d.successCriteria.trim()}
-                                    onClick={() => { saveDraft(); toast(t("Pilot set — now bring in the people.", { class: "body" })); }}>
+                                    onClick={() => {
+                                        saveDraft();
+                                        if (!extras.value.startedAt) patchExtras({ startedAt: new Date().toISOString() });
+                                        toast(t("Pilot set — now bring in the people.", { class: "body" }));
+                                    }}>
                                     {t("Lock the setup →")}
                                 </button>
                             </div>
