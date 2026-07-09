@@ -112,7 +112,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         color: "var(--cc-orange)",
         title: "Trade one proof point for one admission.",
         copy: "Proof should create permission, not become a deck.",
-        say: "The pattern we usually see is [proof point]. When that shows up, teams either absorb it manually or redesign the workflow. Which is happening there?",
+        say: "Teams dealing with [pressure] usually hit the same pattern — and either absorb it manually or redesign the workflow. We've seen both. Which is happening there?",
         coach: "One proof point. Then stop.",
         replies: [
             {

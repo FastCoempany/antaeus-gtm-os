@@ -48,11 +48,17 @@ export function loadAccountOptions(
                 if (!id || !name) return null;
                 const heat = asNumber(o.heat);
                 const band = asString(o.band);
+                // Freshest signal headline — the "why now" the message
+                // leads with (canon §4.8: no send path without a named
+                // strain).
+                const signals = Array.isArray(o.signals) ? o.signals : [];
+                const topSignal = asString(asObject(signals[0])?.headline);
                 return {
                     id,
                     name,
                     ...(heat ? { heat } : {}),
-                    ...(band ? { band } : {})
+                    ...(band ? { band } : {}),
+                    ...(topSignal ? { topSignal } : {})
                 };
             })
             .filter((a): a is AccountOption => a !== null);

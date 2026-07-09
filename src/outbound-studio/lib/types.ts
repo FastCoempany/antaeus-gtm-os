@@ -125,6 +125,8 @@ export interface AccountOption {
     readonly name: string;
     readonly heat?: number;
     readonly band?: string;
+    /** The account's freshest signal headline (from gtmos_sc_v4). */
+    readonly topSignal?: string;
 }
 
 // ─── Touch log + angle save ───────────────────────────────────────────
