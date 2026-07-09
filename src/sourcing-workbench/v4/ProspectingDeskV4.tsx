@@ -64,19 +64,36 @@ function answered(p: Prospect): { q1: boolean; q2: boolean; q3: boolean; left: n
     return { q1, q2, q3, left: [q1, q2, q3].filter((x) => !x).length };
 }
 
+/**
+ * Patch a question field AND keep the stage honest: all three answered
+ * promotes to "ready" (the right rail), un-answering demotes back to
+ * "researched". `patchProspect` alone never re-runs promotion — without
+ * this, nothing in the room could ever reach the Ready rail.
+ */
+function patchQuestion(p: Prospect, part: Partial<Prospect>): void {
+    patchProspect(p.id, part);
+    const next = { ...p, ...part } as Prospect;
+    const a = answered(next);
+    if (a.left === 0 && next.stage !== "ready" && next.stage !== "pushed") {
+        setProspectStage(p.id, "ready");
+    } else if (a.left > 0 && next.stage === "ready") {
+        setProspectStage(p.id, "researched");
+    }
+}
+
 function sendProspect(p: Prospect): void {
     const ok = enqueueInboundAccount({
         name: p.accountName,
         note: [p.entryPoint, p.approach].filter(Boolean).join(" · ") || undefined,
         from: "prospecting-desk"
     });
+    if (!ok) {
+        toast(`${t("Couldn't queue")} ${p.accountName} — ${t("try the send again.")}`);
+        return;
+    }
     setProspectStage(p.id, "pushed");
     if (selectedId.value === p.id) selectedId.value = null;
-    toast(
-        ok
-            ? `${p.accountName} ${t("is on its way to Signal Console — it lands the next time that room opens.", { class: "body" })}`
-            : `${p.accountName} ${t("marked as sent.")}`
-    );
+    toast(`${p.accountName} ${t("is on its way to Signal Console — it lands the next time that room opens.", { class: "body" })}`);
 }
 
 function setAside(p: Prospect): void {
@@ -112,7 +129,12 @@ export function ProspectingDeskV4(): JSX.Element {
     const focus = inboundFocus.value;
 
     const sel = selectedId.value ? all.find((p) => p.id === selectedId.value) ?? null : null;
-    const selOpen = sel && (sel.stage === "captured" || sel.stage === "researched") ? sel : null;
+    // Keep the panel open through the ready promotion so the Send
+    // button is right there the moment the third answer lands.
+    const selOpen =
+        sel && (sel.stage === "captured" || sel.stage === "researched" || sel.stage === "ready")
+            ? sel
+            : null;
     const a = selOpen ? answered(selOpen) : null;
     const q = selOpen ? getProspectQuality(selOpen) : null;
 
@@ -236,7 +258,7 @@ export function ProspectingDeskV4(): JSX.Element {
                         {added.length === 0 ? (
                             <div class="pd4-emptyr">{t("Nothing waiting. Describe a search above and add companies.", { class: "body" })}</div>
                         ) : (
-                            added.map((p) => {
+                            added.slice(0, 30).map((p) => {
                                 const pq = getProspectQuality(p);
                                 return (
                                     <button type="button" class={`pd4-rr${selOpen?.id === p.id ? " is-active" : ""}`} key={p.id} onClick={() => (selectedId.value = p.id)}>
@@ -271,7 +293,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("Are they who we're targeting?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.notes}
                                                 placeholder={t("e.g. Yes — they own the forecast rebuild and just raised", { class: "body" })}
-                                                onInput={(e) => patchProspect(selOpen.id, { notes: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { notes: (e.currentTarget as HTMLInputElement).value })} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q2 ? "is-done" : "is-todo"}`}>
@@ -280,7 +302,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("What's our way in to the account?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.entryPoint}
                                                 placeholder={t("e.g. A shared investor sits on their board — ask for the intro", { class: "body" })}
-                                                onInput={(e) => patchProspect(selOpen.id, { entryPoint: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { entryPoint: (e.currentTarget as HTMLInputElement).value })} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q3 ? "is-done" : "is-todo"}`}>
@@ -289,7 +311,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("How will we reach out?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.approach}
                                                 placeholder={t("e.g. Open on the raise, then ask for the board intro", { class: "body" })}
-                                                onInput={(e) => patchProspect(selOpen.id, { approach: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { approach: (e.currentTarget as HTMLInputElement).value })} />
                                         </div>
                                     </div>
                                 </div>
@@ -324,7 +346,7 @@ export function ProspectingDeskV4(): JSX.Element {
                         {ready.length === 0 ? (
                             <div class="pd4-emptyr">{t("Nothing queued yet. Finish confirming an account and it lands here.", { class: "body" })}</div>
                         ) : (
-                            ready.map((p) => (
+                            ready.slice(0, 30).map((p) => (
                                 <div class="pd4-rr" key={p.id}>
                                     <div class="pd4-ra">{p.accountName}</div>
                                     {p.contactName ? <div class="pd4-rc">{p.contactName}</div> : null}

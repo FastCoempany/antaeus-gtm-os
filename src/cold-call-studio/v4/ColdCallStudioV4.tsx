@@ -85,6 +85,12 @@ function removePb(threadId: ThreadId, id: string): void {
 
 function logOutcome(outcome: Outcome): void {
     const account = selectedAccount.value;
+    // Never log a junk row — an outcome needs a named account (the
+    // stats + Readiness discovery inputs read this log).
+    if (!account) {
+        toast(t("Pick the account you called first.", { class: "body" }));
+        return;
+    }
     const entry = logCall(outcome);
     if (!entry) return;
     if (outcome === "meeting_booked" && account) {
@@ -233,7 +239,7 @@ export function ColdCallStudioV4(): JSX.Element {
                             <div class="cc4-gl">{t("Still alive")}</div>
                             <div class="cc4-pills">
                                 {ALIVE.map((o) => (
-                                    <button type="button" class="cc4-out" key={o} onClick={() => logOutcome(o)}>
+                                    <button type="button" class="cc4-out" key={o} disabled={!account} onClick={() => logOutcome(o)}>
                                         {o === "callback_scheduled" ? t("Call me back") : t("Gave a referral")}
                                     </button>
                                 ))}
@@ -243,7 +249,7 @@ export function ColdCallStudioV4(): JSX.Element {
                             <div class="cc4-gl">{t("No, this time")}</div>
                             <div class="cc4-pills">
                                 {NO_THIS_TIME.map((o) => (
-                                    <button type="button" class="cc4-out" key={o} onClick={() => logOutcome(o)}>
+                                    <button type="button" class="cc4-out" key={o} disabled={!account} onClick={() => logOutcome(o)}>
                                         {o === "rejected" ? t("Not interested") : OUTCOME_LABELS[o].replace(/^./, (c) => c.toUpperCase())}
                                     </button>
                                 ))}

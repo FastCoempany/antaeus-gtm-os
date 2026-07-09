@@ -48,7 +48,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         label: "Opening thread",
         verb: "pull",
         color: "var(--cc-blue)",
-        title: "Earn permission in the first breath.",
+        title: "Get permission in the first breath.",
         copy: "Own the interruption and give the buyer control.",
         say: "I know I am interrupting. Give me 20 seconds and you can decide if this is worth continuing.",
         coach: "Do not explain the company yet. The first win is permission.",
@@ -107,13 +107,13 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "proof",
         num: "04",
-        label: "Proof thread",
+        label: "Show-it's-real thread",
         verb: "trade",
         color: "var(--cc-orange)",
-        title: "Trade one proof point for one admission.",
-        copy: "Proof should create permission, not become a deck.",
+        title: "Trade one real example for one admission.",
+        copy: "The example should create permission, not become a deck.",
         say: "Teams dealing with [pressure] usually hit the same pattern — and either absorb it manually or redesign the workflow. We've seen both. Which is happening there?",
-        coach: "One proof point. Then stop.",
+        coach: "One real example. Then stop.",
         replies: [
             {
                 id: "manual",
@@ -142,7 +142,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         verb: "lock",
         color: "var(--cc-green)",
         title: "Ask for the smallest real next move.",
-        copy: "The ask should match what the call earned.",
+        copy: "The ask should match what the call built.",
         say: "It sounds specific enough to look at together. Would it make sense to spend 20 minutes this week mapping whether the same pattern applies to [account]?",
         coach: "Ask for time only after pressure and proof are both alive.",
         replies: [

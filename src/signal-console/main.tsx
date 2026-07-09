@@ -148,9 +148,11 @@ void bootDensity();
 // localStorage seeded — no degradation, just no cross-device sync
 // until the next session retries.
 void (async (): Promise<void> => {
+    let cloudMode: string | null = null;
     try {
         const client = createDataClient();
-        await bootCloudPersistence(client);
+        const boot = await bootCloudPersistence(client);
+        cloudMode = boot.mode;
     } catch (err) {
         // Synchronous throw from createDataClient (env-var missing) —
         // surface a plain warning, not a Sentry report, since this is
@@ -164,6 +166,10 @@ void (async (): Promise<void> => {
     // here). Runs AFTER cloud boot so the new accounts survive the
     // cloud-replaces-local step, and goes through saveAccount so each
     // one persists to the cloud + mirror through the canonical path.
+    // Skip when the cloud list FAILED ("local-only" with a live client)
+    // — draining then could insert cloud duplicates of accounts the
+    // cloud already has; the queue simply waits for the next clean boot.
+    if (cloudMode === "local-only") return;
     try {
         const queue = readInboundQueue();
         if (queue.length > 0) {

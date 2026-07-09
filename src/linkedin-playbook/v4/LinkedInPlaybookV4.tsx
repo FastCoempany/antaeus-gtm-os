@@ -126,7 +126,7 @@ export function LinkedInPlaybookV4(): JSX.Element {
         icp: bestIcp.value,
         hottestAccount:
             focusName != null
-                ? { name: focusName, heat: focusName === hottest?.name ? hottest.heat : 0 }
+                ? { name: focusName, heat: focusName.toLowerCase() === hottest?.name.toLowerCase() ? hottest.heat : 0 }
                 : null,
         latestTouch: latestTouch.value,
         stats: st
@@ -135,7 +135,10 @@ export function LinkedInPlaybookV4(): JSX.Element {
     const others = warming.filter(
         (w) => focusName == null || w.name.toLowerCase() !== focusName.toLowerCase()
     );
-    const heat = focusName === hottest?.name ? hottest?.heat ?? 0 : 0;
+    const heat =
+        focusName != null && focusName.toLowerCase() === hottest?.name.toLowerCase()
+            ? hottest?.heat ?? 0
+            : 0;
 
     function markDone(): void {
         if (!focusName) return;
@@ -145,8 +148,11 @@ export function LinkedInPlaybookV4(): JSX.Element {
         const entry = logCue();
         setActiveCue(null);
         if (entry) {
-            const next = Math.min(4, here + 1);
-            toast(`${t("Logged on")} ${focusName} — ${t("next:")} ${RUNG_LABELS[next]}.`);
+            if (here === 4) {
+                toast(`${t("Logged on")} ${focusName} — ${t("the ladder's run. The next touch belongs in Outbound.", { class: "body" })}`);
+            } else {
+                toast(`${t("Logged on")} ${focusName} — ${t("next:")} ${RUNG_LABELS[here + 1]}.`);
+            }
         }
     }
 

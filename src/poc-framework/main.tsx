@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { PocFramework } from "./PocFramework";
 import { PocFrameworkDS } from "./ds/PocFrameworkDS";
+import { PilotDeskV4, bootPilotExtras } from "./v4/PilotDeskV4";
 import { bootDensity } from "@/lib/density";
 import "@/styles/tokens.css";
 import "@/components/components.css";
@@ -105,7 +106,32 @@ if (dsParam === "1") {
     useDsSurface = !isFeatureEnabled("room_poc_framework_legacy");
 }
 
-render(useDsSurface ? <PocFrameworkDS /> : <PocFramework />, root);
+// Wire-to-production v4 (canon §4.15, the guided pilot, settled
+// 2026-07-06 — renamed Pilot Desk on the face; the served path stays
+// until the full path-rename sweep). Default ON; room_pilot_desk_v4_off
+// is the kill-switch back to the DS surface; ?v4=0/1 is the hatch.
+const v4Param = (() => {
+    try {
+        return new URLSearchParams(window.location.search).get("v4");
+    } catch {
+        return null;
+    }
+})();
+const useV4 =
+    v4Param === "1" ||
+    (v4Param !== "0" && !isFeatureEnabled("room_pilot_desk_v4_off"));
+
+if (useV4) bootPilotExtras();
+render(
+    useV4 ? (
+        <PilotDeskV4 />
+    ) : useDsSurface ? (
+        <PocFrameworkDS />
+    ) : (
+        <PocFramework />
+    ),
+    root
+);
 
 // Boot the density gradient so the DS surface's primitives render at the
 // workspace's chosen density (defensive — no-ops without a session).

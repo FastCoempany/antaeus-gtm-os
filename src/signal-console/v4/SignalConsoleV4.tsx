@@ -147,7 +147,7 @@ function Chip({ account, heat, ageLabel, band }: {
                         </button>
                     </div>
                     <div class="sc4-rack">
-                        <a class="sc4-btn sc4-btn--go" href={move === "Research" ? hrefToDiscoveryAgenda(account.name) : hrefToOutbound(account.name)}>
+                        <a class="sc4-btn sc4-btn--go" href={move === "Research" ? hrefToDiscoveryAgenda(account.name) : hrefToOutbound(account.name, exec.temperature)}>
                             {move}
                         </a>
                         <a class="sc4-btn" href={hrefToDiscoveryAgenda(account.name)}>{t("Plan a call")}</a>
