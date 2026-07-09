@@ -1,0 +1,217 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jump to any room — reimagined (triptych)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1c40;--ink-2:rgba(10,28,64,.64);--ink-3:rgba(10,28,64,.42);--ink-4:rgba(10,28,64,.24);
+--field:#eef1f7;--surface:#fff;--hair:rgba(10,28,64,.09);--hair-2:rgba(10,28,64,.15);
+--orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--forest-soft:rgba(27,94,63,.08);--amber:#b5790f;--red:#c0392b;--gold:#b08414;
+--serif:"DM Serif Display",Georgia,serif;--read:"Newsreader",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--ease:cubic-bezier(.22,.61,.36,1);}
+*{box-sizing:border-box;min-width:0}body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--field);-webkit-font-smoothing:antialiased}
+.pagehd{max-width:1120px;margin:0 auto;padding:30px 34px 0}
+.pagehd .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.pagehd h1{font-family:var(--serif);font-size:30px;margin:9px 0 4px;font-weight:400}
+.pagehd p{font-size:14px;color:var(--ink-2);line-height:1.55;max-width:760px;margin:0}
+.switch{display:flex;gap:8px;margin:20px 0 0;flex-wrap:wrap}
+.switch button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:9px 15px;border:1px solid var(--hair-2);border-radius:8px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.switch button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.switch button b{color:inherit;font-weight:600}
+.stage{max-width:1120px;margin:16px auto 0;padding:0 34px 70px}
+.pane{display:none}.pane.on{display:block;animation:rise .4s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lead{font-size:13px;color:var(--ink-3);line-height:1.6;margin:0 0 18px;max-width:820px}.lead b{color:var(--ink)}
+
+/* frame that reads like an app overlay */
+.frame{background:var(--surface);border:1px solid var(--hair-2);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,28,64,.4)}
+.appbar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--hair);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4)}
+.appbar b{color:var(--ink);letter-spacing:.2em}.appbar .r{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px}
+.scrim{background:linear-gradient(180deg,rgba(10,28,64,.04),transparent);padding:26px}
+
+/* ============ A — THE MOTION MAP ============ */
+.map__q{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.map__t{font-family:var(--serif);font-size:23px;margin:0 0 3px}
+.map__s{font-size:12.5px;color:var(--ink-3);margin-bottom:22px}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0}
+.stage-col{border-left:1px solid var(--hair);padding:0 12px}.stage-col:first-child{border-left:0;padding-left:0}
+.stage-lab{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:11px;height:22px}
+.rm{display:block;padding:9px 10px;border-radius:8px;border:1px solid transparent;margin-bottom:7px;cursor:pointer;transition:all .15s var(--ease);position:relative}
+.rm:hover{background:var(--field);border-color:var(--hair)}
+.rm .rn{font-size:12.5px;font-weight:600;letter-spacing:-.005em}
+.rm .rd{font-size:10.5px;color:var(--ink-3);line-height:1.3;margin-top:2px}
+.rm.here{background:#0a1c40;border-color:#0a1c40}.rm.here .rn{color:#fff}.rm.here .rd{color:rgba(255,255,255,.6)}
+.rm.here::after{content:"you are here";position:absolute;top:-8px;right:8px;font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--orange);padding:1px 6px;border-radius:20px}
+.rm.next{border-color:var(--orange);border-style:dashed;background:rgba(230,112,30,.05)}
+.rm.next .rn{color:var(--orange)}
+.rm.next::after{content:"↑ suggested";position:absolute;top:-8px;right:8px;font-family:var(--mono);font-size:7.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);background:var(--surface);border:1px solid var(--orange);padding:1px 6px;border-radius:20px}
+.map__foot{margin-top:20px;padding-top:14px;border-top:1px solid var(--hair);font-size:12px;color:var(--ink-3)}.map__foot b{color:var(--ink)}.map__foot kbd{font-family:var(--mono);font-size:10px;background:var(--field);border:1px solid var(--hair-2);border-radius:4px;padding:1px 6px}
+
+/* ============ B — THE COMMAND LINE ============ */
+.cl__prompt{display:flex;align-items:center;gap:13px;padding:20px 26px;border-bottom:1px solid var(--hair)}
+.cl__caret{font-family:var(--serif);font-size:26px;color:var(--orange);line-height:1}
+.cl__input{font-family:var(--read);font-size:22px;color:var(--ink);border:0;outline:0;background:0;flex:1}
+.cl__input::placeholder{color:var(--ink-4)}
+.cl__hint{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);letter-spacing:.05em}
+.cl__body{padding:16px 12px 20px;max-height:460px;overflow:auto}
+.cl__gl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-4);padding:12px 14px 6px;display:flex;align-items:center;gap:8px}.cl__gl::after{content:"";flex:1;height:1px;background:var(--hair)}
+.cl__row{display:flex;align-items:center;gap:13px;padding:9px 14px;border-radius:9px;cursor:pointer}
+.cl__row:hover,.cl__row.foc{background:var(--field)}
+.cl__row.foc{box-shadow:inset 3px 0 0 var(--orange)}
+.cl__ic{width:26px;height:26px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff}
+.cl__rn{font-size:14px;font-weight:600}.cl__rn .fam{font-family:var(--mono);font-size:9px;color:var(--ink-4);margin-left:8px;font-weight:400;letter-spacing:.04em}
+.cl__rd{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.cl__go{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ink-4)}
+.cl__row:hover .cl__go,.cl__row.foc .cl__go{color:var(--orange)}
+.skillrow .cl__ic{background:var(--blue)!important;border-radius:50%}
+.cl__meta{margin-left:auto;font-size:10.5px;color:var(--ink-4);font-family:var(--mono)}
+
+/* ============ C — THE SWITCHER RAIL ============ */
+.railwrap{display:grid;grid-template-columns:270px 1fr;min-height:440px}
+.rail{border-right:1px solid var(--hair);padding:16px 0;background:linear-gradient(180deg,rgba(10,28,64,.015),transparent)}
+.rail__hd{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-4);padding:0 18px 10px}
+.rail__now{margin:0 12px 12px;padding:11px 13px;border-radius:10px;background:var(--ink);color:#fff}
+.rail__now .l{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.rail__now .n{font-size:15px;font-weight:600;margin-top:3px}
+.rail__next{margin:0 12px 16px;padding:10px 13px;border-radius:10px;border:1px dashed var(--orange);background:rgba(230,112,30,.05);cursor:pointer}
+.rail__next .l{font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.rail__next .n{font-size:13.5px;font-weight:600;color:var(--orange);margin-top:2px}.rail__next .w{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.fam{margin-bottom:3px}
+.fam__h{display:flex;align-items:center;gap:8px;padding:7px 18px;cursor:pointer}
+.fam__dot{width:7px;height:7px;border-radius:2px}
+.fam__n{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.fam__c{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-4)}
+.fam__rooms{padding:0 0 4px}
+.rrow{display:block;padding:5px 18px 5px 33px;font-size:12.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent}
+.rrow:hover{background:var(--field);color:var(--ink)}
+.rrow.cur{border-left-color:var(--orange);color:var(--ink);font-weight:600}
+.railmain{padding:34px;display:flex;flex-direction:column;justify-content:center}
+.railmain .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.railmain h2{font-family:var(--serif);font-size:26px;margin:8px 0 10px;font-weight:400}
+.railmain p{font-size:13px;color:var(--ink-2);line-height:1.6;max-width:52ch}
+.railmain .pill{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--ink-3);border:1px solid var(--hair-2);border-radius:20px;padding:5px 12px}
+
+.note{margin-top:16px;font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.7}
+</style></head><body>
+<div class="pagehd">
+  <div class="k">Design exploration · not wired · reimagining the jump-to-any-room mechanism</div>
+  <h1>Jump to any room, from anywhere.</h1>
+  <p>Today this is a ⌘K command palette — a searchable list of all 22 rooms + skills, grouped by family. It works, but it predates the 2026-07 redesign and reads like the old shell. Three directions for what it could become, in the new language. Click to compare.</p>
+  <div class="switch">
+    <button class="on" data-p="a">A · <b>The motion map</b> — see the whole GTM motion, jump by where you are in it</button>
+    <button data-p="b">B · <b>The command line, reborn</b> — the ⌘K palette in the new language, smarter default</button>
+    <button data-p="c">C · <b>The persistent switcher</b> — an always-there rail, never summoned</button>
+  </div>
+</div>
+<div class="stage">
+
+  <!-- ============ A ============ -->
+  <div class="pane on" id="pane-a">
+    <p class="lead"><b>The motion map.</b> Instead of an alphabetical list, the 22 rooms are laid out as your <b>actual GTM motion</b> — left to right, entry → strategy → find & work → advance → diagnose → hand off. You see where you are, where the system thinks you should go next, and the whole shape at once. Summoned with ⌘K as a bright overlay; type to filter, or just point at the stage you want.</p>
+    <div class="frame"><div class="appbar"><b>ANTAEUS</b> · jump<span class="r">⌘K · type to filter · Esc to close</span></div>
+    <div class="scrim">
+      <div class="map__q">Where do you want to go?</div>
+      <div class="map__t">Your whole motion, at a glance.</div>
+      <div class="map__s">You're in <b>Deal Workspace</b>. The system suggests <b>Getting to Signed</b> — Ramp is at the terms stage.</div>
+      <div class="flow" id="flowA"></div>
+      <div class="map__foot"><b>Skills</b> live here too — type “prep” for <kbd>Prep the next call</kbd>, “risk” for <kbd>What's at risk</kbd>. Enter jumps; ↑↓ walks the map.</div>
+    </div></div>
+    <div class="note">A — reframes "a list of rooms" into "the shape of the motion." Strongest for orientation ("where am I, what's the whole system"). Risk: denser; needs the stage grouping to stay legible as rooms grow.</div>
+  </div>
+
+  <!-- ============ B ============ -->
+  <div class="pane" id="pane-b">
+    <p class="lead"><b>The command line, reborn.</b> The ⌘K palette you have — but in the new language: a serif prompt, de-carded rows, each room named in spoon-fed words with its family tag, skills woven in with a round blue mark. The empty state is <b>smart</b> — your recent rooms + the one room the system thinks you need next, before you type a letter. Keyboard-first and fast.</p>
+    <div class="frame"><div class="appbar"><b>ANTAEUS</b> · jump<span class="r">↑↓ to move · ↵ to jump · Esc to close</span></div>
+      <div class="cl__prompt"><span class="cl__caret">›</span><input class="cl__input" placeholder="Go to a room, or run a skill…" value=""><span class="cl__hint">⌘K</span></div>
+      <div class="cl__body" id="clBody"></div>
+    </div>
+    <div class="note">B — the smallest leap from today; keeps the muscle memory (⌘K, type, Enter) but dresses it in the redesign + adds a smart default so most jumps need zero typing. Risk: still a "list", just a nicer one.</div>
+  </div>
+
+  <!-- ============ C ============ -->
+  <div class="pane" id="pane-c">
+    <p class="lead"><b>The persistent switcher.</b> Not summoned at all — a slim, collapsible rail that's <b>always there</b> on the left edge. The 8 families as a compact spine, your current room lit, the system's suggested next room pinned at the top. One click to jump; you never lose track of where you are. It folds today's three separate organs — the ⌘K palette, the birdseye "what to look at next" float, and the back-trail — into <b>one nav organ</b>.</p>
+    <div class="frame"><div class="appbar"><b>ANTAEUS</b><span class="r">the rail is always here · click ‹ to collapse to icons</span></div>
+      <div class="railwrap">
+        <div class="rail" id="railNav"></div>
+        <div class="railmain">
+          <div class="k">The room you're in</div>
+          <h2>Deal Workspace</h2>
+          <p>The rail stays put while you work. Glance left to see where you are in the motion, where the system says to go next, and jump anywhere in one click — no ⌘K, no summon, no "where was I."</p>
+          <span class="pill">⌘K still works — it just focuses the rail's filter instead of opening a separate overlay.</span>
+        </div>
+      </div>
+    </div>
+    <div class="note">C — the most ambitious: a standing presence that unifies navigation + "what's next" + "where I came from." Strongest for never-lost orientation. Risk: takes permanent screen real-estate; every room's layout must budget for it (collapsible mitigates).</div>
+  </div>
+
+</div>
+<script>
+// current-names room set, grouped by the operator's motion + by family
+const FAM={threshold:['#8a97b0','Threshold'],command:['#2563eb','Command Chamber'],decision:['#b08414','Decision Bench'],
+  live:['#e6701e','Live Instrument'],diagnosis:['#c0392b','Diagnosis Table'],ledger:['#1b5e3f','System Ledger'],
+  intel:['#7c3aed','Intelligence Surface'],trust:['#5b6b86','Trust Annex']};
+const R=[
+ {n:'Welcome',f:'threshold',d:'the morning landing',s:'enter'},
+ {n:'Onboarding',f:'threshold',d:'seed the workspace',s:'enter'},
+ {n:'Dashboard',f:'command',d:'the one move, ranked',s:'enter'},
+ {n:'ICP Studio',f:'decision',d:'who you sell to',s:'strategy'},
+ {n:'Territory Architect',f:'decision',d:'carve the market',s:'strategy'},
+ {n:'Prospecting Desk',f:'decision',d:'find real accounts',s:'strategy'},
+ {n:'Signal Console',f:'live',d:'watch the heat',s:'find'},
+ {n:'Briefing',f:'intel',d:'what the system saw',s:'find'},
+ {n:'Outdoors Events',f:'live',d:'where buyers gather',s:'find'},
+ {n:'Outbound Studio',f:'live',d:'the send line',s:'work'},
+ {n:'Cold Call Studio',f:'live',d:'walk in ready',s:'work'},
+ {n:'LinkedIn Playbook',f:'live',d:'air cover',s:'work'},
+ {n:'Discovery Studio',f:'live',d:'run the live call',s:'work'},
+ {n:'Deal Workspace',f:'diagnosis',d:'what will slip',s:'advance',here:1},
+ {n:'Pilot Desk',f:'decision',d:'run a pilot',s:'advance'},
+ {n:'Getting to Signed',f:'live',d:'run to signature',s:'advance',next:1},
+ {n:'Call in a Favor',f:'live',d:'mobilize your people',s:'advance'},
+ {n:'Future Autopsy',f:'diagnosis',d:'why it will die',s:'diagnose'},
+ {n:'Quota Workback',f:'ledger',d:'your daily number',s:'diagnose'},
+ {n:'Readiness Score',f:'ledger',d:'inheritable yet?',s:'synth'},
+ {n:'Founding GTM',f:'ledger',d:'the handoff kit',s:'synth'},
+ {n:'Settings',f:'trust',d:'keep it safe',s:'synth'},
+];
+const SKILLS=[{n:"What's at risk",d:'the stalling deals → Deal Workspace'},{n:'Prep the next call',d:'pull the agenda → Discovery Studio'},{n:'This week’s reads',d:'what moved → Briefing'}];
+const STAGES=[['enter','Enter'],['strategy','Strategy'],['find','Find & watch'],['work','Work the account'],['advance','Advance the deal'],['diagnose','Diagnose'],['synth','Hand off']];
+// A groups into 6 motion columns
+const COLS=[['enter'],['strategy'],['find'],['work'],['advance'],['diagnose','synth']];
+const flowA=document.getElementById('flowA');
+COLS.forEach(keys=>{const col=document.createElement('div');col.className='stage-col';
+ const labs=keys.map(k=>STAGES.find(x=>x[0]===k)[1]).join(' · ');
+ let h='<div class="stage-lab">'+labs+'</div>';
+ R.filter(r=>keys.includes(r.s)).forEach(r=>{h+='<div class="rm'+(r.here?' here':'')+(r.next?' next':'')+'"><div class="rn">'+r.n+'</div><div class="rd">'+r.d+'</div></div>';});
+ col.innerHTML=h;flowA.appendChild(col);});
+// B command line — smart default (recent + suggested), then families
+const clBody=document.getElementById('clBody');
+function chip(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function famColor(f){return FAM[f][0];}
+function rowHtml(r,foc){return '<div class="cl__row'+(foc?' foc':'')+'"><div class="cl__ic" style="background:'+famColor(r.f)+'">'+chip(r.n)+'</div><div><div class="cl__rn">'+r.n+'<span class="fam">'+FAM[r.f][1]+'</span></div><div class="cl__rd">'+r.d+'</div></div><span class="cl__go">jump ↵</span></div>';}
+let clh='<div class="cl__gl">Suggested — where the system thinks you should go</div>';
+clh+=rowHtml(R.find(r=>r.next),true);
+clh+='<div class="cl__gl">Recent</div>'+rowHtml(R.find(r=>r.n==='Signal Console'))+rowHtml(R.find(r=>r.n==='Outbound Studio'));
+clh+='<div class="cl__gl">Skills</div>';
+SKILLS.forEach(s=>{clh+='<div class="cl__row skillrow"><div class="cl__ic">✦</div><div><div class="cl__rn">'+s.n+'</div><div class="cl__rd">'+s.d+'</div></div><span class="cl__meta">run</span></div>';});
+clh+='<div class="cl__gl">All rooms · by family</div>';
+Object.keys(FAM).forEach(f=>{R.filter(r=>r.f===f).forEach(r=>{clh+=rowHtml(r);});});
+clBody.innerHTML=clh;
+// C rail
+const railNav=document.getElementById('railNav');
+let rh='<div class="rail__now"><div class="l">You are here</div><div class="n">Deal Workspace</div></div>';
+rh+='<div class="rail__next"><div class="l">↑ go next</div><div class="n">Getting to Signed</div><div class="w">Ramp is at the terms stage</div></div>';
+rh+='<div class="rail__hd">All rooms · 8 families</div>';
+Object.keys(FAM).forEach(f=>{const rooms=R.filter(r=>r.f===f);if(!rooms.length)return;
+ rh+='<div class="fam"><div class="fam__h"><span class="fam__dot" style="background:'+FAM[f][0]+'"></span><span class="fam__n">'+FAM[f][1]+'</span><span class="fam__c">'+rooms.length+'</span></div><div class="fam__rooms">';
+ rooms.forEach(r=>{rh+='<div class="rrow'+(r.here?' cur':'')+'">'+r.n+'</div>';});
+ rh+='</div></div>';});
+railNav.innerHTML=rh;
+// switch
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+ document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+ document.getElementById('pane-'+b.dataset.p).classList.add('on');
+});
+</script>
+</body></html>
