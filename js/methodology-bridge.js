@@ -161,8 +161,8 @@
             sessionOutcome: 'a better read on whether a deal actually has an internal mover and what to do if it does not',
             modules: [
                 { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'carry champion truth into live deal notes and risk' },
-                { href: '/app/poc-framework/', label: 'PoC Framework', reason: 'tie proof strategy to the strength of the internal champion' },
-                { href: '/app/advisor-deploy/', label: 'Advisor Deploy', reason: 'decide when outside leverage should help strengthen the thread' }
+                { href: '/pilot-desk/', label: 'Pilot Desk', reason: 'tie the pilot to the strength of the internal champion' },
+                { href: '/call-in-a-favor/', label: 'Call in a Favor', reason: 'decide when outside help should strengthen the thread' }
             ],
             outputs: [
                 'A sharper distinction between a polite contact and a real internal operator.',

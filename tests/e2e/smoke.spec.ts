@@ -354,7 +354,7 @@ test.describe("room boot smoke tests", () => {
         page
     }) => {
         // The new Preact PoC Framework at /pilot-desk/ (distinct
-        // from the legacy /app/pilot-desk/). Wave 1 ships the
+        // from the legacy /app/poc-framework/). Wave 1 ships the
         // structural shell — empty proof list, dark forge / cream cast
         // split stage. Smoke test asserts: page loads without runtime
         // errors, the topbar kicker reads POC FRAMEWORK, both forge
