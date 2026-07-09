@@ -4,7 +4,7 @@ import type { Prospect, ProspectQuality } from "./types";
  * Phase 4 / Room 13 Wave 2 — prospect quality engine.
  *
  * Faithful port of the legacy `getProspectQuality(prospect)` from
- * `app/sourcing-workbench/index.html` lines 1402-1460. Returns a
+ * `app/prospecting-desk/index.html` lines 1402-1460. Returns a
  * 0-100 score + 3-band classification (ready / researched /
  * captured) + reasons + remaining gaps.
  *

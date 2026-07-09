@@ -30,8 +30,8 @@ export function buildAdvisorRoomHref({
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
     if (!params.get("returnTo")) {
-        params.set("returnTo", "/advisor-deploy/");
-        params.set("returnLabel", "Back to Advisor Deploy");
+        params.set("returnTo", "/call-in-a-favor/");
+        params.set("returnLabel", "Back to Call in a Favor");
         if (focusObject) params.set("focusObject", focusObject);
         if (roomLabel) params.set("focusRoom", roomLabel);
         params.set("fromMode", "room");
@@ -78,12 +78,12 @@ export function hrefToPocFramework(
     accountName: string
 ): string {
     const path = dealId
-        ? `/poc-framework/?deal=${encodeURIComponent(dealId)}`
-        : "/poc-framework/";
+        ? `/pilot-desk/?deal=${encodeURIComponent(dealId)}`
+        : "/pilot-desk/";
     return buildAdvisorRoomHref({
         href: path,
         focusObject: accountName || "Advisor deployment",
-        roomLabel: "PoC Framework"
+        roomLabel: "Pilot Desk"
     });
 }
 
@@ -97,12 +97,12 @@ export function hrefToNegotiation(
     accountName: string
 ): string {
     const path = dealId
-        ? `/negotiation/?deal=${encodeURIComponent(dealId)}`
-        : "/negotiation/";
+        ? `/getting-to-signed/?deal=${encodeURIComponent(dealId)}`
+        : "/getting-to-signed/";
     return buildAdvisorRoomHref({
         href: path,
         focusObject: accountName, // empty string → no param (buildAdvisorRoomHref skips falsy)
-        roomLabel: "Negotiation"
+        roomLabel: "Getting to Signed"
     });
 }
 

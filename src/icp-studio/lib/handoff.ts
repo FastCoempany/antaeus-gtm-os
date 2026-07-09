@@ -59,9 +59,9 @@ export function hrefToTerritoryArchitect(industry: string): string {
 
 export function hrefToSourcingWorkbench(industry: string): string {
     return buildIcpStudioHref({
-        href: "/sourcing-workbench/",
+        href: "/prospecting-desk/",
         focusObject: industry,
-        roomLabel: "Sourcing Workbench"
+        roomLabel: "Prospecting Desk"
     });
 }
 

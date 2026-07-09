@@ -45,7 +45,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/negotiation/", { waitUntil: "domcontentloaded" });
+            await page.goto("/getting-to-signed/", { waitUntil: "domcontentloaded" });
             await page.evaluate((deals) => {
                 localStorage.setItem(
                     "gtmos_deal_workspaces",
@@ -78,7 +78,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/negotiation/", { waitUntil: "domcontentloaded" });
+            await page.goto("/getting-to-signed/", { waitUntil: "domcontentloaded" });
             await page.evaluate((deals) => {
                 localStorage.setItem(
                     "gtmos_deal_workspaces",
@@ -106,7 +106,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/negotiation/", { waitUntil: "domcontentloaded" });
+            await page.goto("/getting-to-signed/", { waitUntil: "domcontentloaded" });
             await page.evaluate((deals) => {
                 localStorage.setItem(
                     "gtmos_deal_workspaces",
@@ -174,7 +174,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
             expect(await negotiationCta.count()).toBe(1);
 
             const href = await negotiationCta.getAttribute("href");
-            expect(href).toContain("/negotiation/");
+            expect(href).toContain("/getting-to-signed/");
             expect(href).toContain("deal=deal_meridian");
             expect(href).toContain("focusObject=Meridian");
             expect(href).toContain("returnTo=%2Fdeal-workspace%2F");
@@ -189,7 +189,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/negotiation/?deal=deal_meridian", {
+            await page.goto("/getting-to-signed/?deal=deal_meridian", {
                 waitUntil: "domcontentloaded"
             });
             await page.evaluate((deals) => {
@@ -222,7 +222,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/negotiation/", { waitUntil: "domcontentloaded" });
+            await page.goto("/getting-to-signed/", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
 
             // Default counterparty is CFO — pushbacks should mention
@@ -255,7 +255,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
         const page = await ctx.newPage();
         try {
             // Deal Workspace already covered above. Check PoC Framework.
-            await page.goto("/poc-framework/?deal=deal_meridian", {
+            await page.goto("/pilot-desk/?deal=deal_meridian", {
                 waitUntil: "domcontentloaded"
             });
             await page.evaluate((deals) => {
@@ -272,7 +272,7 @@ test.describe("Phase 4 — Negotiation room rebuild", () => {
             expect(pocText).toContain("Rehearse the negotiation");
 
             // Advisor Deploy: check it has the same CTA in SecondaryStack.
-            await page.goto("/advisor-deploy/?deal=deal_meridian", {
+            await page.goto("/call-in-a-favor/?deal=deal_meridian", {
                 waitUntil: "networkidle"
             });
             await page.waitForTimeout(500);

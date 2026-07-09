@@ -234,7 +234,7 @@ describe("targetUrl shape", () => {
         expect(r.move.targetUrl).toContain("account=Acme%20Corp");
     });
 
-    it("routes a proof observation to /poc-framework/", () => {
+    it("routes a proof observation to /pilot-desk/", () => {
         const r = rankNextMove(
             input({
                 observations: [
@@ -248,7 +248,7 @@ describe("targetUrl shape", () => {
             })
         );
         if (!r.ok) throw new Error("expected ok");
-        expect(r.move.targetUrl).toContain("/poc-framework/");
+        expect(r.move.targetUrl).toContain("/pilot-desk/");
     });
 });
 

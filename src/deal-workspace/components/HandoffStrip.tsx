@@ -22,9 +22,9 @@ import {
  * Negotiation ↔ Advisor Deploy is now lit on the high-pressure
  * phase of a deal per canon §4.16b):
  *   - Pre-mortem this deal (primary)   → /future-autopsy/
- *   - Forge the evidence                    → /poc-framework/
- *   - Rehearse the negotiation         → /negotiation/
- *   - Deploy an advisor                → /advisor-deploy/
+ *   - Forge the evidence                    → /pilot-desk/
+ *   - Rehearse the negotiation         → /getting-to-signed/
+ *   - Deploy an advisor                → /call-in-a-favor/
  *
  * When a focal deal is pinned (focusedDeal signal), focusObject =
  * that deal's account name. When no deal is pinned, the destination

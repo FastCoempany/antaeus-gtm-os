@@ -83,7 +83,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         ifStuck:
             "The cap is the point. If the ceiling feels tight, that's it forcing you to drop the accounts that don't really fit."
     },
-    "/sourcing-workbench/": {
+    "/prospecting-desk/": {
         whatItIsFor:
             "Sourcing Workbench turns a focus into named, researched prospects you can push forward.",
         theMoveHere:
@@ -155,7 +155,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         ifStuck:
             "If nothing's pinned, there are no deals under enough pressure yet — which is a good problem to have."
     },
-    "/poc-framework/": {
+    "/pilot-desk/": {
         whatItIsFor:
             "PoC Framework turns one pilot into evidence the buyer's boss can act on — a claim, an owner, a metric, and a kill rule.",
         theMoveHere:
@@ -163,7 +163,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         ifStuck:
             "Interest isn't evidence until it can be carried without you in the room. Start with the claim and who signs off on it."
     },
-    "/advisor-deploy/": {
+    "/call-in-a-favor/": {
         whatItIsFor:
             "Advisor Deploy prepares one backchannel ask before you spend external trust, then tracks it coming back as deal movement.",
         theMoveHere:
@@ -171,7 +171,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         ifStuck:
             "Every ask should return as a deal update or a clear hold. If it can't, it's not ready to send."
     },
-    "/negotiation/": {
+    "/getting-to-signed/": {
         whatItIsFor:
             "Negotiation rehearses the procurement, finance, and terms conversation before it happens, so you walk in with positions, not improvised concessions.",
         theMoveHere:

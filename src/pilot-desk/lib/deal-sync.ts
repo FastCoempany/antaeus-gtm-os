@@ -78,7 +78,7 @@ export function loadDealsForLinking(
 /**
  * Snapshot stored in the deal's `.poc` property — small,
  * downstream-readable. Matches the shape the legacy `syncPocIntoDeal`
- * wrote (lines 366-375 of `app/poc-framework/index.html`).
+ * wrote (lines 366-375 of `app/pilot-desk/index.html`).
  */
 export interface DealPocSnapshot {
     readonly status: string;

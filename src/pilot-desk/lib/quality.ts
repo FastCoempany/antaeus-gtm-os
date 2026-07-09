@@ -13,7 +13,7 @@ import type {
  *
  * Faithful TypeScript port of the legacy `getPoCQuality` /
  * `heatLabel` / `heatColor` / `deriveMolds` (lines 137-180 of
- * `app/poc-framework/index.html`). No behavioral changes — same
+ * `app/pilot-desk/index.html`). No behavioral changes — same
  * inputs produce identical outputs.
  *
  * The room shapes one piece of pilot evidence the buyer's boss can

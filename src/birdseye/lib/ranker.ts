@@ -89,7 +89,7 @@ function buildObservationTargetUrl(obs: ObservationView): string {
             case "account":
                 return "/signal-console/";
             case "proof":
-                return "/poc-framework/";
+                return "/pilot-desk/";
             default:
                 return "/dashboard/";
         }

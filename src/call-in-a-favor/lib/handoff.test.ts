@@ -14,8 +14,8 @@ describe("buildAdvisorRoomHref", () => {
             focusObject: "Acme",
             roomLabel: "Deal Workspace"
         });
-        expect(url).toContain("returnTo=%2Fadvisor-deploy%2F");
-        expect(url).toContain("returnLabel=Back+to+Advisor+Deploy");
+        expect(url).toContain("returnTo=%2Fcall-in-a-favor%2F");
+        expect(url).toContain("returnLabel=Back+to+Call+in+a+Favor");
         expect(url).toContain("focusObject=Acme");
         expect(url).toContain("focusRoom=Deal+Workspace");
         expect(url).toContain("fromMode=room");
@@ -29,7 +29,7 @@ describe("buildAdvisorRoomHref", () => {
             roomLabel: "Deal Workspace"
         });
         expect(url).toContain("deal=d1");
-        expect(url).toContain("returnTo=%2Fadvisor-deploy%2F");
+        expect(url).toContain("returnTo=%2Fcall-in-a-favor%2F");
     });
 
     it("does not overwrite returnTo when href already has one (legacy parity)", () => {
@@ -39,7 +39,7 @@ describe("buildAdvisorRoomHref", () => {
             roomLabel: "Deal Workspace"
         });
         expect(url).toContain("returnTo=%2Felsewhere%2F");
-        expect(url).not.toContain("returnTo=%2Fadvisor-deploy%2F");
+        expect(url).not.toContain("returnTo=%2Fcall-in-a-favor%2F");
     });
 
     it("merges extra params, ignoring blanks", () => {

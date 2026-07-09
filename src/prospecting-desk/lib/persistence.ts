@@ -150,7 +150,7 @@ function parseQueryCard(raw: unknown): QueryCard | null {
     if (!id) return null;
 
     // Legacy `gtmos_sw_query_cards` rows from the static-HTML room
-    // (app/sourcing-workbench/index.html lines 1846-1869) store the
+    // (app/prospecting-desk/index.html lines 1846-1869) store the
     // operational fields under a `filters` object with keys industry /
     // companySize / geography / behavioralSignal / techSignal /
     // personaTitles / booleanString / exclusions / customNotes; the

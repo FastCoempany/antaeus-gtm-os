@@ -54,7 +54,7 @@ describe("buildPlannerHref", () => {
 
     it("merges extra params, ignoring blanks", () => {
         const url = buildPlannerHref({
-            href: "/poc-framework/",
+            href: "/pilot-desk/",
             focusObject: "Sarah",
             roomLabel: "PoC",
             extra: { mood: "tense", blank: "" }

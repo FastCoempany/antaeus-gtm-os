@@ -74,9 +74,9 @@ export function hrefToCallPlanner(accountName: string): string {
 
 export function hrefToPoC(accountName: string): string {
     return buildFutureAutopsyRoomHref({
-        href: "/poc-framework/",
+        href: "/pilot-desk/",
         focusObject: accountName,
-        roomLabel: "PoC Framework"
+        roomLabel: "Pilot Desk"
     });
 }
 
@@ -100,9 +100,9 @@ export function hrefToNegotiation(
     dealId?: string
 ): string {
     return buildFutureAutopsyRoomHref({
-        href: "/negotiation/",
+        href: "/getting-to-signed/",
         focusObject: accountName,
-        roomLabel: "Negotiation",
+        roomLabel: "Getting to Signed",
         ...(dealId ? { extra: { deal: dealId } } : {})
     });
 }

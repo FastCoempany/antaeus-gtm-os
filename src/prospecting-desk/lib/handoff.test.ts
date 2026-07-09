@@ -16,8 +16,8 @@ describe("buildSourcingHref", () => {
             account: "Acme"
         });
         expect(url.startsWith("/signal-console/?")).toBe(true);
-        expect(url).toContain("returnTo=%2Fsourcing-workbench%2F");
-        expect(url).toContain("returnLabel=Sourcing+Workbench");
+        expect(url).toContain("returnTo=%2Fprospecting-desk%2F");
+        expect(url).toContain("returnLabel=Prospecting+Desk");
         expect(url).toContain("focusObject=Acme");
         expect(url).toContain("focusRoom=Signal+Console");
         expect(url).toContain("fromMode=sourcing");

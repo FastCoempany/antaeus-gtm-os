@@ -24,9 +24,9 @@ import { bootCloudPersistence } from "./lib/cloud-persistence";
  * Entry point for the Sourcing Workbench Preact rebuild
  * (Phase 4 / Room 13 per ADR-001 §6).
  *
- * Served at /sourcing-workbench/ in dev + prod. Behind Posthog feature
+ * Served at /prospecting-desk/ in dev + prod. Behind Posthog feature
  * flag `room_sourcing_workbench_v2`. The legacy
- * `app/sourcing-workbench/index.html` flag-redirect is wired in the
+ * `app/prospecting-desk/index.html` flag-redirect is wired in the
  * same wave as this boot file.
  *
  * Boot order:
@@ -42,7 +42,7 @@ initObservability();
 const root = document.getElementById("app");
 if (!root) {
     throw new Error(
-        "Sourcing Workbench could not mount: #app root element missing from index.html"
+        "Prospecting Desk could not mount: #app root element missing from index.html"
     );
 }
 

@@ -2,11 +2,11 @@
  * Phase 4 / Room 5 Wave 5 — cross-room handoff helpers.
  *
  * Faithful port of the legacy `buildPocRoomHref` (lines 91-99 of
- * `app/poc-framework/index.html`). Builds the deep-link URL into the
+ * `app/pilot-desk/index.html`). Builds the deep-link URL into the
  * destination room with the canonical continuity params:
  *
- *   returnTo     = /poc-framework/   (where to come back)
- *   returnLabel  = "Back to PoC Framework"
+ *   returnTo     = /pilot-desk/   (where to come back)
+ *   returnLabel  = "Back to Pilot Desk"
  *   focusObject  = the account name      (what to highlight)
  *   focusRoom    = the destination room label
  *   fromMode     = "room"
@@ -14,7 +14,7 @@
  *
  * Per CLAUDE.md §2: these params are "the continuity plumbing — do
  * not break them." Every consumer-side room reads them to render the
- * "Back to PoC Framework" affordance + restore the focused object.
+ * "Back to Pilot Desk" affordance + restore the focused object.
  */
 
 export interface HandoffOptions {
@@ -32,8 +32,8 @@ export function buildPocRoomHref({
 }: HandoffOptions): string {
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
-    params.set("returnTo", "/poc-framework/");
-    params.set("returnLabel", "Back to PoC Framework");
+    params.set("returnTo", "/pilot-desk/");
+    params.set("returnLabel", "Back to Pilot Desk");
     if (focusObject) params.set("focusObject", focusObject);
     if (roomLabel) params.set("focusRoom", roomLabel);
     params.set("fromMode", "room");
@@ -72,9 +72,9 @@ export function hrefToFutureAutopsy(accountName: string): string {
 
 export function hrefToAdvisorDeploy(accountName: string): string {
     return buildPocRoomHref({
-        href: "/advisor-deploy/",
+        href: "/call-in-a-favor/",
         focusObject: accountName,
-        roomLabel: "Advisor Deploy"
+        roomLabel: "Call in a Favor"
     });
 }
 
@@ -89,9 +89,9 @@ export function hrefToNegotiation(
     dealId?: string
 ): string {
     return buildPocRoomHref({
-        href: "/negotiation/",
+        href: "/getting-to-signed/",
         focusObject: accountName,
-        roomLabel: "Negotiation",
+        roomLabel: "Getting to Signed",
         ...(dealId ? { extra: { deal: dealId } } : {})
     });
 }

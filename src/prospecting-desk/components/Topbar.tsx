@@ -23,7 +23,7 @@ export function Topbar(): JSX.Element {
         ? `${baseKicker} · sourcing against: ${focus}`
         : baseKicker;
     return (
-        <header class="sw-topbar" aria-label={t("Sourcing Workbench header")}>
+        <header class="sw-topbar" aria-label={t("Prospecting Desk header")}>
             <p class="sw-topbar__kicker">{kicker}</p>
             <h1 class="sw-topbar__title">
                 Push only the names the territory will respect.

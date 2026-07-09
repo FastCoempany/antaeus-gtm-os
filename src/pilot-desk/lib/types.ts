@@ -6,7 +6,7 @@
  * "shape one piece of pilot evidence the buyer's boss can act on,
  * so pilots stop becoming optimism theater."
  *
- * Field names mirror the legacy `app/poc-framework/index.html`
+ * Field names mirror the legacy `app/pilot-desk/index.html`
  * runtime so existing data flows in without translation.
  */
 

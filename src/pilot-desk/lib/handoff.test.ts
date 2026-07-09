@@ -19,8 +19,8 @@ describe("buildPocRoomHref", () => {
             roomLabel: "Deal Workspace"
         });
         const p = params(url);
-        expect(p.get("returnTo")).toBe("/poc-framework/");
-        expect(p.get("returnLabel")).toBe("Back to PoC Framework");
+        expect(p.get("returnTo")).toBe("/pilot-desk/");
+        expect(p.get("returnLabel")).toBe("Back to Pilot Desk");
         expect(p.get("focusObject")).toBe("Acme");
         expect(p.get("focusRoom")).toBe("Deal Workspace");
         expect(p.get("fromMode")).toBe("room");
@@ -58,8 +58,8 @@ describe("convenience builders", () => {
         );
     });
 
-    it("hrefToAdvisorDeploy targets /advisor-deploy/", () => {
-        expect(hrefToAdvisorDeploy("Acme").startsWith("/advisor-deploy/?")).toBe(
+    it("hrefToAdvisorDeploy targets /call-in-a-favor/", () => {
+        expect(hrefToAdvisorDeploy("Acme").startsWith("/call-in-a-favor/?")).toBe(
             true
         );
     });

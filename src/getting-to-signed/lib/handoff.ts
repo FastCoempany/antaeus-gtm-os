@@ -18,8 +18,8 @@
  *   - PoC Framework (proof state on the negotiating deal)
  *
  * Per `deliverables/audit/continuity-params-2026-05.md`:
- *   returnTo     = /negotiation/
- *   returnLabel  = "Back to Negotiation"
+ *   returnTo     = /getting-to-signed/
+ *   returnLabel  = "Back to Getting to Signed"
  *   focusObject  = account name (only when there's a real value —
  *                  Invariant 8: no placeholder strings)
  *   focusRoom    = destination room display label
@@ -44,8 +44,8 @@ export function buildNegotiationHref({
     const [path, existingQs] = href.split("?");
     const params = new URLSearchParams(existingQs ?? "");
     if (!params.get("returnTo")) {
-        params.set("returnTo", "/negotiation/");
-        params.set("returnLabel", "Back to Negotiation");
+        params.set("returnTo", "/getting-to-signed/");
+        params.set("returnLabel", "Back to Getting to Signed");
         if (focusObject && focusObject.trim().length > 0) {
             params.set("focusObject", focusObject.trim());
         }
@@ -94,11 +94,11 @@ export function hrefToAdvisorDeploy(
     accountName?: string
 ): string {
     const path = dealId
-        ? `/advisor-deploy/?deal=${encodeURIComponent(dealId)}`
-        : "/advisor-deploy/";
+        ? `/call-in-a-favor/?deal=${encodeURIComponent(dealId)}`
+        : "/call-in-a-favor/";
     return buildNegotiationHref({
         href: path,
-        roomLabel: "Advisor Deploy",
+        roomLabel: "Call in a Favor",
         ...(accountName ? { focusObject: accountName } : {})
     });
 }
@@ -108,11 +108,11 @@ export function hrefToPocFramework(
     accountName?: string
 ): string {
     const path = dealId
-        ? `/poc-framework/?deal=${encodeURIComponent(dealId)}`
-        : "/poc-framework/";
+        ? `/pilot-desk/?deal=${encodeURIComponent(dealId)}`
+        : "/pilot-desk/";
     return buildNegotiationHref({
         href: path,
-        roomLabel: "PoC Framework",
+        roomLabel: "Pilot Desk",
         ...(accountName ? { focusObject: accountName } : {})
     });
 }

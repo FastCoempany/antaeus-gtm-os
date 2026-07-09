@@ -4,7 +4,7 @@ import type { LinkedDealSummary, ProofDocs, ProofDraft } from "./types";
  * Phase 4 / Room 5 Wave 4 — proof document generators.
  *
  * Faithful TypeScript port of the four legacy doc templates from
- * `app/poc-framework/index.html` lines 216-292: scope, kickoff,
+ * `app/pilot-desk/index.html` lines 216-292: scope, kickoff,
  * readout, email. Each is a markdown string the operator can copy
  * into any tool.
  *

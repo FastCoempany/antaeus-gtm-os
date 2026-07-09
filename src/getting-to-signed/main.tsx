@@ -174,7 +174,7 @@ const draftDirty = computed(() => {
         (d.notes ?? "").trim().length > 0
     );
 });
-startUnsavedGuard(draftDirty, "Negotiation");
+startUnsavedGuard(draftDirty, "Getting to Signed");
 
 // Async cloud boot — replaces local state if cloud has rows; migrates
 // local up if cloud is empty. Auto-save effect starts after boot

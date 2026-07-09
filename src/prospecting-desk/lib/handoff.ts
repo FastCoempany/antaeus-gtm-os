@@ -12,8 +12,8 @@
  * pushed prospect's account.
  */
 
-const ROOM_HREF = "/sourcing-workbench/";
-const ROOM_LABEL = "Sourcing Workbench";
+const ROOM_HREF = "/prospecting-desk/";
+const ROOM_LABEL = "Prospecting Desk";
 
 interface HrefOptions {
     readonly href: string;

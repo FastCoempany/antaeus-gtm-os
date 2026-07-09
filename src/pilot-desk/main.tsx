@@ -25,9 +25,9 @@ import { bootCloudPersistence } from "./lib/cloud-persistence";
  * Entry point for the PoC Framework Preact rebuild
  * (Phase 4 / Room 5 per ADR-001 §6).
  *
- * Served at /poc-framework/ in dev + prod. Behind Posthog feature
+ * Served at /pilot-desk/ in dev + prod. Behind Posthog feature
  * flag `room_poc_framework_v2`. Wave 6 will wire the legacy
- * `app/poc-framework/index.html` flag-redirect.
+ * `app/pilot-desk/index.html` flag-redirect.
  *
  * Boot order:
  *   1. initObservability — Sentry + Posthog

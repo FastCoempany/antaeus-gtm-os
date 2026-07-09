@@ -9,14 +9,14 @@ import {
 describe("buildTerritoryHref", () => {
     it("writes the canonical continuity params", () => {
         const out = buildTerritoryHref({
-            href: "/sourcing-workbench/",
-            roomLabel: "Sourcing Workbench"
+            href: "/prospecting-desk/",
+            roomLabel: "Prospecting Desk"
         });
         const u = new URL(out, "http://x");
-        expect(u.pathname).toBe("/sourcing-workbench/");
+        expect(u.pathname).toBe("/prospecting-desk/");
         expect(u.searchParams.get("returnTo")).toBe("/territory-architect/");
         expect(u.searchParams.get("returnLabel")).toBe("Back to Territory");
-        expect(u.searchParams.get("focusRoom")).toBe("Sourcing Workbench");
+        expect(u.searchParams.get("focusRoom")).toBe("Prospecting Desk");
         expect(u.searchParams.get("fromMode")).toBe("room");
         expect(u.searchParams.get("fromSurface")).toBe("territory-architect");
     });
@@ -55,8 +55,8 @@ describe("buildTerritoryHref", () => {
 
     it("merges extra params without clobbering canonical params", () => {
         const out = buildTerritoryHref({
-            href: "/sourcing-workbench/",
-            roomLabel: "Sourcing Workbench",
+            href: "/prospecting-desk/",
+            roomLabel: "Prospecting Desk",
             extra: { account: "Meridian" }
         });
         const u = new URL(out, "http://x");
@@ -66,10 +66,10 @@ describe("buildTerritoryHref", () => {
 });
 
 describe("convenience builders", () => {
-    it("hrefToSourcingWorkbench builds /sourcing-workbench/ with provenance", () => {
+    it("hrefToSourcingWorkbench builds /prospecting-desk/ with provenance", () => {
         const u = new URL(hrefToSourcingWorkbench(), "http://x");
-        expect(u.pathname).toBe("/sourcing-workbench/");
-        expect(u.searchParams.get("focusRoom")).toBe("Sourcing Workbench");
+        expect(u.pathname).toBe("/prospecting-desk/");
+        expect(u.searchParams.get("focusRoom")).toBe("Prospecting Desk");
     });
 
     it("hrefToSignalConsole builds /signal-console/", () => {

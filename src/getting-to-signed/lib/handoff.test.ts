@@ -25,8 +25,8 @@ describe("buildNegotiationHref", () => {
             focusObject: "Acme Corp"
         });
         const qs = new URLSearchParams(url.split("?")[1]);
-        expect(qs.get("returnTo")).toBe("/negotiation/");
-        expect(qs.get("returnLabel")).toBe("Back to Negotiation");
+        expect(qs.get("returnTo")).toBe("/getting-to-signed/");
+        expect(qs.get("returnLabel")).toBe("Back to Getting to Signed");
         expect(qs.get("focusObject")).toBe("Acme Corp");
         expect(qs.get("focusRoom")).toBe("Deal Workspace");
         expect(qs.get("fromMode")).toBe("room");
@@ -41,7 +41,7 @@ describe("buildNegotiationHref", () => {
         const qs = new URLSearchParams(url.split("?")[1]);
         expect(qs.has("focusObject")).toBe(false);
         // Other params still written.
-        expect(qs.get("returnTo")).toBe("/negotiation/");
+        expect(qs.get("returnTo")).toBe("/getting-to-signed/");
         expect(qs.get("focusRoom")).toBe("Deal Workspace");
     });
 
@@ -156,15 +156,15 @@ describe("hrefToAdvisorDeploy", () => {
     it("writes focusRoom = Advisor Deploy", () => {
         const url = hrefToAdvisorDeploy("deal-123", "Acme");
         const qs = new URLSearchParams(url.split("?")[1]);
-        expect(qs.get("focusRoom")).toBe("Advisor Deploy");
+        expect(qs.get("focusRoom")).toBe("Call in a Favor");
         expect(qs.get("focusObject")).toBe("Acme");
     });
 
     it("works with no args at all (cold landing)", () => {
         const url = hrefToAdvisorDeploy();
-        expect(url).toContain("/advisor-deploy/?");
+        expect(url).toContain("/call-in-a-favor/?");
         const qs = new URLSearchParams(url.split("?")[1]);
-        expect(qs.get("returnTo")).toBe("/negotiation/");
+        expect(qs.get("returnTo")).toBe("/getting-to-signed/");
         expect(qs.has("deal")).toBe(false);
         expect(qs.has("focusObject")).toBe(false);
     });
@@ -174,7 +174,7 @@ describe("hrefToPocFramework", () => {
     it("writes focusRoom = PoC Framework", () => {
         const url = hrefToPocFramework("deal-123", "Acme");
         const qs = new URLSearchParams(url.split("?")[1]);
-        expect(qs.get("focusRoom")).toBe("PoC Framework");
+        expect(qs.get("focusRoom")).toBe("Pilot Desk");
         expect(qs.get("focusObject")).toBe("Acme");
     });
 });

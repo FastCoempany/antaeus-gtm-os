@@ -350,11 +350,11 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Phase 4 / Room 5 Wave 1 — /poc-framework/ Preact rebuild boots cleanly", async ({
+    test("Phase 4 / Room 5 Wave 1 — /pilot-desk/ Preact rebuild boots cleanly", async ({
         page
     }) => {
-        // The new Preact PoC Framework at /poc-framework/ (distinct
-        // from the legacy /app/poc-framework/). Wave 1 ships the
+        // The new Preact PoC Framework at /pilot-desk/ (distinct
+        // from the legacy /app/pilot-desk/). Wave 1 ships the
         // structural shell — empty proof list, dark forge / cream cast
         // split stage. Smoke test asserts: page loads without runtime
         // errors, the topbar kicker reads POC FRAMEWORK, both forge
@@ -362,7 +362,7 @@ test.describe("room boot smoke tests", () => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        await page.goto("/poc-framework/");
+        await page.goto("/pilot-desk/");
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".poc-topbar__kicker")).toContainText(
@@ -472,13 +472,13 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Phase 4 / Room 10 Wave 1 — /advisor-deploy/ Preact rebuild boots cleanly", async ({
+    test("Phase 4 / Room 10 Wave 1 — /call-in-a-favor/ Preact rebuild boots cleanly", async ({
         page
     }) => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        await page.goto("/advisor-deploy/");
+        await page.goto("/call-in-a-favor/");
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".ad-topbar__kicker")).toContainText(
@@ -520,13 +520,13 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Phase 4 / Room 13 Wave 1 — /sourcing-workbench/ Preact rebuild boots cleanly", async ({
+    test("Phase 4 / Room 13 Wave 1 — /prospecting-desk/ Preact rebuild boots cleanly", async ({
         page
     }) => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        await page.goto("/sourcing-workbench/");
+        await page.goto("/prospecting-desk/");
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".sw-topbar__kicker")).toContainText(
@@ -679,7 +679,7 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Phase 3 of ADR-003 — /negotiation/ Preact greenfield boots cleanly", async ({
+    test("Phase 3 of ADR-003 — /getting-to-signed/ Preact greenfield boots cleanly", async ({
         page
     }) => {
         // The new Negotiation room (canon §4.16b → live room). Greenfield
@@ -690,7 +690,7 @@ test.describe("room boot smoke tests", () => {
         const errors: string[] = [];
         page.on("pageerror", (err) => errors.push(err.message));
 
-        await page.goto("/negotiation/");
+        await page.goto("/getting-to-signed/");
         await page.waitForLoadState("networkidle");
 
         await expect(page.locator(".ng-topbar__kicker")).toContainText(

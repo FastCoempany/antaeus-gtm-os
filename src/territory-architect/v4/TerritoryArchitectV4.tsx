@@ -278,7 +278,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                                     ) : null}
                                     <div class="ta4-acts">
                                         <button type="button" class="ta4-mini" onClick={() => (drawerFocusId.value = f.id)}>{t("Open accounts")}</button>
-                                        <a class="ta4-mini" href="/sourcing-workbench/?returnTo=%2Fterritory-architect%2F&returnLabel=Territory&fromMode=room&fromSurface=territory-architect">{t("Fill from Prospecting")}</a>
+                                        <a class="ta4-mini" href="/prospecting-desk/?returnTo=%2Fterritory-architect%2F&returnLabel=Territory&fromMode=room&fromSurface=territory-architect">{t("Fill from Prospecting")}</a>
                                     </div>
                                 </div>
                             );

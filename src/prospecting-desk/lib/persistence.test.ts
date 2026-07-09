@@ -152,7 +152,7 @@ describe("legacy shape compatibility", () => {
     });
 
     it("accepts legacy query card with filters object + no top-level query", () => {
-        // Shape from app/sourcing-workbench/index.html lines 1846-1869.
+        // Shape from app/prospecting-desk/index.html lines 1846-1869.
         const legacy = [
             {
                 id: "qc_legacy_1",
@@ -248,7 +248,7 @@ describe("legacy shape compatibility", () => {
     });
 
     it("accepts legacy prospect with `name` instead of accountName", () => {
-        // Shape from app/sourcing-workbench/index.html lines 2049-2058.
+        // Shape from app/prospecting-desk/index.html lines 2049-2058.
         const legacy = [
             {
                 id: "pr_legacy_1",

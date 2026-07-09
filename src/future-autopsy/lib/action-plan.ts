@@ -84,7 +84,7 @@ function buildRoute(
             return {
                 label: "Rehearse the negotiation",
                 href: hrefToNegotiation(accountName, dealId),
-                roomLabel: "Negotiation",
+                roomLabel: "Getting to Signed",
                 tone,
                 reason
             };

@@ -26,9 +26,9 @@ import { bootAdvisorProfileCloudPersistence } from "./lib/cloud-persistence-prof
  * Entry point for the Advisor Deploy Preact rebuild
  * (Phase 4 / Room 10 per ADR-001 §6).
  *
- * Served at /advisor-deploy/ in dev + prod. Behind Posthog feature
+ * Served at /call-in-a-favor/ in dev + prod. Behind Posthog feature
  * flag `room_advisor_deploy_v2`. Wave 6 wires the legacy
- * `app/advisor-deploy/index.html` flag-redirect.
+ * `app/call-in-a-favor/index.html` flag-redirect.
  *
  * Boot order:
  *   1. initObservability — Sentry + Posthog
@@ -46,7 +46,7 @@ initObservability();
 const root = document.getElementById("app");
 if (!root) {
     throw new Error(
-        "Advisor Deploy could not mount: #app root element missing from index.html"
+        "Call in a Favor could not mount: #app root element missing from index.html"
     );
 }
 

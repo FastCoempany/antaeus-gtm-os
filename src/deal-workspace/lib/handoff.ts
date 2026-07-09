@@ -67,16 +67,16 @@ export function hrefToFutureAutopsy(accountName?: string): string {
 
 export function hrefToPocFramework(accountName?: string): string {
     return buildDealWorkspaceHref({
-        href: "/poc-framework/",
-        roomLabel: "PoC Framework",
+        href: "/pilot-desk/",
+        roomLabel: "Pilot Desk",
         ...(accountName ? { focusObject: accountName } : {})
     });
 }
 
 export function hrefToAdvisorDeploy(accountName?: string): string {
     return buildDealWorkspaceHref({
-        href: "/advisor-deploy/",
-        roomLabel: "Advisor Deploy",
+        href: "/call-in-a-favor/",
+        roomLabel: "Call in a Favor",
         ...(accountName ? { focusObject: accountName } : {})
     });
 }
@@ -100,11 +100,11 @@ export function hrefToNegotiation(
     accountName?: string
 ): string {
     const path = dealId
-        ? `/negotiation/?deal=${encodeURIComponent(dealId)}`
-        : "/negotiation/";
+        ? `/getting-to-signed/?deal=${encodeURIComponent(dealId)}`
+        : "/getting-to-signed/";
     return buildDealWorkspaceHref({
         href: path,
-        roomLabel: "Negotiation",
+        roomLabel: "Getting to Signed",
         ...(accountName ? { focusObject: accountName } : {})
     });
 }
