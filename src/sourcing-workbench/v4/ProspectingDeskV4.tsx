@@ -19,6 +19,7 @@ import type { Prospect } from "../lib/types";
 import { getProspectQuality } from "../lib/quality";
 import { computeLoomRead } from "../lib/loom-read";
 import { hrefToSignalConsole, hrefToOutboundStudio } from "../lib/handoff";
+import { saveProspect, saveQueryCard } from "../lib/cloud-persistence";
 import { enqueueInboundAccount } from "@/signal-console/lib/inbound-queue";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./prospecting-desk-v4.css";
@@ -81,6 +82,13 @@ function patchQuestion(p: Prospect, part: Partial<Prospect>): void {
     }
 }
 
+// Cloud write too — a local-only write is clobbered when cloud replaces
+// local on boot. Re-reads the canonical row so stage promotions ride along.
+function persistProspect(id: string): void {
+    const updated = prospects.value.find((x) => x.id === id);
+    if (updated) void saveProspect(updated);
+}
+
 function sendProspect(p: Prospect): void {
     const ok = enqueueInboundAccount({
         name: p.accountName,
@@ -92,24 +100,28 @@ function sendProspect(p: Prospect): void {
         return;
     }
     setProspectStage(p.id, "pushed");
+    persistProspect(p.id);
     if (selectedId.value === p.id) selectedId.value = null;
     toast(`${p.accountName} ${t("is on its way to Signal Console — it lands the next time that room opens.", { class: "body" })}`);
 }
 
 function setAside(p: Prospect): void {
     setProspectStage(p.id, "dropped");
+    persistProspect(p.id);
     if (selectedId.value === p.id) selectedId.value = null;
     toast(`${p.accountName} ${t("set aside — not who we're targeting.", { class: "body" })}`);
 }
 
 function saveSearch(): void {
     const saved = saveQueryCardFromDraft();
+    if (saved) void saveQueryCard(saved);
     if (saved) toast(t("Search saved — add the companies it turns up below.", { class: "body" }));
 }
 
 function addCompany(): void {
     const saved = saveProspectFromDraft();
     if (saved) {
+        void saveProspect(saved);
         addOpen.value = false;
         selectedId.value = saved.id;
         toast(`${saved.accountName} ${t("added to the funnel.")}`);
@@ -293,7 +305,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("Are they who we're targeting?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.notes}
                                                 placeholder={t("e.g. Yes — they own the forecast rebuild and just raised", { class: "body" })}
-                                                onInput={(e) => patchQuestion(selOpen, { notes: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { notes: (e.currentTarget as HTMLInputElement).value })}
+                                                onChange={() => persistProspect(selOpen.id)} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q2 ? "is-done" : "is-todo"}`}>
@@ -302,7 +315,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("What's our way in to the account?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.entryPoint}
                                                 placeholder={t("e.g. A shared investor sits on their board — ask for the intro", { class: "body" })}
-                                                onInput={(e) => patchQuestion(selOpen, { entryPoint: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { entryPoint: (e.currentTarget as HTMLInputElement).value })}
+                                                onChange={() => persistProspect(selOpen.id)} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q3 ? "is-done" : "is-todo"}`}>
@@ -311,7 +325,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                             <div class="pd4-qt">{t("How will we reach out?", { class: "body" })}</div>
                                             <input class="pd4-fill" value={selOpen.approach}
                                                 placeholder={t("e.g. Open on the raise, then ask for the board intro", { class: "body" })}
-                                                onInput={(e) => patchQuestion(selOpen, { approach: (e.currentTarget as HTMLInputElement).value })} />
+                                                onInput={(e) => patchQuestion(selOpen, { approach: (e.currentTarget as HTMLInputElement).value })}
+                                                onChange={() => persistProspect(selOpen.id)} />
                                         </div>
                                     </div>
                                 </div>

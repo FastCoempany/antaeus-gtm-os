@@ -9,6 +9,7 @@ import {
     totalWorked
 } from "../state";
 import { buildIcpQuality } from "../lib/quality";
+import { saveIcp } from "../lib/cloud-persistence";
 import { buildStatement, buildFocus, buildBuyingGroup } from "../lib/builders";
 import { scoreAccountAgainstIcp } from "../../signal-console/lib/icp-match";
 import type { Account } from "../../signal-console/lib/types";
@@ -94,7 +95,10 @@ export function IcpStudioV4(): JSX.Element {
     const passed = quality.checks.filter((c) => c.tone === "good").length;
 
     function save(): void {
-        saveDraftAsIcp();
+        // Cloud write too — a local-only save is clobbered when cloud
+        // replaces local on boot.
+        const icp = saveDraftAsIcp();
+        if (icp) void saveIcp(icp);
     }
 
     return (

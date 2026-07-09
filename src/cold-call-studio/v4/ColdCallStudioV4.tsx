@@ -12,6 +12,7 @@ import {
     logCall
 } from "../state";
 import { THREADS } from "../lib/threads";
+import { saveCallEntry } from "../lib/cloud-persistence";
 import { personalize } from "../lib/personalize";
 import { OUTCOME_LABELS, type Outcome, type ThreadId } from "../lib/types";
 import { hrefToSignalConsole, hrefToDealWorkspace } from "../lib/handoff";
@@ -93,6 +94,9 @@ function logOutcome(outcome: Outcome): void {
     }
     const entry = logCall(outcome);
     if (!entry) return;
+    // Cloud write too — a local-only log is clobbered when cloud
+    // replaces local on boot.
+    void saveCallEntry(entry);
     if (outcome === "meeting_booked" && account) {
         toast(`${t("Meeting booked — a deal was created for", { class: "body" })} ${account.name}.`);
     } else {

@@ -12,8 +12,10 @@ import {
     toggleNoAsk,
     logTouchFromRack,
     saveAngleFromRack,
-    setTouchOutcome
+    setTouchOutcome,
+    allTouches
 } from "../state";
+import { saveTouch, saveAngle } from "../lib/cloud-persistence";
 import {
     PERSONA_LABELS,
     TEMPERATURES,
@@ -218,7 +220,12 @@ export function OutboundStudioV4(): JSX.Element {
                             <button type="button" class="ob4-g" disabled={!ok}
                                 onClick={() => {
                                     const logged = logTouchFromRack();
-                                    if (logged) toast(`${t("Logged as sent to")} ${r.accountName.trim()}.`);
+                                    // Cloud write too — a local-only log is
+                                    // clobbered when cloud replaces local on boot.
+                                    if (logged) {
+                                        void saveTouch(logged);
+                                        toast(`${t("Logged as sent to")} ${r.accountName.trim()}.`);
+                                    }
                                 }}>
                                 {t("Mark it sent")}
                             </button>
@@ -228,7 +235,10 @@ export function OutboundStudioV4(): JSX.Element {
                             <button type="button" class="ob4-save" disabled={!ok}
                                 onClick={() => {
                                     const res = saveAngleFromRack();
-                                    if (res.saved) toast(t("Saved to reuse."));
+                                    if (res.saved) {
+                                        void saveAngle(res.angle);
+                                        toast(t("Saved to reuse."));
+                                    }
                                     else if (res.reason === "duplicate") toast(t("Already saved this one."));
                                 }}>
                                 ★ {t("Save this one")}
@@ -276,6 +286,8 @@ export function OutboundStudioV4(): JSX.Element {
                                                 onChange={(e) => {
                                                     const v = (e.currentTarget as HTMLSelectElement).value;
                                                     setTouchOutcome(touch.id, (v || null) as TouchOutcome | null);
+                                                    const updated = allTouches.value.find((x) => x.id === touch.id);
+                                                    if (updated) void saveTouch(updated);
                                                 }}>
                                                 <option value="">{t("no reply yet")}</option>
                                                 {TOUCH_OUTCOMES.map((o) => (

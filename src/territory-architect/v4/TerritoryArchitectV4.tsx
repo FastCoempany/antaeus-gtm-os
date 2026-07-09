@@ -31,6 +31,7 @@ import {
     type DispositionState
 } from "../lib/types";
 import { computeFieldRead } from "../lib/field-read";
+import { saveThesis, saveApproach, saveAccount } from "../lib/cloud-persistence";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./territory-architect-v4.css";
 
@@ -118,10 +119,20 @@ export function TerritoryArchitectV4(): JSX.Element {
         ? allAccounts.filter((a) => a.focusId === drawerFocus.id)
         : [];
 
+    // Cloud writes too — a local-only write is clobbered when cloud
+    // replaces local on boot.
+    function persistAccount(id: string): void {
+        const updated = accounts.value.find((a) => a.id === id);
+        if (updated) void saveAccount(updated);
+    }
+
     function carve(): void {
         patchThesisDraft({ axis });
         const saved = saveThesisFromDraft();
-        if (saved) carveOpen.value = false;
+        if (saved) {
+            void saveThesis(saved);
+            carveOpen.value = false;
+        }
     }
 
     return (
@@ -303,7 +314,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                                 type="button"
                                 class="ta4-mini"
                                 disabled={!approachDraft.value.name.trim() || !approachDraft.value.focusId}
-                                onClick={() => saveApproachFromDraft()}
+                                onClick={() => { const a = saveApproachFromDraft(); if (a) void saveApproach(a); }}
                             >
                                 {t("Add approach")}
                             </button>
@@ -331,13 +342,13 @@ export function TerritoryArchitectV4(): JSX.Element {
                                 drawerAccounts.map((a) => (
                                     <div class="ta4-arow" key={a.id}>
                                         <div class="ta4-anm">{a.name}</div>
-                                        <select value={a.disposition} onChange={(e) => setAccountDisposition(a.id, (e.currentTarget as HTMLSelectElement).value as DispositionState)}>
+                                        <select value={a.disposition} onChange={(e) => { setAccountDisposition(a.id, (e.currentTarget as HTMLSelectElement).value as DispositionState); persistAccount(a.id); }}>
                                             {DISPOSITIONS.map((dd) => <option value={dd} key={dd}>{DISPOSITION_LABELS[dd]}</option>)}
                                         </select>
-                                        <select value={a.tier} onChange={(e) => retierAccount(a.id, (e.currentTarget as HTMLSelectElement).value as TierId)}>
+                                        <select value={a.tier} onChange={(e) => { retierAccount(a.id, (e.currentTarget as HTMLSelectElement).value as TierId); persistAccount(a.id); }}>
                                             {TIER_IDS.map((tid) => <option value={tid} key={tid}>{TIER_LABELS[tid]}</option>)}
                                         </select>
-                                        <select value={a.focusId} title={t("Move to another division")} onChange={(e) => retagAccount(a.id, (e.currentTarget as HTMLSelectElement).value)}>
+                                        <select value={a.focusId} title={t("Move to another division")} onChange={(e) => { retagAccount(a.id, (e.currentTarget as HTMLSelectElement).value); persistAccount(a.id); }}>
                                             {allFocuses.map((f) => <option value={f.id} key={f.id}>{f.title}</option>)}
                                         </select>
                                     </div>
@@ -354,13 +365,13 @@ export function TerritoryArchitectV4(): JSX.Element {
                                             tier: drawerFocus.tier
                                         })
                                     }
-                                    onKeyDown={(e) => { if (e.key === "Enter") saveAccountFromDraft(); }}
+                                    onKeyDown={(e) => { if (e.key === "Enter") { const a = saveAccountFromDraft(); if (a) void saveAccount(a); } }}
                                 />
                                 <button
                                     type="button"
                                     class="ta4-mini"
                                     disabled={!accountDraft.value.name.trim() || alloc.total >= alloc.ceiling}
-                                    onClick={() => saveAccountFromDraft()}
+                                    onClick={() => { const a = saveAccountFromDraft(); if (a) void saveAccount(a); }}
                                 >
                                     {alloc.total >= alloc.ceiling ? t("At the cap") : t("Add")}
                                 </button>
