@@ -71,6 +71,11 @@ describe("parseBackfillCsv", () => {
         expect(skipped[0]!.reason).toContain("value");
     });
 
+    it("bare Yes/No outcome columns read as won/lost", () => {
+        const { deals } = parseBackfillCsv("account,value,won?\nAcme,10000,Yes\nGlobex,20000,No");
+        expect(deals.map((d) => d.won)).toEqual([true, false]);
+    });
+
     it("maps loss reasons by keyword and keeps the raw words", () => {
         const { deals } = parseBackfillCsv(
             "account,value,outcome,date,reason\nA,10000,lost,,budget freeze\nB,10000,lost,,champion left the company\nC,10000,lost,,pushed to next year"

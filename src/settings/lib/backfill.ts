@@ -94,7 +94,10 @@ function parseMoney(raw: string): number {
 }
 
 function parseOutcome(raw: string): boolean | null {
-    const v = raw.toLowerCase();
+    const v = raw.toLowerCase().trim();
+    // Bare Yes/No columns ("Won?") — exact match so "no" never fires
+    // inside a longer word.
+    if (v === "no" || v === "n") return false;
     if (/won|win|closed[-_ ]?won|yes|signed/.test(v)) return true;
     if (/lost|loss|closed[-_ ]?lost|no[-_ ]?decision|churn/.test(v)) return false;
     return null;

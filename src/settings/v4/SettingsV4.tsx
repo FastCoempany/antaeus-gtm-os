@@ -165,7 +165,7 @@ export function SettingsV4(): JSX.Element {
                         <div class="st4-ab">
                             {t("Sold before you had Antaeus? Paste your closed deals from a spreadsheet — one deal per line: account, deal size, won or lost, close date, and (for losses) why. A header row is fine. Your history switches on the reads that otherwise wait for new deals to close: who hits and who misses, the losses you paid for, why you win, and whether your plan is realistic.", { class: "body" })}
                             <textarea class="st4-paste" rows={5} value={backfillText.value}
-                                placeholder={"account,value,outcome,date,reason\nNorthwind,$80,000,won,2026-03-04,\nApex Mfg,64000,lost,2026-04-18,went with a competitor"}
+                                placeholder={"account,value,outcome,date,reason\nNorthwind,\"$80,000\",won,2026-03-04,\nApex Mfg,64000,lost,2026-04-18,went with a competitor"}
                                 onInput={(e) => { backfillText.value = (e.currentTarget as HTMLTextAreaElement).value; backfillDone.value = null; }} />
                             {(() => {
                                 const parsed = parseBackfillCsv(backfillText.value);
