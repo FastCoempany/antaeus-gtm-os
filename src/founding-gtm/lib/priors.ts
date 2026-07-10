@@ -76,14 +76,14 @@ export function priorForSection(
               : band === "enterprise"
                 ? "enterprise"
                 : "strategic";
-    const note = `Based on teams selling ${size} deals to ${bandName} buyers — not your record yet. Your own pattern takes this page over as the work lands.`;
+    const note = `This is how it usually goes for teams selling ${size} deals to ${bandName} buyers. As your own deals and calls land, this page rewrites itself around what actually happens for you.`;
 
     switch (id) {
         case "who_hits":
             return {
                 note,
                 body: [
-                    `There's no close pattern of your own yet, so here's the one that holds for teams selling ${size} deals: the wins come from accounts that match the stated target tightly — right size, right owner of the problem, and something observable that just happened (a raise, a new leader, a hiring push). The misses cluster in the "adjacent" accounts — close enough to take the meeting, not close enough to buy.`,
+                    `None of your own deals have closed yet, so here's the pattern that holds for teams selling ${size} deals: the wins come from accounts that match the stated target tightly — right size, right owner of the problem, and something observable that just happened (a raise, a new leader, a hiring push). The misses cluster in the "adjacent" accounts — close enough to take the meeting, not close enough to buy.`,
                     `Expect roughly ${b.winRate}% of real opportunities to close (${b.winRange} is the honest range), over about ${b.cycle} days each. When a deal of yours closes — either way — this page starts telling you where YOUR pattern differs from that, which is the part worth money.`
                 ]
             };
@@ -91,7 +91,7 @@ export function priorForSection(
             return {
                 note,
                 body: [
-                    `No sends on the record yet. What lands for teams like yours: a short first message tied to something that just happened at the account, written to the person who owns the problem — not the person who fills in the CRM. Generic templates to bought lists convert near zero and burn the address doing it.`,
+                    `No outreach logged yet. What lands for teams like yours: a short first message tied to something that just happened at the account, written to the person who owns the problem — not the person who fills in the CRM. Generic templates to bought lists convert near zero and burn the address doing it.`,
                     `The honest math at this deal size: about ${b.t2m} in every 100 targeted messages and calls turn into a first meeting. That's why the daily number in your plan looks the way it does — and why every message should carry the reason-right-now, not the pitch.`
                 ]
             };
@@ -99,7 +99,7 @@ export function priorForSection(
             return {
                 note,
                 body: [
-                    `No calls on the record yet. The questions that win second meetings are the ones that get the buyer saying something they haven't said out loud: what actually breaks today, what it costs when it does, and who signs when the fix is real. The call that stays on features gets a polite "send materials" and goes quiet.`,
+                    `No calls logged yet. The questions that win second meetings are the ones that get the buyer saying something they haven't said out loud: what actually breaks today, what it costs when it does, and who signs when the fix is real. The call that stays on features gets a polite "send materials" and goes quiet.`,
                     `The one teams your size skip most — and pay for later — is the who-signs question. Ask it early, plainly, every time. When your own calls start landing here, this page shows which questions YOUR advanced calls actually asked.`
                 ]
             };
@@ -115,7 +115,7 @@ export function priorForSection(
             return {
                 note,
                 body: [
-                    `No losses on the books yet — they're coming, and knowing the usual shape softens the tuition. The most common loss at this deal size isn't a competitor: it's no decision. The buyer agreed there was a problem, never felt enough pressure to fix it this quarter, and went quiet.`,
+                    `You haven't lost a deal yet — you will, and knowing the usual shape ahead of time softens the cost. The most common loss at this deal size isn't a competitor: it's no decision. The buyer agreed there was a problem, never felt enough pressure to fix it this quarter, and went quiet.`,
                     `The second most common: the single-threaded deal. One contact carried everything, that contact got busy or left, and the deal went dark. When a real loss lands here, write down what you won't repeat — that sentence is what this section exists for.`
                 ]
             };

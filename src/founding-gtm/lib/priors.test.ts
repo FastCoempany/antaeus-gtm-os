@@ -34,10 +34,11 @@ describe("priorForSection", () => {
         expect(priorForSection("who_hits", 10_000)!.body.join(" ")).toContain("25%");
     });
 
-    it("the note names the deal size and never claims to be the record", () => {
+    it("the note names the deal size and never claims to be the operator's own result", () => {
         const p = priorForSection("why_we_win", 80_000)!;
         expect(p.note).toContain("$80k");
-        expect(p.note.toLowerCase()).toContain("not your record");
+        expect(p.note.toLowerCase()).toContain("how it usually goes");
+        expect(p.note.toLowerCase()).toContain("your own deals");
     });
 
     it("speaks the plain voice — no banned vocabulary", () => {

@@ -122,7 +122,7 @@ export function FoundingGtmV4(): JSX.Element {
                             return (
                                 <>
                                     <div class="fg4-notice fg4-notice--prior">
-                                        <span class="fg4-nk">{t("Not your record yet")}</span>
+                                        <span class="fg4-nk">{t("How it usually goes — until your own results replace this", { class: "body" })}</span>
                                         <p>{prior.note}</p>
                                     </div>
                                     {prior.body.map((para, i) => (
