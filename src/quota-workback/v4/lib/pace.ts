@@ -1,4 +1,5 @@
 import type { Benchmark, PlanInputs, PlanMetrics, CoverageSnapshot } from "../../lib/types";
+import { bulkOutreachThisMonth } from "./bulk-outreach";
 import { computeMetrics } from "../../lib/engine";
 import { EMPTY_COVERAGE } from "../../lib/types";
 import { t } from "@/lib/voice/t";
@@ -84,6 +85,11 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
         const ts = stamp(x.createdAt) ?? stamp(x.at);
         if (ts != null && ts >= mStart) outreach += 1;
     }
+    // hand-counted daily outreach (the one-line "about 40 today" log) —
+    // counted alongside the per-touch logs so the pace read stops
+    // accusing operators who did the work but didn't log every send.
+    outreach += bulkOutreachThisMonth(st as Parameters<typeof bulkOutreachThisMonth>[0], now);
+
     let meetings = 0;
     const cc = readJson<{ calls?: ReadonlyArray<{ createdAt?: string; at?: string; outcome?: string }> }>(st, "gtmos_cold_call_log");
     for (const x of cc?.calls ?? []) {

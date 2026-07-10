@@ -14,6 +14,7 @@ import {
     buildPace,
     fmtMoney
 } from "./lib/pace";
+import { logBulkOutreach, bulkOutreachToday, BULK_LABELS } from "./lib/bulk-outreach";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./quota-workback-v4.css";
 
@@ -29,6 +30,9 @@ import "./quota-workback-v4.css";
  * day, real opportunities, first meetings — no funnel jargon.
  */
 const adjustOpen = signal(false);
+const bulkDraft = signal("");
+// Bumped after a bulk log so the memoized actuals re-read.
+const bulkVersion = signal(0);
 
 export function QuotaWorkbackV4(): JSX.Element {
     const inp = inputs.value;
@@ -37,7 +41,7 @@ export function QuotaWorkbackV4(): JSX.Element {
     const cov = coverage.value;
     // The activity logs don't change mid-visit — read them once per
     // mount instead of re-parsing four JSON blobs on every keystroke.
-    const actuals = useMemo(() => readActuals(), []);
+    const actuals = useMemo(() => readActuals(), [bulkVersion.value]);
     const believe = buildBelievability(inp, bench, m);
     const pace = buildPace(inp.quota, actuals, cov);
     const hasPlan = inp.quota > 0;
@@ -192,6 +196,22 @@ export function QuotaWorkbackV4(): JSX.Element {
                                             <span class={`qw4-ln ${behindOutreach ? "qw4-bad" : "qw4-good"}`}>{actuals.outreachPerDay}</span>
                                             <span class="qw4-lt">{t("a day this month")}</span>
                                             <span class={`qw4-gp ${behindOutreach ? "is-behind" : "is-ok"}`}>{behindOutreach ? `${outreachGap} ${t("short")}` : t("on track")}</span>
+                                        </div>
+                                        <div class="qw4-bulk">
+                                            <span class="qw4-bp">{BULK_LABELS.prompt}</span>
+                                            <input inputMode="numeric" value={bulkDraft.value} placeholder="40"
+                                                onInput={(e) => (bulkDraft.value = (e.currentTarget as HTMLInputElement).value)} />
+                                            <button type="button" disabled={!(Number(bulkDraft.value) > 0)}
+                                                onClick={() => {
+                                                    logBulkOutreach(Number(bulkDraft.value));
+                                                    bulkDraft.value = "";
+                                                    bulkVersion.value += 1;
+                                                }}>
+                                                {BULK_LABELS.action}
+                                            </button>
+                                            {bulkOutreachToday() > 0 ? (
+                                                <span class="qw4-bq">{bulkOutreachToday()} {BULK_LABELS.onRecord}</span>
+                                            ) : null}
                                         </div>
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindMeetings ? "qw4-bad" : "qw4-good"}`}>{actuals.meetingsThisMonth}</span>
