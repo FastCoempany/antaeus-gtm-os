@@ -77,7 +77,7 @@ other data-starved insight promise: Future Autopsy's empty state is a
 happy state, Readiness is gate-based, the believability read is already
 prior-driven with named benchmarks.
 
-## 3 · Backfill lane — QUEUED
+## 3 · Backfill lane — SHIPPED 2026-07-10
 
 A founder with 18 months of history in a spreadsheet/old CRM has no way to
 hand it over; their Tier 3 clock starts at zero for no reason. A rough
@@ -85,6 +85,15 @@ import (closed deals: amount, stage reached, loss reason, dates) capitalizes
 Future Autopsy calibration, Founding GTM §§5/6, and believability on day
 one. The heavy-seeding doctrine already frames win/loss history as
 "invited, not gated" — this is that invitation made real.
+
+**Shipped 2026-07-10:** Settings → Your data → "Bring your deal history."
+Paste closed deals from any spreadsheet (forgiving parser: loose header
+matching, "$80,000" money, won/lost variants, loss reasons mapped by
+keyword with the raw words kept); live preview ("12 deals read — 8 won,
+4 lost · 2 lines skipped" — unreadable rows reported by line, never
+silently dropped); commit writes cloud rows through the deals accessor
+AND the `gtmos_deal_workspaces` mirror, deduped on account + close date
+so a re-paste is safe. `src/settings/lib/backfill.ts`.
 
 ## 4 · Auto-capture — the staged path, as CORRECTED by the founder 2026-07-09
 
@@ -109,8 +118,18 @@ as setup walls.
 1. ~~Bulk capture~~ — shipped 2026-07-09.
 2. ~~Priors + labeling pass~~ — shipped for Founding GTM 2026-07-10.
 3. Backfill lane (closed-deal import).
-4. Stage 1 BCC capture (needs founder-side inbound-mail provider + DNS
-   setup; build the edge function + Settings section together).
+4. ~~Stage 1 BCC capture~~ — app side SHIPPED 2026-07-10: the
+   `inbound-email` Edge Function (secret-gated Postmark-shaped webhook →
+   token → workspace → account match by recipient domain/name → touch
+   row in `sequences`, subject/recipient/timestamp only, never the
+   body); per-workspace address minting (`workspace_profile.data
+   .capture_token`, idempotent — no schema change); the Settings
+   "Counting your work automatically" section (the BCC address with
+   per-tool set-it-once instructions; the honest stage-2
+   optional-not-on-yet explainer; the stage-4 calls guidance — no
+   dialer, ever). Founder-side remaining: provider + DNS + secrets per
+   `docs/founder-bcc-capture-setup.md` (~30 min); the address surfaces
+   in Settings the moment `VITE_CAPTURE_EMAIL_DOMAIN` is set.
 5. Stage 3 ICS calendar (edge function + poll + Settings paste field).
 6. Stage 2 email OAuth — only when chosen; optional-in-Settings framing per
    above. Start Google verification well before we want it live.
