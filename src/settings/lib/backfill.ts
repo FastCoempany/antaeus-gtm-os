@@ -239,6 +239,20 @@ export async function commitBackfill(
                 seen.add(
                     `${String(d["account_name"] ?? d["accountName"] ?? "").toLowerCase()}|${String(d["close_date"] ?? d["closeDate"] ?? "")}`
                 );
+                // Phase-2.3 passthrough rows carry the real deals inside
+                // data.migrated_from_localstorage.gtmos_deal_workspaces —
+                // expand them so a legacy-migrated workspace dedupes too.
+                const data = d["data"] as Record<string, unknown> | null | undefined;
+                const blob = (data?.["migrated_from_localstorage"] as Record<string, unknown> | undefined)?.[
+                    "gtmos_deal_workspaces"
+                ];
+                if (Array.isArray(blob)) {
+                    for (const m of blob as Array<Record<string, unknown>>) {
+                        seen.add(
+                            `${String(m["accountName"] ?? m["account_name"] ?? m["name"] ?? "").toLowerCase()}|${String(m["closeDate"] ?? m["close_date"] ?? "")}`
+                        );
+                    }
+                }
             }
         } catch (err) {
             reportError(err, { op: "settings.backfill.cloudDedupe" });

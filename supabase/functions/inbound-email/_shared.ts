@@ -123,9 +123,27 @@ export interface WatchedAccount {
     readonly domain?: string | null;
 }
 
+/**
+ * Multi-label public suffixes where "last two labels" is the suffix
+ * itself (northwind.co.uk → co.uk would collide every UK company into
+ * one). Not the full public-suffix list — the common commercial ones.
+ */
+const TWO_LABEL_SUFFIXES = new Set([
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk",
+    "com.au", "net.au", "org.au",
+    "co.jp", "or.jp", "ne.jp",
+    "co.in", "net.in", "org.in",
+    "com.br", "com.mx", "com.ar", "com.sg", "com.hk", "com.tr",
+    "co.nz", "co.za", "co.kr", "com.cn", "com.tw"
+]);
+
 function rootDomain(host: string): string {
     const parts = host.toLowerCase().split(".").filter(Boolean);
-    return parts.slice(-2).join(".");
+    const lastTwo = parts.slice(-2).join(".");
+    if (TWO_LABEL_SUFFIXES.has(lastTwo) && parts.length >= 3) {
+        return parts.slice(-3).join(".");
+    }
+    return lastTwo;
 }
 
 /**

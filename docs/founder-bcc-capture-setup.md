@@ -85,6 +85,13 @@ address" shows each operator their real address with a copy button.
 3. Open Outbound Studio: the send appears in the touch history for that
    account; the quota pace read counts it.
 
+**One timing note:** captured sends land in the cloud immediately, but
+the pace and readiness reads on other pages count them after Outbound
+Studio has been opened once since the send (that room keeps the local
+tally in sync with the cloud). In practice the numbers are never more
+than one visit behind, and the one-line hand count on the quota page
+covers the same ground on days you don't open Outbound at all.
+
 ## Rotation / troubleshooting
 
 - **Rotate the webhook secret:** `supabase secrets set

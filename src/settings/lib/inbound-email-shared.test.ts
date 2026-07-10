@@ -69,6 +69,13 @@ describe("matchAccount", () => {
         expect(matchAccount(["ops@apexmanufacturing.io"], accounts)).toBe("Apex Manufacturing");
     });
 
+    it("co.uk domains don't collide into one account", () => {
+        const uk = [{ name: "Northwind UK", domain: "northwind.co.uk" }];
+        expect(matchAccount(["sam@northwind.co.uk"], uk)).toBe("Northwind UK");
+        expect(matchAccount(["sam@mail.northwind.co.uk"], uk)).toBe("Northwind UK");
+        expect(matchAccount(["sam@unrelated.co.uk"], uk)).toBeNull();
+    });
+
     it("no match → null", () => {
         expect(matchAccount(["x@unrelated.com"], accounts)).toBeNull();
     });
