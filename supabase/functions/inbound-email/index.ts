@@ -136,6 +136,10 @@ Deno.serve(async (req: Request) => {
         sequence_key: "outbound",
         name: accountName,
         title: mail.subject || "(captured send)",
+        // Outbound Studio hydrates touch dates from the row's
+        // created_at — stamp the mail's send time so delayed delivery
+        // or webhook replays don't skew the daily pace.
+        created_at: mail.sentAt,
         data: blob
     });
     if (insErr) return json(500, { error: "touch insert failed" });

@@ -1,8 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { parseBackfillCsv, splitCsvLine, commitBackfill } from "./backfill";
 
+let mockClient: unknown = null;
 vi.mock("@/lib/data-client", () => ({
     createDataClient: () => {
+        if (mockClient) return mockClient;
         throw new Error("no env in tests — mirror-only path");
     }
 }));
@@ -71,6 +73,24 @@ describe("commitBackfill", () => {
         const mirror = JSON.parse(s.data["gtmos_deal_workspaces"]!) as Array<{ stage: string; accountName: string }>;
         expect(mirror).toHaveLength(1);
         expect(mirror[0]).toMatchObject({ accountName: "Northwind", stage: "closed-won" });
+    });
+
+    it("dedupes against cloud rows even when the device mirror is empty", async () => {
+        const s = mem();
+        mockClient = {
+            deals: {
+                list: async () => [{ account_name: "Northwind", close_date: "2026-03-04" }],
+                insert: async () => ({ id: "cloud-1" })
+            }
+        };
+        try {
+            const { deals } = parseBackfillCsv("Northwind,80000,won,2026-03-04");
+            const r = await commitBackfill(deals, s);
+            expect(r.written).toBe(0);
+            expect(r.duplicates).toBe(1);
+        } finally {
+            mockClient = null;
+        }
     });
 
     it("preserves deals already in the mirror", async () => {

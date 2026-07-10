@@ -227,6 +227,24 @@ export async function commitBackfill(
         client = null; // offline / no env — the mirror still gets the rows
     }
 
+    // The device mirror can be empty on a fresh browser while the cloud
+    // already holds a previous import — seed the dedupe set from the
+    // cloud rows too, so a re-paste never doubles the history.
+    if (client) {
+        try {
+            const cloudRows = (await client.deals.list({ limit: 1000 })) as ReadonlyArray<
+                Record<string, unknown>
+            >;
+            for (const d of cloudRows) {
+                seen.add(
+                    `${String(d["account_name"] ?? d["accountName"] ?? "").toLowerCase()}|${String(d["close_date"] ?? d["closeDate"] ?? "")}`
+                );
+            }
+        } catch (err) {
+            reportError(err, { op: "settings.backfill.cloudDedupe" });
+        }
+    }
+
     let written = 0;
     let cloudWritten = 0;
     let duplicates = 0;
