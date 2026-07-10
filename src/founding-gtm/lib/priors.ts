@@ -1,4 +1,5 @@
 import { getBand, benchmarkFor } from "@/quota-workback/lib/engine";
+import { loadInputs } from "@/quota-workback/lib/persistence";
 import type { SectionId } from "./types";
 
 /**
@@ -27,24 +28,18 @@ export interface SectionPrior {
 
 interface StorageLike {
     getItem(key: string): string | null;
+    setItem(key: string, value: string): void;
 }
 
-/** Typical deal size from the quota inputs; 50k (mid-market) default. */
+/**
+ * Typical deal size, read through the Quota room's OWN loader — so the
+ * priors resolve the same ACV the plan does, including the
+ * gtmos_outbound_seed fallback and formatted values ("75,000"). 50k
+ * (mid-market) when nothing is set anywhere.
+ */
 export function readAcv(s?: StorageLike | null): number {
-    let store: StorageLike | null = s ?? null;
-    if (!store) {
-        try {
-            store = typeof localStorage !== "undefined" ? localStorage : null;
-        } catch {
-            store = null;
-        }
-    }
-    if (!store) return 50_000;
     try {
-        const raw = store.getItem("gtmos_qw_inputs");
-        if (!raw) return 50_000;
-        const parsed = JSON.parse(raw) as Record<string, unknown>;
-        const acv = Number(parsed["acv"]);
+        const acv = loadInputs(s).acv;
         return Number.isFinite(acv) && acv > 0 ? acv : 50_000;
     } catch {
         return 50_000;

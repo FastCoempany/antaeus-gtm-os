@@ -54,11 +54,23 @@ describe("priorForSection", () => {
 
 describe("readAcv", () => {
     const store = (data: Record<string, string>) => ({
-        getItem: (k: string) => data[k] ?? null
+        getItem: (k: string) => data[k] ?? null,
+        setItem: (k: string, v: string) => {
+            data[k] = v;
+        }
     });
 
     it("reads the quota acv", () => {
         expect(readAcv(store({ gtmos_qw_inputs: JSON.stringify({ acv: 120_000 }) }))).toBe(120_000);
+    });
+
+    it("honors the quota loader's fallbacks — outbound seed + formatted values", () => {
+        expect(
+            readAcv(store({ gtmos_outbound_seed: JSON.stringify({ avg_deal_size: 180_000 }) }))
+        ).toBe(180_000);
+        expect(
+            readAcv(store({ gtmos_qw_inputs: JSON.stringify({ acv: "75,000" }) }))
+        ).toBe(75_000);
     });
 
     it("defaults to mid-market on empty or malformed storage", () => {
