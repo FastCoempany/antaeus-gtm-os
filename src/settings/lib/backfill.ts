@@ -85,7 +85,11 @@ function splitCommaLine(line: string): string[] {
 }
 
 function parseMoney(raw: string): number {
-    const n = Number(raw.replace(/[$,\s]/g, ""));
+    const cleaned = raw.replace(/[$,\s]/g, "");
+    // Number("") is 0 — a blank value cell must read as unreadable,
+    // never as a $0 deal.
+    if (!cleaned) return NaN;
+    const n = Number(cleaned);
     return Number.isFinite(n) && n >= 0 ? Math.round(n) : NaN;
 }
 
@@ -293,7 +297,14 @@ export async function commitBackfill(
         const deal = toDeal(b, id);
         if (client) {
             try {
-                const row = await client.deals.insert(dealToDbWrite(deal));
+                // Carry the close-date stamp to the cloud row too —
+                // Deal Workspace republishes the mirror from cloud, and
+                // the pace reads sum closed-won by these stamps.
+                const row = await client.deals.insert({
+                    ...dealToDbWrite(deal),
+                    created_at: deal.created_at,
+                    updated_at: deal.updated_at
+                });
                 const rowId = (row as { id?: unknown } | null)?.id;
                 if (typeof rowId === "string" && rowId) id = rowId;
                 cloudWritten++;

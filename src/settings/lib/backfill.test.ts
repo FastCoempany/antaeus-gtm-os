@@ -64,6 +64,13 @@ describe("parseBackfillCsv", () => {
         expect(skipped[1]!.reason).toContain("account");
     });
 
+    it("a blank value cell is unreadable — never a $0 deal", () => {
+        const { deals, skipped } = parseBackfillCsv("account,value,outcome\nAcme,,won\nGlobex,   ,lost");
+        expect(deals).toHaveLength(0);
+        expect(skipped).toHaveLength(2);
+        expect(skipped[0]!.reason).toContain("value");
+    });
+
     it("maps loss reasons by keyword and keeps the raw words", () => {
         const { deals } = parseBackfillCsv(
             "account,value,outcome,date,reason\nA,10000,lost,,budget freeze\nB,10000,lost,,champion left the company\nC,10000,lost,,pushed to next year"
@@ -93,6 +100,29 @@ describe("commitBackfill", () => {
         // land the win in the right month.
         expect(mirror[0]!.created_at).toContain("2026-03-04");
         expect(mirror[0]!.updated_at).toContain("2026-03-04");
+    });
+
+    it("cloud inserts carry the close-date stamps", async () => {
+        const s = mem();
+        const inserted: Array<Record<string, unknown>> = [];
+        mockClient = {
+            deals: {
+                list: async () => [],
+                insert: async (row: Record<string, unknown>) => {
+                    inserted.push(row);
+                    return { id: "cloud-1" };
+                }
+            }
+        };
+        try {
+            const { deals } = parseBackfillCsv("Northwind,80000,won,2026-03-04");
+            await commitBackfill(deals, s);
+            expect(inserted).toHaveLength(1);
+            expect(String(inserted[0]!["created_at"])).toContain("2026-03-04");
+            expect(String(inserted[0]!["updated_at"])).toContain("2026-03-04");
+        } finally {
+            mockClient = null;
+        }
     });
 
     it("dedupes against cloud rows even when the device mirror is empty", async () => {
