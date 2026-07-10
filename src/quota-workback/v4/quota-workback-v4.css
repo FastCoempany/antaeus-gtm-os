@@ -77,3 +77,11 @@
 .qw4-hl { font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.4)); margin-right: 4px; }
 .qw4-btn { font-family: var(--ds-sans, sans-serif); font-weight: 600; font-size: 13px; padding: 9px 16px; border-radius: 8px; border: 0; background: var(--ds-orange, #e6701e); color: #fff; cursor: pointer; text-decoration: none; box-shadow: 0 8px 20px -12px rgba(230,112,30,.85); }
 .qw4-gh { font-family: var(--ds-sans, sans-serif); font-weight: 500; font-size: 12.5px; padding: 8px 13px; border-radius: 8px; border: 1px solid var(--ds-hair-2, rgba(10,28,64,.15)); background: var(--ds-surface, #fff); color: var(--ds-ink-2, rgba(10,28,64,.62)); cursor: pointer; text-decoration: none; }
+
+/* ── bulk outreach — the one-line "count it" log ────────────────────── */
+.qw4-bulk{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 0 10px;border-bottom:1px solid var(--ds-hairline, rgba(14,31,64,0.08));}
+.qw4-bulk .qw4-bp{font-size:0.78rem;color:var(--ds-ink-soft, #667085);}
+.qw4-bulk input{width:64px;padding:5px 8px;border:1px solid var(--ds-hairline, rgba(14,31,64,0.16));border-radius:6px;font:inherit;font-size:0.85rem;}
+.qw4-bulk button{padding:5px 12px;border:0;border-radius:6px;background:var(--ds-ink, #0e1f40);color:#fff;font:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;}
+.qw4-bulk button:disabled{opacity:0.4;cursor:default;}
+.qw4-bulk .qw4-bq{font-size:0.74rem;color:var(--ds-forest, #1b5e3f);font-weight:600;}

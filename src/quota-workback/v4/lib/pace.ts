@@ -1,4 +1,5 @@
 import type { Benchmark, PlanInputs, PlanMetrics, CoverageSnapshot } from "../../lib/types";
+import { bulkOutreachByDayThisMonth, localDay } from "./bulk-outreach";
 import { computeMetrics } from "../../lib/engine";
 import { EMPTY_COVERAGE } from "../../lib/types";
 import { t } from "@/lib/voice/t";
@@ -72,26 +73,45 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     const mStart = monthStart(now);
     const yStart = yearStart(now);
 
-    // outreach this month: outbound touches + linkedin actions + cold calls
-    let outreach = 0;
+    // outreach this month: outbound touches + linkedin actions + cold
+    // calls, tallied per local day so the hand-counted daily totals
+    // below can merge without double-counting.
+    const loggedByDay: Record<string, number> = {};
+    const bump = (ts: number): void => {
+        const day = localDay(new Date(ts));
+        loggedByDay[day] = (loggedByDay[day] ?? 0) + 1;
+    };
     const ob = readJson<{ touches?: ReadonlyArray<{ createdAt?: string; savedAt?: string }> }>(st, "gtmos_outbound_touches");
     for (const x of ob?.touches ?? []) {
         const ts = stamp(x.createdAt) ?? stamp(x.savedAt);
-        if (ts != null && ts >= mStart) outreach += 1;
+        if (ts != null && ts >= mStart) bump(ts);
     }
     const li = readJson<{ actions?: ReadonlyArray<{ createdAt?: string; at?: string }> }>(st, "gtmos_linkedin_log");
     for (const x of li?.actions ?? []) {
         const ts = stamp(x.createdAt) ?? stamp(x.at);
-        if (ts != null && ts >= mStart) outreach += 1;
+        if (ts != null && ts >= mStart) bump(ts);
     }
     let meetings = 0;
     const cc = readJson<{ calls?: ReadonlyArray<{ createdAt?: string; at?: string; outcome?: string }> }>(st, "gtmos_cold_call_log");
     for (const x of cc?.calls ?? []) {
         const ts = stamp(x.createdAt) ?? stamp(x.at);
         if (ts != null && ts >= mStart) {
-            outreach += 1;
+            bump(ts);
             if (x.outcome === "meeting_booked") meetings += 1;
         }
+    }
+    // Hand-counted daily totals (the one-line "40 today" log). The
+    // operator types the day's TOTAL, so per day the truth is
+    // max(logged, hand count) — a floor, never an add-on. Days with
+    // only a hand count still count in full.
+    const bulkByDay = bulkOutreachByDayThisMonth(
+        st as Parameters<typeof bulkOutreachByDayThisMonth>[0],
+        now
+    );
+    let outreach = 0;
+    const days = new Set([...Object.keys(loggedByDay), ...Object.keys(bulkByDay)]);
+    for (const day of days) {
+        outreach += Math.max(loggedByDay[day] ?? 0, bulkByDay[day] ?? 0);
     }
 
     // closes: from the deal mirror
