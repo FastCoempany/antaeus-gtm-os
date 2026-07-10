@@ -29,6 +29,8 @@ import { densityState } from "@/lib/density";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "../lib/types";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { reportError } from "@/lib/observability";
+import { parseBackfillCsv, commitBackfill } from "../lib/backfill";
+import { loadCaptureToken, mintCaptureToken, captureDomain, captureAddress } from "../lib/capture";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./settings-v4.css";
 
@@ -47,6 +49,18 @@ import "./settings-v4.css";
 
 const deleteConfirm = signal("");
 const restoreBusy = signal(false);
+const backfillText = signal("");
+const backfillBusy = signal(false);
+const backfillDone = signal<string | null>(null);
+const captureToken = signal<string | null>(null);
+const captureBusy = signal(false);
+const captureErr = signal<string | null>(null);
+let captureLoaded = false;
+function ensureCaptureToken(): void {
+    if (captureLoaded) return;
+    captureLoaded = true;
+    void loadCaptureToken().then((r) => (captureToken.value = r.token));
+}
 
 async function signOut(): Promise<void> {
     try {
@@ -147,6 +161,43 @@ export function SettingsV4(): JSX.Element {
                         </div>
                     </div>
                     <details class="st4-adv">
+                        <summary>{t("Bring your deal history", { class: "body" })}</summary>
+                        <div class="st4-ab">
+                            {t("Sold before you had Antaeus? Paste your closed deals from a spreadsheet — one deal per line: account, deal size, won or lost, close date, and (for losses) why. A header row is fine. Your history switches on the reads that otherwise wait for new deals to close: who hits and who misses, the losses you paid for, why you win, and whether your plan is realistic.", { class: "body" })}
+                            <textarea class="st4-paste" rows={5} value={backfillText.value}
+                                placeholder={"account,value,outcome,date,reason\nNorthwind,$80,000,won,2026-03-04,\nApex Mfg,64000,lost,2026-04-18,went with a competitor"}
+                                onInput={(e) => { backfillText.value = (e.currentTarget as HTMLTextAreaElement).value; backfillDone.value = null; }} />
+                            {(() => {
+                                const parsed = parseBackfillCsv(backfillText.value);
+                                const won = parsed.deals.filter((d) => d.won).length;
+                                const lost = parsed.deals.length - won;
+                                return (
+                                    <div class="st4-abrow">
+                                        <span class="st4-id">
+                                            {parsed.deals.length > 0
+                                                ? `${parsed.deals.length} ${t("deals read")} — ${won} ${t("won")}, ${lost} ${t("lost")}${parsed.skipped.length > 0 ? ` · ${parsed.skipped.length} ${t("lines skipped")}` : ""}`
+                                                : backfillText.value.trim()
+                                                  ? t("Nothing readable yet — check the columns.", { class: "body" })
+                                                  : ""}
+                                        </span>
+                                        <button type="button" class="st4-btn" disabled={parsed.deals.length === 0 || backfillBusy.value}
+                                            onClick={() => {
+                                                backfillBusy.value = true;
+                                                void commitBackfill(parsed.deals).then((r) => {
+                                                    backfillBusy.value = false;
+                                                    backfillText.value = "";
+                                                    backfillDone.value = `${r.written} ${t("deals added to your history")}${r.duplicates > 0 ? ` · ${r.duplicates} ${t("already there, skipped")}` : ""}.`;
+                                                });
+                                            }}>
+                                            {backfillBusy.value ? t("Adding…") : t("Add them")}
+                                        </button>
+                                    </div>
+                                );
+                            })()}
+                            {backfillDone.value ? <div class="st4-ok">{backfillDone.value}</div> : null}
+                        </div>
+                    </details>
+                    <details class="st4-adv">
                         <summary>{t("Advanced — this device's offline copy", { class: "body" })}</summary>
                         <div class="st4-ab">
                             {t("The app also keeps a working copy on this device for offline use. You can export or clear just this device's copy — it doesn't touch your cloud workspace.", { class: "body" })}
@@ -172,6 +223,85 @@ export function SettingsV4(): JSX.Element {
                             </button>
                         </div>
                     </div>
+                </section>
+
+                {/* capture — getting the work counted without typing */}
+                <section class="st4-sec">
+                    <div class="st4-sh">{t("Counting your work automatically", { class: "body" })}</div>
+                    <div class="st4-sd">{t("The less you have to log by hand, the truer every read gets. Three ways in — all optional.", { class: "body" })}</div>
+
+                    <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCaptureToken(); }}>
+                        <summary>{t("Email — your BCC address", { class: "body" })}</summary>
+                        <div class="st4-ab">
+                            {t("Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. We keep the subject line, who it went to, and when. Never the message itself.", { class: "body" })}
+                            {(() => {
+                                const domain = captureDomain();
+                                if (!domain) {
+                                    return (
+                                        <div class="st4-cap-wait">
+                                            {t("One setup step is still on our side — the mail domain isn't live yet. The moment it is, your address appears right here.", { class: "body" })}
+                                        </div>
+                                    );
+                                }
+                                const tok = captureToken.value;
+                                return (
+                                    <div class="st4-abrow">
+                                        {tok ? (
+                                            <>
+                                                <code class="st4-cap-addr">{captureAddress(tok, domain)}</code>
+                                                <button type="button" class="st4-btn is-ghost"
+                                                    onClick={() => { void navigator.clipboard?.writeText(captureAddress(tok, domain)).catch(() => undefined); }}>
+                                                    {t("Copy it")}
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button type="button" class="st4-btn" disabled={captureBusy.value}
+                                                onClick={() => {
+                                                    captureBusy.value = true;
+                                                    captureErr.value = null;
+                                                    void mintCaptureToken().then((r) => {
+                                                        captureBusy.value = false;
+                                                        captureToken.value = r.token;
+                                                        captureErr.value = r.error;
+                                                    });
+                                                }}>
+                                                {captureBusy.value ? t("Setting up…") : t("Create my address")}
+                                            </button>
+                                        )}
+                                        {captureErr.value ? <span class="st4-id">{captureErr.value}</span> : null}
+                                    </div>
+                                );
+                            })()}
+                            <div class="st4-cap-steps">
+                                <b>{t("Set it up once, per tool:")}</b>
+                                <ul>
+                                    <li>{t("Gmail: there's no automatic BCC — type (or paste) your address into the BCC line when you send outreach. After two or three sends it autocompletes on the first letter.", { class: "body" })}</li>
+                                    <li>{t("Outlook: same — add it to the BCC line by hand. On desktop, you can pin it: New mail → Options → Bcc shows the field on every message.", { class: "body" })}</li>
+                                    <li>{t("Superhuman, Outreach, Apollo, and most sales tools: Settings has an \"always BCC\" box — paste your address there once and every send counts itself.", { class: "body" })}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="st4-adv">
+                        <summary>{t("Email — the deeper connection (optional, not on yet)", { class: "body" })}</summary>
+                        <div class="st4-ab">
+                            {t("Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet: Google requires a security review of us (not of you) before your one-click approval can exist, and we haven't started that clock. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.", { class: "body" })}
+                        </div>
+                    </details>
+
+                    <details class="st4-adv">
+                        <summary>{t("Calls — run them with your own tools", { class: "body" })}</summary>
+                        <div class="st4-ab">
+                            {t("There's no dialer in Antaeus, on purpose — call from whatever you already use: your phone, Zoom, Meet, OpenPhone, Aircall. Here's how the calls still count:", { class: "body" })}
+                            <ul>
+                                <li>{t("Cold calls: open Cold Call Studio before you dial — it hands you the game plan — and tap the outcome the moment you hang up (meeting booked, callback, voicemail…). A booked meeting creates the deal by itself.", { class: "body" })}</li>
+                                <li>{t("Scheduled discovery calls: run the call inside Discovery Studio — it's built to be glanced at while you talk, and what you capture flows straight to the deal.", { class: "body" })}</li>
+                                <li>{t("If your tool records or transcribes (Zoom, Meet, OpenPhone): after the call, skim the recap and put the two things that matter into the room you ran it from — what they admitted, and the dated next step. Two lines is enough; the rooms do the rest.", { class: "body" })}</li>
+                                <li>{t("Direct connections to call tools may come later. The habit above costs about thirty seconds a call and keeps every read honest today.", { class: "body" })}</li>
+                            </ul>
+                        </div>
+                    </details>
                 </section>
 
                 {/* preferences */}

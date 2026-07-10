@@ -55,3 +55,13 @@
 .st4-sp { margin-left: auto; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 
 .st4-toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--ds-ink, #0a1c40); color: #fff; font-family: var(--ds-mono, monospace); font-size: 12px; padding: 11px 18px; border-radius: 8px; z-index: 9; cursor: pointer; box-shadow: 0 8px 30px -10px rgba(10,28,64,.5); }
+
+/* ── bring your deal history ─────────────────────────────────────────── */
+.st4-paste{width:100%;margin:10px 0 8px;padding:8px 10px;border:1px solid var(--ds-hairline, rgba(14,31,64,0.16));border-radius:6px;font-family:var(--ds-mono, monospace);font-size:0.74rem;line-height:1.5;resize:vertical;}
+.st4-ok{margin-top:8px;font-size:0.8rem;color:var(--ds-forest, #1b5e3f);font-weight:600;}
+
+/* ── counting your work automatically ────────────────────────────────── */
+.st4-cap-addr{font-family:var(--ds-mono, monospace);font-size:0.82rem;background:rgba(37,99,235,0.07);border:1px solid rgba(37,99,235,0.2);border-radius:6px;padding:6px 10px;color:var(--ds-blue, #2563eb);}
+.st4-cap-wait{margin-top:10px;font-size:0.82rem;color:var(--ds-ink-soft, #667085);}
+.st4-cap-steps{margin-top:12px;font-size:0.82rem;}
+.st4-cap-steps ul, .st4-ab ul{margin:8px 0 0 18px;display:grid;gap:6px;font-size:0.82rem;color:var(--ds-ink-soft, #44506b);line-height:1.55;}
