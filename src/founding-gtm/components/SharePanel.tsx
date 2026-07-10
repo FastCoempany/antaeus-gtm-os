@@ -13,6 +13,7 @@ import {
     type ShareRow
 } from "../lib/share";
 import { authoredSections, readinessVerdictLabel } from "../state";
+import { withPriorsForShare, readAcv } from "../lib/priors";
 
 /**
  * SharePanel — operator-side manage UI for Founding GTM share links.
@@ -87,7 +88,7 @@ export function SharePanel() {
         errorBannerSignal.value = null;
         try {
             const snapshot = buildShareSnapshot({
-                sections: authoredSections.value,
+                sections: withPriorsForShare(authoredSections.value, readAcv()),
                 workspaceName: "Your workspace",
                 verdictLabel: readinessVerdictLabel.value
             });
@@ -134,7 +135,7 @@ export function SharePanel() {
         errorBannerSignal.value = null;
         try {
             const snapshot = buildShareSnapshot({
-                sections: authoredSections.value,
+                sections: withPriorsForShare(authoredSections.value, readAcv()),
                 workspaceName: "Your workspace",
                 verdictLabel: readinessVerdictLabel.value
             });

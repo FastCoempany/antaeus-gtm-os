@@ -134,3 +134,27 @@ export function priorForSection(
             return null;
     }
 }
+
+/**
+ * For the share snapshot: an empty section carries its prior with the
+ * source note as the LEADING paragraph, so the recipient reads it
+ * self-labeled ("This is how it usually goes for teams selling…") and
+ * never mistakes the pattern for this workspace's own results. Ready
+ * and partial sections pass through untouched.
+ */
+export function withPriorsForShare<
+    T extends {
+        readonly id: SectionId;
+        readonly status: string;
+        readonly body: ReadonlyArray<string>;
+    }
+>(sections: ReadonlyArray<T>, acv: number): ReadonlyArray<T> {
+    return sections.map((section) => {
+        if (section.status !== "empty" || section.body.length > 0) {
+            return section;
+        }
+        const prior = priorForSection(section.id, acv);
+        if (!prior) return section;
+        return { ...section, body: [prior.note, ...prior.body] };
+    });
+}

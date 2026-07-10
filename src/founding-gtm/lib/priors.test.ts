@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { priorForSection, readAcv } from "./priors";
+import { priorForSection, readAcv, withPriorsForShare } from "./priors";
 import { SECTION_IDS } from "./types";
 
 const BANNED = [
@@ -77,5 +77,21 @@ describe("readAcv", () => {
         expect(readAcv(store({}))).toBe(50_000);
         expect(readAcv(store({ gtmos_qw_inputs: "{nope" }))).toBe(50_000);
         expect(readAcv(store({ gtmos_qw_inputs: JSON.stringify({ acv: -3 }) }))).toBe(50_000);
+    });
+});
+
+describe("withPriorsForShare", () => {
+    const empty = { id: "why_we_win" as const, status: "empty", body: [] as string[] };
+    const ready = { id: "who_hits" as const, status: "ready", body: ["Real read."] };
+
+    it("an empty section shares its prior, note first — self-labeling", () => {
+        const [shared] = withPriorsForShare([empty], 50_000);
+        expect(shared!.body.length).toBeGreaterThanOrEqual(3);
+        expect(shared!.body[0]!.toLowerCase()).toContain("how it usually goes");
+    });
+
+    it("ready sections pass through untouched", () => {
+        const [shared] = withPriorsForShare([ready], 50_000);
+        expect(shared!.body).toEqual(["Real read."]);
     });
 });
