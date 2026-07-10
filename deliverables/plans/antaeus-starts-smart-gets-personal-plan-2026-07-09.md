@@ -44,7 +44,7 @@ the pace math counts it. Per-account logging stays for touches that matter
 - Wired into `readActuals()` outreach; one small input on the pace strand
   ("Sent more than you logged? Type today's real number." → **Count it**).
 
-## 2 · Priors before posteriors — NEXT
+## 2 · Priors before posteriors — SHIPPED for Founding GTM 2026-07-10
 
 The app is already full of priors (quota benchmark bands, the autopsy cause
 tables, stage-death stories, heat weights, the discovery frameworks) — they
@@ -64,6 +64,18 @@ work:
 
 Surface-level change is a content source + a label per section — no layout
 changes.
+
+**Shipped 2026-07-10 (Founding GTM):** `src/founding-gtm/lib/priors.ts` —
+every part of the open book renders a band-aware authored pattern when
+empty, led by a blue "NOT YOUR RECORD YET" source note ("Based on teams
+selling $X deals to <band> buyers — your own pattern takes this page over
+as the work lands"). Every number is drawn from the same
+`benchmarkFor(acv)` the Quota room uses — one source of truth. The
+operator's own authored read wins the moment a section has anything real
+to say (the existing path). Sweep of the other Tier 3 surfaces found no
+other data-starved insight promise: Future Autopsy's empty state is a
+happy state, Readiness is gate-based, the believability read is already
+prior-driven with named benchmarks.
 
 ## 3 · Backfill lane — QUEUED
 
@@ -95,7 +107,7 @@ as setup walls.
 ## Sequencing
 
 1. ~~Bulk capture~~ — shipped 2026-07-09.
-2. Priors + labeling pass across Tier 3 surfaces.
+2. ~~Priors + labeling pass~~ — shipped for Founding GTM 2026-07-10.
 3. Backfill lane (closed-deal import).
 4. Stage 1 BCC capture (needs founder-side inbound-mail provider + DNS
    setup; build the edge function + Settings section together).
