@@ -60,3 +60,8 @@
 .fg4-nav { margin-top: auto; display: flex; justify-content: space-between; border-top: 1px solid var(--ds-hair, rgba(10,28,64,.09)); padding-top: 16px; }
 .fg4-pg { font-family: var(--ds-mono, monospace); font-size: 11.5px; color: var(--ds-blue, #2563eb); background: 0; border: 0; cursor: pointer; }
 .fg4-pg:hover { text-decoration: underline; }
+
+/* ── priors — the pattern for teams your size, before your record ───── */
+.fg4-notice--prior { border-left-color: var(--ds-blue, #2563eb); }
+.fg4-notice--prior .fg4-nk { color: var(--ds-blue, #2563eb); }
+.fg4-para--prior { color: var(--ds-ink-2, rgba(10,28,64,.72)); }

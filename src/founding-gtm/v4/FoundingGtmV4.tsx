@@ -6,6 +6,7 @@ import { countReady } from "../lib/sections";
 import { SECTION_IDS, type SectionId, type AuthoredSection } from "../lib/types";
 import { SharePanel } from "../components/SharePanel";
 import { CeremonyOverlay } from "../components/CeremonyOverlay";
+import { priorForSection, readAcv } from "../lib/priors";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./founding-gtm-v4.css";
 
@@ -104,9 +105,32 @@ export function FoundingGtmV4(): JSX.Element {
                     </div>
 
                     {open.status === "empty" ? (
-                        <p class="fg4-emptyread">
-                            {t("Nothing here yet — this part writes itself as the work lands in the rooms that feed it. It's shown empty on purpose: a hire should see what's real, not a filler paragraph.", { class: "body" })}
-                        </p>
+                        (() => {
+                            // Starts smart: an empty part renders the authored
+                            // pattern for teams this size, labeled honestly in
+                            // the blue system role. The operator's own record
+                            // takes the page over the moment the section has
+                            // anything real to say (the branch below).
+                            const prior = priorForSection(open.id, readAcv());
+                            if (!prior) {
+                                return (
+                                    <p class="fg4-emptyread">
+                                        {t("Nothing here yet — this part writes itself as the work lands in the rooms that feed it.", { class: "body" })}
+                                    </p>
+                                );
+                            }
+                            return (
+                                <>
+                                    <div class="fg4-notice fg4-notice--prior">
+                                        <span class="fg4-nk">{t("How it usually goes — until your own results replace this", { class: "body" })}</span>
+                                        <p>{prior.note}</p>
+                                    </div>
+                                    {prior.body.map((para, i) => (
+                                        <p class="fg4-para fg4-para--prior" key={`${open.id}-prior-${i}`}>{para}</p>
+                                    ))}
+                                </>
+                            );
+                        })()
                     ) : (
                         <>
                             {open.body.map((para, i) => (
