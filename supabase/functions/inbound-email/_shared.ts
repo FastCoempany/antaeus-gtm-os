@@ -27,6 +27,14 @@ export interface InboundPayload {
     readonly CcFull?: ReadonlyArray<InboundAddress>;
     readonly Bcc?: string;
     readonly BccFull?: ReadonlyArray<InboundAddress>;
+    /**
+     * A BCC'd capture address is usually NOT in the To/Cc headers —
+     * Postmark exposes the actual delivery address here, and the
+     * `+hash` part separately as MailboxHash. These are the primary
+     * signal for the BCC path.
+     */
+    readonly OriginalRecipient?: string;
+    readonly MailboxHash?: string;
     readonly Subject?: string;
     readonly Date?: string;
 }
@@ -81,7 +89,17 @@ export function parseInbound(payload: InboundPayload, localPart = "log"): Parsed
         ...fullList(payload.CcFull, payload.Cc),
         ...fullList(payload.BccFull, payload.Bcc)
     ];
-    const captureToken = extractCaptureToken(all, localPart);
+    // BCC path first: MailboxHash IS the token for log+<token>@ mail;
+    // OriginalRecipient carries the full delivery address. The header
+    // lists are the fallback (To/Cc'd capture address).
+    const hash = (payload.MailboxHash ?? "").trim().toLowerCase();
+    const captureToken =
+        (/^[a-z0-9]{8,64}$/.test(hash) ? hash : null) ??
+        extractCaptureToken(
+            payload.OriginalRecipient ? [payload.OriginalRecipient.trim().toLowerCase()] : [],
+            localPart
+        ) ??
+        extractCaptureToken(all, localPart);
     const captureRx = new RegExp(`^${localPart}\\+`, "i");
     const recipients = [...new Set(all.filter((a) => !captureRx.test(a)))];
     const from = fullList(

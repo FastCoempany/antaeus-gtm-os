@@ -90,19 +90,32 @@ Deno.serve(async (req: Request) => {
         return json(200, { ok: true, skipped: "unknown capture token" });
     }
 
-    // Watched accounts for the match.
+    // The touch row needs a real user_id (NOT NULL; the auth.uid()
+    // default resolves to nothing in a webhook context) — attribute
+    // captures to the workspace owner, falling back to any member.
+    const { data: members } = await sb
+        .from("workspace_members")
+        .select("user_id, role")
+        .eq("workspace_id", workspaceId)
+        .limit(20);
+    const owner =
+        (members ?? []).find((m) => m.role === "owner") ?? (members ?? [])[0];
+    const userId = owner?.user_id as string | undefined;
+    if (!userId) {
+        return json(200, { ok: true, skipped: "workspace has no members" });
+    }
+
+    // Watched accounts for the match (account_name + domain are
+    // top-level columns; account_key is the fallback name).
     const { data: accountRows } = await sb
         .from("signal_console_accounts")
-        .select("name, data")
+        .select("account_key, account_name, domain")
         .eq("workspace_id", workspaceId)
         .limit(500);
-    const accounts: WatchedAccount[] = (accountRows ?? []).map((r) => {
-        const blob = (r.data ?? {}) as Record<string, unknown>;
-        return {
-            name: String(r.name ?? ""),
-            domain: typeof blob["domain"] === "string" ? (blob["domain"] as string) : null
-        };
-    });
+    const accounts: WatchedAccount[] = (accountRows ?? []).map((r) => ({
+        name: String(r.account_name ?? r.account_key ?? ""),
+        domain: typeof r.domain === "string" ? r.domain : null
+    }));
 
     const matched = matchAccount(mail.recipients, accounts);
     const recipient = mail.recipients[0]!;
@@ -119,6 +132,7 @@ Deno.serve(async (req: Request) => {
     });
     const { error: insErr } = await sb.from("sequences").insert({
         workspace_id: workspaceId,
+        user_id: userId,
         sequence_key: "outbound",
         name: accountName,
         title: mail.subject || "(captured send)",

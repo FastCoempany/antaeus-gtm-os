@@ -30,6 +30,26 @@ describe("inbound email parsing", () => {
         expect(mail.recipients).toEqual(["sarah@northwind.com"]);
     });
 
+    it("real BCC sends: MailboxHash carries the token, To has only the buyer", () => {
+        const mail = parseInbound({
+            From: "me@vectyr.ai",
+            ToFull: [{ email: "sarah@northwind.com" }],
+            OriginalRecipient: "log+aabbccddeeff0011@in.antaeus.app",
+            MailboxHash: "aabbccddeeff0011",
+            Subject: "hello"
+        });
+        expect(mail.captureToken).toBe("aabbccddeeff0011");
+        expect(mail.recipients).toEqual(["sarah@northwind.com"]);
+    });
+
+    it("OriginalRecipient alone is enough when MailboxHash is absent", () => {
+        const mail = parseInbound({
+            ToFull: [{ email: "sarah@northwind.com" }],
+            OriginalRecipient: "log+aabbccddeeff@in.antaeus.app"
+        });
+        expect(mail.captureToken).toBe("aabbccddeeff");
+    });
+
     it("no token → null, mail is skippable", () => {
         expect(extractCaptureToken(["someone@example.com"])).toBeNull();
     });
