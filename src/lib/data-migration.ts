@@ -659,6 +659,7 @@ function toAccessorName(table: TableName): string {
         // table union — the migration never reads from it.
         outdoors_events: "outdoorsEvents",
         outdoors_events_runs: "outdoorsEventsRuns",
+        captured_meetings: "capturedMeetings",
         proposed_modifications: "proposedModifications",
         workspace_skill_overrides: "workspaceSkillOverrides",
         active_observation_variants: "activeObservationVariants",

@@ -130,6 +130,18 @@ as setup walls.
    dialer, ever). Founder-side remaining: provider + DNS + secrets per
    `docs/founder-bcc-capture-setup.md` (~30 min); the address surfaces
    in Settings the moment `VITE_CAPTURE_EMAIL_DOMAIN` is set.
-5. Stage 3 ICS calendar (edge function + poll + Settings paste field).
+5. ~~Stage 3 ICS calendar~~ — SHIPPED 2026-07-10, fully user-side:
+   `captured_meetings` table (service-role writer, member reads); the
+   `calendar-sync` Edge Function (fetches the pasted secret iCal link,
+   parses VEVENTs incl. simple DAILY/WEEKLY recurrence, keeps ONLY
+   meetings with an attendee at a watched account — personal events
+   never stored; upserts per occurrence); Settings "Calendar — paste
+   your link" with per-provider get-the-link steps (Google / Outlook /
+   Apple), instant Connect feedback ("found N meetings with accounts
+   you watch"), check-now + disconnect; the quota pace read counts
+   held-this-month calendar meetings as a floor (max-merge with logged
+   bookings, never double-counted). Founder-side: deploy the function +
+   enable the 6-hourly cron (migration 20260710210001) — no provider,
+   no DNS.
 6. Stage 2 email OAuth — only when chosen; optional-in-Settings framing per
    above. Start Google verification well before we want it live.

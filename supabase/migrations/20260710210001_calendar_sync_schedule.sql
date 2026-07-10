@@ -1,0 +1,23 @@
+-- Calendar sync schedule — COMMENTED OUT by default (same pattern as
+-- the heartbeat + briefing pipeline). Founder enables after:
+--   1. supabase functions deploy calendar-sync --no-verify-jwt
+--   2. supabase secrets set CALENDAR_SYNC_SECRET=<long-random-string>
+--   3. Uncomment + run the block below in the Supabase SQL Editor,
+--      pasting the same secret into the URL.
+--
+-- Every 6 hours is plenty — meetings don't churn minute to minute, and
+-- the Settings "Check my calendar now" button syncs on demand.
+--
+-- select cron.schedule(
+--     'antaeus-calendar-sync',
+--     '0 */6 * * *',
+--     $$
+--     select net.http_post(
+--         url := 'https://wjdqmgxwulqxxxnyuzyl.supabase.co/functions/v1/calendar-sync?secret=<CALENDAR_SYNC_SECRET>',
+--         headers := '{"Content-Type": "application/json"}'::jsonb,
+--         body := '{"action":"run_all"}'::jsonb
+--     );
+--     $$
+-- );
+
+select 1;

@@ -30,7 +30,15 @@ import { PRODUCT_CATEGORIES, type ProductCategory } from "../lib/types";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { reportError } from "@/lib/observability";
 import { parseBackfillCsv, commitBackfill } from "../lib/backfill";
-import { loadCaptureToken, mintCaptureToken, captureDomain, captureAddress } from "../lib/capture";
+import {
+    loadCaptureToken,
+    mintCaptureToken,
+    captureDomain,
+    captureAddress,
+    loadCalendarUrl,
+    saveCalendarUrl,
+    syncCalendarNow
+} from "../lib/capture";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import "./settings-v4.css";
 
@@ -60,6 +68,45 @@ function ensureCaptureToken(): void {
     if (captureLoaded) return;
     captureLoaded = true;
     void loadCaptureToken().then((r) => (captureToken.value = r.token));
+}
+const calUrl = signal<string | null>(null);
+const calDraft = signal("");
+const calBusy = signal(false);
+const calMsg = signal<string | null>(null);
+let calLoaded = false;
+function ensureCalendar(): void {
+    if (calLoaded) return;
+    calLoaded = true;
+    void loadCalendarUrl().then((r) => (calUrl.value = r.url));
+}
+function connectCalendar(): void {
+    calBusy.value = true;
+    calMsg.value = null;
+    void saveCalendarUrl(calDraft.value).then((saved) => {
+        if (!saved.ok) {
+            calBusy.value = false;
+            calMsg.value = saved.error;
+            return;
+        }
+        calUrl.value = calDraft.value.trim();
+        calDraft.value = "";
+        void syncCalendarNow().then((r) => {
+            calBusy.value = false;
+            calMsg.value = r.ok
+                ? r.matched > 0
+                    ? `Connected — found ${r.matched} meeting${r.matched === 1 ? "" : "s"} with accounts you watch.`
+                    : "Connected. No meetings with watched accounts in the current window — they'll count as they land."
+                : r.error;
+        });
+    });
+}
+function disconnectCalendar(): void {
+    calBusy.value = true;
+    void saveCalendarUrl(null).then(() => {
+        calBusy.value = false;
+        calUrl.value = null;
+        calMsg.value = "Disconnected. Nothing new gets read.";
+    });
 }
 
 async function signOut(): Promise<void> {
@@ -280,6 +327,41 @@ export function SettingsV4(): JSX.Element {
                                     <li>{t("Superhuman, Outreach, Apollo, and most sales tools: Settings has an \"always BCC\" box — paste your address there once and every send counts itself.", { class: "body" })}</li>
                                 </ul>
                             </div>
+                        </div>
+                    </details>
+
+                    <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCalendar(); }}>
+                        <summary>{t("Calendar — paste your link", { class: "body" })}</summary>
+                        <div class="st4-ab">
+                            {t("Paste your calendar's private link and meetings with accounts you're watching count themselves — no approvals, no setup on your calendar's side. We keep only meetings where someone from a watched account is invited: the title, the time, and who. Everything else on your calendar is ignored and never stored.", { class: "body" })}
+                            <div class="st4-cap-steps">
+                                <b>{t("Where the link lives:")}</b>
+                                <ul>
+                                    <li>{t("Google Calendar: calendar.google.com → the gear → Settings → click your calendar on the left → scroll to \"Secret address in iCal format\" → copy.", { class: "body" })}</li>
+                                    <li>{t("Outlook: outlook.com → the gear → Calendar → Shared calendars → publish your calendar → copy the ICS link.", { class: "body" })}</li>
+                                    <li>{t("Apple iCloud: icloud.com/calendar → the share icon next to your calendar → Public Calendar → copy the link.", { class: "body" })}</li>
+                                </ul>
+                            </div>
+                            {calUrl.value ? (
+                                <div class="st4-abrow">
+                                    <span class="st4-ok">{t("Your calendar is connected.")}</span>
+                                    <button type="button" class="st4-btn is-ghost" disabled={calBusy.value}
+                                        onClick={() => { calBusy.value = true; calMsg.value = null; void syncCalendarNow().then((r) => { calBusy.value = false; calMsg.value = r.ok ? `${t("Checked — ")}${r.matched} ${t("meetings with watched accounts in the current window.", { class: "body" })}` : r.error; }); }}>
+                                        {calBusy.value ? t("Checking…") : t("Check my calendar now", { class: "body" })}
+                                    </button>
+                                    <button type="button" class="st4-btn is-ghost" disabled={calBusy.value} onClick={disconnectCalendar}>{t("Disconnect")}</button>
+                                </div>
+                            ) : (
+                                <div class="st4-abrow">
+                                    <input class="st4-cal-in" placeholder="https://calendar.google.com/calendar/ical/…/basic.ics"
+                                        value={calDraft.value}
+                                        onInput={(e) => (calDraft.value = (e.currentTarget as HTMLInputElement).value)} />
+                                    <button type="button" class="st4-btn" disabled={!calDraft.value.trim() || calBusy.value} onClick={connectCalendar}>
+                                        {calBusy.value ? t("Connecting…") : t("Connect")}
+                                    </button>
+                                </div>
+                            )}
+                            {calMsg.value ? <div class="st4-id" style="margin-top:8px">{calMsg.value}</div> : null}
                         </div>
                     </details>
 
