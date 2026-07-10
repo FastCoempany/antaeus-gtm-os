@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
+import { projectHorizonDays,
     autopsyUniverseScore,
     generateAutopsy,
     killSwitchFor,
@@ -34,7 +34,11 @@ describe("generateAutopsy", () => {
         });
         const doc = generateAutopsy(v);
         expect(doc.deal.id).toBe("d");
-        expect(doc.horizonDays).toBe(DEFAULT_PREFS.autopsyHorizonDays);
+        // The horizon is projected per deal now (risk-scaled, 7-90) —
+        // not the flat prefs constant.
+        expect(doc.horizonDays).toBeGreaterThanOrEqual(7);
+        expect(doc.horizonDays).toBeLessThanOrEqual(90);
+        expect(doc.horizonDays).toBe(90 - Math.round(v.riskScore));
         expect(doc.causes.length).toBeGreaterThan(0);
         expect(doc.chapters.length).toBeGreaterThan(0);
         expect(doc.winConditions.length).toBeGreaterThanOrEqual(5);
@@ -181,5 +185,43 @@ describe("rankAutopsyUniverse", () => {
         );
         const out = rankAutopsyUniverse(many, { limit: 4 });
         expect(out).toHaveLength(4);
+    });
+});
+
+describe("projectHorizonDays", () => {
+    it("scales the window off the risk score, clamped 7-90", () => {
+        expect(projectHorizonDays({ riskScore: 30 })).toBe(60);
+        expect(projectHorizonDays({ riskScore: 80 })).toBe(10);
+        expect(projectHorizonDays({ riskScore: 95 })).toBe(7);
+        expect(projectHorizonDays({ riskScore: 2 })).toBe(88);
+    });
+
+    it("a real close date caps the countdown", () => {
+        const now = new Date("2026-07-10T12:00:00Z");
+        expect(
+            projectHorizonDays({ riskScore: 30, closeDate: "2026-07-20" }, 45, now)
+        ).toBe(10);
+    });
+
+    it("a deal past its close date is inside its final week", () => {
+        const now = new Date("2026-07-10T12:00:00Z");
+        expect(
+            projectHorizonDays({ riskScore: 30, closeDate: "2026-07-01" }, 45, now)
+        ).toBe(7);
+    });
+
+    it("falls back when the risk score isn't usable", () => {
+        expect(projectHorizonDays({ riskScore: 0 })).toBe(DEFAULT_PREFS.autopsyHorizonDays);
+        expect(projectHorizonDays({ riskScore: Number.NaN }, 33)).toBe(33);
+    });
+
+    it("re-times the authored story to the projected countdown", () => {
+        const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
+            now: NOW,
+            storage: STORAGE
+        });
+        const doc = generateAutopsy(v);
+        expect(doc.loseStory.startsWith(`${doc.horizonDays} days later`)).toBe(true);
+        expect(doc.loseStory.startsWith("45 days later")).toBe(doc.horizonDays === 45);
     });
 });

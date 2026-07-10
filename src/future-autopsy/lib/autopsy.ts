@@ -33,8 +33,46 @@ export interface GenerateOptions {
 
 const STORY_MAX = 700;
 
+function retime(lead: string, horizonDays: number): string {
+    return lead.replace(/^45 days later/, `${horizonDays} days later`);
+}
+
 function clip(s: string, max = STORY_MAX): string {
     return s.length > max ? s.slice(0, max) : s;
+}
+
+/**
+ * Project THIS deal's countdown instead of a flat constant
+ * (founder-approved 2026-07-10; the 45-day constant was the flagged
+ * assumption). The heuristic is deliberately explainable:
+ *
+ *   - the risk score sets the window: a deal at risk 80 has ~10 days
+ *     of rope, a deal at risk 30 has ~60 (clamped 7–90). Staleness,
+ *     stage-stuck time, and qualification are already inside the risk
+ *     score — no double counting.
+ *   - a real close date caps it: the countdown never runs past the
+ *     date the deal is supposed to close, and a deal already past its
+ *     close date is inside its final week.
+ *
+ * Still a heuristic, not a model — calibration against real losses is
+ * future work once enough outcome history exists.
+ */
+export function projectHorizonDays(
+    vitals: Pick<ComputedVitals, "riskScore" | "closeDate">,
+    fallback: number = DEFAULT_PREFS.autopsyHorizonDays,
+    now: Date = new Date()
+): number {
+    const risk = Number(vitals.riskScore);
+    if (!Number.isFinite(risk) || risk <= 0) return fallback;
+    let days = Math.max(7, Math.min(90, Math.round(90 - risk)));
+    if (vitals.closeDate) {
+        const closeMs = Date.parse(vitals.closeDate);
+        if (Number.isFinite(closeMs)) {
+            const toClose = Math.ceil((closeMs - now.getTime()) / 86_400_000);
+            days = toClose <= 0 ? Math.min(days, 7) : Math.min(days, toClose);
+        }
+    }
+    return Math.max(7, days);
 }
 
 export function generateAutopsy(
@@ -42,7 +80,8 @@ export function generateAutopsy(
     options: GenerateOptions = {}
 ): AutopsyDoc {
     const prefs = options.prefs ?? DEFAULT_PREFS;
-    const horizonDays = options.horizonDays ?? prefs.autopsyHorizonDays;
+    const horizonDays =
+        options.horizonDays ?? projectHorizonDays(vitals, prefs.autopsyHorizonDays);
 
     const causes = topCauses(vitals, prefs, 5);
     const chapters = causes
@@ -82,8 +121,11 @@ export function generateAutopsy(
         winConditions,
         countermeasures,
         killSwitch: killSwitchFor(vitals, prefs),
-        loseStory: clip(loseLead + loseTail),
-        winStory: clip(winLead + winTail)
+        // The authored leads open with "45 days later" — re-time the
+        // prose to this deal's projected countdown so the story and the
+        // number on the face agree.
+        loseStory: clip(retime(loseLead, horizonDays) + loseTail),
+        winStory: clip(retime(winLead, horizonDays) + winTail)
     };
 }
 
