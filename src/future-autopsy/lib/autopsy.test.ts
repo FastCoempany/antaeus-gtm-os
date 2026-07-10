@@ -203,6 +203,13 @@ describe("projectHorizonDays", () => {
         ).toBe(10);
     });
 
+    it("a close date inside the week wins over the 7-day floor", () => {
+        const now = new Date("2026-07-10T12:00:00Z");
+        expect(
+            projectHorizonDays({ riskScore: 30, closeDate: "2026-07-13" }, 45, now)
+        ).toBe(3);
+    });
+
     it("a deal past its close date is inside its final week", () => {
         const now = new Date("2026-07-10T12:00:00Z");
         expect(

@@ -64,6 +64,8 @@ export function projectHorizonDays(
 ): number {
     const risk = Number(vitals.riskScore);
     if (!Number.isFinite(risk) || risk <= 0) return fallback;
+    // The 7-day floor applies to the risk-derived window only — a real
+    // close date closer than that is the truth and wins.
     let days = Math.max(7, Math.min(90, Math.round(90 - risk)));
     if (vitals.closeDate) {
         const closeMs = Date.parse(vitals.closeDate);
@@ -72,7 +74,7 @@ export function projectHorizonDays(
             days = toClose <= 0 ? Math.min(days, 7) : Math.min(days, toClose);
         }
     }
-    return Math.max(7, days);
+    return Math.max(1, days);
 }
 
 export function generateAutopsy(
