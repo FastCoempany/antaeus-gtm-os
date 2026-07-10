@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
     readBulkCounts,
+    bulkOutreachByDayThisMonth,
     logBulkOutreach,
     bulkOutreachThisMonth,
     bulkOutreachToday,
@@ -45,6 +46,15 @@ describe("bulk outreach counts", () => {
         logBulkOutreach(25, s, new Date(2026, 6, 9));
         logBulkOutreach(99, s, new Date(2026, 5, 30));
         expect(bulkOutreachThisMonth(s, new Date(2026, 6, 10))).toBe(65);
+    });
+
+    it("per-day month map filters to the current month", () => {
+        const s = mem();
+        logBulkOutreach(40, s, new Date(2026, 6, 8));
+        logBulkOutreach(99, s, new Date(2026, 5, 30));
+        expect(bulkOutreachByDayThisMonth(s, new Date(2026, 6, 10))).toEqual({
+            "2026-07-08": 40
+        });
     });
 
     it("today's count reads back for the face", () => {

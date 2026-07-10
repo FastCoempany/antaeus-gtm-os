@@ -34,6 +34,31 @@ describe("readActuals", () => {
         expect(a.outreachPerDay).toBeGreaterThan(0);
     });
 
+    it("a hand count is the day's floor, never an add-on", () => {
+        const s = new FakeStorage();
+        // 3 touches logged today + a hand count of 40 for today → 40, not 43.
+        const today = new Date(NOW);
+        s.setItem("gtmos_outbound_touches", JSON.stringify({ touches: [
+            { createdAt: today.toISOString() },
+            { createdAt: today.toISOString() },
+            { createdAt: today.toISOString() }
+        ]}));
+        const day = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        s.setItem("gtmos_bulk_outreach_v1", JSON.stringify({ [day]: 40 }));
+        const a = readActuals(s, NOW);
+        // 6 workdays elapsed by Jul 8 2026 (Wed) → 40 / 6 ≈ 6.7
+        expect(a.outreachPerDay).toBe(6.7);
+        expect(a.hasActivity).toBe(true);
+    });
+
+    it("a hand count alone turns activity on (the quiet-state exit)", () => {
+        const s = new FakeStorage();
+        s.setItem("gtmos_bulk_outreach_v1", JSON.stringify({ "2026-07-07": 25 }));
+        const a = readActuals(s, NOW);
+        expect(a.hasActivity).toBe(true);
+        expect(a.outreachPerDay).toBeGreaterThan(0);
+    });
+
     it("degrades to zeros on an empty workspace", () => {
         const a = readActuals(new FakeStorage(), NOW);
         expect(a.hasActivity).toBe(false);

@@ -80,17 +80,27 @@ export function logBulkOutreach(
     return next;
 }
 
+/** Hand-counted outreach for the current calendar month, keyed by day. */
+export function bulkOutreachByDayThisMonth(
+    s?: StorageLike | null,
+    now: Date = new Date()
+): Readonly<Record<string, number>> {
+    const counts = readBulkCounts(s);
+    const prefix = localDay(now).slice(0, 7);
+    const out: Record<string, number> = {};
+    for (const [day, n] of Object.entries(counts)) {
+        if (day.startsWith(prefix)) out[day] = n;
+    }
+    return out;
+}
+
 /** Sum of hand-counted outreach for the current calendar month. */
 export function bulkOutreachThisMonth(
     s?: StorageLike | null,
     now: Date = new Date()
 ): number {
-    const counts = readBulkCounts(s);
-    const prefix = localDay(now).slice(0, 7);
     let total = 0;
-    for (const [day, n] of Object.entries(counts)) {
-        if (day.startsWith(prefix)) total += n;
-    }
+    for (const n of Object.values(bulkOutreachByDayThisMonth(s, now))) total += n;
     return total;
 }
 
