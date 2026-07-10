@@ -2162,6 +2162,56 @@ export type Database = {
           },
         ]
       }
+      captured_meetings: {
+        // HAND-AUTHORED PENDING REGEN. Replaced by
+        // `supabase gen types typescript --linked` after migration
+        // 20260710210000 applies to production.
+        Row: {
+          account_name: string
+          attendees: Json
+          created_at: string
+          ends_at: string | null
+          ics_uid: string
+          id: string
+          source: string
+          starts_at: string
+          title: string
+          workspace_id: string
+        }
+        Insert: {
+          account_name: string
+          attendees?: Json
+          created_at?: string
+          ends_at?: string | null
+          ics_uid: string
+          id?: string
+          source?: string
+          starts_at: string
+          title?: string
+          workspace_id: string
+        }
+        Update: {
+          account_name?: string
+          attendees?: Json
+          created_at?: string
+          ends_at?: string | null
+          ics_uid?: string
+          id?: string
+          source?: string
+          starts_at?: string
+          title?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "captured_meetings_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_profile: {
         // HAND-AUTHORED PENDING REGEN (ADR-007). Replaced by
         // `supabase gen types typescript --linked` after migration

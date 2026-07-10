@@ -123,7 +123,8 @@ function makeDataClient(opts: {
         briefingClusters: {} as never,
         briefingPatterns: {} as never,
         briefingAuditEnvelopes: {} as never,
-        briefingPatternFeedback: {} as never
+        briefingPatternFeedback: {} as never,
+        capturedMeetings: {} as never
     };
 
     return { data, inserts, updates, storedRows };

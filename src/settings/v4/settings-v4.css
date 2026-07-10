@@ -65,3 +65,4 @@
 .st4-cap-wait{margin-top:10px;font-size:0.82rem;color:var(--ds-ink-soft, #667085);}
 .st4-cap-steps{margin-top:12px;font-size:0.82rem;}
 .st4-cap-steps ul, .st4-ab ul{margin:8px 0 0 18px;display:grid;gap:6px;font-size:0.82rem;color:var(--ds-ink-soft, #44506b);line-height:1.55;}
+.st4-cal-in{flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--ds-hairline, rgba(14,31,64,0.16));border-radius:6px;font:inherit;font-size:0.8rem;}

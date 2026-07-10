@@ -1,5 +1,6 @@
 import type { Benchmark, PlanInputs, PlanMetrics, CoverageSnapshot } from "../../lib/types";
 import { bulkOutreachByDayThisMonth, localDay } from "./bulk-outreach";
+import { capturedMeetingsThisMonth } from "./captured-meetings";
 import { computeMetrics } from "../../lib/engine";
 import { EMPTY_COVERAGE } from "../../lib/types";
 import { t } from "@/lib/voice/t";
@@ -146,9 +147,16 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     }
     workdays = Math.max(1, workdays);
 
+    // Calendar-captured meetings (the paste-your-link lane) merge as a
+    // floor — a booked meeting that then happened must not count twice.
+    const heldFromCalendar = capturedMeetingsThisMonth(
+        st as Parameters<typeof capturedMeetingsThisMonth>[0],
+        now
+    );
+
     return {
         outreachPerDay: Math.round((outreach / workdays) * 10) / 10,
-        meetingsThisMonth: meetings,
+        meetingsThisMonth: Math.max(meetings, heldFromCalendar),
         closedThisMonth,
         closedWonYtd,
         hasActivity: outreach > 0 || meetings > 0 || deals.length > 0

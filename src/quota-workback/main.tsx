@@ -64,6 +64,13 @@ refreshCoverage();
 startCoverageRecompute();
 startPersistence();
 
+// Calendar-captured meetings: refresh the device tally from the cloud
+// (fire-and-forget — the pace read picks it up on the next visit if
+// this one races the first render).
+void import("./v4/lib/captured-meetings").then((m) =>
+    m.hydrateCapturedMeetings().catch(() => undefined)
+);
+
 // Design-system migration (canon §6, synthesis flow). The DS surface
 // composes the component library; the existing room renders otherwise.
 // The workback math, the benchmarks, the coverage computation,

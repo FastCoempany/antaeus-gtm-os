@@ -103,3 +103,109 @@ export async function mintCaptureToken(
         };
     }
 }
+
+// ─── The calendar link (auto-capture stage 3) ──────────────────────────
+
+export interface CalendarState {
+    readonly url: string | null;
+    readonly hasRow: boolean;
+}
+
+/** Read the workspace's saved calendar link (null when none). */
+export async function loadCalendarUrl(
+    opts: { readonly data?: DataClient } = {}
+): Promise<CalendarState> {
+    try {
+        const data = opts.data ?? createDataClient();
+        const rows = await data.workspaceProfile.list({ limit: 1 });
+        if (!Array.isArray(rows) || rows.length === 0) {
+            return { url: null, hasRow: false };
+        }
+        const row = rows[0] as unknown as { data?: Record<string, unknown> | null };
+        const url = row.data?.["calendar_ics_url"];
+        return {
+            url: typeof url === "string" && /^https?:\/\//.test(url) ? url : null,
+            hasRow: true
+        };
+    } catch (err) {
+        reportError(err, { op: "settings.loadCalendarUrl" });
+        return { url: null, hasRow: false };
+    }
+}
+
+/**
+ * Save (or clear, with null) the calendar link. The link is a secret —
+ * it lives in the workspace profile blob, never rendered to anyone
+ * outside the workspace.
+ */
+export async function saveCalendarUrl(
+    url: string | null,
+    opts: { readonly data?: DataClient } = {}
+): Promise<{ ok: boolean; error: string | null }> {
+    if (url !== null && !/^https?:\/\/\S+$/.test(url.trim())) {
+        return { ok: false, error: "That doesn't look like a link — paste the full address." };
+    }
+    try {
+        const data = opts.data ?? createDataClient();
+        const rows = await data.workspaceProfile.list({ limit: 1 });
+        if (!Array.isArray(rows) || rows.length === 0) {
+            return {
+                ok: false,
+                error: "Your workspace profile isn't set up yet. Complete onboarding first."
+            };
+        }
+        const row = rows[0] as unknown as {
+            workspace_id: string;
+            data?: Record<string, unknown> | null;
+        };
+        const blob = { ...(row.data ?? {}) };
+        if (url === null) {
+            delete blob["calendar_ics_url"];
+        } else {
+            blob["calendar_ics_url"] = url.trim();
+        }
+        await data.workspaceProfile.update(row.workspace_id, { data: blob as never });
+        return { ok: true, error: null };
+    } catch (err) {
+        reportError(err, { op: "settings.saveCalendarUrl" });
+        return {
+            ok: false,
+            error: "Couldn't save the link just now. Check your connection and try again."
+        };
+    }
+}
+
+export interface CalendarSyncOutcome {
+    readonly ok: boolean;
+    readonly matched: number;
+    readonly error: string | null;
+}
+
+/** Ask the server to read the calendar now (the Connect button). */
+export async function syncCalendarNow(): Promise<CalendarSyncOutcome> {
+    try {
+        const { getSupabaseClient } = await import("@/lib/supabase-client");
+        const sb = getSupabaseClient() as unknown as {
+            functions: {
+                invoke: (
+                    name: string,
+                    opts: { body: unknown }
+                ) => Promise<{ data: unknown; error: { message?: string } | null }>;
+            };
+        };
+        const { data, error } = await sb.functions.invoke("calendar-sync", {
+            body: { action: "sync_one" }
+        });
+        if (error) {
+            return { ok: false, matched: 0, error: "Couldn't check the calendar just now — try again." };
+        }
+        const r = (data ?? {}) as { ok?: boolean; matched?: number; error?: string };
+        if (!r.ok) {
+            return { ok: false, matched: 0, error: r.error ?? "Couldn't read the calendar." };
+        }
+        return { ok: true, matched: Number(r.matched ?? 0), error: null };
+    } catch (err) {
+        reportError(err, { op: "settings.syncCalendarNow" });
+        return { ok: false, matched: 0, error: "Couldn't check the calendar just now — try again." };
+    }
+}
