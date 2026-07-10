@@ -124,11 +124,26 @@ Deno.serve(async (req: Request) => {
     // it to an account later by watching that company.
     const accountName = matched ?? (recipient.split("@")[1] ?? recipient);
 
+    // Provider retries / manual replays re-post the same MessageID —
+    // one email must never count twice.
+    if (mail.messageId) {
+        const { data: dupes } = await sb
+            .from("sequences")
+            .select("id")
+            .eq("workspace_id", workspaceId)
+            .eq("data->>messageId", mail.messageId)
+            .limit(1);
+        if ((dupes ?? []).length > 0) {
+            return json(200, { ok: true, skipped: "already captured" });
+        }
+    }
+
     const blob = buildTouchBlob({
         accountName,
         recipient,
         subject: mail.subject,
-        sentAt: mail.sentAt
+        sentAt: mail.sentAt,
+        messageId: mail.messageId
     });
     const { error: insErr } = await sb.from("sequences").insert({
         workspace_id: workspaceId,

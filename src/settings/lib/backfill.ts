@@ -48,8 +48,19 @@ interface RawColumns {
     reason?: number;
 }
 
-/** Split one CSV line, honoring double-quoted cells with commas. */
+/**
+ * Split one row. Spreadsheet copies (Excel / Google Sheets) are
+ * tab-delimited — a tab in the line wins, and TSV needs no quote
+ * handling. Otherwise CSV with double-quoted cells.
+ */
 export function splitCsvLine(line: string): string[] {
+    if (line.includes("\t")) {
+        return line.split("\t").map((c) => c.trim());
+    }
+    return splitCommaLine(line);
+}
+
+function splitCommaLine(line: string): string[] {
     const out: string[] = [];
     let cur = "";
     let inQuotes = false;
@@ -165,6 +176,12 @@ export function parseBackfillCsv(text: string): BackfillParse {
 }
 
 function toDeal(b: BackfillDeal, id: string): Deal {
+    // The pace/believability reads sum closed-won by the row's
+    // created_at/updated_at — stamp both with the close date so a
+    // backfilled win lands in the right month and year.
+    const stamp = b.closeDate
+        ? new Date(`${b.closeDate}T12:00:00`).toISOString()
+        : new Date().toISOString();
     return {
         id,
         accountName: b.accountName,
@@ -173,7 +190,9 @@ function toDeal(b: BackfillDeal, id: string): Deal {
         closeDate: b.closeDate ?? undefined,
         lossReason: b.lossReason ?? undefined,
         lossNotes: b.lossNotes ?? undefined,
-        notes: "Brought in from your deal history."
+        notes: "Brought in from your deal history.",
+        created_at: stamp,
+        updated_at: stamp
     };
 }
 

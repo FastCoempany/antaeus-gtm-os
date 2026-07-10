@@ -35,6 +35,7 @@ export interface InboundPayload {
      */
     readonly OriginalRecipient?: string;
     readonly MailboxHash?: string;
+    readonly MessageID?: string;
     readonly Subject?: string;
     readonly Date?: string;
 }
@@ -46,6 +47,8 @@ export interface ParsedInbound {
     readonly captureToken: string | null;
     readonly subject: string;
     readonly sentAt: string;
+    /** Provider message id — the replay/retry dedupe key. */
+    readonly messageId: string | null;
 }
 
 function splitAddressList(raw: string | undefined): string[] {
@@ -114,7 +117,8 @@ export function parseInbound(payload: InboundPayload, localPart = "log"): Parsed
         subject: (payload.Subject ?? "").slice(0, 200).trim(),
         sentAt: Number.isFinite(sentAtRaw)
             ? new Date(sentAtRaw).toISOString()
-            : new Date().toISOString()
+            : new Date().toISOString(),
+        messageId: (payload.MessageID ?? "").trim() || null
     };
 }
 
@@ -194,6 +198,7 @@ export function buildTouchBlob(args: {
     recipient: string;
     subject: string;
     sentAt: string;
+    messageId?: string | null;
 }): Record<string, unknown> {
     return {
         account: null,
@@ -213,6 +218,7 @@ export function buildTouchBlob(args: {
         qualityScore: null,
         motionBand: null,
         capturedVia: "bcc",
+        messageId: args.messageId ?? null,
         createdAt: args.sentAt
     };
 }

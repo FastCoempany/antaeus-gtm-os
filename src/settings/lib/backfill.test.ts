@@ -27,6 +27,17 @@ describe("splitCsvLine", () => {
 });
 
 describe("parseBackfillCsv", () => {
+    it("reads a tab-delimited paste straight from a spreadsheet", () => {
+        const { deals, skipped } = parseBackfillCsv(
+            "Account\tDeal Size\tOutcome\tClose Date\n" +
+                "Northwind\t$80,000\tWon\t2026-03-04\n" +
+                "Apex\t64000\tLost\t2026-04-18"
+        );
+        expect(skipped).toEqual([]);
+        expect(deals).toHaveLength(2);
+        expect(deals[0]).toMatchObject({ accountName: "Northwind", value: 80_000, won: true });
+    });
+
     it("reads a headered sheet with money formatting", () => {
         const { deals, skipped } = parseBackfillCsv(
             "Account,Deal Size,Outcome,Close Date,Loss Reason\n" +
@@ -70,9 +81,18 @@ describe("commitBackfill", () => {
         const again = await commitBackfill(deals, s);
         expect(again.written).toBe(0);
         expect(again.duplicates).toBe(1);
-        const mirror = JSON.parse(s.data["gtmos_deal_workspaces"]!) as Array<{ stage: string; accountName: string }>;
+        const mirror = JSON.parse(s.data["gtmos_deal_workspaces"]!) as Array<{
+            stage: string;
+            accountName: string;
+            created_at?: string;
+            updated_at?: string;
+        }>;
         expect(mirror).toHaveLength(1);
         expect(mirror[0]).toMatchObject({ accountName: "Northwind", stage: "closed-won" });
+        // Stamped with the close date so the pace/believability reads
+        // land the win in the right month.
+        expect(mirror[0]!.created_at).toContain("2026-03-04");
+        expect(mirror[0]!.updated_at).toContain("2026-03-04");
     });
 
     it("dedupes against cloud rows even when the device mirror is empty", async () => {

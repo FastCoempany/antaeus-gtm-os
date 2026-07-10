@@ -50,6 +50,15 @@ describe("inbound email parsing", () => {
         expect(mail.captureToken).toBe("aabbccddeeff");
     });
 
+    it("carries the provider MessageID for replay dedupe", () => {
+        const mail = parseInbound({
+            ToFull: [{ email: "log+aabbccddeeff@in.antaeus.app" }],
+            MessageID: "  abc-123  "
+        });
+        expect(mail.messageId).toBe("abc-123");
+        expect(parseInbound({}).messageId).toBeNull();
+    });
+
     it("no token → null, mail is skippable", () => {
         expect(extractCaptureToken(["someone@example.com"])).toBeNull();
     });
@@ -94,6 +103,7 @@ describe("buildTouchBlob", () => {
             channel: "email",
             content: "Quick question",
             capturedVia: "bcc",
+            messageId: null,
             createdAt: "2026-07-10T14:00:00.000Z"
         });
         expect(JSON.stringify(blob)).not.toContain("Body");
