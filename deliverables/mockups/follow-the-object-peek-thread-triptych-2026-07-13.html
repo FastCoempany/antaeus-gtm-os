@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G9 · Peek → Thread — triptych · 2026-07-13</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   G9 · PEEK → THREAD — TRIPTYCH · 2026-07-13
+   Founder locked the O-B/O-A combo: the five-line peek card is
+   the universal default; the whole thread is its second door.
+   Three treatments of how the thread door opens:
+     FO-1 the veil (peek → full overlay)
+     FO-2 the unfolding (the card itself grows into the thread)
+     FO-3 the side sheet (thread slides in, room stays)
+   Click any underlined account name, then "see the whole thread."
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f; --red:#cf3b34;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:24px auto 10px;padding:0 20px;font-size:.95rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:26px auto 60px;padding:16px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.86rem;line-height:1.65;color:var(--ink-70)}
+
+/* ---- fake room ---- */
+.frame{position:relative;max-width:1060px;margin:18px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);
+  box-shadow:0 18px 50px rgba(10,28,64,.08);min-height:600px;overflow:hidden}
+.room{padding:22px 28px 30px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.9rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.92rem;color:var(--ink-70)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+.obj{color:var(--ink);font-weight:600;cursor:pointer;border-bottom:1px dotted rgba(230,112,30,.55);
+  transition:color .12s,border-color .12s}
+.obj:hover{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* ---- the peek card (shared) ---- */
+.peek{position:absolute;z-index:20;width:340px;background:var(--raised);border:1px solid var(--ink-14);
+  border-radius:12px;box-shadow:0 20px 55px rgba(10,28,64,.18);padding:16px 18px 14px;display:none;
+  transition:width .3s cubic-bezier(.4,0,.2,1)}
+.peek.on{display:block;animation:pop .16s ease}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.peek .nm{font-family:var(--serif);font-size:1.3rem;margin:0 0 10px}
+.prow{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--ink-08);font-size:.82rem;line-height:1.5;color:var(--ink-70)}
+.prow .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;font-weight:700;
+  text-transform:uppercase;color:var(--ink-50);min-width:96px;padding-top:2px}
+.prow b{color:var(--ink)}
+.pmove{margin-top:10px;display:block;width:100%;text-align:left;background:var(--orange);color:#fff;
+  border:none;border-radius:8px;padding:10px 13px;font-family:var(--sans);font-size:.84rem;font-weight:600;cursor:pointer}
+.pmove span{display:block;font-weight:400;font-size:.74rem;opacity:.85;margin-top:2px}
+.pthread{margin-top:8px;display:block;width:100%;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;font-weight:700;color:var(--blue);text-align:center;padding:6px}
+.pthread:hover{text-decoration:underline}
+
+/* ---- thread stops (shared) ---- */
+.tstop{position:relative;padding:0 0 18px 26px}
+.tstop::before{content:"";position:absolute;left:0;top:5px;width:10px;height:10px;border-radius:50%;
+  background:var(--field);border:2.5px solid var(--ink-30)}
+.tstop::after{content:"";position:absolute;left:4.5px;top:19px;bottom:2px;width:2px;background:var(--ink-14)}
+.tstop:last-child::after{display:none}
+.tstop.here::before{border-color:var(--ink);background:var(--ink)}
+.tstop.next::before{border-color:var(--orange);background:var(--orange);box-shadow:0 0 0 4px rgba(230,112,30,.15)}
+.tstop .rl{display:flex;align-items:baseline;gap:9px;margin-bottom:2px}
+.tstop .rn{font-weight:700;font-size:.88rem}
+.tstop .tag{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;font-weight:700;border-radius:99px;padding:2px 8px}
+.tstop .tag.here{color:var(--ink);border:1px solid var(--ink-30)}
+.tstop .tag.next{color:#fff;background:var(--orange)}
+.tstop .go{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;font-weight:700;color:var(--blue);cursor:pointer;white-space:nowrap}
+.tstop .go:hover{text-decoration:underline}
+.tstop .wt{font-size:.8rem;color:var(--ink-70);line-height:1.55}
+.tstop .wt b{color:var(--ink)}
+.tremember{margin-top:8px;font-size:.76rem;color:var(--ink-50);font-style:italic;line-height:1.5}
+
+/* ============================================================
+   FO-1 · THE VEIL
+   ============================================================ */
+.veil{position:absolute;inset:0;background:rgba(246,248,252,.97);backdrop-filter:blur(3px);
+  z-index:30;padding:26px 34px;overflow:auto;display:none}
+.veil.on{display:block;animation:fadein .22s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.v-close{position:absolute;top:18px;right:22px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;font-weight:700;color:var(--ink-50);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:6px 14px;cursor:pointer}
+.v-k{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);text-transform:uppercase}
+.v-name{font-family:var(--serif);font-size:2.4rem;letter-spacing:-.02em;margin:6px 0 2px}
+.v-state{font-size:.93rem;color:var(--ink-70);margin:0 0 22px;max-width:680px}
+.v-state b{color:var(--ink)}
+.v-move{margin:0 0 24px;padding:15px 18px;background:var(--raised);border:1px solid var(--ink-08);
+  border-left:3px solid var(--orange);border-radius:9px;max-width:700px}
+.v-move .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;font-weight:700;color:var(--orange);text-transform:uppercase}
+.v-move .t{font-size:.93rem;font-weight:600;margin:5px 0 3px}
+.v-move .r{font-size:.84rem;color:var(--ink-70)}
+
+/* ============================================================
+   FO-2 · THE UNFOLDING
+   ============================================================ */
+.peek.unfolded{width:560px}
+.peek .foldzone{display:none;border-top:1px solid var(--ink-08);margin-top:12px;padding-top:14px}
+.peek.unfolded .foldzone{display:block;animation:fadein .25s ease}
+.peek.unfolded .pthread{display:none}
+.foldzone .fz-k{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;font-weight:700;
+  color:var(--ink-50);text-transform:uppercase;margin-bottom:12px}
+.fz-back{margin-top:4px;display:block;width:100%;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;font-weight:700;color:var(--ink-50);text-align:center;padding:6px}
+.fz-back:hover{color:var(--ink)}
+
+/* ============================================================
+   FO-3 · THE SIDE SHEET
+   ============================================================ */
+.sheet{position:absolute;top:0;right:0;bottom:0;width:440px;max-width:88%;background:var(--raised);
+  border-left:1px solid var(--ink-14);box-shadow:-18px 0 50px rgba(10,28,64,.12);z-index:30;
+  transform:translateX(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  padding:22px 26px;overflow:auto}
+.sheet.on{transform:translateX(0)}
+.s-close{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.14em;font-weight:700;color:var(--ink-50);background:var(--field);
+  border:1px solid var(--ink-14);border-radius:99px;padding:5px 12px;cursor:pointer}
+.s-k{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);text-transform:uppercase}
+.s-name{font-family:var(--serif);font-size:1.9rem;letter-spacing:-.02em;margin:4px 0 2px}
+.s-state{font-size:.84rem;color:var(--ink-70);margin:0 0 16px}
+.s-state b{color:var(--ink)}
+.s-move{margin:0 0 18px;padding:12px 14px;background:var(--field);border:1px solid var(--ink-08);
+  border-left:3px solid var(--orange);border-radius:8px}
+.s-move .k{font-family:var(--mono);font-size:.52rem;letter-spacing:.16em;font-weight:700;color:var(--orange);text-transform:uppercase}
+.s-move .t{font-size:.86rem;font-weight:600;margin:4px 0 2px}
+.s-move .r{font-size:.78rem;color:var(--ink-70)}
+.dimmer{position:absolute;inset:0;background:rgba(10,28,64,.05);z-index:25;display:none}
+.dimmer.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">G9 · PEEK → THREAD · TRIPTYCH · 2026-07-13</span>
+  <button class="on" data-p="fo1">FO-1 · <b>The Veil</b> — the thread takes the room, then gives it back</button>
+  <button data-p="fo2">FO-2 · <b>The Unfolding</b> — the card itself grows into the thread</button>
+  <button data-p="fo3">FO-3 · <b>The Side Sheet</b> — the thread slides in, the room stays</button>
+</div>
+
+<!-- ================= FO-1 · THE VEIL ================= -->
+<div class="pane on" id="pane-fo1">
+  <p class="lead"><b>FO-1 · The Veil.</b> The straight combination: the five-line peek answers the two-second
+  question in place; <b>"see the whole thread"</b> lifts the full bright veil over the room — the object's
+  masthead, the one move, every stop with its own GO. Esc (or the close pill) puts the room back exactly as
+  it was. Two clean modes: glance, then immerse.</p>
+
+  <div class="frame" id="fo1-frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click an underlined account name</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><span class="obj" data-peek="fo1">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo1">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo1">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <div class="peek" id="fo1-peek">
+      <div class="nm">Ramp</div>
+      <div class="prow"><span class="k">Where it stands</span><span><b>$84k · verbal yes</b> — in procurement, next step dated Jul 15.</span></div>
+      <div class="prow"><span class="k">What's pulling</span><span>The security questionnaire — <b>6 days unanswered</b>, champion cooling.</span></div>
+      <div class="prow"><span class="k">What changes</span><span>Answer it and the blocking front clears — the close date holds.</span></div>
+      <div class="prow"><span class="k">Remembered</span><span>Champion Dana Cho · 7 discovery truths · the CRO-hire angle that landed.</span></div>
+      <button class="pmove">Send the security answers → Getting to Signed
+        <span>Your papers already cover 88 of the 150 questions.</span></button>
+      <button class="pthread" data-thread="fo1">SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE ↗</button>
+    </div>
+
+    <div class="veil" id="fo1-veil">
+      <button class="v-close" data-vclose="fo1">ESC · BACK TO THE ROOM</button>
+      <div class="v-k">ONE OBJECT · ITS WHOLE THREAD THROUGH THE HOUSE</div>
+      <div class="v-name">Ramp</div>
+      <p class="v-state"><b>$84k, verbal yes</b> — won on paper, now surviving procurement. What's pulling:
+      <b>the security questionnaire has sat 6 days</b> and the champion is cooling.</p>
+      <div class="v-move">
+        <div class="k">The one move</div>
+        <div class="t">Send the security answers — your papers already cover 88 of the 150 questions.</div>
+        <div class="r">Do it and the blocking front clears, the plan-to-signed unfreezes, and the close date holds.</div>
+      </div>
+      <div>
+        <div class="tstop"><div class="rl"><span class="rn">Signal Console</span><span class="go">GO →</span></div>
+          <div class="wt">Heat <b>88</b> — hiring surge + a new CRO this month. 2 fresh signals this week.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Outbound Studio</span><span class="go">GO →</span></div>
+          <div class="wt">4 touches · last reply 3 days ago. The opener that landed: the CRO-hire angle.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Discovery Studio</span><span class="go">GO →</span></div>
+          <div class="wt">Call ran Jun 30 — champion named: <b>Dana Cho</b>. 7 truths captured.</div></div>
+        <div class="tstop here"><div class="rl"><span class="rn">Deal Workspace</span><span class="tag here">YOU ARE HERE</span></div>
+          <div class="wt"><b>$84k · verbal yes</b> · next step dated Jul 15 — the results meeting.</div></div>
+        <div class="tstop next"><div class="rl"><span class="rn">Getting to Signed</span><span class="tag next">SUGGESTED NEXT</span><span class="go">GO →</span></div>
+          <div class="wt">Security is the blocking front — <b>your papers answer 88 of 150.</b> Legal + finance quiet.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Call in a Favor</span><span class="go">GO →</span></div>
+          <div class="wt"><b>Elena Ruiz</b> carries weight here — one favor available.</div></div>
+      </div>
+      <p class="tremember">The system remembers all of this. Jump to any stop — nothing needs restating.</p>
+    </div>
+  </div>
+
+  <div class="note"><b>FO-1</b> — the cleanest separation of the two altitudes: the peek stays ruthlessly
+  five lines because the veil absorbs all depth-pressure — anything that wants to grow the card has a
+  home one click away. The veil is also where a room-level jump rack could live later. Cost: the mode
+  switch — the room disappears while you read the thread, which is exactly what O-C avoided.</div>
+</div>
+
+<!-- ================= FO-2 · THE UNFOLDING ================= -->
+<div class="pane" id="pane-fo2">
+  <p class="lead"><b>FO-2 · The Unfolding.</b> No second surface at all — <b>the card is the thread, folded.</b>
+  Click "see the whole thread" and the same card widens and unfolds the stops beneath the five lines; "fold it
+  back" returns it to the peek. You never change modes, never lose the room, and the thread stays anchored to
+  the exact name you clicked. The lightest possible depth.</p>
+
+  <div class="frame" id="fo2-frame" style="min-height:660px">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click a name · then unfold the thread</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><span class="obj" data-peek="fo2">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo2">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo2">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <div class="peek" id="fo2-peek">
+      <div class="nm">Ramp</div>
+      <div class="prow"><span class="k">Where it stands</span><span><b>$84k · verbal yes</b> — in procurement, next step dated Jul 15.</span></div>
+      <div class="prow"><span class="k">What's pulling</span><span>The security questionnaire — <b>6 days unanswered</b>, champion cooling.</span></div>
+      <div class="prow"><span class="k">What changes</span><span>Answer it and the blocking front clears — the close date holds.</span></div>
+      <div class="prow"><span class="k">Remembered</span><span>Champion Dana Cho · 7 discovery truths · the CRO-hire angle that landed.</span></div>
+      <button class="pmove">Send the security answers → Getting to Signed
+        <span>Your papers already cover 88 of the 150 questions.</span></button>
+      <button class="pthread" data-unfold="fo2">SEE THE WHOLE THREAD — UNFOLD IT HERE ↓</button>
+
+      <div class="foldzone">
+        <div class="fz-k">The whole thread · every room that holds a piece</div>
+        <div class="tstop"><div class="rl"><span class="rn">Signal Console</span><span class="go">GO →</span></div>
+          <div class="wt">Heat <b>88</b> · hiring surge + new CRO · 2 signals this week.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Outbound Studio</span><span class="go">GO →</span></div>
+          <div class="wt">4 touches · last reply 3 days ago · the CRO-hire opener landed.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Discovery Studio</span><span class="go">GO →</span></div>
+          <div class="wt">Jun 30 call · champion <b>Dana Cho</b> · 7 truths captured.</div></div>
+        <div class="tstop here"><div class="rl"><span class="rn">Deal Workspace</span><span class="tag here">YOU ARE HERE</span></div>
+          <div class="wt">Next step dated Jul 15 — the results meeting.</div></div>
+        <div class="tstop next"><div class="rl"><span class="rn">Getting to Signed</span><span class="tag next">NEXT</span><span class="go">GO →</span></div>
+          <div class="wt">Security blocking · <b>your papers answer 88 of 150.</b></div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Call in a Favor</span><span class="go">GO →</span></div>
+          <div class="wt"><b>Elena Ruiz</b> carries weight here · one favor available.</div></div>
+        <p class="tremember">All remembered — jump anywhere, nothing needs restating.</p>
+        <button class="fz-back" data-fold="fo2">FOLD IT BACK ↑</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="note"><b>FO-2</b> — the most continuous: one surface, two depths, zero mode switches — the
+  least-resistance reading of the combo (the thread is literally the card's second fold). Anchoring to the
+  clicked name keeps spatial memory intact. Risks: an unfolded card is a tall floating object — on a dense
+  surface it will cover working UI while open; and it flirts with the "popover-dashboard" drift the peek
+  was warned about — the fold boundary has to stay hard (five lines above, thread below, nothing else ever).</div>
+</div>
+
+<!-- ================= FO-3 · THE SIDE SHEET ================= -->
+<div class="pane" id="pane-fo3">
+  <p class="lead"><b>FO-3 · The Side Sheet.</b> The peek is identical; the thread door opens as a
+  <b>sheet from the right edge</b> — the same 440px slide-in the Discovery dossier taught the product. The
+  room stays visible and live under a whisper of dim; the sheet carries the object masthead, the one move,
+  and the stops. It's the O-C companion's body without its permanence: it comes when called and leaves on Esc.</p>
+
+  <div class="frame" id="fo3-frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click a name · then open the sheet</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><span class="obj" data-peek="fo3">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo3">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><span class="obj" data-peek="fo3">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <div class="dimmer" id="fo3-dimmer"></div>
+
+    <div class="peek" id="fo3-peek">
+      <div class="nm">Ramp</div>
+      <div class="prow"><span class="k">Where it stands</span><span><b>$84k · verbal yes</b> — in procurement, next step dated Jul 15.</span></div>
+      <div class="prow"><span class="k">What's pulling</span><span>The security questionnaire — <b>6 days unanswered</b>, champion cooling.</span></div>
+      <div class="prow"><span class="k">What changes</span><span>Answer it and the blocking front clears — the close date holds.</span></div>
+      <div class="prow"><span class="k">Remembered</span><span>Champion Dana Cho · 7 discovery truths · the CRO-hire angle that landed.</span></div>
+      <button class="pmove">Send the security answers → Getting to Signed
+        <span>Your papers already cover 88 of the 150 questions.</span></button>
+      <button class="pthread" data-sheet="fo3">SEE THE WHOLE THREAD — OPEN THE SHEET →</button>
+    </div>
+
+    <div class="sheet" id="fo3-sheet">
+      <button class="s-close" data-sclose="fo3">ESC · CLOSE</button>
+      <div class="s-k">THE WHOLE THREAD</div>
+      <div class="s-name">Ramp</div>
+      <p class="s-state"><b>$84k · verbal yes</b> · in procurement — security has sat 6 days, champion cooling.</p>
+      <div class="s-move">
+        <div class="k">The one move</div>
+        <div class="t">Send the security answers → Getting to Signed</div>
+        <div class="r">Your papers already cover 88 of the 150 questions.</div>
+      </div>
+      <div>
+        <div class="tstop"><div class="rl"><span class="rn">Signal Console</span><span class="go">GO →</span></div>
+          <div class="wt">Heat <b>88</b> · hiring surge + new CRO · 2 signals this week.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Outbound Studio</span><span class="go">GO →</span></div>
+          <div class="wt">4 touches · last reply 3 days ago · the CRO-hire opener landed.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Discovery Studio</span><span class="go">GO →</span></div>
+          <div class="wt">Jun 30 call · champion <b>Dana Cho</b> · 7 truths captured.</div></div>
+        <div class="tstop here"><div class="rl"><span class="rn">Deal Workspace</span><span class="tag here">YOU ARE HERE</span></div>
+          <div class="wt">Next step dated Jul 15 — the results meeting.</div></div>
+        <div class="tstop next"><div class="rl"><span class="rn">Getting to Signed</span><span class="tag next">NEXT</span><span class="go">GO →</span></div>
+          <div class="wt">Security blocking · <b>your papers answer 88 of 150.</b></div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Call in a Favor</span><span class="go">GO →</span></div>
+          <div class="wt"><b>Elena Ruiz</b> carries weight here · one favor available.</div></div>
+      </div>
+      <p class="tremember">All remembered — jump anywhere, nothing needs restating.</p>
+    </div>
+  </div>
+
+  <div class="note"><b>FO-3</b> — the middle path: the room never leaves your sight (unlike FO-1) and the
+  thread never floats over working UI (unlike FO-2). It reuses a pattern the product already owns — the
+  Discovery Studio dossier's right slide-in — so it costs no new vocabulary. And it's one small step from
+  O-C later: "pin this sheet" turns it into the companion rail without a redesign. Risk: on narrow screens
+  the sheet covers most of the room anyway, converging on FO-1's mode switch.</div>
+</div>
+
+<script>
+/* ---- pane switcher ---- */
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- peek positioning (shared) ---- */
+function wirePeek(key){
+  var frame=document.getElementById(key+'-frame'),card=document.getElementById(key+'-peek');
+  document.querySelectorAll('[data-peek="'+key+'"]').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var r=el.getBoundingClientRect(),f=frame.getBoundingClientRect();
+      var left=Math.min(r.left-f.left, f.width-(card.classList.contains('unfolded')?580:360));
+      card.style.left=Math.max(12,left)+'px';
+      card.classList.add('on');
+      var want=r.bottom-f.top+10;
+      if(want+card.offsetHeight+24>frame.offsetHeight){
+        frame.style.minHeight=(want+card.offsetHeight+24)+'px';
+      }
+      card.style.top=want+'px';
+    });
+  });
+  document.addEventListener('click',function(e){
+    if(!card.contains(e.target)&&!e.target.closest('[data-peek="'+key+'"]')){
+      card.classList.remove('on');card.classList.remove('unfolded');
+    }
+  });
+  return card;
+}
+var fo1card=wirePeek('fo1'),fo2card=wirePeek('fo2'),fo3card=wirePeek('fo3');
+
+/* ---- FO-1 veil ---- */
+(function(){
+  var veil=document.getElementById('fo1-veil');
+  document.querySelector('[data-thread="fo1"]').addEventListener('click',function(){
+    fo1card.classList.remove('on');veil.classList.add('on');
+  });
+  document.querySelector('[data-vclose="fo1"]').addEventListener('click',function(){veil.classList.remove('on')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')veil.classList.remove('on')});
+})();
+
+/* ---- FO-2 unfold ---- */
+(function(){
+  var frame=document.getElementById('fo2-frame');
+  document.querySelector('[data-unfold="fo2"]').addEventListener('click',function(e){
+    e.stopPropagation();
+    fo2card.classList.add('unfolded');
+    setTimeout(function(){
+      var need=parseFloat(fo2card.style.top)+fo2card.offsetHeight+24;
+      if(need>frame.offsetHeight)frame.style.minHeight=need+'px';
+    },340);
+  });
+  document.addEventListener('click',function(e){
+    var f=e.target.closest('[data-fold="fo2"]');
+    if(f){e.stopPropagation();fo2card.classList.remove('unfolded');}
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){fo2card.classList.remove('unfolded');fo2card.classList.remove('on');}
+  });
+})();
+
+/* ---- FO-3 sheet ---- */
+(function(){
+  var sheet=document.getElementById('fo3-sheet'),dim=document.getElementById('fo3-dimmer');
+  document.querySelector('[data-sheet="fo3"]').addEventListener('click',function(){
+    fo3card.classList.remove('on');sheet.classList.add('on');dim.classList.add('on');
+  });
+  function close(){sheet.classList.remove('on');dim.classList.remove('on')}
+  document.querySelector('[data-sclose="fo3"]').addEventListener('click',close);
+  dim.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+})();
+</script>
+</body>
+</html>
