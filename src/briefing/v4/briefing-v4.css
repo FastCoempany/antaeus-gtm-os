@@ -4,10 +4,67 @@
  * controllable ticker per the settled 2026-07 design. De-carded —
  * the greeting and ticker live on the field, not in boxes.
  */
-.bfv4-greet { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 22px 0 4px; }
+.bfv4-greet { padding: 22px 0 4px; }
+.bfv4-greetrow { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .bfv4-hello { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-size: 30px; letter-spacing: -0.01em; }
 .bfv4-sub { font-size: 13px; color: var(--ds-ink-2, rgba(10,28,64,.62)); }
 .bfv4-clock { margin-left: auto; font-family: var(--ds-mono, monospace); font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+
+/* ── the sky band — the locked design's ambient weather ── */
+.bfv4-greet--sky {
+    background: linear-gradient(180deg, rgba(125, 180, 240, 0.26) 0%, rgba(125, 180, 240, 0.05) 100%);
+    border-radius: 12px;
+    padding: 22px 22px 14px;
+    margin-top: 14px;
+}
+.bfv4-greet--sky.is-night {
+    background: linear-gradient(180deg, rgba(38, 62, 110, 0.16) 0%, rgba(38, 62, 110, 0.04) 100%);
+}
+.bfv4-wx { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.bfv4-temp { font-family: var(--ds-serif, "DM Serif Display", Georgia, serif); font-size: 26px; letter-spacing: -0.01em; }
+.bfv4-cond { font-size: 12.5px; color: var(--ds-ink-2, rgba(10,28,64,.62)); }
+.bfv4-fcbtn {
+    margin-left: auto;
+    font-family: var(--ds-mono, monospace);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ds-ink-2, rgba(10,28,64,.62));
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(10, 28, 64, 0.14);
+    border-radius: 99px;
+    padding: 7px 14px;
+    cursor: pointer;
+}
+.bfv4-fcbtn:hover { color: var(--ds-ink, #0a1c40); }
+.bfv4-glyph { width: 22px; height: 22px; color: var(--ds-ink-2, rgba(10,28,64,.62)); flex: none; }
+.bfv4-glyph--sm { width: 16px; height: 16px; }
+.bfv4-glyph--sun {
+    display: inline-block;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffd463 0%, #ffb340 55%, rgba(255, 179, 64, 0) 72%);
+    box-shadow: 0 0 14px 4px rgba(255, 190, 80, 0.45);
+    animation: bfv4-sunpulse 3.2s ease-in-out infinite;
+}
+@keyframes bfv4-sunpulse {
+    0%, 100% { box-shadow: 0 0 12px 3px rgba(255, 190, 80, 0.4); }
+    50% { box-shadow: 0 0 20px 7px rgba(255, 190, 80, 0.55); }
+}
+@media (prefers-reduced-motion: reduce) { .bfv4-glyph--sun { animation: none; } }
+.bfv4-fc {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(10, 28, 64, 0.1);
+    overflow-x: auto;
+}
+.bfv4-fday { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+.bfv4-fdn { font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
+.bfv4-fhi { font-size: 13px; font-weight: 700; }
+.bfv4-flo { font-size: 11px; color: var(--ds-ink-3, rgba(10,28,64,.4)); }
 
 .bfv4-ticker { overflow: hidden; border-top: 1px solid var(--ds-hair, rgba(10,28,64,.09)); border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); margin: 12px 0 6px; padding: 8px 0; white-space: nowrap; }
 .bfv4-tape { display: inline-flex; gap: 34px; animation: bfv4-scroll 55s linear infinite; will-change: transform; }

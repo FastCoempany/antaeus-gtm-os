@@ -16,6 +16,7 @@
 
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { reportError } from "@/lib/observability";
+import { demoSamplePatterns, isDemoEnv } from "./demo-patterns";
 
 export type Trajectory = "rising" | "stable" | "declining" | null;
 
@@ -173,6 +174,10 @@ export function latestRunPatterns(
  * state instead of crashing.
  */
 export async function loadStandardPatterns(): Promise<BriefingPattern[]> {
+    // The demo lane is isolated sample data by declaration — serve the
+    // authored sample set there (real workspaces never see it, and the
+    // cloud is never touched from a demo session).
+    if (isDemoEnv()) return demoSamplePatterns();
     try {
         const sb = getSupabaseClient();
         const result = await sb
