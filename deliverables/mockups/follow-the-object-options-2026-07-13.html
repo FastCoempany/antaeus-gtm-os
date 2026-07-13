@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G9 · Follow the Object — options · 2026-07-13</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   G9 · FOLLOW THE OBJECT — THREE OPTIONS · 2026-07-13
+   Canon §2's standing requirement, made into a mechanism:
+   every sacred-noun name, anywhere it appears, must expose —
+     1 current state · 2 pressure on it · 3 best next move ·
+     4 what changes downstream · 5 what the system remembers.
+   Three interaction models for the same idea. Click any
+   underlined account name in the fake room to try each.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309; --green:#22c55e;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:24px auto 10px;padding:0 20px;font-size:.95rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:26px auto 60px;padding:16px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.86rem;line-height:1.65;color:var(--ink-70)}
+
+/* ---- the fake room every option sits in ---- */
+.frame{position:relative;max-width:1060px;margin:18px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;overflow:hidden;background:var(--field);
+  box-shadow:0 18px 50px rgba(10,28,64,.08);min-height:560px}
+.room{padding:22px 28px 30px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.9rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.92rem;color:var(--ink-70)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+.obj{color:var(--ink);font-weight:600;cursor:pointer;border-bottom:1px dotted rgba(230,112,30,.55);
+  transition:color .12s,border-color .12s}
+.obj:hover{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* ---- shared thread stop styling ---- */
+.stopk{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;font-weight:700;text-transform:uppercase;color:var(--ink-50)}
+.go{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;font-weight:700;color:var(--blue);
+  cursor:pointer;white-space:nowrap}
+.go:hover{text-decoration:underline}
+
+/* ============================================================
+   O-A · THE THREAD — full overlay, the object's whole life
+   ============================================================ */
+.a-layer{position:absolute;inset:0;background:rgba(246,248,252,.97);backdrop-filter:blur(3px);
+  z-index:10;padding:26px 34px;overflow:auto;display:none}
+.a-layer.on{display:block;animation:fadein .22s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.a-close{position:absolute;top:18px;right:22px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;font-weight:700;color:var(--ink-50);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:6px 14px;cursor:pointer}
+.a-k{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);text-transform:uppercase}
+.a-name{font-family:var(--serif);font-size:2.6rem;letter-spacing:-.02em;margin:6px 0 2px}
+.a-state{font-size:.95rem;color:var(--ink-70);margin:0 0 26px}
+.a-state b{color:var(--ink)}
+.a-thread{position:relative;margin-left:10px;padding-left:28px;border-left:2px solid var(--ink-14)}
+.a-stop{position:relative;padding:0 0 22px}
+.a-stop::before{content:"";position:absolute;left:-35px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--field);border:2.5px solid var(--ink-30)}
+.a-stop.here::before{border-color:var(--ink);background:var(--ink)}
+.a-stop.next::before{border-color:var(--orange);background:var(--orange);
+  box-shadow:0 0 0 5px rgba(230,112,30,.15)}
+.a-stop .room-line{display:flex;align-items:baseline;gap:10px;margin-bottom:3px}
+.a-stop .rname{font-weight:700;font-size:.94rem}
+.a-stop .tag{font-family:var(--mono);font-size:.54rem;letter-spacing:.14em;font-weight:700;border-radius:99px;padding:2.5px 9px}
+.a-stop .tag.here{color:var(--ink);border:1px solid var(--ink-30)}
+.a-stop .tag.next{color:#fff;background:var(--orange)}
+.a-stop .what{font-size:.88rem;color:var(--ink-70);line-height:1.6;max-width:640px}
+.a-stop .what b{color:var(--ink)}
+.a-stop .go{margin-left:8px}
+.a-move{margin:6px 0 26px;padding:16px 18px;background:var(--raised);border:1px solid var(--ink-08);
+  border-left:3px solid var(--orange);border-radius:9px;max-width:700px}
+.a-move .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;font-weight:700;color:var(--orange);text-transform:uppercase}
+.a-move .t{font-size:.95rem;font-weight:600;margin:5px 0 3px}
+.a-move .r{font-size:.85rem;color:var(--ink-70)}
+.a-remember{margin-top:4px;font-size:.8rem;color:var(--ink-50);font-style:italic}
+
+/* ============================================================
+   O-B · THE PEEK — anchored card first, thread on commit
+   ============================================================ */
+.b-card{position:absolute;z-index:20;width:340px;background:var(--raised);border:1px solid var(--ink-14);
+  border-radius:12px;box-shadow:0 20px 55px rgba(10,28,64,.18);padding:16px 18px 14px;display:none}
+.b-card.on{display:block;animation:pop .16s ease}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.b-card .nm{font-family:var(--serif);font-size:1.3rem;margin:0 0 10px}
+.b-row{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--ink-08);font-size:.82rem;line-height:1.5;color:var(--ink-70)}
+.b-row .stopk{min-width:96px;padding-top:2px}
+.b-row b{color:var(--ink)}
+.b-move{margin-top:10px;display:block;width:100%;text-align:left;background:var(--orange);color:#fff;
+  border:none;border-radius:8px;padding:10px 13px;font-family:var(--sans);font-size:.84rem;font-weight:600;cursor:pointer}
+.b-move span{display:block;font-weight:400;font-size:.74rem;opacity:.85;margin-top:2px}
+.b-thread-link{margin-top:8px;display:block;width:100%;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;font-weight:700;color:var(--blue);text-align:center;padding:6px}
+.b-thread-link:hover{text-decoration:underline}
+
+/* ============================================================
+   O-C · THE COMPANION — pinned rail that travels with you
+   ============================================================ */
+.c-body{display:flex;min-height:560px}
+.c-main{flex:1;min-width:0;transition:opacity .2s}
+.c-main.dim{opacity:.45}
+.c-rail{width:0;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1);
+  border-left:1px solid var(--ink-14);background:var(--raised)}
+.c-rail.on{width:330px}
+.c-rail-inner{width:330px;padding:18px 20px 24px}
+.c-pin{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.c-pin .chip{font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;font-weight:700;
+  color:var(--forest);border:1px solid rgba(27,94,63,.35);border-radius:99px;padding:3px 9px}
+.c-pin .x{margin-left:auto;font-family:var(--mono);font-size:.6rem;font-weight:700;color:var(--ink-50);
+  background:none;border:1px solid var(--ink-14);border-radius:99px;padding:4px 10px;cursor:pointer}
+.c-nm{font-family:var(--serif);font-size:1.55rem;margin:2px 0 0}
+.c-st{font-size:.8rem;color:var(--ink-70);margin:3px 0 14px}
+.c-stop{padding:10px 0;border-top:1px solid var(--ink-08);cursor:pointer}
+.c-stop:hover .rn{color:var(--orange)}
+.c-stop .rn{font-size:.84rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.c-stop .rn .dotc{width:7px;height:7px;border-radius:50%;background:var(--ink-30);flex:none}
+.c-stop.next .rn .dotc{background:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.16)}
+.c-stop.here .rn .dotc{background:var(--ink)}
+.c-stop .wt{font-size:.76rem;color:var(--ink-70);line-height:1.5;margin-top:3px;padding-left:15px}
+.c-stop .youare{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;font-weight:700;color:var(--ink-50);margin-left:auto}
+.c-remember{margin-top:12px;font-size:.72rem;color:var(--ink-50);font-style:italic;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">G9 · FOLLOW THE OBJECT · OPTIONS · 2026-07-13</span>
+  <button class="on" data-p="oa">O-A · <b>The Thread</b> — full overlay, the object's whole life</button>
+  <button data-p="ob">O-B · <b>The Peek</b> — a small card first, thread on commit</button>
+  <button data-p="oc">O-C · <b>The Companion</b> — pin the object, it travels with you</button>
+</div>
+
+<!-- ================= O-A · THE THREAD ================= -->
+<div class="pane on" id="pane-oa">
+  <p class="lead"><b>O-A · The Thread.</b> Click a name and the room quiets under a bright veil; the object's
+  <b>whole life through the house</b> rises as one vertical thread — every room that holds a piece of it, in
+  the order the motion runs. Where you are is inked; <b>the system's suggested next stop glows orange</b>;
+  the one move sits at the top as its own block. Esc puts the room back exactly as it was. One object,
+  one thread, jump anywhere.</p>
+
+  <div class="frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click an underlined account name</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><span class="obj" data-open="oa">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><span class="obj" data-open="oa">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><span class="obj" data-open="oa">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <div class="a-layer" id="oa-layer">
+      <button class="a-close" data-close="oa">ESC · BACK TO THE ROOM</button>
+      <div class="a-k">ONE OBJECT · ITS WHOLE THREAD THROUGH THE HOUSE</div>
+      <div class="a-name">Ramp</div>
+      <p class="a-state"><b>$84k, verbal yes</b> — the deal is won on paper and now has to survive procurement.
+      What's pulling on it: <b>the security questionnaire has sat unanswered for 6 days</b> and the champion is cooling.</p>
+
+      <div class="a-move">
+        <div class="k">The one move</div>
+        <div class="t">Send the security answers — your papers already cover 88 of the 150 questions.</div>
+        <div class="r">Do it and the blocking front clears, the plan-to-signed unfreezes, and the close date holds.</div>
+      </div>
+
+      <div class="a-thread">
+        <div class="a-stop">
+          <div class="room-line"><span class="rname">Signal Console</span><span class="go" >GO →</span></div>
+          <div class="what">Heat <b>88</b> — hiring surge + a new CRO landed this month. 2 fresh signals this week.</div>
+        </div>
+        <div class="a-stop">
+          <div class="room-line"><span class="rname">Outbound Studio</span><span class="go">GO →</span></div>
+          <div class="what">4 touches sent · last reply 3 days ago. The opener that landed: the CRO-hire angle.</div>
+        </div>
+        <div class="a-stop">
+          <div class="room-line"><span class="rname">Discovery Studio</span><span class="go">GO →</span></div>
+          <div class="what">Call ran Jun 30 — champion named: <b>Dana Cho</b>. 7 truths captured, next step locked in the room.</div>
+        </div>
+        <div class="a-stop here">
+          <div class="room-line"><span class="rname">Deal Workspace</span><span class="tag here">YOU ARE HERE</span></div>
+          <div class="what"><b>$84k · verbal yes</b> · next step dated Jul 15 — the results meeting with Dana's boss.</div>
+        </div>
+        <div class="a-stop next">
+          <div class="room-line"><span class="rname">Getting to Signed</span><span class="tag next">SUGGESTED NEXT</span><span class="go">GO →</span></div>
+          <div class="what">Security is the blocking front — <b>your papers answer 88 of 150 questions.</b> Legal and finance are quiet. The plan-to-signed has no dates yet.</div>
+        </div>
+        <div class="a-stop">
+          <div class="room-line"><span class="rname">Call in a Favor</span><span class="go">GO →</span></div>
+          <div class="what"><b>Elena Ruiz</b> carries weight here — a customer who ran the same security gauntlet. One favor available; you haven't asked her in months.</div>
+        </div>
+      </div>
+      <p class="a-remember">The system remembers all of this. Jump to any stop — nothing needs restating.</p>
+    </div>
+  </div>
+
+  <div class="note"><b>O-A</b> — the fullest read: all five of canon §2's required exposures (state · pressure ·
+  next move · downstream change · remembered) get room to breathe, and the thread teaches the motion itself —
+  a new operator learns what the rooms ARE by following one deal through them. Composes cleanly with the Ground
+  (G1 raises the map of rooms; G9 raises the life of one object). Risk: it's modal — a full takeover for what is
+  sometimes a two-second question ("what's Ramp's next step?").</div>
+</div>
+
+<!-- ================= O-B · THE PEEK ================= -->
+<div class="pane" id="pane-ob">
+  <p class="lead"><b>O-B · The Peek.</b> The lightest touch: click a name and a small card lands <b>right where
+  you clicked</b> — the five things canon says every noun must answer, one line each: where it stands, what's
+  pulling on it, the one move (the only orange), what changes if you act, what the system remembers. You never
+  leave the room. "See the whole thread" is the quiet second door for when the two-second answer isn't enough.</p>
+
+  <div class="frame" id="ob-frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click an underlined account name</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><span class="obj" data-peek="1">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><span class="obj" data-peek="1">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><span class="obj" data-peek="1">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <div class="b-card" id="ob-card">
+      <div class="nm">Ramp</div>
+      <div class="b-row"><span class="stopk">Where it stands</span><span><b>$84k · verbal yes</b> — in procurement, next step dated Jul 15.</span></div>
+      <div class="b-row"><span class="stopk">What's pulling</span><span>The security questionnaire — <b>6 days unanswered</b>, champion cooling.</span></div>
+      <div class="b-row"><span class="stopk">What changes</span><span>Answer it and the blocking front clears — the close date holds.</span></div>
+      <div class="b-row"><span class="stopk">Remembered</span><span>Champion Dana Cho · 7 discovery truths · the CRO-hire angle that landed.</span></div>
+      <button class="b-move">Send the security answers → Getting to Signed
+        <span>Your papers already cover 88 of the 150 questions.</span></button>
+      <button class="b-thread-link">SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE ↗</button>
+    </div>
+  </div>
+
+  <div class="note"><b>O-B</b> — the least-resistance answer (Part III §2): the two-second question gets a
+  two-second answer, in place, without a mode switch — and the card IS canon §2's five-line contract, verbatim.
+  The thread is still reachable but demoted to the second door. This is the version that ships everywhere without
+  ever feeling heavy — a Briefing sentence, a Founding GTM paragraph, a Signal Console row: any name, same card.
+  Risk: the card must stay ruthlessly five lines — if it grows, it becomes a popover-dashboard (the drift mode to watch).</div>
+</div>
+
+<!-- ================= O-C · THE COMPANION ================= -->
+<div class="pane" id="pane-oc">
+  <p class="lead"><b>O-C · The Companion.</b> Click a name and the object <b>docks as a rail on the right — pinned</b>.
+  The room stays live; the rail is the object's condensed thread (every stop, one line each, the suggested next
+  glowing). The difference: <b>it travels</b>. Click a stop and the main surface goes to that room while the rail
+  stays put — you carry Ramp with you through the house until you unpin it. The object becomes your companion,
+  not a lookup.</p>
+
+  <div class="frame">
+    <div class="c-body">
+      <div class="c-main" id="oc-main">
+        <div class="room">
+          <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · <span id="oc-roomname">DEAL WORKSPACE</span>
+            <span class="hint" id="oc-hint">click an underlined account name</span></div>
+          <div id="oc-roomview">
+            <div class="rh1">3 deals will slip this week if you do nothing.</div>
+            <div class="rrow"><span class="obj" data-pin="1">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+            <div class="rrow"><span class="obj" data-pin="1">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+            <div class="rrow"><span class="obj" data-pin="1">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-rail" id="oc-rail">
+        <div class="c-rail-inner">
+          <div class="c-pin"><span class="chip">PINNED · TRAVELS WITH YOU</span>
+            <button class="x" id="oc-unpin">UNPIN</button></div>
+          <div class="c-nm">Ramp</div>
+          <div class="c-st">$84k · verbal yes · in procurement</div>
+
+          <div class="c-stop" data-room="SIGNAL CONSOLE">
+            <div class="rn"><span class="dotc"></span>Signal Console</div>
+            <div class="wt">Heat 88 · hiring surge + new CRO · 2 signals this week</div>
+          </div>
+          <div class="c-stop" data-room="OUTBOUND STUDIO">
+            <div class="rn"><span class="dotc"></span>Outbound Studio</div>
+            <div class="wt">4 touches · last reply 3 days ago</div>
+          </div>
+          <div class="c-stop" data-room="DISCOVERY STUDIO">
+            <div class="rn"><span class="dotc"></span>Discovery Studio</div>
+            <div class="wt">Jun 30 call · champion Dana Cho · 7 truths</div>
+          </div>
+          <div class="c-stop here" data-room="DEAL WORKSPACE">
+            <div class="rn"><span class="dotc"></span>Deal Workspace<span class="youare">YOU ARE HERE</span></div>
+            <div class="wt">Next step dated Jul 15 — the results meeting</div>
+          </div>
+          <div class="c-stop next" data-room="GETTING TO SIGNED">
+            <div class="rn"><span class="dotc"></span>Getting to Signed<span class="youare" style="color:var(--orange)">NEXT</span></div>
+            <div class="wt">Security blocking · your papers answer 88 of 150</div>
+          </div>
+          <div class="c-stop" data-room="CALL IN A FAVOR">
+            <div class="rn"><span class="dotc"></span>Call in a Favor</div>
+            <div class="wt">Elena Ruiz carries weight here · one favor available</div>
+          </div>
+
+          <p class="c-remember">Everything here is remembered — jump to any stop and nothing needs restating.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note"><b>O-C</b> — the deepest version of "the object is the navigation": pin Ramp and work Ramp
+  across four rooms without ever re-finding it — the rail is the continuity params made visible and persistent.
+  Strongest for the deep-work session (the hour you spend getting one deal to signed). Risks: it takes 330px of
+  every room it visits (the rooms weren't composed with a permanent rail — plane-count pressure); and pinned
+  state needs discipline about when it lets go, or it becomes chrome that never leaves. Likely the power mode
+  of O-B rather than the default: peek first, pin from the peek.</div>
+</div>
+
+<script>
+/* ---- pane switcher ---- */
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- O-A thread overlay ---- */
+(function(){
+  var layer=document.getElementById('oa-layer');
+  document.querySelectorAll('[data-open="oa"]').forEach(function(el){
+    el.addEventListener('click',function(){layer.classList.add('on')});
+  });
+  document.querySelector('[data-close="oa"]').addEventListener('click',function(){layer.classList.remove('on')});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')layer.classList.remove('on');
+  });
+})();
+
+/* ---- O-B peek card ---- */
+(function(){
+  var card=document.getElementById('ob-card'),frame=document.getElementById('ob-frame');
+  document.querySelectorAll('[data-peek]').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var r=el.getBoundingClientRect(),f=frame.getBoundingClientRect();
+      var left=Math.min(r.left-f.left, f.width-360);
+      card.style.left=Math.max(12,left)+'px';
+      card.classList.add('on');
+      /* clamp into the frame so the one move never clips */
+      var want=r.bottom-f.top+10;
+      var max=frame.offsetHeight-card.offsetHeight-14;
+      if(want>max){
+        frame.style.minHeight=Math.max(frame.offsetHeight,want+card.offsetHeight+24)+'px';
+      }
+      card.style.top=want+'px';
+    });
+  });
+  document.addEventListener('click',function(e){
+    if(!card.contains(e.target))card.classList.remove('on');
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')card.classList.remove('on');
+  });
+})();
+
+/* ---- O-C companion rail ---- */
+(function(){
+  var rail=document.getElementById('oc-rail'),main=document.getElementById('oc-main'),
+      roomname=document.getElementById('oc-roomname'),roomview=document.getElementById('oc-roomview'),
+      hint=document.getElementById('oc-hint');
+  var HOME=roomview.innerHTML;
+  var FAKE={
+    'SIGNAL CONSOLE':'<div class="rh1">Ramp — heat 88, and rising.</div><div class="rrow">Hiring surge · 12 AE roles opened <span class="m">this week</span></div><div class="rrow">New CRO landed · Priya Nair <span class="m">Jun 28</span></div>',
+    'OUTBOUND STUDIO':'<div class="rh1">Where you are with Ramp.</div><div class="rrow">4 touches sent · the CRO-hire opener landed <span class="m">reply · 3d ago</span></div>',
+    'DISCOVERY STUDIO':'<div class="rh1">The Jun 30 call — what it captured.</div><div class="rrow">Champion: Dana Cho · 7 truths · next step locked <span class="m">Jun 30</span></div>',
+    'DEAL WORKSPACE':HOME,
+    'GETTING TO SIGNED':'<div class="rh1">Security is the blocking front.</div><div class="rrow">Your papers answer 88 of 150 questions <span class="m">6d waiting</span></div><div class="rrow">Legal + finance quiet · plan-to-signed has no dates <span class="m">at risk</span></div>',
+    'CALL IN A FAVOR':'<div class="rh1">Who could put in a word.</div><div class="rrow">Elena Ruiz — ran the same security gauntlet <span class="m">available</span></div>'
+  };
+  document.addEventListener('click',function(e){
+    var pin=e.target.closest('[data-pin]');
+    if(pin){rail.classList.add('on');return;}
+  });
+  document.getElementById('oc-unpin').addEventListener('click',function(){
+    rail.classList.remove('on');
+    roomview.innerHTML=HOME;roomname.textContent='DEAL WORKSPACE';
+  });
+  document.querySelectorAll('.c-stop').forEach(function(s){
+    s.addEventListener('click',function(){
+      var rm=s.dataset.room;
+      roomname.textContent=rm;
+      roomview.innerHTML=FAKE[rm]||HOME;
+      hint.textContent='the rail stays — you carried Ramp here';
+      document.querySelectorAll('.c-stop').forEach(function(x){x.classList.remove('here')});
+      s.classList.add('here');
+    });
+  });
+})();
+</script>
+</body>
+</html>
