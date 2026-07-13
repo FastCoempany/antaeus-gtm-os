@@ -135,6 +135,13 @@ export interface RawCommandCard {
     readonly badgeTone?: string;
     readonly meta?: ReadonlyArray<string>;
     readonly actions?: ReadonlyArray<CommandAction>;
+    /**
+     * The object this card is about (an account/deal name). Optional —
+     * when absent the engine falls back to the card title. Carried so
+     * object-level surfaces (Follow the Object) can resolve a composed
+     * title like "Outbound to Ramp" back to the account it concerns.
+     */
+    readonly focusObject?: string;
     /** Optional pre-computed ranking signals merged into engine input. */
     readonly rankingSignals?: Readonly<Record<string, unknown>>;
 }

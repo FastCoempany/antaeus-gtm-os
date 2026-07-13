@@ -1,0 +1,257 @@
+/* Follow the Object — the peek + the unfold (G9, settled 2026-07-13).
+   The card is fixed-position, anchored where the name was clicked. It
+   never takes the room: the unfold grows the same card downward, with
+   its own scroll when the viewport runs out. */
+
+.fo-obj {
+    cursor: pointer;
+    border-bottom: 1px dotted rgba(230, 112, 30, 0.55);
+    transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.fo-obj:hover {
+    color: var(--ds-orange, #e6701e);
+    border-bottom-color: var(--ds-orange, #e6701e);
+}
+
+.fo-card {
+    position: fixed;
+    z-index: 90;
+    width: 340px;
+    background: var(--ds-raised, #ffffff);
+    border: 1px solid rgba(10, 28, 64, 0.14);
+    border-radius: 12px;
+    box-shadow: 0 20px 55px rgba(10, 28, 64, 0.18);
+    padding: 16px 18px 14px;
+    overflow-y: auto;
+    color: var(--ds-ink, #0a1c40);
+    animation: fo-pop 0.16s ease;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fo-card.is-unfolded {
+    width: 560px;
+}
+
+@keyframes fo-pop {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fo-nm {
+    font-family: var(--ds-font-serif, "DM Serif Display", Georgia, serif);
+    font-size: 1.3rem;
+    margin: 0 0 10px;
+}
+
+.fo-row {
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    border-top: 1px solid rgba(10, 28, 64, 0.08);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(10, 28, 64, 0.7);
+}
+
+.fo-row .fo-k {
+    font-family: var(--ds-font-mono, "JetBrains Mono", monospace);
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.5);
+    min-width: 96px;
+    padding-top: 2px;
+    flex: none;
+}
+
+.fo-move {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--ds-orange, #e6701e);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.fo-move:hover {
+    background: var(--ds-orange-strong, #d05f12);
+}
+
+.fo-move span {
+    display: block;
+    font-weight: 400;
+    font-size: 0.74rem;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.fo-thread,
+.fo-back {
+    margin-top: 8px;
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--ds-font-mono, "JetBrains Mono", monospace);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ds-blue, #2563eb);
+    text-align: center;
+    padding: 6px;
+}
+
+.fo-thread:hover {
+    text-decoration: underline;
+}
+
+.fo-back {
+    color: rgba(10, 28, 64, 0.5);
+}
+
+.fo-back:hover {
+    color: var(--ds-ink, #0a1c40);
+}
+
+/* ─── the unfolded thread ────────────────────────────────────────── */
+
+.fo-fold {
+    border-top: 1px solid rgba(10, 28, 64, 0.08);
+    margin-top: 12px;
+    padding-top: 14px;
+    animation: fo-pop 0.25s ease;
+}
+
+.fo-foldk {
+    font-family: var(--ds-font-mono, "JetBrains Mono", monospace);
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(10, 28, 64, 0.5);
+    margin-bottom: 12px;
+}
+
+.fo-stop {
+    position: relative;
+    padding: 0 0 18px 26px;
+}
+
+.fo-stop::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ds-field, #f6f8fc);
+    border: 2.5px solid rgba(10, 28, 64, 0.3);
+    box-sizing: border-box;
+}
+
+.fo-stop::after {
+    content: "";
+    position: absolute;
+    left: 4.5px;
+    top: 19px;
+    bottom: 2px;
+    width: 2px;
+    background: rgba(10, 28, 64, 0.14);
+}
+
+.fo-stop:last-of-type::after {
+    display: none;
+}
+
+.fo-stop.is-here::before {
+    border-color: var(--ds-ink, #0a1c40);
+    background: var(--ds-ink, #0a1c40);
+}
+
+.fo-stop.is-next::before {
+    border-color: var(--ds-orange, #e6701e);
+    background: var(--ds-orange, #e6701e);
+    box-shadow: 0 0 0 4px rgba(230, 112, 30, 0.15);
+}
+
+.fo-rl {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    margin-bottom: 2px;
+}
+
+.fo-rn {
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.fo-tag {
+    font-family: var(--ds-font-mono, "JetBrains Mono", monospace);
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 99px;
+    padding: 2px 8px;
+}
+
+.fo-tag--here {
+    color: var(--ds-ink, #0a1c40);
+    border: 1px solid rgba(10, 28, 64, 0.3);
+}
+
+.fo-tag--next {
+    color: #fff;
+    background: var(--ds-orange, #e6701e);
+}
+
+.fo-go {
+    margin-left: auto;
+    font-family: var(--ds-font-mono, "JetBrains Mono", monospace);
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ds-blue, #2563eb);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fo-go:hover {
+    text-decoration: underline;
+}
+
+.fo-wt {
+    font-size: 0.8rem;
+    color: rgba(10, 28, 64, 0.7);
+    line-height: 1.55;
+}
+
+.fo-remember {
+    margin: 8px 0 0;
+    font-size: 0.76rem;
+    color: rgba(10, 28, 64, 0.5);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fo-card,
+    .fo-fold {
+        animation: none;
+        transition: none;
+    }
+}

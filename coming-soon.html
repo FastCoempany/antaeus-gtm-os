@@ -27,13 +27,14 @@
   </script>
   <style>
     /*
-     * Bright re-skin (2026) — retires the dark navy + gold/teal gate.
-     * The gate is the first surface a visitor sees; it used to contradict
-     * the bright product behind it (canon Part II §1: bright field, navy
-     * ink, orange accent, DM Serif Display). Now it matches start.html so
-     * first contact and the landing are continuous. Calm + still — the
-     * old glow/ring/breathe animations were marketing energy where an
-     * operator tool needs stillness (same call as the retired pulse).
+     * The Earth (settled 2026-07-13) — the Living Mark's lifted→grounded
+     * device as the gate. The foot of the page is a faint forest stratum
+     * — the earth — under a permanent forest ground line. The mark
+     * arrives lifted (weak, per the myth); each typed digit of the
+     * invite code lowers it a step; the sixth seats it on the line, and
+     * submitting grows a root into the stratum before the Worker takes
+     * the code. Unlock mechanics unchanged: GET /_gate/unlock?code&next,
+     * the antaeus_gate cookie, ?error=1 bounce (worker/index.ts).
      */
     :root {
       --field: #f6f8fc;
@@ -41,10 +42,15 @@
       --ink: #0a1c40;
       --ink-70: rgba(10, 28, 64, 0.70);
       --ink-50: rgba(10, 28, 64, 0.50);
+      --ink-30: rgba(10, 28, 64, 0.30);
       --ink-25: rgba(10, 28, 64, 0.25);
-      --ink-10: rgba(10, 28, 64, 0.10);
+      --ink-08: rgba(10, 28, 64, 0.08);
       --orange: #e6701e;
       --orange-dark: #d05f12;
+      --forest: #1b5e3f;
+      --forest-14: rgba(27, 94, 63, 0.14);
+      --forest-08: rgba(27, 94, 63, 0.08);
+      --red: #cf3b34;
       --font-serif: 'DM Serif Display', Georgia, serif;
       --font-sans: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -58,85 +64,84 @@
       background: var(--field);
       background-image:
         radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.05), transparent 30%),
-        radial-gradient(circle at 90% 6%, rgba(230, 112, 30, 0.045), transparent 28%);
+        radial-gradient(circle at 90% 6%, rgba(230, 112, 30, 0.045), transparent 28%),
+        linear-gradient(var(--ink-08) 1px, transparent 1px),
+        linear-gradient(90deg, var(--ink-08) 1px, transparent 1px);
+      background-size: auto, auto, 34px 34px, 34px 34px;
+      background-position: 0 0, 0 0, center 0, center 0;
       color: var(--ink);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
-      overflow: hidden;
     }
 
     .page {
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 9vh 24px 0;
     }
 
     h1 {
-      width: min(1200px, 100%);
-      margin: 0;
+      width: min(900px, 100%);
+      margin: 0 0 10px;
       text-align: center;
       font-family: var(--font-serif);
-      font-size: clamp(2.8rem, 6vw, 6.4rem);
-      line-height: 0.98;
-      letter-spacing: -0.03em;
+      font-size: clamp(2.2rem, 4.6vw, 3.9rem);
+      line-height: 1.04;
+      letter-spacing: -0.02em;
       text-wrap: balance;
       color: var(--ink);
     }
 
-    .pulse-word {
-      display: inline-block;
-      color: var(--orange);
-      font-style: italic;
-    }
-
-    @media (max-width: 760px) {
-      body { overflow-y: auto; }
-      h1 {
-        font-size: clamp(2.1rem, 9.2vw, 4rem);
-        line-height: 1.0;
-      }
+    .sub {
+      margin: 0 0 40px;
+      text-align: center;
+      font-size: 1rem;
+      color: var(--ink-70);
+      max-width: 560px;
+      line-height: 1.65;
     }
 
     /* ─── Pre-beta gate form ─────────────────────────────────────── */
+    /* Kicker + steps sit in the input's grid column so both center
+       over the actual code box, not the input+button row. */
 
     .gate {
-      margin: 40px auto 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 8px;
       width: min(380px, 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
+      margin: 0 0 12px;
     }
 
     .gate__kicker {
+      grid-column: 1;
       font-family: var(--font-mono);
-      font-size: 0.66rem;
-      letter-spacing: 0.20em;
+      font-size: 0.64rem;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       font-weight: 700;
-      color: var(--orange);
-      margin: 0;
-    }
-
-    .gate__row {
-      display: flex;
-      gap: 8px;
-      width: 100%;
+      color: var(--ink-50);
+      margin: 0 0 12px;
+      text-align: center;
     }
 
     .gate__input {
-      flex: 1;
+      grid-column: 1;
+      grid-row: 2;
+      min-width: 0;
       background: var(--raised);
-      border: 1px solid var(--ink-25);
+      border: 1px solid var(--ink-30);
       border-radius: 9px;
-      padding: 12px 14px;
+      padding: 13px 14px;
       color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 1rem;
-      letter-spacing: 0.16em;
+      font-size: 1.05rem;
+      letter-spacing: 0.28em;
       text-align: center;
       transition: border-color 140ms ease, box-shadow 140ms ease;
     }
@@ -149,17 +154,19 @@
 
     .gate__input::placeholder {
       color: var(--ink-25);
-      letter-spacing: 0.16em;
+      letter-spacing: 0.28em;
     }
 
     .gate__submit {
+      grid-column: 2;
+      grid-row: 2;
       background: var(--orange);
       border: 1px solid var(--orange);
       color: #fff;
       font-family: var(--font-sans);
       font-weight: 600;
       font-size: 0.95rem;
-      padding: 12px 20px;
+      padding: 13px 22px;
       border-radius: 9px;
       cursor: pointer;
       transition: background 140ms ease, box-shadow 140ms ease;
@@ -171,77 +178,257 @@
     }
 
     .gate__error {
-      margin: 0;
+      grid-column: 1;
+      grid-row: 3;
+      margin: 10px 0 0;
       font-size: 0.82rem;
-      color: #cf3b34;
+      color: var(--red);
       text-align: center;
-      min-height: 1.2em;
+      min-height: 1.25em;
     }
 
+    .gate__steps {
+      grid-column: 1;
+      grid-row: 4;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .gate__step {
+      width: 26px;
+      height: 3px;
+      background: rgba(27, 94, 63, 0.18);
+      border-radius: 2px;
+      transition: background 200ms ease;
+    }
+
+    .gate__step.hit { background: var(--forest); }
+
     .gate__exit {
-      margin: 20px auto 0;
+      margin: 0;
       max-width: 480px;
       text-align: center;
-      font-size: 0.85rem;
-      line-height: 1.6;
+      font-size: 0.84rem;
+      line-height: 1.7;
       color: var(--ink-50);
     }
 
     .gate__exit a {
-      color: var(--orange);
+      color: var(--forest);
+      font-weight: 600;
       text-decoration: none;
-      border-bottom: 1px dotted rgba(230, 112, 30, 0.4);
+      border-bottom: 1px dotted rgba(27, 94, 63, 0.45);
     }
 
-    .gate__exit a:hover { opacity: 0.82; }
+    .gate__exit a:hover { border-bottom-style: solid; }
+
+    /* ─── The earth ──────────────────────────────────────────────── */
+
+    .earthzone {
+      position: relative;
+      width: 100%;
+      height: clamp(230px, 30vh, 320px);
+      flex: none;
+      margin-top: 10px;
+      align-self: stretch;
+    }
+
+    .earthzone__ground {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 120px;
+      height: 3px;
+      background: var(--forest);
+    }
+
+    .earthzone__earth {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 120px;
+      background: linear-gradient(180deg, var(--forest-08) 0%, rgba(27, 94, 63, 0.02) 100%);
+    }
+
+    .earthzone__strata {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 120px;
+      overflow: hidden;
+      opacity: 0.5;
+    }
+
+    .earthzone__strata i {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--forest-14);
+    }
+
+    .earthzone__mark {
+      position: absolute;
+      left: 50%;
+      bottom: 99px;
+      width: 118px;
+      height: 118px;
+      transform: translateX(-50%) translateY(-96px) rotate(-7deg);
+      opacity: 0.32;
+      transition: transform 450ms cubic-bezier(0.34, 1.3, 0.5, 1), opacity 450ms ease;
+    }
+
+    .earthzone__mark svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .earthzone__mark svg path { stroke: var(--ink); }
+
+    .earthzone__root {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 65px;
+      width: 2.5px;
+      height: 0;
+      background: var(--forest);
+      transition: height 550ms ease 150ms;
+    }
+
+    .earthzone__root.on { height: 58px; }
+
+    .earthzone__landed {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 26px;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--forest);
+      opacity: 0;
+      transition: opacity 350ms ease;
+      margin: 0;
+    }
+
+    .earthzone__landed.on { opacity: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .earthzone__mark, .earthzone__root, .earthzone__landed,
+      .gate__step, .gate__input, .gate__submit { transition: none; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding-top: 7vh; }
+      h1 { font-size: clamp(1.9rem, 8.4vw, 3rem); }
+      .earthzone { height: 230px; }
+    }
   </style>
 </head>
 <body>
   <main class="page">
-    <div>
-      <h1>Your first go-to-market hire just became more <span class="pulse-word">predictable.</span></h1>
+    <h1>Antaeus is strongest on the ground.</h1>
+    <p class="sub">So is your sales motion. The private build is open to invited operators.</p>
 
-      <form class="gate" method="get" action="/_gate/unlock" autocomplete="off">
-        <p class="gate__kicker">Antaeus · Private build</p>
-        <div class="gate__row">
-          <input
-            class="gate__input"
-            type="text"
-            name="code"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="• • • • • •"
-            aria-label="Access code"
-            required
-          />
-          <button class="gate__submit" type="submit">Enter</button>
-        </div>
-        <p class="gate__error" id="gate-error" role="alert"></p>
-        <input type="hidden" name="next" id="gate-next" value="/" />
-      </form>
+    <form class="gate" id="gate-form" method="get" action="/_gate/unlock" autocomplete="off">
+      <p class="gate__kicker">Antaeus · Private build</p>
+      <input
+        class="gate__input"
+        id="gate-input"
+        type="text"
+        name="code"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        maxlength="12"
+        placeholder="••••••"
+        aria-label="Invite code"
+        required
+      />
+      <button class="gate__submit" type="submit">Enter</button>
+      <p class="gate__error" id="gate-error" role="alert"></p>
+      <div class="gate__steps" id="gate-steps" aria-hidden="true">
+        <div class="gate__step"></div><div class="gate__step"></div><div class="gate__step"></div>
+        <div class="gate__step"></div><div class="gate__step"></div><div class="gate__step"></div>
+      </div>
+      <input type="hidden" name="next" id="gate-next" value="/" />
+    </form>
 
-      <p class="gate__exit">
-        No code? Operator preview is invite-only right now. Reach out at
-        <a href="mailto:founders@antaeus.app">founders@antaeus.app</a> and
-        we'll get you in.
-      </p>
+    <p class="gate__exit">
+      No code? The private build is invite-only.<br />
+      Write to <a href="mailto:founders@antaeus.app">founders@antaeus.app</a> and we'll get you in.
+    </p>
+
+    <div class="earthzone" aria-hidden="true">
+      <div class="earthzone__mark" id="gate-mark">
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M14 38L24 10l10 28" stroke-width="3.4"/>
+          <path d="M18.2 28h11.6" stroke-width="3.4"/>
+        </svg>
+      </div>
+      <div class="earthzone__ground"></div>
+      <div class="earthzone__earth"></div>
+      <div class="earthzone__strata">
+        <i style="bottom:88px"></i><i style="bottom:62px"></i><i style="bottom:38px"></i><i style="bottom:16px"></i>
+      </div>
+      <div class="earthzone__root" id="gate-root"></div>
+      <p class="earthzone__landed" id="gate-landed">GROUNDED · ROOTED</p>
     </div>
   </main>
 
   <script>
-    // Surface ?error=1 inline + carry ?next= through the unlock POST.
+    // The grounding: each typed digit lowers the lifted mark one step;
+    // six digits seat it on the ground line. Submit grows the root,
+    // then hands the code to the Worker (GET /_gate/unlock). ?error=1
+    // returns here with the mark lifted again. Progressive enhancement:
+    // without JS this is a plain working form.
     (function () {
       try {
+        var input = document.getElementById('gate-input');
+        var form = document.getElementById('gate-form');
+        var mark = document.getElementById('gate-mark');
+        var root = document.getElementById('gate-root');
+        var landed = document.getElementById('gate-landed');
+        var err = document.getElementById('gate-error');
+        var steps = document.querySelectorAll('#gate-steps .gate__step');
+        var LIFT = -96, TILT = -7, submitted = false;
+
+        function setProgress(n) {
+          var f = Math.min(6, n) / 6;
+          mark.style.transform = 'translateX(-50%) translateY(' + (LIFT * (1 - f)) +
+            'px) rotate(' + (TILT * (1 - f)) + 'deg)';
+          mark.style.opacity = String(0.32 + 0.68 * f);
+          for (var i = 0; i < steps.length; i++) {
+            steps[i].classList.toggle('hit', i < n);
+          }
+        }
+
+        input.addEventListener('input', function () {
+          input.value = input.value.replace(/\D/g, '').slice(0, 12);
+          if (err) err.textContent = '';
+          setProgress(input.value.length);
+        });
+
+        form.addEventListener('submit', function (e) {
+          if (submitted) return; // second pass: let the browser navigate
+          if (!input.value) return; // `required` shows its own message
+          e.preventDefault();
+          submitted = true;
+          setProgress(6);
+          root.classList.add('on');
+          landed.classList.add('on');
+          window.setTimeout(function () { form.submit(); }, 750);
+        });
+
+        // Surface ?error=1 inline + carry ?next= through the unlock GET.
         var params = new URLSearchParams(window.location.search || '');
         if (params.get('error') === '1') {
-          var err = document.getElementById('gate-error');
-          if (err) err.textContent = 'That code does not unlock anything yet. Try again.';
+          if (err) err.textContent = "That code doesn't open anything yet. Check it and try again.";
         }
         var next = params.get('next');
         if (next && next.charAt(0) === '/' && next.charAt(1) !== '/') {
           var nextInput = document.getElementById('gate-next');
           if (nextInput) nextInput.value = next;
         }
+
+        setProgress(0);
       } catch (e) {}
     })();
   </script>

@@ -13,6 +13,8 @@ import {
 import { ClimbDrawer } from "./ClimbDrawer";
 import { buildMasthead, buildStanding } from "./lib/cockpit";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
+import { buildFollowRead } from "@/lib/follow/follow-data";
 import "./dashboard-v4.css";
 
 /**
@@ -62,6 +64,11 @@ export function DashboardV4(): JSX.Element {
         ? move.actions.find((a) => a.variant !== "ghost") ?? move.actions[0]
         : null;
     const why = move ? explainCommandObject(move, "spotlight") : null;
+    // The move's title is a door into the object's whole thread — but
+    // only when the focusObject resolves to something the system has
+    // actually seen (placeholder focusObjects stay plain text).
+    const moveFollowable =
+        move && move.focusObject ? buildFollowRead(move.focusObject) !== null : false;
 
     return (
         <div class="db4">
@@ -105,7 +112,22 @@ export function DashboardV4(): JSX.Element {
                                 <span class="db4-n">· #{idx + 1} {t("of", { class: "body" })} {total}</span>
                             </div>
                             <div class="db4-mrow">
-                                <h2 class="db4-mt">{move.title}</h2>
+                                <h2
+                                class={`db4-mt${moveFollowable ? " fo-obj" : ""}`}
+                                onClick={
+                                    moveFollowable
+                                        ? (e) => {
+                                              e.stopPropagation();
+                                              openFollow(
+                                                  e.currentTarget as HTMLElement,
+                                                  move.focusObject as string
+                                              );
+                                          }
+                                        : undefined
+                                }
+                            >
+                                {move.title}
+                            </h2>
                                 {primary ? (
                                     <a class="db4-go" href={primary.href}>
                                         {primary.label} →
@@ -152,6 +174,8 @@ export function DashboardV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            {/* Follow the Object — any name is a door (2026-07-13). */}
+            <FollowPeek />
 
         </div>
     );
