@@ -280,13 +280,13 @@ export function SettingsV4(): JSX.Element {
                     <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCaptureToken(); }}>
                         <summary>{t("Email — your BCC address", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. We keep the subject line, who it went to, and when. Never the message itself.", { class: "body" })}
+                            {t("Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. What gets saved: the subject line, who it went to, and when — never the message itself.", { class: "body" })}
                             {(() => {
                                 const domain = captureDomain();
                                 if (!domain) {
                                     return (
                                         <div class="st4-cap-wait">
-                                            {t("One setup step is still on our side — the mail domain isn't live yet. The moment it is, your address appears right here.", { class: "body" })}
+                                            {t("Your address isn't switched on quite yet — the moment it is, it appears right here, ready to copy.", { class: "body" })}
                                         </div>
                                     );
                                 }
@@ -333,7 +333,7 @@ export function SettingsV4(): JSX.Element {
                     <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCalendar(); }}>
                         <summary>{t("Calendar — paste your link", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Paste your calendar's private link and meetings with accounts you're watching count themselves — no approvals, no setup on your calendar's side. We keep only meetings where someone from a watched account is invited: the title, the time, and who. Everything else on your calendar is ignored and never stored.", { class: "body" })}
+                            {t("Paste your calendar's private link and meetings with accounts you're watching count themselves — no approvals, no setup on your calendar's side. Only meetings where someone from an account you're watching is invited get saved — the title, the time, and who. Everything else on your calendar is ignored and never stored.", { class: "body" })}
                             <div class="st4-cap-steps">
                                 <b>{t("Where the link lives:")}</b>
                                 <ul>
@@ -368,7 +368,7 @@ export function SettingsV4(): JSX.Element {
                     <details class="st4-adv">
                         <summary>{t("Email — the deeper connection (optional, not on yet)", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet: Google requires a security review of us (not of you) before your one-click approval can exist, and we haven't started that clock. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.", { class: "body" })}
+                            {t("Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet — Google has to security-review Antaeus itself (nothing about you) before your one-click approval can exist. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.", { class: "body" })}
                         </div>
                     </details>
 
