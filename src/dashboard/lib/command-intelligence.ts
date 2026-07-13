@@ -208,7 +208,7 @@ function buildObjectFromCard(
             meta,
             actions,
             ...(card.rankingSignals ? { rankingSignals: { ...card.rankingSignals } } : {}),
-            focusObject: tx(card.title),
+            focusObject: tx(card.focusObject ?? "") || tx(card.title),
             focusRoom: tx(actions[0]?.roomLabel ?? ""),
             stateKey: family,
             source: card

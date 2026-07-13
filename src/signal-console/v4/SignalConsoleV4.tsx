@@ -25,6 +25,7 @@ import {
 } from "../lib/handoff";
 import { buildAttentionField, type AttentionBand } from "./lib/attention";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 import "./signal-console-v4.css";
 
 /**
@@ -111,7 +112,7 @@ function Chip({ account, heat, ageLabel, band }: {
                 <span class="sc4-cheat">{heat}</span>
                 <span class={`sc4-tdot sc4-tdot--${tdot}`} title={exec.temperatureLabel} />
             </div>
-            <div class="sc4-cname">{account.name}</div>
+            <div class="sc4-cname fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, account.name); }}>{account.name}</div>
             <div class="sc4-csig">
                 {topSig?.headline ?? account.notes ?? t("no signals yet — research to build heat", { class: "body" })}
             </div>
@@ -284,6 +285,7 @@ export function SignalConsoleV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            <FollowPeek />
 
         </div>
     );

@@ -35,6 +35,7 @@ import {
 } from "./lib/views";
 import "./deal-workspace-v4.css";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 
 /**
  * DealWorkspaceV4 — the Diagnosis Table (canon §4.13), wired to
@@ -99,7 +100,7 @@ function ListView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.
                         <div class={`dw4-lrow dw4-${g.meta.cls}`} key={a.deal.id} style={laneVars(g.meta.cls)}>
                             <div class="dw4-tick" />
                             <div>
-                                <div class="dw4-a" onClick={() => setFocusedDealId(a.deal.id)}>{a.deal.accountName}</div>
+                                <div class="dw4-a fo-obj" onClick={(e) => { e.stopPropagation(); setFocusedDealId(a.deal.id); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</div>
                                 <div class="dw4-v">{money(a.deal.value)}</div>
                                 <span class="dw4-stg">{a.deal.stage}</span>
                             </div>
@@ -140,7 +141,7 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                         {focal.lane === "healthy" ? t("On track") : t("Slipping now")}
                         {focal.deal.value >= 100 ? t(" · your biggest deal") : ""}
                     </div>
-                    <div class="dw4-nm">{focal.deal.accountName} <span class="dw4-fv">{money(focal.deal.value)}</span></div>
+                    <div class="dw4-nm"><span class="fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, focal.deal.accountName); }}>{focal.deal.accountName}</span> <span class="dw4-fv">{money(focal.deal.value)}</span></div>
                     <div class="dw4-fstg">{focal.deal.stage}</div>
                 </div>
                 <div class="dw4-diag">
@@ -175,7 +176,7 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                 {rest.map((a) => (
                     <div class="dw4-qr" key={a.deal.id} style={`--qc:${a.lane === "critical" ? "var(--ds-red,#c0392b)" : a.lane === "at-risk" ? "var(--ds-amber,#b5790f)" : "var(--ds-forest,#1b5e3f)"}`} onClick={() => setFocusedDealId(a.deal.id)}>
                         <div>
-                            <div class="dw4-qa">{a.deal.accountName}</div>
+                            <div class="dw4-qa fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</div>
                             <div class="dw4-qwhy">{a.causes[0] ?? t("on track")}</div>
                         </div>
                         <span class="dw4-qv">{money(a.deal.value)}</span>
@@ -208,7 +209,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                         const pc = a.lane === "critical" ? "var(--ds-red,#c0392b)" : a.lane === "at-risk" ? "var(--ds-amber,#b5790f)" : "var(--ds-forest,#1b5e3f)";
                         return (
                             <div class="dw4-pill" key={a.deal.id} style={`left:${x}%;top:${y}px;--pc:${pc}`} onClick={() => setFocusedDealId(a.deal.id)}>
-                                <span class="dw4-pa">{a.deal.accountName}</span>
+                                <span class="dw4-pa fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</span>
                                 <span class="dw4-pv">{money(a.deal.value)}</span>
                                 <span class="dw4-pwhy">{a.causes[0] ?? (a.lane === "healthy" ? t("on track") : t("watch"))}</span>
                             </div>
@@ -223,7 +224,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                         <div class="dw4-arow" key={a.deal.id}>
                             <div class="dw4-tick" style="background:var(--ds-red,#c0392b)" />
                             <div>
-                                <div class="dw4-a" onClick={() => setFocusedDealId(a.deal.id)}>{a.deal.accountName}</div>
+                                <div class="dw4-a fo-obj" onClick={(e) => { e.stopPropagation(); setFocusedDealId(a.deal.id); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</div>
                                 <div class="dw4-v">{money(a.deal.value)} · {a.deal.stage}</div>
                             </div>
                             <div class="dw4-why"><span class="dw4-c">{a.causes.join(" · ")}</span>{a.nextMove}</div>
@@ -324,6 +325,8 @@ export function DealWorkspaceV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            {/* Follow the Object — any name is a door (2026-07-13). */}
+            <FollowPeek />
 
         </div>
     );

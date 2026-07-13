@@ -166,6 +166,10 @@ function signalSnapshotToMoveCards(
             const card: RawCommandCard = {
                 ...(id ? { id } : {}),
                 title: `Outbound to ${name}`,
+                // The account is the object this move is about — carrying
+                // it lets object-level surfaces (Follow the Object) resolve
+                // the card to the account instead of the composed title.
+                focusObject: name,
                 badge: "Now",
                 meta: [`heat ${Math.round(heat)}`],
                 // Sarah's hand-reach intent on a "Outbound to X" card
