@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G9 · Peek → unfold — the foil study · 2026-07-13</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   G9 · PEEK → UNFOLD — THE FOIL STUDY · 2026-07-13
+   The settled O-B/O-A combo (the peek that unfolds in place),
+   restyled at founder request: the borders read as ALUMINUM
+   FOIL ROLLED ONTO A RIMMED BAKING PAN. The room frame is the
+   sheet pan (brushed-steel rim); the peek card is wrapped in
+   crinkled foil that rolls over its lip — extra crumple at the
+   corners, a specular ridge where the roll turns.
+   A play exploration, not canon — the material deliberately
+   ignores the semantic-color rules for fun.
+   Click an underlined account name, then unfold the thread.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  /* crinkled foil: fractal noise lit from the upper left */
+  --crinkle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.019 0.027' numOctaves='3' seed='8' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23e8ebf1' surfaceScale='4.2' diffuseConstant='1' result='d'%3E%3CfeDistantLight azimuth='235' elevation='40'/%3E%3C/feDiffuseLighting%3E%3CfeSpecularLighting in='n' lighting-color='%23ffffff' surfaceScale='4.2' specularConstant='0.95' specularExponent='16' result='s'%3E%3CfeDistantLight azimuth='235' elevation='58'/%3E%3C/feSpecularLighting%3E%3CfeComposite in='s' in2='d' operator='arithmetic' k1='0' k2='1' k3='1' k4='0'/%3E%3C/filter%3E%3Crect width='560' height='560' filter='url(%23f)'/%3E%3C/svg%3E");
+  /* heavier crumple for corners + the pan rim */
+  --crumple:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.055 0.075' numOctaves='3' seed='4' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23e4e8ef' surfaceScale='4.6' diffuseConstant='1' result='d'%3E%3CfeDistantLight azimuth='218' elevation='38'/%3E%3C/feDiffuseLighting%3E%3CfeSpecularLighting in='n' lighting-color='%23ffffff' surfaceScale='4.6' specularConstant='1' specularExponent='14' result='s'%3E%3CfeDistantLight azimuth='218' elevation='55'/%3E%3C/feSpecularLighting%3E%3CfeComposite in='s' in2='d' operator='arithmetic' k1='0' k2='1' k3='1' k4='0'/%3E%3C/filter%3E%3Crect width='340' height='340' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.pagehead{max-width:1060px;margin:26px auto 0;padding:0 20px}
+.pagehead .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50)}
+.pagehead p{font-size:.92rem;line-height:1.7;color:var(--ink-70);max-width:860px;margin:8px 0 0}
+.pagehead b{color:var(--ink)}
+
+/* ============================================================
+   THE SHEET PAN — the room frame with a rolled steel rim
+   ============================================================ */
+.pan{position:relative;max-width:1060px;margin:20px auto 70px;border-radius:22px;
+  padding:16px;
+  background-color:#9aa1ad;
+  background-image:
+    linear-gradient(118deg, rgba(255,255,255,.35) 0%, rgba(120,127,140,.4) 14%,
+      rgba(244,246,250,.32) 27%, rgba(96,103,117,.42) 46%, rgba(238,242,248,.35) 63%,
+      rgba(118,125,139,.4) 80%, rgba(250,252,255,.32) 100%),
+    var(--crumple);
+  background-blend-mode:overlay,normal;
+  background-size:auto,340px 340px;
+  /* the rolled lip: bright ridge outside, shadow falling inward */
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.9),
+    inset 0 0 0 4px rgba(255,255,255,.3),
+    inset 0 0 0 7px rgba(88,95,109,.6),
+    inset 0 12px 24px rgba(56,62,76,.38),
+    inset 0 -7px 16px rgba(255,255,255,.45),
+    0 3px 0 rgba(255,255,255,.75),
+    0 1px 0 rgba(90,96,110,.55),
+    0 22px 55px rgba(10,28,64,.26);
+}
+.pan::after{/* baked-on specular streak — rim band only */
+  content:"";position:absolute;inset:0;border-radius:22px;pointer-events:none;
+  background:linear-gradient(64deg, transparent 22%, rgba(255,255,255,.55) 34%, transparent 43%,
+    transparent 68%, rgba(255,255,255,.4) 78%, transparent 86%);
+  mix-blend-mode:screen;
+  padding:16px;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+}
+.frame{position:relative;border-radius:10px;background:var(--field);min-height:640px;overflow:hidden;
+  box-shadow:inset 0 2px 10px rgba(70,76,90,.3), inset 0 0 0 1px rgba(120,126,138,.4)}
+.room{padding:22px 28px 30px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.9rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.92rem;color:var(--ink-70)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+.obj{color:var(--ink);font-weight:600;cursor:pointer;border-bottom:1px dotted rgba(230,112,30,.55);
+  transition:color .12s,border-color .12s}
+.obj:hover{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* ============================================================
+   THE FOIL-WRAPPED PEEK — crinkled foil rolled over the lip
+   ============================================================ */
+.peek{position:absolute;z-index:20;width:364px;display:none;
+  /* hand-rolled irregular corners */
+  border-radius:17px 21px 15px 19px / 19px 15px 21px 16px;
+  padding:13px;
+  background-color:#a6adb9;
+  background-image:
+    linear-gradient(115deg, rgba(255,255,255,.38) 0%, rgba(118,125,139,.42) 16%,
+      rgba(246,248,252,.35) 30%, rgba(100,107,121,.45) 52%, rgba(240,244,250,.38) 70%,
+      rgba(122,129,143,.38) 86%, rgba(252,253,255,.35) 100%),
+    var(--crinkle);
+  background-blend-mode:overlay,normal;
+  background-size:auto,560px 560px;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.95),
+    inset 0 0 0 4px rgba(98,105,119,.65),
+    inset 0 7px 14px rgba(255,255,255,.5),
+    inset 0 -6px 12px rgba(72,78,92,.5),
+    0 2px 0 rgba(255,255,255,.7),
+    0 1px 0 rgba(90,96,110,.6),
+    0 24px 60px rgba(10,28,64,.32);
+  transition:width .3s cubic-bezier(.4,0,.2,1);
+}
+.peek::before{/* extra crumple bunched at the corners, like a real roll-over */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background-image:
+    radial-gradient(140px 140px at 0% 0%, rgba(90,96,110,.4), transparent 55%),
+    radial-gradient(140px 140px at 100% 0%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(150px 150px at 100% 100%, rgba(90,96,110,.35), transparent 55%),
+    radial-gradient(130px 130px at 0% 100%, rgba(255,255,255,.45), transparent 55%),
+    var(--crumple);
+  background-size:auto,auto,auto,auto,340px 340px;
+  background-blend-mode:normal,screen,normal,screen,overlay;
+  opacity:.55;
+  -webkit-mask-image:linear-gradient(#000,#000);
+  mask-composite:exclude;
+  /* only the border band gets the heavy crumple */
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  padding:13px;
+}
+.peek::after{/* the specular streak — foil band only */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(58deg, transparent 18%, rgba(255,255,255,.6) 30%, transparent 40%,
+    transparent 62%, rgba(255,255,255,.45) 74%, transparent 84%);
+  mix-blend-mode:screen;
+  padding:13px;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+}
+.peek.on{display:block;animation:pop .16s ease}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.peek.unfolded{width:584px}
+
+.peek-inner{position:relative;z-index:2;background:var(--raised);border-radius:8px;
+  padding:15px 17px 13px;
+  box-shadow:inset 0 1px 4px rgba(70,76,90,.25), 0 0 0 1px rgba(120,126,138,.55)}
+
+.peek .nm{font-family:var(--serif);font-size:1.3rem;margin:0 0 10px}
+.prow{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--ink-08);font-size:.82rem;line-height:1.5;color:var(--ink-70)}
+.prow .k{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;font-weight:700;
+  text-transform:uppercase;color:var(--ink-50);min-width:96px;padding-top:2px}
+.prow b{color:var(--ink)}
+.pmove{margin-top:10px;display:block;width:100%;text-align:left;background:var(--orange);color:#fff;
+  border:none;border-radius:8px;padding:10px 13px;font-family:var(--sans);font-size:.84rem;font-weight:600;cursor:pointer}
+.pmove span{display:block;font-weight:400;font-size:.74rem;opacity:.85;margin-top:2px}
+.pthread{margin-top:8px;display:block;width:100%;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;font-weight:700;color:var(--blue);text-align:center;padding:6px}
+.pthread:hover{text-decoration:underline}
+.peek.unfolded .pthread{display:none}
+.peek .foldzone{display:none;border-top:1px solid var(--ink-08);margin-top:12px;padding-top:14px}
+.peek.unfolded .foldzone{display:block;animation:pop .25s ease}
+.foldzone .fz-k{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;font-weight:700;
+  color:var(--ink-50);text-transform:uppercase;margin-bottom:12px}
+.tstop{position:relative;padding:0 0 18px 26px}
+.tstop::before{content:"";position:absolute;left:0;top:5px;width:10px;height:10px;border-radius:50%;
+  background:var(--field);border:2.5px solid var(--ink-30)}
+.tstop::after{content:"";position:absolute;left:4.5px;top:19px;bottom:2px;width:2px;background:var(--ink-14)}
+.tstop:last-of-type::after{display:none}
+.tstop.here::before{border-color:var(--ink);background:var(--ink)}
+.tstop.next::before{border-color:var(--orange);background:var(--orange);box-shadow:0 0 0 4px rgba(230,112,30,.15)}
+.tstop .rl{display:flex;align-items:baseline;gap:9px;margin-bottom:2px}
+.tstop .rn{font-weight:700;font-size:.88rem}
+.tstop .tag{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;font-weight:700;border-radius:99px;padding:2px 8px}
+.tstop .tag.here{color:var(--ink);border:1px solid var(--ink-30)}
+.tstop .tag.next{color:#fff;background:var(--orange)}
+.tstop .go{margin-left:auto;font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;font-weight:700;
+  color:var(--blue);cursor:pointer;white-space:nowrap}
+.tstop .go:hover{text-decoration:underline}
+.tstop .wt{font-size:.8rem;color:var(--ink-70);line-height:1.55}
+.tstop .wt b{color:var(--ink)}
+.tremember{margin-top:8px;font-size:.76rem;color:var(--ink-50);font-style:italic;line-height:1.5}
+.fz-back{margin-top:4px;display:block;width:100%;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;font-weight:700;color:var(--ink-50);text-align:center;padding:6px}
+.fz-back:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="pagehead">
+  <div class="k">G9 · PEEK → UNFOLD · THE FOIL STUDY · 2026-07-13</div>
+  <p><b>The settled combo, wrapped in foil.</b> Same interaction as the locked design — click a name for
+  the peek, unfold the whole thread in place — but the borders are the founder's ask: <b>aluminum foil
+  rolled onto a rimmed baking pan.</b> The room frame is the sheet pan (rolled steel lip, specular streak);
+  the peek card is wrapped in crinkled foil that rolls over its edge — bunched crumple at the corners,
+  a bright ridge where the roll turns, hand-rolled irregular corners. A play exploration, not canon.</p>
+</div>
+
+<div class="pan">
+<div class="frame" id="frame">
+  <div class="room">
+    <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE · FRESH FROM THE OVEN
+      <span class="hint">click an underlined account name</span></div>
+    <div class="rh1">3 deals will slip this week if you do nothing.</div>
+    <div class="rrow"><span class="obj">Northwind Robotics</span> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+    <div class="rrow"><span class="obj">Mercury</span> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+    <div class="rrow"><span class="obj">Ramp</span> verbal yes · terms on the table <span class="m">$84k</span></div>
+  </div>
+
+  <div class="peek" id="peek">
+    <div class="peek-inner">
+      <div class="nm">Ramp</div>
+      <div class="prow"><span class="k">Where it stands</span><span><b>$84k · verbal yes</b> — in procurement, next step dated Jul 15.</span></div>
+      <div class="prow"><span class="k">What's pulling</span><span>The security questionnaire — <b>6 days unanswered</b>, champion cooling.</span></div>
+      <div class="prow"><span class="k">What changes</span><span>Answer it and the blocking front clears — the close date holds.</span></div>
+      <div class="prow"><span class="k">Remembered</span><span>Champion Dana Cho · 7 discovery truths · the CRO-hire angle that landed.</span></div>
+      <button class="pmove">Send the security answers → Getting to Signed
+        <span>Your papers already cover 88 of the 150 questions.</span></button>
+      <button class="pthread" id="unfold-btn">SEE THE WHOLE THREAD — UNFOLD IT HERE ↓</button>
+
+      <div class="foldzone">
+        <div class="fz-k">The whole thread · every room that holds a piece</div>
+        <div class="tstop"><div class="rl"><span class="rn">Signal Console</span><span class="go">GO →</span></div>
+          <div class="wt">Heat <b>88</b> · hiring surge + new CRO · 2 signals this week.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Outbound Studio</span><span class="go">GO →</span></div>
+          <div class="wt">4 touches · last reply 3 days ago · the CRO-hire opener landed.</div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Discovery Studio</span><span class="go">GO →</span></div>
+          <div class="wt">Jun 30 call · champion <b>Dana Cho</b> · 7 truths captured.</div></div>
+        <div class="tstop here"><div class="rl"><span class="rn">Deal Workspace</span><span class="tag here">YOU ARE HERE</span></div>
+          <div class="wt">Next step dated Jul 15 — the results meeting.</div></div>
+        <div class="tstop next"><div class="rl"><span class="rn">Getting to Signed</span><span class="tag next">NEXT</span><span class="go">GO →</span></div>
+          <div class="wt">Security blocking · <b>your papers answer 88 of 150.</b></div></div>
+        <div class="tstop"><div class="rl"><span class="rn">Call in a Favor</span><span class="go">GO →</span></div>
+          <div class="wt"><b>Elena Ruiz</b> carries weight here · one favor available.</div></div>
+        <p class="tremember">All remembered — jump anywhere, nothing needs restating.</p>
+        <button class="fz-back" id="fold-btn">FOLD IT BACK ↑ (CRIMP THE EDGES)</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  var frame=document.getElementById('frame'),card=document.getElementById('peek');
+  document.querySelectorAll('.obj').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      card.classList.remove('unfolded');
+      var r=el.getBoundingClientRect(),f=frame.getBoundingClientRect();
+      var left=Math.min(r.left-f.left, f.width-604);
+      card.style.left=Math.max(12,left)+'px';
+      card.classList.add('on');
+      card.style.top=(r.bottom-f.top+10)+'px';
+      fit();
+    });
+  });
+  function fit(){
+    var need=parseFloat(card.style.top)+card.offsetHeight+24;
+    if(need>frame.offsetHeight)frame.style.minHeight=need+'px';
+  }
+  document.getElementById('unfold-btn').addEventListener('click',function(e){
+    e.stopPropagation();card.classList.add('unfolded');setTimeout(fit,340);
+  });
+  document.getElementById('fold-btn').addEventListener('click',function(e){
+    e.stopPropagation();card.classList.remove('unfolded');
+  });
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(!document.contains(t))return;
+    if(!card.contains(t)&&!t.closest('.obj')){card.classList.remove('on');card.classList.remove('unfolded');}
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      if(card.classList.contains('unfolded'))card.classList.remove('unfolded');
+      else card.classList.remove('on');
+    }
+  });
+})();
+</script>
+</body>
+</html>
