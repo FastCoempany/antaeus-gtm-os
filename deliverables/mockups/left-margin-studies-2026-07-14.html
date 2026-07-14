@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The left margin — six studies · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LEFT MARGIN — SIX STUDIES · 2026-07-14
+   Ideation with the founder: the Western eye boots up at the
+   left edge — the exact real estate the hallway used to own.
+   The reframe: our rooms are prose, and the left edge of prose
+   is the MARGIN. Margins hold annotations, not doors. Six ghost
+   layers that hand the eye something when it looks left,
+   without changing a single room structure:
+     LM-1 marginalia ticks   LM-2 the pressure spine
+     LM-3 provenance whisper LM-4 dog-ears
+     LM-5 the tide           LM-6 the ghost hallway
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.78rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:6px 14px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+/* ---- the fake room ---- */
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:600px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.roomwrap{position:absolute;inset:0;overflow-y:auto}
+.room{padding:22px 28px 40px 46px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70);
+  transition:box-shadow .15s,border-color .15s}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+.rrow.lit{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12)}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:#fff;
+  font-size:.8rem;padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.on{opacity:1}
+
+/* ============================================================
+   LM-1 · MARGINALIA TICKS
+   ============================================================ */
+.lm1-ticks{position:absolute;left:0;top:0;bottom:0;width:34px;z-index:10;pointer-events:none}
+.lm1-tick{position:absolute;left:10px;width:14px;height:3px;border-radius:2px;pointer-events:auto;cursor:pointer;
+  transition:width .15s}
+.lm1-tick:hover{width:22px}
+.lm1-tick.s-red{background:var(--red)}
+.lm1-tick.s-amber{background:var(--amber)}
+.lm1-tick.s-forest{background:var(--forest)}
+
+/* ============================================================
+   LM-2 · THE PRESSURE SPINE
+   ============================================================ */
+.lm2-spine{position:absolute;left:0;top:0;bottom:0;width:14px;z-index:10;cursor:pointer}
+.lm2-heat{position:absolute;left:5px;top:8px;bottom:8px;width:4px;border-radius:3px;overflow:hidden}
+.lm2-heat i{position:absolute;left:0;right:0}
+.lm2-window{position:absolute;left:2px;width:10px;border:1.5px solid var(--ink);border-radius:4px;
+  opacity:.45;transition:top .08s linear}
+
+/* ============================================================
+   LM-3 · THE PROVENANCE WHISPER
+   ============================================================ */
+.lm3-whisper{position:absolute;left:4px;bottom:22px;writing-mode:vertical-rl;transform:rotate(180deg);
+  white-space:nowrap;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;font-weight:700;
+  text-transform:uppercase;color:var(--ink-30);cursor:pointer;z-index:10;padding:4px 6px;
+  transition:color .18s;background:none;border:none}
+.lm3-whisper:hover{color:var(--orange)}
+.lm3-whisper .who{color:var(--ink-50)}
+.lm3-whisper:hover .who{color:var(--orange)}
+
+/* ============================================================
+   LM-4 · DOG-EARS
+   ============================================================ */
+.lm4-ears{position:absolute;left:0;top:90px;z-index:10;display:flex;flex-direction:column;gap:14px}
+.lm4-ear{position:relative;width:26px;height:26px;cursor:pointer;border:none;background:none;padding:0}
+.lm4-ear::before{content:"";position:absolute;left:0;top:0;width:0;height:0;
+  border-top:26px solid var(--pc,rgba(10,28,64,.28));border-right:26px solid transparent;
+  filter:drop-shadow(1px 1px 1px rgba(10,28,64,.18));transition:border-top-width .15s,border-right-width .15s}
+.lm4-ear:hover::before{border-top-width:32px;border-right-width:32px}
+.lm4-chip{position:absolute;left:34px;top:2px;background:var(--ink);color:#fff;font-size:.72rem;
+  padding:5px 11px;border-radius:7px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none}
+.lm4-ear:hover .lm4-chip{opacity:1}
+
+/* ============================================================
+   LM-5 · THE TIDE
+   ============================================================ */
+.lm5-tide{position:absolute;left:0;top:0;bottom:0;width:26px;z-index:10;overflow:hidden;pointer-events:none}
+.lm5-fill{position:absolute;left:0;top:0;width:100%;height:38%;
+  background:linear-gradient(180deg,rgba(27,94,63,.1),rgba(27,94,63,.05));
+  border-bottom:1.5px solid rgba(27,94,63,.4);transition:height .3s}
+.lm5-time{position:absolute;left:3px;font-family:var(--mono);font-size:.54rem;letter-spacing:.08em;
+  font-weight:700;color:var(--forest);transform-origin:0 0;white-space:nowrap;transition:top .3s}
+.lm5-ctl{max-width:1060px;margin:10px auto 0;padding:0 2px;display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--ink-50)}
+.lm5-ctl input{width:260px;accent-color:var(--forest)}
+
+/* ============================================================
+   LM-6 · THE GHOST HALLWAY
+   ============================================================ */
+.lm6-ghost{position:absolute;left:0;top:0;bottom:0;width:196px;z-index:10;cursor:pointer;border:none;background:none;padding:0}
+.lm6-rail{display:block;position:absolute;inset:10px auto 10px 10px;width:168px;border-radius:10px;
+  border:1.5px dashed rgba(10,28,64,.1);opacity:.55;transition:opacity .2s;pointer-events:none}
+.lm6-item{display:block;height:26px;margin:10px 12px;border-radius:7px;background:rgba(10,28,64,.05)}
+.lm6-item:first-child{margin-top:14px}
+.lm6-ghost:hover .lm6-rail{opacity:1}
+.lm6-say{position:absolute;left:22px;top:50%;transform:translateY(-50%);width:150px;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;font-weight:700;text-transform:uppercase;
+  color:var(--ink-50);line-height:1.9;opacity:0;transition:opacity .2s;pointer-events:none;text-align:left}
+.lm6-ghost:hover .lm6-say{opacity:1}
+.lm6-say b{color:var(--orange)}
+/* mini map payoff */
+.gmap{position:absolute;left:0;right:0;bottom:0;background:var(--raised);
+  border-top:2.5px solid var(--ink);box-shadow:0 -18px 50px rgba(10,28,64,.14);
+  transform:translateY(101%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:40;
+  padding:18px 28px 22px}
+.gmap.up{transform:translateY(0)}
+.gmap .gk{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);margin-bottom:3px}
+.gmap .gt{font-family:var(--serif);font-size:1.3rem;margin:0 0 12px}
+.gmap .cols{display:flex;gap:24px;flex-wrap:wrap}
+.gmap .col b{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;color:var(--ink-30);margin-bottom:5px}
+.gmap .col a{display:block;font-size:.82rem;color:var(--ink-70);padding:2px 0;cursor:pointer}
+.gmap .col a:hover{color:var(--orange)}
+.gmap .col a.here{color:var(--ink);font-weight:700}
+.gmap .col a.next{color:var(--orange);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LEFT MARGIN · SIX STUDIES · 2026-07-14</span>
+  <button class="on" data-p="m1">LM-1 · <b>Marginalia ticks</b></button>
+  <button data-p="m2">LM-2 · <b>The pressure spine</b></button>
+  <button data-p="m3">LM-3 · <b>Provenance whisper</b></button>
+  <button data-p="m4">LM-4 · <b>Dog-ears</b></button>
+  <button data-p="m5">LM-5 · <b>The tide</b></button>
+  <button data-p="m6">LM-6 · <b>The ghost hallway</b></button>
+</div>
+
+<!-- ============ LM-1 · MARGINALIA TICKS ============ -->
+<div class="pane on" id="pane-m1">
+  <p class="lead"><b>LM-1 · Marginalia ticks.</b> One tiny registration mark on the left edge per object
+  row, colored by state — red slipping, amber thin, forest held. The eye lands left and reads the room's
+  pressure before reading a word. Hover a tick and its row lights; click and you're there. Annotation,
+  never navigation.</p>
+  <div class="frame" id="f1">
+    <div class="lm1-ticks" id="ticks1"></div>
+    <div class="roomwrap">
+      <div class="room" id="room1">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+          <span class="hint">hover the ticks on the left edge</span></div>
+        <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      </div>
+    </div>
+    <div class="toast" id="toast1"></div>
+  </div>
+  <div class="note"><b>LM-1</b> — the closest to real marginalia: it comments on exactly what's on screen,
+  scales to any room with ranked rows, and costs ~14px. The risk is tick-blindness on healthy rooms — a
+  column of quiet forest reads as texture. Strongest on the Diagnosis Table rooms where state varies.</div>
+</div>
+
+<!-- ============ LM-2 · THE PRESSURE SPINE ============ -->
+<div class="pane" id="pane-m2">
+  <p class="lead"><b>LM-2 · The pressure spine.</b> A 4px strip on the far left that is the <b>whole page
+  mapped to scroll</b> — every row's state painted at its scroll position, with a small window showing
+  where you are. Glance left: how much red is below the fold? Click anywhere on the spine to jump. A
+  minimap with no map. Scroll the room and watch the window ride.</p>
+  <div class="frame" id="f2">
+    <div class="lm2-spine" id="spine2" title="the page, mapped">
+      <div class="lm2-heat" id="heat2"></div>
+      <div class="lm2-window" id="win2"></div>
+    </div>
+    <div class="roomwrap" id="wrap2">
+      <div class="room" id="room2">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+          <span class="hint">scroll — the spine knows what's below the fold</span></div>
+        <div class="rh1">Eighteen deals, and the ugly ones are at the bottom.</div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>LM-2</b> — answers the one question a tall room can't: "is there pressure I can't
+  see right now?" It's honest escalation (canon rule 7) — red only exists where red is real. Quietest win:
+  it doubles as a scrollbar the eye actually reads. Risk: on short rooms it's a solution without a problem.</div>
+</div>
+
+<!-- ============ LM-3 · THE PROVENANCE WHISPER ============ -->
+<div class="pane" id="pane-m3">
+  <p class="lead"><b>LM-3 · The provenance whisper.</b> The continuity params made visible: faint rotated
+  text running up the left edge — <b>where you came from, and what rides along</b>. The first thing the eye
+  asks when it jumps left is "where am I, how did I get here." This answers without one pixel of chrome.
+  Hover warms it; click takes you back.</p>
+  <div class="frame" id="f3">
+    <button class="lm3-whisper" id="whisper3">← CAME FROM <span class="who">SIGNAL CONSOLE</span> · RAMP RIDES ALONG</button>
+    <div class="roomwrap">
+      <div class="room" id="room3">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · OUTBOUND STUDIO
+          <span class="hint">read the left edge, bottom-up</span></div>
+        <div class="rh1">Where you are with Ramp.</div>
+        <div class="rrow"><b>The opener that landed</b> — the CRO-hire angle · reply 3 days ago <span class="m">4 touches</span></div>
+        <div class="rrow"><b>Next send</b> — the security-answers nudge, drafted and waiting <span class="m">ready</span></div>
+      </div>
+    </div>
+    <div class="toast" id="toast3"></div>
+  </div>
+  <div class="note"><b>LM-3</b> — the philosophical twin of the back-pill, but it lives where the eye
+  starts instead of where the chrome is. Reading rotated text is a real cost (nobody loves tilting their
+  head), so it works as ambient reassurance you *feel* rather than copy you read — and the params already
+  exist, so it's nearly free.</div>
+</div>
+
+<!-- ============ LM-4 · DOG-EARS ============ -->
+<div class="pane" id="pane-m4">
+  <p class="lead"><b>LM-4 · Dog-ears.</b> Two or three tiny folded corners at the left edge — the objects
+  you touched last, like fingers held in a book. Hover names them; click opens the Follow peek (in the
+  real build) — here it lights a toast. "Pick up where your thumb was." Recency, not hierarchy.</p>
+  <div class="frame" id="f4">
+    <div class="lm4-ears">
+      <button class="lm4-ear" style="--pc:rgba(230,112,30,.75)" data-name="Ramp — you were at terms"><span class="lm4-chip">Ramp · verbal yes · 20 min ago</span></button>
+      <button class="lm4-ear" style="--pc:rgba(10,28,64,.4)" data-name="Northwind — you set the next step"><span class="lm4-chip">Northwind Robotics · this morning</span></button>
+      <button class="lm4-ear" style="--pc:rgba(10,28,64,.22)" data-name="Mercury — you read the autopsy"><span class="lm4-chip">Mercury · yesterday</span></button>
+    </div>
+    <div class="roomwrap">
+      <div class="room" id="room4">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DASHBOARD
+          <span class="hint">the folded corners are where your thumb was</span></div>
+        <div class="rh1">The most valuable move on your board.</div>
+        <div class="rrow"><b>Send the security answers → Getting to Signed</b> — your papers cover 88 of 150 <span class="m">Ramp</span></div>
+        <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet, no dated next step <span class="m">$120k</span></div>
+      </div>
+    </div>
+    <div class="toast" id="toast4"></div>
+  </div>
+  <div class="note"><b>LM-4</b> — the warmest of the six: it's *your* margin, shaped by your hands, and it
+  pairs naturally with Follow the Object (a dog-ear IS a saved peek). Three maximum, or it becomes history
+  chrome. The fold metaphor also plays beautifully with the Founding GTM open book.</div>
+</div>
+
+<!-- ============ LM-5 · THE TIDE ============ -->
+<div class="pane" id="pane-m5">
+  <p class="lead"><b>LM-5 · The tide.</b> The left edge fills downward as the working day passes — a
+  barely-there forest wash with a hairline waterline and the hour riding it. Morning is empty margin;
+  evening is full. A clock made of margin: completely useless, weirdly grounding. Drag the slider to
+  live a day in five seconds.</p>
+  <div class="frame" id="f5">
+    <div class="lm5-tide"><div class="lm5-fill" id="fill5"></div><div class="lm5-time" id="time5">11 AM</div></div>
+    <div class="roomwrap">
+      <div class="room" id="room5">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · BRIEFING
+          <span class="hint">the margin is the day</span></div>
+        <div class="rh1">Here's what the system saw.</div>
+        <div class="rrow"><b>Northwind</b> has sat at proposal three weeks with no next step <span class="m">21d</span></div>
+        <div class="rrow"><b>Acme pilot</b> is past its results date and still marked open <span class="m">due</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="lm5-ctl"><span>SIMULATE THE DAY</span><input type="range" id="slider5" min="0" max="100" value="38"><span id="lbl5">11 AM</span></div>
+  <div class="note"><b>LM-5</b> — pure mood. It does no work and asks for none; it just makes the margin
+  feel inhabited, the way the sky band makes the Briefing feel like a morning. If it ever ships it's an
+  easter egg, not a feature — and honestly that might be its charm.</div>
+</div>
+
+<!-- ============ LM-6 · THE GHOST HALLWAY ============ -->
+<div class="pane" id="pane-m6">
+  <p class="lead"><b>LM-6 · The ghost hallway.</b> The mischievous one: the faint <b>watermark of the rail
+  we killed</b> — a dashed silhouette where every other SaaS puts its menu. Mouse drifts left out of habit,
+  the ghost wakes and says: <b>"there's no hallway here — press G."</b> Click it (or press G) and the
+  Ground rises instead. A joke that doubles as onboarding for every rail-trained hand.</p>
+  <div class="frame" id="f6">
+    <button class="lm6-ghost" id="ghost6" aria-label="There is no hallway — open the ground">
+      <span class="lm6-rail">
+        <span class="lm6-item"></span><span class="lm6-item"></span><span class="lm6-item"></span>
+        <span class="lm6-item"></span><span class="lm6-item"></span>
+      </span>
+      <span class="lm6-say">THERE'S NO HALLWAY HERE.<br><b>PRESS G</b> — THE GROUND HAS EVERY ROOM.</span>
+    </button>
+    <div class="roomwrap">
+      <div class="room" id="room6" style="padding-left:216px">
+        <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DASHBOARD
+          <span class="hint">drift your mouse left, like you would anywhere else</span></div>
+        <div class="rh1">3 deals will slip this week if you do nothing.</div>
+        <div class="rrow"><b>Send the security answers</b> — Ramp's blocking front clears <span class="m">the move</span></div>
+        <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet <span class="m">$120k</span></div>
+      </div>
+    </div>
+    <div class="gmap" id="gmap6"></div>
+  </div>
+  <div class="note"><b>LM-6</b> — the funniest and the most didactic: it meets the muscle memory of every
+  SaaS-trained operator exactly where it fires and converts the reflex into the Ground. It's also the only
+  study that would ever want to *retire itself* — after N uses it should stop appearing, its job done.
+  Never ships as permanent chrome; ships as a first-week teacher, if at all.</div>
+</div>
+
+<script>
+/* ---- pane switcher ---- */
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+    if(b.dataset.p==='m2'&&window.__repaintSpine)window.__repaintSpine();
+  });
+});
+
+/* ---- shared deal data ---- */
+var DEALS=[
+  ["Northwind Robotics","20 days quiet · no dated next step","$120k","red"],
+  ["Mercury","stalled in discovery · champion went quiet","$40k","red"],
+  ["Ramp","verbal yes · terms on the table","$84k","amber"],
+  ["Vanta","first meeting Thursday · prep ready","$65k","forest"],
+  ["Acme","pilot running · adoption climbing","$95k","forest"],
+  ["Hightouch","75 days without a signal","$52k","amber"],
+  ["Linear","proposal out · waiting on the committee","$71k","forest"],
+  ["Retool","next step dated Friday","$58k","forest"]
+];
+function rowHtml(d){return '<div class="rrow" data-state="'+d[3]+'"><b>'+d[0]+'</b> '+d[1]+' <span class="m">'+d[2]+'</span></div>'}
+function toast(id,msg){var t=document.getElementById(id);t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on')},1600)}
+
+/* ---- LM-1 ticks ---- */
+(function(){
+  var room=document.getElementById('room1');
+  DEALS.slice(0,7).forEach(function(d){room.insertAdjacentHTML('beforeend',rowHtml(d))});
+  var ticks=document.getElementById('ticks1'),frame=document.getElementById('f1');
+  var rows=room.querySelectorAll('.rrow');
+  rows.forEach(function(r,i){
+    var t=document.createElement('span');
+    t.className='lm1-tick s-'+r.dataset.state;
+    t.style.top=(r.offsetTop+r.offsetHeight/2-1)+'px';
+    t.addEventListener('mouseenter',function(){r.classList.add('lit')});
+    t.addEventListener('mouseleave',function(){r.classList.remove('lit')});
+    t.addEventListener('click',function(){r.scrollIntoView({block:'center',behavior:'smooth'});
+      toast('toast1',DEALS[i][0]+' — jumped')});
+    ticks.appendChild(t);
+  });
+})();
+
+/* ---- LM-2 pressure spine ---- */
+(function(){
+  var room=document.getElementById('room2'),wrap=document.getElementById('wrap2');
+  var LONG=DEALS.concat(DEALS.slice(0,4).map(function(d){return [d[0]+" II",d[1],d[2],d[3]]}))
+    .concat([["Globex","close date 12 days overdue","$140k","red"],
+             ["Initech","champion left the company","$77k","red"],
+             ["Umbrella","no next step · single-threaded","$96k","red"]]);
+  LONG.forEach(function(d){room.insertAdjacentHTML('beforeend',rowHtml(d))});
+  var heat=document.getElementById('heat2'),win=document.getElementById('win2');
+  var C={red:'#cf3b34',amber:'#d97706',forest:'#1b5e3f'};
+  function paint(){
+    heat.innerHTML='';
+    var total=wrap.scrollHeight,h=heat.offsetHeight;
+    room.querySelectorAll('.rrow').forEach(function(r){
+      var i=document.createElement('i');
+      i.style.top=(r.offsetTop/total*h)+'px';
+      i.style.height=Math.max(3,(r.offsetHeight/total*h))+'px';
+      i.style.background=C[r.dataset.state];
+      i.style.opacity=r.dataset.state==='forest'?'.35':'.9';
+      heat.appendChild(i);
+    });
+    win.style.height=(wrap.clientHeight/total*h)+'px';
+  }
+  function track(){
+    var total=wrap.scrollHeight,h=heat.offsetHeight;
+    win.style.top=(8+wrap.scrollTop/total*h)+'px';
+  }
+  paint();track();
+  window.__repaintSpine=function(){paint();track();};
+  wrap.addEventListener('scroll',track);
+  document.getElementById('spine2').addEventListener('click',function(e){
+    var rect=heat.getBoundingClientRect();
+    var f=(e.clientY-rect.top)/rect.height;
+    wrap.scrollTo({top:f*wrap.scrollHeight-wrap.clientHeight/2,behavior:'smooth'});
+  });
+})();
+
+/* ---- LM-3 whisper ---- */
+document.getElementById('whisper3').addEventListener('click',function(){
+  toast('toast3','← back to Signal Console (with Ramp still in hand)');
+});
+
+/* ---- LM-4 dog-ears ---- */
+document.querySelectorAll('.lm4-ear').forEach(function(e){
+  e.addEventListener('click',function(){toast('toast4',e.dataset.name+' — opens the peek')});
+});
+
+/* ---- LM-5 tide ---- */
+(function(){
+  var slider=document.getElementById('slider5'),fill=document.getElementById('fill5'),
+      time=document.getElementById('time5'),lbl=document.getElementById('lbl5');
+  function setDay(p){
+    fill.style.height=p+'%';
+    time.style.top='calc('+p+'% + 4px)';
+    var mins=8*60+(p/100)*(10*60); /* 8am → 6pm */
+    var h=Math.floor(mins/60),m=Math.round(mins%60);
+    var ampm=h>=12?'PM':'AM';var hh=h>12?h-12:h;
+    var s=hh+':'+(m<10?'0':'')+m+' '+ampm;
+    time.textContent=s;lbl.textContent=s;
+  }
+  slider.addEventListener('input',function(){setDay(Number(slider.value))});
+  setDay(38);
+})();
+
+/* ---- LM-6 ghost hallway ---- */
+(function(){
+  var gmap=document.getElementById('gmap6');
+  gmap.innerHTML='<div class="gk">THE GROUND — YOUR WHOLE MOTION</div>'+
+    '<div class="gt">No hallway. Just the ground.</div>'+
+    '<div class="cols">'+
+    '<div class="col"><b>ENTER</b><a>Welcome</a><a class="here">Dashboard · you are here</a></div>'+
+    '<div class="col"><b>STRATEGY</b><a>ICP Studio</a><a>Territory</a></div>'+
+    '<div class="col"><b>FIND</b><a>Prospecting Desk</a><a>Signal Console</a></div>'+
+    '<div class="col"><b>WORK</b><a>Outbound</a><a>Discovery</a></div>'+
+    '<div class="col"><b>ADVANCE</b><a>Deal Workspace</a><a class="next">Getting to Signed · suggested</a></div>'+
+    '<div class="col"><b>HAND OFF</b><a>Readiness</a><a>Founding GTM</a></div>'+
+    '</div>';
+  document.getElementById('ghost6').addEventListener('click',function(){gmap.classList.toggle('up')});
+  document.addEventListener('keydown',function(e){
+    if(!document.getElementById('pane-m6').classList.contains('on'))return;
+    if(e.key==='g'||e.key==='G'){gmap.classList.add('up')}
+    if(e.key==='Escape'){gmap.classList.remove('up')}
+  });
+})();
+</script>
+</body>
+</html>
