@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The left margin — round 2 · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LEFT MARGIN — ROUND 2 · 2026-07-14
+   Round 1's six studies read well and landed flat. Round 2 goes
+   for execution weight: fewer, bigger, more physical.
+     LM-7 · THE DOCKET — today's moves as paper edges tucked
+            into the margin; pull one, handle it, the margin
+            empties as your day does.
+     LM-8 · THE LAMP — the margin reads WITH you: a warm tick
+            tracks the row under your eye and whispers that
+            row's one move.
+     LM-9 · THE SEISMOGRAPH — the last seven days of the
+            workspace drawn as a living ink trace; spikes are
+            hoverable events, the top pulses with now.
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+/* ---- the fake room ---- */
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:620px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.room{position:absolute;inset:0;padding:22px 28px 30px 74px;overflow-y:auto}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{position:relative;display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70);
+  transition:box-shadow .18s,border-color .18s,background .18s}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:#fff;
+  font-size:.8rem;padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
+.toast.on{opacity:1}
+
+/* ============================================================
+   LM-7 · THE DOCKET — paper edges tucked into the margin
+   ============================================================ */
+.dk-rail{position:absolute;left:0;top:0;bottom:0;width:60px;z-index:20;
+  background:linear-gradient(90deg,rgba(10,28,64,.05),transparent 80%);
+  border-right:1px solid var(--ink-08)}
+.dk-count{position:absolute;top:16px;left:0;width:60px;text-align:center;
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;font-weight:700;color:var(--ink-50);
+  text-transform:uppercase;line-height:1.8}
+.dk-count b{display:block;font-size:1.5rem;color:var(--ink);font-family:var(--serif);letter-spacing:0}
+.dk-sheet{position:absolute;left:0;height:64px;width:230px;cursor:pointer;border:none;padding:0;
+  background:none;transform:translateX(-186px);transition:transform .28s cubic-bezier(.34,1.2,.4,1);z-index:21}
+.dk-sheet .paper{position:absolute;inset:0;background:var(--raised);border:1px solid var(--ink-14);
+  border-left:none;border-radius:0 10px 10px 0;
+  box-shadow:2px 3px 10px rgba(10,28,64,.14), inset -3px 0 6px rgba(10,28,64,.04);
+  display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 16px 0 14px;text-align:left}
+.dk-sheet .edge{position:absolute;right:0;top:0;bottom:0;width:44px;border-radius:0 10px 10px 0;
+  display:flex;align-items:center;justify-content:center}
+.dk-sheet .edge i{width:3.5px;height:34px;border-radius:3px;background:var(--ec,var(--ink-30))}
+.dk-sheet:hover{transform:translateX(-158px)}
+.dk-sheet.out{transform:translateX(-6px)}
+.dk-sheet.done{transform:translateX(-236px);opacity:0}
+.dk-sheet .paper > *{opacity:0;transition:opacity .15s}
+.dk-sheet:hover .paper > *,.dk-sheet.out .paper > *{opacity:1}
+.dk-sheet .t{font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk-sheet .s{font-size:.7rem;color:var(--ink-50);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk-sheet .h{font-family:var(--mono);font-size:.54rem;letter-spacing:.12em;font-weight:700;color:var(--orange);text-transform:uppercase}
+.dk-handle{position:absolute;right:8px;bottom:6px;font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;
+  font-weight:700;color:var(--forest);border:1px solid rgba(27,94,63,.35);border-radius:99px;padding:3px 8px;
+  background:var(--raised);opacity:0;transition:opacity .18s}
+.dk-sheet.out .dk-handle{opacity:1}
+.dk-empty{position:absolute;left:0;top:46%;width:60px;text-align:center;font-family:var(--mono);
+  font-size:.54rem;letter-spacing:.1em;font-weight:700;color:var(--forest);text-transform:uppercase;
+  line-height:1.9;opacity:0;transition:opacity .4s .2s;pointer-events:none}
+.dk-empty.on{opacity:1}
+
+/* ============================================================
+   LM-8 · THE LAMP — the margin reads with you
+   ============================================================ */
+.lp-rail{position:absolute;left:0;top:0;bottom:0;width:64px;z-index:20;pointer-events:none}
+.lp-plumb{position:absolute;left:0;width:64px;height:64px;transition:top .22s cubic-bezier(.3,.8,.3,1);opacity:0}
+.lp-plumb.on{opacity:1}
+.lp-plumb .beam{position:absolute;left:0;top:50%;height:2.5px;width:46px;background:var(--orange);
+  border-radius:2px;transform:translateY(-50%);box-shadow:0 0 12px rgba(230,112,30,.5)}
+.lp-plumb .dot{position:absolute;left:44px;top:50%;transform:translate(0,-50%);width:9px;height:9px;
+  border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(230,112,30,.16)}
+.lp-say{position:absolute;left:16px;bottom:16px;right:16px;max-width:560px;z-index:20;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;font-weight:700;text-transform:uppercase;
+  color:var(--ink-50);background:rgba(255,255,255,.85);backdrop-filter:blur(6px);
+  border:1px solid var(--ink-08);border-left:3px solid var(--orange);border-radius:8px;
+  padding:9px 13px;opacity:0;transition:opacity .18s;pointer-events:none}
+.lp-say.on{opacity:1}
+.lp-say b{color:var(--ink)}
+.rrow.lamplit{border-color:rgba(230,112,30,.5);
+  background:linear-gradient(90deg,rgba(230,112,30,.07),var(--raised) 40%)}
+
+/* ============================================================
+   LM-9 · THE SEISMOGRAPH — the workspace's last seven days
+   ============================================================ */
+.sg-rail{position:absolute;left:0;top:0;bottom:0;width:74px;z-index:20;
+  border-right:1px solid var(--ink-08);
+  background:linear-gradient(90deg,rgba(10,28,64,.03),transparent 85%)}
+.sg-rail svg{position:absolute;left:0;top:0;width:74px;height:100%}
+.sg-trace{fill:none;stroke:var(--ink);stroke-width:1.6;opacity:.75;
+  stroke-dasharray:2400;stroke-dashoffset:2400;animation:sgdraw 2.2s ease forwards}
+@keyframes sgdraw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.sg-trace{animation:none;stroke-dashoffset:0}}
+.sg-day{font-family:var(--mono);font-size:8px;letter-spacing:.08em;fill:rgba(10,28,64,.3);font-weight:700}
+.sg-now{animation:sgpulse 2.4s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes sgpulse{0%,100%{opacity:.9}50%{opacity:.35}}
+.sg-hit{cursor:pointer}
+.sg-chip{position:absolute;left:80px;background:var(--ink);color:#fff;font-size:.72rem;line-height:1.5;
+  padding:7px 12px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;z-index:25}
+.sg-chip.on{opacity:1}
+.sg-chip .k{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;opacity:.65;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LEFT MARGIN · ROUND 2 · 2026-07-14</span>
+  <button class="on" data-p="d">LM-7 · <b>The Docket</b> — today's moves, tucked into the margin</button>
+  <button data-p="l">LM-8 · <b>The Lamp</b> — the margin reads with you</button>
+  <button data-p="s">LM-9 · <b>The Seismograph</b> — seven days of the workspace, drawn</button>
+</div>
+
+<!-- ============ LM-7 · THE DOCKET ============ -->
+<div class="pane on" id="pane-d">
+  <p class="lead"><b>LM-7 · The Docket.</b> Today's moves live as <b>paper sheets tucked into the left
+  margin</b> — only their edges showing, one color-coded strip each. Hover and a sheet eases out to show its
+  first line; click and it slides fully out as a real card with the move and a <b>Handled</b> button.
+  Handle it and the sheet leaves the stack — <b>the margin physically empties as your day does.</b>
+  The count at the top is the honest read: it only goes down by doing.</p>
+  <div class="frame" id="fd">
+    <div class="dk-rail"></div>
+    <div class="dk-count" id="dk-count"><b>4</b>LEFT<br>TODAY</div>
+    <div class="dk-empty" id="dk-empty">MARGIN<br>CLEAR ·<br>DAY<br>HANDLED</div>
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DASHBOARD
+        <span class="hint">pull a sheet from the left margin</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Send the security answers</b> — Ramp's blocking front clears <span class="m">the move</span></div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+    </div>
+    <div class="toast" id="toast-d"></div>
+  </div>
+  <div class="note"><b>LM-7</b> — the only margin idea so far with a real job: it's the day's docket made
+  physical, and "handled" is the one verb it knows. The pull-out is the moment — paper sliding from under
+  the page you're reading. Feeds straight from the birdseye ranker + observations, so the sheets are the
+  system's picks, not another inbox. Risk: it IS chrome — four sheets are always present; earns its place
+  only if handling them from anywhere beats visiting the Dashboard.</div>
+</div>
+
+<!-- ============ LM-8 · THE LAMP ============ -->
+<div class="pane" id="pane-l">
+  <p class="lead"><b>LM-8 · The Lamp.</b> The margin <b>reads with you</b>: as your cursor moves down the
+  room, a warm beam tracks the row under your eye — the row glows faintly from the left, and the margin
+  whispers <b>that row's one move</b> at the foot of the page. Nothing to learn, nothing to click (clicking
+  the row still does what it always did) — the left edge simply pays attention to the same line you are.</p>
+  <div class="frame" id="fl">
+    <div class="lp-rail"><div class="lp-plumb" id="lp-plumb"><span class="beam"></span><span class="dot"></span></div></div>
+    <div class="room" id="lp-room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">move your cursor down the rows</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow" data-move="Lock a real next step today — anything specific moves it."><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow" data-move="Confirm the champion is still alive before more activity."><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow" data-move="Send the security answers — 88 of 150 already covered."><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+      <div class="rrow" data-move="Prep is ready — walk in with the CRO-hire opener."><b>Vanta</b> — first meeting Thursday <span class="m">$65k</span></div>
+      <div class="rrow" data-move="Adoption is climbing — pull the missing IT owner in now."><b>Acme</b> — pilot running · adoption climbing <span class="m">$95k</span></div>
+      <div class="rrow" data-move="75 days silent — refresh the signals or set it aside honestly."><b>Hightouch</b> — 75 days without a signal <span class="m">$52k</span></div>
+    </div>
+    <div class="lp-say" id="lp-say"></div>
+  </div>
+  <div class="note"><b>LM-8</b> — the margin as attention, not information: it never adds objects, it
+  responds. The beam is the room saying "I see what you're looking at, and here's the smallest move on it"
+  — the recovery engine's `nextMove` already computes exactly this per deal, so the whisper is real data,
+  not new copy. Risk: cursor-following anything flirts with hover theater; the beam must stay slow, warm,
+  and silent when the cursor leaves the rows.</div>
+</div>
+
+<!-- ============ LM-9 · THE SEISMOGRAPH ============ -->
+<div class="pane" id="pane-s">
+  <p class="lead"><b>LM-9 · The Seismograph.</b> The left margin is <b>the last seven days of your
+  workspace, drawn as one ink trace</b> — time runs down, today at the top with a slow pulse. Quiet days
+  run flat; the needle kicks where something happened — <b>red kicks left for decay, forest kicks right for
+  wins, blue for signals</b>. Hover a kick and the margin tells you what it was. The room's memory,
+  living where your eye lands first.</p>
+  <div class="frame" id="fs">
+    <div class="sg-rail" id="sg-rail"></div>
+    <div class="room" style="padding-left:92px">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · BRIEFING
+        <span class="hint">hover the kicks in the trace</span></div>
+      <div class="rh1">Here's what the system saw.</div>
+      <div class="rrow"><b>Northwind</b> has sat at proposal three weeks with no next step <span class="m">21d</span></div>
+      <div class="rrow"><b>Ramp</b> — the security questionnaire is the blocking front <span class="m">6d</span></div>
+      <div class="rrow"><b>Vanta</b> booked the first meeting for Thursday <span class="m">new</span></div>
+      <div class="rrow"><b>Acme pilot</b> — adoption climbing, results date next week <span class="m">live</span></div>
+    </div>
+    <div class="sg-chip" id="sg-chip"></div>
+  </div>
+  <div class="note"><b>LM-9</b> — the observations ledger already stores exactly this (dated, per-object,
+  generator-tagged), so the trace is a rendering of data the heartbeat writes every 30 minutes — zero new
+  collection. It gives the margin the thing the other studies lacked: a shape worth looking at, different
+  every day, honest by construction (flat weeks LOOK flat). Risk: it's a chart in the margin — it must stay
+  ink-on-paper simple or it becomes a BI widget turned sideways.</div>
+</div>
+
+<script>
+/* ---- pane switcher ---- */
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+    if(b.dataset.p==='s'&&window.__drawSeismo)window.__drawSeismo();
+  });
+});
+function toast(id,msg){var t=document.getElementById(id);t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on')},1700)}
+
+/* ---- LM-7 the docket ---- */
+(function(){
+  var SHEETS=[
+    {h:"THE MOVE",t:"Send the security answers",s:"Ramp · clears the blocking front",c:"#e6701e"},
+    {h:"SLIPPING",t:"Northwind — lock a next step",s:"20 days quiet · $120k",c:"#cf3b34"},
+    {h:"SLIPPING",t:"Mercury — find the champion",s:"went quiet in discovery",c:"#cf3b34"},
+    {h:"KEEP WARM",t:"Vanta — Thursday prep",s:"first meeting · prep is ready",c:"#1b5e3f"}
+  ];
+  var frame=document.getElementById('fd'),count=document.getElementById('dk-count');
+  var remaining=SHEETS.length;
+  SHEETS.forEach(function(sh,i){
+    var b=document.createElement('button');
+    b.className='dk-sheet';
+    b.style.top=(120+i*84)+'px';
+    b.style.setProperty('--ec',sh.c);
+    b.innerHTML='<span class="paper"><span class="h">'+sh.h+'</span><span class="t">'+sh.t+'</span>'+
+      '<span class="s">'+sh.s+'</span><span class="dk-handle">HANDLED ✓</span></span>'+
+      '<span class="edge"><i></i></span>';
+    b.addEventListener('click',function(e){
+      if(!b.classList.contains('out')){
+        document.querySelectorAll('.dk-sheet.out').forEach(function(x){x.classList.remove('out')});
+        b.classList.add('out');
+      }else if(e.target.closest('.dk-handle')||true){
+        /* second click anywhere on the out sheet = handled */
+        b.classList.add('done');
+        remaining--;
+        count.querySelector('b').textContent=remaining;
+        if(remaining===0){
+          count.style.opacity='0';
+          document.getElementById('dk-empty').classList.add('on');
+        }
+        toast('toast-d','Handled — '+sh.t);
+        /* restack the ones below */
+        var sheets=[].slice.call(document.querySelectorAll('.dk-sheet:not(.done)'));
+        sheets.forEach(function(x,j){x.style.top=(120+j*84)+'px'});
+      }
+    });
+    frame.appendChild(b);
+  });
+})();
+
+/* ---- LM-8 the lamp ---- */
+(function(){
+  var room=document.getElementById('lp-room'),plumb=document.getElementById('lp-plumb'),
+      say=document.getElementById('lp-say'),frame=document.getElementById('fl');
+  var rows=[].slice.call(room.querySelectorAll('.rrow'));
+  var current=null;
+  room.addEventListener('mousemove',function(e){
+    var best=null,bestD=1e9;
+    rows.forEach(function(r){
+      var rc=r.getBoundingClientRect();
+      var mid=rc.top+rc.height/2;
+      var d=Math.abs(e.clientY-mid);
+      if(d<bestD){bestD=d;best=r}
+    });
+    if(!best||bestD>90){leave();return}
+    if(best!==current){
+      if(current)current.classList.remove('lamplit');
+      current=best;current.classList.add('lamplit');
+      var fc=frame.getBoundingClientRect(),rc=best.getBoundingClientRect();
+      plumb.style.top=(rc.top-fc.top+rc.height/2-32)+'px';
+      plumb.classList.add('on');
+      say.innerHTML='THE MOVE HERE → <b>'+best.dataset.move+'</b>';
+      say.classList.add('on');
+    }
+  });
+  function leave(){
+    if(current){current.classList.remove('lamplit');current=null}
+    plumb.classList.remove('on');say.classList.remove('on');
+  }
+  room.addEventListener('mouseleave',leave);
+})();
+
+/* ---- LM-9 the seismograph ---- */
+(function(){
+  var EVENTS=[
+    /* day 0 = today (top). offset: - = left/decay(red), + = right/win(forest), blue = signal */
+    {day:0,frac:.25,amp:-26,c:'#cf3b34',what:'Ramp — security stalled 6 days',k:'TODAY'},
+    {day:0,frac:.6,amp:18,c:'#2563eb',what:'Northwind II — new signal: Series B',k:'TODAY'},
+    {day:1,frac:.4,amp:30,c:'#1b5e3f',what:'Vanta — first meeting booked',k:'YESTERDAY'},
+    {day:2,frac:.5,amp:-34,c:'#cf3b34',what:'Mercury — champion went quiet',k:'SAT'},
+    {day:4,frac:.3,amp:22,c:'#2563eb',what:'Ramp — hiring surge, 12 AE roles',k:'THU'},
+    {day:4,frac:.7,amp:14,c:'#1b5e3f',what:'Acme pilot — adoption up 40%',k:'THU'},
+    {day:6,frac:.5,amp:-20,c:'#cf3b34',what:'Hightouch — 70 days without a signal',k:'TUE'}
+  ];
+  var DAYS=['TODAY','YD','SUN','SAT','FRI','THU','WED','TUE'];
+  var rail=document.getElementById('sg-rail'),chip=document.getElementById('sg-chip');
+  function draw(){
+    var H=rail.offsetHeight,W=74,cx=37;
+    if(H<100){return}
+    var dayH=(H-30)/7;
+    var svg='<svg xmlns="http://www.w3.org/2000/svg">';
+    /* day labels */
+    for(var d=0;d<7;d++){
+      svg+='<text class="sg-day" x="4" y="'+(18+d*dayH+10)+'">'+DAYS[d]+'</text>';
+    }
+    /* build the trace path: straight down cx with excursions at events */
+    var pts=[[cx,10]];
+    var evs=EVENTS.slice().sort(function(a,b){return (a.day+a.frac)-(b.day+b.frac)});
+    evs.forEach(function(ev){
+      var y=18+(ev.day+ev.frac)*dayH;
+      pts.push([cx,y-9]);
+      pts.push([cx+ev.amp,y]);
+      pts.push([cx,y+9]);
+      ev._y=y;ev._x=cx+ev.amp;
+    });
+    pts.push([cx,H-10]);
+    var dstr='M'+pts.map(function(p){return p[0]+','+p[1]}).join(' L');
+    svg+='<path class="sg-trace" d="'+dstr+'"/>';
+    /* now pulse */
+    svg+='<circle class="sg-now" cx="'+cx+'" cy="10" r="4.5" fill="#e6701e"/>';
+    /* hover targets */
+    evs.forEach(function(ev,i){
+      svg+='<circle class="sg-hit" data-i="'+i+'" cx="'+ev._x+'" cy="'+ev._y+'" r="11" fill="transparent"/>'+
+           '<circle cx="'+ev._x+'" cy="'+ev._y+'" r="3" fill="'+ev.c+'"/>';
+    });
+    svg+='</svg>';
+    rail.innerHTML=svg;
+    rail.querySelectorAll('.sg-hit').forEach(function(h){
+      var ev=evs[Number(h.dataset.i)];
+      h.addEventListener('mouseenter',function(){
+        chip.innerHTML='<span class="k">'+ev.k+'</span>'+ev.what;
+        chip.style.top=(ev._y-16)+'px';
+        chip.classList.add('on');
+      });
+      h.addEventListener('mouseleave',function(){chip.classList.remove('on')});
+    });
+  }
+  window.__drawSeismo=draw;
+  draw();
+})();
+</script>
+</body>
+</html>
