@@ -25,14 +25,52 @@
     opacity: 0.4;
     transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.gnd-mark {
+/* The Grip (founder-picked 2026-07-14): the mark docked in a raised
+   tab that breaks the line — the drag-handle idiom, always present,
+   quiet until hovered. */
+.gnd-tab {
     position: absolute;
-    left: 24px;
-    bottom: 11.5px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--ds-surface, #fff);
+    border: 1px solid var(--ds-hair-2, rgba(10, 28, 64, 0.15));
+    border-bottom: none;
+    border-radius: 9px 9px 0 0;
+    padding: 4px 13px 5px;
     color: var(--ds-ink, #0a1c40);
-    opacity: 0.65;
-    transition: opacity 0.2s;
     line-height: 0;
+    box-shadow: 0 -3px 10px rgba(10, 28, 64, 0.07);
+    transition: padding 0.18s ease, box-shadow 0.18s ease;
+}
+.gnd-line:hover .gnd-tab,
+.gnd-line:focus-visible .gnd-tab {
+    padding-bottom: 8px;
+    box-shadow: 0 -6px 16px rgba(10, 28, 64, 0.12);
+}
+.gnd-grip {
+    display: flex;
+    gap: 2.5px;
+    align-items: center;
+}
+.gnd-grip i {
+    width: 2px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--ds-ink-3, rgba(10, 28, 64, 0.3));
+    transition: background 0.18s ease;
+}
+.gnd-line:hover .gnd-grip i,
+.gnd-line:focus-visible .gnd-grip i {
+    background: var(--ds-orange, #e6701e);
+}
+@media (prefers-reduced-motion: reduce) {
+    .gnd-tab {
+        transition: none;
+    }
 }
 .gnd-whisper {
     position: absolute;

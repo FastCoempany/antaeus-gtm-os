@@ -150,13 +150,21 @@ export function GroundLine(): JSX.Element {
                 title={t("Touch the ground — see the whole motion (G)", { class: "body" })}
                 aria-label={t("Open the motion map", { class: "body" })}
             >
-                <span class="gnd-mark" aria-hidden="true">
-                    <svg width="13" height="13" viewBox="0 0 48 48" fill="none">
+                <span class="gnd-stroke" />
+                {/* The Grip (founder-picked 2026-07-14) — the mark docked
+                    in a small raised tab with grip lines, so the ground
+                    line reads as a handle, never a page border. */}
+                <span class="gnd-tab" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
                         <path d="M14 38L24 10l10 28" stroke="currentColor" stroke-width="4" />
                         <path d="M18.2 28h11.6" stroke="currentColor" stroke-width="4" />
                     </svg>
+                    <span class="gnd-grip">
+                        <i />
+                        <i />
+                        <i />
+                    </span>
                 </span>
-                <span class="gnd-stroke" />
                 <span class="gnd-whisper">
                     {t("touch the ground · see the whole motion · G", { class: "body" })}
                 </span>
