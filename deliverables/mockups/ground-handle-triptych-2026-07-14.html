@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ground — handle triptych · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE GROUND — HANDLE TRIPTYCH · 2026-07-14
+   Founder problem: the ground line at the foot of every room is
+   easy to miss or read as a page border. Wanted: a HANDLE or
+   PULLEY — subtle, out of the way, but enticing interaction.
+   Three candidates, each on a live fake room. Hover the bottom
+   of the frame; click (or press G) raises a mini motion map so
+   the pull has a real payoff in the demo.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:24px auto 10px;padding:0 20px;font-size:.95rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:26px auto 60px;padding:16px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.86rem;line-height:1.65;color:var(--ink-70)}
+
+/* ---- the fake room ---- */
+.frame{position:relative;max-width:1060px;margin:18px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:620px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.room{padding:22px 28px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.9rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.92rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+
+/* ---- the mini map that rises (shared payoff) ---- */
+.gmap{position:absolute;left:0;right:0;bottom:0;background:var(--raised);
+  border-top:2.5px solid var(--ink);box-shadow:0 -18px 50px rgba(10,28,64,.14);
+  transform:translateY(101%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:30;
+  padding:20px 28px 24px}
+.gmap.up{transform:translateY(0)}
+.gmap .gk{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);margin-bottom:4px}
+.gmap .gt{font-family:var(--serif);font-size:1.4rem;margin:0 0 14px}
+.gmap .cols{display:flex;gap:26px;flex-wrap:wrap}
+.gmap .col b{display:block;font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;color:var(--ink-30);margin-bottom:6px}
+.gmap .col a{display:block;font-size:.84rem;color:var(--ink-70);padding:3px 0;cursor:pointer}
+.gmap .col a:hover{color:var(--orange)}
+.gmap .col a.here{color:var(--ink);font-weight:700}
+.gmap .col a.next{color:var(--orange);font-weight:700}
+
+/* ---- shared: the ground line itself ---- */
+.gline{position:absolute;left:0;right:0;bottom:0;height:26px;cursor:pointer;z-index:20;background:none;border:none;padding:0}
+.gline .stroke{position:absolute;left:0;right:0;bottom:8px;height:2px;background:rgba(10,28,64,.16);transition:background .18s,height .18s}
+.gline:hover .stroke{background:rgba(10,28,64,.45)}
+.gline .whisper{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;font-weight:700;text-transform:uppercase;
+  color:var(--ink-50);opacity:0;transition:opacity .18s;white-space:nowrap;pointer-events:none}
+.gline:hover .whisper{opacity:1}
+
+/* ============================================================
+   GH-1 · THE GRIP — the mark docked in a lifted tab
+   ============================================================ */
+.h1-tab{position:absolute;left:50%;transform:translateX(-50%);bottom:2px;
+  display:flex;align-items:center;gap:7px;
+  background:var(--raised);border:1px solid var(--ink-14);border-bottom:none;
+  border-radius:9px 9px 0 0;padding:4px 13px 6px;
+  box-shadow:0 -3px 10px rgba(10,28,64,.07);
+  transition:padding .18s,box-shadow .18s,transform .18s}
+.gline:hover .h1-tab{padding-bottom:9px;box-shadow:0 -6px 16px rgba(10,28,64,.12)}
+.h1-tab svg{width:12px;height:12px;flex:none}
+.h1-grip{display:flex;gap:2.5px;align-items:center}
+.h1-grip i{width:2px;height:8px;border-radius:2px;background:rgba(10,28,64,.3);transition:background .18s}
+.gline:hover .h1-grip i{background:var(--orange)}
+
+/* ============================================================
+   GH-2 · THE PULL — a cord and ring hanging from the line
+   ============================================================ */
+.h2-pull{position:absolute;left:50%;transform:translateX(-50%);bottom:2px;
+  width:26px;height:30px;pointer-events:none;
+  transition:transform .2s cubic-bezier(.34,1.4,.5,1);transform-origin:top center;
+  animation:h2settle 2.4s cubic-bezier(.34,1.3,.5,1) 1}
+.gline:hover .h2-pull{transform:translateX(-50%) translateY(4px)}
+@keyframes h2settle{
+  0%{transform:translateX(-50%) rotate(0deg)}
+  16%{transform:translateX(-50%) rotate(5.5deg)}
+  38%{transform:translateX(-50%) rotate(-3.5deg)}
+  62%{transform:translateX(-50%) rotate(1.8deg)}
+  82%{transform:translateX(-50%) rotate(-.7deg)}
+  100%{transform:translateX(-50%) rotate(0deg)}
+}
+@media (prefers-reduced-motion: reduce){.h2-pull{animation:none}}
+.h2-cord{position:absolute;left:50%;transform:translateX(-50%);top:0;width:2px;height:13px;background:rgba(10,28,64,.4)}
+.h2-ring{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:16px;height:16px;
+  border:2.5px solid rgba(10,28,64,.45);border-radius:50%;background:var(--field);
+  transition:border-color .18s,box-shadow .18s}
+.gline:hover .h2-ring{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.14)}
+/* the line dips slightly where the cord hangs — weight on the rope */
+.h2-dip{position:absolute;left:50%;transform:translateX(-50%);bottom:32px;width:60px;height:2px;
+  border-radius:0 0 50% 50%;border-bottom:2px solid rgba(10,28,64,.28);background:none;
+  transition:border-color .18s}
+.gline:hover .h2-dip{border-color:var(--orange)}
+
+/* ============================================================
+   GH-3 · THE RISE — the map swells under the line
+   ============================================================ */
+.h3-mound{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;
+  width:170px;height:16px;overflow:hidden;pointer-events:none;transition:height .22s}
+.gline:hover .h3-mound{height:24px}
+.h3-mound i{position:absolute;left:0;right:0;bottom:-155px;height:170px;border-radius:50%;
+  border-top:2.5px solid rgba(10,28,64,.4);background:linear-gradient(180deg,rgba(27,94,63,.1),transparent 60%);
+  transition:border-color .22s}
+.gline:hover .h3-mound i{border-top-color:var(--orange)}
+.h3-chev{position:absolute;left:50%;transform:translateX(-50%);bottom:11px;width:11px;height:11px;
+  pointer-events:none;transition:transform .22s;opacity:.55}
+.gline:hover .h3-chev{transform:translateX(-50%) translateY(-4px);opacity:1}
+.h3-chev::before{content:"";position:absolute;inset:0;
+  border-left:2.5px solid var(--ink);border-top:2.5px solid var(--ink);transform:rotate(45deg);
+  transition:border-color .22s}
+.gline:hover .h3-chev::before{border-color:var(--orange)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE GROUND · HANDLE TRIPTYCH · 2026-07-14</span>
+  <button class="on" data-p="h1">GH-1 · <b>The Grip</b> — the mark docked in a lifted tab</button>
+  <button data-p="h2">GH-2 · <b>The Pull</b> — a cord and ring hang from the line</button>
+  <button data-p="h3">GH-3 · <b>The Rise</b> — the map swells up under the line</button>
+</div>
+
+<!-- ============ GH-1 · THE GRIP ============ -->
+<div class="pane on" id="pane-h1">
+  <p class="lead"><b>GH-1 · The Grip.</b> The mark stops floating on the line and <b>docks in a small
+  raised tab</b> — the brand's A beside three grip lines, the drag-handle idiom everyone's hands already
+  know. It reads as a physical thing attached to the line, not a border. Hover: the tab lifts a little,
+  the grip warms orange, the whisper appears. One quiet object, dead center, always present.</p>
+
+  <div class="frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">hover the foot of the frame · click to raise the map</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <button class="gline" data-map="h1" aria-label="Open the motion map">
+      <span class="stroke"></span>
+      <span class="whisper">TOUCH THE GROUND · SEE THE WHOLE MOTION · G</span>
+      <span class="h1-tab">
+        <svg viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="4"/></svg>
+        <span class="h1-grip"><i></i><i></i><i></i></span>
+      </span>
+    </button>
+    <div class="gmap" id="map-h1"></div>
+  </div>
+
+  <div class="note"><b>GH-1</b> — the safest and most legible: a tab breaking the line says "handle" in
+  every UI language, and it gives the mark a home (the favicon, at the foot of every room). Costs the most
+  visual presence of the three — a permanent small object in the first fold of every room, though it stays
+  under the 26px strip. The natural pick if discoverability is the priority.</div>
+</div>
+
+<!-- ============ GH-2 · THE PULL ============ -->
+<div class="pane" id="pane-h2">
+  <p class="lead"><b>GH-2 · The Pull.</b> The literal pulley: a short <b>cord and ring hang from the
+  line</b> at center, and the line itself dips slightly under the weight — a blind-pull at the foot of the
+  room, asking for one tug. On page load it <b>settles with a single soft sway</b> (once, then still —
+  motion doctrine intact). Hover: the ring drops toward your cursor and warms orange. Click pulls the
+  whole motion map up from beneath the floor.</p>
+
+  <div class="frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">hover the foot of the frame · click to raise the map</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <button class="gline" data-map="h2" aria-label="Open the motion map" style="height:44px">
+      <span class="stroke" style="bottom:32px"></span>
+      <span class="h2-dip"></span>
+      <span class="whisper" style="bottom:38px">PULL · SEE THE WHOLE MOTION · G</span>
+      <span class="h2-pull"><span class="h2-cord"></span><span class="h2-ring"></span></span>
+    </button>
+    <div class="gmap" id="map-h2"></div>
+  </div>
+
+  <div class="note"><b>GH-2</b> — the most enticing and the most literal answer to "handle or pulley":
+  a hanging ring is an invitation your hand understands before your brain does, and the one-time settle
+  sway earns attention without becoming decoration. The myth holds — you pull the map up from the earth.
+  Risk: it's the most playful of the three; the sway must stay a single settle, never a loop, or it turns
+  into hover theater.</div>
+</div>
+
+<!-- ============ GH-3 · THE RISE ============ -->
+<div class="pane" id="pane-h3">
+  <p class="lead"><b>GH-3 · The Rise.</b> Nothing hangs and nothing docks — instead the line itself
+  <b>swells at the center</b>, a low mound with a faint forest wash under it and a small chevron pointing
+  up, like the map is pushing up through the ground from beneath. Hover: the mound grows a few pixels and
+  the chevron lifts. The subtlest of the three — the handle is the landscape itself.</p>
+
+  <div class="frame">
+    <div class="room">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">hover the foot of the frame · click to raise the map</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <button class="gline" data-map="h3" aria-label="Open the motion map">
+      <span class="stroke"></span>
+      <span class="h3-mound"><i></i></span>
+      <span class="h3-chev"></span>
+      <span class="whisper" style="bottom:34px">SOMETHING'S UNDER HERE · G</span>
+    </button>
+    <div class="gmap" id="map-h3"></div>
+  </div>
+
+  <div class="note"><b>GH-3</b> — the most on-myth (the ground itself stirs) and the quietest; it never
+  adds an object to the room, only a change in the terrain. But it's also the closest to the current
+  problem: at a glance a 16px swell can still read as nothing. Best paired with the chevron staying
+  always-visible (as here) rather than hover-only. The poetic pick; GH-1 and GH-2 are the discoverable picks.</div>
+</div>
+
+<script>
+/* ---- pane switcher ---- */
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- shared mini map payoff ---- */
+var MAP_HTML=
+  '<div class="gk">THE GROUND — YOUR WHOLE MOTION</div>'+
+  '<div class="gt">Where do you want to stand?</div>'+
+  '<div class="cols">'+
+  '<div class="col"><b>ENTER</b><a>Welcome</a><a>Dashboard</a></div>'+
+  '<div class="col"><b>STRATEGY</b><a>ICP Studio</a><a>Territory</a></div>'+
+  '<div class="col"><b>FIND</b><a>Prospecting Desk</a><a>Signal Console</a></div>'+
+  '<div class="col"><b>WORK</b><a>Outbound</a><a>Discovery</a></div>'+
+  '<div class="col"><b>ADVANCE</b><a class="here">Deal Workspace · you are here</a><a class="next">Getting to Signed · suggested</a></div>'+
+  '<div class="col"><b>HAND OFF</b><a>Readiness</a><a>Founding GTM</a></div>'+
+  '</div>';
+document.querySelectorAll('.gmap').forEach(function(m){m.innerHTML=MAP_HTML});
+document.querySelectorAll('.gline').forEach(function(g){
+  g.addEventListener('click',function(){
+    var m=document.getElementById('map-'+g.dataset.map);
+    m.classList.toggle('up');
+  });
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')document.querySelectorAll('.gmap').forEach(function(m){m.classList.remove('up')});
+});
+</script>
+</body>
+</html>
