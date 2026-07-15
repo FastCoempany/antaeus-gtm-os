@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The left margin — round 4, big · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LEFT MARGIN — ROUND 4 · BIG · 2026-07-14
+   Rounds 1-3: widgets (flat), physical toys (flat), plain
+   typography (flat). Round 4 stops decorating the edge and
+   makes it a real, full-height, grabbable thing carrying real
+   content:
+     LM-13 · THE WING — the suggested next room literally waits
+             at your left, its actual surface peeking
+     LM-14 · THE MORNING FOLD — the day's briefing pinned as a
+             folded page; unfold it over the room, fold it back
+     LM-15 · THE CURTAIN — grab the left edge and DRAG; the
+             motion map follows your hand
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:640px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.room{position:absolute;inset:0;padding:22px 28px;overflow:hidden}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:13px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+
+/* ============================================================
+   LM-13 · THE WING — the next room waits at your left
+   ============================================================ */
+.wg-wing{position:absolute;left:0;top:0;bottom:0;width:340px;z-index:30;cursor:pointer;
+  transform:translateX(-268px);transition:transform .34s cubic-bezier(.3,.9,.3,1);
+  border:none;padding:0;background:none;text-align:left}
+.wg-wing:hover{transform:translateX(-224px)}
+.wg-wing.in{transform:translateX(0);cursor:default}
+.wg-surface{position:absolute;inset:0;background:var(--raised);
+  border-right:2.5px solid var(--ink);box-shadow:14px 0 44px rgba(10,28,64,.22);
+  padding:22px 24px;overflow:hidden}
+.wg-surface::after{/* fade the content into the visible sliver so the
+   peek never shows chopped half-words */
+  content:"";position:absolute;top:0;bottom:0;right:0;width:118px;
+  background:linear-gradient(90deg,transparent,var(--raised) 72%);pointer-events:none;
+  transition:opacity .3s}
+.wg-wing.in .wg-surface::after{opacity:0}
+.wg-kick{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;font-weight:700;
+  color:var(--orange);text-transform:uppercase;margin-bottom:4px}
+.wg-title{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px}
+.wg-sub{font-size:.8rem;color:var(--ink-50);margin:0 0 18px;line-height:1.5}
+.wg-item{padding:11px 13px;background:var(--field);border:1px solid var(--ink-08);border-radius:8px;
+  margin-bottom:8px;font-size:.82rem;color:var(--ink-70);line-height:1.5}
+.wg-item b{color:var(--ink)}
+.wg-go{display:inline-block;margin-top:10px;background:var(--orange);color:#fff;font-size:.82rem;
+  font-weight:600;padding:9px 16px;border-radius:8px}
+.wg-lip{position:absolute;right:0;top:0;bottom:0;width:40px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,transparent,rgba(10,28,64,.035))}
+.wg-lip span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.22em;font-weight:700;text-transform:uppercase;color:var(--ink-50);white-space:nowrap;
+  transition:color .2s}
+.wg-wing:hover .wg-lip span{color:var(--orange)}
+.wg-close{position:absolute;top:14px;right:12px;z-index:31;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.12em;font-weight:700;color:var(--ink-50);background:var(--field);
+  border:1px solid var(--ink-14);border-radius:99px;padding:5px 12px;cursor:pointer;opacity:0;
+  transition:opacity .2s;pointer-events:none}
+.wg-wing.in .wg-close{opacity:1;pointer-events:auto}
+
+/* ============================================================
+   LM-14 · THE MORNING FOLD — the briefing pinned as a folded page
+   ============================================================ */
+.mf-fold{position:absolute;left:0;top:64px;z-index:30;cursor:pointer;border:none;padding:0;background:none}
+.mf-corner{position:relative;width:120px;height:150px;
+  background:linear-gradient(135deg,#fffef9 0%,#faf8ef 60%,#f0ede0 100%);
+  border:1px solid rgba(10,28,64,.14);border-left:none;border-radius:0 4px 14px 0;
+  box-shadow:3px 4px 14px rgba(10,28,64,.16);
+  transition:width .25s cubic-bezier(.3,.9,.3,1)}
+.mf-fold:hover .mf-corner{width:150px}
+.mf-corner::after{/* the fold-back triangle at the outer corner */
+  content:"";position:absolute;right:0;bottom:0;width:0;height:0;
+  border-left:34px solid #e4e0cf;border-top:34px solid transparent;
+  border-radius:0 0 12px 0;filter:drop-shadow(-2px -2px 3px rgba(10,28,64,.12))}
+.mf-corner .k{position:absolute;top:12px;left:12px;right:12px;font-family:var(--mono);font-size:.52rem;
+  letter-spacing:.14em;font-weight:700;color:var(--ink-50);text-transform:uppercase;line-height:1.8}
+.mf-corner .t{position:absolute;top:44px;left:12px;right:16px;font-family:var(--serif);
+  font-size:.98rem;line-height:1.3;color:var(--ink)}
+.mf-corner .d{position:absolute;bottom:12px;left:12px;font-family:var(--mono);font-size:.5rem;
+  letter-spacing:.1em;color:var(--ink-30);font-weight:700}
+/* the unfolded page */
+.mf-page{position:absolute;left:0;top:0;bottom:0;width:min(560px,72%);z-index:35;
+  background:linear-gradient(180deg,#fffef9,#faf8ef);border-right:1px solid rgba(10,28,64,.18);
+  box-shadow:18px 0 50px rgba(10,28,64,.24);padding:26px 30px;overflow-y:auto;
+  transform:translateX(-102%);transition:transform .38s cubic-bezier(.3,.9,.3,1)}
+.mf-page.open{transform:translateX(0)}
+.mf-mast{display:flex;align-items:baseline;gap:12px;border-bottom:2.5px solid var(--ink);padding-bottom:10px;margin-bottom:16px}
+.mf-mast .nm{font-family:var(--serif);font-size:1.6rem}
+.mf-mast .dt{margin-left:auto;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--ink-50);font-weight:700}
+.mf-story{padding:12px 0;border-bottom:1px solid rgba(10,28,64,.1)}
+.mf-story .h{font-family:var(--serif);font-size:1.12rem;line-height:1.3;margin:0 0 5px}
+.mf-story .b{font-size:.84rem;line-height:1.6;color:var(--ink-70);margin:0}
+.mf-story .go{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;font-weight:700;color:var(--blue);
+  text-transform:uppercase;cursor:pointer}
+.mf-story .go:hover{text-decoration:underline}
+.mf-refold{margin-top:16px;width:100%;background:none;border:1px dashed rgba(10,28,64,.25);border-radius:8px;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;font-weight:700;color:var(--ink-50);
+  text-transform:uppercase;padding:10px;cursor:pointer}
+.mf-refold:hover{color:var(--ink);border-color:var(--ink-50)}
+
+/* ============================================================
+   LM-15 · THE CURTAIN — grab the edge and drag
+   ============================================================ */
+.ct-edge{position:absolute;left:0;top:0;bottom:0;width:22px;z-index:30;cursor:grab;
+  background:linear-gradient(90deg,rgba(10,28,64,.1),rgba(10,28,64,.03) 60%,transparent);
+  border-left:3px solid rgba(10,28,64,.35);
+  display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s}
+.ct-edge:hover{border-left-color:var(--orange);
+  background:linear-gradient(90deg,rgba(230,112,30,.12),rgba(230,112,30,.03) 60%,transparent)}
+.ct-edge.grabbing{cursor:grabbing}
+.ct-edge .dots{display:flex;flex-direction:column;gap:5px}
+.ct-edge .dots i{width:3.5px;height:3.5px;border-radius:50%;background:rgba(10,28,64,.4)}
+.ct-edge:hover .dots i{background:var(--orange)}
+.ct-sheet{position:absolute;left:0;top:0;bottom:0;width:100%;z-index:29;background:var(--raised);
+  border-right:2.5px solid var(--ink);box-shadow:16px 0 48px rgba(10,28,64,.25);
+  transform:translateX(-100%);padding:24px 30px;overflow:hidden}
+.ct-sheet.anim{transition:transform .3s cubic-bezier(.3,.9,.3,1)}
+.ct-k{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);margin-bottom:4px}
+.ct-t{font-family:var(--serif);font-size:1.5rem;margin:0 0 16px}
+.ct-cols{display:flex;gap:12px;justify-content:space-between;max-width:960px}
+.ct-col b{display:block;font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;color:var(--ink-30);margin-bottom:6px}
+.ct-col a{display:block;font-size:.86rem;color:var(--ink-70);padding:3px 0;cursor:pointer}
+.ct-col a:hover{color:var(--orange)}
+.ct-col a.here{color:var(--ink);font-weight:700}
+.ct-col a.next{color:var(--orange);font-weight:700}
+.ct-hint{position:absolute;bottom:18px;left:30px;font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.14em;font-weight:700;color:var(--ink-30);text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LEFT MARGIN · ROUND 4 · BIG · 2026-07-14</span>
+  <button class="on" data-p="wg">LM-13 · <b>The Wing</b> — the next room waits at your left</button>
+  <button data-p="mf">LM-14 · <b>The Morning Fold</b> — the day's page, pinned</button>
+  <button data-p="ct">LM-15 · <b>The Curtain</b> — grab the edge and drag</button>
+</div>
+
+<!-- ============ LM-13 · THE WING ============ -->
+<div class="pane on" id="pane-wg">
+  <p class="lead"><b>LM-13 · The Wing.</b> Not a menu — <b>one door</b>: the room the system thinks you
+  need next physically waits at your left, its <b>actual surface</b> peeking a few inches into view like a
+  stage wing. You can read its edge from here. Hover eases it out; click and it slides in as the room.
+  The eye's landing zone holds the answer to the only navigation question that matters: <b>what's next.</b></p>
+  <div class="frame">
+    <div class="room" style="padding-left:78px">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">the next room is peeking from the left — click it</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <button class="wg-wing" id="wg-wing" aria-label="The suggested next room">
+      <span class="wg-surface">
+        <span class="wg-kick">Suggested next · Getting to Signed</span>
+        <span class="wg-title" style="display:block">Ramp is at terms.</span>
+        <span class="wg-sub" style="display:block">The security questionnaire is the blocking front — 6 days waiting.</span>
+        <span class="wg-item" style="display:block"><b>Security</b> — your papers answer 88 of 150 questions</span>
+        <span class="wg-item" style="display:block"><b>Legal</b> — no redlines yet · quiet</span>
+        <span class="wg-item" style="display:block"><b>The committee</b> — Dana warm · signer not engaged</span>
+        <span class="wg-go">Walk in →</span>
+      </span>
+      <span class="wg-lip"><span>NEXT · GETTING TO SIGNED · RAMP</span></span>
+    </button>
+    <button class="wg-close" id="wg-close">TUCK IT BACK</button>
+  </div>
+  <div class="note"><b>LM-13</b> — the birdseye ranker already computes the one suggested next room + why;
+  the Wing gives that answer a body instead of a badge. It's the anti-hallway: not twenty doors, one door,
+  already ajar, showing its real interior. Restraint requirement: it only appears when the system genuinely
+  has a next (same rule as the Ground's suggested-next glow).</div>
+</div>
+
+<!-- ============ LM-14 · THE MORNING FOLD ============ -->
+<div class="pane" id="pane-mf">
+  <p class="lead"><b>LM-14 · The Morning Fold.</b> The day's briefing is <b>pinned to the left edge as a
+  folded page</b> — cream paper against the cool field, the top read showing on the fold. Click and it
+  unfolds over the room like opening the morning paper; read it, jump anywhere, fold it back. One physical
+  object that makes "check the briefing" a two-second gesture from any room.</p>
+  <div class="frame">
+    <div class="room" style="padding-left:150px">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">the morning paper is pinned at the left</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+
+    <button class="mf-fold" id="mf-fold" aria-label="Open the morning briefing">
+      <span class="mf-corner">
+        <span class="k">THE MORNING<br>BRIEFING · 3 READS</span>
+        <span class="t">Three of your accounts opened RevOps roles this week</span>
+        <span class="d">TUE JUL 14</span>
+      </span>
+    </button>
+
+    <div class="mf-page" id="mf-page">
+      <div class="mf-mast"><span class="nm">The Morning Briefing</span><span class="dt">TUE · JUL 14 · 7 AM</span></div>
+      <div class="mf-story">
+        <p class="h">Three of your accounts opened RevOps leadership roles this week</p>
+        <p class="b">Ramp, Vanta, and Northwind all posted senior RevOps roles inside six days. New leaders
+        re-open the tooling conversation in their first quarter — the window for a first meeting is open now.</p>
+        <span class="go">DRAFT THE OPENERS → OUTBOUND</span>
+      </div>
+      <div class="mf-story">
+        <p class="h">Northwind has sat at proposal three weeks with no next step</p>
+        <p class="b">The longest quiet stretch of any live deal. The smallest move that changes it: a dated
+        next step, today.</p>
+        <span class="go">OPEN THE DEAL → DEAL WORKSPACE</span>
+      </div>
+      <div class="mf-story">
+        <p class="h">A competitor raised $40M and is hiring twelve sellers in your segment</p>
+        <p class="b">The warm accounts you haven't touched will start hearing a rival pitch this quarter.
+        First voice in the room sets the comparison.</p>
+        <span class="go">REORDER THE WATCHLIST → SIGNAL CONSOLE</span>
+      </div>
+      <button class="mf-refold" id="mf-refold">FOLD IT BACK ↤</button>
+    </div>
+  </div>
+  <div class="note"><b>LM-14</b> — the Briefing is the one room built to be read daily from anywhere, and
+  this makes it literally ambient: the paper is pinned in every room's margin, the fold always shows the
+  top read (so even folded it's informative), and unfolding never navigates — the room stays underneath.
+  The cream paper against the cool field does the wayfinding with zero labels.</div>
+</div>
+
+<!-- ============ LM-15 · THE CURTAIN ============ -->
+<div class="pane" id="pane-ct">
+  <p class="lead"><b>LM-15 · The Curtain.</b> The first <b>draggable</b> thing in the product: the whole
+  left edge is a grabbable seam — visible grip dots, full height. Grab it and <b>pull right</b>; the motion
+  map follows your hand like dragging a page in. Release past a third and it commits; release early and it
+  snaps back. Click works too. Your hand already knows this gesture from every phone it's ever swiped.</p>
+  <div class="frame" id="ct-frame">
+    <div class="room" style="padding-left:56px">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DASHBOARD
+        <span class="hint">grab the left seam and pull right</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Send the security answers</b> — Ramp's blocking front clears <span class="m">the move</span></div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery <span class="m">$40k</span></div>
+    </div>
+
+    <div class="ct-sheet" id="ct-sheet">
+      <div class="ct-k">THE GROUND — YOUR WHOLE MOTION</div>
+      <div class="ct-t">Where do you want to stand?</div>
+      <div class="ct-cols">
+        <div class="ct-col"><b>ENTER</b><a>Welcome</a><a class="here">Dashboard · here</a></div>
+        <div class="ct-col"><b>STRATEGY</b><a>ICP Studio</a><a>Territory</a></div>
+        <div class="ct-col"><b>FIND</b><a>Prospecting Desk</a><a>Signal Console</a></div>
+        <div class="ct-col"><b>WORK</b><a>Outbound</a><a>Discovery</a></div>
+        <div class="ct-col"><b>ADVANCE</b><a>Deal Workspace</a><a class="next">Getting to Signed · next</a></div>
+        <div class="ct-col"><b>HAND OFF</b><a>Readiness</a><a>Founding GTM</a></div>
+      </div>
+      <div class="ct-hint">RELEASE EARLY TO SNAP BACK · ESC CLOSES</div>
+    </div>
+
+    <div class="ct-edge" id="ct-edge" title="Pull">
+      <div class="dots"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-15</b> — the drag is the honesty: nothing is hidden behind a symbol, the seam
+  visibly *is* an edge of something, and pulling it answers the question your hand asked. It composes with
+  the Ground rather than replacing it — same map, second door, for the hand that reaches left instead of
+  down. Physics matter enormously here: the sheet must track 1:1 under the cursor with zero lag or the
+  magic dies.</div>
+</div>
+
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- LM-13 the wing ---- */
+(function(){
+  var wing=document.getElementById('wg-wing'),close=document.getElementById('wg-close');
+  wing.addEventListener('click',function(){wing.classList.add('in')});
+  close.addEventListener('click',function(e){e.stopPropagation();wing.classList.remove('in')});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&document.getElementById('pane-wg').classList.contains('on'))
+      wing.classList.remove('in');
+  });
+})();
+
+/* ---- LM-14 the morning fold ---- */
+(function(){
+  var fold=document.getElementById('mf-fold'),page=document.getElementById('mf-page'),
+      refold=document.getElementById('mf-refold');
+  fold.addEventListener('click',function(){page.classList.add('open')});
+  refold.addEventListener('click',function(){page.classList.remove('open')});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&document.getElementById('pane-mf').classList.contains('on'))
+      page.classList.remove('open');
+  });
+})();
+
+/* ---- LM-15 the curtain ---- */
+(function(){
+  var edge=document.getElementById('ct-edge'),sheet=document.getElementById('ct-sheet'),
+      frame=document.getElementById('ct-frame');
+  var dragging=false,startX=0,pos=-100,open=false;
+  var W=function(){return frame.offsetWidth};
+  function setPos(pct,anim){
+    sheet.classList.toggle('anim',!!anim);
+    sheet.style.transform='translateX('+pct+'%)';
+    edge.style.transform='translateX('+((100+pct)/100*W())+'px)';
+    if(anim){setTimeout(function(){edge.style.transition='transform .3s cubic-bezier(.3,.9,.3,1)'},0)}
+    else{edge.style.transition='none'}
+  }
+  edge.addEventListener('pointerdown',function(e){
+    dragging=true;startX=e.clientX;edge.classList.add('grabbing');
+    edge.setPointerCapture(e.pointerId);
+  });
+  edge.addEventListener('pointermove',function(e){
+    if(!dragging)return;
+    var base=open?0:-100;
+    var deltaPct=(e.clientX-startX)/W()*100;
+    pos=Math.max(-100,Math.min(0,base+deltaPct));
+    setPos(pos,false);
+  });
+  function release(){
+    if(!dragging)return;
+    dragging=false;edge.classList.remove('grabbing');
+    if(pos>-66){open=true;pos=0}else{open=false;pos=-100}
+    setPos(pos,true);
+  }
+  edge.addEventListener('pointerup',release);
+  edge.addEventListener('pointercancel',release);
+  /* click = toggle for the mouse-first user who doesn't drag */
+  edge.addEventListener('click',function(e){
+    if(Math.abs(e.clientX-startX)>6)return; /* was a drag */
+    open=!open;pos=open?0:-100;setPos(pos,true);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&document.getElementById('pane-ct').classList.contains('on')){
+      open=false;pos=-100;setPos(pos,true);
+    }
+  });
+  setPos(-100,false);
+})();
+</script>
+</body>
+</html>
