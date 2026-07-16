@@ -1,7 +1,7 @@
 # The Live Edge — doctrine + build plan
 
 **Date:** 2026-07-16
-**Status:** design LOCKED (founder), build not started
+**Status:** design LOCKED (founder) · **BUILT 2026-07-16** — all three stages shipped in one pass (`src/lib/edge/`, mounted on 20 v4 rooms + the Settings mirror + the demo stream)
 **Settled design files:**
 - `deliverables/mockups/left-margin-live-edge-2026-07-14.html` — the combined edge (the count + the tagged wire + the ledger foot)
 - `deliverables/mockups/live-edge-switch-settled-2026-07-16.html` — the corrected toggle (no standing controls; off you can see)
