@@ -1,5 +1,6 @@
 import { signal, type Signal } from "@preact/signals";
 import { createDataClient } from "@/lib/data-client";
+import { setLiveEdgeOn } from "@/lib/edge/edge-prefs";
 import {
     DEMO_INACTIVE,
     type BackupReadout,
@@ -392,6 +393,21 @@ export async function togglePhaseF(next: boolean): Promise<void> {
     } finally {
         phaseFSaving.value = false;
     }
+}
+
+/**
+ * The Live Edge's durable switch (locked 2026-07-16) — mirrors the
+ * hover control on the rail itself. Edge off ≠ capture off: the wire
+ * hides; the counting keeps running.
+ */
+export function toggleLiveEdge(next: boolean): void {
+    setLiveEdgeOn(next);
+    flashToast(
+        next ? "good" : "info",
+        next
+            ? "The live edge is on — your day comes back to the left wall."
+            : "The live edge is off. The hairline stays on your rooms — click it any time to turn it back on."
+    );
 }
 
 export async function refreshCloudStatus(): Promise<void> {

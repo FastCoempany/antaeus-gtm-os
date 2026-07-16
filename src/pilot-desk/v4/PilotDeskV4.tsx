@@ -25,6 +25,7 @@ import {
     type PersonKind
 } from "./lib/pilot";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./pilot-desk-v4.css";
 
 /**
@@ -513,6 +514,7 @@ export function PilotDeskV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="pk4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

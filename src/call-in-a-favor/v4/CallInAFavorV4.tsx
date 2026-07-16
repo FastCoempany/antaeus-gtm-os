@@ -30,6 +30,7 @@ import { saveAdvisor } from "../lib/cloud-persistence-profile";
 import { TIER_IDS } from "../lib/types";
 import type { AdvisorDeal, DeploymentOutcome, MomentId, TierId } from "../lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./call-in-a-favor-v4.css";
 
 /**
@@ -316,6 +317,7 @@ export function CallInAFavorV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="cf4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

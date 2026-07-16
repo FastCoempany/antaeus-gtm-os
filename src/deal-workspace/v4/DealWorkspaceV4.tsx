@@ -35,6 +35,7 @@ import {
 } from "./lib/views";
 import "./deal-workspace-v4.css";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 
 /**
@@ -325,6 +326,7 @@ export function DealWorkspaceV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            <LiveEdge />
             {/* Follow the Object — any name is a door (2026-07-13). */}
             <FollowPeek />
 

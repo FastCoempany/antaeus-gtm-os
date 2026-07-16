@@ -8,6 +8,7 @@ import { SharePanel } from "../components/SharePanel";
 import { CeremonyOverlay } from "../components/CeremonyOverlay";
 import { priorForSection, readAcv } from "../lib/priors";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./founding-gtm-v4.css";
 
 /**
@@ -169,6 +170,7 @@ export function FoundingGtmV4(): JSX.Element {
                 />
             ) : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

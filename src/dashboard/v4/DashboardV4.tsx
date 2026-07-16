@@ -13,6 +13,7 @@ import {
 import { ClimbDrawer } from "./ClimbDrawer";
 import { buildMasthead, buildStanding } from "./lib/cockpit";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 import { buildFollowRead } from "@/lib/follow/follow-data";
 import "./dashboard-v4.css";
@@ -174,6 +175,7 @@ export function DashboardV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            <LiveEdge />
             {/* Follow the Object — any name is a door (2026-07-13). */}
             <FollowPeek />
 

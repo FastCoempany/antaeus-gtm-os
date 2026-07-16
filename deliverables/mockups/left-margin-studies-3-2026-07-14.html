@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The left margin — round 3, plain · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LEFT MARGIN — ROUND 3 · PLAIN · 2026-07-14
+   Rounds 1 + 2 verdict: too clever. Round 3 uses only what
+   printed pages have done with left margins for centuries —
+   no metaphors, no motion, no widgets. You understand each
+   before you notice it:
+     LM-10 · SIDE-HEADS — section titles sit in the margin
+     LM-11 · THE LEDGER COLUMN — the room's numbers, set plain
+     LM-12 · HEADWORDS — names in the margin, story in the page
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);min-height:620px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding:22px 28px 16px;
+  border-bottom:1px solid var(--ink-08)}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rh1{font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:20px 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+
+/* ============================================================
+   LM-10 · SIDE-HEADS — section titles live in the margin
+   ============================================================ */
+.sh-body{display:grid;grid-template-columns:170px 1fr;gap:0 26px;padding:0 28px 34px}
+.sh-head{grid-column:1;text-align:right;padding-top:14px}
+.sh-head .t{font-family:var(--serif);font-size:1.05rem;color:var(--ink);line-height:1.25}
+.sh-head .s{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;font-weight:700;
+  text-transform:uppercase;color:var(--ink-30);margin-top:4px}
+.sh-head .s.warn{color:var(--red)}
+.sh-content{grid-column:2;padding:10px 0 16px;border-bottom:1px solid var(--ink-08)}
+.sh-content:last-child{border-bottom:none}
+.sh-h1{grid-column:2;font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:20px 0 6px}
+
+/* ============================================================
+   LM-11 · THE LEDGER COLUMN — the room's numbers, set plain
+   ============================================================ */
+.lg-body{display:grid;grid-template-columns:168px 1fr;gap:0 30px;padding:0 28px 34px}
+.lg-col{grid-column:1;padding-top:24px;border-right:1px solid var(--ink-08);padding-right:24px}
+.lg-stat{margin-bottom:24px}
+.lg-stat .n{font-family:var(--serif);font-size:2rem;line-height:1;color:var(--ink)}
+.lg-stat .n.bad{color:var(--red)}
+.lg-stat .n.good{color:var(--forest)}
+.lg-stat .l{font-size:.76rem;color:var(--ink-50);margin-top:4px;line-height:1.45}
+.lg-main{grid-column:2;padding-top:4px}
+
+/* ============================================================
+   LM-12 · HEADWORDS — names in the margin, story in the page
+   ============================================================ */
+.hw-body{padding:0 28px 34px}
+.hw-h1{font-family:var(--serif);font-size:1.85rem;letter-spacing:-.01em;margin:20px 0 18px;padding-left:198px}
+.hw-row{display:grid;grid-template-columns:170px 1fr;gap:0 28px;padding:13px 0;border-bottom:1px solid var(--ink-08);align-items:baseline}
+.hw-row:last-child{border-bottom:none}
+.hw-name{text-align:right;font-family:var(--serif);font-size:1.02rem;color:var(--ink);cursor:pointer}
+.hw-name:hover{color:var(--orange)}
+.hw-read{font-size:.9rem;color:var(--ink-70);display:flex;gap:14px;align-items:baseline}
+.hw-read .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink);flex:none}
+.hw-read b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LEFT MARGIN · ROUND 3 · PLAIN · 2026-07-14</span>
+  <button class="on" data-p="sh">LM-10 · <b>Side-heads</b></button>
+  <button data-p="lg">LM-11 · <b>The ledger column</b></button>
+  <button data-p="hw">LM-12 · <b>Headwords</b></button>
+</div>
+
+<!-- ============ LM-10 · SIDE-HEADS ============ -->
+<div class="pane on" id="pane-sh">
+  <p class="lead"><b>LM-10 · Side-heads.</b> The oldest trick in print: section titles sit <b>in</b> the
+  margin, beside their sections, instead of above them. Nothing is added — the headers the room already
+  has just move left. The eye lands at the edge and reads the room's table of contents in place.</p>
+  <div class="frame">
+    <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE</div>
+    <div class="sh-body">
+      <div class="sh-h1">3 deals will slip this week if you do nothing.</div>
+
+      <div class="sh-head"><div class="t">Act this week</div><div class="s warn">2 slipping</div></div>
+      <div class="sh-content">
+        <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      </div>
+
+      <div class="sh-head"><div class="t">At terms</div><div class="s">1 deal</div></div>
+      <div class="sh-content">
+        <div class="rrow"><b>Ramp</b> — verbal yes · the security answers clear the front <span class="m">$84k</span></div>
+      </div>
+
+      <div class="sh-head"><div class="t">On pace</div><div class="s">3 deals</div></div>
+      <div class="sh-content">
+        <div class="rrow"><b>Vanta</b> — first meeting Thursday · prep ready <span class="m">$65k</span></div>
+        <div class="rrow"><b>Acme</b> — pilot running · adoption climbing <span class="m">$95k</span></div>
+        <div class="rrow"><b>Linear</b> — proposal out · committee reviewing <span class="m">$71k</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>LM-10</b> — legal documents, textbooks, and field manuals have set section titles in
+  the margin forever because it works: you scan the edge, you know the structure, you dive where you need.
+  It costs no new content — the lane headers the room already renders simply move into the eye's path.</div>
+</div>
+
+<!-- ============ LM-11 · THE LEDGER COLUMN ============ -->
+<div class="pane" id="pane-lg">
+  <p class="lead"><b>LM-11 · The ledger column.</b> The room's three or four vital numbers, set plainly
+  down the left margin — the way a printed report carries its figures in the left column. No chart, no
+  meter, no metaphor. Reading the margin <b>is</b> reading the room's state; the page to the right is
+  the detail.</p>
+  <div class="frame">
+    <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE</div>
+    <div class="lg-body">
+      <div class="lg-col">
+        <div class="lg-stat"><div class="n bad">3</div><div class="l">will slip this week if nothing happens</div></div>
+        <div class="lg-stat"><div class="n">$840k</div><div class="l">in flight across 10 live deals</div></div>
+        <div class="lg-stat"><div class="n good">1</div><div class="l">at terms — the run to signature</div></div>
+        <div class="lg-stat"><div class="n">6d</div><div class="l">since the security answers were asked for</div></div>
+      </div>
+      <div class="lg-main">
+        <div class="rh1">The board, ranked by pressure.</div>
+        <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+        <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+        <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+        <div class="rrow"><b>Vanta</b> — first meeting Thursday · prep ready <span class="m">$65k</span></div>
+        <div class="rrow"><b>Acme</b> — pilot running · adoption climbing <span class="m">$95k</span></div>
+        <div class="rrow"><b>Linear</b> — proposal out · committee reviewing <span class="m">$71k</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>LM-11</b> — the numbers most rooms currently carry in a topbar or hero strip, moved
+  to where the eye actually starts. Nothing new is computed; the layout just admits that the first glance
+  goes left and puts the room's summary there, set in type instead of chips.</div>
+</div>
+
+<!-- ============ LM-12 · HEADWORDS ============ -->
+<div class="pane" id="pane-hw">
+  <p class="lead"><b>LM-12 · Headwords.</b> Dictionary layout: the <b>name</b> sits out in the margin,
+  the story sits in the page. Scan the left edge and you've read every account in the room without reading
+  a single sentence; read across when one catches you. The names are the doors (they'd open the Follow
+  peek in the real build).</p>
+  <div class="frame">
+    <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE</div>
+    <div class="hw-body">
+      <div class="hw-h1">3 deals will slip this week if you do nothing.</div>
+      <div class="hw-row"><div class="hw-name">Northwind Robotics</div>
+        <div class="hw-read">20 days quiet · no dated next step — lock a real one today <span class="m">$120k</span></div></div>
+      <div class="hw-row"><div class="hw-name">Mercury</div>
+        <div class="hw-read">stalled in discovery · champion went quiet — confirm they're still alive <span class="m">$40k</span></div></div>
+      <div class="hw-row"><div class="hw-name">Ramp</div>
+        <div class="hw-read">verbal yes · terms on the table — <b>send the security answers</b> <span class="m">$84k</span></div></div>
+      <div class="hw-row"><div class="hw-name">Vanta</div>
+        <div class="hw-read">first meeting Thursday · prep is ready <span class="m">$65k</span></div></div>
+      <div class="hw-row"><div class="hw-name">Acme</div>
+        <div class="hw-read">pilot running · adoption climbing · results next week <span class="m">$95k</span></div></div>
+      <div class="hw-row"><div class="hw-name">Hightouch</div>
+        <div class="hw-read">75 days without a signal — refresh it or set it aside honestly <span class="m">$52k</span></div></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-12</b> — dictionaries put the headword in the margin because the fastest scan a
+  human does is a vertical list of proper nouns. The de-carded row (canon's own direction) makes room for
+  it naturally, and every name is already a Follow door in production. Of the three, this one changes the
+  reading experience the most while adding the least.</div>
+</div>
+
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

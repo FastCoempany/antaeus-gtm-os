@@ -12,6 +12,7 @@ import {
 import { buildActionPlan } from "../lib/action-plan";
 import type { Vitals } from "../lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./future-autopsy-v4.css";
 
 /**
@@ -77,6 +78,7 @@ export function FutureAutopsyV4(): JSX.Element {
                     </div>
                 </div>
                 <GroundLine />
+            <LiveEdge />
             </div>
         );
     }

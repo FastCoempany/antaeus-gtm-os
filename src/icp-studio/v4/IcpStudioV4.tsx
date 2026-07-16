@@ -14,6 +14,7 @@ import { buildStatement, buildFocus, buildBuyingGroup } from "../lib/builders";
 import { scoreAccountAgainstIcp } from "../../signal-console/lib/icp-match";
 import type { Account } from "../../signal-console/lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./icp-studio-v4.css";
 
 /**
@@ -258,6 +259,7 @@ export function IcpStudioV4(): JSX.Element {
                 </div>
             </div>
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

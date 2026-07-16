@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Live Edge — toggle triptych · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LIVE EDGE — TOGGLE TRIPTYCH · 2026-07-14
+   Founder asks: the operator must be able to turn the Live Edge
+   on and off. Three treatments, each shown WITH the Ground's
+   grip tab at the foot so the two edge pieces are judged
+   together. Every pane also notes how the "Launch interactive
+   demo" lane ships it (a scripted sample stream so the edge
+   performs for a first-time viewer).
+     TG-1 · THE TUCK — a tab on the seam; fold it away, it keeps
+            a quiet count while tucked
+     TG-2 · THE SWITCH — a labeled switch in the edge's head;
+            off means off (a bare hairline remains)
+     TG-3 · FROM THE GROUND — the edge rises out of the ground
+            line; the toggle lives in the Ground map
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.78rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:6px 14px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:660px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.main{position:absolute;top:0;right:0;bottom:26px;left:212px;padding:22px 28px;overflow-y:auto;
+  transition:left .32s cubic-bezier(.3,.9,.3,1)}
+.frame.edge-off .main{left:10px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.8rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+
+/* ---- the live edge (compact) ---- */
+.edge{position:absolute;top:0;left:0;bottom:26px;width:212px;border-right:1px solid var(--ink-08);
+  background:linear-gradient(90deg,rgba(10,28,64,.025),transparent 70%);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .32s cubic-bezier(.3,.9,.3,1),opacity .32s}
+.frame.edge-off .edge{transform:translateX(-101%);opacity:.5}
+.mhead{padding:14px 14px 10px;border-bottom:1px solid var(--ink-08);flex:none}
+.dotline{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.16em;font-weight:700;text-transform:uppercase;color:var(--ink-50)}
+.mdot{width:7px;height:7px;border-radius:50%;background:var(--forest);flex:none;
+  animation:mbreathe 3.2s ease-in-out infinite}
+@keyframes mbreathe{0%,100%{opacity:.9}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.mdot{animation:none}}
+.ct{padding:12px 14px 4px;flex:none}
+.ct .row{display:flex;align-items:baseline;gap:7px}
+.ct .n{font-family:var(--serif);font-size:1.7rem;line-height:1}
+.ct .goal{font-family:var(--mono);font-size:.56rem;color:var(--ink-30);font-weight:700}
+.ct .l{font-size:.68rem;color:var(--ink-50);margin-top:2px}
+.ct .track{height:3px;background:var(--ink-08);border-radius:2px;margin-top:6px;overflow:hidden}
+.ct .track i{display:block;height:100%;width:16%;background:var(--forest);border-radius:2px}
+.mfeed{flex:1;padding:6px 12px;overflow:hidden}
+.mline{position:relative;padding:8px 2px 8px 6px;border-bottom:1px solid var(--ink-08);font-size:.72rem;
+  color:var(--ink-70);line-height:1.5}
+.mline b{color:var(--ink)}
+.mline .when{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--ink-30);
+  font-weight:700;margin-top:1px;text-transform:uppercase}
+.mline.dim{opacity:.4}
+.mline.big{border-left:3px solid var(--orange);padding-left:9px;
+  background:linear-gradient(90deg,rgba(230,112,30,.06),transparent 80%)}
+.mfoot{flex:none;border-top:1px solid var(--ink-08);padding:8px 14px 10px;
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;font-weight:700;
+  color:var(--ink-30);text-transform:uppercase;line-height:1.7}
+.mfoot b{color:var(--ink-50)}
+
+/* ---- the ground (production grip) ---- */
+.gnd{position:absolute;left:0;right:0;bottom:0;height:26px;cursor:pointer;background:none;border:none;padding:0;z-index:40}
+.gnd .stroke{position:absolute;left:0;right:0;bottom:9px;height:2.5px;background:var(--ink);opacity:.4;transition:opacity .2s}
+.gnd:hover .stroke{opacity:.85}
+.gnd-tab{position:absolute;left:50%;transform:translateX(-50%);bottom:0;display:flex;align-items:center;gap:7px;
+  background:var(--raised);border:1px solid var(--ink-14);border-bottom:none;border-radius:9px 9px 0 0;
+  padding:4px 13px 5px;line-height:0;box-shadow:0 -3px 10px rgba(10,28,64,.07);transition:padding .18s}
+.gnd:hover .gnd-tab{padding-bottom:8px}
+.gnd-tab svg{width:12px;height:12px}
+.gnd-grip{display:flex;gap:2.5px;align-items:center}
+.gnd-grip i{width:2px;height:8px;border-radius:2px;background:rgba(10,28,64,.3);transition:background .18s}
+.gnd:hover .gnd-grip i{background:var(--orange)}
+
+/* ============================================================
+   TG-1 · THE TUCK — a tab on the seam
+   ============================================================ */
+.tk-tab{position:absolute;top:50%;transform:translateY(-50%);left:212px;z-index:30;
+  width:22px;height:74px;background:var(--raised);border:1px solid var(--ink-14);border-left:none;
+  border-radius:0 9px 9px 0;cursor:pointer;box-shadow:3px 0 10px rgba(10,28,64,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  transition:left .32s cubic-bezier(.3,.9,.3,1);padding:0}
+.frame.edge-off .tk-tab{left:0}
+.tk-chev{width:8px;height:8px;border-left:2.2px solid var(--ink-50);border-bottom:2.2px solid var(--ink-50);
+  transform:rotate(45deg);transition:transform .32s;margin-left:3px}
+.frame.edge-off .tk-chev{transform:rotate(225deg);margin-left:-3px}
+.tk-dot{width:7px;height:7px;border-radius:50%;background:var(--forest);
+  animation:mbreathe 3.2s ease-in-out infinite}
+.tk-badge{font-family:var(--mono);font-size:.56rem;font-weight:700;color:var(--orange);
+  opacity:0;transition:opacity .3s}
+.frame.edge-off .tk-badge{opacity:1}
+.tk-tab:hover .tk-chev{border-color:var(--orange)}
+
+/* ============================================================
+   TG-2 · THE SWITCH — labeled, in the edge's head
+   ============================================================ */
+.sw{margin-left:auto;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:none;
+  background:none;padding:0;font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;
+  font-weight:700;color:var(--ink-50);text-transform:uppercase}
+.sw .pill{width:28px;height:15px;border-radius:99px;background:var(--forest);position:relative;
+  transition:background .25s;flex:none}
+.sw .pill::after{content:"";position:absolute;top:2px;left:15px;width:11px;height:11px;border-radius:50%;
+  background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(10,28,64,.3)}
+.frame.edge-off .sw .pill{background:var(--ink-30)}
+.frame.edge-off .sw .pill::after{left:2px}
+/* the bare hairline that remains when off */
+.sw-strip{position:absolute;top:0;left:0;bottom:26px;width:10px;z-index:29;cursor:pointer;
+  background:none;border:none;padding:0;opacity:0;pointer-events:none;transition:opacity .3s}
+.frame.edge-off .sw-strip{opacity:1;pointer-events:auto}
+.sw-strip i{position:absolute;top:0;bottom:0;left:4px;width:2px;background:var(--ink-08);transition:background .2s}
+.sw-strip:hover i{background:rgba(230,112,30,.4)}
+.sw-strip .whis{position:absolute;left:14px;top:50%;transform:translateY(-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;font-weight:700;color:var(--ink-30);
+  text-transform:uppercase;opacity:0;transition:opacity .2s;pointer-events:none}
+.sw-strip:hover .whis{opacity:1}
+
+/* ============================================================
+   TG-3 · FROM THE GROUND — the edge grows out of the line
+   ============================================================ */
+.g3-stem{position:absolute;left:212px;bottom:26px;width:2.5px;height:calc(100% - 26px);
+  background:var(--ink);opacity:.22;transform-origin:bottom;transition:transform .45s cubic-bezier(.3,.9,.3,1);z-index:28}
+.frame.edge-off .g3-stem{transform:scaleY(0)}
+.gmap{position:absolute;left:0;right:0;bottom:0;background:var(--raised);
+  border-top:2.5px solid var(--ink);box-shadow:0 -18px 50px rgba(10,28,64,.14);
+  transform:translateY(101%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:50;
+  padding:18px 28px 20px}
+.gmap.up{transform:translateY(0)}
+.gmap .gk{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;font-weight:700;color:var(--ink-50);margin-bottom:3px}
+.gmap .gt{font-family:var(--serif);font-size:1.3rem;margin:0 0 12px}
+.gmap .cols{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px}
+.gmap .col b{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;color:var(--ink-30);margin-bottom:5px}
+.gmap .col a{display:block;font-size:.8rem;color:var(--ink-70);padding:2px 0;cursor:pointer}
+.gmap .col a.here{color:var(--ink);font-weight:700}
+.gmap-organ{display:flex;align-items:center;gap:12px;border-top:1px solid var(--ink-08);padding-top:12px}
+.gmap-organ .ok{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;font-weight:700;
+  color:var(--ink-50);text-transform:uppercase}
+.gmap-organ .od{font-size:.76rem;color:var(--ink-50)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LIVE EDGE · TOGGLE TRIPTYCH · 2026-07-14</span>
+  <button class="on" data-p="tk">TG-1 · <b>The Tuck</b> — fold it away on the seam</button>
+  <button data-p="sw">TG-2 · <b>The Switch</b> — off means off</button>
+  <button data-p="g3">TG-3 · <b>From the Ground</b> — the edge grows out of the line</button>
+</div>
+
+<!-- ============ TG-1 · THE TUCK ============ -->
+<div class="pane on" id="pane-tk">
+  <p class="lead"><b>TG-1 · The Tuck.</b> A small tab rides the seam between the edge and the room — the
+  Live Edge's sibling to the Ground's grip. Click it and the whole edge folds away; the tab stays on the
+  wall with the breathing dot and <b>a quiet count of what landed while it was tucked</b> (an orange number
+  when a buyer moved). Click again and it slides back out. Not off — just folded, still watching.</p>
+  <div class="frame" id="f-tk">
+    <div class="edge" id="edge-tk"></div>
+    <button class="tk-tab" id="tk-tab" aria-label="Tuck or open the live edge">
+      <span class="tk-dot"></span>
+      <span class="tk-chev"></span>
+      <span class="tk-badge" id="tk-badge">+3</span>
+    </button>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click the tab on the seam · the grip waits below</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+    <button class="gnd" aria-label="Open the motion map">
+      <span class="stroke"></span>
+      <span class="gnd-tab"><svg viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="4"/></svg><span class="gnd-grip"><i></i><i></i><i></i></span></span>
+    </button>
+  </div>
+  <div class="note"><b>TG-1</b> — the friendliest: tucking is reversible in one click and the tab keeps the
+  one thing you'd regret missing (a buyer moved) visible as a small orange count. The two tabs rhyme — the
+  grip below, the tuck on the seam — same white-tab language, two different organs. <b>Demo lane:</b> the
+  interactive demo boots with the edge OUT and a scripted sample stream running, so a first-time viewer sees
+  it perform; the tab teaches fold/unfold in the first minute. <b>Persistence:</b> tucked/out saves per
+  device (same pattern as the schedule float's prefs).</div>
+</div>
+
+<!-- ============ TG-2 · THE SWITCH ============ -->
+<div class="pane" id="pane-sw">
+  <p class="lead"><b>TG-2 · The Switch.</b> A plain labeled switch in the edge's own head — <b>LIVE · ON</b>.
+  Flip it and the edge is properly gone: the room takes the full width and all that remains is a bare
+  hairline on the wall (hover it: "the live edge is off"). The same setting lives in Settings under "How
+  the app works for you." For the operator who wants quiet, quiet means quiet.</p>
+  <div class="frame" id="f-sw">
+    <div class="edge" id="edge-sw"></div>
+    <button class="sw-strip" id="sw-strip" aria-label="Turn the live edge on">
+      <i></i><span class="whis">THE LIVE EDGE IS OFF — CLICK TO TURN ON</span>
+    </button>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">flip the switch in the edge's head</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+    <button class="gnd" aria-label="Open the motion map">
+      <span class="stroke"></span>
+      <span class="gnd-tab"><svg viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="4"/></svg><span class="gnd-grip"><i></i><i></i><i></i></span></span>
+    </button>
+  </div>
+  <div class="note"><b>TG-2</b> — the most respectful of "off": no residual badge, no counting in the
+  corner — one hairline so the way back is findable, nothing else. Mirrored in Settings so it's
+  discoverable both places (the switch writes the same preference). <b>Demo lane:</b> demo boots ON with
+  the sample stream; the switch is live in the demo too, so a viewer can feel both states. <b>Default for
+  real workspaces:</b> ON from day one — the edge is most valuable in week one, when the capture lanes are
+  proving themselves.</div>
+</div>
+
+<!-- ============ TG-3 · FROM THE GROUND ============ -->
+<div class="pane" id="pane-g3">
+  <p class="lead"><b>TG-3 · From the Ground.</b> The myth does the work: the Live Edge is <b>part of the
+  ground</b> — its vertical stem literally grows up out of the ground line, one continuous stroke framing
+  the room. The toggle lives where every organ control belongs: <b>in the Ground map.</b> Click the grip
+  (as always) — the map rises with the rooms, and at its foot: "The live edge — on / off." Turn it off and
+  the stem sinks back into the ground; turn it on and the edge grows out of it.</p>
+  <div class="frame" id="f-g3">
+    <div class="edge" id="edge-g3"></div>
+    <div class="g3-stem"></div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">click the grip — the toggle lives in the map</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+    <button class="gnd" id="g3-gnd" aria-label="Open the motion map">
+      <span class="stroke"></span>
+      <span class="gnd-tab"><svg viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="4"/></svg><span class="gnd-grip"><i></i><i></i><i></i></span></span>
+    </button>
+    <div class="gmap" id="g3-map">
+      <div class="gk">THE GROUND — YOUR WHOLE MOTION</div>
+      <div class="gt">Where do you want to stand?</div>
+      <div class="cols">
+        <div class="col"><b>ENTER</b><a>Welcome</a><a class="here">Dashboard · here</a></div>
+        <div class="col"><b>STRATEGY</b><a>ICP Studio</a><a>Territory</a></div>
+        <div class="col"><b>FIND</b><a>Prospecting Desk</a><a>Signal Console</a></div>
+        <div class="col"><b>WORK</b><a>Outbound</a><a>Discovery</a></div>
+        <div class="col"><b>ADVANCE</b><a>Deal Workspace</a><a>Getting to Signed</a></div>
+        <div class="col"><b>HAND OFF</b><a>Readiness</a><a>Founding GTM</a></div>
+      </div>
+      <div class="gmap-organ">
+        <span class="ok">THE LIVE EDGE</span>
+        <span class="od">You · the machine · the buyers, live on the left wall.</span>
+        <button class="sw" id="g3-sw" style="margin-left:auto"><span id="g3-sw-label">LIVE · ON</span><span class="pill"></span></button>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>TG-3</b> — the most on-myth and the most opinionated: the edge isn't furniture with
+  its own controls, it's a limb of the ground — strength rising from the earth, one continuous stroke. The
+  Ground map becomes the home for organ toggles generally (the live edge today; whatever grows next later).
+  Cost: turning it off takes two clicks (grip → switch) instead of one. <b>Demo lane:</b> demo boots ON;
+  the scripted walkthrough points at the grip once — "everything the app does lives here" — one lesson,
+  two organs.</div>
+</div>
+
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- compact live edge builder ---- */
+function buildEdge(id,withSwitch){
+  var el=document.getElementById(id);
+  el.innerHTML=
+    '<div class="mhead"><div class="dotline"><span class="mdot"></span>THE LIVE EDGE'+
+    (withSwitch?'<button class="sw" id="'+id+'-sw"><span>LIVE · ON</span><span class="pill"></span></button>':'')+
+    '</div></div>'+
+    '<div class="ct"><div class="row"><span class="n">15</span><span class="goal">/ 90 TODAY</span></div>'+
+    '<div class="l">messages &amp; calls — logged or captured</div>'+
+    '<div class="track"><i></i></div></div>'+
+    '<div class="mfeed">'+
+    '<div class="mline big"><b>Northwind</b> — a reply landed after 20 quiet days.<div class="when">28M</div></div>'+
+    '<div class="mline">Captured your send to <b>dana@ramp.com</b> — counted.<div class="when">1H</div></div>'+
+    '<div class="mline dim">Calendar sync — Thursday with <b>Vanta</b> confirmed.<div class="when">3H</div></div>'+
+    '<div class="mline dim">Heartbeat — <b>Northwind</b> still has no dated next step.<div class="when">3H</div></div>'+
+    '</div>'+
+    '<div class="mfoot">STILL QUIET · <b>MERCURY</b> SINCE TUE<br>SHIFT · <b>147</b> ACTIONS SINCE 7 AM</div>';
+}
+buildEdge('edge-tk',false);
+buildEdge('edge-sw',true);
+buildEdge('edge-g3',false);
+
+/* ---- TG-1 tuck ---- */
+(function(){
+  var f=document.getElementById('f-tk'),tab=document.getElementById('tk-tab'),
+      badge=document.getElementById('tk-badge'),missed=0;
+  tab.addEventListener('click',function(){
+    f.classList.toggle('edge-off');
+    if(!f.classList.contains('edge-off')){missed=0;badge.textContent=''}
+  });
+  /* while tucked, events keep counting on the tab */
+  setInterval(function(){
+    if(f.classList.contains('edge-off')){
+      missed++;badge.textContent='+'+missed;
+    }
+  },4000);
+})();
+
+/* ---- TG-2 switch ---- */
+(function(){
+  var f=document.getElementById('f-sw');
+  function wire(){
+    var sw=document.getElementById('edge-sw-sw');
+    if(sw)sw.addEventListener('click',function(){f.classList.add('edge-off')});
+  }
+  wire();
+  document.getElementById('sw-strip').addEventListener('click',function(){
+    f.classList.remove('edge-off');
+  });
+})();
+
+/* ---- TG-3 from the ground ---- */
+(function(){
+  var f=document.getElementById('f-g3'),map=document.getElementById('g3-map'),
+      sw=document.getElementById('g3-sw'),lbl=document.getElementById('g3-sw-label');
+  document.getElementById('g3-gnd').addEventListener('click',function(){map.classList.toggle('up')});
+  sw.addEventListener('click',function(e){
+    e.stopPropagation();
+    f.classList.toggle('edge-off');
+    lbl.textContent=f.classList.contains('edge-off')?'LIVE · OFF':'LIVE · ON';
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')map.classList.remove('up');
+  });
+})();
+</script>
+</body>
+</html>

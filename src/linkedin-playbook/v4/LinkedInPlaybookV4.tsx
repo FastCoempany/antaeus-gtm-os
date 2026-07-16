@@ -19,6 +19,7 @@ import { hrefToSignalConsole } from "../lib/handoff";
 import { saveAction } from "../lib/cloud-persistence";
 import type { ActionEntry, CueIndex } from "../lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./linkedin-playbook-v4.css";
 
 /**
@@ -270,6 +271,7 @@ export function LinkedInPlaybookV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="lp4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

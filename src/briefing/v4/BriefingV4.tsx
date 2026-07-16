@@ -19,6 +19,7 @@ import { SuggestionsSection } from "../components/SuggestionsSection";
 import { BriefingFooter } from "../components/BriefingFooter";
 import { patterns } from "../state";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import { loadWeather, type WeatherKind, type WeatherRead } from "./lib/weather";
 import "./briefing-v4.css";
 
@@ -223,6 +224,7 @@ export function BriefingV4(): JSX.Element {
                 <BriefingFooter />
             </main>
             <GroundLine />
+            <LiveEdge />
         </>
     );
 }
