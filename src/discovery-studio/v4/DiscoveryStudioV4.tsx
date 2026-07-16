@@ -44,6 +44,7 @@ import { hrefToDealWorkspace, hrefToFutureAutopsy } from "../lib/handoff";
 import { QUESTION_BANK, unquoteQuestion } from "@/call-planner/lib/personas";
 import { PERSONA_KEYS, PERSONA_LABELS, type PersonaKey } from "@/call-planner/lib/types";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./discovery-studio-v4.css";
 
 /**
@@ -173,6 +174,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                     </div>
                 </div>
                 <GroundLine />
+            <LiveEdge />
             </div>
         );
     }

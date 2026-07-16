@@ -29,6 +29,7 @@ import {
 } from "../lib/types";
 import { weatherFor, flightsHref, hotelsHref, calendarIcs, type WeatherGlance } from "./lib/get-there";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./outdoors-events-v4.css";
 
 /**
@@ -222,6 +223,7 @@ export function OutdoorsEventsV4(): JSX.Element {
                 </div>
             </div>
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

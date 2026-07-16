@@ -22,6 +22,7 @@ import { hrefToSignalConsole, hrefToOutboundStudio } from "../lib/handoff";
 import { saveProspect, saveQueryCard } from "../lib/cloud-persistence";
 import { enqueueInboundAccount } from "@/signal-console/lib/inbound-queue";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./prospecting-desk-v4.css";
 
 /**
@@ -399,6 +400,7 @@ export function ProspectingDeskV4(): JSX.Element {
 
             {toastMsg.value ? <div class="pd4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

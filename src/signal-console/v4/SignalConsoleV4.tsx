@@ -25,6 +25,7 @@ import {
 } from "../lib/handoff";
 import { buildAttentionField, type AttentionBand } from "./lib/attention";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 import "./signal-console-v4.css";
 
@@ -285,6 +286,7 @@ export function SignalConsoleV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            <LiveEdge />
             <FollowPeek />
 
         </div>

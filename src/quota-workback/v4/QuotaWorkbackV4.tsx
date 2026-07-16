@@ -16,6 +16,7 @@ import {
 } from "./lib/pace";
 import { logBulkOutreach, bulkOutreachToday, BULK_LABELS } from "./lib/bulk-outreach";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./quota-workback-v4.css";
 
 /**
@@ -293,6 +294,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                 )}
             </div>
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

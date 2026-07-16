@@ -17,6 +17,7 @@ import {
     type MemberKind
 } from "./lib/fronts";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./getting-to-signed-v4.css";
 
 /**
@@ -347,6 +348,7 @@ export function GettingToSignedV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="gs4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

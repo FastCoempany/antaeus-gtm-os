@@ -22,9 +22,11 @@ import {
     exportCloudData,
     deleteCloudData,
     togglePhaseF,
+    toggleLiveEdge,
     refreshCloudStatus,
     setDensity
 } from "../state";
+import { liveEdgeOn } from "@/lib/edge/edge-prefs";
 import { densityState } from "@/lib/density";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "../lib/types";
 import { getSupabaseClient } from "@/lib/supabase-client";
@@ -40,6 +42,7 @@ import {
     syncCalendarNow
 } from "../lib/capture";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./settings-v4.css";
 
 /**
@@ -414,6 +417,17 @@ export function SettingsV4(): JSX.Element {
                     </div>
                     <div class="st4-item">
                         <div>
+                            <div class="st4-it">{t("Show the live edge")}</div>
+                            <div class="st4-id">{t("The left wall carries your day — your count, what just landed, who's gone quiet. Turn it off and a thin line stays; click that line any time to bring it back. Your work is counted either way.", { class: "body" })}</div>
+                        </div>
+                        <div class="st4-ia">
+                            <button type="button" class={`st4-btn${liveEdgeOn.value ? "" : " is-ghost"}`} onClick={() => toggleLiveEdge(!liveEdgeOn.value)}>
+                                {liveEdgeOn.value ? t("On") : t("Off")}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="st4-item">
+                        <div>
                             <div class="st4-it">{t("Let the system suggest things", { class: "body" })}</div>
                             <div class="st4-id">{t("It'll flag a pattern now and then. You always accept or dismiss — nothing changes on its own.", { class: "body" })}</div>
                         </div>
@@ -459,6 +473,7 @@ export function SettingsV4(): JSX.Element {
                 <div class="st4-toast" onClick={dismissToast}>{toastSignal.value.message}</div>
             ) : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

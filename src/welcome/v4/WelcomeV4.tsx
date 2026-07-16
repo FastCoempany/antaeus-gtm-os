@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import { landing, initWelcomeV4 } from "./state";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./welcome-v4.css";
 
 /**
@@ -122,6 +123,7 @@ export function WelcomeV4(): JSX.Element {
                 touch the ground line (or press G) and the motion map
                 rises from beneath the room. */}
             <GroundLine />
+            <LiveEdge />
 
         </div>
     );

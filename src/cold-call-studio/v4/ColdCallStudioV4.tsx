@@ -24,6 +24,7 @@ import {
     type CustomPushbackMap
 } from "./lib/custom-pushbacks";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./cold-call-studio-v4.css";
 
 /**
@@ -281,6 +282,7 @@ export function ColdCallStudioV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="cc4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

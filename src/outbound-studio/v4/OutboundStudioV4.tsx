@@ -31,6 +31,7 @@ import {
 import { TRIGGERS, CTA_LABELS } from "../lib/data";
 import { hrefToSignalConsole } from "../lib/handoff";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./outbound-studio-v4.css";
 
 /**
@@ -304,6 +305,7 @@ export function OutboundStudioV4(): JSX.Element {
             </div>
             {toastMsg.value ? <div class="ob4-toast">{toastMsg.value}</div> : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }

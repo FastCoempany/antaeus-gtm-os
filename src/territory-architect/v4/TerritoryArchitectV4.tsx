@@ -33,6 +33,7 @@ import {
 import { computeFieldRead } from "../lib/field-read";
 import { saveThesis, saveApproach, saveAccount } from "../lib/cloud-persistence";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./territory-architect-v4.css";
 
 /**
@@ -382,6 +383,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                 </>
             ) : null}
             <GroundLine />
+            <LiveEdge />
         </div>
     );
 }
