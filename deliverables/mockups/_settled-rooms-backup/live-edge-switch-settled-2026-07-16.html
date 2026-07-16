@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Live Edge — the switch, corrected · 2026-07-16</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LIVE EDGE — THE SWITCH, CORRECTED · 2026-07-16
+   The founder picked TG-2 and flagged two things:
+     1. the standing LIVE·ON pill is redundant chrome — the
+        control should be there when you go looking, not before
+     2. the off action had no visible state change (the pill
+        stayed green while the edge retracted — "hidden," not
+        "off")
+   This mockup is the corrected behavior:
+     · no standing controls — hover the edge, "turn off" appears
+     · off happens in three beats: STILL (dot stops, wire grays,
+       in place) → FOLD (collapses to the hairline) → the
+       hairline left behind is visibly dead
+     · on is the mirror: the edge slides out gray, then WAKES —
+       the dot breathes again, the lines re-ink one after another
+     · the off-state hairline answers your cursor ANYWHERE on
+       the wall — the whisper follows your mouse height
+     · the room scrolls; the rail holds the wall (viewport-fixed
+       in the real build)
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.lead{max-width:940px;margin:26px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.lead .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);display:block;margin-bottom:6px}
+.note{max-width:940px;margin:22px auto 60px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+.note b{color:var(--ink)}
+
+.frame{position:relative;max-width:1100px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:680px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08)}
+.main{position:absolute;top:0;right:0;bottom:26px;left:216px;padding:22px 28px;overflow-y:auto;
+  transition:left .38s cubic-bezier(.3,.9,.3,1)}
+.frame.edge-off .main{left:14px}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.8rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink);flex:none}
+
+/* ================= the live edge ================= */
+.edge{position:absolute;top:0;left:0;bottom:26px;width:216px;border-right:1px solid var(--ink-08);
+  background:linear-gradient(90deg,rgba(10,28,64,.025),transparent 70%);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .38s cubic-bezier(.3,.9,.3,1)}
+.frame.edge-off .edge{transform:translateX(-101%)}
+
+.mhead{padding:14px 14px 10px;border-bottom:1px solid var(--ink-08);flex:none;position:relative}
+.dotline{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.16em;font-weight:700;text-transform:uppercase;color:var(--ink-50)}
+.mdot{width:7px;height:7px;border-radius:50%;background:var(--forest);flex:none;
+  animation:mbreathe 3.2s ease-in-out infinite;transition:background .3s}
+@keyframes mbreathe{0%,100%{opacity:.9}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.mdot{animation:none}}
+
+/* the hover-revealed off control — no standing chrome */
+.e-off{position:absolute;top:11px;right:12px;border:none;background:none;padding:3px 2px;cursor:pointer;
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;font-weight:700;color:var(--ink-30);
+  text-transform:uppercase;opacity:0;transition:opacity .22s,color .18s;pointer-events:none}
+.edge:hover .e-off{opacity:1;pointer-events:auto}
+.e-off:hover{color:var(--ink)}
+.e-off:focus-visible{opacity:1;pointer-events:auto;outline:2px solid var(--orange);outline-offset:2px;border-radius:3px}
+
+.ct{padding:12px 14px 4px;flex:none}
+.ct .row{display:flex;align-items:baseline;gap:7px}
+.ct .n{font-family:var(--serif);font-size:1.7rem;line-height:1}
+.ct .goal{font-family:var(--mono);font-size:.56rem;color:var(--ink-30);font-weight:700}
+.ct .l{font-size:.68rem;color:var(--ink-50);margin-top:2px}
+.ct .track{height:3px;background:var(--ink-08);border-radius:2px;margin-top:6px;overflow:hidden}
+.ct .track i{display:block;height:100%;width:16%;background:var(--forest);border-radius:2px;transition:background .3s}
+
+.mfeed{flex:1;padding:6px 12px;overflow:hidden}
+.mline{position:relative;padding:8px 2px 8px 6px;border-bottom:1px solid var(--ink-08);font-size:.72rem;
+  color:var(--ink-70);line-height:1.5}
+.mline b{color:var(--ink)}
+.mline .when{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--ink-30);
+  font-weight:700;margin-top:1px;text-transform:uppercase}
+.mline.dim{opacity:.4}
+.mline.big{border-left:3px solid var(--orange);padding-left:9px;
+  background:linear-gradient(90deg,rgba(230,112,30,.06),transparent 80%)}
+.mfoot{flex:none;border-top:1px solid var(--ink-08);padding:8px 14px 10px;
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;font-weight:700;
+  color:var(--ink-30);text-transform:uppercase;line-height:1.7}
+.mfoot b{color:var(--ink-50)}
+
+/* ---- beat 1 · STILL — the edge visibly stops being alive, in place ---- */
+/* dimming is simultaneous (delay 0); waking re-inks staggered (base delays below) */
+.mline{transition:filter .32s,opacity .32s}
+.mline:nth-child(1){transition-delay:.05s}
+.mline:nth-child(2){transition-delay:.15s}
+.mline:nth-child(3){transition-delay:.25s}
+.mline:nth-child(4){transition-delay:.35s}
+.mline:nth-child(5){transition-delay:.45s}
+.frame.stilling .mline,.frame.waking .mline{filter:grayscale(1);opacity:.3;transition-delay:0s}
+.ct,.mfoot,.dotline{transition:filter .32s,opacity .32s}
+.frame.stilling .ct,.frame.waking .ct,
+.frame.stilling .mfoot,.frame.waking .mfoot{filter:grayscale(1);opacity:.4}
+.frame.stilling .mdot,.frame.waking .mdot{animation:none;background:var(--ink-30);opacity:.6}
+
+/* ---- beat 3 · the hairline left behind is visibly dead ---- */
+.strip{position:absolute;top:0;left:0;bottom:26px;width:14px;z-index:29;cursor:pointer;
+  background:none;border:none;padding:0;opacity:0;pointer-events:none;transition:opacity .3s}
+.frame.edge-off .strip{opacity:1;pointer-events:auto}
+.strip .line{position:absolute;top:0;bottom:0;left:5px;width:2px;background:var(--ink-08);transition:background .2s}
+.strip:hover .line{background:rgba(230,112,30,.45)}
+/* the whisper — a small raised chip that follows your cursor height */
+.whis{position:absolute;left:16px;top:120px;transform:translateY(-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.13em;font-weight:700;color:var(--ink-50);
+  text-transform:uppercase;opacity:0;transition:opacity .18s;pointer-events:none;
+  background:var(--raised);border:1px solid var(--ink-14);border-radius:7px;padding:6px 11px;
+  box-shadow:0 4px 14px rgba(10,28,64,.1)}
+.strip:hover .whis,.strip:focus-visible .whis{opacity:1}
+.strip:focus-visible .line{background:rgba(230,112,30,.45)}
+
+/* ---- the ground (production grip) ---- */
+.gnd{position:absolute;left:0;right:0;bottom:0;height:26px;cursor:pointer;background:none;border:none;padding:0;z-index:40}
+.gnd .stroke{position:absolute;left:0;right:0;bottom:9px;height:2.5px;background:var(--ink);opacity:.4;transition:opacity .2s}
+.gnd:hover .stroke{opacity:.85}
+.gnd-tab{position:absolute;left:50%;transform:translateX(-50%);bottom:0;display:flex;align-items:center;gap:7px;
+  background:var(--raised);border:1px solid var(--ink-14);border-bottom:none;border-radius:9px 9px 0 0;
+  padding:4px 13px 5px;line-height:0;box-shadow:0 -3px 10px rgba(10,28,64,.07);transition:padding .18s}
+.gnd:hover .gnd-tab{padding-bottom:8px}
+.gnd-tab svg{width:12px;height:12px}
+.gnd-grip{display:flex;gap:2.5px;align-items:center}
+.gnd-grip i{width:2px;height:8px;border-radius:2px;background:rgba(10,28,64,.3);transition:background .18s}
+.gnd:hover .gnd-grip i{background:var(--orange)}
+
+/* the beats caption under the frame */
+.beats{max-width:1100px;margin:10px auto 0;padding:0 4px;display:flex;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;font-weight:700;color:var(--ink-30);text-transform:uppercase}
+.beats b{color:var(--ink-50)}
+</style>
+</head>
+<body>
+
+<p class="lead"><span class="k">THE LIVE EDGE · THE SWITCH, CORRECTED · 2026-07-16</span>
+<b>No standing controls.</b> Hover the edge and <b>turn off</b> appears in its head — there when you go
+looking, invisible when you're not. Click it and the off happens in three beats you can see:
+the edge <b>stills in place</b> (the dot stops breathing, the wire grays out), <i>then</i> it folds to the
+wall, and the hairline it leaves behind is plainly dead — no dot, no color. Hover that hairline
+<b>anywhere</b>, top of the page or bottom, and "click to turn on" appears at your cursor. Click it and
+watch the mirror: the edge slides out gray, then <b>wakes</b> — the dot breathes again and the lines
+re-ink one after another. Scroll the room list — the edge holds the wall.</p>
+
+<div class="frame" id="frame">
+  <aside class="edge" id="edge">
+    <div class="mhead">
+      <div class="dotline"><span class="mdot"></span>THE LIVE EDGE</div>
+      <button class="e-off" id="offBtn">TURN OFF</button>
+    </div>
+    <div class="ct">
+      <div class="row"><span class="n">15</span><span class="goal">/ 90 TODAY</span></div>
+      <div class="l">messages &amp; calls — logged or captured</div>
+      <div class="track"><i></i></div>
+    </div>
+    <div class="mfeed">
+      <div class="mline big"><b>Northwind</b> — a reply landed after 20 quiet days.<div class="when">28M</div></div>
+      <div class="mline">Captured your send to <b>dana@ramp.com</b> — counted.<div class="when">1H</div></div>
+      <div class="mline dim">Calendar sync — Thursday with <b>Vanta</b> confirmed.<div class="when">3H</div></div>
+      <div class="mline dim">Heartbeat — <b>Northwind</b> still has no dated next step.<div class="when">3H</div></div>
+    </div>
+    <div class="mfoot">STILL QUIET · <b>MERCURY</b> SINCE TUE<br>SHIFT · <b>147</b> ACTIONS SINCE 7 AM</div>
+  </aside>
+
+  <button class="strip" id="strip" aria-label="The live edge is off — click to turn on">
+    <span class="line"></span>
+    <span class="whis" id="whis">THE LIVE EDGE IS OFF — CLICK TO TURN ON</span>
+  </button>
+
+  <div class="main" id="main">
+    <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+      <span class="hint">hover the edge → turn off · then hover the wall anywhere</span></div>
+    <div class="rh1">3 deals will slip this week if you do nothing.</div>
+    <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+    <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+    <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    <div class="rrow"><b>Vanta</b> — pilot moving · check-in Thursday <span class="m">$66k</span></div>
+    <div class="rrow"><b>Beacon Health</b> — security questionnaire in play <span class="m">$150k</span></div>
+    <div class="rrow"><b>Torch Labs</b> — first meeting booked from a cold call <span class="m">$38k</span></div>
+    <div class="rrow"><b>Juniper</b> — champion left · rebuilding the thread <span class="m">$95k</span></div>
+    <div class="rrow"><b>Coreline</b> — proposal out · quiet 6 days <span class="m">$72k</span></div>
+    <div class="rrow"><b>Atlas Freight</b> — discovery Friday · prep owed <span class="m">$54k</span></div>
+    <div class="rrow"><b>Halcyon</b> — renewal conversation opens next month <span class="m">$110k</span></div>
+    <div class="rrow"><b>Fieldstone</b> — new exec landed · warm way in <span class="m">$47k</span></div>
+    <div class="rrow"><b>Meridian Bio</b> — stuck at legal · liability cap <span class="m">$130k</span></div>
+  </div>
+
+  <button class="gnd" aria-label="Open the motion map">
+    <span class="stroke"></span>
+    <span class="gnd-tab"><svg viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="4"/></svg><span class="gnd-grip"><i></i><i></i><i></i></span></span>
+  </button>
+</div>
+
+<div class="beats"><span>OFF · <b>1 STILL</b> — the dot stops, the wire grays, in place</span>
+<span>· <b>2 FOLD</b> — collapses to the wall</span>
+<span>· <b>3 DEAD LINE</b> — nothing breathing</span>
+<span>&nbsp;&nbsp;ON · the mirror — slide out gray, then <b>WAKE</b>, line by line</span></div>
+
+<div class="note"><b>What this settles.</b> The standing LIVE·ON pill is gone — the off control is
+hover-revealed ("there when you go looking"), and the state change is <b>seen before the retraction</b>,
+so the click reads as "off," never "hidden." The whisper follows your cursor's height anywhere on the
+hairline — in the real build the rail is <b>fixed to the viewport, not the page</b>, so it spans the full
+window wherever you've scrolled. <b>Settings mirror:</b> the durable switch lives under "How the app works
+for you" — "Show the live edge" — with plain copy on flip: <i>"The live edge is off. The hairline stays on
+your rooms; click it any time to turn it back on."</i> Turning the edge off never stops the counting —
+capture and the day's count keep running; you're hiding the wire, not stopping the work. <b>Default:</b>
+ON for real workspaces. <b>Demo lane:</b> "Launch interactive demo" boots with the edge ON and a scripted
+sample stream (a reply landing, a meeting confirming, the heartbeat noticing) so it performs in the first
+ten seconds; the toggle is live in the demo so a viewer can feel both states.</div>
+
+<script>
+(function(){
+  var frame=document.getElementById('frame'),
+      offBtn=document.getElementById('offBtn'),
+      strip=document.getElementById('strip'),
+      whis=document.getElementById('whis');
+
+  /* OFF — three beats: still (in place) → fold → dead hairline */
+  offBtn.addEventListener('click',function(){
+    if(frame.classList.contains('edge-off')||frame.classList.contains('stilling'))return;
+    frame.classList.add('stilling');                 /* beat 1 — watch it stop */
+    setTimeout(function(){
+      frame.classList.add('edge-off');               /* beat 2 — then it folds */
+    },420);
+    setTimeout(function(){
+      frame.classList.remove('stilling');            /* housekeeping once hidden */
+      frame.classList.add('waking');                 /* park gray for the return */
+    },860);
+  });
+
+  /* ON — the mirror: slide out gray, then wake line by line */
+  strip.addEventListener('click',function(){
+    if(!frame.classList.contains('edge-off'))return;
+    frame.classList.remove('edge-off');              /* slides out still gray */
+    setTimeout(function(){
+      frame.classList.remove('waking');              /* the wake — dot breathes, lines re-ink staggered */
+    },460);
+  });
+
+  /* the whisper follows your cursor height, anywhere on the strip */
+  strip.addEventListener('mousemove',function(e){
+    var r=strip.getBoundingClientRect();
+    var y=e.clientY-r.top;
+    y=Math.max(34,Math.min(r.height-34,y));
+    whis.style.top=y+'px';
+  });
+})();
+</script>
+</body>
+</html>

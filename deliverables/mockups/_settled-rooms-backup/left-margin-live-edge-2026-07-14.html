@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Live Edge — round 5.1 · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LIVE EDGE — ROUND 5.1 · 2026-07-14
+   Round 5 landed ("i really reeeeeeeeally like these"). This
+   pass makes each study deeper and adds the tab that matters:
+   all three living together on ONE margin — the machine, the
+   buyers, and you — the way it would actually ship.
+   Upgrades: glyphs per event kind, arrival flash + timestamps
+   that age as lines sink, big buyer moments held with an orange
+   rule, honest quiet ledger, live pace track on the count,
+   auto-captures that tick the count without you touching it,
+   hover pauses any feed.
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.78rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:6px 14px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:660px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08);display:flex}
+.margin{width:232px;flex:none;border-right:1px solid var(--ink-08);position:relative;
+  background:linear-gradient(90deg,rgba(10,28,64,.025),transparent 70%);overflow:hidden;
+  display:flex;flex-direction:column}
+.main{flex:1;min-width:0;padding:22px 28px;overflow-y:auto}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.8rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+
+/* ---- margin header ---- */
+.mhead{padding:16px 16px 12px;border-bottom:1px solid var(--ink-08);flex:none}
+.dotline{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.16em;font-weight:700;text-transform:uppercase;color:var(--ink-50)}
+.mdot{width:8px;height:8px;border-radius:50%;background:var(--forest);flex:none;
+  animation:mbreathe 3.2s ease-in-out infinite}
+.mdot.kick{animation:mkick .5s ease}
+@keyframes mbreathe{0%,100%{opacity:.9}50%{opacity:.45}}
+@keyframes mkick{0%{box-shadow:0 0 0 0 rgba(27,94,63,.45)}100%{box-shadow:0 0 0 9px rgba(27,94,63,0)}}
+@media (prefers-reduced-motion:reduce){.mdot{animation:none}}
+.mhead .sub{font-size:.72rem;color:var(--ink-50);margin-top:5px;line-height:1.5}
+
+/* ---- live feed ---- */
+.mfeed{flex:1;padding:8px 14px 6px;overflow:hidden;position:relative}
+.mline{position:relative;padding:9px 2px 9px 24px;border-bottom:1px solid var(--ink-08);
+  opacity:0;transform:translateY(-8px);
+  transition:opacity .5s,transform .5s cubic-bezier(.3,.9,.3,1),background .8s}
+.mline.on{opacity:1;transform:none}
+.mline.fresh{background:linear-gradient(90deg,rgba(27,94,63,.07),transparent 80%)}
+.mline.dim{opacity:.36}
+.mline.big{border-left:3px solid var(--orange);padding-left:12px;margin-left:-14px;
+  padding-left:26px;background:linear-gradient(90deg,rgba(230,112,30,.06),transparent 80%)}
+.mline.big.dim{opacity:.55}
+.mline .glyph{position:absolute;left:0;top:11px;width:15px;height:15px;color:var(--ink-30)}
+.mline.big .glyph{left:6px;color:var(--orange)}
+.mline .glyph svg{width:100%;height:100%;display:block}
+.mline .what{font-size:.76rem;color:var(--ink-70);line-height:1.5}
+.mline .what b{color:var(--ink)}
+.mline .when{font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;color:var(--ink-30);
+  font-weight:700;margin-top:2px;text-transform:uppercase}
+.mline .tag{display:inline-block;font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;
+  font-weight:700;text-transform:uppercase;border-radius:99px;padding:1.5px 7px;margin-right:6px;vertical-align:1px}
+.tag--m{color:var(--blue);border:1px solid rgba(37,99,235,.3)}
+.tag--b{color:var(--orange);border:1px solid rgba(230,112,30,.35)}
+.tag--y{color:var(--forest);border:1px solid rgba(27,94,63,.32)}
+
+/* ---- quiet ledger foot ---- */
+.mfoot{flex:none;border-top:1px solid var(--ink-08);padding:10px 16px 12px}
+.mfoot .fk{font-family:var(--mono);font-size:.52rem;letter-spacing:.16em;font-weight:700;
+  color:var(--ink-30);text-transform:uppercase;margin-bottom:5px}
+.mfoot .fl{font-size:.72rem;color:var(--ink-50);line-height:1.7}
+.mfoot .fl b{color:var(--ink-70)}
+.mfoot .count{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;font-weight:700;
+  color:var(--ink-30);text-transform:uppercase;line-height:1.7}
+.mfoot .count b{color:var(--ink-50)}
+
+/* ---- the count ---- */
+.ct-stats{padding:14px 16px 6px;flex:none}
+.ct-stat{margin-bottom:16px;position:relative}
+.ct-stat .row{display:flex;align-items:baseline;gap:8px}
+.ct-stat .n{font-family:var(--serif);font-size:2rem;line-height:1;transition:transform .18s,color .18s}
+.ct-stat.bump .n{transform:scale(1.16);color:var(--forest)}
+.ct-stat .goal{font-family:var(--mono);font-size:.6rem;color:var(--ink-30);font-weight:700}
+.ct-stat .l{font-size:.72rem;color:var(--ink-50);margin-top:2px;line-height:1.45}
+.ct-track{height:3px;background:var(--ink-08);border-radius:2px;margin-top:7px;overflow:hidden}
+.ct-track i{display:block;height:100%;background:var(--forest);border-radius:2px;
+  transition:width .5s cubic-bezier(.3,.9,.3,1)}
+.ct-plus{position:absolute;right:2px;top:-2px;font-family:var(--mono);font-size:.72rem;font-weight:700;
+  color:var(--forest);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .65s}
+.ct-plus.fly{opacity:1;transform:translateY(-15px)}
+.ct-pace{padding:0 16px 10px;font-size:.7rem;color:var(--ink-50);line-height:1.55;flex:none}
+.ct-pace b{color:var(--ink)}
+.act{background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:var(--sans);
+  font-size:.8rem;font-weight:600;padding:9px 14px;cursor:pointer;margin-right:8px;margin-top:6px}
+.act:hover{background:#132a58}
+.act.orange{background:var(--orange)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LIVE EDGE · ROUND 5.1 · 2026-07-14</span>
+  <button class="on" data-p="all">★ <b>The Live Edge</b> — all three on one margin</button>
+  <button data-p="sh">LM-16+ · <b>The Shift</b></button>
+  <button data-p="os">LM-17+ · <b>The Other Side</b></button>
+  <button data-p="cn">LM-18+ · <b>The Count</b></button>
+</div>
+
+<!-- ============ THE LIVE EDGE (combined) ============ -->
+<div class="pane on" id="pane-all">
+  <p class="lead"><b>★ The Live Edge — how it would actually ship.</b> One margin, three kinds of life:
+  <b>your numbers</b> on top, counting the day; the <b>live wire</b> beneath, where machine work and buyer
+  movement land as they happen — buyer moments carry the orange rule and hold longer; machine lines stay
+  quiet and sink faster. The foot keeps the honest ledger: who's still silent, and the shift total.
+  Captures tick your count on their own — watch <b>messages &amp; calls</b> move without touching anything.
+  Hover the wire to pause it.</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot" id="all-dot"></span>THE LIVE EDGE</div>
+        <div class="sub">You · the machine · the buyers. Live.</div>
+      </div>
+      <div class="ct-stats" id="all-stats">
+        <div class="ct-stat" data-stat="touch">
+          <span class="ct-plus">+1</span>
+          <div class="row"><span class="n">14</span><span class="goal">/ 90 today</span></div>
+          <div class="l">messages &amp; calls — counted, logged or captured</div>
+          <div class="ct-track"><i style="width:16%"></i></div>
+        </div>
+      </div>
+      <div class="mfeed" id="all-feed"></div>
+      <div class="mfoot">
+        <div class="fk">STILL QUIET</div>
+        <div class="fl"><b>Mercury</b> since Tue · <b>Hightouch</b> 75d</div>
+        <div class="count" style="margin-top:6px">SHIFT TOTAL · <b id="all-total">147</b> ACTIONS SINCE 7 AM</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">the left edge is alive — hover it to pause</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+      <div style="margin-top:14px">
+        <button class="act orange" data-log="touch">Log a send</button>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>The Live Edge</b> — the ration that makes it shippable: buyer moments are rare and
+  LOUD (orange rule, held longer), machine lines are frequent and nearly silent (they exist mostly so the
+  edge never reads dead), and your count only moves on truth (a log or a capture). Every event here maps to
+  a real table the system already writes — sequences, captured_meetings, observations, heartbeat runs. The
+  margin is a renderer, not a new system.</div>
+</div>
+
+<!-- ============ LM-16+ · THE SHIFT ============ -->
+<div class="pane" id="pane-sh">
+  <p class="lead"><b>LM-16+ · The Shift, deepened.</b> Now with a glyph per kind of work (capture, heartbeat,
+  calendar, briefing, watch), an arrival wash that cools as the line settles, timestamps that age as lines
+  sink, the breathing dot kicking once per arrival, and the shift ledger at the foot counting everything —
+  including what never surfaced. Hover pauses the shift.</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot" id="sh-dot"></span>ON SHIFT</div>
+        <div class="sub">The system, working your motion right now.</div>
+      </div>
+      <div class="mfeed" id="sh-feed"></div>
+      <div class="mfoot">
+        <div class="count">THIS SHIFT · <b id="sh-total">312</b> READS &amp; WRITES<br>SURFACED ONLY WHAT MATTERED</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">watch the left edge — the machine is working</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-16+</b> — the foot line is the important upgrade: "312 reads &amp; writes ·
+  surfaced only what mattered" makes the rationing itself visible — the operator learns the machine does
+  far more than it shows, which is exactly the trust the heavy-seeding promise needs.</div>
+</div>
+
+<!-- ============ LM-17+ · THE OTHER SIDE ============ -->
+<div class="pane" id="pane-os">
+  <p class="lead"><b>LM-17+ · The Other Side, deepened.</b> Big buyer moments now carry the orange rule,
+  arrive with the wash, and hold their brightness longer — a reply after 20 quiet days should not sink at
+  the same speed as a routine confirmation. The foot keeps the honest silence ledger. Glyphs mark the kind
+  of movement: a reply, an accepted meeting, people joining, security progress.</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot" id="os-dot" style="background:var(--orange)"></span>THE OTHER SIDE</div>
+        <div class="sub">Buyers moving, as it happens.</div>
+      </div>
+      <div class="mfeed" id="os-feed"></div>
+      <div class="mfoot">
+        <div class="fk">STILL QUIET</div>
+        <div class="fl"><b>Mercury</b> since Tue · <b>Hightouch</b> 75d — nothing to show, said plainly.</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">the left edge is their side of the table</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-17+</b> — the escalation ladder is the design: routine movement (a confirmation)
+  arrives quiet and sinks fast; genuine movement (a reply after silence, new stakeholders appearing) arrives
+  loud and stays. That's canon rule 7 applied to a feed — intensity only where something real changed.</div>
+</div>
+
+<!-- ============ LM-18+ · THE COUNT ============ -->
+<div class="pane" id="pane-cn">
+  <p class="lead"><b>LM-18+ · The Count, deepened.</b> Each tally now carries its <b>pace track</b> — the
+  thin line filling toward what the day wants — and a plain projection underneath that updates as you work.
+  The upgrade that matters: <b>captures count themselves.</b> Watch — every few seconds a send you "made
+  outside the app" lands and the number moves on its own. The buttons still work too.</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot" id="cn-dot"></span>TODAY · COUNTED</div>
+        <div class="sub">Logged or captured — it all lands here.</div>
+      </div>
+      <div class="ct-stats">
+        <div class="ct-stat" data-stat="touch">
+          <span class="ct-plus">+1</span>
+          <div class="row"><span class="n">14</span><span class="goal">/ 90 today</span></div>
+          <div class="l">messages &amp; calls</div>
+          <div class="ct-track"><i style="width:16%"></i></div>
+        </div>
+        <div class="ct-stat" data-stat="meet">
+          <span class="ct-plus">+1</span>
+          <div class="row"><span class="n">2</span><span class="goal">/ 5 this week</span></div>
+          <div class="l">meetings held</div>
+          <div class="ct-track"><i style="width:40%"></i></div>
+        </div>
+        <div class="ct-stat" data-stat="deal">
+          <span class="ct-plus">+1</span>
+          <div class="row"><span class="n">1</span><span class="goal">moved</span></div>
+          <div class="l">deals moved forward today</div>
+        </div>
+      </div>
+      <div class="ct-pace" id="cn-pace">At this pace: <b>~64 by 6 PM</b> — a touch behind the 90 the number wants.</div>
+      <div class="mfeed" id="cn-feed" style="flex:1"></div>
+      <div class="mfoot">
+        <div class="count">CAPTURED SENDS COUNT THEMSELVES — BCC LANE ON</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · OUTBOUND STUDIO
+        <span class="hint">act — or don't. captures count themselves.</span></div>
+      <div class="rh1">Where you are with Ramp.</div>
+      <div class="rrow"><b>The opener that landed</b> — the CRO-hire angle · reply 3 days ago <span class="m">4 touches</span></div>
+      <div style="margin-top:14px">
+        <button class="act orange" data-log="touch">Log this send</button>
+        <button class="act" data-log="meet">Meeting held</button>
+        <button class="act" data-log="deal">Deal moved</button>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>LM-18+</b> — the auto-tick is the whole point: the first time an operator sees the
+  number move because of an email they sent from Gmail an hour ago, the capture lanes stop being plumbing
+  and become a feeling. The pace projection stays plain-worded and honest ("a touch behind"), never a score,
+  never a streak.</div>
+</div>
+
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- glyph library (inline, currentColor) ---- */
+var G={
+  mail:'<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  pulse:'<svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2.5-6 4 12 2.5-6H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5.5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 10h16M9 3.5v4M15 3.5v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 6c-2-1.6-4.8-2-8-1.6v13.2c3.2-.4 6 0 8 1.6 2-1.6 4.8-2 8-1.6V4.4C16.8 4 14 4.4 12 6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 6v13" stroke="currentColor" stroke-width="1.8"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg>',
+  reply:'<svg viewBox="0 0 24 24" fill="none"><path d="M9.5 7L4 12l5.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 12H14c3.3 0 6 2.7 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5.5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12.5l2.5 2.5 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8.5" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19c.6-3 2.9-4.5 5.5-4.5S13.9 16 14.5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15.5 6.2a3 3 0 110 4.9M17 12.6c2 .5 3.2 1.9 3.6 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5l7 2.6v5.2c0 4.6-3 7.6-7 9.2-4-1.6-7-4.6-7-9.2V6.1l7-2.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 11.8l2.2 2.2 3.8-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+var AGES=['JUST NOW','1M','2M','4M','7M','11M','16M','22M'];
+
+/* ---- feed engine: arrival wash, aging stamps, big-hold, hover pause ---- */
+function liveFeed(opts){
+  var feed=document.getElementById(opts.feed);
+  var dot=opts.dot?document.getElementById(opts.dot):null;
+  var i=0,paused=false;
+  feed.addEventListener('mouseenter',function(){paused=true});
+  feed.addEventListener('mouseleave',function(){paused=false});
+  function push(){
+    if(paused)return;
+    var ev=opts.events[i%opts.events.length];i++;
+    var el=document.createElement('div');
+    el.className='mline fresh'+(ev.big?' big':'');
+    el.innerHTML='<span class="glyph">'+(G[ev.g]||G.pulse)+'</span>'+
+      '<div class="what">'+(ev.tag?'<span class="tag tag--'+ev.tag+'">'+({m:'machine',b:'buyer',y:'you'})[ev.tag]+'</span>':'')+ev.t+'</div>'+
+      '<div class="when">JUST NOW</div>';
+    feed.insertBefore(el,feed.firstChild);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('on')})});
+    setTimeout(function(){el.classList.remove('fresh')},2200);
+    if(dot){dot.classList.remove('kick');void dot.offsetWidth;dot.classList.add('kick')}
+    var lines=feed.querySelectorAll('.mline');
+    lines.forEach(function(l,j){
+      var w=l.querySelector('.when');
+      if(w)w.textContent=AGES[Math.min(j,AGES.length-1)];
+      var holdBoost=l.classList.contains('big')?2:0;
+      if(j>=2+holdBoost)l.classList.add('dim');
+      if(j>7)l.remove();
+    });
+    if(opts.onEvent)opts.onEvent(ev);
+    if(opts.total){
+      var t=document.getElementById(opts.total);
+      t.textContent=String(Number(t.textContent)+1+Math.floor(Math.random()*3));
+    }
+  }
+  push();
+  setInterval(push,opts.interval);
+}
+
+/* ---- count helpers ---- */
+function bumpStat(scope,key,goalNow){
+  var st=document.querySelector(scope+' .ct-stat[data-stat="'+key+'"]');
+  if(!st)return;
+  var n=st.querySelector('.n'),plus=st.querySelector('.ct-plus'),track=st.querySelector('.ct-track i');
+  var v=Number(n.textContent)+1;
+  n.textContent=String(v);
+  if(track&&goalNow)track.style.width=Math.min(100,Math.round(v/goalNow*100))+'%';
+  st.classList.add('bump');plus.classList.add('fly');
+  setTimeout(function(){st.classList.remove('bump');plus.classList.remove('fly')},650);
+  return v;
+}
+
+/* ---- THE SHIFT ---- */
+liveFeed({feed:'sh-feed',dot:'sh-dot',total:'sh-total',interval:2700,events:[
+  {g:'mail',t:'Captured your send to <b>dana@ramp.com</b> — counted, filed under Ramp.'},
+  {g:'pulse',t:'Heartbeat — read all 10 live deals. <b>Northwind</b> still has no dated next step.'},
+  {g:'cal',t:'Calendar sync — Thursday with <b>Vanta</b> confirmed.'},
+  {g:'eye',t:'Heat recomputed across 12 watched accounts — <b>Ramp</b> still hottest at 88.'},
+  {g:'pulse',t:'Wrote an observation: <b>Mercury</b> quiet for 14 days.'},
+  {g:'book',t:'Briefing pipeline — read 214 sources across your market overnight.'}
+]});
+
+/* ---- THE OTHER SIDE ---- */
+liveFeed({feed:'os-feed',dot:'os-dot',interval:3000,events:[
+  {g:'check',t:'<b>Ramp</b> — Dana Cho accepted Thursday’s results meeting.'},
+  {g:'reply',t:'<b>Northwind</b> — a reply landed after 20 quiet days.',big:true},
+  {g:'users',t:'<b>Vanta</b> — their ops lead added a colleague to Thursday.'},
+  {g:'shield',t:'<b>Ramp</b> — security returned 40 more answered questions.',big:true},
+  {g:'users',t:'<b>Acme</b> — two new hands-on users active in the pilot today.'},
+  {g:'check',t:'<b>Linear</b> — proposal opened by the committee twice today.'}
+]});
+
+/* ---- THE COUNT ---- */
+liveFeed({feed:'cn-feed',dot:'cn-dot',interval:4200,events:[
+  {g:'mail',t:'Captured — a send to <b>ops@vanta.com</b> from your inbox. Counted for you.'},
+  {g:'mail',t:'Captured — your follow-up to <b>Northwind</b>. Counted for you.'},
+  {g:'cal',t:'Calendar — Thursday’s meeting confirmed. It will count when held.'},
+  {g:'mail',t:'Captured — a send to <b>dana@ramp.com</b>. Counted for you.'}
+],onEvent:function(ev){
+  if(ev.g==='mail'){
+    var v=bumpStat('#pane-cn','touch',90);
+    if(v){var pace=document.getElementById('cn-pace');
+      var proj=Math.round(v/14*64);
+      pace.innerHTML='At this pace: <b>~'+proj+' by 6 PM</b>'+(proj>=90?' — on the number.':' — a touch behind the 90 the number wants.');}
+  }
+}});
+document.querySelectorAll('#pane-cn [data-log]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var goals={touch:90,meet:5,deal:0};
+    bumpStat('#pane-cn',btn.dataset.log,goals[btn.dataset.log]);
+  });
+});
+
+/* ---- THE LIVE EDGE (combined) ---- */
+liveFeed({feed:'all-feed',dot:'all-dot',total:'all-total',interval:2900,events:[
+  {g:'mail',tag:'y',t:'Captured your send to <b>dana@ramp.com</b> — counted.',you:true},
+  {g:'pulse',tag:'m',t:'Heartbeat — <b>Northwind</b> still has no dated next step.'},
+  {g:'reply',tag:'b',t:'<b>Northwind</b> — a reply landed after 20 quiet days.',big:true},
+  {g:'cal',tag:'m',t:'Calendar sync — Thursday with <b>Vanta</b> confirmed.'},
+  {g:'check',tag:'b',t:'<b>Ramp</b> — Dana accepted Thursday’s results meeting.',big:true},
+  {g:'eye',tag:'m',t:'Heat recomputed — <b>Ramp</b> hottest at 88.'},
+  {g:'mail',tag:'y',t:'Captured — your follow-up to <b>Vanta</b>. Counted.',you:true},
+  {g:'shield',tag:'b',t:'<b>Ramp</b> — security returned 40 answered questions.'}
+],onEvent:function(ev){
+  if(ev.you)bumpStat('#pane-all','touch',90);
+}});
+document.querySelectorAll('#pane-all [data-log]').forEach(function(btn){
+  btn.addEventListener('click',function(){bumpStat('#pane-all','touch',90)});
+});
+</script>
+</body>
+</html>
