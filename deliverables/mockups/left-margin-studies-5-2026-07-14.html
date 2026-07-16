@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The left margin — round 5, live presence · 2026-07-14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE LEFT MARGIN — ROUND 5 · LIVE PRESENCE · 2026-07-14
+   The one lane rounds 1-4 never touched: the left edge as the
+   place where something is ALIVE right now. Not doors (the
+   Ground owns those), not annotations of the page, not history.
+     LM-16 · THE SHIFT — the machine you hired, visibly on duty
+     LM-17 · THE OTHER SIDE — the buyer's side of the table,
+             moving in real time
+     LM-18 · THE COUNT — your own day being counted as you work
+   Play exploration, design-only, not canon.
+   ============================================================ */
+:root{
+  --field:#f6f8fc; --raised:#ffffff;
+  --ink:#0a1c40;
+  --ink-70:rgba(10,28,64,.70); --ink-50:rgba(10,28,64,.50);
+  --ink-30:rgba(10,28,64,.30); --ink-14:rgba(10,28,64,.14);
+  --ink-08:rgba(10,28,64,.08);
+  --orange:#e6701e; --blue:#2563eb; --forest:#1b5e3f;
+  --red:#cf3b34; --amber:#b45309;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--field);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.bar{position:sticky;top:0;z-index:80;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:12px 20px;background:rgba(246,248,252,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-08)}
+.bar .lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;font-weight:700;color:var(--ink-50);margin-right:6px}
+.bar button{font-family:var(--sans);font-size:.8rem;color:var(--ink-70);background:var(--raised);
+  border:1px solid var(--ink-14);border-radius:99px;padding:7px 16px;cursor:pointer}
+.bar button b{color:var(--ink)}
+.bar button.on{border-color:var(--orange);box-shadow:0 0 0 3px rgba(230,112,30,.12);color:var(--ink)}
+.pane{display:none}
+.pane.on{display:block}
+.lead{max-width:900px;margin:22px auto 10px;padding:0 20px;font-size:.94rem;line-height:1.7;color:var(--ink-70)}
+.lead b{color:var(--ink)}
+.note{max-width:900px;margin:24px auto 56px;padding:15px 20px;background:var(--raised);
+  border:1px solid var(--ink-08);border-left:3px solid var(--blue);border-radius:8px;
+  font-size:.85rem;line-height:1.65;color:var(--ink-70)}
+
+.frame{position:relative;max-width:1060px;margin:16px auto 0;border:1px solid var(--ink-14);
+  border-radius:14px;background:var(--field);height:640px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,28,64,.08);display:flex}
+.margin{width:218px;flex:none;border-right:1px solid var(--ink-08);position:relative;
+  background:linear-gradient(90deg,rgba(10,28,64,.025),transparent 70%);overflow:hidden}
+.main{flex:1;min-width:0;padding:22px 28px;overflow-y:auto}
+.rtop{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.2em;font-weight:700;color:var(--ink-50);padding-bottom:16px;
+  border-bottom:1px solid var(--ink-08);margin-bottom:20px}
+.rtop b{color:var(--ink);display:flex;align-items:center;gap:7px}
+.rtop .hint{margin-left:auto;color:var(--orange);letter-spacing:.1em;text-transform:none;font-weight:700}
+.rh1{font-family:var(--serif);font-size:1.8rem;letter-spacing:-.01em;margin:0 0 18px}
+.rrow{display:flex;gap:14px;align-items:baseline;padding:12px 16px;background:var(--raised);
+  border:1px solid var(--ink-08);border-radius:9px;margin-bottom:9px;font-size:.9rem;color:var(--ink-70)}
+.rrow b{color:var(--ink)}
+.rrow .m{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--ink)}
+
+/* shared margin header */
+.mhead{padding:18px 16px 12px;border-bottom:1px solid var(--ink-08)}
+.mhead .dotline{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.16em;font-weight:700;text-transform:uppercase;color:var(--ink-50)}
+.mdot{width:8px;height:8px;border-radius:50%;background:var(--forest);flex:none;
+  animation:mbreathe 3s ease-in-out infinite}
+@keyframes mbreathe{0%,100%{opacity:.9;box-shadow:0 0 0 0 rgba(27,94,63,.3)}
+  50%{opacity:.45;box-shadow:0 0 0 5px rgba(27,94,63,0)}}
+@media (prefers-reduced-motion:reduce){.mdot{animation:none}}
+.mhead .sub{font-size:.72rem;color:var(--ink-50);margin-top:5px;line-height:1.5}
+
+/* shared live feed lines */
+.mfeed{position:absolute;top:84px;bottom:0;left:0;right:0;padding:10px 16px;overflow:hidden}
+.mline{padding:9px 0;border-bottom:1px solid var(--ink-08);opacity:0;transform:translateY(-6px);
+  transition:opacity .5s,transform .5s}
+.mline.on{opacity:1;transform:none}
+.mline.dim{opacity:.38}
+.mline .what{font-size:.76rem;color:var(--ink-70);line-height:1.5}
+.mline .what b{color:var(--ink)}
+.mline .when{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--ink-30);
+  font-weight:700;margin-top:2px;text-transform:uppercase}
+.mline .k{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.k--sys{background:var(--blue)}
+.k--good{background:var(--forest)}
+.k--warm{background:var(--orange)}
+
+/* ============================================================
+   LM-18 · THE COUNT — specific bits
+   ============================================================ */
+.ct-stats{padding:16px}
+.ct-stat{margin-bottom:20px;position:relative}
+.ct-stat .n{font-family:var(--serif);font-size:2.1rem;line-height:1;transition:transform .18s}
+.ct-stat.bump .n{transform:scale(1.18);color:var(--forest)}
+.ct-stat .l{font-size:.74rem;color:var(--ink-50);margin-top:3px;line-height:1.45}
+.ct-plus{position:absolute;right:8px;top:-4px;font-family:var(--mono);font-size:.72rem;font-weight:700;
+  color:var(--forest);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .6s}
+.ct-plus.fly{opacity:1;transform:translateY(-14px)}
+.ct-foot{position:absolute;bottom:14px;left:16px;right:16px;font-size:.7rem;color:var(--ink-30);
+  font-family:var(--mono);letter-spacing:.08em;font-weight:700;text-transform:uppercase;line-height:1.7}
+.act{background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:var(--sans);
+  font-size:.8rem;font-weight:600;padding:9px 14px;cursor:pointer;margin-right:8px;margin-top:6px}
+.act:hover{background:#132a58}
+.act.orange{background:var(--orange)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="lbl">THE LEFT MARGIN · ROUND 5 · LIVE PRESENCE · 2026-07-14</span>
+  <button class="on" data-p="sh">LM-16 · <b>The Shift</b> — the machine, visibly on duty</button>
+  <button data-p="os">LM-17 · <b>The Other Side</b> — the buyer's table, moving</button>
+  <button data-p="cn">LM-18 · <b>The Count</b> — your day, counted as you work</button>
+</div>
+
+<!-- ============ LM-16 · THE SHIFT ============ -->
+<div class="pane on" id="pane-sh">
+  <p class="lead"><b>LM-16 · The Shift.</b> The left edge is where you can <b>see the machine you hired
+  actually working</b> — live, as it happens: a send captured, the heartbeat reading your deals, a calendar
+  sync landing, heat recomputing. Each event surfaces, holds a beat, then dims into the shift log. Nothing
+  to click, nothing it asks of you — just standing evidence that the system is on duty while you sell.
+  (Demo: events arrive every few seconds.)</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot"></span>ON SHIFT</div>
+        <div class="sub">The system, working your motion right now.</div>
+      </div>
+      <div class="mfeed" id="sh-feed"></div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">watch the left edge — the machine is working</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-16</b> — every line is something the shipped system genuinely does (BCC capture,
+  the 30-minute heartbeat, calendar sync, heat recompute, the briefing pipeline) — today all of it is
+  invisible until you go looking. This is the "counting your work automatically" promise made ambient: the
+  proof of the dividend, on the edge where the eye lands. Rationing rule if real: a few events per hour
+  surface; the rest just tick the shift-log count.</div>
+</div>
+
+<!-- ============ LM-17 · THE OTHER SIDE ============ -->
+<div class="pane" id="pane-os">
+  <p class="lead"><b>LM-17 · The Other Side.</b> Same edge, opposite direction: not your machine —
+  <b>their table.</b> The buyers' side of your motion, moving in real time: a reply landing, a meeting
+  accepted, a champion going active after six quiet days. The rooms tell you what to do; the left edge
+  shows you <b>the other side of the glass is alive.</b> (Demo: buyer movement arrives every few seconds.)</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot" style="background:var(--orange);animation-name:none"></span>THE OTHER SIDE</div>
+        <div class="sub">Buyers moving, as it happens.</div>
+      </div>
+      <div class="mfeed" id="os-feed"></div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · DEAL WORKSPACE
+        <span class="hint">the left edge is their side of the table</span></div>
+      <div class="rh1">3 deals will slip this week if you do nothing.</div>
+      <div class="rrow"><b>Northwind Robotics</b> — 20 days quiet · no dated next step <span class="m">$120k</span></div>
+      <div class="rrow"><b>Mercury</b> — stalled in discovery · champion went quiet <span class="m">$40k</span></div>
+      <div class="rrow"><b>Ramp</b> — verbal yes · terms on the table <span class="m">$84k</span></div>
+    </div>
+  </div>
+  <div class="note"><b>LM-17</b> — the emotionally strongest of the family: nothing moves a seller like
+  evidence the buyer moved. Today those moments are buried (a reply is a row in a log; an accepted meeting
+  is a calendar-sync upsert) — this surfaces them the second they land. Honesty constraint: only REAL
+  captured events, never inferred "engagement" theater — replies, booked/accepted meetings, questionnaire
+  progress. If the other side is silent, the margin says so plainly: "quiet since Tuesday."</div>
+</div>
+
+<!-- ============ LM-18 · THE COUNT ============ -->
+<div class="pane" id="pane-cn">
+  <p class="lead"><b>LM-18 · The Count.</b> The mirror: <b>your own day, being counted as you work.</b>
+  Log a touch, hold a meeting, move a deal — the tallies at the left tick up the moment you act, with a
+  small +1 that flies. It's the pace read made live: not a report you visit at week's end, but a day you
+  can watch accumulate. (Demo: use the buttons in the room.)</p>
+  <div class="frame">
+    <div class="margin">
+      <div class="mhead">
+        <div class="dotline"><span class="mdot"></span>TODAY · COUNTED</div>
+        <div class="sub">Everything you do lands here — logged or captured.</div>
+      </div>
+      <div class="ct-stats">
+        <div class="ct-stat" id="st-touch"><span class="ct-plus">+1</span><div class="n">14</div><div class="l">messages &amp; calls today — pace wants 90</div></div>
+        <div class="ct-stat" id="st-meet"><span class="ct-plus">+1</span><div class="n">2</div><div class="l">meetings held this week</div></div>
+        <div class="ct-stat" id="st-deal"><span class="ct-plus">+1</span><div class="n">1</div><div class="l">deal moved forward today</div></div>
+      </div>
+      <div class="ct-foot">CAPTURED SENDS COUNT<br>THEMSELVES — BCC LANE ON</div>
+    </div>
+    <div class="main">
+      <div class="rtop"><b><svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/><path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/><path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>ANTAEUS</b> · OUTBOUND STUDIO
+        <span class="hint">act — and watch the left edge count it</span></div>
+      <div class="rh1">Where you are with Ramp.</div>
+      <div class="rrow"><b>The opener that landed</b> — the CRO-hire angle · reply 3 days ago <span class="m">4 touches</span></div>
+      <div style="margin-top:14px">
+        <button class="act orange" data-count="touch">Log this send</button>
+        <button class="act" data-count="meet">Meeting held</button>
+        <button class="act" data-count="deal">Deal moved</button>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>LM-18</b> — behavioral rule 5 (every save must visibly matter) applied to the day
+  itself: the reward for acting is watching the honest number move, right where the eye lands. It pairs
+  with the capture lanes — sends you BCC'd count themselves, so the margin also ticks when you did the work
+  OUTSIDE the app. Guardrail: counts, never scores; pace context in plain words; no streaks, no confetti.</div>
+</div>
+
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    document.getElementById('pane-'+b.dataset.p).classList.add('on');
+  });
+});
+
+/* ---- shared live feed engine ---- */
+function runFeed(feedId,events,interval){
+  var feed=document.getElementById(feedId),i=0;
+  function push(){
+    var ev=events[i%events.length];i++;
+    var el=document.createElement('div');
+    el.className='mline';
+    el.innerHTML='<div class="what"><span class="k k--'+ev.k+'"></span>'+ev.t+'</div>'+
+      '<div class="when">'+ev.w+'</div>';
+    feed.insertBefore(el,feed.firstChild);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('on')})});
+    /* dim older lines, drop the very old */
+    var lines=feed.querySelectorAll('.mline');
+    lines.forEach(function(l,j){
+      if(j>=2)l.classList.add('dim');
+      if(j>7)l.remove();
+    });
+  }
+  push();
+  setInterval(push,interval);
+}
+
+runFeed('sh-feed',[
+  {k:'sys',t:'Captured your send to <b>dana@ramp.com</b> — counted, filed under Ramp.',w:'just now'},
+  {k:'sys',t:'Heartbeat — read all 10 live deals. <b>Northwind</b> still has no dated next step.',w:'just now'},
+  {k:'good',t:'Calendar sync — Thursday with <b>Vanta</b> confirmed on your calendar.',w:'just now'},
+  {k:'sys',t:'Heat recomputed across 12 watched accounts — <b>Ramp</b> still hottest at 88.',w:'just now'},
+  {k:'warm',t:'Wrote an observation: <b>Mercury</b> has gone quiet for 14 days.',w:'just now'},
+  {k:'sys',t:'Briefing pipeline — read 214 sources across your market overnight.',w:'just now'}
+],2600);
+
+runFeed('os-feed',[
+  {k:'good',t:'<b>Ramp</b> — Dana Cho accepted Thursday’s results meeting.',w:'just now'},
+  {k:'warm',t:'<b>Northwind</b> — a reply landed after 20 quiet days.',w:'just now'},
+  {k:'good',t:'<b>Vanta</b> — meeting confirmed · their ops lead added a colleague.',w:'just now'},
+  {k:'warm',t:'<b>Ramp</b> — security team returned 40 more answered questions.',w:'just now'},
+  {k:'good',t:'<b>Acme</b> — two new hands-on users active in the pilot today.',w:'just now'},
+  {k:'sys',t:'<b>Mercury</b> — still quiet since Tuesday. Nothing to show yet.',w:'just now'}
+],2600);
+
+/* ---- LM-18 the count ---- */
+(function(){
+  var map={touch:'st-touch',meet:'st-meet',deal:'st-deal'};
+  document.querySelectorAll('[data-count]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var st=document.getElementById(map[btn.dataset.count]);
+      var n=st.querySelector('.n'),plus=st.querySelector('.ct-plus');
+      n.textContent=String(Number(n.textContent)+1);
+      st.classList.add('bump');plus.classList.add('fly');
+      setTimeout(function(){st.classList.remove('bump');plus.classList.remove('fly')},650);
+    });
+  });
+})();
+</script>
+</body>
+</html>
