@@ -1,7 +1,7 @@
 # The Luca Demo — full reseed of both interactive demo lanes
 
 **Date:** 2026-07-16
-**Status:** PLAN — awaiting founder approval. Nothing built yet.
+**Status:** APPROVED (founder, 2026-07-16) with one change — **Boeing joins as the 29th enterprise org and takes the Getting to Signed showpiece**; Delta stays on the roster at discovery stage. All other Part 7 items green-lit as proposed. Build in progress.
 **Scope:** demo environment ONLY (`sessionStorage.gtmos_env_mode === "demo"`, the
 `gtmos_demo__*` localStorage namespace, and the code-side scripted demo content).
 Production, real workspaces, and the cloud are untouched.
@@ -42,7 +42,7 @@ Production, real workspaces, and the cloud are untouched.
 | Quota | **$2,000,000** | **$800,000** |
 | Deal band | $150K–$600K (typical ~$280K) | $25K–$90K (typical ~$55K) |
 | Cycle | ~150 days | ~45 days |
-| Book | 28 named enterprises | 28 named smaller companies |
+| Book | 29 named enterprises | 28 named smaller companies |
 
 **Why a talent platform makes every roster credible:** every company on both
 rosters hires at scale or hires hard — frontline ramps (retail, food service,
@@ -57,7 +57,7 @@ Revenue figures are public figures or estimates, marked for **verification at
 build time via web search** (the build step confirms each is in-band and swaps
 any that drifted out). Tiers use Territory Architect's four-tier model.
 
-### 1A · Enterprise book — 28 household names, $1B–$100B revenue
+### 1A · Enterprise book — 29 household names, $1B–$100B revenue
 
 The founder's five required industries are all present: retail, aviation, HR
 tech, global contractor management, AI-focused.
@@ -92,8 +92,9 @@ tech, global contractor management, AI-focused.
 | 26 | Airbnb | Marketplace/tech | ~$11B | Selective, brand-heavy hiring — quality-screen story | 3 |
 | 27 | Spotify | Media/tech | ~$17B | Distributed-team hiring | 3 |
 | 28 | FedEx | Logistics | ~$88B | Peak-season hiring at six-figure headcounts | 2 |
+| 29 | Boeing | Aerospace | ~$78B | Production + quality workforce rebuild — hiring at scale under scrutiny | 1 |
 
-Tier counts: T1 ×7, T2 ×10, T3 ×11 — matches a real enterprise book's shape
+Tier counts: T1 ×8, T2 ×10, T3 ×11 — matches a real enterprise book's shape
 (few bets, wide middle, long watch tail). Territory's 300-cap reads honest at
 28 named + room to grow.
 
@@ -167,6 +168,7 @@ common-last, cross-checked at build time (quick search) so we don't
 accidentally coin the real VP of TA at that company. Any collision → rename.
 
 **Total fictional people:** ~90 per book (contacts) + ~10 shared (Luca bench).
+(Enterprise book now counts 29 accounts with Boeing.)
 
 ---
 
@@ -182,13 +184,13 @@ runtime) so the demo never goes stale on the calendar.
   chose the incumbent ATS's add-on). These feed Future Autopsy + the loss pages
   of the handoff book.
 - **Live pipeline:** 12 deals, $3.4MM face value:
-  - 1 at **Getting to Signed** (Delta, $480K — security questionnaire front
+  - 1 at **Getting to Signed** (Boeing, $480K — security questionnaire front
     blocking, the coverage-map showpiece)
   - 2 at proposal (Starbucks $420K · United $380K)
   - 3 at pilot/evaluation (OpenAI $350K — live Pilot Desk pilot · Nordstrom
     $260K · CoreWeave $220K)
-  - 3 at discovery (Databricks · Marriott · Best Buy)
-  - 3 early (Uber · FedEx · Workday)
+  - 3 at discovery (Databricks · Delta · Marriott)
+  - 3 early (Uber · FedEx · Best Buy)
   - Health mix: 2 critical (Nordstrom stalled 21d, no dated next step; United
     champion went quiet), 3 at-risk, 7 healthy.
 - **Pace math:** $840K closed + weighted pipeline ≈ $1.7MM projected on $2MM —
@@ -235,7 +237,7 @@ $3.4MM in flight (enterprise).
 `gtmos_readiness_snapshot`, `gtmos_dashboard_command_mode`.
 **Content:** health snapshots computed FROM the seeded deals/accounts (not
 hand-faked numbers — build runs the same snapshot builders the rooms use).
-The cockpit's one move should resolve to the Delta blocked front (enterprise) /
+The cockpit's one move should resolve to the Boeing blocked front (enterprise) /
 the Cava signed-run (SMB) or the most-critical deal — we verify which card wins
 and tune deal pressure so the top move is a story worth telling in a demo.
 
@@ -258,9 +260,10 @@ the contact archetypes in Part 2 and the triggers used by Outbound.
 `gtmos_ta_dispositions`, `gtmos_ta_signals`, plus empty-but-valid retier/swap
 histories.
 **Enterprise carve (vertical × segment blend, 5 divisions):**
-1. *Air & Travel Frontline* (Delta, United, Southwest, JetBlue, Marriott,
-   Hilton) — why-you: screening at seasonal volume is Luca's home turf; why-now:
-   summer surge hiring is public on every one of them.
+1. *Air & Aerospace Frontline* (Boeing, Delta, United, Southwest, JetBlue,
+   Marriott, Hilton) — why-you: screening at seasonal volume is Luca's home
+   turf; why-now: summer surge hiring is public on the airlines, and Boeing's
+   production-workforce rebuild is a standing public story.
 2. *Retail & Food Ramp* (Nordstrom, Gap, Best Buy, Ulta, Dick's, Starbucks,
    Chipotle) — charter anchored on published seasonal-hire counts.
 3. *AI-Native Talent Wars* (OpenAI, Databricks, Palantir, CoreWeave) — why-you:
@@ -376,7 +379,7 @@ champion. **SMB:** the Duolingo pilot, day 5 of 14, circle of 4, adoption 3-of-4
 partner; a former Fortune-100 CHRO now advising; two happy-customer champions
 (at Chipotle and Sweetgreen — accounts Luca closed, so the story is coherent);
 an angel with airline-industry weight. 2 favors in flight (enterprise: the
-board partner warming Delta's procurement front — linked to the Getting to
+board partner warming Boeing's procurement front — linked to the Getting to
 Signed blocking front; a customer reference offered to Starbucks), 1 completed
 favor with the loop closed on the deal, 1 gentle over-ask guard case armed
 (the board partner was asked 3 weeks ago — the "open with a thank-you" state
@@ -385,7 +388,7 @@ is visible). Coverage read shows 2 stuck deals with no one to call on.
 ### 4.16 Getting to Signed
 **Keys:** `gtmos_getting_to_signed_v1` (fronts model), `gtmos_negotiation` +
 `gtmos_negotiation_learnings` (engine layer).
-**Content — enterprise (Delta, $480K):** Security front BLOCKING — the
+**Content — enterprise (Boeing, $480K):** Security front BLOCKING — the
 coverage map showpiece: 150-question questionnaire, 118 answered by papers
 Luca holds (SOC 2 Type II · pen-test · subprocessor list · DPA), 22 with saved
 answers, 10 need engineering; Legal front clearing (liability cap traded at
@@ -451,7 +454,7 @@ jordan@lucaindustries.com), category = recruiting.
 ### 4.22 The Live Edge (code-side demo stream)
 **File:** `src/lib/edge/demo-stream.ts` — re-cast from the roster, per
 scenario: base wire (a Starbucks reply after 20 quiet days · captured send to
-a fictional Delta contact · calendar Thursday with Duolingo (SMB) · heartbeat
+a fictional Boeing contact · calendar Thursday with Duolingo (SMB) · heartbeat
 on Nordstrom's missing next step) + the five arrivals. The seeded local
 sources (touches/calls/quota/bulk) make the COUNT real on top of the script.
 
@@ -522,5 +525,6 @@ research); the mechanics are modest (the writer machinery exists).
 3. **Luca details** — HQ Chicago, founded 2019, ~620 employees, the one-line
    pitch: fine as proposed, or adjust.
 4. **The pilot showpieces** — OpenAI (enterprise) + Duolingo (SMB): keep or swap.
-5. Anything on the Getting to Signed showpiece being **Delta** (the deepest
-   single artifact in the demo).
+5. ~~Anything on the Getting to Signed showpiece being **Delta**~~ — RESOLVED:
+   founder swapped the showpiece to **Boeing** (29th org); Delta stays on the
+   roster at discovery stage. Items 1–4 green-lit as proposed.
