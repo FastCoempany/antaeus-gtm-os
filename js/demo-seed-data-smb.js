@@ -3,9 +3,10 @@
  * Same rules as demo-seed-data-ent.js (the hybrid people rule; relative
  * dates; real facts in signals only). 28 recognizable companies,
  * $65MM–$999MM revenue per public figures/estimates verified 2026-07-17.
- * Cava, Duolingo, and Figma crossed $1B and were swapped out for
- * Coursera, Miro, and Poppi; Sweetgreen carries the signed-run,
- * Notion carries the live pilot.
+ * 29 recognizable companies. Cava and Poppi are out (founder call);
+ * Duolingo and Figma stay in by founder direction despite crossing
+ * $1B in FY2025, alongside Coursera and Miro. Sweetgreen carries the
+ * signed-run, Notion carries the live pilot.
  */
 (function(){
 function d(n){return new Date(Date.now()-n*86400000).toISOString()}
@@ -42,6 +43,16 @@ A('sc_s_coursera','Coursera','COUR','EdTech','Technology','$695M','1,400','Mount
 A('sc_s_miro','Miro','','Collaboration Software','Technology','$500M ARR (est.)','1,800','San Francisco, CA','miro.com',64,[
   S('mi_s1','expansion','Distributed hiring across US and Europe hubs continues post-correction',
     'Hiring resumed selectively after the 2023-24 tech reset.','Distributed funnels with a central people team — consistency is the pitch.','Industry reporting',26,0.68,true)]),
+A('sc_s_duolingo','Duolingo','DUOL','Consumer EdTech','Technology','$1B+','900','Pittsburgh, PA','duolingo.com',82,[
+  S('du_s1','ai_transformation','The CEO\'s AI-first memo reset how the company hires — managers must show a role can\'t be done by AI before opening it',
+    'Real 2025 policy: contractor work AI can handle winds down, and every new seat gets an AI test first.','A company that interrogates every hire this hard needs the sharpest screen in the market — and they buy tools that match their bar.','News coverage',26,0.9,false),
+  S('du_s2','expansion','Leadership says AI made employees four to five times as productive — without a single layoff',
+    'Real public statements from late 2025; output per employee is the operating metric.','Productivity-per-person culture applied to hiring is exactly the Luca pitch.','CNBC',18,0.85,false)]),
+A('sc_s_figma','Figma','FIG','Design Software','Technology','$1B+','1,700','San Francisco, CA','figma.com',80,[
+  S('fg_s1','expansion','Hiring in response to AI, not cutting — the CEO says roles are being added across the company',
+    'Real post-IPO statement from late 2025: headcount grows as AI expands what the company ships.','A design-tools company adding heads while rivals cut is a live, selective, high-volume funnel.','News coverage',22,0.88,false),
+  S('fg_s2','pain_point','Design-engineer hybrid roles are among the hardest screens in software',
+    'Their core craft blends disciplines most rubrics separate.','Hard-to-screen roles are where an outcome-trained screen shows off.','Industry reporting',30,0.7,true)]),
 A('sc_s_grammarly','Grammarly','','AI Writing','Technology','$700M ARR','1,000+','San Francisco, CA','grammarly.com',72,[
   S('gr_s1','expansion','Raised $1B in non-dilutive growth financing in 2025 — scaling go-to-market and product hiring',
     'Real 2025 financing; the company is buying growth, and growth means hiring.','Fresh capital + hiring plans = a funnel about to outgrow the team.','News coverage',28,0.85,false)]),
@@ -59,9 +70,6 @@ A('sc_s_chomps','Chomps','','CPG / Food','Consumer','$900M','400+','Chicago, IL'
     'Real announcements: a Missouri plant (~250 jobs) and a Nebraska facility (~150 jobs).','Production hiring is new muscle for a brand this young — they will need screening help, not just applicants.','Company announcements',26,0.9,false),
   S('ch_s2','expansion','Revenue roughly doubled two years running — headquarters hiring sprinting to keep up',
     'Growth reporting puts them near the top of the snack category\'s growth table.','Hypergrowth CPG with a Chicago HQ — a hometown logo for Luca.','Forbes',18,0.8,false)]),
-A('sc_s_poppi','Poppi','','Beverage','Consumer','$500M','300+','Austin, TX','drinkpoppi.com',58,[
-  S('pp_s1','expansion','Acquired by PepsiCo in 2025 — integration adds structure to a startup-speed org',
-    'Real 2025 acquisition; the brand keeps operating with big-company backing.','Integration windows reopen every tooling decision.','News coverage',30,0.78,true)]),
 A('sc_s_eventbrite','Eventbrite','EB','Ticketing Platform','Technology','$325M','700','San Francisco, CA','eventbrite.com',52,[
   S('eb_s1','pain_point','Rebuilt org running lean — every hire is scrutinized',
     'Post-restructure headcount discipline is public.','Lean teams buy tools instead of headcount. Right-size the pitch.','Public filings',28,0.7,true)]),
@@ -344,7 +352,7 @@ E.territory={
    TA(9,'Tecovas',2,'ta_s_dtc','existing-proof-point','signal-event',200),TA(10,'Rothy\'s',2,'ta_s_dtc','existing-proof-point','signal-event',130),
    TA(11,'Bombas',3,'ta_s_dtc','market-signal','strategic-bet',70),TA(12,'Allbirds',3,'ta_s_dtc','cold','strategic-bet',150),
    TA(13,'Dr. Squatch',3,'ta_s_dtc','market-signal','strategic-bet',68),TA(14,'Siete Foods',2,'ta_s_dtc','existing-proof-point','signal-event',125),
-   TA(15,'Poppi',3,'ta_s_dtc','market-signal','strategic-bet',66),TA(16,'Athletic Brewing',2,'ta_s_dtc','existing-proof-point','signal-event',165),
+   TA(15,'Duolingo',1,'ta_s_soft','market-signal','signal-event',76),TA(30,'Figma',1,'ta_s_soft','market-signal','signal-event',74),TA(16,'Athletic Brewing',2,'ta_s_dtc','existing-proof-point','signal-event',165),
    TA(17,'Spindrift',2,'ta_s_dtc','existing-proof-point','signal-event',145),TA(18,'Oatly',3,'ta_s_dtc','cold','strategic-bet',64),
    TA(19,'Notion',1,'ta_s_soft','network-connection','signal-event',92),TA(20,'Grammarly',2,'ta_s_soft','market-signal','signal-event',75),
    TA(21,'1Password',2,'ta_s_soft','market-signal','signal-event',72),TA(22,'Calendly',2,'ta_s_soft','existing-proof-point','signal-event',205),
@@ -362,7 +370,7 @@ E.territory={
    {id:'ta_s_d2',accountId:'ta_s_a19',type:'progressing',approachUsed:'ta_s_ap4',angleWorked:'ta_s_ap4',timestamp:d(2)},
    {id:'ta_s_d3',accountId:'ta_s_a12',type:'no-traction',approachUsed:'ta_s_ap3',blocker:'',timestamp:d(95)},
    {id:'ta_s_d4',accountId:'ta_s_a6',type:'engaged-stalled',approachUsed:'ta_s_ap3',blocker:'Three-person people team mid-launch — timing, not interest.',timestamp:d(8)}],
-  swapHistory:[{id:'ta_s_sw1',accountRemoved:'Duolingo (crossed the revenue band)',accountAdded:'ta_s_a25',reason:'fit-correction',timestamp:d(20)}],
+  swapHistory:[{id:'ta_s_sw1',accountRemoved:'Casper',accountAdded:'ta_s_a25',reason:'fit-correction',timestamp:d(20)}],
   retierHistory:[{id:'ta_s_rt1',date:d(15),summary:'Book re-tiered around dated expansion events.'}],
   calibrations:{progression:true,leverage:true,swapLogic:true}};
 E.sourcing={
