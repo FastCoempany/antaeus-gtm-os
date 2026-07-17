@@ -446,7 +446,7 @@ export function SettingsV4(): JSX.Element {
                                     <button type="button" class="st4-btn is-ghost" onClick={exitDemo}>{t("Exit the sample")}</button>
                                 ) : (
                                     <>
-                                        <a class="st4-btn is-ghost" href="/demo-seed.html?autoseed=mm&return=/dashboard/">{t("Mid-market sample")}</a>
+                                        <a class="st4-btn is-ghost" href="/demo-seed.html?autoseed=smb&return=/dashboard/">{t("SMB sample")}</a>
                                         <a class="st4-btn is-ghost" href="/demo-seed.html?autoseed=ent&return=/dashboard/">{t("Enterprise sample")}</a>
                                     </>
                                 )}
