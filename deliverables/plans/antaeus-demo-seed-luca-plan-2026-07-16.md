@@ -1,7 +1,7 @@
 # The Luca Demo — full reseed of both interactive demo lanes
 
 **Date:** 2026-07-16
-**Status:** APPROVED (founder, 2026-07-16) with one change — **Boeing joins as the 29th enterprise org and takes the Getting to Signed showpiece**; Delta stays on the roster at discovery stage. All other Part 7 items green-lit as proposed. Build in progress.
+**Status:** APPROVED (founder, 2026-07-16); BUILT + SHIPPED 2026-07-17 (PR #309). **Post-ship roster call (founder, 2026-07-17):** Duolingo and Figma STAY on the SMB book by founder direction despite crossing $1B in FY2025; Coursera and Miro stay as additions; Cava and Poppi are out. SMB book = 29 names. Original approval note: with one change — **Boeing joins as the 29th enterprise org and takes the Getting to Signed showpiece**; Delta stays on the roster at discovery stage. All other Part 7 items green-lit as proposed. Build in progress.
 **Scope:** demo environment ONLY (`sessionStorage.gtmos_env_mode === "demo"`, the
 `gtmos_demo__*` localStorage namespace, and the code-side scripted demo content).
 Production, real workspaces, and the cloud are untouched.

@@ -56,7 +56,7 @@ function renderDemoLane(){
       '</div>' +
     '</div>' +
     '<div class="scenario-grid">' +
-      '<button class="btn btn-mm" onclick="seed(\'smb\')"><span class="scenario-type">Book one</span><span class="scenario-title">SMB book</span><span class="scenario-meta">$55K deals - $800K number - 28 accounts</span><span class="scenario-body">Jordan Park\'s book at Luca Industries: growth brands and scale-ups, fast cycles, a pilot running at Notion, and a deal at the finish line with Sweetgreen.</span></button>' +
+      '<button class="btn btn-mm" onclick="seed(\'smb\')"><span class="scenario-type">Book one</span><span class="scenario-title">SMB book</span><span class="scenario-meta">$55K deals - $800K number - 29 accounts</span><span class="scenario-body">Jordan Park\'s book at Luca Industries: growth brands and scale-ups, fast cycles, a pilot running at Notion, and a deal at the finish line with Sweetgreen.</span></button>' +
       '<button class="btn btn-ent" onclick="seed(\'ent\')"><span class="scenario-type">Book two</span><span class="scenario-title">Enterprise book</span><span class="scenario-meta">$280K deals - $2M number - 29 accounts</span><span class="scenario-body">Elena Vasquez\'s book at Luca Industries: Boeing at the security-review front, a pilot running at OpenAI, and household names across aviation, retail, and AI.</span></button>' +
     '</div>' +
     '<div class="toolbar">' +
