@@ -311,3 +311,166 @@ window.__LUCA_SEED__.smb={
   onboardingAnswers:{companyName:'Luca Industries',stage:'Growth · $100MM ARR',quota:800000,acv:55000,productCategory:'recruiting',buyerPersona:'Head of People'}
 };
 })();
+
+/* ── SMB part 2 — territory, funnel, working history, pilot, fronts ── */
+(function(){
+function d(n){return new Date(Date.now()-n*86400000).toISOString()}
+function dd(n){return d(n).slice(0,10)}
+var E=window.__LUCA_SEED__.smb;
+var F=function(id,name,pressure,segment,lev,ago){var full=pressure+' for '+segment+', and '+lev+'.';
+  return {id:id,name:name,pressure:pressure,segment:segment,leverage:lev,fullStatement:full,version:1,status:'active',createdAt:d(ago),versions:[{v:1,statement:full,date:d(ago)}]}};
+var focuses=[
+F('ta_s_food','Fast-casual expansion','Opening crews are hired on deadlines by managers who already have full-time jobs','fast-casual brands opening new restaurants and markets','we can screen the opening crew before the manager ever reads a resume',110),
+F('ta_s_dtc','DTC & CPG velocity','Growth brands hire in bursts with no recruiting bench','consumer brands whose expansion news dates their hiring need','we can absorb the burst so the brand does not have to staff for the peak',104),
+F('ta_s_soft','Software scale-ups','Two recruiters carry a thousand openings at a bar nobody will lower','software companies hiring faster than their people team can read','we can give every application a first read the day it lands',98),
+F('ta_s_odd','Category oddballs','Discipline-era operators justify every seat','platforms and insurers proving their model economics','we can be the recruiter leverage they do not have to hire',92)];
+var AP=function(id,fid,cat,name,desc,ago){return {id:id,focusId:fid,category:cat,name:name,description:desc,status:'active',createdAt:d(ago),retiredAt:null}};
+var approaches=[
+AP('ta_s_ap1','ta_s_food','event-opener','Opening-date opener','Call the week the expansion news lands — the announcement dates the need.',88),
+AP('ta_s_ap2','ta_s_food','reference','Sweetgreen peer story','Peer reference from the crew-screening work — operator to operator.',87),
+AP('ta_s_ap3','ta_s_dtc','burst-math','Burst-hiring math','Cost of a bad burst hire at a lean brand, in their own numbers.',86),
+AP('ta_s_ap4','ta_s_soft','recruiter-hours','Recruiter-hours pitch','Hours per hire, before and after the screen — the pilot proves it in two weeks.',85),
+AP('ta_s_ap5','ta_s_odd','one-funnel','One-funnel package','Quote the single busiest funnel first; expand after the number moves.',84)];
+var TA=function(i,name,tier,fid,lev,trig,ago){return {id:'ta_s_a'+i,name:name,tier:tier,focusId:fid,leverageType:lev,additionTrigger:trig,status:'active',addedAt:d(ago),overrideCount:0}};
+E.territory={
+  setup:{completedAt:d(115),version:2},
+  territory:{healthScore:77,lastPulse:dd(1),pulseSkips:0,salesCycle:'1-3m',createdAt:d(115)},
+  focuses:focuses,approaches:approaches,
+  accounts:[
+   TA(1,'Sweetgreen',1,'ta_s_food','existing-proof-point','signal-event',100),TA(2,'Portillo\'s',1,'ta_s_food','network-connection','signal-event',95),
+   TA(3,'Cava',3,'ta_s_food','market-signal','strategic-bet',90),TA(4,'Warby Parker',1,'ta_s_dtc','market-signal','signal-event',98),
+   TA(5,'Chomps',1,'ta_s_dtc','network-connection','signal-event',88),TA(6,'Liquid Death',2,'ta_s_dtc','market-signal','signal-event',85),
+   TA(7,'OLIPOP',2,'ta_s_dtc','market-signal','signal-event',82),TA(8,'Gymshark',2,'ta_s_dtc','market-signal','signal-event',80),
+   TA(9,'Tecovas',2,'ta_s_dtc','existing-proof-point','signal-event',200),TA(10,'Rothy\'s',2,'ta_s_dtc','existing-proof-point','signal-event',130),
+   TA(11,'Bombas',3,'ta_s_dtc','market-signal','strategic-bet',70),TA(12,'Allbirds',3,'ta_s_dtc','cold','strategic-bet',150),
+   TA(13,'Dr. Squatch',3,'ta_s_dtc','market-signal','strategic-bet',68),TA(14,'Siete Foods',2,'ta_s_dtc','existing-proof-point','signal-event',125),
+   TA(15,'Poppi',3,'ta_s_dtc','market-signal','strategic-bet',66),TA(16,'Athletic Brewing',2,'ta_s_dtc','existing-proof-point','signal-event',165),
+   TA(17,'Spindrift',2,'ta_s_dtc','existing-proof-point','signal-event',145),TA(18,'Oatly',3,'ta_s_dtc','cold','strategic-bet',64),
+   TA(19,'Notion',1,'ta_s_soft','network-connection','signal-event',92),TA(20,'Grammarly',2,'ta_s_soft','market-signal','signal-event',75),
+   TA(21,'1Password',2,'ta_s_soft','market-signal','signal-event',72),TA(22,'Calendly',2,'ta_s_soft','existing-proof-point','signal-event',205),
+   TA(23,'Webflow',3,'ta_s_soft','cold','strategic-bet',62),TA(24,'Miro',3,'ta_s_soft','cold','strategic-bet',60),
+   TA(25,'Coursera',3,'ta_s_soft','market-signal','strategic-bet',58),TA(26,'Lemonade',2,'ta_s_odd','market-signal','signal-event',56),
+   TA(27,'Vimeo',3,'ta_s_odd','cold','strategic-bet',155),TA(28,'Eventbrite',3,'ta_s_odd','cold','strategic-bet',118),
+   TA(29,'BARK',3,'ta_s_odd','market-signal','strategic-bet',54)],
+  signals:[
+   {id:'ta_s_s1',accountId:'ta_s_a1',description:'New-market openings keep the crew funnel live.',type:'expansion',timestamp:d(3)},
+   {id:'ta_s_s2',accountId:'ta_s_a5',description:'Two plants announced — production hiring is new muscle for them.',type:'expansion',timestamp:d(5)},
+   {id:'ta_s_s3',accountId:'ta_s_a19',description:'1,300 openings a year against a hand-read funnel.',type:'expansion',timestamp:d(7)},
+   {id:'ta_s_s4',accountId:'ta_s_a4',description:'Store-a-week pace makes field screening the bottleneck.',type:'expansion',timestamp:d(4)}],
+  dispositions:[
+   {id:'ta_s_d1',accountId:'ta_s_a1',type:'progressing',approachUsed:'ta_s_ap2',angleWorked:'ta_s_ap2',timestamp:d(4)},
+   {id:'ta_s_d2',accountId:'ta_s_a19',type:'progressing',approachUsed:'ta_s_ap4',angleWorked:'ta_s_ap4',timestamp:d(2)},
+   {id:'ta_s_d3',accountId:'ta_s_a12',type:'no-traction',approachUsed:'ta_s_ap3',blocker:'',timestamp:d(95)},
+   {id:'ta_s_d4',accountId:'ta_s_a6',type:'engaged-stalled',approachUsed:'ta_s_ap3',blocker:'Three-person people team mid-launch — timing, not interest.',timestamp:d(8)}],
+  swapHistory:[{id:'ta_s_sw1',accountRemoved:'Duolingo (crossed the revenue band)',accountAdded:'ta_s_a25',reason:'fit-correction',timestamp:d(20)}],
+  retierHistory:[{id:'ta_s_rt1',date:d(15),summary:'Book re-tiered around dated expansion events.'}],
+  calibrations:{progression:true,leverage:true,swapLogic:true}};
+E.sourcing={
+  queryCards:[
+   {id:'sw_s_q1',focusId:'ta_s_food',platform:'apollo',status:'active',createdAt:d(16),updatedAt:d(2),filters:{industry:'Fast casual / restaurant groups',companySize:'2,000-10,000 employees',geography:'US',behavioralSignal:'New-market announcements, opening schedules, crew hiring pushes',techSignal:'ATS-lite / spreadsheet screening',personaTitles:'Head of People; Field Talent Lead',exclusions:'Franchise-only groups',customNotes:'The opening date is the deadline — call the week the news lands.'}},
+   {id:'sw_s_q2',focusId:'ta_s_dtc',platform:'sales-nav',status:'active',createdAt:d(14),updatedAt:d(3),filters:{industry:'Consumer brands / CPG',companySize:'200-1,500 employees',geography:'US',behavioralSignal:'Funding, new facilities, category launches, retail expansion',techSignal:'No recruiting stack',personaTitles:'Head of People; COO',exclusions:'Brands under $65M revenue',customNotes:'Burst hiring with no bench — the screen absorbs the peak.'}},
+   {id:'sw_s_q3',focusId:'ta_s_soft',platform:'zoominfo',status:'active',createdAt:d(12),updatedAt:d(1),filters:{industry:'Software / AI',companySize:'300-3,000 employees',geography:'US + EU',behavioralSignal:'Growth milestones, financing, headcount plans',techSignal:'Greenhouse / Ashby / Lever',personaTitles:'Recruiting Lead; Head of People',exclusions:'Pre-revenue startups',customNotes:'Recruiter-hours math wins here — bring the pilot numbers.'}}],
+  prospects:[
+   {id:'sw_s_p1',name:'Torchy\'s Tacos',focusId:'ta_s_food',sourceType:'query-card',sourceQueryCardId:'sw_s_q1',initialImpression:'Multi-state expansion with opening crews on deadlines.',stage:'ready',createdAt:d(7),updatedAt:d(1),research:{focusMatch:'strong',entryPoint:'Head of People',suggestedApproach:'ta_s_ap1',leverageType:'market-signal',note:'Same shape as Portillo\'s — expansion crews, compressed timelines.'}},
+   {id:'sw_s_p2',name:'Graza',focusId:'ta_s_dtc',sourceType:'query-card',sourceQueryCardId:'sw_s_q2',initialImpression:'Breakout olive-oil brand staffing up ops.',stage:'researched',createdAt:d(6),updatedAt:d(2),research:{focusMatch:'moderate',entryPoint:'COO',suggestedApproach:'ta_s_ap3',leverageType:'market-signal',note:'Growth is real; revenue may still be under the band floor — confirm before pushing.'}},
+   {id:'sw_s_p3',name:'Linear',focusId:'ta_s_soft',sourceType:'query-card',sourceQueryCardId:'sw_s_q3',initialImpression:'Tiny team, famous bar — maybe too small.',stage:'parked',createdAt:d(9),updatedAt:d(4),research:{focusMatch:'uncertain',entryPoint:'',suggestedApproach:null,leverageType:'cold',note:'Bar fits, volume does not. Park until they scale.'}},
+   {id:'sw_s_p4',name:'Fellow',focusId:'ta_s_dtc',sourceType:'news-article',sourceQueryCardId:null,initialImpression:'Premium coffee gear brand growing retail.',stage:'captured',createdAt:d(4),updatedAt:d(4)},
+   {id:'sw_s_p5',name:'Thrive Market',focusId:'ta_s_dtc',sourceType:'query-card',sourceQueryCardId:'sw_s_q2',initialImpression:'Fulfillment hiring at membership-retail scale.',stage:'ready',createdAt:d(5),updatedAt:d(2),research:{focusMatch:'strong',entryPoint:'VP People',suggestedApproach:'ta_s_ap3',leverageType:'market-signal',note:'Warehouse funnels are the volume end of this book.'}}],
+  personaMaps:[
+   {id:'sw_s_m1',focusId:'ta_s_food',title:'Head of People',alternativeTitles:'VP People; People Lead',role:'decision-maker',priority:'primary-target',typicalConcerns:'Opening deadlines, manager screening load, crew quality.',bestApproach:'ta_s_ap1',notes:'Often signs alone under $60K — one-call close is possible.',createdAt:d(15)},
+   {id:'sw_s_m2',focusId:'ta_s_dtc','title':'COO',alternativeTitles:'Head of Operations',role:'economic-buyer',priority:'secondary',typicalConcerns:'Burst cost, brand fit, not adding headcount.',bestApproach:'ta_s_ap3',notes:'Brings the wallet when the burst is dated.',createdAt:d(14)},
+   {id:'sw_s_m3',focusId:'ta_s_soft',title:'Recruiting Lead',alternativeTitles:'Head of Talent',role:'champion',priority:'primary-target',typicalConcerns:'Hours per hire, bar integrity, funnel backlog.',bestApproach:'ta_s_ap4',notes:'Lives the pain daily; the pilot sells itself if the numbers move.',createdAt:d(13)}]};
+var T=function(acct,cn,ct,per,temp,ch,trig,out,ago){return {id:'t_s_'+ago+'_'+acct.slice(0,3),account:acct.toLowerCase(),accountName:acct,contactName:cn,contactTitle:ct,persona:per,temperature:temp,channel:ch,trigger:trig,ctaType:'soft_ask',assetUsed:'case_study',content:'',outcome:out,outcomeDate:out?d(Math.max(1,ago-2)):null,dealId:null,qualityScore:74,motionBand:'workable',createdAt:d(ago)}};
+E.shared={
+ outboundTouches:{touches:[
+  T('Sweetgreen','Rafael Ibanez','Head of Talent Operations','mgr','warm','email','expansion','replied',30),
+  T('Notion','Sofia Marchetti','Recruiting Lead','mgr','warm','email','expansion','replied',20),
+  T('Chomps','Lena Fitzgerald','Head of People','vp','warm','email','expansion','replied',16),
+  T('Warby Parker','Marcus Bell','Director, Retail Talent','mgr','cool','email','expansion',null,14),
+  T('Gymshark','Poppy Ashworth','Head of Talent Acquisition','mgr','cool','email','leadership','replied',12),
+  T('Liquid Death','Jesse Varga','Head of People','vp','cool','email','leadership',null,10),
+  T('OLIPOP','Amara Diallo','Head of People','vp','cool','email','expansion','no_response',9),
+  T('Lemonade','Noa Berman','People Operations Lead','mgr','ice_cold','email','ai_transformation',null,8),
+  T('Portillo\'s','Gus Kaminski','Field Talent Lead','mgr','ice_cold','email','expansion',null,6),
+  T('Grammarly','','','vp','ice_cold','email','expansion','no_response',11),
+  T('Bombas','','','vp','ice_cold','email','leadership',null,5),
+  T('1Password','','','vp','ice_cold','email','leadership',null,4),
+  T('Dr. Squatch','','','vp','ice_cold','linkedin','leadership',null,3),
+  T('Coursera','','','vp','ice_cold','email','ai_transformation',null,2),
+  T('BARK','','','vp','ice_cold','email','pain_point',null,1)]},
+ coldCallLog:{calls:[
+  {id:'cc_s1',accountName:'Portillo\'s',contactName:'Gus Kaminski',contactTitle:'Field Talent Lead',outcome:'meeting_booked',duration:210,notes:'Texas opening crews — he named the pain before I did. Meeting set.',createdAt:d(10)},
+  {id:'cc_s2',accountName:'Bombas',contactName:'',contactTitle:'',outcome:'callback_scheduled',duration:120,notes:'New-CEO reset underway; call back after their planning week.',createdAt:d(5)},
+  {id:'cc_s3',accountName:'Tecovas',contactName:'Wade Barlow',contactTitle:'Retail Talent Lead',outcome:'referred',duration:180,notes:'Happy customer — referred us to a peer brand\'s people lead.',createdAt:d(30)},
+  {id:'cc_s4',accountName:'Oatly',contactName:'',contactTitle:'',outcome:'voicemail',duration:40,notes:'',createdAt:d(7)},
+  {id:'cc_s5',accountName:'Webflow',contactName:'',contactTitle:'',outcome:'no_answer',duration:15,notes:'',createdAt:d(4)},
+  {id:'cc_s6',accountName:'Miro',contactName:'',contactTitle:'',outcome:'voicemail',duration:35,notes:'',createdAt:d(3)},
+  {id:'cc_s7',accountName:'Spindrift',contactName:'Colin Mercer',contactTitle:'Head of People',outcome:'callback_scheduled',duration:150,notes:'Renewal-adjacent — wants the year-one numbers before expanding.',createdAt:d(15)}]},
+ linkedinLog:{actions:[
+  {id:'li_s1',type:'connection',action:'connection',accountName:'Notion',outcome:'accepted',createdAt:d(25)},
+  {id:'li_s2',type:'content_engage',action:'content_engage',accountName:'Notion',outcome:null,createdAt:d(19)},
+  {id:'li_s3',type:'dm',action:'dm',accountName:'Notion',outcome:'replied',createdAt:d(15)},
+  {id:'li_s4',type:'connection',action:'connection',accountName:'Chomps',outcome:'accepted',createdAt:d(14)},
+  {id:'li_s5',type:'content_engage',action:'content_engage',accountName:'Warby Parker',outcome:null,createdAt:d(11)},
+  {id:'li_s6',type:'connection',action:'connection',accountName:'Gymshark',outcome:'accepted',createdAt:d(9)},
+  {id:'li_s7',type:'dm',action:'dm',accountName:'Liquid Death',outcome:'no_response',createdAt:d(7)},
+  {id:'li_s8',type:'connection',action:'connection',accountName:'Lemonade',outcome:'pending',createdAt:d(3)}]},
+ angles:[
+  {company:'Sweetgreen',trigger:'expansion',persona:'Head of Talent Operations',email:'Every new market is an opening crew hired on a deadline. The screen reads them before your managers have to.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(28)},
+  {company:'Notion',trigger:'expansion',persona:'Recruiting Lead',email:'1,300 openings, every application read by hand. Two weeks on your busiest funnel shows the hours coming back.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(18)},
+  {company:'Chomps',trigger:'expansion',persona:'Head of People',email:'Two plants, hundreds of production roles, no recruiting bench. The screen is the bench.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(14)}],
+ discoveryStats:{totalCalls:11,advancedCalls:6},
+ discoveryWorked:{'rt_pain_1':true,'rt_trigger_1':true,'rt_stakeholder_1':true,'rt_decision_1':true},
+ discoveryCallLog:{calls:[
+  {id:'dcl_s1',createdAt:d(48),updatedAt:d(48),accountName:'Sweetgreen',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','stakeholder-and-ownership','decision-architecture','next-step-lock'],nodeIdsWorked:['rt_pain_1','rt_stakeholder_1'],disposition:'advanced'},
+  {id:'dcl_s2',createdAt:d(26),updatedAt:d(26),accountName:'Notion',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','proof-threshold','next-step-lock'],nodeIdsWorked:['rt_pain_1'],disposition:'advanced'},
+  {id:'dcl_s3',createdAt:d(20),updatedAt:d(20),accountName:'Chomps',activeFramework:'recruiting',segmentKeysWorked:['opening-frame','pain-and-consequence','trigger-and-urgency'],nodeIdsWorked:['rt_trigger_1'],disposition:'advanced'},
+  {id:'dcl_s4',createdAt:d(8),updatedAt:d(8),accountName:'OLIPOP',activeFramework:'recruiting',segmentKeysWorked:['opening-frame','current-state-truth'],nodeIdsWorked:[],disposition:'stalled'},
+  {id:'dcl_s5',createdAt:d(150),updatedAt:d(150),accountName:'Allbirds',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','decision-architecture'],nodeIdsWorked:['rt_decision_1'],disposition:'lost'}]},
+ discoveryAgenda:{contact:'Amara Diallo',company:'OLIPOP',linkedDeal:'deal_s_olipop',gates:['pain_validated',null,null,null]},
+ autopsyLog:(function(){var log={};
+   log['deal_s_allbirds']={lastRunAt:d(90),tasks:{'review_loss_pattern':{done:true,doneAt:d(90)},'anchor_dated_event':{done:true,doneAt:d(85)}}};
+   log['deal_s_liquid']={lastRunAt:d(4),tasks:{'set_deadline':{done:false}}};
+   return log})(),
+ autopsySnapshots:{snapshots:[
+  {dealId:'deal_s_allbirds',accountName:'Allbirds',verdictMode:'corrected',killSwitch:'Turnaround accounts get a dated forcing event by call two, or they go back to watch.',topCauseId:'no_nextstep',topCauseLabel:'No forcing event',generatedAtIso:d(90)},
+  {dealId:'deal_s_liquid',accountName:'Liquid Death',verdictMode:'left',killSwitch:'If the launch slips past next month, park it and work the OLIPOP thread.',topCauseId:'no_nextstep',topCauseLabel:'Next step has no date',generatedAtIso:d(4)}]},
+ pocData:{pocs:[
+  {id:'poc_s_rothys',vendor:'Luca Industries',account:'Rothy\'s',duration:14,success:'1) Screen every retail application within 24 hours\n2) Store-manager hours on screening cut by half\n3) Opening-crew quality holds through two openings',boundaries:'- Retail funnel only\n- Two store openings in scope\n- Weekly check-in with the retail talent lead',outcome:'converted',created:d(120)},
+  {id:'poc_s_notion',vendor:'Luca Industries',account:'Notion',duration:14,success:'1) Every engineering application gets a first read the day it lands\n2) Recruiter hours per hire cut 35%\n3) On-site pass rate holds or improves',boundaries:'- Engineering funnel only\n- Their rubric, our screen\n- Day-7 and day-14 adoption reads',outcome:'in_progress',created:d(8)}]},
+ playbookNotes:{
+  'note_0':'The SMB engine is expansion news. Openings, plants, launches — the announcement dates the need and the call lands warm.',
+  'note_3':'Wins ride dated events: Rothy\'s store fleet, Tecovas openings, Siete integration. Every win had a date attached before we called.',
+  'note_4':'Losses: no forcing event (Allbirds), platform-priced a one-problem buyer (Eventbrite), single-threaded into a freeze (Vimeo). Anchor to dates, quote one funnel first, multi-thread everything.'}};
+E.pilotDesk={'notion':{startedAt:d(8),circle:[
+  {id:'ps_1',name:'Sofia Marchetti',role:'Recruiting Lead',kind:'champion',active:true},
+  {id:'ps_2',name:'Ben Whitaker',role:'Head of People',kind:'signoff',active:false},
+  {id:'ps_3',name:'Kai Nakamura',role:'Senior Recruiter',kind:'hands_on',active:true},
+  {id:'ps_4',name:'Priya Anand',role:'Recruiter',kind:'hands_on',active:true}],
+ checkins:[{at:d(1),actions:28}],
+ shared:['getting_started','champion_kit'],closedGaps:[],stepsDone:2,stage:3,writeup:''}};
+E.gts={'deal_s_sweetgreen':{
+  fronts:{
+   legal:{theirAsk:'Uncapped liability on candidate-data claims',yourLine:'Cap at 12 months of fees with a separate breach cap — the same structure their delivery vendors sign.',status:'blocking'},
+   security:{theirAsk:'Security review questionnaire (40 questions)',yourLine:'Our papers answer 36 of 40 today; the rest have saved answers.',status:'clearing'},
+   finance:{theirAsk:'Net-60 terms',yourLine:'Net-45, or net-30 with 2% off annual prepay.',status:'todo'},
+   business:{theirAsk:'Start after the current opening wave',yourLine:'The wave IS the pilot evidence — starting now means the next market opens with the screen on.',status:'clearing'}},
+  committee:[
+   {id:'gs_1',name:'Rafael Ibanez',role:'Head of Talent Operations',kind:'champion',lastTouch:d(1)},
+   {id:'gs_2',name:'Whitney Cole',role:'VP People',kind:'signer',lastTouch:d(3)},
+   {id:'gs_3',name:'Theo Lindgren',role:'Commercial Counsel',kind:'other',lastTouch:d(4)}],
+  papers:{soc2:true,subprocessors:true,pentest:true,dpa:true},
+  coverage:{total:40,covered:36,saved:4},
+  planToSigned:'1) Redline round on the cap (this week)\n2) Close the 4 saved security answers\n3) Terms call — prepay trade on the table\n4) Signature target: two weeks out',
+  targetDate:dd(-14)}};
+E.customPushbacks=[
+ {id:'cpb_s1',buyer:'"We\'re too small for a screening platform."',reply:'Small teams feel a screening miss hardest — one bad store manager costs more than the platform. The one-funnel package is priced for your signature, not a committee.'},
+ {id:'cpb_s2',buyer:'"Our managers like doing their own hiring."',reply:'They keep the decision — the screen just means they only read the ones worth reading. Ask them what they\'d do with those hours back.'}];
+E.outdoorsEvents=[
+ {id:'oe_s1',name:'RecFest USA',kind:'conference',where_at:'Nashville, TN',start_date:'2026-09-23',end_date:'2026-09-24',status:'planning',tags:'talent acquisition',notes:'Half the book\'s people leads attend.',source_url:'https://recfest.com/usa/',relevance_tier:'direct',relevance_reason:'The US gathering of the exact people this book sells to.',discovered_at:d(30),source_kind:'discovery_run',dedupe_key:'recfest-usa__2026-09__nashville'},
+ {id:'oe_s2',name:'Transform 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-12',end_date:'2027-04-14',status:'watching',tags:'people leadership',notes:'',source_url:'https://transform.us/conference/',relevance_tier:'direct',relevance_reason:'People-leadership buyers in one room.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'transform__2027-04__las-vegas'},
+ {id:'oe_s3',name:'Natural Products Expo West',kind:'trade show',where_at:'Anaheim, CA',start_date:'2027-03-03',end_date:'2027-03-06',status:'watching',tags:'CPG',notes:'The CPG half of the book gathers here.',source_url:'https://www.expowest.com/en/home.html',relevance_tier:'adjacent',relevance_reason:'Growth CPG brands — hiring follows the growth on this floor.',discovered_at:d(25),source_kind:'discovery_run',dedupe_key:'expo-west__2027-03__anaheim'},
+ {id:'oe_s4',name:'SaaStr Annual',kind:'conference',where_at:'SF Bay Area, CA',start_date:'2027-05-11',end_date:'2027-05-13',status:'watching',tags:'software',notes:'',source_url:'https://www.saastrannual2026.com/',relevance_tier:'indirect',relevance_reason:'The scale-up book\'s founders and people leads orbit this one.',discovered_at:d(22),source_kind:'discovery_run',dedupe_key:'saastr-annual__2027-05__sf'}];
+E.capturedHeld=7;
+E.bulkDays=[26,31,24,29];
+})();
