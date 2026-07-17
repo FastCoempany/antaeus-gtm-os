@@ -20,99 +20,99 @@ var S=function(id,cat,headline,detail,why,source,ago,conf,ai){
 var accts=[
 A('sc_s_sweetgreen','Sweetgreen','SG','Food Service','Consumer','$679M','6,000+','Los Angeles, CA','sweetgreen.com',90,[
   S('sg_s1','leadership','New COO arrived from Chipotle in 2025 — operations leadership rebuilt mid-expansion',
-    'Real appointment: a former Chipotle executive took operations in May 2025.','A Chipotle-trained COO already knows what AI screening did for crew hiring there. Shortest education cycle on the book.','Trade press',80,0.9,false),
+    'Real appointment: a former Chipotle executive took operations in May 2025.','A Chipotle-trained COO already knows what AI screening did for crew hiring there. Shortest education cycle on the book.','Trade press',24,0.9,false),
   S('sg_s2','expansion','New-market openings keep crew hiring running ahead of the recruiting team',
-    'Store growth continues into new metros; every opening is a local crew funnel.','New-market crew hiring with a lean TA team is the exact SMB pitch.','Company announcements',45,0.82,false)]),
+    'Store growth continues into new metros; every opening is a local crew funnel.','New-market crew hiring with a lean TA team is the exact SMB pitch.','Company announcements',14,0.82,false)]),
 A('sc_s_notion','Notion','','Productivity Software','Technology','$500M+ ARR','2,900','San Francisco, CA','notion.so',87,[
   S('nt_s1','expansion','Headcount grew ~18% in 2025 with over 1,300 new roles opened during the year',
-    'Real workforce-data read: fast hiring against a famously high bar.','Selective hiring at growth pace — screening quality is their stated obsession.','Workforce data',60,0.8,false),
+    'Real workforce-data read: fast hiring against a famously high bar.','Selective hiring at growth pace — screening quality is their stated obsession.','Workforce data',18,0.8,false),
   S('nt_s2','ai_transformation','Crossed $500M ARR while shipping AI agents — hiring for AI-native roles across the org',
-    'Real milestone from 2025; the company hires people who work the way its product does.','An AI-native buyer evaluating an AI screen — the pilot conversation is native here.','News coverage',90,0.85,false)]),
+    'Real milestone from 2025; the company hires people who work the way its product does.','An AI-native buyer evaluating an AI screen — the pilot conversation is native here.','News coverage',27,0.85,false)]),
 A('sc_s_warby','Warby Parker','WRBY','DTC Eyewear','Consumer','$872M','4,000+','New York, NY','warbyparker.com',84,[
   S('wp_s1','expansion','Opened 47 net new stores in 2025 and posted its first annual net income — retail is the fastest-growing team',
-    'Real FY2025 results: 323 locations and counting; store staffing is the growth engine.','A store-a-week opening pace means a standing retail hiring funnel with real math.','Earnings coverage',60,0.9,false)]),
+    'Real FY2025 results: 323 locations and counting; store staffing is the growth engine.','A store-a-week opening pace means a standing retail hiring funnel with real math.','Earnings coverage',18,0.9,false)]),
 A('sc_s_gymshark','Gymshark','','Fitness Apparel','Consumer','$860M','1,500+','Solihull, UK','gymshark.com',78,[
   S('gs_s1','leadership','Chief People Officer hired from Farfetch in 2024 to lead talent through international expansion',
-    'Real appointment: the new people chief scaled her last org from 100 to 7,000+.','A CPO hired to scale talent is a buyer with a mandate, not a maybe.','Trade press',150,0.88,false),
+    'Real appointment: the new people chief scaled her last org from 100 to 7,000+.','A CPO hired to scale talent is a buyer with a mandate, not a maybe.','Trade press',45,0.88,false),
   S('gs_s2','expansion','US retail expansion adds store hiring to a DTC-native org',
-    'Permanent US stores are staffing up with retail leadership and associates.','First-time retail hiring is where screening discipline saves a brand.','Company careers data',70,0.72,true)]),
+    'Permanent US stores are staffing up with retail leadership and associates.','First-time retail hiring is where screening discipline saves a brand.','Company careers data',21,0.72,true)]),
 A('sc_s_coursera','Coursera','COUR','EdTech','Technology','$695M','1,400','Mountain View, CA','coursera.org',66,[
   S('cs_s1','ai_transformation','AI product push is reshaping the org — hiring concentrated in AI-adjacent roles',
-    'Public strategy centers AI across the catalog and platform.','An education company betting on AI evaluates AI tooling for itself with less friction.','Public filings',75,0.72,true)]),
+    'Public strategy centers AI across the catalog and platform.','An education company betting on AI evaluates AI tooling for itself with less friction.','Public filings',22,0.72,true)]),
 A('sc_s_miro','Miro','','Collaboration Software','Technology','$500M ARR (est.)','1,800','San Francisco, CA','miro.com',64,[
   S('mi_s1','expansion','Distributed hiring across US and Europe hubs continues post-correction',
-    'Hiring resumed selectively after the 2023-24 tech reset.','Distributed funnels with a central people team — consistency is the pitch.','Industry reporting',85,0.68,true)]),
+    'Hiring resumed selectively after the 2023-24 tech reset.','Distributed funnels with a central people team — consistency is the pitch.','Industry reporting',26,0.68,true)]),
 A('sc_s_grammarly','Grammarly','','AI Writing','Technology','$700M ARR','1,000+','San Francisco, CA','grammarly.com',72,[
   S('gr_s1','expansion','Raised $1B in non-dilutive growth financing in 2025 — scaling go-to-market and product hiring',
-    'Real 2025 financing; the company is buying growth, and growth means hiring.','Fresh capital + hiring plans = a funnel about to outgrow the team.','News coverage',95,0.85,false)]),
+    'Real 2025 financing; the company is buying growth, and growth means hiring.','Fresh capital + hiring plans = a funnel about to outgrow the team.','News coverage',28,0.85,false)]),
 A('sc_s_1password','1Password','','Security Software','Technology','$400M+ ARR','1,200','Toronto, Canada','1password.com',75,[
   S('op_s1','leadership','Passed $400M ARR in late 2025 and expanded the executive team — a president and chief business officer joined',
-    'Real milestone + real appointments from November 2025.','New executive layers mean new operating reviews — including how they hire.','Company announcements',85,0.88,false)]),
+    'Real milestone + real appointments from November 2025.','New executive layers mean new operating reviews — including how they hire.','Company announcements',26,0.88,false)]),
 A('sc_s_liquid','Liquid Death','','Beverage','Consumer','$340M','300+','Los Angeles, CA','liquiddeath.com',70,[
   S('ld_s1','leadership','New CFO from PepsiCo lineage arrived in late 2025 as the brand gears up for energy-drink expansion',
-    'Real appointment ahead of the 2026 category expansion.','Category expansion at a lean brand means hiring sprints — and no recruiting infrastructure to absorb them.','Fortune',80,0.85,false)]),
+    'Real appointment ahead of the 2026 category expansion.','Category expansion at a lean brand means hiring sprints — and no recruiting infrastructure to absorb them.','Fortune',24,0.85,false)]),
 A('sc_s_olipop','OLIPOP','','Beverage','Consumer','$400M+','500+','Oakland, CA','drinkolipop.com',73,[
   S('ol_s1','expansion','Raised a $50M round at a $1.85B valuation in 2025 and installed a new president from Coca-Cola lineage',
-    'Real raise + real leadership addition from February 2025.','Funded, restructured, and scaling commercial teams — the classic growth-hiring window.','CNBC',110,0.88,false)]),
+    'Real raise + real leadership addition from February 2025.','Funded, restructured, and scaling commercial teams — the classic growth-hiring window.','CNBC',33,0.88,false)]),
 A('sc_s_chomps','Chomps','','CPG / Food','Consumer','$900M','400+','Chicago, IL','chomps.com',81,[
   S('ch_s1','expansion','Two new manufacturing facilities announced — hundreds of production jobs coming online',
-    'Real announcements: a Missouri plant (~250 jobs) and a Nebraska facility (~150 jobs).','Production hiring is new muscle for a brand this young — they will need screening help, not just applicants.','Company announcements',85,0.9,false),
+    'Real announcements: a Missouri plant (~250 jobs) and a Nebraska facility (~150 jobs).','Production hiring is new muscle for a brand this young — they will need screening help, not just applicants.','Company announcements',26,0.9,false),
   S('ch_s2','expansion','Revenue roughly doubled two years running — headquarters hiring sprinting to keep up',
-    'Growth reporting puts them near the top of the snack category\'s growth table.','Hypergrowth CPG with a Chicago HQ — a hometown logo for Luca.','Forbes',60,0.8,false)]),
+    'Growth reporting puts them near the top of the snack category\'s growth table.','Hypergrowth CPG with a Chicago HQ — a hometown logo for Luca.','Forbes',18,0.8,false)]),
 A('sc_s_poppi','Poppi','','Beverage','Consumer','$500M','300+','Austin, TX','drinkpoppi.com',58,[
   S('pp_s1','expansion','Acquired by PepsiCo in 2025 — integration adds structure to a startup-speed org',
-    'Real 2025 acquisition; the brand keeps operating with big-company backing.','Integration windows reopen every tooling decision.','News coverage',100,0.78,true)]),
+    'Real 2025 acquisition; the brand keeps operating with big-company backing.','Integration windows reopen every tooling decision.','News coverage',30,0.78,true)]),
 A('sc_s_eventbrite','Eventbrite','EB','Ticketing Platform','Technology','$325M','700','San Francisco, CA','eventbrite.com',52,[
   S('eb_s1','pain_point','Rebuilt org running lean — every hire is scrutinized',
-    'Post-restructure headcount discipline is public.','Lean teams buy tools instead of headcount. Right-size the pitch.','Public filings',95,0.7,true)]),
+    'Post-restructure headcount discipline is public.','Lean teams buy tools instead of headcount. Right-size the pitch.','Public filings',28,0.7,true)]),
 A('sc_s_lemonade','Lemonade','LMND','Insurtech','Technology','$527M','1,200','New York, NY','lemonade.com',68,[
   S('lm_s1','ai_transformation','Grew the book 22% while headcount shrank 9% — AI absorbs the work, and they say so publicly',
-    'Real investor-day fact: in-force premium per employee up 34%.','An AI-native insurer that measures output per employee will pilot an AI screen on its own hiring.','Investor materials',70,0.85,false)]),
+    'Real investor-day fact: in-force premium per employee up 34%.','An AI-native insurer that measures output per employee will pilot an AI screen on its own hiring.','Investor materials',21,0.85,false)]),
 A('sc_s_vimeo','Vimeo','','Video Platform','Technology','$417M','1,000','New York, NY','vimeo.com',48,[
   S('vm_s1','leadership','Acquired by Bending Spoons in late 2025 — new ownership resetting the operating model',
-    'Real acquisition completed November 2025.','Ownership resets reopen the tooling map — and usually compress the team that runs it.','News coverage',95,0.8,false)]),
+    'Real acquisition completed November 2025.','Ownership resets reopen the tooling map — and usually compress the team that runs it.','News coverage',28,0.8,false)]),
 A('sc_s_allbirds','Allbirds','BIRD','DTC Footwear','Consumer','$190M','600','San Francisco, CA','allbirds.com',44,[
   S('ab_s1','pain_point','Rebuild underway — smaller team, every hire loaded with expectation',
-    'Real trajectory: revenue declining, headcount lean, a turnaround CEO promoted from COO in 2024.','When every hire counts double, screen quality is survival, not efficiency.','Earnings coverage',85,0.75,true)]),
+    'Real trajectory: revenue declining, headcount lean, a turnaround CEO promoted from COO in 2024.','When every hire counts double, screen quality is survival, not efficiency.','Earnings coverage',26,0.75,true)]),
 A('sc_s_bombas','Bombas','','DTC Apparel','Consumer','$325M','300','New York, NY','bombas.com',56,[
   S('bo_s1','leadership','New CEO from Under Armour lineage took over in 2025 with the founder moving to executive chair',
-    'Real 2025 transition; operating leadership professionalized.','New operating CEOs bring operating tools. Early window.','CNBC',120,0.85,false)]),
+    'Real 2025 transition; operating leadership professionalized.','New operating CEOs bring operating tools. Early window.','CNBC',36,0.85,false)]),
 A('sc_s_rothys','Rothy\'s','','DTC Footwear','Consumer','$211M','500','San Francisco, CA','rothys.com',54,[
   S('ro_s1','expansion','Best year on record in 2024 under a veteran retail CEO — wholesale and retail expansion hiring',
-    'Real results: $211M, +17%, with store fleet growth doing the lifting.','Retail expansion at a digital-native brand means first-time field hiring.','CNBC',130,0.85,false)]),
+    'Real results: $211M, +17%, with store fleet growth doing the lifting.','Retail expansion at a digital-native brand means first-time field hiring.','CNBC',39,0.85,false)]),
 A('sc_s_tecovas','Tecovas','','Western Wear','Consumer','$300M (est.)','700+','Austin, TX','tecovas.com',62,[
   S('tc_s1','expansion','Store expansion continues — every opening staffs a new frontline team',
-    'The western-wear brand keeps adding retail doors and wholesale.','Scheduled store openings are scheduled hiring waves.','Trade press',75,0.72,true)]),
+    'The western-wear brand keeps adding retail doors and wholesale.','Scheduled store openings are scheduled hiring waves.','Trade press',22,0.72,true)]),
 A('sc_s_portillos','Portillo\'s','PTLO','Food Service','Consumer','$711M','8,000+','Chicago, IL','portillos.com',71,[
   S('pt_s1','expansion','Texas expansion continues — each restaurant staffs dozens on a compressed opening timeline',
-    'Real expansion: ten Texas openings since 2023 with the new smaller-format restaurants.','Opening-crew hiring on a deadline, over and over — a subscription-shaped screening need. And a Chicago neighbor.','Company announcements',55,0.85,false)]),
+    'Real expansion: ten Texas openings since 2023 with the new smaller-format restaurants.','Opening-crew hiring on a deadline, over and over — a subscription-shaped screening need. And a Chicago neighbor.','Company announcements',16,0.85,false)]),
 A('sc_s_oatly','Oatly','OTLY','Food / Beverage','Consumer','$824M','1,600','Malmö, Sweden','oatly.com',50,[
   S('oa_s1','pain_point','Efficiency program running — global org getting leaner while commercial hiring continues',
-    'Public cost discipline with regional commercial teams still hiring.','Lean-and-hiring is the tool-buying posture.','Public filings',90,0.72,true)]),
+    'Public cost discipline with regional commercial teams still hiring.','Lean-and-hiring is the tool-buying posture.','Public filings',27,0.72,true)]),
 A('sc_s_athletic','Athletic Brewing','','Beverage','Consumer','$110M','300+','Milford, CT','athleticbrewing.com',46,[
   S('at_s1','expansion','Category leader still compounding — production and field-sales hiring continue',
-    'Non-alcoholic beer keeps growing; they raised $50M in 2024 to expand capacity.','Production + field hiring at a lean brand — right-sized pilot territory.','CNBC',140,0.78,true)]),
+    'Non-alcoholic beer keeps growing; they raised $50M in 2024 to expand capacity.','Production + field hiring at a lean brand — right-sized pilot territory.','CNBC',42,0.78,true)]),
 A('sc_s_spindrift','Spindrift','','Beverage','Consumer','$300M+','250','Newton, MA','spindriftfresh.com',42,[
   S('sp_s1','expansion','Steady growth with a small HQ — hiring happens in bursts around launches',
-    'Real trajectory per business-press reporting.','Burst hiring with no recruiting bench is exactly when a screen earns its keep.','Bloomberg',150,0.7,true)]),
+    'Real trajectory per business-press reporting.','Burst hiring with no recruiting bench is exactly when a screen earns its keep.','Bloomberg',45,0.7,true)]),
 A('sc_s_squatch','Dr. Squatch','','CPG','Consumer','$400M','400+','Marina del Rey, CA','drsquatch.com',48,[
   S('dq_s1','leadership','Acquired by Unilever in 2025 — brand keeps operating with new resources behind it',
-    'Real 2025 acquisition; the meme-brand growth engine now has CPG-giant backing.','Integration + growth capital = hiring waves with new process expectations.','Company announcements',110,0.8,false)]),
+    'Real 2025 acquisition; the meme-brand growth engine now has CPG-giant backing.','Integration + growth capital = hiring waves with new process expectations.','Company announcements',33,0.8,false)]),
 A('sc_s_siete','Siete Foods','','CPG / Food','Consumer','$500M','500+','Austin, TX','sietefoods.com',45,[
   S('si_s1','expansion','PepsiCo acquisition completed in 2025 — the family brand scaling inside a giant',
-    'Real completed acquisition from January 2025.','Post-acquisition scaling opens headcount — and standardizes tooling.','Company announcements',160,0.8,false)]),
+    'Real completed acquisition from January 2025.','Post-acquisition scaling opens headcount — and standardizes tooling.','Company announcements',48,0.8,false)]),
 A('sc_s_calendly','Calendly','','Scheduling Software','Technology','$280M ARR','500','Atlanta, GA','calendly.com',40,[
   S('cl_s1','pain_point','Lean team with a high bar — hiring few, screening hard',
-    'The company runs deliberately small for its revenue.','Low-volume, high-bar screening — the quality end of the SMB book.','Industry reporting',100,0.65,true)]),
+    'The company runs deliberately small for its revenue.','Low-volume, high-bar screening — the quality end of the SMB book.','Industry reporting',30,0.65,true)]),
 A('sc_s_webflow','Webflow','','Web Software','Technology','$213M','800','San Francisco, CA','webflow.com',43,[
   S('wf_s1','pain_point','Design-engineer hybrid roles are notoriously hard to screen',
-    'Their core roles blend disciplines most rubrics separate.','Hard-to-screen roles are where an outcome-trained screen shows off.','Industry reporting',105,0.65,true)]),
+    'Their core roles blend disciplines most rubrics separate.','Hard-to-screen roles are where an outcome-trained screen shows off.','Industry reporting',32,0.65,true)]),
 A('sc_s_bark','BARK','BARK','Pet Products','Consumer','$484M','1,000','New York, NY','bark.co',41,[
   S('bk_s1','pain_point','First full year of positive adjusted EBITDA — discipline era, hiring under scrutiny',
-    'Real FY2025 result; the company is proving the model economics.','Discipline-era companies buy efficiency. Frame the screen as recruiter leverage they do not have to hire.','Company filings',80,0.75,true)])];
+    'Real FY2025 result; the company is proving the model economics.','Discipline-era companies buy efficiency. Frame the screen as recruiter leverage they do not have to hire.','Company filings',24,0.75,true)])];
 
 var advisors=[
-  {id:'adv_l1',name:'Priya Raghavan',title:'Board Partner, Meridian Point Ventures (Series C lead)',tier:'t1',expertise:'Enterprise software GTM',equity:'Board seat',companies:['Warby Parker','Lemonade'],relationship:'active',createdAt:d(400)},
+  {id:'adv_l1',name:'Priya Raghavan',title:'Board Partner, Halcyon Ridge Ventures (Series C lead)',tier:'t1',expertise:'Enterprise software GTM',equity:'Board seat',companies:['Warby Parker','Lemonade'],relationship:'active',createdAt:d(400)},
   {id:'adv_l2',name:'Tom Calloway',title:'Former CHRO, Fortune 100 retailer (advisor)',tier:'t2',expertise:'Retail people organizations',equity:'0.4% advisor shares',companies:['Warby Parker','Rothy\'s','Tecovas'],relationship:'active',createdAt:d(320)},
   {id:'adv_l3',name:'Dana Whitcomb',title:'VP Talent, Chipotle (happy customer)',tier:'t4',expertise:'Frontline volume hiring',equity:'—',companies:['Sweetgreen','Portillo\'s'],relationship:'active',createdAt:d(200)},
   {id:'adv_l6',name:'Rafael Ibanez',title:'Head of Talent Ops, Sweetgreen (happy customer)',tier:'t4',expertise:'Multi-site food-service hiring',equity:'—',companies:['Portillo\'s','Chomps'],relationship:'active',createdAt:d(150)},
