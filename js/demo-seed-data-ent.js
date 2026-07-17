@@ -489,3 +489,197 @@ window.__LUCA_SEED__.ent={
   onboardingAnswers:{companyName:'Luca Industries',stage:'Growth · $100MM ARR',quota:2000000,acv:280000,productCategory:'recruiting',buyerPersona:'VP Talent Acquisition'}
 };
 })();
+
+/* ── ENT part 2 — territory, funnel, working history, pilot, fronts ── */
+(function(){
+function d(n){return new Date(Date.now()-n*86400000).toISOString()}
+function dd(n){return d(n).slice(0,10)}
+var E=window.__LUCA_SEED__.ent;
+
+var F=function(id,name,pressure,segment,lev,ago){var full=pressure+' for '+segment+', and '+lev+'.';
+  return {id:id,name:name,pressure:pressure,segment:segment,leverage:lev,fullStatement:full,version:1,status:'active',createdAt:d(ago),versions:[{v:1,statement:full,date:d(ago)}]}};
+var focuses=[
+F('ta_e_air','Air & aerospace frontline','Safety-critical hiring is running at post-strike, record-schedule volume','airlines and aerospace manufacturers rebuilding frontline and production workforces','we can keep screening quality up where a bad hire is a safety story',130),
+F('ta_e_ramp','Retail & food ramp','Seasonal and turnaround hiring waves are outrunning recruiting teams','retailers and food-service brands with public hiring pushes','we can carry the seasonal funnel without dropping the brand bar',124),
+F('ta_e_ai','AI-native talent wars','Offer speed is deciding who gets the engineer','AI companies hiring against the fastest rivals in tech','we can cut application-to-offer to days on their own funnel',118),
+F('ta_e_hrtech','Workforce platforms','HR-tech companies hire at scale and know the category cold','HCM, payroll, and global-employment platforms','we can win the sharpest buyers in the market and turn them into references',112),
+F('ta_e_scale','Scale logistics & marketplaces','Peak-season and ops hiring runs on speed alone','logistics networks and marketplace platforms with six-figure seasonal funnels','we can make throughput and quality the same number',106)];
+var AP=function(id,fid,cat,name,desc,ago){return {id:id,focusId:fid,category:cat,name:name,description:desc,status:'active',createdAt:d(ago),retiredAt:null}};
+var approaches=[
+AP('ta_e_ap1','ta_e_air','event-opener','Public hiring-wave opener','Open on their own announced hiring event — the strike rebuild, the class schedule — never a cold pitch.',100),
+AP('ta_e_ap2','ta_e_air','safety-frame','Quality-of-hire frame','Tie screening quality to the safety and brand story their leadership already tells.',99),
+AP('ta_e_ap3','ta_e_ramp','seasonal-math','Seasonal math opener','Lead with the season: funnel size, window length, and what a missed week costs.',98),
+AP('ta_e_ap4','ta_e_ramp','reference','Chipotle peer story','Peer reference from the burrito-season win — same funnel shape, same math.',97),
+AP('ta_e_ap5','ta_e_ai','speed-proof','Offer-velocity demo','Show days-to-offer on a live funnel; the talent war does the urgency for us.',96),
+AP('ta_e_ap6','ta_e_hrtech','insider','Sharp-buyer respect','They know the category — skip the education, open with the outcome delta.',95),
+AP('ta_e_ap7','ta_e_scale','throughput','Peak-throughput case','Cost of a slow screen at 10,000 applications a week, in their own arithmetic.',94)];
+var TA=function(i,name,tier,fid,lev,trig,ago){return {id:'ta_e_a'+i,name:name,tier:tier,focusId:fid,leverageType:lev,additionTrigger:trig,status:'active',addedAt:d(ago),overrideCount:0}};
+var taccts=[
+TA(1,'Boeing',1,'ta_e_air','existing-proof-point','signal-event',120),TA(2,'Delta Air Lines',1,'ta_e_air','market-signal','signal-event',115),
+TA(3,'United Airlines',1,'ta_e_air','market-signal','signal-event',115),TA(4,'Southwest Airlines',2,'ta_e_air','market-signal','strategic-bet',90),
+TA(5,'JetBlue',3,'ta_e_air','cold','strategic-bet',85),TA(6,'Marriott International',2,'ta_e_air','network-connection','network-opportunity',88),
+TA(7,'Hilton',3,'ta_e_air','market-signal','strategic-bet',80),TA(8,'Nordstrom',1,'ta_e_ramp','market-signal','signal-event',110),
+TA(9,'Gap Inc.',2,'ta_e_ramp','market-signal','signal-event',108),TA(10,'Best Buy',2,'ta_e_ramp','market-signal','signal-event',82),
+TA(11,'Ulta Beauty',2,'ta_e_ramp','market-signal','strategic-bet',78),TA(12,'Dick\'s Sporting Goods',3,'ta_e_ramp','cold','strategic-bet',75),
+TA(13,'Starbucks',1,'ta_e_ramp','network-connection','signal-event',105),TA(14,'Chipotle',1,'ta_e_ramp','existing-proof-point','signal-event',220),
+TA(15,'OpenAI',1,'ta_e_ai','network-connection','signal-event',100),TA(16,'Databricks',1,'ta_e_ai','network-connection','signal-event',95),
+TA(17,'Palantir',3,'ta_e_ai','cold','strategic-bet',150),TA(18,'CoreWeave',2,'ta_e_ai','market-signal','signal-event',92),
+TA(19,'Workday',2,'ta_e_hrtech','market-signal','strategic-bet',70),TA(20,'ADP',3,'ta_e_hrtech','cold','strategic-bet',68),
+TA(21,'Dayforce',3,'ta_e_hrtech','existing-proof-point','signal-event',300),TA(22,'Paycom',3,'ta_e_hrtech','cold','strategic-bet',66),
+TA(23,'Deel',1,'ta_e_hrtech','existing-proof-point','signal-event',260),TA(24,'Randstad',2,'ta_e_hrtech','market-signal','strategic-bet',64),
+TA(25,'Nike',2,'ta_e_scale','market-signal','signal-event',72),TA(26,'Uber',2,'ta_e_scale','market-signal','signal-event',60),
+TA(27,'Airbnb',3,'ta_e_scale','cold','strategic-bet',58),TA(28,'Spotify',3,'ta_e_scale','cold','strategic-bet',56),
+TA(29,'FedEx',2,'ta_e_scale','market-signal','signal-event',62)];
+E.territory={
+  setup:{completedAt:d(130),version:2},
+  territory:{healthScore:81,lastPulse:dd(2),pulseSkips:0,salesCycle:'3-6m',createdAt:d(130)},
+  focuses:focuses,approaches:approaches,accounts:taccts,
+  signals:[
+   {id:'ta_e_s1',accountId:'ta_e_a1',description:'Production rebuild keeps the factory funnel wide open.',type:'expansion',timestamp:d(4)},
+   {id:'ta_e_s2',accountId:'ta_e_a13',description:'Green Apron staffing investment is live in stores.',type:'expansion',timestamp:d(6)},
+   {id:'ta_e_s3',accountId:'ta_e_a15',description:'New people chief owns recruiting scale as of February.',type:'leadership',timestamp:d(8)},
+   {id:'ta_e_s4',accountId:'ta_e_a8',description:'Holiday planning starts next month — the seasonal window opens.',type:'expansion',timestamp:d(3)},
+   {id:'ta_e_s5',accountId:'ta_e_a16',description:'Hiring 3,000 this year against a recruiter team built for less.',type:'expansion',timestamp:d(9)}],
+  dispositions:[
+   {id:'ta_e_d1',accountId:'ta_e_a1',type:'progressing',approachUsed:'ta_e_ap1',angleWorked:'ta_e_ap1',timestamp:d(3)},
+   {id:'ta_e_d2',accountId:'ta_e_a13',type:'progressing',approachUsed:'ta_e_ap4',angleWorked:'ta_e_ap4',timestamp:d(5)},
+   {id:'ta_e_d3',accountId:'ta_e_a3',type:'engaged-stalled',approachUsed:'ta_e_ap2',blocker:'The person who signs is not in the thread yet.',timestamp:d(7)},
+   {id:'ta_e_d4',accountId:'ta_e_a8',type:'engaged-stalled',approachUsed:'ta_e_ap3',blocker:'No dated next step since the ownership change.',timestamp:d(10)},
+   {id:'ta_e_d5',accountId:'ta_e_a17',type:'no-traction',approachUsed:'ta_e_ap5',timestamp:d(60)}],
+  swapHistory:[{id:'ta_e_sw1',accountRemoved:'Lowe\'s',accountAdded:'ta_e_a18',reason:'signal-upgrade',timestamp:d(45)}],
+  retierHistory:[{id:'ta_e_rt1',date:d(30),summary:'Book tightened around live public hiring events.'}],
+  calibrations:{progression:true,leverage:true,swapLogic:true}};
+
+E.sourcing={
+  queryCards:[
+   {id:'sw_e_q1',focusId:'ta_e_air',platform:'sales-nav',status:'active',createdAt:d(20),updatedAt:d(2),filters:{industry:'Airlines / aerospace manufacturing',companySize:'20,000+ employees',geography:'North America',behavioralSignal:'Announced hiring classes, production ramps, new training centers',techSignal:'Workday ATS / legacy screening',personaTitles:'VP Talent Acquisition; Director Recruiting Operations',exclusions:'Regional carriers under 5,000 employees',customNotes:'Watch for announced class schedules — they date the funnel for us.'}},
+   {id:'sw_e_q2',focusId:'ta_e_ramp',platform:'apollo',status:'active',createdAt:d(18),updatedAt:d(3),filters:{industry:'Retail / food service',companySize:'25,000+ employees',geography:'US',behavioralSignal:'Seasonal hiring announcements, store-count growth, turnaround labor investment',techSignal:'Paradox / ATS add-ons',personaTitles:'VP Talent Acquisition; Head of Field Recruiting',exclusions:'Franchise-only operators (stores hire, corporate does not)',customNotes:'The announced number IS the pitch — 20,000 spring hires means a dated conversation.'}},
+   {id:'sw_e_q3',focusId:'ta_e_ai',platform:'zoominfo',status:'active',createdAt:d(15),updatedAt:d(1),filters:{industry:'AI / data infrastructure',companySize:'500-10,000 employees',geography:'US',behavioralSignal:'Funding round with public hiring plan, datacenter buildouts, new-grad programs',techSignal:'Greenhouse / Ashby',personaTitles:'Head of Recruiting Operations; VP People',exclusions:'Pre-product labs under 100 people',customNotes:'Speed-to-offer is the only pitch this focus needs.'}}],
+  prospects:[
+   {id:'sw_e_p1',name:'Alaska Airlines',focusId:'ta_e_air',sourceType:'query-card',sourceQueryCardId:'sw_e_q1',initialImpression:'Merger integration doubles the hiring surface.',stage:'ready',createdAt:d(8),updatedAt:d(1),research:{focusMatch:'strong',entryPoint:'VP Talent Acquisition',suggestedApproach:'ta_e_ap1',leverageType:'market-signal',note:'Hawaiian integration means two funnels becoming one — consistency sale.'}},
+   {id:'sw_e_p2',name:'Panda Express',focusId:'ta_e_ramp',sourceType:'query-card',sourceQueryCardId:'sw_e_q2',initialImpression:'Store growth with a lean corporate TA team.',stage:'ready',createdAt:d(7),updatedAt:d(2),research:{focusMatch:'strong',entryPoint:'Head of Field Recruiting',suggestedApproach:'ta_e_ap3',leverageType:'market-signal',note:'Same funnel shape as the Chipotle win, one tier smaller.'}},
+   {id:'sw_e_p3',name:'Anduril',focusId:'ta_e_ai',sourceType:'query-card',sourceQueryCardId:'sw_e_q3',initialImpression:'Defense-tech hiring surge, security-heavy screens.',stage:'researched',createdAt:d(6),updatedAt:d(2),research:{focusMatch:'moderate',entryPoint:'Recruiting Operations lead',suggestedApproach:'ta_e_ap5',leverageType:'market-signal',note:'Clearance requirements complicate the funnel — could be the pain or the blocker.'}},
+   {id:'sw_e_p4',name:'Waste Management',focusId:'ta_e_scale',sourceType:'news-article',sourceQueryCardId:null,initialImpression:'Frontline hiring at national scale, little tooling noise.',stage:'captured',createdAt:d(4),updatedAt:d(4)},
+   {id:'sw_e_p5',name:'Sysco',focusId:'ta_e_scale',sourceType:'query-card',sourceQueryCardId:'sw_e_q2',initialImpression:'Driver hiring is a standing funnel with real math.',stage:'captured',createdAt:d(3),updatedAt:d(3)},
+   {id:'sw_e_p6',name:'Scale AI',focusId:'ta_e_ai',sourceType:'referral',sourceQueryCardId:null,initialImpression:'Contributor-network screening is a different product conversation.',stage:'parked',createdAt:d(12),updatedAt:d(5),research:{focusMatch:'uncertain',entryPoint:'',suggestedApproach:null,leverageType:'market-signal',note:'Their screening need is for contributors, not employees — park until the product answer is clear.'}}],
+  personaMaps:[
+   {id:'sw_e_m1',focusId:'ta_e_air',title:'VP Talent Acquisition',alternativeTitles:'Managing Director, Talent Acquisition',role:'decision-maker',priority:'primary-target',typicalConcerns:'Class schedules, funnel throughput, regulator-grade consistency.',bestApproach:'ta_e_ap1',notes:'Owns the number the CEO quotes. Open with their own announcement.',createdAt:d(19)},
+   {id:'sw_e_m2',focusId:'ta_e_ramp',title:'Head of Field Recruiting',alternativeTitles:'VP Store Talent',role:'champion',priority:'primary-target',typicalConcerns:'Season readiness, store-manager screening load, quality at wage.',bestApproach:'ta_e_ap3',notes:'Feels the season personally. The math opener lands here.',createdAt:d(17)},
+   {id:'sw_e_m3',focusId:'ta_e_ai',title:'Head of Recruiting Operations',alternativeTitles:'Recruiting Ops Lead',role:'champion',priority:'primary-target',typicalConcerns:'Days-to-offer, recruiter hours per hire, bar integrity.',bestApproach:'ta_e_ap5',notes:'Wants the demo, not the deck.',createdAt:d(14)},
+   {id:'sw_e_m4',focusId:'ta_e_ramp',title:'SVP People Operations',alternativeTitles:'VP People',role:'economic-buyer',priority:'situational',typicalConcerns:'Cost per hire, tooling consolidation, brand risk.',bestApproach:'ta_e_ap4',notes:'Bring the peer reference, not the feature list.',createdAt:d(13)}]};
+
+var T=function(acct,cn,ct,per,temp,ch,trig,out,ago){return {id:'t_e_'+ago+'_'+acct.slice(0,3),account:acct.toLowerCase(),accountName:acct,contactName:cn,contactTitle:ct,persona:per,temperature:temp,channel:ch,trigger:trig,ctaType:'soft_ask',assetUsed:'case_study',content:'',outcome:out,outcomeDate:out?d(Math.max(1,ago-2)):null,dealId:null,qualityScore:78,motionBand:'workable',createdAt:d(ago)}};
+E.shared={
+ outboundTouches:{touches:[
+  T('Boeing','Karen Mitchell','VP Talent Acquisition','vp','warm','email','expansion','replied',26),
+  T('Boeing','Pete Kowalski','Head of Recruiting Operations','mgr','warm','email','expansion','replied',12),
+  T('Starbucks','Alicia Fontaine','VP Talent Acquisition','vp','warm','email','expansion','replied',18),
+  T('Starbucks','Jerome Bates','Director, People Systems','mgr','cool','linkedin','leadership',null,9),
+  T('United Airlines','Rob Vasquez','Managing Director, Talent Acquisition','vp','cool','email','pain_point','no_response',22),
+  T('OpenAI','Mia Kessler','Head of Recruiting Operations','mgr','warm','email','competitive','replied',15),
+  T('OpenAI','Tara Bloom','Lead Technical Recruiter','ic','warm','email','competitive',null,5),
+  T('Nordstrom','Yolanda Pierce','VP Talent Acquisition','vp','cool','email','expansion','no_response',20),
+  T('CoreWeave','Nate Brower','Director, Talent Acquisition','mgr','warm','email','expansion','replied',11),
+  T('Databricks','Ingrid Solberg','Head of Recruiting Operations','mgr','cool','email','expansion',null,7),
+  T('Delta Air Lines','Curtis Hale','Director, TA Operations','mgr','ice_cold','email','leadership','no_response',13),
+  T('Marriott International','Fran Delacroix','Senior Director, Global TA','vp','ice_cold','email','expansion',null,10),
+  T('FedEx','','','vp','ice_cold','email','expansion',null,8),
+  T('Uber','','','vp','ice_cold','linkedin','leadership',null,6),
+  T('Best Buy','','','vp','ice_cold','email','leadership',null,4),
+  T('Nike','','','vp','ice_cold','email','leadership','no_response',17),
+  T('Workday','','','vp','ice_cold','email','ai_transformation',null,3),
+  T('Randstad','','','csuite','ice_cold','email','ai_transformation',null,1)]},
+ coldCallLog:{calls:[
+  {id:'cc_e1',accountName:'CoreWeave',contactName:'Owen Marsh',contactTitle:'Site Recruiting Lead',outcome:'meeting_booked',duration:240,notes:'Site-to-site funnel pain confirmed on the call — meeting set with Nate.',createdAt:d(44)},
+  {id:'cc_e2',accountName:'Delta Air Lines',contactName:'Curtis Hale',contactTitle:'Director, TA Operations',outcome:'callback_scheduled',duration:180,notes:'Mid-class-year; call back when 2027 planning opens.',createdAt:d(16)},
+  {id:'cc_e3',accountName:'FedEx',contactName:'',contactTitle:'',outcome:'voicemail',duration:45,notes:'',createdAt:d(8)},
+  {id:'cc_e4',accountName:'JetBlue',contactName:'',contactTitle:'',outcome:'no_answer',duration:20,notes:'',createdAt:d(12)},
+  {id:'cc_e5',accountName:'Uber',contactName:'',contactTitle:'',outcome:'rejected',duration:90,notes:'Mid-reorg — told to come back next quarter.',createdAt:d(14)},
+  {id:'cc_e6',accountName:'Marriott International',contactName:'Fran Delacroix',contactTitle:'Senior Director, Global TA',outcome:'callback_scheduled',duration:200,notes:'COE intro promised; she wants the Chipotle numbers first.',createdAt:d(19)},
+  {id:'cc_e7',accountName:'Ulta Beauty',contactName:'',contactTitle:'',outcome:'voicemail',duration:40,notes:'',createdAt:d(6)},
+  {id:'cc_e8',accountName:'Southwest Airlines',contactName:'',contactTitle:'',outcome:'no_answer',duration:15,notes:'',createdAt:d(3)}]},
+ linkedinLog:{actions:[
+  {id:'li_e1',type:'connection',action:'connection',accountName:'Boeing',outcome:'accepted',createdAt:d(30)},
+  {id:'li_e2',type:'content_engage',action:'content_engage',accountName:'Boeing',outcome:null,createdAt:d(24)},
+  {id:'li_e3',type:'dm',action:'dm',accountName:'Boeing',outcome:'replied',createdAt:d(20)},
+  {id:'li_e4',type:'connection',action:'connection',accountName:'OpenAI',outcome:'accepted',createdAt:d(18)},
+  {id:'li_e5',type:'content_engage',action:'content_engage',accountName:'OpenAI',outcome:null,createdAt:d(13)},
+  {id:'li_e6',type:'connection',action:'connection',accountName:'Databricks',outcome:'pending',createdAt:d(7)},
+  {id:'li_e7',type:'content_engage',action:'content_engage',accountName:'Starbucks',outcome:null,createdAt:d(10)},
+  {id:'li_e8',type:'dm',action:'dm',accountName:'United Airlines',outcome:'no_response',createdAt:d(15)},
+  {id:'li_e9',type:'connection',action:'connection',accountName:'Nike',outcome:'accepted',createdAt:d(9)},
+  {id:'li_e10',type:'connection',action:'connection',accountName:'Marriott International',outcome:'pending',createdAt:d(4)}]},
+ angles:[
+  {company:'Boeing',trigger:'expansion',persona:'VP Talent Acquisition',email:'Open on the production rebuild: every factory hire is now a quality decision, and the screening layer is where quality starts.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(25)},
+  {company:'Starbucks',trigger:'expansion',persona:'VP Talent Acquisition',email:'The Green Apron investment puts more people on the floor — the screen decides whether they are the right ones. Chipotle math attached.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(17)},
+  {company:'OpenAI',trigger:'competitive',persona:'Head of Recruiting Operations',email:'When rivals bid $100M for the same people, days-to-offer is the whole game. We cut it on your own funnel in two weeks.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(14)},
+  {company:'FedEx',trigger:'expansion',persona:'VP Talent Acquisition',email:'Peak season is a six-figure funnel with a six-week window. Screening throughput is the number that decides January attrition.',temperature:'ice_cold',channel:'email',ctaType:'no_ask',savedAt:d(8)}],
+ discoveryStats:{totalCalls:14,advancedCalls:7},
+ discoveryWorked:{'rt_pain_1':true,'rt_pain_2':true,'rt_trigger_1':true,'rt_stakeholder_1':true,'rt_evidence_1':true,'rt_decision_1':true},
+ discoveryCallLog:{calls:[
+  {id:'dcl_e1',createdAt:d(200),updatedAt:d(200),accountName:'Chipotle',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','trigger-and-urgency','proof-threshold','stakeholder-and-ownership','decision-architecture','next-step-lock'],nodeIdsWorked:['rt_pain_1','rt_trigger_1','rt_stakeholder_1'],disposition:'advanced'},
+  {id:'dcl_e2',createdAt:d(80),updatedAt:d(80),accountName:'Boeing',activeFramework:'recruiting',segmentKeysWorked:['opening-frame','current-state-truth','pain-and-consequence','trigger-and-urgency','stakeholder-and-ownership'],nodeIdsWorked:['rt_pain_1','rt_pain_2'],disposition:'advanced'},
+  {id:'dcl_e3',createdAt:d(40),updatedAt:d(40),accountName:'OpenAI',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','proof-threshold','next-step-lock'],nodeIdsWorked:['rt_evidence_1'],disposition:'advanced'},
+  {id:'dcl_e4',createdAt:d(18),updatedAt:d(18),accountName:'Databricks',activeFramework:'recruiting',segmentKeysWorked:['opening-frame','current-state-truth','pain-and-consequence','trigger-and-urgency'],nodeIdsWorked:['rt_pain_1','rt_trigger_1'],disposition:'stalled'},
+  {id:'dcl_e5',createdAt:d(14),updatedAt:d(14),accountName:'Delta Air Lines',activeFramework:'recruiting',segmentKeysWorked:['opening-frame','current-state-truth'],nodeIdsWorked:[],disposition:'stalled'},
+  {id:'dcl_e6',createdAt:d(95),updatedAt:d(95),accountName:'Palantir',activeFramework:'recruiting',segmentKeysWorked:['pain-and-consequence','decision-architecture'],nodeIdsWorked:['rt_decision_1'],disposition:'lost'}]},
+ discoveryAgenda:{contact:'Ingrid Solberg',company:'Databricks',linkedDeal:'deal_e_databricks',gates:['pain_validated',null,null,null]},
+ autopsyLog:(function(){var log={};
+   log['deal_e_palantir']={lastRunAt:d(58),tasks:{'review_loss_pattern':{done:true,doneAt:d(58)},'security_review_week1':{done:true,doneAt:d(50)}}};
+   log['deal_e_nordstrom']={lastRunAt:d(5),tasks:{'set_deadline':{done:false},'eb_strategy':{done:false}}};
+   log['deal_e_united']={lastRunAt:d(3),tasks:{'send_eb_request':{done:true,doneAt:d(2)},'set_deadline':{done:false}}};
+   return log})(),
+ autopsySnapshots:{snapshots:[
+  {dealId:'deal_e_palantir',accountName:'Palantir',verdictMode:'corrected',killSwitch:'Security review opens in week 1 or the deal does not advance past discovery.',topCauseId:'no_nextstep',topCauseLabel:'Security review started too late',generatedAtIso:d(58)},
+  {dealId:'deal_e_nordstrom',accountName:'Nordstrom',verdictMode:'left',killSwitch:'If no dated next step by Friday, downgrade the forecast and work the season window elsewhere.',topCauseId:'no_nextstep',topCauseLabel:'Next step has no date',generatedAtIso:d(5)},
+  {dealId:'deal_e_united',accountName:'United Airlines',verdictMode:'corrected',killSwitch:'If the VP People misses the next briefing, route the favor through Marcus before the schedule locks.',topCauseId:'champion_weak',topCauseLabel:'Signer not yet in the room',generatedAtIso:d(3)}]},
+ pocData:{pocs:[
+  {id:'poc_e_chipotle',vendor:'Luca Industries',account:'Chipotle',duration:14,success:'1) Cut apply-to-start below 5 days on the seasonal funnel\n2) Screening consistency across 200 pilot stores\n3) Hiring-manager satisfaction above 8/10',boundaries:'- One region, 200 stores\n- No custom model work during the pilot\n- Weekly check-ins with the recruiting circle',outcome:'converted',created:d(200)},
+  {id:'poc_e_openai',vendor:'Luca Industries',account:'OpenAI',duration:21,success:'1) Cut recruiter screening hours 40% on the infra-eng funnel\n2) Zero drop in on-site pass rate\n3) Days from application to first interview under 4',boundaries:'- Infra-eng funnel only\n- Their rubric, our screen\n- Security review runs in parallel, not after',outcome:'in_progress',created:d(12)}]},
+ playbookNotes:{
+  'note_0':'The book runs on public hiring events. Boeing rebuild, Starbucks Green Apron, burrito season — the announcement dates the conversation and does the urgency for us.',
+  'note_3':'Fastest closes had the signer in the room by week 3 and a pilot scoped in discovery. Chipotle is the template: peer intro, seasonal math, two-week pilot, done.',
+  'note_4':'Two loss patterns to kill: security reviews that start at proposal (Palantir), and incumbent ATS bundles beating us on procurement ease (Gap). Week-1 security conversation and outcome-delta selling are now standard.'}};
+
+E.pilotDesk={'openai':{startedAt:d(12),circle:[
+  {id:'pc_1',name:'Mia Kessler',role:'Head of Recruiting Operations',kind:'champion',active:true},
+  {id:'pc_2',name:'Jonah Price',role:'VP People',kind:'signoff',active:false},
+  {id:'pc_3',name:'Tara Bloom',role:'Lead Technical Recruiter',kind:'hands_on',active:true},
+  {id:'pc_4',name:'Priyanka Shah',role:'Technical Recruiter',kind:'hands_on',active:true},
+  {id:'pc_5',name:'Cole Bennett',role:'Technical Recruiter',kind:'hands_on',active:true},
+  {id:'pc_6',name:'Ana Fuentes',role:'Recruiting Coordinator',kind:'hands_on',active:false}],
+ checkins:[{at:d(7),actions:34},{at:d(2),actions:51}],
+ shared:['getting_started','role_quickstarts','champion_kit'],
+ closedGaps:[],stepsDone:1,stage:3,
+ writeup:''}};
+
+E.gts={'deal_e_boeing':{
+  fronts:{
+   security:{theirAsk:'Full 150-question security review before any contract redlines move',yourLine:'Our papers answer 118 of the 150 today — SOC 2 Type II, pen-test, subprocessor list, DPA. The working session closes 22 more.',status:'blocking'},
+   legal:{theirAsk:'Uncapped liability on data-related claims',yourLine:'Cap at 12 months of fees with a separate, higher breach cap — the structure their own vendors sign.',status:'clearing'},
+   finance:{theirAsk:'Net-90 payment terms',yourLine:'Net-60 flat, or net-30 with 3% off annual prepay — their treasury usually takes the prepay.',status:'todo'},
+   business:{theirAsk:'Hold rollout until next fiscal year',yourLine:'Seasonal math says January start loses the spring class — the plan to signed keeps the pilot-to-rollout bridge inside this year.',status:'clearing'}},
+  committee:[
+   {id:'gc_1',name:'Karen Mitchell',role:'VP Talent Acquisition',kind:'champion',lastTouch:d(2)},
+   {id:'gc_2',name:'Doug Reyes',role:'SVP People Operations',kind:'signer',lastTouch:d(9)},
+   {id:'gc_3',name:'Linda Tran',role:'Procurement Manager',kind:'other',lastTouch:d(4)},
+   {id:'gc_4',name:'Marcus Webb',role:'Information Security Lead',kind:'other',lastTouch:d(3)}],
+  papers:{soc2:true,subprocessors:true,pentest:true,dpa:true},
+  coverage:{total:150,covered:118,saved:22},
+  planToSigned:'1) Security working session (this week) — close the 22 saved answers\n2) Engineering answers the last 10 (next week)\n3) Legal redline round on the cap structure\n4) Terms call with treasury — prepay trade on the table\n5) Signature target: end of month',
+  targetDate:dd(-21)}};
+
+E.customPushbacks=[
+ {id:'cpb_e1',buyer:'"Our ATS already has an AI screening add-on."',reply:'The bundle checks a box — ask them what number it moved. We run on top of the same ATS and show the delta on your own funnel in two weeks.'},
+ {id:'cpb_e2',buyer:'"Legal will never approve AI screening — bias risk."',reply:'That is exactly why the audit trail matters: every screen is explainable and logged, which is more than the gut-call your store managers make today. Our compliance papers answer it in writing.'}];
+
+E.outdoorsEvents=[
+ {id:'oe_e1',name:'RecFest USA',kind:'conference',where_at:'Nashville, TN',start_date:'2026-09-23',end_date:'2026-09-24',status:'planning',tags:'talent acquisition',notes:'The TA-leader field day — half the book\'s champions attend.',source_url:'https://recfest.com/usa/',relevance_tier:'direct',relevance_reason:'The biggest US gathering of the exact people Luca sells to.',discovered_at:d(30),source_kind:'discovery_run',dedupe_key:'recfest-usa__2026-09__nashville'},
+ {id:'oe_e2',name:'Transform 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-12',end_date:'2027-04-14',status:'watching',tags:'people leadership',notes:'',source_url:'https://transform.us/conference/',relevance_tier:'direct',relevance_reason:'People-leadership buyers and the HR-tech vendor field in one room.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'transform__2027-04__las-vegas'},
+ {id:'oe_e3',name:'UNLEASH America 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-13',end_date:'2027-04-15',status:'watching',tags:'HR technology',notes:'',source_url:'https://www.unleash.ai/unleashamerica/',relevance_tier:'direct',relevance_reason:'Enterprise HR-tech buying committees walk the floor here.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'unleash-america__2027-04__las-vegas'},
+ {id:'oe_e4',name:'NRF Big Show 2027',kind:'trade show',where_at:'New York, NY',start_date:'2027-01-10',end_date:'2027-01-12',status:'watching',tags:'retail',notes:'Retail-book adjacency — the seasonal-hiring conversation lives here.',source_url:'https://nrfbigshow.nrf.com/',relevance_tier:'adjacent',relevance_reason:'The retail half of the book gathers here; hiring is a standing agenda item.',discovered_at:d(25),source_kind:'discovery_run',dedupe_key:'nrf-big-show__2027-01__new-york'},
+ {id:'oe_e5',name:'SaaStr Annual',kind:'conference',where_at:'SF Bay Area, CA',start_date:'2027-05-11',end_date:'2027-05-13',status:'watching',tags:'software',notes:'',source_url:'https://www.saastrannual2026.com/',relevance_tier:'indirect',relevance_reason:'The AI-native book\'s founders and people leaders orbit this one.',discovered_at:d(22),source_kind:'discovery_run',dedupe_key:'saastr-annual__2027-05__sf'}];
+
+E.capturedHeld=5;
+E.bulkDays=[19,14,22,17];
+})();
