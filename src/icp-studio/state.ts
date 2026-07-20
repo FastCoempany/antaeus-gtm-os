@@ -139,8 +139,39 @@ export function resetDraft(): void {
     draft.value = EMPTY_ICP_DRAFT;
 }
 
+/**
+ * If the working draft is untouched and a saved definition exists,
+ * open the room ON the most recent one — the operator's sharpened ICP
+ * greets them instead of an empty form. Saved values that aren't in
+ * the fixed option lists ride the custom slots, so the assembled
+ * statement and the quality read compute from the real record.
+ */
+function hydrateDraftFromLatest(icps: ReadonlyArray<SavedIcp>): void {
+    if (!icps.length) return;
+    const d = draft.value;
+    const untouched =
+        !d.industry && !d.size && !d.geo && !d.buyer && !d.pain && !d.trigger;
+    if (!untouched) return;
+    const latest = icps[icps.length - 1];
+    draft.value = {
+        ...d,
+        role: latest.role,
+        industry: latest.industry ? "custom" : "",
+        industryCustom: latest.industry,
+        size: latest.size,
+        geo: latest.geo,
+        buyer: latest.buyer ? "custom" : "",
+        buyerCustom: latest.buyer,
+        pain: latest.pain,
+        trigger: latest.trigger,
+        proofWindow: latest.proofWindow,
+        engineActive: latest.engineActive ? String(latest.engineActive) : d.engineActive
+    };
+}
+
 export function setSavedIcps(next: ReadonlyArray<SavedIcp>): void {
     savedIcps.value = next;
+    hydrateDraftFromLatest(next);
 }
 
 export function appendSavedIcp(icp: SavedIcp): void {

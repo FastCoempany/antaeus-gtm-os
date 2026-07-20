@@ -476,9 +476,9 @@ window.__LUCA_SEED__.ent={
    checks:{icp_defined:true,discovery_method:true,objection_handling:true,competitive_positioning:true,loss_patterns:true},
    notes:'Luca sells screening at volume. The enterprise book runs on public hiring events — seasonal ramps, production rebuilds, growth plans — because those create urgency no cold pitch can. Two rules from the record: open the security conversation in week 1 (the Palantir lesson), and when the incumbent ATS bundles a screening add-on, sell the outcome delta and get to the signer before renewal season (the Gap lesson).'},
   icps:[
-    {id:'icp_e1',name:'Frontline Volume Hirers',industry:'Retail / Food Service / Aviation / Logistics',size:'10,000+ employees',geo:'North America',buyer:'VP Talent Acquisition',pain:'Seasonal or standing volume hiring outrunning the recruiting team; screening by gut at scale',trigger:'A public hiring wave — seasonal ramp, production rebuild, expansion announcement',proofWindow:'30-60 days',worked:true,statement:'We sell to enterprises hiring thousands into frontline roles, where the VP of Talent Acquisition needs screening quality to survive volume — and a public hiring event has already started the clock.',saved_at:d(210)},
     {id:'icp_e2',name:'AI-Native Talent Wars',industry:'AI / Software / Data',size:'1,000-10,000 employees',geo:'US',buyer:'Head of Recruiting Operations',pain:'Engineering funnels with extreme selectivity; speed-to-offer losing candidates to rivals',trigger:'Funding round with a public hiring plan, or a publicized talent war',proofWindow:'30-45 days',worked:true,statement:'AI-native companies hiring engineers against the fastest-moving rivals in tech, where days from application to offer decide who gets the hire.',saved_at:d(160)},
-    {id:'icp_e3',name:'People-Org Resets',industry:'Any',size:'25,000+ employees',geo:'US',buyer:'SVP People Operations',pain:'New people leadership rebuilding the talent stack',trigger:'A new CHRO/CPO or a people-org restructuring in the last two quarters',proofWindow:'60-120 days',worked:false,statement:'Enterprises whose people leadership changed in the last two quarters — the window when the talent stack gets re-picked.',saved_at:d(120)}],
+    {id:'icp_e3',name:'People-Org Resets',industry:'Any',size:'25,000+ employees',geo:'US',buyer:'SVP People Operations',pain:'New people leadership rebuilding the talent stack',trigger:'A new CHRO/CPO or a people-org restructuring in the last two quarters',proofWindow:'60-120 days',worked:false,statement:'Enterprises whose people leadership changed in the last two quarters — the window when the talent stack gets re-picked.',saved_at:d(120)},
+    {id:'icp_e1',name:'Frontline Volume Hirers',industry:'Retail / Food Service / Aviation / Logistics',size:'10,000+ employees',geo:'North America',buyer:'VP Talent Acquisition',pain:'Seasonal or standing volume hiring outrunning the recruiting team; screening by gut at scale',trigger:'A public hiring wave — seasonal ramp, production rebuild, expansion announcement',proofWindow:'30-60 days',worked:true,statement:'We sell to enterprises hiring thousands into frontline roles, where the VP of Talent Acquisition needs screening quality to survive volume — and a public hiring event has already started the clock.',saved_at:d(210)}],
   accounts:accts,
   deals:deals,
   stageHistory:stageHistory,
@@ -601,16 +601,16 @@ E.shared={
   {id:'cc_e7',accountName:'Ulta Beauty',contactName:'',contactTitle:'',outcome:'voicemail',duration:40,notes:'',createdAt:d(6)},
   {id:'cc_e8',accountName:'Southwest Airlines',contactName:'',contactTitle:'',outcome:'no_answer',duration:15,notes:'',createdAt:d(3)}]},
  linkedinLog:{actions:[
-  {id:'li_e1',type:'connection',action:'connection',accountName:'Boeing',outcome:'accepted',createdAt:d(30)},
-  {id:'li_e2',type:'content_engage',action:'content_engage',accountName:'Boeing',outcome:null,createdAt:d(24)},
-  {id:'li_e3',type:'dm',action:'dm',accountName:'Boeing',outcome:'replied',createdAt:d(20)},
-  {id:'li_e4',type:'connection',action:'connection',accountName:'OpenAI',outcome:'accepted',createdAt:d(18)},
-  {id:'li_e5',type:'content_engage',action:'content_engage',accountName:'OpenAI',outcome:null,createdAt:d(13)},
-  {id:'li_e6',type:'connection',action:'connection',accountName:'Databricks',outcome:'pending',createdAt:d(7)},
-  {id:'li_e7',type:'content_engage',action:'content_engage',accountName:'Starbucks',outcome:null,createdAt:d(10)},
-  {id:'li_e8',type:'dm',action:'dm',accountName:'United Airlines',outcome:'no_response',createdAt:d(15)},
-  {id:'li_e9',type:'connection',action:'connection',accountName:'Nike',outcome:'accepted',createdAt:d(9)},
-  {id:'li_e10',type:'connection',action:'connection',accountName:'Marriott International',outcome:'pending',createdAt:d(4)}]},
+  {id:'li_e1',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Boeing',outcome:'accepted',createdAt:d(30)},
+  {id:'li_e2',cueLabel:'Comment with one useful observation',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Boeing',outcome:null,createdAt:d(24)},
+  {id:'li_e3',cueLabel:'Connect after recognition',actionType:'dm',type:'dm',action:'dm',accountName:'Boeing',outcome:'replied',createdAt:d(20)},
+  {id:'li_e4',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'OpenAI',outcome:'accepted',createdAt:d(18)},
+  {id:'li_e5',cueLabel:'Comment with one useful observation',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'OpenAI',outcome:null,createdAt:d(13)},
+  {id:'li_e6',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Databricks',outcome:'pending',createdAt:d(7)},
+  {id:'li_e7',cueLabel:'Watch the public signal',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Starbucks',outcome:null,createdAt:d(10)},
+  {id:'li_e8',cueLabel:'Watch the public signal',actionType:'dm',type:'dm',action:'dm',accountName:'United Airlines',outcome:'no_response',createdAt:d(15)},
+  {id:'li_e9',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Nike',outcome:'accepted',createdAt:d(9)},
+  {id:'li_e10',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Marriott International',outcome:'pending',createdAt:d(4)}]},
  angles:[
   {company:'Boeing',trigger:'expansion',persona:'VP Talent Acquisition',email:'Open on the production rebuild: every factory hire is now a quality decision, and the screening layer is where quality starts.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(25)},
   {company:'Starbucks',trigger:'expansion',persona:'VP Talent Acquisition',email:'The Green Apron investment puts more people on the floor — the screen decides whether they are the right ones. Chipotle math attached.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(17)},
@@ -643,7 +643,18 @@ E.shared={
   'note_3':'Fastest closes had the signer in the room by week 3 and a pilot scoped in discovery. Chipotle is the template: peer intro, seasonal math, two-week pilot, done.',
   'note_4':'Two loss patterns to kill: security reviews that start at proposal (Palantir), and incumbent ATS bundles beating us on procurement ease (Gap). Week-1 security conversation and outcome-delta selling are now standard.'}};
 
-E.pilotDesk={'openai':{startedAt:d(12),circle:[
+E.pilotDesk={'boeing':{startedAt:d(52),circle:[
+  {id:'pbo_1',name:'Karen Mitchell',role:'VP Talent Acquisition',kind:'champion',active:true},
+  {id:'pbo_2',name:'Doug Reyes',role:'SVP People Operations',kind:'signoff',active:false},
+  {id:'pbo_3',name:'Pete Kowalski',role:'Head of Recruiting Operations',kind:'hands_on',active:true},
+  {id:'pbo_4',name:'Alma Reyes-Fulton',role:'Production Recruiter',kind:'hands_on',active:true},
+  {id:'pbo_5',name:'Jim Castile',role:'Production Recruiter',kind:'hands_on',active:true},
+  {id:'pbo_6',name:'Nina Vo',role:'Recruiting Coordinator',kind:'hands_on',active:true}],
+ checkins:[{at:d(45),actions:31},{at:d(38),actions:58},{at:d(31),actions:74},{at:d(24),actions:88}],
+ shared:['getting_started','role_quickstarts','champion_kit','kickoff_note','case_study'],
+ closedGaps:['it_person','second_site'],stepsDone:3,stage:5,
+ writeup:'Three weeks on the Renton machinist funnel: every application screened inside a day (the backlog was eleven days when we started), recruiter hours per hire down 44%, and quality-of-hire flags surfaced before interviews instead of after offers. Doug can carry this to the CFO without us in the room — the screening layer holds at strike-rebuild volume.'},
+'openai':{startedAt:d(12),circle:[
   {id:'pc_1',name:'Mia Kessler',role:'Head of Recruiting Operations',kind:'champion',active:true},
   {id:'pc_2',name:'Jonah Price',role:'VP People',kind:'signoff',active:false},
   {id:'pc_3',name:'Tara Bloom',role:'Lead Technical Recruiter',kind:'hands_on',active:true},

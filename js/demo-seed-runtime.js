@@ -245,6 +245,27 @@ window.seed=function(mode){
   w('gtmos_pilot_desk_v1',data.pilotDesk||{});
   w('gtmos_getting_to_signed_v1',data.gts||{});
   w('gtmos_cold_call_custom_pushbacks_v1',data.customPushbacks||[]);
+  // The LinkedIn + Outbound rooms boot from the cloud `sequences`
+  // table (demo-local: gtmos_demo__sequences) and REPLACE local state
+  // when cloud rows exist. Pre-seed that table in cloud row shape so
+  // both rooms boot deterministically on the seeded history instead of
+  // running a boot-time migration.
+  var seqRows=[];
+  (sh.linkedinLog.actions||[]).forEach(function(a,i){
+    seqRows.push({id:'seq_li_'+mode+'_'+i,sequence_key:'linkedin',name:a.accountName||'',title:'',created_at:a.createdAt,
+      data:{contactName:a.contactName||'',actionType:a.actionType||a.type||'connection',temperature:'cool',content:'',
+        motionKey:'credibility',motionLabel:'',cueLabel:a.cueLabel||'',whyNow:'',recommendedNext:'',
+        outcome:a.outcome||null,outcomeDate:a.outcomeDate||null}});
+  });
+  (sh.outboundTouches.touches||[]).forEach(function(x,i){
+    seqRows.push({id:'seq_ob_'+mode+'_'+i,sequence_key:'outbound',name:x.accountName||'',title:x.content||'',created_at:x.createdAt,
+      data:{account:x.account||'',accountName:x.accountName||'',contactName:x.contactName||'',contactTitle:x.contactTitle||'',
+        persona:x.persona,temperature:x.temperature,channel:x.channel,trigger:x.trigger,ctaType:x.ctaType,
+        assetUsed:x.assetUsed,outcome:x.outcome||null,outcomeDate:x.outcomeDate||null,dealId:x.dealId||null,
+        qualityScore:x.qualityScore||0,motionBand:x.motionBand||'workable'}});
+  });
+  try{localStorage.setItem('gtmos_demo__sequences',JSON.stringify(seqRows));keys++}catch(e){}
+
   // Outdoors Events rows land on the demo-local data client's key —
   // already namespaced, so the shim passes it through untouched.
   try{

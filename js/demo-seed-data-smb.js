@@ -308,9 +308,9 @@ window.__LUCA_SEED__.smb={
    checks:{icp_defined:true,discovery_method:true,objection_handling:true,competitive_positioning:true,loss_patterns:true},
    notes:'The SMB book runs on expansion news. A new plant, a store-a-week pace, a category launch — that is the whole prospecting engine. Two lessons live in the losses: anchor turnaround accounts to a dated event or wait (Allbirds), and quote the one-funnel package to discipline-era buyers (Eventbrite). Multi-thread even the small ones (Vimeo).'},
   icps:[
-    {id:'icp_s1',name:'Expansion-Wave Consumer',industry:'Food service / DTC / CPG',size:'200-2,000 employees',geo:'US',buyer:'Head of People',pain:'Opening crews and production hires screened by whoever has a free hour',trigger:'Announced expansion — stores, plants, markets',proofWindow:'14-30 days',worked:true,statement:'Growth consumer brands whose expansion news dates their hiring need — we call the week the announcement lands.',saved_at:d(180)},
     {id:'icp_s2',name:'Scale-up Software',industry:'Software / AI',size:'300-3,000 employees',geo:'US + EU',buyer:'Head of People / Recruiting Lead',pain:'High-bar funnels read by hand; recruiting team of two or three',trigger:'Funding or a public growth milestone',proofWindow:'14-30 days',worked:true,statement:'Software scale-ups where two recruiters carry a thousand openings — the pilot pays for itself in recruiter hours inside a month.',saved_at:d(140)},
-    {id:'icp_s3',name:'Discipline-Era Operators',industry:'Any',size:'300-1,500 employees',geo:'US',buyer:'Head of People + CFO',pain:'Hiring under efficiency scrutiny; every seat justified',trigger:'Public cost program or post-restructure rebuild',proofWindow:'30-45 days',worked:false,statement:'Companies in their discipline era, where the screen is recruiter leverage they do not have to hire.',saved_at:d(90)}],
+    {id:'icp_s3',name:'Discipline-Era Operators',industry:'Any',size:'300-1,500 employees',geo:'US',buyer:'Head of People + CFO',pain:'Hiring under efficiency scrutiny; every seat justified',trigger:'Public cost program or post-restructure rebuild',proofWindow:'30-45 days',worked:false,statement:'Companies in their discipline era, where the screen is recruiter leverage they do not have to hire.',saved_at:d(90)},
+    {id:'icp_s1',name:'Expansion-Wave Consumer',industry:'Food service / DTC / CPG',size:'200-2,000 employees',geo:'US',buyer:'Head of People',pain:'Opening crews and production hires screened by whoever has a free hour',trigger:'Announced expansion — stores, plants, markets',proofWindow:'14-30 days',worked:true,statement:'Growth consumer brands whose expansion news dates their hiring need — we call the week the announcement lands.',saved_at:d(180)}],
   accounts:accts,deals:deals,stageHistory:stageHistory,advisors:advisors,
   deployments:[
     {id:'dep_s1',dealName:'Sweetgreen',momentId:'reference',advisorId:'adv_l3',outcome:'successful',outcomeDate:d(20),notes:'Dana told the Chipotle story peer-to-peer — moved the evaluation to a redline round',createdAt:d(24)},
@@ -415,14 +415,17 @@ E.shared={
   {id:'cc_s6',accountName:'Miro',contactName:'',contactTitle:'',outcome:'voicemail',duration:35,notes:'',createdAt:d(3)},
   {id:'cc_s7',accountName:'Spindrift',contactName:'Colin Mercer',contactTitle:'Head of People',outcome:'callback_scheduled',duration:150,notes:'Renewal-adjacent — wants the year-one numbers before expanding.',createdAt:d(15)}]},
  linkedinLog:{actions:[
-  {id:'li_s1',type:'connection',action:'connection',accountName:'Notion',outcome:'accepted',createdAt:d(25)},
-  {id:'li_s2',type:'content_engage',action:'content_engage',accountName:'Notion',outcome:null,createdAt:d(19)},
-  {id:'li_s3',type:'dm',action:'dm',accountName:'Notion',outcome:'replied',createdAt:d(15)},
-  {id:'li_s4',type:'connection',action:'connection',accountName:'Chomps',outcome:'accepted',createdAt:d(14)},
-  {id:'li_s5',type:'content_engage',action:'content_engage',accountName:'Warby Parker',outcome:null,createdAt:d(11)},
-  {id:'li_s6',type:'connection',action:'connection',accountName:'Gymshark',outcome:'accepted',createdAt:d(9)},
-  {id:'li_s7',type:'dm',action:'dm',accountName:'Liquid Death',outcome:'no_response',createdAt:d(7)},
-  {id:'li_s8',type:'connection',action:'connection',accountName:'Lemonade',outcome:'pending',createdAt:d(3)}]},
+  {id:'li_s0a',cueLabel:'Watch the public signal',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Sweetgreen',outcome:null,createdAt:d(21)},
+  {id:'li_s0b',cueLabel:'Comment with one useful observation',actionType:'connection',type:'connection',action:'connection',accountName:'Sweetgreen',outcome:'accepted',createdAt:d(17)},
+  {id:'li_s0c',cueLabel:'Connect after recognition',actionType:'dm',type:'dm',action:'dm',accountName:'Sweetgreen',outcome:'replied',createdAt:d(12)},
+  {id:'li_s1',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Notion',outcome:'accepted',createdAt:d(25)},
+  {id:'li_s2',cueLabel:'Comment with one useful observation',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Notion',outcome:null,createdAt:d(19)},
+  {id:'li_s3',cueLabel:'Connect after recognition',actionType:'dm',type:'dm',action:'dm',accountName:'Notion',outcome:'replied',createdAt:d(15)},
+  {id:'li_s4',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Chomps',outcome:'accepted',createdAt:d(14)},
+  {id:'li_s5',cueLabel:'Watch the public signal',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Warby Parker',outcome:null,createdAt:d(11)},
+  {id:'li_s6',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Gymshark',outcome:'accepted',createdAt:d(9)},
+  {id:'li_s7',cueLabel:'Watch the public signal',actionType:'dm',type:'dm',action:'dm',accountName:'Liquid Death',outcome:'no_response',createdAt:d(7)},
+  {id:'li_s8',cueLabel:'Watch the public signal',actionType:'connection',type:'connection',action:'connection',accountName:'Lemonade',outcome:'pending',createdAt:d(3)}]},
  angles:[
   {company:'Sweetgreen',trigger:'expansion',persona:'Head of Talent Operations',email:'Every new market is an opening crew hired on a deadline. The screen reads them before your managers have to.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(28)},
   {company:'Notion',trigger:'expansion',persona:'Recruiting Lead',email:'1,300 openings, every application read by hand. Two weeks on your busiest funnel shows the hours coming back.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(18)},
@@ -450,7 +453,17 @@ E.shared={
   'note_0':'The SMB engine is expansion news. Openings, plants, launches — the announcement dates the need and the call lands warm.',
   'note_3':'Wins ride dated events: Rothy\'s store fleet, Tecovas openings, Siete integration. Every win had a date attached before we called.',
   'note_4':'Losses: no forcing event (Allbirds), platform-priced a one-problem buyer (Eventbrite), single-threaded into a freeze (Vimeo). Anchor to dates, quote one funnel first, multi-thread everything.'}};
-E.pilotDesk={'notion':{startedAt:d(8),circle:[
+E.pilotDesk={'sweetgreen':{startedAt:d(38),circle:[
+  {id:'psg_1',name:'Rafael Ibanez',role:'Head of Talent Operations',kind:'champion',active:true},
+  {id:'psg_2',name:'Whitney Cole',role:'VP People',kind:'signoff',active:false},
+  {id:'psg_3',name:'Marisol Vega',role:'Field Recruiter',kind:'hands_on',active:true},
+  {id:'psg_4',name:'Devon Okoye',role:'Field Recruiter',kind:'hands_on',active:true},
+  {id:'psg_5',name:'Tessa Whitman',role:'Recruiting Coordinator',kind:'hands_on',active:true}],
+ checkins:[{at:d(31),actions:22},{at:d(24),actions:41},{at:d(17),actions:57}],
+ shared:['getting_started','role_quickstarts','champion_kit','kickoff_note'],
+ closedGaps:['it_person'],stepsDone:3,stage:5,
+ writeup:'Two market openings ran with the screen on. Crew applications got a first read inside 24 hours (was 4 days); store managers spent half the screening hours they did in the last opening wave; both opening crews hit their start dates fully staffed. Whitney can take this to finance as-is: the screen paid for itself inside the window.'},
+'notion':{startedAt:d(8),circle:[
   {id:'ps_1',name:'Sofia Marchetti',role:'Recruiting Lead',kind:'champion',active:true},
   {id:'ps_2',name:'Ben Whitaker',role:'Head of People',kind:'signoff',active:false},
   {id:'ps_3',name:'Kai Nakamura',role:'Senior Recruiter',kind:'hands_on',active:true},
