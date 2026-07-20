@@ -152,10 +152,7 @@ function hydrateDraftFromLatest(icps: ReadonlyArray<SavedIcp>): void {
     const untouched =
         !d.industry && !d.size && !d.geo && !d.buyer && !d.pain && !d.trigger;
     if (!untouched) return;
-    // Prefer the most recent definition marked worked — that's the one
-    // the rest of the workspace actually hunts with.
-    const worked = [...icps].reverse().find((i) => i.worked);
-    const latest = worked ?? icps[icps.length - 1];
+    const latest = icps[icps.length - 1];
     draft.value = {
         ...d,
         role: latest.role,
