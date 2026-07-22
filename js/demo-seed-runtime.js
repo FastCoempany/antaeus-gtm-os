@@ -245,6 +245,27 @@ window.seed=function(mode){
   w('gtmos_pilot_desk_v1',data.pilotDesk||{});
   w('gtmos_getting_to_signed_v1',data.gts||{});
   w('gtmos_cold_call_custom_pushbacks_v1',data.customPushbacks||[]);
+  // Signal Console v4 is cloud-native: accounts hydrate from the
+  // demo-local `signal_console_accounts` table (signals ride each
+  // account row's data blob; the standalone `signals` table gets the
+  // same rows) — without these, every card reads "no signals yet".
+  var scRows=[]; var sigRows=[];
+  (data.accounts||[]).forEach(function(a){
+    var sigs=(a.signals||[]).map(function(g){
+      return {id:g.id,signal_type:g.cat||'other',headline:g.headline||'',source:g.source_name||'',
+        published_date:g.published_date||null,fetched_at:g.fetched_at||g.published_date||null,
+        confidence:(typeof g.confidence==='number')?g.confidence:null,is_ai:!!g.is_ai,flagged:false,
+        note:'',data:{detail:g.detail||'',why_it_matters:g.why_it_matters||'',status:g.status||''}};
+    });
+    scRows.push({id:a.id,account_name:a.name,ticker:a.ticker||null,domain:a.domain||null,
+      industry:a.industry||null,relationship_type:'prospect',last_enriched_at:null,
+      created_at:a.created_at||new Date().toISOString(),updated_at:a.updated_at||new Date().toISOString(),
+      data:{hq:a.hq||'',employees:a.employees||'',signals:sigs}});
+    sigs.forEach(function(g){sigRows.push(Object.assign({account_id:a.id},g))});
+  });
+  try{localStorage.setItem('gtmos_demo__signal_console_accounts',JSON.stringify(scRows));keys++}catch(e){}
+  try{localStorage.setItem('gtmos_demo__signals',JSON.stringify(sigRows));keys++}catch(e){}
+
   // The LinkedIn + Outbound rooms boot from the cloud `sequences`
   // table (demo-local: gtmos_demo__sequences) and REPLACE local state
   // when cloud rows exist. Pre-seed that table in cloud row shape so
