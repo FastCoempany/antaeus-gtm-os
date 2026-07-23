@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus — The Grounded Cut (D4 stage)</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+/* D4 · THE GROUNDED CUT — 75s self-running stage. The flagship.
+   Brief: deliverables/teaser/brief-d4-the-grounded-cut-2026-07-23.md
+   The Myth's frame · the Shards' language · the Day's clock.
+   Three laws: growth from the line · the honest clock · one orange frame. */
+:root{
+  --field:#f6f8fc; --ink:#0a1c40; --orange:#e6701e; --forest:#1b5e3f;
+  --red:#cf3b34; --blue:#2563eb;
+  --serif:'DM Serif Display',Georgia,serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--field);
+  font-family:var(--serif);color:var(--ink)}
+#paper{position:absolute;inset:0;opacity:.4;transition:opacity 6s ease;
+  background-image:linear-gradient(rgba(10,28,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(10,28,64,.045) 1px,transparent 1px);
+  background-size:33px 33px}
+body.grounded #paper{opacity:1}
+/* the day's temperature, compressed — cool dawn → true bright → warm slant. never night. */
+#cool{position:absolute;inset:0;opacity:0;transition:opacity 6s ease;
+  background:radial-gradient(1200px 700px at 50% 0%,rgba(37,99,235,.07),transparent)}
+body.dawn #cool{opacity:1}
+#warm{position:absolute;inset:0;opacity:0;transition:opacity 8s ease;
+  background:linear-gradient(105deg,rgba(230,112,30,.05),transparent 55%)}
+body.evening #warm{opacity:1}
+/* the one orange frame (10:48) */
+#ignitewash{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;
+  background:radial-gradient(1100px 640px at 50% 42%,rgba(230,112,30,.15),transparent)}
+#ignitewash.on{opacity:1}
+#world{position:absolute;inset:0;transition:transform 50s linear}
+body.push #world{transform:scale(1.05)}
+
+/* ── the ground line ── */
+#line{position:absolute;left:0;right:0;top:78%;height:2.5px;background:var(--ink);
+  opacity:.12;transform:scaleX(.32);transform-origin:center;
+  transition:opacity 1s ease,transform .9s cubic-bezier(.3,.9,.3,1)}
+body.grounded #line{opacity:.7;transform:scaleX(1)}
+#pulse{position:absolute;left:50%;top:78%;width:14px;height:14px;border-radius:50%;
+  border:3px solid var(--orange);transform:translate(-50%,-50%) scale(.2);opacity:0}
+#pulse.go{animation:pl .68s ease-out forwards}
+@keyframes pl{0%{opacity:.95;transform:translate(-50%,-50%) scale(.2)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+#ripple{position:absolute;left:0;right:0;top:78%;margin-top:14px;text-align:center;
+  font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.34em;
+  color:rgba(10,28,64,.34);opacity:0;transition:opacity 1.4s ease}
+#ripple.on{opacity:1}
+
+/* ── the clock — exists only between TOUCH and the settling ── */
+#clock{position:absolute;top:44px;right:56px;font-family:var(--mono);font-weight:700;
+  font-size:20px;letter-spacing:.14em;color:rgba(10,28,64,.62);display:flex;
+  opacity:0;transition:opacity 1s ease}
+#clock.on{opacity:1}
+#clock .ch{display:inline-block;white-space:pre}
+#clock .ch.roll{animation:chroll .42s cubic-bezier(.3,.9,.3,1)}
+@keyframes chroll{0%{transform:translateY(12px);opacity:0}100%{transform:translateY(0);opacity:1}}
+body.ignite #clock{opacity:.5}
+
+/* ── the mark ── */
+#mark{position:absolute;left:50%;top:16%;width:132px;height:132px;margin-left:-66px;
+  transition:top 4.6s cubic-bezier(.45,.05,.55,.95),transform 4.6s ease}
+#mark svg{width:100%;height:100%;overflow:visible}
+#mark path{stroke:var(--ink);fill:none;stroke-width:2.2;opacity:.55;
+  transition:stroke-width 1.6s ease,opacity 1.6s ease}
+#mark{transform:rotate(-7deg)}
+#mark #bar{opacity:0}
+body.grounded #mark{transform:rotate(0)}
+body.grounded #mark path{stroke-width:3.4;opacity:1}
+body.grounded #mark #bar{opacity:1}
+#mark2{position:absolute;left:58.5%;top:78%;width:108px;height:108px;margin-top:-85.5px;
+  clip-path:inset(-60px 0 22.5px 0);}
+#mark2 .rise{transform:translateY(115%);transition:transform 1.9s cubic-bezier(.3,.9,.3,1)}
+#mark2.on .rise{transform:translateY(0)}
+#mark2 path{stroke:var(--forest);fill:none;stroke-width:3.4}
+
+/* ── act I ── */
+.truth{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:54px;
+  letter-spacing:-.01em;opacity:0;transition:opacity 1.2s ease}
+.truth.on{opacity:1}
+#yours{font-size:96px;top:41%}
+#whisper1{position:absolute;left:0;right:0;top:60%;text-align:center;font-family:var(--mono);
+  font-weight:700;font-size:13px;letter-spacing:.3em;color:rgba(10,28,64,.34);
+  opacity:0;transition:opacity 1.2s ease}
+#whisper1.on{opacity:1}
+
+/* ── act III shards — the growth law ── */
+.shard{position:absolute;left:0;right:0;top:0;height:78%;overflow:hidden;pointer-events:none}
+.shard .grow{position:absolute;inset:0;transform:translateY(103%);
+  transition:transform 1.7s cubic-bezier(.3,.9,.3,1)}
+.shard.on .grow{transform:translateY(0)}
+.shard.off .grow{transform:translateY(103%);transition-duration:.9s}
+.slabel{position:absolute;left:0;right:0;top:9%;text-align:center;font-size:52px;
+  letter-spacing:-.01em;opacity:0;transition:opacity 1s ease .5s;padding:0 220px;line-height:1.25}
+.shard.on .slabel{opacity:1}
+.shard.off .slabel{opacity:0;transition-delay:0s}
+.smono{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.22em;
+  color:rgba(10,28,64,.4)}
+
+/* 7:31 · the pick (thin-orange word, not the full frame) */
+#s6 .names{position:absolute;left:0;right:0;bottom:0;height:520px;text-align:center}
+#s6 .nm{position:absolute;left:50%;font-family:'Public Sans',sans-serif;font-weight:600;
+  font-size:26px;color:rgba(10,28,64,.22);white-space:nowrap}
+#s6 #boeing{font-family:var(--serif);font-size:98px;font-weight:400;color:var(--ink);
+  transition:color 1s ease}
+#s6.ignite #boeing{color:var(--orange)}
+#s6 .bmono{position:absolute;left:50%;transform:translateX(-50%);bottom:96px;opacity:0;transition:opacity 1s ease}
+#s6.ignite .bmono{opacity:1}
+
+/* 9:12 · the wire (tagged sentences stack; the count rolls at the stem's top) */
+#s7 .stem{position:absolute;left:24%;bottom:0;width:3px;height:520px;background:rgba(10,28,64,.18)}
+#s7 .count{position:absolute;left:24%;transform:translateX(-50%);bottom:530px;font-size:110px;line-height:1}
+#s7 .count .d{display:inline-block}
+#s7 .count .d.roll{animation:chroll .5s cubic-bezier(.3,.9,.3,1)}
+#s7 .cl{position:absolute;left:24%;transform:translateX(-50%);bottom:496px;white-space:nowrap;
+  background:var(--field);padding:0 12px}
+#s7 .wires{position:absolute;left:34%;bottom:120px;width:760px}
+#s7 .wl{margin-bottom:26px;font-size:27px;font-family:'Public Sans',sans-serif;
+  color:rgba(10,28,64,.85);opacity:0;transform:translateY(14px);
+  transition:opacity .5s ease,transform .5s cubic-bezier(.3,.9,.3,1)}
+#s7 .wl.in{opacity:1;transform:translateY(0)}
+#s7 .wl .tag{display:block;font-family:var(--mono);font-weight:700;font-size:12px;
+  letter-spacing:.28em;margin-bottom:6px;color:rgba(10,28,64,.45)}
+
+/* 10:48 · the ignition (the one orange frame) */
+#s8 .big{position:absolute;left:0;right:0;bottom:300px;text-align:center;font-size:64px;
+  color:var(--orange);padding:0 200px;line-height:1.25}
+#s8 .tag{position:absolute;left:0;right:0;bottom:470px;text-align:center;
+  font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.3em;color:var(--orange)}
+
+/* 2:20 · the thread */
+#s9 .big{position:absolute;left:0;right:0;bottom:420px;text-align:center;font-size:92px;
+  line-height:1;color:rgba(10,28,64,.55)}
+#s9 svg{position:absolute;left:220px;bottom:230px;width:1480px;height:60px;overflow:visible}
+#s9 .rail{stroke:rgba(10,28,64,.5);stroke-width:2;fill:none;
+  stroke-dasharray:1480;stroke-dashoffset:1480;transition:stroke-dashoffset 2.2s cubic-bezier(.3,.9,.3,1)}
+#s9.draw .rail{stroke-dashoffset:0}
+#s9 .node{fill:var(--ink);opacity:0;transition:opacity .4s ease}
+#s9.draw .node{opacity:.8}
+#s9 .wp{position:absolute;bottom:190px;font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.16em;color:rgba(10,28,64,.5);transform:translateX(-50%);
+  opacity:0;transition:opacity .5s ease}
+#s9.draw .wp{opacity:1}
+
+/* 4:45 · the honest beat */
+#s10 .red{position:absolute;right:52%;bottom:210px;width:640px;
+  font-size:47px;color:var(--red);text-align:right;line-height:1.3}
+#s10 .ans{position:absolute;left:52%;bottom:216px;width:420px;font-size:47px;
+  color:var(--orange);border-left:4px solid var(--orange);padding-left:26px;
+  opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s cubic-bezier(.3,.9,.3,1)}
+#s10.answer .ans{opacity:1;transform:translateY(0)}
+
+/* 6:22 · the face-off (columns slide ALONG the line — the one sanctioned exception) */
+#s11 .col{position:absolute;bottom:200px;width:520px;transition:transform .8s cubic-bezier(.3,.9,.3,1)}
+#s11 .colL{left:170px;text-align:right;transform:translateX(-980px)}
+#s11 .colR{right:170px;transform:translateX(980px)}
+#s11.face .col{transform:translateX(0)}
+#s11 .ck{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.28em;
+  color:rgba(10,28,64,.45);margin-bottom:16px}
+#s11 .ct{font-size:44px;line-height:1.28}
+#s11 .barwrap{position:absolute;left:50%;transform:translateX(-50%);bottom:60px;width:480px;
+  opacity:0;transition:opacity .6s ease}
+#s11.face .barwrap{opacity:1}
+#s11 .bn{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:700;
+  font-size:14px;color:rgba(10,28,64,.55);margin-bottom:10px}
+#s11 .track{height:11px;background:rgba(10,28,64,.1);border-radius:6px;overflow:hidden}
+#s11 .fill{height:100%;width:0;background:var(--forest);border-radius:6px;
+  transition:width 2.2s cubic-bezier(.3,.9,.3,1)}
+#s11.fillbar .fill{width:78.6%}
+
+/* 11:47 · the settling */
+#s12 .book{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:560px;height:330px}
+#s12 .page{position:absolute;bottom:0;width:280px;height:310px;background:#fff;
+  border:1.5px solid rgba(10,28,64,.18);box-shadow:0 16px 40px rgba(10,28,64,.1)}
+#s12 .pl{left:0;border-radius:10px 3px 0 0;transform-origin:bottom right;transform:rotate(-1.6deg)}
+#s12 .pr{right:0;border-radius:3px 10px 0 0;transform-origin:bottom left;transform:rotate(1.6deg)}
+#s12 .book::after{content:'';position:absolute;left:50%;bottom:0;width:2px;height:300px;
+  margin-left:-1px;background:rgba(10,28,64,.22)}
+#s12 .pw{position:absolute;left:26px;right:26px;top:40px;font-family:var(--mono);
+  font-weight:700;font-size:11.5px;letter-spacing:.16em;color:rgba(10,28,64,.4);line-height:2.4;
+  opacity:0;transition:opacity 1.4s ease .9s}
+#s12.on .pw{opacity:1}
+
+#close{position:absolute;left:0;right:0;top:84.5%;text-align:center;font-style:italic;
+  font-size:44px;opacity:0;transition:opacity 1.3s ease}
+#close.on{opacity:1}
+
+#card{position:absolute;inset:0;background:var(--field);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:26px;opacity:0;transition:opacity 1s ease;z-index:50}
+#card.on{opacity:1}
+#card .k{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.3em;color:rgba(10,28,64,.5)}
+#card .l{font-size:58px}
+#card .u{font-family:'Public Sans',sans-serif;font-size:20px;color:rgba(10,28,64,.6)}
+#card .t{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.24em;color:rgba(10,28,64,.32)}
+</style>
+</head>
+<body class="dawn">
+<div id="paper"></div><div id="cool"></div><div id="warm"></div><div id="ignitewash"></div>
+<div id="world">
+  <div id="line"></div>
+  <div id="pulse"></div>
+  <div id="ripple">WATCHING&nbsp;&nbsp;·&nbsp;&nbsp;COUNTING&nbsp;&nbsp;·&nbsp;&nbsp;REMEMBERING</div>
+
+  <div id="mark"><svg viewBox="0 0 48 48">
+    <path d="M14 38L24 10l10 28"/><path id="bar" d="M18.2 28h11.6"/>
+  </svg></div>
+
+  <div class="truth" id="t1">Your whole revenue motion lives in one head.</div>
+  <div class="truth" id="yours">Yours.</div>
+  <div id="whisper1">AND&nbsp;HEADS&nbsp;DON'T&nbsp;SCALE</div>
+
+  <!-- 7:31 · the pick -->
+  <div class="shard" id="s6">
+    <div class="slabel">The one move that matters. Picked.<br>With the reason attached.</div>
+    <div class="grow"><div class="names">
+      <span class="nm" style="left:22%;bottom:300px">Delta Air Lines</span>
+      <span class="nm" style="left:64%;bottom:360px">FedEx</span>
+      <span class="nm" style="left:30%;bottom:150px">Marriott</span>
+      <span class="nm" style="left:70%;bottom:180px">Nike</span>
+      <span class="nm" style="left:16%;bottom:430px">Starbucks</span>
+      <span class="nm" style="left:74%;bottom:470px">OpenAI</span>
+      <span class="nm" style="left:26%;bottom:520px">Chipotle</span>
+      <span class="nm" style="left:66%;bottom:80px">Uber</span>
+      <span id="boeing" class="nm" style="bottom:210px;transform:translateX(-50%)">Boeing</span>
+      <div class="bmono smono">HEAT&nbsp;62&nbsp;·&nbsp;FRESH&nbsp;SIGNALS</div>
+    </div></div>
+  </div>
+
+  <!-- 9:12 · the wire -->
+  <div class="shard" id="s7">
+    <div class="slabel">Captured. Counted. Nobody logged anything.</div>
+    <div class="grow">
+      <div class="stem"></div>
+      <div class="count"><span class="d" id="cnt">13</span></div>
+      <div class="cl smono">TODAY&nbsp;·&nbsp;LOGGED&nbsp;OR&nbsp;CAPTURED</div>
+      <div class="wires">
+        <div class="wl" id="w1"><span class="tag">YOU</span>You reached out to Boeing — counted.</div>
+        <div class="wl" id="w2"><span class="tag" style="color:var(--blue)">THE MACHINE</span>Calendar — Thursday with United is confirmed.</div>
+        <div class="wl" id="w3"><span class="tag" style="color:var(--blue)">THE MACHINE</span>Nordstrom still has no dated next step.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10:48 · the ignition -->
+  <div class="shard" id="s8">
+    <div class="grow">
+      <div class="tag">THE&nbsp;BUYERS</div>
+      <div class="big">Starbucks replied — after 20 quiet days.</div>
+    </div>
+  </div>
+
+  <!-- 2:20 · the thread -->
+  <div class="shard" id="s9">
+    <div class="slabel">One account. Its whole life. One thread.</div>
+    <div class="grow">
+      <div class="big">Boeing</div>
+      <svg viewBox="0 0 1480 60" preserveAspectRatio="none">
+        <path class="rail" d="M0 30H1480"/>
+        <circle class="node" cx="60" cy="30" r="6"/><circle class="node" cx="400" cy="30" r="6"/>
+        <circle class="node" cx="740" cy="30" r="6"/><circle class="node" cx="1080" cy="30" r="6"/>
+        <circle class="node" cx="1420" cy="30" r="6"/>
+      </svg>
+      <div class="wp" style="left:calc(220px + 60px)">THE&nbsp;SIGNAL</div>
+      <div class="wp" style="left:calc(220px + 400px)">THE&nbsp;MESSAGE</div>
+      <div class="wp" style="left:calc(220px + 740px)">THE&nbsp;CALL</div>
+      <div class="wp" style="left:calc(220px + 1080px)">THE&nbsp;DEAL</div>
+      <div class="wp" style="left:calc(220px + 1420px)">THE&nbsp;FAVOR</div>
+    </div>
+  </div>
+
+  <!-- 4:45 · the honest beat -->
+  <div class="shard" id="s10">
+    <div class="grow">
+      <div class="red">3 deals will slip this week if you do nothing.</div>
+      <div class="ans">Here's the move.</div>
+    </div>
+  </div>
+
+  <!-- 6:22 · the face-off -->
+  <div class="shard" id="s11">
+    <div class="grow">
+      <div class="col colL"><div class="ck">THEIR&nbsp;SIDE</div>
+        <div class="ct">150 security questions before anything moves.</div></div>
+      <div class="col colR"><div class="ck">YOUR&nbsp;LINE</div>
+        <div class="ct">Your papers already answer 118.</div></div>
+      <div class="barwrap">
+        <div class="bn"><span>118</span><span style="color:rgba(10,28,64,.35)">of 150</span></div>
+        <div class="track"><div class="fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11:47 · the settling -->
+  <div class="shard" id="s12">
+    <div class="slabel">Everything compounds into what your first hire opens on day one.</div>
+    <div class="grow"><div class="book">
+      <div class="page pl"><div class="pw">WHO&nbsp;HITS,&nbsp;WHO&nbsp;MISSES<br>THE&nbsp;OUTREACH&nbsp;THAT&nbsp;LANDED<br>THE&nbsp;QUESTIONS&nbsp;THAT&nbsp;WON</div></div>
+      <div class="page pr"><div class="pw">WHERE&nbsp;DEALS&nbsp;LEAK<br>WHY&nbsp;WE&nbsp;WIN<br>THE&nbsp;DAY-ONE&nbsp;RHYTHM</div></div>
+    </div></div>
+  </div>
+
+  <div id="mark2"><div class="rise"><svg viewBox="0 0 48 48">
+    <path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/>
+  </svg></div></div>
+
+  <div id="close">Built so the next person can stand on it.</div>
+</div>
+
+<div id="clock"></div>
+
+<div id="card">
+  <svg width="88" height="88" viewBox="0 0 48 48" fill="none">
+    <path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>
+  <div class="k">ANTAEUS</div>
+  <div class="l">Strength, from the ground.</div>
+  <div class="u">antaeus.app</div>
+  <div class="t">6:04&nbsp;AM&nbsp;TOMORROW</div>
+</div>
+
+<script>
+const at=(ms,fn)=>setTimeout(fn,ms);
+const $=(s)=>document.querySelector(s);
+const on=(id,c='on')=>document.getElementById(id).classList.add(c);
+const off=(id,c='on')=>document.getElementById(id).classList.remove(c);
+const mark=document.getElementById('mark');
+function setClock(t){
+  const el=$('#clock'), prev=el.textContent;
+  el.innerHTML='';
+  [...t].forEach((c,i)=>{
+    const s=document.createElement('span'); s.className='ch'; s.textContent=c;
+    if(prev[i]!==c) s.classList.add('roll');
+    el.appendChild(s);
+  });
+}
+function run(){
+  /* ACT I — LIFTED (0–12). No clock exists yet. */
+  at(0,   ()=>{ on('t1') });
+  at(5600,()=>{ off('t1'); mark.style.top='34%'; });
+  at(6600,()=>{ on('yours') });
+  at(9400,()=>{ on('whisper1') });
+  at(11600,()=>{ off('yours'); off('whisper1'); });
+
+  /* ACT II — TOUCH (12–18). Time starts when the ground wakes. */
+  at(12000,()=>{ mark.style.transitionDuration='2.2s'; mark.style.top='68.3%'; });
+  at(15200,()=>{ $('#pulse').classList.add('go');
+                 document.body.classList.add('grounded'); });
+  at(16200,()=>{ on('ripple') });
+  at(16800,()=>{ setClock('6:04 AM'); $('#clock').classList.add('on'); });
+  at(18600,()=>{ off('ripple') });
+
+  /* ACT III — THE DAY RISES (18–68). One 5% push across the act. */
+  at(18000,()=>{ document.body.classList.add('push');
+                 mark.style.opacity='0'; mark.style.transitionDuration='1.5s'; });
+  /* 7:31 · the pick */
+  at(18800,()=>{ setClock('7:31 AM'); document.body.classList.remove('dawn'); on('s6'); });
+  at(20400,()=>{ document.getElementById('s6').classList.add('ignite') });
+  at(25000,()=>{ document.getElementById('s6').classList.add('off'); off('s6') });
+  /* 9:12 · the wire */
+  at(26000,()=>{ setClock('9:12 AM'); on('s7'); });
+  at(27400,()=>on('w1','in')); at(28400,()=>on('w2','in')); at(29400,()=>on('w3','in'));
+  at(30600,()=>{ const d=$('#cnt'); d.textContent='14';
+    d.classList.remove('roll'); void d.offsetWidth; d.classList.add('roll'); });
+  at(32200,()=>{ document.getElementById('s7').classList.add('off'); off('s7') });
+  /* 10:48 · the ignition — the film's one full-orange frame */
+  at(33200,()=>{ setClock('10:48 AM'); on('s8');
+    $('#ignitewash').classList.add('on'); document.body.classList.add('ignite'); });
+  at(39200,()=>{ $('#ignitewash').classList.remove('on'); document.body.classList.remove('ignite');
+    document.getElementById('s8').classList.add('off'); off('s8'); });
+  /* 2:20 · the thread */
+  at(40200,()=>{ setClock('2:20 PM'); on('s9'); });
+  at(41600,()=>{ document.getElementById('s9').classList.add('draw') });
+  at(46200,()=>{ document.getElementById('s9').classList.add('off'); off('s9') });
+  /* 4:45 · the honest beat */
+  at(47200,()=>{ setClock('4:45 PM'); document.body.classList.add('evening'); on('s10'); });
+  at(50400,()=>{ document.getElementById('s10').classList.add('answer') });
+  at(53200,()=>{ document.getElementById('s10').classList.add('off'); off('s10') });
+  /* 6:22 · the face-off — columns slide ALONG the line */
+  at(54200,()=>{ setClock('6:22 PM'); on('s11');
+    at(400,()=>document.getElementById('s11').classList.add('face')); });
+  at(56400,()=>{ document.getElementById('s11').classList.add('fillbar') });
+  at(60200,()=>{ document.getElementById('s11').classList.add('off'); off('s11') });
+  /* 11:47 · the settling */
+  at(61200,()=>{ setClock('11:47 PM'); on('s12'); });
+  at(67000,()=>{ document.getElementById('s12').classList.add('off'); off('s12');
+    $('#clock').classList.remove('on'); });   /* the clock dies with the day */
+
+  /* ACT IV — STAND (68–75). */
+  at(68000,()=>{ document.body.classList.remove('push');
+                 mark.style.opacity='1'; });
+  at(70200,()=>{ on('mark2') });
+  at(71600,()=>{ on('close') });
+  at(73400,()=>{ on('card') });
+}
+if(new URLSearchParams(location.search).has('wait')){
+  window.__go=()=>run();
+}else{
+  window.addEventListener('load',()=>{ at(600,run) });
+}
+</script>
+</body>
+</html>
