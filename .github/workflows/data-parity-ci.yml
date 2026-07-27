@@ -369,7 +369,18 @@ jobs:
         run: |
           BRANCH_NAME="${{ needs.provision-branch.outputs.branch_name }}"
           echo "Tearing down branch $BRANCH_NAME"
-          # `|| true` so teardown never fails the workflow — the janitor
-          # will catch anything that's still stranded.
-          supabase --experimental branches delete "$BRANCH_NAME" \
-            --project-ref "$PROJECT_REF" -y || true
+          BRANCH_ID=$(supabase --experimental branches list \
+            --project-ref "$PROJECT_REF" -o json \
+            | python3 -c "import sys,json; \
+              d=json.load(sys.stdin); \
+              b=next((x for x in d if x.get('name')=='$BRANCH_NAME'), {}); \
+              print(b.get('id') or b.get('project_ref') or '')")
+          if [ -z "$BRANCH_ID" ]; then
+            echo "Branch $BRANCH_NAME not found — nothing to delete."
+            exit 0
+          fi
+          supabase --experimental branches delete "$BRANCH_ID" \
+            --project-ref "$PROJECT_REF" -y \
+          || supabase --experimental branches delete "$BRANCH_NAME" \
+            --project-ref "$PROJECT_REF" -y
+          echo "Deleted $BRANCH_NAME"
