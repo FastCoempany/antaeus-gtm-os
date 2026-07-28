@@ -80,38 +80,38 @@ export function FirstVisitPrimer(): JSX.Element | null {
                 your market.
             </h2>
             <p class="bf-primer__body">
-                Open it daily. The toggle at the top picks between two
-                views: <strong>{t("Workspace")}</strong> (what's moving in your
-                own deals, signals, pilot evidence — refreshed every 30 minutes)
-                and <strong>{t("World")}</strong> (what's moving in the market
-                you sell into — refreshed Monday mornings).
+                Open it daily. It reads top to bottom the way your morning
+                does: <strong>{t("your work")}</strong> first (what's moving in
+                your own deals, signals, and pilot evidence — refreshed every
+                30 minutes), then <strong>{t("your market")}</strong> (what's
+                moving in the world you sell into — refreshed Monday mornings).
             </p>
             <ul class="bf-primer__list">
                 <li>
-                    <strong>{t("Workspace")}</strong> — heartbeat-fresh reads
+                    <strong>{t("Your work")}</strong> — heartbeat-fresh reads
                     about your deals going stale, accounts going quiet,
                     evidence past its readout. Dismiss what doesn't matter;
                     the rest tells you where to look first.
                 </li>
                 <li>
-                    <strong>{t("World · Patterns")}</strong> — synthesized reads
+                    <strong>{t("Your market · Patterns")}</strong> — synthesized reads
                     of what's moving in your market. Click any destination
                     chip to draft a move in the destination room. "Show
                     the work" expands the audit trail.
                 </li>
                 <li>
-                    <strong>{t("World · Where the data disagrees")}</strong> —
+                    <strong>{t("Your market · Where the data disagrees")}</strong> —
                     the system challenging an assumption you've stated.
                     Quiet most weeks. Loud when the evidence stops matching.
                 </li>
                 <li>
-                    <strong>{t("World · Consider watching")}</strong> — companies
+                    <strong>{t("Your market · Consider watching")}</strong> — companies
                     the data kept mentioning alongside the ones you've
                     named but that aren't on your watchlist yet.
                 </li>
                 <li>
-                    <strong>{t("Watch list")}</strong> — your standing orders,
-                    shared across both views. Arm a trigger and the system
+                    <strong>{t("Watch list")}</strong> —
+                    your standing orders on the watching-for strip. Arm one and the system
                     tells you when it fires.
                 </li>
             </ul>
