@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus — The Dance (fever cut)</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+/* THE DANCE — ~50s fever cut. Objects, icons, imagined in-app fragments.
+   The camera never rests: punch-ins, pull-backs, whips, match cuts.
+   No beat holds longer than ~4s. */
+:root{
+  --field:#f6f8fc; --ink:#0a1c40; --orange:#e6701e; --forest:#1b5e3f;
+  --red:#cf3b34; --blue:#2563eb;
+  --serif:'DM Serif Display',Georgia,serif; --mono:'JetBrains Mono',monospace;
+  --sans:'Public Sans',sans-serif;
+  --ease:cubic-bezier(.2,.9,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--field);
+  font-family:var(--serif);color:var(--ink)}
+#paper{position:absolute;inset:0;opacity:.75;
+  background-image:linear-gradient(rgba(10,28,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(10,28,64,.045) 1px,transparent 1px);
+  background-size:33px 33px}
+
+/* ── the scene machine ── */
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none;display:flex;
+  align-items:center;justify-content:center;perspective:1500px}
+.scene.in{opacity:1}
+.zi{animation:kZi .5s var(--ease) both}          /* punch toward camera */
+.zf{animation:kZf .55s var(--ease) both}         /* pull back into frame */
+.wi{animation:kWi .42s var(--ease) both}         /* whip in from right */
+.oT{animation:kOT .48s var(--ease) both}         /* exit THROUGH the lens */
+.oB{animation:kOB .42s var(--ease) both}         /* exit falling back */
+.oW{animation:kOW .38s var(--ease) both}         /* whip out left */
+@keyframes kZi{from{opacity:0;transform:scale(1.22)}to{opacity:1;transform:scale(1)}}
+@keyframes kZf{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes kWi{from{opacity:0;transform:translateX(10%) skewX(-3deg)}to{opacity:1;transform:none}}
+@keyframes kOT{to{opacity:0;transform:scale(5.5)}}
+@keyframes kOB{to{opacity:0;transform:scale(.62)}}
+@keyframes kOW{to{opacity:0;transform:translateX(-9%) skewX(-3deg)}}
+
+/* shared physical bits */
+.icon{display:inline-flex;flex:none}
+.icon svg{stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.kick{font-family:var(--mono);font-weight:700;letter-spacing:.26em;font-size:13px;color:rgba(10,28,64,.45)}
+.pop{opacity:0;transform:translateY(46px) rotate(-1.6deg)}
+.pop.go{animation:kPop .5s var(--ease) forwards}
+@keyframes kPop{60%{transform:translateY(-6px) rotate(.4deg)}
+  to{opacity:1;transform:translateY(0) rotate(0)}}
+.roll{animation:kRoll .4s var(--ease)}
+@keyframes kRoll{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* S1 · the dot (cold open) */
+#s1 .bigdot{width:190px;height:190px;border-radius:50%;background:var(--orange);
+  box-shadow:0 0 0 0 rgba(230,112,30,.35);animation:kBeat .7s ease-in-out 2}
+@keyframes kBeat{50%{transform:scale(1.12);box-shadow:0 0 0 44px rgba(230,112,30,0)}}
+
+/* S2 · the account card (imagined UI, physical) */
+#s2 .card{width:760px;background:#fff;border:1.5px solid rgba(10,28,64,.14);border-radius:18px;
+  box-shadow:0 40px 90px rgba(10,28,64,.18),0 8px 24px rgba(10,28,64,.08);
+  padding:44px 52px;transform:rotateY(-10deg) rotateX(5deg);animation:kFloat 4s ease-in-out infinite}
+@keyframes kFloat{50%{transform:rotateY(-7deg) rotateX(3.4deg) translateY(-8px)}}
+#s2 .row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#s2 .nm{font-size:76px;line-height:1}
+#s2 .dot{width:16px;height:16px;border-radius:50%;background:var(--orange);
+  animation:kBeat 1.6s ease-in-out infinite}
+#s2 .sub{font-family:var(--sans);font-size:19px;color:rgba(10,28,64,.55);margin-bottom:34px}
+#s2 .glabel{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:700;
+  font-size:14px;letter-spacing:.2em;margin-bottom:10px}
+#s2 .track{height:14px;border-radius:7px;background:rgba(10,28,64,.08);overflow:hidden}
+#s2 .fill{height:100%;width:8%;border-radius:7px;background:var(--orange);
+  transition:width 1s var(--ease)}
+#s2.hot .fill{width:62%}
+
+/* S3 · signal chips slam-stack */
+#s3 .stack{width:900px;display:flex;flex-direction:column;gap:22px}
+.chip{background:#fff;border:1.5px solid rgba(10,28,64,.12);border-left:5px solid var(--orange);
+  border-radius:14px;box-shadow:0 20px 50px rgba(10,28,64,.12);padding:26px 34px;
+  display:flex;gap:22px;align-items:center}
+.chip .icon{color:var(--orange)}
+.chip .t{font-family:var(--sans);font-weight:600;font-size:27px}
+.chip .m{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.2em;
+  color:rgba(10,28,64,.4);margin-top:6px}
+#s3 .kick{position:absolute;top:22%;left:0;right:0;text-align:center}
+
+/* S4 · the composer (typing) */
+#s4 .comp{width:880px;background:#fff;border:1.5px solid rgba(10,28,64,.12);border-radius:18px;
+  box-shadow:0 40px 90px rgba(10,28,64,.16);padding:40px 48px;transform:rotateY(6deg) rotateX(3deg)}
+#s4 .to{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.18em;
+  color:rgba(10,28,64,.5);padding-bottom:18px;border-bottom:1.5px solid rgba(10,28,64,.1);
+  margin-bottom:26px;display:flex;gap:14px;align-items:center}
+#s4 .tline{font-family:var(--sans);font-size:25px;line-height:1.5;white-space:nowrap;
+  overflow:hidden;max-width:0}
+#s4 .tline.type{animation:kType .8s steps(34) forwards}
+@keyframes kType{to{max-width:100%}}
+#s4 .send{margin-top:30px;display:inline-flex;align-items:center;gap:12px;background:var(--orange);
+  color:#fff;font-family:var(--sans);font-weight:700;font-size:20px;border-radius:12px;
+  padding:16px 30px;box-shadow:0 12px 30px rgba(230,112,30,.35)}
+#s4 .send.hit{animation:kHit .35s var(--ease)}
+@keyframes kHit{40%{transform:scale(.92)}to{transform:scale(1)}}
+#plane{position:absolute;left:38%;top:52%;color:var(--ink);opacity:0}
+#plane.fly{animation:kFly .9s cubic-bezier(.3,.2,.4,1) forwards}
+@keyframes kFly{from{opacity:1;transform:translate(0,0) rotate(8deg) scale(1)}
+  to{opacity:0;transform:translate(1100px,-240px) rotate(-6deg) scale(.7)}}
+
+/* S5 · the thread (icon waypoints) */
+#s5 .wrap{width:1560px;position:relative}
+#s5 .rail{position:absolute;left:0;right:0;top:44px;height:2.5px;background:rgba(10,28,64,.5);
+  transform:scaleX(0);transform-origin:left;transition:transform 1.1s var(--ease)}
+#s5.draw .rail{transform:scaleX(1)}
+#s5 .wp{position:absolute;top:0;transform:translateX(-50%);text-align:center;width:220px;opacity:0}
+#s5 .wp.go{animation:kPop .45s var(--ease) forwards}
+#s5 .wp .ic{width:88px;height:88px;margin:0 auto 14px;background:#fff;border:2px solid var(--ink);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 14px 34px rgba(10,28,64,.16)}
+#s5 .wp .lb{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.2em;color:rgba(10,28,64,.55)}
+#s5 .head{position:absolute;left:0;right:0;top:24%;text-align:center;font-size:54px}
+
+/* S6 · the live-call fragment */
+#s6 .frag{width:820px}
+#s6 .read{display:inline-flex;gap:12px;align-items:center;background:#fff;
+  border:1.5px solid rgba(10,28,64,.14);border-radius:999px;padding:12px 26px;
+  font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.2em;
+  color:rgba(10,28,64,.6);box-shadow:0 12px 30px rgba(10,28,64,.1);margin-bottom:30px}
+#s6 .read .dot{width:10px;height:10px;border-radius:50%;background:var(--blue);
+  animation:kBeat 1.4s ease-in-out infinite}
+#s6 .q{background:#fff;border:1.5px solid rgba(10,28,64,.12);border-radius:18px;
+  padding:40px 48px;font-size:47px;box-shadow:0 30px 70px rgba(10,28,64,.15);
+  transform-origin:bottom;animation:kFlip .55s var(--ease) both}
+@keyframes kFlip{from{opacity:0;transform:rotateX(-70deg)}to{opacity:1;transform:rotateX(0)}}
+#s6 .opts{display:flex;gap:16px;margin-top:24px}
+#s6 .opt{font-family:var(--sans);font-weight:600;font-size:18px;color:rgba(10,28,64,.6);
+  border:1.5px solid rgba(10,28,64,.2);border-radius:999px;padding:10px 22px;background:#fff}
+
+/* S7 · serif beat */
+#s7 .line{font-size:88px;letter-spacing:-.01em}
+
+/* S8 · the wire + count */
+#s8 .bigcount{position:absolute;right:12%;top:24%;font-size:300px;line-height:1;
+  color:rgba(10,28,64,.1)}
+#s8 .rows{width:900px;display:flex;flex-direction:column;gap:20px}
+.wrow{background:#fff;border:1.5px solid rgba(10,28,64,.12);border-radius:14px;
+  padding:22px 30px;display:flex;gap:20px;align-items:center;
+  box-shadow:0 18px 44px rgba(10,28,64,.12)}
+.wrow .t{font-family:var(--sans);font-weight:600;font-size:25px}
+.wrow .tag{font-family:var(--mono);font-weight:700;font-size:11.5px;letter-spacing:.24em;
+  color:rgba(10,28,64,.42);display:block;margin-bottom:4px}
+.wrow .icon{color:var(--ink)}
+
+/* S9 · the ignition (the one orange frame) */
+#s9{background:radial-gradient(1200px 700px at 50% 44%,rgba(230,112,30,.2),rgba(246,248,252,0))}
+#s9 .bub{background:#fff;border-radius:22px 22px 22px 6px;border:1.5px solid rgba(10,28,64,.1);
+  box-shadow:0 40px 100px rgba(230,112,30,.3);padding:46px 58px;text-align:center}
+#s9 .t{font-size:64px;color:var(--orange)}
+#s9 .m{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.26em;
+  color:rgba(10,28,64,.5);margin-top:16px}
+#s9 .tag{position:absolute;top:26%;left:0;right:0;text-align:center;font-family:var(--mono);
+  font-weight:700;font-size:14px;letter-spacing:.3em;color:var(--orange)}
+
+/* S10 · the calendar chip */
+#s10 .cal{width:520px;background:#fff;border:1.5px solid rgba(10,28,64,.14);border-radius:20px;
+  overflow:hidden;box-shadow:0 40px 90px rgba(10,28,64,.18);transform:rotateY(-7deg) rotateX(4deg)}
+#s10 .cal .top{background:var(--ink);color:#fff;font-family:var(--mono);font-weight:700;
+  letter-spacing:.3em;font-size:15px;text-align:center;padding:16px}
+#s10 .cal .day{font-size:150px;text-align:center;line-height:1.1;padding:18px 0 0}
+#s10 .cal .who{font-family:var(--sans);font-weight:600;font-size:23px;text-align:center;
+  padding:0 30px 14px;color:rgba(10,28,64,.75)}
+#s10 .stamp{display:flex;justify-content:center;gap:10px;align-items:center;padding-bottom:28px;
+  font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.22em;color:var(--forest)}
+#s10 .stamp .icon{color:var(--forest)}
+#s10 .side{position:absolute;left:0;right:0;top:20%;text-align:center;font-family:var(--mono);
+  font-weight:700;font-size:13px;letter-spacing:.28em;color:var(--blue)}
+
+/* S11 · the red beat */
+#s11 .dealrow{width:880px;background:#fff;border:1.5px solid rgba(10,28,64,.12);
+  border-left:6px solid var(--red);border-radius:14px;padding:26px 34px;
+  box-shadow:0 24px 60px rgba(10,28,64,.14);display:flex;justify-content:space-between;
+  align-items:center;animation:kShake .5s ease .3s}
+@keyframes kShake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+#s11 .dn{font-size:40px}
+#s11 .dm{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;color:var(--red)}
+#s11 .rl{font-size:64px;color:var(--red);margin-bottom:26px;text-align:center}
+#s11 .ans{display:inline-flex;gap:14px;align-items:center;background:#fff;color:var(--orange);
+  border:2px solid var(--orange);border-radius:999px;padding:16px 34px;font-size:30px;
+  box-shadow:0 16px 40px rgba(230,112,30,.22)}
+#s11 .col{display:flex;flex-direction:column;align-items:center;gap:8px}
+
+/* S12 · the security wall */
+#s12 .wallwrap{text-align:center}
+#s12 .wall{display:grid;grid-template-columns:repeat(15,30px);gap:7px;justify-content:center;
+  margin-bottom:40px}
+#s12 .tile{width:30px;height:30px;border-radius:6px;background:rgba(10,28,64,.1);opacity:0;
+  transition:background .3s ease}
+#s12 .tile.on{opacity:1}
+#s12 .tile.ok{background:var(--forest)}
+#s12 .wt{font-size:54px}
+#s12 .wt .n{color:var(--forest)}
+#s12 .wm{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.26em;
+  color:rgba(10,28,64,.45);margin-top:14px}
+
+/* S13 · the book */
+#s13 .bookwrap{text-align:center}
+#s13 .book{position:relative;width:560px;height:330px;margin:0 auto 44px}
+#s13 .page{position:absolute;bottom:0;width:280px;height:310px;background:#fff;
+  border:1.5px solid rgba(10,28,64,.18);box-shadow:0 26px 60px rgba(10,28,64,.16)}
+#s13 .pl{left:0;border-radius:10px 3px 0 0;transform-origin:bottom right;transform:rotate(-1.6deg)}
+#s13 .pr{right:0;border-radius:3px 10px 0 0;transform-origin:bottom left;transform:rotate(1.6deg)}
+#s13 .book::after{content:'';position:absolute;left:50%;bottom:0;width:2px;height:300px;
+  margin-left:-1px;background:rgba(10,28,64,.22)}
+#s13 .pw{position:absolute;left:26px;right:26px;top:40px;font-family:var(--mono);
+  font-weight:700;font-size:11.5px;letter-spacing:.16em;color:rgba(10,28,64,.4);line-height:2.4;
+  text-align:left}
+#s13 .cap{font-size:50px;padding:0 260px;line-height:1.25}
+
+/* S14 · the ground + the mark */
+#s14 .stage{position:relative;width:100%;height:100%}
+#s14 .gline{position:absolute;left:0;right:0;top:64%;height:2.5px;background:var(--ink);
+  transform:scaleX(0);transition:transform .8s var(--ease)}
+#s14.gr .gline{transform:scaleX(1)}
+#s14 .mk{position:absolute;left:50%;top:64%;width:150px;height:150px;margin-left:-75px;
+  margin-top:-119px;transform:translateY(-420px);transition:transform 1s cubic-bezier(.4,.05,.6,1)}
+#s14.land .mk{transform:translateY(0)}
+#s14 .mk path{stroke:var(--ink);fill:none;stroke-width:3.4}
+#s14 .gp{position:absolute;left:50%;top:64%;width:12px;height:12px;border-radius:50%;
+  border:3px solid var(--orange);transform:translate(-50%,-50%) scale(.2);opacity:0}
+#s14 .gp.go{animation:kPulse .6s ease-out forwards}
+@keyframes kPulse{0%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) scale(10)}}
+#s14 .cap{position:absolute;left:0;right:0;top:72%;text-align:center;font-style:italic;font-size:40px}
+
+/* S15 · flash recap (three heartbeat pops) */
+.flash{position:absolute;inset:0;opacity:0;display:flex;align-items:center;justify-content:center}
+.flash.go{animation:kFlash .4s ease both}
+@keyframes kFlash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+#f1{background:var(--orange)}#f1 .d{width:170px;height:170px;border-radius:50%;background:#fff}
+#f2{background:var(--ink)}#f2 .t{font-size:110px;color:#fff}
+#f3{background:var(--forest)}#f3 .t{font-family:var(--mono);font-weight:700;font-size:90px;color:#fff}
+
+/* S16 · card */
+#s16{flex-direction:column;gap:26px;background:var(--field)}
+#s16 .k{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.3em;color:rgba(10,28,64,.5)}
+#s16 .l{font-size:58px}
+#s16 .u{font-family:var(--sans);font-size:20px;color:rgba(10,28,64,.6)}
+</style>
+</head>
+<body>
+<div id="paper"></div>
+
+<!-- S1 · the dot -->
+<div class="scene" id="s1"><div class="bigdot"></div></div>
+
+<!-- S2 · the account card -->
+<div class="scene" id="s2"><div class="card">
+  <div class="row1"><div class="nm">Boeing</div><div class="dot"></div></div>
+  <div class="sub">Aerospace · Chicago · 29 accounts watched</div>
+  <div class="glabel"><span>HEAT</span><span id="heatn">62</span></div>
+  <div class="track"><div class="fill"></div></div>
+</div></div>
+
+<!-- S3 · signal chips -->
+<div class="scene" id="s3">
+  <div class="kick">FRESH&nbsp;SIGNALS&nbsp;·&nbsp;TODAY</div>
+  <div class="stack">
+    <div class="chip pop" id="c1">
+      <span class="icon"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M13 2L5 13h6l-2 9 8-11h-6l2-9z"/></svg></span>
+      <div><div class="t">2,400 factory roles opening — the rebuild after the strike.</div>
+      <div class="m">HIRING&nbsp;SURGE&nbsp;·&nbsp;PUBLIC&nbsp;POSTING</div></div>
+    </div>
+    <div class="chip pop" id="c2">
+      <span class="icon"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M2 16l20-7-7 4 2 8-4-6-11 1z"/></svg></span>
+      <div><div class="t">737 output climbing — suppliers told to speed up.</div>
+      <div class="m">PRODUCTION&nbsp;·&nbsp;PRESS</div></div>
+    </div>
+    <div class="chip pop" id="c3">
+      <span class="icon"><svg width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></span>
+      <div><div class="t">A new head of talent acquisition, five weeks in.</div>
+      <div class="m">LEADERSHIP&nbsp;·&nbsp;ANNOUNCEMENT</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 · the composer -->
+<div class="scene" id="s4">
+  <div class="comp">
+    <div class="to"><span class="icon"><svg width="22" height="22" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7L22 7"/></svg></span>
+      TO&nbsp;·&nbsp;TALENT&nbsp;ACQUISITION&nbsp;·&nbsp;BOEING</div>
+    <div class="tline" id="l1">Two thousand hires is a systems problem, not a sourcing one.</div>
+    <div class="tline" id="l2" style="margin-top:10px">Here's how three airlines did it without breaking.</div>
+    <div class="send" id="send"><span class="icon"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M2 16l20-7-7 4 2 8-4-6-11 1z"/></svg></span>Send</div>
+  </div>
+  <div id="plane"><svg width="90" height="90" viewBox="0 0 24 24" style="stroke-width:1.8"><path d="M2 16l20-7-7 4 2 8-4-6-11 1z"/></svg></div>
+</div>
+
+<!-- S5 · the thread -->
+<div class="scene" id="s5">
+  <div class="head">One account. One thread.</div>
+  <div class="wrap">
+    <div class="rail"></div>
+    <div class="wp" style="left:6%"><div class="ic"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M13 2L5 13h6l-2 9 8-11h-6l2-9z"/></svg></div><div class="lb">THE&nbsp;SIGNAL</div></div>
+    <div class="wp" style="left:28%"><div class="ic"><svg width="40" height="40" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7L22 7"/></svg></div><div class="lb">THE&nbsp;MESSAGE</div></div>
+    <div class="wp" style="left:50%"><div class="ic"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2c1.5 3 3.5 5 6 6l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 6c0-1 1-2 2-2z"/></svg></div><div class="lb">THE&nbsp;CALL</div></div>
+    <div class="wp" style="left:72%"><div class="ic"><svg width="40" height="40" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg></div><div class="lb">THE&nbsp;DEAL</div></div>
+    <div class="wp" style="left:94%"><div class="ic"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M8 12l-4-2 8-7 8 7-4 2M4 10v6l8 6 8-6v-6M12 3v9"/></svg></div><div class="lb">THE&nbsp;FAVOR</div></div>
+  </div>
+</div>
+
+<!-- S6 · the live call -->
+<div class="scene" id="s6"><div class="frag">
+  <div class="read"><span class="dot"></span>LIVE&nbsp;·&nbsp;READING:&nbsp;GUARDED</div>
+  <div class="q">“Who signs off on this — and who fights it?”</div>
+  <div class="opts"><span class="opt">They named the CFO →</span><span class="opt">They hedged →</span></div>
+</div></div>
+
+<!-- S7 · serif beat -->
+<div class="scene" id="s7"><div class="line">It runs while you work.</div></div>
+
+<!-- S8 · the wire -->
+<div class="scene" id="s8">
+  <div class="bigcount" id="cnt">12</div>
+  <div class="rows">
+    <div class="wrow pop" id="r1">
+      <span class="icon"><svg width="36" height="36" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>
+      <div><span class="tag">YOU</span><div class="t">Reached out to Boeing — counted.</div></div>
+    </div>
+    <div class="wrow pop" id="r2">
+      <span class="icon" style="color:var(--blue)"><svg width="36" height="36" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
+      <div><span class="tag" style="color:var(--blue)">THE MACHINE</span><div class="t">Thursday with United — on the books. Nothing for you to do.</div></div>
+    </div>
+    <div class="wrow pop" id="r3">
+      <span class="icon" style="color:var(--orange)"><svg width="36" height="36" viewBox="0 0 24 24"><path d="M9 17l-5-5 5-5M4 12h11a5 5 0 015 5v2"/></svg></span>
+      <div><span class="tag" style="color:var(--orange)">THE BUYERS</span><div class="t">A reply is in. Twenty days of quiet, over.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 · the ignition -->
+<div class="scene" id="s9">
+  <div class="tag">THE&nbsp;BUYERS</div>
+  <div class="bub"><div class="t">Starbucks replied.</div>
+  <div class="m">AFTER&nbsp;20&nbsp;QUIET&nbsp;DAYS</div></div>
+</div>
+
+<!-- S10 · the calendar -->
+<div class="scene" id="s10">
+  <div class="side">THE&nbsp;MACHINE&nbsp;·&nbsp;WHILE&nbsp;YOU&nbsp;SLEPT</div>
+  <div class="cal">
+    <div class="top">THURSDAY</div>
+    <div class="day">10:30</div>
+    <div class="who">United Airlines · first call</div>
+    <div class="stamp"><span class="icon"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>CONFIRMED</div>
+  </div>
+</div>
+
+<!-- S11 · the red beat -->
+<div class="scene" id="s11"><div class="col">
+  <div class="rl">3 deals will slip this week.</div>
+  <div class="dealrow">
+    <div><div class="dn">Nordstrom</div><div class="dm">NO&nbsp;DATED&nbsp;NEXT&nbsp;STEP&nbsp;·&nbsp;21&nbsp;DAYS&nbsp;QUIET</div></div>
+    <div style="font-size:44px;color:rgba(10,28,64,.45)">$340K</div>
+  </div>
+  <div class="ans pop" id="ans">Here's the move<span class="icon"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+</div></div>
+
+<!-- S12 · the security wall -->
+<div class="scene" id="s12"><div class="wallwrap">
+  <div class="wall" id="wall"></div>
+  <div class="wt"><span class="n" id="wn">0</span> of 150 already answered.</div>
+  <div class="wm">SOC&nbsp;2&nbsp;·&nbsp;PEN-TEST&nbsp;·&nbsp;DPA&nbsp;·&nbsp;THE&nbsp;PAPERS&nbsp;YOU&nbsp;HOLD</div>
+</div></div>
+
+<!-- S13 · the book -->
+<div class="scene" id="s13"><div class="bookwrap">
+  <div class="book">
+    <div class="page pl"><div class="pw">WHO&nbsp;HITS,&nbsp;WHO&nbsp;MISSES<br>THE&nbsp;OUTREACH&nbsp;THAT&nbsp;LANDED<br>THE&nbsp;QUESTIONS&nbsp;THAT&nbsp;WON</div></div>
+    <div class="page pr"><div class="pw">WHERE&nbsp;DEALS&nbsp;LEAK<br>WHY&nbsp;WE&nbsp;WIN<br>THE&nbsp;DAY-ONE&nbsp;RHYTHM</div></div>
+  </div>
+  <div class="cap">It all compounds into the book your first hire opens on day one.</div>
+</div></div>
+
+<!-- S14 · the ground -->
+<div class="scene" id="s14"><div class="stage">
+  <div class="gline"></div>
+  <div class="mk"><svg viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/></svg></div>
+  <div class="gp"></div>
+  <div class="cap">Built so the next person can stand on it.</div>
+</div></div>
+
+<!-- S15 · the three-beat flourish -->
+<div class="flash" id="f1"><div class="d"></div></div>
+<div class="flash" id="f2"><div class="t">14</div></div>
+<div class="flash" id="f3"><div class="t">118/150</div></div>
+
+<!-- S16 · card -->
+<div class="scene" id="s16">
+  <svg width="88" height="88" viewBox="0 0 48 48" fill="none">
+    <path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>
+  <div class="k">ANTAEUS</div>
+  <div class="l">Strength, from the ground.</div>
+  <div class="u">antaeus.app</div>
+</div>
+
+<script>
+const at=(ms,fn)=>setTimeout(fn,ms);
+const $=(s)=>document.querySelector(s);
+function IN(id,how){const e=$(id);e.classList.add('in',how)}
+function OUT(id,how){const e=$(id);e.classList.remove('zi','zf','wi');e.classList.add(how);
+  at(520,()=>{e.classList.remove('in',how)})}
+
+/* build the 150-tile wall */
+const wall=$('#wall');
+for(let i=0;i<150;i++){const t=document.createElement('div');t.className='tile';wall.appendChild(t)}
+
+function run(){
+  /* S1 · dot (0–1.6) */
+  IN('#s1','zf');
+  at(1400,()=>OUT('#s1','oT'));
+  /* S2 · account card (1.6–4.8) — the dot was its heat dot */
+  at(1550,()=>{ IN('#s2','zi'); at(500,()=>$('#s2').classList.add('hot')); });
+  at(4450,()=>OUT('#s2','oT'));
+  /* S3 · chips slam (4.8–8.4) */
+  at(4700,()=>{ IN('#s3','zf');
+    at(150,()=>$('#c1').classList.add('go'));
+    at(500,()=>$('#c2').classList.add('go'));
+    at(850,()=>$('#c3').classList.add('go')); });
+  at(8050,()=>OUT('#s3','oW'));
+  /* S4 · composer (8.4–12.6) */
+  at(8350,()=>{ IN('#s4','wi');
+    at(400,()=>$('#l1').classList.add('type'));
+    at(1300,()=>$('#l2').classList.add('type'));
+    at(2400,()=>{ $('#send').classList.add('hit'); $('#plane').classList.add('fly'); }); });
+  at(12250,()=>OUT('#s4','oB'));
+  /* S5 · the thread (12.6–16.4) */
+  at(12550,()=>{ IN('#s5','zf'); at(200,()=>$('#s5').classList.add('draw'));
+    ['6%','28%','50%','72%','94%'].forEach((_,i)=>
+      at(350+i*220,()=>document.querySelectorAll('#s5 .wp')[i].classList.add('go'))); });
+  at(16050,()=>OUT('#s5','oT'));
+  /* S6 · live call (16.4–19.6) */
+  at(16350,()=>IN('#s6','zi'));
+  at(19250,()=>OUT('#s6','oB'));
+  /* S7 · serif beat (19.6–21.0) */
+  at(19550,()=>IN('#s7','zf'));
+  at(20800,()=>OUT('#s7','oT'));
+  /* S8 · the wire (21.0–24.8) */
+  at(21000,()=>{ IN('#s8','wi');
+    at(150,()=>$('#r1').classList.add('go'));
+    at(500,()=>$('#r2').classList.add('go'));
+    at(850,()=>$('#r3').classList.add('go'));
+    [13,14].forEach((n,i)=>at(1500+i*600,()=>{ const c=$('#cnt');
+      c.textContent=n; c.classList.remove('roll'); void c.offsetWidth; c.classList.add('roll'); })); });
+  at(24450,()=>OUT('#s8','oT'));
+  /* S9 · ignition (24.8–27.8) — the one orange frame */
+  at(24750,()=>IN('#s9','zi'));
+  at(27450,()=>OUT('#s9','oT'));
+  /* S10 · calendar (27.8–30.4) */
+  at(27750,()=>IN('#s10','zf'));
+  at(30050,()=>OUT('#s10','oW'));
+  /* S11 · red beat (30.4–34.4) */
+  at(30350,()=>{ IN('#s11','wi'); at(1500,()=>$('#ans').classList.add('go')); });
+  at(34050,()=>OUT('#s11','oB'));
+  /* S12 · security wall (34.4–38.8) */
+  at(34350,()=>{ IN('#s12','zf');
+    const tiles=[...document.querySelectorAll('#s12 .tile')];
+    tiles.forEach((t,i)=>at(100+i*6,()=>t.classList.add('on')));
+    tiles.slice(0,118).forEach((t,i)=>at(1200+i*11,()=>t.classList.add('ok')));
+    let n=0; const iv=setInterval(()=>{ n=Math.min(118,n+3);
+      $('#wn').textContent=n; if(n>=118)clearInterval(iv); },33);
+  });
+  at(38450,()=>OUT('#s12','oT'));
+  /* S13 · the book (38.8–42.4) */
+  at(38750,()=>IN('#s13','zi'));
+  at(42050,()=>OUT('#s13','oB'));
+  /* S14 · the ground (42.4–46.0) */
+  at(42350,()=>{ IN('#s14','zf'); at(150,()=>$('#s14').classList.add('gr'));
+    at(600,()=>$('#s14').classList.add('land'));
+    at(1580,()=>$('#s14 .gp').classList.add('go')); });
+  at(45650,()=>OUT('#s14','oT'));
+  /* S15 · flourish (46.0–47.2) */
+  at(46000,()=>$('#f1').classList.add('go'));
+  at(46400,()=>$('#f2').classList.add('go'));
+  at(46800,()=>$('#f3').classList.add('go'));
+  /* S16 · card (47.2–51) */
+  at(47200,()=>IN('#s16','zf'));
+}
+if(new URLSearchParams(location.search).has('wait')){
+  window.__go=()=>run();
+}else{
+  window.addEventListener('load',()=>{ at(600,run) });
+}
+</script>
+</body>
+</html>

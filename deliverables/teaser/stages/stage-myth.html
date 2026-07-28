@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus — The Myth (D2 stage)</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+/* D2 · THE MYTH — 70s self-running stage.
+   Brief: deliverables/teaser/brief-d2-the-myth-2026-07-23.md */
+:root{
+  --field:#f6f8fc; --ink:#0a1c40; --orange:#e6701e; --forest:#1b5e3f;
+  --red:#cf3b34; --blue:#2563eb;
+  --serif:'DM Serif Display',Georgia,serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--field);
+  font-family:var(--serif);color:var(--ink)}
+/* graph paper — dim in act I, fuller once grounded */
+#paper{position:absolute;inset:0;opacity:.4;transition:opacity 6s ease;
+  background-image:linear-gradient(rgba(10,28,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(10,28,64,.045) 1px,transparent 1px);
+  background-size:33px 33px}
+body.grounded #paper{opacity:1}
+/* warm cast rising from the ground after touch */
+#warm{position:absolute;left:0;right:0;bottom:0;height:22%;opacity:0;transition:opacity 5s ease;
+  background:linear-gradient(to top,rgba(230,112,30,.05),transparent)}
+body.grounded #warm{opacity:1}
+#world{position:absolute;inset:0;transition:transform 34s linear}
+body.push #world{transform:scale(1.04)}
+
+/* ── the horizon / ground line ── */
+#line{position:absolute;left:0;right:0;top:78%;height:2.5px;background:var(--ink);
+  opacity:.12;transform:scaleX(.32);transform-origin:center;
+  transition:opacity 1s ease,transform .9s cubic-bezier(.3,.9,.3,1)}
+body.grounded #line{opacity:.7;transform:scaleX(1)}
+#pulse{position:absolute;left:50%;top:78%;width:14px;height:14px;border-radius:50%;
+  border:3px solid var(--orange);transform:translate(-50%,-50%) scale(.2);opacity:0}
+#pulse.go{animation:pl .68s ease-out forwards}
+@keyframes pl{0%{opacity:.95;transform:translate(-50%,-50%) scale(.2)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+#ripple{position:absolute;left:0;right:0;top:78%;margin-top:14px;text-align:center;
+  font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.34em;
+  color:rgba(10,28,64,.34);opacity:0;transition:opacity 1.4s ease}
+#ripple.on{opacity:1}
+
+/* ── the mark ── */
+#mark{position:absolute;left:50%;top:16%;width:132px;height:132px;margin-left:-66px;
+  transition:top 4.6s cubic-bezier(.45,.05,.55,.95),transform 4.6s ease}
+#mark svg{width:100%;height:100%;overflow:visible}
+#mark path{stroke:var(--ink);fill:none;stroke-width:2.2;opacity:.55;
+  transition:stroke-width 1.6s ease,opacity 1.6s ease}
+#mark{transform:rotate(-7deg)}
+#mark #bar{opacity:0}
+body.grounded #mark{transform:rotate(0)}
+body.grounded #mark path{stroke-width:3.4;opacity:1}
+body.grounded #mark #bar{opacity:1}
+/* second mark (the hire) */
+/* feet at 38/48 of the 108px svg = 85.5px — seat them exactly on the line and
+   clip the 22.5px of box that hangs below it so the rise never pokes under. */
+#mark2{position:absolute;left:58.5%;top:78%;width:108px;height:108px;margin-top:-85.5px;
+  clip-path:inset(-60px 0 22.5px 0);}
+#mark2 .rise{transform:translateY(115%);transition:transform 1.9s cubic-bezier(.3,.9,.3,1)}
+#mark2.on .rise{transform:translateY(0)}
+#mark2 path{stroke:var(--forest);fill:none;stroke-width:3.4}
+
+/* ── act I truths ── */
+.truth{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:54px;
+  letter-spacing:-.01em;opacity:0;transition:opacity 1.2s ease}
+.truth.on{opacity:1}
+#yours{font-size:96px;top:41%}
+#whisper1{position:absolute;left:0;right:0;top:60%;text-align:center;font-family:var(--mono);
+  font-weight:700;font-size:13px;letter-spacing:.3em;color:rgba(10,28,64,.34);
+  opacity:0;transition:opacity 1.2s ease}
+#whisper1.on{opacity:1}
+
+/* ── act III shards (grow from the line) ── */
+.shard{position:absolute;left:0;right:0;top:0;height:78%;overflow:hidden;pointer-events:none}
+/* .grow must have real height (inset:0) — a bottom-anchored box whose children are
+   all absolute collapses to 0 height and translateY(%) stops hiding anything. */
+.shard .grow{position:absolute;inset:0;transform:translateY(103%);
+  transition:transform 1.7s cubic-bezier(.3,.9,.3,1)}
+.shard.on .grow{transform:translateY(0)}
+.shard.off .grow{transform:translateY(103%);transition-duration:.9s}
+.slabel{position:absolute;left:0;right:0;top:9%;text-align:center;font-size:52px;
+  letter-spacing:-.01em;opacity:0;transition:opacity 1s ease .5s}
+.shard.on .slabel{opacity:1}
+.shard.off .slabel{opacity:0;transition-delay:0s}
+.smono{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.22em;
+  color:rgba(10,28,64,.4)}
+
+/* shard 6 — the name stem */
+#s6 .names{position:absolute;left:0;right:0;bottom:0;height:520px;text-align:center}
+#s6 .nm{position:absolute;left:50%;font-family:'Public Sans',sans-serif;font-weight:600;
+  font-size:26px;color:rgba(10,28,64,.22);white-space:nowrap}
+#s6 #boeing{font-family:var(--serif);font-size:98px;font-weight:400;color:var(--ink);
+  transition:color 1s ease,text-shadow 1s ease}
+#s6.ignite #boeing{color:var(--orange);text-shadow:0 0 26px rgba(230,112,30,.35)}
+#s6 .bmono{position:absolute;left:50%;transform:translateX(-50%);bottom:96px;opacity:0;transition:opacity 1s ease}
+#s6.ignite .bmono{opacity:1}
+
+/* shard 7 — the count stem */
+#s7 .stem{position:absolute;left:50%;bottom:0;width:3px;height:330px;background:rgba(10,28,64,.25)}
+#s7 .count{position:absolute;left:50%;transform:translateX(-50%);bottom:330px;
+  font-size:150px;line-height:1}
+#s7 .cl{position:absolute;left:50%;transform:translateX(-50%);bottom:288px;
+  background:var(--field);padding:0 14px;white-space:nowrap}
+
+/* shard 8 — the honest beat */
+#s8 .red{position:absolute;right:52%;bottom:210px;width:640px;
+  font-size:47px;color:var(--red);text-align:right;line-height:1.3}
+#s8 .ans{position:absolute;left:52%;bottom:216px;width:420px;font-size:47px;
+  color:var(--orange);border-left:4px solid var(--orange);padding-left:26px;
+  opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s cubic-bezier(.3,.9,.3,1)}
+#s8.answer .ans{opacity:1;transform:translateY(0)}
+
+/* shard 9 — the coverage bar */
+#s9 .wrap{position:absolute;left:50%;transform:translateX(-50%);bottom:230px;width:900px}
+#s9 .nums{display:flex;justify-content:space-between;font-size:58px;margin-bottom:18px}
+#s9 .track{height:16px;background:rgba(10,28,64,.1);border-radius:8px;overflow:hidden}
+#s9 .fill{height:100%;width:0;background:var(--forest);border-radius:8px;transition:width 2.3s cubic-bezier(.3,.9,.3,1)}
+#s9.fill .fill{width:78.6%}
+#s9 .pm{text-align:center;margin-top:18px}
+
+/* shard 10 — the book */
+#s10 .book{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:560px;height:330px}
+#s10 .page{position:absolute;bottom:0;width:280px;height:310px;background:#fff;
+  border:1.5px solid rgba(10,28,64,.18);box-shadow:0 16px 40px rgba(10,28,64,.1)}
+#s10 .pl{left:0;border-radius:10px 3px 0 0;transform-origin:bottom right;transform:rotate(-1.6deg)}
+#s10 .pr{right:0;border-radius:3px 10px 0 0;transform-origin:bottom left;transform:rotate(1.6deg)}
+#s10 .book::after{content:'';position:absolute;left:50%;bottom:0;width:2px;height:300px;
+  margin-left:-1px;background:rgba(10,28,64,.22)}
+#s10 .pw{position:absolute;left:26px;right:26px;top:40px;font-family:var(--mono);
+  font-weight:700;font-size:11.5px;letter-spacing:.16em;color:rgba(10,28,64,.4);line-height:2.4;
+  opacity:0;transition:opacity 1.4s ease .9s}
+#s10.on .pw{opacity:1}
+
+/* act IV closing */
+#close{position:absolute;left:0;right:0;top:84.5%;text-align:center;font-style:italic;
+  font-size:44px;opacity:0;transition:opacity 1.3s ease}
+#close.on{opacity:1}
+
+/* end card */
+#card{position:absolute;inset:0;background:var(--field);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:26px;opacity:0;transition:opacity 1s ease;z-index:50}
+#card.on{opacity:1}
+#card .k{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.3em;color:rgba(10,28,64,.5)}
+#card .l{font-size:58px}
+#card .u{font-family:'Public Sans',sans-serif;font-size:20px;color:rgba(10,28,64,.6)}
+#card .t{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.2em;color:rgba(10,28,64,.3)}
+</style>
+</head>
+<body>
+<div id="paper"></div><div id="warm"></div>
+<div id="world">
+  <div id="line"></div>
+  <div id="pulse"></div>
+  <div id="ripple">WATCHING&nbsp;&nbsp;·&nbsp;&nbsp;COUNTING&nbsp;&nbsp;·&nbsp;&nbsp;REMEMBERING</div>
+
+  <div id="mark"><svg viewBox="0 0 48 48">
+    <path d="M14 38L24 10l10 28"/><path id="bar" d="M18.2 28h11.6"/>
+  </svg></div>
+
+  <div class="truth" id="t1">Every deal your company has ever won lives in one head.</div>
+  <div class="truth" id="t2">Every reason. Every relationship. Every save.</div>
+  <div class="truth" id="yours">Yours.</div>
+  <div id="whisper1">AND&nbsp;HEADS&nbsp;DON'T&nbsp;SCALE</div>
+
+  <!-- shard 6 · the pick -->
+  <div class="shard" id="s6">
+    <div class="slabel">It reads the world for you.</div>
+    <div class="grow"><div class="names">
+      <span class="nm" style="left:22%;bottom:300px">Delta Air Lines</span>
+      <span class="nm" style="left:64%;bottom:360px">FedEx</span>
+      <span class="nm" style="left:30%;bottom:150px">Marriott</span>
+      <span class="nm" style="left:70%;bottom:180px">Nike</span>
+      <span class="nm" style="left:16%;bottom:430px">Starbucks</span>
+      <span class="nm" style="left:74%;bottom:470px">OpenAI</span>
+      <span class="nm" style="left:26%;bottom:520px">Chipotle</span>
+      <span class="nm" style="left:66%;bottom:80px">Uber</span>
+      <span id="boeing" class="nm" style="bottom:210px;transform:translateX(-50%)">Boeing</span>
+      <div class="bmono smono">HEAT&nbsp;62&nbsp;·&nbsp;FRESH&nbsp;SIGNALS&nbsp;·&nbsp;A&nbsp;REAL&nbsp;EVENT,&nbsp;TODAY</div>
+    </div></div>
+  </div>
+
+  <!-- shard 7 · the count -->
+  <div class="shard" id="s7">
+    <div class="slabel">It counts the work — even the work you don't log.</div>
+    <div class="grow">
+      <div class="stem"></div>
+      <div class="count" id="cnt">13</div>
+      <div class="cl smono">TODAY&nbsp;·&nbsp;LOGGED&nbsp;OR&nbsp;CAPTURED</div>
+    </div>
+  </div>
+
+  <!-- shard 8 · the honest beat -->
+  <div class="shard" id="s8">
+    <div class="slabel">It says the hard thing out loud.</div>
+    <div class="grow">
+      <div class="red">3 deals will slip this week if you do nothing.</div>
+      <div class="ans">Here's the move.</div>
+    </div>
+  </div>
+
+  <!-- shard 9 · the coverage bar -->
+  <div class="shard" id="s9">
+    <div class="slabel">It answers before you're asked.</div>
+    <div class="grow"><div class="wrap">
+      <div class="nums"><span>118</span><span style="color:rgba(10,28,64,.35)">of 150</span></div>
+      <div class="track"><div class="fill"></div></div>
+      <div class="pm smono">THE&nbsp;PAPERS&nbsp;YOU&nbsp;ALREADY&nbsp;HOLD</div>
+    </div></div>
+  </div>
+
+  <!-- shard 10 · the book -->
+  <div class="shard" id="s10">
+    <div class="slabel">And it writes everything down — for the one who comes next.</div>
+    <div class="grow"><div class="book">
+      <div class="page pl"><div class="pw">WHO&nbsp;HITS,&nbsp;WHO&nbsp;MISSES<br>THE&nbsp;OUTREACH&nbsp;THAT&nbsp;LANDED<br>THE&nbsp;QUESTIONS&nbsp;THAT&nbsp;WON</div></div>
+      <div class="page pr"><div class="pw">WHERE&nbsp;DEALS&nbsp;LEAK<br>WHY&nbsp;WE&nbsp;WIN<br>THE&nbsp;DAY-ONE&nbsp;RHYTHM</div></div>
+    </div></div>
+  </div>
+
+  <div id="mark2"><div class="rise"><svg viewBox="0 0 48 48">
+    <path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/>
+  </svg></div></div>
+
+  <div id="close">Built so the next person can stand on it.</div>
+</div>
+
+<div id="card">
+  <svg width="88" height="88" viewBox="0 0 48 48" fill="none">
+    <path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>
+  <div class="k">ANTAEUS</div>
+  <div class="l">Strength, from the ground.</div>
+  <div class="u">antaeus.app</div>
+</div>
+
+<script>
+const at=(ms,fn)=>setTimeout(fn,ms);
+const on=(id,c='on')=>document.getElementById(id).classList.add(c);
+const off=(id,c='on')=>document.getElementById(id).classList.remove(c);
+const mark=document.getElementById('mark');
+
+/* ?wait=1 → hold on the empty field until the shooter calls window.__go()
+   (lets ffmpeg start before the timeline does, in a chromeless --app window). */
+if(new URLSearchParams(location.search).has('wait')){
+  window.__go=()=>run();
+}else{
+  window.addEventListener('load',()=>{ at(600,run) });
+}
+function run(){
+  /* ACT I — LIFTED (0–19s). The mark sinks ~7% per truth. */
+  at(0,   ()=>{ on('t1') });
+  at(4600,()=>{ off('t1'); mark.style.top='28%'; });
+  at(5600,()=>{ on('t2') });
+  at(10200,()=>{ off('t2'); mark.style.top='42%'; });
+  at(11200,()=>{ on('yours') });
+  at(14600,()=>{ on('whisper1') });
+  at(17200,()=>{ off('yours'); off('whisper1'); });
+
+  /* ACT II — TOUCH (19–24s). Feet meet line; the line wakes. */
+  at(17600,()=>{ mark.style.transitionDuration='2.2s'; mark.style.top='68.3%'; }); // feet exactly on the 78% line (feet sit at 38/48 of the 132px svg)
+  at(20300,()=>{ /* one second of stillness */ });
+  at(21300,()=>{ document.getElementById('pulse').classList.add('go');
+                 document.body.classList.add('grounded'); });
+  at(22300,()=>{ on('ripple') });
+  at(25300,()=>{ off('ripple') });
+
+  /* ACT III — RISE (24–58s). Push-in runs across the act. */
+  at(24000,()=>{ document.body.classList.add('push');
+                 mark.style.opacity='0'; mark.style.transitionDuration='1.5s'; });
+  at(24300,()=>{ on('s6') });
+  at(26000,()=>{ document.getElementById('s6').classList.add('ignite') });
+  at(30600,()=>{ document.getElementById('s6').classList.add('off'); off('s6') });
+  at(31600,()=>{ on('s7') });
+  at(33400,()=>{ rollCount() });
+  at(36600,()=>{ document.getElementById('s7').classList.add('off'); off('s7') });
+  at(37600,()=>{ on('s8') });
+  at(41000,()=>{ document.getElementById('s8').classList.add('answer') });
+  at(44600,()=>{ document.getElementById('s8').classList.add('off'); off('s8') });
+  at(45600,()=>{ on('s9') });
+  at(47000,()=>{ document.getElementById('s9').classList.add('fill') });
+  at(51600,()=>{ document.getElementById('s9').classList.add('off'); off('s9') });
+  at(52600,()=>{ on('s10') });
+  at(58000,()=>{ document.getElementById('s10').classList.add('off'); off('s10') });
+
+  /* ACT IV — STAND (58–70s). */
+  at(58400,()=>{ document.body.classList.remove('push');
+                 mark.style.opacity='1'; });
+  at(61000,()=>{ on('mark2') });
+  at(63200,()=>{ on('close') });
+  at(67400,()=>{ on('card') });
+}
+function rollCount(){
+  const el=document.getElementById('cnt');
+  at(0,()=>el.textContent='13'); at(900,()=>el.textContent='14');
+}
+</script>
+</body>
+</html>

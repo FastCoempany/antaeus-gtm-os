@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Antaeus — The Dance II (cast cut)</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+/* THE DANCE II — ~51s. Characters, jolts, iconography.
+   Line-figures in the brand stroke (severe, architectural — never cute).
+   Movement: slams, snaps, drop-ins, scatters, a racing spark, a handoff. */
+:root{
+  --field:#f6f8fc; --ink:#0a1c40; --orange:#e6701e; --forest:#1b5e3f;
+  --red:#cf3b34; --blue:#2563eb;
+  --serif:'DM Serif Display',Georgia,serif; --mono:'JetBrains Mono',monospace;
+  --sans:'Public Sans',sans-serif;
+  --ease:cubic-bezier(.2,.9,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--field);
+  font-family:var(--serif);color:var(--ink)}
+#paper{position:absolute;inset:0;opacity:.75;
+  background-image:linear-gradient(rgba(10,28,64,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(10,28,64,.045) 1px,transparent 1px);
+  background-size:33px 33px}
+
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none;display:flex;
+  align-items:center;justify-content:center;perspective:1500px}
+.scene.in{opacity:1}
+.zi{animation:kZi .42s var(--ease) both}
+.zf{animation:kZf .48s var(--ease) both}
+.wi{animation:kWi .36s var(--ease) both}
+.di{animation:kDi .45s var(--ease) both}          /* drop-in from above */
+.oT{animation:kOT .42s var(--ease) both}
+.oB{animation:kOB .38s var(--ease) both}
+.oW{animation:kOW .34s var(--ease) both}
+.oD{animation:kOD .38s var(--ease) both}          /* fall out below */
+@keyframes kZi{from{opacity:0;transform:scale(1.24)}to{opacity:1;transform:scale(1)}}
+@keyframes kZf{from{opacity:0;transform:scale(.68)}to{opacity:1;transform:scale(1)}}
+@keyframes kWi{from{opacity:0;transform:translateX(11%) skewX(-4deg)}to{opacity:1;transform:none}}
+@keyframes kDi{from{opacity:0;transform:translateY(-14%) rotate(1.4deg)}
+  62%{transform:translateY(1.6%) rotate(-.4deg)}to{opacity:1;transform:none}}
+@keyframes kOT{to{opacity:0;transform:scale(5.5)}}
+@keyframes kOB{to{opacity:0;transform:scale(.6)}}
+@keyframes kOW{to{opacity:0;transform:translateX(-10%) skewX(-4deg)}}
+@keyframes kOD{to{opacity:0;transform:translateY(13%) rotate(-1.6deg)}}
+
+.icon{display:inline-flex;flex:none}
+.icon svg,.fig svg,.oi svg,.plane2 svg,.env svg{stroke:currentColor;fill:none;stroke-width:2.6;
+  stroke-linecap:round;stroke-linejoin:round}
+.kick{font-family:var(--mono);font-weight:700;letter-spacing:.26em;font-size:13px;color:rgba(10,28,64,.45)}
+.slam{opacity:0}
+.slam.go{animation:kSlam .34s var(--ease) forwards}
+@keyframes kSlam{from{opacity:0;transform:scale(1.55) rotate(2.4deg)}
+  62%{opacity:1;transform:scale(.95) rotate(-1deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.snap{opacity:0}
+.snap.go{animation:kSnap .18s steps(2,end) forwards}
+@keyframes kSnap{from{opacity:0;transform:scale(1.3) rotate(-2deg)}to{opacity:1;transform:none}}
+.roll{animation:kRoll .4s var(--ease)}
+@keyframes kRoll{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes kShake{15%{transform:translateX(-9px) rotate(-.5deg)}35%{transform:translateX(8px)}
+  55%{transform:translateX(-5px)}75%{transform:translateX(3px)}}
+
+/* ── the figures (line people, brand stroke) ── */
+.fig{position:absolute;color:var(--ink)}
+.fig svg{stroke-width:3.2;overflow:visible}
+.fig .pose{display:none}
+.fig[data-pose="stand"] .p-stand{display:block}
+.fig[data-pose="walk1"] .p-walk1{display:block}
+.fig[data-pose="walk2"] .p-walk2{display:block}
+.fig[data-pose="raise"] .p-raise{display:block}
+.fig[data-pose="hold"] .p-hold{display:block}
+.fig[data-pose="give"] .p-give{display:block}
+.ping{position:absolute;width:14px;height:14px;border-radius:50%;border:3px solid var(--orange);
+  opacity:0;transform:scale(.2)}
+.ping.go{animation:kPing .55s ease-out forwards}
+@keyframes kPing{0%{opacity:.95}100%{opacity:0;transform:scale(7)}}
+
+/* S1 · the head that holds everything */
+#s1 .stagewrap{position:relative;width:100%;height:100%}
+#s1 .fig{left:50%;top:56%;transform:translateX(-50%)}
+#s1 .orb{position:absolute;left:50%;top:58%;width:0;height:0}
+#s1 .ring{position:absolute;left:0;top:0;animation:kSpin linear infinite}
+#s1 .ring.r2{animation-direction:reverse}
+@keyframes kSpin{to{transform:rotate(360deg)}}
+#s1 .oi{position:absolute;color:var(--ink);opacity:.8}
+#s1.fling .ring{animation-play-state:paused}
+#s1.fling .oi{animation:kFling .5s ease-in forwards}
+@keyframes kFling{to{transform:translate(var(--fx),var(--fy)) rotate(160deg);opacity:0}}
+#s1 .cap{position:absolute;left:0;right:0;top:14%;text-align:center;font-size:60px}
+#s1 .kick{position:absolute;left:0;right:0;top:25%;text-align:center}
+
+/* S2 · account card */
+#s2 .card{width:760px;background:#fff;border:1.5px solid rgba(10,28,64,.14);border-radius:18px;
+  box-shadow:0 40px 90px rgba(10,28,64,.18);padding:44px 52px}
+#s2 .row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#s2 .nm{font-size:76px;line-height:1}
+#s2 .dot{width:16px;height:16px;border-radius:50%;background:var(--orange);
+  animation:kBeat 1.4s ease-in-out infinite}
+@keyframes kBeat{50%{transform:scale(1.28);box-shadow:0 0 0 16px rgba(230,112,30,0)}}
+#s2 .sub{font-family:var(--sans);font-size:19px;color:rgba(10,28,64,.55);margin-bottom:34px}
+#s2 .glabel{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:700;
+  font-size:14px;letter-spacing:.2em;margin-bottom:10px}
+#s2 .track{height:14px;border-radius:7px;background:rgba(10,28,64,.08);overflow:hidden}
+#s2 .fill{height:100%;width:8%;border-radius:7px;background:var(--orange);transition:width .8s var(--ease)}
+#s2.hot .fill{width:62%}
+
+/* S3 · bolt rain + chips */
+#s3 .rain{position:absolute;inset:0;overflow:hidden}
+#s3 .bolt{position:absolute;top:-120px;color:rgba(230,112,30,.55);
+  animation:kFall 1.15s cubic-bezier(.4,0,.8,1) both}
+@keyframes kFall{to{transform:translateY(1350px) rotate(24deg)}}
+#s3 .stack{width:940px;display:flex;flex-direction:column;gap:24px;position:relative}
+.chip{background:#fff;border:1.5px solid rgba(10,28,64,.12);border-left:5px solid var(--orange);
+  border-radius:14px;box-shadow:0 20px 50px rgba(10,28,64,.12);padding:26px 34px;
+  display:flex;gap:22px;align-items:center}
+.chip .icon{color:var(--orange)}
+.chip .t{font-family:var(--sans);font-weight:600;font-size:27px}
+.chip .m{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.2em;
+  color:rgba(10,28,64,.4);margin-top:6px}
+
+/* S4 · composer */
+#s4 .comp{width:880px;background:#fff;border:1.5px solid rgba(10,28,64,.12);border-radius:18px;
+  box-shadow:0 40px 90px rgba(10,28,64,.16);padding:40px 48px}
+#s4 .to{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.18em;
+  color:rgba(10,28,64,.5);padding-bottom:18px;border-bottom:1.5px solid rgba(10,28,64,.1);
+  margin-bottom:26px;display:flex;gap:14px;align-items:center}
+#s4 .tline{font-family:var(--sans);font-size:25px;line-height:1.5;white-space:nowrap;
+  overflow:hidden;max-width:0}
+#s4 .tline.type{animation:kType .6s steps(30) forwards}
+@keyframes kType{to{max-width:100%}}
+#s4 .send{margin-top:30px;display:inline-flex;align-items:center;gap:12px;background:var(--orange);
+  color:#fff;font-family:var(--sans);font-weight:700;font-size:20px;border-radius:12px;
+  padding:16px 30px;box-shadow:0 12px 30px rgba(230,112,30,.35)}
+#s4 .send.hit{animation:kHit .3s var(--ease)}
+@keyframes kHit{40%{transform:scale(.9)}to{transform:scale(1)}}
+
+/* S5 · the buyer's door */
+#s5 .door{position:absolute;right:24%;top:26%;width:220px;height:420px;border:3px solid var(--ink);
+  border-radius:6px;background:#fff;box-shadow:0 30px 70px rgba(10,28,64,.14)}
+#s5 .door::after{content:'';position:absolute;right:22px;top:50%;width:14px;height:14px;
+  border-radius:50%;border:3px solid var(--ink)}
+#s5 .fig{right:calc(24% + 240px);top:34%}
+#s5 .plane2{position:absolute;left:-8%;top:30%;color:var(--ink);
+  animation:kArc 1s cubic-bezier(.3,.2,.5,1) .3s both}
+@keyframes kArc{from{transform:translate(0,0) rotate(10deg);opacity:1}
+  80%{opacity:1}
+  to{transform:translate(1150px,110px) rotate(-8deg);opacity:0}}
+#s5 .env{position:absolute;right:calc(24% + 300px);top:47%;color:var(--ink);opacity:0}
+#s5 .env.pop{animation:kSlam .3s var(--ease) forwards}
+#s5 .stampchip{position:absolute;right:24%;top:14%;background:#fff;border:2px solid var(--forest);
+  color:var(--forest);border-radius:999px;padding:12px 26px;font-family:var(--mono);
+  font-weight:700;font-size:14px;letter-spacing:.24em}
+#s5 .cap{position:absolute;left:8%;top:66%;font-size:50px;max-width:640px;line-height:1.25}
+
+/* S6 · the call (two figures, chips flying) */
+#s6 .figL{left:14%;top:34%}
+#s6 .figR{right:14%;top:34%;transform:scaleX(-1)}
+#s6 .bub{position:absolute;background:#fff;border:1.5px solid rgba(10,28,64,.14);
+  border-radius:18px;box-shadow:0 18px 44px rgba(10,28,64,.14);padding:22px 32px;
+  font-size:31px}
+#s6 .b1{left:22%;top:28%}
+#s6 .b2{right:22%;top:42%;border-radius:18px 18px 6px 18px}
+#s6 .b3{left:22%;top:56%}
+#s6 .b4{right:20%;top:24%;color:var(--orange);border-color:var(--orange);font-size:36px}
+#s6 .readchip{position:absolute;left:0;right:0;bottom:16%;text-align:center}
+#s6 .readchip span{display:inline-flex;gap:12px;align-items:center;background:#fff;
+  border:1.5px solid rgba(10,28,64,.14);border-radius:999px;padding:12px 26px;
+  font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.2em;color:rgba(10,28,64,.6)}
+
+/* S7 · it runs while you walk */
+#s7 .rows{position:absolute;left:12%;top:24%;width:760px;display:flex;flex-direction:column;gap:18px}
+.wrow{background:#fff;border:1.5px solid rgba(10,28,64,.12);border-radius:14px;
+  padding:20px 28px;display:flex;gap:18px;align-items:center;
+  box-shadow:0 18px 44px rgba(10,28,64,.12)}
+.wrow .t{font-family:var(--sans);font-weight:600;font-size:23px}
+.wrow .tag{font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.24em;
+  color:rgba(10,28,64,.42);display:block;margin-bottom:3px}
+#s7 .fig{left:66%;top:38%;transition:left 3.4s linear}
+#s7.go .fig{left:88%}
+#s7 .cap{position:absolute;left:12%;top:66%;font-size:66px}
+
+/* S8 · ignition */
+#s8{background:radial-gradient(1200px 700px at 50% 44%,rgba(230,112,30,.2),rgba(246,248,252,0))}
+#s8 .bub{background:#fff;border-radius:22px 22px 22px 6px;border:1.5px solid rgba(10,28,64,.1);
+  box-shadow:0 40px 100px rgba(230,112,30,.3);padding:46px 58px;text-align:center}
+#s8 .t{font-size:64px;color:var(--orange)}
+#s8 .m{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.26em;
+  color:rgba(10,28,64,.5);margin-top:16px}
+
+/* S9 · red beat */
+#s9 .col{display:flex;flex-direction:column;align-items:center;gap:26px}
+#s9 .rl{font-size:64px;color:var(--red)}
+#s9 .dealrow{width:880px;background:#fff;border:1.5px solid rgba(10,28,64,.12);
+  border-left:6px solid var(--red);border-radius:14px;padding:26px 34px;
+  box-shadow:0 24px 60px rgba(10,28,64,.14);display:flex;justify-content:space-between;
+  align-items:center;animation:kShake .5s ease .35s}
+#s9 .dn{font-size:40px}
+#s9 .dm{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;color:var(--red)}
+#s9 .ans{display:inline-flex;gap:14px;align-items:center;background:#fff;color:var(--orange);
+  border:2px solid var(--orange);border-radius:999px;padding:16px 34px;font-size:30px}
+
+/* S10 · the wall and the hand */
+#s10 .wall{display:grid;grid-template-columns:repeat(15,30px);gap:7px;
+  position:absolute;left:50%;top:14%;transform:translateX(-38%) rotateX(9deg)}
+#s10 .tile{width:30px;height:30px;border-radius:6px;background:rgba(10,28,64,.12);opacity:0;
+  transition:background .25s ease}
+#s10 .tile.on{opacity:1}
+#s10 .tile.ok{background:var(--forest)}
+#s10 .fig{left:18%;top:44%}
+#s10 .wt{position:absolute;left:0;right:0;bottom:16%;text-align:center;font-size:50px}
+#s10 .wt .n{color:var(--forest)}
+#s10 .wm{position:absolute;left:0;right:0;bottom:10%;text-align:center}
+
+/* S11 · the spark on the thread */
+#s11 .wrap{width:1560px;position:relative}
+#s11 .rail{position:absolute;left:0;right:0;top:44px;height:2.5px;background:rgba(10,28,64,.5)}
+#s11 .spark{position:absolute;top:38px;left:0;width:16px;height:16px;border-radius:50%;
+  background:var(--orange);box-shadow:0 0 22px rgba(230,112,30,.8)}
+#s11.race .spark{animation:kRace 2.6s cubic-bezier(.5,0,.5,1) forwards}
+@keyframes kRace{to{left:100%}}
+#s11 .wp{position:absolute;top:0;transform:translateX(-50%);text-align:center;width:220px;opacity:0}
+#s11 .wp.go{animation:kSlam .3s var(--ease) forwards}
+#s11 .wp .ic{width:88px;height:88px;margin:0 auto 14px;background:#fff;border:2px solid var(--ink);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 14px 34px rgba(10,28,64,.16)}
+#s11 .wp .lb{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.2em;color:rgba(10,28,64,.55)}
+#s11 .head{position:absolute;left:0;right:0;top:26%;text-align:center;font-size:54px}
+
+/* S12 · the handoff */
+#s12 .stage12{position:relative;width:100%;height:100%}
+#s12 .gline{position:absolute;left:0;right:0;top:66%;height:2.5px;background:var(--ink);
+  transform:scaleX(0);transition:transform .7s var(--ease)}
+#s12.gr .gline{transform:scaleX(1)}
+#s12 .figA{left:34%;top:43.8%;transition:opacity 1s ease}
+#s12.done .figA{opacity:.25}
+#s12 .figB{left:72%;top:43.8%;transform:scaleX(-1)}
+#s12 .bookmini{position:absolute;left:40.5%;top:50%;width:92px;height:64px;
+  transition:left 1s var(--ease)}
+#s12.pass .bookmini{left:63.5%}
+#s12 .bookmini .pg{position:absolute;bottom:0;width:46px;height:58px;background:#fff;
+  border:2px solid var(--ink)}
+#s12 .bookmini .pgl{left:0;border-radius:6px 2px 0 0;transform:rotate(-2deg);transform-origin:bottom right}
+#s12 .bookmini .pgr{right:0;border-radius:2px 6px 0 0;transform:rotate(2deg);transform-origin:bottom left}
+#s12 .mk{position:absolute;left:50%;top:66%;width:120px;height:120px;margin-left:-60px;margin-top:-95px}
+#s12 .mk path{stroke:var(--ink);fill:none;stroke-width:3.2}
+#s12 .cap{position:absolute;left:0;right:0;top:76%;text-align:center;font-style:italic;font-size:42px}
+
+/* flourish + card */
+.flash{position:absolute;inset:0;opacity:0;display:flex;align-items:center;justify-content:center}
+.flash.go{animation:kFlash .38s ease both}
+@keyframes kFlash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+#f1{background:var(--orange)}#f1 .d{width:170px;height:170px;border-radius:50%;background:#fff}
+#f2{background:var(--ink)}#f2 .t{font-size:110px;color:#fff}
+#f3{background:var(--forest)}#f3 .t{font-family:var(--mono);font-weight:700;font-size:90px;color:#fff}
+#s14{flex-direction:column;gap:26px;background:var(--field)}
+#s14 .k{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.3em;color:rgba(10,28,64,.5)}
+#s14 .l{font-size:58px}
+#s14 .u{font-family:var(--sans);font-size:20px;color:rgba(10,28,64,.6)}
+</style>
+</head>
+<body>
+<div id="paper"></div>
+
+<!-- S1 · the head that holds everything -->
+<div class="scene" id="s1"><div class="stagewrap">
+  <div class="cap">It all lives in one head.</div>
+  <div class="kick">EVERY&nbsp;DEAL&nbsp;·&nbsp;EVERY&nbsp;REASON&nbsp;·&nbsp;EVERY&nbsp;SAVE</div>
+  <div class="orb" id="orb"></div>
+  <div class="fig" data-pose="stand" id="fg1"></div>
+</div></div>
+
+<!-- S2 · account card -->
+<div class="scene" id="s2"><div class="card slam" id="cardslam">
+  <div class="row1"><div class="nm">Boeing</div><div class="dot"></div></div>
+  <div class="sub">Aerospace · Chicago · 29 accounts watched</div>
+  <div class="glabel"><span>HEAT</span><span>62</span></div>
+  <div class="track"><div class="fill"></div></div>
+</div></div>
+
+<!-- S3 · bolt rain + chips -->
+<div class="scene" id="s3">
+  <div class="rain" id="rain"></div>
+  <div class="stack">
+    <div class="chip slam" id="c1">
+      <span class="icon" id="ic-b1"></span>
+      <div><div class="t">2,400 factory roles opening — the rebuild after the strike.</div>
+      <div class="m">HIRING&nbsp;SURGE&nbsp;·&nbsp;PUBLIC&nbsp;POSTING</div></div>
+    </div>
+    <div class="chip slam" id="c2" style="margin-left:120px">
+      <span class="icon" id="ic-b2"></span>
+      <div><div class="t">A new head of talent acquisition, five weeks in.</div>
+      <div class="m">LEADERSHIP&nbsp;·&nbsp;ANNOUNCEMENT</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 · composer -->
+<div class="scene" id="s4"><div class="comp">
+  <div class="to"><span class="icon" id="ic-env"></span>TO&nbsp;·&nbsp;TALENT&nbsp;ACQUISITION&nbsp;·&nbsp;BOEING</div>
+  <div class="tline" id="l1">Two thousand hires is a systems problem, not a sourcing one.</div>
+  <div class="tline" id="l2" style="margin-top:10px">Here's how three airlines did it without breaking.</div>
+  <div class="send" id="send"><span class="icon" id="ic-pl"></span>Send</div>
+</div></div>
+
+<!-- S5 · the buyer's door -->
+<div class="scene" id="s5">
+  <div class="plane2" id="ic-pl2"></div>
+  <div class="door"></div>
+  <div class="fig" data-pose="stand" id="fg5"></div>
+  <div class="env" id="env5"></div>
+  <div class="stampchip snap" id="opened">OPENED&nbsp;·&nbsp;TWICE</div>
+  <div class="cap">It found the right door.</div>
+</div>
+
+<!-- S6 · the call -->
+<div class="scene" id="s6">
+  <div class="fig figL" data-pose="stand" id="fg6a"></div>
+  <div class="fig figR" data-pose="stand" id="fg6b"></div>
+  <div class="bub b1 snap" id="b1">“Who signs off on this?”</div>
+  <div class="bub b2 snap" id="b2">“The CFO. Maybe.”</div>
+  <div class="bub b3 snap" id="b3">“Who fights it?”</div>
+  <div class="bub b4 snap" id="b4">“…procurement. Always.”</div>
+  <div class="readchip snap" id="rc"><span><span class="icon" id="ic-ph"></span>LIVE&nbsp;·&nbsp;THE&nbsp;NEXT&nbsp;QUESTION,&nbsp;READY</span></div>
+</div>
+
+<!-- S7 · it runs while you walk -->
+<div class="scene" id="s7">
+  <div class="rows">
+    <div class="wrow slam" id="r1"><span class="icon" id="ic-cal"></span>
+      <div><span class="tag" style="color:var(--blue)">THE MACHINE</span>
+      <div class="t">Thursday with United — on the books.</div></div></div>
+    <div class="wrow slam" id="r2"><span class="icon" id="ic-chk"></span>
+      <div><span class="tag">COUNTED</span>
+      <div class="t">14 today — logged or not.</div></div></div>
+    <div class="wrow slam" id="r3"><span class="icon" id="ic-rep"></span>
+      <div><span class="tag" style="color:var(--orange)">THE BUYERS</span>
+      <div class="t">A reply is in.</div></div></div>
+  </div>
+  <div class="fig" data-pose="walk1" id="fg7"></div>
+  <div class="cap">It runs while you work.</div>
+</div>
+
+<!-- S8 · ignition -->
+<div class="scene" id="s8"><div class="bub slam" id="ign">
+  <div class="t">Starbucks replied.</div>
+  <div class="m">AFTER&nbsp;20&nbsp;QUIET&nbsp;DAYS</div>
+</div></div>
+
+<!-- S9 · red beat -->
+<div class="scene" id="s9"><div class="col">
+  <div class="rl slam" id="rl9">3 deals will slip this week.</div>
+  <div class="dealrow"><div><div class="dn">Nordstrom</div>
+    <div class="dm">NO&nbsp;DATED&nbsp;NEXT&nbsp;STEP&nbsp;·&nbsp;21&nbsp;DAYS&nbsp;QUIET</div></div>
+    <div style="font-size:44px;color:rgba(10,28,64,.45)">$340K</div></div>
+  <div class="ans snap" id="ans9">Here's the move<span class="icon" id="ic-ar"></span></div>
+</div></div>
+
+<!-- S10 · the wall and the hand -->
+<div class="scene" id="s10">
+  <div class="wall" id="wall"></div>
+  <div class="fig" data-pose="stand" id="fg10"></div>
+  <div class="wt"><span class="n" id="wn">0</span> of 150 already answered.</div>
+  <div class="wm kick">SOC&nbsp;2&nbsp;·&nbsp;PEN-TEST&nbsp;·&nbsp;DPA&nbsp;·&nbsp;THE&nbsp;PAPERS&nbsp;YOU&nbsp;HOLD</div>
+</div>
+
+<!-- S11 · the spark -->
+<div class="scene" id="s11">
+  <div class="head">One account. One thread.</div>
+  <div class="wrap">
+    <div class="rail"></div><div class="spark"></div>
+    <div class="wp" style="left:6%"><div class="ic" id="ic-w1"></div><div class="lb">THE&nbsp;SIGNAL</div></div>
+    <div class="wp" style="left:28%"><div class="ic" id="ic-w2"></div><div class="lb">THE&nbsp;MESSAGE</div></div>
+    <div class="wp" style="left:50%"><div class="ic" id="ic-w3"></div><div class="lb">THE&nbsp;CALL</div></div>
+    <div class="wp" style="left:72%"><div class="ic" id="ic-w4"></div><div class="lb">THE&nbsp;DEAL</div></div>
+    <div class="wp" style="left:94%"><div class="ic" id="ic-w5"></div><div class="lb">THE&nbsp;FAVOR</div></div>
+  </div>
+</div>
+
+<!-- S12 · the handoff -->
+<div class="scene" id="s12"><div class="stage12">
+  <div class="gline"></div>
+  <div class="fig figA" data-pose="give" id="fgA"></div>
+  <div class="fig figB" data-pose="hold" id="fgB"></div>
+  <div class="bookmini"><div class="pg pgl"></div><div class="pg pgr"></div></div>
+  <div class="mk"><svg viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/></svg></div>
+  <div class="cap">Built so the next person can stand on it.</div>
+</div></div>
+
+<!-- flourish -->
+<div class="flash" id="f1"><div class="d"></div></div>
+<div class="flash" id="f2"><div class="t">14</div></div>
+<div class="flash" id="f3"><div class="t">118/150</div></div>
+
+<!-- card -->
+<div class="scene" id="s14">
+  <svg width="88" height="88" viewBox="0 0 48 48" fill="none">
+    <path d="M14 38L24 10l10 28" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M18.2 28h11.6" stroke="#0a1c40" stroke-width="3.4"/>
+    <path d="M2 38h44" stroke="#0a1c40" stroke-width="3.4"/></svg>
+  <div class="k">ANTAEUS</div>
+  <div class="l">Strength, from the ground.</div>
+  <div class="u">antaeus.app</div>
+</div>
+
+<script>
+const at=(ms,fn)=>setTimeout(fn,ms);
+const $=(s)=>document.querySelector(s);
+function IN(id,how){const e=$(id);e.classList.add('in',how)}
+function OUT(id,how){const e=$(id);e.classList.remove('zi','zf','wi','di');e.classList.add(how);
+  at(460,()=>{e.classList.remove('in',how)})}
+const go=(id)=>$(id).classList.add('go');
+
+/* ── icon library (brand-stroke line glyphs) ── */
+const I={
+ bolt:'<path d="M13 2L5 13h6l-2 9 8-11h-6l2-9z"/>',
+ plane:'<path d="M2 16l20-7-7 4 2 8-4-6-11 1z"/>',
+ env:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7L22 7"/>',
+ phone:'<path d="M5 4h4l2 5-3 2c1.5 3 3.5 5 6 6l2-3 5 2v4c0 1-1 2-2 2C10 21 3 14 3 6c0-1 1-2 2-2z"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>',
+ chk:'<path d="M4 12l6 6L20 6"/>',
+ rep:'<path d="M9 17l-5-5 5-5M4 12h11a5 5 0 015 5v2"/>',
+ case:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+ book:'<path d="M4 5a2 2 0 012-2h6v18H6a2 2 0 00-2 2V5zM12 3h6a2 2 0 012 2v18a2 2 0 00-2-2h-6"/>',
+ doll:'<path d="M12 2v20M17 6H9.5a3 3 0 000 6h5a3 3 0 010 6H6"/>',
+ pin:'<path d="M12 21s-7-6.5-7-11a7 7 0 0114 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+ shield:'<path d="M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6l8-3z"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
+ hand:'<path d="M8 12l-4-2 8-7 8 7-4 2M4 10v6l8 6 8-6v-6M12 3v9"/>'
+};
+const ic=(k,s)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24">${I[k]}</svg>`;
+for(const [id,k,s] of [['#ic-b1','bolt',40],['#ic-b2','pin',40],['#ic-env','env',22],
+ ['#ic-pl','plane',22],['#ic-ph','phone',18],['#ic-cal','cal',34],['#ic-chk','chk',34],
+ ['#ic-rep','rep',34],['#ic-ar','rep',26],['#ic-w1','bolt',40],['#ic-w2','env',40],
+ ['#ic-w3','phone',40],['#ic-w4','case',40],['#ic-w5','hand',40]])
+  $(id).innerHTML=ic(k,s);
+$('#ic-pl2').innerHTML='<svg width="86" height="86" viewBox="0 0 24 24" style="stroke-width:1.8">'+I.plane+'</svg>';
+$('#env5').innerHTML='<svg width="54" height="54" viewBox="0 0 24 24">'+I.env+'</svg>';
+$('#ic-ar').style.color='var(--orange)';
+$('#ic-cal').style.color='var(--blue)';
+$('#ic-rep').style.color='var(--orange)';
+
+/* ── the figure (line person; poses swap by data-pose) ── */
+const FIG=`<svg width="120" height="240" viewBox="0 0 60 120">
+ <g class="pose p-stand"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 32L15 54M30 32l15 22M30 65L18 108M30 65l12 43"/></g>
+ <g class="pose p-walk1"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 32L18 50M30 32l14 16M30 65L14 104M30 65l16 38"/></g>
+ <g class="pose p-walk2"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 32L20 52M30 32l12 20M30 65L22 106M30 65l8 41"/></g>
+ <g class="pose p-raise"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 32L15 54M30 30l20-16M30 65L18 108M30 65l12 43"/></g>
+ <g class="pose p-hold"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 34l22 8M30 38l22 8M30 65L18 108M30 65l12 43"/></g>
+ <g class="pose p-give"><circle cx="30" cy="13" r="9.5"/><path d="M30 23v42M30 30l24 14M30 65L18 108M30 65l12 43"/></g>
+</svg>`;
+for(const id of ['#fg1','#fg5','#fg6a','#fg6b','#fg7','#fg10','#fgA','#fgB'])
+  $(id).innerHTML=FIG;
+
+/* S1 orbit: 3 rings of icons around the head */
+(function(){
+  const orb=$('#orb');
+  const rings=[[130,6,['env','phone','cal','doll']],[205,9,['bolt','case','chk','pin','book']],
+               [285,13,['rep','shield','chart','hand','env','phone']]];
+  rings.forEach(([r,dur,keys],ri)=>{
+    const ring=document.createElement('div'); ring.className='ring'+(ri===1?' r2':'');
+    ring.style.animationDuration=dur+'s';
+    keys.forEach((k,i)=>{
+      const a=2*Math.PI*i/keys.length;
+      const d=document.createElement('div'); d.className='oi';
+      d.style.left=(Math.cos(a)*r-20)+'px'; d.style.top=(Math.sin(a)*r-20)+'px';
+      d.style.setProperty('--fx',(Math.cos(a)*900)+'px');
+      d.style.setProperty('--fy',(Math.sin(a)*900)+'px');
+      d.innerHTML=ic(k,40); ring.appendChild(d);
+    });
+    orb.appendChild(ring);
+  });
+})();
+/* S3 bolt rain */
+(function(){
+  const rain=$('#rain');
+  for(let i=0;i<26;i++){
+    const b=document.createElement('div'); b.className='bolt';
+    b.style.left=(3+Math.random()*94)+'%';
+    b.style.animationDelay=(Math.random()*1.6)+'s';
+    b.innerHTML=ic('bolt',18+Math.round(Math.random()*22));
+    rain.appendChild(b);
+  }
+})();
+/* S10 wall */
+(function(){const w=$('#wall');
+  for(let i=0;i<150;i++){const t=document.createElement('div');t.className='tile';w.appendChild(t)}})();
+
+/* walk cycle helper */
+function walk(figSel,ms){
+  const f=$(figSel); let p=1;
+  const iv=setInterval(()=>{ p=p===1?2:1; f.dataset.pose='walk'+p; },200);
+  at(ms,()=>{ clearInterval(iv); f.dataset.pose='stand'; });
+}
+
+function run(){
+  /* S1 · the head that holds everything (0–5.4) */
+  IN('#s1','zf');
+  at(4200,()=>$('#s1').classList.add('fling'));       /* the orbit EXPLODES */
+  at(4900,()=>OUT('#s1','oT'));
+  /* S2 · account card (5.4–8.2) */
+  at(5100,()=>{ IN('#s2','in'); go('#cardslam'); at(400,()=>$('#s2').classList.add('hot')); });
+  at(7900,()=>OUT('#s2','oT'));
+  /* S3 · bolt rain + chips (8.2–11.6) */
+  at(8100,()=>{ IN('#s3','di');
+    at(200,()=>go('#c1')); at(650,()=>go('#c2')); });
+  at(11250,()=>OUT('#s3','oW'));
+  /* S4 · composer (11.6–14.8) */
+  at(11500,()=>{ IN('#s4','wi');
+    at(300,()=>$('#l1').classList.add('type'));
+    at(1000,()=>$('#l2').classList.add('type'));
+    at(1900,()=>{ $('#send').classList.add('hit'); }); });
+  at(14450,()=>OUT('#s4','oT'));
+  /* S5 · the buyer's door (14.8–18.2) */
+  at(14650,()=>{ IN('#s5','di');
+    at(1250,()=>{ $('#env5').classList.add('pop');
+      const p=document.createElement('div'); p.className='ping go';
+      p.style.left='calc(76% - 240px + 46px)'; p.style.top='36%';
+      $('#s5').appendChild(p); });
+    at(1800,()=>go('#opened')); });
+  at(17850,()=>OUT('#s5','oB'));
+  /* S6 · the call (18.2–23.0) — chips snap like a rally */
+  at(18050,()=>{ IN('#s6','zi');
+    at(300,()=>go('#b1')); at(1100,()=>go('#b2'));
+    at(1900,()=>go('#b3')); at(2700,()=>go('#b4'));
+    at(3300,()=>go('#rc')); });
+  at(22650,()=>OUT('#s6','oT'));
+  /* S7 · it runs while you walk (23.0–26.6) */
+  at(22850,()=>{ IN('#s7','wi'); $('#s7').classList.add('go'); walk('#fg7',3300);
+    at(250,()=>go('#r1')); at(650,()=>go('#r2')); at(1050,()=>go('#r3')); });
+  at(26250,()=>OUT('#s7','oT'));
+  /* S8 · ignition (26.6–29.4) */
+  at(26450,()=>{ IN('#s8','in'); go('#ign'); });
+  at(29050,()=>OUT('#s8','oT'));
+  /* S9 · red beat (29.4–33.0) */
+  at(29250,()=>{ IN('#s9','wi'); go('#rl9'); at(1400,()=>go('#ans9')); });
+  at(32650,()=>OUT('#s9','oB'));
+  /* S10 · the wall and the hand (33.0–38.0) */
+  at(32850,()=>{ IN('#s10','zf');
+    const tiles=[...document.querySelectorAll('#s10 .tile')];
+    tiles.forEach((t,i)=>at(80+i*5,()=>t.classList.add('on')));
+    at(1400,()=>{ $('#fg10').dataset.pose='raise';          /* the flick */
+      tiles.slice(0,118).forEach((t,i)=>at(120+i*9,()=>t.classList.add('ok')));
+      let n=0; const iv=setInterval(()=>{ n=Math.min(118,n+4);
+        $('#wn').textContent=n; if(n>=118)clearInterval(iv); },30); });
+  });
+  at(37650,()=>OUT('#s10','oT'));
+  /* S11 · the spark (38.0–41.6) */
+  at(37850,()=>{ IN('#s11','zf'); $('#s11').classList.add('race');
+    [0,600,1200,1800,2400].forEach((d,i)=>
+      at(200+d,()=>document.querySelectorAll('#s11 .wp')[i].classList.add('go'))); });
+  at(41250,()=>OUT('#s11','oW'));
+  /* S12 · the handoff (41.6–47.0) */
+  at(41450,()=>{ IN('#s12','zf'); at(150,()=>$('#s12').classList.add('gr'));
+    at(900,()=>$('#s12').classList.add('pass'));          /* the book crosses */
+    at(1900,()=>{ $('#s12').classList.add('done'); $('#fgB').dataset.pose='hold'; }); });
+  at(46650,()=>OUT('#s12','oT'));
+  /* flourish (47.0–48.2) */
+  at(47000,()=>go('#f1')); at(47400,()=>go('#f2')); at(47800,()=>go('#f3'));
+  /* card (48.2–52) */
+  at(48200,()=>IN('#s14','zf'));
+}
+if(new URLSearchParams(location.search).has('wait')){
+  window.__go=()=>run();
+}else{
+  window.addEventListener('load',()=>{ at(600,run) });
+}
+</script>
+</body>
+</html>
