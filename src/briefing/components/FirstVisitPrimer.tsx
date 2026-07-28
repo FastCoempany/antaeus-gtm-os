@@ -100,7 +100,7 @@ export function FirstVisitPrimer(): JSX.Element | null {
                     the work" expands the audit trail.
                 </li>
                 <li>
-                    <strong>{t("Your market · Where the data disagrees")}</strong> —
+                    <strong>{t("Your market · The data disagrees")}</strong> —
                     the system challenging an assumption you've stated.
                     Quiet most weeks. Loud when the evidence stops matching.
                 </li>
