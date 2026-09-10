@@ -114,6 +114,35 @@ The visitor face fails if it does any of these, and Marcus closes the tab on eac
 - **Testimonial carousels, animated counters, parallax** — engagement theater. The visitor face is severe and still (the motion doctrine, `08`, applies: motion only shows a state change, and a landing page has almost none).
 - **Anything that makes Antaeus read as a CRM, an enablement library, or an AI copilot.** That is the one sale, and every reject above is a way of losing it.
 
+### The one standing exception (founder-granted 2026-09-10)
+
+`product.html` — the flagship product page — is exempt from two of the
+rejects above: **stock photography** and the **autoplaying carousel**.
+The founder granted this explicitly and scoped it to that page.
+
+The page is built on the composition and interaction vocabulary of a
+flagship consumer product page, where lifestyle photography and an
+autoplaying highlights carousel are load-bearing parts of the form. The
+exception exists so the page can carry that form honestly; it is not a
+judgement that either reject was wrong.
+
+What the exception does **not** do:
+
+- It does not change the rejects for any other surface. The landing
+  (`start.html`), the positioning page, auth, legal and the share cards
+  all still show the product or show type, and are still severe and
+  still.
+- It does not license photography as a substitute for the product.
+  `product.html` shows real rooms everywhere the product is the point;
+  photography carries the human beats only (the week carousel), and the
+  carousel stops on any real interaction, pauses off-screen, and does
+  not autoplay at all under `prefers-reduced-motion`.
+
+A future audit of `product.html` against this spec should read this
+exception first. Do not strip the photography or the carousel from that
+page as a doctrine fix — that is a founder decision that has already
+been made the other way.
+
 ---
 
 ## Part V — Migration, citations, signals
