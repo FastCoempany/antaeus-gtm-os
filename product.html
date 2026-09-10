@@ -83,9 +83,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
 /* ── sticky local nav (the floating pill) ─────────────────── */
 .localnav{position:sticky;top:10px;z-index:55;padding:0 16px;margin-top:-46px;
-  pointer-events:none;opacity:0;transform:translateY(-8px);
-  transition:opacity .28s var(--ease),transform .28s var(--ease)}
-.localnav.is-on{opacity:1;transform:none;pointer-events:auto}
+  pointer-events:none;opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s}
+/* visibility, not just opacity — an invisible nav must not hold focus */
+.localnav.is-on{opacity:1;visibility:visible;transform:none;pointer-events:auto}
 .localnav__in{max-width:calc(var(--wrap) - 40px);margin:0 auto;
   display:flex;align-items:center;gap:14px;
   background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(22px);
@@ -254,6 +255,12 @@ section[id],header[id]{scroll-margin-top:92px}
 /* ── highlights ───────────────────────────────────────────── */
 .hl-head{display:flex;flex-direction:column;gap:12px;align-items:flex-start;
   padding-bottom:34px}
+/* the pagination centres cards, so the rail needs half a viewport of
+   padding at each end or the first and last card can never get there */
+#hl-rail{--hcard-w:min(78vw,398px);
+  padding-left:calc(50% - var(--hcard-w)/2);
+  padding-right:calc(50% - var(--hcard-w)/2);
+  scroll-padding-left:0}
 .hcard{width:min(78vw,398px);background:var(--surface);border-radius:22px;
   padding:34px 26px 26px;box-shadow:var(--shadow-rest);
   display:flex;flex-direction:column;min-height:474px;border:1px solid var(--hair)}
@@ -838,7 +845,7 @@ section[id],header[id]{scroll-margin-top:92px}
       </div>
     <div class="specs" style="margin-top:clamp(34px,5vw,56px)">
       <p class="spec rv"><b id="pace-a">1 in 5 closes</b><span id="pace-as">how often deals this size are won — the band is 15 to 25%</span></p>
-      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× in flight</b><span id="pace-bs">the pipeline you want against the target, not just what you hope</span></p>
+      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× in flight</b><span id="pace-bs">enough going at once that a couple of slips do not sink the quarter</span></p>
       <p class="spec rv" data-d="2"><b id="pace-c">90 days</b><span id="pace-cs">how long one usually takes to close — the range is 60 to 120 days</span></p>
     </div>
       <p class="bench">These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.</p>
@@ -1388,7 +1395,12 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
       hlPP.innerHTML = v ? PAUSE : PLAY;
       hlPP.setAttribute("aria-label", v ? "Pause highlights" : "Play highlights");
       /* resume from where the bar stopped rather than from zero */
-      if (v) t0 = performance.now() - elapsedFraction() * DUR;
+      if (v) {
+        t0 = performance.now() - elapsedFraction() * DUR;
+        /* reduced motion suppresses AUTO-play; an explicit press is a
+           request, so start the loop on demand */
+        if (!raf) raf = requestAnimationFrame(tick);
+      }
       paint();
     }
     hlPP.addEventListener("click", function () { setPlaying(!playing); });
@@ -1481,6 +1493,10 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
     });
     document.getElementById("pv-prev").addEventListener("click", function () { open(at - 1); });
     document.getElementById("pv-next").addEventListener("click", function () { open(at + 1); });
+    /* re-pick the asset if the viewport crosses the breakpoint */
+    function repick() { if (pv.classList.contains("is-open")) open(at); }
+    if (wideMq.addEventListener) wideMq.addEventListener("change", repick);
+    else if (wideMq.addListener) wideMq.addListener(repick);
     document.addEventListener("keydown", function (e) {
       if (!pv.classList.contains("is-open")) return;
       if (e.key === "Escape") pv.classList.remove("is-open");
@@ -1537,16 +1553,16 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
      changes, change these with it. */
   var BENCH = {
     smb: { a: "1 in 4 closes",  as: "how often deals this size are won — the band is 20 to 30%",
-           b: "3× in flight",   bs: "the pipeline you want against the target, not just what you hope",
+           b: "3× in flight",   bs: "enough going at once that one slipping does not sink the quarter",
            c: "45 days",        cs: "how long one usually takes to close — the range is 30 to 60 days" },
     mid: { a: "1 in 5 closes",  as: "how often deals this size are won — the band is 15 to 25%",
-           b: "3.5× in flight", bs: "the pipeline you want against the target, not just what you hope",
+           b: "3.5× in flight", bs: "enough going at once that a couple of slips do not sink the quarter",
            c: "90 days",        cs: "how long one usually takes to close — the range is 60 to 120 days" },
     ent: { a: "1 in 7 closes",  as: "how often deals this size are won — the band is 10 to 18%",
-           b: "4.5× in flight", bs: "the pipeline you want against the target, not just what you hope",
+           b: "4.5× in flight", bs: "fewer, larger deals means more cover for each one that stalls",
            c: "180 days",       cs: "how long one usually takes to close — the range is 120 to 270 days" },
     str: { a: "1 in 8 closes",  as: "how often deals this size are won — the band is 8 to 15%",
-           b: "5× in flight",   bs: "the pipeline you want against the target, not just what you hope",
+           b: "5× in flight",   bs: "at this size a single deal going quiet can be the whole quarter",
            c: "240 days",       cs: "how long one usually takes to close — the range is 180 to 360 days" }
   };
   if (acv) {
