@@ -31,6 +31,9 @@
   --ink25:rgba(10,28,64,.25); --ink14:rgba(10,28,64,.14); --ink10:rgba(10,28,64,.10);
   --hair:rgba(10,28,64,.08);
   --orange:#e6701e; --orange-strong:#cf5f13; --orange-soft:rgba(230,112,30,.10);
+  /* the filled button needs a deeper orange: white on #e6701e is only
+     3.13:1, on #b85918 it is 4.69:1. The accent token is unchanged. */
+  --orange-btn:#b85918; --orange-btn-hover:#9d4b13;
   --blue:#2563eb; --blue-strong:#1d4ed8; --blue-soft:rgba(37,99,235,.08);
   --green:#1f9d57; --amber:#c8821a; --red:#cf3b34;
   --forest:#1B5138; --forest-strong:#15402b; --forest-soft:rgba(27,81,56,.08);
@@ -95,13 +98,27 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .localnav__sections a:hover{color:var(--ink)}
 .localnav__cta{margin-left:auto;display:flex;align-items:center;gap:9px}
 @media(max-width:900px){.localnav__sections{display:none}}
+/* the pill has to survive a 320px phone: the ghost link goes, the
+   name truncates, the one move stays */
+.localnav__name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:560px){
+  .localnav{padding:0 10px}
+  .localnav__in{padding:7px 7px 7px 15px;gap:8px}
+  .localnav__cta .btn--ghost{display:none}
+  .localnav__cta .btn{padding:9px 15px;font-size:.8rem}
+  .localnav__name{font-size:1rem}
+}
+@media(max-width:360px){
+  .localnav__in{padding:6px 6px 6px 12px}
+  .localnav__cta .btn{padding:8px 12px;font-size:.75rem}
+}
 
 /* ── buttons ──────────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
   border-radius:999px;font-weight:600;font-size:.85rem;text-decoration:none;
   padding:10px 19px;white-space:nowrap;transition:background .16s var(--ease),transform .16s var(--ease)}
-.btn--move{background:var(--orange);color:#fff;box-shadow:0 1px 2px rgba(207,95,19,.28)}
-.btn--move:hover{background:var(--orange-strong)}
+.btn--move{background:var(--orange-btn);color:#fff;box-shadow:0 1px 2px rgba(157,75,19,.30)}
+.btn--move:hover{background:var(--orange-btn-hover)}
 .btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--ink25)}
 .btn--ghost:hover{border-color:var(--ink);background:rgba(10,28,64,.03)}
 .btn--lg{font-size:.95rem;padding:14px 28px}
@@ -110,13 +127,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .lnk:hover{text-decoration:underline}
 .lnk .chev{font-size:.8em;transform:translateY(.5px)}
 .lnk--play::before{content:"";width:19px;height:19px;border-radius:50%;
-  border:1.5px solid currentColor;flex:none;
-  background:radial-gradient(circle at 58% 50%,currentColor 0 2.6px,transparent 2.7px)}
+  border:1.5px solid currentColor;flex:none;display:grid;place-items:center;
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 1.4l6.2 4.6L2 10.6z' fill='%232563eb'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:56% 50%;background-size:7px 8px}
 
 /* ── type ─────────────────────────────────────────────────── */
 .kick{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;
   text-transform:uppercase;font-weight:700;color:var(--ink50)}
-.kick--move{color:var(--orange)}
 .kick--sys{color:var(--blue)}
 .kick--dur{color:var(--forest)}
 h1,h2,h3,h4{margin:0;font-weight:400;letter-spacing:-.015em}
@@ -133,6 +150,8 @@ h1,h2,h3,h4{margin:0;font-weight:400;letter-spacing:-.015em}
 
 /* ── section rhythm ───────────────────────────────────────── */
 section{position:relative}
+/* an in-page jump must clear the floating nav pill */
+section[id],header[id]{scroll-margin-top:92px}
 .band{padding:clamp(74px,12vw,150px) 0}
 .band--tight{padding:clamp(52px,8vw,96px) 0}
 .band--white{background:var(--surface)}
@@ -185,10 +204,9 @@ section{position:relative}
   box-shadow:14px 0 0 var(--ink10),28px 0 0 var(--ink10)}
 
 /* sticky buy bar */
-.buybar{position:sticky;bottom:0;z-index:40;background:rgba(239,242,247,.92);
-  backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--hair);
-  transition:transform .3s var(--ease),opacity .3s var(--ease)}
-.buybar.is-off{transform:translateY(105%);opacity:0;pointer-events:none}
+/* a hero platter, like the reference — it belongs to the hero and
+   scrolls away with it, it is not a bar that follows you down. */
+.buybar{background:rgba(239,242,247,.92);border-top:1px solid var(--hair)}
 .buybar .wrap{display:flex;align-items:center;gap:18px;padding-top:14px;padding-bottom:14px}
 .buybar p{margin:0;font-size:.9rem;line-height:1.38;color:var(--ink)}
 .buybar p span{color:var(--ink55)}
@@ -218,13 +236,14 @@ section{position:relative}
 .dot.is-on{width:34px;background:var(--ink14)}
 .dot.is-on::after{content:"";position:absolute;inset:0;border-radius:999px;
   background:var(--ink70);transform-origin:left;transform:scaleX(var(--p,0))}
-.dot.is-on.no-anim::after{transform:scaleX(1)}
+/* a paused slide holds its progress where it stopped — it is not finished */
 .pp{width:38px;height:38px;border-radius:50%;background:var(--sunk);
   display:grid;place-items:center;color:var(--ink)}
 .pp:hover{background:var(--ink10)}
 .pp svg{width:13px;height:13px;fill:currentColor}
 /* arrow buttons */
-.arrows{display:flex;gap:10px;justify-content:center;margin-top:30px}
+.arrows{display:flex;gap:10px;justify-content:flex-end;margin:22px auto 0;
+  max-width:var(--wrap);padding:0 22px}
 .arw{width:38px;height:38px;border-radius:50%;background:var(--sunk);
   display:grid;place-items:center;color:var(--ink70);transition:background .16s,color .16s}
 .arw:hover{background:var(--ink10);color:var(--ink)}
@@ -292,7 +311,7 @@ section{position:relative}
       Antaeus
     </p>
     <h1 class="h-hero rv in" data-d="1">You built it.<br />They can run it.</h1>
-    <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />It reads your motion back to you every morning after.</p>
+    <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />After that it reads your whole way of selling back to you every morning.</p>
   </div>
   <div class="hero__shot rv in" data-d="3">
     <div class="shotframe shotframe--bar">
@@ -325,7 +344,7 @@ section{position:relative}
 
     <article class="hcard">
       <h3>Every account you watch, sorted by what just moved.</h3>
-      <p class="hc-note">Hot and something happened. Still warm but aging. Going quiet.</p>
+      <p class="hc-note">Banded by where your attention should go: act now, reach while they’re warm, emerging, or going cold.</p>
       <figure><img src="marketing/detail/signal-console--actnow.jpg" width="1500" height="250" alt="Account cards banded under ACT NOW, each showing a heat number and what just happened." loading="lazy" /></figure>
       <p class="hc-room">Signal Console</p>
     </article>
@@ -339,7 +358,7 @@ section{position:relative}
 
     <article class="hcard">
       <h3>The deals that will slip this week, and the smallest fix.</h3>
-      <p class="hc-note">Stage is not the truth. What is stuck, and what unsticks it.</p>
+      <p class="hc-note">Where a deal says it is matters less than what it is actually stuck on.</p>
       <figure><img src="marketing/detail/deal-workspace--board.jpg" width="1500" height="519" alt="A board of open deals ordered by how much pressure each is under." loading="lazy" /></figure>
       <p class="hc-room">Deal Workspace</p>
     </article>
@@ -409,7 +428,7 @@ section{position:relative}
 .pv__chips{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;
   padding:36px 22px 8px;justify-content:flex-start}
 .pv__chips::-webkit-scrollbar{display:none}
-@media(min-width:900px){.pv__chips{justify-content:center;flex-wrap:wrap;overflow:visible}}
+@media(min-width:900px){.pv__chips{padding-left:22px;padding-right:22px}}
 .chip{display:inline-flex;align-items:center;gap:11px;flex:none;
   background:var(--sunk);border-radius:999px;padding:11px 20px 11px 12px;
   font-size:.9rem;font-weight:500;white-space:nowrap;
@@ -429,13 +448,21 @@ section{position:relative}
 .pv__close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 .pv__frame{margin:14px auto 0;max-width:900px}
 .pv__frame img{border-radius:12px;border:1px solid var(--hair);box-shadow:var(--shadow-lift)}
-.pv__nav{display:flex;align-items:center;gap:14px;margin:30px auto 0;max-width:900px}
-.pv__cap{background:var(--sunk);border-radius:18px;padding:22px 26px;flex:1;
+.pv__nav{position:relative;margin:30px auto 0;max-width:900px}
+.pv__cap{background:var(--sunk);border-radius:18px;padding:22px 34px;width:100%;
   font-size:1rem;line-height:1.5;color:var(--ink55)}
 .pv__cap b{color:var(--ink);font-weight:700}
-.pv__arw{width:44px;height:44px;border-radius:50%;background:var(--sunk);flex:none;
-  display:grid;place-items:center;color:var(--ink70)}
+/* half-tucked at the edges, the way the reference does it — inline
+   arrows ate a third of the caption on a phone */
+.pv__arw{position:absolute;top:50%;transform:translateY(-50%);
+  width:48px;height:48px;border-radius:50%;background:var(--sunk);
+  display:grid;place-items:center;color:var(--ink70);
+  box-shadow:0 0 0 6px var(--surface)}
+#pv-prev{left:-24px}
+#pv-next{right:-24px}
+.pv__arw:focus-visible{z-index:1}
 .pv__arw:hover{background:var(--ink10);color:var(--ink)}
+.pv__arw:active{transform:translateY(-50%) scale(.94)}
 .pv__arw svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round}
 
@@ -455,13 +482,22 @@ section{position:relative}
   align-items:end;margin-top:clamp(50px,7vw,90px)}
 .twoup figure{margin:0}
 .twoup img{border-radius:10px;border:1px solid var(--hair);box-shadow:var(--shadow-rest);
-  filter:saturate(.16) opacity(.7);width:100%;aspect-ratio:16/7;object-fit:cover;object-position:top left}
+  width:100%;aspect-ratio:16/7;object-fit:cover;object-position:top left}
+/* the "before" is a state of affairs, not a screenshot to desaturate */
+.wasplate{border-radius:10px;border:1px dashed var(--ink25);aspect-ratio:16/7;
+  display:grid;place-items:center;background:var(--sunk)}
+.wasplate span{font-family:var(--serif);font-size:2.4rem;color:var(--ink-note);line-height:1}
 .twoup .now img{filter:none}
 .twoup figcaption{margin-top:18px}
 .twoup .t{font-size:.86rem;color:var(--ink50);line-height:1.4}
 .twoup .n{font-family:var(--serif);font-size:clamp(1.3rem,3vw,2rem);line-height:1.1;margin-top:7px;display:block}
 .twoup .now .n{color:var(--ink)}
-@media(max-width:640px){.twoup{grid-template-columns:1fr;gap:34px}}
+@media(max-width:640px){
+  .twoup{gap:10px}
+  .twoup img{aspect-ratio:5/4}
+  .twoup .t{font-size:.7rem}
+  .twoup figcaption{margin-top:12px}
+}
 
 /* ── lifestyle carousel ───────────────────────────────────── */
 .lcard{width:min(80vw,352px)}
@@ -471,12 +507,20 @@ section{position:relative}
 .lcard p b{color:var(--ink);font-weight:700}
 
 /* ── tab-pill carousel ────────────────────────────────────── */
-.tabs{display:flex;gap:9px;overflow-x:auto;scrollbar-width:none;padding:0 22px 4px;
-  justify-content:flex-start}
+.tabwrap{max-width:var(--wrap);margin:0 auto;padding:0 22px;position:relative}
+.tabtrack{background:var(--sunk);border-radius:999px;padding:5px;position:relative;
+  max-width:max-content;margin:0 auto}
+/* the row scrolls inside the track; a fade shows there is more */
+.tabtrack.is-over::after{content:"";position:absolute;top:5px;bottom:5px;right:5px;width:46px;
+  border-radius:0 999px 999px 0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(239,242,247,0),var(--sunk) 72%)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+  scroll-snap-type:x proximity;justify-content:flex-start}
 .tabs::-webkit-scrollbar{display:none}
-@media(min-width:820px){.tabs{justify-content:center}}
+.tabs>.tab{scroll-snap-align:center}
 .tab{flex:none;border-radius:999px;padding:9px 19px;font-size:.88rem;font-weight:600;
-  color:var(--ink55);background:transparent;transition:background .18s,color .18s}
+  color:var(--ink55);background:transparent;transition:background .18s,color .18s;
+  white-space:nowrap}
 .tab:hover{color:var(--ink)}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
 .tabpanel{display:none}
@@ -557,7 +601,7 @@ section{position:relative}
     <button class="pv__close" id="pv-close" aria-label="Close">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
     </button>
-    <div class="pv__frame"><img id="pv-img" src="marketing/rooms/dashboard.jpg" alt="" loading="lazy" /></div>
+    <div class="pv__frame"><img id="pv-img" src="marketing/rooms/dashboard.jpg" alt="Dashboard — a room in Antaeus." loading="lazy" /></div>
     <div class="pv__nav">
       <button class="pv__arw" id="pv-prev" aria-label="Previous room">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2L4 8l6 6"/></svg>
@@ -590,12 +634,12 @@ section{position:relative}
     <div class="specs">
       <p class="spec rv"><b>Every 30 minutes</b><span>the system re-reads your whole workspace on its own</span></p>
       <p class="spec spec--sys rv" data-d="1"><b>One ranked move</b><span>with the plain reason it came up ahead of the other thirteen</span></p>
-      <p class="spec spec--dur rv" data-d="2"><b>22 rooms, one motion</b><span>the work carries between them — you never restate anything</span></p>
+      <p class="spec rv" data-d="2"><b>22 rooms, one motion</b><span>the work carries between them — you never restate anything</span></p>
     </div>
 
     <div class="twoup rv">
       <figure class="was">
-        <img src="marketing/detail/dashboard--standing.jpg" width="1500" height="208" alt="A flat row of numbers with no ranking." loading="lazy" />
+        <div class="wasplate" aria-hidden="true"><span>?</span></div>
         <figcaption>
           <span class="t">A spreadsheet and what you remember</span>
           <span class="n">You are the system</span>
@@ -659,19 +703,21 @@ section{position:relative}
 <section class="band band--sunk" id="craft" aria-labelledby="cf-h">
   <div class="wrap center">
     <p class="kick rv">Reaching out</p>
-    <h2 class="h-sec rv" data-d="1" id="cf-h" style="margin-top:14px;max-width:19ch">The part most founders wing.</h2>
+    <h2 class="h-sec rv" data-d="1" id="cf-h" style="margin-top:14px;max-width:23ch">The part most founders make up as they go.</h2>
     <p class="copy rv" data-d="2" style="margin:30px auto 0;text-align:left">
       Outreach that could have gone to anyone gets treated like it went to nobody. Antaeus will not let a line leave without <b>the account, the person, and the thing that just happened to them</b> attached to it. Same on the call: whatever the buyer says, <b>there is a next line ready</b>, and what you learn is captured while you are still in the room.
     </p>
   </div>
 
   <div style="margin-top:clamp(38px,5vw,62px)">
+    <div class="tabwrap"><div class="tabtrack" id="craft-track">
     <div class="tabs" id="craft-tabs" role="tablist" aria-label="Ways to reach out">
       <button class="tab" role="tab" aria-selected="true" aria-controls="cp-out" id="ct-out">Outbound</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="cp-cold" id="ct-cold">Cold call</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="cp-li" id="ct-li">LinkedIn</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="cp-disco" id="ct-disco">Discovery</button>
     </div>
+    </div></div>
 
     <div class="wrap">
       <div class="tabpanel is-on" id="cp-out" role="tabpanel" aria-labelledby="ct-out">
@@ -694,7 +740,7 @@ section{position:relative}
   </div>
 
   <div class="wrap" style="margin-top:clamp(64px,9vw,120px)">
-    <h3 class="h-sub rv" style="max-width:18ch">Set to what's actually happening.</h3>
+    <h3 class="h-sub rv" style="max-width:22ch">Everything between finding them and signing.</h3>
   </div>
   <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="More of the work">
     <article class="gcard"><figure><img src="marketing/detail/prospecting-desk--funnel.jpg" width="1500" height="557" alt="The prospecting desk funnel: find, confirm, send." loading="lazy" /></figure><p><b>Finding them.</b> Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.</p></article>
@@ -719,16 +765,21 @@ section{position:relative}
 
 <style>
 /* ── compare-with picker ──────────────────────────────────── */
+/* the picker governs the numbers below it, so they share one panel */
+.benchpanel{background:var(--surface);border:1px solid var(--hair);border-radius:18px;
+  padding:clamp(24px,4vw,40px);margin:clamp(48px,7vw,88px) auto 0;max-width:780px;
+  box-shadow:var(--shadow-rest)}
+.benchpanel .specs{margin-inline:auto}
 .picker{display:flex;flex-direction:column;align-items:center;gap:12px;
-  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
-  padding:22px;max-width:520px;margin:0 auto;box-shadow:var(--shadow-rest)}
+  padding:0;max-width:520px;margin:0 auto}
 .picker label{font-size:.78rem;color:var(--ink50);font-weight:600}
 .picker select{appearance:none;-webkit-appearance:none;font:inherit;font-size:.95rem;
-  font-weight:600;color:var(--ink);background:var(--sunk);border:1px solid var(--ink14);
+  font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--ink25);
   border-radius:999px;padding:10px 42px 10px 20px;cursor:pointer;
   background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5l5-5' fill='none' stroke='%230a1c40' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 18px center;background-size:11px}
-.picker .bench{font-size:.76rem;color:var(--ink50);text-align:center;line-height:1.4;max-width:40ch}
+.benchpanel .bench{font-size:.78rem;color:var(--ink50);text-align:center;line-height:1.45;
+  max-width:46ch;margin:clamp(26px,4vw,38px) auto 0}
 
 /* ── room grid ────────────────────────────────────────────── */
 .roomgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));
@@ -770,18 +821,12 @@ section{position:relative}
 <section class="band band--white" id="pace" aria-labelledby="pc-h">
   <div class="wrap">
     <p class="kick rv">Pace</p>
-    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:17ch">Enough in flight,<br />or not.</h2>
+    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:20ch">Do you have enough<br />going to hit the number?</h2>
     <p class="copy copy--wide rv" data-d="2" style="margin-top:30px">
       Give it your number and Antaeus works backwards to the only thing you control — <b>what you do every working day</b>. Then it does the part most planning tools skip: it tells you whether the plan is realistic for deals your size, <b>names the one assumption that's optimistic</b>, and says what it costs you if that assumption is wrong.
     </p>
 
-    <div class="specs" style="margin-top:clamp(48px,7vw,88px)">
-      <p class="spec rv"><b id="pace-a">1 in 5 closes</b><span id="pace-as">how often deals this size are won — the band is 15 to 25%</span></p>
-      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× in flight</b><span id="pace-bs">the pipeline you want against the target, not just what you hope</span></p>
-      <p class="spec rv" data-d="2"><b id="pace-c">90 days</b><span id="pace-cs">how long one usually takes to close — the range is 60 to 120 days</span></p>
-    </div>
-
-    <div class="rv" style="margin-top:clamp(46px,6vw,74px)">
+    <div class="benchpanel rv">
       <div class="picker">
         <label for="acv">Show the benchmark for</label>
         <select id="acv">
@@ -790,9 +835,15 @@ section{position:relative}
           <option value="ent">Deals around $150k</option>
           <option value="str">Deals above $400k</option>
         </select>
-        <p class="bench">These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.</p>
       </div>
+    <div class="specs" style="margin-top:clamp(34px,5vw,56px)">
+      <p class="spec rv"><b id="pace-a">1 in 5 closes</b><span id="pace-as">how often deals this size are won — the band is 15 to 25%</span></p>
+      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× in flight</b><span id="pace-bs">the pipeline you want against the target, not just what you hope</span></p>
+      <p class="spec rv" data-d="2"><b id="pace-c">90 days</b><span id="pace-cs">how long one usually takes to close — the range is 60 to 120 days</span></p>
     </div>
+      <p class="bench">These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.</p>
+    </div>
+
   </div>
 </section>
 
@@ -816,7 +867,7 @@ section{position:relative}
       <div><i>Working the deal</i><b>Signal Console</b><span>Accounts you watch, and what just moved.</span></div>
       <div><i>Working the deal</i><b>Outbound Studio</b><span>One line, for one named person.</span></div>
       <div><i>Working the deal</i><b>Cold Call Studio</b><span>Walk in ready. Log what happened after.</span></div>
-      <div><i>Working the deal</i><b>LinkedIn Playbook</b><span>Air cover, never the opening scene.</span></div>
+      <div><i>Working the deal</i><b>LinkedIn Playbook</b><span>Warm them up in public — never open in their inbox.</span></div>
       <div><i>Working the deal</i><b>Discovery Studio</b><span>Run the live call from a console.</span></div>
       <div><i>Working the deal</i><b>Call in a Favor</b><span>The people in your corner, put to work.</span></div>
       <div><i>Working the deal</i><b>Getting to Signed</b><span>Survive security, legal and finance.</span></div>
@@ -896,7 +947,7 @@ section{position:relative}
 .cmp .rowlbl{font-size:.78rem;color:var(--ink50);font-weight:600}
 .cmp .v{font-size:.87rem;line-height:1.45;color:var(--ink70)}
 .cmp .v--us{color:var(--ink);font-weight:500}
-.cmp .mark-y{color:var(--forest);font-weight:700}
+.cmp .mark-y{color:var(--ink);font-weight:700}
 .cmp .mark-n{color:var(--ink-note);font-weight:700}
 @media(max-width:760px){
   .cmp{grid-template-columns:1fr;border-radius:12px}
@@ -977,10 +1028,10 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
       <a class="lnk" href="/signup.html">Create workspace <span class="chev">›</span></a>
     </article>
     <article class="wcard">
-      <p class="kick kick--dur">Free in beta</p>
+      <p class="kick">Free in beta</p>
       <h3>No card, no seat count, no call with anyone.</h3>
       <p>We are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card.</p>
-      <a class="lnk" href="/signup.html">Start now <span class="chev">›</span></a>
+      <a class="lnk" href="/signup.html">Create workspace <span class="chev">›</span></a>
     </article>
     <article class="wcard">
       <p class="kick kick--sys">Yours to take</p>
@@ -1097,11 +1148,11 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
       </details>
       <details>
         <summary>Does it send emails or make calls for me?</summary>
-        <div class="a"><p>No. It writes the line with you and you send it from wherever you already send mail. It can count what you sent — you can point it at your calendar, or blind-copy an address so outreach gets logged without you typing it twice. It never dials, and it will never take an action toward a buyer on its own.</p></div>
+        <div class="a"><p>No. It writes the line with you and you send it from wherever you already send mail. It can count what you sent — point it at your calendar and meetings get logged without you typing them twice. It never dials, and it will never take an action toward a buyer on its own.</p></div>
       </details>
       <details>
         <summary>What does "ready to hand off" actually mean?</summary>
-        <div class="a"><p>It is one question answered honestly: could a person who starts Monday run this motion without you sitting next to them. Antaeus answers it with a state, not a score — from <b>you are the system</b>, through <b>building</b> and <b>inheritable with you there to answer questions</b>, up to <b>hire-ready</b>. Each state has conditions you can read, and the app says what it would take to reach the next one.</p></div>
+        <div class="a"><p>It is one question answered honestly: could a person who starts Monday run this motion without you sitting next to them. Antaeus answers it with a state, not a score — from <b>you are the system</b>, through <b>building</b> and <b>inheritable with you there to answer questions</b>, up to <b>hire-ready</b>, and then <b>hire-ready and repeatable</b> once you have won and lost enough to see the pattern. Each state has conditions you can read, and the app says what it would take to reach the next one.</p></div>
       </details>
       <details>
         <summary>Is it using AI?</summary>
@@ -1223,14 +1274,10 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
 
   /* ── sticky local nav + buy bar ──────────────────────── */
   var localnav = document.getElementById("localnav");
-  var buybar = document.getElementById("buybar");
   var hero = document.getElementById("top");
-  var footerEl = document.querySelector("footer");
   function chrome() {
     var past = hero ? (hero.getBoundingClientRect().bottom < 40) : false;
     localnav.classList.toggle("is-on", past);
-    var nearEnd = footerEl && footerEl.getBoundingClientRect().top < window.innerHeight + 120;
-    buybar.classList.toggle("is-off", nearEnd);
   }
   chrome();
   window.addEventListener("scroll", chrome, { passive: true });
@@ -1307,8 +1354,8 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
         var on = i === idx;
         d.classList.toggle("is-on", on);
         d.setAttribute("aria-selected", on ? "true" : "false");
-        if (!on) d.style.removeProperty("--p");
-        d.classList.toggle("no-anim", on && !playing);
+        if (!on) d.style.setProperty("--p", "0");
+
       });
     }
     function goTo(i, user) {
@@ -1322,6 +1369,11 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
       if (user && playing) { /* keep playing */ }
     }
     function restart() { t0 = performance.now(); }
+    function elapsedFraction() {
+      var d = dots[idx];
+      var v = d ? parseFloat(getComputedStyle(d).getPropertyValue("--p")) : 0;
+      return isNaN(v) ? 0 : Math.min(1, Math.max(0, v));
+    }
     function tick(now) {
       if (playing) {
         var p = Math.min(1, (now - t0) / DUR);
@@ -1335,7 +1387,8 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
       playing = v;
       hlPP.innerHTML = v ? PAUSE : PLAY;
       hlPP.setAttribute("aria-label", v ? "Pause highlights" : "Play highlights");
-      if (v) restart(); else paint();
+      /* resume from where the bar stopped rather than from zero */
+      if (v) t0 = performance.now() - elapsedFraction() * DUR;
       paint();
     }
     hlPP.addEventListener("click", function () { setPlaying(!playing); });
@@ -1438,19 +1491,43 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
 
   /* ── craft tabs ──────────────────────────────────────── */
   var tabWrap = document.getElementById("craft-tabs");
+  var tabTrack = document.getElementById("craft-track");
   if (tabWrap) {
     var tabs = Array.prototype.slice.call(tabWrap.querySelectorAll(".tab"));
-    tabs.forEach(function (t) {
-      t.addEventListener("click", function () {
-        tabs.forEach(function (o) {
-          var on = o === t;
-          o.setAttribute("aria-selected", String(on));
-          var panel = document.getElementById(o.getAttribute("aria-controls"));
-          if (panel) panel.classList.toggle("is-on", on);
-        });
-        t.scrollIntoView({ inline: "center", block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    function selectTab(t, focus) {
+      tabs.forEach(function (o) {
+        var on = o === t;
+        o.setAttribute("aria-selected", String(on));
+        o.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(o.getAttribute("aria-controls"));
+        if (panel) panel.classList.toggle("is-on", on);
       });
+      if (focus) t.focus();
+      t.scrollIntoView({ inline: "center", block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    }
+    tabs.forEach(function (t) {
+      t.tabIndex = t.getAttribute("aria-selected") === "true" ? 0 : -1;
+      t.addEventListener("click", function () { selectTab(t, false); });
     });
+    /* roving focus — the roles promise this, so honour it */
+    tabWrap.addEventListener("keydown", function (e) {
+      var i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      var to = null;
+      if (e.key === "ArrowRight") to = tabs[(i + 1) % tabs.length];
+      else if (e.key === "ArrowLeft") to = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === "Home") to = tabs[0];
+      else if (e.key === "End") to = tabs[tabs.length - 1];
+      if (to) { e.preventDefault(); selectTab(to, true); }
+    });
+    function tabOverflow() {
+      if (tabTrack) tabTrack.classList.toggle("is-over",
+        tabWrap.scrollWidth > tabWrap.clientWidth + 2 &&
+        tabWrap.scrollLeft < tabWrap.scrollWidth - tabWrap.clientWidth - 2);
+    }
+    tabOverflow();
+    tabWrap.addEventListener("scroll", tabOverflow, { passive: true });
+    window.addEventListener("resize", tabOverflow);
   }
 
   /* ── pace benchmark picker ───────────────────────────── */
@@ -1487,12 +1564,15 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
   }
 
   /* ── footer sections: open on desktop, closed on phones ─ */
+  var footMq = window.matchMedia("(min-width: 760px)");
   function footerMode() {
-    var wide = window.matchMedia("(min-width: 760px)").matches;
-    document.querySelectorAll(".fgrid details").forEach(function (d) { d.open = wide; });
+    document.querySelectorAll(".fgrid details").forEach(function (d) { d.open = footMq.matches; });
   }
   footerMode();
-  window.addEventListener("resize", footerMode);
+  /* only on an actual breakpoint change — a section the reader opened
+     should not snap shut on a rotate */
+  if (footMq.addEventListener) footMq.addEventListener("change", footerMode);
+  else if (footMq.addListener) footMq.addListener(footerMode);
 
   /* ── one FAQ open at a time ──────────────────────────── */
   var faqs = Array.prototype.slice.call(document.querySelectorAll(".faq details"));
