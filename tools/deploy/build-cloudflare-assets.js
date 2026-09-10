@@ -56,6 +56,17 @@ const include = [
   // Legal pages — required for footer links and signup flow.
   "privacy.html",
   "terms.html",
+  // The flagship product page — the full top-to-bottom tour of the
+  // rooms, modelled on the composition and interaction vocabulary of a
+  // flagship consumer product page (sticky local nav, an autoplaying
+  // highlights carousel, the expanding "take a closer look" viewer,
+  // spec stacks, tab-pill and peek carousels, a benchmark picker, an
+  // FAQ accordion). Self-contained; its imagery lives in /marketing/.
+  "product.html",
+  // Imagery for product.html: real room renders (marketing/rooms +
+  // marketing/detail) and the photography for the week carousel
+  // (marketing/week). Must ship or the product page is blank.
+  "marketing",
   // Phase 5.4 — public-facing positioning page. The "more than the
   // landing provides" surface a visitor lands on when they want to
   // understand the category before signing up. Linked from
