@@ -41,6 +41,9 @@
   /* the filled button needs a deeper orange: white on #e6701e is only
      3.13:1, on #b85918 it is 4.69:1. The accent token is unchanged. */
   --orange-btn:#b85918; --orange-btn-hover:#9d4b13;
+  /* accent colours used as SMALL TEXT need their own darker inks:
+     #e6701e is 3.13:1 on white, #ad5417 is 5.18:1. */
+  --orange-ink:#ad5417; --amber-ink:#996314;
   --blue:#2563eb; --blue-strong:#1d4ed8; --blue-soft:rgba(37,99,235,.08);
   --green:#1f9d57; --amber:#c8821a; --red:#cf3b34;
   --forest:#1B5138; --forest-strong:#15402b; --forest-soft:rgba(27,81,56,.08);
@@ -198,18 +201,6 @@ section[id],header[id]{scroll-margin-top:92px}
 .hero .when{margin:22px auto 0;font-size:clamp(1rem,1.7vw,1.17rem);color:var(--ink70);
   line-height:1.45;max-width:min(50ch,100%);text-wrap:balance}
 .hero__shot{margin:clamp(30px,5vw,58px) auto 0;max-width:1080px;padding:0 10px}
-@media(min-width:900px){
-  .hero__shot .shotframe img{max-height:min(58vh,600px);object-fit:cover;object-position:top center}
-}
-.shotframe{border-radius:14px;overflow:hidden;background:var(--surface);
-  box-shadow:var(--shadow-offset);border:1px solid var(--hair)}
-.shotframe img{width:100%}
-.shotframe--bar{position:relative;padding-top:30px}
-.shotframe--bar::before{content:"";position:absolute;top:0;left:0;right:0;height:30px;
-  background:var(--surface);border-bottom:1px solid var(--hair)}
-.shotframe--bar::after{content:"";position:absolute;top:11px;left:14px;width:8px;height:8px;
-  border-radius:50%;background:var(--ink10);
-  box-shadow:14px 0 0 var(--ink10),28px 0 0 var(--ink10)}
 
 /* sticky buy bar */
 /* a hero platter, like the reference — it belongs to the hero and
@@ -269,15 +260,294 @@ section[id],header[id]{scroll-margin-top:92px}
   padding-right:calc(50% - var(--hcard-w)/2);
   scroll-padding-left:0}
 .hcard{width:min(78vw,398px);background:var(--surface);border-radius:22px;
-  padding:34px 26px 26px;box-shadow:var(--shadow-rest);
-  display:flex;flex-direction:column;min-height:474px;border:1px solid var(--hair)}
+  padding:30px 24px 24px;box-shadow:var(--shadow-rest);
+  display:flex;flex-direction:column;min-height:430px;border:1px solid var(--hair)}
 .hcard h3{font-family:var(--serif);font-size:1.38rem;line-height:1.16;text-align:center;
   letter-spacing:-.01em;max-width:19ch;margin:0 auto}
 .hcard .hc-note{font-size:.79rem;color:var(--ink50);text-align:center;margin:11px auto 0;max-width:26ch;line-height:1.4}
-.hcard figure{margin:24px 0 0;flex:1;display:flex;align-items:center;justify-content:center}
-.hcard figure img{border-radius:9px;box-shadow:var(--shadow-rest);border:1px solid var(--hair)}
+.hcard figure{margin:20px 0 0;flex:1;display:flex;align-items:center;justify-content:center}
+.hcard figure>.sc{width:100%}
 .hcard .hc-room{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;
   text-transform:uppercase;color:var(--ink-note);text-align:center;margin-top:20px;font-weight:700}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCENES
+
+   Every picture of the product on this page is built here, in markup,
+   from the same tokens the product uses. Nothing is a screenshot.
+
+   Two reasons. A dense console has no thumbnail form — shrink a real
+   room into a 340px card and you get grey mush — so these are drawn at
+   the size they are shown, six elements instead of forty. And a page
+   like this teases: it shows the shape of the work without handing over
+   the map. Scenes can also move, which is the whole point; a capture
+   cannot assemble itself.
+
+   Company names are invented. Nothing here implies a customer.
+   ═══════════════════════════════════════════════════════════════ */
+.sc{background:var(--surface);border:1px solid var(--hair);border-radius:14px;
+  box-shadow:var(--shadow-rest);padding:22px;text-align:left;position:relative;
+  overflow:hidden}
+.sc--sunk{background:var(--sunk);box-shadow:none}
+.sc--plain{background:transparent;border:0;box-shadow:none;padding:0}
+.sc--lg{padding:clamp(24px,3.4vw,40px);border-radius:18px;box-shadow:var(--shadow-offset)}
+
+/* Staged entrance. The resting state is VISIBLE — the hidden state is
+   only applied once JS is running (html.anim), so a scene is never
+   parked at opacity:0 waiting on an observer that may never fire. */
+.anim .sc [data-a]{opacity:0;transform:translateY(9px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.sc.lit [data-a]{opacity:1;transform:none}
+.sc.lit [data-a="1"]{transition-delay:.06s}
+.sc.lit [data-a="2"]{transition-delay:.14s}
+.sc.lit [data-a="3"]{transition-delay:.22s}
+.sc.lit [data-a="4"]{transition-delay:.30s}
+.sc.lit [data-a="5"]{transition-delay:.38s}
+.sc.lit [data-a="6"]{transition-delay:.46s}
+.sc.lit [data-a="7"]{transition-delay:.54s}
+.sc.lit [data-a="8"]{transition-delay:.62s}
+@media (prefers-reduced-motion:reduce){
+  .sc [data-a]{opacity:1;transform:none;transition:none}
+}
+
+/* ── scene parts ───────────────────────────────────────────── */
+.sc-kick{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:700;color:var(--ink-note);margin:0 0 10px}
+.sc-kick--move{color:var(--orange-ink)}
+.sc-kick--sys{color:var(--blue)}
+.sc-h{font-family:var(--serif);font-size:1.16rem;line-height:1.2;margin:0;
+  letter-spacing:-.01em}
+.sc--lg .sc-h{font-size:clamp(1.3rem,2.3vw,1.9rem)}
+.sc-p{font-size:.8rem;line-height:1.5;color:var(--ink50);margin:9px 0 0}
+.sc-p b{color:var(--ink);font-weight:600}
+.sc--lg .sc-p{font-size:clamp(.86rem,1.2vw,.98rem)}
+.sc-hr{height:1px;background:var(--hair);margin:15px 0;border:0}
+.sc-btn{display:inline-flex;align-items:center;gap:6px;background:var(--orange-btn);
+  color:#fff;border-radius:6px;padding:8px 14px;font-size:.76rem;font-weight:700;
+  margin-top:14px}
+.sc-ghost{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;
+  color:var(--blue);font-weight:700}
+.sc-quiet{font-family:var(--mono);font-size:.6rem;color:var(--ink-note);
+  letter-spacing:.04em;margin:12px 0 0}
+
+/* rows — a list of live objects */
+.sc-row{display:flex;align-items:baseline;gap:10px;padding:8px 0;
+  border-top:1px solid var(--hair);font-size:.78rem}
+.sc-row:first-of-type{border-top:0}
+.sc-row b{font-weight:700;color:var(--ink)}
+.sc-row span{color:var(--ink50);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-row em{font-style:normal;font-family:var(--mono);font-size:.68rem;
+  color:var(--ink-note);font-variant-numeric:tabular-nums}
+.sc-row--hot{box-shadow:inset 3px 0 0 var(--red);padding-left:10px}
+.sc-row--warm{box-shadow:inset 3px 0 0 var(--orange);padding-left:10px}
+.sc-row em.sc-day,.sc-day{font-family:var(--mono);font-size:.6rem;font-weight:700;
+  border-radius:4px;padding:2px 5px;flex:none}
+.sc-row em.sc-day--red,.sc-day--red{background:var(--red-soft);color:#b3231c}
+.sc-row em.sc-day--amber,.sc-day--amber{background:var(--amber-soft);color:var(--amber-ink)}
+.sc-row em.sc-day--blue,.sc-day--blue{background:var(--blue-soft);color:var(--blue-strong)}
+
+/* heat chips */
+.sc-heat{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.sc-acct{border:1px solid var(--hair);border-radius:8px;padding:9px 10px;
+  box-shadow:inset 3px 0 0 var(--ink14)}
+.sc-acct--hot{box-shadow:inset 3px 0 0 var(--orange)}
+.sc-acct--new{box-shadow:inset 3px 0 0 var(--blue)}
+.sc-acct b{display:block;font-size:.82rem;font-weight:700}
+.sc-acct span{display:block;font-size:.66rem;color:var(--ink50);margin-top:2px;
+  line-height:1.35}
+.sc-bar{height:4px;border-radius:99px;background:var(--ink10);margin-bottom:7px;
+  overflow:hidden}
+.sc-bar i{display:block;height:100%;border-radius:99px;background:var(--orange);
+  width:var(--w,60%)}
+.anim .sc-bar i{width:0;transition:width .9s var(--ease)}
+.sc.lit .sc-bar i{width:var(--w,60%)}
+@media (prefers-reduced-motion:reduce){.sc .sc-bar i{width:var(--w,60%);transition:none}}
+
+/* the response branches on a live call */
+.sc-tap{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sc-tap span{border:1px solid var(--ink14);border-radius:99px;padding:6px 11px;
+  font-size:.72rem;color:var(--ink50);background:var(--surface)}
+.sc-tap span.on{border-color:var(--orange);color:var(--ink);font-weight:600;
+  box-shadow:0 0 0 3px var(--orange-soft)}
+.sc-listen{font-size:.74rem;color:var(--ink50);margin:10px 0 0;
+  padding-left:11px;box-shadow:inset 2px 0 0 var(--blue)}
+
+/* the pilot circle */
+.sc-circle{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.sc-av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  font-size:.64rem;font-weight:700;background:var(--sunk);color:var(--ink70);
+  border:1px solid var(--hair)}
+.sc-av--gap{background:transparent;border:1.5px dashed var(--ink25);color:var(--ink25)}
+
+/* the ladder */
+.sc-rungs{display:flex;flex-direction:column-reverse;gap:7px}
+.sc-rung{display:flex;align-items:center;gap:9px;font-size:.74rem;color:var(--ink-note)}
+.sc-rung i{display:block;height:4px;border-radius:99px;background:var(--ink10);flex:1}
+.sc-rung--past{color:var(--forest)}
+.sc-rung--past i{background:var(--forest)}
+.sc-rung--here{color:var(--ink);font-weight:700}
+.sc-rung--here i{background:var(--blue)}
+
+/* the open book */
+.sc-book{display:grid;grid-template-columns:.62fr 1fr;gap:16px}
+.sc-toc{display:flex;flex-direction:column;gap:7px;border-right:1px solid var(--hair);
+  padding-right:14px}
+.sc-toc span{display:flex;align-items:center;gap:7px;font-size:.68rem;color:var(--ink-note)}
+.sc-toc span::before{content:"";width:5px;height:5px;border-radius:50%;
+  background:var(--ink14);flex:none}
+.sc-toc span.done::before{background:var(--forest)}
+.sc-toc span.done{color:var(--ink70)}
+.sc-note{margin-top:11px;padding-left:11px;box-shadow:inset 2px 0 0 var(--orange);
+  font-size:.72rem;color:var(--ink50);line-height:1.45}
+.sc-note b{color:var(--ink)}
+.sc-lines{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+.sc-lines i{display:block;height:5px;border-radius:99px;background:var(--ink10)}
+
+/* the motion map — shape without labels */
+.sc-map{position:relative;padding-bottom:16px}
+.sc-mapgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}
+.sc-node{height:26px;border-radius:5px;background:var(--sunk);
+  border:1px solid var(--hair)}
+.sc-node--named{display:grid;place-items:center;font-size:.6rem;font-weight:700;
+  color:var(--ink70);background:var(--surface);padding:0 4px;text-align:center;
+  line-height:1.1;height:auto;min-height:26px}
+.sc-node--here{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sc-node--next{border:1.5px dashed var(--orange);color:var(--orange-ink);background:var(--orange-tint)}
+.sc-ground{height:2px;background:var(--ink);border-radius:2px;margin-top:16px;
+  transform-origin:center}
+.anim .sc-ground{transform:scaleX(.2);transition:transform .8s var(--ease)}
+.sc.lit .sc-ground{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){.sc .sc-ground{transform:scaleX(1);transition:none}}
+
+/* the live edge rail */
+.sc-edge{display:grid;grid-template-columns:118px 1fr;gap:16px}
+.sc-rail{border-right:1px solid var(--hair);padding-right:14px}
+.sc-count{font-family:var(--serif);font-size:1.7rem;line-height:1}
+.sc-count small{font-family:var(--mono);font-size:.6rem;color:var(--ink-note);
+  margin-left:4px;letter-spacing:.04em}
+.sc-wire{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.sc-wire p{margin:0;font-size:.68rem;line-height:1.4;color:var(--ink50);
+  padding-left:9px;box-shadow:inset 2px 0 0 var(--hair-strong)}
+.sc-wire p.big{box-shadow:inset 2px 0 0 var(--orange);color:var(--ink70)}
+.sc-wire p b{color:var(--ink);font-weight:700}
+
+/* the standing strip — five states, most of them still ahead of you */
+.shotnote{text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;
+  color:var(--ink-note);margin:16px 0 0}
+.sc-stand{display:flex;gap:6px;align-items:flex-end;width:100%;min-width:0}
+.sc-stand div{flex:1 1 0;min-width:0;max-width:100%;overflow:hidden}
+.sc-stand i{display:block;height:3px;border-radius:99px;background:var(--ink10);
+  transform-origin:left}
+.anim .sc-stand i{transform:scaleX(0);transition:transform .7s var(--ease)}
+.sc.lit .sc-stand i{transform:scaleX(1)}
+.sc-stand div:nth-child(1) i{background:var(--forest)}
+.sc-stand div:nth-child(2) i{background:var(--amber);transition-delay:.1s}
+.sc-stand div:nth-child(3) i{transition-delay:.2s}
+.sc-stand div:nth-child(4) i{transition-delay:.3s}
+.sc-stand div:nth-child(5) i{transition-delay:.4s}
+.sc-stand span{display:block;font-family:var(--mono);font-size:.53rem;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;color:var(--ink-note);margin-top:7px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-stand div:nth-child(1) span{color:var(--forest)}
+.sc-stand div:nth-child(2) span{color:var(--amber-ink)}
+.sc-stand div.at span{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.sc .sc-stand i{transform:scaleX(1);transition:none}}
+@media(max-width:560px){.sc-stand div:nth-child(n+4){display:none}}
+
+/* ── THE BRIEFING · the one scene shown whole ───────────────────
+   Everything else on this page is a fragment. This one assembles in
+   front of the reader, piece by piece, and the sky slides up into
+   place under it at the end. It is the daily payback, and it is the
+   scene that gives away the least. */
+.anim .brf [data-a]{opacity:0;transform:translateY(10px);
+  transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.brf.lit [data-a]{opacity:1;transform:none}
+.brf.lit [data-a="1"]{transition-delay:.05s}
+.brf.lit [data-a="2"]{transition-delay:.18s}
+.brf.lit [data-a="3"]{transition-delay:.31s}
+.brf.lit [data-a="4"]{transition-delay:.44s}
+.brf.lit [data-a="5"]{transition-delay:.57s}
+.brf.lit [data-a="6"]{transition-delay:.70s}
+.brf.lit [data-a="7"]{transition-delay:.83s}
+@media (prefers-reduced-motion:reduce){
+  .brf [data-a]{opacity:1;transform:none;transition:none}
+}
+.brf{max-width:880px;margin:0 auto;background:var(--surface);border-radius:18px;
+  border:1px solid var(--hair);box-shadow:var(--shadow-offset);overflow:hidden}
+.brf-in{padding:clamp(20px,3vw,34px) clamp(18px,3vw,34px) 0}
+.brf-top{display:flex;align-items:baseline;gap:10px;
+  border-bottom:1px solid var(--hair);padding-bottom:13px}
+.brf-top b{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;font-weight:700}
+.brf-top span{font-size:.76rem;color:var(--ink50)}
+.brf-top i{margin-left:auto;font-style:normal;font-size:.68rem;color:var(--ink-note);
+  font-family:var(--mono)}
+.brf-noticed{display:flex;align-items:center;gap:10px;background:var(--sunk);
+  border-radius:9px;padding:11px 13px;margin-top:14px;font-size:.78rem;
+  color:var(--ink70);line-height:1.4;flex-wrap:wrap}
+.brf-noticed em{font-style:normal;font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.16em;color:var(--blue);font-weight:700;flex:none}
+.brf-noticed u{text-decoration:none;color:var(--ink);font-weight:700}
+.brf-yes{margin-left:auto;display:flex;gap:6px;flex:none}
+.brf-yes span{border-radius:99px;font-size:.68rem;font-weight:700;padding:4px 11px}
+.brf-yes span:first-child{background:var(--forest);color:#fff}
+.brf-yes span:last-child{border:1px solid var(--ink14);color:var(--ink50)}
+.brf-sec{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;font-weight:700;
+  text-transform:uppercase;color:var(--ink-note);margin:20px 0 4px}
+.brf-sec small{font-family:var(--sans);letter-spacing:0;text-transform:none;
+  font-size:.7rem;font-weight:400;margin-left:8px}
+.brf-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;
+  border-top:1px solid var(--hair)}
+.brf-item p{margin:0;font-size:.82rem;line-height:1.45;color:var(--ink70)}
+.brf-item p b{color:var(--ink);font-weight:700}
+.brf-item a{display:block;margin-top:4px;font-size:.7rem;color:var(--blue);
+  text-decoration:none;font-family:var(--mono)}
+.brf-drafts{display:flex;gap:8px;flex-wrap:wrap;padding:14px 0 18px}
+.brf-drafts span{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--hair);
+  border-radius:99px;padding:5px 6px 5px 12px;font-size:.72rem;color:var(--ink70)}
+.brf-drafts span i{font-style:normal;background:var(--forest);color:#fff;
+  border-radius:99px;font-size:.62rem;font-weight:700;padding:2px 9px}
+
+/* the sky slides up into place, last */
+.brf-sky{background:linear-gradient(178deg,#cfe2f7 0%,#e6eef9 62%,#f3f6fb 100%);
+  padding:20px clamp(18px,3vw,34px) 18px;display:flex;align-items:flex-end;gap:14px;
+  position:relative}
+.anim .brf-sky{transform:translateY(100%);opacity:0;
+  transition:transform .85s cubic-bezier(.2,.8,.2,1) .95s,opacity .5s ease .95s}
+.brf.lit .brf-sky{transform:none;opacity:1}
+.brf-sky h4{font-family:var(--serif);font-size:1.35rem;font-weight:400;margin:0;
+  letter-spacing:-.01em}
+.brf-sky p{margin:3px 0 0;font-family:var(--mono);font-size:.62rem;color:var(--ink70)}
+.brf-temp{font-family:var(--serif);font-size:1.9rem;line-height:1;margin-left:auto;
+  display:flex;align-items:center;gap:12px}
+.brf-sun{width:34px;height:34px;border-radius:50%;flex:none;
+  background:radial-gradient(circle,#ffd97a 38%,rgba(255,205,80,.55) 62%,transparent 74%)}
+.anim .brf-sun{opacity:0;transform:scale(.4);
+  transition:opacity .7s ease 1.5s,transform .9s cubic-bezier(.2,.8,.2,1) 1.5s}
+.brf.lit .brf-sun{opacity:1;transform:none}
+.brf-forecast{position:absolute;right:clamp(18px,3vw,34px);top:18px;
+  border:1px solid rgba(10,28,64,.14);border-radius:99px;background:rgba(255,255,255,.7);
+  padding:4px 11px;font-size:.66rem;color:var(--ink70)}
+/* the market line, running under it all */
+.brf-ticker{border-top:1px solid var(--hair);overflow:hidden;background:var(--surface)}
+.brf-tick{display:flex;gap:26px;padding:9px 0;white-space:nowrap;width:max-content;
+  animation:brfrun 34s linear infinite}
+.brf.lit .brf-tick{animation-play-state:running}
+.brf-tick span{font-size:.7rem;color:var(--ink50)}
+.brf-tick span em{font-style:normal;font-family:var(--mono);font-size:.56rem;
+  letter-spacing:.16em;color:var(--ink-note);font-weight:700;margin-right:7px}
+.brf-tick span u{text-decoration:none;color:var(--blue)}
+@keyframes brfrun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .brf-sky{transform:none;opacity:1;transition:none}
+  .brf-sun{opacity:1;transform:none;transition:none}
+  .brf-tick{animation:none}
+}
+@media(max-width:640px){
+  .brf-edge,.brf-sky{flex-wrap:wrap}
+  .brf-temp{margin-left:0}
+  .brf-forecast{display:none}
+}
 </style>
 </head>
 <body>
@@ -328,13 +598,23 @@ section[id],header[id]{scroll-margin-top:92px}
     <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />After that it reads your whole way of selling back to you every morning.</p>
   </div>
   <div class="hero__shot rv in" data-d="3">
-    <div class="shotframe shotframe--bar">
-      <picture>
-        <source media="(min-width:900px)" srcset="marketing/rooms/dashboard.jpg" width="2000" height="1448" />
-        <img src="marketing/detail/dashboard--move.jpg" width="1500" height="365"
-             alt="The Antaeus dashboard: a headline reading &quot;You're Building.&quot;, the one most valuable move on the board with the reason it came up first, and a row showing where each part of the motion stands." />
-      </picture>
+    <div class="sc sc--lg" data-scene>
+      <p class="sc-kick" data-a="1">Where your whole motion stands</p>
+      <div class="sc-stand" data-a="1" aria-hidden="true">
+        <div><i></i><span>You are the system</span></div>
+        <div><i></i><span>Building</span></div>
+        <div class="at"><i></i><span>Inheritable</span></div>
+        <div><i></i><span>Hire-ready</span></div>
+        <div><i></i><span>Repeatable</span></div>
+      </div>
+      <hr class="sc-hr" data-a="2" />
+      <p class="sc-kick sc-kick--move" data-a="3">The most valuable move on your board · #1 of 14</p>
+      <h2 class="sc-h" data-a="4">Reach out to Northwind.</h2>
+      <p class="sc-p" data-a="5">Their new CRO started three weeks ago and they just posted twelve roles on her team. <b>The account is running hot</b> — and reaching out is the part of your motion that is furthest behind.</p>
+      <span class="sc-btn" data-a="6">Compose it →</span>
+      <p class="sc-quiet" data-a="7">· clearly the top one &nbsp;·&nbsp; then: Meridian, Halcyon</p>
     </div>
+    <p class="shotnote">A morning in a workspace. Names are examples.</p>
   </div>
 </header>
 
@@ -363,53 +643,131 @@ section[id],header[id]{scroll-margin-top:92px}
 
     <article class="hcard">
       <h3>Every account you watch, sorted by what just moved.</h3>
-      <p class="hc-note">Banded by where your attention should go: act now, reach while they’re warm, emerging, or going cold.</p>
-      <figure><img src="marketing/detail/signal-console--actnow.jpg" width="1500" height="250" alt="Account cards banded under ACT NOW, each showing a heat number and what just happened." loading="lazy" /></figure>
-      <p class="hc-room">Signal Console</p>
+      <p class="hc-note">Act now, reach while they’re warm, emerging, going cold.</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick sc-kick--move" data-a="1">Act now — hot, and something just moved</p>
+          <div class="sc-heat">
+            <div class="sc-acct sc-acct--hot" data-a="2"><div class="sc-bar" style="--w:94%"><i></i></div><b>Northwind</b><span>Hired a new VP of Sales</span></div>
+            <div class="sc-acct sc-acct--hot" data-a="3"><div class="sc-bar" style="--w:88%"><i></i></div><b>Meridian</b><span>Posted 12 roles this week</span></div>
+            <div class="sc-acct" data-a="4"><div class="sc-bar" style="--w:71%"><i></i></div><b>Halcyon</b><span>New CRO started</span></div>
+            <div class="sc-acct sc-acct--new" data-a="5"><div class="sc-bar" style="--w:54%"><i></i></div><b>Torch Labs</b><span>Came out of stealth</span></div>
+          </div>
+        </div>
+      </figure>
     </article>
 
     <article class="hcard">
       <h3>One thing to do first, and why it came up first.</h3>
       <p class="hc-note">Not a list of fourteen. The single most valuable one, with its reason shown.</p>
-      <figure><img src="marketing/detail/dashboard--move.jpg" width="1500" height="365" alt="The dashboard naming one move, its plain reason, and an orange button to act on it." loading="lazy" /></figure>
-      <p class="hc-room">Dashboard</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick sc-kick--move" data-a="1">#1 of 14</p>
+          <h4 class="sc-h" data-a="2">Reach out to Northwind.</h4>
+          <p class="sc-p" data-a="3">New CRO three weeks in, twelve roles posted. <b>Running hot</b>, and outreach is your weakest part.</p>
+          <span class="sc-btn" data-a="4">Compose it →</span>
+          <p class="sc-quiet" data-a="5">· then: Meridian, Halcyon</p>
+        </div>
+      </figure>
     </article>
 
     <article class="hcard">
       <h3>The deals that will slip this week, and the smallest fix.</h3>
       <p class="hc-note">Where a deal says it is matters less than what it is actually stuck on.</p>
-      <figure><img src="marketing/detail/deal-workspace--board.jpg" width="1500" height="519" alt="A board of open deals ordered by how much pressure each is under." loading="lazy" /></figure>
-      <p class="hc-room">Deal Workspace</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick" data-a="1">If you do nothing this week</p>
+          <h4 class="sc-h" data-a="2">3 will slip.</h4>
+          <div style="margin-top:12px">
+            <div class="sc-row sc-row--hot" data-a="3"><b>Northwind</b><span>no next step</span><em class="sc-day sc-day--red">20d</em></div>
+            <div class="sc-row sc-row--warm" data-a="4"><b>Meridian</b><span>champion went quiet</span><em class="sc-day sc-day--amber">11d</em></div>
+            <div class="sc-row" data-a="5"><b>Halcyon</b><span>verbal yes · terms open</span><em class="sc-day sc-day--blue">4d</em></div>
+          </div>
+        </div>
+      </figure>
     </article>
 
     <article class="hcard">
       <h3>A console you run the discovery call from, live.</h3>
       <p class="hc-note">They say something. You tap what you heard. It hands you the next line.</p>
-      <figure><img src="marketing/detail/discovery-studio--live.jpg" width="1500" height="569" alt="The live discovery console with a question, what to listen for, and buyer-response branches." loading="lazy" /></figure>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · live</p>
+          <h4 class="sc-h" data-a="2">Walk me through what happens when a ticket sits two hours.</h4>
+          <p class="sc-listen" data-a="3">Listen for whether this is really <b>theirs to fix</b> — and who flinches when you name the cost.</p>
+          <div class="sc-tap">
+            <span data-a="4">“We just cope”</span>
+            <span class="on" data-a="5">“We hired more agents”</span>
+            <span data-a="6">“Not a priority”</span>
+          </div>
+          <p class="sc-quiet" data-a="7">Tap what you heard to get your next line</p>
+        </div>
+      </figure>
       <p class="hc-room">Discovery Studio</p>
     </article>
 
     <article class="hcard">
       <h3>A pilot that gives their boss something to act on.</h3>
       <p class="hc-note">Walked through, one step at a time, with the people you need to pull in.</p>
-      <figure><img src="marketing/detail/pilot-desk--guide.jpg" width="1500" height="557" alt="The pilot desk showing setup, the circle of people using it, and the adoption read." loading="lazy" /></figure>
-      <p class="hc-room">Pilot Desk</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick" data-a="1">Who is hands-on</p>
+          <div class="sc-circle">
+            <span class="sc-av" data-a="2">PR</span><span class="sc-av" data-a="2">DM</span>
+            <span class="sc-av" data-a="3">JT</span><span class="sc-av" data-a="3">AO</span>
+            <span class="sc-av" data-a="4">KL</span>
+            <span class="sc-av sc-av--gap" data-a="5">+</span><span class="sc-av sc-av--gap" data-a="5">+</span>
+          </div>
+          <p class="sc-note" data-a="6"><b>Someone from IT</b> — nobody named yet. Ask the champion for an intro.</p>
+          <hr class="sc-hr" data-a="7" />
+          <div class="sc-bar" style="--w:71%" data-a="7"><i></i></div>
+          <p class="sc-quiet" data-a="8">5 of 7 using it day to day</p>
+        </div>
+      </figure>
     </article>
 
     <article class="hcard">
       <h3>Everything a first hire opens on day one.</h3>
       <p class="hc-note">Written like a document a sharp operator left for their replacement.</p>
-      <figure><img src="marketing/detail/founding-gtm--book.jpg" width="1500" height="654" alt="A two-page reader with the parts of the handoff on the left and the open part in full on the right." loading="lazy" /></figure>
-      <p class="hc-room">Founding GTM</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <div class="sc-book">
+            <div class="sc-toc">
+              <span class="done" data-a="1">Who hits, who misses</span>
+              <span class="done" data-a="2">What actually landed</span>
+              <span class="done" data-a="2">The questions that won</span>
+              <span class="done" data-a="3">Where deals leak</span>
+              <span data-a="3">The losses you paid for</span>
+              <span data-a="4">Why you win</span>
+              <span data-a="4">The week to run</span>
+            </div>
+            <div>
+              <h4 class="sc-h" data-a="2" style="font-size:1rem">Who hits, who misses, and why</h4>
+              <div class="sc-lines" data-a="3"><i></i><i style="width:92%"></i><i style="width:78%"></i></div>
+              <p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but your stated target is enterprise.</p>
+            </div>
+          </div>
+        </div>
+      </figure>
     </article>
 
     <article class="hcard">
       <h3>One question, answered honestly: could someone else run this?</h3>
       <p class="hc-note">Five states, and what it takes to reach the next one.</p>
-      <figure><img src="marketing/detail/readiness--climb.jpg" width="1500" height="698" alt="A ladder of five states with the one already passed behind in forest green and the current one lit." loading="lazy" /></figure>
-      <p class="hc-room">Readiness</p>
+      <figure>
+        <div class="sc sc--sunk" data-scene style="width:100%">
+          <p class="sc-kick" data-a="1">Could a hire run this on Monday?</p>
+          <div class="sc-rungs" style="margin-top:12px">
+            <div class="sc-rung" data-a="5"><i></i>Hire-ready, repeatable</div>
+            <div class="sc-rung" data-a="4"><i></i>Hire-ready</div>
+            <div class="sc-rung sc-rung--here" data-a="3"><i></i>Inheritable, with you there</div>
+            <div class="sc-rung sc-rung--past" data-a="2"><i></i>Building</div>
+            <div class="sc-rung sc-rung--past" data-a="1"><i></i>You are the system</div>
+          </div>
+          <p class="sc-quiet" data-a="6">Left “you are the system” behind 3 weeks ago</p>
+        </div>
+      </figure>
     </article>
-
   </div>
   <div class="cctl">
     <div class="dots" id="hl-dots" role="tablist" aria-label="Highlight"></div>
@@ -443,11 +801,14 @@ section[id],header[id]{scroll-margin-top:92px}
 /* ── product viewer ───────────────────────────────────────── */
 .pv{background:var(--surface)}
 .pv__stage{max-width:960px;margin:0 auto;padding:0 22px}
-.pv__hero img{border-radius:12px;border:1px solid var(--hair);box-shadow:var(--shadow-lift);width:100%}
 .pv__chips{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;
   padding:36px 22px 8px;justify-content:flex-start}
 .pv__chips::-webkit-scrollbar{display:none}
-@media(min-width:900px){.pv__chips{padding-left:22px;padding-right:22px}}
+/* `safe center` centres the rail when the chips fit and falls back to
+   start-alignment the moment they overflow, so nothing is ever scrolled
+   off the left edge and unreachable. Browsers without it keep flex-start. */
+@media(min-width:900px){.pv__chips{padding-left:22px;padding-right:22px;
+  justify-content:safe center}}
 .chip{display:inline-flex;align-items:center;gap:11px;flex:none;
   background:var(--sunk);border-radius:999px;padding:11px 20px 11px 12px;
   font-size:.9rem;font-weight:500;white-space:nowrap;
@@ -460,13 +821,12 @@ section[id],header[id]{scroll-margin-top:92px}
 .chip__p::after{width:1.6px;height:11px}
 .pv__open{display:none;padding-top:6px}
 .pv.is-open .pv__open{display:block}
-.pv.is-open .pv__hero,.pv.is-open .pv__chips{display:none}
+.pv.is-open .pv__chips{display:none}
 .pv__close{width:44px;height:44px;border-radius:50%;background:var(--sunk);
   display:grid;place-items:center;margin-left:auto;color:var(--ink70)}
 .pv__close:hover{background:var(--ink10);color:var(--ink)}
 .pv__close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 .pv__frame{margin:14px auto 0;max-width:900px}
-.pv__frame img{border-radius:12px;border:1px solid var(--hair);box-shadow:var(--shadow-lift)}
 .pv__nav{position:relative;margin:30px auto 0;max-width:900px}
 .pv__cap{background:var(--sunk);border-radius:18px;padding:22px 34px;width:100%;
   font-size:1rem;line-height:1.5;color:var(--ink55)}
@@ -485,9 +845,7 @@ section[id],header[id]{scroll-margin-top:92px}
 .pv__arw svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round}
 
-/* ── media card + spec stack ──────────────────────────────── */
-.mediacard{max-width:900px;margin:0 auto;border-radius:16px;overflow:hidden;
-  border:1px solid var(--hair);box-shadow:var(--shadow-offset);background:var(--surface)}
+/* ── spec stack ───────────────────────────────────────────── */
 .specs{margin:clamp(56px,8vw,104px) auto 0;max-width:760px;display:flex;
   flex-direction:column;gap:clamp(30px,4vw,48px)}
 .spec b{display:block;font-family:var(--serif);font-size:clamp(1.9rem,4.6vw,3rem);
@@ -503,14 +861,18 @@ section[id],header[id]{scroll-margin-top:92px}
 .twoup img{border-radius:10px;border:1px solid var(--hair);box-shadow:var(--shadow-rest);
   width:100%;aspect-ratio:16/7;object-fit:cover;object-position:top left}
 /* the "before" is a state of affairs, not a screenshot to desaturate */
-.wasplate{border-radius:10px;border:1px dashed var(--ink25);aspect-ratio:16/7;
-  display:grid;place-items:center;background:var(--sunk)}
-.wasplate span{font-family:var(--serif);font-size:2.4rem;color:var(--ink-note);line-height:1}
+/* the "before" is a state of affairs, not a screenshot: rows that all
+   weigh exactly the same, which is the whole problem */
+.wasplate{border-radius:10px;border:1px solid var(--hair);aspect-ratio:16/7;
+  background:var(--sunk);padding:16px 18px;display:flex;flex-direction:column;
+  justify-content:center;gap:9px}
+.wasplate i{display:block;height:6px;border-radius:99px;background:var(--ink14)}
 .twoup .now img{filter:none}
 .twoup figcaption{margin-top:18px}
 .twoup .t{font-size:.86rem;color:var(--ink50);line-height:1.4}
 .twoup .n{font-family:var(--serif);font-size:clamp(1.3rem,3vw,2rem);line-height:1.1;margin-top:7px;display:block}
 .twoup .now .n{color:var(--ink)}
+@media(max-width:420px){.twoup{grid-template-columns:1fr;gap:26px}}
 @media(max-width:640px){
   .twoup{gap:10px}
   .twoup img{aspect-ratio:5/4}
@@ -545,7 +907,6 @@ section[id],header[id]{scroll-margin-top:92px}
 .tabpanel{display:none}
 .tabpanel.is-on{display:block}
 .tabshot{max-width:900px;margin:32px auto 0}
-.tabshot img{border-radius:12px;border:1px solid var(--hair);box-shadow:var(--shadow-lift)}
 .tabcap{max-width:640px;margin:24px auto 0;font-size:1rem;line-height:1.5;color:var(--ink55);text-align:left}
 .tabcap b{color:var(--ink);font-weight:700}
 
@@ -572,16 +933,36 @@ section[id],header[id]{scroll-margin-top:92px}
     <div class="sides rv" data-d="2">
       <div class="sides__stage" id="sides-stage">
         <div class="sides__slide is-on" data-side="you">
-          <picture>
-            <source media="(min-width:900px)" srcset="marketing/rooms/dashboard.jpg" />
-            <img src="marketing/detail/dashboard--move.jpg" width="1500" height="365" alt="The dashboard as the founder sees it — the state of the motion, the one most valuable move, and where each part stands." loading="lazy" />
-          </picture>
+          <div class="sc sc--lg sc--plain" data-scene style="box-shadow:none;border:0">
+            <p class="sc-kick sc-kick--move" data-a="1">The most valuable move on your board</p>
+            <h3 class="sc-h" data-a="2">Reach out to Northwind.</h3>
+            <p class="sc-p" data-a="3">New CRO three weeks in, twelve roles posted this week. <b>The account is running hot</b>, and outreach is the part of your motion furthest behind.</p>
+            <span class="sc-btn" data-a="4">Compose it →</span>
+            <hr class="sc-hr" data-a="5" />
+            <div class="sc-row" data-a="5"><b>3 will slip</b><span>this week if nothing changes</span></div>
+            <div class="sc-row" data-a="6"><b>Halcyon</b><span>quiet 16 days — your worst open deal</span></div>
+          </div>
         </div>
         <div class="sides__slide" data-side="them">
-          <picture>
-            <source media="(min-width:900px)" srcset="marketing/rooms/founding-gtm.jpg" />
-            <img src="marketing/detail/founding-gtm--book.jpg" width="1500" height="654" alt="The handoff book as a new hire sees it — seven parts written as prose, with what to notice in each." loading="lazy" />
-          </picture>
+          <div class="sc sc--lg sc--plain" data-scene style="box-shadow:none;border:0">
+            <p class="sc-kick sc-kick--dur" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 parts ready</p>
+            <div class="sc-book" data-a="2">
+              <div class="sc-toc">
+                <span class="done">Who hits, who misses</span>
+                <span class="done">What actually landed</span>
+                <span class="done">The questions that won</span>
+                <span class="done">Where deals leak</span>
+                <span class="done">The losses you paid for</span>
+                <span>Why you win</span>
+                <span>The week to run</span>
+              </div>
+              <div>
+                <h3 class="sc-h" data-a="3" style="font-size:1.06rem">Who hits, who misses, and why</h3>
+                <p class="sc-p" data-a="4">Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go ask.</p>
+                <p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="swatches" role="group" aria-label="Whose view">
@@ -605,12 +986,15 @@ section[id],header[id]{scroll-margin-top:92px}
   </div>
 
   <div class="pv__stage">
-    <div class="pv__hero">
-      <picture>
-        <source media="(min-width:900px)" srcset="marketing/rooms/signal-console.jpg" />
-        <img src="marketing/detail/signal-console--actnow.jpg" width="1500" height="250"
-             alt="The Signal Console — accounts banded by whether to act now, reach while warm, or let them go cold." />
-      </picture>
+    <div class="sc sc--lg" data-scene>
+      <p class="sc-kick sc-kick--sys" data-a="1">Watching · 16 accounts</p>
+      <div class="sc-heat" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+        <div class="sc-acct sc-acct--hot" data-a="2"><div class="sc-bar" style="--w:94%"><i></i></div><b>Northwind</b><span>Hired a new VP of Sales · replied 2h ago</span></div>
+        <div class="sc-acct sc-acct--hot" data-a="3"><div class="sc-bar" style="--w:88%"><i></i></div><b>Meridian</b><span>Posted 12 roles this week</span></div>
+        <div class="sc-acct" data-a="4"><div class="sc-bar" style="--w:71%"><i></i></div><b>Halcyon</b><span>New CRO started this month</span></div>
+        <div class="sc-acct sc-acct--new" data-a="5"><div class="sc-bar" style="--w:54%"><i></i></div><b>Torch Labs</b><span>Came out of stealth</span></div>
+      </div>
+      <p class="sc-quiet" data-a="6">Four need something today · three going cold</p>
     </div>
   </div>
 
@@ -620,7 +1004,7 @@ section[id],header[id]{scroll-margin-top:92px}
     <button class="pv__close" id="pv-close" aria-label="Close">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
     </button>
-    <div class="pv__frame"><img id="pv-img" src="marketing/rooms/dashboard.jpg" alt="Dashboard — a room in Antaeus." loading="lazy" /></div>
+    <div class="pv__frame" id="pv-stage"></div>
     <div class="pv__nav">
       <button class="pv__arw" id="pv-prev" aria-label="Previous room">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2L4 8l6 6"/></svg>
@@ -640,9 +1024,62 @@ section[id],header[id]{scroll-margin-top:92px}
     <h2 class="h-sec rv" data-d="1" id="br-h" style="margin-top:14px;max-width:16ch">It keeps reading<br />when you stop.</h2>
   </div>
   <div class="wrap" style="margin-top:clamp(38px,6vw,64px)">
-    <div class="mediacard rv" data-d="2">
-      <img src="marketing/rooms/briefing.jpg" width="2000" height="1137"
-           alt="The morning briefing — a plain-language read of what moved in the workspace and in the market, written the way a colleague would say it." loading="lazy" />
+    <div class="brf rv" data-d="2">
+      <div class="brf-in">
+        <div class="brf-top" data-a="1">
+          <b>BRIEFING</b><span>Thursday, 2 July</span><i>7:41 AM · Chicago</i>
+        </div>
+
+        <div class="brf-noticed" data-a="2">
+          <em>Noticed</em>
+          <span>You always open <u>the account you flagged</u> after I mark a deal quiet — want me to just take you there?</span>
+          <span class="brf-yes"><span>Yes</span><span>Later</span></span>
+        </div>
+
+        <p class="brf-sec" data-a="3">Your work <small>inside your own deals and accounts</small></p>
+
+        <div class="brf-item" data-a="3">
+          <em class="sc-day sc-day--red">20d</em>
+          <p><b>Northwind</b> has sat at proposal for three weeks with no next step.<a href="#rooms">Open the deal →</a></p>
+        </div>
+        <div class="brf-item" data-a="4">
+          <em class="sc-day sc-day--amber">11d</em>
+          <p><b>Meridian</b> has gone quiet since the champion moved teams.<a href="#rooms">Open the account →</a></p>
+        </div>
+        <div class="brf-item" data-a="5">
+          <em class="sc-day sc-day--blue">6d</em>
+          <p>The <b>Halcyon pilot</b> is past the day it was meant to report, and still marked open.<a href="#rooms">Open the pilot →</a></p>
+        </div>
+        <div class="brf-item" data-a="6">
+          <em class="sc-day sc-day--amber">0</em>
+          <p>No discovery calls logged this week — <b>the rhythm is slipping</b>.<a href="#rooms">Pick up a call →</a></p>
+        </div>
+
+        <div class="brf-drafts" data-a="7">
+          <span>Battlecard for Meridian’s raise <i>Open</i></span>
+          <span>Objection handler <i>Open</i></span>
+        </div>
+      </div>
+
+      <div class="brf-sky">
+        <div>
+          <h4>Good morning</h4>
+          <p>7:41 AM · Chicago</p>
+        </div>
+        <span class="brf-forecast">7-day forecast ↗</span>
+        <span class="brf-temp"><span class="brf-sun" aria-hidden="true"></span>78°</span>
+      </div>
+
+      <div class="brf-ticker" aria-hidden="true">
+        <div class="brf-tick">
+          <span><em>The market</em>Two competitors shipped forecasting in the same month.</span>
+          <span><em>Challenge</em>Both deals you closed were mid-market, not enterprise. <u>Revisit who you sell to ↗</u></span>
+          <span><em>Blind spot</em>Meridian keeps appearing next to accounts you already watch.</span>
+          <span><em>The market</em>Two competitors shipped forecasting in the same month.</span>
+          <span><em>Challenge</em>Both deals you closed were mid-market, not enterprise. <u>Revisit who you sell to ↗</u></span>
+          <span><em>Blind spot</em>Meridian keeps appearing next to accounts you already watch.</span>
+        </div>
+      </div>
     </div>
   </div>
   <div class="wrap">
@@ -658,14 +1095,29 @@ section[id],header[id]{scroll-margin-top:92px}
 
     <div class="twoup rv">
       <figure class="was">
-        <div class="wasplate" aria-hidden="true"><span>?</span></div>
+        <div class="wasplate" aria-hidden="true">
+          <i style="width:86%"></i><i style="width:64%"></i><i style="width:79%"></i>
+          <i style="width:52%"></i><i style="width:71%"></i>
+        </div>
         <figcaption>
           <span class="t">A spreadsheet and what you remember</span>
           <span class="n">You are the system</span>
         </figcaption>
       </figure>
       <figure class="now">
-        <img src="marketing/detail/dashboard--ladder.jpg" width="1500" height="177" alt="The five states of readiness shown as a ladder, with the passed state behind in forest green." loading="lazy" />
+        <div class="sc sc--sunk" data-scene style="aspect-ratio:16/7;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div>
+            <p class="sc-kick sc-kick--move" data-a="2" style="margin-bottom:5px">#1 of 14</p>
+            <p class="sc-h" data-a="3" style="font-size:1rem;margin:0">Reach out to Northwind.</p>
+          </div>
+          <div class="sc-stand" aria-hidden="true">
+            <div><i></i><span>You are the system</span></div>
+            <div><i></i><span>Building</span></div>
+            <div class="at"><i></i><span>Inheritable</span></div>
+            <div><i></i><span>Hire-ready</span></div>
+            <div><i></i><span>Repeatable</span></div>
+          </div>
+        </div>
         <figcaption>
           <span class="t">The same motion, six weeks in</span>
           <span class="n">Someone else could run it</span>
@@ -744,19 +1196,56 @@ section[id],header[id]{scroll-margin-top:92px}
 
     <div class="wrap">
       <div class="tabpanel is-on" id="cp-out" role="tabpanel" aria-labelledby="ct-out">
-        <div class="tabshot"><img src="marketing/rooms/outbound.jpg" width="2000" height="1206" alt="The outbound room composing one line for one named person at one account." loading="lazy" /></div>
+        <div class="tabshot"><div class="sc sc--lg" data-scene>
+          <p class="sc-kick" data-a="1">Writing to Sarah, a VP at Northwind</p>
+          <p class="sc-p" data-a="2" style="font-size:.95rem;color:var(--ink70)">Sarah — congratulations on the new seat.<br /><br />I saw <b>Northwind opened twelve roles on your team this week</b>. Hiring that fast usually means the forecast gets harder to trust right as the team doubles.<br /><br />Worth twenty minutes next week to compare notes on how you are planning to scale it?</p>
+          <hr class="sc-hr" data-a="3" />
+          <div class="sc-row" data-a="3"><em class="sc-day sc-day--blue">Why now</em><span>Twelve roles posted · new CRO started</span></div>
+          <div class="sc-row" data-a="4"><b>The ask</b><span>20 minutes next week</span></div>
+          <span class="sc-btn" data-a="5">Copy the message</span>
+        </div></div>
         <p class="tabcap"><b>Outbound.</b> Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone.</p>
       </div>
       <div class="tabpanel" id="cp-cold" role="tabpanel" aria-labelledby="ct-cold">
-        <div class="tabshot"><img src="marketing/rooms/cold-call.jpg" width="1931" height="1629" alt="The cold call game plan: the shape of the call and the pushback likely at each step." loading="lazy" /></div>
+        <div class="tabshot"><div class="sc sc--lg" data-scene>
+          <p class="sc-kick" data-a="1">Before you dial · the shape of it</p>
+          <div class="sc-tap" data-a="2" style="margin-top:0">
+            <span>Open</span><span class="on">Find the pain</span><span>Show it is real</span><span>Ask for the meeting</span><span>Wrap</span>
+          </div>
+          <hr class="sc-hr" data-a="3" />
+          <p class="sc-kick" data-a="3">They will probably say</p>
+          <h3 class="sc-h" data-a="4">“We already have something for this.”</h3>
+          <p class="sc-note" data-a="5">Then ask what it does <b>when a ticket sits two hours</b>. Nobody defends a tool through a specific bad morning.</p>
+          <p class="sc-quiet" data-a="6">Read before you dial · log what happened after · never during</p>
+        </div></div>
         <p class="tabcap"><b>Cold call.</b> The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking.</p>
       </div>
       <div class="tabpanel" id="cp-li" role="tabpanel" aria-labelledby="ct-li">
-        <div class="tabshot"><img src="marketing/rooms/linkedin.jpg" width="1931" height="1435" alt="The LinkedIn playbook showing the single next public move on one account." loading="lazy" /></div>
+        <div class="tabshot"><div class="sc sc--lg" data-scene>
+          <p class="sc-kick" data-a="1">One account · one move</p>
+          <div class="sc-rungs" style="margin-top:12px">
+            <div class="sc-rung" data-a="5"><i></i>Ask — only once it is warranted</div>
+            <div class="sc-rung" data-a="4"><i></i>Give something first</div>
+            <div class="sc-rung sc-rung--here" data-a="3"><i></i>Connect, now she knows your name</div>
+            <div class="sc-rung sc-rung--past" data-a="2"><i></i>Say something useful on her post</div>
+            <div class="sc-rung sc-rung--past" data-a="1"><i></i>Watch what she posts</div>
+          </div>
+          <p class="sc-note" data-a="6">You are three rungs in with Sarah. <b>Connect today</b> — do not ask yet.</p>
+        </div></div>
         <p class="tabcap"><b>LinkedIn.</b> One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening.</p>
       </div>
       <div class="tabpanel" id="cp-disco" role="tabpanel" aria-labelledby="ct-disco">
-        <div class="tabshot"><img src="marketing/rooms/discovery-studio.jpg" width="2000" height="1741" alt="The live discovery console with the current question, what to listen for, and the buyer-response branches." loading="lazy" /></div>
+        <div class="tabshot"><div class="sc sc--lg" data-scene>
+          <p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · live</p>
+          <h3 class="sc-h" data-a="2">Walk me through what happens when a ticket sits two hours during a spike.</h3>
+          <p class="sc-listen" data-a="3">Listen for whether this pain is really <b>theirs to fix</b> — and who flinches when you name the cost.</p>
+          <div class="sc-tap">
+            <span data-a="4">“It is annoying but we cope”</span>
+            <span class="on" data-a="5">“We just hired more agents”</span>
+            <span data-a="6">“Not a top priority”</span>
+          </div>
+          <p class="sc-note" data-a="7">They hired around it. <b>Ask what that cost and who signed it off</b> — you have just found your economic buyer.</p>
+        </div></div>
         <p class="tabcap"><b>Discovery.</b> A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went.</p>
       </div>
     </div>
@@ -766,14 +1255,48 @@ section[id],header[id]{scroll-margin-top:92px}
     <h3 class="h-sub rv" style="max-width:22ch">Everything between finding them and signing.</h3>
   </div>
   <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="More of the work">
-    <article class="gcard"><figure><img src="marketing/detail/prospecting-desk--funnel.jpg" width="1500" height="557" alt="The prospecting desk funnel: find, confirm, send." loading="lazy" /></figure><p><b>Finding them.</b> Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/territory--axis.jpg" width="1500" height="537" alt="Territory carved into named divisions." loading="lazy" /></figure><p><b>Carving the market.</b> Cut it by geography, industry, size, named accounts, or a live trigger — and blend them. Every division says why you're the right team to win it.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/icp-studio--sharpen.jpg" width="1500" height="537" alt="Sharpening the definition of who you sell to." loading="lazy" /></figure><p><b>Who you sell to.</b> One sharp definition, pushed on until it's a target you can actually hunt. Every other room works against it from then on.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/pilot-desk--guide.jpg" width="1500" height="557" alt="The guided pilot with its circle of hands-on users." loading="lazy" /></figure><p><b>Running the pilot.</b> Walked through step by step: what it has to show, who needs to be hands-on, who's still missing, and a write-up the champion can defend without you.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/getting-to-signed--face.jpg" width="1500" height="537" alt="The blocking front shown as two sides — their ask on one, your line on the other, and the distance between them." loading="lazy" /></figure><p><b>Getting to signed.</b> After they say yes, security, legal and finance can still kill it. It leads with the one front actually blocking, their ask against your line, and what you can trade.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/call-in-a-favor--relay.jpg" width="1500" height="537" alt="The favor written as a relay from you to your person to the buyer." loading="lazy" /></figure><p><b>Calling in a favor.</b> Your investors, advisors and happy customers, matched to the deal they can actually move. It writes both notes — yours to them, and the one they forward.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/future-autopsy--count.jpg" width="1500" height="537" alt="A deal pinned with the countdown to when it dies." loading="lazy" /></figure><p><b>The autopsy, early.</b> It writes the story of how the deal dies before it does, names the pattern, and routes you to the room where the fix happens.</p></article>
-    <article class="gcard"><figure><img src="marketing/detail/quota-workback--pace.jpg" width="1500" height="635" alt="The pace read: projected landing against target." loading="lazy" /></figure><p><b>Your number, backwards.</b> The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">Describe who you are after</p>
+  <p class="sc-p" data-a="2" style="margin-top:4px">“Series B fintechs that just named a new head of revenue”</p>
+  <div class="sc-tap" style="margin-top:10px"><span data-a="3">247 found</span><span class="on" data-a="4">31 confirmed</span><span data-a="5">→ sent</span></div>
+</div></figure><p><b>Finding them.</b> Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">How is this market cut?</p>
+  <div class="sc-tap" style="margin-top:6px"><span data-a="2">Geography</span><span class="on" data-a="3">Vertical</span><span data-a="4">Size</span><span data-a="5">A live trigger</span></div>
+  <div class="sc-bar" style="--w:82%;margin-top:14px" data-a="6"><i></i></div>
+  <p class="sc-quiet" data-a="6">247 of a 300 seat budget spent</p>
+</div></figure><p><b>Carving the market.</b> Cut it by geography, industry, size, named accounts, or a live trigger — and blend them. Every division says why you're the right team to win it.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">Too broad to hunt</p>
+  <h4 class="sc-h" data-a="2" style="font-size:1rem">“B2B SaaS companies”</h4>
+  <p class="sc-note" data-a="4">Sharper — <b>heads of revenue at 200-strong fintechs, three months into the seat</b>.</p>
+</div></figure><p><b>Who you sell to.</b> One sharp definition, pushed on until it's a target you can actually hunt. Every other room works against it from then on.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">Who is hands-on</p>
+  <div class="sc-circle"><span class="sc-av" data-a="2">PR</span><span class="sc-av" data-a="2">DM</span><span class="sc-av" data-a="3">JT</span><span class="sc-av" data-a="3">AO</span><span class="sc-av sc-av--gap" data-a="4">+</span></div>
+  <p class="sc-note" data-a="5"><b>Someone from IT</b> — nobody named yet.</p>
+</div></figure><p><b>Running the pilot.</b> Walked through step by step: what it has to show, who needs to be hands-on, who's still missing, and a write-up the champion can defend without you.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">The one thing blocking</p>
+  <div class="sc-row sc-row--hot" data-a="2"><b>Their ask</b><span>unlimited liability</span></div>
+  <div class="sc-row" data-a="3" style="box-shadow:inset 3px 0 0 var(--forest);padding-left:10px"><b>Your line</b><span>12 months of fees, breach capped higher</span></div>
+  <p class="sc-quiet" data-a="4">Your papers already answer 120 of their 150 questions</p>
+</div></figure><p><b>The run to a signature.</b> After they say yes, security, legal and finance can still kill it. It leads with the one front actually blocking, their ask against your line, and what you can trade.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">The relay</p>
+  <div class="sc-tap" style="margin-top:6px"><span data-a="2">You</span><span class="on" data-a="3">Your investor</span><span data-a="4">The buyer</span></div>
+  <p class="sc-note" data-a="5">All he has to do is <b>change a couple of lines and hit send</b>.</p>
+</div></figure><p><b>Calling in a favor.</b> Your investors, advisors and happy customers, matched to the deal they can actually move. It writes both notes — yours to them, and the one they forward.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">Written 45 days early</p>
+  <h4 class="sc-h" data-a="2" style="font-size:1rem">Northwind dies in 20 days.</h4>
+  <div class="sc-row sc-row--hot" data-a="4" style="margin-top:8px"><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em></div>
+</div></figure><p><b>The autopsy, early.</b> It writes the story of how the deal dies before it does, names the pattern, and routes you to the room where the fix happens.</p></article>
+    <article class="gcard"><figure><div class="sc sc--sunk" data-scene style="width:100%;aspect-ratio:20/9;display:flex;flex-direction:column;justify-content:center">
+  <p class="sc-kick" data-a="1">Projected landing</p>
+  <h4 class="sc-h" data-a="2" style="font-size:1.2rem;color:var(--red)">$1.4M against $2M</h4>
+  <p class="sc-note" data-a="4">One assumption is optimistic — <b>you have never won at 25%</b>.</p>
+</div></figure><p><b>Your number, backwards.</b> The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.</p></article>
   </div>
   <div class="arrows"><button class="arw" data-arw="prev" data-rail="prevrail" aria-label="Previous"><svg viewBox="0 0 16 16"><path d="M10 2L4 8l6 6"/></svg></button><button class="arw" data-arw="next" data-rail="prevrail" aria-label="Next"><svg viewBox="0 0 16 16"><path d="M6 2l6 6-6 6"/></svg></button></div>
 
@@ -804,17 +1327,25 @@ section[id],header[id]{scroll-margin-top:92px}
 .benchpanel .bench{font-size:.78rem;color:var(--ink50);text-align:center;line-height:1.45;
   max-width:46ch;margin:clamp(26px,4vw,38px) auto 0}
 
-/* ── room grid ────────────────────────────────────────────── */
-.roomgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));
-  gap:0;background:var(--surface);border:1px solid var(--hair);border-radius:12px;
-  overflow:hidden;margin-top:clamp(38px,5vw,60px)}
-/* borders live on the cells, so a short last row stays surface, not a grey slab */
-.roomgrid div{background:var(--surface);padding:20px 18px;
-  border-right:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-.roomgrid b{display:block;font-family:var(--serif);font-size:1.06rem;font-weight:400;letter-spacing:-.01em}
-.roomgrid span{display:block;font-size:.79rem;color:var(--ink50);margin-top:6px;line-height:1.4}
-.roomgrid i{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ink-note);font-style:normal;font-weight:700;margin-bottom:9px}
+/* ── the three we name ────────────────────────────────────────
+   The page names three rooms and no more. A marketing page that lists
+   every room hands over the architecture; this one shows the shape and
+   keeps the map. */
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));
+  gap:18px;margin-top:clamp(34px,5vw,54px)}
+.three article{background:var(--surface);border:1px solid var(--hair);
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;
+  box-shadow:var(--shadow-rest)}
+.three h3{font-family:var(--serif);font-size:1.3rem;font-weight:400;
+  letter-spacing:-.01em;margin:0}
+.three .rn{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:700;color:var(--orange-ink);margin:0 0 9px}
+.three p.d{font-size:.85rem;line-height:1.5;color:var(--ink50);margin:10px 0 16px}
+.three .sc{margin-top:auto}
+.rest{margin:clamp(34px,5vw,52px) auto 0;max-width:62ch;text-align:center;
+  font-size:clamp(.95rem,1.5vw,1.08rem);line-height:1.6;color:var(--ink50)}
+.rest b{color:var(--ink);font-weight:600}
+.rest .n{font-family:var(--serif);font-size:1.4em;color:var(--ink)}
 
 /* ── ink band cards ───────────────────────────────────────── */
 .dcard{width:min(74vw,320px)}
@@ -874,35 +1405,49 @@ section[id],header[id]{scroll-margin-top:92px}
 <section class="band band--sunk" id="all-rooms" aria-labelledby="ar-h">
   <div class="wrap">
     <p class="kick rv">All of it</p>
-    <h2 class="h-sec rv" data-d="1" id="ar-h" style="margin-top:14px;max-width:18ch">Every room.<br />One motion.</h2>
-    <p class="lede rv" data-d="2" style="max-width:50ch;margin-top:24px">
-      They are not tabs. Work done in one shows up in the next without you retyping it — the account you added this morning is the account the call is about this afternoon.
+    <h2 class="h-sec rv" data-d="1" id="ar-h" style="margin-top:14px;max-width:16ch">Twenty-two rooms.<br />Here are three.</h2>
+    <p class="lede rv" data-d="2" style="max-width:52ch;margin-top:24px">
+      They are not tabs. Work done in one shows up in the next without you retyping it — the account you added this morning is the account the call is about this afternoon. We are not going to lay the whole thing out on a marketing page. You will see it when you are inside.
     </p>
 
-    <div class="roomgrid rv">
-      <div><i>Start</i><b>Welcome</b><span>The first morning the setup pays you back.</span></div>
-      <div><i>Start</i><b>Onboarding</b><span>An afternoon of real thinking, and the workspace is live.</span></div>
-      <div><i>Every morning</i><b>Dashboard</b><span>Where the whole motion stands, and the one move.</span></div>
-      <div><i>Every morning</i><b>Briefing</b><span>What the system saw, in your work and in your market.</span></div>
-      <div><i>Who you go after</i><b>ICP Studio</b><span>One sharp definition of who you sell to.</span></div>
-      <div><i>Who you go after</i><b>Territory Architect</b><span>The market carved into divisions you own.</span></div>
-      <div><i>Who you go after</i><b>Prospecting Desk</b><span>Find companies, confirm them, send them on.</span></div>
-      <div><i>Working the deal</i><b>Signal Console</b><span>Accounts you watch, and what just moved.</span></div>
-      <div><i>Working the deal</i><b>Outbound Studio</b><span>One line, for one named person.</span></div>
-      <div><i>Working the deal</i><b>Cold Call Studio</b><span>Walk in ready. Log what happened after.</span></div>
-      <div><i>Working the deal</i><b>LinkedIn Playbook</b><span>Warm them up in public — never open in their inbox.</span></div>
-      <div><i>Working the deal</i><b>Discovery Studio</b><span>Run the live call from a console.</span></div>
-      <div><i>Working the deal</i><b>Call in a Favor</b><span>The people in your corner, put to work.</span></div>
-      <div><i>Working the deal</i><b>Getting to Signed</b><span>Survive security, legal and finance.</span></div>
-      <div><i>Working the deal</i><b>Outdoors Events</b><span>Where your buyers gather, found for you.</span></div>
-      <div><i>Working the deal</i><b>Pilot Desk</b><span>A pilot their boss can act on.</span></div>
-      <div><i>When it slips</i><b>Deal Workspace</b><span>What's decaying, and the smallest fix.</span></div>
-      <div><i>When it slips</i><b>Future Autopsy</b><span>How the deal dies, written early.</span></div>
-      <div><i>The handoff</i><b>Quota Workback</b><span>Your number, down to the daily habit.</span></div>
-      <div><i>The handoff</i><b>Readiness</b><span>Could someone else run this tomorrow?</span></div>
-      <div><i>The handoff</i><b>Founding GTM</b><span>What a hire reads on day one.</span></div>
-      <div><i>Your workspace</i><b>Settings</b><span>Your workspace is safe, and yours to take.</span></div>
+    <div class="three rv">
+      <article>
+        <p class="rn">Discovery Studio</p>
+        <h3>You run the call from it, while you are on the call.</h3>
+        <p class="d">Ten frameworks, six buyer lenses, and a next line ready for whatever they say back. Not notes you write afterwards.</p>
+        <div class="sc sc--sunk" data-scene>
+          <p class="sc-kick sc-kick--sys" data-a="1">They just said</p>
+          <h4 class="sc-h" data-a="2" style="font-size:.98rem">“We just hired more agents.”</h4>
+          <p class="sc-note" data-a="4">They hired around it. <b>Ask what that cost and who signed it off.</b></p>
+        </div>
+      </article>
+
+      <article>
+        <p class="rn">Future Autopsy</p>
+        <h3>It writes how the deal dies before it does.</h3>
+        <p class="d">The pattern, the days you have left, and the smallest thing that would change the ending.</p>
+        <div class="sc sc--sunk" data-scene>
+          <p class="sc-kick" data-a="1">45 days early</p>
+          <h4 class="sc-h" data-a="2" style="font-size:.98rem">Northwind dies in 20 days.</h4>
+          <div class="sc-row sc-row--hot" data-a="4" style="margin-top:8px"><b>Pattern</b><span>pressure before clarity</span><em>4×</em></div>
+        </div>
+      </article>
+
+      <article>
+        <p class="rn">The Briefing</p>
+        <h3>What the system saw while you were out.</h3>
+        <p class="d">Written the way a colleague would say it, every morning, whether or not you opened anything yesterday.</p>
+        <div class="sc sc--sunk" data-scene>
+          <p class="sc-kick sc-kick--sys" data-a="1">This morning</p>
+          <div class="sc-row" data-a="2"><em class="sc-day sc-day--red">20d</em><span><b>Northwind</b> has not moved since the proposal.</span></div>
+          <div class="sc-row" data-a="4"><em class="sc-day sc-day--amber">11d</em><span><b>Meridian</b> went quiet.</span></div>
+        </div>
+      </article>
     </div>
+
+    <p class="rest rv">
+      The other <span class="n">nineteen</span> do the rest of it — <b>who you go after and how you carve the market</b>, finding real companies and confirming them, the line you send and the call you walk into, the pilot, the run through security and legal to a signature, your number worked back to a daily habit, and the handoff itself.
+    </p>
   </div>
 </section>
 
@@ -917,12 +1462,44 @@ section[id],header[id]{scroll-margin-top:92px}
 
     <div class="pair rv">
       <div>
-        <figure><img src="marketing/detail/ground--map.jpg" width="1500" height="596" alt="The motion map risen from beneath a room: all the rooms laid out as the order you work them, with the room you are in filled dark and the one the system suggests outlined in orange." loading="lazy" /></figure>
+        <figure>
+          <div class="sc sc--sunk sc-map" data-scene style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center">
+            <p class="sc-kick" data-a="1">The ground · your whole motion</p>
+            <div class="sc-mapgrid" data-a="2" aria-hidden="true">
+              <span class="sc-node"></span><span class="sc-node"></span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node"></span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node sc-node--named sc-node--here">You are here</span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node sc-node--named sc-node--next">Suggested</span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node"></span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node"></span><span class="sc-node"></span>
+              <span class="sc-node"></span><span class="sc-node"></span><span class="sc-node"></span>
+              <span class="sc-node"></span>
+            </div>
+            <div class="sc-ground" aria-hidden="true"></div>
+            <p class="sc-quiet" data-a="4">Twenty-two of them. Press the line and they come up.</p>
+          </div>
+        </figure>
         <h3>The Ground</h3>
         <p>One line, every room. Press it and the map of your whole motion rises from beneath the page, with you-are-here lit and the system's suggestion glowing. Summoned, then gone — it never sits there taking up the screen.</p>
       </div>
       <div>
-        <figure><img src="marketing/detail/live-edge--rail.jpg" width="1500" height="921" alt="A room with a hairline rail down its left margin: today's count against the daily number, then a running list of what moved — a reply that landed, a send that was counted, a calendar confirmation." loading="lazy" /></figure>
+        <figure>
+          <div class="sc sc--sunk" data-scene style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center">
+            <div class="sc-edge">
+              <div class="sc-rail">
+                <p class="sc-count" data-a="1">15<small>/ 90 today</small></p>
+                <div class="sc-bar" style="--w:17%;margin-top:9px" data-a="2"><i></i></div>
+                <p class="sc-quiet" data-a="2" style="margin-top:8px">messages and calls</p>
+              </div>
+              <div class="sc-wire">
+                <p class="big" data-a="3"><b>Northwind</b> — a reply landed after 20 quiet days. <em style="font-style:normal;color:var(--ink-note)">28m</em></p>
+                <p data-a="4">Captured your send to <b>Sarah</b> — counted.</p>
+                <p data-a="5">Calendar — Thursday with <b>Meridian</b> confirmed.</p>
+                <p data-a="6">Still no dated next step on <b>Halcyon</b>.</p>
+              </div>
+            </div>
+          </div>
+        </figure>
         <h3>The Live Edge</h3>
         <p>A hairline down the left margin carrying today's count against your daily number, and a running list of what moved — tagged by whether it was you, the system, or the buyer. Switch it off and it folds to the wall in three beats you can see.</p>
       </div>
@@ -939,10 +1516,10 @@ section[id],header[id]{scroll-margin-top:92px}
   <div class="rail rail--edge rail--start" style="margin-top:clamp(34px,5vw,54px)" role="group" aria-label="How your data is handled">
     <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M10 20a10 10 0 0 1 19.4-3.4A8 8 0 1 1 34 34H14a8 8 0 0 1-4-14z"/><path d="M24 22v10m0 0l-4-4m4 4l4-4"/></svg></figure><p><b>Saved as you work.</b> Your workspace lives in the cloud, not trapped on one laptop. Close the lid mid-sentence and open it somewhere else.</p></article>
     <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 6l14 6v11c0 9-6 16.5-14 19-8-2.5-14-10-14-19V12z"/><path d="M18 24l4.5 4.5L31 20"/></svg></figure><p><b>Nothing sold, nothing shared.</b> Your accounts, deals and calls are your commercial position. They are not a dataset we resell or train a public model on.</p></article>
-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M12 8h18l8 8v24a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/><path d="M30 8v8h8"/><path d="M17 27h14M17 33h9"/></svg></figure><p><b>Take a full copy, any time.</b> One button in Settings downloads everything in your workspace as a plain file. No ticket, no export queue, no waiting on us.</p></article>
+    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M12 8h18l8 8v24a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/><path d="M30 8v8h8"/><path d="M17 27h14M17 33h9"/></svg></figure><p><b>Take a full copy, any time.</b> One button downloads everything in your workspace as a plain file. No ticket, no export queue, no waiting on us.</p></article>
     <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M14 16h20v22a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z"/><path d="M10 16h28M20 11h8M21 24v10M27 24v10"/></svg></figure><p><b>Delete it and mean it.</b> Type the words and it's gone — the accounts, the deals, the pilot results, all of it. Not archived somewhere we can still read.</p></article>
     <article class="dcard"><figure><svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7"/><path d="M11 40c0-7.2 5.8-13 13-13s13 5.8 13 13"/></svg></figure><p><b>Read-only for a hire.</b> Share the workspace with someone who is starting Monday without handing them your logins or the ability to change anything.</p></article>
-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 5v14M24 5l-5 5M24 5l5 5"/><path d="M8 24v16a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V24"/><path d="M8 24h32"/></svg></figure><p><b>An offline copy too.</b> If you want a version that never leaves the machine you're on, Settings will hand you one. It's tucked away, because most people never need it.</p></article>
+    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 5v14M24 5l-5 5M24 5l5 5"/><path d="M8 24v16a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V24"/><path d="M8 24h32"/></svg></figure><p><b>An offline copy too.</b> If you want a version that never leaves the machine you're on, the app will hand you one. It's tucked away, because most people never need it.</p></article>
   </div>
   <div class="arrows"><button class="arw" data-arw="prev" data-rail="prevrail" aria-label="Previous"><svg viewBox="0 0 16 16"><path d="M10 2L4 8l6 6"/></svg></button><button class="arw" data-arw="next" data-rail="prevrail" aria-label="Next"><svg viewBox="0 0 16 16"><path d="M6 2l6 6-6 6"/></svg></button></div>
 </section>
@@ -1295,6 +1872,45 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
     revealables.forEach(function (el) { el.classList.add("in"); });
   }
 
+  /* ── scenes assemble when they arrive ──────────────────
+     The CSS resting state is visible; only once JS is running do we
+     hide them, so no reader is ever left with a blank card.
+
+     A plain scroll sweep rather than IntersectionObserver: a jump to an
+     anchor, a restored scroll position or a fast flick can all outrun
+     the observer and leave scenes dark. This lights anything that has
+     reached the fold, however the reader got there. */
+  var pending = Array.prototype.slice.call(
+    document.querySelectorAll("[data-scene], .brf"));
+  function lightAll() {
+    pending.forEach(function (el) { el.classList.add("lit"); });
+    pending = [];
+  }
+  if (reduce) {
+    lightAll();
+  } else {
+    document.documentElement.classList.add("anim");
+    var ticking = false;
+    function sweep() {
+      ticking = false;
+      var fold = window.innerHeight * 0.92;
+      pending = pending.filter(function (el) {
+        if (el.getBoundingClientRect().top < fold) { el.classList.add("lit"); return false; }
+        return true;
+      });
+      if (!pending.length) {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+      }
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; requestAnimationFrame(sweep); }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    sweep();
+  }
+
   /* ── sticky local nav + buy bar ──────────────────────── */
   var localnav = document.getElementById("localnav");
   var hero = document.getElementById("top");
@@ -1464,44 +2080,93 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
   });
 
   /* ── product viewer ──────────────────────────────────── */
-  var ROOMS = [
-    { id: "dashboard", chip: "Dashboard", img: "marketing/rooms/dashboard.jpg", small: "marketing/detail/dashboard--move.jpg",
-      cap: "<b>Dashboard.</b> Where your whole motion stands, in a sentence. Then the single most valuable thing to do, the plain reason it came up ahead of the others, and a row along the bottom where each part of the motion is a door." },
-    { id: "signal-console", chip: "Signal Console", img: "marketing/rooms/signal-console.jpg", small: "marketing/detail/signal-console--actnow.jpg",
-      cap: "<b>Signal Console.</b> The accounts you watch, banded by where your attention should go — act now, reach while it's warm, emerging, going cold. Each card carries how hot it is and what just happened." },
-    { id: "deal-workspace", chip: "Deal Workspace", img: "marketing/rooms/deal-workspace.jpg", small: "marketing/detail/deal-workspace--board.jpg",
-      cap: "<b>Deal Workspace.</b> Not a pipeline board. The deals that will slip if you do nothing this week, worst first, with the smallest corrective move on each one." },
-    { id: "discovery-studio", chip: "Discovery Studio", img: "marketing/rooms/discovery-studio.jpg", small: "marketing/detail/discovery-studio--live.jpg",
-      cap: "<b>Discovery Studio.</b> A console you run the live call from. One question at a time, what to listen for, and the moment they answer you tap what you heard — it hands you the next line and takes you where the conversation went." },
-    { id: "pilot-desk", chip: "Pilot Desk", img: "marketing/rooms/pilot-desk.jpg", small: "marketing/detail/pilot-desk--guide.jpg",
-      cap: "<b>Pilot Desk.</b> A guide, not a scorecard. What the pilot has to show, the right people hands-on with it, who's still missing, and a write-up the champion can take to their boss and defend without you in the room." },
-    { id: "getting-to-signed", chip: "Getting to Signed", img: "marketing/rooms/getting-to-signed.jpg", small: "marketing/detail/getting-to-signed--face.jpg",
-      cap: "<b>Getting to Signed.</b> The deal isn't won when they say yes. This leads with the one front actually blocking — security, legal, finance — with their ask against your line, what you can trade, and the line you won't cross." },
-    { id: "founding-gtm", chip: "Founding GTM", img: "marketing/rooms/founding-gtm.jpg", small: "marketing/detail/founding-gtm--book.jpg",
-      cap: "<b>Founding GTM.</b> Seven parts a first hire reads on day one: who hits and who misses, the outreach that landed, the questions that won the second meeting, where deals leak, the losses you paid for, why you win, and the week to run." }
+  /* Four moments, not a room directory. The page names three rooms in
+     total; everything else is described by what it does. */
+  var MOMENTS = [
+    { chip: "The morning read",
+      cap: "<b>The morning read.</b> Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      scene:
+        '<div class="sc sc--lg" data-scene>' +
+          '<p class="sc-kick sc-kick--sys" data-a="1">While you were out</p>' +
+          '<div class="sc-row" data-a="2"><em class="sc-day sc-day--red">20d</em><span><b>Northwind</b> has sat at proposal for three weeks with no next step.</span></div>' +
+          '<div class="sc-row" data-a="3"><em class="sc-day sc-day--amber">11d</em><span><b>Meridian</b> has gone quiet since the champion moved teams.</span></div>' +
+          '<div class="sc-row" data-a="4"><em class="sc-day sc-day--blue">6d</em><span>The <b>Halcyon pilot</b> is past the day it was meant to report.</span></div>' +
+          '<p class="sc-note" data-a="5">And one you did not ask for — <b>both deals you closed this quarter were mid-market</b>, not enterprise.</p>' +
+        '</div>' },
+
+    { chip: "A live call",
+      cap: "<b>A live call.</b> Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      scene:
+        '<div class="sc sc--lg" data-scene>' +
+          '<p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · make the cost real</p>' +
+          '<h3 class="sc-h" data-a="2">Walk me through what happens when a ticket sits two hours during a spike.</h3>' +
+          '<p class="sc-listen" data-a="3">Listen for whether this pain is really <b>theirs to fix</b>, or a polite nice-to-have — and who flinches when you name the cost.</p>' +
+          '<div class="sc-tap">' +
+            '<span data-a="4">“It is annoying but we cope”</span>' +
+            '<span class="on" data-a="5">“We just hired more agents”</span>' +
+            '<span data-a="6">“Not a top priority”</span>' +
+          '</div>' +
+          '<p class="sc-note" data-a="7">They hired around it. <b>Ask what that cost, and who signed it off</b> — you have just found your economic buyer.</p>' +
+        '</div>' },
+
+    { chip: "A deal going quiet",
+      cap: "<b>A deal going quiet.</b> Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      scene:
+        '<div class="sc sc--lg" data-scene>' +
+          '<p class="sc-kick" data-a="1">Written 45 days early</p>' +
+          '<h3 class="sc-h" data-a="2">Northwind dies in 20 days, and here is how.</h3>' +
+          '<p class="sc-p" data-a="3">You have one champion and no one above her. She goes quiet in week two, procurement never opens, and it closes as <b>no decision</b> — the way most of your losses have gone.</p>' +
+          '<hr class="sc-hr" data-a="4" />' +
+          '<div class="sc-row sc-row--hot" data-a="5"><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em></div>' +
+          '<div class="sc-row" data-a="6"><b>The smallest fix</b><span>get a second name in the room this week</span></div>' +
+        '</div>' },
+
+    { chip: "The handoff",
+      cap: "<b>The handoff.</b> Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      scene:
+        '<div class="sc sc--lg" data-scene>' +
+          '<p class="sc-kick" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 parts ready</p>' +
+          '<div class="sc-book" data-a="2">' +
+            '<div class="sc-toc">' +
+              '<span class="done">Who hits, who misses</span>' +
+              '<span class="done">What actually landed</span>' +
+              '<span class="done">The questions that won</span>' +
+              '<span class="done">Where deals leak</span>' +
+              '<span class="done">The losses you paid for</span>' +
+              '<span>Why you win</span>' +
+              '<span>The week to run</span>' +
+            '</div>' +
+            '<div>' +
+              '<h3 class="sc-h" data-a="3" style="font-size:1.1rem">Who hits, who misses, and why</h3>' +
+              '<p class="sc-p" data-a="4">Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.</p>' +
+              '<p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>' }
   ];
-  var wideMq = window.matchMedia("(min-width:900px)");
   var chipWrap = document.getElementById("pv-chips");
   var pv = document.getElementById("rooms");
-  var pvImg = document.getElementById("pv-img");
+  var pvStage = document.getElementById("pv-stage");
   var pvCap = document.getElementById("pv-cap");
   if (chipWrap && pv) {
     var at = 0;
-    ROOMS.forEach(function (r, i) {
+    MOMENTS.forEach(function (r, i) {
       var b = document.createElement("button");
       b.className = "chip"; b.type = "button";
       b.innerHTML = '<span class="chip__p" aria-hidden="true"></span>' + r.chip;
-      b.setAttribute("aria-label", "Open " + r.chip);
+      b.setAttribute("aria-label", "See " + r.chip);
       b.addEventListener("click", function () { open(i); });
       chipWrap.appendChild(b);
     });
     function open(i) {
-      at = (i + ROOMS.length) % ROOMS.length;
-      var r = ROOMS[at];
-      pvImg.src = (window.matchMedia("(min-width:900px)").matches || !r.small) ? r.img : r.small;
-      pvImg.alt = r.chip + " — a room in Antaeus.";
+      at = (i + MOMENTS.length) % MOMENTS.length;
+      var r = MOMENTS[at];
+      pvStage.innerHTML = r.scene;
       pvCap.innerHTML = r.cap;
       pv.classList.add("is-open");
+      /* the scene assembles each time it is opened */
+      var sc = pvStage.querySelector("[data-scene]");
+      if (sc) requestAnimationFrame(function () { sc.classList.add("lit"); });
     }
     document.getElementById("pv-close").addEventListener("click", function () {
       pv.classList.remove("is-open");
@@ -1509,10 +2174,6 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
     });
     document.getElementById("pv-prev").addEventListener("click", function () { open(at - 1); });
     document.getElementById("pv-next").addEventListener("click", function () { open(at + 1); });
-    /* re-pick the asset if the viewport crosses the breakpoint */
-    function repick() { if (pv.classList.contains("is-open")) open(at); }
-    if (wideMq.addEventListener) wideMq.addEventListener("change", repick);
-    else if (wideMq.addListener) wideMq.addListener(repick);
     document.addEventListener("keydown", function (e) {
       if (!pv.classList.contains("is-open")) return;
       if (e.key === "Escape") pv.classList.remove("is-open");
