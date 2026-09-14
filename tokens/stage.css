@@ -1,0 +1,29 @@
+/* tokens/stage.css — the shared stage every teaser stands on (brief 6.1).
+   True black, 16:10 native, 4:5 crop below 640px around the declared focal
+   point, play/pause and reduced-motion conventions. Teasers add their own
+   scoped rules under their root class (.t01 ... .t13). */
+.stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #000000;
+  container-type: inline-size;
+  isolation: isolate;
+  --fx: 0.5;
+  --fy: 0.5;
+}
+.stage > .stage-frame { position: absolute; inset: 0; }
+@container (max-width: 639px) {
+  .stage { aspect-ratio: 4 / 5; }
+  .stage > .stage-frame {
+    width: 200%;
+    left: clamp(-100%, calc(50% - var(--fx) * 200%), 0%);
+  }
+}
+/* Loops run only while the page runtime marks the stage playing (in view,
+   not hovered, motion allowed). Paused at time zero they show the resting
+   frame; paused mid-loop they hold their frame. */
+.stage:not(.is-playing) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition-duration: 0.001ms !important; }
+}
