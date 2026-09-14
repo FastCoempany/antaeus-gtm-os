@@ -1,0 +1,14 @@
+{
+  "price": "$75",
+  "turnaround": "five days",
+  "slogan": "See it before you build it.",
+  "contact_email": "hello@shapshyftrs.com",
+  "stripe_url": "",
+  "source_links": {
+    "gtmos": "https://antaeus.app",
+    "aesdr": "https://aesdr.com"
+  },
+  "show_source_names": true,
+  "show_brand_names": true,
+  "chrome_font": "Schibsted Grotesk"
+}

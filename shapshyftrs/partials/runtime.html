@@ -1,0 +1,44 @@
+<script>
+/* Shared teaser runtime: one script for every stage on the page.
+   In view (threshold 0.25) and not hovered: playing. Hover pauses.
+   prefers-reduced-motion: reduce never plays; interactions still work.
+   Each stage gets the class is-playing and the events teaser:play / teaser:pause,
+   which script-driven teasers listen to. Variant A sets data-play-delay on body
+   so a caption can fade in before its loop starts. */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var delay = parseInt(document.body.getAttribute("data-play-delay") || "0", 10) || 0;
+  var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
+  stages.forEach(function (el) {
+    var inView = false, hover = false, started = false, timer = null;
+    function apply(on) {
+      if (el.classList.contains("is-playing") === on) return;
+      el.classList.toggle("is-playing", on);
+      el.dispatchEvent(new CustomEvent(on ? "teaser:play" : "teaser:pause"));
+    }
+    function update() {
+      var on = inView && !hover && !reduce.matches;
+      clearTimeout(timer);
+      if (on && delay && !started) {
+        timer = setTimeout(function () { started = true; apply(true); }, delay);
+      } else {
+        if (on) started = true;
+        apply(on);
+      }
+    }
+    el.__stageUpdate = function (v) { if (v !== undefined) inView = v; update(); };
+    el.addEventListener("mouseenter", function () { hover = true; update(); });
+    el.addEventListener("mouseleave", function () { hover = false; update(); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.__stageUpdate(e.isIntersecting); });
+    }, { threshold: 0.25 });
+    stages.forEach(function (el) { io.observe(el); });
+  } else {
+    stages.forEach(function (el) { el.__stageUpdate(true); });
+  }
+  var onChange = function () { stages.forEach(function (el) { el.__stageUpdate(); }); };
+  if (reduce.addEventListener) reduce.addEventListener("change", onChange); else reduce.addListener(onChange);
+})();
+</script>

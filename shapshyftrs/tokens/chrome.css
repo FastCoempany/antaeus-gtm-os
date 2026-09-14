@@ -1,0 +1,21 @@
+/* tokens/chrome.css — the page's own tokens (brief section 9).
+   Pinned values only. The page has no accent color of its own. */
+:root {
+  --chrome-ground: #000000;         /* pinned */
+  --chrome-text: #F4F4F0;           /* pinned, primary text */
+  --chrome-text-2: #8E8E89;         /* pinned, secondary text */
+  --chrome-button-bg: #F4F4F0;      /* pinned */
+  --chrome-button-fg: #000000;      /* pinned */
+  --chrome-font: "Schibsted Grotesk", system-ui, sans-serif; /* pinned default */
+  --chrome-body: 15px;  --chrome-body-lh: 24px;      /* pinned scale */
+  --chrome-sub: 18px;   --chrome-sub-lh: 28px;
+  --chrome-caption: 22px; --chrome-caption-lh: 28px;
+  --chrome-h2: 32px;    --chrome-h2-lh: 36px;
+  --chrome-slogan: 64px; --chrome-slogan-lh: 1.02;
+  --chrome-slogan-m: 40px; --chrome-slogan-m-lh: 1.05;
+  --chrome-wordmark: 28px;
+  --chrome-track-display: -0.02em;
+  --chrome-measure: 66ch;
+  --chrome-unit: 8px;
+  --chrome-section: 96px; --chrome-section-m: 64px;
+}

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&display=swap">
+<title>shapshyftrs teasers</title>
+<style>
+/* tokens/chrome.css */
+/* tokens/chrome.css — the page's own tokens (brief section 9).
+   Pinned values only. The page has no accent color of its own. */
+:root {
+  --chrome-ground: #000000;         /* pinned */
+  --chrome-text: #F4F4F0;           /* pinned, primary text */
+  --chrome-text-2: #8E8E89;         /* pinned, secondary text */
+  --chrome-button-bg: #F4F4F0;      /* pinned */
+  --chrome-button-fg: #000000;      /* pinned */
+  --chrome-font: "Schibsted Grotesk", system-ui, sans-serif; /* pinned default */
+  --chrome-body: 15px;  --chrome-body-lh: 24px;      /* pinned scale */
+  --chrome-sub: 18px;   --chrome-sub-lh: 28px;
+  --chrome-caption: 22px; --chrome-caption-lh: 28px;
+  --chrome-h2: 32px;    --chrome-h2-lh: 36px;
+  --chrome-slogan: 64px; --chrome-slogan-lh: 1.02;
+  --chrome-slogan-m: 40px; --chrome-slogan-m-lh: 1.05;
+  --chrome-wordmark: 28px;
+  --chrome-track-display: -0.02em;
+  --chrome-measure: 66ch;
+  --chrome-unit: 8px;
+  --chrome-section: 96px; --chrome-section-m: 64px;
+}
+
+/* tokens/stage.css */
+/* tokens/stage.css — the shared stage every teaser stands on (brief 6.1).
+   True black, 16:10 native, 4:5 crop below 640px around the declared focal
+   point, play/pause and reduced-motion conventions. Teasers add their own
+   scoped rules under their root class (.t01 ... .t13). */
+.stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #000000;
+  container-type: inline-size;
+  isolation: isolate;
+  --fx: 0.5;
+  --fy: 0.5;
+}
+.stage > .stage-frame { position: absolute; inset: 0; }
+@container (max-width: 639px) {
+  .stage { aspect-ratio: 4 / 5; }
+  .stage > .stage-frame {
+    width: 200%;
+    left: clamp(-100%, calc(50% - var(--fx) * 200%), 0%);
+  }
+}
+/* Loops run only while the page runtime marks the stage playing (in view,
+   not hovered, motion allowed). Paused at time zero they show the resting
+   frame; paused mid-loop they hold their frame. */
+.stage:not(.is-playing) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition-duration: 0.001ms !important; }
+}
+
+/* tokens/gtmos.css */
+/* tokens/gtmos.css — filled in phase 1 (source study) */
+
+/* tokens/aesdr.css */
+/* tokens/aesdr.css — filled in phase 1 (source study) */
+
+/* tokens/cockpit.css */
+/* tokens/cockpit.css — filled in phase 1 (source study) */
+</style>
+<style>
+html,body{margin:0;background:#000;color:#F4F4F0;font-family:"Schibsted Grotesk",system-ui,sans-serif}
+.sheet{padding:48px 32px 96px}
+.sheet h1{font-size:28px;font-weight:700;margin:0 0 8px}
+.sheet p{margin:0 0 40px;color:#8E8E89;font-size:15px;line-height:24px}
+.sheet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:40px 24px}
+.sheet-item{margin:0}
+.sheet-frame{width:100%}
+.sheet-item figcaption{margin-top:10px;font-size:14px;line-height:20px;color:#8E8E89}
+.sheet-item figcaption b{color:#F4F4F0;font-weight:600}
+</style>
+</head>
+<body class="sheet">
+<h1>shapshyftrs teasers</h1>
+<p>All thirteen teasers, gallery order, for review.</p>
+<div class="sheet-grid">
+
+</div>
+<script>
+/* Shared teaser runtime: one script for every stage on the page.
+   In view (threshold 0.25) and not hovered: playing. Hover pauses.
+   prefers-reduced-motion: reduce never plays; interactions still work.
+   Each stage gets the class is-playing and the events teaser:play / teaser:pause,
+   which script-driven teasers listen to. Variant A sets data-play-delay on body
+   so a caption can fade in before its loop starts. */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var delay = parseInt(document.body.getAttribute("data-play-delay") || "0", 10) || 0;
+  var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
+  stages.forEach(function (el) {
+    var inView = false, hover = false, started = false, timer = null;
+    function apply(on) {
+      if (el.classList.contains("is-playing") === on) return;
+      el.classList.toggle("is-playing", on);
+      el.dispatchEvent(new CustomEvent(on ? "teaser:play" : "teaser:pause"));
+    }
+    function update() {
+      var on = inView && !hover && !reduce.matches;
+      clearTimeout(timer);
+      if (on && delay && !started) {
+        timer = setTimeout(function () { started = true; apply(true); }, delay);
+      } else {
+        if (on) started = true;
+        apply(on);
+      }
+    }
+    el.__stageUpdate = function (v) { if (v !== undefined) inView = v; update(); };
+    el.addEventListener("mouseenter", function () { hover = true; update(); });
+    el.addEventListener("mouseleave", function () { hover = false; update(); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.__stageUpdate(e.isIntersecting); });
+    }, { threshold: 0.25 });
+    stages.forEach(function (el) { io.observe(el); });
+  } else {
+    stages.forEach(function (el) { el.__stageUpdate(true); });
+  }
+  var onChange = function () { stages.forEach(function (el) { el.__stageUpdate(); }); };
+  if (reduce.addEventListener) reduce.addEventListener("change", onChange); else reduce.addListener(onChange);
+})();
+</script>
+
+</body>
+</html>
