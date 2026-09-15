@@ -239,7 +239,7 @@ The hero is exactly one viewport: the copy on top, teaser 1 filling the row that
 
 ### B. Wall
 
-Dense. Compact hero in the top 40% of the viewport, teaser 1 full width beneath it; the wall starts below the fold. Two columns, three at 1440px and up, one on a phone; native 16:10 tiles; gaps 24px; museum labels beneath each (caption line, then source label, both small, both in the chrome face). Loops play only in view.
+Dense. Compact hero in the top 40% of the viewport, teaser 1 beneath it as the same one-viewport band A and C use (the row under the copy is a size container; the stage is as tall as the row, as wide as a 16:10 frame whose middle 56% is that row, never under 640px, pulled up to the band around teaser 1's focal point, starting at the left gutter); the hero is exactly the viewport and the wall starts below the fold. Two columns, three at 1440px and up, one on a phone; native 16:10 tiles from 768px up (the wall opts out of the shared 4:5 crop, which is for phones; every desktop column is narrower than the crop's 640px threshold); the last tile spans the row and closes the wall; gaps 24px; museum labels beneath each (caption line, then source label, both small, both in the chrome face); the wall's bottom padding matches the 96 + 96 the stacked sections have. Loops play only in view.
 
 ```
 +------------------------------------------------------------------+
@@ -262,7 +262,8 @@ Dense. Compact hero in the top 40% of the viewport, teaser 1 full width beneath 
 |  Lead heat on one dial.            A signal, scored in seven …     |
 |  an internal sales cockpit         GTM OS, antaeus.app             |
 |                                                                    |
-|  … 6 and 7, 8 and 9, 10 and 11, 12 and 13 (three across at 1440)  |
+|  … 6 and 7, 8 and 9, 10 and 11, 12 and 13 (three across at 1440); |
+|  the thirteenth spans the row                                       |
 +------------------------------------------------------------------+
 |  How it works                                                      |
 |  1 Tell us the idea.     2 We build it.        3 You get a link.   |
@@ -278,7 +279,7 @@ Dense. Compact hero in the top 40% of the viewport, teaser 1 full width beneath 
 
 ### C. Reel
 
-Hero above in normal flow; a horizontal strip of thirteen 16:10 cards, 70vw wide, 32px gaps, snapping to cards; the strip moves sideways on wheel and drag by translating the track and native vertical scroll stays intact everywhere else; a thin indicator with thirteen ticks beneath; "How it works", the offer and the form below in normal flow. Below 768px the strip becomes a vertical stack.
+Hero above in normal flow (the same one-viewport band as A: the copy on top, teaser 1 filling the row that is left around its focal point); a horizontal strip of thirteen 16:10 cards, 70vw wide with a 640px floor so the stage's 4:5 crop never trips on the strip, 32px gaps, snapping to cards; the strip moves sideways on wheel and drag by translating the track and native vertical scroll stays intact everywhere else; a thin indicator with thirteen ticks beneath; "How it works", the offer and the form below in normal flow. Below 768px the strip becomes a vertical stack.
 
 ```
 +------------------------------------------------------------------+
@@ -286,7 +287,7 @@ Hero above in normal flow; a horizontal strip of thirteen 16:10 cards, 70vw wide
 |  See it before you build it.                                       |
 |  You have an idea for an app, a tool, a product page. …            |
 |  [ Send us the idea ]                                              |
-|   #################### teaser 1, full width ####################   |
+|   ############ teaser 1, the row is its stage ################     |
 +------------------------------------------------------------------+
 |  Everything below is ours. Built by us, rebuilt here as teasers.   |
 +------------------------------------------------------------------+
