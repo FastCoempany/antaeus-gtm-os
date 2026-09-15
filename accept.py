@@ -76,10 +76,22 @@ say('9 all three carry identical copy', same, 'gallery-intro present once in eac
 
 # forbidden: no contractor names, no out-of-scope brands, no source paths
 repo_text = '\n'.join(p.read_text(errors='replace') for p in dist.rglob('*.html'))
-banned = ['Hanan','Glekel','Yupangco','Schwarz','Sarker','Prous','Baumgartner','Hijazi','Thiel','Salman',
-          'VULKEN','RHECC','Pure Patch','/home/user/','prismhr','PrismHR']
+
+# The ten contractor surnames are held as truncated hashes, not as text. Rule 8
+# says never write a contractor's name in a file, and the first version of this
+# guard listed all ten in clear -- which made the check against rule 8 the only
+# breach of it in the tree. Hashing keeps the check and drops the names: every
+# word in dist/ is hashed and compared, so a name still cannot ship, but reading
+# this file tells you nothing about who those people are.
+NAME_HASHES = {'13aacf62bf70', '14a96ebb257d', '2993f8453f06', '316a91552b13', '7b54df6d6361', '9f04291f95d0', 'a558eaa0f8eb', 'a66ded421756', 'a7bece6b48d8', 'aec1c22d36c5'}
+words = {w.lower() for w in re.findall(r"[A-Za-z][A-Za-z'-]{2,}", repo_text)}
+name_hit = sum(1 for w in words if hashlib.sha256(w.encode()).hexdigest()[:12] in NAME_HASHES)
+
+banned = ['VULKEN', 'RHECC', 'Pure Patch', '/home/user/', 'prismhr', 'Gong']
 hit = [b for b in banned if b.lower() in repo_text.lower()]
-say('7 no contractor or out-of-scope name in dist', not hit, f'{len(banned)} checked' + (f' HIT {hit}' if hit else ''))
+say('7 no contractor or out-of-scope name in dist', not hit and not name_hit,
+    f'{len(NAME_HASHES)} names + {len(banned)} brands checked against {len(words)} words'
+    + (f' HIT {hit}' if hit else '') + (f' {name_hit} NAME HIT' if name_hit else ''))
 
 # match real file references, not the .steps CSS class in "How it works"
 srcs = [r'src\s*=\s*["\'][^"\']+\.(png|jpe?g|webp|gif|svg)', r'url\(\s*["\']?[^"\')]*\.(png|jpe?g|webp)',
@@ -194,6 +206,74 @@ with sync_playwright() as p:
             if pg.evaluate("()=>document.documentElement.scrollWidth > window.innerWidth+1"): over.append(v)
         say(f'13d no horizontal scroll at {vw}px on any variant', not over, over or 'a-keynote b-wall c-reel')
         pg.close()
+
+    # 17: type inside a frame is neither cut by the stage nor overprinted by a sibling.
+    # The old comment on the block below claimed to cover "phone" and never measured
+    # it -- which is how a callout at 68% visible and a three-way overprint shipped
+    # while this script reported all clear. Both failure modes are measured here:
+    # SLICED compares each text run's box against the stage-frame it sits in, and
+    # OVERLAP compares runs that live in different block boxes (two runs inside one
+    # wrapping paragraph share a bounding box and are not a collision).
+    SLICE_JS = """() => {
+      const out=[];
+      document.querySelectorAll('.stage').forEach(st=>{
+        const fr=st.querySelector('.stage-frame'); if(!fr) return;
+        const fb=fr.getBoundingClientRect();
+        const id=(st.className.match(/f\\d+/)||['stage'])[0];
+        const walk=document.createTreeWalker(st,NodeFilter.SHOW_TEXT); let n; const boxes=[];
+        while(n=walk.nextNode()){
+          const t=n.textContent.trim(); if(!t) continue;
+          const cs=getComputedStyle(n.parentElement);
+          if(cs.visibility==='hidden'||cs.display==='none'||parseFloat(cs.opacity)<0.05) continue;
+          const rg=document.createRange(); rg.selectNodeContents(n);
+          const rc=rg.getBoundingClientRect(); if(rc.width<1||rc.height<1) continue;
+          // Clip against the stage AND every ancestor that hides its overflow, so
+          // what is measured is what a visitor can actually see. A line a scrolling
+          // rail has clipped away entirely is invisible, not broken; a line cut
+          // through the middle is the defect worth failing on.
+          let cl=[fb.left,fb.top,fb.right,fb.bottom];
+          for(let a=n.parentElement;a&&a!==document.body;a=a.parentElement){
+            const ov=getComputedStyle(a).overflow;
+            if(ov&&ov!=='visible'){const ab=a.getBoundingClientRect();
+              cl=[Math.max(cl[0],ab.left),Math.max(cl[1],ab.top),
+                  Math.min(cl[2],ab.right),Math.min(cl[3],ab.bottom)];}
+          }
+          const ix=Math.max(0,Math.min(rc.right,cl[2])-Math.max(rc.left,cl[0]));
+          const iy=Math.max(0,Math.min(rc.bottom,cl[3])-Math.max(rc.top,cl[1]));
+          const vis=(ix*iy)/(rc.width*rc.height);
+          if(vis<=0.02) continue;
+          let blk=n.parentElement;
+          while(blk && getComputedStyle(blk).display.indexOf('inline')===0) blk=blk.parentElement;
+          boxes.push({t:t.slice(0,24),vis,blk,
+                      rc:[Math.max(rc.left,cl[0]),Math.max(rc.top,cl[1]),
+                          Math.min(rc.right,cl[2]),Math.min(rc.bottom,cl[3])]});
+        }
+        boxes.filter(x=>x.vis<0.97).forEach(x=>
+          out.push(id+' SLICED '+Math.round(x.vis*100)+'% "'+x.t+'"'));
+        for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
+          if(boxes[i].blk===boxes[j].blk) continue;
+          const a=boxes[i].rc,c=boxes[j].rc;
+          const ox=Math.min(a[2],c[2])-Math.max(a[0],c[0]);
+          const oy=Math.min(a[3],c[3])-Math.max(a[1],c[1]);
+          if(ox>2&&oy>2) out.push(id+' OVERLAP "'+boxes[i].t+'" / "'+boxes[j].t+'"');
+        }
+      });
+      return out;}"""
+    # The one admitted overlap: the PUFF JUNCTION lockup sets its contour and its
+    # letterforms over each other on purpose -- that offset IS the mark.
+    ALLOWED = ('f01 OVERLAP "puff" / "JUNCTION"',)
+    bad = []
+    for vw, vh in [(390, 844), (768, 1024), (1440, 900)]:
+        ctx = b.new_context(viewport={'width': vw, 'height': vh}); serve(ctx)
+        pg = ctx.new_page()
+        for v in VARIANTS:
+            pg.goto('file://' + str(dist / f'variant-{v}.html')); pg.wait_for_timeout(2200)
+            for hit in pg.evaluate(SLICE_JS):
+                if hit not in ALLOWED:
+                    bad.append(f'{v}@{vw} {hit}')
+        ctx.close()
+    say('17 no sliced or overprinted type inside any frame', not bad,
+        f'3 viewports x 3 variants measured' + (f' :: {bad[:3]}' if bad else ''))
 
     # keyboard reach + visible focus
     ctx = b.new_context(viewport={'width': 1440, 'height': 900}); serve(ctx)

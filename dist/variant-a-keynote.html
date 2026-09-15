@@ -57,6 +57,8 @@
   overflow: hidden;
   background: #000000;
   container-type: inline-size;
+
+  container-name: frame;
   isolation: isolate;
   --fx: 0.5;
   --fy: 0.5;
@@ -71,7 +73,7 @@
 
 .stage > .stage-frame { --sw: 100cqw; }
 .stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
   .stage > .stage-frame > .stage-scene {
     inset: auto;
@@ -1308,7 +1310,7 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .f03 .f03-line { left: 27%; right: 27%; bottom: 10%; font-size: calc(var(--u) * 4.6); }
 }
 </style>
@@ -1413,7 +1415,7 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .f04 .f04-words { left: 26%; right: 26%; top: 28%; }
   .f04 .f04-word { font-size: calc(var(--u) * 7.4); }
   .f04 .f04-sub { left: 27%; right: 27%; top: 60%; font-size: calc(var(--u) * 2.9); }
@@ -1651,25 +1653,37 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
       <p class="f08-style">AC-LST-001 | LONG SLEEVE TEE | SIZE RANGE: S-XL | SAMPLE SIZE: M | STATUS: PROTO | TOPS</p>
       <div class="f08-body">
         <svg class="f08-flat" viewBox="0 0 840 320" aria-hidden="true">
+          <!-- Drawn to the graded spec for the sample size, M, at 6px per inch.
+               Body 30" HPS to hem; half chest 21.5" and half hem 21.5", which is
+               what makes the side seam vertical and the hem straight; across
+               shoulder 17.25"; neck 7" wide with a 4.5" front drop; armhole 10.5"
+               below HPS; sleeve 26" along the outer fold, tapering from an 8"
+               bicep to a 5" cuff. -->
           <g fill="none" stroke="#9A958C" stroke-width="1">
-            <path d="M186 118 q14 30 3 62 M220 114 q9 34 -2 66 M254 120 q12 28 2 60"/>
-            <path d="M120 140 q9 22 4 42 M320 140 q-9 22 -4 42"/>
+            <path d="M188 150 q13 28 3 58 M220 146 q9 32 -2 62 M252 152 q11 26 2 56"/>
+            <path d="M298 108 q22 26 34 42 M142 108 q-22 26 -34 42"/>
           </g>
           <g fill="none" stroke="#141414" stroke-width="2.2" stroke-linejoin="round">
-            <path d="M178 40 q42 -14 84 0 l70 30 -22 58 -26 -11 v168 q-70 14 -138 0 v-168 l-26 11 -22 -58 z"/>
-            <path d="M178 40 q42 30 84 0"/>
-            <path d="M136 152 h168"/>
+            <!-- Front outline. One piece: the study confirms the front is cut on
+                 the fold, so there is no seam across it. The horizontal yoke seam
+                 that makes the back two panels is on the back, which this view
+                 does not show. -->
+            <path d="M199 50 L168 59 Q159 85 156 113 L156 230 L284 230 L284 113 Q281 85 272 59 L241 50 C238 88 202 88 199 50 Z"/>
+            <!-- Sleeves, set in with a slight drop shoulder. -->
+            <path d="M272 59 L372 179 L349 198 L284 113"/>
+            <path d="M168 59 L68 179 L91 198 L156 113"/>
           </g>
-          <path class="f08-rib" d="M178 40 q42 -14 84 0 q-42 20 -84 0 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path class="f08-rib" d="M106 150 l30 -12 11 30 -30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path class="f08-rib" d="M334 150 l-30 -12 -11 30 30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path d="M124 272 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
-          <path d="M124 280 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
+          <!-- 2-ply foldover rib: 1" neckband, 2" cuffs. -->
+          <path class="f08-rib" d="M235 56 C232 82 208 82 205 56" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M364 170 L372 179 L349 198 L341 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M76 170 L68 179 L91 198 L99 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <!-- 1" turnback at the straight hem. -->
+          <path d="M156 224 h128" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
           <g class="f08-leaders" stroke="#C0392B" stroke-width="1.4" fill="none">
-            <path data-l="0" d="M262 48 L436 40" marker-end="url(#f08a)"/>
-            <path data-l="1" d="M344 158 L436 118" marker-end="url(#f08a)"/>
-            <path data-l="2" d="M316 276 L436 196" marker-end="url(#f08a)"/>
-            <path data-l="3" d="M304 152 L436 274" marker-end="url(#f08a)"/>
+            <path data-l="0" d="M234 58 L436 40" marker-end="url(#f08a)"/>
+            <path data-l="1" d="M358 186 L436 118" marker-end="url(#f08a)"/>
+            <path data-l="2" d="M286 227 L436 196" marker-end="url(#f08a)"/>
+            <path data-l="3" d="M285 168 L436 274" marker-end="url(#f08a)"/>
           </g>
           <defs>
             <marker id="f08a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto">
@@ -1698,8 +1712,11 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
    string as the sub-header, and the dated footer.
    Every number and the style string are verbatim; nothing about this garment
    is invented. The construction drawn is the real one: set-in sleeve with a
-   slight drop shoulder, straight body, straight hem, 2-ply foldover rib, and
-   the horizontal back yoke seam that makes the back two panels.
+   slight drop shoulder, a long sleeve at the graded 26" along the outer fold,
+   straight body, straight hem, and 2-ply foldover rib at the neck and cuffs.
+   The front is one piece cut on the fold, so nothing crosses it. The
+   horizontal yoke seam that makes the back two panels belongs to the back and
+   is not drawn, because this is the exterior front view.
    A drawn line arrives, it does not ease, so the leaders snap. */
 .f08 .f08-sheet { background: #FFFFFF; overflow: hidden; }
 .f08 .f08-head {
@@ -1783,7 +1800,7 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   /* a wide document cannot survive a half-width band, so on the phone it
      stacks: the header, the flat, and the callouts as a list beneath */
   .f08 .f08-head {
@@ -1799,16 +1816,21 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   .f08 .f08-title {
     grid-area: 2 / 1 / 3 / 3; text-align: left; font-size: calc(var(--u) * 2.4);
   }
-  .f08 .f08-style { left: 27%; right: 27%; top: 18.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
-  .f08 .f08-body { left: 27%; right: 27%; top: 29%; bottom: 11%; }
-  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 48%; width: 100%; }
+  .f08 .f08-title { font-size: calc(var(--u) * 2); white-space: nowrap; }
+  .f08 .f08-style { left: 27%; right: 27%; top: 22.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
+  .f08 .f08-body { left: 27%; right: 27%; top: 31%; bottom: 11%; }
+  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 44%; width: 100%; }
   .f08 .f08-leaders { display: none; }
+  /* Four callouts have to fit the box rather than be spaced across it: at this
+     width a space-between grid taller than its container pushes the last row
+     out through the bottom, which is how "3/8" ended up half cut and sitting
+     on the footer. Sized so four rows total less than the height available. */
   .f08 .f08-calls {
-    position: absolute; left: 0; right: 0; top: 52%; bottom: 4%; width: auto;
+    position: absolute; left: 0; right: 0; top: 48%; bottom: 4%; width: auto;
     padding: 0; align-content: space-between;
   }
-  .f08 .f08-calls b { font-size: calc(var(--u) * 1.6); }
-  .f08 .f08-calls span { font-size: calc(var(--u) * 2.9); }
+  .f08 .f08-calls b { font-size: calc(var(--u) * 1.3); line-height: 1.25; }
+  .f08 .f08-calls span { font-size: calc(var(--u) * 2.2); line-height: 1.1; }
   .f08 .f08-foot { left: 27%; right: 27%; bottom: 3%; font-size: calc(var(--u) * 1.5); }
 }
 </style>
@@ -1946,23 +1968,19 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   <div class="frame-frame">
 <!-- frame id=margin num=10 source=aesdr focal=62%,50% loop=10 interactive=no -->
 <div class="stage f10" data-frame="margin" style="--fx:0.62;--fy:0.50" role="img"
-     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, and in the body a phrase is struck through in red and a correction is inserted after it">
+     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, naming the rules the sentences beside them obey, and a list of banned words is struck through in red">
   <div class="stage-frame">
     <div class="stage-scene f10-page m-ae-field">
-      <p class="f10-kicker">Manuscript · folio iv</p>
+      <p class="f10-kicker">Manuscript</p>
       <div class="f10-body">
-        <p>Your onboarding was a crime scene. A week of shadowing. A Gong playlist. A prayer.
-          <span class="f10-strike">That is not training.</span>
-          <span class="f10-insert">That is hazing with a CRM licence.</span>
-        </p>
-        <p>Every month or quarter, they reset your number to zero. And every month or
-          quarter, you act surprised. You don't have a pipeline problem. You have a
-          denial problem.</p>
+        <p>Every month or quarter, they reset your number to <span class="f10-mark">zero.</span>
+          And every month or quarter, you act surprised.
+          <span class="f10-mark">You don't have a pipeline problem. You have a denial problem.</span></p>
       </div>
       <aside class="f10-rail m-ae-margin">
-        <span class="f10-note" data-n="0">say the quiet part</span>
-        <span class="f10-note" data-n="1">this is the whole book</span>
-        <span class="f10-note" data-n="2">keep — don't soften</span>
+        <span class="f10-note" data-n="0">the named number — never &ldquo;many&rdquo;</span>
+        <span class="f10-note" data-n="1">the verdict construction</span>
+        <span class="f10-note f10-banned" data-n="2">crush it &middot; synergy &middot; game-changer</span>
       </aside>
       <svg class="f10-glyph" viewBox="0 0 64 64" aria-hidden="true">
         <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -2005,15 +2023,24 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   line-height: 2; color: var(--ae-ink);
 }
 .f10 .f10-body p { margin: 0 0 calc(var(--u) * 2.4); }
-.f10 .f10-strike {
+/* The pen marks the body rather than rewriting it. Underlining a clause that
+   already obeys the rule is an annotation; striking a shipped sentence and
+   writing a replacement would be asserting an edit the brand never made. */
+.f10 .f10-mark {
+  background-image: linear-gradient(var(--ae-redink), var(--ae-redink));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.06em);
+  background-size: 0 2px;
+  animation: f10-mark 10s linear infinite;
+}
+.f10 .f10-body p .f10-mark + .f10-mark,
+.f10 .f10-mark:nth-of-type(2) { animation-delay: 2.2s; }
+/* The one strike falls where the brand's own list says it should. */
+.f10 .f10-banned {
+  color: var(--ae-redink);
   text-decoration: line-through;
   text-decoration-color: var(--ae-redink);
   text-decoration-thickness: 2px;
-  animation: f10-strike 10s linear infinite;
-}
-.f10 .f10-insert {
-  color: var(--ae-redink); border-bottom: 2px solid var(--ae-redink);
-  opacity: 0; animation: f10-insert 10s linear infinite;
 }
 .f10 .f10-rail {
   position: absolute; right: 5%; top: 17%; width: 25%;
@@ -2031,29 +2058,27 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   width: calc(var(--u) * 10); height: calc(var(--u) * 10); opacity: 0.85;
 }
 @keyframes f10-note { 0%, 3% { opacity: 0; } 8%, 92% { opacity: 1; } 100% { opacity: 1; } }
-@keyframes f10-strike {
-  0%, 56% { text-decoration-color: transparent; }
-  62%, 100% { text-decoration-color: var(--ae-redink); }
+@keyframes f10-mark {
+  0%, 56% { background-size: 0 2px; }
+  66%, 100% { background-size: 100% 2px; }
 }
-@keyframes f10-insert { 0%, 66% { opacity: 0; } 72%, 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .f10 .f10-note, .f10 .f10-insert { opacity: 1; }
-  .f10 .f10-strike { text-decoration-color: var(--ae-redink); }
+  .f10 .f10-note { opacity: 1; }
+  .f10 .f10-mark { background-size: 100% 2px; }
 }
 
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   /* focal 62%: the band runs 37% to 87% of the scene. The body and the rail
      both move inside it, the rail dropping below the text rather than beside
      it -- which is what the real manuscript does on a narrow screen. */
   .f10 .f10-kicker { left: 39%; top: 5%; font-size: calc(var(--u) * 1.9); }
   .f10 .f10-body {
-    left: 39%; right: 15%; top: 10%;
+    left: 39%; right: 15%; top: 15%;
     font-size: calc(var(--u) * 2.7); line-height: 1.7;
   }
-  .f10 .f10-body p + p { display: none; }
   .f10 .f10-body p { margin-bottom: calc(var(--u) * 2.4); }
   .f10 .f10-rail {
     left: 39%; right: 15%; top: 48%; bottom: auto; width: auto;
@@ -2169,7 +2194,7 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .f11 .f11-block { width: 40%; height: 34%; bottom: 30%; }
   .f11 .f11-shadow { left: 28%; right: 28%; bottom: 27%; }
   .f11 .f11-slime { left: 28%; bottom: 16%; }
@@ -2217,14 +2242,14 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
           <div class="f12-track"><i></i></div>
         </div>
         <ul class="f12-wire">
-          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>replied to the model you sent<em>12m</em></li>
-          <li><span class="f12-tag">YOU</span>sent the pricing model<em>1h</em></li>
-          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>read the thread and filed it<em>1h</em></li>
-          <li><span class="f12-tag">YOU</span>called the operations lead<em>3h</em></li>
-          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>noticed nine quiet days<em>4h</em></li>
-          <li><span class="f12-tag">YOU</span>opened the renewal file<em>5h</em></li>
+          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>Northwind Robotics replied to your outreach.<em>12m</em></li>
+          <li><span class="f12-tag">YOU</span>Captured your send to Northwind Robotics — counted.<em>1h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Calendar — Thursday with Northwind Robotics is confirmed.<em>1h</em></li>
+          <li><span class="f12-tag">YOU</span>You called Northwind Robotics.<em>3h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Heartbeat — Northwind UK still has no dated next step.<em>4h</em></li>
+          <li><span class="f12-tag">YOU</span>You made a LinkedIn touch on Northwind UK.<em>5h</em></li>
         </ul>
-        <p class="f12-foot"><span>QUIETEST · 9 DAYS</span><span>6 TODAY</span></p>
+        <p class="f12-foot"><span>Quiet since 4:12 PM.</span><span>6 TODAY</span></p>
       </div>
       <button class="f12-switch" type="button" aria-pressed="false">
         <span class="f12-switch-label">Turn it off</span>
@@ -2252,11 +2277,11 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   overflow: hidden;
 }
 .f12 .f12-rail {
-  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 44%;
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 47%;
   padding: calc(var(--u) * 3.4) calc(var(--u) * 3) calc(var(--u) * 2.6);
   border-right: 1px solid var(--an-hair-strong);
   background: linear-gradient(90deg, rgba(10, 28, 64, 0.025), transparent 70%);
-  display: grid; grid-template-rows: auto auto 1fr auto; gap: calc(var(--u) * 2.4);
+  display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: calc(var(--u) * 2);
   transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
               filter 260ms ease, opacity 260ms ease;
 }
@@ -2284,12 +2309,12 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   height: calc(var(--u) * 0.55); background: var(--an-sunk); border-radius: 99px; overflow: hidden;
 }
 .f12 .f12-track i { display: block; width: 38%; height: 100%; background: var(--an-forest); }
-.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: start; }
+.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: stretch; overflow: hidden; }
 .f12 .f12-wire li {
   position: relative; display: flex; align-items: baseline; gap: calc(var(--u) * 0.9);
-  padding: calc(var(--u) * 1.15) 0;
+  padding: calc(var(--u) * 0.85) 0;
   border-top: 1px solid var(--an-hair);
-  font-family: var(--an-sans); font-size: calc(var(--u) * 1.6);
+  font-family: var(--an-sans); font-size: calc(var(--u) * 1.35);
   color: var(--an-ink-soft); line-height: 1.35;
 }
 .f12 .f12-wire li.is-machine { color: var(--an-ink-faint); }
@@ -2311,19 +2336,30 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   color: var(--an-ink-quiet);
 }
 .f12 .f12-foot {
-  margin: 0; display: flex; justify-content: space-between;
+  margin: 0; display: grid; gap: calc(var(--u) * 0.5);
   font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
   letter-spacing: 0.14em; color: var(--an-ink-quiet);
+  text-transform: uppercase;
 }
 /* Beat one: everything stills IN PLACE. Beat two: the rail folds. */
 .f12.is-still .f12-rail { filter: grayscale(1); opacity: 0.3; }
 .f12.is-still .f12-dot { animation-play-state: paused; }
 .f12.is-off .f12-rail { transform: translateX(-101%); filter: grayscale(1); opacity: 0.3; }
 /* Beat three: the hairline left behind is plainly dead. */
+/* The study measures the resting line exactly: "a 2.5px navy stroke at 40%
+   opacity full-width, 9px off the bottom, inside a 26px hit area". The first
+   build drew it 1px at 14% -- a line at 13% contrast against the field, which
+   renders as an empty room rather than as a dead wire, which is the one thing
+   this frame exists to deny. The hit area is kept separately so the whisper is
+   still reachable without thickening the stroke. */
 .f12 .f12-hair {
-  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 1px;
-  background: var(--an-hair-strong); opacity: 0;
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6);
+  width: calc(var(--u) * 1.6); opacity: 0;
   transition: opacity 200ms ease 300ms;
+}
+.f12 .f12-hair::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2.5px; background: rgba(10, 28, 64, 0.40);
 }
 .f12.is-off .f12-hair { opacity: 1; }
 .f12 .f12-whisper {
@@ -2366,19 +2402,27 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+/* Between the phone band and a full-width stage the rail is short enough that
+   the sixth line lands half inside the clip -- a sentence cut through its
+   middle, which reads as broken rather than as a wire that scrolls. Below this
+   width the wire carries five whole lines instead of five and a half. */
+@container frame (max-width: 940px) {
+  .f12 .f12-wire li:nth-child(n + 6) { display: none; }
+}
+@container frame (max-width: 639px) {
   /* focal 22%: the band is the left half of the scene, which is where the
      rail already lives. The switch moves inside it. */
-  .f12 .f12-rail { width: 40%; padding: calc(var(--u) * 4) calc(var(--u) * 2.4); gap: calc(var(--u) * 2); }
+  .f12 .f12-rail { width: 42%; padding: calc(var(--u) * 3.2) calc(var(--u) * 2.2); gap: calc(var(--u) * 1.5); }
   .f12 .f12-head { font-size: calc(var(--u) * 2); }
-  .f12 .f12-count b { font-size: calc(var(--u) * 8); }
+  .f12 .f12-count b { font-size: calc(var(--u) * 6); }
   .f12 .f12-count span { font-size: calc(var(--u) * 1.9); }
-  .f12 .f12-wire li { font-size: calc(var(--u) * 1.85); padding: calc(var(--u) * 1.15) 0; flex-wrap: wrap; }
+  .f12 .f12-wire li { font-size: calc(var(--u) * 1.35); padding: calc(var(--u) * 0.7) 0; flex-wrap: wrap; }
+  .f12 .f12-wire li:nth-child(n + 3) { display: none; }
   .f12 .f12-tag { font-size: calc(var(--u) * 1.4); }
   .f12 .f12-wire em { font-size: calc(var(--u) * 1.5); }
   .f12 .f12-foot { font-size: calc(var(--u) * 1.25); gap: calc(var(--u) * 1); }
   .f12 .f12-wire em { margin-left: auto; }
-  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto 1fr; }
+  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto minmax(0, 1fr); }
   .f12 .f12-foot { display: none; }
   .f12 .f12-switch {
     right: auto; left: 5%; top: auto; bottom: calc(var(--u) * 2.4); transform: none;
@@ -2405,7 +2449,7 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
       /* three beats: still in place, then fold, then the dead hairline */
       root.classList.add("is-still");
       later(function () { root.classList.add("is-off"); }, 300);
-      later(function () { off = true; busy = false; label.textContent = "Turn it on";
+      later(function () { off = true; busy = false; label.textContent = "Turn it back on";
         btn.setAttribute("aria-pressed", "true"); }, 780);
     } else {
       root.classList.remove("is-off");

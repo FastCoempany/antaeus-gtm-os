@@ -56,6 +56,8 @@
   overflow: hidden;
   background: #000000;
   container-type: inline-size;
+
+  container-name: frame;
   isolation: isolate;
   --fx: 0.5;
   --fy: 0.5;
@@ -70,7 +72,7 @@
 
 .stage > .stage-frame { --sw: 100cqw; }
 .stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
   .stage > .stage-frame > .stage-scene {
     inset: auto;
@@ -898,14 +900,14 @@ html,body{margin:0;background:#000}
           <div class="f12-track"><i></i></div>
         </div>
         <ul class="f12-wire">
-          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>replied to the model you sent<em>12m</em></li>
-          <li><span class="f12-tag">YOU</span>sent the pricing model<em>1h</em></li>
-          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>read the thread and filed it<em>1h</em></li>
-          <li><span class="f12-tag">YOU</span>called the operations lead<em>3h</em></li>
-          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>noticed nine quiet days<em>4h</em></li>
-          <li><span class="f12-tag">YOU</span>opened the renewal file<em>5h</em></li>
+          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>Northwind Robotics replied to your outreach.<em>12m</em></li>
+          <li><span class="f12-tag">YOU</span>Captured your send to Northwind Robotics — counted.<em>1h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Calendar — Thursday with Northwind Robotics is confirmed.<em>1h</em></li>
+          <li><span class="f12-tag">YOU</span>You called Northwind Robotics.<em>3h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Heartbeat — Northwind UK still has no dated next step.<em>4h</em></li>
+          <li><span class="f12-tag">YOU</span>You made a LinkedIn touch on Northwind UK.<em>5h</em></li>
         </ul>
-        <p class="f12-foot"><span>QUIETEST · 9 DAYS</span><span>6 TODAY</span></p>
+        <p class="f12-foot"><span>Quiet since 4:12 PM.</span><span>6 TODAY</span></p>
       </div>
       <button class="f12-switch" type="button" aria-pressed="false">
         <span class="f12-switch-label">Turn it off</span>
@@ -933,11 +935,11 @@ html,body{margin:0;background:#000}
   overflow: hidden;
 }
 .f12 .f12-rail {
-  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 44%;
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 47%;
   padding: calc(var(--u) * 3.4) calc(var(--u) * 3) calc(var(--u) * 2.6);
   border-right: 1px solid var(--an-hair-strong);
   background: linear-gradient(90deg, rgba(10, 28, 64, 0.025), transparent 70%);
-  display: grid; grid-template-rows: auto auto 1fr auto; gap: calc(var(--u) * 2.4);
+  display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: calc(var(--u) * 2);
   transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
               filter 260ms ease, opacity 260ms ease;
 }
@@ -965,12 +967,12 @@ html,body{margin:0;background:#000}
   height: calc(var(--u) * 0.55); background: var(--an-sunk); border-radius: 99px; overflow: hidden;
 }
 .f12 .f12-track i { display: block; width: 38%; height: 100%; background: var(--an-forest); }
-.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: start; }
+.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: stretch; overflow: hidden; }
 .f12 .f12-wire li {
   position: relative; display: flex; align-items: baseline; gap: calc(var(--u) * 0.9);
-  padding: calc(var(--u) * 1.15) 0;
+  padding: calc(var(--u) * 0.85) 0;
   border-top: 1px solid var(--an-hair);
-  font-family: var(--an-sans); font-size: calc(var(--u) * 1.6);
+  font-family: var(--an-sans); font-size: calc(var(--u) * 1.35);
   color: var(--an-ink-soft); line-height: 1.35;
 }
 .f12 .f12-wire li.is-machine { color: var(--an-ink-faint); }
@@ -992,19 +994,30 @@ html,body{margin:0;background:#000}
   color: var(--an-ink-quiet);
 }
 .f12 .f12-foot {
-  margin: 0; display: flex; justify-content: space-between;
+  margin: 0; display: grid; gap: calc(var(--u) * 0.5);
   font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
   letter-spacing: 0.14em; color: var(--an-ink-quiet);
+  text-transform: uppercase;
 }
 /* Beat one: everything stills IN PLACE. Beat two: the rail folds. */
 .f12.is-still .f12-rail { filter: grayscale(1); opacity: 0.3; }
 .f12.is-still .f12-dot { animation-play-state: paused; }
 .f12.is-off .f12-rail { transform: translateX(-101%); filter: grayscale(1); opacity: 0.3; }
 /* Beat three: the hairline left behind is plainly dead. */
+/* The study measures the resting line exactly: "a 2.5px navy stroke at 40%
+   opacity full-width, 9px off the bottom, inside a 26px hit area". The first
+   build drew it 1px at 14% -- a line at 13% contrast against the field, which
+   renders as an empty room rather than as a dead wire, which is the one thing
+   this frame exists to deny. The hit area is kept separately so the whisper is
+   still reachable without thickening the stroke. */
 .f12 .f12-hair {
-  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 1px;
-  background: var(--an-hair-strong); opacity: 0;
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6);
+  width: calc(var(--u) * 1.6); opacity: 0;
   transition: opacity 200ms ease 300ms;
+}
+.f12 .f12-hair::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2.5px; background: rgba(10, 28, 64, 0.40);
 }
 .f12.is-off .f12-hair { opacity: 1; }
 .f12 .f12-whisper {
@@ -1047,19 +1060,27 @@ html,body{margin:0;background:#000}
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+/* Between the phone band and a full-width stage the rail is short enough that
+   the sixth line lands half inside the clip -- a sentence cut through its
+   middle, which reads as broken rather than as a wire that scrolls. Below this
+   width the wire carries five whole lines instead of five and a half. */
+@container frame (max-width: 940px) {
+  .f12 .f12-wire li:nth-child(n + 6) { display: none; }
+}
+@container frame (max-width: 639px) {
   /* focal 22%: the band is the left half of the scene, which is where the
      rail already lives. The switch moves inside it. */
-  .f12 .f12-rail { width: 40%; padding: calc(var(--u) * 4) calc(var(--u) * 2.4); gap: calc(var(--u) * 2); }
+  .f12 .f12-rail { width: 42%; padding: calc(var(--u) * 3.2) calc(var(--u) * 2.2); gap: calc(var(--u) * 1.5); }
   .f12 .f12-head { font-size: calc(var(--u) * 2); }
-  .f12 .f12-count b { font-size: calc(var(--u) * 8); }
+  .f12 .f12-count b { font-size: calc(var(--u) * 6); }
   .f12 .f12-count span { font-size: calc(var(--u) * 1.9); }
-  .f12 .f12-wire li { font-size: calc(var(--u) * 1.85); padding: calc(var(--u) * 1.15) 0; flex-wrap: wrap; }
+  .f12 .f12-wire li { font-size: calc(var(--u) * 1.35); padding: calc(var(--u) * 0.7) 0; flex-wrap: wrap; }
+  .f12 .f12-wire li:nth-child(n + 3) { display: none; }
   .f12 .f12-tag { font-size: calc(var(--u) * 1.4); }
   .f12 .f12-wire em { font-size: calc(var(--u) * 1.5); }
   .f12 .f12-foot { font-size: calc(var(--u) * 1.25); gap: calc(var(--u) * 1); }
   .f12 .f12-wire em { margin-left: auto; }
-  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto 1fr; }
+  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto minmax(0, 1fr); }
   .f12 .f12-foot { display: none; }
   .f12 .f12-switch {
     right: auto; left: 5%; top: auto; bottom: calc(var(--u) * 2.4); transform: none;
@@ -1086,7 +1107,7 @@ html,body{margin:0;background:#000}
       /* three beats: still in place, then fold, then the dead hairline */
       root.classList.add("is-still");
       later(function () { root.classList.add("is-off"); }, 300);
-      later(function () { off = true; busy = false; label.textContent = "Turn it on";
+      later(function () { off = true; busy = false; label.textContent = "Turn it back on";
         btn.setAttribute("aria-pressed", "true"); }, 780);
     } else {
       root.classList.remove("is-off");

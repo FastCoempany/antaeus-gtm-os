@@ -56,6 +56,8 @@
   overflow: hidden;
   background: #000000;
   container-type: inline-size;
+
+  container-name: frame;
   isolation: isolate;
   --fx: 0.5;
   --fy: 0.5;
@@ -70,7 +72,7 @@
 
 .stage > .stage-frame { --sw: 100cqw; }
 .stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
   .stage > .stage-frame > .stage-scene {
     inset: auto;

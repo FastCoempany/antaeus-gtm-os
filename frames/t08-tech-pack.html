@@ -11,25 +11,37 @@
       <p class="f08-style">AC-LST-001 | LONG SLEEVE TEE | SIZE RANGE: S-XL | SAMPLE SIZE: M | STATUS: PROTO | TOPS</p>
       <div class="f08-body">
         <svg class="f08-flat" viewBox="0 0 840 320" aria-hidden="true">
+          <!-- Drawn to the graded spec for the sample size, M, at 6px per inch.
+               Body 30" HPS to hem; half chest 21.5" and half hem 21.5", which is
+               what makes the side seam vertical and the hem straight; across
+               shoulder 17.25"; neck 7" wide with a 4.5" front drop; armhole 10.5"
+               below HPS; sleeve 26" along the outer fold, tapering from an 8"
+               bicep to a 5" cuff. -->
           <g fill="none" stroke="#9A958C" stroke-width="1">
-            <path d="M186 118 q14 30 3 62 M220 114 q9 34 -2 66 M254 120 q12 28 2 60"/>
-            <path d="M120 140 q9 22 4 42 M320 140 q-9 22 -4 42"/>
+            <path d="M188 150 q13 28 3 58 M220 146 q9 32 -2 62 M252 152 q11 26 2 56"/>
+            <path d="M298 108 q22 26 34 42 M142 108 q-22 26 -34 42"/>
           </g>
           <g fill="none" stroke="#141414" stroke-width="2.2" stroke-linejoin="round">
-            <path d="M178 40 q42 -14 84 0 l70 30 -22 58 -26 -11 v168 q-70 14 -138 0 v-168 l-26 11 -22 -58 z"/>
-            <path d="M178 40 q42 30 84 0"/>
-            <path d="M136 152 h168"/>
+            <!-- Front outline. One piece: the study confirms the front is cut on
+                 the fold, so there is no seam across it. The horizontal yoke seam
+                 that makes the back two panels is on the back, which this view
+                 does not show. -->
+            <path d="M199 50 L168 59 Q159 85 156 113 L156 230 L284 230 L284 113 Q281 85 272 59 L241 50 C238 88 202 88 199 50 Z"/>
+            <!-- Sleeves, set in with a slight drop shoulder. -->
+            <path d="M272 59 L372 179 L349 198 L284 113"/>
+            <path d="M168 59 L68 179 L91 198 L156 113"/>
           </g>
-          <path class="f08-rib" d="M178 40 q42 -14 84 0 q-42 20 -84 0 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path class="f08-rib" d="M106 150 l30 -12 11 30 -30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path class="f08-rib" d="M334 150 l-30 -12 -11 30 30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
-          <path d="M124 272 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
-          <path d="M124 280 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
+          <!-- 2-ply foldover rib: 1" neckband, 2" cuffs. -->
+          <path class="f08-rib" d="M235 56 C232 82 208 82 205 56" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M364 170 L372 179 L349 198 L341 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M76 170 L68 179 L91 198 L99 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <!-- 1" turnback at the straight hem. -->
+          <path d="M156 224 h128" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
           <g class="f08-leaders" stroke="#C0392B" stroke-width="1.4" fill="none">
-            <path data-l="0" d="M262 48 L436 40" marker-end="url(#f08a)"/>
-            <path data-l="1" d="M344 158 L436 118" marker-end="url(#f08a)"/>
-            <path data-l="2" d="M316 276 L436 196" marker-end="url(#f08a)"/>
-            <path data-l="3" d="M304 152 L436 274" marker-end="url(#f08a)"/>
+            <path data-l="0" d="M234 58 L436 40" marker-end="url(#f08a)"/>
+            <path data-l="1" d="M358 186 L436 118" marker-end="url(#f08a)"/>
+            <path data-l="2" d="M286 227 L436 196" marker-end="url(#f08a)"/>
+            <path data-l="3" d="M285 168 L436 274" marker-end="url(#f08a)"/>
           </g>
           <defs>
             <marker id="f08a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto">
@@ -58,8 +70,11 @@
    string as the sub-header, and the dated footer.
    Every number and the style string are verbatim; nothing about this garment
    is invented. The construction drawn is the real one: set-in sleeve with a
-   slight drop shoulder, straight body, straight hem, 2-ply foldover rib, and
-   the horizontal back yoke seam that makes the back two panels.
+   slight drop shoulder, a long sleeve at the graded 26" along the outer fold,
+   straight body, straight hem, and 2-ply foldover rib at the neck and cuffs.
+   The front is one piece cut on the fold, so nothing crosses it. The
+   horizontal yoke seam that makes the back two panels belongs to the back and
+   is not drawn, because this is the exterior front view.
    A drawn line arrives, it does not ease, so the leaders snap. */
 .f08 .f08-sheet { background: #FFFFFF; overflow: hidden; }
 .f08 .f08-head {
@@ -143,7 +158,7 @@
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   /* a wide document cannot survive a half-width band, so on the phone it
      stacks: the header, the flat, and the callouts as a list beneath */
   .f08 .f08-head {
@@ -159,16 +174,21 @@
   .f08 .f08-title {
     grid-area: 2 / 1 / 3 / 3; text-align: left; font-size: calc(var(--u) * 2.4);
   }
-  .f08 .f08-style { left: 27%; right: 27%; top: 18.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
-  .f08 .f08-body { left: 27%; right: 27%; top: 29%; bottom: 11%; }
-  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 48%; width: 100%; }
+  .f08 .f08-title { font-size: calc(var(--u) * 2); white-space: nowrap; }
+  .f08 .f08-style { left: 27%; right: 27%; top: 22.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
+  .f08 .f08-body { left: 27%; right: 27%; top: 31%; bottom: 11%; }
+  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 44%; width: 100%; }
   .f08 .f08-leaders { display: none; }
+  /* Four callouts have to fit the box rather than be spaced across it: at this
+     width a space-between grid taller than its container pushes the last row
+     out through the bottom, which is how "3/8" ended up half cut and sitting
+     on the footer. Sized so four rows total less than the height available. */
   .f08 .f08-calls {
-    position: absolute; left: 0; right: 0; top: 52%; bottom: 4%; width: auto;
+    position: absolute; left: 0; right: 0; top: 48%; bottom: 4%; width: auto;
     padding: 0; align-content: space-between;
   }
-  .f08 .f08-calls b { font-size: calc(var(--u) * 1.6); }
-  .f08 .f08-calls span { font-size: calc(var(--u) * 2.9); }
+  .f08 .f08-calls b { font-size: calc(var(--u) * 1.3); line-height: 1.25; }
+  .f08 .f08-calls span { font-size: calc(var(--u) * 2.2); line-height: 1.1; }
   .f08 .f08-foot { left: 27%; right: 27%; bottom: 3%; font-size: calc(var(--u) * 1.5); }
 }
 </style>

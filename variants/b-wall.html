@@ -42,6 +42,11 @@
      so the wall opts its tiles out of the crop from 768px up. Specificity beats
      stage.css's container rules; inset: 0 with auto width and height restores the
      16:10 composition (top/left auto after inset: 0 would collapse the scene). */
+  /* Renaming the container stops both stage.css's crop and every frame's own
+     phone layout from matching, which is the whole opt-out in one move.
+     100cqw still resolves: an unnamed container unit reads the nearest query
+     container whatever it is called. */
+  .wall .stage { container-name: wall-tile; }
   .wall .stage > .stage-frame { aspect-ratio: 16 / 10; --sw: 100cqw; }
   .wall .stage > .stage-frame > .stage-scene { inset: 0; width: auto; height: auto; }
   /* Twelve tiles divide evenly at every breakpoint -- 12/3, 12/2, 12/1 -- so

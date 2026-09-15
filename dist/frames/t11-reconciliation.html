@@ -56,6 +56,8 @@
   overflow: hidden;
   background: #000000;
   container-type: inline-size;
+
+  container-name: frame;
   isolation: isolate;
   --fx: 0.5;
   --fy: 0.5;
@@ -70,7 +72,7 @@
 
 .stage > .stage-frame { --sw: 100cqw; }
 .stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
   .stage > .stage-frame > .stage-scene {
     inset: auto;
@@ -985,7 +987,7 @@ html,body{margin:0;background:#000}
 /* The phone crop shows a band of the scene half its width, centred on the
    declared focal point. Anything outside fx +/- 25% is cut, so the composition
    moves inside the band rather than being sliced by it (brief 13). */
-@container (max-width: 639px) {
+@container frame (max-width: 639px) {
   .f11 .f11-block { width: 40%; height: 34%; bottom: 30%; }
   .f11 .f11-shadow { left: 28%; right: 28%; bottom: 27%; }
   .f11 .f11-slime { left: 28%; bottom: 16%; }
