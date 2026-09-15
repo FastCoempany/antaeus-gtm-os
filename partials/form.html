@@ -1,0 +1,76 @@
+<section class="send section" id="send" aria-labelledby="send-heading">
+  <h2 id="send-heading">Send us the idea</h2>
+  <form class="idea-form" novalidate>
+    <div class="field">
+      <label for="f-name">Your name</label>
+      <input id="f-name" name="name" type="text" required autocomplete="name" data-error="Add your name and send again.">
+      <p class="field-error" aria-live="polite"></p>
+    </div>
+    <div class="field">
+      <label for="f-email">Email</label>
+      <input id="f-email" name="email" type="email" required autocomplete="email" data-error="Add your email and send again.">
+      <p class="field-error" aria-live="polite"></p>
+    </div>
+    <div class="field">
+      <label for="f-idea">The idea</label>
+      <textarea id="f-idea" name="idea" required rows="4" placeholder="Three sentences is plenty." data-error="Add the idea and send again."></textarea>
+      <p class="field-error" aria-live="polite"></p>
+    </div>
+    <div class="field">
+      <label for="f-who">Who uses it</label>
+      <input id="f-who" name="who" type="text" required placeholder="The person, not the market." data-error="Add who uses it and send again.">
+      <p class="field-error" aria-live="polite"></p>
+    </div>
+    <div class="field">
+      <label for="f-screens">The screens you want to see</label>
+      <textarea id="f-screens" name="screens" required rows="3" placeholder="Up to three." data-error="Add the screens and send again."></textarea>
+      <p class="field-error" aria-live="polite"></p>
+    </div>
+    <div class="field">
+      <label for="f-else">Anything else</label>
+      <textarea id="f-else" name="else" rows="3" placeholder="Colors, links, a sketch. Optional."></textarea>
+    </div>
+    <button type="submit" class="button">Send the idea</button>
+  </form>
+  <div class="sent" hidden tabindex="-1">
+    <p>Sent. Next: pay ${PRICE} here and we start.</p>
+    <a class="button" href="${PAY_HREF}">Pay ${PRICE}</a>
+  </div>
+</section>
+<script>
+/* The form: real markup, real client-side validation, mocked submission (brief 12).
+   Each empty required field shows its own line; the first one takes focus.
+   An email that is not an address shows the email line. */
+(function () {
+  var form = document.querySelector(".idea-form");
+  if (!form) return;
+  var sent = form.parentNode.querySelector(".sent");
+  function check(field) {
+    var input = field.querySelector("input, textarea");
+    var msg = field.querySelector(".field-error");
+    if (!input || !msg || !input.required) return true;
+    var value = input.value.trim();
+    var ok = value.length > 0;
+    if (ok && input.type === "email") ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    msg.textContent = ok ? "" : input.getAttribute("data-error");
+    field.setAttribute("data-invalid", ok ? "false" : "true");
+    input.setAttribute("aria-invalid", ok ? "false" : "true");
+    return ok;
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var fields = Array.prototype.slice.call(form.querySelectorAll(".field"));
+    var firstBad = null;
+    fields.forEach(function (f) { if (!check(f) && !firstBad) firstBad = f; });
+    if (firstBad) { firstBad.querySelector("input, textarea").focus(); return; }
+    /* TODO: POST the fields here (a Cloudflare Worker or Supabase); out of scope for v1. */
+    form.hidden = true;
+    sent.hidden = false;
+    sent.focus();
+  });
+  form.addEventListener("input", function (e) {
+    var field = e.target.closest(".field");
+    if (field && field.getAttribute("data-invalid") === "true") check(field);
+  });
+})();
+</script>
