@@ -1,0 +1,54 @@
+/* materials/pj-sweep.css — Puff Junction, the white studio sweep.
+
+   Measured from: Grinder_1/2/3.png, sampled across the full width at 8%
+   height and down the centre (study/puff-junction.md §5).
+   Taken: flat #EDEDED (237) at every horizontal sample; holds 237 down to
+   ~40% of the frame; 50%→235, 60%→220, 70%→200–205 (darkest), then lifts
+   again to 213–221 at the bottom as the floor catches bounce. No colour cast,
+   no vignette, no visible horizon line. Contact shadow broad, soft, feathered,
+   no penumbra edge, bottoming at #BBBBBB–#CBCBCB.
+   Policy: rebuilt.
+
+   Framing, from the same renders: object plus shadow occupies 73% of the
+   width, with ~30% headroom above and ~19% below, sitting slightly left of
+   centre and low. Generous, calm, luxury-goods framing.
+
+   What it is not: a real cove has a soft floor reflection carrying the
+   object's colour. This carries none. */
+
+.m-sweep {
+  background:
+    linear-gradient(
+      180deg,
+      #EDEDED 0%,
+      #EDEDED 40%,
+      #EBEBEB 50%,
+      #DCDCDC 60%,
+      #C9C9C9 70%,
+      #D2D2D2 86%,
+      #DBDBDB 100%
+    );
+}
+
+/* One big soft key from upper front, slightly to one side. No hard specular
+   anywhere on the concrete; only the brass carries a highlight. */
+.m-sweep-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    78% 62% at 42% 6%,
+    rgba(255, 255, 255, 0.55) 0,
+    transparent 70%
+  );
+}
+
+.m-contact-shadow {
+  background: radial-gradient(
+    closest-side,
+    rgba(150, 150, 150, 0.62) 0,
+    rgba(178, 178, 178, 0.34) 46%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.1));
+}

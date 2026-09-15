@@ -1,0 +1,51 @@
+/* materials/pj-harlequin.css — Puff Junction, the dissolving harlequin.
+
+   Measured from: Grinder_1.png and Grinder_3.png at native resolution, scaled
+   against the known 20.9 mm concrete half (study/puff-junction.md §3.1).
+   Taken: cells 13–14 mm on point, ~3 over the 41.8 mm body height and ~6
+   across the 85 mm face; dark cells #414141 against #565656 concrete in the
+   bright render and #181818 against #444444 in the low-key one — roughly
+   25–35% darker than the adjacent concrete, matte, perfectly flush, catching
+   the same light. Projected 1:1 square on point in the most frontal render;
+   the source object's lozenges are taller than wide.
+   Policy: rebuilt.
+
+   Squares rotated 45°, meeting corner to corner, alternate cells filled. No
+   outlines, no gutters, no grout. It is dense at one vertical corner and thins
+   diagonally away with a ragged staircase front — individual cells drop out
+   entirely, and it is never an opacity fade. It wraps the radiused corner onto
+   the adjacent face and crosses the horizontal parting seam in perfect
+   registration between two separately-cast halves.
+
+   The dark cells are NOT black: model them as a value shift on the same
+   material, never as a fill.
+
+   Provenance: lifted from a limited-edition concrete-cube table lighter. The
+   reference file in the archive carries hand-drawn annotation circles around
+   exactly two things — the edge where the harlequin runs, and a diamond plaque.
+
+   Depth: three accounts in the archive disagree. The founder's brief says
+   etched, the source object is embossed relief, the delivered renders show it
+   flush. Flush-darker is what the hero renders actually show, and it is what
+   this builds.
+
+   What it is not: this material carries one cell's appearance. The dissolve —
+   the staircase front, cells dropping individually — is structure, so it is
+   generated per cell in the frame and cites this file. A gradient cannot drop
+   a single cell. */
+
+.m-harlequin-cell {
+  /* a square rotated 45°, meeting its neighbours corner to corner */
+  --hq-shift: 0.28;                  /* how much darker than the ground, 0..1 */
+  background-color: rgba(0, 0, 0, var(--hq-shift));
+  /* flush with the surrounding material: it catches the same light, so it
+     carries the same grain rather than sitting on top of it */
+  mix-blend-mode: multiply;
+}
+
+/* The lozenge stretched vertically, as the source object has it. Set
+   --hq-stretch to 1 for the square-on-point the frontal render projects. */
+.m-harlequin {
+  --hq-cell: 15.9%;                  /* ~6 across the face */
+  --hq-stretch: 1.18;
+}

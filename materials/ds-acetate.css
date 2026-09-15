@@ -1,0 +1,89 @@
+/* materials/ds-acetate.css — Darkest Shades, acetate.
+
+   Measured from: Renders_Sunglasses_presentation.pdf page images
+   (study/darkest-shades.md §2).
+   Taken: gloss black base #131313–#1B1B1B, mid-tones #2E2E2E–#383838, hard thin
+   near-white specular #C8–#E8 along every chamfer, sub-surface lift to
+   #3A–#50 at thin edges; satin black #202020–#262626 with a wide soft
+   highlight topping out at #6A–#80; blue tortoise near-black ground
+   #131313–#1A273A with cobalt-periwinkle flecks #5B8CCF–#6495D0 in irregular
+   blobs 3–8% of frame width, edges lifting to #93B5BF–#A7BEC6 when lit from
+   behind; red tortoise the same behaviour with oxblood flecks #4B1313–#501414.
+   Policy: rebuilt.
+
+   Gloss black behaves like polished dark resin: near-mirror on the flat
+   facets, so it mostly reads as reflections of the grey room rather than as
+   black. The tortoise is translucent and is the richest and most under-used
+   surface the brand owns — the flecks glow from behind, they are never a
+   repeating pattern, and the colour runs hottest where the material is
+   thinnest.
+
+   What it is not: real sub-surface scattering carries light *through* a
+   volume. This fakes it with a screen pass and an edge glow, so it holds for
+   a plate and not for a solid. The flecks also run smaller and more evenly
+   spread than the source, where a few blobs reach 8% of the frame width and
+   leave real clear ground between them -- pushed that far, thresholded
+   turbulence stops reading as inclusions in a material and starts reading as
+   droplets on one. Verified by building it both ways; this is the closer of
+   the two, and the gap is density, not colour. */
+
+.m-acetate-gloss {
+  background-color: var(--ds-gloss, #131313);
+  background-image:
+    linear-gradient(168deg, rgba(255, 255, 255, 0.1) 0, transparent 26%),
+    linear-gradient(0deg, rgba(210, 210, 210, 0.1) 0, transparent 34%),
+    linear-gradient(180deg, #1B1B1B 0, #101010 62%, #191919 100%);
+}
+
+/* The chamfer: a hard, thin, near-white line 1–3 px at render scale. */
+.m-acetate-chamfer {
+  box-shadow:
+    inset 0 1px 0 rgba(216, 216, 216, 0.72),
+    inset 0 -1px 0 rgba(58, 58, 58, 0.6);
+}
+
+.m-acetate-satin {
+  background-color: var(--ds-satin, #202020);
+  background-image: radial-gradient(120% 90% at 40% 8%, rgba(255, 255, 255, 0.24) 0, transparent 66%);
+}
+
+/* Blue tortoise, lit from behind. --glow-x / --glow-y move the backlight;
+   where it sits, the material opens up. */
+.m-tortoise {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  background-color: #10151F;
+  background-image:
+    /* the backlight, and the flecks glowing where it passes */
+    radial-gradient(
+      40% 54% at var(--glow-x) var(--glow-y),
+      rgba(167, 190, 198, 0.3) 0,
+      rgba(147, 181, 191, 0.13) 42%,
+      transparent 80%
+    ),
+    /* The flecks. One large tile at a high base frequency: a small tile at a
+       low frequency reads as repeating cloud, and the seams are visible at
+       frame scale. Alpha stays low so the ground remains near-black -- the
+       fleck is an inclusion in dark material, not a cloud on a light one. */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.026 0.034' numOctaves='3' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.35 0 0 0 0 0.58 0 0 0 3.6 -1.42'/></filter>\
+<rect width='900' height='560' filter='url(%23f)'/></svg>"),
+    /* a second, finer scatter so the flecks are not all one size */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.075' numOctaves='3' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.13 0 0 0 0 0.22 0 0 0 0 0.4 0 0 0 3.2 -1.5'/></filter>\
+<rect width='900' height='560' filter='url(%23g)'/></svg>"),
+    linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
+  background-size: auto, 100% 100%, 100% 100%, auto;
+  background-blend-mode: screen, screen, screen, normal;
+}
+
+/* Translucency: the rim glows from behind at #93B5BF–#A7BEC6. */
+.m-tortoise-rim {
+  box-shadow:
+    inset 0 0 calc(var(--u, 1%) * 2.4) rgba(147, 181, 191, 0.42),
+    inset 0 0 0 1px rgba(167, 190, 198, 0.28);
+}

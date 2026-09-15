@@ -1,0 +1,68 @@
+/* materials/ae-paper.css — AESDR, the cream field and its paper.
+
+   Quoted from the shipped :root and the syllabus/tools CSS
+   (study/aesdr.md §2, §4′).
+   Taken verbatim: --cream #FAF7F2, --ink #1A1A1A, --light #E8E4DF,
+   --crimson #8B1A1A, the red-ink #C53030, and the ruled-paper and aged-stock
+   recipes.
+   Policy: hybrid — the values cross, the compositions do not.
+
+   Cream is a warm off-white, never paper-white, and the ~1.5% luminance step
+   between #FAF7F2 and a #fff card is the primary figure-ground device: it is
+   deliberately very quiet. Borders carry all the structure; shadows are rare.
+   Radius is zero, stated outright in the token file: "AESDR is editorial —
+   sharp corners."
+
+   What it is not: the real aged stock is a photographed paper with fibre.
+   This is three background layers, so it holds at a distance and thins under
+   a magnifier. */
+
+.m-ae-field { background: var(--ae-cream, #FAF7F2); }
+.m-ae-card { background: #FFFFFF; border: 1px solid var(--ae-light, #E8E4DF); border-radius: 0; }
+
+/* The system speaking to you: a 3px crimson left-rule on white. */
+.m-ae-aside {
+  background: #FFFFFF;
+  border-left: 3px solid var(--ae-crimson, #8B1A1A);
+}
+
+/* Ruled paper, from the standalone tools. */
+.m-ae-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) var(--rule-step, 2.4%)
+  );
+  opacity: 0.5;
+}
+
+/* Aged card stock, from the syllabus. */
+.m-ae-stock {
+  background-color: var(--ae-catalog-field, #F4EADD);
+  background-image:
+    radial-gradient(ellipse at top, rgba(58, 42, 28, 0.08), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(58, 42, 28, 0.02) 0 2px, transparent 2px 28px),
+    linear-gradient(180deg, #EFE2CC 0%, #E6D4B6 100%);
+}
+
+/* The margin rail: Caveat handwriting in red ink behind a 2px crimson border.
+   #C53030 is the editor's pen and is NOT the brand crimson — they sit side by
+   side in the same files and are not interchangeable. */
+.m-ae-margin {
+  border-left: 2px solid var(--ae-redink, #C53030);
+  font-family: var(--ae-hand, "Caveat", cursive);
+  color: var(--ae-redink, #C53030);
+}
+
+.m-ae-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink, #C53030);
+  text-decoration-thickness: 2px;
+}
+
+.m-ae-insert {
+  color: var(--ae-redink, #C53030);
+  border-bottom: 2px solid var(--ae-redink, #C53030);
+}

@@ -1,0 +1,64 @@
+/* materials/an-field.css — Antaeus, the graph-paper field.
+
+   Quoted verbatim from the settled auth gate, which is the canonical
+   implementation (study/antaeus.md §2, addendum A2).
+   Taken: grid pitch 34px both axes at 1px, ink rgba(10,28,64,.08) — the brand
+   navy at 8%, never grey; grid origin center 0 on both axes so it is
+   symmetric about the page centreline; blue wash circle at 12% 0% alpha .05
+   stop 32%; orange wash circle at 88% 8% alpha .04 stop 30%; vignette ellipse
+   at center, transparent 30% → field at 82%.
+   Policy: hybrid — the recipe is the brand's own.
+
+   Caution from the renders: the grid is visible on the auth gate and only
+   there, and all fourteen operating-room captures show a completely flat
+   field. Using this is a revival, not a continuation. It is also the cheapest
+   way to make a bright field read as drafted rather than empty.
+
+   What it is not: the real field sits under live content that breaks it up.
+   Alone at frame scale the regularity is more visible than it ever is in the
+   product, so the vignette matters more here than it does there. */
+
+.m-an-field {
+  --an-grid-ink: var(--an-grid, rgba(10, 28, 64, 0.08));
+  position: relative;
+  background-color: var(--an-field-lt, #F6F8FC);
+  background-image:
+    radial-gradient(circle at 12% 0%, var(--an-wash-blue, rgba(37, 99, 235, 0.05)), transparent 32%),
+    radial-gradient(circle at 88% 8%, var(--an-wash-orange, rgba(230, 112, 30, 0.04)), transparent 30%),
+    linear-gradient(var(--an-grid-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--an-grid-ink) 1px, transparent 1px);
+  background-size:
+    auto, auto,
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px),
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px);
+  background-position: 0 0, 0 0, center 0, center 0;
+}
+
+/* The vignette dissolves the grid at the edges so it never boxes the page. */
+.m-an-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(246, 248, 252, 0.82) 100%);
+}
+
+/* The earth, from the settled auth gate: a faint forest stratum under a
+   permanent forest ground line. */
+.m-an-earth {
+  background: linear-gradient(180deg, rgba(27, 94, 63, 0.08) 0%, rgba(27, 94, 63, 0.02) 100%);
+}
+
+.m-an-ground {
+  background: var(--an-forest, #1B5E3F);
+}
+
+/* The orange-ruled block: a 3px left rule with an asymmetric radius, square
+   left and rounded right. The product's "here is the one move" object, and it
+   works at every scale. In blue it is the system explaining itself; in red
+   corrective; in amber caution. */
+.m-an-ruled {
+  background: var(--an-surface, #FFFFFF);
+  border-left: var(--an-rule-w, 3px) solid var(--an-orange, #E6701E);
+  border-radius: var(--an-radius-rule, 0 14px 14px 0);
+}

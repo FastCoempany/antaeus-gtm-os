@@ -1,0 +1,61 @@
+/* materials/ae-iris.css — AESDR, the iris.
+
+   Quoted verbatim from app/globals.css (study/aesdr.md §4′).
+   Policy: hybrid — the gradient stops are the brand's own material.
+
+   Seven stops, background-size 300% 100%, shimmer 4s linear infinite,
+   -webkit-background-clip: text where it carries type.
+
+   Its discipline is the whole trick, and it is why this reads as a brand
+   rather than as gradient-chic. Permitted: the wordmark, the single primary
+   CTA per surface, thin ambient lines of 1–2 px, one clipped payoff line, the
+   deck numeral. Forbidden: whole headlines, any panel or card fill, more than
+   one iris CTA on a surface, decorative swirls or halos, icons.
+
+   There is a family, not a fixed asset: the gate runs a no-pink variant and
+   the lesson player a more saturated one.
+
+   What it is not: the real shimmer runs continuously at 4s on a live page.
+   Under prefers-reduced-motion it holds a still frame, which loses the thing
+   the material is for. */
+
+.m-iris {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-text {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+/* The ambient line: 1px, full width, opacity .15. The most disciplined object
+   in the product. */
+.m-iris-line {
+  height: 1px;
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  opacity: 0.15;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+/* The gradient border, done with a double background — the signature trick. */
+.m-iris-border {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--ae-cream, #FAF7F2), var(--ae-cream, #FAF7F2)) padding-box,
+    var(--ae-iris) border-box;
+  background-size: auto, 300% 100%;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+@keyframes m-iris-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 300% 50%; }
+}

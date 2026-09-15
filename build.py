@@ -269,6 +269,7 @@ def substitute(text: str, values: dict) -> str:
 
 INCLUDE_RE = re.compile(r"<!--\s*@include\s+([\w./-]+)\s*-->")
 TOKENS_RE = re.compile(r"<!--\s*@tokens\s*-->")
+MATERIALS_RE = re.compile(r"<!--\s*@materials\s*-->")
 TEASER_RE = re.compile(r"<!--\s*@frame\s+(\d+)\s*-->")
 EACH_RE = re.compile(
     r"<!--\s*@each-frame\s+from=(\d+)\s+to=(\d+)\s*-->(.*?)<!--\s*@end-each\s*-->", re.S
@@ -287,6 +288,7 @@ def expand(text: str, ctx: dict, depth: int = 0) -> str:
 
     text = INCLUDE_RE.sub(inc, text)
     text = TOKENS_RE.sub(lambda m: "<style>\n" + ctx["tokens"] + "\n</style>", text)
+    text = MATERIALS_RE.sub(lambda m: "<style>\n" + ctx["materials"] + "\n</style>", text)
 
     by_num = {t["num"]: t for t in ctx["frames"]}
 
@@ -399,7 +401,12 @@ def build_single_pages(ctx: dict) -> list[Path]:
 
 def main() -> None:
     cfg = load_config()
-    ctx = {"cfg": cfg, "tokens": load_tokens(), "frames": load_frames()}
+    ctx = {
+        "cfg": cfg,
+        "tokens": load_tokens(),
+        "materials": load_materials(),
+        "frames": load_frames(),
+    }
     DIST.mkdir(exist_ok=True)
     (DIST / "frames").mkdir(exist_ok=True)
     for stale in (DIST / "frames").glob("*.html"):

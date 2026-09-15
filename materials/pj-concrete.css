@@ -1,0 +1,77 @@
+/* materials/pj-concrete.css — Puff Junction, faux concrete.
+
+   Measured from: Grinder_1.png, Grinder_3.png (study/puff-junction.md §2).
+   Taken: top face #69635C (catching brass bounce), front upper #565656, front
+   lower #585858, left #555555; the same material at #444444–#4B4947 in the
+   low-key set; local range within one face #0A0A0A → #A9A8A6.
+   Policy: rebuilt. Nothing crosses from the source but numbers.
+
+   Three scales of texture, all of them load-bearing:
+     1. broad cloudy mottling, ±10–15 levels, cells 15–25 mm on the object —
+        this is what makes it read as cast rather than painted
+     2. fine dark aggregate speckle, #35–#3A, sparse, 0.3–0.8 mm
+     3. a faint directional troweled streak, top face only
+
+   Fully achromatic: R = G = B in nearly every sample. Never tint it.
+   Roughness ~0.85 — there is no specular anywhere on this material, only a
+   broad soft luminance gradient.
+
+   What it is not: the real surface has genuine depth at the radiused corners
+   that a flat plane cannot carry, and real aggregate sits *in* the material
+   rather than on it. Corners want a Fresnel lift; this gives them a gradient. */
+
+.m-concrete {
+  --c-base: var(--pj-concrete, #565656);
+  --c-lit: var(--pj-concrete-lit, #69635C);
+  --c-shade: var(--pj-concrete-shade, #353535);
+  --c-mottle: 0.5;           /* strength of the cloud layer */
+  --c-grain: 0.42;           /* strength of the aggregate speckle */
+  --c-cell: 22%;             /* cloud cell, ~15–25 mm on an 85 mm face */
+  background-color: var(--c-base);
+  background-image:
+    /* 3 · the troweled streak, directional and very faint */
+    repeating-linear-gradient(
+      96deg,
+      rgba(255, 255, 255, 0.018) 0 2px,
+      rgba(0, 0, 0, 0.014) 2px 5px,
+      transparent 5px 11px
+    ),
+    /* 2 · aggregate: sparse dark pinpricks */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'>\
+<filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='7'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.21 0 0 0 0 0.23 0 0 0 -2.6 1.05'/></filter>\
+<rect width='90' height='90' filter='url(%23g)'/></svg>"),
+    /* 1 · the cloud: two turbulence octaves at different scales */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='4' seed='3'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.42 -0.2'/></filter>\
+<rect width='240' height='240' filter='url(%23c)'/></svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='d'><feTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' seed='11'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 -0.13'/></filter>\
+<rect width='240' height='240' filter='url(%23d)'/></svg>");
+  background-size: auto, 90px 90px, var(--c-cell) var(--c-cell), calc(var(--c-cell) * 0.55) calc(var(--c-cell) * 0.55);
+  background-blend-mode: overlay, multiply, soft-light, multiply;
+}
+
+/* A lit face: the broad soft falloff, no specular. */
+.m-concrete--lit {
+  box-shadow: inset 0 0 0 100vmax transparent;
+  background-color: var(--c-lit);
+}
+
+/* The parting seam: a crisp 1–1.5px dark line with the faintest chamfer
+   either side. A machined joint, not a crack. */
+.m-concrete-seam {
+  height: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0,
+    rgba(0, 0, 0, 0.62) 38%,
+    rgba(0, 0, 0, 0.62) 62%,
+    rgba(255, 255, 255, 0.045) 100%
+  );
+}
