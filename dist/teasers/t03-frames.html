@@ -951,34 +951,54 @@ html,body{margin:0;background:#000}
 .t03 .t03-main { position: absolute; left: 15%; top: 17.2%; width: 70%; height: 38.8%; overflow: visible; }
 .t03 .t03-reflect { position: absolute; left: 15%; top: 56%; width: 70%; height: 38.8%; transform: scaleY(-1); transform-origin: 50% 50%; opacity: 0.26; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 22%, rgba(0,0,0,0) 72%); mask-image: linear-gradient(to top, rgba(0,0,0,1) 22%, rgba(0,0,0,0) 72%); }
 .t03 .t03-reflect svg { width: 100%; height: 100%; overflow: visible; }
-.t03 .t03-layer { transition: opacity 320ms ease; }
+.t03 .t03-layer { transition: opacity 280ms ease; }
+/* Exactly one frame layer paints at a time: the pair crossfades, A down while
+   B comes up, so the subject never composites over itself. is-b is toggled on
+   the root, which is .t03 itself, so both rules are compound selectors and not
+   descendant ones: with a space the B layer never rose and only every second
+   recolor reached the frame. */
 .t03 .t03-layer.t03-b { opacity: 0; }
-.t03 .is-b .t03-layer.t03-b { opacity: 1; }
+.t03.is-b .t03-layer.t03-b { opacity: 1; }
+.t03.is-b .t03-layer.t03-a { opacity: 0; }
 .t03 .t03-acetate { stroke-linejoin: round; stroke-linecap: round; }
 .t03 .t03-sweep { will-change: transform; animation: t03-sweep 9s cubic-bezier(.4, 0, .2, 1) infinite; }
 .t03 .t03-matte .t03-spec { opacity: 0; }
 .t03 .t03-matte .t03-sweep { opacity: .35; }
 @keyframes t03-sweep { 0%, 14% { transform: translateX(-640px); } 66%, 100% { transform: translateX(780px); } }
 .t03 .t03-mark { position: absolute; left: 50%; top: 76%; transform: translateX(-50%); white-space: nowrap; text-align: center; font-family: var(--nds-font-display); font-stretch: 125%; font-weight: 500; font-size: calc(0.95 * var(--u)); letter-spacing: 0.14em; word-spacing: 0.3em; text-transform: uppercase; color: var(--nds-ink); opacity: 0.72; }
-.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(1.1 * var(--u)); }
-.t03 .t03-sw { width: calc(2.6 * var(--u)); height: calc(2.6 * var(--u)); padding: 0; border: 0; border-radius: 50%; cursor: pointer; position: relative; background: var(--sw-frame); box-shadow: 0 0 0 calc(0.0625 * var(--u)) rgba(255,255,255,0.25); transition: box-shadow 200ms ease, transform 200ms ease; }
+/* The strip is nine round swatches at one pitch, and each swatch carries an
+   invisible hit slop (::before) exactly one pitch wide and a finger tall,
+   centred on its dot. Nine 44px-wide boxes cannot fit across a 390px frame,
+   so the boxes TILE instead: no overlap, no gap, which puts the boundary
+   between two swatches on the true midpoint between their dots. Nothing is
+   lifted over a neighbour, so no swatch can ever shadow the one beside it.
+   The dot itself is the button, at its original size and centre, so the focus
+   ring lands 2px off the visible disc. */
+.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(1.1 * var(--u)); --t03-dot: calc(2.6 * var(--u)); --t03-pitch: calc(3.7 * var(--u)); /* a fingertip, not a fraction of the frame: this floor is in px on purpose, and it clears 44 by a hair so sub-pixel snapping cannot take it under */ --t03-hit-h: max(45px, calc(3.9 * var(--u))); --t03-slop-x: calc((var(--t03-pitch) - var(--t03-dot)) / 2); --t03-slop-y: calc((var(--t03-hit-h) - var(--t03-dot)) / 2); }
+.t03 .t03-sw { flex: 0 0 auto; position: relative; overflow: visible; width: var(--t03-dot); height: var(--t03-dot); margin: 0; padding: 0; border: 0; -webkit-appearance: none; appearance: none; border-radius: 50%; cursor: pointer; background: var(--sw-frame); box-shadow: 0 0 0 calc(0.0625 * var(--u)) rgba(255,255,255,0.25); transition: transform 200ms ease, box-shadow 200ms ease; }
+/* The slop is hung off the dot's own four edges rather than sized and centred,
+   so each hit box is exactly the dot plus half a gap on each side however the
+   dot's sub-pixel position falls: the boxes meet on the midpoint and cannot drift. */
+.t03 .t03-sw::before { content: ""; position: absolute; inset: calc(-1 * var(--t03-slop-y)) calc(-1 * var(--t03-slop-x)); transition: transform 200ms ease; }
 .t03 .t03-sw::after { content: ""; position: absolute; inset: 28%; border-radius: 50%; background: var(--sw-lens); }
-.t03 .t03-sw[aria-pressed="true"] { box-shadow: 0 0 0 calc(0.0625 * var(--u)) #FFFFFF, 0 0 0 calc(0.35 * var(--u)) #000000, 0 0 0 calc(0.42 * var(--u)) rgba(255,255,255,0.45); transform: translateY(calc(-0.25 * var(--u))); }
-.t03 .t03-sw:focus-visible { outline: 2px solid #F4F4F0; outline-offset: 4px; }
+.t03 .t03-sw[aria-pressed="true"] { transform: translateY(calc(-0.25 * var(--u))); box-shadow: 0 0 0 calc(0.0625 * var(--u)) #FFFFFF, 0 0 0 calc(0.35 * var(--u)) #000000, 0 0 0 calc(0.42 * var(--u)) rgba(255,255,255,0.45); }
+/* the pressed dot lifts; its hit slop stays put, so the tiling never breaks */
+.t03 .t03-sw[aria-pressed="true"]::before { transform: translateY(calc(0.25 * var(--u))); }
+.t03 .t03-sw:focus-visible { outline: 2px solid #F4F4F0; outline-offset: 2px; }
 </style>
 <script>
 (function () {
   var seq = 0;
   var SWATCHES = [
-    { name: "Gloss black, blackout lens", frame: "#1C1C1C", lens: ["#3A3A3A", "#262626"], kind: "gloss" },
-    { name: "Gloss black, smoke gradient lens", frame: "#1C1C1C", lens: ["#232428", "#5E626B"], kind: "gloss" },
-    { name: "Gloss black, silver mirror lens", frame: "#1C1C1C", lens: ["#B4B6BA", "#5A5C60"], kind: "gloss" },
-    { name: "Gloss black, amber lens", frame: "#1C1C1C", lens: ["#D5BB46", "#B99B2E"], kind: "gloss" },
-    { name: "Blue tortoise, ice cyan lens", frame: "#101C3C", lens: ["#83B8C6", "#5F98A8"], kind: "tortoise-blue" },
-    { name: "Red tortoise, blackout lens", frame: "#3A2626", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
-    { name: "Matte black, blackout lens", frame: "#232323", lens: ["#3A3A3A", "#262626"], kind: "matte" },
-    { name: "Gloss black, pale blue-grey lens", frame: "#1C1C1C", lens: ["#9FB3BF", "#7C919E"], kind: "gloss" },
-    { name: "Graphite, blackout lens", frame: "#545454", lens: ["#3A3A3A", "#262626"], kind: "gloss" }
+    { name: "gloss black, blackout lens", frame: "#1C1C1C", lens: ["#3A3A3A", "#262626"], kind: "gloss" },
+    { name: "gloss black, smoke gradient lens", frame: "#1C1C1C", lens: ["#232428", "#5E626B"], kind: "gloss" },
+    { name: "gloss black, silver mirror lens", frame: "#1C1C1C", lens: ["#B4B6BA", "#5A5C60"], kind: "gloss" },
+    { name: "gloss black, amber lens", frame: "#1C1C1C", lens: ["#D5BB46", "#B99B2E"], kind: "gloss" },
+    { name: "blue tortoise, ice cyan lens", frame: "#101C3C", lens: ["#83B8C6", "#5F98A8"], kind: "tortoise-blue" },
+    { name: "red tortoise, blackout lens", frame: "#3A2626", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
+    { name: "matte black, blackout lens", frame: "#232323", lens: ["#3A3A3A", "#262626"], kind: "matte" },
+    { name: "gloss black, pale blue-grey lens", frame: "#1C1C1C", lens: ["#9FB3BF", "#7C919E"], kind: "gloss" },
+    { name: "graphite, blackout lens", frame: "#545454", lens: ["#3A3A3A", "#262626"], kind: "gloss" }
   ];
   var NEAR = "M 440 382 L 724 372 L 726 536 Q 724 566 696 576 L 522 586 Q 448 582 440 522 Z";
   var FAR = "M 792 372 L 924 378 Q 956 468 940 546 Q 932 566 906 568 L 812 562 Q 794 550 792 522 Z";
@@ -1053,7 +1073,7 @@ html,body{margin:0;background:#000}
     SWATCHES.forEach(function (sw, i) {
       var b = document.createElement("button");
       b.type = "button"; b.className = "t03-sw";
-      b.setAttribute("aria-label", sw.name);
+      b.setAttribute("aria-label", "Recolor to " + sw.name);
       b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
       b.style.setProperty("--sw-frame", sw.kind === "tortoise-blue" ? "#243F84" : sw.kind === "tortoise-red" ? "#5C2E2E" : sw.frame);
       b.style.setProperty("--sw-lens", sw.lens[0]);

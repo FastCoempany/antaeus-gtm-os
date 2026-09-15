@@ -1470,34 +1470,54 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 .t03 .t03-main { position: absolute; left: 15%; top: 17.2%; width: 70%; height: 38.8%; overflow: visible; }
 .t03 .t03-reflect { position: absolute; left: 15%; top: 56%; width: 70%; height: 38.8%; transform: scaleY(-1); transform-origin: 50% 50%; opacity: 0.26; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 22%, rgba(0,0,0,0) 72%); mask-image: linear-gradient(to top, rgba(0,0,0,1) 22%, rgba(0,0,0,0) 72%); }
 .t03 .t03-reflect svg { width: 100%; height: 100%; overflow: visible; }
-.t03 .t03-layer { transition: opacity 320ms ease; }
+.t03 .t03-layer { transition: opacity 280ms ease; }
+/* Exactly one frame layer paints at a time: the pair crossfades, A down while
+   B comes up, so the subject never composites over itself. is-b is toggled on
+   the root, which is .t03 itself, so both rules are compound selectors and not
+   descendant ones: with a space the B layer never rose and only every second
+   recolor reached the frame. */
 .t03 .t03-layer.t03-b { opacity: 0; }
-.t03 .is-b .t03-layer.t03-b { opacity: 1; }
+.t03.is-b .t03-layer.t03-b { opacity: 1; }
+.t03.is-b .t03-layer.t03-a { opacity: 0; }
 .t03 .t03-acetate { stroke-linejoin: round; stroke-linecap: round; }
 .t03 .t03-sweep { will-change: transform; animation: t03-sweep 9s cubic-bezier(.4, 0, .2, 1) infinite; }
 .t03 .t03-matte .t03-spec { opacity: 0; }
 .t03 .t03-matte .t03-sweep { opacity: .35; }
 @keyframes t03-sweep { 0%, 14% { transform: translateX(-640px); } 66%, 100% { transform: translateX(780px); } }
 .t03 .t03-mark { position: absolute; left: 50%; top: 76%; transform: translateX(-50%); white-space: nowrap; text-align: center; font-family: var(--nds-font-display); font-stretch: 125%; font-weight: 500; font-size: calc(0.95 * var(--u)); letter-spacing: 0.14em; word-spacing: 0.3em; text-transform: uppercase; color: var(--nds-ink); opacity: 0.72; }
-.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(1.1 * var(--u)); }
-.t03 .t03-sw { width: calc(2.6 * var(--u)); height: calc(2.6 * var(--u)); padding: 0; border: 0; border-radius: 50%; cursor: pointer; position: relative; background: var(--sw-frame); box-shadow: 0 0 0 calc(0.0625 * var(--u)) rgba(255,255,255,0.25); transition: box-shadow 200ms ease, transform 200ms ease; }
+/* The strip is nine round swatches at one pitch, and each swatch carries an
+   invisible hit slop (::before) exactly one pitch wide and a finger tall,
+   centred on its dot. Nine 44px-wide boxes cannot fit across a 390px frame,
+   so the boxes TILE instead: no overlap, no gap, which puts the boundary
+   between two swatches on the true midpoint between their dots. Nothing is
+   lifted over a neighbour, so no swatch can ever shadow the one beside it.
+   The dot itself is the button, at its original size and centre, so the focus
+   ring lands 2px off the visible disc. */
+.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(1.1 * var(--u)); --t03-dot: calc(2.6 * var(--u)); --t03-pitch: calc(3.7 * var(--u)); /* a fingertip, not a fraction of the frame: this floor is in px on purpose, and it clears 44 by a hair so sub-pixel snapping cannot take it under */ --t03-hit-h: max(45px, calc(3.9 * var(--u))); --t03-slop-x: calc((var(--t03-pitch) - var(--t03-dot)) / 2); --t03-slop-y: calc((var(--t03-hit-h) - var(--t03-dot)) / 2); }
+.t03 .t03-sw { flex: 0 0 auto; position: relative; overflow: visible; width: var(--t03-dot); height: var(--t03-dot); margin: 0; padding: 0; border: 0; -webkit-appearance: none; appearance: none; border-radius: 50%; cursor: pointer; background: var(--sw-frame); box-shadow: 0 0 0 calc(0.0625 * var(--u)) rgba(255,255,255,0.25); transition: transform 200ms ease, box-shadow 200ms ease; }
+/* The slop is hung off the dot's own four edges rather than sized and centred,
+   so each hit box is exactly the dot plus half a gap on each side however the
+   dot's sub-pixel position falls: the boxes meet on the midpoint and cannot drift. */
+.t03 .t03-sw::before { content: ""; position: absolute; inset: calc(-1 * var(--t03-slop-y)) calc(-1 * var(--t03-slop-x)); transition: transform 200ms ease; }
 .t03 .t03-sw::after { content: ""; position: absolute; inset: 28%; border-radius: 50%; background: var(--sw-lens); }
-.t03 .t03-sw[aria-pressed="true"] { box-shadow: 0 0 0 calc(0.0625 * var(--u)) #FFFFFF, 0 0 0 calc(0.35 * var(--u)) #000000, 0 0 0 calc(0.42 * var(--u)) rgba(255,255,255,0.45); transform: translateY(calc(-0.25 * var(--u))); }
-.t03 .t03-sw:focus-visible { outline: 2px solid #F4F4F0; outline-offset: 4px; }
+.t03 .t03-sw[aria-pressed="true"] { transform: translateY(calc(-0.25 * var(--u))); box-shadow: 0 0 0 calc(0.0625 * var(--u)) #FFFFFF, 0 0 0 calc(0.35 * var(--u)) #000000, 0 0 0 calc(0.42 * var(--u)) rgba(255,255,255,0.45); }
+/* the pressed dot lifts; its hit slop stays put, so the tiling never breaks */
+.t03 .t03-sw[aria-pressed="true"]::before { transform: translateY(calc(0.25 * var(--u))); }
+.t03 .t03-sw:focus-visible { outline: 2px solid #F4F4F0; outline-offset: 2px; }
 </style>
 <script>
 (function () {
   var seq = 0;
   var SWATCHES = [
-    { name: "Gloss black, blackout lens", frame: "#1C1C1C", lens: ["#3A3A3A", "#262626"], kind: "gloss" },
-    { name: "Gloss black, smoke gradient lens", frame: "#1C1C1C", lens: ["#232428", "#5E626B"], kind: "gloss" },
-    { name: "Gloss black, silver mirror lens", frame: "#1C1C1C", lens: ["#B4B6BA", "#5A5C60"], kind: "gloss" },
-    { name: "Gloss black, amber lens", frame: "#1C1C1C", lens: ["#D5BB46", "#B99B2E"], kind: "gloss" },
-    { name: "Blue tortoise, ice cyan lens", frame: "#101C3C", lens: ["#83B8C6", "#5F98A8"], kind: "tortoise-blue" },
-    { name: "Red tortoise, blackout lens", frame: "#3A2626", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
-    { name: "Matte black, blackout lens", frame: "#232323", lens: ["#3A3A3A", "#262626"], kind: "matte" },
-    { name: "Gloss black, pale blue-grey lens", frame: "#1C1C1C", lens: ["#9FB3BF", "#7C919E"], kind: "gloss" },
-    { name: "Graphite, blackout lens", frame: "#545454", lens: ["#3A3A3A", "#262626"], kind: "gloss" }
+    { name: "gloss black, blackout lens", frame: "#1C1C1C", lens: ["#3A3A3A", "#262626"], kind: "gloss" },
+    { name: "gloss black, smoke gradient lens", frame: "#1C1C1C", lens: ["#232428", "#5E626B"], kind: "gloss" },
+    { name: "gloss black, silver mirror lens", frame: "#1C1C1C", lens: ["#B4B6BA", "#5A5C60"], kind: "gloss" },
+    { name: "gloss black, amber lens", frame: "#1C1C1C", lens: ["#D5BB46", "#B99B2E"], kind: "gloss" },
+    { name: "blue tortoise, ice cyan lens", frame: "#101C3C", lens: ["#83B8C6", "#5F98A8"], kind: "tortoise-blue" },
+    { name: "red tortoise, blackout lens", frame: "#3A2626", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
+    { name: "matte black, blackout lens", frame: "#232323", lens: ["#3A3A3A", "#262626"], kind: "matte" },
+    { name: "gloss black, pale blue-grey lens", frame: "#1C1C1C", lens: ["#9FB3BF", "#7C919E"], kind: "gloss" },
+    { name: "graphite, blackout lens", frame: "#545454", lens: ["#3A3A3A", "#262626"], kind: "gloss" }
   ];
   var NEAR = "M 440 382 L 724 372 L 726 536 Q 724 566 696 576 L 522 586 Q 448 582 440 522 Z";
   var FAR = "M 792 372 L 924 378 Q 956 468 940 546 Q 932 566 906 568 L 812 562 Q 794 550 792 522 Z";
@@ -1572,7 +1592,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
     SWATCHES.forEach(function (sw, i) {
       var b = document.createElement("button");
       b.type = "button"; b.className = "t03-sw";
-      b.setAttribute("aria-label", sw.name);
+      b.setAttribute("aria-label", "Recolor to " + sw.name);
       b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
       b.style.setProperty("--sw-frame", sw.kind === "tortoise-blue" ? "#243F84" : sw.kind === "tortoise-red" ? "#5C2E2E" : sw.frame);
       b.style.setProperty("--sw-lens", sw.lens[0]);
@@ -2065,54 +2085,83 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 
 <figure class="tile" data-teaser-num="6">
   <div class="tile-frame">
-<!-- teaser id=coach-exchange num=6 source=aesdr focal=46%,42% loop=10 interactive=no -->
-<div class="stage t06" data-teaser="coach-exchange" style="--fx:0.46;--fy:0.42" role="img" aria-label="A practice exchange: what the learner said, and the coach's reply">
+<!-- teaser id=coach-exchange num=6 source=aesdr focal=50%,50% loop=10 interactive=no -->
+<div class="stage t06" data-teaser="coach-exchange" style="--fx:0.50;--fy:0.50" role="img" aria-label="A practice exchange on paper: what the learner said, and the coach's reply">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t06-sheet">
       <div class="t06-head"><span class="t06-kicker">Practice 02</span><span class="t06-kicker">Cold open</span></div>
       <div class="t06-block">
         <span class="t06-label">You said</span>
-        <span class="t06-line t06-a1">“Hi, this is Dana from Halden Supply. Do you have a minute?”</span>
-        <span class="t06-line t06-a2">“Hi, this is Dana. I’m calling because your team posted three new roles this week.”</span>
+        <span class="t06-stack">
+          <span class="t06-line t06-a1">“Hi, this is Dana from Halden Supply. Do you have a minute?”</span>
+          <span class="t06-line t06-a2">“Hi, this is Dana. I saw you posted three new roles this week.”</span>
+        </span>
       </div>
       <div class="t06-block t06-coach">
         <span class="t06-label">Coach</span>
-        <span class="t06-reply t06-r1">You gave your name and asked for time. Give the reason first, then ask for the time.</span>
-        <span class="t06-reply t06-r2">Better. The reason came first and it was theirs, not yours. Now stop talking and let them answer.</span>
+        <span class="t06-stack">
+          <span class="t06-reply t06-r1">You gave your name and asked for time. Give the reason first, then ask.</span>
+          <span class="t06-reply t06-r2">Better. The reason came first, and it was about them. Now stop and listen.</span>
+        </span>
         <span class="t06-under"><i></i></span>
       </div>
     </div>
   </div></div>
 </div>
 <style>
-.t06 .t06-sheet { position: absolute; left: 15%; top: 17%; width: 70%; height: 66%; padding: calc(3 * var(--u)) calc(4 * var(--u)); background: var(--aes-paper); color: var(--aes-ink); border: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-head { display: flex; justify-content: space-between; padding-bottom: calc(1.2 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-kicker { font-family: var(--aes-font-mono); font-size: calc(0.95 * var(--u)); letter-spacing: 0.25em; text-transform: uppercase; color: var(--aes-muted); }
-.t06 .t06-block { position: relative; margin-top: calc(3 * var(--u)); }
-.t06 .t06-label { display: block; font-family: var(--aes-font-label); font-weight: 600; font-size: calc(1.15 * var(--u)); letter-spacing: 0.15em; text-transform: uppercase; color: var(--aes-muted); margin-bottom: calc(0.9 * var(--u)); }
-.t06 .t06-line, .t06 .t06-reply { display: block; font-family: var(--aes-font-body); }
-.t06 .t06-line { font-weight: 500; font-size: calc(2.6 * var(--u)); line-height: 1.32; color: var(--aes-ink); max-width: calc(52 * var(--u)); }
-.t06 .t06-a2, .t06 .t06-r2 { position: absolute; left: 0; top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u)); }
-.t06 .t06-a1, .t06 .t06-a2 { animation: t06-a1 10s ease-in-out infinite; will-change: opacity, transform; }
-.t06 .t06-a2 { animation-name: t06-a2; opacity: 0; }
-.t06 .t06-coach { margin-top: calc(3.2 * var(--u)); padding-top: calc(2.4 * var(--u)); border-top: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-reply { font-weight: 400; font-size: calc(2.1 * var(--u)); line-height: 1.42; color: var(--aes-ink); max-width: calc(50 * var(--u)); }
+/* The page chrome sets a fixed line-height (24px) and border-box; the single-teaser
+   and probe pages set neither. Both are re-declared here so the sheet lays out from
+   --u alone and measures the same at 334px and at 1600px. */
+.t06 .t06-sheet, .t06 .t06-sheet * { box-sizing: border-box; }
+/* Paper, centred, bleeding past both crop edges; the type sits in a 47u column
+   (scene x 26.5–73.5) so the 4:5 crop at 25–75% never slices a word. */
+.t06 .t06-sheet {
+  position: absolute; left: 13%; top: 50%; width: 74%; min-height: 71%;
+  padding: calc(5.2 * var(--u)) calc(13.5 * var(--u));
+  transform: translateY(-50%);
+  background-color: var(--aes-paper);
+  background-image: linear-gradient(118deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 46%);
+  color: var(--aes-ink); font-size: calc(1 * var(--u)); line-height: 1.45;
+}
+.t06 .t06-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: calc(1.4 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-kicker { font-family: var(--aes-font-mono); font-weight: var(--aes-weight-mono); font-size: calc(1.05 * var(--u)); line-height: 1.3; letter-spacing: 0.24em; text-transform: uppercase; color: var(--aes-muted); }
+.t06 .t06-block { margin-top: calc(3.6 * var(--u)); }
+.t06 .t06-label { display: block; font-family: var(--aes-font-label); font-weight: var(--aes-weight-label); font-size: calc(1.25 * var(--u)); line-height: 1.3; letter-spacing: 0.16em; text-transform: uppercase; color: var(--aes-muted); margin-bottom: calc(1.05 * var(--u)); }
+/* Both attempts share one grid cell, so the block is always as tall as the longer
+   of the two and neither can push past the foot of the paper at any width. */
+.t06 .t06-stack { display: grid; }
+.t06 .t06-stack > * { grid-area: 1 / 1; align-self: start; }
+.t06 .t06-line, .t06 .t06-reply { display: block; font-family: var(--aes-font-body); color: var(--aes-ink); }
+.t06 .t06-line { font-weight: var(--aes-weight-body-strong); font-size: calc(2.7 * var(--u)); line-height: 1.34; }
+.t06 .t06-reply { font-weight: var(--aes-weight-body); font-size: calc(2.2 * var(--u)); line-height: 1.45; }
+.t06 .t06-coach { margin-top: calc(3.8 * var(--u)); padding-top: calc(2.8 * var(--u)); border-top: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-under { display: block; position: relative; margin-top: calc(2 * var(--u)); width: calc(16 * var(--u)); height: calc(0.1875 * var(--u)); overflow: hidden; transform-origin: left center; }
+/* Three whole runs of the iris tiled across the strip, so the rule always shows the
+   complete spectrum and the shimmer travels exactly one tile: no seam at the loop. */
+.t06 .t06-under i { position: absolute; inset: 0; width: 300%; background-image: var(--aes-iris); background-size: 33.3333% 100%; }
+/* The loop follows the causality of a real practice call: the learner says it
+   again, and only then does the coach react to the new attempt. The two blocks
+   never change at the same time — while the learner line swaps, the coach's note
+   and its rule hold the paper; while the note retypes, the new learner line holds
+   it — so the sheet is never blank. */
+.t06 .t06-a1 { animation: t06-a1 10s ease-in-out infinite; will-change: opacity, transform; }
+.t06 .t06-a2 { animation: t06-a2 10s ease-in-out infinite; opacity: 0; will-change: opacity, transform; }
 .t06 .t06-r1 { animation: t06-r1 10s ease-in-out infinite; will-change: opacity; }
 .t06 .t06-r2 { animation: t06-r2 10s ease-in-out infinite; opacity: 0; will-change: opacity; }
-/* the words: each appears on its own beat (the reply types in); the erase is the whole block fading at once, so no word ever hangs mid-air */
+/* Each word arrives on its own beat; the erase is the whole block fading at once,
+   so no word is ever left hanging mid-air. */
 .t06 .t06-reply span { display: inline-block; animation: t06-w1 10s linear infinite; animation-delay: calc(var(--i) * 0.06s); }
-.t06 .t06-r2 { top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u) + 2.4 * var(--u)); }
 .t06 .t06-r2 span { animation-name: t06-w2; opacity: 0; }
-.t06 .t06-under { display: block; position: relative; margin-top: calc(1.6 * var(--u)); width: calc(18 * var(--u)); height: calc(0.125 * var(--u)); overflow: hidden; transform-origin: left center; animation: t06-under 10s cubic-bezier(.4, 0, .2, 1) infinite; }
-.t06 .t06-under i { position: absolute; inset: 0; width: 300%; background: var(--aes-iris); animation: t06-shimmer 6s linear infinite; will-change: transform; }
-@keyframes t06-a1 { 0%, 18% { opacity: 1; transform: translateY(0); } 22%, 76% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } 80%, 100% { opacity: 1; transform: translateY(0); } }
-@keyframes t06-a2 { 0%, 24% { opacity: 0; transform: translateY(calc(0.6 * var(--u))); } 28%, 70% { opacity: 1; transform: translateY(0); } 74%, 100% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } }
-@keyframes t06-r1 { 0%, 18% { opacity: 1; } 21%, 80% { opacity: 0; } 83%, 100% { opacity: 1; } }
-@keyframes t06-r2 { 0%, 28% { opacity: 0; } 30.5%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
-@keyframes t06-w1 { 0%, 18% { opacity: 1; } 30%, 83.5% { opacity: 0; } 84%, 100% { opacity: 1; } }
-@keyframes t06-w2 { 0%, 30.5% { opacity: 0; } 31%, 74% { opacity: 1; } 76%, 100% { opacity: 0; } }
-@keyframes t06-under { 0%, 18% { transform: scaleX(1); } 21%, 43% { transform: scaleX(0); } 49%, 70% { transform: scaleX(1); } 73%, 95% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-@keyframes t06-shimmer { from { transform: translateX(0); } to { transform: translateX(-66.66%); } }
+.t06 .t06-under { animation: t06-under 10s ease-in-out infinite; }
+.t06 .t06-under i { animation: t06-shimmer 6s linear infinite; will-change: transform; }
+@keyframes t06-a1 { 0%, 16% { opacity: 1; transform: translateY(0); } 20%, 72% { opacity: 0; transform: translateY(calc(-0.5 * var(--u))); } 72.01% { opacity: 0; transform: translateY(calc(0.5 * var(--u))); } 77%, 100% { opacity: 1; transform: translateY(0); } }
+@keyframes t06-a2 { 0%, 20% { opacity: 0; transform: translateY(calc(0.5 * var(--u))); } 25%, 68% { opacity: 1; transform: translateY(0); } 72%, 100% { opacity: 0; transform: translateY(calc(-0.5 * var(--u))); } }
+@keyframes t06-r1 { 0%, 26% { opacity: 1; } 29%, 81.5% { opacity: 0; } 82%, 100% { opacity: 1; } }
+@keyframes t06-r2 { 0%, 29% { opacity: 0; } 30%, 78% { opacity: 1; } 81%, 100% { opacity: 0; } }
+@keyframes t06-w1 { 0%, 26% { opacity: 1; } 28%, 81.5% { opacity: 0; } 82%, 100% { opacity: 1; } }
+@keyframes t06-w2 { 0%, 29.5% { opacity: 0; } 30%, 78% { opacity: 1; } 80%, 100% { opacity: 0; } }
+@keyframes t06-under { 0%, 25% { transform: scaleX(1); } 29%, 40% { transform: scaleX(0); } 47%, 77% { transform: scaleX(1); } 81%, 91% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes t06-shimmer { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
 </style>
 <script>
 (function () {
@@ -2470,7 +2519,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 <figure class="tile" data-teaser-num="9">
   <div class="tile-frame">
 <!-- teaser id=territory-tiles num=9 source=gtmos focal=50%,50% loop=8 interactive=yes -->
-<div class="stage t09" data-teaser="territory-tiles" style="--fx:0.50;--fy:0.50" role="group" aria-label="Thirteen glass tiles that drift in from scattered positions and lock into a territory shape; one tile sits forward at a different depth. Hover or focus a tile to lift it">
+<div class="stage t09" data-teaser="territory-tiles" style="--fx:0.50;--fy:0.50" role="group" aria-label="A field of glass tiles that drift in from scattered positions and lock into a territory shape; one tile sits forward at a different depth. Hover or focus a tile to lift it">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t09-rig"><div class="t09-plane"><div class="t09-field"></div></div></div>
   </div></div>
@@ -2481,6 +2530,9 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 .t09 .t09-plane { position: absolute; inset: 0; transform-style: flat; transform: rotateX(var(--gtm-tilt-x)); }
 /* the field is a flat layer on the tilted plane: the tiles are hit-tested in 2D (Chromium drops pointer hits on buttons nested in preserve-3d contexts), so depth is drawn as scale and shadow rather than z */
 .t09 .t09-field { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(3, 1fr); gap: calc(0.5 * var(--u)); transform-style: flat; }
+/* touch targets under the 4:5 crop. The field is 72u wide at left 17u, five columns with 0.5u gaps: columns are 14u on a 14.5u pitch, so column five spans 75u-89u. The crop shows scene x 25u-75u, so column five lands exactly past the right edge with no visible face at all, while its buttons stay in the tab order off-frame. Hiding them there costs nothing visually and leaves every remaining target at least 44x44 (the smallest, the half-cropped column one, measures 45x93 at 390). Full-frame keeps all thirteen.
+   The pair of conditions is deliberate: the stage crops itself below 640px of its own width, but a page may opt its stages out of that crop while they are still narrow (the wall does, from 768px up). Requiring the viewport to be below that boundary too means this rule can only fail by not firing, never by hiding a tile that is actually on screen */
+@media (max-width: 767px) { @container (max-width: 639px) { .t09 .t09-edge { visibility: hidden; } } }
 /* a cell is the moving thing: it drifts in from its own scattered position (--sx --sy, its depth --ss as scale, --sr) and locks */
 .t09 .t09-cell { position: relative; grid-column: var(--c); grid-row: var(--r); transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; will-change: transform, opacity; animation: t09-drift-a var(--t09-loop) var(--gtm-loop-ease) infinite; }
 .t09 .t09-cell.t09-g2 { animation-name: t09-drift-b; }
@@ -2510,7 +2562,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 </style>
 <script>
 (function () {
-  /* thirteen divisions of an invented territory: name, tier (spoken only), cell (column, row), glyph, drift group, scattered origin */
+  /* thirteen zones of an invented territory: name, tier (spoken only), cell (column, row), glyph, drift group, scattered origin */
   var TILES = [
     ["Coastal", "Tier one", 2, 1, 0, 1, [-9, -7, -6, -7]],
     ["Northern", "Tier two", 3, 1, 1, 2, [3, -9, -2, 5]],
@@ -2537,7 +2589,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
   var FWD = 5; /* Metro, the forward tile */
   function tile(spec, i) {
     var cell = document.createElement("div");
-    cell.className = "t09-cell t09-g" + (spec[4] + 1) + (i === FWD ? " t09-fwd" : "");
+    cell.className = "t09-cell t09-g" + (spec[4] + 1) + (i === FWD ? " t09-fwd" : "") + (spec[2] === 5 ? " t09-edge" : "");
     cell.style.setProperty("--c", spec[2]); cell.style.setProperty("--r", spec[3]);
     var s = spec[6];
     cell.style.setProperty("--sx", "calc(" + s[0] * 0.55 + " * var(--u))");
@@ -2546,7 +2598,8 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
     cell.style.setProperty("--sr", s[3] + "deg");
     var b = document.createElement("button");
     b.type = "button"; b.className = "t09-tile";
-    b.setAttribute("aria-label", spec[0] + ", " + spec[1].toLowerCase() + (i === FWD ? ", the forward division" : ""));
+    /* the label is the action the control performs, not the thing it names */
+    b.setAttribute("aria-label", "Lift " + spec[0] + ", " + spec[1].toLowerCase() + (i === FWD ? ", forward" : ""));
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("class", "t09-glyph"); svg.setAttribute("viewBox", "0 0 16 16"); svg.setAttribute("aria-hidden", "true");
     var p = document.createElementNS(NS, "path");
@@ -2576,112 +2629,176 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 <figure class="tile" data-teaser-num="10">
   <div class="tile-frame">
 <!-- teaser id=course-arc num=10 source=aesdr focal=50%,50% loop=8 interactive=no -->
-<div class="stage t10" data-teaser="course-arc" style="--fx:0.5;--fy:0.5" role="img" aria-label="Seven courses on a curve, in order, the current one lit">
+<div class="stage t10" data-teaser="course-arc" style="--fx:0.5;--fy:0.5" role="img" aria-label="Seven courses numbered along a shallow curve, the third one lit and named">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t10-sheet">
-      <div class="t10-head"><span class="t10-kicker">Seven courses</span><span class="t10-kicker">03 / 07</span></div>
-      <svg class="t10-svg" viewBox="0 0 1280 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="t10-head">
+        <span class="t10-kicker">Seven courses</span>
+        <span class="t10-count"><span class="t10-cur t10-fade-a">03 / 07</span><span class="t10-cur t10-swap-b">04 / 07</span></span>
+      </div>
+      <div class="t10-arc">
+        <svg class="t10-svg" viewBox="0 0 1280 316" aria-hidden="true"></svg>
+      </div>
     </div>
   </div></div>
 </div>
 <style>
-.t10 .t10-sheet { position: absolute; left: 12%; top: 20%; width: 76%; height: 60%; padding: calc(3 * var(--u)) calc(4 * var(--u)) calc(2 * var(--u)); background: var(--aes-paper); color: var(--aes-ink); border: calc(0.0625 * var(--u)) solid var(--aes-light); display: flex; flex-direction: column; }
-.t10 .t10-head { display: flex; justify-content: space-between; padding-bottom: calc(1.2 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t10 .t10-kicker { font-family: var(--aes-font-mono); font-size: calc(0.95 * var(--u)); letter-spacing: 0.25em; text-transform: uppercase; color: var(--aes-muted); }
-.t10 .t10-svg { flex: 1; width: 100%; min-height: 0; margin-top: calc(1 * var(--u)); overflow: visible; }
-.t10 .t10-track { fill: none; stroke: var(--aes-light); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
-.t10 .t10-prog { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 66.667; animation: t10-prog 8s cubic-bezier(.4, 0, .2, 1) infinite; }
-.t10 .t10-mark circle.t10-ring { fill: var(--aes-paper); stroke: var(--aes-light); stroke-width: 1.5; }
-.t10 .t10-mark.is-done circle.t10-ring { fill: var(--aes-crimson); stroke: var(--aes-crimson); stroke-width: 2; }
-.t10 .t10-mark circle.t10-done { fill: var(--aes-crimson); opacity: 0; }
-.t10 .t10-mark text { font-family: var(--aes-font-mono); font-size: 13px; letter-spacing: 0.06em; text-anchor: middle; dominant-baseline: central; fill: var(--aes-muted); }
-.t10 .t10-mark.is-done text { fill: var(--aes-paper); }
-.t10 .t10-mark text.t10-numlight { fill: var(--aes-paper); opacity: 0; }
-.t10 .t10-glow { will-change: transform, opacity; }
-.t10 .t10-glow .t10-halo { fill: var(--aes-crimson); opacity: 0.16; }
-.t10 .t10-glow .t10-halo2 { fill: var(--aes-crimson); opacity: 0.32; }
-.t10 .t10-glow .t10-cur { fill: var(--aes-paper); stroke: var(--aes-ink); stroke-width: 2.5; }
-.t10 .t10-title { font-family: var(--aes-font-body); font-weight: 500; font-size: 34px; fill: var(--aes-ink); opacity: 0; }
-.t10 .t10-title.t10-t3 { opacity: 1; }
-.t10 .t10-glow { animation: t10-glow 8s cubic-bezier(.4, 0, .2, 1) infinite; }
-.t10 .t10-m3 .t10-done, .t10 .t10-m3 .t10-numlight { animation: t10-done3 8s ease-in-out infinite; }
-.t10 .t10-m4 .t10-done, .t10 .t10-m4 .t10-numlight { animation: t10-done4 8s ease-in-out infinite; }
-.t10 .t10-t3 { animation: t10-t3 8s ease-in-out infinite; }
-.t10 .t10-t4 { animation: t10-t4 8s ease-in-out infinite; }
-.t10 .t10-t5 { animation: t10-t5 8s ease-in-out infinite; }
-@keyframes t10-glow {
-  0%, 26% { transform: translate(var(--p3x), var(--p3y)); opacity: 1; }
-  34%, 54% { transform: translate(var(--p4x), var(--p4y)); opacity: 1; }
-  62%, 86% { transform: translate(var(--p5x), var(--p5y)); opacity: 1; }
-  91% { transform: translate(var(--p5x), var(--p5y)); opacity: 0; }
-  91.1% { transform: translate(var(--p3x), var(--p3y)); opacity: 0; }
-  96%, 100% { transform: translate(var(--p3x), var(--p3y)); opacity: 1; }
+.t10 .t10-sheet, .t10 .t10-head, .t10 .t10-arc, .t10 .t10-count { box-sizing: border-box; }
+.t10 .t10-sheet {
+  position: absolute; left: 8.5%; top: 18%; width: 83%; height: calc(40 * var(--u));
+  padding: calc(7 * var(--u)) 0;
+  background: var(--aes-paper); color: var(--aes-ink);
+  border: calc(0.0625 * var(--u)) solid var(--aes-light);
+  display: flex; flex-direction: column;
 }
-@keyframes t10-prog { 0%, 26% { stroke-dashoffset: 66.667; } 34%, 54% { stroke-dashoffset: 50; } 62%, 86% { stroke-dashoffset: 33.333; } 96%, 100% { stroke-dashoffset: 66.667; } }
-@keyframes t10-done3 { 0%, 27% { opacity: 0; } 33%, 87% { opacity: 1; } 95%, 100% { opacity: 0; } }
-@keyframes t10-done4 { 0%, 55% { opacity: 0; } 61%, 87% { opacity: 1; } 95%, 100% { opacity: 0; } }
-@keyframes t10-t3 { 0%, 26% { opacity: 1; } 31%, 90% { opacity: 0; } 97%, 100% { opacity: 1; } }
-@keyframes t10-t4 { 0%, 31% { opacity: 0; } 36%, 54% { opacity: 1; } 59%, 100% { opacity: 0; } }
-@keyframes t10-t5 { 0%, 59% { opacity: 0; } 64%, 87% { opacity: 1; } 92%, 100% { opacity: 0; } }
+.t10 .t10-head {
+  display: flex; justify-content: center; align-items: baseline; gap: calc(5 * var(--u));
+  padding-bottom: calc(1.6 * var(--u));
+  border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light);
+}
+.t10 .t10-kicker, .t10 .t10-count, .t10 .t10-cur {
+  font-family: var(--aes-font-mono); font-weight: var(--aes-weight-mono);
+  font-size: calc(1.25 * var(--u)); line-height: 1.3;
+  letter-spacing: var(--aes-eyebrow-track); text-transform: var(--aes-label-case);
+  color: var(--aes-muted); white-space: nowrap;
+}
+/* both readings share one cell, so the swap cannot shift the running head */
+.t10 .t10-count { display: inline-grid; }
+.t10 .t10-cur { grid-area: 1 / 1; }
+.t10 .t10-arc { width: calc(70 * var(--u)); margin: calc(5 * var(--u)) auto 0; }
+.t10 .t10-svg { display: block; width: 100%; aspect-ratio: 1280 / 316; overflow: visible; }
+
+.t10 .t10-track { fill: none; stroke: var(--aes-form-border); stroke-width: 2.5; stroke-dasharray: 2.5 9; stroke-linecap: round; opacity: 0.75; }
+.t10 .t10-prog { fill: none; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 66.667; }
+.t10 .t10-ring { fill: var(--aes-paper); stroke: var(--aes-form-border); stroke-width: 2.4; }
+.t10 .t10-mark.is-done .t10-ring { fill: var(--aes-crimson); stroke: var(--aes-crimson); }
+.t10 .t10-num { font-family: var(--aes-font-mono); letter-spacing: 0.06em; text-anchor: middle; dominant-baseline: central; fill: var(--aes-muted); }
+.t10 .t10-mark.is-done .t10-num { fill: var(--aes-paper); }
+.t10 .t10-fill { fill: var(--aes-crimson); opacity: 0; }
+.t10 .t10-numlight { fill: var(--aes-paper); opacity: 0; }
+
+.t10 .t10-glow { transform-box: view-box; transform-origin: 0 0; transform: translate(var(--p3x, 446.8px), var(--p3y, 105.6px)); will-change: transform; }
+.t10 .t10-halo { fill: var(--aes-crimson); opacity: 0.12; }
+.t10 .t10-halo2 { fill: var(--aes-crimson); opacity: 0.26; }
+.t10 .t10-disc { fill: var(--aes-paper); stroke: var(--aes-ink); stroke-width: 3; }
+.t10 .t10-gnum { font-family: var(--aes-font-mono); letter-spacing: 0.06em; text-anchor: middle; dominant-baseline: central; fill: var(--aes-ink); }
+.t10 .t10-leader { stroke: var(--aes-form-border); stroke-width: 2; }
+.t10 .t10-title { font-family: var(--aes-font-body); font-weight: var(--aes-weight-body-strong); text-anchor: middle; fill: var(--aes-ink); }
+.t10 .t10-fade-b, .t10 .t10-swap-b { opacity: 0; }
+
+/* the name clears before the marker moves and resolves once it lands, so two
+   courses never print over each other */
+.t10 .t10-glow { animation: t10-step 8s var(--aes-loop-ease) infinite; }
+.t10 .t10-prog { animation: t10-prog 8s var(--aes-loop-ease) infinite; }
+.t10 .t10-fade-a { animation: t10-fade-a 8s ease-in-out infinite; }
+.t10 .t10-fade-b { animation: t10-fade-b 8s ease-in-out infinite; }
+.t10 .t10-swap-b { animation: t10-swap-b 8s ease-in-out infinite; }
+.t10 .t10-leader { animation: t10-leader 8s ease-in-out infinite; }
+.t10 .t10-fill, .t10 .t10-numlight { animation: t10-settle 8s ease-in-out infinite; }
+@keyframes t10-step {
+  0%, 18% { transform: translate(var(--p3x, 446.8px), var(--p3y, 105.6px)); }
+  28%, 62% { transform: translate(var(--p4x, 640px), var(--p4y, 99px)); }
+  72%, 100% { transform: translate(var(--p3x, 446.8px), var(--p3y, 105.6px)); }
+}
+@keyframes t10-prog {
+  0%, 18% { stroke-dashoffset: 66.667; }
+  28%, 62% { stroke-dashoffset: 50; }
+  72%, 100% { stroke-dashoffset: 66.667; }
+}
+@keyframes t10-fade-a { 0%, 13% { opacity: 1; } 18%, 72% { opacity: 0; } 77%, 100% { opacity: 1; } }
+@keyframes t10-fade-b { 0%, 28% { opacity: 0; } 33%, 57% { opacity: 1; } 62%, 100% { opacity: 0; } }
+@keyframes t10-swap-b { 0%, 13% { opacity: 0; } 18%, 72% { opacity: 1; } 77%, 100% { opacity: 0; } }
+@keyframes t10-leader {
+  0%, 13% { opacity: 1; } 18%, 28% { opacity: 0; }
+  33%, 57% { opacity: 1; } 62%, 72% { opacity: 0; } 77%, 100% { opacity: 1; }
+}
+@keyframes t10-settle { 0%, 22% { opacity: 0; } 30%, 64% { opacity: 1; } 70%, 100% { opacity: 0; } }
 </style>
 <script>
 (function () {
-  var count = 0;
+  var seq = 0;
   var roots = document.querySelectorAll(".stage.t10");
   Array.prototype.forEach.call(roots, function (root) {
     if (root.dataset.ready) return;
     root.dataset.ready = "1";
-    count += 1;
-    var uid = "t10g" + count + Math.floor(performance.now());
-    var svg = root.querySelector(".t10-svg");
+    seq += 1;
     var NS = "http://www.w3.org/2000/svg";
-    var titles = ["Opening the call", "Ask what changed", "Find the pain", "Show it is real", "Handle the pushback", "Ask for the meeting", "Close the loop"];
-    var d = "M 70 330 Q 640 40 1210 330";
-    var defs = document.createElementNS(NS, "defs");
-    var grad = document.createElementNS(NS, "linearGradient");
+    var svg = root.querySelector(".t10-svg");
+    var uid = "t10i" + seq + "x" + Math.floor(performance.now());
+    var D = "M 64 158 Q 640 40 1216 158";
+    var TITLES = ["Find the pain", "Show it is real"];
+
+    function make(tag, attrs, cls) {
+      var el = document.createElementNS(NS, tag);
+      if (cls) el.setAttribute("class", cls);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      return el;
+    }
+    /* the iris, on exactly one element: the stretch of the course already walked */
+    var defs = make("defs", {});
+    var grad = make("linearGradient", { x1: "0", x2: "1", y1: "0", y2: "0" });
     grad.setAttribute("id", uid);
-    grad.setAttribute("x1", "0"); grad.setAttribute("x2", "1"); grad.setAttribute("y1", "0"); grad.setAttribute("y2", "0");
-    var stops = [["0", "#FF006E"], [".17", "#FF6B00"], [".34", "#F59E0B"], [".51", "#10B981"], [".68", "#38BDF8"], [".85", "#8B5CF6"], ["1", "#FF006E"]];
-    stops.forEach(function (s) { var st = document.createElementNS(NS, "stop"); st.setAttribute("offset", s[0]); st.setAttribute("stop-color", s[1]); grad.appendChild(st); });
-    defs.appendChild(grad); svg.appendChild(defs);
-    function path(cls) { var p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("class", cls); p.setAttribute("pathLength", "100"); svg.appendChild(p); return p; }
-    var track = path("t10-track");
-    var prog = path("t10-prog");
-    prog.setAttribute("stroke", "url(#" + uid + ")");
+    [["0", "#FF006E"], [".17", "#FF6B00"], [".34", "#F59E0B"], [".51", "#10B981"], [".68", "#38BDF8"], [".85", "#8B5CF6"], ["1", "#FF006E"]]
+      .forEach(function (s) { grad.appendChild(make("stop", { offset: s[0], "stop-color": s[1] })); });
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    var track = make("path", { d: D }, "t10-track");
+    svg.appendChild(track);
+    var prog = make("path", { d: D, pathLength: "100", stroke: "url(#" + uid + ")" }, "t10-prog");
+    svg.appendChild(prog);
+
     var total = track.getTotalLength();
     var pts = [];
     for (var i = 0; i < 7; i++) {
-      var pt = track.getPointAtLength(total * i / 6);
-      pts.push(pt);
-      var g = document.createElementNS(NS, "g");
-      g.setAttribute("class", "t10-mark t10-m" + (i + 1) + (i < 2 ? " is-done" : ""));
-      g.setAttribute("transform", "translate(" + pt.x.toFixed(1) + " " + pt.y.toFixed(1) + ")");
-      var ring = document.createElementNS(NS, "circle"); ring.setAttribute("r", "17"); ring.setAttribute("class", "t10-ring"); g.appendChild(ring);
-      var done = document.createElementNS(NS, "circle"); done.setAttribute("r", "18"); done.setAttribute("class", "t10-done"); g.appendChild(done);
-      var num = document.createElementNS(NS, "text"); num.textContent = String(i + 1); g.appendChild(num);
-      var numLight = document.createElementNS(NS, "text"); numLight.textContent = String(i + 1); numLight.setAttribute("class", "t10-numlight"); g.appendChild(numLight);
+      var p = total ? track.getPointAtLength(total * i / 6) : { x: 64 + i * 192, y: 130 };
+      pts.push(p);
+      var g = make("g", { transform: "translate(" + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")" },
+        "t10-mark" + (i < 2 ? " is-done" : ""));
+      g.appendChild(make("circle", { r: "27" }, "t10-ring"));
+      if (i === 2) g.appendChild(make("circle", { r: "27" }, "t10-fill"));
+      var n = make("text", { "font-size": "30" }, "t10-num");
+      n.textContent = String(i + 1);
+      g.appendChild(n);
+      if (i === 2) {
+        var nl = make("text", { "font-size": "30" }, "t10-num t10-numlight");
+        nl.textContent = "3";
+        g.appendChild(nl);
+      }
       svg.appendChild(g);
     }
-    root.style.setProperty("--p3x", pts[2].x.toFixed(1) + "px"); root.style.setProperty("--p3y", pts[2].y.toFixed(1) + "px");
-    root.style.setProperty("--p4x", pts[3].x.toFixed(1) + "px"); root.style.setProperty("--p4y", pts[3].y.toFixed(1) + "px");
-    root.style.setProperty("--p5x", pts[4].x.toFixed(1) + "px"); root.style.setProperty("--p5y", pts[4].y.toFixed(1) + "px");
-    var glow = document.createElementNS(NS, "g"); glow.setAttribute("class", "t10-glow");
-    glow.style.transform = "translate(" + pts[2].x.toFixed(1) + "px," + pts[2].y.toFixed(1) + "px)";
-    [["t10-halo", "40"], ["t10-halo2", "28"], ["t10-cur", "17"]].forEach(function (c) { var el = document.createElementNS(NS, "circle"); el.setAttribute("r", c[1]); el.setAttribute("class", c[0]); glow.appendChild(el); });
-    var curNum = document.createElementNS(NS, "text"); curNum.setAttribute("class", "t10-curnum"); curNum.setAttribute("style", "font-family:var(--aes-font-mono);font-size:13px;letter-spacing:.06em;text-anchor:middle;dominant-baseline:central;fill:var(--aes-ink)");
-    glow.appendChild(curNum);
-    svg.appendChild(glow);
-    [2, 3, 4].forEach(function (idx) {
-      var t = document.createElementNS(NS, "text");
-      t.setAttribute("class", "t10-title t10-t" + (idx + 1));
-      t.setAttribute("x", (pts[idx].x + 34).toFixed(1));
-      t.setAttribute("y", (pts[idx].y + 12).toFixed(1));
-      t.textContent = titles[idx];
-      svg.appendChild(t);
+    root.style.setProperty("--p3x", pts[2].x.toFixed(1) + "px");
+    root.style.setProperty("--p3y", pts[2].y.toFixed(1) + "px");
+    root.style.setProperty("--p4x", pts[3].x.toFixed(1) + "px");
+    root.style.setProperty("--p4y", pts[3].y.toFixed(1) + "px");
+
+    /* the lit course carries its own leader and name, so the caption never parts
+       company with the marker it belongs to, on the wide frame or the phone crop */
+    var glow = make("g", {}, "t10-glow");
+    glow.appendChild(make("circle", { r: "56" }, "t10-halo"));
+    glow.appendChild(make("circle", { r: "38" }, "t10-halo2"));
+    glow.appendChild(make("circle", { r: "27" }, "t10-disc"));
+    glow.appendChild(make("line", { x1: "0", y1: "62", x2: "0", y2: "124" }, "t10-leader"));
+    ["a", "b"].forEach(function (k, j) {
+      var n = make("text", { "font-size": "30" }, "t10-gnum t10-fade-" + k);
+      n.textContent = String(j + 3);
+      glow.appendChild(n);
+      var t = make("text", { y: "180", "font-size": "64" }, "t10-title t10-fade-" + k);
+      t.textContent = TITLES[j];
+      glow.appendChild(t);
     });
-    /* numeral of the current marker follows the glow: rendered per state via three texts */
-    var nums = [3, 4, 5].map(function (n, k) { var t = document.createElementNS(NS, "text"); t.setAttribute("class", "t10-title t10-t" + n); t.setAttribute("style", "font-family:var(--aes-font-mono);font-size:13px;letter-spacing:.06em;text-anchor:middle;dominant-baseline:central;fill:var(--aes-ink)"); t.setAttribute("x", pts[n - 1].x.toFixed(1)); t.setAttribute("y", pts[n - 1].y.toFixed(1)); t.textContent = String(n); svg.appendChild(t); return t; });
-    curNum.remove();
+    svg.appendChild(glow);
+
+    /* hold both names inside the phone crop whatever face the browser lands on */
+    var LO = 183, HI = 1097;
+    Array.prototype.forEach.call(glow.querySelectorAll(".t10-title"), function (t, j) {
+      var len = 0;
+      try { len = t.getComputedTextLength(); } catch (e) { len = 0; }
+      if (!len) return;
+      var cx = pts[j + 2].x, half = len / 2;
+      var shift = Math.min(Math.max(cx, LO + half), HI - half) - cx;
+      if (Math.abs(shift) > 1) t.setAttribute("x", shift.toFixed(1));
+    });
   });
 })();
 </script>
@@ -2693,9 +2810,10 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 <figure class="tile" data-teaser-num="11">
   <div class="tile-frame">
 <!-- teaser id=garment-tag num=11 source=nrdi-digs focal=50%,50% loop=8 interactive=no -->
-<div class="stage t11" data-teaser="garment-tag" style="--fx:0.50;--fy:0.50" role="img" aria-label="A folded corner of a sage knit garment, the corner turned back to show the woven label sewn inside, with a paper tag hanging from the fold">
+<div class="stage t11" data-teaser="garment-tag" style="--fx:0.50;--fy:0.50" role="img" aria-label="A folded corner of a sage knit garment lit from the upper left, the corner turned back to show the woven label sewn inside, with a paper tag tacked through the fold">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t11-pool"></div>
+    <div class="t11-contact"></div>
     <div class="t11-cloth">
       <div class="t11-body">
         <div class="t11-stitch"></div>
@@ -2735,54 +2853,61 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
   </div></div>
 </div>
 <style>
-/* the floor: one soft key from the upper left spills under the cloth; matte knit and paper, no reflection */
-.t11 .t11-pool { position: absolute; left: 6%; top: 70%; width: 66%; height: 24%; border-radius: 50%; background: rgba(255,255,255,0.045); filter: blur(calc(3 * var(--u))); }
-/* the cloth: a 60 × 38 unit corner of a knit, lying at a slight angle, its top-right corner cut by the fold line (the folded-over part is the flap, drawn on top) */
-.t11 .t11-cloth { position: absolute; left: calc(8 * var(--u)); top: calc(13.5 * var(--u)); width: calc(60 * var(--u)); height: calc(38 * var(--u)); transform: rotate(-4deg); clip-path: polygon(0 0, calc(100% - 24 * var(--u)) 0, 100% calc(24 * var(--u)), 100% 100%, 0 100%); }
+/* the floor: the key light spills past the cloth onto the surface it lies on;
+   matte knit and paper, so a soft pool and a contact shadow, never a reflection */
+.t11 .t11-pool { position: absolute; left: 17%; top: calc(37 * var(--u)); width: 66%; height: calc(15 * var(--u)); background: radial-gradient(ellipse 54% 58% at 46% 66%, rgba(255,255,255,0.13), rgba(255,255,255,0.045) 54%, transparent 80%); filter: blur(calc(2.2 * var(--u))); }
+.t11 .t11-contact { position: absolute; left: 24%; top: calc(41.6 * var(--u)); width: 52%; height: calc(2.8 * var(--u)); border-radius: 50%; background: rgba(0,0,0,0.45); transform: rotate(-3.5deg); filter: blur(calc(0.8 * var(--u))); }
+/* the cloth: a 46 x 37.5 unit folded corner of a knit, centred in the frame and
+   lying at a slight angle; its top-right corner is cut by the fold line and the
+   folded-over part is the flap, drawn on top */
+.t11 .t11-cloth { position: absolute; left: 27%; top: calc(6.25 * var(--u)); width: 46%; height: calc(37.5 * var(--u)); transform: rotate(-3.5deg); clip-path: polygon(0 0, calc(100% - 28 * var(--u)) 0, 100% calc(28 * var(--u)), 100% 100%, 0 100%); }
 .t11 .t11-body { position: absolute; inset: 0; border-radius: calc(0.8 * var(--u)) 0 calc(0.8 * var(--u)) calc(0.8 * var(--u)); background-color: var(--ndg-garment-sage);
-  background-image: radial-gradient(ellipse 70% 60% at 22% 12%, rgba(255,255,255,0.26), transparent 70%), linear-gradient(165deg, transparent 45%, rgba(0,0,0,0.2) 100%),
+  background-image: radial-gradient(ellipse 72% 62% at 20% 10%, rgba(255,255,255,0.28), transparent 72%), linear-gradient(162deg, transparent 42%, rgba(0,0,0,0.22) 100%),
     repeating-linear-gradient(90deg, rgba(255,255,255,0.17) 0, rgba(255,255,255,0.17) calc(0.12 * var(--u)), transparent calc(0.12 * var(--u)), transparent calc(0.34 * var(--u))),
     repeating-linear-gradient(180deg, rgba(0,0,0,0.13) 0, rgba(0,0,0,0.13) calc(0.07 * var(--u)), transparent calc(0.07 * var(--u)), transparent calc(0.3 * var(--u))); }
 /* the hem: a ribbed band along the foot with a stitch line above it */
-.t11 .t11-hem { position: absolute; left: 0; right: 0; bottom: 0; height: calc(4 * var(--u)); background-color: var(--ndg-garment-sage-shade); background-image: linear-gradient(180deg, rgba(0,0,0,0.12), transparent 30%), repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0, rgba(0,0,0,0.16) calc(0.16 * var(--u)), rgba(255,255,255,0.1) calc(0.16 * var(--u)), rgba(255,255,255,0.1) calc(0.3 * var(--u)), transparent calc(0.3 * var(--u)), transparent calc(0.5 * var(--u))); border-top: calc(0.0625 * var(--u)) solid rgba(0,0,0,0.22); }
-.t11 .t11-stitch { position: absolute; left: 0; right: 0; bottom: calc(4.5 * var(--u)); height: 0; border-top: calc(0.09 * var(--u)) dashed rgba(0,0,0,0.32); }
-/* the fold: the flap is the corner turned back, the inside face of the knit (paler, purl side), lit along its crease; its shadow falls down-left onto the body */
-.t11 .t11-fold-shadow { position: absolute; right: 0; top: 0; width: calc(24 * var(--u)); height: calc(24 * var(--u)); transform: translate(calc(-1.1 * var(--u)), calc(1.3 * var(--u))); filter: blur(calc(0.8 * var(--u))); }
+.t11 .t11-hem { position: absolute; left: 0; right: 0; bottom: 0; height: calc(4.2 * var(--u)); background-color: var(--ndg-garment-sage-shade); background-image: linear-gradient(180deg, rgba(0,0,0,0.12), transparent 30%), repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0, rgba(0,0,0,0.16) calc(0.16 * var(--u)), rgba(255,255,255,0.1) calc(0.16 * var(--u)), rgba(255,255,255,0.1) calc(0.3 * var(--u)), transparent calc(0.3 * var(--u)), transparent calc(0.5 * var(--u))); border-top: calc(0.0625 * var(--u)) solid rgba(0,0,0,0.22); }
+.t11 .t11-stitch { position: absolute; left: 0; right: 0; bottom: calc(4.8 * var(--u)); height: 0; border-top: calc(0.09 * var(--u)) dashed rgba(0,0,0,0.32); }
+/* the fold: the flap is the corner turned back, the inside face of the knit
+   (paler, purl side), lit along its crease; its shadow falls down-left */
+.t11 .t11-fold-shadow { position: absolute; right: 0; top: 0; width: calc(28 * var(--u)); height: calc(28 * var(--u)); transform: translate(calc(-1 * var(--u)), calc(1.2 * var(--u))); filter: blur(calc(0.8 * var(--u))); }
 .t11 .t11-fold-shadow i { position: absolute; inset: 0; display: block; clip-path: polygon(0 0, 100% 100%, 0 100%); background: rgba(0,0,0,0.5); }
-.t11 .t11-flap { position: absolute; right: 0; top: 0; width: calc(24 * var(--u)); height: calc(24 * var(--u)); clip-path: polygon(0 0, 100% 100%, 0 100%); background-color: var(--ndg-garment-sage-inside);
+.t11 .t11-flap { position: absolute; right: 0; top: 0; width: calc(28 * var(--u)); height: calc(28 * var(--u)); clip-path: polygon(0 0, 100% 100%, 0 100%); background-color: var(--ndg-garment-sage-inside);
   background-image: linear-gradient(225deg, transparent 47%, rgba(255,255,255,0.5) 49.5%, rgba(255,255,255,0.12) 54%, rgba(0,0,0,0.08) 60%, transparent 70%), linear-gradient(0deg, rgba(0,0,0,0.16), transparent 7%), linear-gradient(90deg, rgba(0,0,0,0.12), transparent 6%),
     repeating-linear-gradient(180deg, rgba(255,255,255,0.16) 0, rgba(255,255,255,0.16) calc(0.1 * var(--u)), transparent calc(0.1 * var(--u)), transparent calc(0.3 * var(--u))),
     repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) calc(0.08 * var(--u)), transparent calc(0.08 * var(--u)), transparent calc(0.36 * var(--u))); }
 /* the woven label, sewn to the inside face where the fold reveals it */
-.t11 .t11-label { position: absolute; left: calc(1.1 * var(--u)); bottom: calc(1.1 * var(--u)); width: calc(9 * var(--u)); height: calc(6.75 * var(--u)); background-color: #FFFFFF; background-image: repeating-linear-gradient(180deg, #FFFFFF 0, #FFFFFF calc(0.08 * var(--u)), #EFEFEC calc(0.08 * var(--u)), #EFEFEC calc(0.16 * var(--u))); overflow: hidden; display: grid; align-content: start; justify-items: center; padding: calc(0.9 * var(--u)) calc(0.6 * var(--u)) 0; box-shadow: 0 calc(0.06 * var(--u)) calc(0.2 * var(--u)) rgba(0,0,0,0.18); }
-.t11 .t11-label::before { content: ""; position: absolute; inset: calc(0.4 * var(--u)); border: calc(0.0625 * var(--u)) dashed rgba(0,0,0,0.24); pointer-events: none; }
+.t11 .t11-label { position: absolute; left: calc(1.2 * var(--u)); bottom: calc(1.5 * var(--u)); width: calc(7 * var(--u)); height: calc(5.25 * var(--u)); background-color: #FFFFFF; background-image: repeating-linear-gradient(180deg, #FFFFFF 0, #FFFFFF calc(0.08 * var(--u)), #EFEFEC calc(0.08 * var(--u)), #EFEFEC calc(0.16 * var(--u))); overflow: hidden; display: grid; align-content: start; justify-items: center; padding: calc(0.62 * var(--u)) calc(0.45 * var(--u)) 0; box-shadow: 0 calc(0.06 * var(--u)) calc(0.2 * var(--u)) rgba(0,0,0,0.18); }
+.t11 .t11-label::before { content: ""; position: absolute; inset: calc(0.36 * var(--u)); border: calc(0.0625 * var(--u)) dashed rgba(0,0,0,0.24); pointer-events: none; }
 .t11 .t11-lmark, .t11 .t11-tmark, .t11 .t11-mark { font-family: var(--ndg-font); font-weight: 900; letter-spacing: -0.05em; text-transform: lowercase; line-height: 0.9; }
-.t11 .t11-lmark { font-size: calc(1.85 * var(--u)); color: var(--ndg-black); }
-.t11 .t11-ltext { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.54 * var(--u)); color: var(--ndg-black); margin-top: calc(0.55 * var(--u)); letter-spacing: 0; white-space: nowrap; }
-.t11 .t11-lsize { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.66 * var(--u)); color: var(--ndg-black); margin-top: calc(0.4 * var(--u)); }
+.t11 .t11-lmark { font-size: calc(1.5 * var(--u)); color: var(--ndg-black); }
+.t11 .t11-ltext { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.5 * var(--u)); color: var(--ndg-black); margin-top: calc(0.42 * var(--u)); letter-spacing: 0; white-space: nowrap; }
+.t11 .t11-lsize { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.55 * var(--u)); color: var(--ndg-black); margin-top: calc(0.3 * var(--u)); }
 .t11 .t11-lglint { position: absolute; top: 0; bottom: 0; left: 0; width: 30%; background: rgba(255,255,255,0.55); transform: translateX(-120%) skewX(-18deg); animation: t11-glint 8s cubic-bezier(.4, 0, .2, 1) infinite; will-change: transform; }
-/* the light pass: one soft band crossing the whole cloth, clipped by the cloth's outline */
-.t11 .t11-light { position: absolute; top: -10%; bottom: -10%; left: 0; width: 30%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3) 50%, transparent); transform: translateX(-130%) skewX(-14deg); animation: t11-light 8s cubic-bezier(.4, 0, .2, 1) infinite; will-change: transform; }
-@keyframes t11-light { 0% { transform: translateX(-130%) skewX(-14deg); } 40%, 100% { transform: translateX(360%) skewX(-14deg); } }
-@keyframes t11-glint { 0%, 4% { transform: translateX(-120%) skewX(-18deg); } 30%, 100% { transform: translateX(400%) skewX(-18deg); } }
-/* the paper tag: tacked through the fold, hanging straight down over the cloth's right margin; it turns to show its back, then swings to rest */
-.t11 .t11-tag-pivot { position: absolute; left: calc(55.8 * var(--u)); top: calc(31.1 * var(--u)); width: calc(10 * var(--u)); height: calc(16 * var(--u)); perspective: calc(80 * var(--u)); transform-origin: 50% 0; animation: t11-swing 8s ease-in-out infinite; }
-.t11 .t11-tack { position: absolute; left: 50%; top: calc(-2.2 * var(--u)); width: calc(0.16 * var(--u)); height: calc(3 * var(--u)); background: var(--ndg-black); transform: translateX(-50%); }
+/* the light pass: one soft band crossing the whole cloth, clipped by the
+   cloth's outline; it is absent from the resting frame and fades in and out */
+.t11 .t11-light { position: absolute; top: 0; bottom: 0; left: 0; width: 26%; opacity: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.32) 50%, transparent); transform: translateX(-30%) skewX(-14deg); animation: t11-light 8s cubic-bezier(.4, 0, .2, 1) infinite; will-change: transform, opacity; }
+@keyframes t11-light { 0% { transform: translateX(-30%) skewX(-14deg); opacity: 0; } 7% { opacity: 1; } 34% { opacity: 1; } 40%, 100% { transform: translateX(290%) skewX(-14deg); opacity: 0; } }
+@keyframes t11-glint { 0%, 6% { transform: translateX(-120%) skewX(-18deg); } 32%, 100% { transform: translateX(400%) skewX(-18deg); } }
+/* the paper tag: tacked through the fold on the crease, hanging down the
+   knit; it turns to show its back, then swings to rest */
+.t11 .t11-tag-pivot { position: absolute; left: calc(60.8 * var(--u)); top: calc(30.2 * var(--u)); width: calc(9 * var(--u)); height: calc(14.4 * var(--u)); perspective: calc(74 * var(--u)); transform-origin: 50% 0; animation: t11-swing 8s ease-in-out infinite; }
+.t11 .t11-tack { position: absolute; left: 50%; top: calc(-1.6 * var(--u)); width: calc(0.16 * var(--u)); height: calc(2.3 * var(--u)); background: var(--ndg-tag-tack); transform: translateX(-50%); }
 .t11 .t11-tag-shadow { position: absolute; inset: 0; background: rgba(0,0,0,0.42); transform: translate(calc(0.7 * var(--u)), calc(1 * var(--u))); filter: blur(calc(0.7 * var(--u))); animation: t11-tag-shadow 8s ease-in-out infinite; will-change: opacity; }
 .t11 .t11-tag { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 0; animation: t11-turn 8s cubic-bezier(.45, 0, .2, 1) infinite; will-change: transform; }
 .t11 .t11-face { position: absolute; inset: 0; background: var(--ndg-light-blue); backface-visibility: hidden; overflow: hidden; }
 .t11 .t11-back { transform: rotateY(180deg); background: #FFFFFF; display: grid; justify-items: center; align-content: center; }
-.t11 .t11-hole { position: absolute; left: 50%; top: 5%; width: calc(0.9 * var(--u)); height: calc(0.9 * var(--u)); border-radius: 50%; background: #000000; transform: translateX(-50%); }
-.t11 .t11-script { position: absolute; left: 0; right: 0; top: 25%; text-align: center; font-family: var(--ndg-font-script); font-size: calc(0.95 * var(--u)); line-height: 1; color: var(--ndg-blue); transform: rotate(-4deg); white-space: nowrap; }
-.t11 .t11-tmark { position: absolute; left: 0; right: 0; top: 41%; text-align: center; font-size: calc(3.4 * var(--u)); color: var(--ndg-black); }
-.t11 .t11-btext { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.66 * var(--u)); color: var(--ndg-black); line-height: 1.6; }
+.t11 .t11-hole { position: absolute; left: 50%; top: 5%; width: calc(0.82 * var(--u)); height: calc(0.82 * var(--u)); border-radius: 50%; background: #000000; transform: translateX(-50%); }
+.t11 .t11-script { position: absolute; left: 0; right: 0; top: 25%; text-align: center; font-family: var(--ndg-font-script); font-size: calc(0.86 * var(--u)); line-height: 1; color: var(--ndg-blue); transform: rotate(-4deg); white-space: nowrap; }
+.t11 .t11-tmark { position: absolute; left: 0; right: 0; top: 41%; text-align: center; font-size: calc(3.1 * var(--u)); color: var(--ndg-black); }
+.t11 .t11-btext { font-family: var(--ndg-font); font-weight: 400; font-size: calc(0.6 * var(--u)); color: var(--ndg-black); line-height: 1.6; }
 .t11 .t11-b1 { font-weight: 700; }
-.t11 .t11-bars { margin-top: calc(1.4 * var(--u)); width: 62%; height: calc(2.4 * var(--u)); background-image: repeating-linear-gradient(90deg, #000 0, #000 calc(0.1 * var(--u)), transparent calc(0.1 * var(--u)), transparent calc(0.2 * var(--u)), #000 calc(0.2 * var(--u)), #000 calc(0.38 * var(--u)), transparent calc(0.38 * var(--u)), transparent calc(0.52 * var(--u))); }
+.t11 .t11-bars { margin-top: calc(1.25 * var(--u)); width: 62%; height: calc(2.2 * var(--u)); background-image: repeating-linear-gradient(90deg, #000 0, #000 calc(0.1 * var(--u)), transparent calc(0.1 * var(--u)), transparent calc(0.2 * var(--u)), #000 calc(0.2 * var(--u)), #000 calc(0.38 * var(--u)), transparent calc(0.38 * var(--u)), transparent calc(0.52 * var(--u))); }
 @keyframes t11-turn { 0%, 40% { transform: rotateY(0deg); } 66%, 100% { transform: rotateY(360deg); } }
 @keyframes t11-tag-shadow { 0%, 38% { opacity: 1; } 50% { opacity: 0.2; } 58% { opacity: 0.2; } 70%, 100% { opacity: 1; } }
 @keyframes t11-swing { 0%, 38% { transform: rotate(0deg); } 52% { transform: rotate(-4deg); } 66% { transform: rotate(3deg); } 78% { transform: rotate(-1.2deg); } 88%, 100% { transform: rotate(0deg); } }
-/* the wordmark, typeset small beneath the cloth */
-.t11 .t11-mark { position: absolute; left: calc(38 * var(--u)); top: calc(55.6 * var(--u)); transform: translateX(-50%); font-size: calc(1.7 * var(--u)); color: #FFFFFF; opacity: 0.85; }
+/* the wordmark, typeset small and centred beneath the cloth */
+.t11 .t11-mark { position: absolute; left: 50%; top: calc(55.2 * var(--u)); transform: translateX(-50%); font-size: calc(1.8 * var(--u)); color: #FFFFFF; opacity: 0.85; }
 </style>
 <script>
 (function () {
@@ -2797,64 +2922,84 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 
 <figure class="tile" data-teaser-num="12">
   <div class="tile-frame">
-<!-- teaser id=task-tiers num=12 source=cockpit focal=48%,50% loop=7 interactive=no -->
-<div class="stage t12" data-teaser="task-tiers" style="--fx:0.48;--fy:0.50" role="img" aria-label="Three engineered rails stacked as tiers with five task chips resting on them; one chip is caught mid-drop, falls from the top rail to the bottom, the rails rebalance, then it climbs back">
+<!-- teaser id=task-tiers num=12 source=cockpit focal=50%,50% loop=7 interactive=no -->
+<div class="stage t12" data-teaser="task-tiers" style="--fx:0.50;--fy:0.50" role="img" aria-label="Three engineered rails stacked as tiers, each with its tier name engraved at its head and five task chips resting on them; one chip is caught mid-drop, falls from the top rail to the bottom, the rails rebalance, then it climbs back">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t12-rails"></div>
   </div></div>
 </div>
 <style>
-/* three rails, graphite, flat, each its own shelf: a two-tone bevel top and bottom, a sunk lip along the foot with a tick ladder etched in it, the tier's name engraved at the head. The stage stays black between them */
-.t12 .t12-rails { position: absolute; left: calc(9 * var(--u)); top: calc(10 * var(--u)); width: calc(82 * var(--u)); height: calc(42 * var(--u)); display: grid; grid-template-rows: repeat(3, 1fr); gap: calc(1.5 * var(--u)); }
+/* the slot grid, in scene units, so the rails and the choreography cannot drift apart.
+   The rails run 16 to 84 and bleed past both edges of the 4:5 crop, which shows scene 25 to 75.
+   Everything that has to be READ sits inside that band: the engraved tier name and the first chip share a 29.5 datum,
+   the three chip slots run 29.5 / 45.5 / 61.5, one 16u step apart, and the longest run of chips
+   ends at 70.7, so the band keeps 4.5u clear on the left and 4.1u on the right. At full width
+   the name still sits in the head of its rail, with the air past the last chip matching the air before it.
+   Every move in the loop is exactly one step sideways or two tiers (35u) down. */
+.t12 { --t12-step: 16; --t12-tier: 35; }
+/* three rails, graphite, flat, each its own shelf: a two-tone bevel top and bottom, a sunk lip along
+   the foot with a tick ladder etched in it, and the tier's name engraved at the head. The ladder is
+   phased so a major tick falls under every chip slot: the ticks start 2.2u into the rail (1.2u of foot
+   plus 1u of its own inset) and the first slot sits 13.5u in, so the majors are offset 11.3u and step
+   with the slots, and the minors carry the same phase eight to a step. The stage stays black between them */
+.t12 .t12-rails { position: absolute; left: calc(16 * var(--u)); top: calc(7 * var(--u)); width: calc(68 * var(--u)); height: calc(48.5 * var(--u)); display: grid; grid-template-rows: repeat(3, 1fr); gap: calc(4 * var(--u)); }
 .t12 .t12-rail { position: relative; border-radius: calc(0.45 * var(--u)); background: linear-gradient(180deg, var(--ckp-sheen), transparent 45%), var(--ckp-panel); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-sunk); }
 .t12 .t12-foot { position: absolute; left: calc(1.2 * var(--u)); right: calc(1.2 * var(--u)); bottom: calc(1.1 * var(--u)); height: calc(1.6 * var(--u)); border-radius: calc(0.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
-.t12 .t12-ticks { position: absolute; left: calc(1 * var(--u)); right: calc(1 * var(--u)); top: calc(0.35 * var(--u)); bottom: calc(0.35 * var(--u)); background-image: repeating-linear-gradient(90deg, var(--ckp-tick-major) 0, var(--ckp-tick-major) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(10 * var(--u))), repeating-linear-gradient(90deg, var(--ckp-tick-minor) 0, var(--ckp-tick-minor) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(2 * var(--u))); background-size: 100% 100%, 100% 55%; background-position: 0 0, 0 100%; background-repeat: no-repeat; }
-.t12 .t12-lab { position: absolute; left: calc(1.6 * var(--u)); top: calc(1.3 * var(--u)); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(0.8 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-quiet); }
+.t12 .t12-ticks { position: absolute; left: calc(1 * var(--u)); right: calc(1 * var(--u)); top: calc(0.35 * var(--u)); bottom: calc(0.35 * var(--u)); background-image: repeating-linear-gradient(90deg, var(--ckp-tick-major) 0, var(--ckp-tick-major) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(16 * var(--u))), repeating-linear-gradient(90deg, var(--ckp-tick-minor) 0, var(--ckp-tick-minor) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(2 * var(--u))); background-size: 100% 100%, 100% 55%; background-position: calc(11.3 * var(--u)) 0, calc(1.3 * var(--u)) 100%; background-repeat: no-repeat; }
+/* the tier name: engraved into the head of the rail, in quiet ink, above the chips and on the same
+   left datum as the first slot and the ladder's first major tick, so the head of the rail reads as
+   one column and the crop, which starts 4.5u further left, never cuts the name */
+.t12 .t12-lab { position: absolute; left: calc(13.5 * var(--u)); top: calc(1.3 * var(--u)); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(0.95 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-quiet); }
 /* the chips rest on the lip: the evidence-chip grammar, mono at 0.1em, a hairline at 22%, a tick at the left in the tier's strength */
-.t12 .t12-chip { position: absolute; z-index: 1; top: calc(5.1 * var(--u)); height: calc(5.2 * var(--u)); display: flex; align-items: center; gap: calc(1.1 * var(--u)); padding: 0 calc(1.6 * var(--u)) 0 calc(1.3 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-fg-quiet); background: var(--ckp-ground); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); color: var(--ckp-fg-soft); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.5 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
+.t12 .t12-chip { position: absolute; z-index: 1; top: calc(5.6 * var(--u)); height: calc(5.2 * var(--u)); display: flex; align-items: center; gap: calc(0.95 * var(--u)); padding: 0 calc(1.35 * var(--u)) 0 calc(1.15 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-fg-quiet); background: var(--ckp-ground); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); color: var(--ckp-fg-soft); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.5 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
 .t12 .t12-tick { position: relative; flex: none; width: calc(0.4 * var(--u)); height: calc(1.4 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
 .t12 .t12-tick i { position: absolute; inset: 0; border-radius: inherit; display: block; }
 .t12 .t12-tick .t12-full { background: var(--ckp-signal); box-shadow: 0 0 calc(0.8 * var(--u)) var(--ckp-signal-halo); }
 .t12 .t12-tick .t12-half { background: var(--ckp-signal-half); }
 .t12 .t12-l1 .t12-chip { color: var(--ckp-fg); }
 .t12 .t12-l3 .t12-chip { color: var(--ckp-fg-faint); }
-/* the one that moves: caught mid-drop at rest, it lands two rails down with the register spring, its neighbours close ranks, then it climbs back */
-.t12 .t12-drop { z-index: 2; transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; will-change: transform, opacity; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+/* the one that moves: caught half a step out of its slot and straddling the gap between the first
+   two rails at rest, it lands two tiers lower with the register spring, its neighbours close ranks,
+   then it climbs back */
+.t12 .t12-drop { z-index: 2; transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; will-change: transform, opacity; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
 .t12 .t12-drop .t12-full { opacity: 0.55; animation: t12-tick-full var(--ckp-loop-default) linear infinite; }
 .t12 .t12-drop .t12-half { opacity: 1; animation: t12-tick-half var(--ckp-loop-default) linear infinite; }
 .t12 .t12-drop .t12-full, .t12 .t12-drop .t12-half { will-change: opacity; }
 .t12 .t12-closes { will-change: transform; animation: t12-close var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
 .t12 .t12-yields { will-change: transform; animation: t12-yield var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
-/* the loop, 7s. 0–6% held mid-drop; 6–20% the fall, the 160ms spring on landing; 20–27% the top rail closes and the bottom rail yields;
-   27–56% at rest on the bottom rail; 56–60% it lifts; 60–82% the climb to its slot; 82–90% held there; 90–100% it lets go again */
+/* the loop, 7s. 0–6% held mid-drop; 6–20% the fall, the 160ms spring on landing (the tier below
+   has already yielded by 19%, so it lands on an open slot); 20–56% at rest on the bottom rail;
+   56–60% it lifts; 60–82% the climb back to its slot, which reopened at 74%; 82–90% held there;
+   90–100% it lets go again */
 @keyframes t12-drop {
-  0%, 6% { transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; }
-  20% { transform: translate(calc(-18.5 * var(--u)), calc(29.4 * var(--u))) rotate(0deg); opacity: 0.62; animation-timing-function: var(--ckp-ease-spring); }
-  22%, 56% { transform: translate(calc(-18.5 * var(--u)), calc(29 * var(--u))) rotate(0deg); opacity: 0.62; }
-  60% { transform: translate(calc(-18.5 * var(--u)), calc(28.2 * var(--u))) rotate(0deg); opacity: 0.8; animation-timing-function: var(--ckp-loop-ease); }
+  0%, 6% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
+  20% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) + 0.4) * var(--u))) rotate(0deg); opacity: 0.62; animation-timing-function: var(--ckp-ease-spring); }
+  22%, 56% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc(var(--t12-tier) * var(--u))) rotate(0deg); opacity: 0.62; }
+  60% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) - 0.8) * var(--u))) rotate(0deg); opacity: 0.8; animation-timing-function: var(--ckp-loop-ease); }
   82%, 90% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
-  100% { transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; }
+  100% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
 }
 @keyframes t12-tick-full { 0%, 6% { opacity: 0.55; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 1; } 100% { opacity: 0.55; } }
 @keyframes t12-tick-half { 0%, 6% { opacity: 1; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes t12-close { 0%, 20% { transform: translateX(0); } 27%, 60% { transform: translateX(calc(-18.5 * var(--u))); } 67%, 100% { transform: translateX(0); } }
-@keyframes t12-yield { 0%, 20% { transform: translateX(0); } 27%, 60% { transform: translateX(calc(18.5 * var(--u))); } 67%, 100% { transform: translateX(0); } }
+@keyframes t12-close { 0%, 10% { transform: translateX(0); } 21%, 62% { transform: translateX(calc(-1 * var(--t12-step) * var(--u))); } 74%, 100% { transform: translateX(0); } }
+@keyframes t12-yield { 0%, 8% { transform: translateX(0); } 19%, 70% { transform: translateX(calc(var(--t12-step) * var(--u))); } 82%, 100% { transform: translateX(0); } }
 </style>
 <script>
 (function () {
-  /* three rails, five invented moves; the chip's slot is its x in scene units, its rail sets the tick strength */
+  /* three rails, five invented moves; the chip's slot is its x inside the rail, in scene units, and its rail sets the tick strength */
   var RAILS = [["Today", "full"], ["This week", "half"], ["Later", "none"]];
+  var SLOT = [13.5, 29.5, 45.5];
   var CHIPS = [
-    [0, 9, "Send the deck"],
-    [0, 27.5, "Pricing reply", "drop"],
-    [0, 46, "Call back", "closes"],
-    [1, 9, "Intro thread"],
-    [2, 9, "Old quote", "yields"]
+    [0, 0, "Call back"],
+    [0, 1, "Send deck", "drop"],
+    [0, 2, "Recap", "closes"],
+    [1, 0, "Follow up"],
+    [2, 0, "Old quote", "yields"]
   ];
   function chip(spec, strength) {
     var c = document.createElement("span");
     c.className = "t12-chip" + (spec[3] ? " t12-" + spec[3] : "");
-    c.style.left = "calc(" + spec[1] + " * var(--u))";
+    c.style.left = "calc(" + SLOT[spec[1]] + " * var(--u))";
     var t = document.createElement("span"); t.className = "t12-tick";
     var f = document.createElement("i"); f.className = "t12-full"; if (strength !== "full" && spec[3] !== "drop") f.style.opacity = "0";
     var h = document.createElement("i"); h.className = "t12-half"; if (strength !== "half" && spec[3] !== "drop") h.style.opacity = "0";

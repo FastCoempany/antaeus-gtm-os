@@ -936,54 +936,83 @@ html,body{margin:0;background:#000}
 </style>
 </head>
 <body>
-<div class="single"><!-- teaser id=coach-exchange num=6 source=aesdr focal=46%,42% loop=10 interactive=no -->
-<div class="stage t06" data-teaser="coach-exchange" style="--fx:0.46;--fy:0.42" role="img" aria-label="A practice exchange: what the learner said, and the coach's reply">
+<div class="single"><!-- teaser id=coach-exchange num=6 source=aesdr focal=50%,50% loop=10 interactive=no -->
+<div class="stage t06" data-teaser="coach-exchange" style="--fx:0.50;--fy:0.50" role="img" aria-label="A practice exchange on paper: what the learner said, and the coach's reply">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t06-sheet">
       <div class="t06-head"><span class="t06-kicker">Practice 02</span><span class="t06-kicker">Cold open</span></div>
       <div class="t06-block">
         <span class="t06-label">You said</span>
-        <span class="t06-line t06-a1">“Hi, this is Dana from Halden Supply. Do you have a minute?”</span>
-        <span class="t06-line t06-a2">“Hi, this is Dana. I’m calling because your team posted three new roles this week.”</span>
+        <span class="t06-stack">
+          <span class="t06-line t06-a1">“Hi, this is Dana from Halden Supply. Do you have a minute?”</span>
+          <span class="t06-line t06-a2">“Hi, this is Dana. I saw you posted three new roles this week.”</span>
+        </span>
       </div>
       <div class="t06-block t06-coach">
         <span class="t06-label">Coach</span>
-        <span class="t06-reply t06-r1">You gave your name and asked for time. Give the reason first, then ask for the time.</span>
-        <span class="t06-reply t06-r2">Better. The reason came first and it was theirs, not yours. Now stop talking and let them answer.</span>
+        <span class="t06-stack">
+          <span class="t06-reply t06-r1">You gave your name and asked for time. Give the reason first, then ask.</span>
+          <span class="t06-reply t06-r2">Better. The reason came first, and it was about them. Now stop and listen.</span>
+        </span>
         <span class="t06-under"><i></i></span>
       </div>
     </div>
   </div></div>
 </div>
 <style>
-.t06 .t06-sheet { position: absolute; left: 15%; top: 17%; width: 70%; height: 66%; padding: calc(3 * var(--u)) calc(4 * var(--u)); background: var(--aes-paper); color: var(--aes-ink); border: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-head { display: flex; justify-content: space-between; padding-bottom: calc(1.2 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-kicker { font-family: var(--aes-font-mono); font-size: calc(0.95 * var(--u)); letter-spacing: 0.25em; text-transform: uppercase; color: var(--aes-muted); }
-.t06 .t06-block { position: relative; margin-top: calc(3 * var(--u)); }
-.t06 .t06-label { display: block; font-family: var(--aes-font-label); font-weight: 600; font-size: calc(1.15 * var(--u)); letter-spacing: 0.15em; text-transform: uppercase; color: var(--aes-muted); margin-bottom: calc(0.9 * var(--u)); }
-.t06 .t06-line, .t06 .t06-reply { display: block; font-family: var(--aes-font-body); }
-.t06 .t06-line { font-weight: 500; font-size: calc(2.6 * var(--u)); line-height: 1.32; color: var(--aes-ink); max-width: calc(52 * var(--u)); }
-.t06 .t06-a2, .t06 .t06-r2 { position: absolute; left: 0; top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u)); }
-.t06 .t06-a1, .t06 .t06-a2 { animation: t06-a1 10s ease-in-out infinite; will-change: opacity, transform; }
-.t06 .t06-a2 { animation-name: t06-a2; opacity: 0; }
-.t06 .t06-coach { margin-top: calc(3.2 * var(--u)); padding-top: calc(2.4 * var(--u)); border-top: calc(0.0625 * var(--u)) solid var(--aes-light); }
-.t06 .t06-reply { font-weight: 400; font-size: calc(2.1 * var(--u)); line-height: 1.42; color: var(--aes-ink); max-width: calc(50 * var(--u)); }
+/* The page chrome sets a fixed line-height (24px) and border-box; the single-teaser
+   and probe pages set neither. Both are re-declared here so the sheet lays out from
+   --u alone and measures the same at 334px and at 1600px. */
+.t06 .t06-sheet, .t06 .t06-sheet * { box-sizing: border-box; }
+/* Paper, centred, bleeding past both crop edges; the type sits in a 47u column
+   (scene x 26.5–73.5) so the 4:5 crop at 25–75% never slices a word. */
+.t06 .t06-sheet {
+  position: absolute; left: 13%; top: 50%; width: 74%; min-height: 71%;
+  padding: calc(5.2 * var(--u)) calc(13.5 * var(--u));
+  transform: translateY(-50%);
+  background-color: var(--aes-paper);
+  background-image: linear-gradient(118deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 46%);
+  color: var(--aes-ink); font-size: calc(1 * var(--u)); line-height: 1.45;
+}
+.t06 .t06-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: calc(1.4 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-kicker { font-family: var(--aes-font-mono); font-weight: var(--aes-weight-mono); font-size: calc(1.05 * var(--u)); line-height: 1.3; letter-spacing: 0.24em; text-transform: uppercase; color: var(--aes-muted); }
+.t06 .t06-block { margin-top: calc(3.6 * var(--u)); }
+.t06 .t06-label { display: block; font-family: var(--aes-font-label); font-weight: var(--aes-weight-label); font-size: calc(1.25 * var(--u)); line-height: 1.3; letter-spacing: 0.16em; text-transform: uppercase; color: var(--aes-muted); margin-bottom: calc(1.05 * var(--u)); }
+/* Both attempts share one grid cell, so the block is always as tall as the longer
+   of the two and neither can push past the foot of the paper at any width. */
+.t06 .t06-stack { display: grid; }
+.t06 .t06-stack > * { grid-area: 1 / 1; align-self: start; }
+.t06 .t06-line, .t06 .t06-reply { display: block; font-family: var(--aes-font-body); color: var(--aes-ink); }
+.t06 .t06-line { font-weight: var(--aes-weight-body-strong); font-size: calc(2.7 * var(--u)); line-height: 1.34; }
+.t06 .t06-reply { font-weight: var(--aes-weight-body); font-size: calc(2.2 * var(--u)); line-height: 1.45; }
+.t06 .t06-coach { margin-top: calc(3.8 * var(--u)); padding-top: calc(2.8 * var(--u)); border-top: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-under { display: block; position: relative; margin-top: calc(2 * var(--u)); width: calc(16 * var(--u)); height: calc(0.1875 * var(--u)); overflow: hidden; transform-origin: left center; }
+/* Three whole runs of the iris tiled across the strip, so the rule always shows the
+   complete spectrum and the shimmer travels exactly one tile: no seam at the loop. */
+.t06 .t06-under i { position: absolute; inset: 0; width: 300%; background-image: var(--aes-iris); background-size: 33.3333% 100%; }
+/* The loop follows the causality of a real practice call: the learner says it
+   again, and only then does the coach react to the new attempt. The two blocks
+   never change at the same time — while the learner line swaps, the coach's note
+   and its rule hold the paper; while the note retypes, the new learner line holds
+   it — so the sheet is never blank. */
+.t06 .t06-a1 { animation: t06-a1 10s ease-in-out infinite; will-change: opacity, transform; }
+.t06 .t06-a2 { animation: t06-a2 10s ease-in-out infinite; opacity: 0; will-change: opacity, transform; }
 .t06 .t06-r1 { animation: t06-r1 10s ease-in-out infinite; will-change: opacity; }
 .t06 .t06-r2 { animation: t06-r2 10s ease-in-out infinite; opacity: 0; will-change: opacity; }
-/* the words: each appears on its own beat (the reply types in); the erase is the whole block fading at once, so no word ever hangs mid-air */
+/* Each word arrives on its own beat; the erase is the whole block fading at once,
+   so no word is ever left hanging mid-air. */
 .t06 .t06-reply span { display: inline-block; animation: t06-w1 10s linear infinite; animation-delay: calc(var(--i) * 0.06s); }
-.t06 .t06-r2 { top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u) + 2.4 * var(--u)); }
 .t06 .t06-r2 span { animation-name: t06-w2; opacity: 0; }
-.t06 .t06-under { display: block; position: relative; margin-top: calc(1.6 * var(--u)); width: calc(18 * var(--u)); height: calc(0.125 * var(--u)); overflow: hidden; transform-origin: left center; animation: t06-under 10s cubic-bezier(.4, 0, .2, 1) infinite; }
-.t06 .t06-under i { position: absolute; inset: 0; width: 300%; background: var(--aes-iris); animation: t06-shimmer 6s linear infinite; will-change: transform; }
-@keyframes t06-a1 { 0%, 18% { opacity: 1; transform: translateY(0); } 22%, 76% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } 80%, 100% { opacity: 1; transform: translateY(0); } }
-@keyframes t06-a2 { 0%, 24% { opacity: 0; transform: translateY(calc(0.6 * var(--u))); } 28%, 70% { opacity: 1; transform: translateY(0); } 74%, 100% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } }
-@keyframes t06-r1 { 0%, 18% { opacity: 1; } 21%, 80% { opacity: 0; } 83%, 100% { opacity: 1; } }
-@keyframes t06-r2 { 0%, 28% { opacity: 0; } 30.5%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
-@keyframes t06-w1 { 0%, 18% { opacity: 1; } 30%, 83.5% { opacity: 0; } 84%, 100% { opacity: 1; } }
-@keyframes t06-w2 { 0%, 30.5% { opacity: 0; } 31%, 74% { opacity: 1; } 76%, 100% { opacity: 0; } }
-@keyframes t06-under { 0%, 18% { transform: scaleX(1); } 21%, 43% { transform: scaleX(0); } 49%, 70% { transform: scaleX(1); } 73%, 95% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-@keyframes t06-shimmer { from { transform: translateX(0); } to { transform: translateX(-66.66%); } }
+.t06 .t06-under { animation: t06-under 10s ease-in-out infinite; }
+.t06 .t06-under i { animation: t06-shimmer 6s linear infinite; will-change: transform; }
+@keyframes t06-a1 { 0%, 16% { opacity: 1; transform: translateY(0); } 20%, 72% { opacity: 0; transform: translateY(calc(-0.5 * var(--u))); } 72.01% { opacity: 0; transform: translateY(calc(0.5 * var(--u))); } 77%, 100% { opacity: 1; transform: translateY(0); } }
+@keyframes t06-a2 { 0%, 20% { opacity: 0; transform: translateY(calc(0.5 * var(--u))); } 25%, 68% { opacity: 1; transform: translateY(0); } 72%, 100% { opacity: 0; transform: translateY(calc(-0.5 * var(--u))); } }
+@keyframes t06-r1 { 0%, 26% { opacity: 1; } 29%, 81.5% { opacity: 0; } 82%, 100% { opacity: 1; } }
+@keyframes t06-r2 { 0%, 29% { opacity: 0; } 30%, 78% { opacity: 1; } 81%, 100% { opacity: 0; } }
+@keyframes t06-w1 { 0%, 26% { opacity: 1; } 28%, 81.5% { opacity: 0; } 82%, 100% { opacity: 1; } }
+@keyframes t06-w2 { 0%, 29.5% { opacity: 0; } 30%, 78% { opacity: 1; } 80%, 100% { opacity: 0; } }
+@keyframes t06-under { 0%, 25% { transform: scaleX(1); } 29%, 40% { transform: scaleX(0); } 47%, 77% { transform: scaleX(1); } 81%, 91% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes t06-shimmer { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
 </style>
 <script>
 (function () {
