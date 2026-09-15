@@ -29,8 +29,14 @@
   position: absolute; left: -14%; right: -14%; top: 40%; height: 26%;
   transform: rotate(-13deg);
 }
+/* The overlock ridge is three or four knit cells wide. Height was a
+   percentage of the scene's HEIGHT while the cell is measured against its
+   WIDTH, so 3.4% came out at 0.69 of a cell and the seam read as a thin
+   chrome rod laid on the cloth rather than as a pressed ridge in it. Driven
+   from the same unit as the cell, it is 3.2 cells. */
 .f05 .f05-seam {
-  position: absolute; left: -14%; right: -14%; top: 49.4%; height: 3.4%;
+  position: absolute; left: -14%; right: -14%; top: 46%;
+  height: calc(var(--kn-pitch, 3.1%) * 3.2);
   transform: rotate(-13deg);
 }
 .f05 .f05-vignette {

@@ -109,21 +109,28 @@
    seam allowance pressed to one side, with a bright crest and a soft shadow
    on the far side, and a tight chain of fine diagonal loops along the fold. */
 .m-seam-overlock {
+  /* The crest used to run from near-black to near-white across the ridge,
+     which is a specular highlight, and a specular highlight on cloth reads as
+     chrome -- the seam looked like a rod laid on the knit instead of a fold
+     pressed into it. This brand's own note on the fabric is "high
+     micro-contrast, low macro-contrast": the thread catches light, the panel
+     does not. So the range is compressed to a cloth ridge and the stitch
+     chain is brought up to carry the detail instead. */
   background-image:
     repeating-linear-gradient(
       68deg,
-      rgba(255, 255, 255, 0.2) 0 2px,
-      transparent 2px 5px
+      rgba(255, 252, 244, 0.34) 0 2px,
+      rgba(58, 52, 42, 0.16) 2px 5px
     ),
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.34) 0,
-      rgba(96, 90, 78, 0.85) 14%,
-      rgba(168, 159, 138, 0.96) 34%,
-      rgba(216, 207, 182, 0.98) 48%,
-      rgba(150, 142, 124, 0.9) 64%,
-      rgba(52, 48, 40, 0.72) 86%,
-      rgba(0, 0, 0, 0.38) 100%
+      rgba(34, 30, 24, 0.3) 0,
+      rgba(120, 113, 97, 0.5) 16%,
+      rgba(178, 169, 147, 0.52) 38%,
+      rgba(198, 189, 164, 0.56) 50%,
+      rgba(166, 157, 137, 0.5) 64%,
+      rgba(92, 86, 72, 0.46) 86%,
+      rgba(34, 30, 24, 0.32) 100%
     );
 }
 

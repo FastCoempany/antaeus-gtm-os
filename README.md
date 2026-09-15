@@ -136,7 +136,9 @@ screens/        captures
 
 ## Reading order
 
-`BRIEF.md` is the contract. `study/` is the evidence. `SOURCES.md` says where
+`BRIEF.md` is the contract. `PHASE-7.md` is the adversarial read of the
+finished build — what it refuted, what was done about it, and what it tried to
+refute and could not. `study/` is the evidence. `SOURCES.md` says where
 every value came from. `DESIGN.md` is the token and material plan with the
 review against the brief's list of generic tells. `ASSUMPTIONS.md` is every
 decision made where the brief was silent, every deviation, and every gap in the
