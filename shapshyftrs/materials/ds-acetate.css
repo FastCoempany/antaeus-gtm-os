@@ -1,0 +1,107 @@
+/* materials/ds-acetate.css — Darkest Shades, acetate.
+
+   Measured from: Renders_Sunglasses_presentation.pdf page images
+   (study/darkest-shades.md §2).
+   Taken: gloss black base #131313–#1B1B1B, mid-tones #2E2E2E–#383838, hard thin
+   near-white specular #C8–#E8 along every chamfer, sub-surface lift to
+   #3A–#50 at thin edges; satin black #202020–#262626 with a wide soft
+   highlight topping out at #6A–#80; blue tortoise near-black ground
+   #131313–#1A273A with cobalt-periwinkle flecks #5B8CCF–#6495D0 in irregular
+   blobs 3–8% of frame width, edges lifting to #93B5BF–#A7BEC6 when lit from
+   behind; red tortoise the same behaviour with oxblood flecks #4B1313–#501414.
+   Policy: rebuilt.
+
+   Gloss black behaves like polished dark resin: near-mirror on the flat
+   facets, so it mostly reads as reflections of the grey room rather than as
+   black. The tortoise is translucent and is the richest and most under-used
+   surface the brand owns — the flecks glow from behind, they are never a
+   repeating pattern, and the colour runs hottest where the material is
+   thinnest.
+
+   What it is not: real sub-surface scattering carries light *through* a
+   volume. This fakes it with a screen pass and an edge glow, so it holds for
+   a plate and not for a solid.
+
+   MEASURED OFF THE RENDER, after the second pass fixed the first:
+     ground          #10141B          spec #131313-#1A273A     in range
+     fleck hue/sat   210deg / 0.49    spec 215deg / 0.55       close
+     blob width      up to 5.8%       spec 3-8% of the frame   in range
+     backlit fleck   #9CBCDD          spec #93B5BF-#A7BEC6     in range
+   The first build missed every one of those. It ran three octaves of
+   turbulence against a hard alpha threshold, which shatters a blob into a
+   scatter of specks about 1% wide, and it sat under a
+   brightness(.66) saturate(1.15) filter on the frame -- a colour grade, which
+   this brand's canon bans outright, and which was also what dragged the
+   ground to #0B0D11 and the flecks to a near-neutral #72808E. The grade is
+   gone, the octaves are down to one so a blob stays whole, and the alpha
+   curve keeps its zero-crossing (blob width) while reaching full opacity at
+   the core, which is what lets the real cobalt show instead of a wash that
+   blends grey against near-black. */
+
+.m-acetate-gloss {
+  background-color: var(--ds-gloss, #131313);
+  background-image:
+    linear-gradient(168deg, rgba(255, 255, 255, 0.1) 0, transparent 26%),
+    linear-gradient(0deg, rgba(210, 210, 210, 0.1) 0, transparent 34%),
+    linear-gradient(180deg, #1B1B1B 0, #101010 62%, #191919 100%);
+}
+
+/* The chamfer: a hard, thin, near-white line 1–3 px at render scale. */
+.m-acetate-chamfer {
+  box-shadow:
+    inset 0 1px 0 rgba(216, 216, 216, 0.72),
+    inset 0 -1px 0 rgba(58, 58, 58, 0.6);
+}
+
+.m-acetate-satin {
+  background-color: var(--ds-satin, #202020);
+  background-image: radial-gradient(120% 90% at 40% 8%, rgba(255, 255, 255, 0.24) 0, transparent 66%);
+}
+
+/* Blue tortoise, lit from behind. --glow-x / --glow-y move the backlight;
+   where it sits, the material opens up. */
+.m-tortoise {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  background-color: #10151F;
+  background-image:
+    /* the backlight, and the flecks glowing where it passes */
+    radial-gradient(
+      40% 54% at var(--glow-x) var(--glow-y),
+      rgba(167, 190, 198, 0.3) 0,
+      rgba(147, 181, 191, 0.13) 42%,
+      transparent 80%
+    ),
+    /* The flecks. One large tile: a small tile at a low frequency reads as
+       repeating cloud and its seams show at frame scale. Alpha stays low so
+       the ground remains near-black -- the fleck is an inclusion in dark
+       material, not a cloud on a light one.
+       numOctaves is 1 here, not 3. Octaves add finer and finer detail on top
+       of the base frequency, and against a hard alpha threshold that detail
+       shatters what should be an organic blob 3-8% of the frame wide into a
+       scatter of specks around 1% -- the material stopped reading as acetate
+       and started reading as a snowstorm. One octave keeps the blob whole.
+       The fill is the measured cobalt-periwinkle #5B8CCF straight from the
+       study, not a darker stand-in relit by a filter. */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
+<rect width='900' height='560' filter='url(%23f)'/></svg>"),
+    /* a second, finer scatter so the flecks are not all one size */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
+<rect width='900' height='560' filter='url(%23g)'/></svg>"),
+    linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
+  background-size: auto, 100% 100%, 100% 100%, auto;
+  background-blend-mode: screen, screen, screen, normal;
+}
+
+/* Translucency: the rim glows from behind at #93B5BF–#A7BEC6. */
+.m-tortoise-rim {
+  box-shadow:
+    inset 0 0 calc(var(--u, 1%) * 2.4) rgba(147, 181, 191, 0.42),
+    inset 0 0 0 1px rgba(167, 190, 198, 0.28);
+}

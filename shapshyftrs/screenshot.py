@@ -2,10 +2,10 @@
 """Screenshot dist/ into screens/ with Playwright for Python.
 
   python3 screenshot.py                 variants at 1440x900 and 390x844 (full page),
-                                        plus every teaser's resting frame at 1600 wide
+                                        plus every frame's resting frame at 1600 wide
   python3 screenshot.py --variants      variants only
-  python3 screenshot.py --teasers       teaser stills only
-  python3 screenshot.py --live          capture teasers mid-loop (3 s in) instead of resting
+  python3 screenshot.py --frames       frame stills only
+  python3 screenshot.py --live          capture frames mid-loop (3 s in) instead of resting
   python3 screenshot.py --only NAME     restrict to files whose name contains NAME
   python3 screenshot.py --fold          variants at viewport size only (first fold)
   python3 screenshot.py --fetch-fonts   cache the declared Google Fonts faces into
@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent
 DIST = ROOT / "dist"
 SCREENS = ROOT / "screens"
 VIEWPORTS = [(1440, 900), (390, 844)]
-TEASER_WIDTH = 1600
+FRAME_WIDTH = 1600
 FALLBACK_CHROMIUM = ["/opt/pw-browsers/chromium", os.environ.get("PLAYWRIGHT_CHROMIUM_PATH", "")]
 
 
@@ -167,14 +167,14 @@ def settle(page, ms: int) -> bool:
 def main(argv: list[str]) -> int:
     if "--fetch-fonts" in argv:
         return fetch_fonts()
-    want_variants = "--teasers" not in argv
-    want_teasers = "--variants" not in argv
+    want_variants = "--frames" not in argv
+    want_frames = "--variants" not in argv
     live = "--live" in argv
     fold = "--fold" in argv
     only = argv[argv.index("--only") + 1] if "--only" in argv else ""
 
     SCREENS.mkdir(exist_ok=True)
-    (SCREENS / "teasers").mkdir(exist_ok=True)
+    (SCREENS / "frames").mkdir(exist_ok=True)
     errors: list[str] = []
     network: list[str] = []  # resource fetch failures (fonts behind a proxy), reported but not counted
     fallback: list[str] = []  # stills taken before the declared faces loaded -- not usable
@@ -211,16 +211,16 @@ def main(argv: list[str]) -> int:
                     print(f"wrote {out.relative_to(ROOT)}{'' if ok else '   ** FALLBACK TYPE **'}")
                     ctx.close()
 
-        if want_teasers:
-            for html in sorted((DIST / "teasers").glob("t*.html")):
+        if want_frames:
+            for html in sorted((DIST / "frames").glob("t*.html")):
                 if only and only not in html.name:
                     continue
-                ctx, page = open_page(TEASER_WIDTH, TEASER_WIDTH * 10 // 16, reduce=not live)
+                ctx, page = open_page(FRAME_WIDTH, FRAME_WIDTH * 10 // 16, reduce=not live)
                 page.goto(html.resolve().as_uri())
                 ok = settle(page, 3000 if live else 800)
                 sub = "live" if live else ""
-                (SCREENS / "teasers" / sub).mkdir(exist_ok=True) if sub else None
-                out = SCREENS / "teasers" / sub / f"{html.stem}.png"
+                (SCREENS / "frames" / sub).mkdir(exist_ok=True) if sub else None
+                out = SCREENS / "frames" / sub / f"{html.stem}.png"
                 page.screenshot(path=str(out), full_page=False)
                 if not ok:
                     fallback.append(str(out.relative_to(ROOT)))

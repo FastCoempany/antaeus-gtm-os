@@ -4,17 +4,18 @@
 <!-- @include partials/head.html -->
 <title>shapshyftrs</title>
 <!-- @tokens -->
+<!-- @materials -->
 <!-- @include partials/chrome-styles.html -->
 <style>
-/* Variant A, keynote: one teaser per viewport on a full-bleed stage, vertical
+/* Variant A, keynote: one frame per viewport on a full-bleed stage, vertical
    scroll-snap (proximity), the caption arrives, then the loop starts. */
 html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 .stage-section { min-height: 100vh; min-height: 100svh; scroll-snap-align: start; display: grid; align-content: center; padding: var(--section) var(--gutter); }
-/* The hero is one viewport: the copy on top, teaser 1 filling the row that is left.
+/* The hero is one viewport: the copy on top, frame 1 filling the row that is left.
    The row is a size container, so the stage is sized from the room it really has:
    it is as tall as the row and as wide as a 16:10 frame whose middle 56% is the
    row (gutter to gutter at most). The frame is pulled up so the band centered on
-   the teaser's declared focal point (--fy) is what shows; the teaser's own black
+   the frame's declared focal point (--fy) is what shows; the frame's own black
    margins are what get cropped, never its subject. Below 640px of stage width the
    4:5 crop would trip, so the stage never goes narrower than that on desktop. */
 .hero { min-height: 100vh; min-height: 100svh; scroll-snap-align: start; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: clamp(24px, 4vh, 48px) var(--gutter) 0; }
@@ -22,21 +23,32 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 .hero-stage { display: grid; align-items: center; justify-items: start; min-height: calc(300px + clamp(24px, 4vh, 40px)); padding-bottom: clamp(24px, 4vh, 40px); container-type: size; }
 .hero-stage .stage { width: max(min(640px, 100%), min(calc(100cqh * 1.6 / 0.56), 100%)); height: 100cqh; }
 .hero-stage .stage > .stage-frame { margin-top: calc(50cqh - var(--fy, 0.5) * 62.5cqw); }
-.teaser-stage { display: grid; grid-template-rows: 1fr auto; gap: 16px; align-content: center; justify-items: center; }
-.teaser-stage .teaser-frame { width: min(100%, calc((100vh - 2 * var(--section) - 60px) * 1.6)); width: min(100%, calc((100svh - 2 * var(--section) - 60px) * 1.6)); align-self: center; }
+.frame-stage { display: grid; grid-template-rows: 1fr auto; gap: 16px; align-content: center; justify-items: center; }
+.frame-stage .frame-frame { width: min(100%, calc((100vh - 2 * var(--section) - 60px) * 1.6)); width: min(100%, calc((100svh - 2 * var(--section) - 60px) * 1.6)); align-self: center; }
 /* The caption spans the content width so it starts where the page's other text starts (the frame's edge is invisible on black). */
-.teaser-stage figcaption { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap; }
-.js .teaser-stage .caption { opacity: 0; transition: opacity 400ms ease; }
-.js .teaser-stage.is-inview .caption { opacity: 1; }
+.frame-stage figcaption { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap; }
+.js .frame-stage .caption { opacity: 0; transition: opacity 400ms ease; }
+.js .frame-stage.is-inview .caption { opacity: 1; }
 .how-stage, .offer-stage { align-content: center; }
 .send { scroll-snap-align: start; }
-/* The one orchestrated moment on load: wordmark, then slogan (the sub-line and button arrive on the same beat), then teaser 1 (runtime delay 700ms). Under 1.2 s. Rule-10 review, DESIGN.md. */
+/* The one orchestrated moment on load: wordmark, then slogan (the sub-line and button arrive on the same beat), then frame 1 (runtime delay 700ms). Under 1.2 s. Rule-10 review, DESIGN.md. */
 .js .hero .wordmark { animation: a-in 320ms ease-out both; }
 .js .hero .slogan { animation: a-in 360ms ease-out 220ms both; }
 .js .hero .subline, .js .hero .button { animation: a-in 360ms ease-out 220ms both; }
+/* A short laptop viewport cannot hold a 64px slogan, three lines of sub-copy
+   and a 300px stage inside 700px. The copy scale and the stage floor both come
+   down rather than letting the hero run past the fold on the one variant whose
+   whole idea is one frame per viewport. */
+@media (min-width: 768px) and (max-height: 820px) {
+  .hero { padding-top: 20px; }
+  .hero .slogan { font-size: clamp(34px, 4.4vh, 48px); }
+  .hero .subline { max-width: 52ch; }
+  .hero-copy { padding-bottom: 16px; gap: 14px; }
+  .hero-stage { min-height: 216px; padding-bottom: 16px; }
+}
 @keyframes a-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .js .teaser-stage .caption, .js .teaser-stage .source { opacity: 1; transition: none; }
+  .js .frame-stage .caption, .js .frame-stage .source { opacity: 1; transition: none; }
 }
 @media (max-width: 767px) {
   html { scroll-snap-type: none; }
@@ -45,9 +57,9 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
   .hero-stage { container-type: normal; margin-inline: calc(-1 * var(--gutter)); }
   .hero-stage .stage { height: auto; }
   .hero-stage .stage > .stage-frame { margin-top: 0; }
-  .hero-stage .stage, .teaser-stage .teaser-frame, .teaser-stage figcaption { width: 100%; }
-  .teaser-stage { padding-left: 0; padding-right: 0; }
-  .teaser-stage figcaption { padding: 0 var(--gutter); flex-direction: column; align-items: flex-start; gap: 4px; }
+  .hero-stage .stage, .frame-stage .frame-frame, .frame-stage figcaption { width: 100%; }
+  .frame-stage { padding-left: 0; padding-right: 0; }
+  .frame-stage figcaption { padding: 0 var(--gutter); flex-direction: column; align-items: flex-start; gap: 4px; }
 }
 </style>
 </head>
@@ -58,12 +70,12 @@ html { scroll-snap-type: y proximity; scroll-padding-top: 0; }
 <section class="stage-section intro-stage" aria-label="The gallery">
 <!-- @include partials/gallery-intro.html -->
 </section>
-<!-- @each-teaser from=1 to=13 -->
-<figure class="stage-section teaser-stage" data-teaser-num="${TEASER_NUM}">
-  <div class="teaser-frame">
-${TEASER_HTML}
+<!-- @each-frame from=1 to=12 -->
+<figure class="stage-section frame-stage" data-frame-num="${FRAME_NUM}">
+  <div class="frame-frame">
+${FRAME_HTML}
   </div>
-  <figcaption><span class="caption">${TEASER_CAPTION}</span><span class="source">${TEASER_SOURCE_HTML}</span></figcaption>
+  <figcaption><span class="caption">${FRAME_CAPTION}</span><span class="source">${FRAME_SOURCE_HTML}</span></figcaption>
 </figure>
 <!-- @end-each -->
 <section class="stage-section how-stage">
@@ -79,7 +91,7 @@ ${TEASER_HTML}
 <script>
 /* Variant A: the caption arrives before the loop starts. */
 (function () {
-  var figs = Array.prototype.slice.call(document.querySelectorAll(".teaser-stage"));
+  var figs = Array.prototype.slice.call(document.querySelectorAll(".frame-stage"));
   if (!("IntersectionObserver" in window)) { figs.forEach(function (f) { f.classList.add("is-inview"); }); return; }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add("is-inview"); });

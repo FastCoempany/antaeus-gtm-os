@@ -1,0 +1,129 @@
+<!-- frame id=iris-seam num=4 source=aesdr focal=50%,46% loop=8 interactive=yes -->
+<div class="stage f04" data-frame="iris-seam" style="--fx:0.50;--fy:0.46">
+  <div class="stage-frame">
+    <div class="stage-scene f04-scene m-ae-field">
+      <div class="f04-words" aria-live="off">
+        <span class="f04-word m-iris-text" data-i="0">Owning</span>
+        <span class="f04-word m-iris-text" data-i="1">Untamed</span>
+        <span class="f04-word m-iris-text" data-i="2">Verdict</span>
+        <span class="f04-word m-iris-text" data-i="3">Keeper</span>
+      </div>
+      <div class="f04-line m-iris-line"></div>
+      <p class="f04-sub">The operating manual, not the motivation engine.</p>
+      <svg class="f04-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 45 Q38 12 55 45"/>
+          <path d="M21 45 H55"/>
+          <path d="M29 41 Q38 30 47 41"/>
+          <path d="M33 45 V41.5 M43 45 V41.5"/>
+          <path d="M26 45 V50 M34 45 V51 M43 45 V51 M51 45 V50"/>
+          <circle cx="15" cy="36" r="6.2"/>
+          <path d="M11.8 30.8 Q9.4 19 10.2 11"/>
+          <path d="M18.2 30.8 Q20.8 19 20.2 11"/>
+        </g>
+        <circle cx="13" cy="35" r="1.5" fill="#1A1A1A"/>
+        <path d="M9 33.2 Q15 29.6 21 33.2" fill="none" stroke="#8B1A1A" stroke-width="2"
+              stroke-linecap="round"/>
+      </svg>
+      <button class="f04-hold" type="button" aria-pressed="false">
+        <span class="f04-hold-label">Hold the word</span>
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 4 — the ration as the composition.
+   Materials: ae-iris (the seven stops verbatim, 300% background-size, the 4 s
+   shimmer, the 1 px ambient line at opacity .15) and ae-paper (cream
+   #FAF7F2, zero radius).
+   The iris is always an accent on something. Here it is the only thing, and
+   its discipline is the subject: one line, and one word lit at a time. The
+   mascot is present as its own monoline glyph family — the shell arc and the
+   ear — which is the brand's abstraction of the creature and the only
+   faithful way to carry it without placing a source render. Logged in
+   ASSUMPTIONS.md.
+   Registers the brand has retired are avoided deliberately: no classified, no
+   dossier, no ledger, no editorial split, no decision card. */
+.f04 .f04-scene { position: absolute; inset: 0; }
+.f04 .f04-line { position: absolute; left: 0; right: 0; top: 56%; height: 2px; opacity: 0.22; }
+.f04 .f04-words {
+  position: absolute; left: 0; right: 0; top: 30%; height: 22%;
+  display: grid; place-items: center;
+}
+.f04 .f04-word {
+  grid-area: 1 / 1;
+  font-family: var(--ae-display); font-style: italic; font-weight: 900;
+  font-size: calc(var(--u) * 11); line-height: 1; letter-spacing: -0.02em;
+  opacity: 0;
+}
+.f04.is-playing .f04-word { animation: f04-ignite 8s linear infinite; }
+.f04 .f04-word[data-i="0"] { animation-delay: 0s; }
+.f04 .f04-word[data-i="1"] { animation-delay: 2s; }
+.f04 .f04-word[data-i="2"] { animation-delay: 4s; }
+.f04 .f04-word[data-i="3"] { animation-delay: 6s; }
+.f04 .f04-sub {
+  position: absolute; left: 0; right: 0; top: 63%; margin: 0; text-align: center;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.3);
+  line-height: 1.6; color: var(--ae-muted);
+}
+.f04 .f04-glyph {
+  position: absolute; right: 7%; bottom: 9%;
+  width: calc(var(--u) * 11); height: calc(var(--u) * 11);
+}
+.f04 .f04-hold {
+  position: absolute; left: 7%; bottom: 9%;
+  font-family: var(--ae-cond); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 1.9); letter-spacing: var(--ae-track-button);
+  color: var(--ae-ink); background: transparent;
+  border: 1.5px solid var(--ae-ink); border-radius: var(--ae-radius);
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 2);
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.3s;
+}
+.f04 .f04-hold:hover { transform: translateY(-1px); }
+.f04 .f04-hold:focus-visible { outline: 2px solid var(--ae-crimson); outline-offset: 2px; }
+.f04 .f04-hold[aria-pressed="true"] { background: var(--ae-ink); color: var(--ae-cream); }
+.f04.is-held .f04-word { animation-play-state: paused !important; }
+.f04.is-held .f04-line { animation-play-state: paused !important; }
+@keyframes f04-ignite {
+  0%, 1% { opacity: 0; }
+  6% { opacity: 1; }
+  22% { opacity: 1; }
+  27%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f04 .f04-word { opacity: 0; }
+  .f04 .f04-word[data-i="0"] { opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  .f04 .f04-words { left: 26%; right: 26%; top: 28%; }
+  .f04 .f04-word { font-size: calc(var(--u) * 7.4); }
+  .f04 .f04-sub { left: 27%; right: 27%; top: 60%; font-size: calc(var(--u) * 2.9); }
+  .f04 .f04-hold {
+    left: 50%; right: auto; bottom: 8%; transform: translateX(-50%);
+    font-size: calc(var(--u) * 2.4);
+  }
+  .f04 .f04-glyph {
+    right: 28%; left: auto; bottom: 6%; transform: none;
+    width: calc(var(--u) * 9); height: calc(var(--u) * 9);
+  }
+  .f04 .f04-hold { left: 28%; right: auto; transform: none; }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var btn = root.querySelector(".f04-hold");
+  var label = root.querySelector(".f04-hold-label");
+  btn.addEventListener("click", function () {
+    var held = root.classList.toggle("is-held");
+    btn.setAttribute("aria-pressed", held ? "true" : "false");
+    label.textContent = held ? "Let it run" : "Hold the word";
+  });
+})();
+</script>

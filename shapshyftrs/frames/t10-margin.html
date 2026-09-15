@@ -1,0 +1,132 @@
+<!-- frame id=margin num=10 source=aesdr focal=62%,50% loop=10 interactive=no -->
+<div class="stage f10" data-frame="margin" style="--fx:0.62;--fy:0.50" role="img"
+     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, naming the rules the sentences beside them obey, and a list of banned words is struck through in red">
+  <div class="stage-frame">
+    <div class="stage-scene f10-page m-ae-field">
+      <p class="f10-kicker">Manuscript</p>
+      <div class="f10-body">
+        <p>Every month or quarter, they reset your number to <span class="f10-mark">zero.</span>
+          And every month or quarter, you act surprised.
+          <span class="f10-mark">You don't have a pipeline problem. You have a denial problem.</span></p>
+      </div>
+      <aside class="f10-rail m-ae-margin">
+        <span class="f10-note" data-n="0">the named number — never &ldquo;many&rdquo;</span>
+        <span class="f10-note" data-n="1">the verdict construction</span>
+        <span class="f10-note f10-banned" data-n="2">crush it &middot; synergy &middot; game-changer</span>
+      </aside>
+      <svg class="f10-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 45 Q38 12 55 45"/>
+          <path d="M21 45 H55"/>
+          <path d="M29 41 Q38 30 47 41"/>
+          <path d="M33 45 V41.5 M43 45 V41.5"/>
+          <path d="M26 45 V50 M34 45 V51 M43 45 V51 M51 45 V50"/>
+          <circle cx="15" cy="36" r="6.2"/>
+          <path d="M11.8 30.8 Q9.4 19 10.2 11"/>
+          <path d="M18.2 30.8 Q20.8 19 20.2 11"/>
+        </g>
+        <circle cx="13" cy="35" r="1.5" fill="#1A1A1A"/>
+        <path d="M9 33.2 Q15 29.6 21 33.2" fill="none" stroke="#8B1A1A" stroke-width="2"
+              stroke-linecap="round"/>
+        <g stroke="#2E7D32" stroke-width="1.7" stroke-linecap="round" fill="none">
+          <path d="M38 28.5 V17"/>
+          <path d="M38 21.5 q-5.4 -0.8 -6.4 -5.6 q5.4 0.9 6.4 4.8"/>
+          <path d="M38 19.5 q5.4 -0.8 6.4 -5.6 q-5.4 0.9 -6.4 4.8"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 10 — a page annotating itself.
+   Materials: ae-paper (cream #FAF7F2, the manuscript margin rail behind a 2px
+   #C53030 border, strikes at text-decoration-thickness 2px, inserts in red
+   ink with a red underline) and the Caveat hand, which in this brand is a
+   voice rather than a decorative script.
+   Two reds sit side by side here and they are not interchangeable: crimson
+   #8B1A1A is the brand's authority, #C53030 is the editor's pen. Only the
+   pen writes in the margin.
+   The rail exists in the product as a component of a finished artifact. Here
+   the annotation is the event, and you watch it happen.
+   The mascot is present as its own monoline glyph — the recovery form, shell
+   with a sprout, in the brand's 1.6px round-cap construction. Logged in
+   ASSUMPTIONS.md as the faithful alternative to placing a source render.
+   Registers the brand has retired are avoided: this is the margin voice, not
+   a dossier, a ledger or an editorial split. */
+.f10 .f10-page { position: absolute; inset: 0; overflow: hidden; }
+.f10 .f10-kicker {
+  position: absolute; left: 6%; top: 7%; margin: 0;
+  font-family: var(--ae-mono); font-size: calc(var(--u) * 1.4);
+  text-transform: uppercase; letter-spacing: var(--ae-track-eyebrow);
+  color: var(--ae-muted);
+}
+.f10 .f10-body {
+  position: absolute; left: 6%; right: 34%; top: 18%;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.5);
+  line-height: 2; color: var(--ae-ink);
+}
+.f10 .f10-body p { margin: 0 0 calc(var(--u) * 2.4); }
+/* The pen marks the body rather than rewriting it. Underlining a clause that
+   already obeys the rule is an annotation; striking a shipped sentence and
+   writing a replacement would be asserting an edit the brand never made. */
+.f10 .f10-mark {
+  background-image: linear-gradient(var(--ae-redink), var(--ae-redink));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.06em);
+  background-size: 0 2px;
+  animation: f10-mark 10s linear infinite;
+}
+.f10 .f10-body p .f10-mark + .f10-mark,
+.f10 .f10-mark:nth-of-type(2) { animation-delay: 2.2s; }
+/* The one strike falls where the brand's own list says it should. */
+.f10 .f10-banned {
+  color: var(--ae-redink);
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink);
+  text-decoration-thickness: 2px;
+}
+.f10 .f10-rail {
+  position: absolute; right: 5%; top: 17%; width: 25%;
+  padding-left: calc(var(--u) * 1.6);
+  display: grid; gap: calc(var(--u) * 4.4); align-content: start;
+  font-size: calc(var(--u) * 3);
+  transform: rotate(-1.5deg);
+}
+.f10 .f10-note { opacity: 0; animation: f10-note 10s linear infinite; }
+.f10 .f10-note[data-n="0"] { animation-delay: 0.4s; }
+.f10 .f10-note[data-n="1"] { animation-delay: 2.6s; }
+.f10 .f10-note[data-n="2"] { animation-delay: 4.8s; }
+.f10 .f10-glyph {
+  position: absolute; right: 6%; bottom: 8%;
+  width: calc(var(--u) * 10); height: calc(var(--u) * 10); opacity: 0.85;
+}
+@keyframes f10-note { 0%, 3% { opacity: 0; } 8%, 92% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes f10-mark {
+  0%, 56% { background-size: 0 2px; }
+  66%, 100% { background-size: 100% 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f10 .f10-note { opacity: 1; }
+  .f10 .f10-mark { background-size: 100% 2px; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  /* focal 62%: the band runs 37% to 87% of the scene. The body and the rail
+     both move inside it, the rail dropping below the text rather than beside
+     it -- which is what the real manuscript does on a narrow screen. */
+  .f10 .f10-kicker { left: 39%; top: 5%; font-size: calc(var(--u) * 1.9); }
+  .f10 .f10-body {
+    left: 39%; right: 15%; top: 15%;
+    font-size: calc(var(--u) * 2.7); line-height: 1.7;
+  }
+  .f10 .f10-body p { margin-bottom: calc(var(--u) * 2.4); }
+  .f10 .f10-rail {
+    left: 39%; right: 15%; top: 48%; bottom: auto; width: auto;
+    font-size: calc(var(--u) * 3.1); gap: calc(var(--u) * 2.2);
+  }
+  .f10 .f10-glyph { right: 16%; bottom: 5%; width: calc(var(--u) * 13); height: calc(var(--u) * 13); }
+}
+</style>

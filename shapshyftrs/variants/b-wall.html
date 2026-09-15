@@ -4,20 +4,21 @@
 <!-- @include partials/head.html -->
 <title>shapshyftrs</title>
 <!-- @tokens -->
+<!-- @materials -->
 <!-- @include partials/chrome-styles.html -->
 <style>
 /* Variant B, the wall: a compact hero in the top 40% of the viewport with
-   teaser 1 live beneath it, then a dense wall of teasers at native 16:10,
+   frame 1 live beneath it, then a dense wall of frames at native 16:10,
    two columns, three at 1440 and up, one on a phone, gaps of 24px, museum
    labels beneath each. Loops play only in view (the shared runtime). */
-/* The hero is one viewport: the copy in the top 40%, teaser 1 filling the row
+/* The hero is one viewport: the copy in the top 40%, frame 1 filling the row
    that is left, sized the way variants A and C size theirs. The row is a size
    container; the stage is as tall as the row and as wide as a 16:10 frame whose
    middle 56% is the row (gutter to gutter at most, never under 640px so the
    shared 4:5 crop never trips on desktop), pulled up so the band around the
-   teaser's declared focal point (--fy) is what shows. Sizing the stage from
+   frame's declared focal point (--fy) is what shows. Sizing the stage from
    60svh minus a guessed 64px put it under 640px at 1366x768 and 1280x720, which
-   turned teaser 1 into the phone crop and ran the hero 350-400px past the fold. */
+   turned frame 1 into the phone crop and ran the hero 350-400px past the fold. */
 .hero { min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: minmax(40vh, auto) minmax(0, 1fr); padding: clamp(24px, 4vh, 40px) var(--gutter) 0; }
 .hero .wordmark { font-size: var(--chrome-wordmark); }
 .hero-copy { gap: 16px; align-content: start; }
@@ -31,20 +32,27 @@
 .tile .caption { font-size: var(--chrome-body); line-height: var(--chrome-body-lh); letter-spacing: 0; }
 .js .hero .wordmark { animation: b-in 320ms ease-out both; }
 .js .hero .slogan { animation: b-in 360ms ease-out 220ms both; }
-/* Three beats on load (rule-10 review, DESIGN.md): wordmark, slogan with its copy and button, then teaser 1. */
+/* Three beats on load (rule-10 review, DESIGN.md): wordmark, slogan with its copy and button, then frame 1. */
 .js .hero .subline, .js .hero .button { animation: b-in 360ms ease-out 220ms both; }
 @keyframes b-in { from { opacity: 0; } to { opacity: 1; } }
 @media (min-width: 768px) {
-  /* Brief 11.B: the wall's teasers are native 16:10. The shared stage crops any
+  /* Brief 11.B: the wall's frames are native 16:10. The shared stage crops any
      stage under 640px of its own width to 4:5 (brief 6.1, for phones), and every
      wall column is narrower than that on desktop (416px at 1440, 576px at 1920),
      so the wall opts its tiles out of the crop from 768px up. Specificity beats
      stage.css's container rules; inset: 0 with auto width and height restores the
      16:10 composition (top/left auto after inset: 0 would collapse the scene). */
+  /* Renaming the container stops both stage.css's crop and every frame's own
+     phone layout from matching, which is the whole opt-out in one move.
+     100cqw still resolves: an unnamed container unit reads the nearest query
+     container whatever it is called. */
+  .wall .stage { container-name: wall-tile; }
   .wall .stage > .stage-frame { aspect-ratio: 16 / 10; --sw: 100cqw; }
   .wall .stage > .stage-frame > .stage-scene { inset: 0; width: auto; height: auto; }
-  /* Thirteen tiles never fill two or three columns; the last one spans the row and closes the wall instead of leaving a stub beside empty cells. */
-  .wall .tile:last-child { grid-column: 1 / -1; }
+  /* Twelve tiles divide evenly at every breakpoint -- 12/3, 12/2, 12/1 -- so
+     there is no stub to close and no tile spans the row. (The set was thirteen
+     in the first version, which did leave one, and the rule that fixed it then
+     is what made frame 12 render three columns wide here.) */
 }
 @media (min-width: 1440px) { .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 767px) {
@@ -65,12 +73,12 @@
 <!-- @include partials/gallery-intro.html -->
 </section>
 <section class="wall" aria-label="Teasers">
-<!-- @each-teaser from=1 to=13 -->
-<figure class="tile" data-teaser-num="${TEASER_NUM}">
+<!-- @each-frame from=1 to=12 -->
+<figure class="tile" data-frame-num="${FRAME_NUM}">
   <div class="tile-frame">
-${TEASER_HTML}
+${FRAME_HTML}
   </div>
-  <figcaption><span class="caption">${TEASER_CAPTION}</span><span class="source">${TEASER_SOURCE_HTML}</span></figcaption>
+  <figcaption><span class="caption">${FRAME_CAPTION}</span><span class="source">${FRAME_SOURCE_HTML}</span></figcaption>
 </figure>
 <!-- @end-each -->
 </section>

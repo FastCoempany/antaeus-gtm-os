@@ -1,0 +1,161 @@
+/* A NOTE ON UNITS, because this material got it wrong once.
+   background-size takes two values and resolves the first against the
+   element's width and the second against its height. Give it percentages on
+   both axes and a cell meant to be square renders at the element's aspect
+   ratio -- on a 16:10 field a 49-degree diamond came out at 36 degrees and the
+   knurl read as quilted upholstery. Both axes must therefore be driven from a
+   single length. --u is one percent of the scene's width, so a cell expressed
+   in --u keeps its measured proportions at every frame size. Never set the
+   cell token to a percentage. */
+/* materials/digs-knit.css — DIGS, the thermal knit and its rib.
+
+   Measured from: the garment photography and fabric closeups, sampled with
+   PIL (study/digs.md §2).
+   Taken: knit face sunlit #A89F8A, in shade #4C493E, top-lit #ADA595, in cast
+   shadow #787265; the reverse face — a completely different material, smooth,
+   flat, warmer and duller — #5D523F; overlock seam ridge #868070; body under
+   warm low sun #A49267 with highlight #CCB17D and mid #94824E; body under cool
+   studio light #8C8C83. Rib neckband #A59869, rib cuff #9C998B / #8F8C78.
+   Spec: thermal knit 100% cotton 215 gsm × 150 cm; rib 2×2 95/5 380 gsm.
+   Policy: rebuilt.
+
+   The face is a micro-waffle / bird's-eye: a half-drop (staggered) lattice of
+   tiny raised yarn crossings with a dark pinhole at each cell centre, about
+   1.2 mm pitch, the two yarn families crossing at roughly ±45°. At arm's
+   length it reads as a fine matte grain and only resolves into diamonds at
+   macro distance. The raised crossings catch a soft specular ridge highlight
+   while the pinholes hold a small hard shadow — high micro-contrast, low
+   macro-contrast, and a diffuse cotton sheen with no gloss.
+
+   What it is not: real knit has depth and the pinholes are holes, so raking
+   light throws shadows across them. This is a flat plane with a fixed light,
+   and the half-drop is a background offset rather than a real stagger of
+   yarns. */
+
+.m-knit {
+  --kn-pitch: calc(var(--u, 1%) * 2.6);  /* the waffle cell as a LENGTH -- see the note */
+  --kn-light: 0.5;                   /* 0 raking .. 1 flat */
+
+  /* The cell is an SVG pattern, not crossed gradients: the pinhole is a
+     closed feature at the centre of each cell and a gradient pair cannot
+     carry one -- with gradients alone the face reads as herringbone and the
+     holes disappear. One cell holds the two yarn crossings at +/- 45 degrees,
+     their ridge highlights, and the pinhole with its small hard shadow. The
+     half-drop comes from the second background position. */
+  background-color: var(--digs-knit, #A89F8A);
+  background-image:
+    linear-gradient(
+      168deg,
+      rgba(173, 165, 149, calc(0.2 + var(--kn-light) * 0.62)) 0,
+      rgba(120, 114, 101, 0.4) 52%,
+      rgba(76, 73, 62, calc(0.78 - var(--kn-light) * 0.5)) 100%
+    ),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<rect width='40' height='40' fill='%23554F42' fill-opacity='0.34'/>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23D8CFB6' stroke-opacity='0.95' stroke-width='7'/>\
+<path d='M0 20 L20 0 L40 20' stroke='%23F3EBD6' stroke-opacity='0.8' stroke-width='2.6'/>\
+<path d='M40 20 L20 40 L0 20' stroke='%232E2A20' stroke-opacity='0.5' stroke-width='2.4'/>\
+</g>\
+<circle cx='20' cy='20' r='3' fill='%232A261C' fill-opacity='0.72'/>\
+</svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23C9C0A6' stroke-opacity='0.5' stroke-width='6'/>\
+</g>\
+<circle cx='20' cy='20' r='2.6' fill='%232A261C' fill-opacity='0.42'/>\
+</svg>");
+  background-size: auto, var(--kn-pitch) var(--kn-pitch), var(--kn-pitch) var(--kn-pitch);
+  background-position:
+    0 0,
+    0 0,
+    calc(var(--kn-pitch) / 2) calc(var(--kn-pitch) / 2);   /* the half-drop */
+  background-blend-mode: soft-light, normal, normal;
+}
+
+/* The reverse: smooth, flat, warmer and duller. A fine jersey, not a waffle. */
+.m-knit-reverse {
+  background-color: var(--digs-knit-reverse, #5D523F);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 2px
+    ),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0, rgba(0, 0, 0, 0.18) 100%);
+}
+
+/* 2×2 rib: pairs of raised wales alternating with recessed pairs, ~1.5–2 mm
+   pitch, running perpendicular to the edge. Denser and slightly darker than
+   the body because the ribs self-shadow. */
+.m-rib {
+  --rib-pitch: 1.9%;
+  background-color: var(--digs-rib, #9C998B);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.17) 0 22%,
+    rgba(0, 0, 0, 0.1) 22% 34%,
+    rgba(0, 0, 0, 0.26) 34% 50%,
+    rgba(255, 255, 255, 0.17) 50% 72%,
+    rgba(0, 0, 0, 0.1) 72% 84%,
+    rgba(0, 0, 0, 0.26) 84% 100%
+  );
+  background-size: var(--rib-pitch) auto;
+}
+
+/* The overlock seam (ISO #514): a raised ridge three or four knit cells wide,
+   seam allowance pressed to one side, with a bright crest and a soft shadow
+   on the far side, and a tight chain of fine diagonal loops along the fold. */
+.m-seam-overlock {
+  /* The crest used to run from near-black to near-white across the ridge,
+     which is a specular highlight, and a specular highlight on cloth reads as
+     chrome -- the seam looked like a rod laid on the knit instead of a fold
+     pressed into it. This brand's own note on the fabric is "high
+     micro-contrast, low macro-contrast": the thread catches light, the panel
+     does not. So the range is compressed to a cloth ridge and the stitch
+     chain is brought up to carry the detail instead. */
+  background-image:
+    repeating-linear-gradient(
+      68deg,
+      rgba(255, 252, 244, 0.34) 0 2px,
+      rgba(58, 52, 42, 0.16) 2px 5px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(34, 30, 24, 0.3) 0,
+      rgba(120, 113, 97, 0.5) 16%,
+      rgba(178, 169, 147, 0.52) 38%,
+      rgba(198, 189, 164, 0.56) 50%,
+      rgba(166, 157, 137, 0.5) 64%,
+      rgba(92, 86, 72, 0.46) 86%,
+      rgba(34, 30, 24, 0.32) 100%
+    );
+}
+
+/* The seam-highlighter wash — the founder's own name for it. A lighter-value
+   halo running along every seam, the neckband edge, the shoulder line, the
+   cuff and the hem, over broad soft tonal cloudiness across the panels. This
+   is what makes a garment look like a garment rather than a flat fill. */
+.m-wash-halo {
+  background: linear-gradient(
+    180deg,
+    transparent 0,
+    rgba(206, 190, 148, 0.5) 30%,
+    rgba(219, 203, 160, 0.72) 50%,
+    rgba(206, 190, 148, 0.5) 70%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 0.8));
+}
+
+.m-wash-cloud {
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='170'>\
+<filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='23'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.96 0 0 0 0 0.85 0 0 0 0.4 -0.14'/></filter>\
+<rect width='260' height='170' filter='url(%23w)'/></svg>");
+  background-size: 74% 74%;
+  mix-blend-mode: soft-light;
+}

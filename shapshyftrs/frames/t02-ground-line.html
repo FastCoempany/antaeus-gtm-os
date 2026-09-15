@@ -1,0 +1,55 @@
+<!-- frame id=ground-line num=2 source=antaeus focal=50%,58% loop=8 interactive=no -->
+<div class="stage f02" data-frame="ground-line" style="--fx:0.50;--fy:0.58" role="img"
+     aria-label="A drafted capital A standing on a ground line that runs past its feet, on pale graph paper; the letter lifts off the line, tilts and hollows, then settles back. The line never moves">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f02-field m-an-field">
+        <svg class="f02-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <g class="f02-a" stroke="var(--an-ink)" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter">
+            <path d="M14 38L24 10l10 28"/>
+            <path d="M18.2 28h11.6"/>
+          </g>
+          <path d="M2 38h44" stroke="var(--an-forest)" stroke-width="3.2" stroke-linecap="butt"/>
+        </svg>
+        <div class="f02-earth m-an-earth"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 2 — the mark as a horizon.
+   Materials: an-field (34 px grid at rgba(10,28,64,.08), the two corner
+   washes, the vignette) and the Grounded-A's exact geometry — legs
+   M14 38L24 10l10 28, crossbar M18.2 28h11.6, ground M2 38h44, butt caps and
+   mitered joins.
+   The ground runs 12 units past each foot: 2.2x the width of the letter. That
+   overhang is the mark. The settled auth gate does this at 118 px as a login
+   affordance; here the line is a horizon and the letter is a building — and
+   the lift is the product's own state device, so the A floats and the ground
+   never moves. */
+.f02 .f02-field { position: absolute; inset: 0; }
+.f02 .f02-mark {
+  position: absolute; left: 50%; bottom: 3%;
+  height: 74%; width: auto; transform: translateX(-50%); overflow: visible;
+}
+.f02 .f02-a {
+  transform-origin: 24px 24px;
+  animation: f02-lift 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+.f02 .f02-earth {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18.4%;
+}
+.f02 .f02-earth i {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: rgba(27, 94, 63, 0.14);
+}
+.f02 .f02-earth i:nth-child(1) { top: 26%; }
+.f02 .f02-earth i:nth-child(2) { top: 52%; }
+.f02 .f02-earth i:nth-child(3) { top: 79%; }
+@keyframes f02-lift {
+  0%, 18% { transform: none; opacity: 1; }
+  44%, 62% { transform: translate(1px, -7px) rotate(6deg); opacity: 0.42; }
+  86%, 100% { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f02 .f02-a { transform: none; opacity: 1; } }
+</style>

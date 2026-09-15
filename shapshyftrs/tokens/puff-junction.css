@@ -1,0 +1,76 @@
+/* tokens/puff-junction.css
+   Measured in study/puff-junction.md. Every value here cites a source file
+   there; nothing was picked by eye.
+
+   There are two Puff Junctions in that archive and they do not match: a neon
+   pop-art paper identity (Feb 2024) and a monochrome concrete-and-brass object
+   language (2024-25). Both sets are below. The object set governs product
+   frames; the paper set is the accent system and the slime is rationed to one
+   element per composition. */
+:root {
+  /* --- the object brand ------------------------------------------------ */
+  /* Faux concrete. Fully achromatic -- R = G = B in nearly every sample.
+     Never tint it. Base albedo #565656 in a band from #44 to #60. */
+  --pj-concrete: #565656;
+  --pj-concrete-lit: #69635C;   /* top face, catching brass bounce */
+  --pj-concrete-low: #444444;   /* the darker render set */
+  --pj-concrete-shade: #353535;
+  --pj-concrete-deep: #0A0A0A;  /* the darkest fall on a face */
+  --pj-aggregate: #37373A;      /* fine dark speckle, 0.3-0.8 mm */
+  --pj-harlequin: #414141;      /* dark cells: a value shift, never a fill */
+  --pj-harlequin-low: #181818;  /* the same cells in the low-key render */
+
+  /* Brushed brass, and it is two-faced: pale warm near-neutral on flats,
+     saturated antique gold on knurled and cylindrical surfaces. Painting the
+     flat top gold is the single easiest way to get this wrong. */
+  --pj-brass-flat: #D1CAC1;     /* the logo plateau, mirroring a big source */
+  --pj-brass-flat-alt: #D1C8BB;
+  --pj-brass-knurl: #816437;
+  --pj-brass-knurl-alt: #7D5A2B;
+  --pj-brass-flange: #795930;
+  --pj-brass-land: #675125;      /* knurl crown, macro on black */
+  --pj-brass-groove: #563B12;
+  --pj-brass-groove-deep: #0A0602;
+  --pj-brass-crown-hot: #E8DCB8;
+  --pj-brass-albedo: #B8934E;
+  --pj-brass-roughness: 0.32;    /* satin; never mirror */
+
+  /* Other real materials */
+  --pj-nickel: #9EA8A4;          /* the first machined sample */
+  --pj-gloss-black: #2E2E2E;     /* the bottle body */
+
+  /* The white sweep, measured across the render's full width */
+  --pj-sweep-top: #EDEDED;       /* flat across the width, to 40% height */
+  --pj-sweep-mid: #DCDCDC;       /* 60% */
+  --pj-sweep-dark: #C8C8C8;      /* 70%, the darkest band */
+  --pj-sweep-floor: #D9D9D9;     /* lifts again at the floor */
+  --pj-shadow: #C3C3C3;          /* contact shadow, broad and feathered */
+
+  /* Geometry, from the drawings (mm) */
+  --pj-block: 85;                /* square face */
+  --pj-height: 57.2;             /* assembled */
+  --pj-bore: 63;                 /* brass disc -- 74% of the face */
+  --pj-proud: 15.4;              /* knob standing above the concrete */
+  --pj-radius: 3;                /* R3 on the block corners */
+  --pj-knurl-pitch: 1.26;        /* perpendicular to a groove */
+  --pj-knurl-w: 1.65;            /* land, circumferential */
+  --pj-knurl-h: 1.9;             /* land, axial -- 1.15:1, point up */
+  --pj-knurl-angle: 49deg;       /* grooves crossing */
+  --pj-harlequin-cell: 13.5;     /* on point */
+  --pj-deboss: 0.2;              /* three terraces: 0.0 / 0.1 / 0.2 */
+
+  /* --- the paper brand -------------------------------------------------- */
+  /* Quoted from the brand guide. There is no grey in this palette at all,
+     which is a real tension with a product whose hero material is #565656. */
+  --pj-slime: #D6FD4A;
+  --pj-dream: #A5E4FF;
+  --pj-flamingo: #FF8FF1;
+  --pj-pineapple: #FEF200;
+  --pj-black: #000000;
+  --pj-white: #FFFFFF;
+
+  /* Arnet is licensed commercial, italic-only by system, EUR 85 per weight.
+     Work Sans is on Google Fonts. See DESIGN.md for the substitution. */
+  --pj-display: "Archivo", "Arnet", system-ui, sans-serif;
+  --pj-body: "Work Sans", system-ui, sans-serif;
+}

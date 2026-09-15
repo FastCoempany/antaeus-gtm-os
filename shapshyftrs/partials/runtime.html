@@ -1,9 +1,9 @@
 <script>
-/* Shared teaser runtime: one script for every stage on the page.
+/* Shared frame runtime: one script for every stage on the page.
    In view (threshold 0.25) and not hovered: playing. Hover pauses.
    prefers-reduced-motion: reduce never plays; interactions still work.
-   Each stage gets the class is-playing and the events teaser:play / teaser:pause,
-   which script-driven teasers listen to. The nearest ancestor with data-play-delay (the body, a hero, a
+   Each stage gets the class is-playing and the events frame:play / frame:pause,
+   which script-driven frames listen to. The nearest ancestor with data-play-delay (the body, a hero, a
    gallery figure) delays a stage's first start so a caption or the hero copy
    can arrive before its loop begins. */
 (function () {
@@ -16,7 +16,7 @@
     function apply(on) {
       if (el.classList.contains("is-playing") === on) return;
       el.classList.toggle("is-playing", on);
-      el.dispatchEvent(new CustomEvent(on ? "teaser:play" : "teaser:pause"));
+      el.dispatchEvent(new CustomEvent(on ? "frame:play" : "frame:pause"));
     }
     function update() {
       var on = inView && !hover && !reduce.matches;

@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- One request. The chrome face first, then one family per source, and only
+     the weights that ship. Real faces where they are free and exact; the
+     substitutions are recorded in DESIGN.md with what each one loses:
+       Archivo Expanded  stands in for  Owners Wide   (Darkest Shades)
+       Hanken Grotesk    stands in for  Stolzl        (Darkest Shades)
+       Archivo (italic)  stands in for  Arnet         (Puff Junction)
+       Caveat            stands in for  The Old Falcons (DIGS, demo cut) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@400;600&family=DM+Serif+Display&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Archivo:ital,wdth,wght@0,62..125,500..700;1,62..125,700..900&family=Hanken+Grotesk:wght@400;600&family=Work+Sans:wght@400;500;700&family=Alexandria:wght@400;700;900&display=swap">
+<title>ground-line</title>
+<style>
+/* tokens/chrome.css */
+:root {
+
+  --chrome-ground: #000000;
+  --chrome-text: #F4F4F0;
+  --chrome-text-2: #8E8E89;
+  --chrome-button-bg: #F4F4F0;
+  --chrome-button-fg: #000000;
+  --chrome-button-radius: 4px;
+
+  --chrome-font: "Schibsted Grotesk", system-ui, sans-serif;
+
+  --chrome-body: 15px;
+  --chrome-body-lh: 24px;
+  --chrome-sub: 18px;
+  --chrome-sub-lh: 28px;
+  --chrome-caption: 22px;
+  --chrome-caption-lh: 28px;
+  --chrome-h2: 32px;
+  --chrome-h2-lh: 36px;
+  --chrome-slogan: 64px;
+  --chrome-slogan-lh: 1.02;
+  --chrome-slogan-m: 40px;
+  --chrome-slogan-m-lh: 1.05;
+  --chrome-wordmark: 28px;
+  --chrome-track-display: -0.02em;
+
+  --chrome-measure: 66ch;
+  --chrome-unit: 8px;
+  --chrome-section: 96px;
+  --chrome-section-m: 64px;
+}
+
+/* tokens/stage.css */
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000000;
+  container-type: inline-size;
+
+  container-name: frame;
+  isolation: isolate;
+  --fx: 0.5;
+  --fy: 0.5;
+}
+.stage > .stage-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.stage > .stage-frame > .stage-scene { position: absolute; inset: 0; }
+
+.stage > .stage-frame { --sw: 100cqw; }
+.stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
+@container frame (max-width: 639px) {
+  .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
+  .stage > .stage-frame > .stage-scene {
+    inset: auto;
+    top: 0;
+    height: 100%;
+    width: 200%;
+    left: clamp(-100%, calc(50% - var(--fx) * 200%), 0%);
+  }
+}
+
+.stage:not(.is-playing) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition-duration: 0.001ms !important; }
+}
+
+/* tokens/puff-junction.css */
+:root {
+
+  --pj-concrete: #565656;
+  --pj-concrete-lit: #69635C;
+  --pj-concrete-low: #444444;
+  --pj-concrete-shade: #353535;
+  --pj-concrete-deep: #0A0A0A;
+  --pj-aggregate: #37373A;
+  --pj-harlequin: #414141;
+  --pj-harlequin-low: #181818;
+
+  --pj-brass-flat: #D1CAC1;
+  --pj-brass-flat-alt: #D1C8BB;
+  --pj-brass-knurl: #816437;
+  --pj-brass-knurl-alt: #7D5A2B;
+  --pj-brass-flange: #795930;
+  --pj-brass-land: #675125;
+  --pj-brass-groove: #563B12;
+  --pj-brass-groove-deep: #0A0602;
+  --pj-brass-crown-hot: #E8DCB8;
+  --pj-brass-albedo: #B8934E;
+  --pj-brass-roughness: 0.32;
+
+  --pj-nickel: #9EA8A4;
+  --pj-gloss-black: #2E2E2E;
+
+  --pj-sweep-top: #EDEDED;
+  --pj-sweep-mid: #DCDCDC;
+  --pj-sweep-dark: #C8C8C8;
+  --pj-sweep-floor: #D9D9D9;
+  --pj-shadow: #C3C3C3;
+
+  --pj-block: 85;
+  --pj-height: 57.2;
+  --pj-bore: 63;
+  --pj-proud: 15.4;
+  --pj-radius: 3;
+  --pj-knurl-pitch: 1.26;
+  --pj-knurl-w: 1.65;
+  --pj-knurl-h: 1.9;
+  --pj-knurl-angle: 49deg;
+  --pj-harlequin-cell: 13.5;
+  --pj-deboss: 0.2;
+
+  --pj-slime: #D6FD4A;
+  --pj-dream: #A5E4FF;
+  --pj-flamingo: #FF8FF1;
+  --pj-pineapple: #FEF200;
+  --pj-black: #000000;
+  --pj-white: #FFFFFF;
+
+  --pj-display: "Archivo", "Arnet", system-ui, sans-serif;
+  --pj-body: "Work Sans", system-ui, sans-serif;
+}
+
+/* tokens/darkest-shades.css */
+:root {
+
+  --ds-black: #000000;
+  --ds-white: #FFFFFF;
+  --ds-neutral: #545454;
+  --ds-terracotta: #BF835E;
+
+  --ds-sweep: #D2D2D2;
+  --ds-sweep-alt: #D3D3D3;
+  --ds-shadow: #C0C0C0;
+  --ds-panel: #F1F2F1;
+  --ds-hair: #E0E1E0;
+  --ds-rule: #808180;
+
+  --ds-lens: #151515;
+  --ds-lens-high: #2A2A2A;
+  --ds-sheen-lo: #4A4A4A;
+  --ds-sheen-hi: #6A6A6A;
+
+  --ds-smoke-top: #353535;
+  --ds-smoke-bottom: #878A8E;
+  --ds-mirror-top: #C8C8C8;
+  --ds-mirror-bottom: #9A9A9A;
+  --ds-teal: #5BA7BC;
+  --ds-teal-high: #9CC4CE;
+  --ds-amber-lens: #CDAB16;
+
+  --ds-gloss: #131313;
+  --ds-gloss-high: #1B1B1B;
+  --ds-gloss-mid: #333333;
+  --ds-specular: #D8D8D8;
+  --ds-satin: #202020;
+  --ds-satin-high: #767676;
+  --ds-tortoise-ground: #1A273A;
+  --ds-tortoise-fleck: #5B8CCF;
+  --ds-tortoise-fleck-hi: #6495D0;
+  --ds-tortoise-glow: #93B5BF;
+  --ds-tortoise-glow-hi: #A7BEC6;
+  --ds-oxblood: #4B1313;
+
+  --ds-electric: #0D12CC;
+  --ds-electric-hi: #1F31C8;
+
+  --ds-gold: #C9AA78;
+  --ds-gold-ramp:
+    #8B6635 0%, #F7E7C5 16%, #C7A575 36%, #F6E4BD 53%,
+    #A47A43 72%, #DEC399 87%, #76552D 100%;
+
+  --ds-mark-aspect: 1.9498;
+  --ds-front: 148;
+  --ds-temple: 149;
+  --ds-split: 25.97%;
+
+  --ds-display: "Archivo Expanded", "Owners Wide", system-ui, sans-serif;
+  --ds-body: "Hanken Grotesk", "Stolzl", system-ui, sans-serif;
+  --ds-track-kicker: 0.12em;
+  --ds-lead-display: 0.97;
+}
+
+/* tokens/digs.css */
+:root {
+
+  --digs-blue: #0042E5;
+  --digs-black: #000000;
+  --digs-ice: #F0F5FF;
+
+  --digs-offwhite: #F8F0E8;
+  --digs-sandblue: #6176A3;
+  --digs-thread: #24315A;
+  --digs-thread-sewn: #3E4351;
+
+  --digs-knit-lit: #ADA595;
+  --digs-knit: #A89F8A;
+  --digs-knit-shadow: #787265;
+  --digs-knit-dark: #4C493E;
+  --digs-knit-reverse: #5D523F;
+  --digs-seam: #868070;
+  --digs-wash: #A08D64;
+  --digs-body-warm: #A49267;
+  --digs-body-warm-hi: #CCB17D;
+  --digs-body-cool: #8C8C83;
+  --digs-rib: #9C998B;
+
+  --digs-knit-pitch: 1.2;
+  --digs-knit-angle: 45deg;
+  --digs-rib-pitch: 1.75;
+  --digs-neckband: 1;
+  --digs-cuff: 2;
+  --digs-sa: 0.375;
+  --digs-hem-turnback: 1;
+  --digs-emb-w: 2.5;
+  --digs-emb-h: 1.58;
+
+  --digs-sans: "Alexandria", system-ui, sans-serif;
+  --digs-script: "Caveat", "The Old Falcons", cursive;
+  --digs-lead-display: 0.95;
+  --digs-scrawl-angle: -9deg;
+}
+
+/* tokens/aesdr.css */
+:root {
+  --ae-crimson: #8B1A1A;
+  --ae-crimson-pressed: #6E1414;
+  --ae-cream: #FAF7F2;
+  --ae-ink: #1A1A1A;
+  --ae-muted: #6B6B6B;
+  --ae-light: #E8E4DF;
+  --ae-white: #FFFFFF;
+  --ae-form-border: #928C84;
+
+  --ae-redink: #C53030;
+  --ae-green: #2E7D32;
+  --ae-pass: #15803D;
+  --ae-gold: #B8943E;
+  --ae-gold-lt: #D4B96A;
+
+  --ae-iris: linear-gradient(90deg,
+    #FF006E 0%, #FF6B00 17%, #F59E0B 34%, #10B981 51%,
+    #38BDF8 68%, #8B5CF6 85%, #FF006E 100%);
+  --ae-iris-size: 300% 100%;
+  --ae-iris-speed: 4s;
+
+  --ae-catalog-field: #F4EADD;
+  --ae-catalog-card: #FFF8EC;
+  --ae-catalog-rule: #CBB58C;
+  --ae-ruled: #F0EBE3;
+
+  --ae-display: "Playfair Display", Georgia, serif;
+  --ae-serif: "Source Serif 4", Georgia, serif;
+  --ae-cond: "Barlow Condensed", system-ui, sans-serif;
+  --ae-mono: "Space Mono", monospace;
+  --ae-hand: "Caveat", cursive;
+
+  --ae-track-eyebrow: 0.25em;
+  --ae-track-button: 0.15em;
+  --ae-radius: 0;
+  --ae-rule-system: 3px;
+
+  --ae-tilt-stamp: -2deg;
+  --ae-tilt-cover: -3deg;
+  --ae-tilt-date: -4deg;
+  --ae-tilt-hand: -1.5deg;
+
+  --ae-ghost: 0.06;
+  --ae-ambient: 0.15;
+  --ae-stamp-body: 0.25;
+  --ae-stamp-border: 0.15;
+}
+
+/* tokens/antaeus.css */
+:root {
+
+  --an-field: #EEF1F7;
+  --an-field-lt: #F6F8FC;
+  --an-surface: #FFFFFF;
+  --an-sunk: #EFF2F7;
+
+  --an-ink: #0A1C40;
+  --an-ink-soft: rgba(10, 28, 64, 0.66);
+  --an-ink-faint: rgba(10, 28, 64, 0.42);
+  --an-ink-quiet: rgba(10, 28, 64, 0.22);
+  --an-hair: rgba(10, 28, 64, 0.07);
+  --an-hair-strong: rgba(10, 28, 64, 0.14);
+  --an-rule: rgba(10, 28, 64, 0.16);
+  --an-grid: rgba(10, 28, 64, 0.08);
+
+  --an-orange: #E6701E;
+  --an-orange-soft: rgba(230, 112, 30, 0.10);
+  --an-blue: #2563EB;
+  --an-blue-soft: rgba(37, 99, 235, 0.08);
+  --an-green: #22C55E;
+  --an-forest: #1B5E3F;
+  --an-forest-soft: rgba(27, 94, 63, 0.09);
+  --an-amber: #B5790F;
+  --an-amber-soft: rgba(181, 121, 15, 0.10);
+  --an-red: #C0392B;
+  --an-red-soft: rgba(192, 57, 43, 0.06);
+
+  --an-grid-pitch: 34px;
+  --an-wash-blue: rgba(37, 99, 235, 0.05);
+  --an-wash-orange: rgba(230, 112, 30, 0.04);
+
+  --an-serif: "DM Serif Display", Georgia, serif;
+  --an-sans: "Public Sans", system-ui, sans-serif;
+  --an-mono: "JetBrains Mono", monospace;
+  --an-read: "Newsreader", Georgia, serif;
+  --an-track-kicker: 0.16em;
+  --an-lead-display: 0.98;
+
+  --an-mark-legs: "M14 38L24 10l10 28";
+  --an-mark-bar: "M18.2 28h11.6";
+  --an-mark-ground: "M2 38h44";
+  --an-lift: translate(1px, -7px) rotate(6deg);
+  --an-lift-opacity: 0.42;
+  --an-lift-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --an-radius-rule: 0 14px 14px 0;
+  --an-rule-w: 3px;
+}
+</style>
+<style>
+/* materials/ae-iris.css */
+.m-iris {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-text {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-line {
+  height: 1px;
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  opacity: 0.15;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-border {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--ae-cream, #FAF7F2), var(--ae-cream, #FAF7F2)) padding-box,
+    var(--ae-iris) border-box;
+  background-size: auto, 300% 100%;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+@keyframes m-iris-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 300% 50%; }
+}
+
+/* materials/ae-paper.css */
+.m-ae-field { background: var(--ae-cream, #FAF7F2); }
+.m-ae-card { background: #FFFFFF; border: 1px solid var(--ae-light, #E8E4DF); border-radius: 0; }
+
+.m-ae-aside {
+  background: #FFFFFF;
+  border-left: 3px solid var(--ae-crimson, #8B1A1A);
+}
+
+.m-ae-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) var(--rule-step, 2.4%)
+  );
+  opacity: 0.5;
+}
+
+.m-ae-stock {
+  background-color: var(--ae-catalog-field, #F4EADD);
+  background-image:
+    radial-gradient(ellipse at top, rgba(58, 42, 28, 0.08), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(58, 42, 28, 0.02) 0 2px, transparent 2px 28px),
+    linear-gradient(180deg, #EFE2CC 0%, #E6D4B6 100%);
+}
+
+.m-ae-margin {
+  border-left: 2px solid var(--ae-redink, #C53030);
+  font-family: var(--ae-hand, "Caveat", cursive);
+  color: var(--ae-redink, #C53030);
+}
+
+.m-ae-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink, #C53030);
+  text-decoration-thickness: 2px;
+}
+
+.m-ae-insert {
+  color: var(--ae-redink, #C53030);
+  border-bottom: 2px solid var(--ae-redink, #C53030);
+}
+
+/* materials/an-field.css */
+.m-an-field {
+  --an-grid-ink: var(--an-grid, rgba(10, 28, 64, 0.08));
+  position: relative;
+  background-color: var(--an-field-lt, #F6F8FC);
+  background-image:
+    radial-gradient(circle at 12% 0%, var(--an-wash-blue, rgba(37, 99, 235, 0.05)), transparent 32%),
+    radial-gradient(circle at 88% 8%, var(--an-wash-orange, rgba(230, 112, 30, 0.04)), transparent 30%),
+    linear-gradient(var(--an-grid-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--an-grid-ink) 1px, transparent 1px);
+  background-size:
+    auto, auto,
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px),
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px);
+  background-position: 0 0, 0 0, center 0, center 0;
+}
+
+.m-an-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(246, 248, 252, 0.82) 100%);
+}
+
+.m-an-earth {
+  background: linear-gradient(180deg, rgba(27, 94, 63, 0.08) 0%, rgba(27, 94, 63, 0.02) 100%);
+}
+
+.m-an-ground {
+  background: var(--an-forest, #1B5E3F);
+}
+
+.m-an-ruled {
+  background: var(--an-surface, #FFFFFF);
+  border-left: var(--an-rule-w, 3px) solid var(--an-orange, #E6701E);
+  border-radius: var(--an-radius-rule, 0 14px 14px 0);
+}
+
+/* materials/digs-knit.css */
+.m-knit {
+  --kn-pitch: calc(var(--u, 1%) * 2.6);
+  --kn-light: 0.5;
+
+  background-color: var(--digs-knit, #A89F8A);
+  background-image:
+    linear-gradient(
+      168deg,
+      rgba(173, 165, 149, calc(0.2 + var(--kn-light) * 0.62)) 0,
+      rgba(120, 114, 101, 0.4) 52%,
+      rgba(76, 73, 62, calc(0.78 - var(--kn-light) * 0.5)) 100%
+    ),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<rect width='40' height='40' fill='%23554F42' fill-opacity='0.34'/>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23D8CFB6' stroke-opacity='0.95' stroke-width='7'/>\
+<path d='M0 20 L20 0 L40 20' stroke='%23F3EBD6' stroke-opacity='0.8' stroke-width='2.6'/>\
+<path d='M40 20 L20 40 L0 20' stroke='%232E2A20' stroke-opacity='0.5' stroke-width='2.4'/>\
+</g>\
+<circle cx='20' cy='20' r='3' fill='%232A261C' fill-opacity='0.72'/>\
+</svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23C9C0A6' stroke-opacity='0.5' stroke-width='6'/>\
+</g>\
+<circle cx='20' cy='20' r='2.6' fill='%232A261C' fill-opacity='0.42'/>\
+</svg>");
+  background-size: auto, var(--kn-pitch) var(--kn-pitch), var(--kn-pitch) var(--kn-pitch);
+  background-position:
+    0 0,
+    0 0,
+    calc(var(--kn-pitch) / 2) calc(var(--kn-pitch) / 2);
+  background-blend-mode: soft-light, normal, normal;
+}
+
+.m-knit-reverse {
+  background-color: var(--digs-knit-reverse, #5D523F);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 2px
+    ),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0, rgba(0, 0, 0, 0.18) 100%);
+}
+
+.m-rib {
+  --rib-pitch: 1.9%;
+  background-color: var(--digs-rib, #9C998B);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.17) 0 22%,
+    rgba(0, 0, 0, 0.1) 22% 34%,
+    rgba(0, 0, 0, 0.26) 34% 50%,
+    rgba(255, 255, 255, 0.17) 50% 72%,
+    rgba(0, 0, 0, 0.1) 72% 84%,
+    rgba(0, 0, 0, 0.26) 84% 100%
+  );
+  background-size: var(--rib-pitch) auto;
+}
+
+.m-seam-overlock {
+
+  background-image:
+    repeating-linear-gradient(
+      68deg,
+      rgba(255, 252, 244, 0.34) 0 2px,
+      rgba(58, 52, 42, 0.16) 2px 5px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(34, 30, 24, 0.3) 0,
+      rgba(120, 113, 97, 0.5) 16%,
+      rgba(178, 169, 147, 0.52) 38%,
+      rgba(198, 189, 164, 0.56) 50%,
+      rgba(166, 157, 137, 0.5) 64%,
+      rgba(92, 86, 72, 0.46) 86%,
+      rgba(34, 30, 24, 0.32) 100%
+    );
+}
+
+.m-wash-halo {
+  background: linear-gradient(
+    180deg,
+    transparent 0,
+    rgba(206, 190, 148, 0.5) 30%,
+    rgba(219, 203, 160, 0.72) 50%,
+    rgba(206, 190, 148, 0.5) 70%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 0.8));
+}
+
+.m-wash-cloud {
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='170'>\
+<filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='23'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.96 0 0 0 0 0.85 0 0 0 0.4 -0.14'/></filter>\
+<rect width='260' height='170' filter='url(%23w)'/></svg>");
+  background-size: 74% 74%;
+  mix-blend-mode: soft-light;
+}
+
+/* materials/ds-acetate.css */
+.m-acetate-gloss {
+  background-color: var(--ds-gloss, #131313);
+  background-image:
+    linear-gradient(168deg, rgba(255, 255, 255, 0.1) 0, transparent 26%),
+    linear-gradient(0deg, rgba(210, 210, 210, 0.1) 0, transparent 34%),
+    linear-gradient(180deg, #1B1B1B 0, #101010 62%, #191919 100%);
+}
+
+.m-acetate-chamfer {
+  box-shadow:
+    inset 0 1px 0 rgba(216, 216, 216, 0.72),
+    inset 0 -1px 0 rgba(58, 58, 58, 0.6);
+}
+
+.m-acetate-satin {
+  background-color: var(--ds-satin, #202020);
+  background-image: radial-gradient(120% 90% at 40% 8%, rgba(255, 255, 255, 0.24) 0, transparent 66%);
+}
+
+.m-tortoise {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  background-color: #10151F;
+  background-image:
+
+    radial-gradient(
+      40% 54% at var(--glow-x) var(--glow-y),
+      rgba(167, 190, 198, 0.3) 0,
+      rgba(147, 181, 191, 0.13) 42%,
+      transparent 80%
+    ),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
+<rect width='900' height='560' filter='url(%23f)'/></svg>"),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
+<rect width='900' height='560' filter='url(%23g)'/></svg>"),
+    linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
+  background-size: auto, 100% 100%, 100% 100%, auto;
+  background-blend-mode: screen, screen, screen, normal;
+}
+
+.m-tortoise-rim {
+  box-shadow:
+    inset 0 0 calc(var(--u, 1%) * 2.4) rgba(147, 181, 191, 0.42),
+    inset 0 0 0 1px rgba(167, 190, 198, 0.28);
+}
+
+/* materials/ds-lens.css */
+.m-lens-blackout {
+  --sheen: 50;
+  background-color: var(--ds-lens, #151515);
+  background-image:
+
+    radial-gradient(
+      calc(var(--u, 1%) * 1.6) calc(var(--u, 1%) * 1.1) at 72% 13%,
+      rgba(255, 255, 255, 0.62) 0,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      58deg,
+      transparent calc(var(--sheen) * 1% - 26%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% - 12%),
+      rgba(106, 106, 106, 0.72) calc(var(--sheen) * 1%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% + 12%),
+      transparent calc(var(--sheen) * 1% + 26%)
+    ),
+    linear-gradient(180deg, #1D1D1D 0, #141414 100%);
+  box-shadow: inset 0 0 calc(var(--u, 1%) * 0.9) rgba(0, 0, 0, 0.85);
+}
+
+.m-lens-smoke {
+  background: linear-gradient(180deg, var(--ds-smoke-top, #353535) 0, var(--ds-smoke-bottom, #878A8E) 100%);
+}
+
+.m-lens-mirror {
+  background-image:
+    linear-gradient(112deg, transparent 34%, rgba(255, 255, 255, 0.34) 48%, transparent 62%),
+    linear-gradient(180deg, var(--ds-mirror-top, #C8C8C8) 0, var(--ds-mirror-bottom, #9A9A9A) 100%);
+  box-shadow: inset 0 0 0 1px rgba(28, 28, 28, 0.55);
+}
+
+/* materials/ds-sweep.css */
+.m-ds-sweep {
+  background: #D2D2D2;
+}
+
+.m-ds-shadow {
+
+  background: radial-gradient(
+    closest-side,
+    rgba(160, 160, 160, 0.5) 0,
+    rgba(186, 186, 186, 0.26) 52%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.4));
+}
+
+.m-ds-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at 56% 2%, rgba(255, 255, 255, 0.34) 0, transparent 68%);
+}
+
+/* materials/pj-brass.css */
+.m-brass-flat {
+  background-color: var(--pj-brass-flat, #D1CAC1);
+  background-image:
+
+    repeating-radial-gradient(
+      circle at 46% 42%,
+      rgba(255, 255, 255, 0.055) 0 1px,
+      rgba(66, 54, 43, 0.05) 1px 2px,
+      transparent 2px 3.5px
+    ),
+    radial-gradient(120% 100% at 32% 18%, rgba(255, 255, 255, 0.5) 0, transparent 62%),
+    radial-gradient(90% 90% at 78% 88%, rgba(66, 54, 43, 0.5) 0, transparent 66%);
+}
+
+.m-brass-curved {
+  background-color: var(--pj-brass-knurl, #816437);
+  background-image:
+
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      rgba(0, 0, 0, 0.06) 1px 2px,
+      transparent 2px 4px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 4, 2, 0.55) 0,
+      rgba(232, 220, 184, 0.42) 26%,
+      rgba(184, 147, 78, 0.1) 52%,
+      rgba(7, 4, 2, 0.5) 100%
+    );
+}
+
+.m-deboss {
+  --deboss-light: 0.5;
+  color: transparent;
+  text-shadow:
+    calc((var(--deboss-light) - 0.5) * 0.14em) -0.035em 0 rgba(255, 255, 255, 0.5),
+    calc((0.5 - var(--deboss-light)) * 0.14em) 0.035em 0 rgba(0, 0, 0, 0.42);
+}
+
+/* materials/pj-concrete.css */
+.m-concrete {
+  --c-base: var(--pj-concrete, #565656);
+  --c-lit: var(--pj-concrete-lit, #69635C);
+  --c-shade: var(--pj-concrete-shade, #353535);
+  --c-mottle: 0.5;
+  --c-grain: 0.42;
+  --c-cell: 22%;
+  background-color: var(--c-base);
+  background-image:
+
+    repeating-linear-gradient(
+      96deg,
+      rgba(255, 255, 255, 0.018) 0 2px,
+      rgba(0, 0, 0, 0.014) 2px 5px,
+      transparent 5px 11px
+    ),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'>\
+<filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='7'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.21 0 0 0 0 0.23 0 0 0 -2.6 1.05'/></filter>\
+<rect width='90' height='90' filter='url(%23g)'/></svg>"),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='4' seed='3'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.42 -0.2'/></filter>\
+<rect width='240' height='240' filter='url(%23c)'/></svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='d'><feTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' seed='11'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 -0.13'/></filter>\
+<rect width='240' height='240' filter='url(%23d)'/></svg>");
+  background-size: auto, 90px 90px, var(--c-cell) var(--c-cell), calc(var(--c-cell) * 0.55) calc(var(--c-cell) * 0.55);
+  background-blend-mode: overlay, multiply, soft-light, multiply;
+}
+
+.m-concrete--lit {
+  box-shadow: inset 0 0 0 100vmax transparent;
+  background-color: var(--c-lit);
+}
+
+.m-concrete-seam {
+  height: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0,
+    rgba(0, 0, 0, 0.62) 38%,
+    rgba(0, 0, 0, 0.62) 62%,
+    rgba(255, 255, 255, 0.045) 100%
+  );
+}
+
+/* materials/pj-harlequin.css */
+.m-harlequin-cell {
+
+  --hq-shift: 0.28;
+  background-color: rgba(0, 0, 0, var(--hq-shift));
+
+  mix-blend-mode: multiply;
+}
+
+.m-harlequin {
+  --hq-cell: 15.9;
+  --hq-stretch: 1.597;
+}
+
+/* materials/pj-knurl.css */
+.m-knurl {
+  --k-cell: calc(var(--u, 1%) * 4.2);
+  --k-light: 0.5;
+
+  background-color: var(--pj-brass-knurl, #816437);
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='100' height='115' viewBox='0 0 100 115'>\
+<defs>\
+<linearGradient id='f' x1='0.1' y1='0' x2='0.9' y2='1'>\
+<stop offset='0' stop-color='%23F2E7C9'/><stop offset='0.42' stop-color='%23C49A57'/>\
+<stop offset='0.78' stop-color='%238A6A32'/><stop offset='1' stop-color='%23654B20'/></linearGradient>\
+<g id='d'>\
+<path d='M50 0 L100 57.5 L50 115 L0 57.5 Z' fill='url(%23f)'/>\
+<path d='M50 0 L100 57.5 L50 115 L0 57.5 Z' fill='none' stroke='%230A0602' stroke-opacity='0.88' stroke-width='6'/>\
+<path d='M0 57.5 L50 0 L100 57.5' fill='none' stroke='%23FFF8E2' stroke-opacity='0.5' stroke-width='2.2'/>\
+</g></defs>\
+<rect width='100' height='115' fill='%23654B20'/>\
+<use href='%23d'/>\
+<use href='%23d' x='-50' y='-57.5'/><use href='%23d' x='50' y='-57.5'/>\
+<use href='%23d' x='-50' y='57.5'/><use href='%23d' x='50' y='57.5'/>\
+</svg>");
+  background-size: var(--k-cell) calc(var(--k-cell) * 1.15);
+  background-position: 0 0;
+}
+
+.m-knurl--band {
+  box-shadow:
+    inset 0 calc(var(--u, 1%) * 0.6) calc(var(--u, 1%) * 1.6) rgba(0, 0, 0, 0.6),
+    inset 0 calc(var(--u, 1%) * -0.6) calc(var(--u, 1%) * 1.6) rgba(0, 0, 0, 0.6);
+}
+
+.m-knurl-rake {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    104deg,
+    transparent 0,
+    rgba(255, 246, 219, 0.1) 32%,
+    rgba(255, 249, 232, 0.36) 46%,
+    rgba(255, 246, 219, 0.1) 60%,
+    transparent 100%
+  );
+  background-size: 260% 100%;
+  background-position: calc(var(--rake, 0) * 1%) 0;
+}
+
+/* materials/pj-sweep.css */
+.m-sweep {
+  background:
+
+    linear-gradient(
+      180deg,
+      #EDEDED 0%,
+      #EBEBEB 40%,
+      #E4E4E4 50%,
+      #DCDCDC 60%,
+      #C9C9C9 70%,
+      #D5D5D5 86%,
+      #DBDBDB 100%
+    );
+}
+
+.m-sweep-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    190% 62% at 46% 6%,
+    rgba(255, 255, 255, 0.10) 0,
+    transparent 76%
+  );
+}
+
+.m-contact-shadow {
+  background: radial-gradient(
+    closest-side,
+    rgba(150, 150, 150, 0.62) 0,
+    rgba(178, 178, 178, 0.34) 46%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.1));
+}
+</style>
+<style>
+html,body{margin:0;background:#000}
+.single{width:min(100vw,1600px);margin:0 auto}
+</style>
+</head>
+<body>
+<div class="single"><!-- frame id=ground-line num=2 source=antaeus focal=50%,58% loop=8 interactive=no -->
+<div class="stage f02" data-frame="ground-line" style="--fx:0.50;--fy:0.58" role="img"
+     aria-label="A drafted capital A standing on a ground line that runs past its feet, on pale graph paper; the letter lifts off the line, tilts and hollows, then settles back. The line never moves">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f02-field m-an-field">
+        <svg class="f02-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <g class="f02-a" stroke="var(--an-ink)" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter">
+            <path d="M14 38L24 10l10 28"/>
+            <path d="M18.2 28h11.6"/>
+          </g>
+          <path d="M2 38h44" stroke="var(--an-forest)" stroke-width="3.2" stroke-linecap="butt"/>
+        </svg>
+        <div class="f02-earth m-an-earth"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 2 — the mark as a horizon.
+   Materials: an-field (34 px grid at rgba(10,28,64,.08), the two corner
+   washes, the vignette) and the Grounded-A's exact geometry — legs
+   M14 38L24 10l10 28, crossbar M18.2 28h11.6, ground M2 38h44, butt caps and
+   mitered joins.
+   The ground runs 12 units past each foot: 2.2x the width of the letter. That
+   overhang is the mark. The settled auth gate does this at 118 px as a login
+   affordance; here the line is a horizon and the letter is a building — and
+   the lift is the product's own state device, so the A floats and the ground
+   never moves. */
+.f02 .f02-field { position: absolute; inset: 0; }
+.f02 .f02-mark {
+  position: absolute; left: 50%; bottom: 3%;
+  height: 74%; width: auto; transform: translateX(-50%); overflow: visible;
+}
+.f02 .f02-a {
+  transform-origin: 24px 24px;
+  animation: f02-lift 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+.f02 .f02-earth {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18.4%;
+}
+.f02 .f02-earth i {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: rgba(27, 94, 63, 0.14);
+}
+.f02 .f02-earth i:nth-child(1) { top: 26%; }
+.f02 .f02-earth i:nth-child(2) { top: 52%; }
+.f02 .f02-earth i:nth-child(3) { top: 79%; }
+@keyframes f02-lift {
+  0%, 18% { transform: none; opacity: 1; }
+  44%, 62% { transform: translate(1px, -7px) rotate(6deg); opacity: 0.42; }
+  86%, 100% { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f02 .f02-a { transform: none; opacity: 1; } }
+</style>
+</div>
+<script>
+/* Shared frame runtime: one script for every stage on the page.
+   In view (threshold 0.25) and not hovered: playing. Hover pauses.
+   prefers-reduced-motion: reduce never plays; interactions still work.
+   Each stage gets the class is-playing and the events frame:play / frame:pause,
+   which script-driven frames listen to. The nearest ancestor with data-play-delay (the body, a hero, a
+   gallery figure) delays a stage's first start so a caption or the hero copy
+   can arrive before its loop begins. */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
+  stages.forEach(function (el) {
+    var holder = el.closest("[data-play-delay]");
+    var delay = holder ? (parseInt(holder.getAttribute("data-play-delay"), 10) || 0) : 0;
+    var inView = false, hover = false, started = false, timer = null;
+    function apply(on) {
+      if (el.classList.contains("is-playing") === on) return;
+      el.classList.toggle("is-playing", on);
+      el.dispatchEvent(new CustomEvent(on ? "frame:play" : "frame:pause"));
+    }
+    function update() {
+      var on = inView && !hover && !reduce.matches;
+      clearTimeout(timer);
+      if (on && delay && !started) {
+        timer = setTimeout(function () { started = true; apply(true); }, delay);
+      } else {
+        if (on) started = true;
+        apply(on);
+      }
+    }
+    el.__stageUpdate = function (v) { if (v !== undefined) inView = v; update(); };
+    el.addEventListener("mouseenter", function () { hover = true; update(); });
+    el.addEventListener("mouseleave", function () { hover = false; update(); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.__stageUpdate(e.isIntersecting); });
+    }, { threshold: 0.25 });
+    stages.forEach(function (el) { io.observe(el); });
+  } else {
+    stages.forEach(function (el) { el.__stageUpdate(true); });
+  }
+  var onChange = function () { stages.forEach(function (el) { el.__stageUpdate(); }); };
+  if (reduce.addEventListener) reduce.addEventListener("change", onChange); else reduce.addListener(onChange);
+})();
+</script>
+
+</body>
+</html>

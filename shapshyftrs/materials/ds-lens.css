@@ -1,0 +1,56 @@
+/* materials/ds-lens.css — Darkest Shades, the lenses.
+
+   Measured from: Renders_Sunglasses_presentation.pdf page images
+   (study/darkest-shades.md §2).
+   Policy: rebuilt.
+
+   The blackout lens is the hero product attribute and it is two elements:
+   a near-black fill at #151515–#2A2A2A that you genuinely cannot see through,
+   plus one broad soft sheen — a wide diagonal wipe lower-left to upper-right
+   at roughly #4A–#6A, 25–35% of the lens width, very soft edges — plus one
+   small hard specular dot near the top edge. That is the whole recipe.
+
+   Across every lens there is a faint 2–4 px inner shadow where the lens meets
+   the groove, and the lens sits slightly proud of the frame front.
+
+   What it is not: a real polarised lens shifts with viewing angle and shows a
+   faint interference sheen. This is a fixed sheen on a fixed fill. */
+
+.m-lens-blackout {
+  --sheen: 50;                    /* 0..100, where the band sits */
+  background-color: var(--ds-lens, #151515);
+  background-image:
+    /* the one hard specular dot, near the top edge */
+    radial-gradient(
+      calc(var(--u, 1%) * 1.6) calc(var(--u, 1%) * 1.1) at 72% 13%,
+      rgba(255, 255, 255, 0.62) 0,
+      transparent 100%
+    ),
+    /* the one broad soft sheen band, lower-left to upper-right */
+    linear-gradient(
+      58deg,
+      transparent calc(var(--sheen) * 1% - 26%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% - 12%),
+      rgba(106, 106, 106, 0.72) calc(var(--sheen) * 1%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% + 12%),
+      transparent calc(var(--sheen) * 1% + 26%)
+    ),
+    linear-gradient(180deg, #1D1D1D 0, #141414 100%);
+  box-shadow: inset 0 0 calc(var(--u, 1%) * 0.9) rgba(0, 0, 0, 0.85);
+}
+
+/* Graduated smoke: a clean vertical ramp, dark over light — the opposite of a
+   classic gradient lens. Slightly cool, no colour cast. */
+.m-lens-smoke {
+  background: linear-gradient(180deg, var(--ds-smoke-top, #353535) 0, var(--ds-smoke-bottom, #878A8E) 100%);
+}
+
+/* Silver mirror: it reflects the ROOM, not a scene. A smooth vertical
+   gradient with one long pale streak and a 1px dark bezel inside the frame.
+   A reflected skyline in one of these is off-brand. */
+.m-lens-mirror {
+  background-image:
+    linear-gradient(112deg, transparent 34%, rgba(255, 255, 255, 0.34) 48%, transparent 62%),
+    linear-gradient(180deg, var(--ds-mirror-top, #C8C8C8) 0, var(--ds-mirror-bottom, #9A9A9A) 100%);
+  box-shadow: inset 0 0 0 1px rgba(28, 28, 28, 0.55);
+}

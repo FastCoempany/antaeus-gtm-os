@@ -1,0 +1,73 @@
+/* materials/pj-sweep.css — Puff Junction, the white studio sweep.
+
+   Measured from: Grinder_1/2/3.png, sampled across the full width at 8%
+   height and down the centre (study/puff-junction.md §5).
+   Taken: flat #EDEDED (237) at every horizontal sample; holds 237 down to
+   ~40% of the frame; 40%→235, 50%→228, 60%→220, 70%→200–205 (darkest), then
+   lifts again to 213–221 at the bottom as the floor catches bounce.
+   (This line previously read "50%→235, 60%→220", which is the CSS below as it
+   was first written, not the study. The 228 sample had gone missing and 235
+   had slid a stop down. A header that restates the source to match the code
+   is worse than no header: it launders a defect into evidence.) No colour cast,
+   no vignette, no visible horizon line. Contact shadow broad, soft, feathered,
+   no penumbra edge, bottoming at #BBBBBB–#CBCBCB.
+   Policy: rebuilt.
+
+   Framing, from the same renders: object plus shadow occupies 73% of the
+   width, with ~30% headroom above and ~19% below, sitting slightly left of
+   centre and low. Generous, calm, luxury-goods framing.
+
+   What it is not: a real cove has a soft floor reflection carrying the
+   object's colour. This carries none. */
+
+.m-sweep {
+  background:
+    /* The study's samples, at the heights it took them:
+       237 flat to 40%, then 40%->235, 50%->228, 60%->220,
+       70%->200-205 (darkest), lifting to 213-221 at the bottom where the
+       floor catches bounce. The first build shifted the ramp a stop late,
+       holding 237 to 40% and putting 235 at 50% where the measurement says
+       228 -- and then the header restated the study to match the CSS rather
+       than the other way round, quietly dropping the 228 sample. */
+    linear-gradient(
+      180deg,
+      #EDEDED 0%,
+      #EBEBEB 40%,
+      #E4E4E4 50%,
+      #DCDCDC 60%,
+      #C9C9C9 70%,
+      #D5D5D5 86%,
+      #DBDBDB 100%
+    );
+}
+
+/* One big soft key from upper front. No hard specular anywhere on the
+   concrete; only the brass carries a highlight.
+   The key is very wide on purpose. The study's one emphatic measurement is
+   that the cove is "perfectly flat #EDEDED (237) horizontally -- I sampled
+   across the full width at 8% height and got 237 at every point", with no
+   cast and no vignette. A 78%-wide key at 42% put a six-level bow across
+   exactly that band (239 242 245 245 242 239), so the material contradicted
+   the one line of the study it quoted. At 190% the falloff across the top of
+   the frame is flat to the level, and the key still does its real job, which
+   is the vertical falloff. */
+.m-sweep-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    190% 62% at 46% 6%,
+    rgba(255, 255, 255, 0.10) 0,
+    transparent 76%
+  );
+}
+
+.m-contact-shadow {
+  background: radial-gradient(
+    closest-side,
+    rgba(150, 150, 150, 0.62) 0,
+    rgba(178, 178, 178, 0.34) 46%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.1));
+}

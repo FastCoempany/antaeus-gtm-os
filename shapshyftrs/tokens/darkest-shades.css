@@ -1,0 +1,76 @@
+/* tokens/darkest-shades.css
+   Measured in study/darkest-shades.md.
+
+   The identity is deliberately achromatic: black, white, a grey ladder, and a
+   terracotta the brand has barely spent. The founder's own instruction is the
+   whole system -- "I think I see 'just black'..... Like really lean into
+   complete darkness. With white/empty space peeking." */
+:root {
+  /* Core */
+  --ds-black: #000000;
+  --ds-white: #FFFFFF;
+  --ds-neutral: #545454;
+  --ds-terracotta: #BF835E;      /* held in reserve; used nowhere in the
+                                    executions. Spending it extends the system. */
+
+  /* The studio. A mid grey, not white -- getting this right is half the look. */
+  --ds-sweep: #D2D2D2;
+  --ds-sweep-alt: #D3D3D3;
+  --ds-shadow: #C0C0C0;          /* only 8-10% darker than the ground */
+  --ds-panel: #F1F2F1;           /* the light panel on every identity page */
+  --ds-hair: #E0E1E0;
+  --ds-rule: #808180;
+
+  /* The blackout lens -- the hero material, and it is two elements */
+  --ds-lens: #151515;
+  --ds-lens-high: #2A2A2A;
+  --ds-sheen-lo: #4A4A4A;
+  --ds-sheen-hi: #6A6A6A;
+
+  /* Other lenses */
+  --ds-smoke-top: #353535;       /* graduated: dark over light */
+  --ds-smoke-bottom: #878A8E;
+  --ds-mirror-top: #C8C8C8;      /* reflects the room, never a scene */
+  --ds-mirror-bottom: #9A9A9A;
+  --ds-teal: #5BA7BC;
+  --ds-teal-high: #9CC4CE;
+  --ds-amber-lens: #CDAB16;
+
+  /* Acetate */
+  --ds-gloss: #131313;
+  --ds-gloss-high: #1B1B1B;
+  --ds-gloss-mid: #333333;
+  --ds-specular: #D8D8D8;        /* the hard thin line on every chamfer */
+  --ds-satin: #202020;
+  --ds-satin-high: #767676;
+  --ds-tortoise-ground: #1A273A;
+  --ds-tortoise-fleck: #5B8CCF;
+  --ds-tortoise-fleck-hi: #6495D0;
+  --ds-tortoise-glow: #93B5BF;   /* translucent edge, lit from behind */
+  --ds-tortoise-glow-hi: #A7BEC6;
+  --ds-oxblood: #4B1313;
+
+  /* The one saturated thing in the entire brand: a temple-tip cap. */
+  --ds-electric: #0D12CC;
+  --ds-electric-hi: #1F31C8;
+
+  /* The Eclipse gold. An exploration, not the mark -- and its gold is an
+     approximated screen colour, not a specified foil. */
+  --ds-gold: #C9AA78;
+  --ds-gold-ramp:
+    #8B6635 0%, #F7E7C5 16%, #C7A575 36%, #F6E4BD 53%,
+    #A47A43 72%, #DEC399 87%, #76552D 100%;
+
+  /* Geometry */
+  --ds-mark-aspect: 1.9498;      /* the angular mark, ten vertices */
+  --ds-front: 148;               /* family envelope, mm: fronts 142-154 */
+  --ds-temple: 149;              /* 145-153 */
+  --ds-split: 25.97%;            /* the identity page's left column */
+
+  /* Owners Wide and Stolzl are commercial retail faces with no licence on
+     record, and the wordmark may be a modified cut. See DESIGN.md. */
+  --ds-display: "Archivo Expanded", "Owners Wide", system-ui, sans-serif;
+  --ds-body: "Hanken Grotesk", "Stolzl", system-ui, sans-serif;
+  --ds-track-kicker: 0.12em;
+  --ds-lead-display: 0.97;       /* lines nearly touching */
+}

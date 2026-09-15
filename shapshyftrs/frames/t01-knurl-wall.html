@@ -1,0 +1,73 @@
+<!-- frame id=knurl-wall num=1 source=puff-junction focal=50%,50% loop=9 interactive=no -->
+<div class="stage f01" data-frame="knurl-wall" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A wall of brass diamond knurling, lit by a light travelling slowly across it; as the light crosses the centre a shallow wordmark surfaces out of the metal and sinks back">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f01-field m-knurl m-knurl--band"></div>
+      <div class="f01-mark"><span class="f01-puff">puff</span><span class="f01-junction">JUNCTION</span></div>
+      <div class="f01-rake m-knurl-rake"></div>
+      <div class="f01-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 1 — the knurl at architectural scale.
+   Materials: pj-knurl (1.26 mm pitch, 1.65 x 1.9 lands, point-up at 1.15:1,
+   grooves crossing at 49 degrees) and pj-brass's whisper deboss (three
+   terraces, 0.2 mm, letters left at the original surface).
+   The knurl has never been the subject in this brand; it has only ever been a
+   band on a knob 63 mm across. Here it is the wall, and the only other event
+   is a light crossing it. Metal does not ease, so the rake runs at constant
+   velocity. */
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: calc(var(--u) * 5.4); }
+.f01 .f01-rake { animation: f01-rake 9s linear infinite; }
+.f01 .f01-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 96% at 50% 46%, transparent 38%, rgba(0, 0, 0, 0.62) 100%);
+}
+/* The mark is a whisper: one raking-light edge, and almost invisible from the
+   wrong angle. Its opacity rides the same clock as the light. */
+.f01 .f01-mark {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: calc(var(--u) * 0.6);
+  font-family: var(--pj-display); font-style: italic;
+  animation: f01-surface 9s linear infinite;
+}
+/* The deboss is 0.2 mm deep. The study is emphatic about what that looks
+   like: "astonishingly shallow -- in the hero renders it is barely legible,
+   catching light on one edge only. If you rebuild this, the mark should be a
+   whisper", and the brand rule is that the mark whispers on an object and
+   shouts on paper, never the other way round.
+   The first build had the technique right and the values wrong. A text-shadow
+   is a whole copy of the glyph, not an edge, so two offset copies at 0.85 and
+   0.75 alpha stack into a solid cream letter with a hard dark rim -- the
+   loudest object in the frame, which is the swap the rule names. At these
+   alphas the knurl reads straight through the letterform and only the two
+   edges catch, which is what 0.2 mm actually does to light. */
+.f01 .f01-puff {
+  font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
+  letter-spacing: -0.02em; text-transform: lowercase;
+  color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.1) calc(var(--u) * -0.1) 0 rgba(255, 248, 226, 0.26),
+    calc(var(--u) * 0.11) calc(var(--u) * 0.11) 0 rgba(20, 12, 2, 0.3);
+}
+.f01 .f01-junction {
+  font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
+  text-indent: 0.44em; color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.07) calc(var(--u) * -0.07) 0 rgba(255, 248, 226, 0.24),
+    calc(var(--u) * 0.08) calc(var(--u) * 0.08) 0 rgba(20, 12, 2, 0.28);
+}
+@keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
+@keyframes f01-surface {
+  0%, 34% { opacity: 0; }
+  46% { opacity: 0.85; }
+  58% { opacity: 0.85; }
+  72%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f01 .f01-rake { background-position: 44% 0; }
+  .f01 .f01-mark { opacity: 1; }
+}
+</style>

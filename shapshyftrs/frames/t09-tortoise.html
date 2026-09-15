@@ -1,0 +1,89 @@
+<!-- frame id=tortoise num=9 source=darkest-shades focal=50%,50% loop=10 interactive=yes -->
+<div class="stage f09" data-frame="tortoise" style="--fx:0.50;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f09-plate m-tortoise m-tortoise-rim"></div>
+      <div class="f09-chamfer"></div>
+      <p class="f09-hint">Drag the light</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 9 — the richest surface the brand owns, at macro, lit from behind.
+   Materials: ds-acetate's blue tortoise — a near-black ground at
+   #131313–#1A273A with cobalt-periwinkle inclusions at #5B8CCF–#6495D0 in
+   irregular organic blobs, translucent, the edges lifting to
+   #93B5BF–#A7BEC6 where light passes through — and the hard thin near-white
+   chamfer line that every acetate edge carries.
+   The render deck never goes macro on this material and the light there is
+   always in front. Here it is behind, and the operator moves it: where it
+   sits, the material opens up. */
+.f09 .f09-plate {
+  position: absolute; inset: 0;
+  animation: f09-drift 10s ease-in-out infinite;
+  cursor: ew-resize; touch-action: none;
+}
+.f09.is-led .f09-plate { animation: none; }
+.f09 .f09-chamfer {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow:
+    inset 0 2px 0 rgba(216, 216, 216, 0.5),
+    inset 0 -2px 0 rgba(20, 20, 20, 0.85),
+    inset 0 0 calc(var(--u) * 5) rgba(0, 0, 0, 0.8);
+}
+.f09 .f09-hint {
+  position: absolute; left: 50%; bottom: 6.5%; transform: translateX(-50%); margin: 0;
+  font-family: var(--ds-body); font-size: calc(var(--u) * 1.5);
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: rgba(214, 228, 232, 0.75); pointer-events: none;
+  text-shadow: 0 1px calc(var(--u) * 0.6) rgba(0, 0, 0, 0.9);
+  transition: opacity 220ms ease;
+}
+.f09.is-led .f09-hint { opacity: 0; }
+@keyframes f09-drift {
+  0%, 100% { --glow-x: 26%; --glow-y: 58%; }
+  50% { --glow-x: 74%; --glow-y: 42%; }
+}
+@property --glow-x { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@property --glow-y { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@media (prefers-reduced-motion: reduce) { .f09 .f09-plate { --glow-x: 38%; --glow-y: 48%; } }
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var plate = root.querySelector(".f09-plate");
+  plate.tabIndex = 0;
+  plate.setAttribute("role", "slider");
+  plate.setAttribute("aria-label", "Move the light behind the acetate");
+  plate.setAttribute("aria-valuemin", "0");
+  plate.setAttribute("aria-valuemax", "100");
+  plate.setAttribute("aria-valuenow", "50");
+  var x = 50, y = 50, down = false;
+  function put(nx, ny) {
+    x = Math.max(4, Math.min(96, nx));
+    if (ny !== undefined) y = Math.max(8, Math.min(92, ny));
+    root.classList.add("is-led");
+    plate.style.setProperty("--glow-x", x + "%");
+    plate.style.setProperty("--glow-y", y + "%");
+    plate.setAttribute("aria-valuenow", Math.round(x));
+  }
+  function at(e) {
+    var r = plate.getBoundingClientRect();
+    put(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
+  }
+  plate.addEventListener("pointerdown", function (e) {
+    down = true; plate.setPointerCapture(e.pointerId); at(e); e.preventDefault();
+  });
+  plate.addEventListener("pointermove", function (e) { if (down) at(e); });
+  plate.addEventListener("pointerup", function () { down = false; });
+  plate.addEventListener("pointercancel", function () { down = false; });
+  plate.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { put(x - 6); e.preventDefault(); }
+    else if (e.key === "ArrowRight") { put(x + 6); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { put(x, y - 6); e.preventDefault(); }
+    else if (e.key === "ArrowDown") { put(x, y + 6); e.preventDefault(); }
+  });
+})();
+</script>

@@ -1,0 +1,39 @@
+/* materials/ds-sweep.css — Darkest Shades, the product studio.
+
+   Measured from: Renders_Sunglasses_presentation.pdf, rendered to page images
+   and sampled (study/darkest-shades.md §2).
+   Taken: infinite seamless backdrop flat #D2D2D2 (occasionally #D3D3D3); floor
+   darkening only to #C3C3C3–#C8C8C8 under the object; shadow bottoming at #C0,
+   spreading 5–10% wider than the object, gone within about an eighth of the
+   object's height; in three-quarter views it stretches into two long very soft
+   parallel streaks, one per temple.
+   Policy: rebuilt.
+
+   A mid grey, not white, and getting this right is half the look. One very
+   large soft key upper-front plus a broad ambient dome. No rim light, no hard
+   key, no colour grade. The grey stays grey.
+
+   What it is not: the real shadow is cast geometry. This is a blurred
+   ellipse, so it will not follow a shape that changes. */
+
+.m-ds-sweep {
+  background: #D2D2D2;
+}
+
+.m-ds-shadow {
+  /* never more than 8–10% darker than the ground, and wider than the object */
+  background: radial-gradient(
+    closest-side,
+    rgba(160, 160, 160, 0.5) 0,
+    rgba(186, 186, 186, 0.26) 52%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.4));
+}
+
+.m-ds-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at 56% 2%, rgba(255, 255, 255, 0.34) 0, transparent 68%);
+}

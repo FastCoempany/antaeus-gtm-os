@@ -1,0 +1,2275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- One request. The chrome face first, then one family per source, and only
+     the weights that ship. Real faces where they are free and exact; the
+     substitutions are recorded in DESIGN.md with what each one loses:
+       Archivo Expanded  stands in for  Owners Wide   (Darkest Shades)
+       Hanken Grotesk    stands in for  Stolzl        (Darkest Shades)
+       Archivo (italic)  stands in for  Arnet         (Puff Junction)
+       Caveat            stands in for  The Old Falcons (DIGS, demo cut) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@400;600&family=DM+Serif+Display&family=Public+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Archivo:ital,wdth,wght@0,62..125,500..700;1,62..125,700..900&family=Hanken+Grotesk:wght@400;600&family=Work+Sans:wght@400;500;700&family=Alexandria:wght@400;700;900&display=swap">
+<title>shapshyftrs frames</title>
+<style>
+/* tokens/chrome.css */
+:root {
+
+  --chrome-ground: #000000;
+  --chrome-text: #F4F4F0;
+  --chrome-text-2: #8E8E89;
+  --chrome-button-bg: #F4F4F0;
+  --chrome-button-fg: #000000;
+  --chrome-button-radius: 4px;
+
+  --chrome-font: "Schibsted Grotesk", system-ui, sans-serif;
+
+  --chrome-body: 15px;
+  --chrome-body-lh: 24px;
+  --chrome-sub: 18px;
+  --chrome-sub-lh: 28px;
+  --chrome-caption: 22px;
+  --chrome-caption-lh: 28px;
+  --chrome-h2: 32px;
+  --chrome-h2-lh: 36px;
+  --chrome-slogan: 64px;
+  --chrome-slogan-lh: 1.02;
+  --chrome-slogan-m: 40px;
+  --chrome-slogan-m-lh: 1.05;
+  --chrome-wordmark: 28px;
+  --chrome-track-display: -0.02em;
+
+  --chrome-measure: 66ch;
+  --chrome-unit: 8px;
+  --chrome-section: 96px;
+  --chrome-section-m: 64px;
+}
+
+/* tokens/stage.css */
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000000;
+  container-type: inline-size;
+
+  container-name: frame;
+  isolation: isolate;
+  --fx: 0.5;
+  --fy: 0.5;
+}
+.stage > .stage-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.stage > .stage-frame > .stage-scene { position: absolute; inset: 0; }
+
+.stage > .stage-frame { --sw: 100cqw; }
+.stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
+@container frame (max-width: 639px) {
+  .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
+  .stage > .stage-frame > .stage-scene {
+    inset: auto;
+    top: 0;
+    height: 100%;
+    width: 200%;
+    left: clamp(-100%, calc(50% - var(--fx) * 200%), 0%);
+  }
+}
+
+.stage:not(.is-playing) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition-duration: 0.001ms !important; }
+}
+
+/* tokens/puff-junction.css */
+:root {
+
+  --pj-concrete: #565656;
+  --pj-concrete-lit: #69635C;
+  --pj-concrete-low: #444444;
+  --pj-concrete-shade: #353535;
+  --pj-concrete-deep: #0A0A0A;
+  --pj-aggregate: #37373A;
+  --pj-harlequin: #414141;
+  --pj-harlequin-low: #181818;
+
+  --pj-brass-flat: #D1CAC1;
+  --pj-brass-flat-alt: #D1C8BB;
+  --pj-brass-knurl: #816437;
+  --pj-brass-knurl-alt: #7D5A2B;
+  --pj-brass-flange: #795930;
+  --pj-brass-land: #675125;
+  --pj-brass-groove: #563B12;
+  --pj-brass-groove-deep: #0A0602;
+  --pj-brass-crown-hot: #E8DCB8;
+  --pj-brass-albedo: #B8934E;
+  --pj-brass-roughness: 0.32;
+
+  --pj-nickel: #9EA8A4;
+  --pj-gloss-black: #2E2E2E;
+
+  --pj-sweep-top: #EDEDED;
+  --pj-sweep-mid: #DCDCDC;
+  --pj-sweep-dark: #C8C8C8;
+  --pj-sweep-floor: #D9D9D9;
+  --pj-shadow: #C3C3C3;
+
+  --pj-block: 85;
+  --pj-height: 57.2;
+  --pj-bore: 63;
+  --pj-proud: 15.4;
+  --pj-radius: 3;
+  --pj-knurl-pitch: 1.26;
+  --pj-knurl-w: 1.65;
+  --pj-knurl-h: 1.9;
+  --pj-knurl-angle: 49deg;
+  --pj-harlequin-cell: 13.5;
+  --pj-deboss: 0.2;
+
+  --pj-slime: #D6FD4A;
+  --pj-dream: #A5E4FF;
+  --pj-flamingo: #FF8FF1;
+  --pj-pineapple: #FEF200;
+  --pj-black: #000000;
+  --pj-white: #FFFFFF;
+
+  --pj-display: "Archivo", "Arnet", system-ui, sans-serif;
+  --pj-body: "Work Sans", system-ui, sans-serif;
+}
+
+/* tokens/darkest-shades.css */
+:root {
+
+  --ds-black: #000000;
+  --ds-white: #FFFFFF;
+  --ds-neutral: #545454;
+  --ds-terracotta: #BF835E;
+
+  --ds-sweep: #D2D2D2;
+  --ds-sweep-alt: #D3D3D3;
+  --ds-shadow: #C0C0C0;
+  --ds-panel: #F1F2F1;
+  --ds-hair: #E0E1E0;
+  --ds-rule: #808180;
+
+  --ds-lens: #151515;
+  --ds-lens-high: #2A2A2A;
+  --ds-sheen-lo: #4A4A4A;
+  --ds-sheen-hi: #6A6A6A;
+
+  --ds-smoke-top: #353535;
+  --ds-smoke-bottom: #878A8E;
+  --ds-mirror-top: #C8C8C8;
+  --ds-mirror-bottom: #9A9A9A;
+  --ds-teal: #5BA7BC;
+  --ds-teal-high: #9CC4CE;
+  --ds-amber-lens: #CDAB16;
+
+  --ds-gloss: #131313;
+  --ds-gloss-high: #1B1B1B;
+  --ds-gloss-mid: #333333;
+  --ds-specular: #D8D8D8;
+  --ds-satin: #202020;
+  --ds-satin-high: #767676;
+  --ds-tortoise-ground: #1A273A;
+  --ds-tortoise-fleck: #5B8CCF;
+  --ds-tortoise-fleck-hi: #6495D0;
+  --ds-tortoise-glow: #93B5BF;
+  --ds-tortoise-glow-hi: #A7BEC6;
+  --ds-oxblood: #4B1313;
+
+  --ds-electric: #0D12CC;
+  --ds-electric-hi: #1F31C8;
+
+  --ds-gold: #C9AA78;
+  --ds-gold-ramp:
+    #8B6635 0%, #F7E7C5 16%, #C7A575 36%, #F6E4BD 53%,
+    #A47A43 72%, #DEC399 87%, #76552D 100%;
+
+  --ds-mark-aspect: 1.9498;
+  --ds-front: 148;
+  --ds-temple: 149;
+  --ds-split: 25.97%;
+
+  --ds-display: "Archivo Expanded", "Owners Wide", system-ui, sans-serif;
+  --ds-body: "Hanken Grotesk", "Stolzl", system-ui, sans-serif;
+  --ds-track-kicker: 0.12em;
+  --ds-lead-display: 0.97;
+}
+
+/* tokens/digs.css */
+:root {
+
+  --digs-blue: #0042E5;
+  --digs-black: #000000;
+  --digs-ice: #F0F5FF;
+
+  --digs-offwhite: #F8F0E8;
+  --digs-sandblue: #6176A3;
+  --digs-thread: #24315A;
+  --digs-thread-sewn: #3E4351;
+
+  --digs-knit-lit: #ADA595;
+  --digs-knit: #A89F8A;
+  --digs-knit-shadow: #787265;
+  --digs-knit-dark: #4C493E;
+  --digs-knit-reverse: #5D523F;
+  --digs-seam: #868070;
+  --digs-wash: #A08D64;
+  --digs-body-warm: #A49267;
+  --digs-body-warm-hi: #CCB17D;
+  --digs-body-cool: #8C8C83;
+  --digs-rib: #9C998B;
+
+  --digs-knit-pitch: 1.2;
+  --digs-knit-angle: 45deg;
+  --digs-rib-pitch: 1.75;
+  --digs-neckband: 1;
+  --digs-cuff: 2;
+  --digs-sa: 0.375;
+  --digs-hem-turnback: 1;
+  --digs-emb-w: 2.5;
+  --digs-emb-h: 1.58;
+
+  --digs-sans: "Alexandria", system-ui, sans-serif;
+  --digs-script: "Caveat", "The Old Falcons", cursive;
+  --digs-lead-display: 0.95;
+  --digs-scrawl-angle: -9deg;
+}
+
+/* tokens/aesdr.css */
+:root {
+  --ae-crimson: #8B1A1A;
+  --ae-crimson-pressed: #6E1414;
+  --ae-cream: #FAF7F2;
+  --ae-ink: #1A1A1A;
+  --ae-muted: #6B6B6B;
+  --ae-light: #E8E4DF;
+  --ae-white: #FFFFFF;
+  --ae-form-border: #928C84;
+
+  --ae-redink: #C53030;
+  --ae-green: #2E7D32;
+  --ae-pass: #15803D;
+  --ae-gold: #B8943E;
+  --ae-gold-lt: #D4B96A;
+
+  --ae-iris: linear-gradient(90deg,
+    #FF006E 0%, #FF6B00 17%, #F59E0B 34%, #10B981 51%,
+    #38BDF8 68%, #8B5CF6 85%, #FF006E 100%);
+  --ae-iris-size: 300% 100%;
+  --ae-iris-speed: 4s;
+
+  --ae-catalog-field: #F4EADD;
+  --ae-catalog-card: #FFF8EC;
+  --ae-catalog-rule: #CBB58C;
+  --ae-ruled: #F0EBE3;
+
+  --ae-display: "Playfair Display", Georgia, serif;
+  --ae-serif: "Source Serif 4", Georgia, serif;
+  --ae-cond: "Barlow Condensed", system-ui, sans-serif;
+  --ae-mono: "Space Mono", monospace;
+  --ae-hand: "Caveat", cursive;
+
+  --ae-track-eyebrow: 0.25em;
+  --ae-track-button: 0.15em;
+  --ae-radius: 0;
+  --ae-rule-system: 3px;
+
+  --ae-tilt-stamp: -2deg;
+  --ae-tilt-cover: -3deg;
+  --ae-tilt-date: -4deg;
+  --ae-tilt-hand: -1.5deg;
+
+  --ae-ghost: 0.06;
+  --ae-ambient: 0.15;
+  --ae-stamp-body: 0.25;
+  --ae-stamp-border: 0.15;
+}
+
+/* tokens/antaeus.css */
+:root {
+
+  --an-field: #EEF1F7;
+  --an-field-lt: #F6F8FC;
+  --an-surface: #FFFFFF;
+  --an-sunk: #EFF2F7;
+
+  --an-ink: #0A1C40;
+  --an-ink-soft: rgba(10, 28, 64, 0.66);
+  --an-ink-faint: rgba(10, 28, 64, 0.42);
+  --an-ink-quiet: rgba(10, 28, 64, 0.22);
+  --an-hair: rgba(10, 28, 64, 0.07);
+  --an-hair-strong: rgba(10, 28, 64, 0.14);
+  --an-rule: rgba(10, 28, 64, 0.16);
+  --an-grid: rgba(10, 28, 64, 0.08);
+
+  --an-orange: #E6701E;
+  --an-orange-soft: rgba(230, 112, 30, 0.10);
+  --an-blue: #2563EB;
+  --an-blue-soft: rgba(37, 99, 235, 0.08);
+  --an-green: #22C55E;
+  --an-forest: #1B5E3F;
+  --an-forest-soft: rgba(27, 94, 63, 0.09);
+  --an-amber: #B5790F;
+  --an-amber-soft: rgba(181, 121, 15, 0.10);
+  --an-red: #C0392B;
+  --an-red-soft: rgba(192, 57, 43, 0.06);
+
+  --an-grid-pitch: 34px;
+  --an-wash-blue: rgba(37, 99, 235, 0.05);
+  --an-wash-orange: rgba(230, 112, 30, 0.04);
+
+  --an-serif: "DM Serif Display", Georgia, serif;
+  --an-sans: "Public Sans", system-ui, sans-serif;
+  --an-mono: "JetBrains Mono", monospace;
+  --an-read: "Newsreader", Georgia, serif;
+  --an-track-kicker: 0.16em;
+  --an-lead-display: 0.98;
+
+  --an-mark-legs: "M14 38L24 10l10 28";
+  --an-mark-bar: "M18.2 28h11.6";
+  --an-mark-ground: "M2 38h44";
+  --an-lift: translate(1px, -7px) rotate(6deg);
+  --an-lift-opacity: 0.42;
+  --an-lift-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --an-radius-rule: 0 14px 14px 0;
+  --an-rule-w: 3px;
+}
+</style>
+<style>
+/* materials/ae-iris.css */
+.m-iris {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-text {
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-line {
+  height: 1px;
+  background-image: var(--ae-iris);
+  background-size: var(--ae-iris-size, 300% 100%);
+  opacity: 0.15;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+.m-iris-border {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--ae-cream, #FAF7F2), var(--ae-cream, #FAF7F2)) padding-box,
+    var(--ae-iris) border-box;
+  background-size: auto, 300% 100%;
+  animation: m-iris-shimmer var(--ae-iris-speed, 4s) linear infinite;
+}
+
+@keyframes m-iris-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 300% 50%; }
+}
+
+/* materials/ae-paper.css */
+.m-ae-field { background: var(--ae-cream, #FAF7F2); }
+.m-ae-card { background: #FFFFFF; border: 1px solid var(--ae-light, #E8E4DF); border-radius: 0; }
+
+.m-ae-aside {
+  background: #FFFFFF;
+  border-left: 3px solid var(--ae-crimson, #8B1A1A);
+}
+
+.m-ae-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) calc(var(--rule-step, 2.4%) - 1px),
+    var(--ae-ruled, #F0EBE3) var(--rule-step, 2.4%)
+  );
+  opacity: 0.5;
+}
+
+.m-ae-stock {
+  background-color: var(--ae-catalog-field, #F4EADD);
+  background-image:
+    radial-gradient(ellipse at top, rgba(58, 42, 28, 0.08), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(58, 42, 28, 0.02) 0 2px, transparent 2px 28px),
+    linear-gradient(180deg, #EFE2CC 0%, #E6D4B6 100%);
+}
+
+.m-ae-margin {
+  border-left: 2px solid var(--ae-redink, #C53030);
+  font-family: var(--ae-hand, "Caveat", cursive);
+  color: var(--ae-redink, #C53030);
+}
+
+.m-ae-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink, #C53030);
+  text-decoration-thickness: 2px;
+}
+
+.m-ae-insert {
+  color: var(--ae-redink, #C53030);
+  border-bottom: 2px solid var(--ae-redink, #C53030);
+}
+
+/* materials/an-field.css */
+.m-an-field {
+  --an-grid-ink: var(--an-grid, rgba(10, 28, 64, 0.08));
+  position: relative;
+  background-color: var(--an-field-lt, #F6F8FC);
+  background-image:
+    radial-gradient(circle at 12% 0%, var(--an-wash-blue, rgba(37, 99, 235, 0.05)), transparent 32%),
+    radial-gradient(circle at 88% 8%, var(--an-wash-orange, rgba(230, 112, 30, 0.04)), transparent 30%),
+    linear-gradient(var(--an-grid-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--an-grid-ink) 1px, transparent 1px);
+  background-size:
+    auto, auto,
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px),
+    var(--an-grid-pitch, 34px) var(--an-grid-pitch, 34px);
+  background-position: 0 0, 0 0, center 0, center 0;
+}
+
+.m-an-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(246, 248, 252, 0.82) 100%);
+}
+
+.m-an-earth {
+  background: linear-gradient(180deg, rgba(27, 94, 63, 0.08) 0%, rgba(27, 94, 63, 0.02) 100%);
+}
+
+.m-an-ground {
+  background: var(--an-forest, #1B5E3F);
+}
+
+.m-an-ruled {
+  background: var(--an-surface, #FFFFFF);
+  border-left: var(--an-rule-w, 3px) solid var(--an-orange, #E6701E);
+  border-radius: var(--an-radius-rule, 0 14px 14px 0);
+}
+
+/* materials/digs-knit.css */
+.m-knit {
+  --kn-pitch: calc(var(--u, 1%) * 2.6);
+  --kn-light: 0.5;
+
+  background-color: var(--digs-knit, #A89F8A);
+  background-image:
+    linear-gradient(
+      168deg,
+      rgba(173, 165, 149, calc(0.2 + var(--kn-light) * 0.62)) 0,
+      rgba(120, 114, 101, 0.4) 52%,
+      rgba(76, 73, 62, calc(0.78 - var(--kn-light) * 0.5)) 100%
+    ),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<rect width='40' height='40' fill='%23554F42' fill-opacity='0.34'/>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23D8CFB6' stroke-opacity='0.95' stroke-width='7'/>\
+<path d='M0 20 L20 0 L40 20' stroke='%23F3EBD6' stroke-opacity='0.8' stroke-width='2.6'/>\
+<path d='M40 20 L20 40 L0 20' stroke='%232E2A20' stroke-opacity='0.5' stroke-width='2.4'/>\
+</g>\
+<circle cx='20' cy='20' r='3' fill='%232A261C' fill-opacity='0.72'/>\
+</svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+<g fill='none' stroke-linecap='square'>\
+<path d='M0 20 L20 0 L40 20 L20 40 Z' stroke='%23C9C0A6' stroke-opacity='0.5' stroke-width='6'/>\
+</g>\
+<circle cx='20' cy='20' r='2.6' fill='%232A261C' fill-opacity='0.42'/>\
+</svg>");
+  background-size: auto, var(--kn-pitch) var(--kn-pitch), var(--kn-pitch) var(--kn-pitch);
+  background-position:
+    0 0,
+    0 0,
+    calc(var(--kn-pitch) / 2) calc(var(--kn-pitch) / 2);
+  background-blend-mode: soft-light, normal, normal;
+}
+
+.m-knit-reverse {
+  background-color: var(--digs-knit-reverse, #5D523F);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 2px
+    ),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0, rgba(0, 0, 0, 0.18) 100%);
+}
+
+.m-rib {
+  --rib-pitch: 1.9%;
+  background-color: var(--digs-rib, #9C998B);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.17) 0 22%,
+    rgba(0, 0, 0, 0.1) 22% 34%,
+    rgba(0, 0, 0, 0.26) 34% 50%,
+    rgba(255, 255, 255, 0.17) 50% 72%,
+    rgba(0, 0, 0, 0.1) 72% 84%,
+    rgba(0, 0, 0, 0.26) 84% 100%
+  );
+  background-size: var(--rib-pitch) auto;
+}
+
+.m-seam-overlock {
+
+  background-image:
+    repeating-linear-gradient(
+      68deg,
+      rgba(255, 252, 244, 0.34) 0 2px,
+      rgba(58, 52, 42, 0.16) 2px 5px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(34, 30, 24, 0.3) 0,
+      rgba(120, 113, 97, 0.5) 16%,
+      rgba(178, 169, 147, 0.52) 38%,
+      rgba(198, 189, 164, 0.56) 50%,
+      rgba(166, 157, 137, 0.5) 64%,
+      rgba(92, 86, 72, 0.46) 86%,
+      rgba(34, 30, 24, 0.32) 100%
+    );
+}
+
+.m-wash-halo {
+  background: linear-gradient(
+    180deg,
+    transparent 0,
+    rgba(206, 190, 148, 0.5) 30%,
+    rgba(219, 203, 160, 0.72) 50%,
+    rgba(206, 190, 148, 0.5) 70%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 0.8));
+}
+
+.m-wash-cloud {
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='170'>\
+<filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='23'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.96 0 0 0 0 0.85 0 0 0 0.4 -0.14'/></filter>\
+<rect width='260' height='170' filter='url(%23w)'/></svg>");
+  background-size: 74% 74%;
+  mix-blend-mode: soft-light;
+}
+
+/* materials/ds-acetate.css */
+.m-acetate-gloss {
+  background-color: var(--ds-gloss, #131313);
+  background-image:
+    linear-gradient(168deg, rgba(255, 255, 255, 0.1) 0, transparent 26%),
+    linear-gradient(0deg, rgba(210, 210, 210, 0.1) 0, transparent 34%),
+    linear-gradient(180deg, #1B1B1B 0, #101010 62%, #191919 100%);
+}
+
+.m-acetate-chamfer {
+  box-shadow:
+    inset 0 1px 0 rgba(216, 216, 216, 0.72),
+    inset 0 -1px 0 rgba(58, 58, 58, 0.6);
+}
+
+.m-acetate-satin {
+  background-color: var(--ds-satin, #202020);
+  background-image: radial-gradient(120% 90% at 40% 8%, rgba(255, 255, 255, 0.24) 0, transparent 66%);
+}
+
+.m-tortoise {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  background-color: #10151F;
+  background-image:
+
+    radial-gradient(
+      40% 54% at var(--glow-x) var(--glow-y),
+      rgba(167, 190, 198, 0.3) 0,
+      rgba(147, 181, 191, 0.13) 42%,
+      transparent 80%
+    ),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
+<rect width='900' height='560' filter='url(%23f)'/></svg>"),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
+<rect width='900' height='560' filter='url(%23g)'/></svg>"),
+    linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
+  background-size: auto, 100% 100%, 100% 100%, auto;
+  background-blend-mode: screen, screen, screen, normal;
+}
+
+.m-tortoise-rim {
+  box-shadow:
+    inset 0 0 calc(var(--u, 1%) * 2.4) rgba(147, 181, 191, 0.42),
+    inset 0 0 0 1px rgba(167, 190, 198, 0.28);
+}
+
+/* materials/ds-lens.css */
+.m-lens-blackout {
+  --sheen: 50;
+  background-color: var(--ds-lens, #151515);
+  background-image:
+
+    radial-gradient(
+      calc(var(--u, 1%) * 1.6) calc(var(--u, 1%) * 1.1) at 72% 13%,
+      rgba(255, 255, 255, 0.62) 0,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      58deg,
+      transparent calc(var(--sheen) * 1% - 26%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% - 12%),
+      rgba(106, 106, 106, 0.72) calc(var(--sheen) * 1%),
+      rgba(74, 74, 74, 0.5) calc(var(--sheen) * 1% + 12%),
+      transparent calc(var(--sheen) * 1% + 26%)
+    ),
+    linear-gradient(180deg, #1D1D1D 0, #141414 100%);
+  box-shadow: inset 0 0 calc(var(--u, 1%) * 0.9) rgba(0, 0, 0, 0.85);
+}
+
+.m-lens-smoke {
+  background: linear-gradient(180deg, var(--ds-smoke-top, #353535) 0, var(--ds-smoke-bottom, #878A8E) 100%);
+}
+
+.m-lens-mirror {
+  background-image:
+    linear-gradient(112deg, transparent 34%, rgba(255, 255, 255, 0.34) 48%, transparent 62%),
+    linear-gradient(180deg, var(--ds-mirror-top, #C8C8C8) 0, var(--ds-mirror-bottom, #9A9A9A) 100%);
+  box-shadow: inset 0 0 0 1px rgba(28, 28, 28, 0.55);
+}
+
+/* materials/ds-sweep.css */
+.m-ds-sweep {
+  background: #D2D2D2;
+}
+
+.m-ds-shadow {
+
+  background: radial-gradient(
+    closest-side,
+    rgba(160, 160, 160, 0.5) 0,
+    rgba(186, 186, 186, 0.26) 52%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.4));
+}
+
+.m-ds-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at 56% 2%, rgba(255, 255, 255, 0.34) 0, transparent 68%);
+}
+
+/* materials/pj-brass.css */
+.m-brass-flat {
+  background-color: var(--pj-brass-flat, #D1CAC1);
+  background-image:
+
+    repeating-radial-gradient(
+      circle at 46% 42%,
+      rgba(255, 255, 255, 0.055) 0 1px,
+      rgba(66, 54, 43, 0.05) 1px 2px,
+      transparent 2px 3.5px
+    ),
+    radial-gradient(120% 100% at 32% 18%, rgba(255, 255, 255, 0.5) 0, transparent 62%),
+    radial-gradient(90% 90% at 78% 88%, rgba(66, 54, 43, 0.5) 0, transparent 66%);
+}
+
+.m-brass-curved {
+  background-color: var(--pj-brass-knurl, #816437);
+  background-image:
+
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      rgba(0, 0, 0, 0.06) 1px 2px,
+      transparent 2px 4px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 4, 2, 0.55) 0,
+      rgba(232, 220, 184, 0.42) 26%,
+      rgba(184, 147, 78, 0.1) 52%,
+      rgba(7, 4, 2, 0.5) 100%
+    );
+}
+
+.m-deboss {
+  --deboss-light: 0.5;
+  color: transparent;
+  text-shadow:
+    calc((var(--deboss-light) - 0.5) * 0.14em) -0.035em 0 rgba(255, 255, 255, 0.5),
+    calc((0.5 - var(--deboss-light)) * 0.14em) 0.035em 0 rgba(0, 0, 0, 0.42);
+}
+
+/* materials/pj-concrete.css */
+.m-concrete {
+  --c-base: var(--pj-concrete, #565656);
+  --c-lit: var(--pj-concrete-lit, #69635C);
+  --c-shade: var(--pj-concrete-shade, #353535);
+  --c-mottle: 0.5;
+  --c-grain: 0.42;
+  --c-cell: 22%;
+  background-color: var(--c-base);
+  background-image:
+
+    repeating-linear-gradient(
+      96deg,
+      rgba(255, 255, 255, 0.018) 0 2px,
+      rgba(0, 0, 0, 0.014) 2px 5px,
+      transparent 5px 11px
+    ),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'>\
+<filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='7'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.21 0 0 0 0 0.23 0 0 0 -2.6 1.05'/></filter>\
+<rect width='90' height='90' filter='url(%23g)'/></svg>"),
+
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='4' seed='3'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.42 -0.2'/></filter>\
+<rect width='240' height='240' filter='url(%23c)'/></svg>"),
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>\
+<filter id='d'><feTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' seed='11'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 -0.13'/></filter>\
+<rect width='240' height='240' filter='url(%23d)'/></svg>");
+  background-size: auto, 90px 90px, var(--c-cell) var(--c-cell), calc(var(--c-cell) * 0.55) calc(var(--c-cell) * 0.55);
+  background-blend-mode: overlay, multiply, soft-light, multiply;
+}
+
+.m-concrete--lit {
+  box-shadow: inset 0 0 0 100vmax transparent;
+  background-color: var(--c-lit);
+}
+
+.m-concrete-seam {
+  height: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0,
+    rgba(0, 0, 0, 0.62) 38%,
+    rgba(0, 0, 0, 0.62) 62%,
+    rgba(255, 255, 255, 0.045) 100%
+  );
+}
+
+/* materials/pj-harlequin.css */
+.m-harlequin-cell {
+
+  --hq-shift: 0.28;
+  background-color: rgba(0, 0, 0, var(--hq-shift));
+
+  mix-blend-mode: multiply;
+}
+
+.m-harlequin {
+  --hq-cell: 15.9;
+  --hq-stretch: 1.597;
+}
+
+/* materials/pj-knurl.css */
+.m-knurl {
+  --k-cell: calc(var(--u, 1%) * 4.2);
+  --k-light: 0.5;
+
+  background-color: var(--pj-brass-knurl, #816437);
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='100' height='115' viewBox='0 0 100 115'>\
+<defs>\
+<linearGradient id='f' x1='0.1' y1='0' x2='0.9' y2='1'>\
+<stop offset='0' stop-color='%23F2E7C9'/><stop offset='0.42' stop-color='%23C49A57'/>\
+<stop offset='0.78' stop-color='%238A6A32'/><stop offset='1' stop-color='%23654B20'/></linearGradient>\
+<g id='d'>\
+<path d='M50 0 L100 57.5 L50 115 L0 57.5 Z' fill='url(%23f)'/>\
+<path d='M50 0 L100 57.5 L50 115 L0 57.5 Z' fill='none' stroke='%230A0602' stroke-opacity='0.88' stroke-width='6'/>\
+<path d='M0 57.5 L50 0 L100 57.5' fill='none' stroke='%23FFF8E2' stroke-opacity='0.5' stroke-width='2.2'/>\
+</g></defs>\
+<rect width='100' height='115' fill='%23654B20'/>\
+<use href='%23d'/>\
+<use href='%23d' x='-50' y='-57.5'/><use href='%23d' x='50' y='-57.5'/>\
+<use href='%23d' x='-50' y='57.5'/><use href='%23d' x='50' y='57.5'/>\
+</svg>");
+  background-size: var(--k-cell) calc(var(--k-cell) * 1.15);
+  background-position: 0 0;
+}
+
+.m-knurl--band {
+  box-shadow:
+    inset 0 calc(var(--u, 1%) * 0.6) calc(var(--u, 1%) * 1.6) rgba(0, 0, 0, 0.6),
+    inset 0 calc(var(--u, 1%) * -0.6) calc(var(--u, 1%) * 1.6) rgba(0, 0, 0, 0.6);
+}
+
+.m-knurl-rake {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    104deg,
+    transparent 0,
+    rgba(255, 246, 219, 0.1) 32%,
+    rgba(255, 249, 232, 0.36) 46%,
+    rgba(255, 246, 219, 0.1) 60%,
+    transparent 100%
+  );
+  background-size: 260% 100%;
+  background-position: calc(var(--rake, 0) * 1%) 0;
+}
+
+/* materials/pj-sweep.css */
+.m-sweep {
+  background:
+
+    linear-gradient(
+      180deg,
+      #EDEDED 0%,
+      #EBEBEB 40%,
+      #E4E4E4 50%,
+      #DCDCDC 60%,
+      #C9C9C9 70%,
+      #D5D5D5 86%,
+      #DBDBDB 100%
+    );
+}
+
+.m-sweep-key {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    190% 62% at 46% 6%,
+    rgba(255, 255, 255, 0.10) 0,
+    transparent 76%
+  );
+}
+
+.m-contact-shadow {
+  background: radial-gradient(
+    closest-side,
+    rgba(150, 150, 150, 0.62) 0,
+    rgba(178, 178, 178, 0.34) 46%,
+    transparent 100%
+  );
+  filter: blur(calc(var(--u, 1%) * 1.1));
+}
+</style>
+<style>
+html,body{margin:0;background:#000;color:#F4F4F0;font-family:"Schibsted Grotesk",system-ui,sans-serif}
+.sheet{padding:48px 32px 96px}
+.sheet h1{font-size:28px;font-weight:700;margin:0 0 8px}
+.sheet p{margin:0 0 40px;color:#8E8E89;font-size:15px;line-height:24px}
+.sheet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(640px,1fr));gap:40px 24px}
+.sheet-item{margin:0}
+.sheet-frame{width:100%}
+.sheet-item figcaption{margin-top:10px;font-size:14px;line-height:20px;color:#8E8E89}
+.sheet-item figcaption b{color:#F4F4F0;font-weight:600}
+</style>
+</head>
+<body class="sheet">
+<h1>shapshyftrs frames</h1>
+<p>All twelve frames, gallery order, for review.</p>
+<div class="sheet-grid">
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=knurl-wall num=1 source=puff-junction focal=50%,50% loop=9 interactive=no -->
+<div class="stage f01" data-frame="knurl-wall" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A wall of brass diamond knurling, lit by a light travelling slowly across it; as the light crosses the centre a shallow wordmark surfaces out of the metal and sinks back">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f01-field m-knurl m-knurl--band"></div>
+      <div class="f01-mark"><span class="f01-puff">puff</span><span class="f01-junction">JUNCTION</span></div>
+      <div class="f01-rake m-knurl-rake"></div>
+      <div class="f01-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 1 — the knurl at architectural scale.
+   Materials: pj-knurl (1.26 mm pitch, 1.65 x 1.9 lands, point-up at 1.15:1,
+   grooves crossing at 49 degrees) and pj-brass's whisper deboss (three
+   terraces, 0.2 mm, letters left at the original surface).
+   The knurl has never been the subject in this brand; it has only ever been a
+   band on a knob 63 mm across. Here it is the wall, and the only other event
+   is a light crossing it. Metal does not ease, so the rake runs at constant
+   velocity. */
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: calc(var(--u) * 5.4); }
+.f01 .f01-rake { animation: f01-rake 9s linear infinite; }
+.f01 .f01-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 96% at 50% 46%, transparent 38%, rgba(0, 0, 0, 0.62) 100%);
+}
+/* The mark is a whisper: one raking-light edge, and almost invisible from the
+   wrong angle. Its opacity rides the same clock as the light. */
+.f01 .f01-mark {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: calc(var(--u) * 0.6);
+  font-family: var(--pj-display); font-style: italic;
+  animation: f01-surface 9s linear infinite;
+}
+/* The deboss is 0.2 mm deep. The study is emphatic about what that looks
+   like: "astonishingly shallow -- in the hero renders it is barely legible,
+   catching light on one edge only. If you rebuild this, the mark should be a
+   whisper", and the brand rule is that the mark whispers on an object and
+   shouts on paper, never the other way round.
+   The first build had the technique right and the values wrong. A text-shadow
+   is a whole copy of the glyph, not an edge, so two offset copies at 0.85 and
+   0.75 alpha stack into a solid cream letter with a hard dark rim -- the
+   loudest object in the frame, which is the swap the rule names. At these
+   alphas the knurl reads straight through the letterform and only the two
+   edges catch, which is what 0.2 mm actually does to light. */
+.f01 .f01-puff {
+  font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
+  letter-spacing: -0.02em; text-transform: lowercase;
+  color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.1) calc(var(--u) * -0.1) 0 rgba(255, 248, 226, 0.26),
+    calc(var(--u) * 0.11) calc(var(--u) * 0.11) 0 rgba(20, 12, 2, 0.3);
+}
+.f01 .f01-junction {
+  font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
+  text-indent: 0.44em; color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.07) calc(var(--u) * -0.07) 0 rgba(255, 248, 226, 0.24),
+    calc(var(--u) * 0.08) calc(var(--u) * 0.08) 0 rgba(20, 12, 2, 0.28);
+}
+@keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
+@keyframes f01-surface {
+  0%, 34% { opacity: 0; }
+  46% { opacity: 0.85; }
+  58% { opacity: 0.85; }
+  72%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f01 .f01-rake { background-position: 44% 0; }
+  .f01 .f01-mark { opacity: 1; }
+}
+</style>
+</div><figcaption><b>01 knurl-wall</b>, PUFF JUNCTION. Brass, at four hundred percent. Loop 9s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=ground-line num=2 source=antaeus focal=50%,58% loop=8 interactive=no -->
+<div class="stage f02" data-frame="ground-line" style="--fx:0.50;--fy:0.58" role="img"
+     aria-label="A drafted capital A standing on a ground line that runs past its feet, on pale graph paper; the letter lifts off the line, tilts and hollows, then settles back. The line never moves">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f02-field m-an-field">
+        <svg class="f02-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <g class="f02-a" stroke="var(--an-ink)" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter">
+            <path d="M14 38L24 10l10 28"/>
+            <path d="M18.2 28h11.6"/>
+          </g>
+          <path d="M2 38h44" stroke="var(--an-forest)" stroke-width="3.2" stroke-linecap="butt"/>
+        </svg>
+        <div class="f02-earth m-an-earth"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 2 — the mark as a horizon.
+   Materials: an-field (34 px grid at rgba(10,28,64,.08), the two corner
+   washes, the vignette) and the Grounded-A's exact geometry — legs
+   M14 38L24 10l10 28, crossbar M18.2 28h11.6, ground M2 38h44, butt caps and
+   mitered joins.
+   The ground runs 12 units past each foot: 2.2x the width of the letter. That
+   overhang is the mark. The settled auth gate does this at 118 px as a login
+   affordance; here the line is a horizon and the letter is a building — and
+   the lift is the product's own state device, so the A floats and the ground
+   never moves. */
+.f02 .f02-field { position: absolute; inset: 0; }
+.f02 .f02-mark {
+  position: absolute; left: 50%; bottom: 3%;
+  height: 74%; width: auto; transform: translateX(-50%); overflow: visible;
+}
+.f02 .f02-a {
+  transform-origin: 24px 24px;
+  animation: f02-lift 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+.f02 .f02-earth {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18.4%;
+}
+.f02 .f02-earth i {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: rgba(27, 94, 63, 0.14);
+}
+.f02 .f02-earth i:nth-child(1) { top: 26%; }
+.f02 .f02-earth i:nth-child(2) { top: 52%; }
+.f02 .f02-earth i:nth-child(3) { top: 79%; }
+@keyframes f02-lift {
+  0%, 18% { transform: none; opacity: 1; }
+  44%, 62% { transform: translate(1px, -7px) rotate(6deg); opacity: 0.42; }
+  86%, 100% { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f02 .f02-a { transform: none; opacity: 1; } }
+</style>
+</div><figcaption><b>02 ground-line</b>, Antaeus GTM OS. A mark that stands on a line. Loop 8s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=blackout num=3 source=darkest-shades focal=50%,50% loop=10 interactive=no -->
+<div class="stage f03" data-frame="blackout" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A field of near-black you cannot see through. One broad soft sheen wipes across it from lower left to upper right, and a single hard specular dot sits near the top. Set small along the lower edge: See Everything. Reveal Nothing.">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f03-lens m-lens-blackout"></div>
+      <div class="f03-groove"></div>
+      <p class="f03-line">See Everything. Reveal Nothing.</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 3 — the lens as the whole surface.
+   Materials: ds-lens's blackout recipe — a #151515 fill, one broad soft sheen
+   band at #4A–#6A across 30% of the width, one small hard specular dot near
+   the top edge, and the faint 2–4 px inner shadow where a lens meets its
+   groove.
+   The tagline and the product make the same argument, which is rare. The
+   sheen crosses once, slowly, and nothing else happens. */
+.f03 .f03-lens { position: absolute; inset: 0; animation: f03-sheen 10s ease-in-out infinite; }
+.f03 .f03-groove {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 calc(var(--u) * 3.4) rgba(0, 0, 0, 0.9);
+}
+/* Ragged right, not centred: the brand's headline lockup is caps, few words,
+   ragged right, leading near 0.95 -- NOT JUST / SUNGLASSES. / A STATEMENT.
+   Centring is the one thing that lockup never does. */
+.f03 .f03-line {
+  position: absolute; left: 7%; right: 7%; bottom: 8.5%;
+  margin: 0; text-align: left;
+  font-family: var(--ds-display); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 3.3); line-height: 0.95;
+  letter-spacing: 0.055em; color: rgba(236, 236, 236, 0.9);
+}
+@keyframes f03-sheen {
+  0% { --sheen: 4; }
+  100% { --sheen: 96; }
+}
+@property --sheen { syntax: "<number>"; inherits: true; initial-value: 50; }
+@media (prefers-reduced-motion: reduce) { .f03 .f03-lens { --sheen: 46; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  .f03 .f03-line { left: 27%; right: 27%; bottom: 10%; font-size: calc(var(--u) * 4.6); }
+}
+</style>
+</div><figcaption><b>03 blackout</b>, DARKEST SHADES. A lens you cannot see through. Loop 10s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=iris-seam num=4 source=aesdr focal=50%,46% loop=8 interactive=yes -->
+<div class="stage f04" data-frame="iris-seam" style="--fx:0.50;--fy:0.46">
+  <div class="stage-frame">
+    <div class="stage-scene f04-scene m-ae-field">
+      <div class="f04-words" aria-live="off">
+        <span class="f04-word m-iris-text" data-i="0">Owning</span>
+        <span class="f04-word m-iris-text" data-i="1">Untamed</span>
+        <span class="f04-word m-iris-text" data-i="2">Verdict</span>
+        <span class="f04-word m-iris-text" data-i="3">Keeper</span>
+      </div>
+      <div class="f04-line m-iris-line"></div>
+      <p class="f04-sub">The operating manual, not the motivation engine.</p>
+      <svg class="f04-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 45 Q38 12 55 45"/>
+          <path d="M21 45 H55"/>
+          <path d="M29 41 Q38 30 47 41"/>
+          <path d="M33 45 V41.5 M43 45 V41.5"/>
+          <path d="M26 45 V50 M34 45 V51 M43 45 V51 M51 45 V50"/>
+          <circle cx="15" cy="36" r="6.2"/>
+          <path d="M11.8 30.8 Q9.4 19 10.2 11"/>
+          <path d="M18.2 30.8 Q20.8 19 20.2 11"/>
+        </g>
+        <circle cx="13" cy="35" r="1.5" fill="#1A1A1A"/>
+        <path d="M9 33.2 Q15 29.6 21 33.2" fill="none" stroke="#8B1A1A" stroke-width="2"
+              stroke-linecap="round"/>
+      </svg>
+      <button class="f04-hold" type="button" aria-pressed="false">
+        <span class="f04-hold-label">Hold the word</span>
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 4 — the ration as the composition.
+   Materials: ae-iris (the seven stops verbatim, 300% background-size, the 4 s
+   shimmer, the 1 px ambient line at opacity .15) and ae-paper (cream
+   #FAF7F2, zero radius).
+   The iris is always an accent on something. Here it is the only thing, and
+   its discipline is the subject: one line, and one word lit at a time. The
+   mascot is present as its own monoline glyph family — the shell arc and the
+   ear — which is the brand's abstraction of the creature and the only
+   faithful way to carry it without placing a source render. Logged in
+   ASSUMPTIONS.md.
+   Registers the brand has retired are avoided deliberately: no classified, no
+   dossier, no ledger, no editorial split, no decision card. */
+.f04 .f04-scene { position: absolute; inset: 0; }
+.f04 .f04-line { position: absolute; left: 0; right: 0; top: 56%; height: 2px; opacity: 0.22; }
+.f04 .f04-words {
+  position: absolute; left: 0; right: 0; top: 30%; height: 22%;
+  display: grid; place-items: center;
+}
+.f04 .f04-word {
+  grid-area: 1 / 1;
+  font-family: var(--ae-display); font-style: italic; font-weight: 900;
+  font-size: calc(var(--u) * 11); line-height: 1; letter-spacing: -0.02em;
+  opacity: 0;
+}
+.f04.is-playing .f04-word { animation: f04-ignite 8s linear infinite; }
+.f04 .f04-word[data-i="0"] { animation-delay: 0s; }
+.f04 .f04-word[data-i="1"] { animation-delay: 2s; }
+.f04 .f04-word[data-i="2"] { animation-delay: 4s; }
+.f04 .f04-word[data-i="3"] { animation-delay: 6s; }
+.f04 .f04-sub {
+  position: absolute; left: 0; right: 0; top: 63%; margin: 0; text-align: center;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.3);
+  line-height: 1.6; color: var(--ae-muted);
+}
+.f04 .f04-glyph {
+  position: absolute; right: 7%; bottom: 9%;
+  width: calc(var(--u) * 11); height: calc(var(--u) * 11);
+}
+.f04 .f04-hold {
+  position: absolute; left: 7%; bottom: 9%;
+  font-family: var(--ae-cond); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 1.9); letter-spacing: var(--ae-track-button);
+  color: var(--ae-ink); background: transparent;
+  border: 1.5px solid var(--ae-ink); border-radius: var(--ae-radius);
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 2);
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.3s;
+}
+.f04 .f04-hold:hover { transform: translateY(-1px); }
+.f04 .f04-hold:focus-visible { outline: 2px solid var(--ae-crimson); outline-offset: 2px; }
+.f04 .f04-hold[aria-pressed="true"] { background: var(--ae-ink); color: var(--ae-cream); }
+.f04.is-held .f04-word { animation-play-state: paused !important; }
+.f04.is-held .f04-line { animation-play-state: paused !important; }
+@keyframes f04-ignite {
+  0%, 1% { opacity: 0; }
+  6% { opacity: 1; }
+  22% { opacity: 1; }
+  27%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f04 .f04-word { opacity: 0; }
+  .f04 .f04-word[data-i="0"] { opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  .f04 .f04-words { left: 26%; right: 26%; top: 28%; }
+  .f04 .f04-word { font-size: calc(var(--u) * 7.4); }
+  .f04 .f04-sub { left: 27%; right: 27%; top: 60%; font-size: calc(var(--u) * 2.9); }
+  .f04 .f04-hold {
+    left: 50%; right: auto; bottom: 8%; transform: translateX(-50%);
+    font-size: calc(var(--u) * 2.4);
+  }
+  .f04 .f04-glyph {
+    right: 28%; left: auto; bottom: 6%; transform: none;
+    width: calc(var(--u) * 9); height: calc(var(--u) * 9);
+  }
+  .f04 .f04-hold { left: 28%; right: auto; transform: none; }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var btn = root.querySelector(".f04-hold");
+  var label = root.querySelector(".f04-hold-label");
+  btn.addEventListener("click", function () {
+    var held = root.classList.toggle("is-held");
+    btn.setAttribute("aria-pressed", held ? "true" : "false");
+    label.textContent = held ? "Let it run" : "Hold the word";
+  });
+})();
+</script>
+</div><figcaption><b>04 iris-seam</b>, AESDR. One line, seven colours. Loop 8s, interactive yes.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=waffle num=5 source=digs focal=44%,50% loop=10 interactive=no -->
+<div class="stage f05" data-frame="waffle" style="--fx:0.44;--fy:0.50" role="img"
+     aria-label="A thermal knit at wall scale, its waffle lattice and pinholes visible. An overlock seam runs diagonally across it with a pale wash halo bleeding out along its length, and the light travels slowly from raking to flat">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f05-cloth m-knit"></div>
+      <div class="f05-cloud m-wash-cloud"></div>
+      <div class="f05-halo m-wash-halo"></div>
+      <div class="f05-seam m-seam-overlock"></div>
+      <div class="f05-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 5 — the fabric as architecture, the wash as weather.
+   Materials: digs-knit (the half-drop waffle at ~1.2 mm pitch, yarn families
+   crossing at ±45°, a pinhole at each cell centre, the plane travelling from
+   #4C493E to #ADA595 as the light goes from raking to flat) and the overlock
+   ridge and seam-highlighter wash from the same file.
+   The wash is the founder's own name for it, and it is the thing that makes a
+   garment look like a garment rather than a flat fill. Fabric settles, so the
+   light decelerates. */
+.f05 .f05-cloth {
+  position: absolute; inset: 0; --kn-pitch: calc(var(--u) * 3.1);
+  animation: f05-light 10s cubic-bezier(0.32, 0, 0.16, 1) infinite;
+}
+.f05 .f05-cloud { position: absolute; inset: -8%; }
+.f05 .f05-halo {
+  position: absolute; left: -14%; right: -14%; top: 40%; height: 26%;
+  transform: rotate(-13deg);
+}
+/* The overlock ridge is three or four knit cells wide. Height was a
+   percentage of the scene's HEIGHT while the cell is measured against its
+   WIDTH, so 3.4% came out at 0.69 of a cell and the seam read as a thin
+   chrome rod laid on the cloth rather than as a pressed ridge in it. Driven
+   from the same unit as the cell, it is 3.2 cells. */
+.f05 .f05-seam {
+  position: absolute; left: -14%; right: -14%; top: 46%;
+  height: calc(var(--kn-pitch, 3.1%) * 3.2);
+  transform: rotate(-13deg);
+}
+.f05 .f05-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 104% at 44% 44%, transparent 42%, rgba(0, 0, 0, 0.5) 100%);
+}
+@keyframes f05-light {
+  0%, 100% { --kn-light: 0.08; }
+  50% { --kn-light: 0.92; }
+}
+@property --kn-light { syntax: "<number>"; inherits: true; initial-value: 0.5; }
+@media (prefers-reduced-motion: reduce) { .f05 .f05-cloth { --kn-light: 0.55; } }
+</style>
+</div><figcaption><b>05 waffle</b>, DIGS. A knit, and the seam through it. Loop 10s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=harlequin num=6 source=puff-junction focal=38%,50% loop=9 interactive=no -->
+<div class="stage f06" data-frame="harlequin" style="--fx:0.38;--fy:0.50" role="img"
+     aria-label="A diagonal checkerboard cut into a concrete wall, dense at the left and thinning to the right along a ragged staircase edge. Individual diamonds drop out and return; they never fade">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f06-wall m-concrete"></div>
+      <div class="f06-cells m-harlequin" aria-hidden="true"></div>
+      <div class="f06-seam m-concrete-seam"></div>
+      <div class="f06-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 6 — the corner detail as the whole wall.
+   Materials: pj-concrete (achromatic #565656, cloudy mottling, aggregate
+   speckle, the troweled streak, and the crisp parting seam) and pj-harlequin
+   (cells 13–14 mm on point, dark cells a 25–35% value shift on the same
+   material rather than a fill).
+   On the product this is a detail at 13 mm running down one vertical corner.
+   Here it is the elevation, and you can watch it eat: the staircase front
+   advances and retreats and individual cells drop out entirely, because the
+   real dissolve is never an opacity fade.
+   The cells are generated rather than tiled — a gradient cannot drop a single
+   cell — and each one carries the concrete's own grain through it. */
+.f06 .f06-wall { position: absolute; inset: 0; --c-cell: 26%; }
+.f06 .f06-cells { position: absolute; inset: 0; }
+.f06 .f06-cells i {
+  position: absolute;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: rgba(0, 0, 0, var(--hq-shift, 0.28));
+  mix-blend-mode: multiply;
+  animation: f06-drop 9s ease-in-out infinite;
+}
+.f06 .f06-seam { position: absolute; left: 0; right: 0; top: 50%; }
+.f06 .f06-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(128% 100% at 38% 48%, transparent 44%, rgba(0, 0, 0, 0.55) 100%);
+}
+@keyframes f06-drop {
+  0%, 38% { opacity: 1; }
+  52%, 64% { opacity: 0; }
+  80%, 100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f06 .f06-cells i { opacity: 1; } }
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var host = root.querySelector(".f06-cells");
+  if (!host || host.childElementCount) return;
+  /* The cell comes from the material, not from a copy kept here: about six
+     across the 85 mm face, stretched vertically as the object has it.
+     Filled diamonds sit a full cell apart and touch the unfilled alternates
+     at their vertices. The ragged front is a per-cell threshold, not a
+     gradient: the staircase is what the real dissolve looks like. */
+  var cs = getComputedStyle(host);
+  var W = parseFloat(cs.getPropertyValue("--hq-cell")) || 15.9;
+  var H = W * (parseFloat(cs.getPropertyValue("--hq-stretch")) || 1.597);
+  var out = [];
+  for (var r = -1; r < 6; r++) {
+    for (var c = -1; c < 9; c++) {
+      var keep = 1.0 - (c / 8.0) * 1.34 + ((r * 7 + c * 11) % 5) * 0.075;
+      if (keep < 0.4) continue;
+      var edge = keep < 0.62;
+      out.push('<i style="left:' + (c * W - W / 2).toFixed(2) + '%;top:' +
+        (r * H - H / 2).toFixed(2) + '%;width:' + W + '%;height:' + H + '%;' +
+        'animation-delay:' + (((r * 3 + c * 5) % 9) * -0.62).toFixed(2) + 's;' +
+        (edge ? '' : 'animation:none;') + '"></i>');
+    }
+  }
+  host.innerHTML = out.join("");
+})();
+</script>
+</div><figcaption><b>06 harlequin</b>, PUFF JUNCTION. A pattern eating a wall. Loop 9s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=prismatic num=7 source=darkest-shades focal=50%,54% loop=10 interactive=no -->
+<div class="stage f07" data-frame="prismatic" style="--fx:0.50;--fy:0.54" role="img"
+     aria-label="A flat mid-grey studio sweep with nothing on it, and the brand's angular mark travelling across it as a hard-edged shadow, its two offset notches slicing the light as it passes">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f07-sweep m-ds-sweep"></div>
+      <div class="f07-key m-ds-key"></div>
+      <div class="f07-cast" aria-hidden="true">
+        <svg viewBox="0 0 1000 513">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+      <div class="f07-soft" aria-hidden="true">
+        <svg viewBox="0 0 1000 513" style="animation-delay:0s">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 7 — the founder's unbuilt catalogue idea, built.
+   Materials: ds-sweep (the flat #D2D2D2 seamless backdrop, the single large
+   soft key upper-front, and the shadow discipline — never more than 8–10%
+   darker than the ground, wider than the object, no hard drop shadow) and the
+   verified ten-vertex mark, traced at 99.78% pixel agreement with the source.
+   The brief asked for "prismatic logo elements and patterns in shadows,
+   lighting, background", was quoted, deferred, and never made. The double
+   notch is the whole idea — a downward fold at 54% of the width on the top
+   edge and an upward fold at 45% on the bottom, deliberately offset — so the
+   shadow reads as a crease passing over the surface.
+   Two passes: a soft wide one, and a harder one that carries the geometry.
+   A DELIBERATE DEVIATION, stated because the first build claimed the opposite.
+   The brand's measured rule is that a shadow never falls more than 8-10%
+   below the backdrop and is never hard, and the soft pass here obeys it
+   (rgba(126,126,126,.2) over #D2D2D2 lands at 8%). The geometry pass does not:
+   at .30 it measures 23% below the ground. That rule describes the contact
+   shadow under a product in a photograph, and here the shadow is not under the
+   subject, it IS the subject -- a cast mark has to be legible as a shape or
+   the frame has nothing in it. Logged in ASSUMPTIONS.md. What is not
+   deviation: the mark keeps its measured 1.9498 aspect, which the viewBox
+   carries and which preserveAspectRatio="none" was previously discarding. */
+.f07 .f07-sweep { position: absolute; inset: 0; }
+.f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
+.f07 .f07-cast svg, .f07 .f07-soft svg {
+  position: absolute; left: 0; top: 17%; width: 78%; height: 64%;
+  animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.30); }
+.f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
+.f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
+@keyframes f07-travel {
+  0% { transform: translateX(-104%); }
+  38%, 56% { transform: translateX(14%); }
+  100% { transform: translateX(139%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f07 .f07-cast svg, .f07 .f07-soft svg { transform: translateX(18%); }
+}
+</style>
+</div><figcaption><b>07 prismatic</b>, DARKEST SHADES. A logo, cast as a shadow. Loop 10s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=tech-pack num=8 source=digs focal=50%,50% loop=9 interactive=yes -->
+<div class="stage f08" data-frame="tech-pack" style="--fx:0.50;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene f08-sheet">
+      <div class="f08-head">
+        <span class="f08-wordmark">digs</span>
+        <span class="f08-rule"></span>
+        <span class="f08-title">Long Sleeve Tee</span>
+        <span class="f08-season">FW25</span>
+      </div>
+      <p class="f08-style">AC-LST-001 | LONG SLEEVE TEE | SIZE RANGE: S-XL | SAMPLE SIZE: M | STATUS: PROTO | TOPS</p>
+      <div class="f08-body">
+        <svg class="f08-flat" viewBox="0 0 840 320" aria-hidden="true">
+          <!-- Drawn to the graded spec for the sample size, M, at 6px per inch.
+               Body 30" HPS to hem; half chest 21.5" and half hem 21.5", which is
+               what makes the side seam vertical and the hem straight; across
+               shoulder 17.25"; neck 7" wide with a 4.5" front drop; armhole 10.5"
+               below HPS; sleeve 26" along the outer fold, tapering from an 8"
+               bicep to a 5" cuff. -->
+          <g fill="none" stroke="#9A958C" stroke-width="1">
+            <path d="M188 150 q13 28 3 58 M220 146 q9 32 -2 62 M252 152 q11 26 2 56"/>
+            <path d="M298 108 q22 26 34 42 M142 108 q-22 26 -34 42"/>
+          </g>
+          <g fill="none" stroke="#141414" stroke-width="2.2" stroke-linejoin="round">
+            <!-- Front outline. One piece: the study confirms the front is cut on
+                 the fold, so there is no seam across it. The horizontal yoke seam
+                 that makes the back two panels is on the back, which this view
+                 does not show. -->
+            <path d="M199 50 L168 59 Q159 85 156 113 L156 230 L284 230 L284 113 Q281 85 272 59 L241 50 C238 88 202 88 199 50 Z"/>
+            <!-- Sleeves, set in with a slight drop shoulder. -->
+            <path d="M272 59 L372 179 L349 198 L284 113"/>
+            <path d="M168 59 L68 179 L91 198 L156 113"/>
+          </g>
+          <!-- 2-ply foldover rib: 1" neckband, 2" cuffs. -->
+          <path class="f08-rib" d="M235 56 C232 82 208 82 205 56" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M364 170 L372 179 L349 198 L341 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M76 170 L68 179 L91 198 L99 189 Z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <!-- 1" turnback at the straight hem. -->
+          <path d="M156 224 h128" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
+          <g class="f08-leaders" stroke="#C0392B" stroke-width="1.4" fill="none">
+            <path data-l="0" d="M234 58 L436 40" marker-end="url(#f08a)"/>
+            <path data-l="1" d="M358 186 L436 118" marker-end="url(#f08a)"/>
+            <path data-l="2" d="M286 227 L436 196" marker-end="url(#f08a)"/>
+            <path data-l="3" d="M285 168 L436 274" marker-end="url(#f08a)"/>
+          </g>
+          <defs>
+            <marker id="f08a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="#C0392B"/>
+            </marker>
+          </defs>
+        </svg>
+        <ul class="f08-calls">
+          <li data-l="0"><b>Neckband height</b><span>1"</span></li>
+          <li data-l="1"><b>Sleeve cuff height</b><span>2"</span></li>
+          <li data-l="2"><b>Bottom hem turnback</b><span>1"</span></li>
+          <li data-l="3"><b>Seam allowance, all seams</b><span>3/8"</span></li>
+        </ul>
+      </div>
+      <p class="f08-foot"><span>Exterior view</span><span>UPDATED: 06/15/2025</span></p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 8 — a technical drawing that annotates itself.
+   Materials: the real graded spec (neckband 1", cuff 2", 3/8" seam allowance
+   on every seam, 1" turnback at the hem) and the tech pack's own layout
+   system — black-line flats on white with soft grey diagonal drape strokes,
+   red leader lines with arrowheads running to caps callouts, rib as a hatch
+   of fine parallels, hems as double dashed lines, a pipe-separated style
+   string as the sub-header, and the dated footer.
+   Every number and the style string are verbatim; nothing about this garment
+   is invented. The construction drawn is the real one: set-in sleeve with a
+   slight drop shoulder, a long sleeve at the graded 26" along the outer fold,
+   straight body, straight hem, and 2-ply foldover rib at the neck and cuffs.
+   The front is one piece cut on the fold, so nothing crosses it. The
+   horizontal yoke seam that makes the back two panels belongs to the back and
+   is not drawn, because this is the exterior front view.
+   A drawn line arrives, it does not ease, so the leaders snap. */
+.f08 .f08-sheet { background: #FFFFFF; overflow: hidden; }
+.f08 .f08-head {
+  position: absolute; left: 4%; right: 4%; top: 5.5%;
+  display: flex; align-items: baseline; gap: calc(var(--u) * 1.6);
+  font-family: var(--digs-sans);
+}
+.f08 .f08-wordmark { font-size: calc(var(--u) * 3.6); font-weight: 900; letter-spacing: -0.045em; color: #000; }
+.f08 .f08-rule { flex: 0 0 1px; align-self: stretch; background: rgba(0, 0, 0, 0.35); }
+.f08 .f08-title {
+  flex: 1; text-align: center; text-transform: uppercase;
+  font-size: calc(var(--u) * 2); font-weight: 400; letter-spacing: 0.14em; color: #141414;
+}
+.f08 .f08-season { font-size: calc(var(--u) * 2); font-weight: 700; color: #141414; }
+.f08 .f08-style {
+  position: absolute; left: 4%; right: 4%; top: 13.5%; margin: 0;
+  font-family: var(--digs-sans); font-size: calc(var(--u) * 1.32);
+  letter-spacing: 0.06em; color: #3B3B3B;
+}
+.f08 .f08-body { position: absolute; left: 4%; right: 4%; top: 20%; bottom: 12%; }
+/* One coordinate space across the whole body: the garment occupies the left
+   440 units and the leaders run out to 436 where the callout column begins,
+   so a leader actually lands on the value it is calling out. */
+.f08 .f08-flat { position: absolute; inset: 0; width: 100%; height: 100%; }
+.f08 .f08-flat .f08-rib { stroke-dasharray: 2.4 2.4; }
+.f08 .f08-leaders path {
+  stroke-dasharray: 260; stroke-dashoffset: 260; opacity: 0;
+  animation: f08-draw 9s linear infinite;
+}
+.f08 .f08-leaders path[data-l="0"] { animation-delay: 0.3s; }
+.f08 .f08-leaders path[data-l="1"] { animation-delay: 2.55s; }
+.f08 .f08-leaders path[data-l="2"] { animation-delay: 4.8s; }
+.f08 .f08-leaders path[data-l="3"] { animation-delay: 7.05s; }
+.f08 .f08-calls {
+  position: absolute; right: 0; top: 4%; bottom: 4%; width: 46%;
+  margin: 0; padding: 0 0 0 calc(var(--u) * 1.4); list-style: none;
+  font-family: var(--digs-sans);
+  display: grid; align-content: space-between;
+}
+.f08 .f08-calls li {
+  display: grid; gap: calc(var(--u) * 0.2);
+  opacity: 0.32; transition: opacity 180ms ease;
+  animation: f08-call 9s linear infinite;
+}
+.f08 .f08-calls li[data-l="0"] { animation-delay: 0.3s; }
+.f08 .f08-calls li[data-l="1"] { animation-delay: 2.55s; }
+.f08 .f08-calls li[data-l="2"] { animation-delay: 4.8s; }
+.f08 .f08-calls li[data-l="3"] { animation-delay: 7.05s; }
+.f08 .f08-calls b {
+  font-size: calc(var(--u) * 1.3); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: #141414;
+}
+.f08 .f08-calls span { font-size: calc(var(--u) * 2.6); font-weight: 400; color: #C0392B; line-height: 1.1; }
+.f08.is-lit .f08-calls li, .f08.is-lit .f08-leaders path { animation-play-state: paused; }
+.f08 .f08-calls li.is-on { opacity: 1; }
+.f08 .f08-calls li.is-off { opacity: 0.32; }
+.f08 .f08-leaders path.is-on { stroke-dashoffset: 0; opacity: 1; }
+.f08.is-lit .f08-leaders path:not(.is-on) { opacity: 0; }
+.f08 .f08-foot {
+  position: absolute; left: 4%; right: 4%; bottom: 5%; margin: 0;
+  display: flex; justify-content: space-between;
+  font-family: var(--digs-sans); font-size: calc(var(--u) * 1.3);
+  text-transform: uppercase; letter-spacing: 0.1em; color: #6A6A6A;
+}
+@keyframes f08-draw {
+  0%, 3% { stroke-dashoffset: 260; opacity: 0; }
+  4% { stroke-dashoffset: 260; opacity: 1; }
+  9%, 24% { stroke-dashoffset: 0; opacity: 1; }
+  25%, 100% { stroke-dashoffset: 260; opacity: 0; }
+}
+@keyframes f08-call {
+  0%, 3% { opacity: 0.32; }
+  4%, 24% { opacity: 1; }
+  25%, 100% { opacity: 0.32; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f08 .f08-leaders path { stroke-dashoffset: 0; opacity: 1; }
+  .f08 .f08-calls li { opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  /* a wide document cannot survive a half-width band, so on the phone it
+     stacks: the header, the flat, and the callouts as a list beneath */
+  .f08 .f08-head {
+    left: 27%; right: 27%; top: 3.5%;
+    display: grid; grid-template-columns: auto 1fr; align-items: center;
+    gap: calc(var(--u) * 1.2) calc(var(--u) * 1.4);
+  }
+  /* explicit placement: auto-flow puts the title before the season because
+     that is the DOM order, and the two then stack into each other */
+  .f08 .f08-wordmark { grid-area: 1 / 1; font-size: calc(var(--u) * 4.4); }
+  .f08 .f08-rule { display: none; }
+  .f08 .f08-season { grid-area: 1 / 2; justify-self: end; font-size: calc(var(--u) * 2.2); }
+  .f08 .f08-title {
+    grid-area: 2 / 1 / 3 / 3; text-align: left; font-size: calc(var(--u) * 2.4);
+  }
+  .f08 .f08-title { font-size: calc(var(--u) * 2); white-space: nowrap; }
+  .f08 .f08-style { left: 27%; right: 27%; top: 22.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
+  .f08 .f08-body { left: 27%; right: 27%; top: 31%; bottom: 11%; }
+  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 44%; width: 100%; }
+  .f08 .f08-leaders { display: none; }
+  /* Four callouts have to fit the box rather than be spaced across it: at this
+     width a space-between grid taller than its container pushes the last row
+     out through the bottom, which is how "3/8" ended up half cut and sitting
+     on the footer. Sized so four rows total less than the height available. */
+  .f08 .f08-calls {
+    position: absolute; left: 0; right: 0; top: 48%; bottom: 4%; width: auto;
+    padding: 0; align-content: space-between;
+  }
+  .f08 .f08-calls b { font-size: calc(var(--u) * 1.3); line-height: 1.25; }
+  .f08 .f08-calls span { font-size: calc(var(--u) * 2.2); line-height: 1.1; }
+  .f08 .f08-foot { left: 27%; right: 27%; bottom: 3%; font-size: calc(var(--u) * 1.5); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var items = Array.prototype.slice.call(root.querySelectorAll(".f08-calls li"));
+  var leaders = Array.prototype.slice.call(root.querySelectorAll(".f08-leaders path"));
+  function hold(i) {
+    root.classList.add("is-lit");
+    items.forEach(function (el, n) {
+      el.classList.toggle("is-on", n === i);
+      el.classList.toggle("is-off", n !== i);
+    });
+    leaders.forEach(function (el, n) { el.classList.toggle("is-on", n === i); });
+  }
+  function release() {
+    root.classList.remove("is-lit");
+    items.forEach(function (el) { el.classList.remove("is-on"); el.classList.remove("is-off"); });
+    leaders.forEach(function (el) { el.classList.remove("is-on"); });
+  }
+  items.forEach(function (el, i) {
+    el.tabIndex = 0;
+    el.addEventListener("mouseenter", function () { hold(i); });
+    el.addEventListener("focus", function () { hold(i); });
+    el.addEventListener("mouseleave", release);
+    el.addEventListener("blur", release);
+  });
+})();
+</script>
+</div><figcaption><b>08 tech-pack</b>, DIGS. A drawing that calls itself out. Loop 9s, interactive yes.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=tortoise num=9 source=darkest-shades focal=50%,50% loop=10 interactive=yes -->
+<div class="stage f09" data-frame="tortoise" style="--fx:0.50;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f09-plate m-tortoise m-tortoise-rim"></div>
+      <div class="f09-chamfer"></div>
+      <p class="f09-hint">Drag the light</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 9 — the richest surface the brand owns, at macro, lit from behind.
+   Materials: ds-acetate's blue tortoise — a near-black ground at
+   #131313–#1A273A with cobalt-periwinkle inclusions at #5B8CCF–#6495D0 in
+   irregular organic blobs, translucent, the edges lifting to
+   #93B5BF–#A7BEC6 where light passes through — and the hard thin near-white
+   chamfer line that every acetate edge carries.
+   The render deck never goes macro on this material and the light there is
+   always in front. Here it is behind, and the operator moves it: where it
+   sits, the material opens up. */
+.f09 .f09-plate {
+  position: absolute; inset: 0;
+  animation: f09-drift 10s ease-in-out infinite;
+  cursor: ew-resize; touch-action: none;
+}
+.f09.is-led .f09-plate { animation: none; }
+.f09 .f09-chamfer {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow:
+    inset 0 2px 0 rgba(216, 216, 216, 0.5),
+    inset 0 -2px 0 rgba(20, 20, 20, 0.85),
+    inset 0 0 calc(var(--u) * 5) rgba(0, 0, 0, 0.8);
+}
+.f09 .f09-hint {
+  position: absolute; left: 50%; bottom: 6.5%; transform: translateX(-50%); margin: 0;
+  font-family: var(--ds-body); font-size: calc(var(--u) * 1.5);
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: rgba(214, 228, 232, 0.75); pointer-events: none;
+  text-shadow: 0 1px calc(var(--u) * 0.6) rgba(0, 0, 0, 0.9);
+  transition: opacity 220ms ease;
+}
+.f09.is-led .f09-hint { opacity: 0; }
+@keyframes f09-drift {
+  0%, 100% { --glow-x: 26%; --glow-y: 58%; }
+  50% { --glow-x: 74%; --glow-y: 42%; }
+}
+@property --glow-x { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@property --glow-y { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@media (prefers-reduced-motion: reduce) { .f09 .f09-plate { --glow-x: 38%; --glow-y: 48%; } }
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var plate = root.querySelector(".f09-plate");
+  plate.tabIndex = 0;
+  plate.setAttribute("role", "slider");
+  plate.setAttribute("aria-label", "Move the light behind the acetate");
+  plate.setAttribute("aria-valuemin", "0");
+  plate.setAttribute("aria-valuemax", "100");
+  plate.setAttribute("aria-valuenow", "50");
+  var x = 50, y = 50, down = false;
+  function put(nx, ny) {
+    x = Math.max(4, Math.min(96, nx));
+    if (ny !== undefined) y = Math.max(8, Math.min(92, ny));
+    root.classList.add("is-led");
+    plate.style.setProperty("--glow-x", x + "%");
+    plate.style.setProperty("--glow-y", y + "%");
+    plate.setAttribute("aria-valuenow", Math.round(x));
+  }
+  function at(e) {
+    var r = plate.getBoundingClientRect();
+    put(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
+  }
+  plate.addEventListener("pointerdown", function (e) {
+    down = true; plate.setPointerCapture(e.pointerId); at(e); e.preventDefault();
+  });
+  plate.addEventListener("pointermove", function (e) { if (down) at(e); });
+  plate.addEventListener("pointerup", function () { down = false; });
+  plate.addEventListener("pointercancel", function () { down = false; });
+  plate.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { put(x - 6); e.preventDefault(); }
+    else if (e.key === "ArrowRight") { put(x + 6); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { put(x, y - 6); e.preventDefault(); }
+    else if (e.key === "ArrowDown") { put(x, y + 6); e.preventDefault(); }
+  });
+})();
+</script>
+</div><figcaption><b>09 tortoise</b>, DARKEST SHADES. Acetate, lit from behind. Loop 10s, interactive yes.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=margin num=10 source=aesdr focal=62%,50% loop=10 interactive=no -->
+<div class="stage f10" data-frame="margin" style="--fx:0.62;--fy:0.50" role="img"
+     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, naming the rules the sentences beside them obey, and a list of banned words is struck through in red">
+  <div class="stage-frame">
+    <div class="stage-scene f10-page m-ae-field">
+      <p class="f10-kicker">Manuscript</p>
+      <div class="f10-body">
+        <p>Every month or quarter, they reset your number to <span class="f10-mark">zero.</span>
+          And every month or quarter, you act surprised.
+          <span class="f10-mark">You don't have a pipeline problem. You have a denial problem.</span></p>
+      </div>
+      <aside class="f10-rail m-ae-margin">
+        <span class="f10-note" data-n="0">the named number — never &ldquo;many&rdquo;</span>
+        <span class="f10-note" data-n="1">the verdict construction</span>
+        <span class="f10-note f10-banned" data-n="2">crush it &middot; synergy &middot; game-changer</span>
+      </aside>
+      <svg class="f10-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 45 Q38 12 55 45"/>
+          <path d="M21 45 H55"/>
+          <path d="M29 41 Q38 30 47 41"/>
+          <path d="M33 45 V41.5 M43 45 V41.5"/>
+          <path d="M26 45 V50 M34 45 V51 M43 45 V51 M51 45 V50"/>
+          <circle cx="15" cy="36" r="6.2"/>
+          <path d="M11.8 30.8 Q9.4 19 10.2 11"/>
+          <path d="M18.2 30.8 Q20.8 19 20.2 11"/>
+        </g>
+        <circle cx="13" cy="35" r="1.5" fill="#1A1A1A"/>
+        <path d="M9 33.2 Q15 29.6 21 33.2" fill="none" stroke="#8B1A1A" stroke-width="2"
+              stroke-linecap="round"/>
+        <g stroke="#2E7D32" stroke-width="1.7" stroke-linecap="round" fill="none">
+          <path d="M38 28.5 V17"/>
+          <path d="M38 21.5 q-5.4 -0.8 -6.4 -5.6 q5.4 0.9 6.4 4.8"/>
+          <path d="M38 19.5 q5.4 -0.8 6.4 -5.6 q-5.4 0.9 -6.4 4.8"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 10 — a page annotating itself.
+   Materials: ae-paper (cream #FAF7F2, the manuscript margin rail behind a 2px
+   #C53030 border, strikes at text-decoration-thickness 2px, inserts in red
+   ink with a red underline) and the Caveat hand, which in this brand is a
+   voice rather than a decorative script.
+   Two reds sit side by side here and they are not interchangeable: crimson
+   #8B1A1A is the brand's authority, #C53030 is the editor's pen. Only the
+   pen writes in the margin.
+   The rail exists in the product as a component of a finished artifact. Here
+   the annotation is the event, and you watch it happen.
+   The mascot is present as its own monoline glyph — the recovery form, shell
+   with a sprout, in the brand's 1.6px round-cap construction. Logged in
+   ASSUMPTIONS.md as the faithful alternative to placing a source render.
+   Registers the brand has retired are avoided: this is the margin voice, not
+   a dossier, a ledger or an editorial split. */
+.f10 .f10-page { position: absolute; inset: 0; overflow: hidden; }
+.f10 .f10-kicker {
+  position: absolute; left: 6%; top: 7%; margin: 0;
+  font-family: var(--ae-mono); font-size: calc(var(--u) * 1.4);
+  text-transform: uppercase; letter-spacing: var(--ae-track-eyebrow);
+  color: var(--ae-muted);
+}
+.f10 .f10-body {
+  position: absolute; left: 6%; right: 34%; top: 18%;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.5);
+  line-height: 2; color: var(--ae-ink);
+}
+.f10 .f10-body p { margin: 0 0 calc(var(--u) * 2.4); }
+/* The pen marks the body rather than rewriting it. Underlining a clause that
+   already obeys the rule is an annotation; striking a shipped sentence and
+   writing a replacement would be asserting an edit the brand never made. */
+.f10 .f10-mark {
+  background-image: linear-gradient(var(--ae-redink), var(--ae-redink));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.06em);
+  background-size: 0 2px;
+  animation: f10-mark 10s linear infinite;
+}
+.f10 .f10-body p .f10-mark + .f10-mark,
+.f10 .f10-mark:nth-of-type(2) { animation-delay: 2.2s; }
+/* The one strike falls where the brand's own list says it should. */
+.f10 .f10-banned {
+  color: var(--ae-redink);
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink);
+  text-decoration-thickness: 2px;
+}
+.f10 .f10-rail {
+  position: absolute; right: 5%; top: 17%; width: 25%;
+  padding-left: calc(var(--u) * 1.6);
+  display: grid; gap: calc(var(--u) * 4.4); align-content: start;
+  font-size: calc(var(--u) * 3);
+  transform: rotate(-1.5deg);
+}
+.f10 .f10-note { opacity: 0; animation: f10-note 10s linear infinite; }
+.f10 .f10-note[data-n="0"] { animation-delay: 0.4s; }
+.f10 .f10-note[data-n="1"] { animation-delay: 2.6s; }
+.f10 .f10-note[data-n="2"] { animation-delay: 4.8s; }
+.f10 .f10-glyph {
+  position: absolute; right: 6%; bottom: 8%;
+  width: calc(var(--u) * 10); height: calc(var(--u) * 10); opacity: 0.85;
+}
+@keyframes f10-note { 0%, 3% { opacity: 0; } 8%, 92% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes f10-mark {
+  0%, 56% { background-size: 0 2px; }
+  66%, 100% { background-size: 100% 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f10 .f10-note { opacity: 1; }
+  .f10 .f10-mark { background-size: 100% 2px; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  /* focal 62%: the band runs 37% to 87% of the scene. The body and the rail
+     both move inside it, the rail dropping below the text rather than beside
+     it -- which is what the real manuscript does on a narrow screen. */
+  .f10 .f10-kicker { left: 39%; top: 5%; font-size: calc(var(--u) * 1.9); }
+  .f10 .f10-body {
+    left: 39%; right: 15%; top: 15%;
+    font-size: calc(var(--u) * 2.7); line-height: 1.7;
+  }
+  .f10 .f10-body p { margin-bottom: calc(var(--u) * 2.4); }
+  .f10 .f10-rail {
+    left: 39%; right: 15%; top: 48%; bottom: auto; width: auto;
+    font-size: calc(var(--u) * 3.1); gap: calc(var(--u) * 2.2);
+  }
+  .f10 .f10-glyph { right: 16%; bottom: 5%; width: calc(var(--u) * 13); height: calc(var(--u) * 13); }
+}
+</style>
+</div><figcaption><b>10 margin</b>, AESDR. A page marking itself up. Loop 10s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=reconciliation num=11 source=puff-junction focal=50%,52% loop=10 interactive=no -->
+<div class="stage f11" data-frame="reconciliation" style="--fx:0.50;--fy:0.52" role="img"
+     aria-label="A concrete block with a knurled brass disc set into its top face, on a white studio sweep, entirely monochrome. Late in the loop a single small acid-green element arrives and holds">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f11-sweep m-sweep"></div>
+      <div class="f11-key m-sweep-key"></div>
+      <div class="f11-shadow m-contact-shadow"></div>
+      <div class="f11-block">
+        <div class="f11-disc">
+          <div class="f11-knurl m-knurl m-knurl--band"></div>
+          <div class="f11-crown m-brass-flat"></div>
+        </div>
+        <div class="f11-body">
+          <div class="f11-face m-concrete"></div>
+          <div class="f11-cells" aria-hidden="true"></div>
+          <div class="f11-seam m-concrete-seam"></div>
+          <div class="f11-edge"></div>
+        </div>
+      </div>
+      <div class="f11-slime"><span>puff</span></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 11 — the thing the brand asked for and never got.
+   Materials: pj-sweep (flat #EDEDED across the width, falling to #C8–#CD at
+   70%, lifting at the floor, the single soft key upper-front, the broad
+   feathered contact shadow), pj-concrete, pj-harlequin, pj-knurl and
+   pj-brass's two-faced metal — pale champagne on the flat cap, saturated
+   antique gold on the knurled band.
+   Proportions are the real ones and the view is straight on, so none of the
+   perspective is invented: a Ø63 brass cylinder on an 85 mm face is 74% of
+   the width, standing 15.4 mm proud of a 57.2 mm block, with the parting seam
+   halfway up the concrete and the harlequin dissolving off one corner.
+   What straight-on costs, and it is worth naming: the circle-in-square is a
+   plan relationship, and in elevation it cannot read -- you see a bar on a
+   bar. The 74% is carried as a width ratio, not as the shape. Seeing the
+   shape would take the source's own 35-45 degree three-quarter, which is the
+   product-shot angle this frame is deliberately not.
+   In October 2024 the founder asked to move "not completely, but subtly from
+   a vibrant and somewhat playful neon feel to a subtler, more refined
+   aesthetic." Nobody built it. This is that: the object world, entirely
+   monochrome, and exactly one element in slime #D6FD4A -- the ration the
+   paper brand spends everywhere and the object brand spends nowhere. */
+.f11 .f11-sweep, .f11 .f11-key { position: absolute; inset: 0; }
+.f11 .f11-shadow {
+  position: absolute; left: 25%; right: 25%; bottom: 19%; height: 8%;
+}
+.f11 .f11-block {
+  position: absolute; left: 50%; bottom: 22%; width: 34%; height: 44%;
+  transform: translateX(-50%);
+}
+/* the concrete body: 57.2 mm of the 72.6 mm total silhouette */
+.f11 .f11-body { position: absolute; left: 0; right: 0; bottom: 0; height: 79%; }
+.f11 .f11-face { position: absolute; inset: 0; --c-cell: 40%; }
+.f11 .f11-cells { position: absolute; inset: 0; overflow: hidden; }
+.f11 .f11-cells i {
+  position: absolute; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: rgba(0, 0, 0, 0.26); mix-blend-mode: multiply;
+}
+.f11 .f11-seam { position: absolute; left: 0; right: 0; top: 50%; }
+/* R3 on an 85 mm block, and the eased top and bottom edges */
+.f11 .f11-edge {
+  position: absolute; inset: 0; border-radius: calc(var(--u) * 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset calc(var(--u) * 0.9) 0 calc(var(--u) * 2.2) rgba(255, 255, 255, 0.05),
+    inset calc(var(--u) * -1.1) 0 calc(var(--u) * 2.6) rgba(0, 0, 0, 0.26);
+}
+/* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
+.f11 .f11-disc {
+  container-type: inline-size;
+  position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
+  transform: translateX(-50%);
+}
+.f11 .f11-knurl {
+  /* 1.26 mm of pitch on a 63 mm cylinder is 2% of it, on both axes. The
+     containment sits on .f11-disc, not here: an element is never its own
+     query container, so a cqw written on this rule would measure the stage. */
+  position: absolute; inset: 0; --k-cell: 2cqw;
+  border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
+  overflow: hidden;
+}
+/* The flat champagne cap, seen edge-on. It used to be an ellipse sitting
+   proud of the band, which is what a cylinder looks like from ABOVE -- a
+   view from above on a block drawn in straight elevation, so the object
+   argued with itself and the frame's own note claimed no perspective was
+   invented while the crown invented some. Straight on, a cylinder's cap is a
+   line, and the roundness is carried by the band's shading instead. */
+.f11 .f11-crown {
+  position: absolute; left: 0; right: 0; top: 0; height: 7%;
+  box-shadow: 0 calc(var(--u) * 0.16) calc(var(--u) * 0.4) rgba(0, 0, 0, 0.28);
+}
+.f11 .f11-slime {
+  position: absolute; left: 7.5%; bottom: 12%;
+  opacity: 0; animation: f11-arrive 10s linear infinite;
+}
+.f11 .f11-slime span {
+  display: block; background: var(--pj-slime);
+  color: #000; font-family: var(--pj-display); font-style: italic;
+  font-weight: 700; font-size: calc(var(--u) * 2.6); line-height: 1;
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 1.8) calc(var(--u) * 1.1);
+}
+@keyframes f11-arrive {
+  0%, 62% { opacity: 0; }
+  70%, 100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f11 .f11-slime { opacity: 1; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  .f11 .f11-block { width: 40%; height: 34%; bottom: 30%; }
+  .f11 .f11-shadow { left: 28%; right: 28%; bottom: 27%; }
+  .f11 .f11-slime { left: 28%; bottom: 16%; }
+  .f11 .f11-slime span { font-size: calc(var(--u) * 3.6); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var host = root.querySelector(".f11-cells");
+  if (!host || host.childElementCount) return;
+  /* ~6 cells across the 85 mm face, dense at the left corner, thinning
+     diagonally with a ragged front -- the dissolve the hero renders show. */
+  var W = 16.6, H = 25.2, out = [];
+  for (var r = -1; r < 5; r++) {
+    for (var c = -1; c < 8; c++) {
+      var keep = 1.0 - (c / 6.0) * 1.3 + ((r * 5 + c * 7) % 4) * 0.09;
+      if (keep < 0.42) continue;
+      out.push('<i style="left:' + (c * W - W / 2).toFixed(2) + '%;top:' +
+        (r * H - H / 2).toFixed(2) + '%;width:' + W + '%;height:' + H + '%"></i>');
+    }
+  }
+  host.innerHTML = out.join("");
+})();
+</script>
+</div><figcaption><b>11 reconciliation</b>, PUFF JUNCTION. Monochrome, and one green thing. Loop 10s, interactive no.</figcaption></figure>
+<figure class="sheet-item"><div class="sheet-frame"><!-- frame id=live-edge num=12 source=antaeus focal=22%,50% loop=8 interactive=yes -->
+<div class="stage f12" data-frame="live-edge" style="--fx:0.22;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene f12-room">
+      <div class="f12-rail">
+        <div class="f12-head">
+          <i class="f12-dot"></i><span>THE LIVE EDGE</span>
+        </div>
+        <div class="f12-count">
+          <b>34</b><span>/ 90 TODAY</span>
+          <div class="f12-track"><i></i></div>
+        </div>
+        <ul class="f12-wire">
+          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>Northwind Robotics replied to your outreach.<em>12m</em></li>
+          <li><span class="f12-tag">YOU</span>Captured your send to Northwind Robotics — counted.<em>1h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Calendar — Thursday with Northwind Robotics is confirmed.<em>1h</em></li>
+          <li><span class="f12-tag">YOU</span>You called Northwind Robotics.<em>3h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>Heartbeat — Northwind UK still has no dated next step.<em>4h</em></li>
+          <li><span class="f12-tag">YOU</span>You made a LinkedIn touch on Northwind UK.<em>5h</em></li>
+        </ul>
+        <p class="f12-foot"><span>Quiet since 4:12 PM.</span><span>6 TODAY</span></p>
+      </div>
+      <button class="f12-switch" type="button" aria-pressed="false">
+        <span class="f12-switch-label">Turn it off</span>
+      </button>
+      <div class="f12-hair"><i class="f12-whisper">Turn it back on</i></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 12 — off as a state, not an absence.
+   Materials: an-field's bright cool ground and hairline ink ladder, the
+   forest and orange roles (forest for the breathing dot and the track,
+   orange for the one buyer moment's 3px left rule), and the rail's own
+   construction — no panel, one hairline right edge, a directional wash at
+   rgba(10,28,64,.025) fading to transparent at 70%.
+   The switch is the subject. Off runs three visible beats: everything goes
+   grayscale(1) opacity .3 IN PLACE while the dot stops breathing, then the
+   rail folds translateX(-101%), then the hairline left behind is plainly
+   dead. On is the exact mirror, lines re-inking on staggered delays of
+   .05/.14/.23/.32/.41/.5s.
+   Almost nothing in software bothers to make off legible as a state rather
+   than an absence, which is why it belongs on a page that sells mockups. */
+.f12 .f12-room {
+  background: var(--an-field-lt);
+  overflow: hidden;
+}
+.f12 .f12-rail {
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 47%;
+  padding: calc(var(--u) * 3.4) calc(var(--u) * 3) calc(var(--u) * 2.6);
+  border-right: 1px solid var(--an-hair-strong);
+  background: linear-gradient(90deg, rgba(10, 28, 64, 0.025), transparent 70%);
+  display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: calc(var(--u) * 2);
+  transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 260ms ease, opacity 260ms ease;
+}
+.f12 .f12-head {
+  display: flex; align-items: center; gap: calc(var(--u) * 1.1);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.5);
+  letter-spacing: 0.16em; color: var(--an-ink-faint);
+}
+.f12 .f12-dot {
+  width: calc(var(--u) * 1); height: calc(var(--u) * 1); border-radius: 50%;
+  background: var(--an-forest); animation: f12-breathe 3.2s ease-in-out infinite;
+}
+.f12 .f12-count { display: grid; gap: calc(var(--u) * 1); }
+.f12 .f12-count b {
+  font-family: var(--an-serif); font-weight: 400;
+  font-size: calc(var(--u) * 6); line-height: 1; color: var(--an-ink);
+}
+.f12 .f12-count span {
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.4);
+  letter-spacing: 0.14em; color: var(--an-ink-faint);
+  margin-left: calc(var(--u) * 0.8);
+}
+.f12 .f12-count b + span { display: inline; }
+.f12 .f12-track {
+  height: calc(var(--u) * 0.55); background: var(--an-sunk); border-radius: 99px; overflow: hidden;
+}
+.f12 .f12-track i { display: block; width: 38%; height: 100%; background: var(--an-forest); }
+.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: stretch; overflow: hidden; }
+.f12 .f12-wire li {
+  position: relative; display: flex; align-items: baseline; gap: calc(var(--u) * 0.9);
+  padding: calc(var(--u) * 0.85) 0;
+  border-top: 1px solid var(--an-hair);
+  font-family: var(--an-sans); font-size: calc(var(--u) * 1.35);
+  color: var(--an-ink-soft); line-height: 1.35;
+}
+.f12 .f12-wire li.is-machine { color: var(--an-ink-faint); }
+.f12 .f12-wire li.is-buyer {
+  border-left: 3px solid var(--an-orange);
+  padding-left: calc(var(--u) * 1.2);
+  background: linear-gradient(90deg, rgba(230, 112, 30, 0.08), transparent 62%);
+  color: var(--an-ink);
+}
+.f12 .f12-tag {
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.05);
+  letter-spacing: 0.14em; color: var(--an-ink-quiet); flex: none;
+}
+.f12 .f12-wire li.is-machine .f12-tag { color: var(--an-blue); }
+.f12 .f12-wire li.is-buyer .f12-tag { color: var(--an-orange); }
+.f12 .f12-wire em {
+  margin-left: auto; font-style: normal; flex: none;
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  color: var(--an-ink-quiet);
+}
+.f12 .f12-foot {
+  margin: 0; display: grid; gap: calc(var(--u) * 0.5);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  letter-spacing: 0.14em; color: var(--an-ink-quiet);
+  text-transform: uppercase;
+}
+/* Beat one: everything stills IN PLACE. Beat two: the rail folds. */
+.f12.is-still .f12-rail { filter: grayscale(1); opacity: 0.3; }
+.f12.is-still .f12-dot { animation-play-state: paused; }
+.f12.is-off .f12-rail { transform: translateX(-101%); filter: grayscale(1); opacity: 0.3; }
+/* Beat three: the hairline left behind is plainly dead. */
+/* The study measures the resting line exactly: "a 2.5px navy stroke at 40%
+   opacity full-width, 9px off the bottom, inside a 26px hit area". The first
+   build drew it 1px at 14% -- a line at 13% contrast against the field, which
+   renders as an empty room rather than as a dead wire, which is the one thing
+   this frame exists to deny. The hit area is kept separately so the whisper is
+   still reachable without thickening the stroke. */
+.f12 .f12-hair {
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6);
+  width: calc(var(--u) * 1.6); opacity: 0;
+  transition: opacity 200ms ease 300ms;
+}
+.f12 .f12-hair::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2.5px; background: rgba(10, 28, 64, 0.40);
+}
+.f12.is-off .f12-hair { opacity: 1; }
+.f12 .f12-whisper {
+  position: absolute; left: calc(var(--u) * 1.4); top: 46%;
+  font-style: normal; white-space: nowrap;
+  background: #fff; border: 1px solid var(--an-hair-strong);
+  border-radius: 99px; padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  letter-spacing: 0.1em; color: var(--an-ink-faint);
+  opacity: 0; transition: opacity 180ms ease;
+}
+.f12.is-off .f12-hair:hover .f12-whisper { opacity: 1; }
+/* Waking: the mirror. Lines re-ink on staggered delays. */
+.f12.is-waking .f12-wire li { opacity: 0; animation: f12-ink 360ms ease forwards; }
+.f12.is-waking .f12-wire li:nth-child(1) { animation-delay: 0.05s; }
+.f12.is-waking .f12-wire li:nth-child(2) { animation-delay: 0.14s; }
+.f12.is-waking .f12-wire li:nth-child(3) { animation-delay: 0.23s; }
+.f12.is-waking .f12-wire li:nth-child(4) { animation-delay: 0.32s; }
+.f12.is-waking .f12-wire li:nth-child(5) { animation-delay: 0.41s; }
+.f12.is-waking .f12-wire li:nth-child(6) { animation-delay: 0.5s; }
+.f12 .f12-switch {
+  position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.35);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--an-ink-soft); background: var(--an-surface);
+  border: 1px solid var(--an-hair-strong); border-radius: 99px;
+  padding: calc(var(--u) * 1.1) calc(var(--u) * 2.4);
+  cursor: pointer;
+}
+.f12 .f12-switch:hover { color: var(--an-ink); border-color: var(--an-rule); }
+.f12 .f12-switch:focus-visible { outline: 2px solid var(--an-orange); outline-offset: 3px; }
+@keyframes f12-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.32; } }
+@keyframes f12-ink { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .f12 .f12-rail { transition: none; }
+  .f12 .f12-dot { animation: none; }
+  .f12.is-waking .f12-wire li { animation: none; opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+/* Between the phone band and a full-width stage the rail is short enough that
+   the sixth line lands half inside the clip -- a sentence cut through its
+   middle, which reads as broken rather than as a wire that scrolls. Below this
+   width the wire carries five whole lines instead of five and a half. */
+@container frame (max-width: 940px) {
+  .f12 .f12-wire li:nth-child(n + 6) { display: none; }
+}
+@container frame (max-width: 639px) {
+  /* focal 22%: the band is the left half of the scene, which is where the
+     rail already lives. The switch moves inside it. */
+  .f12 .f12-rail { width: 42%; padding: calc(var(--u) * 3.2) calc(var(--u) * 2.2); gap: calc(var(--u) * 1.5); }
+  .f12 .f12-head { font-size: calc(var(--u) * 2); }
+  .f12 .f12-count b { font-size: calc(var(--u) * 6); }
+  .f12 .f12-count span { font-size: calc(var(--u) * 1.9); }
+  .f12 .f12-wire li { font-size: calc(var(--u) * 1.35); padding: calc(var(--u) * 0.7) 0; flex-wrap: wrap; }
+  .f12 .f12-wire li:nth-child(n + 3) { display: none; }
+  .f12 .f12-tag { font-size: calc(var(--u) * 1.4); }
+  .f12 .f12-wire em { font-size: calc(var(--u) * 1.5); }
+  .f12 .f12-foot { font-size: calc(var(--u) * 1.25); gap: calc(var(--u) * 1); }
+  .f12 .f12-wire em { margin-left: auto; }
+  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto minmax(0, 1fr); }
+  .f12 .f12-foot { display: none; }
+  .f12 .f12-switch {
+    right: auto; left: 5%; top: auto; bottom: calc(var(--u) * 2.4); transform: none;
+    font-size: calc(var(--u) * 1.8); padding: calc(var(--u) * 1.3) calc(var(--u) * 2.6);
+  }
+  .f12 .f12-hair { bottom: calc(var(--u) * 11); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var btn = root.querySelector(".f12-switch");
+  var label = root.querySelector(".f12-switch-label");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var busy = false, off = false, timers = [];
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  function later(fn, ms) { timers.push(setTimeout(fn, reduce.matches ? 0 : ms)); }
+  btn.addEventListener("click", function () {
+    if (busy) return;
+    busy = true; clear();
+    if (!off) {
+      /* three beats: still in place, then fold, then the dead hairline */
+      root.classList.add("is-still");
+      later(function () { root.classList.add("is-off"); }, 300);
+      later(function () { off = true; busy = false; label.textContent = "Turn it back on";
+        btn.setAttribute("aria-pressed", "true"); }, 780);
+    } else {
+      root.classList.remove("is-off");
+      later(function () {
+        root.classList.remove("is-still");
+        root.classList.add("is-waking");
+      }, 420);
+      later(function () { root.classList.remove("is-waking"); off = false; busy = false;
+        label.textContent = "Turn it off"; btn.setAttribute("aria-pressed", "false"); }, 1100);
+    }
+  });
+})();
+</script>
+</div><figcaption><b>12 live-edge</b>, Antaeus GTM OS. A wire switching off. Loop 8s, interactive yes.</figcaption></figure>
+</div>
+<script>
+/* Shared frame runtime: one script for every stage on the page.
+   In view (threshold 0.25) and not hovered: playing. Hover pauses.
+   prefers-reduced-motion: reduce never plays; interactions still work.
+   Each stage gets the class is-playing and the events frame:play / frame:pause,
+   which script-driven frames listen to. The nearest ancestor with data-play-delay (the body, a hero, a
+   gallery figure) delays a stage's first start so a caption or the hero copy
+   can arrive before its loop begins. */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
+  stages.forEach(function (el) {
+    var holder = el.closest("[data-play-delay]");
+    var delay = holder ? (parseInt(holder.getAttribute("data-play-delay"), 10) || 0) : 0;
+    var inView = false, hover = false, started = false, timer = null;
+    function apply(on) {
+      if (el.classList.contains("is-playing") === on) return;
+      el.classList.toggle("is-playing", on);
+      el.dispatchEvent(new CustomEvent(on ? "frame:play" : "frame:pause"));
+    }
+    function update() {
+      var on = inView && !hover && !reduce.matches;
+      clearTimeout(timer);
+      if (on && delay && !started) {
+        timer = setTimeout(function () { started = true; apply(true); }, delay);
+      } else {
+        if (on) started = true;
+        apply(on);
+      }
+    }
+    el.__stageUpdate = function (v) { if (v !== undefined) inView = v; update(); };
+    el.addEventListener("mouseenter", function () { hover = true; update(); });
+    el.addEventListener("mouseleave", function () { hover = false; update(); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.__stageUpdate(e.isIntersecting); });
+    }, { threshold: 0.25 });
+    stages.forEach(function (el) { io.observe(el); });
+  } else {
+    stages.forEach(function (el) { el.__stageUpdate(true); });
+  }
+  var onChange = function () { stages.forEach(function (el) { el.__stageUpdate(); }); };
+  if (reduce.addEventListener) reduce.addEventListener("change", onChange); else reduce.addListener(onChange);
+})();
+</script>
+
+</body>
+</html>

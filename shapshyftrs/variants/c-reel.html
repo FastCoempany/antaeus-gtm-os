@@ -4,17 +4,18 @@
 <!-- @include partials/head.html -->
 <title>shapshyftrs</title>
 <!-- @tokens -->
+<!-- @materials -->
 <!-- @include partials/chrome-styles.html -->
 <style>
 /* Variant C, the reel: hero above in normal flow, then a horizontal strip of
-   thirteen 16:10 cards (70vw wide, 32px gaps) that moves sideways on wheel
-   and drag by translating the track and snaps to cards; a thirteen-tick
+   twelve 16:10 cards (70vw wide, 32px gaps) that moves sideways on wheel
+   and drag by translating the track and snaps to cards; a twelve-tick
    position indicator beneath (a sequence). Below 768px the strip stacks. */
-/* The hero is one viewport, as in variant A: the copy on top, teaser 1 filling
+/* The hero is one viewport, as in variant A: the copy on top, frame 1 filling
    the row that is left. The row is a size container; the stage is as tall as the
    row and as wide as a 16:10 frame whose middle 56% is the row (gutter to gutter
    at most, never under 640px so the 4:5 crop never trips on desktop), pulled up
-   so the band around the teaser's focal point (--fy) is what shows. A full-width
+   so the band around the frame's focal point (--fy) is what shows. A full-width
    16:10 stage in flow put the rail below the fold at 1366x768 and left ~215px of
    black above and below it. */
 .hero { min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: clamp(24px, 4vh, 48px) var(--gutter) 0; }
@@ -30,7 +31,7 @@
 .reel-viewport { position: relative; overflow: hidden; touch-action: pan-y; cursor: grab; outline: none; }
 /* The focus ring is painted on an overlay above the track: the track is a composited layer (will-change: transform), so an outline on the viewport itself showed only in the gaps between cards and as a stray rule under the captions. */
 .reel-viewport:focus-visible::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 2px var(--chrome-text); pointer-events: none; z-index: 1; }
-/* Without script the strip is a native horizontal scroller (the .js class is set inline before the page paints), so teasers 3 to 13 are never clipped off the edge; the ticks, which only script can wire, are hidden. */
+/* Without script the strip is a native horizontal scroller (the .js class is set inline before the page paints), so frames 3 to 13 are never clipped off the edge; the ticks, which only script can wire, are hidden. */
 html:not(.js) .reel-viewport { overflow-x: auto; scroll-snap-type: x proximity; cursor: auto; }
 html:not(.js) .reel-card { scroll-snap-align: start; }
 html:not(.js) .reel-ticks { display: none; }
@@ -48,7 +49,7 @@ html:not(.js) .reel-ticks { display: none; }
 .reel-tick:focus-visible { outline: 2px solid var(--chrome-text); outline-offset: 2px; }
 .js .hero .wordmark { animation: c-in 320ms ease-out both; }
 .js .hero .slogan { animation: c-in 360ms ease-out 220ms both; }
-/* Three beats on load (rule-10 review, DESIGN.md): wordmark, slogan with its copy and button, then teaser 1. */
+/* Three beats on load (rule-10 review, DESIGN.md): wordmark, slogan with its copy and button, then frame 1. */
 .js .hero .subline, .js .hero .button { animation: c-in 360ms ease-out 220ms both; }
 @keyframes c-in { from { opacity: 0; } to { opacity: 1; } }
 @media (max-width: 767px) {
@@ -73,21 +74,21 @@ html:not(.js) .reel-ticks { display: none; }
 <!-- @include partials/gallery-intro.html -->
 </section>
 <section class="reel" aria-label="Teasers">
-  <div class="reel-viewport" tabindex="0" role="region" aria-label="Thirteen teasers. Use the left and right arrow keys to move between them.">
+  <div class="reel-viewport" tabindex="0" role="region" aria-label="Thirteen frames. Use the left and right arrow keys to move between them.">
     <div class="reel-track">
-<!-- @each-teaser from=1 to=13 -->
-<figure class="reel-card" data-teaser-num="${TEASER_NUM}">
+<!-- @each-frame from=1 to=12 -->
+<figure class="reel-card" data-frame-num="${FRAME_NUM}">
   <div class="reel-frame">
-${TEASER_HTML}
+${FRAME_HTML}
   </div>
-  <figcaption><span class="caption">${TEASER_CAPTION}</span><span class="source">${TEASER_SOURCE_HTML}</span></figcaption>
+  <figcaption><span class="caption">${FRAME_CAPTION}</span><span class="source">${FRAME_SOURCE_HTML}</span></figcaption>
 </figure>
 <!-- @end-each -->
     </div>
   </div>
   <div class="reel-ticks" role="group" aria-label="Position in the reel">
-<!-- @each-teaser from=1 to=13 -->
-<button class="reel-tick" type="button" aria-label="Teaser ${TEASER_NUM}" data-index="${TEASER_NUM}"></button>
+<!-- @each-frame from=1 to=12 -->
+<button class="reel-tick" type="button" aria-label="Teaser ${FRAME_NUM}" data-index="${FRAME_NUM}"></button>
 <!-- @end-each -->
   </div>
 </section>
@@ -152,7 +153,7 @@ ${TEASER_HTML}
   }, { passive: false });
   viewport.addEventListener("pointerdown", function (e) {
     if (narrow.matches || e.button !== 0) return;
-    /* A drag that starts on a teaser's own control belongs to the teaser. The viewport itself carries tabindex, so it is excluded from the match (otherwise every pointer inside a stage matched it and the strip never dragged over a card). */
+    /* A drag that starts on a frame's own control belongs to the frame. The viewport itself carries tabindex, so it is excluded from the match (otherwise every pointer inside a stage matched it and the strip never dragged over a card). */
     var ctl = e.target.closest("button, a, [role='slider'], [tabindex]");
     if (ctl && ctl !== viewport && e.target.closest(".stage")) return;
     dragging = true; moved = 0; startX = e.clientX; startTrack = x;

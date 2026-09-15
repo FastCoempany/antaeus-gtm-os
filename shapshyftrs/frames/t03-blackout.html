@@ -1,0 +1,48 @@
+<!-- frame id=blackout num=3 source=darkest-shades focal=50%,50% loop=10 interactive=no -->
+<div class="stage f03" data-frame="blackout" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A field of near-black you cannot see through. One broad soft sheen wipes across it from lower left to upper right, and a single hard specular dot sits near the top. Set small along the lower edge: See Everything. Reveal Nothing.">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f03-lens m-lens-blackout"></div>
+      <div class="f03-groove"></div>
+      <p class="f03-line">See Everything. Reveal Nothing.</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 3 — the lens as the whole surface.
+   Materials: ds-lens's blackout recipe — a #151515 fill, one broad soft sheen
+   band at #4A–#6A across 30% of the width, one small hard specular dot near
+   the top edge, and the faint 2–4 px inner shadow where a lens meets its
+   groove.
+   The tagline and the product make the same argument, which is rare. The
+   sheen crosses once, slowly, and nothing else happens. */
+.f03 .f03-lens { position: absolute; inset: 0; animation: f03-sheen 10s ease-in-out infinite; }
+.f03 .f03-groove {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 calc(var(--u) * 3.4) rgba(0, 0, 0, 0.9);
+}
+/* Ragged right, not centred: the brand's headline lockup is caps, few words,
+   ragged right, leading near 0.95 -- NOT JUST / SUNGLASSES. / A STATEMENT.
+   Centring is the one thing that lockup never does. */
+.f03 .f03-line {
+  position: absolute; left: 7%; right: 7%; bottom: 8.5%;
+  margin: 0; text-align: left;
+  font-family: var(--ds-display); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 3.3); line-height: 0.95;
+  letter-spacing: 0.055em; color: rgba(236, 236, 236, 0.9);
+}
+@keyframes f03-sheen {
+  0% { --sheen: 4; }
+  100% { --sheen: 96; }
+}
+@property --sheen { syntax: "<number>"; inherits: true; initial-value: 50; }
+@media (prefers-reduced-motion: reduce) { .f03 .f03-lens { --sheen: 46; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container frame (max-width: 639px) {
+  .f03 .f03-line { left: 27%; right: 27%; bottom: 10%; font-size: calc(var(--u) * 4.6); }
+}
+</style>
