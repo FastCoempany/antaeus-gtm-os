@@ -320,7 +320,7 @@ html,body{margin:0;background:#000;color:#F4F4F0;font-family:"Schibsted Grotesk"
 .sheet{padding:48px 32px 96px}
 .sheet h1{font-size:28px;font-weight:700;margin:0 0 8px}
 .sheet p{margin:0 0 40px;color:#8E8E89;font-size:15px;line-height:24px}
-.sheet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:40px 24px}
+.sheet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(640px,1fr));gap:40px 24px}
 .sheet-item{margin:0}
 .sheet-frame{width:100%}
 .sheet-item figcaption{margin-top:10px;font-size:14px;line-height:20px;color:#8E8E89}

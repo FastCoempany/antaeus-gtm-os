@@ -186,7 +186,7 @@ Real brand files exist for all three, so there is no provisional file. None ship
 
 ## 3. Wireframes
 
-Content order is identical across all three (brief section 7). Teaser 1 lives in the hero on every variant. The placements are the ones logged in `ASSUMPTIONS.md`: A runs 2–13 in the gallery; B runs 2–13 on the wall (twelve tiles fill two and three columns evenly); C carries all thirteen in the strip because the indicator has thirteen ticks, so teaser 1 appears twice on C.
+Content order is identical across all three (brief section 7). Teaser 1 lives in the hero on every variant. The gallery carries all thirteen in the fixed order on every variant (brief section 7 lists the hero and the thirteen as separate items), so teaser 1 appears twice on every page: once live in the hero without a caption, once in the gallery with its caption and source label.
 
 ### A. Keynote
 

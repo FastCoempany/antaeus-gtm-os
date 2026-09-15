@@ -204,3 +204,13 @@
   --ckp-loop-default: 7s; /* derived */
   --ckp-needle-step: 320ms; /* derived */
 }
+
+:root {
+  /* the flat light that falls on an instrument plate: a barely-there white sheen from the upper left, quieter than the thinnest hairline so it never washes the etched grid */
+  --ckp-sheen: rgba(255, 255, 255, 0.035); /* derived, added for t08 */
+}
+
+:root {
+  /* the drop's snap: the deal room's 160ms register spring read as a curve, one overshoot then settle */
+  --ckp-ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1); /* derived, added for t12 */
+}

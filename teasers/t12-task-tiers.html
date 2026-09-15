@@ -1,0 +1,84 @@
+<!-- teaser id=task-tiers num=12 source=cockpit focal=48%,50% loop=7 interactive=no -->
+<div class="stage t12" data-teaser="task-tiers" style="--fx:0.48;--fy:0.50" role="img" aria-label="Three engineered rails stacked as tiers with five task chips resting on them; one chip is caught mid-drop, falls from the top rail to the bottom, the rails rebalance, then it climbs back">
+  <div class="stage-frame"><div class="stage-scene">
+    <div class="t12-rails"></div>
+  </div></div>
+</div>
+<style>
+/* three rails, graphite, flat, each its own shelf: a two-tone bevel top and bottom, a sunk lip along the foot with a tick ladder etched in it, the tier's name engraved at the head. The stage stays black between them */
+.t12 .t12-rails { position: absolute; left: calc(9 * var(--u)); top: calc(10 * var(--u)); width: calc(82 * var(--u)); height: calc(42 * var(--u)); display: grid; grid-template-rows: repeat(3, 1fr); gap: calc(1.5 * var(--u)); }
+.t12 .t12-rail { position: relative; border-radius: calc(0.45 * var(--u)); background: linear-gradient(180deg, var(--ckp-sheen), transparent 45%), var(--ckp-panel); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-sunk); }
+.t12 .t12-foot { position: absolute; left: calc(1.2 * var(--u)); right: calc(1.2 * var(--u)); bottom: calc(1.1 * var(--u)); height: calc(1.6 * var(--u)); border-radius: calc(0.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
+.t12 .t12-ticks { position: absolute; left: calc(1 * var(--u)); right: calc(1 * var(--u)); top: calc(0.35 * var(--u)); bottom: calc(0.35 * var(--u)); background-image: repeating-linear-gradient(90deg, var(--ckp-tick-major) 0, var(--ckp-tick-major) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(10 * var(--u))), repeating-linear-gradient(90deg, var(--ckp-tick-minor) 0, var(--ckp-tick-minor) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(2 * var(--u))); background-size: 100% 100%, 100% 55%; background-position: 0 0, 0 100%; background-repeat: no-repeat; }
+.t12 .t12-lab { position: absolute; left: calc(1.6 * var(--u)); top: calc(1.3 * var(--u)); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(0.8 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-quiet); }
+/* the chips rest on the lip: the evidence-chip grammar, mono at 0.1em, a hairline at 22%, a tick at the left in the tier's strength */
+.t12 .t12-chip { position: absolute; z-index: 1; top: calc(5.1 * var(--u)); height: calc(5.2 * var(--u)); display: flex; align-items: center; gap: calc(1.1 * var(--u)); padding: 0 calc(1.6 * var(--u)) 0 calc(1.3 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-fg-quiet); background: var(--ckp-ground); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); color: var(--ckp-fg-soft); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.5 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
+.t12 .t12-tick { position: relative; flex: none; width: calc(0.4 * var(--u)); height: calc(1.4 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
+.t12 .t12-tick i { position: absolute; inset: 0; border-radius: inherit; display: block; }
+.t12 .t12-tick .t12-full { background: var(--ckp-signal); box-shadow: 0 0 calc(0.8 * var(--u)) var(--ckp-signal-halo); }
+.t12 .t12-tick .t12-half { background: var(--ckp-signal-half); }
+.t12 .t12-l1 .t12-chip { color: var(--ckp-fg); }
+.t12 .t12-l3 .t12-chip { color: var(--ckp-fg-faint); }
+/* the one that moves: caught mid-drop at rest, it lands two rails down with the register spring, its neighbours close ranks, then it climbs back */
+.t12 .t12-drop { z-index: 2; transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; will-change: transform, opacity; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t12 .t12-drop .t12-full { opacity: 0.55; animation: t12-tick-full var(--ckp-loop-default) linear infinite; }
+.t12 .t12-drop .t12-half { opacity: 1; animation: t12-tick-half var(--ckp-loop-default) linear infinite; }
+.t12 .t12-drop .t12-full, .t12 .t12-drop .t12-half { will-change: opacity; }
+.t12 .t12-closes { will-change: transform; animation: t12-close var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-yields { will-change: transform; animation: t12-yield var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+/* the loop, 7s. 0–6% held mid-drop; 6–20% the fall, the 160ms spring on landing; 20–27% the top rail closes and the bottom rail yields;
+   27–56% at rest on the bottom rail; 56–60% it lifts; 60–82% the climb to its slot; 82–90% held there; 90–100% it lets go again */
+@keyframes t12-drop {
+  0%, 6% { transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; }
+  20% { transform: translate(calc(-18.5 * var(--u)), calc(29.4 * var(--u))) rotate(0deg); opacity: 0.62; animation-timing-function: var(--ckp-ease-spring); }
+  22%, 56% { transform: translate(calc(-18.5 * var(--u)), calc(29 * var(--u))) rotate(0deg); opacity: 0.62; }
+  60% { transform: translate(calc(-18.5 * var(--u)), calc(28.2 * var(--u))) rotate(0deg); opacity: 0.8; animation-timing-function: var(--ckp-loop-ease); }
+  82%, 90% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(calc(-8 * var(--u)), calc(10 * var(--u))) rotate(-3deg); opacity: 0.85; }
+}
+@keyframes t12-tick-full { 0%, 6% { opacity: 0.55; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 1; } 100% { opacity: 0.55; } }
+@keyframes t12-tick-half { 0%, 6% { opacity: 1; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes t12-close { 0%, 20% { transform: translateX(0); } 27%, 60% { transform: translateX(calc(-18.5 * var(--u))); } 67%, 100% { transform: translateX(0); } }
+@keyframes t12-yield { 0%, 20% { transform: translateX(0); } 27%, 60% { transform: translateX(calc(18.5 * var(--u))); } 67%, 100% { transform: translateX(0); } }
+</style>
+<script>
+(function () {
+  /* three rails, five invented moves; the chip's slot is its x in scene units, its rail sets the tick strength */
+  var RAILS = [["Today", "full"], ["This week", "half"], ["Later", "none"]];
+  var CHIPS = [
+    [0, 9, "Send the deck"],
+    [0, 27.5, "Pricing reply", "drop"],
+    [0, 46, "Call back", "closes"],
+    [1, 9, "Intro thread"],
+    [2, 9, "Old quote", "yields"]
+  ];
+  function chip(spec, strength) {
+    var c = document.createElement("span");
+    c.className = "t12-chip" + (spec[3] ? " t12-" + spec[3] : "");
+    c.style.left = "calc(" + spec[1] + " * var(--u))";
+    var t = document.createElement("span"); t.className = "t12-tick";
+    var f = document.createElement("i"); f.className = "t12-full"; if (strength !== "full" && spec[3] !== "drop") f.style.opacity = "0";
+    var h = document.createElement("i"); h.className = "t12-half"; if (strength !== "half" && spec[3] !== "drop") h.style.opacity = "0";
+    t.appendChild(f); t.appendChild(h);
+    c.appendChild(t); c.appendChild(document.createTextNode(spec[2]));
+    return c;
+  }
+  var roots = document.querySelectorAll(".stage.t12");
+  Array.prototype.forEach.call(roots, function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    var rails = root.querySelector(".t12-rails");
+    RAILS.forEach(function (l, i) {
+      var rail = document.createElement("div"); rail.className = "t12-rail t12-l" + (i + 1);
+      var foot = document.createElement("span"); foot.className = "t12-foot";
+      var ticks = document.createElement("span"); ticks.className = "t12-ticks";
+      foot.appendChild(ticks);
+      var lab = document.createElement("span"); lab.className = "t12-lab"; lab.textContent = l[0];
+      rail.appendChild(foot); rail.appendChild(lab);
+      CHIPS.forEach(function (spec) { if (spec[0] === i) rail.appendChild(chip(spec, l[1])); });
+      rails.appendChild(rail);
+    });
+    /* the drop is CSS; the runtime's is-playing class starts and pauses it */
+  });
+})();
+</script>

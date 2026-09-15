@@ -1,0 +1,157 @@
+<!-- teaser id=territory-map num=8 source=cockpit focal=50%,50% loop=7 interactive=no -->
+<div class="stage t08" data-teaser="territory-map" style="--fx:0.5;--fy:0.5" role="img" aria-label="An abstract city etched on a graphite instrument plate: a block grid, a lake along the right edge, a river cutting through it, and clusters of nodes. Three clusters light one at a time, a route traces between them along the streets, then fades.">
+  <div class="stage-frame"><div class="stage-scene">
+    <div class="t08-plate">
+      <svg class="t08-svg" viewBox="0 0 1200 740" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    </div>
+  </div></div>
+</div>
+<style>
+.t08 .t08-plate { position: absolute; left: 12.5%; top: 13%; width: 75%; height: 74%; border-radius: calc(0.75 * var(--u)); overflow: hidden; background: radial-gradient(110% 80% at 18% 10%, var(--ckp-sheen), rgba(255, 255, 255, 0) 64%), var(--ckp-ground); box-shadow: inset calc(0.0625 * var(--u)) calc(0.0625 * var(--u)) 0 0 var(--ckp-bevel-light), inset calc(-0.0625 * var(--u)) calc(-0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-bevel-dark); }
+.t08 .t08-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.t08 .t08-block { fill: var(--ckp-panel); }
+.t08 .t08-raised { fill: var(--ckp-bevel-light); }
+.t08 .t08-lot { fill: var(--ckp-ground); }
+.t08 .t08-ave { fill: none; stroke: var(--ckp-ground); stroke-width: 8px; }
+.t08 .t08-edge { fill: none; stroke: var(--ckp-ground); stroke-width: 10px; stroke-linejoin: round; }
+.t08 .t08-water { fill: var(--ckp-sunk); }
+.t08 .t08-coast { fill: none; stroke: var(--ckp-rule); stroke-width: 1px; }
+.t08 .t08-contour { fill: none; stroke: var(--ckp-hair); stroke-width: 1px; }
+.t08 .t08-bank { fill: none; stroke: var(--ckp-hair-strong); stroke-width: 20px; stroke-linecap: round; }
+.t08 .t08-river { fill: none; stroke: var(--ckp-sunk); stroke-width: 17px; stroke-linecap: round; }
+.t08 .t08-bridge { stroke: var(--ckp-rule); stroke-width: 1.5px; }
+.t08 .t08-band { fill: none; stroke: var(--ckp-hair); stroke-width: 1px; stroke-dasharray: 2 5; }
+.t08 .t08-band-in { stroke: var(--ckp-rule); stroke-dasharray: none; }
+.t08 .t08-tick { fill: none; stroke: var(--ckp-tick-minor); stroke-width: 1px; }
+.t08 .t08-tick-major { stroke: var(--ckp-tick-major); }
+.t08 .t08-spoke { stroke: var(--ckp-hair); stroke-width: 1px; }
+.t08 .t08-sat { fill: var(--ckp-fg-quiet); }
+.t08 .t08-core { fill: var(--ckp-sunk); stroke: var(--ckp-fg-faint); stroke-width: 1.5px; }
+.t08 .t08-halo { fill: none; stroke: rgba(255, 255, 255, var(--ckp-a-ring)); stroke-width: var(--ckp-halo-w); stroke-dasharray: 1.5 3; }
+.t08 .t08-lamp-halo { fill: var(--ckp-signal-halo); }
+.t08 .t08-lamp { fill: var(--ckp-signal); }
+.t08 .t08-on { opacity: 0; }
+.t08 .t08-on .t08-glow { fill: var(--ckp-signal-soft); }
+.t08 .t08-on .t08-spoke { stroke: var(--ckp-signal-half); }
+.t08 .t08-on .t08-sat { fill: var(--ckp-ember); }
+.t08 .t08-on .t08-halo { stroke: var(--ckp-signal); stroke-dasharray: none; opacity: 0.8; }
+.t08 .t08-on .t08-core { fill: var(--ckp-signal); stroke: var(--ckp-signal); }
+.t08 .t08-ring { fill: none; stroke: var(--ckp-signal); stroke-width: var(--ckp-halo-w); opacity: 0; transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
+.t08 .t08-route { fill: none; stroke: var(--ckp-signal); stroke-width: var(--ckp-connector-w); stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.t08 .t08-route-glow { stroke: var(--ckp-signal-soft); stroke-width: 9px; }
+.t08 .t08-comet { fill: none; stroke: var(--ckp-signal); stroke-width: 5px; stroke-linecap: round; stroke-dasharray: 2.5 97.5; stroke-dashoffset: 2.5; opacity: 0; }
+.t08 .t08-onA { animation: t08-onA var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-onB { animation: t08-onB var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-onC { animation: t08-onC var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-ringA { animation: t08-ringA var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-ringB { animation: t08-ringB var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-ringC { animation: t08-ringC var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-route, .t08 .t08-route-glow { animation: t08-route var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t08 .t08-comet { animation: t08-comet var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+@keyframes t08-onA { 0%, 8% { opacity: 0; } 14%, 82% { opacity: 1; } 92%, 100% { opacity: 0; } }
+@keyframes t08-onB { 0%, 20% { opacity: 0; } 26%, 82% { opacity: 1; } 92%, 100% { opacity: 0; } }
+@keyframes t08-onC { 0%, 32% { opacity: 0; } 38%, 82% { opacity: 1; } 92%, 100% { opacity: 0; } }
+@keyframes t08-ringA { 0%, 8% { transform: scale(1); opacity: 0; } 10% { opacity: var(--ckp-ring-opacity); } 26%, 81% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } 82% { transform: scale(1); opacity: 0; } 84% { opacity: var(--ckp-ring-opacity); } 97%, 100% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } }
+@keyframes t08-ringB { 0%, 20% { transform: scale(1); opacity: 0; } 22% { opacity: var(--ckp-ring-opacity); } 38%, 82% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } 83% { transform: scale(1); opacity: 0; } 85% { opacity: var(--ckp-ring-opacity); } 98%, 100% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } }
+@keyframes t08-ringC { 0%, 32% { transform: scale(1); opacity: 0; } 34% { opacity: var(--ckp-ring-opacity); } 50%, 83% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } 84% { transform: scale(1); opacity: 0; } 86% { opacity: var(--ckp-ring-opacity); } 99%, 100% { transform: scale(var(--ckp-ring-scale)); opacity: 0; } }
+@keyframes t08-route { 0%, 40% { stroke-dashoffset: 100; opacity: 1; } 68%, 82% { stroke-dashoffset: 0; opacity: 1; } 92% { stroke-dashoffset: 0; opacity: 0; } 92.5%, 100% { stroke-dashoffset: 100; opacity: 0; } }
+@keyframes t08-comet { 0%, 40% { stroke-dashoffset: 2.5; opacity: 0; } 42% { opacity: 1; } 68% { stroke-dashoffset: -97.5; opacity: 1; } 74%, 92.5% { stroke-dashoffset: -97.5; opacity: 0; } 93%, 100% { stroke-dashoffset: 2.5; opacity: 0; } }
+</style>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  var count = 0;
+  var roots = document.querySelectorAll(".stage.t08");
+  Array.prototype.forEach.call(roots, function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    count += 1;
+    var uid = "t08k" + count + "-" + Math.floor(performance.now() * 100);
+    var svg = root.querySelector(".t08-svg");
+    /* one seeded generator so every instance and every still draw the same city */
+    var seed = 8419;
+    function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+    function el(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+    function f(n) { return Math.round(n * 10) / 10; }
+    function nearest(arr, v) { var best = arr[0]; arr.forEach(function (a) { if (Math.abs(a - v) < Math.abs(best - v)) best = a; }); return best; }
+    function inPoly(px, py, poly) { var inside = false; for (var a = 0, b = poly.length - 1; a < poly.length; b = a++) { var xi = poly[a][0], yi = poly[a][1], xj = poly[b][0], yj = poly[b][1]; if ((yi > py) !== (yj > py) && px < (xj - xi) * (py - yi) / (yj - yi) + xi) inside = !inside; } return inside; }
+
+    var W = 1200, H = 740;
+    var district = [[14, 478], [214, 446], [304, 604], [254, 722], [14, 722]];
+    var poly = district.map(function (p) { return p.join(","); }).join(" ");
+
+    /* the block grid: columns tighten toward the water; every third or fourth street is wider */
+    var cols = [], rows = [], sx = [], sy = [], x = 14, y = 16, i = 0, j = 0;
+    while (x < W - 40) { var w = Math.round(28 + 30 * (1 - x / W) + rnd() * 24); var g = (i % 4 === 2) ? 9 : 5; cols.push([x, w]); sx.push(x + w + g / 2); x += w + g; i++; }
+    while (y < H - 40) { var h = Math.round(24 + rnd() * 24); var gy = (j % 3 === 1) ? 9 : 5; rows.push([y, h]); sy.push(y + h + gy / 2); y += h + gy; j++; }
+    var gB = el("g", {}), used = {};
+    for (var r = 0; r < rows.length; r++) for (var c = 0; c < cols.length; c++) {
+      if (used[r + "_" + c]) continue;
+      var bx = cols[c][0], bw = cols[c][1], by = rows[r][0], bh = rows[r][1];
+      if (bx > 950 || inPoly(bx + bw / 2, by + bh / 2, district)) continue;
+      var q = rnd();
+      if (q < 0.05) continue;
+      if (q < 0.15 && c + 1 < cols.length && !used[r + "_" + (c + 1)]) { bw = cols[c + 1][0] + cols[c + 1][1] - bx; used[r + "_" + (c + 1)] = 1; }
+      else if (q < 0.21 && r + 1 < rows.length) { bh = rows[r + 1][0] + rows[r + 1][1] - by; used[(r + 1) + "_" + c] = 1; }
+      el("rect", { x: bx, y: by, width: bw, height: bh, rx: 1, "class": "t08-block" + (rnd() < 0.11 ? " t08-raised" : "") }, gB);
+    }
+    /* two diagonal avenues cut across the grid */
+    el("path", { d: "M 60 30 L 660 704", "class": "t08-ave" });
+    el("path", { d: "M 500 20 L 902 334", "class": "t08-ave" });
+
+    /* the old quarter: a smaller grid turned nineteen degrees, cut to its own outline */
+    el("polygon", { points: poly, "class": "t08-lot" });
+    var clip = el("clipPath", { id: uid }, el("defs", {}));
+    el("polygon", { points: poly }, clip);
+    var gR = el("g", { transform: "rotate(-19 160 600)" }, el("g", { "clip-path": "url(#" + uid + ")" }));
+    for (var gx = 0, ci = 0; gx < 340; ci++) { var dw = Math.round(30 + rnd() * 22); for (var gy2 = 430; gy2 < 790;) { var dh = Math.round(22 + rnd() * 16); if (rnd() > 0.06) el("rect", { x: gx, y: gy2, width: dw, height: dh, rx: 1, "class": "t08-block" }, gR); gy2 += dh + 5; } gx += dw + (ci % 3 === 1 ? 8 : 5); }
+    el("polygon", { points: poly, "class": "t08-edge" });
+
+    /* the river, its banks, and the lake with its depth contours */
+    var riverD = "M 336 -12 C 342 90 262 170 318 262 C 362 334 486 356 574 392 C 668 430 782 428 936 470";
+    el("path", { d: riverD, "class": "t08-bank" });
+    var river = el("path", { d: riverD, "class": "t08-river" });
+    var coastD = "M 892 -12 C 870 70 924 150 898 236 C 876 310 850 372 900 446 C 942 508 966 574 926 640 C 898 686 884 720 906 752";
+    el("path", { d: coastD + " L 1230 752 L 1230 -12 Z", "class": "t08-water" });
+    [[22, 1], [46, 0.7], [72, 0.45]].forEach(function (o) { el("path", { d: coastD, transform: "translate(" + o[0] + " 0)", opacity: o[1], "class": "t08-contour" }); });
+    el("path", { d: coastD, "class": "t08-coast" });
+    var len = river.getTotalLength();
+    [0.4, 0.72].forEach(function (t) { var p = river.getPointAtLength(len * t), p2 = river.getPointAtLength(len * t + 1); var dx = p2.x - p.x, dy = p2.y - p.y, m = Math.hypot(dx, dy) || 1, nx = -dy / m * 14, ny = dx / m * 14; el("line", { x1: f(p.x - nx), y1: f(p.y - ny), x2: f(p.x + nx), y2: f(p.y + ny), "class": "t08-bridge" }); });
+
+    /* the tick rule along the foot of the plate */
+    var minor = "", major = "";
+    for (var k = 0; k <= 58; k++) { var tx = 20 + k * 20; if (k % 5 === 0) major += "M" + tx + " 740v-11"; else minor += "M" + tx + " 740v-5"; }
+    el("path", { d: minor, "class": "t08-tick" });
+    el("path", { d: major, "class": "t08-tick t08-tick-major" });
+
+    /* clusters sit on street crossings; the home cluster carries the lamp and the zoning bands */
+    var C = {};
+    [["H", 310, 430, 8], ["A", 250, 170, 7], ["B", 560, 290, 9], ["C", 750, 560, 8], ["D", 470, 630, 6], ["E", 800, 140, 5], ["F", 110, 300, 6]].forEach(function (d) {
+      var cx = nearest(sx, d[1]), cy = nearest(sy, d[2]), pts = [];
+      for (var k = 0; k < d[3]; k++) { var a = k * Math.PI * 2 / d[3] + (rnd() - 0.5) * 0.9 + 0.4, rad = 17 + rnd() * 27; pts.push([f(cx + Math.cos(a) * rad), f(cy + Math.sin(a) * rad)]); }
+      C[d[0]] = { x: cx, y: cy, pts: pts };
+    });
+    [[72, "t08-band t08-band-in"], [150, "t08-band"], [262, "t08-band"], [404, "t08-band"]].forEach(function (b) { el("circle", { cx: C.H.x, cy: C.H.y, r: b[0], "class": b[1] }); });
+    function drawCluster(c, g, home) {
+      c.pts.forEach(function (p) { el("line", { x1: c.x, y1: c.y, x2: p[0], y2: p[1], "class": "t08-spoke" }, g); });
+      c.pts.forEach(function (p) { el("circle", { cx: p[0], cy: p[1], r: 2, "class": "t08-sat" }, g); });
+      el("circle", { cx: c.x, cy: c.y, r: 11, "class": "t08-halo" }, g);
+      if (home) { el("circle", { cx: c.x, cy: c.y, r: 6.5, "class": "t08-lamp-halo" }, g); el("circle", { cx: c.x, cy: c.y, r: 3.5, "class": "t08-lamp" }, g); }
+      else el("circle", { cx: c.x, cy: c.y, r: 4, "class": "t08-core" }, g);
+    }
+    Object.keys(C).forEach(function (n) { drawCluster(C[n], el("g", {}), n === "H"); });
+
+    /* the route between three clusters, along the streets, lit behind a pulse */
+    var routeD = "M " + C.A.x + " " + C.A.y + " H " + C.B.x + " V " + C.C.y + " H " + C.C.x;
+    el("path", { d: routeD, pathLength: 100, "class": "t08-route t08-route-glow" });
+    el("path", { d: routeD, pathLength: 100, "class": "t08-route" });
+    el("path", { d: routeD, pathLength: 100, "class": "t08-comet" });
+    ["A", "B", "C"].forEach(function (n) {
+      var c = C[n], g = el("g", { "class": "t08-on t08-on" + n });
+      el("circle", { cx: c.x, cy: c.y, r: 30, "class": "t08-glow" }, g);
+      drawCluster(c, g, false);
+      el("circle", { cx: c.x, cy: c.y, r: 11, "class": "t08-ring t08-ring" + n });
+    });
+  });
+})();
+</script>

@@ -44,13 +44,20 @@ def launch(p):
         raise exc
 
 
-FONT_PROBE = 'document.fonts && document.fonts.check(\'600 16px "Schibsted Grotesk"\')'
+# Every face the page declared must have loaded: the chrome face is checked by name, and no
+# FontFace the page tried to fetch may sit in the error state (a teaser face that failed
+# through the proxy would leave a fallback face in the still).
+FONT_PROBE = (
+    "(() => { if (!document.fonts) return true;"
+    " if (!document.fonts.check('600 16px \"Schibsted Grotesk\"')) return false;"
+    " return !Array.from(document.fonts).some(f => f.status === 'error'); })()"
+)
 
 
 def settle(page, ms: int) -> None:
-    """Wait for load and fonts; reload up to twice if the fonts stylesheet was dropped
+    """Wait for load and fonts; reload up to four times if any face was dropped
     (a proxy hiccup, not a page fault)."""
-    for attempt in range(3):
+    for attempt in range(5):
         page.wait_for_load_state("load")
         try:
             page.evaluate("document.fonts && document.fonts.ready")
@@ -62,7 +69,8 @@ def settle(page, ms: int) -> None:
                 break
         except Exception:  # noqa: BLE001
             break
-        if attempt < 2:
+        if attempt < 4:
+            page.wait_for_timeout(400 * (attempt + 1))
             page.reload()
     page.wait_for_timeout(ms)
 

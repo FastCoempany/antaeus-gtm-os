@@ -1,0 +1,70 @@
+<!-- teaser id=coach-exchange num=6 source=aesdr focal=46%,42% loop=10 interactive=no -->
+<div class="stage t06" data-teaser="coach-exchange" style="--fx:0.46;--fy:0.42" role="img" aria-label="A practice exchange: what the learner said, and the coach's reply">
+  <div class="stage-frame"><div class="stage-scene">
+    <div class="t06-sheet">
+      <div class="t06-head"><span class="t06-kicker">Practice 02</span><span class="t06-kicker">Cold open</span></div>
+      <div class="t06-block">
+        <span class="t06-label">You said</span>
+        <span class="t06-line t06-a1">“Hi, this is Dana from Halden Supply. Do you have a minute?”</span>
+        <span class="t06-line t06-a2">“Hi, this is Dana. I’m calling because your team posted three new roles this week.”</span>
+      </div>
+      <div class="t06-block t06-coach">
+        <span class="t06-label">Coach</span>
+        <span class="t06-reply t06-r1">You gave your name and asked for time. Give the reason first, then ask for the time.</span>
+        <span class="t06-reply t06-r2">Better. The reason came first and it was theirs, not yours. Now stop talking and let them answer.</span>
+        <span class="t06-under"><i></i></span>
+      </div>
+    </div>
+  </div></div>
+</div>
+<style>
+.t06 .t06-sheet { position: absolute; left: 15%; top: 17%; width: 70%; height: 66%; padding: calc(3 * var(--u)) calc(4 * var(--u)); background: var(--aes-paper); color: var(--aes-ink); border: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-head { display: flex; justify-content: space-between; padding-bottom: calc(1.2 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-kicker { font-family: var(--aes-font-mono); font-size: calc(0.95 * var(--u)); letter-spacing: 0.25em; text-transform: uppercase; color: var(--aes-muted); }
+.t06 .t06-block { position: relative; margin-top: calc(3 * var(--u)); }
+.t06 .t06-label { display: block; font-family: var(--aes-font-label); font-weight: 600; font-size: calc(1.15 * var(--u)); letter-spacing: 0.15em; text-transform: uppercase; color: var(--aes-muted); margin-bottom: calc(0.9 * var(--u)); }
+.t06 .t06-line, .t06 .t06-reply { display: block; font-family: var(--aes-font-body); }
+.t06 .t06-line { font-weight: 500; font-size: calc(2.6 * var(--u)); line-height: 1.32; color: var(--aes-ink); max-width: calc(52 * var(--u)); }
+.t06 .t06-a2, .t06 .t06-r2 { position: absolute; left: 0; top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u)); }
+.t06 .t06-a1, .t06 .t06-a2 { animation: t06-a1 10s ease-in-out infinite; will-change: opacity, transform; }
+.t06 .t06-a2 { animation-name: t06-a2; opacity: 0; }
+.t06 .t06-coach { margin-top: calc(3.2 * var(--u)); padding-top: calc(2.4 * var(--u)); border-top: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t06 .t06-reply { font-weight: 400; font-size: calc(2.1 * var(--u)); line-height: 1.42; color: var(--aes-ink); max-width: calc(50 * var(--u)); }
+.t06 .t06-r1 { animation: t06-r1 10s ease-in-out infinite; will-change: opacity; }
+.t06 .t06-r2 { animation: t06-r2 10s ease-in-out infinite; opacity: 0; will-change: opacity; }
+/* the words: each appears on its own beat (the reply types in); the erase is the whole block fading at once, so no word ever hangs mid-air */
+.t06 .t06-reply span { display: inline-block; animation: t06-w1 10s linear infinite; animation-delay: calc(var(--i) * 0.06s); }
+.t06 .t06-r2 { top: calc(1.15 * var(--u) * 1.2 + 0.9 * var(--u) + 2.4 * var(--u)); }
+.t06 .t06-r2 span { animation-name: t06-w2; opacity: 0; }
+.t06 .t06-under { display: block; position: relative; margin-top: calc(1.6 * var(--u)); width: calc(18 * var(--u)); height: calc(0.125 * var(--u)); overflow: hidden; transform-origin: left center; animation: t06-under 10s cubic-bezier(.4, 0, .2, 1) infinite; }
+.t06 .t06-under i { position: absolute; inset: 0; width: 300%; background: var(--aes-iris); animation: t06-shimmer 6s linear infinite; will-change: transform; }
+@keyframes t06-a1 { 0%, 18% { opacity: 1; transform: translateY(0); } 22%, 76% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } 80%, 100% { opacity: 1; transform: translateY(0); } }
+@keyframes t06-a2 { 0%, 24% { opacity: 0; transform: translateY(calc(0.6 * var(--u))); } 28%, 70% { opacity: 1; transform: translateY(0); } 74%, 100% { opacity: 0; transform: translateY(calc(-0.6 * var(--u))); } }
+@keyframes t06-r1 { 0%, 18% { opacity: 1; } 21%, 80% { opacity: 0; } 83%, 100% { opacity: 1; } }
+@keyframes t06-r2 { 0%, 28% { opacity: 0; } 30.5%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
+@keyframes t06-w1 { 0%, 18% { opacity: 1; } 30%, 83.5% { opacity: 0; } 84%, 100% { opacity: 1; } }
+@keyframes t06-w2 { 0%, 30.5% { opacity: 0; } 31%, 74% { opacity: 1; } 76%, 100% { opacity: 0; } }
+@keyframes t06-under { 0%, 18% { transform: scaleX(1); } 21%, 43% { transform: scaleX(0); } 49%, 70% { transform: scaleX(1); } 73%, 95% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes t06-shimmer { from { transform: translateX(0); } to { transform: translateX(-66.66%); } }
+</style>
+<script>
+(function () {
+  var roots = document.querySelectorAll(".stage.t06");
+  Array.prototype.forEach.call(roots, function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    var replies = root.querySelectorAll(".t06-reply");
+    Array.prototype.forEach.call(replies, function (el) {
+      var words = el.textContent.trim().split(/\s+/);
+      el.textContent = "";
+      words.forEach(function (w, i) {
+        var s = document.createElement("span");
+        s.textContent = w;
+        s.style.setProperty("--i", String(i));
+        el.appendChild(s);
+        if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
+      });
+    });
+  });
+})();
+</script>

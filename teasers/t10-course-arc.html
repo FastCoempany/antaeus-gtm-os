@@ -1,0 +1,110 @@
+<!-- teaser id=course-arc num=10 source=aesdr focal=50%,50% loop=8 interactive=no -->
+<div class="stage t10" data-teaser="course-arc" style="--fx:0.5;--fy:0.5" role="img" aria-label="Seven courses on a curve, in order, the current one lit">
+  <div class="stage-frame"><div class="stage-scene">
+    <div class="t10-sheet">
+      <div class="t10-head"><span class="t10-kicker">Seven courses</span><span class="t10-kicker">03 / 07</span></div>
+      <svg class="t10-svg" viewBox="0 0 1280 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    </div>
+  </div></div>
+</div>
+<style>
+.t10 .t10-sheet { position: absolute; left: 12%; top: 20%; width: 76%; height: 60%; padding: calc(3 * var(--u)) calc(4 * var(--u)) calc(2 * var(--u)); background: var(--aes-paper); color: var(--aes-ink); border: calc(0.0625 * var(--u)) solid var(--aes-light); display: flex; flex-direction: column; }
+.t10 .t10-head { display: flex; justify-content: space-between; padding-bottom: calc(1.2 * var(--u)); border-bottom: calc(0.0625 * var(--u)) solid var(--aes-light); }
+.t10 .t10-kicker { font-family: var(--aes-font-mono); font-size: calc(0.95 * var(--u)); letter-spacing: 0.25em; text-transform: uppercase; color: var(--aes-muted); }
+.t10 .t10-svg { flex: 1; width: 100%; min-height: 0; margin-top: calc(1 * var(--u)); overflow: visible; }
+.t10 .t10-track { fill: none; stroke: var(--aes-light); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
+.t10 .t10-prog { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 66.667; animation: t10-prog 8s cubic-bezier(.4, 0, .2, 1) infinite; }
+.t10 .t10-mark circle.t10-ring { fill: var(--aes-paper); stroke: var(--aes-light); stroke-width: 1.5; }
+.t10 .t10-mark.is-done circle.t10-ring { fill: var(--aes-crimson); stroke: var(--aes-crimson); stroke-width: 2; }
+.t10 .t10-mark circle.t10-done { fill: var(--aes-crimson); opacity: 0; }
+.t10 .t10-mark text { font-family: var(--aes-font-mono); font-size: 13px; letter-spacing: 0.06em; text-anchor: middle; dominant-baseline: central; fill: var(--aes-muted); }
+.t10 .t10-mark.is-done text { fill: var(--aes-paper); }
+.t10 .t10-mark text.t10-numlight { fill: var(--aes-paper); opacity: 0; }
+.t10 .t10-glow { will-change: transform, opacity; }
+.t10 .t10-glow .t10-halo { fill: var(--aes-crimson); opacity: 0.16; }
+.t10 .t10-glow .t10-halo2 { fill: var(--aes-crimson); opacity: 0.32; }
+.t10 .t10-glow .t10-cur { fill: var(--aes-paper); stroke: var(--aes-ink); stroke-width: 2.5; }
+.t10 .t10-title { font-family: var(--aes-font-body); font-weight: 500; font-size: 34px; fill: var(--aes-ink); opacity: 0; }
+.t10 .t10-title.t10-t3 { opacity: 1; }
+.t10 .t10-glow { animation: t10-glow 8s cubic-bezier(.4, 0, .2, 1) infinite; }
+.t10 .t10-m3 .t10-done, .t10 .t10-m3 .t10-numlight { animation: t10-done3 8s ease-in-out infinite; }
+.t10 .t10-m4 .t10-done, .t10 .t10-m4 .t10-numlight { animation: t10-done4 8s ease-in-out infinite; }
+.t10 .t10-t3 { animation: t10-t3 8s ease-in-out infinite; }
+.t10 .t10-t4 { animation: t10-t4 8s ease-in-out infinite; }
+.t10 .t10-t5 { animation: t10-t5 8s ease-in-out infinite; }
+@keyframes t10-glow {
+  0%, 26% { transform: translate(var(--p3x), var(--p3y)); opacity: 1; }
+  34%, 54% { transform: translate(var(--p4x), var(--p4y)); opacity: 1; }
+  62%, 86% { transform: translate(var(--p5x), var(--p5y)); opacity: 1; }
+  91% { transform: translate(var(--p5x), var(--p5y)); opacity: 0; }
+  91.1% { transform: translate(var(--p3x), var(--p3y)); opacity: 0; }
+  96%, 100% { transform: translate(var(--p3x), var(--p3y)); opacity: 1; }
+}
+@keyframes t10-prog { 0%, 26% { stroke-dashoffset: 66.667; } 34%, 54% { stroke-dashoffset: 50; } 62%, 86% { stroke-dashoffset: 33.333; } 96%, 100% { stroke-dashoffset: 66.667; } }
+@keyframes t10-done3 { 0%, 27% { opacity: 0; } 33%, 87% { opacity: 1; } 95%, 100% { opacity: 0; } }
+@keyframes t10-done4 { 0%, 55% { opacity: 0; } 61%, 87% { opacity: 1; } 95%, 100% { opacity: 0; } }
+@keyframes t10-t3 { 0%, 26% { opacity: 1; } 31%, 90% { opacity: 0; } 97%, 100% { opacity: 1; } }
+@keyframes t10-t4 { 0%, 31% { opacity: 0; } 36%, 54% { opacity: 1; } 59%, 100% { opacity: 0; } }
+@keyframes t10-t5 { 0%, 59% { opacity: 0; } 64%, 87% { opacity: 1; } 92%, 100% { opacity: 0; } }
+</style>
+<script>
+(function () {
+  var count = 0;
+  var roots = document.querySelectorAll(".stage.t10");
+  Array.prototype.forEach.call(roots, function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    count += 1;
+    var uid = "t10g" + count + Math.floor(performance.now());
+    var svg = root.querySelector(".t10-svg");
+    var NS = "http://www.w3.org/2000/svg";
+    var titles = ["Opening the call", "Ask what changed", "Find the pain", "Show it is real", "Handle the pushback", "Ask for the meeting", "Close the loop"];
+    var d = "M 70 330 Q 640 40 1210 330";
+    var defs = document.createElementNS(NS, "defs");
+    var grad = document.createElementNS(NS, "linearGradient");
+    grad.setAttribute("id", uid);
+    grad.setAttribute("x1", "0"); grad.setAttribute("x2", "1"); grad.setAttribute("y1", "0"); grad.setAttribute("y2", "0");
+    var stops = [["0", "#FF006E"], [".17", "#FF6B00"], [".34", "#F59E0B"], [".51", "#10B981"], [".68", "#38BDF8"], [".85", "#8B5CF6"], ["1", "#FF006E"]];
+    stops.forEach(function (s) { var st = document.createElementNS(NS, "stop"); st.setAttribute("offset", s[0]); st.setAttribute("stop-color", s[1]); grad.appendChild(st); });
+    defs.appendChild(grad); svg.appendChild(defs);
+    function path(cls) { var p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("class", cls); p.setAttribute("pathLength", "100"); svg.appendChild(p); return p; }
+    var track = path("t10-track");
+    var prog = path("t10-prog");
+    prog.setAttribute("stroke", "url(#" + uid + ")");
+    var total = track.getTotalLength();
+    var pts = [];
+    for (var i = 0; i < 7; i++) {
+      var pt = track.getPointAtLength(total * i / 6);
+      pts.push(pt);
+      var g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "t10-mark t10-m" + (i + 1) + (i < 2 ? " is-done" : ""));
+      g.setAttribute("transform", "translate(" + pt.x.toFixed(1) + " " + pt.y.toFixed(1) + ")");
+      var ring = document.createElementNS(NS, "circle"); ring.setAttribute("r", "17"); ring.setAttribute("class", "t10-ring"); g.appendChild(ring);
+      var done = document.createElementNS(NS, "circle"); done.setAttribute("r", "18"); done.setAttribute("class", "t10-done"); g.appendChild(done);
+      var num = document.createElementNS(NS, "text"); num.textContent = String(i + 1); g.appendChild(num);
+      var numLight = document.createElementNS(NS, "text"); numLight.textContent = String(i + 1); numLight.setAttribute("class", "t10-numlight"); g.appendChild(numLight);
+      svg.appendChild(g);
+    }
+    root.style.setProperty("--p3x", pts[2].x.toFixed(1) + "px"); root.style.setProperty("--p3y", pts[2].y.toFixed(1) + "px");
+    root.style.setProperty("--p4x", pts[3].x.toFixed(1) + "px"); root.style.setProperty("--p4y", pts[3].y.toFixed(1) + "px");
+    root.style.setProperty("--p5x", pts[4].x.toFixed(1) + "px"); root.style.setProperty("--p5y", pts[4].y.toFixed(1) + "px");
+    var glow = document.createElementNS(NS, "g"); glow.setAttribute("class", "t10-glow");
+    glow.style.transform = "translate(" + pts[2].x.toFixed(1) + "px," + pts[2].y.toFixed(1) + "px)";
+    [["t10-halo", "40"], ["t10-halo2", "28"], ["t10-cur", "17"]].forEach(function (c) { var el = document.createElementNS(NS, "circle"); el.setAttribute("r", c[1]); el.setAttribute("class", c[0]); glow.appendChild(el); });
+    var curNum = document.createElementNS(NS, "text"); curNum.setAttribute("class", "t10-curnum"); curNum.setAttribute("style", "font-family:var(--aes-font-mono);font-size:13px;letter-spacing:.06em;text-anchor:middle;dominant-baseline:central;fill:var(--aes-ink)");
+    glow.appendChild(curNum);
+    svg.appendChild(glow);
+    [2, 3, 4].forEach(function (idx) {
+      var t = document.createElementNS(NS, "text");
+      t.setAttribute("class", "t10-title t10-t" + (idx + 1));
+      t.setAttribute("x", (pts[idx].x + 34).toFixed(1));
+      t.setAttribute("y", (pts[idx].y + 12).toFixed(1));
+      t.textContent = titles[idx];
+      svg.appendChild(t);
+    });
+    /* numeral of the current marker follows the glow: rendered per state via three texts */
+    var nums = [3, 4, 5].map(function (n, k) { var t = document.createElementNS(NS, "text"); t.setAttribute("class", "t10-title t10-t" + n); t.setAttribute("style", "font-family:var(--aes-font-mono);font-size:13px;letter-spacing:.06em;text-anchor:middle;dominant-baseline:central;fill:var(--aes-ink)"); t.setAttribute("x", pts[n - 1].x.toFixed(1)); t.setAttribute("y", pts[n - 1].y.toFixed(1)); t.textContent = String(n); svg.appendChild(t); return t; });
+    curNum.remove();
+  });
+})();
+</script>

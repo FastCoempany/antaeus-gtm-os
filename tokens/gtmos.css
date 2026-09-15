@@ -169,3 +169,18 @@
   --gtm-loop-default: 9s; /* derived */
   --gtm-pulse-ease: ease-in-out; /* derived */
 }
+
+:root {
+  /* --gtm-perspective (1200px) expressed in scene units so the tilt reads the same at every frame width: 75 × --u = 1200px at 1600 */
+  --gtm-perspective-u: 75; /* derived, added for t01 */
+  /* the moving sheen on a glass pill: a narrow diagonal band, brighter than the static highlight strips, that the loop drags across the glass */
+  --gtm-sheen: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.16) 50%, transparent 100%); /* derived, added for t01 */
+}
+
+:root {
+  /* glass tile edges read at 25–30% white on the black stage; the lifted one a step brighter */
+  --gtm-glass-border-strong: rgba(255, 255, 255, 0.28); /* derived, added for t09 */
+  --gtm-glass-border-lifted: rgba(255, 255, 255, 0.42); /* derived, added for t09 */
+  /* the tile sheen: the same diagonal band as --gtm-sheen, brighter, for slabs that must read as glass at gallery scale */
+  --gtm-sheen-strong: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%); /* derived, added for t09 */
+}
