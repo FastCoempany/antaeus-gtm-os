@@ -220,6 +220,20 @@ def load_frames() -> list[dict]:
     return frames
 
 
+def check_source_links(cfg: dict) -> None:
+    """Every configured source link must name a source that exists.
+
+    config.json carried a link for Antaeus under the key "gtmos" while the
+    frames and this map call that source "antaeus", so the lookup missed and
+    the link silently rendered as plain text — a configured thing doing
+    nothing, which is the hardest kind of wrong to notice. A key that matches
+    no source is a typo, and a typo is worth a failed build."""
+    known = {k for _, k, _ in SOURCES.values() if k}
+    unknown = sorted(set(cfg.get("source_links") or {}) - known)
+    if unknown:
+        die(f"config.json source_links names no such source: {unknown}. known: {sorted(known)}")
+
+
 def source_label(source: str, cfg: dict) -> tuple[str, str]:
     """Return (plain text, html) for a source label per brief 8.8."""
     label, link_key, brand_fallback = SOURCES[source]
@@ -427,6 +441,7 @@ def sweep_dist(written: list[Path]) -> list[str]:
 
 def main() -> None:
     cfg = load_config()
+    check_source_links(cfg)
     ctx = {
         "cfg": cfg,
         "tokens": load_tokens(),

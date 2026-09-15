@@ -5,7 +5,7 @@
   "contact_email": "hello@shapshyftrs.com",
   "stripe_url": "",
   "source_links": {
-    "gtmos": "https://antaeus.app",
+    "antaeus": "https://antaeus.app",
     "aesdr": "https://aesdr.com"
   },
   "show_source_names": true,
