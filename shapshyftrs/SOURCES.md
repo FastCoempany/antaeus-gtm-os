@@ -138,6 +138,7 @@ Every declaration in `tokens/*.css` carries one mark. The tables below list only
 | `--aes-lesson-mid` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |
 | `--aes-lesson-lite` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |
 | `--aes-lesson-lite-2` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |
+| `--aes-light-2` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` (an alias of `--aes-lesson-lite-2`) |
 | `--aes-lesson-line` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |
 | `--aes-lesson-line-2` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |
 | `--aes-amber` | `content/lessons/html/lesson-01/aesdr_course01_v1.html` |

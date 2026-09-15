@@ -596,6 +596,11 @@
   --ckp-ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
+:root {
+
+  --ckp-recess: rgba(0, 0, 0, 0.2);
+}
+
 /* tokens/nrdi.css */
 :root {
 
@@ -929,6 +934,12 @@
   --ndg-garment-sage-inside: #d5cb95;
   --ndg-garment-sage-shade: #a4975f;
 }
+
+:root {
+
+  --nds-tortoise-blue-deep: #070D20;
+  --nds-tortoise-red-deep: #1C1312;
+}
 </style>
 <style>
 html,body{margin:0;background:#000}
@@ -936,8 +947,8 @@ html,body{margin:0;background:#000}
 </style>
 </head>
 <body>
-<div class="single"><!-- teaser id=signal-strip num=5 source=gtmos focal=38%,49% loop=9 interactive=no -->
-<div class="stage t05" data-teaser="signal-strip" style="--fx:0.38;--fy:0.49" role="img" aria-label="A row of seven phase chips over a thin waveform, lighting in order; one earlier chip is re-scored coral and the score numeral ticks up">
+<div class="single"><!-- teaser id=signal-strip num=5 source=gtmos focal=38%,48% loop=9 interactive=no -->
+<div class="stage t05" data-teaser="signal-strip" style="--fx:0.38;--fy:0.48" role="img" aria-label="A row of seven phase chips over a thin waveform, lighting in order; one earlier chip is re-scored coral and the score numeral ticks up">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t05-rig">
       <div class="t05-plane">
@@ -956,11 +967,15 @@ html,body{margin:0;background:#000}
   </div></div>
 </div>
 <style>
-/* the rig: perspective, then one tilted plane holding the head, the glass strip and the chip layer at three depths */
-.t05 .t05-rig { --u: calc(var(--sw) / 130); position: absolute; left: calc(15 * var(--u)); top: calc(14 * var(--u)); width: calc(80 * var(--u)); height: calc(40 * var(--u)); perspective: calc(var(--gtm-perspective-u) * var(--u)); perspective-origin: 38% 34%; }
+/* the rig: perspective, then one tilted plane holding the head, the glass strip and the chip layer at three depths.
+   --pad is the strip's inner gutter: the head, the waveform and the chip row all start on it, so the phone crop
+   (scene x 13%-63% at --fx .38) can cut the glass and the chip row at both edges with the head whole inside it */
+.t05 .t05-rig { --u: calc(var(--sw) / 111); --pad: calc(6 * var(--u)); position: absolute; left: calc(13.9 * var(--u)); top: calc(12.8 * var(--u)); width: calc(84 * var(--u)); height: calc(40 * var(--u)); perspective: calc(var(--gtm-perspective-u) * var(--u)); perspective-origin: 38% 34%; }
 .t05 .t05-plane { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--gtm-tilt-x)) rotateY(calc(-1 * var(--gtm-tilt-y))); }
 /* head: the mono score at the near-left corner, the account beside it */
-.t05 .t05-head { position: absolute; left: 0; top: 0; width: 100%; height: calc(10 * var(--u)); transform: translateZ(calc(0.6 * var(--u))); }
+/* the head rides the gutter, pulled back 1.33u: it sits on a shallower plane than the chip row, and the mono
+   numeral carries a left side bearing, so the correction lands the 7 ink-on-edge with the first chip */
+.t05 .t05-head { position: absolute; left: calc(var(--pad) - 1.33 * var(--u)); top: 0; width: calc(100% - 2 * var(--pad)); height: calc(10 * var(--u)); transform: translateZ(calc(0.6 * var(--u))); }
 .t05 .t05-num { position: absolute; left: 0; bottom: calc(0.5 * var(--u)); display: flex; height: 1em; overflow: hidden; font-family: var(--gtm-font-data); font-weight: var(--gtm-weight-data); font-size: calc(8.6 * var(--u)); line-height: 1; letter-spacing: -0.04em; color: var(--gtm-text); animation: t05-num var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
 .t05 .t05-col { display: block; will-change: transform; }
 .t05 .t05-col i { display: block; height: 1em; font-style: normal; }
@@ -972,10 +987,11 @@ html,body{margin:0;background:#000}
 /* the strip: one long glass panel, lit from its upper left, the waveform in its lower band */
 .t05 .t05-panel { position: absolute; left: 0; top: calc(12 * var(--u)); width: 100%; height: calc(27 * var(--u)); overflow: hidden; border-radius: calc(1 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--gtm-glass-border); background: radial-gradient(ellipse 58% 95% at 14% 0%, rgba(255, 255, 255, 0.12), transparent 62%), var(--gtm-glass-fill); box-shadow: var(--gtm-inner-highlight); -webkit-backdrop-filter: blur(var(--gtm-glass-blur)); backdrop-filter: blur(var(--gtm-glass-blur)); }
 @supports not (backdrop-filter: blur(1px)) { .t05 .t05-panel { background: radial-gradient(ellipse 58% 95% at 14% 0%, rgba(255, 255, 255, 0.12), transparent 62%), var(--gtm-glass-fallback); } }
-.t05 .t05-spec { position: absolute; top: -30%; left: calc(-30 * var(--u)); width: calc(30 * var(--u)); height: 160%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09) 44%, rgba(255, 255, 255, 0.045) 58%, transparent); transform: skewX(-22deg) translateX(calc(46 * var(--u))); will-change: transform; animation: t05-spec var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
-.t05 .t05-play { position: absolute; left: calc(2.5 * var(--u)); top: calc(1.2 * var(--u)); width: calc(0.125 * var(--u)); height: calc(24.6 * var(--u)); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0.55) 70%, transparent); opacity: 0; will-change: transform, opacity; animation: t05-play var(--gtm-loop-default) linear infinite; }
+/* skewX slants x only, so the sweep needs no vertical overshoot: the band is exactly the panel's height */
+.t05 .t05-spec { position: absolute; top: 0; left: calc(-30 * var(--u)); width: calc(30 * var(--u)); height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09) 44%, rgba(255, 255, 255, 0.045) 58%, transparent); transform: skewX(-22deg) translateX(calc(46 * var(--u))); will-change: transform; animation: t05-spec var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
+.t05 .t05-play { position: absolute; left: var(--pad); top: calc(1.2 * var(--u)); width: calc(0.125 * var(--u)); height: calc(24.6 * var(--u)); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0.55) 70%, transparent); opacity: 0; will-change: transform, opacity; animation: t05-play var(--gtm-loop-default) linear infinite; }
 .t05 .t05-play::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(-1.4 * var(--u)); width: calc(2.9 * var(--u)); background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07) 50%, transparent); }
-.t05 .t05-wave { position: absolute; left: calc(2.5 * var(--u)); top: calc(12.5 * var(--u)); width: calc(75 * var(--u)); height: calc(12 * var(--u)); overflow: visible; }
+.t05 .t05-wave { position: absolute; left: var(--pad); top: calc(12.5 * var(--u)); width: calc(100% - 2 * var(--pad)); height: calc(12 * var(--u)); overflow: visible; }
 .t05 .t05-base { stroke: var(--gtm-hairline); stroke-width: 0.8; }
 .t05 .t05-ghost { fill: none; stroke: var(--gtm-border); stroke-width: 1.2; stroke-linejoin: round; }
 .t05 .t05-line { fill: none; stroke: var(--gtm-text-2); stroke-opacity: 0.78; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: butt; stroke-dasharray: 1; stroke-dashoffset: 0; animation: t05-draw var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
@@ -983,7 +999,7 @@ html,body{margin:0;background:#000}
 .t05 .t05-hotglow { fill: none; stroke: var(--gtm-accent); stroke-opacity: 0.2; stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
 .t05 .t05-hotline { fill: none; stroke: var(--gtm-accent); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
 /* the seven chips: a layer lifted off the strip; each chip is three faces (unlit, lit grey, coral) crossfaded by opacity */
-.t05 .t05-chips { position: absolute; left: calc(2.5 * var(--u)); top: calc(14.5 * var(--u)); width: calc(75 * var(--u)); height: calc(8 * var(--u)); display: grid; grid-template-columns: repeat(7, 1fr); gap: calc(0.6 * var(--u)); transform-style: preserve-3d; transform: translateZ(calc(1.2 * var(--u))); }
+.t05 .t05-chips { position: absolute; left: var(--pad); top: calc(14.5 * var(--u)); width: calc(100% - 2 * var(--pad)); height: calc(8 * var(--u)); display: grid; grid-template-columns: repeat(7, 1fr); gap: calc(0.6 * var(--u)); transform-style: preserve-3d; transform: translateZ(calc(1.2 * var(--u))); }
 .t05 .t05-chip { position: relative; }
 .t05 .t05-c3 { transform: translateZ(calc(1.2 * var(--u))); will-change: transform; animation: t05-lift var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
 .t05 .t05-face { position: absolute; inset: 0; border-radius: calc(0.625 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--gtm-border); border-left-width: calc(0.1875 * var(--u)); border-left-color: rgba(255, 255, 255, 0.14); background: var(--gtm-fill-faint); }
@@ -1001,7 +1017,7 @@ html,body{margin:0;background:#000}
 /* the loop, 9s. 0–7% rest; 7–17% the read withdraws; 21–79% the trace draws left to right and each chip lights as the head passes;
    at the sixth chip the score brightens, then the third chip flips coral and the numeral rolls 58 to 74; the seventh lights; 81–100% rest again */
 @keyframes t05-draw { 0%, 7% { stroke-dashoffset: 0; } 17%, 21% { stroke-dashoffset: 1; animation-timing-function: linear; } 79%, 100% { stroke-dashoffset: 0; } }
-@keyframes t05-play { 0%, 19% { opacity: 0; transform: translateX(0); animation-timing-function: linear; } 21% { opacity: 1; transform: translateX(0); animation-timing-function: linear; } 79% { opacity: 1; transform: translateX(calc(75 * var(--u))); animation-timing-function: linear; } 81%, 100% { opacity: 0; transform: translateX(calc(75 * var(--u))); } }
+@keyframes t05-play { 0%, 19% { opacity: 0; transform: translateX(0); animation-timing-function: linear; } 21% { opacity: 1; transform: translateX(0); animation-timing-function: linear; } 79% { opacity: 1; transform: translateX(calc(72 * var(--u))); animation-timing-function: linear; } 81%, 100% { opacity: 0; transform: translateX(calc(72 * var(--u))); } }
 @keyframes t05-spec { 0%, 7% { transform: skewX(-22deg) translateX(calc(46 * var(--u))); } 17% { transform: skewX(-22deg) translateX(calc(132 * var(--u))); animation-timing-function: steps(1, end); } 21% { transform: skewX(-22deg) translateX(calc(-52 * var(--u))); animation-timing-function: linear; } 100% { transform: skewX(-22deg) translateX(calc(46 * var(--u))); } }
 @keyframes t05-num { 0%, 7% { opacity: 1; } 15% { opacity: 0.1; } 21%, 66.5% { opacity: 0.3; } 70%, 100% { opacity: 1; } }
 @keyframes t05-tens { 0%, 8% { transform: translateY(-2em); } 15%, 71.5% { transform: translateY(0); } 77.5%, 100% { transform: translateY(-2em); } }
@@ -1029,7 +1045,9 @@ html,body{margin:0;background:#000}
   var FILL = [58, 42, 34, 66, 50, 76, 60];
   var HOT = 2, HOT_FILL = 92;
   var W = 750, MID = 60, STEP = 1.5;
-  var CHIP = 108, CHIP_W = 102; /* chip pitch and width in waveform units (10.8u and 10.2u of a 75u row) */
+  /* the waveform's viewBox spans the same row the chips do, so the chip pitch is read off the row itself */
+  var COLS = 7, ROW_U = 72, GAP_U = 0.6, COL_U = (ROW_U - GAP_U * (COLS - 1)) / COLS;
+  var CHIP = (COL_U + GAP_U) * (W / ROW_U), CHIP_W = COL_U * (W / ROW_U);
   var hotX0 = HOT * CHIP, hotX1 = hotX0 + CHIP_W, hotC = (hotX0 + hotX1) / 2;
   var NS = "http://www.w3.org/2000/svg";
   function y(x) {

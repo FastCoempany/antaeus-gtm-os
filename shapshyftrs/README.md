@@ -39,6 +39,14 @@ python3 screenshot.py
 
 Writes `screens/`. `--variants` or `--teasers` limits the run; `--fold` captures the first fold only; `--live` captures teasers three seconds into their loop instead of at rest; `--only NAME` filters by filename. The script also reports console and page errors and exits non-zero if it saw any.
 
+The pages load their faces from Google Fonts. Behind a proxy that drops the stylesheet, the browser silently falls back to Times and Arial and the stills are worthless. The script checks after every load that the page actually has font faces and that the chrome face is among them, and marks any still taken without them `** FALLBACK TYPE **`, failing the run. To take the network out of the loop:
+
+```
+python3 screenshot.py --fetch-fonts
+```
+
+That caches the declared stylesheet and its woff2 files into `.fontcache/` (gitignored). While the cache exists every capture is served from it, so the stills are reproducible offline. The built pages are untouched — they still point at Google Fonts for real visitors.
+
 ## How a page is assembled
 
 A variant in `variants/` is an ordinary HTML file with a few build directives in comments. `build.py` expands them and writes one flat file per variant. The full list is in the `build.py` docstring; the ones you need to change a page:
@@ -71,7 +79,7 @@ One teaser is one file, `teasers/tNN-<id>.html`, self-contained: markup, a `<sty
 **The header line.** The first line is a comment `build.py` parses, and it must match the shape exactly or the teaser is skipped (or, under `BUILD_STRICT=1`, the build fails):
 
 ```
-<!-- teaser id=fork-rail num=1 source=gtmos focal=61%,50% loop=9 interactive=no -->
+<!-- teaser id=fork-rail num=1 source=gtmos focal=66.5%,50% loop=9 interactive=no -->
 ```
 
 | Field | Meaning |
@@ -79,14 +87,14 @@ One teaser is one file, `teasers/tNN-<id>.html`, self-contained: markup, a `<sty
 | `id` | must be one of the thirteen keys in `build.py`'s `CAPTIONS`; it selects the locked caption |
 | `num` | 1 to 13, its place in the fixed gallery order; the thirteen must number 1..13 with no gaps or repeats |
 | `source` | one of `gtmos`, `aesdr`, `cockpit`, `nrdi-darkest-shades`, `nrdi-puff-junction`, `nrdi-digs`; it selects the locked source label and the token prefix you are allowed to use |
-| `focal` | `x%,y%` — the point the 4:5 crop centres on below 640px of the teaser's own width. Repeat it as `style="--fx:0.61;--fy:0.50"` on the root |
+| `focal` | `x%,y%` — the point the 4:5 crop centres on below 640px of the teaser's own width. Repeat it as `style="--fx:0.665;--fy:0.50"` on the root. The crop window is the 50% of the scene centred on `--fx`, so move it until no line of type straddles either edge |
 | `loop` | loop length in seconds, 6 to 10 |
 | `interactive` | `yes` or `no`; `yes` teasers use `role="group"` on the root and real controls inside, `no` teasers use `role="img"` and an `aria-label` that describes the loop |
 
 **The root markup.** Three nested elements, then the subject:
 
 ```html
-<div class="stage t01" data-teaser="fork-rail" style="--fx:0.61;--fy:0.50" role="img" aria-label="…">
+<div class="stage t01" data-teaser="fork-rail" style="--fx:0.665;--fy:0.50" role="img" aria-label="…">
   <div class="stage-frame"><div class="stage-scene">
     … the subject …
   </div></div>
@@ -105,7 +113,7 @@ One teaser is one file, `teasers/tNN-<id>.html`, self-contained: markup, a `<sty
 
 **Copy inside the frame.** Plain, generic and invented — invented companies, invented people, no real figures. Nothing about the cockpit's employer, partners or industry anywhere, including comments. No caption, source label or title inside the frame: the variant renders those outside it, in the chrome face.
 
-**Size.** Aim under 25 KB per teaser file, hard cap 35 KB; generate repetitive nodes in script rather than shipping them as markup. The teasers in the repo run 7 to 17 KB.
+**Size.** Aim under 25 KB per teaser file, hard cap 35 KB; generate repetitive nodes in script rather than shipping them as markup. The teasers in the repo run 7 to 18 KB.
 
 ## Checking a teaser
 
@@ -116,6 +124,14 @@ python3 screenshot.py --teasers --only t03 --live   # the same three seconds int
 ```
 
 `screenshot.py` fails the run on any console error or page error, which is the no-errors check. Then read the built page by eye at both sizes — `dist/teasers/tNN-<id>.html` at 1600 wide for the 16:10 composition and at 390 for the 4:5 crop, and `dist/teasers/index.html` for the teaser beside the other twelve. What to look for: the subject covers 45–70% of the frame; nothing essential is cut by the crop; the resting frame is complete on its own; every beat of the loop is visible; the controls work with pointer and keyboard; and the teaser still reads as itself at the wall's 416px tile.
+
+**Re-shoot what you changed, in the same commit.** `screens/` is a record of the built page, so a teaser that changed and a still that did not are a contradiction, and the committed PNG is what a reviewer opens first. A teaser edit means `python3 screenshot.py --teasers --only tNN`; it also means the three variants, because every variant carries all thirteen teasers and teaser 1 twice:
+
+```
+python3 build.py && python3 screenshot.py && python3 screenshot.py --fold
+```
+
+That is the whole of `screens/` and it is the safe default — the run is a few minutes and it cannot leave a stale file behind. A change under `partials/`, `tokens/` or `variants/` needs the same, since all three variants share them. Before committing, check that every PNG you expected to move has a newer timestamp than the file you edited.
 
 The coverage figures quoted in `ASSUMPTIONS.md` were measured with a scratch probe that is not part of this repo. To measure the same thing, open a one-teaser page and paste this into the console:
 
@@ -142,12 +158,14 @@ One caveat if you ever measure a hit target with a scripted pointer: Chromium's 
 
 ## Where decisions go
 
-`ASSUMPTIONS.md` is the log: every decision made where the brief was silent, every copy cut, every provisional token, newest at the bottom of each section. Anything changed in `teasers/`, `variants/`, `partials/` or `tokens/` should leave a line there saying what changed and why, with the measurement behind it. `DESIGN.md` holds the token plan and the rule-10 review; `SOURCES.md` maps every transcribed token to the file it came from and every teaser to the real component it is modelled on.
+`ASSUMPTIONS.md` is the log: every decision made where the brief was silent, every copy cut, every provisional token, newest at the bottom of each section. Anything changed in `teasers/`, `variants/`, `partials/` or `tokens/` leaves two things behind: a line in `ASSUMPTIONS.md` saying what changed and why, with the measurement behind it, and a re-captured `screens/` in the same commit (see Checking a teaser). Neither is optional; a change that ships with a stale still makes a fixed page look broken. `DESIGN.md` holds the token plan and the rule-10 review; `SOURCES.md` maps every transcribed token to the file it came from and every teaser to the real component it is modelled on.
 
 ## Deploy
 
 Cloudflare Pages, static, publish directory `dist/`. There is no build step on the host: run `python3 build.py` locally, commit `dist/`, and point Pages at it. Set `price`, `turnaround`, `stripe_url` and `contact_email` in `config.json` and rebuild before anything goes public. The form is mocked in v1 and posts nowhere; the `TODO` in `partials/form.html` marks where the POST goes later.
 
 ## Sources
+
+**Only `dist/` is published. The repository itself stays private:** `SOURCES.md` indexes four private codebases by file path and names sixty-odd client asset files, which is exactly the record that makes the token work auditable and exactly the record that should not be public.
 
 The reference repositories are read for token values, component anatomy and behavior only. Their locations live in `sources.local.json`, which is gitignored and never read by the build.

@@ -597,6 +597,11 @@
   --ckp-ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
+:root {
+
+  --ckp-recess: rgba(0, 0, 0, 0.2);
+}
+
 /* tokens/nrdi.css */
 :root {
 
@@ -930,6 +935,12 @@
   --ndg-garment-sage-inside: #d5cb95;
   --ndg-garment-sage-shade: #a4975f;
 }
+
+:root {
+
+  --nds-tortoise-blue-deep: #070D20;
+  --nds-tortoise-red-deep: #1C1312;
+}
 </style>
 <style>
 /* The page chrome (brief section 9). One family, no accent, radii 0 except the
@@ -987,7 +998,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 .button:hover { background: #ffffff; }
 
 /* Hero copy block, shared shape; variants place it. */
-.hero-copy { display: grid; gap: 24px; justify-items: start; }
+.hero-copy { display: grid; gap: 24px; justify-items: start; min-width: 0; }
 .hero-copy .button { margin-top: 8px; }
 
 /* How it works: a sequence, so the numbers are allowed. They sit inline at the
@@ -1117,8 +1128,8 @@ html:not(.js) .reel-ticks { display: none; }
     <a class="button" href="#send">Send us the idea</a>
   </div>
   <div class="hero-stage" data-play-delay="700">
-<!-- teaser id=fork-rail num=1 source=gtmos focal=61%,50% loop=9 interactive=no -->
-<div class="stage t01" data-teaser="fork-rail" style="--fx:0.61;--fy:0.50" role="img" aria-label="A call rail of ten glass segments with forks branching off it; one branch is lit, meets a red node, and a recovery arc loops back onto the rail">
+<!-- teaser id=fork-rail num=1 source=gtmos focal=66.5%,50% loop=9 interactive=no -->
+<div class="stage t01" data-teaser="fork-rail" style="--fx:0.665;--fy:0.50" role="img" aria-label="A call rail of ten glass segments with forks branching off it; one branch is lit, meets a red node, and a recovery arc loops back onto the rail">
   <div class="stage-frame">
     <div class="stage-scene">
       <div class="t01-rig">
@@ -1246,8 +1257,8 @@ html:not(.js) .reel-ticks { display: none; }
 
 <figure class="reel-card" data-teaser-num="1">
   <div class="reel-frame">
-<!-- teaser id=fork-rail num=1 source=gtmos focal=61%,50% loop=9 interactive=no -->
-<div class="stage t01" data-teaser="fork-rail" style="--fx:0.61;--fy:0.50" role="img" aria-label="A call rail of ten glass segments with forks branching off it; one branch is lit, meets a red node, and a recovery arc loops back onto the rail">
+<!-- teaser id=fork-rail num=1 source=gtmos focal=66.5%,50% loop=9 interactive=no -->
+<div class="stage t01" data-teaser="fork-rail" style="--fx:0.665;--fy:0.50" role="img" aria-label="A call rail of ten glass segments with forks branching off it; one branch is lit, meets a red node, and a recovery arc loops back onto the rail">
   <div class="stage-frame">
     <div class="stage-scene">
       <div class="t01-rig">
@@ -1503,7 +1514,25 @@ html:not(.js) .reel-ticks { display: none; }
    lifted over a neighbour, so no swatch can ever shadow the one beside it.
    The dot itself is the button, at its original size and centre, so the focus
    ring lands 2px off the visible disc. */
-.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(1.1 * var(--u)); --t03-dot: calc(2.6 * var(--u)); --t03-pitch: calc(3.7 * var(--u)); /* a fingertip, not a fraction of the frame: this floor is in px on purpose, and it clears 44 by a hair so sub-pixel snapping cannot take it under */ --t03-hit-h: max(45px, calc(3.9 * var(--u))); --t03-slop-x: calc((var(--t03-pitch) - var(--t03-dot)) / 2); --t03-slop-y: calc((var(--t03-hit-h) - var(--t03-dot)) / 2); }
+.t03 .t03-swatches { position: absolute; left: 0; right: 0; top: 83%; display: flex; justify-content: center; gap: calc(var(--t03-pitch) - var(--t03-dot)); --t03-dot: calc(2.6 * var(--u)); --t03-pitch: calc(3.7 * var(--u)); /* a fingertip, not a fraction of the frame: this floor is in px on purpose, and it clears 44 by a hair so sub-pixel snapping cannot take it under */ --t03-hit-h: max(45px, calc(3.9 * var(--u))); --t03-slop-x: calc((var(--t03-pitch) - var(--t03-dot)) / 2); --t03-slop-y: calc((var(--t03-hit-h) - var(--t03-dot)) / 2); }
+/* The pitch is the one number: the gap is whatever is left of it after the dot,
+   so the visible strip and the tiled hit boxes can never drift apart. On a phone
+   the 4:5 window is 50u wide and the strip was using only 37u of it, which left
+   nine targets 28.8px wide at 390. There the pitch opens to 5.4u — 48.6u of the
+   50u window, the widest that still keeps a margin — and carries the gap with
+   it, so the boxes go on tiling and every boundary stays on the midpoint between
+   two dots. Nine 44px targets cannot tile a 390px window at all (9 x 44 = 396),
+   so 5.4u is the ceiling, not a compromise short of one.
+
+   Both conditions are needed. The container query is the crop itself, and it is
+   what makes the wider strip a recomposition of the cropped frame rather than a
+   change to the 16:10 one. The viewport query is the touch floor: a 416px wall
+   tile on a 1440px desktop is under 640px too, so the container query alone
+   would spread that strip as well, and that tile is a mouse target at a size the
+   phone rule cannot rescue anyway. Small screen and cropped frame, or nothing. */
+@media (max-width: 639px) {
+  @container (max-width: 639px) { .t03 .t03-swatches { --t03-pitch: calc(5.4 * var(--u)); } }
+}
 .t03 .t03-sw { flex: 0 0 auto; position: relative; overflow: visible; width: var(--t03-dot); height: var(--t03-dot); margin: 0; padding: 0; border: 0; -webkit-appearance: none; appearance: none; border-radius: 50%; cursor: pointer; background: var(--sw-frame); box-shadow: 0 0 0 calc(0.0625 * var(--u)) rgba(255,255,255,0.25); transition: transform 200ms ease, box-shadow 200ms ease; }
 /* The slop is hung off the dot's own four edges rather than sized and centred,
    so each hit box is exactly the dot plus half a gap on each side however the
@@ -1524,16 +1553,72 @@ html:not(.js) .reel-ticks { display: none; }
     { name: "gloss black, silver mirror lens", frame: "#1C1C1C", lens: ["#B4B6BA", "#5A5C60"], kind: "gloss" },
     { name: "gloss black, amber lens", frame: "#1C1C1C", lens: ["#D5BB46", "#B99B2E"], kind: "gloss" },
     { name: "blue tortoise, ice cyan lens", frame: "#101C3C", lens: ["#83B8C6", "#5F98A8"], kind: "tortoise-blue" },
-    { name: "red tortoise, blackout lens", frame: "#3A2626", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
+    { name: "red tortoise, blackout lens", frame: "#403434", lens: ["#3A3A3A", "#262626"], kind: "tortoise-red" },
     { name: "matte black, blackout lens", frame: "#232323", lens: ["#3A3A3A", "#262626"], kind: "matte" },
     { name: "gloss black, pale blue-grey lens", frame: "#1C1C1C", lens: ["#9FB3BF", "#7C919E"], kind: "gloss" },
     { name: "graphite, blackout lens", frame: "#545454", lens: ["#3A3A3A", "#262626"], kind: "gloss" }
   ];
   var NEAR = "M 440 382 L 724 372 L 726 536 Q 724 566 696 576 L 522 586 Q 448 582 440 522 Z";
   var FAR = "M 792 372 L 924 378 Q 956 468 940 546 Q 932 566 906 568 L 812 562 Q 794 550 792 522 Z";
+  /* Tortoiseshell, not spots. One 232 x 104 tile of irregular blotches in two
+     tones over the sampled base: a light tone (the brand's sampled fleck) and a
+     deep one for the shadow inside the shell. Every blotch is filled with a
+     radial gradient in its own bounding box, so it fades out at its own edge
+     instead of cutting; sizes, angles and opacities all differ; and a blotch
+     that runs off one edge of the tile is redrawn on the opposite edge, so the
+     tile has no seam. The tile is long enough that the brow bar (526 units)
+     carries only just over two repeats, which is what kills the polka dot. */
+  var SHELL = [
+    /* x, y, rx, ry, rotation, opacity, tone: 0 light, 1 deep. Painted in order:
+       four wide washes that vary the ground, a dozen elongated patches, the deep
+       veining that threads between them, then four small light breaks on top.
+       Nothing is round and nothing stands alone — every shape overlaps two or
+       three others, which is what makes a shell instead of a row of spots. */
+    [30, 30, 54, 30, -12, 0.13, 0], [168, 20, 50, 28, 10, 0.12, 0],
+    [96, 88, 56, 29, -6, 0.12, 0], [222, 74, 46, 26, 16, 0.11, 0],
+    [14, 16, 40, 17, -22, 0.24, 0], [60, 34, 34, 14, 14, 0.22, 0],
+    [104, 12, 44, 16, -8, 0.26, 0], [150, 40, 38, 15, 20, 0.21, 0],
+    [196, 10, 32, 13, -16, 0.24, 0], [228, 44, 36, 14, 8, 0.22, 0],
+    [26, 62, 42, 16, 12, 0.25, 0], [78, 72, 30, 13, -18, 0.21, 0],
+    [124, 66, 40, 15, 22, 0.23, 0], [172, 80, 34, 14, -6, 0.20, 0],
+    [48, 96, 38, 15, 16, 0.22, 0], [204, 98, 30, 13, -20, 0.20, 0],
+    [42, 24, 30, 11, 18, 0.46, 1], [86, 46, 26, 10, -24, 0.42, 1],
+    [132, 26, 34, 12, 6, 0.48, 1], [178, 52, 28, 11, 22, 0.44, 1],
+    [218, 24, 24, 9, -14, 0.40, 1], [8, 44, 26, 10, 10, 0.45, 1],
+    [62, 84, 32, 12, -10, 0.46, 1], [110, 92, 24, 9, 20, 0.40, 1],
+    [156, 100, 30, 11, -18, 0.43, 1], [200, 74, 26, 10, 14, 0.41, 1],
+    [96, 4, 28, 10, -12, 0.38, 1], [20, 100, 26, 10, 8, 0.42, 1],
+    [186, 0, 22, 9, 16, 0.36, 1], [142, 82, 20, 8, -22, 0.38, 1],
+    [52, 50, 16, 7, -16, 0.32, 0], [164, 16, 14, 6, 20, 0.30, 0],
+    [108, 54, 18, 7, 8, 0.29, 0], [216, 60, 13, 6, -10, 0.28, 0]
+  ];
+  function shellPattern(id, base, fleck, deep) {
+    var W = 232, H = 104, e = "", i, kx, ky, p, m, x, y;
+    for (i = 0; i < SHELL.length; i++) {
+      p = SHELL[i];
+      m = Math.max(p[2], p[3]);
+      for (kx = -1; kx <= 1; kx++) {
+        for (ky = -1; ky <= 1; ky++) {
+          x = p[0] + kx * W; y = p[1] + ky * H;
+          if (x + m < 0 || x - m > W || y + m < 0 || y - m > H) continue;
+          e += "<ellipse cx='" + x + "' cy='" + y + "' rx='" + p[2] + "' ry='" + p[3] +
+               "' fill='url(#" + id + (p[6] ? "-shd" : "-shl") + ")' opacity='" + p[5] +
+               "' transform='rotate(" + p[4] + " " + x + " " + y + ")'/>";
+        }
+      }
+    }
+    return (
+      "<radialGradient id='" + id + "-shl'><stop offset='0' stop-color='" + fleck + "'/><stop offset='.52' stop-color='" + fleck + "' stop-opacity='.74'/><stop offset='1' stop-color='" + fleck + "' stop-opacity='0'/></radialGradient>" +
+      "<radialGradient id='" + id + "-shd'><stop offset='0' stop-color='" + deep + "'/><stop offset='.52' stop-color='" + deep + "' stop-opacity='.7'/><stop offset='1' stop-color='" + deep + "' stop-opacity='0'/></radialGradient>" +
+      "<pattern id='" + id + "-pat' patternUnits='userSpaceOnUse' width='" + W + "' height='" + H + "'>" +
+      "<rect width='" + W + "' height='" + H + "' fill='" + base + "'/>" + e + "</pattern>"
+    );
+  }
   function frameMarkup(uid, sw) {
-    var tort = sw.kind === "tortoise-blue" || sw.kind === "tortoise-red";
-    var fleck = sw.kind === "tortoise-blue" ? "#2C4A9A" : "#8A1E1E";
+    var blue = sw.kind === "tortoise-blue";
+    var tort = blue || sw.kind === "tortoise-red";
+    var fleck = blue ? "#3A55B0" : "#8A1E1E";
+    var deep = blue ? "#070D20" : "#1C1312";
     var frameFill = tort ? "url(#" + uid + "-pat)" : sw.frame;
     var rim = sw.kind === "matte" ? ".14" : ".3";
     return (
@@ -1541,7 +1626,7 @@ html:not(.js) .reel-ticks { display: none; }
       "<linearGradient id='" + uid + "-lens' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='" + sw.lens[0] + "'/><stop offset='1' stop-color='" + sw.lens[1] + "'/></linearGradient>" +
       "<linearGradient id='" + uid + "-spec' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#FFFFFF' stop-opacity='.3'/><stop offset='.28' stop-color='#FFFFFF' stop-opacity='.16'/><stop offset='.46' stop-color='#FFFFFF' stop-opacity='0'/><stop offset='1' stop-color='#000000' stop-opacity='.28'/></linearGradient>" +
       "<radialGradient id='" + uid + "-edge' cx='.5' cy='.5' r='.62'><stop offset='.55' stop-color='#000000' stop-opacity='0'/><stop offset='1' stop-color='#000000' stop-opacity='.42'/></radialGradient>" +
-      "<pattern id='" + uid + "-pat' patternUnits='userSpaceOnUse' width='46' height='38'><rect width='46' height='38' fill='" + sw.frame + "'/><ellipse cx='11' cy='9' rx='9' ry='6' fill='" + fleck + "' opacity='.75'/><ellipse cx='33' cy='24' rx='11' ry='7' fill='" + fleck + "' opacity='.6' transform='rotate(-20 33 24)'/><ellipse cx='6' cy='31' rx='6' ry='4' fill='" + fleck + "' opacity='.5'/></pattern>" +
+      (tort ? shellPattern(uid, sw.frame, fleck, deep) : "") +
       "<clipPath id='" + uid + "-clip'><path d='" + NEAR + "'/><path d='" + FAR + "'/></clipPath>" +
       "</defs>" +
       "<g class='t03-" + (sw.kind === "matte" ? "matte" : "gloss") + "'>" +
@@ -1936,8 +2021,8 @@ html:not(.js) .reel-ticks { display: none; }
 
 <figure class="reel-card" data-teaser-num="5">
   <div class="reel-frame">
-<!-- teaser id=signal-strip num=5 source=gtmos focal=38%,49% loop=9 interactive=no -->
-<div class="stage t05" data-teaser="signal-strip" style="--fx:0.38;--fy:0.49" role="img" aria-label="A row of seven phase chips over a thin waveform, lighting in order; one earlier chip is re-scored coral and the score numeral ticks up">
+<!-- teaser id=signal-strip num=5 source=gtmos focal=38%,48% loop=9 interactive=no -->
+<div class="stage t05" data-teaser="signal-strip" style="--fx:0.38;--fy:0.48" role="img" aria-label="A row of seven phase chips over a thin waveform, lighting in order; one earlier chip is re-scored coral and the score numeral ticks up">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t05-rig">
       <div class="t05-plane">
@@ -1956,11 +2041,15 @@ html:not(.js) .reel-ticks { display: none; }
   </div></div>
 </div>
 <style>
-/* the rig: perspective, then one tilted plane holding the head, the glass strip and the chip layer at three depths */
-.t05 .t05-rig { --u: calc(var(--sw) / 130); position: absolute; left: calc(15 * var(--u)); top: calc(14 * var(--u)); width: calc(80 * var(--u)); height: calc(40 * var(--u)); perspective: calc(var(--gtm-perspective-u) * var(--u)); perspective-origin: 38% 34%; }
+/* the rig: perspective, then one tilted plane holding the head, the glass strip and the chip layer at three depths.
+   --pad is the strip's inner gutter: the head, the waveform and the chip row all start on it, so the phone crop
+   (scene x 13%-63% at --fx .38) can cut the glass and the chip row at both edges with the head whole inside it */
+.t05 .t05-rig { --u: calc(var(--sw) / 111); --pad: calc(6 * var(--u)); position: absolute; left: calc(13.9 * var(--u)); top: calc(12.8 * var(--u)); width: calc(84 * var(--u)); height: calc(40 * var(--u)); perspective: calc(var(--gtm-perspective-u) * var(--u)); perspective-origin: 38% 34%; }
 .t05 .t05-plane { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--gtm-tilt-x)) rotateY(calc(-1 * var(--gtm-tilt-y))); }
 /* head: the mono score at the near-left corner, the account beside it */
-.t05 .t05-head { position: absolute; left: 0; top: 0; width: 100%; height: calc(10 * var(--u)); transform: translateZ(calc(0.6 * var(--u))); }
+/* the head rides the gutter, pulled back 1.33u: it sits on a shallower plane than the chip row, and the mono
+   numeral carries a left side bearing, so the correction lands the 7 ink-on-edge with the first chip */
+.t05 .t05-head { position: absolute; left: calc(var(--pad) - 1.33 * var(--u)); top: 0; width: calc(100% - 2 * var(--pad)); height: calc(10 * var(--u)); transform: translateZ(calc(0.6 * var(--u))); }
 .t05 .t05-num { position: absolute; left: 0; bottom: calc(0.5 * var(--u)); display: flex; height: 1em; overflow: hidden; font-family: var(--gtm-font-data); font-weight: var(--gtm-weight-data); font-size: calc(8.6 * var(--u)); line-height: 1; letter-spacing: -0.04em; color: var(--gtm-text); animation: t05-num var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
 .t05 .t05-col { display: block; will-change: transform; }
 .t05 .t05-col i { display: block; height: 1em; font-style: normal; }
@@ -1972,10 +2061,11 @@ html:not(.js) .reel-ticks { display: none; }
 /* the strip: one long glass panel, lit from its upper left, the waveform in its lower band */
 .t05 .t05-panel { position: absolute; left: 0; top: calc(12 * var(--u)); width: 100%; height: calc(27 * var(--u)); overflow: hidden; border-radius: calc(1 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--gtm-glass-border); background: radial-gradient(ellipse 58% 95% at 14% 0%, rgba(255, 255, 255, 0.12), transparent 62%), var(--gtm-glass-fill); box-shadow: var(--gtm-inner-highlight); -webkit-backdrop-filter: blur(var(--gtm-glass-blur)); backdrop-filter: blur(var(--gtm-glass-blur)); }
 @supports not (backdrop-filter: blur(1px)) { .t05 .t05-panel { background: radial-gradient(ellipse 58% 95% at 14% 0%, rgba(255, 255, 255, 0.12), transparent 62%), var(--gtm-glass-fallback); } }
-.t05 .t05-spec { position: absolute; top: -30%; left: calc(-30 * var(--u)); width: calc(30 * var(--u)); height: 160%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09) 44%, rgba(255, 255, 255, 0.045) 58%, transparent); transform: skewX(-22deg) translateX(calc(46 * var(--u))); will-change: transform; animation: t05-spec var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
-.t05 .t05-play { position: absolute; left: calc(2.5 * var(--u)); top: calc(1.2 * var(--u)); width: calc(0.125 * var(--u)); height: calc(24.6 * var(--u)); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0.55) 70%, transparent); opacity: 0; will-change: transform, opacity; animation: t05-play var(--gtm-loop-default) linear infinite; }
+/* skewX slants x only, so the sweep needs no vertical overshoot: the band is exactly the panel's height */
+.t05 .t05-spec { position: absolute; top: 0; left: calc(-30 * var(--u)); width: calc(30 * var(--u)); height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09) 44%, rgba(255, 255, 255, 0.045) 58%, transparent); transform: skewX(-22deg) translateX(calc(46 * var(--u))); will-change: transform; animation: t05-spec var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
+.t05 .t05-play { position: absolute; left: var(--pad); top: calc(1.2 * var(--u)); width: calc(0.125 * var(--u)); height: calc(24.6 * var(--u)); background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0.55) 70%, transparent); opacity: 0; will-change: transform, opacity; animation: t05-play var(--gtm-loop-default) linear infinite; }
 .t05 .t05-play::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(-1.4 * var(--u)); width: calc(2.9 * var(--u)); background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07) 50%, transparent); }
-.t05 .t05-wave { position: absolute; left: calc(2.5 * var(--u)); top: calc(12.5 * var(--u)); width: calc(75 * var(--u)); height: calc(12 * var(--u)); overflow: visible; }
+.t05 .t05-wave { position: absolute; left: var(--pad); top: calc(12.5 * var(--u)); width: calc(100% - 2 * var(--pad)); height: calc(12 * var(--u)); overflow: visible; }
 .t05 .t05-base { stroke: var(--gtm-hairline); stroke-width: 0.8; }
 .t05 .t05-ghost { fill: none; stroke: var(--gtm-border); stroke-width: 1.2; stroke-linejoin: round; }
 .t05 .t05-line { fill: none; stroke: var(--gtm-text-2); stroke-opacity: 0.78; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: butt; stroke-dasharray: 1; stroke-dashoffset: 0; animation: t05-draw var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
@@ -1983,7 +2073,7 @@ html:not(.js) .reel-ticks { display: none; }
 .t05 .t05-hotglow { fill: none; stroke: var(--gtm-accent); stroke-opacity: 0.2; stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
 .t05 .t05-hotline { fill: none; stroke: var(--gtm-accent); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
 /* the seven chips: a layer lifted off the strip; each chip is three faces (unlit, lit grey, coral) crossfaded by opacity */
-.t05 .t05-chips { position: absolute; left: calc(2.5 * var(--u)); top: calc(14.5 * var(--u)); width: calc(75 * var(--u)); height: calc(8 * var(--u)); display: grid; grid-template-columns: repeat(7, 1fr); gap: calc(0.6 * var(--u)); transform-style: preserve-3d; transform: translateZ(calc(1.2 * var(--u))); }
+.t05 .t05-chips { position: absolute; left: var(--pad); top: calc(14.5 * var(--u)); width: calc(100% - 2 * var(--pad)); height: calc(8 * var(--u)); display: grid; grid-template-columns: repeat(7, 1fr); gap: calc(0.6 * var(--u)); transform-style: preserve-3d; transform: translateZ(calc(1.2 * var(--u))); }
 .t05 .t05-chip { position: relative; }
 .t05 .t05-c3 { transform: translateZ(calc(1.2 * var(--u))); will-change: transform; animation: t05-lift var(--gtm-loop-default) var(--gtm-loop-ease) infinite; }
 .t05 .t05-face { position: absolute; inset: 0; border-radius: calc(0.625 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--gtm-border); border-left-width: calc(0.1875 * var(--u)); border-left-color: rgba(255, 255, 255, 0.14); background: var(--gtm-fill-faint); }
@@ -2001,7 +2091,7 @@ html:not(.js) .reel-ticks { display: none; }
 /* the loop, 9s. 0–7% rest; 7–17% the read withdraws; 21–79% the trace draws left to right and each chip lights as the head passes;
    at the sixth chip the score brightens, then the third chip flips coral and the numeral rolls 58 to 74; the seventh lights; 81–100% rest again */
 @keyframes t05-draw { 0%, 7% { stroke-dashoffset: 0; } 17%, 21% { stroke-dashoffset: 1; animation-timing-function: linear; } 79%, 100% { stroke-dashoffset: 0; } }
-@keyframes t05-play { 0%, 19% { opacity: 0; transform: translateX(0); animation-timing-function: linear; } 21% { opacity: 1; transform: translateX(0); animation-timing-function: linear; } 79% { opacity: 1; transform: translateX(calc(75 * var(--u))); animation-timing-function: linear; } 81%, 100% { opacity: 0; transform: translateX(calc(75 * var(--u))); } }
+@keyframes t05-play { 0%, 19% { opacity: 0; transform: translateX(0); animation-timing-function: linear; } 21% { opacity: 1; transform: translateX(0); animation-timing-function: linear; } 79% { opacity: 1; transform: translateX(calc(72 * var(--u))); animation-timing-function: linear; } 81%, 100% { opacity: 0; transform: translateX(calc(72 * var(--u))); } }
 @keyframes t05-spec { 0%, 7% { transform: skewX(-22deg) translateX(calc(46 * var(--u))); } 17% { transform: skewX(-22deg) translateX(calc(132 * var(--u))); animation-timing-function: steps(1, end); } 21% { transform: skewX(-22deg) translateX(calc(-52 * var(--u))); animation-timing-function: linear; } 100% { transform: skewX(-22deg) translateX(calc(46 * var(--u))); } }
 @keyframes t05-num { 0%, 7% { opacity: 1; } 15% { opacity: 0.1; } 21%, 66.5% { opacity: 0.3; } 70%, 100% { opacity: 1; } }
 @keyframes t05-tens { 0%, 8% { transform: translateY(-2em); } 15%, 71.5% { transform: translateY(0); } 77.5%, 100% { transform: translateY(-2em); } }
@@ -2029,7 +2119,9 @@ html:not(.js) .reel-ticks { display: none; }
   var FILL = [58, 42, 34, 66, 50, 76, 60];
   var HOT = 2, HOT_FILL = 92;
   var W = 750, MID = 60, STEP = 1.5;
-  var CHIP = 108, CHIP_W = 102; /* chip pitch and width in waveform units (10.8u and 10.2u of a 75u row) */
+  /* the waveform's viewBox spans the same row the chips do, so the chip pitch is read off the row itself */
+  var COLS = 7, ROW_U = 72, GAP_U = 0.6, COL_U = (ROW_U - GAP_U * (COLS - 1)) / COLS;
+  var CHIP = (COL_U + GAP_U) * (W / ROW_U), CHIP_W = COL_U * (W / ROW_U);
   var hotX0 = HOT * CHIP, hotX1 = hotX0 + CHIP_W, hotC = (hotX0 + hotX1) / 2;
   var NS = "http://www.w3.org/2000/svg";
   function y(x) {
@@ -2846,7 +2938,7 @@ html:not(.js) .reel-ticks { display: none; }
       <div class="t11-tag">
         <div class="t11-face t11-front">
           <span class="t11-hole"></span>
-          <span class="t11-script">Actually dope</span>
+          <span class="t11-script">Made to last</span>
           <span class="t11-tmark">digs</span>
         </div>
         <div class="t11-face t11-back">
@@ -2933,105 +3025,187 @@ html:not(.js) .reel-ticks { display: none; }
 <figure class="reel-card" data-teaser-num="12">
   <div class="reel-frame">
 <!-- teaser id=task-tiers num=12 source=cockpit focal=50%,50% loop=7 interactive=no -->
-<div class="stage t12" data-teaser="task-tiers" style="--fx:0.50;--fy:0.50" role="img" aria-label="Three engineered rails stacked as tiers, each with its tier name engraved at its head and five task chips resting on them; one chip is caught mid-drop, falls from the top rail to the bottom, the rails rebalance, then it climbs back">
+<div class="stage t12" data-teaser="task-tiers" style="--fx:0.50;--fy:0.50" role="img" aria-label="One graphite instrument plate lit from the upper left, machined into three lanes for the three heat levels. Each lane carries a lamp, its tier name, a slot count, its task chips, and an etched scale with a load bar and a cap mark. The top lane is one over its cap and a chip hangs caught mid-drop beneath it; the chip falls to the bottom lane, both loads and counts step across, the lane above closes ranks, then the chip climbs back.">
   <div class="stage-frame"><div class="stage-scene">
-    <div class="t12-rails"></div>
+    <div class="t12-plate"><div class="t12-well"></div></div>
   </div></div>
 </div>
 <style>
-/* the slot grid, in scene units, so the rails and the choreography cannot drift apart.
-   The rails run 16 to 84 and bleed past both edges of the 4:5 crop, which shows scene 25 to 75.
-   Everything that has to be READ sits inside that band: the engraved tier name and the first chip share a 29.5 datum,
-   the three chip slots run 29.5 / 45.5 / 61.5, one 16u step apart, and the longest run of chips
-   ends at 70.7, so the band keeps 4.5u clear on the left and 4.1u on the right. At full width
-   the name still sits in the head of its rail, with the air past the last chip matching the air before it.
-   Every move in the loop is exactly one step sideways or two tiers (35u) down. */
-.t12 { --t12-step: 16; --t12-tier: 35; }
-/* three rails, graphite, flat, each its own shelf: a two-tone bevel top and bottom, a sunk lip along
-   the foot with a tick ladder etched in it, and the tier's name engraved at the head. The ladder is
-   phased so a major tick falls under every chip slot: the ticks start 2.2u into the rail (1.2u of foot
-   plus 1u of its own inset) and the first slot sits 13.5u in, so the majors are offset 11.3u and step
-   with the slots, and the minors carry the same phase eight to a step. The stage stays black between them */
-.t12 .t12-rails { position: absolute; left: calc(16 * var(--u)); top: calc(7 * var(--u)); width: calc(68 * var(--u)); height: calc(48.5 * var(--u)); display: grid; grid-template-rows: repeat(3, 1fr); gap: calc(4 * var(--u)); }
-.t12 .t12-rail { position: relative; border-radius: calc(0.45 * var(--u)); background: linear-gradient(180deg, var(--ckp-sheen), transparent 45%), var(--ckp-panel); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-sunk); }
-.t12 .t12-foot { position: absolute; left: calc(1.2 * var(--u)); right: calc(1.2 * var(--u)); bottom: calc(1.1 * var(--u)); height: calc(1.6 * var(--u)); border-radius: calc(0.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
-.t12 .t12-ticks { position: absolute; left: calc(1 * var(--u)); right: calc(1 * var(--u)); top: calc(0.35 * var(--u)); bottom: calc(0.35 * var(--u)); background-image: repeating-linear-gradient(90deg, var(--ckp-tick-major) 0, var(--ckp-tick-major) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(16 * var(--u))), repeating-linear-gradient(90deg, var(--ckp-tick-minor) 0, var(--ckp-tick-minor) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(2 * var(--u))); background-size: 100% 100%, 100% 55%; background-position: calc(11.3 * var(--u)) 0, calc(1.3 * var(--u)) 100%; background-repeat: no-repeat; }
-/* the tier name: engraved into the head of the rail, in quiet ink, above the chips and on the same
-   left datum as the first slot and the ladder's first major tick, so the head of the rail reads as
-   one column and the crop, which starts 4.5u further left, never cuts the name */
-.t12 .t12-lab { position: absolute; left: calc(13.5 * var(--u)); top: calc(1.3 * var(--u)); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(0.95 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-quiet); }
-/* the chips rest on the lip: the evidence-chip grammar, mono at 0.1em, a hairline at 22%, a tick at the left in the tier's strength */
-.t12 .t12-chip { position: absolute; z-index: 1; top: calc(5.6 * var(--u)); height: calc(5.2 * var(--u)); display: flex; align-items: center; gap: calc(0.95 * var(--u)); padding: 0 calc(1.35 * var(--u)) 0 calc(1.15 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-fg-quiet); background: var(--ckp-ground); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); color: var(--ckp-fg-soft); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.5 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
-.t12 .t12-tick { position: relative; flex: none; width: calc(0.4 * var(--u)); height: calc(1.4 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
+/* One plate, one key light, three lanes machined into it.
+   Scene units: the plate runs 16 to 84 and bleeds nine units past both edges of the 4:5 crop,
+   which shows scene 25 to 75. The well inside it runs 18.5 to 81.5, so its lanes, scales,
+   tick ladders and load bars bleed past the crop too. Everything that has to be READ sits
+   inside 27 to 74: the head block (lamp, tier name, slot count) on the 27 datum, the three
+   chip slots at scene 36.5 / 50.3 / 64.1 one 13.8u step apart, and the longest run of chips
+   ending at 72.7. Every move in the loop is one step sideways or two lanes (27u) down. */
+.t12 { --t12-step: 13.8; --t12-tier: 27; }
+/* the plate: graphite ground under one soft key from the upper left, falling off into the
+   lower right, with a two-tone bezel and an outer keyline. This is the subject; the stage
+   stays black around it and nothing else is lit */
+.t12 .t12-plate { position: absolute; left: calc(16 * var(--u)); top: calc(8.25 * var(--u)); width: calc(68 * var(--u)); height: calc(46 * var(--u)); border-radius: calc(0.75 * var(--u)); background: radial-gradient(92% 128% at 18% -10%, var(--ckp-hair-strong), var(--ckp-hair) 24%, var(--ckp-sheen) 46%, rgba(255, 255, 255, 0) 70%), linear-gradient(150deg, rgba(0, 0, 0, 0) 16%, var(--ckp-recess) 84%), var(--ckp-ground); box-shadow: inset calc(0.0625 * var(--u)) calc(0.0625 * var(--u)) 0 0 var(--ckp-bevel-light), inset calc(-0.0625 * var(--u)) calc(-0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-bevel-dark); }
+.t12 .t12-well { position: absolute; left: calc(2.5 * var(--u)); right: calc(2.5 * var(--u)); top: calc(2.75 * var(--u)); height: calc(40.5 * var(--u)); }
+/* the three lanes, cut into the one face. The lane the chip leaves and the lane it lands in
+   are level with the plate and catch the key; the middle lane, which it only passes through,
+   is shelved a shallow step down, so the divisions read as machined edges, not as slabs */
+.t12 .t12-lane { position: absolute; left: 0; right: 0; height: calc(13.5 * var(--u)); }
+.t12 .t12-l1 { top: 0; box-shadow: inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark); }
+.t12 .t12-l2 { top: calc(13.5 * var(--u)); background: var(--ckp-recess); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-hair); }
+.t12 .t12-l3 { top: calc(27 * var(--u)); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-hair-strong); }
+/* the chase: one slot-wide channel cut straight down the plate through all three lanes, on
+   the slot the chip travels in. Its left wall is in shadow and its right wall catches the
+   key, and every scale crosses over it, so it reads as machined into the same face */
+.t12 .t12-track { position: absolute; left: calc(31.8 * var(--u)); width: calc(13.8 * var(--u)); top: 0; bottom: 0; box-shadow: inset calc(0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), inset calc(-0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), calc(-0.0625 * var(--u)) 0 0 var(--ckp-hair), calc(0.0625 * var(--u)) 0 0 var(--ckp-hair); }
+/* one hairline dropped the full height of the well between the head column and the chip
+   field. It crosses all three lanes, so the plate reads as a single machined face with rows
+   cut into it rather than as three separate shelves */
+.t12 .t12-spine { position: absolute; left: calc(15.8 * var(--u)); top: 0; bottom: 0; width: calc(0.0625 * var(--u)); background: var(--ckp-bevel-dark); box-shadow: calc(0.0625 * var(--u)) 0 0 var(--ckp-hair); }
+/* the head block: the lane's lamp, its name engraved in quiet ink, and its slot count. It
+   sits on the 27 datum so the crop, which starts two units further left, never cuts it */
+.t12 .t12-head { position: absolute; left: calc(8.5 * var(--u)); top: calc(1.4 * var(--u)); height: calc(5.5 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: calc(0.65 * var(--u)); }
+.t12 .t12-lamp { display: flex; gap: calc(0.3 * var(--u)); }
+.t12 .t12-lamp i { display: block; width: calc(1 * var(--u)); height: calc(0.55 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-fg-quiet); }
+.t12 .t12-lamp i.t12-on { background: var(--ckp-signal); box-shadow: 0 0 calc(0.7 * var(--u)) var(--ckp-signal-halo); }
+.t12 .t12-lamp i.t12-mid { background: var(--ckp-signal-half); }
+.t12 .t12-name { font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.1 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-faint); }
+.t12 .t12-l1 .t12-name { color: var(--ckp-fg-soft); }
+/* the slot count, tabular: over its cap it reads in the warm signal, level with it in quiet ink */
+.t12 .t12-count { display: grid; font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.45 * var(--u)); line-height: 1; font-variant-numeric: var(--ckp-digits-variant); color: var(--ckp-fg-faint); }
+.t12 .t12-count > span { grid-area: 1 / 1; }
+.t12 .t12-over { color: var(--ckp-signal); }
+/* the scale along the foot of every lane: a sunk channel with a two-tone ladder etched in it,
+   a major under each slot, eight minors to the step. The cap mark stands proud of the channel
+   at the third slot. The load bar runs a slot-width per chip, and the only part of it that
+   lights is the length past the cap */
+.t12 .t12-groove { position: absolute; left: 0; right: 0; top: calc(8.5 * var(--u)); height: calc(3.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-hair); }
+.t12 .t12-ticks { position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, transparent 0 calc(4.2 * var(--u)), var(--ckp-tick-minor) calc(4.2 * var(--u)) calc(4.325 * var(--u)), transparent calc(4.325 * var(--u)) calc(13.8 * var(--u))), repeating-linear-gradient(90deg, transparent 0 calc(0.75 * var(--u)), var(--ckp-hair-strong) calc(0.75 * var(--u)) calc(0.8125 * var(--u)), transparent calc(0.8125 * var(--u)) calc(1.725 * var(--u))); background-size: 100% 55%, 100% 29%; background-position: 0 0, 0 0; background-repeat: no-repeat; }
+/* a post standing at every slot, rising out of the scale to the foot of a chip, so a slot
+   with nothing in it reads as a seat waiting rather than as blank plate */
+.t12 .t12-posts { position: absolute; left: 0; right: 0; top: calc(6.8 * var(--u)); height: calc(1.4 * var(--u)); background-image: repeating-linear-gradient(90deg, transparent 0 calc(4.2 * var(--u)), var(--ckp-hair-strong) calc(4.2 * var(--u)) calc(4.325 * var(--u)), transparent calc(4.325 * var(--u)) calc(13.8 * var(--u))), linear-gradient(180deg, var(--ckp-hair) 0 calc(0.0625 * var(--u)), rgba(255, 255, 255, 0) calc(0.0625 * var(--u))); }
+.t12 .t12-cap { position: absolute; left: calc(45.6 * var(--u)); top: calc(7.9 * var(--u)); width: calc(0.125 * var(--u)); height: calc(4.4 * var(--u)); background: var(--ckp-fg-soft); }
+.t12 .t12-bar { position: absolute; left: calc(18 * var(--u)); width: calc(41.4 * var(--u)); bottom: calc(0.45 * var(--u)); height: calc(0.6 * var(--u)); background: var(--ckp-fg-faint); transform-origin: left center; transform: scaleX(0.3333); }
+.t12 .t12-l1 .t12-bar { transform: scaleX(1); }
+.t12 .t12-l2 .t12-bar { background: var(--ckp-fg-quiet); }
+.t12 .t12-spill { position: absolute; left: calc(45.6 * var(--u)); width: calc(13.8 * var(--u)); bottom: calc(0.45 * var(--u)); height: calc(0.6 * var(--u)); background: var(--ckp-signal); box-shadow: 0 0 calc(0.9 * var(--u)) var(--ckp-signal-halo); transform-origin: left center; }
+/* the chips, in the evidence-chip grammar: mono at 0.1em, a hairline border, a snug height,
+   a tick at the left in the lane's strength. They sit in the well rather than in a lane, so
+   the one that moves can cross from the top lane to the bottom one */
+.t12 .t12-chip { position: absolute; z-index: 1; height: calc(4.5 * var(--u)); display: flex; align-items: center; gap: calc(0.72 * var(--u)); padding: 0 calc(1 * var(--u)) 0 calc(0.85 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-hair-strong); color: var(--ckp-fg-faint); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.6 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
+.t12 .t12-c1 { border-color: var(--ckp-fg-quiet); color: var(--ckp-fg-soft); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
+.t12 .t12-tick { position: relative; flex: none; width: calc(0.42 * var(--u)); height: calc(1.5 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
 .t12 .t12-tick i { position: absolute; inset: 0; border-radius: inherit; display: block; }
-.t12 .t12-tick .t12-full { background: var(--ckp-signal); box-shadow: 0 0 calc(0.8 * var(--u)) var(--ckp-signal-halo); }
-.t12 .t12-tick .t12-half { background: var(--ckp-signal-half); }
-.t12 .t12-l1 .t12-chip { color: var(--ckp-fg); }
-.t12 .t12-l3 .t12-chip { color: var(--ckp-fg-faint); }
-/* the one that moves: caught half a step out of its slot and straddling the gap between the first
-   two rails at rest, it lands two tiers lower with the register spring, its neighbours close ranks,
-   then it climbs back */
-.t12 .t12-drop { z-index: 2; transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; will-change: transform, opacity; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
-.t12 .t12-drop .t12-full { opacity: 0.55; animation: t12-tick-full var(--ckp-loop-default) linear infinite; }
-.t12 .t12-drop .t12-half { opacity: 1; animation: t12-tick-half var(--ckp-loop-default) linear infinite; }
-.t12 .t12-drop .t12-full, .t12 .t12-drop .t12-half { will-change: opacity; }
-.t12 .t12-closes { will-change: transform; animation: t12-close var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
-.t12 .t12-yields { will-change: transform; animation: t12-yield var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
-/* the loop, 7s. 0–6% held mid-drop; 6–20% the fall, the 160ms spring on landing (the tier below
-   has already yielded by 19%, so it lands on an open slot); 20–56% at rest on the bottom rail;
-   56–60% it lifts; 60–82% the climb back to its slot, which reopened at 74%; 82–90% held there;
-   90–100% it lets go again */
+.t12 .t12-full { background: var(--ckp-signal); }
+.t12 .t12-half { background: var(--ckp-signal-half); }
+/* the one that moves: a solid object lifted off the plate, the brightest thing in the frame,
+   caught two fifths of the way down at rest. It lands on the open seat below with the
+   register spring, the lane above closes ranks behind it, then it climbs back and the rank
+   reopens for it */
+.t12 .t12-drop { z-index: 2; background: var(--ckp-panel); border-color: var(--ckp-fg-faint); color: var(--ckp-fg); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), 0 calc(0.6 * var(--u)) calc(1.4 * var(--u)) var(--ckp-bevel-dark); transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); will-change: transform; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t12 .t12-drop .t12-tick { box-shadow: 0 0 calc(0.9 * var(--u)) var(--ckp-signal-halo); }
+.t12 .t12-drop .t12-full { will-change: opacity; animation: t12-strength var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t12 .t12-shift { will-change: transform; animation: t12-shift var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l1 .t12-bar { will-change: transform; animation: t12-bar1 var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l1 .t12-spill { will-change: transform; animation: t12-spill var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l3 .t12-bar { will-change: transform; animation: t12-bar3 var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-was { will-change: opacity; animation: t12-was var(--ckp-loop-default) linear infinite; }
+.t12 .t12-now { opacity: 0; will-change: opacity; animation: t12-now var(--ckp-loop-default) linear infinite; }
+/* the loop, 7s. 0-6% held mid-drop, one over the cap on the lane above it; 6-20% the fall,
+   then the 160ms register spring settles it onto the open seat; 20-22.9% the 200ms rebalance,
+   both loads and both counts stepping across together; 21-23.9% the lane above closes ranks;
+   25-56% at rest; 56-60% it lifts and 58-60.9% the rank reopens; 60-80% the climb back, the
+   loads and counts stepping back as it arrives; 82-90% held in its slot; 90-100% it lets go
+   again and the frame returns to rest */
 @keyframes t12-drop {
-  0%, 6% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
-  20% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) + 0.4) * var(--u))) rotate(0deg); opacity: 0.62; animation-timing-function: var(--ckp-ease-spring); }
-  22%, 56% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc(var(--t12-tier) * var(--u))) rotate(0deg); opacity: 0.62; }
-  60% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) - 0.8) * var(--u))) rotate(0deg); opacity: 0.8; animation-timing-function: var(--ckp-loop-ease); }
-  82%, 90% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
-  100% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
+  0%, 6% { transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); }
+  20% { transform: translate(0, calc((var(--t12-tier) - 0.7) * var(--u))) rotate(0deg); animation-timing-function: var(--ckp-ease-spring); }
+  22.3%, 56% { transform: translate(0, calc(var(--t12-tier) * var(--u))) rotate(0deg); }
+  60% { transform: translate(0, calc((var(--t12-tier) - 1.1) * var(--u))) rotate(0deg); animation-timing-function: var(--ckp-loop-ease); }
+  80%, 90% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); }
 }
-@keyframes t12-tick-full { 0%, 6% { opacity: 0.55; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 1; } 100% { opacity: 0.55; } }
-@keyframes t12-tick-half { 0%, 6% { opacity: 1; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes t12-close { 0%, 10% { transform: translateX(0); } 21%, 62% { transform: translateX(calc(-1 * var(--t12-step) * var(--u))); } 74%, 100% { transform: translateX(0); } }
-@keyframes t12-yield { 0%, 8% { transform: translateX(0); } 19%, 70% { transform: translateX(calc(var(--t12-step) * var(--u))); } 82%, 100% { transform: translateX(0); } }
+@keyframes t12-strength { 0%, 19% { opacity: 1; } 22%, 58% { opacity: 0; } 61%, 100% { opacity: 1; } }
+@keyframes t12-shift { 0%, 21% { transform: translateX(0); } 23.9%, 58% { transform: translateX(calc(-1 * var(--t12-step) * var(--u))); } 60.9%, 100% { transform: translateX(0); } }
+@keyframes t12-bar1 { 0%, 20% { transform: scaleX(1); } 22.9%, 78% { transform: scaleX(0.6667); } 80.9%, 100% { transform: scaleX(1); } }
+@keyframes t12-spill { 0%, 20% { transform: scaleX(1); } 22.9%, 78% { transform: scaleX(0); } 80.9%, 100% { transform: scaleX(1); } }
+@keyframes t12-bar3 { 0%, 20% { transform: scaleX(0.3333); } 22.9%, 78% { transform: scaleX(0.6667); } 80.9%, 100% { transform: scaleX(0.3333); } }
+@keyframes t12-was { 0%, 20% { opacity: 1; } 21.5%, 78.5% { opacity: 0; } 80%, 100% { opacity: 1; } }
+@keyframes t12-now { 0%, 20% { opacity: 0; } 21.5%, 78.5% { opacity: 1; } 80%, 100% { opacity: 0; } }
 </style>
 <script>
 (function () {
-  /* three rails, five invented moves; the chip's slot is its x inside the rail, in scene units, and its rail sets the tick strength */
-  var RAILS = [["Today", "full"], ["This week", "half"], ["Later", "none"]];
-  var SLOT = [13.5, 29.5, 45.5];
+  /* the three heat levels, their lamp strength, and the slot count each reads before and
+     after the drop. The cap is two: the top lane holds three, which is why its third sinks */
+  var LANES = [
+    ["Today", "full", 3, "3/2", "2/2"],
+    ["This week", "half", 2, "1/2", "1/2"],
+    ["Later", "none", 0, "1/2", "2/2"]
+  ];
+  var SLOT = [18, 31.8, 45.6];
+  var LANE_H = 13.5;
+  /* lane, slot, label, role */
   var CHIPS = [
     [0, 0, "Call back"],
     [0, 1, "Send deck", "drop"],
-    [0, 2, "Recap", "closes"],
+    [0, 2, "Recap", "shift"],
     [1, 0, "Follow up"],
-    [2, 0, "Old quote", "yields"]
+    [2, 0, "Old quote"]
   ];
+  function u(n) { return "calc(" + n + " * var(--u))"; }
+  function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+  function lamp(strength, lit) {
+    var w = el("span", "t12-lamp");
+    for (var i = 0; i < 3; i++) {
+      var seg = el("i");
+      if (i < lit) seg.className = strength === "full" ? "t12-on" : "t12-mid";
+      w.appendChild(seg);
+    }
+    return w;
+  }
+  function head(lane) {
+    var h = el("span", "t12-head");
+    h.appendChild(lamp(lane[1], lane[2]));
+    var n = el("span", "t12-name"); n.textContent = lane[0]; h.appendChild(n);
+    var c = el("span", "t12-count");
+    var a = el("span"); a.textContent = lane[3];
+    if (lane[3] === lane[4]) { c.appendChild(a); }
+    else {
+      a.className = "t12-was" + (lane[3] === "3/2" ? " t12-over" : "");
+      var b = el("span", "t12-now"); b.textContent = lane[4];
+      c.appendChild(a); c.appendChild(b);
+    }
+    h.appendChild(c);
+    return h;
+  }
   function chip(spec, strength) {
-    var c = document.createElement("span");
-    c.className = "t12-chip" + (spec[3] ? " t12-" + spec[3] : "");
-    c.style.left = "calc(" + SLOT[spec[1]] + " * var(--u))";
-    var t = document.createElement("span"); t.className = "t12-tick";
-    var f = document.createElement("i"); f.className = "t12-full"; if (strength !== "full" && spec[3] !== "drop") f.style.opacity = "0";
-    var h = document.createElement("i"); h.className = "t12-half"; if (strength !== "half" && spec[3] !== "drop") h.style.opacity = "0";
-    t.appendChild(f); t.appendChild(h);
-    c.appendChild(t); c.appendChild(document.createTextNode(spec[2]));
+    var c = el("span", "t12-chip t12-c" + (spec[0] + 1) + (spec[3] ? " t12-" + spec[3] : ""));
+    c.style.left = u(SLOT[spec[1]]);
+    c.style.top = u(spec[0] * LANE_H + 1.9);
+    var t = el("span", "t12-tick");
+    var s = spec[3] === "drop" ? "full" : strength;
+    if (s !== "none") t.appendChild(el("i", s === "full" ? "t12-full" : "t12-half"));
+    c.appendChild(t);
+    c.appendChild(document.createTextNode(spec[2]));
     return c;
   }
   var roots = document.querySelectorAll(".stage.t12");
   Array.prototype.forEach.call(roots, function (root) {
     if (root.dataset.ready) return;
     root.dataset.ready = "1";
-    var rails = root.querySelector(".t12-rails");
-    RAILS.forEach(function (l, i) {
-      var rail = document.createElement("div"); rail.className = "t12-rail t12-l" + (i + 1);
-      var foot = document.createElement("span"); foot.className = "t12-foot";
-      var ticks = document.createElement("span"); ticks.className = "t12-ticks";
-      foot.appendChild(ticks);
-      var lab = document.createElement("span"); lab.className = "t12-lab"; lab.textContent = l[0];
-      rail.appendChild(foot); rail.appendChild(lab);
-      CHIPS.forEach(function (spec) { if (spec[0] === i) rail.appendChild(chip(spec, l[1])); });
-      rails.appendChild(rail);
+    var well = root.querySelector(".t12-well");
+    LANES.forEach(function (lane, i) {
+      var row = el("div", "t12-lane t12-l" + (i + 1));
+      row.appendChild(el("span", "t12-track"));
+      var groove = el("span", "t12-groove");
+      groove.appendChild(el("span", "t12-ticks"));
+      groove.appendChild(el("span", "t12-bar"));
+      if (i === 0) groove.appendChild(el("span", "t12-spill"));
+      row.appendChild(groove);
+      row.appendChild(el("span", "t12-posts"));
+      row.appendChild(el("span", "t12-cap"));
+      row.appendChild(head(lane));
+      well.appendChild(row);
     });
+    well.appendChild(el("span", "t12-spine"));
+    CHIPS.forEach(function (spec) { well.appendChild(chip(spec, LANES[spec[0]][1])); });
     /* the drop is CSS; the runtime's is-playing class starts and pauses it */
   });
 })();

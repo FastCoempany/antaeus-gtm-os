@@ -596,6 +596,11 @@
   --ckp-ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
+:root {
+
+  --ckp-recess: rgba(0, 0, 0, 0.2);
+}
+
 /* tokens/nrdi.css */
 :root {
 
@@ -929,6 +934,12 @@
   --ndg-garment-sage-inside: #d5cb95;
   --ndg-garment-sage-shade: #a4975f;
 }
+
+:root {
+
+  --nds-tortoise-blue-deep: #070D20;
+  --nds-tortoise-red-deep: #1C1312;
+}
 </style>
 <style>
 html,body{margin:0;background:#000}
@@ -937,105 +948,187 @@ html,body{margin:0;background:#000}
 </head>
 <body>
 <div class="single"><!-- teaser id=task-tiers num=12 source=cockpit focal=50%,50% loop=7 interactive=no -->
-<div class="stage t12" data-teaser="task-tiers" style="--fx:0.50;--fy:0.50" role="img" aria-label="Three engineered rails stacked as tiers, each with its tier name engraved at its head and five task chips resting on them; one chip is caught mid-drop, falls from the top rail to the bottom, the rails rebalance, then it climbs back">
+<div class="stage t12" data-teaser="task-tiers" style="--fx:0.50;--fy:0.50" role="img" aria-label="One graphite instrument plate lit from the upper left, machined into three lanes for the three heat levels. Each lane carries a lamp, its tier name, a slot count, its task chips, and an etched scale with a load bar and a cap mark. The top lane is one over its cap and a chip hangs caught mid-drop beneath it; the chip falls to the bottom lane, both loads and counts step across, the lane above closes ranks, then the chip climbs back.">
   <div class="stage-frame"><div class="stage-scene">
-    <div class="t12-rails"></div>
+    <div class="t12-plate"><div class="t12-well"></div></div>
   </div></div>
 </div>
 <style>
-/* the slot grid, in scene units, so the rails and the choreography cannot drift apart.
-   The rails run 16 to 84 and bleed past both edges of the 4:5 crop, which shows scene 25 to 75.
-   Everything that has to be READ sits inside that band: the engraved tier name and the first chip share a 29.5 datum,
-   the three chip slots run 29.5 / 45.5 / 61.5, one 16u step apart, and the longest run of chips
-   ends at 70.7, so the band keeps 4.5u clear on the left and 4.1u on the right. At full width
-   the name still sits in the head of its rail, with the air past the last chip matching the air before it.
-   Every move in the loop is exactly one step sideways or two tiers (35u) down. */
-.t12 { --t12-step: 16; --t12-tier: 35; }
-/* three rails, graphite, flat, each its own shelf: a two-tone bevel top and bottom, a sunk lip along
-   the foot with a tick ladder etched in it, and the tier's name engraved at the head. The ladder is
-   phased so a major tick falls under every chip slot: the ticks start 2.2u into the rail (1.2u of foot
-   plus 1u of its own inset) and the first slot sits 13.5u in, so the majors are offset 11.3u and step
-   with the slots, and the minors carry the same phase eight to a step. The stage stays black between them */
-.t12 .t12-rails { position: absolute; left: calc(16 * var(--u)); top: calc(7 * var(--u)); width: calc(68 * var(--u)); height: calc(48.5 * var(--u)); display: grid; grid-template-rows: repeat(3, 1fr); gap: calc(4 * var(--u)); }
-.t12 .t12-rail { position: relative; border-radius: calc(0.45 * var(--u)); background: linear-gradient(180deg, var(--ckp-sheen), transparent 45%), var(--ckp-panel); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-sunk); }
-.t12 .t12-foot { position: absolute; left: calc(1.2 * var(--u)); right: calc(1.2 * var(--u)); bottom: calc(1.1 * var(--u)); height: calc(1.6 * var(--u)); border-radius: calc(0.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
-.t12 .t12-ticks { position: absolute; left: calc(1 * var(--u)); right: calc(1 * var(--u)); top: calc(0.35 * var(--u)); bottom: calc(0.35 * var(--u)); background-image: repeating-linear-gradient(90deg, var(--ckp-tick-major) 0, var(--ckp-tick-major) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(16 * var(--u))), repeating-linear-gradient(90deg, var(--ckp-tick-minor) 0, var(--ckp-tick-minor) calc(0.0625 * var(--u)), transparent calc(0.0625 * var(--u)), transparent calc(2 * var(--u))); background-size: 100% 100%, 100% 55%; background-position: calc(11.3 * var(--u)) 0, calc(1.3 * var(--u)) 100%; background-repeat: no-repeat; }
-/* the tier name: engraved into the head of the rail, in quiet ink, above the chips and on the same
-   left datum as the first slot and the ladder's first major tick, so the head of the rail reads as
-   one column and the crop, which starts 4.5u further left, never cuts the name */
-.t12 .t12-lab { position: absolute; left: calc(13.5 * var(--u)); top: calc(1.3 * var(--u)); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(0.95 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-quiet); }
-/* the chips rest on the lip: the evidence-chip grammar, mono at 0.1em, a hairline at 22%, a tick at the left in the tier's strength */
-.t12 .t12-chip { position: absolute; z-index: 1; top: calc(5.6 * var(--u)); height: calc(5.2 * var(--u)); display: flex; align-items: center; gap: calc(0.95 * var(--u)); padding: 0 calc(1.35 * var(--u)) 0 calc(1.15 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-fg-quiet); background: var(--ckp-ground); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); color: var(--ckp-fg-soft); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.5 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
-.t12 .t12-tick { position: relative; flex: none; width: calc(0.4 * var(--u)); height: calc(1.4 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
+/* One plate, one key light, three lanes machined into it.
+   Scene units: the plate runs 16 to 84 and bleeds nine units past both edges of the 4:5 crop,
+   which shows scene 25 to 75. The well inside it runs 18.5 to 81.5, so its lanes, scales,
+   tick ladders and load bars bleed past the crop too. Everything that has to be READ sits
+   inside 27 to 74: the head block (lamp, tier name, slot count) on the 27 datum, the three
+   chip slots at scene 36.5 / 50.3 / 64.1 one 13.8u step apart, and the longest run of chips
+   ending at 72.7. Every move in the loop is one step sideways or two lanes (27u) down. */
+.t12 { --t12-step: 13.8; --t12-tier: 27; }
+/* the plate: graphite ground under one soft key from the upper left, falling off into the
+   lower right, with a two-tone bezel and an outer keyline. This is the subject; the stage
+   stays black around it and nothing else is lit */
+.t12 .t12-plate { position: absolute; left: calc(16 * var(--u)); top: calc(8.25 * var(--u)); width: calc(68 * var(--u)); height: calc(46 * var(--u)); border-radius: calc(0.75 * var(--u)); background: radial-gradient(92% 128% at 18% -10%, var(--ckp-hair-strong), var(--ckp-hair) 24%, var(--ckp-sheen) 46%, rgba(255, 255, 255, 0) 70%), linear-gradient(150deg, rgba(0, 0, 0, 0) 16%, var(--ckp-recess) 84%), var(--ckp-ground); box-shadow: inset calc(0.0625 * var(--u)) calc(0.0625 * var(--u)) 0 0 var(--ckp-bevel-light), inset calc(-0.0625 * var(--u)) calc(-0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), 0 0 0 calc(0.0625 * var(--u)) var(--ckp-bevel-dark); }
+.t12 .t12-well { position: absolute; left: calc(2.5 * var(--u)); right: calc(2.5 * var(--u)); top: calc(2.75 * var(--u)); height: calc(40.5 * var(--u)); }
+/* the three lanes, cut into the one face. The lane the chip leaves and the lane it lands in
+   are level with the plate and catch the key; the middle lane, which it only passes through,
+   is shelved a shallow step down, so the divisions read as machined edges, not as slabs */
+.t12 .t12-lane { position: absolute; left: 0; right: 0; height: calc(13.5 * var(--u)); }
+.t12 .t12-l1 { top: 0; box-shadow: inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-bevel-dark); }
+.t12 .t12-l2 { top: calc(13.5 * var(--u)); background: var(--ckp-recess); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), inset 0 calc(-0.0625 * var(--u)) 0 var(--ckp-hair); }
+.t12 .t12-l3 { top: calc(27 * var(--u)); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-hair-strong); }
+/* the chase: one slot-wide channel cut straight down the plate through all three lanes, on
+   the slot the chip travels in. Its left wall is in shadow and its right wall catches the
+   key, and every scale crosses over it, so it reads as machined into the same face */
+.t12 .t12-track { position: absolute; left: calc(31.8 * var(--u)); width: calc(13.8 * var(--u)); top: 0; bottom: 0; box-shadow: inset calc(0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), inset calc(-0.0625 * var(--u)) 0 0 var(--ckp-bevel-dark), calc(-0.0625 * var(--u)) 0 0 var(--ckp-hair), calc(0.0625 * var(--u)) 0 0 var(--ckp-hair); }
+/* one hairline dropped the full height of the well between the head column and the chip
+   field. It crosses all three lanes, so the plate reads as a single machined face with rows
+   cut into it rather than as three separate shelves */
+.t12 .t12-spine { position: absolute; left: calc(15.8 * var(--u)); top: 0; bottom: 0; width: calc(0.0625 * var(--u)); background: var(--ckp-bevel-dark); box-shadow: calc(0.0625 * var(--u)) 0 0 var(--ckp-hair); }
+/* the head block: the lane's lamp, its name engraved in quiet ink, and its slot count. It
+   sits on the 27 datum so the crop, which starts two units further left, never cuts it */
+.t12 .t12-head { position: absolute; left: calc(8.5 * var(--u)); top: calc(1.4 * var(--u)); height: calc(5.5 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: calc(0.65 * var(--u)); }
+.t12 .t12-lamp { display: flex; gap: calc(0.3 * var(--u)); }
+.t12 .t12-lamp i { display: block; width: calc(1 * var(--u)); height: calc(0.55 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-fg-quiet); }
+.t12 .t12-lamp i.t12-on { background: var(--ckp-signal); box-shadow: 0 0 calc(0.7 * var(--u)) var(--ckp-signal-halo); }
+.t12 .t12-lamp i.t12-mid { background: var(--ckp-signal-half); }
+.t12 .t12-name { font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.1 * var(--u)); line-height: 1; letter-spacing: var(--ckp-kicker-track); text-transform: var(--ckp-kicker-case); color: var(--ckp-fg-faint); }
+.t12 .t12-l1 .t12-name { color: var(--ckp-fg-soft); }
+/* the slot count, tabular: over its cap it reads in the warm signal, level with it in quiet ink */
+.t12 .t12-count { display: grid; font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.45 * var(--u)); line-height: 1; font-variant-numeric: var(--ckp-digits-variant); color: var(--ckp-fg-faint); }
+.t12 .t12-count > span { grid-area: 1 / 1; }
+.t12 .t12-over { color: var(--ckp-signal); }
+/* the scale along the foot of every lane: a sunk channel with a two-tone ladder etched in it,
+   a major under each slot, eight minors to the step. The cap mark stands proud of the channel
+   at the third slot. The load bar runs a slot-width per chip, and the only part of it that
+   lights is the length past the cap */
+.t12 .t12-groove { position: absolute; left: 0; right: 0; top: calc(8.5 * var(--u)); height: calc(3.2 * var(--u)); background: var(--ckp-sunk); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-dark), 0 calc(0.0625 * var(--u)) 0 var(--ckp-hair); }
+.t12 .t12-ticks { position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, transparent 0 calc(4.2 * var(--u)), var(--ckp-tick-minor) calc(4.2 * var(--u)) calc(4.325 * var(--u)), transparent calc(4.325 * var(--u)) calc(13.8 * var(--u))), repeating-linear-gradient(90deg, transparent 0 calc(0.75 * var(--u)), var(--ckp-hair-strong) calc(0.75 * var(--u)) calc(0.8125 * var(--u)), transparent calc(0.8125 * var(--u)) calc(1.725 * var(--u))); background-size: 100% 55%, 100% 29%; background-position: 0 0, 0 0; background-repeat: no-repeat; }
+/* a post standing at every slot, rising out of the scale to the foot of a chip, so a slot
+   with nothing in it reads as a seat waiting rather than as blank plate */
+.t12 .t12-posts { position: absolute; left: 0; right: 0; top: calc(6.8 * var(--u)); height: calc(1.4 * var(--u)); background-image: repeating-linear-gradient(90deg, transparent 0 calc(4.2 * var(--u)), var(--ckp-hair-strong) calc(4.2 * var(--u)) calc(4.325 * var(--u)), transparent calc(4.325 * var(--u)) calc(13.8 * var(--u))), linear-gradient(180deg, var(--ckp-hair) 0 calc(0.0625 * var(--u)), rgba(255, 255, 255, 0) calc(0.0625 * var(--u))); }
+.t12 .t12-cap { position: absolute; left: calc(45.6 * var(--u)); top: calc(7.9 * var(--u)); width: calc(0.125 * var(--u)); height: calc(4.4 * var(--u)); background: var(--ckp-fg-soft); }
+.t12 .t12-bar { position: absolute; left: calc(18 * var(--u)); width: calc(41.4 * var(--u)); bottom: calc(0.45 * var(--u)); height: calc(0.6 * var(--u)); background: var(--ckp-fg-faint); transform-origin: left center; transform: scaleX(0.3333); }
+.t12 .t12-l1 .t12-bar { transform: scaleX(1); }
+.t12 .t12-l2 .t12-bar { background: var(--ckp-fg-quiet); }
+.t12 .t12-spill { position: absolute; left: calc(45.6 * var(--u)); width: calc(13.8 * var(--u)); bottom: calc(0.45 * var(--u)); height: calc(0.6 * var(--u)); background: var(--ckp-signal); box-shadow: 0 0 calc(0.9 * var(--u)) var(--ckp-signal-halo); transform-origin: left center; }
+/* the chips, in the evidence-chip grammar: mono at 0.1em, a hairline border, a snug height,
+   a tick at the left in the lane's strength. They sit in the well rather than in a lane, so
+   the one that moves can cross from the top lane to the bottom one */
+.t12 .t12-chip { position: absolute; z-index: 1; height: calc(4.5 * var(--u)); display: flex; align-items: center; gap: calc(0.72 * var(--u)); padding: 0 calc(1 * var(--u)) 0 calc(0.85 * var(--u)); border-radius: calc(0.25 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--ckp-hair-strong); color: var(--ckp-fg-faint); font-family: var(--ckp-font-mono); font-weight: var(--ckp-weight-mono); font-size: calc(1.6 * var(--u)); line-height: 1; letter-spacing: var(--ckp-chip-label-track); white-space: nowrap; }
+.t12 .t12-c1 { border-color: var(--ckp-fg-quiet); color: var(--ckp-fg-soft); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light); }
+.t12 .t12-tick { position: relative; flex: none; width: calc(0.42 * var(--u)); height: calc(1.5 * var(--u)); border-radius: calc(0.0625 * var(--u)); background: var(--ckp-tick-minor); }
 .t12 .t12-tick i { position: absolute; inset: 0; border-radius: inherit; display: block; }
-.t12 .t12-tick .t12-full { background: var(--ckp-signal); box-shadow: 0 0 calc(0.8 * var(--u)) var(--ckp-signal-halo); }
-.t12 .t12-tick .t12-half { background: var(--ckp-signal-half); }
-.t12 .t12-l1 .t12-chip { color: var(--ckp-fg); }
-.t12 .t12-l3 .t12-chip { color: var(--ckp-fg-faint); }
-/* the one that moves: caught half a step out of its slot and straddling the gap between the first
-   two rails at rest, it lands two tiers lower with the register spring, its neighbours close ranks,
-   then it climbs back */
-.t12 .t12-drop { z-index: 2; transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; will-change: transform, opacity; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
-.t12 .t12-drop .t12-full { opacity: 0.55; animation: t12-tick-full var(--ckp-loop-default) linear infinite; }
-.t12 .t12-drop .t12-half { opacity: 1; animation: t12-tick-half var(--ckp-loop-default) linear infinite; }
-.t12 .t12-drop .t12-full, .t12 .t12-drop .t12-half { will-change: opacity; }
-.t12 .t12-closes { will-change: transform; animation: t12-close var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
-.t12 .t12-yields { will-change: transform; animation: t12-yield var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
-/* the loop, 7s. 0–6% held mid-drop; 6–20% the fall, the 160ms spring on landing (the tier below
-   has already yielded by 19%, so it lands on an open slot); 20–56% at rest on the bottom rail;
-   56–60% it lifts; 60–82% the climb back to its slot, which reopened at 74%; 82–90% held there;
-   90–100% it lets go again */
+.t12 .t12-full { background: var(--ckp-signal); }
+.t12 .t12-half { background: var(--ckp-signal-half); }
+/* the one that moves: a solid object lifted off the plate, the brightest thing in the frame,
+   caught two fifths of the way down at rest. It lands on the open seat below with the
+   register spring, the lane above closes ranks behind it, then it climbs back and the rank
+   reopens for it */
+.t12 .t12-drop { z-index: 2; background: var(--ckp-panel); border-color: var(--ckp-fg-faint); color: var(--ckp-fg); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 var(--ckp-bevel-light), 0 calc(0.6 * var(--u)) calc(1.4 * var(--u)) var(--ckp-bevel-dark); transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); will-change: transform; animation: t12-drop var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t12 .t12-drop .t12-tick { box-shadow: 0 0 calc(0.9 * var(--u)) var(--ckp-signal-halo); }
+.t12 .t12-drop .t12-full { will-change: opacity; animation: t12-strength var(--ckp-loop-default) var(--ckp-loop-ease) infinite; }
+.t12 .t12-shift { will-change: transform; animation: t12-shift var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l1 .t12-bar { will-change: transform; animation: t12-bar1 var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l1 .t12-spill { will-change: transform; animation: t12-spill var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-l3 .t12-bar { will-change: transform; animation: t12-bar3 var(--ckp-loop-default) var(--ckp-ease-standard) infinite; }
+.t12 .t12-was { will-change: opacity; animation: t12-was var(--ckp-loop-default) linear infinite; }
+.t12 .t12-now { opacity: 0; will-change: opacity; animation: t12-now var(--ckp-loop-default) linear infinite; }
+/* the loop, 7s. 0-6% held mid-drop, one over the cap on the lane above it; 6-20% the fall,
+   then the 160ms register spring settles it onto the open seat; 20-22.9% the 200ms rebalance,
+   both loads and both counts stepping across together; 21-23.9% the lane above closes ranks;
+   25-56% at rest; 56-60% it lifts and 58-60.9% the rank reopens; 60-80% the climb back, the
+   loads and counts stepping back as it arrives; 82-90% held in its slot; 90-100% it lets go
+   again and the frame returns to rest */
 @keyframes t12-drop {
-  0%, 6% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
-  20% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) + 0.4) * var(--u))) rotate(0deg); opacity: 0.62; animation-timing-function: var(--ckp-ease-spring); }
-  22%, 56% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc(var(--t12-tier) * var(--u))) rotate(0deg); opacity: 0.62; }
-  60% { transform: translate(calc(-1 * var(--t12-step) * var(--u)), calc((var(--t12-tier) - 0.8) * var(--u))) rotate(0deg); opacity: 0.8; animation-timing-function: var(--ckp-loop-ease); }
-  82%, 90% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
-  100% { transform: translate(calc(-0.5 * var(--t12-step) * var(--u)), calc(7.25 * var(--u))) rotate(-3deg); opacity: 0.85; }
+  0%, 6% { transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); }
+  20% { transform: translate(0, calc((var(--t12-tier) - 0.7) * var(--u))) rotate(0deg); animation-timing-function: var(--ckp-ease-spring); }
+  22.3%, 56% { transform: translate(0, calc(var(--t12-tier) * var(--u))) rotate(0deg); }
+  60% { transform: translate(0, calc((var(--t12-tier) - 1.1) * var(--u))) rotate(0deg); animation-timing-function: var(--ckp-loop-ease); }
+  80%, 90% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(0, calc(10.8 * var(--u))) rotate(-3deg); }
 }
-@keyframes t12-tick-full { 0%, 6% { opacity: 0.55; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 1; } 100% { opacity: 0.55; } }
-@keyframes t12-tick-half { 0%, 6% { opacity: 1; } 20%, 58% { opacity: 0; } 80%, 92% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes t12-close { 0%, 10% { transform: translateX(0); } 21%, 62% { transform: translateX(calc(-1 * var(--t12-step) * var(--u))); } 74%, 100% { transform: translateX(0); } }
-@keyframes t12-yield { 0%, 8% { transform: translateX(0); } 19%, 70% { transform: translateX(calc(var(--t12-step) * var(--u))); } 82%, 100% { transform: translateX(0); } }
+@keyframes t12-strength { 0%, 19% { opacity: 1; } 22%, 58% { opacity: 0; } 61%, 100% { opacity: 1; } }
+@keyframes t12-shift { 0%, 21% { transform: translateX(0); } 23.9%, 58% { transform: translateX(calc(-1 * var(--t12-step) * var(--u))); } 60.9%, 100% { transform: translateX(0); } }
+@keyframes t12-bar1 { 0%, 20% { transform: scaleX(1); } 22.9%, 78% { transform: scaleX(0.6667); } 80.9%, 100% { transform: scaleX(1); } }
+@keyframes t12-spill { 0%, 20% { transform: scaleX(1); } 22.9%, 78% { transform: scaleX(0); } 80.9%, 100% { transform: scaleX(1); } }
+@keyframes t12-bar3 { 0%, 20% { transform: scaleX(0.3333); } 22.9%, 78% { transform: scaleX(0.6667); } 80.9%, 100% { transform: scaleX(0.3333); } }
+@keyframes t12-was { 0%, 20% { opacity: 1; } 21.5%, 78.5% { opacity: 0; } 80%, 100% { opacity: 1; } }
+@keyframes t12-now { 0%, 20% { opacity: 0; } 21.5%, 78.5% { opacity: 1; } 80%, 100% { opacity: 0; } }
 </style>
 <script>
 (function () {
-  /* three rails, five invented moves; the chip's slot is its x inside the rail, in scene units, and its rail sets the tick strength */
-  var RAILS = [["Today", "full"], ["This week", "half"], ["Later", "none"]];
-  var SLOT = [13.5, 29.5, 45.5];
+  /* the three heat levels, their lamp strength, and the slot count each reads before and
+     after the drop. The cap is two: the top lane holds three, which is why its third sinks */
+  var LANES = [
+    ["Today", "full", 3, "3/2", "2/2"],
+    ["This week", "half", 2, "1/2", "1/2"],
+    ["Later", "none", 0, "1/2", "2/2"]
+  ];
+  var SLOT = [18, 31.8, 45.6];
+  var LANE_H = 13.5;
+  /* lane, slot, label, role */
   var CHIPS = [
     [0, 0, "Call back"],
     [0, 1, "Send deck", "drop"],
-    [0, 2, "Recap", "closes"],
+    [0, 2, "Recap", "shift"],
     [1, 0, "Follow up"],
-    [2, 0, "Old quote", "yields"]
+    [2, 0, "Old quote"]
   ];
+  function u(n) { return "calc(" + n + " * var(--u))"; }
+  function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+  function lamp(strength, lit) {
+    var w = el("span", "t12-lamp");
+    for (var i = 0; i < 3; i++) {
+      var seg = el("i");
+      if (i < lit) seg.className = strength === "full" ? "t12-on" : "t12-mid";
+      w.appendChild(seg);
+    }
+    return w;
+  }
+  function head(lane) {
+    var h = el("span", "t12-head");
+    h.appendChild(lamp(lane[1], lane[2]));
+    var n = el("span", "t12-name"); n.textContent = lane[0]; h.appendChild(n);
+    var c = el("span", "t12-count");
+    var a = el("span"); a.textContent = lane[3];
+    if (lane[3] === lane[4]) { c.appendChild(a); }
+    else {
+      a.className = "t12-was" + (lane[3] === "3/2" ? " t12-over" : "");
+      var b = el("span", "t12-now"); b.textContent = lane[4];
+      c.appendChild(a); c.appendChild(b);
+    }
+    h.appendChild(c);
+    return h;
+  }
   function chip(spec, strength) {
-    var c = document.createElement("span");
-    c.className = "t12-chip" + (spec[3] ? " t12-" + spec[3] : "");
-    c.style.left = "calc(" + SLOT[spec[1]] + " * var(--u))";
-    var t = document.createElement("span"); t.className = "t12-tick";
-    var f = document.createElement("i"); f.className = "t12-full"; if (strength !== "full" && spec[3] !== "drop") f.style.opacity = "0";
-    var h = document.createElement("i"); h.className = "t12-half"; if (strength !== "half" && spec[3] !== "drop") h.style.opacity = "0";
-    t.appendChild(f); t.appendChild(h);
-    c.appendChild(t); c.appendChild(document.createTextNode(spec[2]));
+    var c = el("span", "t12-chip t12-c" + (spec[0] + 1) + (spec[3] ? " t12-" + spec[3] : ""));
+    c.style.left = u(SLOT[spec[1]]);
+    c.style.top = u(spec[0] * LANE_H + 1.9);
+    var t = el("span", "t12-tick");
+    var s = spec[3] === "drop" ? "full" : strength;
+    if (s !== "none") t.appendChild(el("i", s === "full" ? "t12-full" : "t12-half"));
+    c.appendChild(t);
+    c.appendChild(document.createTextNode(spec[2]));
     return c;
   }
   var roots = document.querySelectorAll(".stage.t12");
   Array.prototype.forEach.call(roots, function (root) {
     if (root.dataset.ready) return;
     root.dataset.ready = "1";
-    var rails = root.querySelector(".t12-rails");
-    RAILS.forEach(function (l, i) {
-      var rail = document.createElement("div"); rail.className = "t12-rail t12-l" + (i + 1);
-      var foot = document.createElement("span"); foot.className = "t12-foot";
-      var ticks = document.createElement("span"); ticks.className = "t12-ticks";
-      foot.appendChild(ticks);
-      var lab = document.createElement("span"); lab.className = "t12-lab"; lab.textContent = l[0];
-      rail.appendChild(foot); rail.appendChild(lab);
-      CHIPS.forEach(function (spec) { if (spec[0] === i) rail.appendChild(chip(spec, l[1])); });
-      rails.appendChild(rail);
+    var well = root.querySelector(".t12-well");
+    LANES.forEach(function (lane, i) {
+      var row = el("div", "t12-lane t12-l" + (i + 1));
+      row.appendChild(el("span", "t12-track"));
+      var groove = el("span", "t12-groove");
+      groove.appendChild(el("span", "t12-ticks"));
+      groove.appendChild(el("span", "t12-bar"));
+      if (i === 0) groove.appendChild(el("span", "t12-spill"));
+      row.appendChild(groove);
+      row.appendChild(el("span", "t12-posts"));
+      row.appendChild(el("span", "t12-cap"));
+      row.appendChild(head(lane));
+      well.appendChild(row);
     });
+    well.appendChild(el("span", "t12-spine"));
+    CHIPS.forEach(function (spec) { well.appendChild(chip(spec, LANES[spec[0]][1])); });
     /* the drop is CSS; the runtime's is-playing class starts and pauses it */
   });
 })();

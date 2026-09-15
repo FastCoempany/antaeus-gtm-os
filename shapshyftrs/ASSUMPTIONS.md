@@ -91,10 +91,10 @@ Every decision from the source study, and every provisional or derived value a r
 - Teaser 12 rests with the moving chip caught mid-drop between the first and second tier, as the brief's still describes; the loop lets it land two tiers down with the deal room's 160ms spring, the neighbours close ranks at the 200ms base step, and it climbs back to its slot before letting go again. Five chips in all, as the brief says, so the second tier holds one.
 - Teaser 13 draws on a canvas (nineteen nodes in six columns, thirty-four light lines — every node in the first five columns reaches the two nearest to it in the column after — a parallax drift per depth and one pulse wave per loop) even though the node count is far under the canvas threshold, because the lines must follow nodes on drifting layers and a canvas keeps that to one draw call. Reduced motion draws the resting frame once. The lit node is white; the suggested node carries the pinned coral as a dashed ring.
 - The contact sheet lays teasers out in columns of at least 640px so every frame shows its 16:10 composition at 1440 wide; the 4:5 crop is reviewed on the single-teaser pages and by the probe, not on the sheet.
-- The contract's token additions from the first build of the thirteen: `--gtm-perspective-u` and `--gtm-sheen` (teaser 1), `--ckp-sheen` (teaser 8), `--ckp-ease-spring` (teaser 12), and the aliases listed at the end of each token file. The gallery review added five more, listed two bullets down; nine in all, each marked `derived, added for tNN`. The teaser review passes at the end of this file added none.
+- The contract's token additions from the first build of the thirteen: `--gtm-perspective-u` and `--gtm-sheen` (teaser 1), `--ckp-sheen` (teaser 8), `--ckp-ease-spring` (teaser 12), and the aliases listed at the end of each token file. The gallery review added five more, listed two bullets down; nine in all, each marked `derived, added for tNN`. The teaser review passes at the end of this file added none, and the phase 5 QA pass added two, `--nds-tortoise-blue-deep` and `--nds-tortoise-red-deep` (teaser 3), for eleven in all.
 - Teasers 1, 4, 5 and 8 were drafted by builder agents whose session ended before their review passes; their drafts passed the probe and were reviewed and kept by hand. Teasers 2, 3, 6, 7, 9, 10, 11, 12 and 13 were built by hand.
-- The gallery judge and checkpoint passes (one reviewer reading the whole sheet, one driving every interaction and the reduced-motion frames) produced ten actionable findings; all were applied. Teaser 11 was rebuilt as a turned-back corner of sage knit with the woven label on the fold's inside and the hangtag tacked through the fold (it had rendered as a flat cream sheet next to teaser 10's cream paper, and the marker script had overflowed the tag). Teaser 12 dropped its title and count (they read as app chrome) and makes the three bevelled rails with their tick ladders the subject. Teaser 4's dial came down from 92% to 68% of the frame height, and teaser 10's paper was narrowed from 80%; the later rebuild (below) set its current geometry, a sheet 83% of the frame width with the arc and its labels on a 70u measure inside it. Teaser 6's coach reply now types in word by word and erases as one clean fade. Teaser 3 gained lens depth, rim highlights and a three-quarter far lens. Teaser 9's tiles gained real glass (28% borders, a static specular, a moving sheen) and lost their sub-labels, and its tilt is pitch-only in a flat transform context because Chromium's hit-testing under a yawed `preserve-3d` plane left seven of thirteen tiles unhoverable. Teaser 13's nodes doubled in size with a glass highlight each. Tokens added: `--ndg-garment-sage-inside`, `--ndg-garment-sage-shade`, `--gtm-glass-border-strong`, `--gtm-glass-border-lifted`, `--gtm-sheen-strong`.
-- The single-teaser pages under `dist/teasers/` weigh 35–45 KB because each inlines the whole token stack, the fonts link and the runtime; the 35 KB ceiling in the contract is for the teaser partial itself (7–17 KB each), and the brief's only weight rule is the 600 KB page budget. The three variants come out at 200–208 KB.
+- The gallery judge and checkpoint passes (one reviewer reading the whole sheet, one driving every interaction and the reduced-motion frames) produced ten actionable findings; all were applied. Teaser 11 was rebuilt as a turned-back corner of sage knit with the woven label on the fold's inside and the hangtag tacked through the fold (it had rendered as a flat cream sheet next to teaser 10's cream paper, and the marker script had overflowed the tag). Teaser 12 dropped its title and count (they read as app chrome) and made the three bevelled rails with their tick ladders the subject; the last QA pass rebuilt that frame again, and the entry at the end of this file is the one to trust. Teaser 4's dial came down from 92% to 68% of the frame height, and teaser 10's paper was narrowed from 80%; the later rebuild (below) set its current geometry, a sheet 83% of the frame width with the arc and its labels on a 70u measure inside it. Teaser 6's coach reply now types in word by word and erases as one clean fade. Teaser 3 gained lens depth, rim highlights and a three-quarter far lens. Teaser 9's tiles gained real glass (28% borders, a static specular, a moving sheen) and lost their sub-labels, and its tilt is pitch-only in a flat transform context because Chromium's hit-testing under a yawed `preserve-3d` plane left seven of thirteen tiles unhoverable. Teaser 13's nodes doubled in size with a glass highlight each. Tokens added: `--ndg-garment-sage-inside`, `--ndg-garment-sage-shade`, `--gtm-glass-border-strong`, `--gtm-glass-border-lifted`, `--gtm-sheen-strong`.
+- The single-teaser pages under `dist/teasers/` weigh 35–45 KB because each inlines the whole token stack, the fonts link and the runtime; the 35 KB ceiling in the contract is for the teaser partial itself (7–18 KB each), and the brief's only weight rule is the 600 KB page budget. The three variants come out at 200–208 KB.
 - Google Fonts drops requests intermittently through this container's proxy. `screenshot.py` waits for every declared face and reloads up to four times; the reviewer also installed the declared faces locally so the committed stills carry the real faces. A still that shows a fallback face is a capture fault, not a page fault.
 
 ## Phase 3: page shell
@@ -153,12 +153,177 @@ Every decision below was made where the brief is silent; findings that asked for
 Two passes ran over `teasers/` after the variants were reviewed. The first carried out the teaser findings the page-shell pass had listed and deferred (above): the type cut at the edges of the 4:5 window, the coach reply running past its paper at wall-tile size, and the 20×20px swatch targets. The second went back over the two teasers that came out of it worst: teaser 3, whose enlarged targets were centred by a percentage and drifted off their dots, and teaser 11, whose subject sat badly in the frame and had never been reviewed for it. Neither pass touched a token file; neither needed a value that was not already there. Newest at the bottom.
 
 - **Teaser 6 declares its own font metrics, and that is why.** The page chrome sets `line-height: 24px` on the body — a fixed pixel value, not a ratio — and `box-sizing: border-box` globally; the single-teaser pages and the probe harness set neither. The fixed line-height inherits into the teaser, and at tile size the teaser's own type is far smaller than 24px, so every block in the sheet was inflated by the chrome's leading and the coach reply ran past the foot of the paper on the three-column wall. The sheet now sets `font-size: calc(1 * var(--u))`, `line-height: 1.45` and its own `box-sizing`, so it lays out from `--u` alone and measures the same at 334px and at 1600px. The two learner attempts share one grid cell and the two coach notes share another, so a block is always as tall as the longer of its two readings and neither can push past the foot whatever the browser does with the face. The paper is centred now (left 13%, width 74%, min-height 71%) with its type in a 47u column at scene x 26.5–73.5, inside the 25–75 the 4:5 window shows, and the focal point moved from 46%,42% to 50%,50%. Measured in variant B's 416px wall tile: every line and the iris rule sit inside the sheet, the worst of them 21px clear of its foot.
-- **Teaser 12's rails were re-gridded onto the scene, not nudged.** The chips had been placed at loose scene offsets and the tier names sat in the rails' far left, outside the phone window. Both now hang off one grid: three chip slots at 29.5 / 45.5 / 61.5 in scene units, one 16u step apart, with the engraved tier name on the same 29.5 datum as the first slot and the tick ladder phased so a major tick falls under every slot. The rails still bleed past both edges of the crop, but the longest run of chips ends at 70.85, so the window keeps 4.5u clear on the left and 4.15u on the right and everything that has to be read is inside it. The focal point moved from 48%,50% to 50%,50%. The loop was re-timed to match: the tier below yields by 19% and the chip lands at 20%, so it never lands on an occupied slot, and the slot it climbs back to reopens at 74%, before it arrives at 82%. Five chips still, three on Today, one each on This week and Later.
+- **Teaser 12's rails were re-gridded onto the scene, not nudged.** *(Superseded: the QA pass below recomposed this frame, and the slot figures in this paragraph no longer describe the file. The reason the grid exists is still the reason it exists.)* The chips had been placed at loose scene offsets and the tier names sat in the rails' far left, outside the phone window. Both now hang off one grid: three chip slots at 29.5 / 45.5 / 61.5 in scene units, one 16u step apart, with the engraved tier name on the same 29.5 datum as the first slot and the tick ladder phased so a major tick falls under every slot. The rails still bleed past both edges of the crop, but the longest run of chips ends at 70.85, so the window keeps 4.5u clear on the left and 4.15u on the right and everything that has to be read is inside it. The focal point moved from 48%,50% to 50%,50%. The loop was re-timed to match: the tier below yields by 19% and the chip lands at 20%, so it never lands on an occupied slot, and the slot it climbs back to reopens at 74%, before it arrives at 82%. Five chips still, three on Today, one each on This week and Later.
 - **Teaser 10 was rebuilt rather than re-cropped.** Its sheet is 83% of the frame width and the arc sits on a 70u measure inside it. The lit course now carries its own leader and its own name, centred under its marker, so the name cannot part company with the marker it belongs to; both names are clamped to the window (x 183 to 1097 in the SVG's 1280 viewBox, measured off the real text length at runtime, so the clamp holds whatever face the browser lands on). The loop steps 3 to 4 and back, where it used to run 3 to 4 to 5 — two names to hold inside the window instead of three. The count in the running head swaps inside one grid cell so the head cannot shift when the reading changes.
 - **Teaser 9 hides its outermost column of tiles under the phone crop.** The field is 72u wide at left 17u, five columns with 0.5u gaps, so a column is 14u on a 14.5u pitch and the fifth spans 75u to 89u. The window shows scene x 25u to 75u, so that column lands exactly past the right edge with no visible face at all. Hiding it costs nothing on screen and takes two tiles out of the tab order's way; the eleven that remain all clear the touch floor, the smallest of them — the half-cropped first column — measuring 44.8 × 84.9px at 390. The first column is kept for that reason: it is cut, but what is left of it is still a target. The rule is `@media (max-width: 767px)` wrapped around `@container (max-width: 639px)` on purpose. The stage crops itself on its own width, but a page may opt its stages out of that crop while they are still narrow, which is exactly what the wall does from 768px up; requiring the viewport to be narrow as well means this rule can only fail by not firing, never by hiding a tile that is actually on screen.
 - **Teaser 5 was left alone, and it is the one finding on that list still standing.** At 390 its score numeral crosses the left edge of the window: about 18px of the leading digit is cut, because the tilted plane projects the head further left than its own 15u inset suggests. The digit still reads and the glass strip is meant to run off both edges, so it was not recomposed. Recorded here rather than closed quietly.
 - **Teaser 3's swatch targets were rebuilt to tile.** The strip keeps its original flex layout (dot-sized items and a 1.1u gap), so every visible dot keeps its exact size and position. Each button *is* the visible dot now — 2.6u round, `--sw-frame` background, `::after` lens — and the hit target is a transparent `::before` hung off that dot's own four edges: `inset: calc(-1 * var(--t03-slop-y)) calc(-1 * var(--t03-slop-x))`, where slop-x is (pitch − dot) / 2 and slop-y is (hit-height − dot) / 2. The width is therefore exactly one pitch. Nine 44px-wide targets cannot fit across a 390px frame, and a target wider than the pitch would have to overlap its neighbour and steal from it; tiling instead means the boxes meet with no gap and no overlap, the ownership boundary between two swatches falls on the true midpoint between their dots, and each box is centred on its dot by construction rather than by a percentage that can drift. 28.8 × 45 is comfortably over the 24 × 24 minimum. The height floor is `max(45px, 3.9u)` — 45 and not 44, so Chromium's 1/64px snapping cannot take a measurement under the floor. The pressed lift stays on the visible dot and its hit slop takes the inverse translate, so the tiling never moves while a swatch is lifted. The same pass added the missing `.t03.is-b .t03-layer.t03-a { opacity: 0 }` and made both layer rules compound rather than descendant selectors (`is-b` is toggled on `.t03` itself, so `.t03 .is-b` never matched): the pair crossfades now and exactly one layer paints.
-- **What teaser 3 measures.** At 390 in `dist/variant-a-keynote.html` all nine targets are identical: 28.83 × 44.98, on a pitch of 28.844, centred on their dots to ±0.01px, with the eight ownership boundaries on the true midpoint to ±0.01px. Other widths, as target w × h with the worst boundary error: 320 → 23.66 × 44.97, ±0.01; 430 → 31.80 × 44.98, ±0.01; the 416px tile inside variant B's wall at 1440 → 15.38 × 44.97, ±0.01; 1600 with no crop → 44.27 × 46.64, ±0.01. Width equals pitch and height clears 44 in all five. A sweep of 3,879 real pointer clicks (1px steps across the whole strip, at three heights per width — the dot's centre, 2.5px inside the top of the target, 2.5px inside the bottom, across all five widths) produced no wrong-owner clicks and no dead clicks: no click ever activated anything but the nearest swatch. Keyboard: Tab reaches all nine in order and then leaves the strip; Enter on swatch 5 and Space on swatch 8 both press and change the frame; the arrow keys move focus and selection together; the focus ring reads `solid 2px rgb(244, 244, 240)` at offset 2 on a 20.27 × 20.27 box, which is the visible dot; the loop resumes after the keys. Zero page errors.
+- **What teaser 3 measures.** At 390 in `dist/variant-a-keynote.html` all nine targets are identical: 28.83 × 44.98, on a pitch of 28.844, centred on their dots to ±0.01px, with the eight ownership boundaries on the true midpoint to ±0.01px. Other widths, as target w × h with the worst boundary error: 320 → 23.66 × 44.97, ±0.01; 430 → 31.80 × 44.98, ±0.01; the 416px tile inside variant B's wall at 1440 → 15.38 × 44.97, ±0.01; 1600 with no crop → 44.27 × 46.64, ±0.01. Width equals pitch and height clears 44 in all five. A sweep of 3,879 real pointer clicks (1px steps across the whole strip, at three heights per width — the dot's centre, 2.5px inside the top of the target, 2.5px inside the bottom, across all five widths) produced no wrong-owner clicks and no dead clicks: no click ever activated anything but the nearest swatch. Keyboard: Tab reaches all nine in order and then leaves the strip; Enter on swatch 5 and Space on swatch 8 both press and change the frame; the arrow keys move focus and selection together; the focus ring reads `solid 2px rgb(244, 244, 240)` at offset 2 on a 20.27 × 20.27 box, which is the visible dot; the loop resumes after the keys. Zero page errors. (The phone figures here were superseded by the phase 5 QA pass at the end of this file, which widened the pitch under the crop; the 416px wall tile and the 1600 no-crop figures still stand.)
 - **A note for whoever measures a hit target next.** Chromium's synthetic-pointer pipeline reads an x as roughly x + 0.99. Proved on a bare control page with divs at exact integer coordinates: the boundary between a div ending at 300 and one starting at 300 measures at 299.05, and `mouse.click(299.4)` lands on the second div. `elementFromPoint` and a dispatched `PointerEvent` agree with `mouse.click`, and all three track a 1px nudge of the strip, so it is the input pipeline and not the CSS. Uncalibrated, a sweep reports a phantom ~1px bias on geometry that is in fact correct. The figures above are calibrated — the offset was measured at 0.991px in the same browser on the same run.
 - **What the teaser 3 frame-layer fix is worth.** With the rule in place, recolouring every hex in the hidden layer to magenta (68 values, node structure untouched) changes 0 pixels and puts 0 magenta pixels on screen: the hidden layer paints nothing. The same operation on the file before the fix changes 120,264 pixels and puts 530 magenta pixels on screen. The computed opacity of the (A, B) pair is now ("0", "1") in the `is-b` state and ("1", "0") out of it; before the fix it was ("1", "1") in both. Diffing the two loop states on one colourway leaves only gradient dither: 49,672px differ by 1, 15,900 by 2, and 8px by more than 20, all of them on a 1.2px anti-aliased temple stroke; the mean signed difference is −2.08 out of 765, so nothing is systematically darker. A no-op control proved the renderer is otherwise pixel-deterministic on this page.
 - **Teaser 11's subject was moved and resized as a composition, not translated.** The old frame's problem was that the cloth was oversized and hung off the left, so sliding it right would only have moved the hole. The cloth came down from 60 × 38u to 46 × 37.5u and was recentred so its rotation centre is the scene centre (50u, 25u), with the tilt eased from −4° to −3.5°: it no longer reads as a placemat that outgrew its frame. The fold deepened from 24u to 28u, so the crease now runs from near the cloth's top-left corner down to its right edge and the turned-back face is the dominant plane instead of a clipped corner; the featureless triangle of plain body that filled the old lower-left shrank, and the fold's cast shadow finally has the length to read. The woven label came down from 9u to 7u wide and travelled with the flap, sitting on the inside face at the fold's lower-left and clear of the tag — the gap between them went from 0, where they overlapped and the label's drop shadow ran into the tag, to about 100px at 1600. The swing tag moved from 55.8u to 60.8u across and down to 30.2u, which put its tack about 55px inboard of the fold edge and fixed a real bug: the old tack sat past the crease, on the plain body, so the tag read as pinned to the cloth beside the fold rather than tacked through it, which is not what the aria-label or the source's placeholder drawing says. Copy on both faces was trimmed to fit the smaller card ("100% cotton thermal" to "cotton thermal", and the fourth back line dropped). The light pass now fades in and out instead of sitting in the resting frame, and the floor was rebuilt as a soft pool plus a real contact shadow under the cloth, matte, with no reflection, as the DIGS stage tokens ask.
+
+## Decisions the earlier passes made but never wrote down (2026-09-15)
+
+A review of this file against the built pages found four things the code decides
+that no line here recorded. None of them touches a section 8 line, so none is a
+locked-copy question; all four are decisions made where the brief is silent, and
+this file's own scope is every one of those.
+
+- **The document title.** Brief section 8 defines no page title. The three
+  variants are titled `shapshyftrs` — the wordmark alone, lowercase, as rule 8.1
+  has it everywhere — because the tab is another place the name appears and the
+  slogan would read as a tagline appended to it, which section 8.9 has no line
+  for. The contact sheet is `shapshyftrs teasers` and a one-teaser page is the
+  teaser's own id (`fork-rail`), since those two are review surfaces and the id
+  is what a reviewer is looking for in a row of tabs. Set in `variants/*.html`
+  and in `build.py` where it writes the review pages.
+- **The chrome's `aria-label` copy.** Landmarks that have no visible heading
+  need a name, and the brief writes none. They are named for what they are, in
+  the same sentence case as the rest of the chrome: `The gallery` on the intro
+  section, `Teasers` on the wall and the reel, `Position in the reel` on the
+  tick group, `Teaser 1` to `Teaser 13` on the ticks themselves, and, on the
+  reel's scrollable region, `Thirteen teasers. Use the left and right arrow keys
+  to move between them.` — the one that has to say more than its own name,
+  because the keys are not discoverable any other way. None of these is visible
+  copy; a sighted visitor sees the caption and the source label, which are
+  locked and unchanged. The mechanism behind the ticks (plain buttons in a
+  labelled group with `aria-current`, not `role="tab"` without panels) was
+  already logged under the variant C fixes; this is the wording.
+- **`<meta name="color-scheme" content="dark">` in `partials/head.html`.** The
+  page is `#000000` ground with `#F4F4F0` text at every width and has no light
+  mode. Declaring the scheme makes the browser paint its own furniture to match
+  — form controls, the scrollbar, the flash of canvas before first paint — so a
+  visitor in a light-mode OS does not get a white scrollbar down the side of a
+  black page or a white flash before the stage arrives. It changes no token and
+  no copy.
+- **The contact sheet's own copy,** `All thirteen teasers, gallery order, for
+  review.` under the heading `shapshyftrs teasers`. The sheet is a deliverable
+  (brief 3) but the brief writes no copy for it, and it is not a page a visitor
+  sees. The line says what the sheet is and who it is for in one sentence, in
+  section 8.9's register (sentence case, active, no exclamation). `DESIGN.md`
+  4.3 already defends its punctuation against rule 10; this is the line itself.
+
+## Phase 5 QA fixes (2026-09-15)
+
+Four findings from the phase 5 pass, three in `teasers/` and one in `screens/`.
+Every decision below was made where the brief is silent. No finding asked for a
+copy change; none of section 8 moved.
+
+- **Teaser 1's focal point moved from 61% to 66.5%, and that is the whole fix.**
+  The 4:5 crop shows the 50% of the scene centred on `--fx`, so at 61% the
+  window ran from scene 36% to 86% and its left edge fell inside the branch pill
+  `A new hire` (scene 31.5–38.3, its text 32.7–37.0): 24% of the text showed, as
+  the two letters `re`. Moving the pill was the obvious fix and is wrong — the
+  five pills sit 10.7 to 13.8 scene-% apart and are 6.8 wide, so shifting this
+  one far enough either way (1.6% left to clear the edge, 3.9% right to clear
+  it) collides with the pill beside it at 390 and at every other width. The
+  focal point is a declared free choice per brief 6.1, so it moved instead. At
+  66.5% the window is scene 41.5–91.5 and its left edge lands in the 2.8-wide
+  gap between `Cost` (ends 40.16) and `Next month` (starts 43.00). Measured on
+  the built page at 320, 360, 375, 390, 414, 430, 480, 500, 560, 600 and 639:
+  no text node straddles either edge at any of them, and the nearest one is
+  8.6px clear at 320, 10.4px at 390, 15.0px at 560, 17.1px at 639. It is also a
+  better crop than the one it replaces: at 61% the recovery arc was cut by the
+  right edge at scene 86, and the old window's clearance on the chip numeral
+  `10` was 0.12px at 320 — one rounding away from a second sliced label. At
+  66.5% the fork, the
+  red node and the whole recovery arc back to the rail are inside the window.
+  The 16:10 composition is untouched, so every desktop width and the 1600px
+  still are exactly as they were. The subject's centroid is at 52% and the focal
+  is at 66.5%; they are different things — the rail runs the full width of the
+  frame, so the focal picks which half of it a phone sees, and the half worth
+  seeing is the one with the branch in it.
+- **Teaser 3's tortoiseshell is a shell now, not a row of spots.** The two
+  tortoise colourways painted a `<pattern>` tile 46 x 38 user units holding
+  three hard-edged ellipses at fixed positions, which repeated about eleven
+  times
+  across the brow bar and read as polka dots — novelty, where brief 5.4 asks
+  DARKEST SHADES for dark, specular and restrained. Dropping the two colourways
+  was the other way out and is wrong: blue tortoise and red/black tortoise are
+  two of the three real finishes in the brand's own renders (`SOURCES.md` part
+  C, teaser 3), so they belong in a strip that stands for nine real models. The
+  tile is 232 x 104 instead, so the 526-unit brow bar carries just over two
+  repeats, and it holds thirty-four blotches in three passes — four wide washes
+  that vary the
+  ground, twelve elongated patches, fourteen deep veins threading between them,
+  four small light breaks on top. Nothing in it is round (every blotch is
+  flattened, rx roughly two and a half times ry, at rotations from -24 to +26
+  degrees) and nothing stands alone: each overlaps two or three others, which is
+  what makes an irregular mass instead of a disc. Every blotch is filled with a
+  radial gradient in its own bounding box, so it fades to nothing at its own
+  edge rather than cutting — soft edges without a filter, and without the seam a
+  blurred tile would show at its boundary. A blotch that runs off an edge of the
+  tile is redrawn on the opposite edge, so the tile repeats with no seam at all.
+  Peak opacity on the light tone came down from .75 to .32, which is where the
+  contrast drop asked for in the finding lives: the tone itself is still the
+  colour sampled from the render, only less of it. The pattern is emitted only
+  for the two tortoise swatches, so the other seven finishes render exactly the
+  markup they rendered before.
+- **The two tortoise colours moved onto the transcribed tokens while that was
+  open.** The teaser had been carrying its own approximations: the red base as
+  `#3A2626` where `--nds-tortoise-red` is `#403434`, and the blue fleck as
+  `#2C4A9A` where `--nds-tortoise-blue-fleck` is `#3A55B0`. Both are marked
+  `from source` in `tokens/nrdi.css` (sampled from the brand's own renders), so
+  the teaser now uses the sampled values. The third tone each colourway needs —
+  the deep one inside the shell, `#070D20` on blue and `#1C1312` on red — is
+  derived; it is a shadow within the material, and no render gives a value for
+  it. The two swatch dots keep the lighter stand-ins they already had
+  (`#243F84`, `#5C2E2E`): a 20px dot has no room for mottling, so it shows the
+  colourway's average rather than its base.
+- **Teaser 3's swatch targets are 42px wide at 390, not 28.8.** The strip's
+  vertical floor already worked (`--t03-hit-h: max(45px, …)`), but the
+  horizontal pitch was `3.7 * var(--u)` with no floor, which is 28.8px on a
+  phone. Putting a px floor on the slop alone — the obvious fix — does not
+  actually fix it: the hit boxes tile, so widening a box without widening the
+  gap makes neighbours overlap, the later sibling wins the overlap, and each
+  swatch still owns 28.8px, only lopsidedly, with the boundary off the midpoint.
+  So the pitch is now the one number the strip is built from (the gap is
+  whatever is left of it after the dot), and on a phone it opens from 3.7u to
+  5.4u. Two conditions gate that, and both are needed: the container query,
+  which is the 4:5 crop itself and makes the wider strip a recomposition of the
+  cropped frame rather than a change to the 16:10 one, and a viewport query at
+  the same 639px, which is the touch floor. Without the second, variant B's
+  416px wall tile at 1440 — under 640px too — would have had its strip spread as
+  well, from a 15.4px pitch to 22.5px: a mouse target at a size no phone rule
+  can rescue, and a composition already measured and signed off. Measured after
+  scoping: that tile is back at 15.38px, the 333.6px tile at a 768 viewport is
+  at 12.33px, and all three variants read 42.09px at 390. The window in the
+  cropped state is exactly 50u wide whatever the screen is, so nine targets at
+  5.4u take 48.6u of it and leave a margin that scales: 13.6px each side at 320,
+  16.5px at 390. Nine 44px targets
+  cannot tile a 390px window at all (9 x 44 = 396 > 390), so 5.4u is the ceiling
+  and not a compromise short of one. Measured by sweeping `elementFromPoint`
+  across the strip in 0.25px steps: nine targets, eight contiguous boundaries,
+  no dead gaps, target width 34.5px at 320, 42.1px at 390, 44.7px at 414, 46.4px
+  at 430 and 69.0px at 639, height 45.5px up to 430 and 50.5px at 639 (the
+  height floor is 45px or 3.9u, whichever is larger, so it stops binding as the
+  frame grows), every boundary on the midpoint between two dots within the 1.2px
+  the synthetic-pointer bias and the 0.25px sweep step account for. Off the crop
+  nothing changed: at 1600 the pitch is 59.2px as before, and variant B's 416px
+  wall tile is untouched.
+- **`screens/` is regenerated whenever a page changes, and `README.md` now says
+  so.** Ten of the nineteen required PNGs no longer matched the built page: four
+  teaser stills predated the teaser review passes above, and all six variant
+  shots predated them too — variant B's own page height had moved 682px. The
+  worst of them, `screens/variant-b-wall-1440x900.png`, still showed the tiny
+  illegible hero this file records as fixed, so the committed screenshot made a
+  fixed page look broken. The cause was procedural: `README.md` required a line
+  in `ASSUMPTIONS.md` after a teaser or variant change and said nothing about
+  re-capturing the still. It does now, in both the place a teaser is checked and
+  the place decisions are logged, with the full command (`python3 build.py &&
+  python3 screenshot.py && python3 screenshot.py --fold`) named as the safe
+  default rather than a `--only` run, because every variant carries all thirteen
+  teasers and teaser 1 twice, so a single teaser edit moves six variant PNGs as
+  well as its own still.
+
+## Phase 5 QA, the last pass
+
+- **The hangtag's script line is invented and was changed to say so plainly.** It read `Actually dope`, which nothing in `SOURCES.md` accounts for: the real hangtag is a blank placeholder card in every revision of the tech pack, and the brand's own tagline was never transcribed. Two words in the brand's voice with no provenance is the kind of thing rule 1 is about, so the line now reads `Made to last` — plain, generic and invented, as brief 6.3 asks fragment copy to be. The marker-script face and its placement on the tag are unchanged, since those are the transcribed part.
+- **`.hero-copy` carries `min-width: 0`.** It is a grid item, so its default `min-width: auto` let its own minimum content width exceed its track and push the document 43px wide on variant C at exactly 768px, intermittently. The guard is correct whatever the trigger, and it costs nothing at any other width.
+- **`--aes-light-2` now has its row in `SOURCES.md` part B.** It is an alias of `--aes-lesson-lite-2` and carries the same citation; it was the one transcribed token of five hundred and twelve with no row.
+- **The repository is private; only `dist/` is published.** Written into `README.md` because `SOURCES.md` is a file-by-file index of four private codebases and a client asset library, and nothing in the repo said so.
+
+- **Teaser 5's head sits on a real inner gutter now, and the rig was re-centred.** The score numeral — the biggest, brightest thing in that frame, under the caption "A signal, scored in seven phases" — was sliced by the phone crop: its left edge fell 17.9px outside the frame at 390 and the 7 of 74 read as a slash. The cause was that the glass panel and the numeral both started on the same line, about 11.5% into the scene, while the crop window began at 13%, so the numeral had no margin to give. The rig now declares a 6u inner gutter that the head, the play head, the waveform and the chip row all start on, which buys about 5% of the scene between the panel's edge and the type and splits it into bleed for the glass and margin for the words. The unit went from the scene over 130 to the scene over 111 and the rig to 84u by 40u at 13.9u, 12.8u, which also fixed a 9%-against-28% left-right imbalance in the 16:10 frame and made the numeral larger rather than smaller (113px to 131px wide at 1600). The declared focal is 38%,48%. **The trade, which is real:** the phone crop now shows about four and a half of the seven chips where it used to show six and a half, and the waveform and chip row begin just inside the left crop edge instead of bleeding past it. The chip the loop re-scores is still inside the window, so a phone viewer still sees the thing that changes; the subject being whole was worth more than two more chips.
+- **Teaser 12 was rebuilt as one lit instrument, not three slabs.** The QA reader's finding was that it was the one teaser not composed as an ad frame: three equal grey rounded slabs, flat-lit, two thirds empty, reading at phone size as an unfinished board rather than an instrument, while its two neighbours from the same source both read as one lit object on black. It is now a single machined plate with three lanes cut into it, a key light falling across it from the upper left, tick ladders and load bars carrying the engineered depth, a lamp and a count at each lane's head, and the dropping chip as the brightest thing in the frame. Measured: the dropping chip used to peak at 198.7 of 255 while the rest of the frame reached 234.8 — it was dimmer than its surroundings, which is the opposite of a subject; it now peaks at 234.8 against 211.6 everywhere else. The amber covers 0.26% of the frame and appears only where something is on, which sits between the other two cockpit teasers. Coverage 50.0%. Everything the brief names survived: three tiers, five chips with their tick strengths, the slot-cap drop, the 160ms register spring on the landing, the 200ms base step on the rebalance, the resting frame with the chip caught mid-drop, and the tier names readable on a phone. One token was appended to `tokens/cockpit.css`: `--ckp-recess`, the shallow step that shelves the middle lane.
+
