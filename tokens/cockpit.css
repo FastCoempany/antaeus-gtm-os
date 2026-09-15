@@ -214,3 +214,10 @@
   /* the drop's snap: the deal room's 160ms register spring read as a curve, one overshoot then settle */
   --ckp-ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1); /* derived, added for t12 */
 }
+
+:root {
+  /* one shallow step of shadow, half the bevel's dark and a step above the sunk groove: it
+     shelves the lane the chip only passes through, and it is where the key light lands off
+     at the far corner of a plate */
+  --ckp-recess: rgba(0, 0, 0, 0.2); /* derived, added for t12 */
+}

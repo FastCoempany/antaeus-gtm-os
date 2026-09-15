@@ -408,3 +408,14 @@
   --ndg-garment-sage-inside: #d5cb95; /* derived, added for t11 */
   --ndg-garment-sage-shade: #a4975f; /* derived, added for t11 */
 }
+
+:root {
+  /* the shadow inside the tortoiseshell: the sampled base and fleck give the
+     shell its two lit tones, and this is the third, the deep veining that runs
+     between the patches. No render gives a value for it, so both are derived
+     off their own base. The teaser assembles its pattern as SVG attribute
+     strings, where var() does not resolve, so it carries these as literals and
+     this block is the record. */
+  --nds-tortoise-blue-deep: #070D20; /* derived, added for t03 */
+  --nds-tortoise-red-deep: #1C1312; /* derived, added for t03 */
+}
