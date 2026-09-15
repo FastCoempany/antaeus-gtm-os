@@ -1,1 +1,206 @@
-/* tokens/cockpit.css — filled in phase 1 (source study) */
+/* tokens/cockpit.css — an internal sales cockpit, the instrument set.
+   Prefix: --ckp-*
+   Files read (paths relative to that repo's root). Two are aliased because
+   their real names belong to a product: the vendored design kit's directory is
+   written as <vendored kit>, and the stylesheet of the app's root surface is
+   written as <root surface>.module.css. Nothing else in the list carries a
+   product, employer, partner, or person name:
+     <vendored kit>/css/tokens.css
+     <vendored kit>/css/motion.css
+     <vendored kit>/css/components.css
+     config/design-tokens.css
+     src/app/layout.tsx
+     src/app/globals.css
+     src/app/groundwork/groundwork.module.css
+     src/app/groundwork/instrument.tsx
+     src/app/room/room.module.css
+     src/app/<root surface>.module.css
+     src/app/dashboard.module.css
+     src/app/sendbook/sendbook.module.css
+     src/app/playbook/playbook.module.css
+     src/components/presence/presence.module.css
+     src/components/scratch/scratchpad.module.css
+     src/lib/book/scoring.ts
+     src/lib/groundwork/day.ts
+     docs/architecture/design-system.md
+   Reading applied (logged in ASSUMPTIONS.md, Phase 1): the source is bright by its
+   own rule (a pale field, navy ink). The real palette is transcribed: the amber is the
+   warm signal, the red is kept for a real alarm only, and the ink ladder and hairlines
+   are transcribed as alphas so they become the graphite panel and its tick lines on
+   the black stage. Type is the brief's default IBM Plex pair, derived, because the
+   source's own faces are the same family as another source in this gallery. Every
+   line carries one mark. */
+:root {
+  /* palette: the source's field and surfaces, for the record */
+  --ckp-src-field: #f5f7fb; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-surface: #ffffff; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-sunk: #eff2f7; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-ink: #0a1c40; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-ink-700: #142949; /* from source: <vendored kit>/css/tokens.css */
+  /* palette: the ink ladder as alphas. These proportions are the engineered part */
+  --ckp-a-ink: 1; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-soft: 0.66; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-faint: 0.42; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-quiet: 0.22; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-rule: 0.16; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-hair-strong: 0.14; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-hair: 0.07; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-a-ring: 0.3; /* from source: src/components/presence/presence.module.css */
+  --ckp-a-node-border: 0.28; /* from source: src/app/room/room.module.css */
+  /* palette: the graphite ground. Three steps like the source's field / surface / sunk trio, inverted */
+  --ckp-ground: #15171a; /* derived */
+  --ckp-panel: #1c1f24; /* derived */
+  --ckp-sunk: #0f1113; /* derived */
+  --ckp-fg: #e9ebee; /* derived */
+  /* palette: the ladder applied to the graphite foreground (the transcribed alphas on white) */
+  --ckp-fg-soft: rgba(233, 235, 238, 0.66); /* derived */
+  --ckp-fg-faint: rgba(233, 235, 238, 0.42); /* derived */
+  --ckp-fg-quiet: rgba(233, 235, 238, 0.22); /* derived */
+  --ckp-rule: rgba(255, 255, 255, 0.16); /* derived */
+  --ckp-hair-strong: rgba(255, 255, 255, 0.14); /* derived */
+  --ckp-hair: rgba(255, 255, 255, 0.07); /* derived */
+
+  /* palette: the one warm signal, on only where something is on */
+  --ckp-signal: #f59e0b; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-signal-half: rgba(245, 158, 11, 0.45); /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-signal-soft: rgba(245, 158, 11, 0.12); /* from source: <vendored kit>/css/tokens.css */
+  --ckp-signal-halo: rgba(245, 158, 11, 0.16); /* from source: src/components/presence/presence.module.css */
+  --ckp-ember: #b6791a; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-ember-deep: #8a5a00; /* from source: src/app/room/room.module.css */
+  --ckp-ember-fill: rgba(138, 90, 0, 0.1); /* from source: src/app/room/room.module.css */
+  /* palette: the red exception, a real alarm and nothing else */
+  --ckp-alarm: #ef4444; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-alarm-glow: rgba(220, 38, 38, 0.5); /* from source: src/app/<root surface>.module.css */
+  --ckp-alarm-deep: #dc2626; /* from source: src/app/<root surface>.module.css */
+  /* palette: the source's other accents, transcribed for the record and not lit on the stage */
+  --ckp-src-orange: #e6701e; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-blue: #2563eb; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-src-green: #22c55e; /* from source: <vendored kit>/css/tokens.css */
+
+  /* surface rules: ticks, rules and bevels */
+  --ckp-tick-w: 4px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-tick-h: 11px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-tick-radius: 1px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-tick-lead: 7px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-gauge-w: 3px; /* from source: <vendored kit>/css/components.css */
+  --ckp-gauge-radius: 2px; /* from source: <vendored kit>/css/components.css */
+  --ckp-burn-h: 8px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-burn-radius: 4px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-meter-h: 6px; /* from source: src/app/<root surface>.module.css */
+  --ckp-zone-h: 5px; /* from source: src/app/room/room.module.css */
+  --ckp-node: 5px; /* from source: src/app/room/room.module.css */
+  --ckp-node-current: 8px; /* from source: src/app/room/room.module.css */
+  --ckp-node-current-border: 2px; /* from source: src/app/room/room.module.css */
+  --ckp-node-board: 32px; /* from source: src/app/dashboard.module.css */
+  --ckp-connector-w: 2px; /* from source: src/app/dashboard.module.css */
+  --ckp-halo-w: 1.5px; /* from source: src/app/dashboard.module.css */
+  --ckp-halo-offset: 7px; /* from source: src/app/dashboard.module.css */
+  --ckp-lamp: 7px; /* from source: src/components/presence/presence.module.css */
+  --ckp-lamp-halo: 3px; /* from source: src/components/presence/presence.module.css */
+  --ckp-track-stripe: repeating-linear-gradient(-60deg, rgba(10, 28, 64, 0.05) 0 6px, transparent 6px 12px); /* from source: src/app/room/room.module.css */
+  /* the source has no bevel; the brief's engineered depth is a two-tone line */
+  --ckp-tick-minor: rgba(255, 255, 255, 0.22); /* derived */
+  --ckp-tick-major: rgba(255, 255, 255, 0.42); /* derived */
+  --ckp-bevel-light: rgba(255, 255, 255, 0.1); /* derived */
+  --ckp-bevel-dark: rgba(0, 0, 0, 0.5); /* derived */
+  --ckp-track-stripe-stage: repeating-linear-gradient(-60deg, rgba(255, 255, 255, 0.05) 0 6px, transparent 6px 12px); /* derived */
+  --ckp-needle-w: 2px; /* derived */
+  --ckp-arc-sweep: 240deg; /* derived */
+
+  /* radii: the source's scale and its surface extras */
+  --ckp-radius-control: 4px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-radius-card: 8px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-radius-frame: 12px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-radius-pill: 99px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-radius-chip: 3px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-radius-stamp: 4px; /* from source: src/app/room/room.module.css */
+  --ckp-radius-fold: 7px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-radius-lane: 10px; /* from source: src/app/<root surface>.module.css */
+
+  /* spacing: an 8px rhythm with half-steps, and the winged stage's ratios */
+  --ckp-space-1: 4px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-2: 8px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-3: 12px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-4: 16px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-5: 20px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-6: 24px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-7: 32px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-8: 40px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-space-9: 48px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-wing-l: 180px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-wing-r: 200px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-lane-w: 380px; /* from source: src/app/<root surface>.module.css */
+  --ckp-chip-pad: 4px 9px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-chip-border: 1px solid rgba(10, 28, 64, 0.22); /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-chip-h: 28px; /* derived */
+  --ckp-tier-rail-h: 2px; /* derived */
+
+  /* type: the brief's default pair, because the source's own faces would not distinguish it here */
+  --ckp-font-sans: "IBM Plex Sans", "Public Sans", system-ui, sans-serif; /* derived */
+  --ckp-font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace; /* derived */
+  --ckp-weight-sans: 400; /* derived */
+  --ckp-weight-sans-strong: 600; /* derived */
+  --ckp-weight-mono: 400; /* derived */
+  /* type: sizes, weights and tracking transcribe; the source's mono kickers run 600–800, the loaded mono is 400 */
+  --ckp-body-size: 15px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-body-lh: 1.6; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-label-size: 13px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-label-weight: 600; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-small-size: 13px; /* from source: config/design-tokens.css */
+  --ckp-small-lh: 18px; /* from source: config/design-tokens.css */
+  --ckp-reason-size: 12.5px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-whisper-size: 10.5px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-whisper-lh: 1.35; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-kicker-size: 10.5px; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-kicker-track: 0.16em; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-kicker-case: uppercase; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-kicker-wing-size: 10px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-kicker-wing-track: 0.14em; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-kicker-facts-size: 11px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-kicker-facts-track: 0.08em; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-kicker-register-size: 9px; /* from source: src/app/room/room.module.css */
+  --ckp-kicker-register-track: 0.16em; /* from source: src/app/room/room.module.css */
+  --ckp-kicker-move-track: 0.2em; /* from source: src/app/room/room.module.css */
+  --ckp-chip-label-size: 10.5px; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-chip-label-track: 0.1em; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-digits-size: 14px; /* from source: src/components/presence/presence.module.css */
+  --ckp-digits-weight: 700; /* from source: src/components/presence/presence.module.css */
+  --ckp-unit-size: 8.5px; /* from source: src/components/presence/presence.module.css */
+  --ckp-unit-track: 0.04em; /* from source: src/components/presence/presence.module.css */
+  --ckp-numeral-size: clamp(34px, 5vw, 60px); /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-numeral-lh: 1; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-digits-variant: tabular-nums; /* from source: src/app/groundwork/groundwork.module.css */
+
+  /* the score the dial is built on: 0–100 with three fixed cut lines */
+  --ckp-score-max: 100; /* from source: src/lib/book/scoring.ts */
+  --ckp-tier-mid-from: 45; /* from source: src/lib/book/scoring.ts */
+  --ckp-tier-high-from: 70; /* from source: src/lib/book/scoring.ts */
+  --ckp-confidence-mid: 0.85; /* from source: src/lib/book/scoring.ts */
+  --ckp-confidence-low: 0.7; /* from source: src/lib/book/scoring.ts */
+  --ckp-heat-levels: 3; /* from source: src/lib/groundwork/day.ts */
+  --ckp-queue-cap: 6; /* from source: src/lib/groundwork/day.ts */
+  --ckp-slot-cap: 2; /* from source: src/lib/groundwork/day.ts */
+  --ckp-tier-chips: 5; /* pinned */
+
+  /* motion: snappy, state-driven, no hover theater */
+  --ckp-dur-quick: 120ms; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-dur-base: 200ms; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-dur-considered: 320ms; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* from source: <vendored kit>/css/tokens.css */
+  --ckp-ease-exit: cubic-bezier(0.4, 0, 1, 1); /* from source: <vendored kit>/css/tokens.css */
+  --ckp-stagger: 40ms; /* from source: <vendored kit>/css/tokens.css */
+  --ckp-burn-dur: 0.4s; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-throb: 1s steps(2, end) infinite; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-throb-opacity: 0.5; /* from source: src/app/groundwork/groundwork.module.css */
+  --ckp-spring-dur: 0.16s; /* from source: src/app/room/room.module.css */
+  --ckp-spring-rise: -4px; /* from source: src/app/room/room.module.css */
+  --ckp-breathe: 2.4s ease-in-out infinite; /* from source: src/components/presence/presence.module.css */
+  --ckp-ring-pulse: 1.9s ease-out infinite; /* from source: src/app/dashboard.module.css */
+  --ckp-ring-scale: 1.45; /* from source: src/app/dashboard.module.css */
+  --ckp-ring-opacity: 0.7; /* from source: src/app/dashboard.module.css */
+  --ckp-meter-fill-dur: 320ms; /* from source: src/app/<root surface>.module.css */
+  /* motion: the material curve for the 6–10s loops (brief 10; the instrument is the snappiest material) */
+  --ckp-loop-ease: cubic-bezier(0.2, 0, 0, 1); /* from source: <vendored kit>/css/tokens.css */
+  --ckp-loop-default: 7s; /* derived */
+  --ckp-needle-step: 320ms; /* derived */
+}

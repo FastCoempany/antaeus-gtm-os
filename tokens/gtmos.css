@@ -1,1 +1,171 @@
-/* tokens/gtmos.css — filled in phase 1 (source study) */
+/* tokens/gtmos.css — GTM OS (antaeus.app), the dark-glass set.
+   Prefix: --gtm-*
+   Files read (paths relative to that repo's root):
+     src/styles/tokens.css
+     css/app.css
+     src/discovery-studio/v4/discovery-studio-v4.css
+     src/signal-console/v4/signal-console-v4.css
+     src/signal-console/lib/heat.ts
+     src/territory-architect/v4/territory-architect-v4.css
+     src/territory-architect/v4/TerritoryArchitectV4.tsx
+     src/lib/ground/ground.css
+     src/lib/ground/motion.ts
+     js/discovery-segment-runtime.js
+     deliverables/design-system/03-component-library-2026-06-07.md
+     deliverables/design-system/08-motion-2026-06-07.md
+     deliverables/plans/antaeus-visual-system-spec-2026-04-01.md
+   Reading applied (logged in ASSUMPTIONS.md, Phase 1): the brief pins the dark-glass
+   language (base, coral, Outfit / Plus Jakarta Sans / Space Mono) while the repo's
+   shipped direction is bright. The pinned values win as the visual language; the
+   supporting values (text tiers, borders, radii, shadows, glass alpha, blur, the
+   cool secondary accent, easings) are transcribed from the legacy dark shell in
+   css/app.css and from the v4 rooms. Every line carries one mark: from source /
+   pinned / derived. Notes sit on their own lines above a declaration. */
+:root {
+  /* palette: the ground and its depth ladder */
+  --gtm-base: #0a0e27; /* pinned */
+  /* the legacy shell's own navy-black ladder, kept for the record; the derived
+     raised/elevated steps below mirror its spacing on the pinned hue */
+  --gtm-legacy-base: #0a0e1a; /* from source: css/app.css */
+  --gtm-legacy-shell: #0b1020; /* from source: css/app.css */
+  --gtm-legacy-2: #0f172a; /* from source: css/app.css */
+  --gtm-legacy-3: #1e293b; /* from source: css/app.css */
+  --gtm-legacy-4: #283548; /* from source: css/app.css */
+  --gtm-raised: #111637; /* derived */
+  --gtm-elevated: #181d45; /* derived */
+
+  /* palette: text tiers on the dark ground (the legacy shell's four tiers) */
+  --gtm-text: #ffffff; /* from source: css/app.css */
+  --gtm-text-2: #e2e8f0; /* from source: css/app.css */
+  --gtm-text-3: #94a3b8; /* from source: css/app.css */
+  --gtm-text-muted: #64748b; /* from source: css/app.css */
+
+  /* palette: accents. Coral is the one lit thing; teal is the cool secondary, used sparingly */
+  --gtm-accent: #ff6b6b; /* pinned */
+  --gtm-accent-soft: rgba(255, 107, 107, 0.14); /* derived */
+  --gtm-accent-glow: rgba(255, 107, 107, 0.45); /* derived */
+  --gtm-accent-glow-blur: 24px; /* derived */
+  --gtm-cool: #2dd4bf; /* from source: css/app.css */
+  --gtm-cool-light: #5eead4; /* from source: css/app.css */
+  --gtm-cool-dark: #14b8a6; /* from source: css/app.css */
+  /* the legacy semantic state map: in-progress = teal, at-risk = amber, blocked = red, complete = green */
+  --gtm-state-amber: #f59e0b; /* from source: css/app.css */
+  --gtm-state-red: #ef4444; /* from source: css/app.css */
+  --gtm-state-green: #22c55e; /* from source: css/app.css */
+
+  /* palette: borders and hairlines on glass */
+  --gtm-border: rgba(255, 255, 255, 0.1); /* from source: css/app.css */
+  --gtm-hairline: rgba(255, 255, 255, 0.08); /* from source: css/app.css */
+  --gtm-fill-faint: rgba(255, 255, 255, 0.03); /* from source: css/app.css */
+  --gtm-fill-soft: rgba(255, 255, 255, 0.06); /* from source: css/app.css */
+  /* brief 6.3 asks for glass borders at 20–30% white; the repo tops out at 0.12 */
+  --gtm-glass-border: rgba(255, 255, 255, 0.22); /* derived */
+  --gtm-glass-border-forward: rgba(255, 255, 255, 0.3); /* derived */
+  --gtm-chip-stroke: rgba(255, 255, 255, 0.28); /* derived */
+
+  /* surface rules: glass */
+  --gtm-glass-rail: rgba(9, 13, 24, 0.94); /* from source: css/app.css */
+  --gtm-glass-panel-source: rgba(15, 23, 42, 0.78); /* from source: css/app.css */
+  /* the panel alpha lowered and the hue moved onto the pinned base so the black stage reads through */
+  --gtm-glass-fill: rgba(16, 22, 58, 0.62); /* derived */
+  --gtm-glass-fallback: #141a45; /* derived */
+  --gtm-glass-blur: 14px; /* from source: css/app.css */
+  --gtm-glass-blur-strong: 16px; /* from source: css/app.css */
+  --gtm-highlight-strip: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)); /* from source: css/app.css */
+  --gtm-highlight-top: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.03)); /* from source: css/app.css */
+  /* the specular: the highlight strips above, pushed to a diagonal that moves with the loop */
+  --gtm-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 35%, transparent 60%); /* derived */
+  --gtm-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.18); /* derived */
+  --gtm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3); /* from source: css/app.css */
+  --gtm-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4); /* from source: css/app.css */
+  --gtm-shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.5); /* from source: css/app.css */
+  --gtm-shadow-card: 0 12px 32px -22px rgba(10, 28, 64, 0.4); /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+
+  /* surface rules: depth. No tilt exists in production; the brief's range is used */
+  --gtm-perspective: 1200px; /* derived */
+  --gtm-tilt-x: 8deg; /* derived */
+  --gtm-tilt-y: -6deg; /* derived */
+
+  /* radii: the legacy shell's scale, then the v4 rooms' observed shapes */
+  --gtm-radius-sm: 6px; /* from source: css/app.css */
+  --gtm-radius-md: 10px; /* from source: css/app.css */
+  --gtm-radius-lg: 16px; /* from source: css/app.css */
+  --gtm-radius-xl: 22px; /* from source: css/app.css */
+  --gtm-radius-full: 9999px; /* from source: css/app.css */
+  --gtm-radius-pill: 20px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-radius-card: 13px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-radius-chip: 6px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-radius-tile: 10px; /* from source: src/territory-architect/v4/territory-architect-v4.css */
+  --gtm-radius-account: 12px; /* from source: src/signal-console/v4/signal-console-v4.css */
+
+  /* the weight devices: a 3px rule in the state color (the "gauge"), a 3px bottom edge */
+  --gtm-rule-w: 3px; /* from source: deliverables/design-system/03-component-library-2026-06-07.md */
+  --gtm-edge-w: 3px; /* from source: deliverables/design-system/03-component-library-2026-06-07.md */
+  --gtm-bar-h: 4px; /* from source: css/app.css */
+  --gtm-bar-track: rgba(255, 255, 255, 0.06); /* from source: css/app.css */
+  --gtm-heat-bar-w: 40px; /* from source: src/signal-console/v4/signal-console-v4.css */
+  --gtm-heat-bar-h: 5px; /* from source: src/signal-console/v4/signal-console-v4.css */
+  --gtm-dot: 7px; /* from source: src/signal-console/v4/signal-console-v4.css */
+
+  /* spacing (the legacy shell's scale; the v4 rooms add half-steps) */
+  --gtm-space-1: 4px; /* from source: css/app.css */
+  --gtm-space-2: 8px; /* from source: css/app.css */
+  --gtm-space-3: 16px; /* from source: css/app.css */
+  --gtm-space-4: 24px; /* from source: css/app.css */
+  --gtm-space-5: 32px; /* from source: css/app.css */
+  --gtm-space-6: 48px; /* from source: css/app.css */
+  --gtm-gap-chips: 4px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-gap-tiles: 8px; /* from source: src/territory-architect/v4/territory-architect-v4.css */
+
+  /* type: families. The repo names the three faces but never their weights; weights are the brief's */
+  --gtm-font-display: "Outfit", "Plus Jakarta Sans", system-ui, sans-serif; /* pinned */
+  --gtm-font-ui: "Plus Jakarta Sans", "Outfit", system-ui, sans-serif; /* pinned */
+  --gtm-font-data: "Space Mono", "IBM Plex Mono", ui-monospace, monospace; /* pinned */
+  --gtm-weight-display: 700; /* pinned */
+  --gtm-weight-display-light: 500; /* pinned */
+  --gtm-weight-ui: 400; /* pinned */
+  --gtm-weight-ui-strong: 600; /* pinned */
+  --gtm-weight-data: 400; /* pinned */
+  /* type: roles and sizes, from the v4 rooms and the token ramp */
+  --gtm-display-size: 24px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-display-lh: 1.25; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-display-track: -0.01em; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-title-size: 20px; /* from source: src/styles/tokens.css */
+  --gtm-body-size: 15px; /* from source: src/styles/tokens.css */
+  --gtm-body-lh: 1.6; /* from source: src/styles/tokens.css */
+  --gtm-label-size: 13px; /* from source: src/styles/tokens.css */
+  --gtm-kicker-size: 10.5px; /* from source: src/styles/tokens.css */
+  --gtm-kicker-track: 0.16em; /* from source: src/styles/tokens.css */
+  --gtm-kicker-case: uppercase; /* from source: src/styles/tokens.css */
+  --gtm-kicker-small: 9.5px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-kicker-small-track: 0.08em; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-chip-size: 11px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-response-size: 12.5px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+  --gtm-numeral-size: 11px; /* from source: src/signal-console/v4/signal-console-v4.css */
+  --gtm-tile-label-size: 12.5px; /* from source: src/territory-architect/v4/territory-architect-v4.css */
+  --gtm-node-label-size: 12px; /* from source: src/lib/ground/ground.css */
+  --gtm-ordinal-size: 9px; /* from source: src/discovery-studio/v4/discovery-studio-v4.css */
+
+  /* counts the teasers are built on */
+  --gtm-rail-segments: 10; /* from source: js/discovery-segment-runtime.js */
+  --gtm-heat-decay-steps: 6; /* from source: src/signal-console/lib/heat.ts */
+  --gtm-heat-max: 99; /* from source: src/signal-console/lib/heat.ts */
+  --gtm-strip-phases: 7; /* pinned */
+  --gtm-constellation-nodes: 19; /* pinned */
+  --gtm-room-count: 22; /* from source: src/lib/ground/motion.ts */
+  --gtm-room-stages: 6; /* from source: src/lib/ground/motion.ts */
+
+  /* motion: the product's own curves and durations (nothing in it runs past 0.5s) */
+  --gtm-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* from source: src/styles/tokens.css */
+  --gtm-ease-exit: cubic-bezier(0.4, 0, 1, 1); /* from source: src/styles/tokens.css */
+  --gtm-ease-settle: cubic-bezier(0.22, 0.61, 0.36, 1); /* from source: src/lib/ground/ground.css */
+  --gtm-dur-quick: 120ms; /* from source: src/styles/tokens.css */
+  --gtm-dur-base: 200ms; /* from source: src/styles/tokens.css */
+  --gtm-dur-considered: 320ms; /* from source: src/styles/tokens.css */
+  --gtm-dur-rise: 450ms; /* from source: src/lib/ground/ground.css */
+  --gtm-stagger: 40ms; /* from source: src/styles/tokens.css */
+  /* motion: the material curve for the 6–10s loops (brief 10, glass is the slowest material) */
+  --gtm-loop-ease: cubic-bezier(0.55, 0, 0.15, 1); /* derived */
+  --gtm-loop-default: 9s; /* derived */
+  --gtm-pulse-ease: ease-in-out; /* derived */
+}

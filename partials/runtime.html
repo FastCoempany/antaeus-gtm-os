@@ -3,13 +3,15 @@
    In view (threshold 0.25) and not hovered: playing. Hover pauses.
    prefers-reduced-motion: reduce never plays; interactions still work.
    Each stage gets the class is-playing and the events teaser:play / teaser:pause,
-   which script-driven teasers listen to. Variant A sets data-play-delay on body
-   so a caption can fade in before its loop starts. */
+   which script-driven teasers listen to. The nearest ancestor with data-play-delay (the body, a hero, a
+   gallery figure) delays a stage's first start so a caption or the hero copy
+   can arrive before its loop begins. */
 (function () {
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var delay = parseInt(document.body.getAttribute("data-play-delay") || "0", 10) || 0;
   var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
   stages.forEach(function (el) {
+    var holder = el.closest("[data-play-delay]");
+    var delay = holder ? (parseInt(holder.getAttribute("data-play-delay"), 10) || 0) : 0;
     var inView = false, hover = false, started = false, timer = null;
     function apply(on) {
       if (el.classList.contains("is-playing") === on) return;

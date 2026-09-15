@@ -44,12 +44,26 @@ def launch(p):
         raise exc
 
 
+FONT_PROBE = 'document.fonts && document.fonts.check(\'600 16px "Schibsted Grotesk"\')'
+
+
 def settle(page, ms: int) -> None:
-    page.wait_for_load_state("load")
-    try:
-        page.evaluate("document.fonts && document.fonts.ready")
-    except Exception:  # noqa: BLE001
-        pass
+    """Wait for load and fonts; reload up to twice if the fonts stylesheet was dropped
+    (a proxy hiccup, not a page fault)."""
+    for attempt in range(3):
+        page.wait_for_load_state("load")
+        try:
+            page.evaluate("document.fonts && document.fonts.ready")
+        except Exception:  # noqa: BLE001
+            pass
+        page.wait_for_timeout(600)
+        try:
+            if page.evaluate(FONT_PROBE):
+                break
+        except Exception:  # noqa: BLE001
+            break
+        if attempt < 2:
+            page.reload()
     page.wait_for_timeout(ms)
 
 
@@ -63,6 +77,7 @@ def main(argv: list[str]) -> int:
     SCREENS.mkdir(exist_ok=True)
     (SCREENS / "teasers").mkdir(exist_ok=True)
     errors: list[str] = []
+    network: list[str] = []  # resource fetch failures (fonts behind a proxy), reported but not counted
 
     with sync_playwright() as p:
         browser = launch(p)
@@ -75,8 +90,9 @@ def main(argv: list[str]) -> int:
                 device_scale_factor=1,
             )
             page = ctx.new_page()
-            page.on("console", lambda m: errors.append(f"console.{m.type}: {m.text}") if m.type == "error" else None)
+            page.on("console", lambda m: (network.append(m.text) if m.text.startswith("Failed to load resource") else errors.append(f"console.{m.type}: {m.text}")) if m.type == "error" else None)
             page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
+            page.on("requestfailed", lambda r: network.append(f"{r.url} :: {r.failure}"))
             return ctx, page
 
         if want_variants:
@@ -108,6 +124,10 @@ def main(argv: list[str]) -> int:
 
         browser.close()
 
+    if network:
+        print(f"\n{len(network)} resource fetch failure(s), not counted as page errors (fonts through a proxy, usually):")
+        for n in network[:4]:
+            print("  " + n[:160])
     if errors:
         print("\nconsole/page errors:")
         for e in errors:
