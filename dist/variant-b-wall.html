@@ -472,7 +472,7 @@
 
 /* materials/digs-knit.css */
 .m-knit {
-  --kn-pitch: 2.6%;
+  --kn-pitch: calc(var(--u, 1%) * 2.6);
   --kn-light: 0.5;
 
   background-color: var(--digs-knit, #A89F8A);
@@ -610,14 +610,14 @@
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.026 0.034' numOctaves='3' seed='19'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.35 0 0 0 0 0.58 0 0 0 3.6 -1.42'/></filter>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
 <rect width='900' height='560' filter='url(%23f)'/></svg>"),
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.075' numOctaves='3' seed='41'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.13 0 0 0 0 0.22 0 0 0 0 0.4 0 0 0 3.2 -1.5'/></filter>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
 <rect width='900' height='560' filter='url(%23g)'/></svg>"),
     linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
   background-size: auto, 100% 100%, 100% 100%, auto;
@@ -800,7 +800,7 @@
 
 /* materials/pj-knurl.css */
 .m-knurl {
-  --k-cell: 4.2%;
+  --k-cell: calc(var(--u, 1%) * 4.2);
   --k-light: 0.5;
 
   background-color: var(--pj-brass-knurl, #816437);
@@ -1088,7 +1088,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
    band on a knob 63 mm across. Here it is the wall, and the only other event
    is a light crossing it. Metal does not ease, so the rake runs at constant
    velocity. */
-.f01 .f01-field { position: absolute; inset: 0; --k-cell: 5.4%; }
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: calc(var(--u) * 5.4); }
 .f01 .f01-rake { animation: f01-rake 9s linear infinite; }
 .f01 .f01-vignette {
   position: absolute; inset: 0; pointer-events: none;
@@ -1102,26 +1102,37 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
   font-family: var(--pj-display); font-style: italic;
   animation: f01-surface 9s linear infinite;
 }
+/* The deboss is 0.2 mm deep. The study is emphatic about what that looks
+   like: "astonishingly shallow -- in the hero renders it is barely legible,
+   catching light on one edge only. If you rebuild this, the mark should be a
+   whisper", and the brand rule is that the mark whispers on an object and
+   shouts on paper, never the other way round.
+   The first build had the technique right and the values wrong. A text-shadow
+   is a whole copy of the glyph, not an edge, so two offset copies at 0.85 and
+   0.75 alpha stack into a solid cream letter with a hard dark rim -- the
+   loudest object in the frame, which is the swap the rule names. At these
+   alphas the knurl reads straight through the letterform and only the two
+   edges catch, which is what 0.2 mm actually does to light. */
 .f01 .f01-puff {
   font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
   letter-spacing: -0.02em; text-transform: lowercase;
   color: transparent;
   text-shadow:
-    calc(var(--u) * -0.12) calc(var(--u) * -0.12) 0 rgba(255, 248, 226, 0.85),
-    calc(var(--u) * 0.14) calc(var(--u) * 0.14) 0 rgba(20, 12, 2, 0.75);
+    calc(var(--u) * -0.1) calc(var(--u) * -0.1) 0 rgba(255, 248, 226, 0.26),
+    calc(var(--u) * 0.11) calc(var(--u) * 0.11) 0 rgba(20, 12, 2, 0.3);
 }
 .f01 .f01-junction {
   font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
   text-indent: 0.44em; color: transparent;
   text-shadow:
-    calc(var(--u) * -0.08) calc(var(--u) * -0.08) 0 rgba(255, 248, 226, 0.7),
-    calc(var(--u) * 0.09) calc(var(--u) * 0.09) 0 rgba(20, 12, 2, 0.62);
+    calc(var(--u) * -0.07) calc(var(--u) * -0.07) 0 rgba(255, 248, 226, 0.24),
+    calc(var(--u) * 0.08) calc(var(--u) * 0.08) 0 rgba(20, 12, 2, 0.28);
 }
 @keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
 @keyframes f01-surface {
   0%, 34% { opacity: 0; }
-  46% { opacity: 1; }
-  58% { opacity: 1; }
+  46% { opacity: 0.85; }
+  58% { opacity: 0.85; }
   72%, 100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1162,7 +1173,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
    band on a knob 63 mm across. Here it is the wall, and the only other event
    is a light crossing it. Metal does not ease, so the rake runs at constant
    velocity. */
-.f01 .f01-field { position: absolute; inset: 0; --k-cell: 5.4%; }
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: calc(var(--u) * 5.4); }
 .f01 .f01-rake { animation: f01-rake 9s linear infinite; }
 .f01 .f01-vignette {
   position: absolute; inset: 0; pointer-events: none;
@@ -1176,26 +1187,37 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
   font-family: var(--pj-display); font-style: italic;
   animation: f01-surface 9s linear infinite;
 }
+/* The deboss is 0.2 mm deep. The study is emphatic about what that looks
+   like: "astonishingly shallow -- in the hero renders it is barely legible,
+   catching light on one edge only. If you rebuild this, the mark should be a
+   whisper", and the brand rule is that the mark whispers on an object and
+   shouts on paper, never the other way round.
+   The first build had the technique right and the values wrong. A text-shadow
+   is a whole copy of the glyph, not an edge, so two offset copies at 0.85 and
+   0.75 alpha stack into a solid cream letter with a hard dark rim -- the
+   loudest object in the frame, which is the swap the rule names. At these
+   alphas the knurl reads straight through the letterform and only the two
+   edges catch, which is what 0.2 mm actually does to light. */
 .f01 .f01-puff {
   font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
   letter-spacing: -0.02em; text-transform: lowercase;
   color: transparent;
   text-shadow:
-    calc(var(--u) * -0.12) calc(var(--u) * -0.12) 0 rgba(255, 248, 226, 0.85),
-    calc(var(--u) * 0.14) calc(var(--u) * 0.14) 0 rgba(20, 12, 2, 0.75);
+    calc(var(--u) * -0.1) calc(var(--u) * -0.1) 0 rgba(255, 248, 226, 0.26),
+    calc(var(--u) * 0.11) calc(var(--u) * 0.11) 0 rgba(20, 12, 2, 0.3);
 }
 .f01 .f01-junction {
   font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
   text-indent: 0.44em; color: transparent;
   text-shadow:
-    calc(var(--u) * -0.08) calc(var(--u) * -0.08) 0 rgba(255, 248, 226, 0.7),
-    calc(var(--u) * 0.09) calc(var(--u) * 0.09) 0 rgba(20, 12, 2, 0.62);
+    calc(var(--u) * -0.07) calc(var(--u) * -0.07) 0 rgba(255, 248, 226, 0.24),
+    calc(var(--u) * 0.08) calc(var(--u) * 0.08) 0 rgba(20, 12, 2, 0.28);
 }
 @keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
 @keyframes f01-surface {
   0%, 34% { opacity: 0; }
-  46% { opacity: 1; }
-  58% { opacity: 1; }
+  46% { opacity: 0.85; }
+  58% { opacity: 0.85; }
   72%, 100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1477,7 +1499,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
    garment look like a garment rather than a flat fill. Fabric settles, so the
    light decelerates. */
 .f05 .f05-cloth {
-  position: absolute; inset: 0; --kn-pitch: 3.1%;
+  position: absolute; inset: 0; --kn-pitch: calc(var(--u) * 3.1);
   animation: f05-light 10s cubic-bezier(0.32, 0, 0.16, 1) infinite;
 }
 .f05 .f05-cloud { position: absolute; inset: -8%; }
@@ -1593,12 +1615,12 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
       <div class="f07-sweep m-ds-sweep"></div>
       <div class="f07-key m-ds-key"></div>
       <div class="f07-cast" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none">
+        <svg viewBox="0 0 1000 513">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
       <div class="f07-soft" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none" style="animation-delay:0s">
+        <svg viewBox="0 0 1000 513" style="animation-delay:0s">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
@@ -1616,15 +1638,24 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
    notch is the whole idea — a downward fold at 54% of the width on the top
    edge and an upward fold at 45% on the bottom, deliberately offset — so the
    shadow reads as a crease passing over the surface.
-   Two passes: a soft wide one that obeys the brand's shadow rule, and a hard
-   one at low alpha that carries the geometry. */
+   Two passes: a soft wide one, and a harder one that carries the geometry.
+   A DELIBERATE DEVIATION, stated because the first build claimed the opposite.
+   The brand's measured rule is that a shadow never falls more than 8-10%
+   below the backdrop and is never hard, and the soft pass here obeys it
+   (rgba(126,126,126,.2) over #D2D2D2 lands at 8%). The geometry pass does not:
+   at .30 it measures 23% below the ground. That rule describes the contact
+   shadow under a product in a photograph, and here the shadow is not under the
+   subject, it IS the subject -- a cast mark has to be legible as a shape or
+   the frame has nothing in it. Logged in ASSUMPTIONS.md. What is not
+   deviation: the mark keeps its measured 1.9498 aspect, which the viewBox
+   carries and which preserveAspectRatio="none" was previously discarding. */
 .f07 .f07-sweep { position: absolute; inset: 0; }
 .f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
 .f07 .f07-cast svg, .f07 .f07-soft svg {
-  position: absolute; left: 0; top: 21%; width: 78%; height: 52%;
+  position: absolute; left: 0; top: 17%; width: 78%; height: 64%;
   animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
-.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.58); }
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.30); }
 .f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
 .f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
 @keyframes f07-travel {
@@ -1894,7 +1925,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
    always in front. Here it is behind, and the operator moves it: where it
    sits, the material opens up. */
 .f09 .f09-plate {
-  position: absolute; inset: 0; filter: brightness(0.66) saturate(1.15);
+  position: absolute; inset: 0;
   animation: f09-drift 10s ease-in-out infinite;
   cursor: ew-resize; touch-action: none;
 }
@@ -2165,11 +2196,15 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 }
 /* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
 .f11 .f11-disc {
+  container-type: inline-size;
   position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
   transform: translateX(-50%);
 }
 .f11 .f11-knurl {
-  position: absolute; inset: 0; --k-cell: 5%;
+  /* 1.26 mm of pitch on a 63 mm cylinder is 2% of it, on both axes. The
+     containment sits on .f11-disc, not here: an element is never its own
+     query container, so a cqw written on this rule would measure the stage. */
+  position: absolute; inset: 0; --k-cell: 2cqw;
   border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
   overflow: hidden;
 }

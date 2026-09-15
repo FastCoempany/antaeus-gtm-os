@@ -66,11 +66,15 @@
 }
 /* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
 .f11 .f11-disc {
+  container-type: inline-size;
   position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
   transform: translateX(-50%);
 }
 .f11 .f11-knurl {
-  position: absolute; inset: 0; --k-cell: 5%;
+  /* 1.26 mm of pitch on a 63 mm cylinder is 2% of it, on both axes. The
+     containment sits on .f11-disc, not here: an element is never its own
+     query container, so a cqw written on this rule would measure the stage. */
+  position: absolute; inset: 0; --k-cell: 2cqw;
   border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
   overflow: hidden;
 }

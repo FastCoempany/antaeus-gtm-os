@@ -1,3 +1,12 @@
+/* A NOTE ON UNITS, because this material got it wrong once.
+   background-size takes two values and resolves the first against the
+   element's width and the second against its height. Give it percentages on
+   both axes and a cell meant to be square renders at the element's aspect
+   ratio -- on a 16:10 field a 49-degree diamond came out at 36 degrees and the
+   knurl read as quilted upholstery. Both axes must therefore be driven from a
+   single length. --u is one percent of the scene's width, so a cell expressed
+   in --u keeps its measured proportions at every frame size. Never set the
+   cell token to a percentage. */
 /* materials/digs-knit.css — DIGS, the thermal knit and its rib.
 
    Measured from: the garment photography and fabric closeups, sampled with
@@ -24,7 +33,7 @@
    yarns. */
 
 .m-knit {
-  --kn-pitch: 2.6%;                  /* the waffle cell at the frame's scale */
+  --kn-pitch: calc(var(--u, 1%) * 2.6);  /* the waffle cell as a LENGTH -- see the note */
   --kn-light: 0.5;                   /* 0 raking .. 1 flat */
 
   /* The cell is an SVG pattern, not crossed gradients: the pinhole is a

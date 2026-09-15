@@ -1,3 +1,12 @@
+/* A NOTE ON UNITS, because this material got it wrong once.
+   background-size takes two values and resolves the first against the
+   element's width and the second against its height. Give it percentages on
+   both axes and a cell meant to be square renders at the element's aspect
+   ratio -- on a 16:10 field a 49-degree diamond came out at 36 degrees and the
+   knurl read as quilted upholstery. Both axes must therefore be driven from a
+   single length. --u is one percent of the scene's width, so a cell expressed
+   in --u keeps its measured proportions at every frame size. Never set the
+   cell token to a percentage. */
 /* materials/pj-knurl.css — Puff Junction, the diamond cross-knurl.
 
    Measured from: Detail A (5:1) of the Top Lid drawing, and the knurl macro
@@ -23,7 +32,7 @@
    with a fixed light, so it holds at one viewing angle. */
 
 .m-knurl {
-  --k-cell: 4.2%;                    /* land width; the cell scales from it */
+  --k-cell: calc(var(--u, 1%) * 4.2);  /* land width as a LENGTH -- see the note above */
   --k-light: 0.5;                    /* 0..1, where the rake sits */
 
   /* The lattice is an SVG pattern rather than crossed CSS gradients: a knurl

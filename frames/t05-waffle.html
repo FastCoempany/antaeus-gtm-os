@@ -21,7 +21,7 @@
    garment look like a garment rather than a flat fill. Fabric settles, so the
    light decelerates. */
 .f05 .f05-cloth {
-  position: absolute; inset: 0; --kn-pitch: 3.1%;
+  position: absolute; inset: 0; --kn-pitch: calc(var(--u) * 3.1);
   animation: f05-light 10s cubic-bezier(0.32, 0, 0.16, 1) infinite;
 }
 .f05 .f05-cloud { position: absolute; inset: -8%; }

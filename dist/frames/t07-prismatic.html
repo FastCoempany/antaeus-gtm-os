@@ -471,7 +471,7 @@
 
 /* materials/digs-knit.css */
 .m-knit {
-  --kn-pitch: 2.6%;
+  --kn-pitch: calc(var(--u, 1%) * 2.6);
   --kn-light: 0.5;
 
   background-color: var(--digs-knit, #A89F8A);
@@ -609,14 +609,14 @@
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.026 0.034' numOctaves='3' seed='19'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.35 0 0 0 0 0.58 0 0 0 3.6 -1.42'/></filter>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
 <rect width='900' height='560' filter='url(%23f)'/></svg>"),
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.075' numOctaves='3' seed='41'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.13 0 0 0 0 0.22 0 0 0 0 0.4 0 0 0 3.2 -1.5'/></filter>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
 <rect width='900' height='560' filter='url(%23g)'/></svg>"),
     linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
   background-size: auto, 100% 100%, 100% 100%, auto;
@@ -799,7 +799,7 @@
 
 /* materials/pj-knurl.css */
 .m-knurl {
-  --k-cell: 4.2%;
+  --k-cell: calc(var(--u, 1%) * 4.2);
   --k-light: 0.5;
 
   background-color: var(--pj-brass-knurl, #816437);
@@ -895,12 +895,12 @@ html,body{margin:0;background:#000}
       <div class="f07-sweep m-ds-sweep"></div>
       <div class="f07-key m-ds-key"></div>
       <div class="f07-cast" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none">
+        <svg viewBox="0 0 1000 513">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
       <div class="f07-soft" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none" style="animation-delay:0s">
+        <svg viewBox="0 0 1000 513" style="animation-delay:0s">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
@@ -918,15 +918,24 @@ html,body{margin:0;background:#000}
    notch is the whole idea — a downward fold at 54% of the width on the top
    edge and an upward fold at 45% on the bottom, deliberately offset — so the
    shadow reads as a crease passing over the surface.
-   Two passes: a soft wide one that obeys the brand's shadow rule, and a hard
-   one at low alpha that carries the geometry. */
+   Two passes: a soft wide one, and a harder one that carries the geometry.
+   A DELIBERATE DEVIATION, stated because the first build claimed the opposite.
+   The brand's measured rule is that a shadow never falls more than 8-10%
+   below the backdrop and is never hard, and the soft pass here obeys it
+   (rgba(126,126,126,.2) over #D2D2D2 lands at 8%). The geometry pass does not:
+   at .30 it measures 23% below the ground. That rule describes the contact
+   shadow under a product in a photograph, and here the shadow is not under the
+   subject, it IS the subject -- a cast mark has to be legible as a shape or
+   the frame has nothing in it. Logged in ASSUMPTIONS.md. What is not
+   deviation: the mark keeps its measured 1.9498 aspect, which the viewBox
+   carries and which preserveAspectRatio="none" was previously discarding. */
 .f07 .f07-sweep { position: absolute; inset: 0; }
 .f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
 .f07 .f07-cast svg, .f07 .f07-soft svg {
-  position: absolute; left: 0; top: 21%; width: 78%; height: 52%;
+  position: absolute; left: 0; top: 17%; width: 78%; height: 64%;
   animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
-.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.58); }
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.30); }
 .f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
 .f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
 @keyframes f07-travel {

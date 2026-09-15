@@ -20,12 +20,23 @@
 
    What it is not: real sub-surface scattering carries light *through* a
    volume. This fakes it with a screen pass and an edge glow, so it holds for
-   a plate and not for a solid. The flecks also run smaller and more evenly
-   spread than the source, where a few blobs reach 8% of the frame width and
-   leave real clear ground between them -- pushed that far, thresholded
-   turbulence stops reading as inclusions in a material and starts reading as
-   droplets on one. Verified by building it both ways; this is the closer of
-   the two, and the gap is density, not colour. */
+   a plate and not for a solid.
+
+   MEASURED OFF THE RENDER, after the second pass fixed the first:
+     ground          #10141B          spec #131313-#1A273A     in range
+     fleck hue/sat   210deg / 0.49    spec 215deg / 0.55       close
+     blob width      up to 5.8%       spec 3-8% of the frame   in range
+     backlit fleck   #9CBCDD          spec #93B5BF-#A7BEC6     in range
+   The first build missed every one of those. It ran three octaves of
+   turbulence against a hard alpha threshold, which shatters a blob into a
+   scatter of specks about 1% wide, and it sat under a
+   brightness(.66) saturate(1.15) filter on the frame -- a colour grade, which
+   this brand's canon bans outright, and which was also what dragged the
+   ground to #0B0D11 and the flecks to a near-neutral #72808E. The grade is
+   gone, the octaves are down to one so a blob stays whole, and the alpha
+   curve keeps its zero-crossing (blob width) while reaching full opacity at
+   the core, which is what lets the real cobalt show instead of a wash that
+   blends grey against near-black. */
 
 .m-acetate-gloss {
   background-color: var(--ds-gloss, #131313);
@@ -61,20 +72,27 @@
       rgba(147, 181, 191, 0.13) 42%,
       transparent 80%
     ),
-    /* The flecks. One large tile at a high base frequency: a small tile at a
-       low frequency reads as repeating cloud, and the seams are visible at
-       frame scale. Alpha stays low so the ground remains near-black -- the
-       fleck is an inclusion in dark material, not a cloud on a light one. */
+    /* The flecks. One large tile: a small tile at a low frequency reads as
+       repeating cloud and its seams show at frame scale. Alpha stays low so
+       the ground remains near-black -- the fleck is an inclusion in dark
+       material, not a cloud on a light one.
+       numOctaves is 1 here, not 3. Octaves add finer and finer detail on top
+       of the base frequency, and against a hard alpha threshold that detail
+       shatters what should be an organic blob 3-8% of the frame wide into a
+       scatter of specks around 1% -- the material stopped reading as acetate
+       and started reading as a snowstorm. One octave keeps the blob whole.
+       The fill is the measured cobalt-periwinkle #5B8CCF straight from the
+       study, not a darker stand-in relit by a filter. */
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.026 0.034' numOctaves='3' seed='19'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.35 0 0 0 0 0.58 0 0 0 3.6 -1.42'/></filter>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
 <rect width='900' height='560' filter='url(%23f)'/></svg>"),
     /* a second, finer scatter so the flecks are not all one size */
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.075' numOctaves='3' seed='41'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.13 0 0 0 0 0.22 0 0 0 0 0.4 0 0 0 3.2 -1.5'/></filter>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
 <rect width='900' height='560' filter='url(%23g)'/></svg>"),
     linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
   background-size: auto, 100% 100%, 100% 100%, auto;

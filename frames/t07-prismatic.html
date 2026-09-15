@@ -6,12 +6,12 @@
       <div class="f07-sweep m-ds-sweep"></div>
       <div class="f07-key m-ds-key"></div>
       <div class="f07-cast" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none">
+        <svg viewBox="0 0 1000 513">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
       <div class="f07-soft" aria-hidden="true">
-        <svg viewBox="0 0 1000 513" preserveAspectRatio="none" style="animation-delay:0s">
+        <svg viewBox="0 0 1000 513" style="animation-delay:0s">
           <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
         </svg>
       </div>
@@ -29,15 +29,24 @@
    notch is the whole idea — a downward fold at 54% of the width on the top
    edge and an upward fold at 45% on the bottom, deliberately offset — so the
    shadow reads as a crease passing over the surface.
-   Two passes: a soft wide one that obeys the brand's shadow rule, and a hard
-   one at low alpha that carries the geometry. */
+   Two passes: a soft wide one, and a harder one that carries the geometry.
+   A DELIBERATE DEVIATION, stated because the first build claimed the opposite.
+   The brand's measured rule is that a shadow never falls more than 8-10%
+   below the backdrop and is never hard, and the soft pass here obeys it
+   (rgba(126,126,126,.2) over #D2D2D2 lands at 8%). The geometry pass does not:
+   at .30 it measures 23% below the ground. That rule describes the contact
+   shadow under a product in a photograph, and here the shadow is not under the
+   subject, it IS the subject -- a cast mark has to be legible as a shape or
+   the frame has nothing in it. Logged in ASSUMPTIONS.md. What is not
+   deviation: the mark keeps its measured 1.9498 aspect, which the viewBox
+   carries and which preserveAspectRatio="none" was previously discarding. */
 .f07 .f07-sweep { position: absolute; inset: 0; }
 .f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
 .f07 .f07-cast svg, .f07 .f07-soft svg {
-  position: absolute; left: 0; top: 21%; width: 78%; height: 52%;
+  position: absolute; left: 0; top: 17%; width: 78%; height: 64%;
   animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
-.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.58); }
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.30); }
 .f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
 .f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
 @keyframes f07-travel {

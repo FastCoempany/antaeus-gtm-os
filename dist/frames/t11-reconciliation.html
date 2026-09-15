@@ -471,7 +471,7 @@
 
 /* materials/digs-knit.css */
 .m-knit {
-  --kn-pitch: 2.6%;
+  --kn-pitch: calc(var(--u, 1%) * 2.6);
   --kn-light: 0.5;
 
   background-color: var(--digs-knit, #A89F8A);
@@ -609,14 +609,14 @@
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.026 0.034' numOctaves='3' seed='19'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.21 0 0 0 0 0.35 0 0 0 0 0.58 0 0 0 3.6 -1.42'/></filter>\
+<filter id='f'><feTurbulence type='turbulence' baseFrequency='0.010 0.013' numOctaves='1' seed='19'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.357 0 0 0 0 0.549 0 0 0 0 0.812 0 0 0 2.6 -0.466'/></filter>\
 <rect width='900' height='560' filter='url(%23f)'/></svg>"),
 
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='900' height='560'>\
-<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.075' numOctaves='3' seed='41'/>\
-<feColorMatrix type='matrix' values='0 0 0 0 0.13 0 0 0 0 0.22 0 0 0 0 0.4 0 0 0 3.2 -1.5'/></filter>\
+<filter id='g'><feTurbulence type='turbulence' baseFrequency='0.024' numOctaves='2' seed='41'/>\
+<feColorMatrix type='matrix' values='0 0 0 0 0.094 0 0 0 0 0.145 0 0 0 0 0.208 0 0 0 1.9 -0.58'/></filter>\
 <rect width='900' height='560' filter='url(%23g)'/></svg>"),
     linear-gradient(168deg, #1A273A 0, #10151F 54%, #131313 100%);
   background-size: auto, 100% 100%, 100% 100%, auto;
@@ -799,7 +799,7 @@
 
 /* materials/pj-knurl.css */
 .m-knurl {
-  --k-cell: 4.2%;
+  --k-cell: calc(var(--u, 1%) * 4.2);
   --k-light: 0.5;
 
   background-color: var(--pj-brass-knurl, #816437);
@@ -955,11 +955,15 @@ html,body{margin:0;background:#000}
 }
 /* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
 .f11 .f11-disc {
+  container-type: inline-size;
   position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
   transform: translateX(-50%);
 }
 .f11 .f11-knurl {
-  position: absolute; inset: 0; --k-cell: 5%;
+  /* 1.26 mm of pitch on a 63 mm cylinder is 2% of it, on both axes. The
+     containment sits on .f11-disc, not here: an element is never its own
+     query container, so a cqw written on this rule would measure the stage. */
+  position: absolute; inset: 0; --k-cell: 2cqw;
   border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
   overflow: hidden;
 }

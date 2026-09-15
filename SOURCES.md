@@ -93,7 +93,7 @@ prove it claims nothing the source does not support.
 
 | # | frame | source | built from | new because | claims |
 |---|---|---|---|---|---|
-| 1 | `knurl-wall` | PUFF JUNCTION | `pj-knurl` (1.26 mm pitch, 1.65 × 1.9 lands, 49° grooves), `pj-brass` (the 0.2 mm three-terrace deboss) | the knurl has only ever been a band on a 63 mm knob; it has never been the subject | none — no text but the wordmark, which is the real lockup |
+| 1 | `knurl-wall` | PUFF JUNCTION | `pj-knurl` (1.26 mm pitch, 1.65 × 1.9 lands, 49° grooves), `pj-brass` (the 0.2 mm three-terrace deboss) | the knurl has only ever been a band on a 63 mm knob; it has never been the subject | none but the wordmark — **re-typeset, not the real lockup**: the mark is set in the brand's own display face, and the merged sticker contour that is one of its thirteen paths is absent. See ASSUMPTIONS.md §*the lockup contour*. |
 | 2 | `ground-line` | Antaeus | the Grounded-A's exact paths and lift transform, `an-field` (34 px grid, two washes, vignette) | the auth gate does this at 118 px as a login affordance; here the line is a horizon | none |
 | 3 | `blackout` | DARKEST SHADES | `ds-lens` blackout recipe | the lens stops being a component and becomes the surface | one tagline, verbatim: *See Everything. Reveal Nothing.* |
 | 4 | `iris-seam` | AESDR | `ae-iris` (seven stops, 300%, 4 s), `ae-paper`, the shell and ear glyphs | the iris is always an accent on something; here the ration is the composition | one positioning line, verbatim; four real accent words |
