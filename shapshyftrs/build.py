@@ -37,14 +37,30 @@ Outputs:
   dist/variant-<name>.html        one file per variants/<name>.html
   dist/teasers/index.html         contact sheet, all teasers with id and source
   dist/teasers/tNN-<id>.html      one teaser per page, for stills
+
+Token files are inlined without their comments: the provenance marks and the
+header's file lists stay in tokens/ and SOURCES.md and never reach dist/.
+
+Modes: the default build tolerates a partial teaser set (phases 2 to 4);
+BUILD_STRICT=1 requires all thirteen and is the phase-5 gate.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
+
+# The default build tolerates teasers that are still being written (a malformed
+# header, gaps in the 1..13 numbering): they are skipped with a warning so the
+# documented command keeps working through phases 2 to 4. BUILD_STRICT=1 is the
+# phase-5 gate: every teaser must parse and the set must be exactly 1..13.
+# (BUILD_LENIENT=1 is accepted as an alias of the default for older notes.)
+STRICT = os.environ.get("BUILD_STRICT") == "1"
+LENIENT = not STRICT
+TEASER_COUNT = 13
 
 ROOT = Path(__file__).resolve().parent
 TOKENS_DIR = ROOT / "tokens"
@@ -103,6 +119,30 @@ def load_config() -> dict:
     return json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 
 
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.S)
+
+
+def strip_provenance(css: str) -> str:
+    """Drop every comment from a token file before it is inlined.
+
+    The token files carry their provenance as comments (the header's list of
+    files read, the per-line from-source / pinned / derived marks). That record
+    belongs to the repo and to SOURCES.md, never to dist/, so nothing a token
+    file cites can reach a shipped page. Only the declarations survive.
+    """
+    css = CSS_COMMENT_RE.sub("", css)
+    lines = [ln.rstrip() for ln in css.splitlines()]
+    out: list[str] = []
+    for ln in lines:
+        if ln.strip() == "":
+            if out and out[-1] == "":
+                continue
+            out.append("")
+        else:
+            out.append(ln)
+    return "\n".join(out).strip()
+
+
 def load_tokens() -> str:
     parts = []
     names = list(TOKEN_ORDER)
@@ -113,7 +153,7 @@ def load_tokens() -> str:
     for name in names:
         path = TOKENS_DIR / name
         if path.exists():
-            parts.append(f"/* tokens/{name} */\n" + path.read_text(encoding="utf-8").strip())
+            parts.append(f"/* tokens/{name} */\n" + strip_provenance(path.read_text(encoding="utf-8")))
     return "\n\n".join(parts)
 
 
@@ -122,14 +162,20 @@ def load_teasers() -> list[dict]:
     for path in sorted(TEASERS_DIR.glob("t*.html")):
         text = path.read_text(encoding="utf-8")
         m = HEADER_RE.search(text)
+        problem = None
         if not m:
-            die(f"{path.name}: missing or malformed header comment")
+            problem = "missing or malformed header comment"
+        elif m.group("id") not in CAPTIONS:
+            problem = f"unknown teaser id {m.group('id')!r}"
+        elif m.group("source") not in SOURCES:
+            problem = f"unknown source {m.group('source')!r}"
+        if problem:
+            if LENIENT:
+                print(f"build.py: skipping {path.name}: {problem}", file=sys.stderr)
+                continue
+            die(f"{path.name}: {problem}")
         tid = m.group("id")
-        if tid not in CAPTIONS:
-            die(f"{path.name}: unknown teaser id {tid!r}")
         source = m.group("source")
-        if source not in SOURCES:
-            die(f"{path.name}: unknown source {source!r}")
         teasers.append(
             {
                 "path": path,
@@ -145,8 +191,13 @@ def load_teasers() -> list[dict]:
         )
     teasers.sort(key=lambda t: t["num"])
     nums = [t["num"] for t in teasers]
-    if nums != list(range(1, len(nums) + 1)):
-        die(f"teaser numbering is not 1..N: {nums}")
+    if len(nums) != len(set(nums)):
+        die(f"two teasers share a number: {nums}")
+    if nums != list(range(1, TEASER_COUNT + 1)):
+        if LENIENT:
+            print(f"build.py: teasers present so far: {nums}", file=sys.stderr)
+        else:
+            die(f"teaser numbering is not 1..{TEASER_COUNT}: {nums}")
     return teasers
 
 
@@ -329,11 +380,11 @@ def build_single_pages(ctx: dict) -> list[Path]:
 
 def main() -> None:
     cfg = load_config()
+    ctx = {"cfg": cfg, "tokens": load_tokens(), "teasers": load_teasers()}
     DIST.mkdir(exist_ok=True)
     (DIST / "teasers").mkdir(exist_ok=True)
     for stale in (DIST / "teasers").glob("*.html"):
         stale.unlink()
-    ctx = {"cfg": cfg, "tokens": load_tokens(), "teasers": load_teasers()}
     outs = build_variants(ctx)
     outs.append(build_contact_sheet(ctx))
     outs.extend(build_single_pages(ctx))

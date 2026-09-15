@@ -1,1 +1,216 @@
-/* tokens/aesdr.css — filled in phase 1 (source study) */
+/* tokens/aesdr.css — AESDR (aesdr.com), the editorial set.
+   Prefix: --aes-*
+   Files read (paths relative to that repo's root):
+     app/globals.css
+     app/layout.tsx
+     app/page.module.css
+     app/dashboard/page.tsx
+     app/syllabus/syllabus.module.css
+     components/LandingSequence.module.css
+     components/landing-sequence/animator.ts
+     components/DeckStack.tsx
+     components/DeckStack.module.css
+     components/brand/Divider.tsx
+     components/ProgressSaver.tsx
+     content/lessons/html/lesson-01/aesdr_course01_v1.html
+     design-canon-seed/07-figma-prep/figma-tokens.json
+     design-canon/03-css-tokens/_gates.css
+     deliverables/prototypes/dashboard-b-shimmer-variants.html
+   Reading applied (logged in ASSUMPTIONS.md, Phase 1): the four pinned faces stay.
+   Abril Fatface, Barlow Condensed and DM Mono are real product faces; Cormorant
+   Garamond exists only in a retired prototype and is kept because the brief pins it.
+   The iris gradient is transcribed as the product defines it (seven stops at 90°);
+   the brief's pearlescent 120° wash is a second, derived token for the one place a
+   teaser needs a glow rather than a line. Every line carries one mark. */
+:root {
+  /* palette: the app's editorial paper and ink */
+  --aes-paper: #FAF7F2; /* from source: app/globals.css */
+  --aes-ink: #1A1A1A; /* from source: app/globals.css */
+  --aes-crimson: #8B1A1A; /* from source: app/globals.css */
+  --aes-muted: #6B6B6B; /* from source: app/globals.css */
+  --aes-light: #E8E4DF; /* from source: app/globals.css */
+  --aes-form-border: #928C84; /* from source: app/globals.css */
+  --aes-card: #ffffff; /* from source: components/DeckStack.module.css */
+  --aes-gold: #B8943E; /* from source: app/dashboard/page.tsx */
+  --aes-gold-light: #D4B96A; /* from source: app/dashboard/page.tsx */
+  --aes-gold-glow: rgba(184, 148, 62, 0.35); /* from source: app/dashboard/page.tsx */
+  /* palette: the lesson player's harder printed contrast */
+  --aes-lesson-paper: #FFFFFF; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-ink: #000000; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-mid: #636060; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-lite: #F2EEE9; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-lite-2: #E5E1DC; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-line: rgba(0, 0, 0, 0.08); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-lesson-line-2: rgba(0, 0, 0, 0.15); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-amber: #D94F00; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-cobalt: #0038FF; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-coral: #FF3200; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-green: #00B85A; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  /* palette: tints in use */
+  --aes-crimson-ring: rgba(139, 26, 26, 0.18); /* from source: app/globals.css */
+  --aes-crimson-glow: 0 0 12px rgba(139, 26, 26, 0.2); /* from source: app/dashboard/page.tsx */
+  --aes-ink-ghost: rgba(0, 0, 0, 0.06); /* from source: components/LandingSequence.module.css */
+  --aes-ink-dot: rgba(0, 0, 0, 0.12); /* from source: components/LandingSequence.module.css */
+  --aes-paper-on-ink: rgba(250, 247, 242, 0.65); /* from source: app/dashboard/page.tsx */
+  /* on the black stage the paper needs seating that the flat product never had */
+  --aes-stage-seat: 0 30px 60px rgba(0, 0, 0, 0.6); /* derived */
+  --aes-crimson-glow-stage: 0 0 24px rgba(139, 26, 26, 0.35); /* derived */
+
+  /* the signature: the iris, exactly as the product defines it */
+  --aes-iris: linear-gradient(90deg, #FF006E 0%, #FF6B00 17%, #F59E0B 34%, #10B981 51%, #38BDF8 68%, #8B5CF6 85%, #FF006E 100%); /* from source: app/globals.css */
+  --aes-iris-lesson: linear-gradient(90deg, #FF006E 0%, #FF6B00 17%, #FFD600 34%, #00E5A0 51%, #0099FF 68%, #7B2FFF 85%, #FF006E 100%); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-iris-size: 200% 100%; /* from source: app/globals.css */
+  --aes-iris-size-wide: 300% 100%; /* from source: components/LandingSequence.module.css */
+  --aes-iris-shift: 0% 50%; /* from source: app/globals.css */
+  --aes-iris-shift-end: 200% 50%; /* from source: app/globals.css */
+  --aes-iris-dur-button: 2s; /* from source: design-canon/03-css-tokens/_gates.css */
+  --aes-iris-dur-progress: 3s; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-iris-dur-line: 4s; /* from source: app/page.module.css */
+  --aes-iris-dur-divider: 8s; /* from source: components/brand/Divider.tsx */
+  --aes-iris-timing: linear; /* from source: app/globals.css */
+  --aes-iris-fallback: #8B1A1A; /* from source: app/globals.css */
+  /* the same order of hues lifted toward sheen and turned to the brief's angle, for a glow only */
+  --aes-iris-sheen: linear-gradient(120deg, #F6EEF4 0%, #F4B8CF 18%, #E7C99B 36%, #A9DCD8 54%, #B9B4E8 72%, #F0D9A3 88%, #F6EEF4 100%); /* derived */
+  --aes-iris-line-opacity: 0.5; /* from source: components/DeckStack.module.css */
+  --aes-iris-ambient-opacity: 0.15; /* from source: components/LandingSequence.module.css */
+
+  /* rules and hairlines as typographic devices */
+  --aes-hairline: 1px solid #E8E4DF; /* from source: app/page.module.css */
+  --aes-rule-iris-h: 2px; /* from source: app/page.module.css */
+  --aes-rule-ambient-h: 1px; /* from source: components/LandingSequence.module.css */
+  --aes-rule-accent: 3px solid #8B1A1A; /* from source: app/dashboard/page.tsx */
+  --aes-rule-lesson: 2px solid #000000; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-rule-stripe-h: 4px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-border-hair: 1px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-border-icon: 1.5px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-border-card: 2px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-bracket: 20px; /* from source: components/LandingSequence.module.css */
+  --aes-dotted-path: 2 6; /* from source: components/brand/Divider.tsx */
+  --aes-dotted-path-w: 1.2px; /* from source: components/brand/Divider.tsx */
+
+  /* radii: sharp corners, editorial */
+  --aes-radius: 0; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-radius-dot: 999px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-radius-deck-shadow: 4px; /* from source: components/DeckStack.module.css */
+
+  /* surface rules: paper is nearly flat */
+  --aes-shadow-card: 0 1px 2px rgba(26, 26, 26, 0.04), 0 8px 24px rgba(26, 26, 26, 0.06); /* from source: components/DeckStack.module.css */
+  --aes-shadow-index: 0 1px 2px rgba(42, 27, 14, 0.08), 0 12px 28px rgba(42, 27, 14, 0.1); /* from source: app/syllabus/syllabus.module.css */
+  --aes-dogear: 28px; /* from source: components/DeckStack.module.css */
+  --aes-dogear-hover: 52px; /* from source: components/DeckStack.module.css */
+  --aes-dogear-gradient: linear-gradient(225deg, #ffffff 0%, #ffffff 48%, #E8E4DF 49%, rgba(0, 0, 0, 0.06) 52%, #FAF7F2 56%, #FAF7F2 100%); /* from source: components/DeckStack.module.css */
+  --aes-progress-w: 80px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-progress-h: 2px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-progress-track: #E5E1DC; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-node: 16px; /* from source: app/dashboard/page.tsx */
+  --aes-node-border: 2px; /* from source: app/dashboard/page.tsx */
+  --aes-node-future-border: 1px; /* from source: app/dashboard/page.tsx */
+  --aes-connector: 1px; /* from source: app/dashboard/page.tsx */
+  --aes-cursor-w: 2px; /* from source: components/LandingSequence.module.css */
+  --aes-cursor-h: 1.1em; /* from source: components/LandingSequence.module.css */
+
+  /* spacing */
+  --aes-space-1: 4px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-2: 8px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-3: 12px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-4: 16px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-5: 24px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-6: 32px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-7: 40px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-8: 48px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-space-9: 64px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-card-pad: 40px; /* from source: components/DeckStack.module.css */
+  --aes-row-gap: 40px; /* from source: app/dashboard/page.tsx */
+
+  /* type: families (pinned by the brief; weights pinned by the brief's font list) */
+  --aes-font-display: "Abril Fatface", "Playfair Display", Georgia, serif; /* pinned */
+  --aes-font-body: "Cormorant Garamond", "Source Serif 4", Georgia, serif; /* pinned */
+  --aes-font-label: "Barlow Condensed", "Arial Narrow", sans-serif; /* pinned */
+  --aes-font-mono: "DM Mono", "IBM Plex Mono", ui-monospace, monospace; /* pinned */
+  --aes-weight-display: 400; /* pinned */
+  --aes-weight-body: 400; /* pinned */
+  --aes-weight-body-strong: 500; /* pinned */
+  --aes-weight-label: 600; /* pinned */
+  --aes-weight-label-light: 500; /* pinned */
+  --aes-weight-mono: 400; /* pinned */
+  /* type: sizes and tracking from the app's scale and the lesson player */
+  --aes-display-size: clamp(22px, 3.2vw, 46px); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-display-lh: 1.05; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-display-track: -0.01em; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-h2-size: 48px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-h2-lh: 1.1; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-title-size: 22px; /* from source: app/dashboard/page.tsx */
+  --aes-title-lh: 1.2; /* from source: app/dashboard/page.tsx */
+  --aes-title-track: 0.01em; /* from source: app/dashboard/page.tsx */
+  --aes-lede-size: 18px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-lede-lh: 1.65; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-body-size: 16px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-body-lh: 1.6; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-body-track: 0; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  /* Cormorant ships nowhere in production, so its teaser sizes are chosen on the body line-heights */
+  --aes-serif-size: 17px; /* derived */
+  --aes-serif-lh: 1.62; /* derived */
+  --aes-label-size: 14px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-label-lh: 1.2; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-label-track: 0.15em; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-label-case: uppercase; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-label-title-size: 18px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-label-title-track: 0.04em; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-eyebrow-size: 10px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-eyebrow-lh: 1.4; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-eyebrow-track: 0.25em; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-footnote-size: 9px; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-footnote-lh: 1.85; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-footnote-track: 0.1em; /* from source: design-canon-seed/07-figma-prep/figma-tokens.json */
+  --aes-progress-label-size: 9px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-progress-label-track: 0.16em; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-counter-size: 12px; /* from source: components/DeckStack.module.css */
+  --aes-counter-track: 0.2em; /* from source: components/DeckStack.module.css */
+  --aes-feedback-size: 9px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-feedback-lh: 1.65; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-stage-label-size: 9px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-stage-label-track: 0.1em; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-typed-size: clamp(22px, 3.5vw, 38px); /* from source: components/LandingSequence.module.css */
+  --aes-typed-lh: 1.5; /* from source: components/LandingSequence.module.css */
+
+  /* counts the teasers are built on */
+  --aes-course-count: 12; /* from source: components/DeckStack.tsx */
+  --aes-arc-markers: 7; /* pinned */
+  --aes-sim-stages: 3; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+
+  /* motion: the product's own timings */
+  --aes-peel-dur: 650ms; /* from source: components/DeckStack.module.css */
+  --aes-peel-ease: cubic-bezier(0.7, 0, 0.2, 1); /* from source: components/DeckStack.module.css */
+  --aes-peel-fade: 450ms; /* from source: components/DeckStack.module.css */
+  --aes-peel-perspective: 1400px; /* from source: components/DeckStack.module.css */
+  --aes-peel-transform: translateX(-8%) rotateY(-155deg) rotateZ(-4deg); /* from source: components/DeckStack.tsx */
+  --aes-fan-offset: 4px; /* from source: components/DeckStack.tsx */
+  --aes-fan-rotate: 0.6deg; /* from source: components/DeckStack.tsx */
+  --aes-dogear-dur: 0.3s; /* from source: components/DeckStack.module.css */
+  --aes-screen-dur: 0.42s; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-screen-ease: cubic-bezier(0.22, 1, 0.36, 1); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-screen-rise: 16px; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-progress-dur: 0.8s; /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-progress-ease: cubic-bezier(0.4, 0, 0.2, 1); /* from source: content/lessons/html/lesson-01/aesdr_course01_v1.html */
+  --aes-type-ms: 32ms; /* from source: components/landing-sequence/animator.ts */
+  --aes-type-jitter-ms: 18ms; /* from source: components/landing-sequence/animator.ts */
+  --aes-type-hold: 800ms; /* from source: components/landing-sequence/animator.ts */
+  --aes-dissolve-dur: 0.6s; /* from source: components/LandingSequence.module.css */
+  --aes-dissolve-blur: 12px; /* from source: components/LandingSequence.module.css */
+  --aes-dissolve-scale: 1.04; /* from source: components/LandingSequence.module.css */
+  --aes-cursor-blink: 0.8s; /* from source: components/LandingSequence.module.css */
+  --aes-node-dur: 0.3s; /* from source: app/dashboard/page.tsx */
+  --aes-line-dur: 0.5s; /* from source: app/dashboard/page.tsx */
+  --aes-toast-dur: 180ms; /* from source: components/ProgressSaver.tsx */
+  /* motion: the material curve for the 6–10s loops (brief 10; paper turns with the deck's curve) */
+  --aes-loop-ease: cubic-bezier(0.7, 0, 0.2, 1); /* from source: components/DeckStack.module.css */
+  --aes-loop-default: 8s; /* derived */
+  --aes-underline-sweep: 650ms; /* derived */
+  --aes-title-crossfade: 400ms; /* derived */
+}
+
+/* Aliases used by the teasers built alongside the synthesized set; each points at a token above or carries its own mark. */
+:root {
+  --aes-light-2: var(--aes-lesson-lite-2, #E5E1DC); /* from source: content/lessons/html/lesson-01 (alias) */
+  --aes-paper-fold: #EEE9E1; /* derived: the underside of a lifted page corner */
+}
