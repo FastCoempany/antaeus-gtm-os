@@ -829,7 +829,7 @@ The build is done when every line is true and each has a measurement or a file r
 - The page still sells the mockup service. The offer, the price, the form and section 8's copy are unchanged from the first version.
 - The internal sales cockpit is out of scope entirely. It is not a source, it is not a frame, and it is not mentioned.
 - The repository stays private. Only `dist/` is ever published — `study/` and `SOURCES.md` index private codebases by path and name real asset files.
-- `${PRICE}` is `$75`, `${TURNAROUND}` is `3 days`, both from `config.json`.
+- `${PRICE}` is `$75`, `${TURNAROUND}` is `five days`, both from `config.json`.
 - The stage is `#000000` and the chrome has no accent of its own.
 - The first version's thirteen teasers are superseded. Reuse nothing from them except the build tooling, the stage stylesheet and the section 8 copy. A frame that survives from v1 must be rebuilt against its source study and re-pass the three tests, or it goes.
 

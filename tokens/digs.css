@@ -1,0 +1,51 @@
+/* tokens/digs.css
+   Measured in study/digs.md.
+
+   Two palettes that do not reconcile, and they are kept apart deliberately:
+   the identity is three values with no greys and no gradients; the product is
+   a warm sage-and-off-white world with a navy thread. Their only point of
+   contact is that both are called blue. */
+:root {
+  /* --- the identity ---------------------------------------------------- */
+  --digs-blue: #0042E5;
+  --digs-black: #000000;
+  --digs-ice: #F0F5FF;
+
+  /* --- the product ------------------------------------------------------ */
+  --digs-offwhite: #F8F0E8;      /* colorway 1 */
+  --digs-sandblue: #6176A3;      /* colorway 2 */
+  --digs-thread: #24315A;        /* Pantone 19-3943, measured off the swatch */
+  --digs-thread-sewn: #3E4351;   /* the same thread as actually stitched */
+
+  /* The thermal knit. High micro-contrast, low macro-contrast, diffuse
+     cotton sheen, no gloss. The reverse face is a different material. */
+  --digs-knit-lit: #ADA595;
+  --digs-knit: #A89F8A;
+  --digs-knit-shadow: #787265;
+  --digs-knit-dark: #4C493E;
+  --digs-knit-reverse: #5D523F;  /* smooth, warmer, duller */
+  --digs-seam: #868070;          /* the overlock ridge crest */
+  --digs-wash: #A08D64;          /* pale streaks of the seam-highlighter wash */
+  --digs-body-warm: #A49267;
+  --digs-body-warm-hi: #CCB17D;
+  --digs-body-cool: #8C8C83;
+  --digs-rib: #9C998B;
+
+  /* Geometry, from the tech pack (in, unless noted) */
+  --digs-knit-pitch: 1.2;        /* mm, the waffle cell */
+  --digs-knit-angle: 45deg;      /* the two yarn families cross at +/- this */
+  --digs-rib-pitch: 1.75;        /* mm */
+  --digs-neckband: 1;            /* finished height */
+  --digs-cuff: 2;
+  --digs-sa: 0.375;              /* seam allowance on every seam */
+  --digs-hem-turnback: 1;
+  --digs-emb-w: 2.5;             /* embroidery, centre back yoke */
+  --digs-emb-h: 1.58;
+
+  /* Alexandria is on Google Fonts and is exact. The Old Falcons is a demo
+     cut -- licence it or draw the letterforms. See DESIGN.md. */
+  --digs-sans: "Alexandria", system-ui, sans-serif;
+  --digs-script: "Caveat", "The Old Falcons", cursive;
+  --digs-lead-display: 0.95;     /* headlines lock together as a block */
+  --digs-scrawl-angle: -9deg;    /* the lockup's marker line */
+}

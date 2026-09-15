@@ -1,7 +1,7 @@
-/* tokens/stage.css — the shared stage every teaser stands on (brief 6.1).
-   True black, 16:10 native, a 4:5 crop below 640px of the teaser's own width
+/* tokens/stage.css — the shared stage every frame stands on (brief 6.1).
+   True black, 16:10 native, a 4:5 crop below 640px of the frame's own width
    around its declared focal point, and the play/pause and reduced-motion
-   conventions. Teasers add their own scoped rules under their root class.
+   conventions. Frames add their own scoped rules under their root class.
 
    Anatomy: .stage (the container, clips) > .stage-frame (the visible window,
    16:10 or 4:5) > .stage-scene (always the 16:10 composition; shifted under
@@ -24,7 +24,7 @@
 }
 .stage > .stage-frame > .stage-scene { position: absolute; inset: 0; }
 /* --u is one percent of the scene's width (the 16:10 composition), whether or
-   not the crop is on, so type and strokes inside a teaser scale with the frame
+   not the crop is on, so type and strokes inside a frame scale with the frame
    from 320px to 1600px wide. Use it for font sizes, strokes, radii, gaps. */
 .stage > .stage-frame { --sw: 100cqw; }
 .stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }

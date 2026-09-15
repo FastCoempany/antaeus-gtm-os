@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&family=Outfit:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&family=Space+Mono:wght@400&family=Abril+Fatface&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Barlow+Condensed:wght@500;600&family=DM+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400&family=Archivo:ital,wdth,wght@0,125,500;0,125,700;1,120,700;1,120,900&family=Manrope:wght@400;600&family=Work+Sans:wght@500;700&family=Alexandria:wght@400;700;900&family=Permanent+Marker&display=swap">
+<title>shapshyftrs frames</title>
+<style>
+/* tokens/chrome.css */
+:root {
+
+  --chrome-ground: #000000;
+  --chrome-text: #F4F4F0;
+  --chrome-text-2: #8E8E89;
+  --chrome-button-bg: #F4F4F0;
+  --chrome-button-fg: #000000;
+  --chrome-button-radius: 4px;
+
+  --chrome-font: "Schibsted Grotesk", system-ui, sans-serif;
+
+  --chrome-body: 15px;
+  --chrome-body-lh: 24px;
+  --chrome-sub: 18px;
+  --chrome-sub-lh: 28px;
+  --chrome-caption: 22px;
+  --chrome-caption-lh: 28px;
+  --chrome-h2: 32px;
+  --chrome-h2-lh: 36px;
+  --chrome-slogan: 64px;
+  --chrome-slogan-lh: 1.02;
+  --chrome-slogan-m: 40px;
+  --chrome-slogan-m-lh: 1.05;
+  --chrome-wordmark: 28px;
+  --chrome-track-display: -0.02em;
+
+  --chrome-measure: 66ch;
+  --chrome-unit: 8px;
+  --chrome-section: 96px;
+  --chrome-section-m: 64px;
+}
+
+/* tokens/stage.css */
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000000;
+  container-type: inline-size;
+  isolation: isolate;
+  --fx: 0.5;
+  --fy: 0.5;
+}
+.stage > .stage-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.stage > .stage-frame > .stage-scene { position: absolute; inset: 0; }
+
+.stage > .stage-frame { --sw: 100cqw; }
+.stage > .stage-frame > .stage-scene { --u: calc(var(--sw) / 100); }
+@container (max-width: 639px) {
+  .stage > .stage-frame { aspect-ratio: 4 / 5; --sw: 200cqw; }
+  .stage > .stage-frame > .stage-scene {
+    inset: auto;
+    top: 0;
+    height: 100%;
+    width: 200%;
+    left: clamp(-100%, calc(50% - var(--fx) * 200%), 0%);
+  }
+}
+
+.stage:not(.is-playing) * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition-duration: 0.001ms !important; }
+}
+
+/* tokens/puff-junction.css */
+:root {
+
+  --pj-concrete: #565656;
+  --pj-concrete-lit: #69635C;
+  --pj-concrete-low: #444444;
+  --pj-concrete-shade: #353535;
+  --pj-concrete-deep: #0A0A0A;
+  --pj-aggregate: #37373A;
+  --pj-harlequin: #414141;
+  --pj-harlequin-low: #181818;
+
+  --pj-brass-flat: #D1CAC1;
+  --pj-brass-flat-alt: #D1C8BB;
+  --pj-brass-knurl: #816437;
+  --pj-brass-knurl-alt: #7D5A2B;
+  --pj-brass-flange: #795930;
+  --pj-brass-land: #675125;
+  --pj-brass-groove: #563B12;
+  --pj-brass-groove-deep: #0A0602;
+  --pj-brass-crown-hot: #E8DCB8;
+  --pj-brass-albedo: #B8934E;
+  --pj-brass-roughness: 0.32;
+
+  --pj-nickel: #9EA8A4;
+  --pj-gloss-black: #2E2E2E;
+
+  --pj-sweep-top: #EDEDED;
+  --pj-sweep-mid: #DCDCDC;
+  --pj-sweep-dark: #C8C8C8;
+  --pj-sweep-floor: #D9D9D9;
+  --pj-shadow: #C3C3C3;
+
+  --pj-block: 85;
+  --pj-height: 57.2;
+  --pj-bore: 63;
+  --pj-proud: 15.4;
+  --pj-radius: 3;
+  --pj-knurl-pitch: 1.26;
+  --pj-knurl-w: 1.65;
+  --pj-knurl-h: 1.9;
+  --pj-knurl-angle: 49deg;
+  --pj-harlequin-cell: 13.5;
+  --pj-deboss: 0.2;
+
+  --pj-slime: #D6FD4A;
+  --pj-dream: #A5E4FF;
+  --pj-flamingo: #FF8FF1;
+  --pj-pineapple: #FEF200;
+  --pj-black: #000000;
+  --pj-white: #FFFFFF;
+
+  --pj-display: "Archivo", "Arnet", system-ui, sans-serif;
+  --pj-body: "Work Sans", system-ui, sans-serif;
+}
+
+/* tokens/darkest-shades.css */
+:root {
+
+  --ds-black: #000000;
+  --ds-white: #FFFFFF;
+  --ds-neutral: #545454;
+  --ds-terracotta: #BF835E;
+
+  --ds-sweep: #D2D2D2;
+  --ds-sweep-alt: #D3D3D3;
+  --ds-shadow: #C0C0C0;
+  --ds-panel: #F1F2F1;
+  --ds-hair: #E0E1E0;
+  --ds-rule: #808180;
+
+  --ds-lens: #151515;
+  --ds-lens-high: #2A2A2A;
+  --ds-sheen-lo: #4A4A4A;
+  --ds-sheen-hi: #6A6A6A;
+
+  --ds-smoke-top: #353535;
+  --ds-smoke-bottom: #878A8E;
+  --ds-mirror-top: #C8C8C8;
+  --ds-mirror-bottom: #9A9A9A;
+  --ds-teal: #5BA7BC;
+  --ds-teal-high: #9CC4CE;
+  --ds-amber-lens: #CDAB16;
+
+  --ds-gloss: #131313;
+  --ds-gloss-high: #1B1B1B;
+  --ds-gloss-mid: #333333;
+  --ds-specular: #D8D8D8;
+  --ds-satin: #202020;
+  --ds-satin-high: #767676;
+  --ds-tortoise-ground: #1A273A;
+  --ds-tortoise-fleck: #5B8CCF;
+  --ds-tortoise-fleck-hi: #6495D0;
+  --ds-tortoise-glow: #93B5BF;
+  --ds-tortoise-glow-hi: #A7BEC6;
+  --ds-oxblood: #4B1313;
+
+  --ds-electric: #0D12CC;
+  --ds-electric-hi: #1F31C8;
+
+  --ds-gold: #C9AA78;
+  --ds-gold-ramp:
+    #8B6635 0%, #F7E7C5 16%, #C7A575 36%, #F6E4BD 53%,
+    #A47A43 72%, #DEC399 87%, #76552D 100%;
+
+  --ds-mark-aspect: 1.9498;
+  --ds-front: 148;
+  --ds-temple: 149;
+  --ds-split: 25.97%;
+
+  --ds-display: "Archivo Expanded", "Owners Wide", system-ui, sans-serif;
+  --ds-body: "Hanken Grotesk", "Stolzl", system-ui, sans-serif;
+  --ds-track-kicker: 0.12em;
+  --ds-lead-display: 0.97;
+}
+
+/* tokens/digs.css */
+:root {
+
+  --digs-blue: #0042E5;
+  --digs-black: #000000;
+  --digs-ice: #F0F5FF;
+
+  --digs-offwhite: #F8F0E8;
+  --digs-sandblue: #6176A3;
+  --digs-thread: #24315A;
+  --digs-thread-sewn: #3E4351;
+
+  --digs-knit-lit: #ADA595;
+  --digs-knit: #A89F8A;
+  --digs-knit-shadow: #787265;
+  --digs-knit-dark: #4C493E;
+  --digs-knit-reverse: #5D523F;
+  --digs-seam: #868070;
+  --digs-wash: #A08D64;
+  --digs-body-warm: #A49267;
+  --digs-body-warm-hi: #CCB17D;
+  --digs-body-cool: #8C8C83;
+  --digs-rib: #9C998B;
+
+  --digs-knit-pitch: 1.2;
+  --digs-knit-angle: 45deg;
+  --digs-rib-pitch: 1.75;
+  --digs-neckband: 1;
+  --digs-cuff: 2;
+  --digs-sa: 0.375;
+  --digs-hem-turnback: 1;
+  --digs-emb-w: 2.5;
+  --digs-emb-h: 1.58;
+
+  --digs-sans: "Alexandria", system-ui, sans-serif;
+  --digs-script: "Caveat", "The Old Falcons", cursive;
+  --digs-lead-display: 0.95;
+  --digs-scrawl-angle: -9deg;
+}
+
+/* tokens/aesdr.css */
+:root {
+  --ae-crimson: #8B1A1A;
+  --ae-crimson-pressed: #6E1414;
+  --ae-cream: #FAF7F2;
+  --ae-ink: #1A1A1A;
+  --ae-muted: #6B6B6B;
+  --ae-light: #E8E4DF;
+  --ae-white: #FFFFFF;
+  --ae-form-border: #928C84;
+
+  --ae-redink: #C53030;
+  --ae-green: #2E7D32;
+  --ae-pass: #15803D;
+  --ae-gold: #B8943E;
+  --ae-gold-lt: #D4B96A;
+
+  --ae-iris: linear-gradient(90deg,
+    #FF006E 0%, #FF6B00 17%, #F59E0B 34%, #10B981 51%,
+    #38BDF8 68%, #8B5CF6 85%, #FF006E 100%);
+  --ae-iris-size: 300% 100%;
+  --ae-iris-speed: 4s;
+
+  --ae-catalog-field: #F4EADD;
+  --ae-catalog-card: #FFF8EC;
+  --ae-catalog-rule: #CBB58C;
+  --ae-ruled: #F0EBE3;
+
+  --ae-display: "Playfair Display", Georgia, serif;
+  --ae-serif: "Source Serif 4", Georgia, serif;
+  --ae-cond: "Barlow Condensed", system-ui, sans-serif;
+  --ae-mono: "Space Mono", monospace;
+  --ae-hand: "Caveat", cursive;
+
+  --ae-track-eyebrow: 0.25em;
+  --ae-track-button: 0.15em;
+  --ae-radius: 0;
+  --ae-rule-system: 3px;
+
+  --ae-tilt-stamp: -2deg;
+  --ae-tilt-cover: -3deg;
+  --ae-tilt-date: -4deg;
+  --ae-tilt-hand: -1.5deg;
+
+  --ae-ghost: 0.06;
+  --ae-ambient: 0.15;
+  --ae-stamp-body: 0.25;
+  --ae-stamp-border: 0.15;
+}
+
+/* tokens/antaeus.css */
+:root {
+
+  --an-field: #EEF1F7;
+  --an-field-lt: #F6F8FC;
+  --an-surface: #FFFFFF;
+  --an-sunk: #EFF2F7;
+
+  --an-ink: #0A1C40;
+  --an-ink-soft: rgba(10, 28, 64, 0.66);
+  --an-ink-faint: rgba(10, 28, 64, 0.42);
+  --an-ink-quiet: rgba(10, 28, 64, 0.22);
+  --an-hair: rgba(10, 28, 64, 0.07);
+  --an-hair-strong: rgba(10, 28, 64, 0.14);
+  --an-rule: rgba(10, 28, 64, 0.16);
+  --an-grid: rgba(10, 28, 64, 0.08);
+
+  --an-orange: #E6701E;
+  --an-orange-soft: rgba(230, 112, 30, 0.10);
+  --an-blue: #2563EB;
+  --an-blue-soft: rgba(37, 99, 235, 0.08);
+  --an-green: #22C55E;
+  --an-forest: #1B5E3F;
+  --an-forest-soft: rgba(27, 94, 63, 0.09);
+  --an-amber: #B5790F;
+  --an-amber-soft: rgba(181, 121, 15, 0.10);
+  --an-red: #C0392B;
+  --an-red-soft: rgba(192, 57, 43, 0.06);
+
+  --an-grid-pitch: 34px;
+  --an-wash-blue: rgba(37, 99, 235, 0.05);
+  --an-wash-orange: rgba(230, 112, 30, 0.04);
+
+  --an-serif: "DM Serif Display", Georgia, serif;
+  --an-sans: "Public Sans", system-ui, sans-serif;
+  --an-mono: "JetBrains Mono", monospace;
+  --an-read: "Newsreader", Georgia, serif;
+  --an-track-kicker: 0.16em;
+  --an-lead-display: 0.98;
+
+  --an-mark-legs: "M14 38L24 10l10 28";
+  --an-mark-bar: "M18.2 28h11.6";
+  --an-mark-ground: "M2 38h44";
+  --an-lift: translate(1px, -7px) rotate(6deg);
+  --an-lift-opacity: 0.42;
+  --an-lift-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --an-radius-rule: 0 14px 14px 0;
+  --an-rule-w: 3px;
+}
+</style>
+<style>
+html,body{margin:0;background:#000;color:#F4F4F0;font-family:"Schibsted Grotesk",system-ui,sans-serif}
+.sheet{padding:48px 32px 96px}
+.sheet h1{font-size:28px;font-weight:700;margin:0 0 8px}
+.sheet p{margin:0 0 40px;color:#8E8E89;font-size:15px;line-height:24px}
+.sheet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(640px,1fr));gap:40px 24px}
+.sheet-item{margin:0}
+.sheet-frame{width:100%}
+.sheet-item figcaption{margin-top:10px;font-size:14px;line-height:20px;color:#8E8E89}
+.sheet-item figcaption b{color:#F4F4F0;font-weight:600}
+</style>
+</head>
+<body class="sheet">
+<h1>shapshyftrs frames</h1>
+<p>All twelve frames, gallery order, for review.</p>
+<div class="sheet-grid">
+
+</div>
+<script>
+/* Shared frame runtime: one script for every stage on the page.
+   In view (threshold 0.25) and not hovered: playing. Hover pauses.
+   prefers-reduced-motion: reduce never plays; interactions still work.
+   Each stage gets the class is-playing and the events frame:play / frame:pause,
+   which script-driven frames listen to. The nearest ancestor with data-play-delay (the body, a hero, a
+   gallery figure) delays a stage's first start so a caption or the hero copy
+   can arrive before its loop begins. */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var stages = Array.prototype.slice.call(document.querySelectorAll(".stage"));
+  stages.forEach(function (el) {
+    var holder = el.closest("[data-play-delay]");
+    var delay = holder ? (parseInt(holder.getAttribute("data-play-delay"), 10) || 0) : 0;
+    var inView = false, hover = false, started = false, timer = null;
+    function apply(on) {
+      if (el.classList.contains("is-playing") === on) return;
+      el.classList.toggle("is-playing", on);
+      el.dispatchEvent(new CustomEvent(on ? "frame:play" : "frame:pause"));
+    }
+    function update() {
+      var on = inView && !hover && !reduce.matches;
+      clearTimeout(timer);
+      if (on && delay && !started) {
+        timer = setTimeout(function () { started = true; apply(true); }, delay);
+      } else {
+        if (on) started = true;
+        apply(on);
+      }
+    }
+    el.__stageUpdate = function (v) { if (v !== undefined) inView = v; update(); };
+    el.addEventListener("mouseenter", function () { hover = true; update(); });
+    el.addEventListener("mouseleave", function () { hover = false; update(); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.__stageUpdate(e.isIntersecting); });
+    }, { threshold: 0.25 });
+    stages.forEach(function (el) { io.observe(el); });
+  } else {
+    stages.forEach(function (el) { el.__stageUpdate(true); });
+  }
+  var onChange = function () { stages.forEach(function (el) { el.__stageUpdate(); }); };
+  if (reduce.addEventListener) reduce.addEventListener("change", onChange); else reduce.addListener(onChange);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+/* tokens/antaeus.css
+   Measured in study/antaeus.md.
+
+   Built from the settled 2026-07 mockups, not from the product's token file:
+   the shipped rooms reference token names that do not exist and fall through
+   to hard-coded fallbacks, --ds-forest is declared twice with the second
+   winning, and the mockups' amber and red run deeper and far more on-brand
+   than the tokens' bright alert colours. */
+:root {
+  /* The field. A band of bright cool neutrals, never stark white. There is
+     no dark theme; a dark Antaeus surface is wrong. */
+  --an-field: #EEF1F7;
+  --an-field-lt: #F6F8FC;
+  --an-surface: #FFFFFF;         /* the raised paper, ~5% above the field */
+  --an-sunk: #EFF2F7;
+
+  /* Ink at four opacities, and hairlines */
+  --an-ink: #0A1C40;
+  --an-ink-soft: rgba(10, 28, 64, 0.66);
+  --an-ink-faint: rgba(10, 28, 64, 0.42);
+  --an-ink-quiet: rgba(10, 28, 64, 0.22);
+  --an-hair: rgba(10, 28, 64, 0.07);
+  --an-hair-strong: rgba(10, 28, 64, 0.14);
+  --an-rule: rgba(10, 28, 64, 0.16);
+  --an-grid: rgba(10, 28, 64, 0.08);   /* the graph paper's ink */
+
+  /* Colour by role, never by hue. Orange is the one dominant move, once per
+     surface -- and five of sixteen settled surfaces carry none at all. */
+  --an-orange: #E6701E;
+  --an-orange-soft: rgba(230, 112, 30, 0.10);
+  --an-blue: #2563EB;            /* the system explaining itself */
+  --an-blue-soft: rgba(37, 99, 235, 0.08);
+  --an-green: #22C55E;           /* health, right now -- a derivative */
+  --an-forest: #1B5E3F;          /* what has held over time -- an integral */
+  --an-forest-soft: rgba(27, 94, 63, 0.09);
+  --an-amber: #B5790F;           /* the mockups' deep ochre, not #f59e0b */
+  --an-amber-soft: rgba(181, 121, 15, 0.10);
+  --an-red: #C0392B;             /* the mockups' brick, not #ef4444 */
+  --an-red-soft: rgba(192, 57, 43, 0.06);
+
+  /* The graph-paper field */
+  --an-grid-pitch: 34px;
+  --an-wash-blue: rgba(37, 99, 235, 0.05);
+  --an-wash-orange: rgba(230, 112, 30, 0.04);
+
+  /* Type. Display serif is always weight 400 -- DM Serif Display has one
+     weight and the system never fakes another. Mono recedes into kickers and
+     never sets body. Newsreader is for the rooms you actually read. */
+  --an-serif: "DM Serif Display", Georgia, serif;
+  --an-sans: "Public Sans", system-ui, sans-serif;
+  --an-mono: "JetBrains Mono", monospace;
+  --an-read: "Newsreader", Georgia, serif;
+  --an-track-kicker: 0.16em;
+  --an-lead-display: 0.98;
+
+  /* The mark. 48-unit viewBox, butt caps, mitered joins -- the flat terminals
+     are most of what makes it read as drafted rather than friendly. */
+  --an-mark-legs: "M14 38L24 10l10 28";
+  --an-mark-bar: "M18.2 28h11.6";
+  --an-mark-ground: "M2 38h44";  /* runs 12 units past each foot: 2.2x the
+                                    width of the letter. The overhang is the
+                                    whole mark. */
+  --an-lift: translate(1px, -7px) rotate(6deg);
+  --an-lift-opacity: 0.42;
+  --an-lift-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --an-radius-rule: 0 14px 14px 0;  /* the orange-ruled block */
+  --an-rule-w: 3px;
+}
