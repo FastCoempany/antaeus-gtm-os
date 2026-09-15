@@ -1,6 +1,7 @@
 {
   "price": "$75",
   "turnaround": "five days",
+  "asset_policy": "hybrid",
   "slogan": "See it before you build it.",
   "contact_email": "hello@shapshyftrs.com",
   "stripe_url": "",

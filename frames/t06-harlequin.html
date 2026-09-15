@@ -50,11 +50,15 @@
   if (!root) return;
   var host = root.querySelector(".f06-cells");
   if (!host || host.childElementCount) return;
-  /* One cell is 15.9% x 25.4% of the scene -- about six across the 85 mm
-     face. Filled diamonds sit a full cell apart and touch the unfilled
-     alternates at their vertices. The ragged front is a per-cell threshold,
-     not a gradient: the staircase is what the real dissolve looks like. */
-  var W = 15.9, H = 25.4, out = [];
+  /* The cell comes from the material, not from a copy kept here: about six
+     across the 85 mm face, stretched vertically as the object has it.
+     Filled diamonds sit a full cell apart and touch the unfilled alternates
+     at their vertices. The ragged front is a per-cell threshold, not a
+     gradient: the staircase is what the real dissolve looks like. */
+  var cs = getComputedStyle(host);
+  var W = parseFloat(cs.getPropertyValue("--hq-cell")) || 15.9;
+  var H = W * (parseFloat(cs.getPropertyValue("--hq-stretch")) || 1.597);
+  var out = [];
   for (var r = -1; r < 6; r++) {
     for (var c = -1; c < 9; c++) {
       var keep = 1.0 - (c / 8.0) * 1.34 + ((r * 7 + c * 11) % 5) * 0.075;

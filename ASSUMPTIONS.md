@@ -20,19 +20,67 @@ direction."* Leponeus is a photoreal 3D iridescent rabbit-tortoise that ships
 as PNG renders. Placing one would break hard rule 2 (no source asset as a
 picture of a product); drawing a fake photoreal creature would break hard rule
 4 (never invent about a real product). Frames 4 and 10 instead carry the
-brand's **own monoline abstraction of it** — the shell arc `M 6 50 Q 32 12
-58 50 Z` and the ear `M 24 60 Q 18 16 36 4 Q 32 32 36 60 Z` at 1.6 px round
-cap, and in frame 10 the `recovery` form with its crimson sprout. That is real
-authored brand material in the brand's own construction, and it is the closest
-faithful thing available. Flagged for the founder: if the mascot must appear as
-the creature, it needs either a licence to place the render or a commissioned
-drawing.
+brand's **own monoline abstraction of it** at 1.6 px round cap: the domed
+shell with a hint of its scutes, four legs, the rabbit head with two long
+upright ears, the single eye, and the one crimson band looped behind the ears
+— which the study names as the only saturated colour on the creature. Frame
+10 carries the `recovery` form, its green sprout growing from the shell.
+
+An adversarial read of the first build was right about it: what shipped there
+read as "a hill with two loose sticks and a leaf beside it". It had a dome, one
+detached ear shape, and a sprout in the wrong colour, none of them touching,
+and nothing about it said creature. A substitution that is logged and reasoned
+is still a failure if the thing drawn is unreadable. Redrawn so the parts
+connect and the animal reads.
+
+Flagged for the founder: if the mascot must appear as the creature, it needs
+either a licence to place the render or a commissioned drawing.
 
 **Frame 4's ambient line runs at 2 px, not 1.** The iris reservation rule
 permits "thin ambient lines, 1–2 px max". At 1 px and opacity .15 the line is
 correct and nearly invisible; since it is the frame's subject it takes the 2 px
 the rule allows rather than the opacity being pushed past it. The ration is not
 broken.
+
+**The PUFF JUNCTION lockup is re-typeset, and its contour is missing.** The
+real mark is thirteen paths: a merged silhouette contour plus the twelve
+letters, the contour offset down-and-left and stroked with the background
+showing through the gap. Frame 1 sets the wordmark in the brand's own display
+face and does not carry that contour. §4.2 permits taking vector paths from a
+real mark and using them as that mark, which would have been the right answer,
+but the source folder holds no vector art — the study measured the mark's
+construction ratios off a PNG. Per-letter outlines would misdescribe a merged
+silhouette, so nothing stands in for it. SOURCES.md row 1 says this rather than
+claiming the mark is the real lockup, which is what it said before.
+
+**Frame 7's cast shadow is darker than the brand's shadow rule.** Darkest
+Shades measures its product shadow at never more than 8–10% below the backdrop,
+never hard. The soft pass in frame 7 obeys that; the pass carrying the mark's
+geometry measures 23% below the ground. That rule describes the contact shadow
+under a product in a photograph, and here the shadow is not under the subject,
+it is the subject — at 10% the frame is empty. Stated in the frame's own header
+with the number, which the first build did not do: it claimed compliance it did
+not have.
+
+**Frame 2 strokes the Grounded-A's ground path in forest, not navy.** The
+Antaeus mark rule is explicit — navy or `currentColor`, never an accent. The
+shipped auth gate strokes exactly this path in forest `#1B5E3F` as the mark
+lands, and the brief says the shipped surfaces are the truth. Taken as licence
+for this one path, in the one frame whose whole subject is that landing.
+
+**The graph-paper field is a revival.** `an-field` rebuilds the 34 px grid the
+product's own canon describes. §5.1 permits reviving it and asks that the
+revival be logged; this is that log.
+
+**Frame 12 carries the source rail's construction, and sits close to its
+composition.** The hairline right edge and the directional wash are taken
+verbatim from the shipped implementation, which the material law allows. The
+arrangement — rail left, four zones in the product's own order — is also the
+source's. What is new is the scale (the rail is half the frame, where the
+product's is a thin wall), the emptied room beside it, and the subject: no
+source screen makes turning the thing off the event. Named here because it is
+the closest any frame comes to reproducing a source screen, and a reader should
+be able to weigh that rather than discover it.
 
 **The visitor reads "teasers"; the build says "frames".** Section 8.2's copy is
 locked and says "rebuilt here as teasers". Everything in the repo calls them
@@ -157,7 +205,9 @@ either; neither line was needed.
   covers the gap.
 - **Font licences.** If web licences exist for Owners Wide, Stolzl, Arnet or
   The Old Falcons, the stand-ins in §2 of `DESIGN.md` come out.
-- **The asset policy is `hybrid`** and nothing in `dist/` currently needs it —
+- **The asset policy is `hybrid`** — the key was missing from `config.json`
+  entirely until the phase-7 read caught it, so this section discussed a
+  setting nothing could read. Nothing in `dist/` currently needs it —
   every surface is constructed, so `rebuilt` would build identically today. The
   setting is kept because the material law permits more than the build has
   spent.

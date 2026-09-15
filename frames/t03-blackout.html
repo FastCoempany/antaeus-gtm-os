@@ -22,11 +22,14 @@
   position: absolute; inset: 0; pointer-events: none;
   box-shadow: inset 0 0 calc(var(--u) * 3.4) rgba(0, 0, 0, 0.9);
 }
+/* Ragged right, not centred: the brand's headline lockup is caps, few words,
+   ragged right, leading near 0.95 -- NOT JUST / SUNGLASSES. / A STATEMENT.
+   Centring is the one thing that lockup never does. */
 .f03 .f03-line {
   position: absolute; left: 7%; right: 7%; bottom: 8.5%;
-  margin: 0; text-align: center;
+  margin: 0; text-align: left;
   font-family: var(--ds-display); font-weight: 700; text-transform: uppercase;
-  font-size: calc(var(--u) * 3.3); line-height: 1.1;
+  font-size: calc(var(--u) * 3.3); line-height: 0.95;
   letter-spacing: 0.055em; color: rgba(236, 236, 236, 0.9);
 }
 @keyframes f03-sheen {

@@ -44,8 +44,12 @@
 }
 
 /* The lozenge stretched vertically, as the source object has it. Set
-   --hq-stretch to 1 for the square-on-point the frontal render projects. */
+   --hq-stretch to 1 for the square-on-point the frontal render projects.
+   These two are the pattern's only source of truth: the frame that lays the
+   cells out reads them back off this element rather than carrying its own
+   copy. They disagreed once -- the material said 1.18 while the frame drew
+   1.597 -- which is what a token nothing reads is for. */
 .m-harlequin {
-  --hq-cell: 15.9%;                  /* ~6 across the face */
-  --hq-stretch: 1.18;
+  --hq-cell: 15.9;                   /* % of the scene width; ~6 across the face */
+  --hq-stretch: 1.597;               /* cell height as a multiple of its width */
 }
