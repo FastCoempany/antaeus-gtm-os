@@ -118,7 +118,17 @@ screens/        captures
 5. Check the phone crop. Below 640 px the stage shows a band half the scene's
    width around the focal point; anything outside it is cut. Six of twelve
    frames needed a phone layout.
-6. Rebuild, re-run the acceptance checks, re-capture `screens/`.
+6. Rebuild, then re-run the checks and re-capture the stills:
+
+   ```
+   BUILD_STRICT=1 python3 build.py     # strict refuses to build a short set
+   python3 accept.py                   # BRIEF.md §15, measured in a real browser
+   python3 screenshot.py               # variants and every frame's resting state
+   ```
+
+   `accept.py` and `screenshot.py` both need the font cache, or they will judge
+   the page in Times and Arial: `python3 screenshot.py --fetch-fonts` writes it
+   once into `.fontcache/` (gitignored).
 
 ## Deploy
 

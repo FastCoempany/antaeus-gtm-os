@@ -401,6 +401,30 @@ def build_single_pages(ctx: dict) -> list[Path]:
     return written
 
 
+def sweep_dist(written: list[Path]) -> list[str]:
+    """Remove anything in dist/ this build did not just write, then prune the
+    directories that emptied out.
+
+    dist/ is the only thing ever published, so a file that outlives the build
+    that made it ships to real visitors. That is not hypothetical: the thirteen
+    teasers of the first version sat in dist/teasers/ through every rebuild of
+    the second, because the build only ever cleaned the one directory it knew
+    by name. Sweeping by what was written instead of by what is expected means
+    a rename or a dropped frame cleans up after itself without anyone
+    remembering to teach this function a new name."""
+    keep = {p.resolve() for p in written}
+    gone: list[str] = []
+    for path in sorted(DIST.rglob("*")):
+        if path.is_file() and path.resolve() not in keep:
+            path.unlink()
+            gone.append(str(path.relative_to(ROOT)))
+    for path in sorted(DIST.rglob("*"), reverse=True):
+        if path.is_dir() and not any(path.iterdir()):
+            path.rmdir()
+            gone.append(str(path.relative_to(ROOT)) + "/")
+    return gone
+
+
 def main() -> None:
     cfg = load_config()
     ctx = {
@@ -411,14 +435,14 @@ def main() -> None:
     }
     DIST.mkdir(exist_ok=True)
     (DIST / "frames").mkdir(exist_ok=True)
-    for stale in (DIST / "frames").glob("*.html"):
-        stale.unlink()
     outs = build_variants(ctx)
     outs.append(build_contact_sheet(ctx))
     outs.extend(build_single_pages(ctx))
     for o in outs:
         size = o.stat().st_size
         print(f"wrote {o.relative_to(ROOT)}  {size/1024:.1f} KB")
+    for gone in sweep_dist(outs):
+        print(f"swept {gone}")
     print(f"frames: {len(ctx['frames'])}  variants: {len(list(VARIANTS_DIR.glob('*.html')))}")
 
 
