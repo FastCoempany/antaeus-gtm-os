@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- @include partials/head.html -->
+<title>shapshyftrs</title>
+<!-- @tokens -->
+<!-- @include partials/chrome-styles.html -->
+<style>
+/* Variant C, the reel: hero above in normal flow, then a horizontal strip of
+   thirteen 16:10 cards (70vw wide, 32px gaps) that moves sideways on wheel
+   and drag by translating the track and snaps to cards; a thirteen-tick
+   position indicator beneath (a sequence). Below 768px the strip stacks. */
+/* The hero is one viewport, as in variant A: the copy on top, teaser 1 filling
+   the row that is left. The row is a size container; the stage is as tall as the
+   row and as wide as a 16:10 frame whose middle 56% is the row (gutter to gutter
+   at most, never under 640px so the 4:5 crop never trips on desktop), pulled up
+   so the band around the teaser's focal point (--fy) is what shows. A full-width
+   16:10 stage in flow put the rail below the fold at 1366x768 and left ~215px of
+   black above and below it. */
+.hero { min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: clamp(24px, 4vh, 48px) var(--gutter) 0; }
+.hero-copy { padding-bottom: clamp(24px, 4vh, 40px); }
+.hero-stage { display: grid; align-items: center; justify-items: start; min-height: calc(300px + clamp(24px, 4vh, 40px)); padding-bottom: clamp(24px, 4vh, 40px); container-type: size; }
+.hero-stage .stage { width: max(min(640px, 100%), min(calc(100cqh * 1.6 / 0.56), 100%)); height: 100cqh; }
+.hero-stage .stage > .stage-frame { margin-top: calc(50cqh - var(--fy, 0.5) * 62.5cqw); }
+/* One 96px beat at every seam: where two padded sections meet, the second drops its top padding (they stacked to 192px below the strip while the gallery had 96); 64px between the intro line and the first card. */
+.section + .section, .foot { padding-top: 0; }
+.intro { padding-bottom: 64px; }
+/* 70vw, with a 640px floor: below that the shared stage crops to 4:5 (brief 6.1), and brief 11.C wants 16:10 cards. At 768 the floor still fits between the gutters (691px). */
+.reel { --card: max(70vw, 640px); --gap: 32px; padding: 0; }
+.reel-viewport { position: relative; overflow: hidden; touch-action: pan-y; cursor: grab; outline: none; }
+/* The focus ring is painted on an overlay above the track: the track is a composited layer (will-change: transform), so an outline on the viewport itself showed only in the gaps between cards and as a stray rule under the captions. */
+.reel-viewport:focus-visible::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 2px var(--chrome-text); pointer-events: none; z-index: 1; }
+/* Without script the strip is a native horizontal scroller (the .js class is set inline before the page paints), so teasers 3 to 13 are never clipped off the edge; the ticks, which only script can wire, are hidden. */
+html:not(.js) .reel-viewport { overflow-x: auto; scroll-snap-type: x proximity; cursor: auto; }
+html:not(.js) .reel-card { scroll-snap-align: start; }
+html:not(.js) .reel-ticks { display: none; }
+.reel-viewport.is-dragging { cursor: grabbing; }
+.reel-track { display: flex; gap: var(--gap); padding: 0 var(--gutter); width: max-content; will-change: transform; transition: transform 480ms cubic-bezier(.2,.8,.2,1); }
+.reel-viewport.is-dragging .reel-track { transition: none; }
+.reel-card { flex: 0 0 var(--card); width: var(--card); display: grid; gap: 16px; }
+/* Caption over source label at the card's left edge, and only the card in front carries its label (a label at the far right of a 1008px card sat 32px from the next card's caption and read as its own; the neighbours' labels also peeked into the gutters as fragments). The switch is instant, not a transition. */
+.reel-card figcaption { display: grid; justify-items: start; gap: 4px; }
+.js .reel-card:not(.is-front) figcaption { opacity: 0; }
+.reel-ticks { display: flex; gap: 8px; padding: 32px var(--gutter) 0; }
+.reel-tick { flex: 0 0 auto; width: 24px; height: 24px; padding: 0; background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
+.reel-tick::before { content: ""; display: block; width: 100%; height: 2px; background: var(--chrome-text-2); }
+.reel-tick[aria-current="true"]::before { background: var(--chrome-text); height: 4px; }
+.reel-tick:focus-visible { outline: 2px solid var(--chrome-text); outline-offset: 2px; }
+.js .hero .wordmark { animation: c-in 320ms ease-out both; }
+.js .hero .slogan { animation: c-in 360ms ease-out 220ms both; }
+/* Three beats on load (rule-10 review, DESIGN.md): wordmark, slogan with its copy and button, then teaser 1. */
+.js .hero .subline, .js .hero .button { animation: c-in 360ms ease-out 220ms both; }
+@keyframes c-in { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 767px) {
+  .hero { min-height: 0; grid-template-rows: auto auto; padding-top: 24px; }
+  .hero-stage { container-type: normal; margin-inline: calc(-1 * var(--gutter)); }
+  .hero-stage .stage { width: 100%; height: auto; }
+  .hero-stage .stage > .stage-frame { margin-top: 0; }
+  .reel-viewport { overflow: visible; cursor: auto; }
+  .reel-track { display: grid; gap: 40px; width: auto; padding: 0; transform: none !important; }
+  .reel-card { width: auto; }
+  .reel-card figcaption { padding: 0 var(--gutter); }
+  .js .reel-card:not(.is-front) figcaption { opacity: 1; }
+  .reel-ticks { display: none; }
+}
+</style>
+</head>
+<body data-variant="c">
+<script>document.documentElement.className += " js";</script>
+<main>
+<!-- @include partials/hero.html -->
+<section class="section intro" aria-label="The gallery">
+<!-- @include partials/gallery-intro.html -->
+</section>
+<section class="reel" aria-label="Teasers">
+  <div class="reel-viewport" tabindex="0" role="region" aria-label="Thirteen teasers. Use the left and right arrow keys to move between them.">
+    <div class="reel-track">
+<!-- @each-teaser from=1 to=13 -->
+<figure class="reel-card" data-teaser-num="${TEASER_NUM}">
+  <div class="reel-frame">
+${TEASER_HTML}
+  </div>
+  <figcaption><span class="caption">${TEASER_CAPTION}</span><span class="source">${TEASER_SOURCE_HTML}</span></figcaption>
+</figure>
+<!-- @end-each -->
+    </div>
+  </div>
+  <div class="reel-ticks" role="group" aria-label="Position in the reel">
+<!-- @each-teaser from=1 to=13 -->
+<button class="reel-tick" type="button" aria-label="Teaser ${TEASER_NUM}" data-index="${TEASER_NUM}"></button>
+<!-- @end-each -->
+  </div>
+</section>
+<section class="section">
+<!-- @include partials/how.html -->
+</section>
+<section class="section">
+<!-- @include partials/offer.html -->
+</section>
+<!-- @include partials/form.html -->
+<!-- @include partials/footer.html -->
+</main>
+<!-- @include partials/runtime.html -->
+<script>
+/* Variant C: the reel. Wheel and drag translate the track; snaps to cards;
+   the page keeps native vertical scroll everywhere, including over the strip
+   once it has reached either end. Arrow keys move one card; ticks jump. */
+(function () {
+  var viewport = document.querySelector(".reel-viewport");
+  var track = document.querySelector(".reel-track");
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".reel-card"));
+  var ticks = Array.prototype.slice.call(document.querySelectorAll(".reel-tick"));
+  if (!viewport || !track || !cards.length) return;
+  var narrow = window.matchMedia("(max-width: 767px)");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var index = 0, x = 0, min = 0, dragging = false, startX = 0, startTrack = 0, moved = 0, wheelTimer = null;
+  function gutter() { return parseFloat(getComputedStyle(track).paddingLeft) || 0; }
+  function step() { return cards[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0); }
+  function bounds() { min = Math.min(0, viewport.clientWidth - track.scrollWidth); }
+  function apply(animate) {
+    track.style.transition = (animate && !reduce.matches) ? "" : "none";
+    track.style.transform = "translate3d(" + x + "px,0,0)";
+    if (!animate || reduce.matches) { void track.offsetWidth; track.style.transition = ""; }
+    ticks.forEach(function (t, i) { t.setAttribute("aria-current", i === index ? "true" : "false"); });
+    cards.forEach(function (c, i) { c.classList.toggle("is-front", i === index); });
+  }
+  /* Focus moving into a card makes the browser scroll the overflow-hidden viewport's own
+     scrollLeft; the track is positioned by translate alone, so that offset is reset every
+     time it appears (otherwise ticks, arrows and drag point at the wrong cards). */
+  viewport.addEventListener("scroll", function () { if (viewport.scrollLeft) viewport.scrollLeft = 0; });
+  function goTo(i, animate) {
+    if (narrow.matches) return;
+    bounds();
+    index = Math.max(0, Math.min(cards.length - 1, i));
+    x = Math.max(min, Math.min(0, -index * step()));
+    apply(animate);
+  }
+  function snap() { index = Math.round(-x / step()); goTo(index, true); }
+  function atStart() { return x >= -1; }
+  function atEnd() { bounds(); return x <= min + 1; }
+  viewport.addEventListener("wheel", function (e) {
+    if (narrow.matches) return;
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (e.deltaMode === 1) d *= 16; else if (e.deltaMode === 2) d *= viewport.clientWidth;
+    if ((d > 0 && atEnd()) || (d < 0 && atStart())) return;
+    e.preventDefault();
+    bounds();
+    x = Math.max(min, Math.min(0, x - d));
+    apply(false);
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(snap, 140);
+  }, { passive: false });
+  viewport.addEventListener("pointerdown", function (e) {
+    if (narrow.matches || e.button !== 0) return;
+    /* A drag that starts on a teaser's own control belongs to the teaser. The viewport itself carries tabindex, so it is excluded from the match (otherwise every pointer inside a stage matched it and the strip never dragged over a card). */
+    var ctl = e.target.closest("button, a, [role='slider'], [tabindex]");
+    if (ctl && ctl !== viewport && e.target.closest(".stage")) return;
+    dragging = true; moved = 0; startX = e.clientX; startTrack = x;
+    viewport.classList.add("is-dragging");
+    viewport.setPointerCapture(e.pointerId);
+  });
+  viewport.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX; moved = Math.max(moved, Math.abs(dx));
+    bounds();
+    x = Math.max(min - 40, Math.min(40, startTrack + dx));
+    apply(false);
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove("is-dragging");
+    if (viewport.hasPointerCapture && viewport.hasPointerCapture(e.pointerId)) viewport.releasePointerCapture(e.pointerId);
+    snap();
+  }
+  viewport.addEventListener("pointerup", endDrag);
+  viewport.addEventListener("pointercancel", endDrag);
+  viewport.addEventListener("click", function (e) { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+  viewport.addEventListener("keydown", function (e) {
+    if (e.target !== viewport) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); goTo(index + 1, true); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); goTo(index - 1, true); }
+    if (e.key === "Home") { e.preventDefault(); goTo(0, true); }
+    if (e.key === "End") { e.preventDefault(); goTo(cards.length - 1, true); }
+  });
+  track.addEventListener("focusin", function (e) {
+    viewport.scrollLeft = 0;
+    var card = e.target.closest(".reel-card");
+    if (card) goTo(cards.indexOf(card), true);
+  });
+  ticks.forEach(function (t, i) {
+    t.addEventListener("click", function () { goTo(i, true); viewport.focus({ preventScroll: true }); });
+    t.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" && ticks[i + 1]) { e.preventDefault(); ticks[i + 1].focus(); goTo(i + 1, true); }
+      if (e.key === "ArrowLeft" && ticks[i - 1]) { e.preventDefault(); ticks[i - 1].focus(); goTo(i - 1, true); }
+    });
+  });
+  window.addEventListener("resize", function () { if (narrow.matches) { track.style.transform = ""; } else goTo(index, false); });
+  goTo(0, false);
+})();
+</script>
+</body>
+</html>
