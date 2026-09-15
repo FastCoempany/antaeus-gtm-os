@@ -937,7 +937,7 @@ html,body{margin:0;background:#000}
 </head>
 <body>
 <div class="single"><!-- teaser id=territory-tiles num=9 source=gtmos focal=50%,50% loop=8 interactive=yes -->
-<div class="stage t09" data-teaser="territory-tiles" style="--fx:0.50;--fy:0.50" role="group" aria-label="Thirteen glass tiles that drift in from scattered positions and lock into a territory shape; one tile sits forward at a different depth. Hover or focus a tile to lift it">
+<div class="stage t09" data-teaser="territory-tiles" style="--fx:0.50;--fy:0.50" role="group" aria-label="A field of glass tiles that drift in from scattered positions and lock into a territory shape; one tile sits forward at a different depth. Hover or focus a tile to lift it">
   <div class="stage-frame"><div class="stage-scene">
     <div class="t09-rig"><div class="t09-plane"><div class="t09-field"></div></div></div>
   </div></div>
@@ -948,6 +948,9 @@ html,body{margin:0;background:#000}
 .t09 .t09-plane { position: absolute; inset: 0; transform-style: flat; transform: rotateX(var(--gtm-tilt-x)); }
 /* the field is a flat layer on the tilted plane: the tiles are hit-tested in 2D (Chromium drops pointer hits on buttons nested in preserve-3d contexts), so depth is drawn as scale and shadow rather than z */
 .t09 .t09-field { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(3, 1fr); gap: calc(0.5 * var(--u)); transform-style: flat; }
+/* touch targets under the 4:5 crop. The field is 72u wide at left 17u, five columns with 0.5u gaps: columns are 14u on a 14.5u pitch, so column five spans 75u-89u. The crop shows scene x 25u-75u, so column five lands exactly past the right edge with no visible face at all, while its buttons stay in the tab order off-frame. Hiding them there costs nothing visually and leaves every remaining target at least 44x44 (the smallest, the half-cropped column one, measures 45x93 at 390). Full-frame keeps all thirteen.
+   The pair of conditions is deliberate: the stage crops itself below 640px of its own width, but a page may opt its stages out of that crop while they are still narrow (the wall does, from 768px up). Requiring the viewport to be below that boundary too means this rule can only fail by not firing, never by hiding a tile that is actually on screen */
+@media (max-width: 767px) { @container (max-width: 639px) { .t09 .t09-edge { visibility: hidden; } } }
 /* a cell is the moving thing: it drifts in from its own scattered position (--sx --sy, its depth --ss as scale, --sr) and locks */
 .t09 .t09-cell { position: relative; grid-column: var(--c); grid-row: var(--r); transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; will-change: transform, opacity; animation: t09-drift-a var(--t09-loop) var(--gtm-loop-ease) infinite; }
 .t09 .t09-cell.t09-g2 { animation-name: t09-drift-b; }
@@ -977,7 +980,7 @@ html,body{margin:0;background:#000}
 </style>
 <script>
 (function () {
-  /* thirteen divisions of an invented territory: name, tier (spoken only), cell (column, row), glyph, drift group, scattered origin */
+  /* thirteen zones of an invented territory: name, tier (spoken only), cell (column, row), glyph, drift group, scattered origin */
   var TILES = [
     ["Coastal", "Tier one", 2, 1, 0, 1, [-9, -7, -6, -7]],
     ["Northern", "Tier two", 3, 1, 1, 2, [3, -9, -2, 5]],
@@ -1004,7 +1007,7 @@ html,body{margin:0;background:#000}
   var FWD = 5; /* Metro, the forward tile */
   function tile(spec, i) {
     var cell = document.createElement("div");
-    cell.className = "t09-cell t09-g" + (spec[4] + 1) + (i === FWD ? " t09-fwd" : "");
+    cell.className = "t09-cell t09-g" + (spec[4] + 1) + (i === FWD ? " t09-fwd" : "") + (spec[2] === 5 ? " t09-edge" : "");
     cell.style.setProperty("--c", spec[2]); cell.style.setProperty("--r", spec[3]);
     var s = spec[6];
     cell.style.setProperty("--sx", "calc(" + s[0] * 0.55 + " * var(--u))");
@@ -1013,7 +1016,8 @@ html,body{margin:0;background:#000}
     cell.style.setProperty("--sr", s[3] + "deg");
     var b = document.createElement("button");
     b.type = "button"; b.className = "t09-tile";
-    b.setAttribute("aria-label", spec[0] + ", " + spec[1].toLowerCase() + (i === FWD ? ", the forward division" : ""));
+    /* the label is the action the control performs, not the thing it names */
+    b.setAttribute("aria-label", "Lift " + spec[0] + ", " + spec[1].toLowerCase() + (i === FWD ? ", forward" : ""));
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("class", "t09-glyph"); svg.setAttribute("viewBox", "0 0 16 16"); svg.setAttribute("aria-hidden", "true");
     var p = document.createElementNS(NS, "path");
