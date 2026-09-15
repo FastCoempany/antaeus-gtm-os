@@ -402,3 +402,9 @@
 :root {
   --nds-ink: var(--nds-ink-on-dark, #FFFFFF); /* alias of the on-dark ink for the frames teaser */
 }
+
+:root {
+  /* the sage knit's reverse face and its shade, for the turned-back garment corner: the inside of a knit is a touch paler and matte, the hem ribbing a touch darker */
+  --ndg-garment-sage-inside: #d5cb95; /* derived, added for t11 */
+  --ndg-garment-sage-shade: #a4975f; /* derived, added for t11 */
+}

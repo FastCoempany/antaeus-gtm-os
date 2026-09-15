@@ -1,0 +1,99 @@
+<!-- teaser id=territory-tiles num=9 source=gtmos focal=50%,50% loop=8 interactive=yes -->
+<div class="stage t09" data-teaser="territory-tiles" style="--fx:0.50;--fy:0.50" role="group" aria-label="Thirteen glass tiles that drift in from scattered positions and lock into a territory shape; one tile sits forward at a different depth. Hover or focus a tile to lift it">
+  <div class="stage-frame"><div class="stage-scene">
+    <div class="t09-rig"><div class="t09-plane"><div class="t09-field"></div></div></div>
+  </div></div>
+</div>
+<style>
+/* the rig: one perspective, one tilted plane, the field of tiles on it; nothing else in the frame. The plane is a flat layer (no preserve-3d, pitch only): Chromium's pointer hit-test drops buttons nested inside a preserve-3d context under a tilted plane, so depth is drawn as scale and shadow */
+.t09 .t09-rig { position: absolute; left: calc(17 * var(--u)); top: calc(13 * var(--u)); width: calc(72 * var(--u)); height: calc(35 * var(--u)); perspective: calc(var(--gtm-perspective-u) * var(--u)); perspective-origin: 50% 30%; }
+.t09 .t09-plane { position: absolute; inset: 0; transform-style: flat; transform: rotateX(var(--gtm-tilt-x)); }
+/* the field is a flat layer on the tilted plane: the tiles are hit-tested in 2D (Chromium drops pointer hits on buttons nested in preserve-3d contexts), so depth is drawn as scale and shadow rather than z */
+.t09 .t09-field { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(3, 1fr); gap: calc(0.5 * var(--u)); transform-style: flat; }
+/* a cell is the moving thing: it drifts in from its own scattered position (--sx --sy, its depth --ss as scale, --sr) and locks */
+.t09 .t09-cell { position: relative; grid-column: var(--c); grid-row: var(--r); transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; will-change: transform, opacity; animation: t09-drift-a var(--t09-loop) var(--gtm-loop-ease) infinite; }
+.t09 .t09-cell.t09-g2 { animation-name: t09-drift-b; }
+.t09 .t09-cell.t09-g3 { animation-name: t09-drift-c; }
+.t09 .t09-cell.t09-fwd { animation-name: t09-drift-f; }
+/* the tile itself is the control: a glass slab, 10px radius, hairline at 28% white, a static diagonal specular, a glyph, a name */
+.t09 .t09-tile { position: absolute; inset: 0; display: block; margin: 0; padding: calc(1.1 * var(--u)) calc(1.2 * var(--u)); text-align: left; overflow: hidden; cursor: pointer; border-radius: calc(0.625 * var(--u)); border: calc(0.0625 * var(--u)) solid var(--gtm-glass-border-strong); background: linear-gradient(118deg, transparent 36%, rgba(255, 255, 255, 0.06) 46%, rgba(255, 255, 255, 0.13) 52%, transparent 66%), radial-gradient(ellipse 70% 90% at 18% 0%, rgba(255, 255, 255, 0.14), transparent 62%), var(--gtm-highlight-top), var(--gtm-glass-fill); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 rgba(255, 255, 255, 0.34), inset 0 0 0 calc(0.0625 * var(--u)) rgba(255, 255, 255, 0.05); -webkit-backdrop-filter: blur(var(--gtm-glass-blur)); backdrop-filter: blur(var(--gtm-glass-blur)); color: var(--gtm-text-2); font: inherit; transform: translateZ(0) scale(1); transition: transform var(--gtm-dur-base) var(--gtm-ease-standard), border-color var(--gtm-dur-quick) linear, box-shadow var(--gtm-dur-base) var(--gtm-ease-standard); }
+@supports not (backdrop-filter: blur(1px)) { .t09 .t09-tile { background: linear-gradient(118deg, transparent 36%, rgba(255, 255, 255, 0.06) 46%, rgba(255, 255, 255, 0.13) 52%, transparent 66%), radial-gradient(ellipse 70% 90% at 18% 0%, rgba(255, 255, 255, 0.14), transparent 62%), var(--gtm-highlight-top), var(--gtm-glass-fallback); } }
+.t09 .t09-tile:hover, .t09 .t09-tile:focus-visible { transform: translateZ(calc(2.4 * var(--u))) translateY(calc(-0.5 * var(--u))) scale(1.05); border-color: var(--gtm-glass-border-lifted); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 rgba(255, 255, 255, 0.4), 0 calc(1.2 * var(--u)) calc(2.4 * var(--u)) rgba(0, 0, 0, 0.55); }
+.t09 .t09-tile:focus-visible { outline: 2px solid #F4F4F0; outline-offset: 2px; }
+.t09 .t09-tile:focus:not(:focus-visible) { outline: none; }
+/* the forward tile: the one item per zone that breaks rank, lifted, a stronger border and the accent edge */
+.t09 .t09-fwd .t09-tile { transform: translateZ(calc(2 * var(--u))) scale(1.04); border-color: var(--gtm-glass-border-lifted); border-left: calc(0.1875 * var(--u)) solid var(--gtm-accent); background: radial-gradient(ellipse 70% 90% at 18% 0%, rgba(255, 255, 255, 0.18), transparent 62%), var(--gtm-highlight-top), var(--gtm-raised); box-shadow: inset 0 calc(0.0625 * var(--u)) 0 rgba(255, 255, 255, 0.4), 0 calc(1.2 * var(--u)) calc(2.4 * var(--u)) rgba(0, 0, 0, 0.5); color: var(--gtm-text); }
+.t09 .t09-fwd .t09-tile:hover, .t09 .t09-fwd .t09-tile:focus-visible { transform: translateZ(calc(4 * var(--u))) translateY(calc(-0.6 * var(--u))) scale(1.09); }
+.t09 .t09-glyph { display: block; width: calc(1.9 * var(--u)); height: calc(1.9 * var(--u)); margin-bottom: calc(1.6 * var(--u)); color: rgba(255, 255, 255, 0.4); }
+.t09 .t09-fwd .t09-glyph { color: var(--gtm-accent); }
+.t09 .t09-name { display: block; font-family: var(--gtm-font-ui); font-weight: var(--gtm-weight-ui-strong); font-size: calc(1.5 * var(--u)); line-height: 1.2; letter-spacing: -0.005em; white-space: nowrap; }
+/* the light: one diagonal sheen crossing every slab as the field locks, clipped inside each tile */
+.t09 .t09-sheen { position: absolute; top: -40%; left: 0; width: 45%; height: 180%; pointer-events: none; background: var(--gtm-sheen-strong); transform: translateX(-140%) skewX(-18deg); will-change: transform; animation: t09-sheen var(--t09-loop) var(--gtm-loop-ease) infinite; }
+.t09 { --t09-loop: 8s; }
+/* the loop, 8s. 0–6% rest, locked; 6–20% the tiles lift off and scatter; three groups drift back and lock in turn; the forward tile settles last; 80–100% rest */
+@keyframes t09-drift-a { 0%, 6% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } 20%, 24% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(var(--ss)); opacity: 0.22; } 50%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } }
+@keyframes t09-drift-b { 0%, 6% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } 20%, 31% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(var(--ss)); opacity: 0.22; } 59%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } }
+@keyframes t09-drift-c { 0%, 6% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } 20%, 38% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(var(--ss)); opacity: 0.22; } 67%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } }
+@keyframes t09-drift-f { 0%, 6% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } 20%, 46% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(var(--ss)); opacity: 0.22; } 76% { transform: translate(0, 0) rotate(0deg) scale(1.03); opacity: 1; } 80%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; } }
+@keyframes t09-sheen { 0%, 40% { transform: translateX(-140%) skewX(-18deg); } 82%, 100% { transform: translateX(340%) skewX(-18deg); } }
+</style>
+<script>
+(function () {
+  /* thirteen divisions of an invented territory: name, tier (spoken only), cell (column, row), glyph, drift group, scattered origin */
+  var TILES = [
+    ["Coastal", "Tier one", 2, 1, 0, 1, [-9, -7, -6, -7]],
+    ["Northern", "Tier two", 3, 1, 1, 2, [3, -9, -2, 5]],
+    ["Ridge", "Tier two", 4, 1, 2, 3, [11, -6, 4, -6]],
+    ["Harbor", "Tier one", 1, 2, 3, 2, [-13, -2, 7, 8]],
+    ["Inland", "Tier three", 2, 2, 1, 1, [-6, 4, -8, -4]],
+    ["Metro", "Tier one", 3, 2, 0, 0, [1, 2, 12, -2]],
+    ["Valley", "Tier two", 4, 2, 2, 3, [8, 3, 6, 7]],
+    ["Basin", "Tier three", 5, 2, 0, 1, [14, -1, -5, -9]],
+    ["Delta", "Tier two", 1, 3, 2, 3, [-12, 8, 2, -8]],
+    ["Prairie", "Tier three", 2, 3, 3, 2, [-5, 11, -7, 6]],
+    ["Lakes", "Tier one", 3, 3, 1, 1, [2, 10, 5, -5]],
+    ["Summit", "Tier three", 4, 3, 3, 0, [9, 9, -4, 9]],
+    ["Upstate", "Tier two", 5, 1, 1, 2, [12, -10, 8, 4]]
+  ];
+  /* four glyph shapes at the tile's top left, drawn as paths in a 16-unit box */
+  var GLYPHS = [
+    "M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z",
+    "M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13zM8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z",
+    "M8 1.5l6.5 6.5L8 14.5L1.5 8z",
+    "M2 13.5L8 2.5l6 11z"
+  ];
+  var NS = "http://www.w3.org/2000/svg";
+  var FWD = 5; /* Metro, the forward tile */
+  function tile(spec, i) {
+    var cell = document.createElement("div");
+    cell.className = "t09-cell t09-g" + (spec[4] + 1) + (i === FWD ? " t09-fwd" : "");
+    cell.style.setProperty("--c", spec[2]); cell.style.setProperty("--r", spec[3]);
+    var s = spec[6];
+    cell.style.setProperty("--sx", "calc(" + s[0] * 0.55 + " * var(--u))");
+    cell.style.setProperty("--sy", "calc(" + s[1] * 0.55 + " * var(--u))");
+    cell.style.setProperty("--ss", String(Math.round((1 + s[2] / 40) * 1000) / 1000));
+    cell.style.setProperty("--sr", s[3] + "deg");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "t09-tile";
+    b.setAttribute("aria-label", spec[0] + ", " + spec[1].toLowerCase() + (i === FWD ? ", the forward division" : ""));
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "t09-glyph"); svg.setAttribute("viewBox", "0 0 16 16"); svg.setAttribute("aria-hidden", "true");
+    var p = document.createElementNS(NS, "path");
+    p.setAttribute("d", GLYPHS[spec[5]]); p.setAttribute("fill", "currentColor"); p.setAttribute("fill-rule", "evenodd");
+    svg.appendChild(p);
+    var n = document.createElement("span"); n.className = "t09-name"; n.textContent = spec[0];
+    var sh = document.createElement("span"); sh.className = "t09-sheen";
+    b.appendChild(svg); b.appendChild(n); b.appendChild(sh);
+    cell.appendChild(b);
+    return cell;
+  }
+  var roots = document.querySelectorAll(".stage.t09");
+  Array.prototype.forEach.call(roots, function (root) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    var field = root.querySelector(".t09-field");
+    TILES.forEach(function (spec, i) { field.appendChild(tile(spec, i)); });
+    /* the drift is CSS; the runtime's is-playing class starts and pauses it. The lift is a transition, so it answers hover and focus while paused too */
+  });
+})();
+</script>
