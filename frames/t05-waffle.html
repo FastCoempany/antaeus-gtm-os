@@ -1,0 +1,46 @@
+<!-- frame id=waffle num=5 source=digs focal=44%,50% loop=10 interactive=no -->
+<div class="stage f05" data-frame="waffle" style="--fx:0.44;--fy:0.50" role="img"
+     aria-label="A thermal knit at wall scale, its waffle lattice and pinholes visible. An overlock seam runs diagonally across it with a pale wash halo bleeding out along its length, and the light travels slowly from raking to flat">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f05-cloth m-knit"></div>
+      <div class="f05-cloud m-wash-cloud"></div>
+      <div class="f05-halo m-wash-halo"></div>
+      <div class="f05-seam m-seam-overlock"></div>
+      <div class="f05-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 5 — the fabric as architecture, the wash as weather.
+   Materials: digs-knit (the half-drop waffle at ~1.2 mm pitch, yarn families
+   crossing at ±45°, a pinhole at each cell centre, the plane travelling from
+   #4C493E to #ADA595 as the light goes from raking to flat) and the overlock
+   ridge and seam-highlighter wash from the same file.
+   The wash is the founder's own name for it, and it is the thing that makes a
+   garment look like a garment rather than a flat fill. Fabric settles, so the
+   light decelerates. */
+.f05 .f05-cloth {
+  position: absolute; inset: 0; --kn-pitch: 3.1%;
+  animation: f05-light 10s cubic-bezier(0.32, 0, 0.16, 1) infinite;
+}
+.f05 .f05-cloud { position: absolute; inset: -8%; }
+.f05 .f05-halo {
+  position: absolute; left: -14%; right: -14%; top: 40%; height: 26%;
+  transform: rotate(-13deg);
+}
+.f05 .f05-seam {
+  position: absolute; left: -14%; right: -14%; top: 49.4%; height: 3.4%;
+  transform: rotate(-13deg);
+}
+.f05 .f05-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 104% at 44% 44%, transparent 42%, rgba(0, 0, 0, 0.5) 100%);
+}
+@keyframes f05-light {
+  0%, 100% { --kn-light: 0.08; }
+  50% { --kn-light: 0.92; }
+}
+@property --kn-light { syntax: "<number>"; inherits: true; initial-value: 0.5; }
+@media (prefers-reduced-motion: reduce) { .f05 .f05-cloth { --kn-light: 0.55; } }
+</style>

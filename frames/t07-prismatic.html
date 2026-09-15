@@ -1,0 +1,51 @@
+<!-- frame id=prismatic num=7 source=darkest-shades focal=50%,54% loop=10 interactive=no -->
+<div class="stage f07" data-frame="prismatic" style="--fx:0.50;--fy:0.54" role="img"
+     aria-label="A flat mid-grey studio sweep with nothing on it, and the brand's angular mark travelling across it as a hard-edged shadow, its two offset notches slicing the light as it passes">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f07-sweep m-ds-sweep"></div>
+      <div class="f07-key m-ds-key"></div>
+      <div class="f07-cast" aria-hidden="true">
+        <svg viewBox="0 0 1000 513" preserveAspectRatio="none">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+      <div class="f07-soft" aria-hidden="true">
+        <svg viewBox="0 0 1000 513" preserveAspectRatio="none" style="animation-delay:0s">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 7 — the founder's unbuilt catalogue idea, built.
+   Materials: ds-sweep (the flat #D2D2D2 seamless backdrop, the single large
+   soft key upper-front, and the shadow discipline — never more than 8–10%
+   darker than the ground, wider than the object, no hard drop shadow) and the
+   verified ten-vertex mark, traced at 99.78% pixel agreement with the source.
+   The brief asked for "prismatic logo elements and patterns in shadows,
+   lighting, background", was quoted, deferred, and never made. The double
+   notch is the whole idea — a downward fold at 54% of the width on the top
+   edge and an upward fold at 45% on the bottom, deliberately offset — so the
+   shadow reads as a crease passing over the surface.
+   Two passes: a soft wide one that obeys the brand's shadow rule, and a hard
+   one at low alpha that carries the geometry. */
+.f07 .f07-sweep { position: absolute; inset: 0; }
+.f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
+.f07 .f07-cast svg, .f07 .f07-soft svg {
+  position: absolute; left: 0; top: 21%; width: 78%; height: 52%;
+  animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.58); }
+.f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
+.f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
+@keyframes f07-travel {
+  0% { transform: translateX(-104%); }
+  38%, 56% { transform: translateX(14%); }
+  100% { transform: translateX(139%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f07 .f07-cast svg, .f07 .f07-soft svg { transform: translateX(18%); }
+}
+</style>

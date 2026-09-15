@@ -1,0 +1,118 @@
+<!-- frame id=margin num=10 source=aesdr focal=62%,50% loop=10 interactive=no -->
+<div class="stage f10" data-frame="margin" style="--fx:0.62;--fy:0.50" role="img"
+     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, and in the body a phrase is struck through in red and a correction is inserted after it">
+  <div class="stage-frame">
+    <div class="stage-scene f10-page m-ae-field">
+      <p class="f10-kicker">Manuscript · folio iv</p>
+      <div class="f10-body">
+        <p>Your onboarding was a crime scene. A week of shadowing. A Gong playlist. A prayer.
+          <span class="f10-strike">That is not training.</span>
+          <span class="f10-insert">That is hazing with a CRM licence.</span>
+        </p>
+        <p>Every month or quarter, they reset your number to zero. And every month or
+          quarter, you act surprised. You don't have a pipeline problem. You have a
+          denial problem.</p>
+      </div>
+      <aside class="f10-rail m-ae-margin">
+        <span class="f10-note" data-n="0">say the quiet part</span>
+        <span class="f10-note" data-n="1">this is the whole book</span>
+        <span class="f10-note" data-n="2">keep — don't soften</span>
+      </aside>
+      <svg class="f10-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 24 60 Q 18 16 36 4 Q 32 32 36 60 Z" transform="translate(-9 -14) scale(0.62) rotate(-16 32 32)"/>
+          <path d="M 6 54 Q 32 18 58 54 Z"/>
+          <path d="M 32 24 Q 30 14 32 4"/>
+        </g>
+        <path d="M 32 18 q -8 -2 -10 -10 q 8 4 10 8" fill="#8B1A1A" stroke="#8B1A1A" stroke-width="1.6"/>
+        <path d="M 32 10 q 8 -2 10 -10 q -8 4 -10 8" fill="#8B1A1A" stroke="#8B1A1A" stroke-width="1.6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 10 — a page annotating itself.
+   Materials: ae-paper (cream #FAF7F2, the manuscript margin rail behind a 2px
+   #C53030 border, strikes at text-decoration-thickness 2px, inserts in red
+   ink with a red underline) and the Caveat hand, which in this brand is a
+   voice rather than a decorative script.
+   Two reds sit side by side here and they are not interchangeable: crimson
+   #8B1A1A is the brand's authority, #C53030 is the editor's pen. Only the
+   pen writes in the margin.
+   The rail exists in the product as a component of a finished artifact. Here
+   the annotation is the event, and you watch it happen.
+   The mascot is present as its own monoline glyph — the recovery form, shell
+   with a sprout, in the brand's 1.6px round-cap construction. Logged in
+   ASSUMPTIONS.md as the faithful alternative to placing a source render.
+   Registers the brand has retired are avoided: this is the margin voice, not
+   a dossier, a ledger or an editorial split. */
+.f10 .f10-page { position: absolute; inset: 0; overflow: hidden; }
+.f10 .f10-kicker {
+  position: absolute; left: 6%; top: 7%; margin: 0;
+  font-family: var(--ae-mono); font-size: calc(var(--u) * 1.4);
+  text-transform: uppercase; letter-spacing: var(--ae-track-eyebrow);
+  color: var(--ae-muted);
+}
+.f10 .f10-body {
+  position: absolute; left: 6%; right: 34%; top: 18%;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.5);
+  line-height: 2; color: var(--ae-ink);
+}
+.f10 .f10-body p { margin: 0 0 calc(var(--u) * 2.4); }
+.f10 .f10-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink);
+  text-decoration-thickness: 2px;
+  animation: f10-strike 10s linear infinite;
+}
+.f10 .f10-insert {
+  color: var(--ae-redink); border-bottom: 2px solid var(--ae-redink);
+  opacity: 0; animation: f10-insert 10s linear infinite;
+}
+.f10 .f10-rail {
+  position: absolute; right: 5%; top: 17%; width: 25%;
+  padding-left: calc(var(--u) * 1.6);
+  display: grid; gap: calc(var(--u) * 4.4); align-content: start;
+  font-size: calc(var(--u) * 3);
+  transform: rotate(-1.5deg);
+}
+.f10 .f10-note { opacity: 0; animation: f10-note 10s linear infinite; }
+.f10 .f10-note[data-n="0"] { animation-delay: 0.4s; }
+.f10 .f10-note[data-n="1"] { animation-delay: 2.6s; }
+.f10 .f10-note[data-n="2"] { animation-delay: 4.8s; }
+.f10 .f10-glyph {
+  position: absolute; right: 6%; bottom: 8%;
+  width: calc(var(--u) * 10); height: calc(var(--u) * 10); opacity: 0.85;
+}
+@keyframes f10-note { 0%, 3% { opacity: 0; } 8%, 92% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes f10-strike {
+  0%, 56% { text-decoration-color: transparent; }
+  62%, 100% { text-decoration-color: var(--ae-redink); }
+}
+@keyframes f10-insert { 0%, 66% { opacity: 0; } 72%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .f10 .f10-note, .f10 .f10-insert { opacity: 1; }
+  .f10 .f10-strike { text-decoration-color: var(--ae-redink); }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  /* focal 62%: the band runs 37% to 87% of the scene. The body and the rail
+     both move inside it, the rail dropping below the text rather than beside
+     it -- which is what the real manuscript does on a narrow screen. */
+  .f10 .f10-kicker { left: 39%; top: 5%; font-size: calc(var(--u) * 1.9); }
+  .f10 .f10-body {
+    left: 39%; right: 15%; top: 10%;
+    font-size: calc(var(--u) * 2.7); line-height: 1.7;
+  }
+  .f10 .f10-body p + p { display: none; }
+  .f10 .f10-body p { margin-bottom: calc(var(--u) * 2.4); }
+  .f10 .f10-rail {
+    left: 39%; right: 15%; top: 48%; bottom: auto; width: auto;
+    font-size: calc(var(--u) * 3.1); gap: calc(var(--u) * 2.2);
+  }
+  .f10 .f10-glyph { right: 16%; bottom: 5%; width: calc(var(--u) * 13); height: calc(var(--u) * 13); }
+}
+</style>

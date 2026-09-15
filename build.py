@@ -89,7 +89,7 @@ CAPTIONS = {
     "knurl-wall": "Brass, at four hundred percent.",
     "ground-line": "A mark that stands on a line.",
     "blackout": "A lens you cannot see through.",
-    "iris-seam": "One line, seven colours.",
+    "iris-seam": "One line, seven colours."  ,
     "waffle": "A knit, and the seam through it.",
     "harlequin": "A pattern eating a wall.",
     "prismatic": "A logo, cast as a shadow.",
@@ -270,7 +270,7 @@ def substitute(text: str, values: dict) -> str:
 INCLUDE_RE = re.compile(r"<!--\s*@include\s+([\w./-]+)\s*-->")
 TOKENS_RE = re.compile(r"<!--\s*@tokens\s*-->")
 MATERIALS_RE = re.compile(r"<!--\s*@materials\s*-->")
-TEASER_RE = re.compile(r"<!--\s*@frame\s+(\d+)\s*-->")
+FRAME_RE = re.compile(r"<!--\s*@frame\s+(\d+)\s*-->")
 EACH_RE = re.compile(
     r"<!--\s*@each-frame\s+from=(\d+)\s+to=(\d+)\s*-->(.*?)<!--\s*@end-each\s*-->", re.S
 )
@@ -299,7 +299,7 @@ def expand(text: str, ctx: dict, depth: int = 0) -> str:
             return f"<!-- frame {n} not built yet -->"
         return by_num[n]["html"]
 
-    text = TEASER_RE.sub(one, text)
+    text = FRAME_RE.sub(one, text)
 
     def each(m: re.Match) -> str:
         a, b, tpl = int(m.group(1)), int(m.group(2)), m.group(3)
@@ -358,14 +358,15 @@ def build_contact_sheet(ctx: dict) -> Path:
         items.append(
             "<figure class=\"sheet-item\">"
             f"<div class=\"sheet-frame\">{t['html']}</div>"
-            f"<figcaption><b>{v['TEASER_NUM2']} {escape(t['id'])}</b>, {escape(label)}. "
-            f"{escape(v['TEASER_CAPTION'])} Loop {escape(v['TEASER_LOOP'])}s, "
-            f"interactive {v['TEASER_INTERACTIVE']}.</figcaption></figure>"
+            f"<figcaption><b>{v['FRAME_NUM2']} {escape(t['id'])}</b>, {escape(label)}. "
+            f"{escape(v['FRAME_CAPTION'])} Loop {escape(v['FRAME_LOOP'])}s, "
+            f"interactive {v['FRAME_INTERACTIVE']}.</figcaption></figure>"
         )
     runtime = expand((PARTIALS_DIR / "runtime.html").read_text(encoding="utf-8"), ctx)
     html = (
         "<!doctype html>\n<html lang=\"en\">\n<head>\n" + head +
         "<title>shapshyftrs frames</title>\n<style>\n" + ctx["tokens"] + "\n</style>\n"
+        "<style>\n" + ctx["materials"] + "\n</style>\n"
         "<style>" + SHEET_CSS + "</style>\n</head>\n<body class=\"sheet\">\n"
         "<h1>shapshyftrs frames</h1>\n<p>All twelve frames, gallery order, for review.</p>\n"
         "<div class=\"sheet-grid\">\n" + "\n".join(items) + "\n</div>\n" + runtime +
@@ -390,6 +391,7 @@ def build_single_pages(ctx: dict) -> list[Path]:
         html = (
             "<!doctype html>\n<html lang=\"en\">\n<head>\n" + head +
             f"<title>{escape(t['id'])}</title>\n<style>\n" + ctx["tokens"] + "\n</style>\n"
+            "<style>\n" + ctx["materials"] + "\n</style>\n"
             "<style>" + SINGLE_CSS + "</style>\n</head>\n<body>\n"
             f"<div class=\"single\">{t['html']}</div>\n" + runtime + "\n</body>\n</html>\n"
         )

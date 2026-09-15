@@ -1,0 +1,128 @@
+<!-- frame id=reconciliation num=11 source=puff-junction focal=50%,52% loop=10 interactive=no -->
+<div class="stage f11" data-frame="reconciliation" style="--fx:0.50;--fy:0.52" role="img"
+     aria-label="A concrete block with a knurled brass disc set into its top face, on a white studio sweep, entirely monochrome. Late in the loop a single small acid-green element arrives and holds">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f11-sweep m-sweep"></div>
+      <div class="f11-key m-sweep-key"></div>
+      <div class="f11-shadow m-contact-shadow"></div>
+      <div class="f11-block">
+        <div class="f11-disc">
+          <div class="f11-knurl m-knurl m-knurl--band"></div>
+          <div class="f11-crown m-brass-flat"></div>
+        </div>
+        <div class="f11-body">
+          <div class="f11-face m-concrete"></div>
+          <div class="f11-cells" aria-hidden="true"></div>
+          <div class="f11-seam m-concrete-seam"></div>
+          <div class="f11-edge"></div>
+        </div>
+      </div>
+      <div class="f11-slime"><span>puff</span></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 11 — the thing the brand asked for and never got.
+   Materials: pj-sweep (flat #EDEDED across the width, falling to #C8–#CD at
+   70%, lifting at the floor, the single soft key upper-front, the broad
+   feathered contact shadow), pj-concrete, pj-harlequin, pj-knurl and
+   pj-brass's two-faced metal — pale champagne on the flat cap, saturated
+   antique gold on the knurled band.
+   Proportions are the real ones and the view is straight on, so none of the
+   perspective is invented: a Ø63 brass cylinder on an 85 mm face is 74% of
+   the width, standing 15.4 mm proud of a 57.2 mm block, with the parting seam
+   halfway up the concrete and the harlequin dissolving off one corner.
+   In October 2024 the founder asked to move "not completely, but subtly from
+   a vibrant and somewhat playful neon feel to a subtler, more refined
+   aesthetic." Nobody built it. This is that: the object world, entirely
+   monochrome, and exactly one element in slime #D6FD4A -- the ration the
+   paper brand spends everywhere and the object brand spends nowhere. */
+.f11 .f11-sweep, .f11 .f11-key { position: absolute; inset: 0; }
+.f11 .f11-shadow {
+  position: absolute; left: 25%; right: 25%; bottom: 19%; height: 8%;
+}
+.f11 .f11-block {
+  position: absolute; left: 50%; bottom: 22%; width: 34%; height: 44%;
+  transform: translateX(-50%);
+}
+/* the concrete body: 57.2 mm of the 72.6 mm total silhouette */
+.f11 .f11-body { position: absolute; left: 0; right: 0; bottom: 0; height: 79%; }
+.f11 .f11-face { position: absolute; inset: 0; --c-cell: 40%; }
+.f11 .f11-cells { position: absolute; inset: 0; overflow: hidden; }
+.f11 .f11-cells i {
+  position: absolute; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: rgba(0, 0, 0, 0.26); mix-blend-mode: multiply;
+}
+.f11 .f11-seam { position: absolute; left: 0; right: 0; top: 50%; }
+/* R3 on an 85 mm block, and the eased top and bottom edges */
+.f11 .f11-edge {
+  position: absolute; inset: 0; border-radius: calc(var(--u) * 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset calc(var(--u) * 0.9) 0 calc(var(--u) * 2.2) rgba(255, 255, 255, 0.05),
+    inset calc(var(--u) * -1.1) 0 calc(var(--u) * 2.6) rgba(0, 0, 0, 0.26);
+}
+/* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
+.f11 .f11-disc {
+  position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
+  transform: translateX(-50%);
+}
+.f11 .f11-knurl {
+  position: absolute; inset: 0; --k-cell: 5%;
+  border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
+  overflow: hidden;
+}
+.f11 .f11-crown {
+  position: absolute; left: 1%; right: 1%; top: -4.5%; height: 20%;
+  border-radius: 50% / 50%;
+  box-shadow: 0 calc(var(--u) * 0.2) calc(var(--u) * 0.5) rgba(0, 0, 0, 0.32);
+}
+.f11 .f11-slime {
+  position: absolute; left: 7.5%; bottom: 12%;
+  opacity: 0; animation: f11-arrive 10s linear infinite;
+}
+.f11 .f11-slime span {
+  display: block; background: var(--pj-slime);
+  color: #000; font-family: var(--pj-display); font-style: italic;
+  font-weight: 700; font-size: calc(var(--u) * 2.6); line-height: 1;
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 1.8) calc(var(--u) * 1.1);
+}
+@keyframes f11-arrive {
+  0%, 62% { opacity: 0; }
+  70%, 100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f11 .f11-slime { opacity: 1; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  .f11 .f11-block { width: 40%; height: 34%; bottom: 30%; }
+  .f11 .f11-shadow { left: 28%; right: 28%; bottom: 27%; }
+  .f11 .f11-slime { left: 28%; bottom: 16%; }
+  .f11 .f11-slime span { font-size: calc(var(--u) * 3.6); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var host = root.querySelector(".f11-cells");
+  if (!host || host.childElementCount) return;
+  /* ~6 cells across the 85 mm face, dense at the left corner, thinning
+     diagonally with a ragged front -- the dissolve the hero renders show. */
+  var W = 16.6, H = 25.2, out = [];
+  for (var r = -1; r < 5; r++) {
+    for (var c = -1; c < 8; c++) {
+      var keep = 1.0 - (c / 6.0) * 1.3 + ((r * 5 + c * 7) % 4) * 0.09;
+      if (keep < 0.42) continue;
+      out.push('<i style="left:' + (c * W - W / 2).toFixed(2) + '%;top:' +
+        (r * H - H / 2).toFixed(2) + '%;width:' + W + '%;height:' + H + '%"></i>');
+    }
+  }
+  host.innerHTML = out.join("");
+})();
+</script>

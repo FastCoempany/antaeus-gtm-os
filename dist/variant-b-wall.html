@@ -1058,7 +1058,69 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
     <a class="button" href="#send">Send us the idea</a>
   </div>
   <div class="hero-stage" data-play-delay="700">
-<!-- frame 1 not built yet -->
+<!-- frame id=knurl-wall num=1 source=puff-junction focal=50%,50% loop=9 interactive=no -->
+<div class="stage f01" data-frame="knurl-wall" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A wall of brass diamond knurling, lit by a light travelling slowly across it; as the light crosses the centre a shallow wordmark surfaces out of the metal and sinks back">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f01-field m-knurl m-knurl--band"></div>
+      <div class="f01-mark"><span class="f01-puff">puff</span><span class="f01-junction">JUNCTION</span></div>
+      <div class="f01-rake m-knurl-rake"></div>
+      <div class="f01-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 1 — the knurl at architectural scale.
+   Materials: pj-knurl (1.26 mm pitch, 1.65 x 1.9 lands, point-up at 1.15:1,
+   grooves crossing at 49 degrees) and pj-brass's whisper deboss (three
+   terraces, 0.2 mm, letters left at the original surface).
+   The knurl has never been the subject in this brand; it has only ever been a
+   band on a knob 63 mm across. Here it is the wall, and the only other event
+   is a light crossing it. Metal does not ease, so the rake runs at constant
+   velocity. */
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: 5.4%; }
+.f01 .f01-rake { animation: f01-rake 9s linear infinite; }
+.f01 .f01-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 96% at 50% 46%, transparent 38%, rgba(0, 0, 0, 0.62) 100%);
+}
+/* The mark is a whisper: one raking-light edge, and almost invisible from the
+   wrong angle. Its opacity rides the same clock as the light. */
+.f01 .f01-mark {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: calc(var(--u) * 0.6);
+  font-family: var(--pj-display); font-style: italic;
+  animation: f01-surface 9s linear infinite;
+}
+.f01 .f01-puff {
+  font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
+  letter-spacing: -0.02em; text-transform: lowercase;
+  color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.12) calc(var(--u) * -0.12) 0 rgba(255, 248, 226, 0.85),
+    calc(var(--u) * 0.14) calc(var(--u) * 0.14) 0 rgba(20, 12, 2, 0.75);
+}
+.f01 .f01-junction {
+  font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
+  text-indent: 0.44em; color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.08) calc(var(--u) * -0.08) 0 rgba(255, 248, 226, 0.7),
+    calc(var(--u) * 0.09) calc(var(--u) * 0.09) 0 rgba(20, 12, 2, 0.62);
+}
+@keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
+@keyframes f01-surface {
+  0%, 34% { opacity: 0; }
+  46% { opacity: 1; }
+  58% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f01 .f01-rake { background-position: 44% 0; }
+  .f01 .f01-mark { opacity: 1; }
+}
+</style>
+
   </div>
 </header>
 
@@ -1067,6 +1129,1296 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 
 </section>
 <section class="wall" aria-label="Teasers">
+
+<figure class="tile" data-frame-num="1">
+  <div class="tile-frame">
+<!-- frame id=knurl-wall num=1 source=puff-junction focal=50%,50% loop=9 interactive=no -->
+<div class="stage f01" data-frame="knurl-wall" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A wall of brass diamond knurling, lit by a light travelling slowly across it; as the light crosses the centre a shallow wordmark surfaces out of the metal and sinks back">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f01-field m-knurl m-knurl--band"></div>
+      <div class="f01-mark"><span class="f01-puff">puff</span><span class="f01-junction">JUNCTION</span></div>
+      <div class="f01-rake m-knurl-rake"></div>
+      <div class="f01-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 1 — the knurl at architectural scale.
+   Materials: pj-knurl (1.26 mm pitch, 1.65 x 1.9 lands, point-up at 1.15:1,
+   grooves crossing at 49 degrees) and pj-brass's whisper deboss (three
+   terraces, 0.2 mm, letters left at the original surface).
+   The knurl has never been the subject in this brand; it has only ever been a
+   band on a knob 63 mm across. Here it is the wall, and the only other event
+   is a light crossing it. Metal does not ease, so the rake runs at constant
+   velocity. */
+.f01 .f01-field { position: absolute; inset: 0; --k-cell: 5.4%; }
+.f01 .f01-rake { animation: f01-rake 9s linear infinite; }
+.f01 .f01-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 96% at 50% 46%, transparent 38%, rgba(0, 0, 0, 0.62) 100%);
+}
+/* The mark is a whisper: one raking-light edge, and almost invisible from the
+   wrong angle. Its opacity rides the same clock as the light. */
+.f01 .f01-mark {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: calc(var(--u) * 0.6);
+  font-family: var(--pj-display); font-style: italic;
+  animation: f01-surface 9s linear infinite;
+}
+.f01 .f01-puff {
+  font-size: calc(var(--u) * 13); font-weight: 700; line-height: 0.82;
+  letter-spacing: -0.02em; text-transform: lowercase;
+  color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.12) calc(var(--u) * -0.12) 0 rgba(255, 248, 226, 0.85),
+    calc(var(--u) * 0.14) calc(var(--u) * 0.14) 0 rgba(20, 12, 2, 0.75);
+}
+.f01 .f01-junction {
+  font-size: calc(var(--u) * 3.1); font-weight: 500; letter-spacing: 0.44em;
+  text-indent: 0.44em; color: transparent;
+  text-shadow:
+    calc(var(--u) * -0.08) calc(var(--u) * -0.08) 0 rgba(255, 248, 226, 0.7),
+    calc(var(--u) * 0.09) calc(var(--u) * 0.09) 0 rgba(20, 12, 2, 0.62);
+}
+@keyframes f01-rake { from { background-position: -140% 0; } to { background-position: 240% 0; } }
+@keyframes f01-surface {
+  0%, 34% { opacity: 0; }
+  46% { opacity: 1; }
+  58% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f01 .f01-rake { background-position: 44% 0; }
+  .f01 .f01-mark { opacity: 1; }
+}
+</style>
+
+  </div>
+  <figcaption><span class="caption">Brass, at four hundred percent.</span><span class="source">PUFF JUNCTION</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="2">
+  <div class="tile-frame">
+<!-- frame id=ground-line num=2 source=antaeus focal=50%,58% loop=8 interactive=no -->
+<div class="stage f02" data-frame="ground-line" style="--fx:0.50;--fy:0.58" role="img"
+     aria-label="A drafted capital A standing on a ground line that runs past its feet, on pale graph paper; the letter lifts off the line, tilts and hollows, then settles back. The line never moves">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f02-field m-an-field">
+        <svg class="f02-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <g class="f02-a" stroke="var(--an-ink)" stroke-width="3.2" stroke-linecap="butt" stroke-linejoin="miter">
+            <path d="M14 38L24 10l10 28"/>
+            <path d="M18.2 28h11.6"/>
+          </g>
+          <path d="M2 38h44" stroke="var(--an-forest)" stroke-width="3.2" stroke-linecap="butt"/>
+        </svg>
+        <div class="f02-earth m-an-earth"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 2 — the mark as a horizon.
+   Materials: an-field (34 px grid at rgba(10,28,64,.08), the two corner
+   washes, the vignette) and the Grounded-A's exact geometry — legs
+   M14 38L24 10l10 28, crossbar M18.2 28h11.6, ground M2 38h44, butt caps and
+   mitered joins.
+   The ground runs 12 units past each foot: 2.2x the width of the letter. That
+   overhang is the mark. The settled auth gate does this at 118 px as a login
+   affordance; here the line is a horizon and the letter is a building — and
+   the lift is the product's own state device, so the A floats and the ground
+   never moves. */
+.f02 .f02-field { position: absolute; inset: 0; }
+.f02 .f02-mark {
+  position: absolute; left: 50%; bottom: 3%;
+  height: 74%; width: auto; transform: translateX(-50%); overflow: visible;
+}
+.f02 .f02-a {
+  transform-origin: 24px 24px;
+  animation: f02-lift 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+.f02 .f02-earth {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18.4%;
+}
+.f02 .f02-earth i {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: rgba(27, 94, 63, 0.14);
+}
+.f02 .f02-earth i:nth-child(1) { top: 26%; }
+.f02 .f02-earth i:nth-child(2) { top: 52%; }
+.f02 .f02-earth i:nth-child(3) { top: 79%; }
+@keyframes f02-lift {
+  0%, 18% { transform: none; opacity: 1; }
+  44%, 62% { transform: translate(1px, -7px) rotate(6deg); opacity: 0.42; }
+  86%, 100% { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f02 .f02-a { transform: none; opacity: 1; } }
+</style>
+
+  </div>
+  <figcaption><span class="caption">A mark that stands on a line.</span><span class="source">Antaeus GTM OS</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="3">
+  <div class="tile-frame">
+<!-- frame id=blackout num=3 source=darkest-shades focal=50%,50% loop=10 interactive=no -->
+<div class="stage f03" data-frame="blackout" style="--fx:0.50;--fy:0.50" role="img"
+     aria-label="A field of near-black you cannot see through. One broad soft sheen wipes across it from lower left to upper right, and a single hard specular dot sits near the top. Set small along the lower edge: See Everything. Reveal Nothing.">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f03-lens m-lens-blackout"></div>
+      <div class="f03-groove"></div>
+      <p class="f03-line">See Everything. Reveal Nothing.</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 3 — the lens as the whole surface.
+   Materials: ds-lens's blackout recipe — a #151515 fill, one broad soft sheen
+   band at #4A–#6A across 30% of the width, one small hard specular dot near
+   the top edge, and the faint 2–4 px inner shadow where a lens meets its
+   groove.
+   The tagline and the product make the same argument, which is rare. The
+   sheen crosses once, slowly, and nothing else happens. */
+.f03 .f03-lens { position: absolute; inset: 0; animation: f03-sheen 10s ease-in-out infinite; }
+.f03 .f03-groove {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 calc(var(--u) * 3.4) rgba(0, 0, 0, 0.9);
+}
+.f03 .f03-line {
+  position: absolute; left: 7%; right: 7%; bottom: 8.5%;
+  margin: 0; text-align: center;
+  font-family: var(--ds-display); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 3.3); line-height: 1.1;
+  letter-spacing: 0.055em; color: rgba(236, 236, 236, 0.9);
+}
+@keyframes f03-sheen {
+  0% { --sheen: 4; }
+  100% { --sheen: 96; }
+}
+@property --sheen { syntax: "<number>"; inherits: true; initial-value: 50; }
+@media (prefers-reduced-motion: reduce) { .f03 .f03-lens { --sheen: 46; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  .f03 .f03-line { left: 27%; right: 27%; bottom: 10%; font-size: calc(var(--u) * 4.6); }
+}
+</style>
+
+  </div>
+  <figcaption><span class="caption">A lens you cannot see through.</span><span class="source">DARKEST SHADES</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="4">
+  <div class="tile-frame">
+<!-- frame id=iris-seam num=4 source=aesdr focal=50%,46% loop=8 interactive=yes -->
+<div class="stage f04" data-frame="iris-seam" style="--fx:0.50;--fy:0.46">
+  <div class="stage-frame">
+    <div class="stage-scene f04-scene m-ae-field">
+      <div class="f04-words" aria-live="off">
+        <span class="f04-word m-iris-text" data-i="0">Owning</span>
+        <span class="f04-word m-iris-text" data-i="1">Untamed</span>
+        <span class="f04-word m-iris-text" data-i="2">Verdict</span>
+        <span class="f04-word m-iris-text" data-i="3">Keeper</span>
+      </div>
+      <div class="f04-line m-iris-line"></div>
+      <p class="f04-sub">The operating manual, not the motivation engine.</p>
+      <svg class="f04-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 24 60 Q 18 16 36 4 Q 32 32 36 60 Z" transform="translate(-9 -14) scale(0.62) rotate(-16 32 32)"/>
+          <path d="M 6 50 Q 32 12 58 50 Z"/>
+          <path d="M 28 22 L 32 18 L 36 22 L 36 28 L 32 32 L 28 28 Z" stroke-opacity=".45"/>
+          <path d="M 18 48 V 38 M 46 48 V 38" stroke-opacity=".45"/>
+          <path d="M 12 46 Q 32 50 52 46" stroke-opacity=".25"/>
+        </g>
+      </svg>
+      <button class="f04-hold" type="button" aria-pressed="false">
+        <span class="f04-hold-label">Hold the word</span>
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 4 — the ration as the composition.
+   Materials: ae-iris (the seven stops verbatim, 300% background-size, the 4 s
+   shimmer, the 1 px ambient line at opacity .15) and ae-paper (cream
+   #FAF7F2, zero radius).
+   The iris is always an accent on something. Here it is the only thing, and
+   its discipline is the subject: one line, and one word lit at a time. The
+   mascot is present as its own monoline glyph family — the shell arc and the
+   ear — which is the brand's abstraction of the creature and the only
+   faithful way to carry it without placing a source render. Logged in
+   ASSUMPTIONS.md.
+   Registers the brand has retired are avoided deliberately: no classified, no
+   dossier, no ledger, no editorial split, no decision card. */
+.f04 .f04-scene { position: absolute; inset: 0; }
+.f04 .f04-line { position: absolute; left: 0; right: 0; top: 56%; height: 2px; opacity: 0.22; }
+.f04 .f04-words {
+  position: absolute; left: 0; right: 0; top: 30%; height: 22%;
+  display: grid; place-items: center;
+}
+.f04 .f04-word {
+  grid-area: 1 / 1;
+  font-family: var(--ae-display); font-style: italic; font-weight: 900;
+  font-size: calc(var(--u) * 11); line-height: 1; letter-spacing: -0.02em;
+  opacity: 0;
+}
+.f04.is-playing .f04-word { animation: f04-ignite 8s linear infinite; }
+.f04 .f04-word[data-i="0"] { animation-delay: 0s; }
+.f04 .f04-word[data-i="1"] { animation-delay: 2s; }
+.f04 .f04-word[data-i="2"] { animation-delay: 4s; }
+.f04 .f04-word[data-i="3"] { animation-delay: 6s; }
+.f04 .f04-sub {
+  position: absolute; left: 0; right: 0; top: 63%; margin: 0; text-align: center;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.3);
+  line-height: 1.6; color: var(--ae-muted);
+}
+.f04 .f04-glyph {
+  position: absolute; right: 7%; bottom: 9%;
+  width: calc(var(--u) * 11); height: calc(var(--u) * 11);
+}
+.f04 .f04-hold {
+  position: absolute; left: 7%; bottom: 9%;
+  font-family: var(--ae-cond); font-weight: 700; text-transform: uppercase;
+  font-size: calc(var(--u) * 1.9); letter-spacing: var(--ae-track-button);
+  color: var(--ae-ink); background: transparent;
+  border: 1.5px solid var(--ae-ink); border-radius: var(--ae-radius);
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 2);
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.3s;
+}
+.f04 .f04-hold:hover { transform: translateY(-1px); }
+.f04 .f04-hold:focus-visible { outline: 2px solid var(--ae-crimson); outline-offset: 2px; }
+.f04 .f04-hold[aria-pressed="true"] { background: var(--ae-ink); color: var(--ae-cream); }
+.f04.is-held .f04-word { animation-play-state: paused !important; }
+.f04.is-held .f04-line { animation-play-state: paused !important; }
+@keyframes f04-ignite {
+  0%, 1% { opacity: 0; }
+  6% { opacity: 1; }
+  22% { opacity: 1; }
+  27%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f04 .f04-word { opacity: 0; }
+  .f04 .f04-word[data-i="0"] { opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  .f04 .f04-words { left: 26%; right: 26%; top: 28%; }
+  .f04 .f04-word { font-size: calc(var(--u) * 7.4); }
+  .f04 .f04-sub { left: 27%; right: 27%; top: 60%; font-size: calc(var(--u) * 2.9); }
+  .f04 .f04-hold {
+    left: 50%; right: auto; bottom: 8%; transform: translateX(-50%);
+    font-size: calc(var(--u) * 2.4);
+  }
+  .f04 .f04-glyph {
+    right: 28%; left: auto; bottom: 6%; transform: none;
+    width: calc(var(--u) * 9); height: calc(var(--u) * 9);
+  }
+  .f04 .f04-hold { left: 28%; right: auto; transform: none; }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var btn = root.querySelector(".f04-hold");
+  var label = root.querySelector(".f04-hold-label");
+  btn.addEventListener("click", function () {
+    var held = root.classList.toggle("is-held");
+    btn.setAttribute("aria-pressed", held ? "true" : "false");
+    label.textContent = held ? "Let it run" : "Hold the word";
+  });
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">One line, seven colours.</span><span class="source"><a class="source-link" href="https://aesdr.com" rel="noopener">AESDR</a></span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="5">
+  <div class="tile-frame">
+<!-- frame id=waffle num=5 source=digs focal=44%,50% loop=10 interactive=no -->
+<div class="stage f05" data-frame="waffle" style="--fx:0.44;--fy:0.50" role="img"
+     aria-label="A thermal knit at wall scale, its waffle lattice and pinholes visible. An overlock seam runs diagonally across it with a pale wash halo bleeding out along its length, and the light travels slowly from raking to flat">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f05-cloth m-knit"></div>
+      <div class="f05-cloud m-wash-cloud"></div>
+      <div class="f05-halo m-wash-halo"></div>
+      <div class="f05-seam m-seam-overlock"></div>
+      <div class="f05-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 5 — the fabric as architecture, the wash as weather.
+   Materials: digs-knit (the half-drop waffle at ~1.2 mm pitch, yarn families
+   crossing at ±45°, a pinhole at each cell centre, the plane travelling from
+   #4C493E to #ADA595 as the light goes from raking to flat) and the overlock
+   ridge and seam-highlighter wash from the same file.
+   The wash is the founder's own name for it, and it is the thing that makes a
+   garment look like a garment rather than a flat fill. Fabric settles, so the
+   light decelerates. */
+.f05 .f05-cloth {
+  position: absolute; inset: 0; --kn-pitch: 3.1%;
+  animation: f05-light 10s cubic-bezier(0.32, 0, 0.16, 1) infinite;
+}
+.f05 .f05-cloud { position: absolute; inset: -8%; }
+.f05 .f05-halo {
+  position: absolute; left: -14%; right: -14%; top: 40%; height: 26%;
+  transform: rotate(-13deg);
+}
+.f05 .f05-seam {
+  position: absolute; left: -14%; right: -14%; top: 49.4%; height: 3.4%;
+  transform: rotate(-13deg);
+}
+.f05 .f05-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 104% at 44% 44%, transparent 42%, rgba(0, 0, 0, 0.5) 100%);
+}
+@keyframes f05-light {
+  0%, 100% { --kn-light: 0.08; }
+  50% { --kn-light: 0.92; }
+}
+@property --kn-light { syntax: "<number>"; inherits: true; initial-value: 0.5; }
+@media (prefers-reduced-motion: reduce) { .f05 .f05-cloth { --kn-light: 0.55; } }
+</style>
+
+  </div>
+  <figcaption><span class="caption">A knit, and the seam through it.</span><span class="source">DIGS</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="6">
+  <div class="tile-frame">
+<!-- frame id=harlequin num=6 source=puff-junction focal=38%,50% loop=9 interactive=no -->
+<div class="stage f06" data-frame="harlequin" style="--fx:0.38;--fy:0.50" role="img"
+     aria-label="A diagonal checkerboard cut into a concrete wall, dense at the left and thinning to the right along a ragged staircase edge. Individual diamonds drop out and return; they never fade">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f06-wall m-concrete"></div>
+      <div class="f06-cells m-harlequin" aria-hidden="true"></div>
+      <div class="f06-seam m-concrete-seam"></div>
+      <div class="f06-vignette"></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 6 — the corner detail as the whole wall.
+   Materials: pj-concrete (achromatic #565656, cloudy mottling, aggregate
+   speckle, the troweled streak, and the crisp parting seam) and pj-harlequin
+   (cells 13–14 mm on point, dark cells a 25–35% value shift on the same
+   material rather than a fill).
+   On the product this is a detail at 13 mm running down one vertical corner.
+   Here it is the elevation, and you can watch it eat: the staircase front
+   advances and retreats and individual cells drop out entirely, because the
+   real dissolve is never an opacity fade.
+   The cells are generated rather than tiled — a gradient cannot drop a single
+   cell — and each one carries the concrete's own grain through it. */
+.f06 .f06-wall { position: absolute; inset: 0; --c-cell: 26%; }
+.f06 .f06-cells { position: absolute; inset: 0; }
+.f06 .f06-cells i {
+  position: absolute;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: rgba(0, 0, 0, var(--hq-shift, 0.28));
+  mix-blend-mode: multiply;
+  animation: f06-drop 9s ease-in-out infinite;
+}
+.f06 .f06-seam { position: absolute; left: 0; right: 0; top: 50%; }
+.f06 .f06-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(128% 100% at 38% 48%, transparent 44%, rgba(0, 0, 0, 0.55) 100%);
+}
+@keyframes f06-drop {
+  0%, 38% { opacity: 1; }
+  52%, 64% { opacity: 0; }
+  80%, 100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f06 .f06-cells i { opacity: 1; } }
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var host = root.querySelector(".f06-cells");
+  if (!host || host.childElementCount) return;
+  /* One cell is 15.9% x 25.4% of the scene -- about six across the 85 mm
+     face. Filled diamonds sit a full cell apart and touch the unfilled
+     alternates at their vertices. The ragged front is a per-cell threshold,
+     not a gradient: the staircase is what the real dissolve looks like. */
+  var W = 15.9, H = 25.4, out = [];
+  for (var r = -1; r < 6; r++) {
+    for (var c = -1; c < 9; c++) {
+      var keep = 1.0 - (c / 8.0) * 1.34 + ((r * 7 + c * 11) % 5) * 0.075;
+      if (keep < 0.4) continue;
+      var edge = keep < 0.62;
+      out.push('<i style="left:' + (c * W - W / 2).toFixed(2) + '%;top:' +
+        (r * H - H / 2).toFixed(2) + '%;width:' + W + '%;height:' + H + '%;' +
+        'animation-delay:' + (((r * 3 + c * 5) % 9) * -0.62).toFixed(2) + 's;' +
+        (edge ? '' : 'animation:none;') + '"></i>');
+    }
+  }
+  host.innerHTML = out.join("");
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">A pattern eating a wall.</span><span class="source">PUFF JUNCTION</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="7">
+  <div class="tile-frame">
+<!-- frame id=prismatic num=7 source=darkest-shades focal=50%,54% loop=10 interactive=no -->
+<div class="stage f07" data-frame="prismatic" style="--fx:0.50;--fy:0.54" role="img"
+     aria-label="A flat mid-grey studio sweep with nothing on it, and the brand's angular mark travelling across it as a hard-edged shadow, its two offset notches slicing the light as it passes">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f07-sweep m-ds-sweep"></div>
+      <div class="f07-key m-ds-key"></div>
+      <div class="f07-cast" aria-hidden="true">
+        <svg viewBox="0 0 1000 513" preserveAspectRatio="none">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+      <div class="f07-soft" aria-hidden="true">
+        <svg viewBox="0 0 1000 513" preserveAspectRatio="none" style="animation-delay:0s">
+          <path d="M0,0 L270,0 L544,65 L732,0 L1000,215 L1000,513 L732,513 L454,448 L269,513 L0,298 Z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 7 — the founder's unbuilt catalogue idea, built.
+   Materials: ds-sweep (the flat #D2D2D2 seamless backdrop, the single large
+   soft key upper-front, and the shadow discipline — never more than 8–10%
+   darker than the ground, wider than the object, no hard drop shadow) and the
+   verified ten-vertex mark, traced at 99.78% pixel agreement with the source.
+   The brief asked for "prismatic logo elements and patterns in shadows,
+   lighting, background", was quoted, deferred, and never made. The double
+   notch is the whole idea — a downward fold at 54% of the width on the top
+   edge and an upward fold at 45% on the bottom, deliberately offset — so the
+   shadow reads as a crease passing over the surface.
+   Two passes: a soft wide one that obeys the brand's shadow rule, and a hard
+   one at low alpha that carries the geometry. */
+.f07 .f07-sweep { position: absolute; inset: 0; }
+.f07 .f07-cast, .f07 .f07-soft { position: absolute; inset: 0; pointer-events: none; }
+.f07 .f07-cast svg, .f07 .f07-soft svg {
+  position: absolute; left: 0; top: 21%; width: 78%; height: 52%;
+  animation: f07-travel 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+.f07 .f07-cast path { fill: rgba(86, 86, 86, 0.58); }
+.f07 .f07-soft path { fill: rgba(126, 126, 126, 0.2); }
+.f07 .f07-soft svg { filter: blur(calc(var(--u) * 1.5)); }
+@keyframes f07-travel {
+  0% { transform: translateX(-104%); }
+  38%, 56% { transform: translateX(14%); }
+  100% { transform: translateX(139%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f07 .f07-cast svg, .f07 .f07-soft svg { transform: translateX(18%); }
+}
+</style>
+
+  </div>
+  <figcaption><span class="caption">A logo, cast as a shadow.</span><span class="source">DARKEST SHADES</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="8">
+  <div class="tile-frame">
+<!-- frame id=tech-pack num=8 source=digs focal=50%,50% loop=9 interactive=yes -->
+<div class="stage f08" data-frame="tech-pack" style="--fx:0.50;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene f08-sheet">
+      <div class="f08-head">
+        <span class="f08-wordmark">digs</span>
+        <span class="f08-rule"></span>
+        <span class="f08-title">Long Sleeve Tee</span>
+        <span class="f08-season">FW25</span>
+      </div>
+      <p class="f08-style">AC-LST-001 | LONG SLEEVE TEE | SIZE RANGE: S-XL | SAMPLE SIZE: M | STATUS: PROTO | TOPS</p>
+      <div class="f08-body">
+        <svg class="f08-flat" viewBox="0 0 840 320" aria-hidden="true">
+          <g fill="none" stroke="#9A958C" stroke-width="1">
+            <path d="M186 118 q14 30 3 62 M220 114 q9 34 -2 66 M254 120 q12 28 2 60"/>
+            <path d="M120 140 q9 22 4 42 M320 140 q-9 22 -4 42"/>
+          </g>
+          <g fill="none" stroke="#141414" stroke-width="2.2" stroke-linejoin="round">
+            <path d="M178 40 q42 -14 84 0 l70 30 -22 58 -26 -11 v168 q-70 14 -138 0 v-168 l-26 11 -22 -58 z"/>
+            <path d="M178 40 q42 30 84 0"/>
+            <path d="M136 152 h168"/>
+          </g>
+          <path class="f08-rib" d="M178 40 q42 -14 84 0 q-42 20 -84 0 z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M106 150 l30 -12 11 30 -30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path class="f08-rib" d="M334 150 l-30 -12 -11 30 30 12 z" fill="none" stroke="#141414" stroke-width="1.3"/>
+          <path d="M124 272 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
+          <path d="M124 280 h192" stroke="#141414" stroke-width="1" stroke-dasharray="7 5" fill="none"/>
+          <g class="f08-leaders" stroke="#C0392B" stroke-width="1.4" fill="none">
+            <path data-l="0" d="M262 48 L436 40" marker-end="url(#f08a)"/>
+            <path data-l="1" d="M344 158 L436 118" marker-end="url(#f08a)"/>
+            <path data-l="2" d="M316 276 L436 196" marker-end="url(#f08a)"/>
+            <path data-l="3" d="M304 152 L436 274" marker-end="url(#f08a)"/>
+          </g>
+          <defs>
+            <marker id="f08a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="#C0392B"/>
+            </marker>
+          </defs>
+        </svg>
+        <ul class="f08-calls">
+          <li data-l="0"><b>Neckband height</b><span>1"</span></li>
+          <li data-l="1"><b>Sleeve cuff height</b><span>2"</span></li>
+          <li data-l="2"><b>Bottom hem turnback</b><span>1"</span></li>
+          <li data-l="3"><b>Seam allowance, all seams</b><span>3/8"</span></li>
+        </ul>
+      </div>
+      <p class="f08-foot"><span>Exterior view</span><span>UPDATED: 06/15/2025</span></p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 8 — a technical drawing that annotates itself.
+   Materials: the real graded spec (neckband 1", cuff 2", 3/8" seam allowance
+   on every seam, 1" turnback at the hem) and the tech pack's own layout
+   system — black-line flats on white with soft grey diagonal drape strokes,
+   red leader lines with arrowheads running to caps callouts, rib as a hatch
+   of fine parallels, hems as double dashed lines, a pipe-separated style
+   string as the sub-header, and the dated footer.
+   Every number and the style string are verbatim; nothing about this garment
+   is invented. The construction drawn is the real one: set-in sleeve with a
+   slight drop shoulder, straight body, straight hem, 2-ply foldover rib, and
+   the horizontal back yoke seam that makes the back two panels.
+   A drawn line arrives, it does not ease, so the leaders snap. */
+.f08 .f08-sheet { background: #FFFFFF; overflow: hidden; }
+.f08 .f08-head {
+  position: absolute; left: 4%; right: 4%; top: 5.5%;
+  display: flex; align-items: baseline; gap: calc(var(--u) * 1.6);
+  font-family: var(--digs-sans);
+}
+.f08 .f08-wordmark { font-size: calc(var(--u) * 3.6); font-weight: 900; letter-spacing: -0.045em; color: #000; }
+.f08 .f08-rule { flex: 0 0 1px; align-self: stretch; background: rgba(0, 0, 0, 0.35); }
+.f08 .f08-title {
+  flex: 1; text-align: center; text-transform: uppercase;
+  font-size: calc(var(--u) * 2); font-weight: 400; letter-spacing: 0.14em; color: #141414;
+}
+.f08 .f08-season { font-size: calc(var(--u) * 2); font-weight: 700; color: #141414; }
+.f08 .f08-style {
+  position: absolute; left: 4%; right: 4%; top: 13.5%; margin: 0;
+  font-family: var(--digs-sans); font-size: calc(var(--u) * 1.32);
+  letter-spacing: 0.06em; color: #3B3B3B;
+}
+.f08 .f08-body { position: absolute; left: 4%; right: 4%; top: 20%; bottom: 12%; }
+/* One coordinate space across the whole body: the garment occupies the left
+   440 units and the leaders run out to 436 where the callout column begins,
+   so a leader actually lands on the value it is calling out. */
+.f08 .f08-flat { position: absolute; inset: 0; width: 100%; height: 100%; }
+.f08 .f08-flat .f08-rib { stroke-dasharray: 2.4 2.4; }
+.f08 .f08-leaders path {
+  stroke-dasharray: 260; stroke-dashoffset: 260; opacity: 0;
+  animation: f08-draw 9s linear infinite;
+}
+.f08 .f08-leaders path[data-l="0"] { animation-delay: 0.3s; }
+.f08 .f08-leaders path[data-l="1"] { animation-delay: 2.55s; }
+.f08 .f08-leaders path[data-l="2"] { animation-delay: 4.8s; }
+.f08 .f08-leaders path[data-l="3"] { animation-delay: 7.05s; }
+.f08 .f08-calls {
+  position: absolute; right: 0; top: 4%; bottom: 4%; width: 46%;
+  margin: 0; padding: 0 0 0 calc(var(--u) * 1.4); list-style: none;
+  font-family: var(--digs-sans);
+  display: grid; align-content: space-between;
+}
+.f08 .f08-calls li {
+  display: grid; gap: calc(var(--u) * 0.2);
+  opacity: 0.32; transition: opacity 180ms ease;
+  animation: f08-call 9s linear infinite;
+}
+.f08 .f08-calls li[data-l="0"] { animation-delay: 0.3s; }
+.f08 .f08-calls li[data-l="1"] { animation-delay: 2.55s; }
+.f08 .f08-calls li[data-l="2"] { animation-delay: 4.8s; }
+.f08 .f08-calls li[data-l="3"] { animation-delay: 7.05s; }
+.f08 .f08-calls b {
+  font-size: calc(var(--u) * 1.3); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: #141414;
+}
+.f08 .f08-calls span { font-size: calc(var(--u) * 2.6); font-weight: 400; color: #C0392B; line-height: 1.1; }
+.f08.is-lit .f08-calls li, .f08.is-lit .f08-leaders path { animation-play-state: paused; }
+.f08 .f08-calls li.is-on { opacity: 1; }
+.f08 .f08-calls li.is-off { opacity: 0.32; }
+.f08 .f08-leaders path.is-on { stroke-dashoffset: 0; opacity: 1; }
+.f08.is-lit .f08-leaders path:not(.is-on) { opacity: 0; }
+.f08 .f08-foot {
+  position: absolute; left: 4%; right: 4%; bottom: 5%; margin: 0;
+  display: flex; justify-content: space-between;
+  font-family: var(--digs-sans); font-size: calc(var(--u) * 1.3);
+  text-transform: uppercase; letter-spacing: 0.1em; color: #6A6A6A;
+}
+@keyframes f08-draw {
+  0%, 3% { stroke-dashoffset: 260; opacity: 0; }
+  4% { stroke-dashoffset: 260; opacity: 1; }
+  9%, 24% { stroke-dashoffset: 0; opacity: 1; }
+  25%, 100% { stroke-dashoffset: 260; opacity: 0; }
+}
+@keyframes f08-call {
+  0%, 3% { opacity: 0.32; }
+  4%, 24% { opacity: 1; }
+  25%, 100% { opacity: 0.32; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f08 .f08-leaders path { stroke-dashoffset: 0; opacity: 1; }
+  .f08 .f08-calls li { opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  /* a wide document cannot survive a half-width band, so on the phone it
+     stacks: the header, the flat, and the callouts as a list beneath */
+  .f08 .f08-head {
+    left: 27%; right: 27%; top: 3.5%;
+    display: grid; grid-template-columns: auto 1fr; align-items: center;
+    gap: calc(var(--u) * 1.2) calc(var(--u) * 1.4);
+  }
+  /* explicit placement: auto-flow puts the title before the season because
+     that is the DOM order, and the two then stack into each other */
+  .f08 .f08-wordmark { grid-area: 1 / 1; font-size: calc(var(--u) * 4.4); }
+  .f08 .f08-rule { display: none; }
+  .f08 .f08-season { grid-area: 1 / 2; justify-self: end; font-size: calc(var(--u) * 2.2); }
+  .f08 .f08-title {
+    grid-area: 2 / 1 / 3 / 3; text-align: left; font-size: calc(var(--u) * 2.4);
+  }
+  .f08 .f08-style { left: 27%; right: 27%; top: 18.5%; font-size: calc(var(--u) * 1.45); line-height: 1.55; }
+  .f08 .f08-body { left: 27%; right: 27%; top: 29%; bottom: 11%; }
+  .f08 .f08-flat { left: 0; right: 0; top: 0; height: 48%; width: 100%; }
+  .f08 .f08-leaders { display: none; }
+  .f08 .f08-calls {
+    position: absolute; left: 0; right: 0; top: 52%; bottom: 4%; width: auto;
+    padding: 0; align-content: space-between;
+  }
+  .f08 .f08-calls b { font-size: calc(var(--u) * 1.6); }
+  .f08 .f08-calls span { font-size: calc(var(--u) * 2.9); }
+  .f08 .f08-foot { left: 27%; right: 27%; bottom: 3%; font-size: calc(var(--u) * 1.5); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var items = Array.prototype.slice.call(root.querySelectorAll(".f08-calls li"));
+  var leaders = Array.prototype.slice.call(root.querySelectorAll(".f08-leaders path"));
+  function hold(i) {
+    root.classList.add("is-lit");
+    items.forEach(function (el, n) {
+      el.classList.toggle("is-on", n === i);
+      el.classList.toggle("is-off", n !== i);
+    });
+    leaders.forEach(function (el, n) { el.classList.toggle("is-on", n === i); });
+  }
+  function release() {
+    root.classList.remove("is-lit");
+    items.forEach(function (el) { el.classList.remove("is-on"); el.classList.remove("is-off"); });
+    leaders.forEach(function (el) { el.classList.remove("is-on"); });
+  }
+  items.forEach(function (el, i) {
+    el.tabIndex = 0;
+    el.addEventListener("mouseenter", function () { hold(i); });
+    el.addEventListener("focus", function () { hold(i); });
+    el.addEventListener("mouseleave", release);
+    el.addEventListener("blur", release);
+  });
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">A drawing that calls itself out.</span><span class="source">DIGS</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="9">
+  <div class="tile-frame">
+<!-- frame id=tortoise num=9 source=darkest-shades focal=50%,50% loop=10 interactive=yes -->
+<div class="stage f09" data-frame="tortoise" style="--fx:0.50;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f09-plate m-tortoise m-tortoise-rim"></div>
+      <div class="f09-chamfer"></div>
+      <p class="f09-hint">Drag the light</p>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 9 — the richest surface the brand owns, at macro, lit from behind.
+   Materials: ds-acetate's blue tortoise — a near-black ground at
+   #131313–#1A273A with cobalt-periwinkle inclusions at #5B8CCF–#6495D0 in
+   irregular organic blobs, translucent, the edges lifting to
+   #93B5BF–#A7BEC6 where light passes through — and the hard thin near-white
+   chamfer line that every acetate edge carries.
+   The render deck never goes macro on this material and the light there is
+   always in front. Here it is behind, and the operator moves it: where it
+   sits, the material opens up. */
+.f09 .f09-plate {
+  position: absolute; inset: 0; filter: brightness(0.66) saturate(1.15);
+  animation: f09-drift 10s ease-in-out infinite;
+  cursor: ew-resize; touch-action: none;
+}
+.f09.is-led .f09-plate { animation: none; }
+.f09 .f09-chamfer {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow:
+    inset 0 2px 0 rgba(216, 216, 216, 0.5),
+    inset 0 -2px 0 rgba(20, 20, 20, 0.85),
+    inset 0 0 calc(var(--u) * 5) rgba(0, 0, 0, 0.8);
+}
+.f09 .f09-hint {
+  position: absolute; left: 50%; bottom: 6.5%; transform: translateX(-50%); margin: 0;
+  font-family: var(--ds-body); font-size: calc(var(--u) * 1.5);
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: rgba(214, 228, 232, 0.75); pointer-events: none;
+  text-shadow: 0 1px calc(var(--u) * 0.6) rgba(0, 0, 0, 0.9);
+  transition: opacity 220ms ease;
+}
+.f09.is-led .f09-hint { opacity: 0; }
+@keyframes f09-drift {
+  0%, 100% { --glow-x: 26%; --glow-y: 58%; }
+  50% { --glow-x: 74%; --glow-y: 42%; }
+}
+@property --glow-x { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@property --glow-y { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@media (prefers-reduced-motion: reduce) { .f09 .f09-plate { --glow-x: 38%; --glow-y: 48%; } }
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var plate = root.querySelector(".f09-plate");
+  plate.tabIndex = 0;
+  plate.setAttribute("role", "slider");
+  plate.setAttribute("aria-label", "Move the light behind the acetate");
+  plate.setAttribute("aria-valuemin", "0");
+  plate.setAttribute("aria-valuemax", "100");
+  plate.setAttribute("aria-valuenow", "50");
+  var x = 50, y = 50, down = false;
+  function put(nx, ny) {
+    x = Math.max(4, Math.min(96, nx));
+    if (ny !== undefined) y = Math.max(8, Math.min(92, ny));
+    root.classList.add("is-led");
+    plate.style.setProperty("--glow-x", x + "%");
+    plate.style.setProperty("--glow-y", y + "%");
+    plate.setAttribute("aria-valuenow", Math.round(x));
+  }
+  function at(e) {
+    var r = plate.getBoundingClientRect();
+    put(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
+  }
+  plate.addEventListener("pointerdown", function (e) {
+    down = true; plate.setPointerCapture(e.pointerId); at(e); e.preventDefault();
+  });
+  plate.addEventListener("pointermove", function (e) { if (down) at(e); });
+  plate.addEventListener("pointerup", function () { down = false; });
+  plate.addEventListener("pointercancel", function () { down = false; });
+  plate.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") { put(x - 6); e.preventDefault(); }
+    else if (e.key === "ArrowRight") { put(x + 6); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { put(x, y - 6); e.preventDefault(); }
+    else if (e.key === "ArrowDown") { put(x, y + 6); e.preventDefault(); }
+  });
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">Acetate, lit from behind.</span><span class="source">DARKEST SHADES</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="10">
+  <div class="tile-frame">
+<!-- frame id=margin num=10 source=aesdr focal=62%,50% loop=10 interactive=no -->
+<div class="stage f10" data-frame="margin" style="--fx:0.62;--fy:0.50" role="img"
+     aria-label="A page of body text with a wide right margin. Red handwritten notes arrive in the margin one at a time, and in the body a phrase is struck through in red and a correction is inserted after it">
+  <div class="stage-frame">
+    <div class="stage-scene f10-page m-ae-field">
+      <p class="f10-kicker">Manuscript · folio iv</p>
+      <div class="f10-body">
+        <p>Your onboarding was a crime scene. A week of shadowing. A Gong playlist. A prayer.
+          <span class="f10-strike">That is not training.</span>
+          <span class="f10-insert">That is hazing with a CRM licence.</span>
+        </p>
+        <p>Every month or quarter, they reset your number to zero. And every month or
+          quarter, you act surprised. You don't have a pipeline problem. You have a
+          denial problem.</p>
+      </div>
+      <aside class="f10-rail m-ae-margin">
+        <span class="f10-note" data-n="0">say the quiet part</span>
+        <span class="f10-note" data-n="1">this is the whole book</span>
+        <span class="f10-note" data-n="2">keep — don't soften</span>
+      </aside>
+      <svg class="f10-glyph" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 24 60 Q 18 16 36 4 Q 32 32 36 60 Z" transform="translate(-9 -14) scale(0.62) rotate(-16 32 32)"/>
+          <path d="M 6 54 Q 32 18 58 54 Z"/>
+          <path d="M 32 24 Q 30 14 32 4"/>
+        </g>
+        <path d="M 32 18 q -8 -2 -10 -10 q 8 4 10 8" fill="#8B1A1A" stroke="#8B1A1A" stroke-width="1.6"/>
+        <path d="M 32 10 q 8 -2 10 -10 q -8 4 -10 8" fill="#8B1A1A" stroke="#8B1A1A" stroke-width="1.6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 10 — a page annotating itself.
+   Materials: ae-paper (cream #FAF7F2, the manuscript margin rail behind a 2px
+   #C53030 border, strikes at text-decoration-thickness 2px, inserts in red
+   ink with a red underline) and the Caveat hand, which in this brand is a
+   voice rather than a decorative script.
+   Two reds sit side by side here and they are not interchangeable: crimson
+   #8B1A1A is the brand's authority, #C53030 is the editor's pen. Only the
+   pen writes in the margin.
+   The rail exists in the product as a component of a finished artifact. Here
+   the annotation is the event, and you watch it happen.
+   The mascot is present as its own monoline glyph — the recovery form, shell
+   with a sprout, in the brand's 1.6px round-cap construction. Logged in
+   ASSUMPTIONS.md as the faithful alternative to placing a source render.
+   Registers the brand has retired are avoided: this is the margin voice, not
+   a dossier, a ledger or an editorial split. */
+.f10 .f10-page { position: absolute; inset: 0; overflow: hidden; }
+.f10 .f10-kicker {
+  position: absolute; left: 6%; top: 7%; margin: 0;
+  font-family: var(--ae-mono); font-size: calc(var(--u) * 1.4);
+  text-transform: uppercase; letter-spacing: var(--ae-track-eyebrow);
+  color: var(--ae-muted);
+}
+.f10 .f10-body {
+  position: absolute; left: 6%; right: 34%; top: 18%;
+  font-family: var(--ae-serif); font-size: calc(var(--u) * 2.5);
+  line-height: 2; color: var(--ae-ink);
+}
+.f10 .f10-body p { margin: 0 0 calc(var(--u) * 2.4); }
+.f10 .f10-strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--ae-redink);
+  text-decoration-thickness: 2px;
+  animation: f10-strike 10s linear infinite;
+}
+.f10 .f10-insert {
+  color: var(--ae-redink); border-bottom: 2px solid var(--ae-redink);
+  opacity: 0; animation: f10-insert 10s linear infinite;
+}
+.f10 .f10-rail {
+  position: absolute; right: 5%; top: 17%; width: 25%;
+  padding-left: calc(var(--u) * 1.6);
+  display: grid; gap: calc(var(--u) * 4.4); align-content: start;
+  font-size: calc(var(--u) * 3);
+  transform: rotate(-1.5deg);
+}
+.f10 .f10-note { opacity: 0; animation: f10-note 10s linear infinite; }
+.f10 .f10-note[data-n="0"] { animation-delay: 0.4s; }
+.f10 .f10-note[data-n="1"] { animation-delay: 2.6s; }
+.f10 .f10-note[data-n="2"] { animation-delay: 4.8s; }
+.f10 .f10-glyph {
+  position: absolute; right: 6%; bottom: 8%;
+  width: calc(var(--u) * 10); height: calc(var(--u) * 10); opacity: 0.85;
+}
+@keyframes f10-note { 0%, 3% { opacity: 0; } 8%, 92% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes f10-strike {
+  0%, 56% { text-decoration-color: transparent; }
+  62%, 100% { text-decoration-color: var(--ae-redink); }
+}
+@keyframes f10-insert { 0%, 66% { opacity: 0; } 72%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .f10 .f10-note, .f10 .f10-insert { opacity: 1; }
+  .f10 .f10-strike { text-decoration-color: var(--ae-redink); }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  /* focal 62%: the band runs 37% to 87% of the scene. The body and the rail
+     both move inside it, the rail dropping below the text rather than beside
+     it -- which is what the real manuscript does on a narrow screen. */
+  .f10 .f10-kicker { left: 39%; top: 5%; font-size: calc(var(--u) * 1.9); }
+  .f10 .f10-body {
+    left: 39%; right: 15%; top: 10%;
+    font-size: calc(var(--u) * 2.7); line-height: 1.7;
+  }
+  .f10 .f10-body p + p { display: none; }
+  .f10 .f10-body p { margin-bottom: calc(var(--u) * 2.4); }
+  .f10 .f10-rail {
+    left: 39%; right: 15%; top: 48%; bottom: auto; width: auto;
+    font-size: calc(var(--u) * 3.1); gap: calc(var(--u) * 2.2);
+  }
+  .f10 .f10-glyph { right: 16%; bottom: 5%; width: calc(var(--u) * 13); height: calc(var(--u) * 13); }
+}
+</style>
+
+  </div>
+  <figcaption><span class="caption">A page marking itself up.</span><span class="source"><a class="source-link" href="https://aesdr.com" rel="noopener">AESDR</a></span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="11">
+  <div class="tile-frame">
+<!-- frame id=reconciliation num=11 source=puff-junction focal=50%,52% loop=10 interactive=no -->
+<div class="stage f11" data-frame="reconciliation" style="--fx:0.50;--fy:0.52" role="img"
+     aria-label="A concrete block with a knurled brass disc set into its top face, on a white studio sweep, entirely monochrome. Late in the loop a single small acid-green element arrives and holds">
+  <div class="stage-frame">
+    <div class="stage-scene">
+      <div class="f11-sweep m-sweep"></div>
+      <div class="f11-key m-sweep-key"></div>
+      <div class="f11-shadow m-contact-shadow"></div>
+      <div class="f11-block">
+        <div class="f11-disc">
+          <div class="f11-knurl m-knurl m-knurl--band"></div>
+          <div class="f11-crown m-brass-flat"></div>
+        </div>
+        <div class="f11-body">
+          <div class="f11-face m-concrete"></div>
+          <div class="f11-cells" aria-hidden="true"></div>
+          <div class="f11-seam m-concrete-seam"></div>
+          <div class="f11-edge"></div>
+        </div>
+      </div>
+      <div class="f11-slime"><span>puff</span></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 11 — the thing the brand asked for and never got.
+   Materials: pj-sweep (flat #EDEDED across the width, falling to #C8–#CD at
+   70%, lifting at the floor, the single soft key upper-front, the broad
+   feathered contact shadow), pj-concrete, pj-harlequin, pj-knurl and
+   pj-brass's two-faced metal — pale champagne on the flat cap, saturated
+   antique gold on the knurled band.
+   Proportions are the real ones and the view is straight on, so none of the
+   perspective is invented: a Ø63 brass cylinder on an 85 mm face is 74% of
+   the width, standing 15.4 mm proud of a 57.2 mm block, with the parting seam
+   halfway up the concrete and the harlequin dissolving off one corner.
+   In October 2024 the founder asked to move "not completely, but subtly from
+   a vibrant and somewhat playful neon feel to a subtler, more refined
+   aesthetic." Nobody built it. This is that: the object world, entirely
+   monochrome, and exactly one element in slime #D6FD4A -- the ration the
+   paper brand spends everywhere and the object brand spends nowhere. */
+.f11 .f11-sweep, .f11 .f11-key { position: absolute; inset: 0; }
+.f11 .f11-shadow {
+  position: absolute; left: 25%; right: 25%; bottom: 19%; height: 8%;
+}
+.f11 .f11-block {
+  position: absolute; left: 50%; bottom: 22%; width: 34%; height: 44%;
+  transform: translateX(-50%);
+}
+/* the concrete body: 57.2 mm of the 72.6 mm total silhouette */
+.f11 .f11-body { position: absolute; left: 0; right: 0; bottom: 0; height: 79%; }
+.f11 .f11-face { position: absolute; inset: 0; --c-cell: 40%; }
+.f11 .f11-cells { position: absolute; inset: 0; overflow: hidden; }
+.f11 .f11-cells i {
+  position: absolute; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: rgba(0, 0, 0, 0.26); mix-blend-mode: multiply;
+}
+.f11 .f11-seam { position: absolute; left: 0; right: 0; top: 50%; }
+/* R3 on an 85 mm block, and the eased top and bottom edges */
+.f11 .f11-edge {
+  position: absolute; inset: 0; border-radius: calc(var(--u) * 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset calc(var(--u) * 0.9) 0 calc(var(--u) * 2.2) rgba(255, 255, 255, 0.05),
+    inset calc(var(--u) * -1.1) 0 calc(var(--u) * 2.6) rgba(0, 0, 0, 0.26);
+}
+/* the brass cylinder, Ø63 on an 85 mm face = 74% of the width */
+.f11 .f11-disc {
+  position: absolute; left: 50%; bottom: 79%; width: 74%; height: 23%;
+  transform: translateX(-50%);
+}
+.f11 .f11-knurl {
+  position: absolute; inset: 0; --k-cell: 5%;
+  border-radius: 46% 46% 3% 3% / 11% 11% 2% 2%;
+  overflow: hidden;
+}
+.f11 .f11-crown {
+  position: absolute; left: 1%; right: 1%; top: -4.5%; height: 20%;
+  border-radius: 50% / 50%;
+  box-shadow: 0 calc(var(--u) * 0.2) calc(var(--u) * 0.5) rgba(0, 0, 0, 0.32);
+}
+.f11 .f11-slime {
+  position: absolute; left: 7.5%; bottom: 12%;
+  opacity: 0; animation: f11-arrive 10s linear infinite;
+}
+.f11 .f11-slime span {
+  display: block; background: var(--pj-slime);
+  color: #000; font-family: var(--pj-display); font-style: italic;
+  font-weight: 700; font-size: calc(var(--u) * 2.6); line-height: 1;
+  padding: calc(var(--u) * 0.9) calc(var(--u) * 1.8) calc(var(--u) * 1.1);
+}
+@keyframes f11-arrive {
+  0%, 62% { opacity: 0; }
+  70%, 100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .f11 .f11-slime { opacity: 1; } }
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  .f11 .f11-block { width: 40%; height: 34%; bottom: 30%; }
+  .f11 .f11-shadow { left: 28%; right: 28%; bottom: 27%; }
+  .f11 .f11-slime { left: 28%; bottom: 16%; }
+  .f11 .f11-slime span { font-size: calc(var(--u) * 3.6); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var host = root.querySelector(".f11-cells");
+  if (!host || host.childElementCount) return;
+  /* ~6 cells across the 85 mm face, dense at the left corner, thinning
+     diagonally with a ragged front -- the dissolve the hero renders show. */
+  var W = 16.6, H = 25.2, out = [];
+  for (var r = -1; r < 5; r++) {
+    for (var c = -1; c < 8; c++) {
+      var keep = 1.0 - (c / 6.0) * 1.3 + ((r * 5 + c * 7) % 4) * 0.09;
+      if (keep < 0.42) continue;
+      out.push('<i style="left:' + (c * W - W / 2).toFixed(2) + '%;top:' +
+        (r * H - H / 2).toFixed(2) + '%;width:' + W + '%;height:' + H + '%"></i>');
+    }
+  }
+  host.innerHTML = out.join("");
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">Monochrome, and one green thing.</span><span class="source">PUFF JUNCTION</span></figcaption>
+</figure>
+
+<figure class="tile" data-frame-num="12">
+  <div class="tile-frame">
+<!-- frame id=live-edge num=12 source=antaeus focal=22%,50% loop=8 interactive=yes -->
+<div class="stage f12" data-frame="live-edge" style="--fx:0.22;--fy:0.50">
+  <div class="stage-frame">
+    <div class="stage-scene f12-room">
+      <div class="f12-rail">
+        <div class="f12-head">
+          <i class="f12-dot"></i><span>THE LIVE EDGE</span>
+        </div>
+        <div class="f12-count">
+          <b>34</b><span>/ 90 TODAY</span>
+          <div class="f12-track"><i></i></div>
+        </div>
+        <ul class="f12-wire">
+          <li class="is-buyer"><span class="f12-tag">THE BUYERS</span>replied to the model you sent<em>12m</em></li>
+          <li><span class="f12-tag">YOU</span>sent the pricing model<em>1h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>read the thread and filed it<em>1h</em></li>
+          <li><span class="f12-tag">YOU</span>called the operations lead<em>3h</em></li>
+          <li class="is-machine"><span class="f12-tag">THE MACHINE</span>noticed nine quiet days<em>4h</em></li>
+          <li><span class="f12-tag">YOU</span>opened the renewal file<em>5h</em></li>
+        </ul>
+        <p class="f12-foot"><span>QUIETEST · 9 DAYS</span><span>6 TODAY</span></p>
+      </div>
+      <button class="f12-switch" type="button" aria-pressed="false">
+        <span class="f12-switch-label">Turn it off</span>
+      </button>
+      <div class="f12-hair"><i class="f12-whisper">Turn it back on</i></div>
+    </div>
+  </div>
+</div>
+<style>
+/* Frame 12 — off as a state, not an absence.
+   Materials: an-field's bright cool ground and hairline ink ladder, the
+   forest and orange roles (forest for the breathing dot and the track,
+   orange for the one buyer moment's 3px left rule), and the rail's own
+   construction — no panel, one hairline right edge, a directional wash at
+   rgba(10,28,64,.025) fading to transparent at 70%.
+   The switch is the subject. Off runs three visible beats: everything goes
+   grayscale(1) opacity .3 IN PLACE while the dot stops breathing, then the
+   rail folds translateX(-101%), then the hairline left behind is plainly
+   dead. On is the exact mirror, lines re-inking on staggered delays of
+   .05/.14/.23/.32/.41/.5s.
+   Almost nothing in software bothers to make off legible as a state rather
+   than an absence, which is why it belongs on a page that sells mockups. */
+.f12 .f12-room {
+  background: var(--an-field-lt);
+  overflow: hidden;
+}
+.f12 .f12-rail {
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 44%;
+  padding: calc(var(--u) * 3.4) calc(var(--u) * 3) calc(var(--u) * 2.6);
+  border-right: 1px solid var(--an-hair-strong);
+  background: linear-gradient(90deg, rgba(10, 28, 64, 0.025), transparent 70%);
+  display: grid; grid-template-rows: auto auto 1fr auto; gap: calc(var(--u) * 2.4);
+  transition: transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 260ms ease, opacity 260ms ease;
+}
+.f12 .f12-head {
+  display: flex; align-items: center; gap: calc(var(--u) * 1.1);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.5);
+  letter-spacing: 0.16em; color: var(--an-ink-faint);
+}
+.f12 .f12-dot {
+  width: calc(var(--u) * 1); height: calc(var(--u) * 1); border-radius: 50%;
+  background: var(--an-forest); animation: f12-breathe 3.2s ease-in-out infinite;
+}
+.f12 .f12-count { display: grid; gap: calc(var(--u) * 1); }
+.f12 .f12-count b {
+  font-family: var(--an-serif); font-weight: 400;
+  font-size: calc(var(--u) * 6); line-height: 1; color: var(--an-ink);
+}
+.f12 .f12-count span {
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.4);
+  letter-spacing: 0.14em; color: var(--an-ink-faint);
+  margin-left: calc(var(--u) * 0.8);
+}
+.f12 .f12-count b + span { display: inline; }
+.f12 .f12-track {
+  height: calc(var(--u) * 0.55); background: var(--an-sunk); border-radius: 99px; overflow: hidden;
+}
+.f12 .f12-track i { display: block; width: 38%; height: 100%; background: var(--an-forest); }
+.f12 .f12-wire { margin: 0; padding: 0; list-style: none; align-self: start; }
+.f12 .f12-wire li {
+  position: relative; display: flex; align-items: baseline; gap: calc(var(--u) * 0.9);
+  padding: calc(var(--u) * 1.15) 0;
+  border-top: 1px solid var(--an-hair);
+  font-family: var(--an-sans); font-size: calc(var(--u) * 1.6);
+  color: var(--an-ink-soft); line-height: 1.35;
+}
+.f12 .f12-wire li.is-machine { color: var(--an-ink-faint); }
+.f12 .f12-wire li.is-buyer {
+  border-left: 3px solid var(--an-orange);
+  padding-left: calc(var(--u) * 1.2);
+  background: linear-gradient(90deg, rgba(230, 112, 30, 0.08), transparent 62%);
+  color: var(--an-ink);
+}
+.f12 .f12-tag {
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.05);
+  letter-spacing: 0.14em; color: var(--an-ink-quiet); flex: none;
+}
+.f12 .f12-wire li.is-machine .f12-tag { color: var(--an-blue); }
+.f12 .f12-wire li.is-buyer .f12-tag { color: var(--an-orange); }
+.f12 .f12-wire em {
+  margin-left: auto; font-style: normal; flex: none;
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  color: var(--an-ink-quiet);
+}
+.f12 .f12-foot {
+  margin: 0; display: flex; justify-content: space-between;
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  letter-spacing: 0.14em; color: var(--an-ink-quiet);
+}
+/* Beat one: everything stills IN PLACE. Beat two: the rail folds. */
+.f12.is-still .f12-rail { filter: grayscale(1); opacity: 0.3; }
+.f12.is-still .f12-dot { animation-play-state: paused; }
+.f12.is-off .f12-rail { transform: translateX(-101%); filter: grayscale(1); opacity: 0.3; }
+/* Beat three: the hairline left behind is plainly dead. */
+.f12 .f12-hair {
+  position: absolute; left: 0; top: 0; bottom: calc(var(--u) * 2.6); width: 1px;
+  background: var(--an-hair-strong); opacity: 0;
+  transition: opacity 200ms ease 300ms;
+}
+.f12.is-off .f12-hair { opacity: 1; }
+.f12 .f12-whisper {
+  position: absolute; left: calc(var(--u) * 1.4); top: 46%;
+  font-style: normal; white-space: nowrap;
+  background: #fff; border: 1px solid var(--an-hair-strong);
+  border-radius: 99px; padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.1);
+  letter-spacing: 0.1em; color: var(--an-ink-faint);
+  opacity: 0; transition: opacity 180ms ease;
+}
+.f12.is-off .f12-hair:hover .f12-whisper { opacity: 1; }
+/* Waking: the mirror. Lines re-ink on staggered delays. */
+.f12.is-waking .f12-wire li { opacity: 0; animation: f12-ink 360ms ease forwards; }
+.f12.is-waking .f12-wire li:nth-child(1) { animation-delay: 0.05s; }
+.f12.is-waking .f12-wire li:nth-child(2) { animation-delay: 0.14s; }
+.f12.is-waking .f12-wire li:nth-child(3) { animation-delay: 0.23s; }
+.f12.is-waking .f12-wire li:nth-child(4) { animation-delay: 0.32s; }
+.f12.is-waking .f12-wire li:nth-child(5) { animation-delay: 0.41s; }
+.f12.is-waking .f12-wire li:nth-child(6) { animation-delay: 0.5s; }
+.f12 .f12-switch {
+  position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+  font-family: var(--an-mono); font-size: calc(var(--u) * 1.35);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--an-ink-soft); background: var(--an-surface);
+  border: 1px solid var(--an-hair-strong); border-radius: 99px;
+  padding: calc(var(--u) * 1.1) calc(var(--u) * 2.4);
+  cursor: pointer;
+}
+.f12 .f12-switch:hover { color: var(--an-ink); border-color: var(--an-rule); }
+.f12 .f12-switch:focus-visible { outline: 2px solid var(--an-orange); outline-offset: 3px; }
+@keyframes f12-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.32; } }
+@keyframes f12-ink { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .f12 .f12-rail { transition: none; }
+  .f12 .f12-dot { animation: none; }
+  .f12.is-waking .f12-wire li { animation: none; opacity: 1; }
+}
+
+/* The phone crop shows a band of the scene half its width, centred on the
+   declared focal point. Anything outside fx +/- 25% is cut, so the composition
+   moves inside the band rather than being sliced by it (brief 13). */
+@container (max-width: 639px) {
+  /* focal 22%: the band is the left half of the scene, which is where the
+     rail already lives. The switch moves inside it. */
+  .f12 .f12-rail { width: 40%; padding: calc(var(--u) * 4) calc(var(--u) * 2.4); gap: calc(var(--u) * 2); }
+  .f12 .f12-head { font-size: calc(var(--u) * 2); }
+  .f12 .f12-count b { font-size: calc(var(--u) * 8); }
+  .f12 .f12-count span { font-size: calc(var(--u) * 1.9); }
+  .f12 .f12-wire li { font-size: calc(var(--u) * 1.85); padding: calc(var(--u) * 1.15) 0; flex-wrap: wrap; }
+  .f12 .f12-tag { font-size: calc(var(--u) * 1.4); }
+  .f12 .f12-wire em { font-size: calc(var(--u) * 1.5); }
+  .f12 .f12-foot { font-size: calc(var(--u) * 1.25); gap: calc(var(--u) * 1); }
+  .f12 .f12-wire em { margin-left: auto; }
+  .f12 .f12-rail { bottom: calc(var(--u) * 11); grid-template-rows: auto auto 1fr; }
+  .f12 .f12-foot { display: none; }
+  .f12 .f12-switch {
+    right: auto; left: 5%; top: auto; bottom: calc(var(--u) * 2.4); transform: none;
+    font-size: calc(var(--u) * 1.8); padding: calc(var(--u) * 1.3) calc(var(--u) * 2.6);
+  }
+  .f12 .f12-hair { bottom: calc(var(--u) * 11); }
+}
+</style>
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  while (root && !root.classList.contains("stage")) root = root.previousElementSibling;
+  if (!root) return;
+  var btn = root.querySelector(".f12-switch");
+  var label = root.querySelector(".f12-switch-label");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var busy = false, off = false, timers = [];
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  function later(fn, ms) { timers.push(setTimeout(fn, reduce.matches ? 0 : ms)); }
+  btn.addEventListener("click", function () {
+    if (busy) return;
+    busy = true; clear();
+    if (!off) {
+      /* three beats: still in place, then fold, then the dead hairline */
+      root.classList.add("is-still");
+      later(function () { root.classList.add("is-off"); }, 300);
+      later(function () { off = true; busy = false; label.textContent = "Turn it on";
+        btn.setAttribute("aria-pressed", "true"); }, 780);
+    } else {
+      root.classList.remove("is-off");
+      later(function () {
+        root.classList.remove("is-still");
+        root.classList.add("is-waking");
+      }, 420);
+      later(function () { root.classList.remove("is-waking"); off = false; busy = false;
+        label.textContent = "Turn it off"; btn.setAttribute("aria-pressed", "false"); }, 1100);
+    }
+  });
+})();
+</script>
+
+  </div>
+  <figcaption><span class="caption">A wire switching off.</span><span class="source">Antaeus GTM OS</span></figcaption>
+</figure>
 
 </section>
 <section class="section">
