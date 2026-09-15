@@ -15,8 +15,8 @@ The chrome exists so six looks can share one room. It should be nearly invisible
 | secondary text | `#8E8E89` | pinned |
 | button | `#F4F4F0` fill, `#000000` text, no border | pinned |
 | accent | none; color belongs to the teasers | pinned |
-| focus ring | 2px `#F4F4F0`, offset 3px | pinned (brief 13) |
-| form field border | 1px `#8E8E89`, `#F4F4F0` on focus | derived |
+| focus ring | 2px `#F4F4F0`, offset 3px on links and buttons | pinned (brief 13) |
+| form field border | 1px `#8E8E89`; on focus the border goes transparent and one 2px `#F4F4F0` ring sits inside its edge (`outline-offset: -1px`), so a focused field shows one frame, not a border, a gap and a ring | derived |
 
 ### Type
 
@@ -30,7 +30,7 @@ One family for the entire chrome: **Schibsted Grotesk** (Google Fonts), 400 body
 | captions (variant B, museum label) | 15 / 24 | 600 | 0 |
 | section headings | 32 / 36 | 600 | -0.02em |
 | slogan | 64 / 1.02 desktop, 40 / 1.05 mobile | 600 | -0.02em |
-| wordmark | 28 in a header; 120 or larger in a hero treatment (variant A: `clamp(56px, 8.4vw, 120px)`) | 700 | -0.02em |
+| wordmark | 28 in a header; 120 in a hero treatment (variants A and C) from 768px up, where the word (678px) still fits between the gutters; below 768 `clamp(48px, 13vw, 64px)`, a step above the 40px mobile slogan (see `ASSUMPTIONS.md`) | 700 | -0.02em |
 | step headings, form labels | 15 / 24 | 600 | 0 |
 | source label | 15 / 24 | 400, secondary text | 0 |
 
@@ -192,6 +192,8 @@ Content order is identical across all three (brief section 7). Teaser 1 lives in
 
 One teaser per viewport on a full-bleed stage; `scroll-snap-type: y proximity`; the caption fades in (400ms), then the loop starts. Below 768px: snap off, everything stacked.
 
+The hero is exactly one viewport: the copy on top, teaser 1 filling the row that is left. The row is a size container, so the stage takes the row's real height and the width of a 16:10 frame whose middle 56% is that row (gutter to gutter at most, never narrower than 640px so the 4:5 crop never trips on desktop); the frame is pulled up so the band centered on the teaser's declared focal point is what shows. What gets cropped is the teaser's own black margin above and below its subject, never the subject; on a short viewport (1280×720) the strip is narrower, on a tall one (768×1024) the whole 16:10 frame fits and centers. The stage starts at the left gutter, on the copy's axis. The gallery intro is a full snapped stage like everything else (one line on black). Captions span the content width so the caption starts at the left gutter with the page's other text and the source label ends at the right gutter; the frame stays centered.
+
 ```
 +------------------------------------------------------------------+  viewport 1
 |  shapshyftrs                                       (wordmark, 120) |
@@ -201,8 +203,9 @@ One teaser per viewport on a full-bleed stage; `scroll-snap-type: y proximity`; 
 |  changes, delivered as a link in five days.          (sub, 18/28)  |
 |  [ Send us the idea ]                                              |
 |                                                                    |
-|   #################### teaser 1, full stage ####################   |
-|   #################### (16:10, plays after 700ms) ##############   |
+|  ############ teaser 1, the row is its stage ################     |
+|  ## (the band of the 16:10 frame around its focal point, ####     |
+|  ## as tall as the row, gutter to gutter; plays after 700ms) #     |
 +------------------------------------------------------------------+  viewport 2
 |                                                                    |
 |  Everything below is ours. Built by us, rebuilt here as teasers.   |
