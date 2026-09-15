@@ -1033,8 +1033,10 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
      16:10 composition (top/left auto after inset: 0 would collapse the scene). */
   .wall .stage > .stage-frame { aspect-ratio: 16 / 10; --sw: 100cqw; }
   .wall .stage > .stage-frame > .stage-scene { inset: 0; width: auto; height: auto; }
-  /* Thirteen tiles never fill two or three columns; the last one spans the row and closes the wall instead of leaving a stub beside empty cells. */
-  .wall .tile:last-child { grid-column: 1 / -1; }
+  /* Twelve tiles divide evenly at every breakpoint -- 12/3, 12/2, 12/1 -- so
+     there is no stub to close and no tile spans the row. (The set was thirteen
+     in the first version, which did leave one, and the rule that fixed it then
+     is what made frame 12 render three columns wide here.) */
 }
 @media (min-width: 1440px) { .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 767px) {
@@ -1125,7 +1127,7 @@ h3 { font-weight: 600; font-size: var(--chrome-body); line-height: var(--chrome-
 </header>
 
 <section class="section intro" aria-label="The gallery">
-<p class="gallery-intro">Everything below is ours. Built by us, rebuilt here as frames.</p>
+<p class="gallery-intro">Everything below is ours. Built by us, rebuilt here as teasers.</p>
 
 </section>
 <section class="wall" aria-label="Teasers">
