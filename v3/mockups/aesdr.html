@@ -1,0 +1,259 @@
+<!-- mockup slug="aesdr" brand="AESDR" kind="Course landing"
+     title="Twelve courses"
+     line="A sales-training landing that reads like a library catalogue and insults you gently."
+     built="Palette, type stack and the iris gradient are the product's own tokens. The
+            twelve course names, call numbers and margin notes are the real curriculum.
+            Every line of copy is quoted; none of it was written here."
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AESDR — Twelve courses, one call number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Barlow+Condensed:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* AESDR — course landing.
+   Tokens are the product's own, copied from its globals.css: crimson #8B1A1A,
+   cream #FAF7F2, ink #1A1A1A, muted #6B6B6B, light #E8E4DF, and the seven-stop
+   iris gradient at its real stops. The type stack is the real one --
+   Playfair Display for display, Source Serif 4 for reading, Barlow Condensed
+   for calls to action, Space Mono for taxonomy.
+   Two of the product's own devices carry the page: the fork, where the visitor
+   picks a side and the other half collapses, and the four-beat section stack
+   (mono eyebrow, Playfair italic headline with exactly one iris word, a 60x2
+   iris rule, Source Serif body, condensed CTA).
+   Every sentence is the product's. Where a surface of the real thing carries
+   text that isn't recorded anywhere, this page leaves it out rather than
+   writing a convincing replacement -- the catalogue cards are numbered and
+   carry the real call number, and only the one lesson title that is actually
+   on the record appears. */
+:root{
+  --crimson:#8B1A1A; --cream:#FAF7F2; --ink:#1A1A1A; --muted:#6B6B6B;
+  --light:#E8E4DF; --form:#928C84;
+  --iris:linear-gradient(90deg,#FF006E 0%,#FF6B00 17%,#F59E0B 34%,#10B981 51%,#38BDF8 68%,#8B5CF6 85%,#FF006E 100%);
+  --display:'Playfair Display',Georgia,serif;
+  --serif:'Source Serif 4',Georgia,serif;
+  --cond:'Barlow Condensed',sans-serif;
+  --mono:'Space Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--serif);font-size:16px;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1140px;margin:0 auto;padding:0 30px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 18px}
+.irisword{background:var(--iris);background-size:300% 100%;-webkit-background-clip:text;
+  background-clip:text;color:transparent;animation:shimmer 4s linear infinite}
+@keyframes shimmer{to{background-position:300% 0}}
+.irisrule{width:60px;height:2px;border:0;margin:22px 0;background:var(--iris);
+  background-size:300% 100%;animation:shimmer 4s linear infinite}
+.cta{display:inline-block;font-family:var(--cond);font-weight:700;font-size:15px;
+  letter-spacing:.15em;text-transform:uppercase;text-decoration:none;
+  border-bottom:2px solid var(--crimson);padding:0 0 3px;color:var(--ink)}
+.cta:hover{color:var(--crimson)}
+
+/* ── bar ─────────────────────────────────────────────── */
+.bar{border-bottom:1px solid var(--light);background:var(--cream)}
+.bar__in{display:flex;align-items:center;gap:28px;height:60px}
+.logo{font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:.02em}
+.bar nav{margin-left:auto;display:flex;gap:24px;font-family:var(--cond);font-weight:600;
+  font-size:14px;letter-spacing:.14em;text-transform:uppercase}
+.bar nav a{text-decoration:none;color:var(--muted)}
+.bar nav a:hover{color:var(--ink)}
+
+/* ── the fork ────────────────────────────────────────── */
+.fork{display:grid;grid-template-columns:1fr 2px 1fr;min-height:376px;
+  border-bottom:1px solid var(--light)}
+.fork__side{padding:56px 40px;display:flex;flex-direction:column;justify-content:center;
+  position:relative;transition:background .3s ease}
+.fork__side .ghost{position:absolute;right:26px;bottom:-16px;font-family:var(--display);
+  font-weight:900;font-size:170px;line-height:1;opacity:.06;pointer-events:none}
+.fork__side h2{margin:0;font-family:var(--display);font-weight:900;font-style:italic;
+  font-size:clamp(34px,4.4vw,52px);line-height:1.02}
+.fork__side p{margin:14px 0 0;max-width:30ch;color:var(--muted);font-size:15px}
+.fork__side .pick{margin:22px 0 0;opacity:0;transform:translateY(4px);
+  transition:opacity .25s ease,transform .25s ease}
+.fork__side:hover .pick,.fork__side:focus-within .pick{opacity:1;transform:none}
+.fork__sdr{background:var(--cream)}
+.fork__sdr:hover{background:#F4F0E9}
+.fork__ae{background:var(--crimson);color:#fff}
+.fork__ae h2,.fork__ae .eyebrow{color:#fff}
+.fork__ae .eyebrow{opacity:.72}
+.fork__ae p{color:rgba(255,255,255,.76)}
+.fork__ae .cta{color:#fff;border-bottom-color:#fff}
+.fork__rule{background:var(--iris);background-size:100% 300%;
+  animation:shimmerY 4s linear infinite}
+@keyframes shimmerY{to{background-position:0 300%}}
+
+/* ── beat ────────────────────────────────────────────── */
+.beat{padding:92px 0 78px}
+.beat h2{margin:0;font-family:var(--display);font-style:italic;font-weight:900;
+  font-size:clamp(30px,4.6vw,56px);line-height:1.08;max-width:17ch}
+.beat p{margin:0;max-width:56ch;color:var(--muted);font-size:17px}
+.whisper{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:15px;
+  margin:20px 0 0}
+
+/* ── catalogue ───────────────────────────────────────── */
+.cat{background:#F4EADD;border-top:1px solid var(--light);border-bottom:1px solid var(--light);
+  padding:72px 0 78px}
+.cat__head{display:flex;align-items:flex-end;gap:20px;margin:0 0 26px}
+.cat__head h2{margin:0;font-family:var(--display);font-weight:900;font-size:26px}
+.cat__head .call{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:.08em}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cardx{position:relative;display:flex;flex-direction:column;
+  background:#FFF8EC;border:1px solid #E3D6C2;border-radius:2px;
+  padding:34px 16px 14px;min-height:172px;
+  background-image:linear-gradient(#EFE3D0 1px,transparent 1px);
+  background-size:100% 1.6em;background-position:0 46px;
+  transition:transform .2s ease,box-shadow .2s ease}
+.cardx::before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:13px;height:13px;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#C9BCA6,#EFE6D6);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.28)}
+.cardx::after{content:"";position:absolute;top:0;bottom:0;left:40px;width:1px;
+  background:#E8D4D4}
+.cardx:nth-child(even){transform:rotate(-.25deg)}
+.cardx:nth-child(3n){transform:rotate(.35deg)}
+.cardx:hover{transform:rotate(0) translateY(-3px);box-shadow:0 8px 20px rgba(26,26,26,.10)}
+.cardx .no{font-family:var(--cond);font-weight:700;font-size:26px;color:#B8943E;
+  line-height:1;margin:0 0 4px 48px}
+.cardx h3{margin:0 0 0 48px;font-family:var(--display);font-weight:700;font-size:15px;
+  line-height:1.24}
+.cardx .dew{font-family:var(--mono);font-size:8.5px;color:var(--muted);letter-spacing:.04em}
+.cardx--sarcastic h3{letter-spacing:.005em}
+.cardx .marg{display:block;margin:7px 0 0 48px;font-family:var(--display);
+  font-style:italic;font-size:11.5px;line-height:1.3;color:#8A7B63}
+/* the foot is pushed down by flow, so a two-line title can never land on it */
+.cardx .foot{display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:auto;padding-top:14px}
+.cardx .day{font-family:var(--mono);font-size:8.5px;color:var(--muted);letter-spacing:.04em}
+
+/* ── warning ─────────────────────────────────────────── */
+.warn{background:var(--ink);color:var(--cream);padding:34px 0}
+.warn .wrap{display:flex;gap:20px;align-items:flex-start}
+.warn b{font-family:var(--cond);font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  font-size:13px;color:#fff;flex:none;padding-top:2px}
+.warn p{margin:0;font-size:15px;color:rgba(250,247,242,.78);max-width:72ch}
+
+/* ── close ───────────────────────────────────────────── */
+.close{padding:78px 0 90px;text-align:center}
+.close h2{margin:0 auto;font-family:var(--display);font-style:italic;font-weight:900;
+  font-size:clamp(30px,4.6vw,52px);max-width:18ch;line-height:1.08}
+.close p{margin:16px auto 0;max-width:52ch;color:var(--muted)}
+.close .irisrule{margin:26px auto}
+.foot{border-top:1px solid var(--light);padding:22px 0 34px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);
+  display:flex;gap:18px}
+
+@media (max-width:880px){
+  .fork{grid-template-columns:1fr;grid-template-rows:auto 2px auto}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .bar nav{display:none}
+}
+
+/* A motion preference is an accessibility setting, not a style. It wins over
+   everything here, so no animation can be added later that forgets to opt in. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;
+    scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar__in">
+    <span class="logo">AESDR</span>
+    <nav><a href="#">Syllabus</a><a href="#">Tools</a><a href="#">Pricing</a><a href="#">Sign in</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="fork" aria-label="Pick your side">
+    <div class="fork__side fork__sdr" tabindex="0">
+      <span class="ghost" aria-hidden="true">01</span>
+      <p class="eyebrow">Side one</p>
+      <h2>You book the meetings.</h2>
+      <p>Dials, sequences, the gatekeeper, the no. Start where the job starts.</p>
+      <p class="pick"><a class="cta" href="#">Pick SDR →</a></p>
+    </div>
+    <div class="fork__rule" aria-hidden="true"></div>
+    <div class="fork__side fork__ae" tabindex="0">
+      <span class="ghost" aria-hidden="true">02</span>
+      <p class="eyebrow">Side two</p>
+      <h2>You carry the number.</h2>
+      <p>Discovery, the demo, the close, the forecast you have to defend.</p>
+      <p class="pick"><a class="cta" href="#">Pick AE →</a></p>
+    </div>
+  </section>
+
+  <section class="wrap beat">
+    <p class="eyebrow">The problem</p>
+    <h2>Every month or quarter, they reset your number to
+      <span class="irisword">zero.</span></h2>
+    <hr class="irisrule" />
+    <p>And every month or quarter, you act surprised. You don't have a pipeline
+       problem. You have a denial problem.</p>
+    <p class="whisper">Keep scrolling. The picture gets worse before it gets better.</p>
+  </section>
+
+  <section class="cat">
+    <div class="wrap">
+      <div class="cat__head">
+        <h2>The syllabus</h2>
+        <span class="call">Dewey 658.85 · AESDR/SAL · Non-Fiction</span>
+      </div>
+      <div class="cards">
+        <article class="cardx"><p class="no">01</p><h3>Building Real Camaraderie</h3><span class="marg">— keep. read twice.</span><span class="foot"><span class="dew">658.85 / L01</span><span class="day">Mon 01</span></span></article>
+        <article class="cardx"><p class="no">02</p><h3>Breaking Down Silos</h3><span class="marg">— cc: solutions eng.</span><span class="foot"><span class="dew">658.85 / L02</span><span class="day">Tue 02</span></span></article>
+        <article class="cardx"><p class="no">03</p><h3>Performance Pitfalls</h3><span class="marg">— mirror test.</span><span class="foot"><span class="dew">658.85 / L03</span><span class="day">Wed 03</span></span></article>
+        <article class="cardx"><p class="no">04</p><h3>Navigating Manager Madness</h3><span class="foot"><span class="dew">658.85 / L04</span><span class="day">Thu 04</span></span></article>
+        <article class="cardx cardx--sarcastic"><p class="no">05</p><h3>tHe SaLeS pLaYbOoK</h3><span class="marg">— LinkedIn isn&#x27;t one.</span><span class="foot"><span class="dew">658.85 / L05</span><span class="day">Fri 05</span></span></article>
+        <article class="cardx cardx--sarcastic"><p class="no">06</p><h3>bEyOnD tHe SaLeS pLaYbOoK</h3><span class="marg">— improvise w/ intent.</span><span class="foot"><span class="dew">658.85 / L06</span><span class="day">Sat 06</span></span></article>
+        <article class="cardx"><p class="no">07</p><h3>Prospecting &amp; Pipeline</h3><span class="marg">— build outbound muscle.</span><span class="foot"><span class="dew">658.85 / L07</span><span class="day">Sun 07</span></span></article>
+        <article class="cardx"><p class="no">08</p><h3>The 30% Rule</h3><span class="marg">— do the math honestly.</span><span class="foot"><span class="dew">658.85 / L08</span><span class="day">Mon 08</span></span></article>
+        <article class="cardx"><p class="no">09</p><h3>CRM Survival Guide</h3><span class="marg">— log before you forget.</span><span class="foot"><span class="dew">658.85 / L09</span><span class="day">Tue 09</span></span></article>
+        <article class="cardx"><p class="no">10</p><h3>Breaking Down the Commission Myth</h3><span class="marg">— 3 months runway min.</span><span class="foot"><span class="dew">658.85 / L10</span><span class="day">Wed 10</span></span></article>
+        <article class="cardx"><p class="no">11</p><h3>Sober Selling</h3><span class="marg">— 21+. not metaphor.</span><span class="foot"><span class="dew">658.85 / L11</span><span class="day">Thu 11</span></span></article>
+        <article class="cardx cardx--sarcastic"><p class="no">12</p><h3>Leveling Up SaaS Relationships</h3><span class="marg">— name 5.</span><span class="foot"><span class="dew">658.85 / L12</span><span class="day">Fri 12</span></span></article>
+      </div>
+      <p style="margin:24px 0 0;max-width:62ch;color:var(--muted);font-size:15px">
+        Twelve courses filed under one Dewey call number — check each one out as
+        the work demands it and return it when you're a different AE or SDR on
+        the other side.</p>
+    </div>
+  </section>
+
+  <section class="warn">
+    <div class="wrap">
+      <b>Content warning</b>
+      <p>This course contains uncomfortable truths about your pipeline, your
+         apartment, your bar tab, your commission check, and your relationship
+         status.</p>
+    </div>
+  </section>
+
+  <section class="wrap close">
+    <p class="eyebrow">What this is</p>
+    <h2>Sober, fun, practical training built by people who
+      <span class="irisword">carried bags.</span></h2>
+    <hr class="irisrule" />
+    <p>No guru routines and no motivational performance built into the format.
+       This program will change your life a few times throughout your journey in
+       the 12 courses.</p>
+    <p style="margin-top:26px"><a class="cta" href="#">Start course one →</a></p>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <span>AESDR</span><span>Sales training</span><span>Twelve courses</span>
+</footer>
+
+</body>
+</html>

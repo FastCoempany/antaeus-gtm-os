@@ -1,0 +1,207 @@
+<!-- mockup slug="antaeus" brand="ANTAEUS" kind="App screen"
+     title="The morning board"
+     line="The inside of a sales tool: one ranked move, the reason it came up, and a live left wall."
+     built="Design system, the five readiness states and the Live Edge's own line
+            templates are the product's. The sample account is the one the product uses."
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Antaeus — Today</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ANTAEUS — the morning board.
+   The product's own system: a bright field, navy ink, orange rationed to the
+   single most valuable move and used nowhere else, forest reserved for things
+   that have held over time, blue for what the system itself noticed. DM Serif
+   Display carries the argument, Public Sans does the work, JetBrains Mono is
+   for codes and ages only.
+   Two shipped surfaces are on screen at once: the left wall, whose lines are
+   the product's own templates tagged you / the machine / the buyers, and the
+   board, which opens on where the whole motion stands, then hands over one
+   move with the reason it came up first. Northwind is the sample account the
+   product itself ships with, so no client is invented here. */
+:root{
+  --field:#f6f8fc; --surface:#ffffff; --sunk:#eff2f7;
+  --ink:#0a1c40; --ink70:rgba(10,28,64,.72); --ink55:rgba(10,28,64,.62);
+  --ink30:rgba(10,28,64,.34); --hair:rgba(10,28,64,.10); --hair2:rgba(10,28,64,.16);
+  --orange:#e6701e; --orange-btn:#b85918; --blue:#2563eb; --forest:#1B5138;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Public Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--field);color:var(--ink);font-family:var(--sans);font-size:14px;
+  line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:262px minmax(0,1fr);min-height:100%}
+
+/* ── the left wall ───────────────────────────────────── */
+.edge{border-right:1px solid var(--hair2);padding:22px 20px 26px;
+  background:linear-gradient(90deg,rgba(10,28,64,.025),transparent 70%);
+  display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:20px}
+.edge__head{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.14em;color:var(--ink55)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--forest);
+  animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:1}50%{opacity:.34}}
+.count b{font-family:var(--serif);font-size:30px;line-height:1;display:block}
+.count span{font-family:var(--mono);font-size:10px;color:var(--ink55);letter-spacing:.06em}
+.track{height:3px;background:var(--hair);margin:9px 0 0;border-radius:2px;overflow:hidden}
+.track i{display:block;height:100%;width:38%;background:var(--forest)}
+.wire{list-style:none;margin:0;padding:0;overflow:hidden}
+.wire li{display:flex;gap:8px;align-items:baseline;padding:8px 0;
+  border-top:1px solid var(--hair);font-size:11.5px;color:var(--ink70);line-height:1.34}
+.wire em{margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--ink30);
+  font-style:normal;flex:none}
+.tag{font-family:var(--mono);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink30);flex:none;padding-top:1px}
+.wire li.machine{color:var(--ink55)}
+.wire li.machine .tag{color:var(--blue)}
+.wire li.buyer{color:var(--ink);border-left:3px solid var(--orange);padding-left:9px;
+  background:linear-gradient(90deg,rgba(230,112,30,.08),transparent 62%)}
+.wire li.buyer .tag{color:var(--orange)}
+.edge__foot{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ink30);
+  text-transform:uppercase;display:grid;gap:4px}
+
+/* ── board ───────────────────────────────────────────── */
+.board{padding:0 0 40px;min-width:0}
+.bar{display:flex;align-items:center;gap:14px;height:56px;padding:0 30px;
+  border-bottom:1px solid var(--hair);background:var(--surface)}
+.mark{width:22px;height:22px;flex:none;color:var(--ink)}
+.mark svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;
+  stroke-width:2.6;stroke-linecap:round}
+.bar .who{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ink55);
+  text-transform:uppercase}
+.verdictchip{margin-left:auto;display:flex;align-items:center;gap:7px;border:1px solid var(--hair2);
+  border-radius:999px;padding:5px 13px;font-size:11.5px;font-weight:600}
+.verdictchip i{width:6px;height:6px;border-radius:50%;background:var(--forest)}
+
+.masthead{padding:34px 30px 0;max-width:980px}
+.kick{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink55);margin:0 0 12px}
+.masthead h1{margin:0;font-family:var(--serif);font-size:clamp(28px,3.6vw,44px);
+  line-height:1.04;letter-spacing:-.01em}
+.masthead .read{margin:12px 0 0;color:var(--ink70);max-width:62ch;font-size:15px}
+
+/* the climb */
+.ladder{display:flex;gap:0;margin:26px 0 0;max-width:820px}
+.rung{flex:1;padding:9px 10px 0;border-top:3px solid var(--hair);font-size:10.5px;
+  color:var(--ink30);font-weight:600;letter-spacing:.02em}
+.rung.past{border-top-color:var(--forest);color:var(--forest)}
+.rung.here{border-top-color:var(--orange);color:var(--ink);font-weight:700}
+
+/* the one move */
+.move{margin:30px 30px 0;max-width:980px;background:var(--surface);
+  border:1px solid var(--hair2);border-radius:4px;border-left:3px solid var(--orange);
+  padding:22px 24px 20px}
+.move .top{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}
+.move .top span{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--orange)}
+.move .top small{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ink30)}
+.move h2{margin:0;font-family:var(--serif);font-size:27px;line-height:1.1}
+.move p{margin:10px 0 0;color:var(--ink70);max-width:60ch}
+.move p b{color:var(--ink)}
+.acts{display:flex;gap:10px;align-items:center;margin:18px 0 0}
+.btn{border:0;border-radius:3px;padding:10px 18px;font-family:var(--sans);font-weight:700;
+  font-size:13px;background:var(--orange-btn);color:#fff;cursor:pointer}
+.btn:hover{background:#9d4b13}
+.skip{background:none;border:1px solid var(--hair2);border-radius:3px;padding:9px 15px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink70);cursor:pointer}
+.skip:hover{border-color:var(--ink30)}
+.why{margin-left:auto;font-size:11.5px;color:var(--ink55)}
+
+/* standing row */
+.standing{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 30px 0;
+  max-width:980px}
+.cell{background:var(--surface);border:1px solid var(--hair);border-radius:4px;
+  padding:15px 16px 16px;text-decoration:none;color:inherit;display:block;
+  transition:border-color .18s ease,transform .18s ease}
+.cell:hover{border-color:var(--ink30);transform:translateY(-2px)}
+.cell .k{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink55)}
+.cell b{display:block;font-family:var(--serif);font-size:25px;line-height:1.1;margin:6px 0 3px}
+.cell span{font-size:11.5px;color:var(--ink55)}
+.cell.warn b{color:var(--orange)}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .edge{display:none}
+  .standing{grid-template-columns:repeat(2,1fr)}
+}
+
+/* A motion preference is an accessibility setting, not a style. It wins over
+   everything here, so no animation can be added later that forgets to opt in. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;
+    scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="edge" aria-label="The live edge">
+    <div class="edge__head"><i class="dot"></i><span>THE LIVE EDGE</span></div>
+    <div class="count">
+      <b>34</b><span>/ 90 TODAY</span>
+      <div class="track"><i></i></div>
+    </div>
+    <ul class="wire">
+      <li class="buyer"><span class="tag">The buyers</span>Northwind Robotics replied to your outreach.<em>12m</em></li>
+      <li><span class="tag">You</span>Captured your send to Northwind Robotics — counted.<em>1h</em></li>
+      <li class="machine"><span class="tag">The machine</span>Calendar — Thursday with Northwind Robotics is confirmed.<em>1h</em></li>
+      <li><span class="tag">You</span>You called Northwind Robotics.<em>3h</em></li>
+      <li class="machine"><span class="tag">The machine</span>Heartbeat — Northwind UK still has no dated next step.<em>4h</em></li>
+    </ul>
+    <div class="edge__foot"><span>Quiet since 4:12 PM.</span><span>6 today</span></div>
+  </aside>
+
+  <main class="board">
+    <div class="bar">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg></span>
+      <span class="who">Today · Tuesday</span>
+      <span class="verdictchip"><i></i>Inheritable with guardrails</span>
+    </div>
+
+    <div class="masthead">
+      <p class="kick">Where the whole motion stands</p>
+      <h1>A hire could run this with you there to answer questions.</h1>
+      <p class="read">Your targeting and your open deals are solid. Your discovery calls are
+        the thin part — three of the last eight had no dated next step when they ended.</p>
+      <div class="ladder" role="img" aria-label="Readiness: past You are the system and Building; now at Inheritable with guardrails">
+        <div class="rung past">You are the system</div>
+        <div class="rung past">Building</div>
+        <div class="rung here">Inheritable</div>
+        <div class="rung">Hire-ready</div>
+        <div class="rung">Repeatable</div>
+      </div>
+    </div>
+
+    <section class="move">
+      <p class="top"><span>The most valuable move on your board</span><small>#1 of 12</small></p>
+      <h2>Reach out to Northwind UK.</h2>
+      <p>They opened a second site this month and have no one running recruiting for it.
+        <b>Nobody has called them.</b> Reaching out is the part of your motion furthest behind.</p>
+      <div class="acts">
+        <button class="btn" type="button">Compose it</button>
+        <button class="skip" type="button">Skip — show the next one</button>
+        <span class="why">Clearly the top one · then: Mercury, Ramp</span>
+      </div>
+    </section>
+
+    <div class="standing">
+      <a class="cell" href="#"><span class="k">Accounts watched</span><b>12</b><span>Four went quiet this week</span></a>
+      <a class="cell" href="#"><span class="k">Live deals</span><b>10</b><span>Two sit at proposal</span></a>
+      <a class="cell warn" href="#"><span class="k">Need a next step</span><b>3</b><span>None has a date on it</span></a>
+      <a class="cell" href="#"><span class="k">Handoff kit</span><b>5/7</b><span>Two parts still thin</span></a>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

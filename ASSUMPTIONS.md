@@ -53,6 +53,13 @@ construction ratios off a PNG. Per-letter outlines would misdescribe a merged
 silhouette, so nothing stands in for it. SOURCES.md row 1 says this rather than
 claiming the mark is the real lockup, which is what it said before.
 
+> **Corrected.** "The source folder holds no vector art" was wrong. It was
+> true of the repository, which is all this version read, and false of the
+> project: the real thirteen-path lockup is in the pre-release archive
+> attached to the repository, in both weights. `v3/` uses it. The mistake was
+> not the reading but the scope — the archives are where the material lives,
+> and this version never opened them.
+
 **Frame 7's cast shadow is darker than the brand's shadow rule.** Darkest
 Shades measures its product shadow at never more than 8–10% below the backdrop,
 never hard. The soft pass in frame 7 obeys that; the pass carrying the mark's
