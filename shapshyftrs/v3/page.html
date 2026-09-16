@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>shapshyftrs — {{SLOGAN}}</title>
+<meta name="description" content="Send us the idea. We turn it into a mockup you can click through. {{PRICE}}, delivered in {{DAYS}}." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ─────────────────────────────────────────────────────────────
+   shapshyftrs
+   The form is the flagship product-page scroll: a sticky local nav, one
+   commanding hero over a floating shot, a buy bar that arrives on scroll, a
+   highlights rail, then a band per piece of work, then how it goes, then the
+   price, the questions and the close.
+   The shell is deliberately quiet. Five brands are about to shout on this
+   page — neon, black, technical white, crimson, navy — so the page they sit
+   in is paper, near-black ink, and one accent used once per surface.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --paper:#fbfaf7; --paper-0:rgba(251,250,247,0); --surface:#ffffff; --sunk:#f2f1ec; --ink:#16161a;
+  --ink70:rgba(22,22,26,.70); --ink55:rgba(22,22,26,.56); --ink35:rgba(22,22,26,.36);
+  --hair:rgba(22,22,26,.10); --hair2:rgba(22,22,26,.18);
+  --accent:#1f45e5; --accent-deep:#16309f;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --gut:30px; --band:104px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink55);margin:0 0 16px}
+.h-hero{font-family:var(--serif);font-weight:400;font-size:clamp(46px,7.4vw,104px);
+  line-height:.98;letter-spacing:-.015em;margin:0}
+.h-sec{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.4vw,56px);
+  line-height:1.04;letter-spacing:-.01em;margin:0}
+.lede{font-size:18px;color:var(--ink70);max-width:58ch;margin:18px 0 0}
+.lede b{color:var(--ink);font-weight:600}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ── buttons ─────────────────────────────────────────── */
+.btn{display:inline-block;border:0;border-radius:999px;padding:13px 24px;font-family:var(--sans);
+  font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;line-height:1}
+.btn--go{background:var(--accent);color:#fff}
+.btn--go:hover{background:var(--accent-deep)}
+.btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--hair2)}
+.btn--ghost:hover{border-color:var(--ink35)}
+
+/* ── local nav ───────────────────────────────────────── */
+.localnav{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;justify-content:center;
+  padding:12px var(--gut);pointer-events:none;
+  opacity:0;transform:translateY(-8px);transition:opacity .3s ease,transform .3s ease}
+.localnav.is-on{opacity:1;transform:none}
+.localnav__in{pointer-events:auto;display:flex;align-items:center;gap:22px;
+  background:rgba(255,255,255,.86);backdrop-filter:blur(14px);
+  border:1px solid var(--hair);border-radius:999px;padding:8px 8px 8px 22px;
+  box-shadow:0 8px 30px rgba(22,22,26,.08);max-width:100%}
+.localnav__name{font-family:var(--serif);font-size:18px;text-decoration:none}
+.localnav__sections{display:flex;gap:18px;font-size:13.5px;color:var(--ink70)}
+.localnav__sections a{text-decoration:none}
+.localnav__sections a:hover{color:var(--ink)}
+.localnav .btn{padding:9px 18px;font-size:13.5px}
+
+/* ── hero ────────────────────────────────────────────── */
+.hero{padding:96px 0 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-40% -20% auto;height:80%;
+  background:radial-gradient(52% 60% at 50% 0,rgba(31,69,229,.07),transparent 72%);
+  pointer-events:none}
+.hero .wrap{position:relative}
+.hero .h-hero{max-width:16ch;margin:0 auto}
+.hero .lede{margin:22px auto 0;text-align:center}
+.hero .acts{display:flex;gap:12px;justify-content:center;margin:26px 0 0;flex-wrap:wrap}
+.heroshot{margin:52px auto 0;max-width:1080px}
+
+/* ── the device ──────────────────────────────────────── */
+/* Each piece of work is the real file, running in an iframe at the width it
+   was designed for and scaled to fit the column — so what is on the page is
+   the deliverable itself, not a screenshot of it. */
+.dev{--w:1400;--h:900;background:var(--surface);border:1px solid var(--hair2);
+  border-radius:11px;overflow:hidden;box-shadow:0 24px 60px rgba(22,22,26,.10)}
+.dev__bar{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;
+  background:var(--sunk);border-bottom:1px solid var(--hair)}
+.dev__bar i{width:9px;height:9px;border-radius:50%;background:var(--hair2);flex:none}
+.dev__url{margin:0 auto;font-family:var(--mono);font-size:10.5px;color:var(--ink55);
+  background:var(--surface);border:1px solid var(--hair);border-radius:999px;
+  padding:3px 14px;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* The iframe renders at the mockup's own design width (--w) and is scaled down
+   to whatever width the port actually got. --s is set per device by script on
+   every resize, because CSS cannot divide one length by another. The value
+   below is the fallback for the desktop column, so the frame is still right
+   with script off. */
+.dev__port{position:relative;width:100%;aspect-ratio:var(--w)/var(--h);overflow:hidden}
+.dev__port > iframe{position:absolute;top:0;left:0;border:0;
+  width:calc(var(--w) * 1px);height:calc(var(--h) * 1px);
+  transform:scale(var(--s,.8));transform-origin:0 0}
+/* a device that shows only the top of a longer page fades out rather than
+   cutting a line of type in half */
+.dev--crop .dev__port::after{content:"";position:absolute;inset:auto 0 0;height:96px;
+  pointer-events:none;background:linear-gradient(rgba(255,255,255,0),var(--surface))}
+
+/* ── buy bar ─────────────────────────────────────────── */
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(22,22,26,.94);
+  backdrop-filter:blur(12px);color:#fff;transform:translateY(100%);
+  transition:transform .32s ease}
+.buybar.is-on{transform:none}
+.buybar .wrap{display:flex;align-items:center;gap:18px;padding-top:12px;padding-bottom:12px}
+.buybar p{margin:0;font-size:14px;line-height:1.35}
+.buybar p b{font-weight:700}
+.buybar p span{color:rgba(255,255,255,.62)}
+.buybar .btn{margin-left:auto;background:#fff;color:var(--ink)}
+.buybar .btn:hover{background:#e9e9e6}
+
+/* ── highlights rail ─────────────────────────────────── */
+.hl{padding:var(--band) 0 0}
+.hl__head{display:flex;align-items:baseline;gap:18px;margin:0 0 24px}
+.hl__head a{margin-left:auto;font-size:14px;color:var(--accent);text-decoration:none}
+.hl__head a:hover{text-decoration:underline}
+/* the rail runs past the right edge on purpose; the fade says so, and goes
+   when there is nothing further to scroll to */
+.railwrap{position:relative}
+.railwrap::after{content:"";position:absolute;inset:0 0 20px auto;width:72px;
+  pointer-events:none;opacity:1;transition:opacity .2s ease;
+  background:linear-gradient(90deg,var(--paper-0),var(--paper))}
+.railwrap.is-end::after{opacity:0}
+.rail{display:flex;gap:16px;overflow-x:auto;padding:4px var(--gut) 20px;
+  scroll-snap-type:x mandatory;scrollbar-width:thin}
+.rail::-webkit-scrollbar{height:6px}
+.rail::-webkit-scrollbar-thumb{background:var(--hair2);border-radius:3px}
+.hcard{flex:0 0 280px;scroll-snap-align:start;background:var(--surface);
+  border:1px solid var(--hair);border-radius:10px;padding:20px 20px 22px;
+  display:flex;flex-direction:column;gap:9px;text-decoration:none}
+.hcard:hover{border-color:var(--ink35)}
+.hcard .b{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink55)}
+.hcard h3{margin:0;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.14}
+.hcard p{margin:0;font-size:13.5px;color:var(--ink70)}
+.hcard .sw{display:flex;gap:5px;margin-top:auto;padding-top:12px}
+.hcard .sw i{width:15px;height:15px;border-radius:4px;border:1px solid rgba(0,0,0,.10)}
+
+/* ── work bands ──────────────────────────────────────── */
+.work{padding:var(--band) 0 0}
+.work__head{max-width:62ch}
+.work__head .h-sec{margin-top:4px}
+.work__meta{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 26px}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--hair2);border-radius:999px;padding:5px 11px;color:var(--ink55)}
+.work__note{margin:14px 0 0;font-size:13.5px;color:var(--ink55);max-width:64ch}
+.work__note a{color:var(--accent)}
+.work__open{display:inline-block;margin-left:2px;white-space:nowrap;text-decoration:none}
+.work__open:hover{text-decoration:underline}
+
+/* ── how ─────────────────────────────────────────────── */
+.how{padding:var(--band) 0 0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:34px 0 0}
+.step{border-top:2px solid var(--ink);padding:16px 0 0}
+.step b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:var(--ink55);margin:0 0 8px}
+.step h3{margin:0 0 6px;font-family:var(--serif);font-weight:400;font-size:24px}
+.step p{margin:0;font-size:14.5px;color:var(--ink70)}
+
+/* ── numbers ─────────────────────────────────────────── */
+.nums{padding:var(--band) 0 0}
+.num{border-top:1px solid var(--hair);padding:30px 0 26px;display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:baseline}
+.num b{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6vw,76px);line-height:1}
+.num p{margin:0;color:var(--ink70)}
+
+/* ── compare ─────────────────────────────────────────── */
+.cmp{padding:var(--band) 0 0}
+.cmp__grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:30px 0 0}
+.panel{background:var(--surface);border:1px solid var(--hair);border-radius:10px;
+  padding:24px 24px 26px}
+.panel--not{background:var(--sunk);border-color:transparent}
+.panel h3{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:24px}
+.panel ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.panel li{display:flex;gap:10px;font-size:15px;color:var(--ink70)}
+.panel li::before{content:"—";color:var(--ink35);flex:none}
+.panel--yes li::before{content:"✓";color:var(--accent);font-weight:700}
+
+/* ── faq ─────────────────────────────────────────────── */
+.faq{padding:var(--band) 0 0}
+.faq dl{margin:28px 0 0;border-top:1px solid var(--hair)}
+.faq dt{font-weight:600;font-size:16.5px;padding:20px 0 0}
+.faq dd{margin:6px 0 20px;color:var(--ink70);border-bottom:1px solid var(--hair);
+  padding-bottom:20px;max-width:70ch}
+
+/* ── close ───────────────────────────────────────────── */
+.close{padding:var(--band) 0 120px;text-align:center}
+.close .h-sec{max-width:18ch;margin:0 auto}
+.form{max-width:620px;margin:32px auto 0;display:grid;gap:12px;text-align:left}
+.form label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink55)}
+.form input,.form textarea{font-family:var(--sans);font-size:15.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--hair2);border-radius:8px;padding:13px 15px;
+  width:100%}
+.form textarea{min-height:120px;resize:vertical}
+.form input:focus,.form textarea:focus{outline:2px solid var(--accent);outline-offset:1px;
+  border-color:transparent}
+.form .row{display:grid;gap:6px}
+.form .send{display:flex;align-items:center;gap:14px;margin:6px 0 0;flex-wrap:wrap}
+.form .send small{color:var(--ink55);font-size:13px}
+.foot{border-top:1px solid var(--hair);padding:26px 0 40px;display:flex;gap:16px;
+  align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink55)}
+.foot .n{font-family:var(--serif);font-size:17px;color:var(--ink)}
+.foot .r{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em}
+
+@media (max-width:900px){
+  :root{--band:74px;--gut:22px}
+  .steps,.cmp__grid{grid-template-columns:1fr}
+  .num{grid-template-columns:1fr;gap:8px}
+  .localnav__sections{display:none}
+}
+
+/* A motion preference is an accessibility setting, not a style. It wins over
+   everything here, so no animation can be added later that forgets to opt in. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;
+    scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body id="top">
+
+<!-- ══ sticky local nav ════════════════════════════════════ -->
+<div class="localnav" id="localnav">
+  <div class="localnav__in">
+    <a class="localnav__name" href="#top">shapshyftrs</a>
+    <nav class="localnav__sections" aria-label="On this page">
+      <a href="#work">The work</a><a href="#how">How</a>
+      <a href="#price">Price</a><a href="#questions">Questions</a>
+    </nav>
+    <a class="btn btn--go" href="#send">Send us the idea</a>
+  </div>
+</div>
+
+<!-- ══ hero ════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="wrap">
+    <p class="kick rv in">shapshyftrs</p>
+    <h1 class="h-hero rv in">{{SLOGAN}}</h1>
+    <p class="lede rv in">You have an idea for a product, a brand, a page.
+      We build it as a real page you can click through — not a slide, not a
+      sketch. <b>{{PRICE}}, one round of changes, delivered in {{DAYS}}.</b></p>
+    <div class="acts rv in">
+      <a class="btn btn--go" href="#send">Send us the idea</a>
+      <a class="btn btn--ghost" href="#work">See five we made</a>
+    </div>
+  </div>
+  <div class="wrap heroshot rv in">
+    <div class="dev dev--crop" style="--w:1400;--h:820">
+      <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+        <span class="dev__url">puffjunction.com/shop/the-grinder</span></div>
+      <div class="dev__port">
+        <iframe title="Puff Junction product page mockup" loading="eager"
+          srcdoc="{{MOCKUP:puff-junction}}"></iframe>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ buy bar ═════════════════════════════════════════════ -->
+<div class="buybar" id="buybar">
+  <div class="wrap">
+    <p><b>{{PRICE}}, paid up front.</b>
+      <span>Delivered in {{DAYS}}. One round of changes included.</span></p>
+    <a class="btn" href="#send">Send us the idea</a>
+  </div>
+</div>
+
+<main>
+  <!-- ══ highlights ════════════════════════════════════════ -->
+  <section class="hl" aria-labelledby="hl-h">
+    <div class="wrap hl__head">
+      <h2 class="h-sec rv" id="hl-h">Five we made.</h2>
+      <a href="#work">Take the tour →</a>
+    </div>
+    <div class="railwrap">
+    <div class="rail" role="group" aria-label="The work">
+      <a class="hcard" href="#w-puff-junction">
+        <span class="b">Puff Junction</span><h3>A shop page that reads like a poster.</h3>
+        <p>Concrete and brass, sold in four neons.</p>
+        <span class="sw"><i style="background:#D6FD4A"></i><i style="background:#FF8FF1"></i><i style="background:#A5E4FF"></i><i style="background:#FEF200"></i><i style="background:#000"></i></span>
+      </a>
+      <a class="hcard" href="#w-darkest-shades">
+        <span class="b">Darkest Shades</span><h3>An eyewear label, built in the dark.</h3>
+        <p>Nine frames, shot on a lightbox in a garage.</p>
+        <span class="sw"><i style="background:#0b0b0c"></i><i style="background:#141416"></i><i style="background:#e9e8e6"></i><i style="background:#c8a14a"></i></span>
+      </a>
+      <a class="hcard" href="#w-digs">
+        <span class="b">digs</span><h3>A tech pack a factory can navigate.</h3>
+        <p>Fourteen pages, a spine, and the real stitch codes.</p>
+        <span class="sw"><i style="background:#ffffff"></i><i style="background:#f4f4f2"></i><i style="background:#c0392b"></i><i style="background:#6176A3"></i><i style="background:#F8F0E8"></i></span>
+      </a>
+      <a class="hcard" href="#w-aesdr">
+        <span class="b">AESDR</span><h3>Sales training that insults you gently.</h3>
+        <p>Twelve courses filed under one call number.</p>
+        <span class="sw"><i style="background:#FAF7F2"></i><i style="background:#8B1A1A"></i><i style="background:#1A1A1A"></i><i style="background:#F4EADD"></i></span>
+      </a>
+      <a class="hcard" href="#w-antaeus">
+        <span class="b">Antaeus</span><h3>The inside of a sales tool.</h3>
+        <p>One ranked move, and the reason it came up first.</p>
+        <span class="sw"><i style="background:#f6f8fc"></i><i style="background:#0a1c40"></i><i style="background:#e6701e"></i><i style="background:#1B5138"></i></span>
+      </a>
+    </div>
+    </div>
+  </section>
+
+  <!-- ══ the work ══════════════════════════════════════════ -->
+  <div id="work"></div>
+
+  <section class="work" id="w-puff-junction">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="kick">{{MOCKUP_META:puff-junction.brand}} · {{MOCKUP_META:puff-junction.kind}}</p>
+        <h2 class="h-sec">A shop page that reads like a poster.</h2>
+        <p class="lede">{{MOCKUP_META:puff-junction.line}}</p>
+      </div>
+      <div class="work__meta rv">
+        <span class="pill">Product page</span><span class="pill">Four-colour palette</span>
+        <span class="pill">Real renders</span><span class="pill">Live in the browser</span>
+      </div>
+      <div class="rv">
+        <div class="dev" style="--w:1400;--h:{{MOCKUP_H:puff-junction}}">
+          <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+            <span class="dev__url">puffjunction.com/shop/the-grinder</span></div>
+          <div class="dev__port">
+            <iframe title="Puff Junction product page mockup" loading="lazy"
+              srcdoc="{{MOCKUP:puff-junction}}"></iframe>
+          </div>
+        </div>
+      </div>
+      <p class="work__note rv">{{MOCKUP_META:puff-junction.built}} <a class="work__open" href="work/puff-junction.html" target="_blank" rel="noopener">Open the page itself ↗</a></p>
+    </div>
+  </section>
+
+  <section class="work" id="w-darkest-shades">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="kick">{{MOCKUP_META:darkest-shades.brand}} · {{MOCKUP_META:darkest-shades.kind}}</p>
+        <h2 class="h-sec">An eyewear label, built in the dark.</h2>
+        <p class="lede">{{MOCKUP_META:darkest-shades.line}}</p>
+      </div>
+      <div class="work__meta rv">
+        <span class="pill">Brand landing</span><span class="pill">Prototype photography</span>
+        <span class="pill">Wordmark rebuilt</span>
+      </div>
+      <div class="rv">
+        <div class="dev" style="--w:1400;--h:{{MOCKUP_H:darkest-shades}}">
+          <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+            <span class="dev__url">darkestshades.com</span></div>
+          <div class="dev__port">
+            <iframe title="Darkest Shades landing page mockup" loading="lazy"
+              srcdoc="{{MOCKUP:darkest-shades}}"></iframe>
+          </div>
+        </div>
+      </div>
+      <p class="work__note rv">{{MOCKUP_META:darkest-shades.built}} <a class="work__open" href="work/darkest-shades.html" target="_blank" rel="noopener">Open the page itself ↗</a></p>
+    </div>
+  </section>
+
+  <section class="work" id="w-digs">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="kick">{{MOCKUP_META:digs.brand}} · {{MOCKUP_META:digs.kind}}</p>
+        <h2 class="h-sec">A tech pack a factory can navigate.</h2>
+        <p class="lede">{{MOCKUP_META:digs.line}}</p>
+      </div>
+      <div class="work__meta rv">
+        <span class="pill">Technical document</span><span class="pill">Real graded spec</span>
+        <span class="pill">ISO stitch codes</span>
+      </div>
+      <div class="rv">
+        <div class="dev" style="--w:1400;--h:{{MOCKUP_H:digs}}">
+          <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+            <span class="dev__url">digs.studio/packs/AC-LST-001</span></div>
+          <div class="dev__port">
+            <iframe title="digs tech pack mockup" loading="lazy"
+              srcdoc="{{MOCKUP:digs}}"></iframe>
+          </div>
+        </div>
+      </div>
+      <p class="work__note rv">{{MOCKUP_META:digs.built}} <a class="work__open" href="work/digs.html" target="_blank" rel="noopener">Open the page itself ↗</a></p>
+    </div>
+  </section>
+
+  <section class="work" id="w-aesdr">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="kick">{{MOCKUP_META:aesdr.brand}} · {{MOCKUP_META:aesdr.kind}}</p>
+        <h2 class="h-sec">Sales training that insults you gently.</h2>
+        <p class="lede">{{MOCKUP_META:aesdr.line}}</p>
+      </div>
+      <div class="work__meta rv">
+        <span class="pill">Course landing</span><span class="pill">Seven-stop iris</span>
+        <span class="pill">Catalogue cards</span>
+      </div>
+      <div class="rv">
+        <div class="dev" style="--w:1400;--h:{{MOCKUP_H:aesdr}}">
+          <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+            <span class="dev__url">aesdr.com/syllabus</span></div>
+          <div class="dev__port">
+            <iframe title="AESDR course landing mockup" loading="lazy"
+              srcdoc="{{MOCKUP:aesdr}}"></iframe>
+          </div>
+        </div>
+      </div>
+      <p class="work__note rv">{{MOCKUP_META:aesdr.built}} <a class="work__open" href="work/aesdr.html" target="_blank" rel="noopener">Open the page itself ↗</a></p>
+    </div>
+  </section>
+
+  <section class="work" id="w-antaeus">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="kick">{{MOCKUP_META:antaeus.brand}} · {{MOCKUP_META:antaeus.kind}}</p>
+        <h2 class="h-sec">The inside of a sales tool.</h2>
+        <p class="lede">{{MOCKUP_META:antaeus.line}}</p>
+      </div>
+      <div class="work__meta rv">
+        <span class="pill">App screen</span><span class="pill">Live rail</span>
+        <span class="pill">One ranked move</span>
+      </div>
+      <div class="rv">
+        <div class="dev" style="--w:1400;--h:{{MOCKUP_H:antaeus}}">
+          <div class="dev__bar" aria-hidden="true"><i></i><i></i><i></i>
+            <span class="dev__url">antaeus.app/today</span></div>
+          <div class="dev__port">
+            <iframe title="Antaeus app screen mockup" loading="lazy"
+              srcdoc="{{MOCKUP:antaeus}}"></iframe>
+          </div>
+        </div>
+      </div>
+      <p class="work__note rv">{{MOCKUP_META:antaeus.built}} <a class="work__open" href="work/antaeus.html" target="_blank" rel="noopener">Open the page itself ↗</a></p>
+    </div>
+  </section>
+
+  <!-- ══ how ═══════════════════════════════════════════════ -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2 class="h-sec rv">Three sentences is plenty.</h2>
+      <p class="lede rv">We do not need a brief, a deck, or a call. We need to know
+        what the thing is and who it is for.</p>
+      <div class="steps">
+        <div class="step rv"><b>01</b><h3>You send the idea.</h3>
+          <p>A paragraph. A link to something you like. A photo of a sketch on a
+             napkin. Whatever you actually have.</p></div>
+        <div class="step rv"><b>02</b><h3>We build it.</h3>
+          <p>A real page, in a browser, with your words and your colours. If you
+             have logos or photographs, we use them. If you do not, we draw.</p></div>
+        <div class="step rv"><b>03</b><h3>You change one thing.</h3>
+          <p>One round is included. Tell us what is wrong and we fix it, then you
+             get the file and the link.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ numbers ═══════════════════════════════════════════ -->
+  <section class="nums" id="price">
+    <div class="wrap">
+      <div class="num rv"><b>{{PRICE}}</b><p>Flat. Paid up front. No hourly rate, no
+        scoping call, no proposal to sign.</p></div>
+      <div class="num rv"><b>Five days</b><p>From the day you send it. Most land sooner;
+        none land later without us telling you first.</p></div>
+      <div class="num rv"><b>One round</b><p>Of changes, included. More rounds are
+        {{PRICE}} each, and most people never ask.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ compare ═══════════════════════════════════════════ -->
+  <section class="cmp">
+    <div class="wrap">
+      <h2 class="h-sec rv">What you get.</h2>
+      <div class="cmp__grid">
+        <div class="panel panel--yes rv">
+          <h3>What you get</h3>
+          <ul>
+            <li>One HTML file that opens in any browser, and a link you can send.</li>
+            <li>A page that works on a phone, not just on the laptop we built it on.</li>
+            <li>Your real words and your real photographs where you have them.</li>
+            <li>The source, so you or your developer can pick it up and keep going.</li>
+          </ul>
+        </div>
+        <div class="panel panel--not rv">
+          <h3>What it isn't</h3>
+          <ul>
+            <li>A working product. Buttons look right; nothing is wired to a database.</li>
+            <li>A brand identity. We work in the one you have, or a plain one.</li>
+            <li>A logo design, a naming exercise, or a strategy document.</li>
+            <li>A long engagement. It is one thing, once, for a flat price.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ questions ═════════════════════════════════════════ -->
+  <section class="faq" id="questions">
+    <div class="wrap">
+      <h2 class="h-sec rv">Questions.</h2>
+      <dl class="rv">
+        <dt>Is the work above real?</dt>
+        <dd>The five brands are real and the material is theirs — the renders, the
+          photography, the technical drawings, the palettes and the words all come
+          from their own files. The pages themselves are ours, built to show what
+          the material can do. The prices and stock counts inside them are ours,
+          because none of these shops exists yet. The product names are theirs.</dd>
+        <dt>What if I do not have a logo or photographs?</dt>
+        <dd>Then we draw. Four of the five pages above lean on assets the brand
+          already owned; the parts nobody had, we built.</dd>
+        <dt>Can you copy a site I like?</dt>
+        <dd>We will happily take its structure — where the price sits, how the
+          scroll is paced. We will not copy its look, and neither should you.</dd>
+        <dt>What do you need from me?</dt>
+        <dd>What the thing is, who it is for, and anything you already have. If
+          that is three sentences and a photo, that is enough to start.</dd>
+        <dt>What happens after the five days?</dt>
+        <dd>You own it. Take it to a developer, take it to an investor, or take it
+          to the next person who asks what you are building.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ══ close ═════════════════════════════════════════════ -->
+  <section class="close" id="send">
+    <div class="wrap">
+      <h2 class="h-sec rv">Send us the idea.</h2>
+      <p class="lede rv" style="margin-left:auto;margin-right:auto">
+        The person, not the market. Tell us what you would build if someone
+        handed you the afternoon.</p>
+      <form class="form rv" method="post" action="#">
+        <div class="row"><label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required /></div>
+        <div class="row"><label for="f-mail">Email</label>
+          <input id="f-mail" name="email" type="email" autocomplete="email" required /></div>
+        <div class="row"><label for="f-idea">The idea</label>
+          <textarea id="f-idea" name="idea" required
+            placeholder="Three sentences is plenty."></textarea></div>
+        <div class="send">
+          <button class="btn btn--go" type="submit">Send it</button>
+          <small>Or email <a href="mailto:{{EMAIL}}">{{EMAIL}}</a>.</small>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <span class="n">shapshyftrs</span>
+  <span>{{SLOGAN}}</span>
+  <span class="r">{{PRICE}} · {{DAYS}}</span>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* reveal on scroll */
+  var rv = document.querySelectorAll(".rv:not(.in)");
+  if ("IntersectionObserver" in window && !reduce){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+    }, {rootMargin:"0px 0px -10% 0px", threshold:.06});
+    rv.forEach(function(el){ io.observe(el); });
+  } else {
+    rv.forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* the rail's right fade retires once the rail is scrolled out */
+  var rail = document.querySelector(".rail");
+  var railwrap = document.querySelector(".railwrap");
+  if (rail && railwrap){
+    var edge = function(){
+      var end = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
+      railwrap.classList.toggle("is-end", end);
+    };
+    rail.addEventListener("scroll", edge, {passive:true});
+    addEventListener("resize", edge);
+    edge();
+  }
+
+  /* Fit each device's iframe to the width its port actually got. The iframe
+     is laid out at the mockup's own design width so the mockup sees a desktop
+     viewport; the scale brings it down to the column. CSS cannot do this on
+     its own -- it will not divide a length by a length -- so it happens here,
+     once at load and again on resize. */
+  var devs = [].slice.call(document.querySelectorAll(".dev"));
+  function fit(){
+    devs.forEach(function(d){
+      var port = d.querySelector(".dev__port");
+      var w = parseFloat(getComputedStyle(d).getPropertyValue("--w")) || 1400;
+      d.style.setProperty("--s", port.clientWidth / w);
+    });
+  }
+  if ("ResizeObserver" in window){
+    var ro = new ResizeObserver(fit);
+    devs.forEach(function(d){ ro.observe(d); });
+  }
+  addEventListener("resize", fit);
+  fit();
+
+  /* the local nav arrives once the hero headline is gone; the buy bar arrives
+     with it and leaves again when the form it points at is on screen */
+  var nav = document.getElementById("localnav");
+  var buy = document.getElementById("buybar");
+  var hero = document.querySelector(".hero .h-hero");
+  var send = document.getElementById("send");
+  function chrome(){
+    var past = hero.getBoundingClientRect().bottom < 0;
+    nav.classList.toggle("is-on", past);
+    var atForm = send.getBoundingClientRect().top < innerHeight * 0.9;
+    buy.classList.toggle("is-on", past && !atForm);
+  }
+  addEventListener("scroll", chrome, {passive:true});
+  addEventListener("resize", chrome);
+  chrome();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!-- mockup slug="digs" brand="DIGS" kind="Technical document"
+     title="AC-LST-001"
+     line="A fourteen-page tech pack turned into something a factory can actually navigate."
+     built="The flats, the ISO stitch callouts, the graded spec and the change-log entry
+            are the real document. Nothing about the garment is invented."
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>digs — AC-LST-001 Long Sleeve Tee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* DIGS — the tech pack as a web document.
+   A tech pack is a PDF that gets emailed, printed, marked up and lost. This is
+   the same fourteen pages with a spine down the side, so a factory can jump to
+   the stitch it is arguing about. Everything on the page is the real document:
+   the flats and their ISO callouts are lifted from the exterior-view page, the
+   graded spec is the real POM table for the sample size and its grade rule,
+   the two colourways are the real ones down to the Pantone, and the change log
+   is what the vendor was actually told after the first sample came back.
+   The only invention is the navigation. */
+:root{
+  --paper:#ffffff; --field:#f4f4f2; --ink:#111113; --mid:#5d5d63;
+  --low:#8b8b91; --rule:#dcdcd9; --red:#c0392b; --go:#1f6feb;
+  --sans:'Archivo',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--field);color:var(--ink);font-family:var(--sans);font-size:14px;
+  line-height:1.5;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+
+.top{background:var(--paper);border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:20}
+.top__in{max-width:1320px;margin:0 auto;padding:0 24px;display:flex;align-items:center;
+  gap:18px;height:58px}
+.brand{height:22px;width:auto}
+.style{font-family:var(--mono);font-size:11px;color:var(--mid);letter-spacing:.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;border:1px solid var(--rule);border-radius:2px;padding:4px 9px;
+  color:var(--mid);white-space:nowrap}
+.chip--proto{background:#fff6e6;border-color:#f0d9a8;color:#8a6414}
+
+.shell{max-width:1320px;margin:0 auto;padding:22px 24px 60px;
+  display:grid;grid-template-columns:232px minmax(0,1fr);gap:22px;align-items:start}
+
+/* ── spine ───────────────────────────────────────────── */
+.spine{background:var(--paper);border:1px solid var(--rule);border-radius:3px;
+  padding:8px;position:sticky;top:80px}
+.spine h2{margin:6px 8px 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--low)}
+.spine ol{list-style:none;margin:0;padding:0;counter-reset:pg}
+.spine li{counter-increment:pg}
+.spine a{display:flex;gap:9px;align-items:baseline;padding:6px 8px;border-radius:2px;
+  text-decoration:none;color:var(--mid);font-size:12.5px}
+.spine a::before{content:counter(pg,decimal-leading-zero);font-family:var(--mono);
+  font-size:10px;color:var(--low);flex:none}
+.spine a:hover{background:var(--field);color:var(--ink)}
+.spine li.on a{background:#eef4ff;color:var(--ink);font-weight:600}
+.spine li.on a::before{color:var(--go)}
+
+/* ── sheet ───────────────────────────────────────────── */
+.sheet{background:var(--paper);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.sheet__head{display:flex;align-items:baseline;gap:14px;padding:16px 20px;
+  border-bottom:1px solid var(--rule)}
+.sheet__head h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.01em}
+.sheet__head span{font-family:var(--mono);font-size:10.5px;color:var(--low);
+  letter-spacing:.1em;text-transform:uppercase}
+.sheet__head .pg{margin-left:auto}
+.flats{padding:10px 18px 4px;background:var(--paper)}
+.flats img{width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:2px 20px 18px;
+  font-family:var(--mono);font-size:10.5px;color:var(--mid)}
+.legend b{color:var(--ink);font-weight:500}
+.legend i{display:inline-block;width:14px;border-top:1.5px solid var(--red);
+  vertical-align:middle;margin-right:6px;font-style:normal}
+
+/* ── blocks ──────────────────────────────────────────── */
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0 0}
+.block{background:var(--paper);border:1px solid var(--rule);border-radius:3px}
+.block h3{margin:0;padding:13px 18px;border-bottom:1px solid var(--rule);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--mid)}
+.block .body{padding:14px 18px 18px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:right;padding:6px 6px;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left;width:auto}
+thead th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--low);font-weight:500}
+td.pom{font-family:var(--mono);font-size:10px;color:var(--low)}
+tbody tr.key td{background:#f7faff}
+tbody tr.key td:nth-child(4){font-weight:700}
+.ways{display:grid;gap:12px}
+.way{display:flex;align-items:center;gap:12px}
+.way .sw{width:44px;height:44px;border-radius:3px;border:1px solid var(--rule);flex:none}
+.way b{display:block;font-size:13px}
+.way span{font-family:var(--mono);font-size:10.5px;color:var(--low)}
+.log{font-size:13px;color:var(--mid);margin:0}
+.log q{color:var(--ink);font-style:italic}
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+.flag{font-family:var(--mono);font-size:10px;border:1px solid #f0c9c4;background:#fdf3f2;
+  color:#94322a;border-radius:2px;padding:3px 7px}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .spine{position:static}
+  .rows{grid-template-columns:1fr}
+}
+
+/* A motion preference is an accessibility setting, not a style. It wins over
+   everything here, so no animation can be added later that forgets to opt in. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;
+    scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top__in">
+    <img class="brand" src="{{ASSET:digs-mark.png}}" alt="digs" />
+    <span class="style">AC-LST-001 &nbsp;|&nbsp; LONG SLEEVE TEE &nbsp;|&nbsp; SIZE RANGE: S-XL &nbsp;|&nbsp; SAMPLE SIZE: M &nbsp;|&nbsp; TOPS</span>
+    <span class="chip chip--proto">Status · Proto</span>
+    <span class="chip">FW25</span>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="spine" aria-label="Pages in this pack">
+    <h2>The pack</h2>
+    <ol>
+      <li><a href="#">Cover</a></li>
+      <li><a href="#">Material &amp; trim placement</a></li>
+      <li class="on"><a href="#" aria-current="page">Exterior view</a></li>
+      <li><a href="#">Interior view</a></li>
+      <li><a href="#">Additional detail</a></li>
+      <li><a href="#">Reference images</a></li>
+      <li><a href="#">How to measure</a></li>
+      <li><a href="#">Graded spec</a></li>
+      <li><a href="#">Bill of materials</a></li>
+      <li><a href="#">Colorways</a></li>
+      <li><a href="#">Labels &amp; packaging</a></li>
+      <li><a href="#">Packaging detail</a></li>
+      <li><a href="#">Artwork detail</a></li>
+      <li><a href="#">Comments &amp; change log</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section class="sheet">
+      <div class="sheet__head">
+        <h1>Exterior view</h1>
+        <span>Front &amp; back</span>
+        <span class="pg">Page 03 / 14</span>
+      </div>
+      <div class="flats">
+        <img src="{{ASSET:digs-flats.jpg}}" alt="Technical flats of the long sleeve tee, front and back, with red leader lines calling out each seam." />
+      </div>
+      <p class="legend">
+        <span><i></i><b>ISO #514</b> 4-thread overlock join</span>
+        <span><i></i><b>ISO #605</b> topstitch</span>
+        <span><i></i><b>ISO #406</b> 2.5 cm self turnback hem, 1/4&#8221; needle spacing</span>
+        <span><i></i><b>2-ply foldover rib</b> at neckband and cuff</span>
+      </p>
+    </section>
+
+    <div class="rows">
+      <section class="block">
+        <h3>Graded spec · inches</h3>
+        <div class="body">
+          <table>
+            <thead><tr><th>Point of measure</th><th>Tol</th><th>S</th><th>M</th><th>L</th><th>XL</th></tr></thead>
+            <tbody>
+              <tr><td>HPS length at centre front <span class="pom">A</span></td><td class="pom">1/2</td><td>29</td><td>30</td><td>31</td><td>32</td></tr>
+              <tr><td>½ chest, 1&#8221; below underarm <span class="pom">B</span></td><td class="pom">1/2</td><td>20</td><td>21½</td><td>23</td><td>25</td></tr>
+              <tr><td>½ hem <span class="pom">C</span></td><td class="pom">—</td><td>20</td><td>21½</td><td>23</td><td>25</td></tr>
+              <tr><td>Across shoulder <span class="pom">D</span></td><td class="pom">3/8</td><td>16½</td><td>17¼</td><td>18</td><td>19</td></tr>
+              <tr class="key"><td>Neckband height <span class="pom">I</span></td><td class="pom">1/8</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr class="key"><td>Sleeve cuff height <span class="pom">O</span></td><td class="pom">1/8</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+              <tr><td>Sleeve length, outer fold <span class="pom">P</span></td><td class="pom">3/8</td><td>25⅝</td><td>26</td><td>26⅜</td><td>26¾</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <h3>Colorways &amp; change log</h3>
+        <div class="body">
+          <div class="ways">
+            <div class="way">
+              <span class="sw" style="background:#F8F0E8"></span>
+              <span><b>01 · Off White</b><span>Fabric off-white · thread DTM · embroidery Pantone 19-3943 TXC</span></span>
+            </div>
+            <div class="way">
+              <span class="sw" style="background:#6176A3"></span>
+              <span><b>02 · Sand Blue</b><span>Same thread and embroidery rules</span></span>
+            </div>
+          </div>
+          <p class="log" style="margin-top:16px">
+            <b style="display:block;color:var(--ink);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px">After sample 1</b>
+            <q>Sample was out of tolerance in several POMs. Please go back to spec on
+            all POMs. Side seam on sample was incorrect. Should be ISO #514 join seam
+            with ISO #605 topstitching. Topstitching missing from sample; only
+            overlock stitch was used.</q>
+          </p>
+          <div class="flags">
+            <span class="flag">HPS −3/4&#8221;</span><span class="flag">Shoulder +3/4&#8221;</span>
+            <span class="flag">Slope +1/4&#8221;</span><span class="flag">Elbow +1/2&#8221;</span>
+            <span class="flag">Cuff width +1/2&#8221;</span><span class="flag">Sleeve −1/2&#8221;</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

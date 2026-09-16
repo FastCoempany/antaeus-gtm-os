@@ -1,0 +1,256 @@
+<!-- mockup slug="puff-junction" brand="PUFF JUNCTION" kind="Product page"
+     title="The Grinder"
+     line="A shop page for a concrete-and-brass grinder, in a brand that is all pop-art and neon."
+     built="Palette, type ladder and voice from the 22-page brand guide. The mark is the
+            real 13-path lockup. The product is the real render."
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Puff Junction — The Grinder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;1,700;1,800;1,900&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* PUFF JUNCTION — shop page.
+   Every value here is the brand's own. Palette verbatim from brand guide 3.1:
+   WHITE #FFFFFF, BLACK #000000, SLIME #D6FD4A, DREAM #A5E4FF,
+   FLAMINGO #FF8FF1, PINEAPPLE #FEF200. Guide 2.1 names Arnet Bold Italic as
+   the primary face and Work Sans as the secondary; Work Sans is used as
+   specified, and Archivo 900 italic stands in for Arnet, which has no web
+   licence here. Guide 4.6: buttons carry an outline stroke. Guide 4.7:
+   halftone grounds. The type hierarchy is guide 2.3 -- uppercase italic
+   display over Work Sans body. */
+:root{
+  --white:#ffffff; --black:#000000;
+  --slime:#D6FD4A; --dream:#A5E4FF; --flamingo:#FF8FF1; --pineapple:#FEF200;
+  --ink:#000000; --mute:rgba(0,0,0,.62); --rule:rgba(0,0,0,.14);
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Work Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--white);color:var(--ink);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;font-size:15px;line-height:1.5}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* the display face: uppercase, italic, tight, as the guide sets it */
+.d{font-family:var(--display);font-style:italic;font-weight:900;
+  text-transform:uppercase;letter-spacing:-.02em;line-height:.92}
+
+/* ── bar ─────────────────────────────────────────────── */
+.bar{position:sticky;top:0;z-index:40;background:var(--white);
+  border-bottom:2px solid var(--black)}
+.bar__in{display:flex;align-items:center;gap:26px;height:62px}
+.mark{width:104px;flex:none}
+.mark svg{width:100%;height:auto;display:block}
+.nav{display:flex;gap:22px;margin-left:auto;font-weight:700;font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase}
+.nav a{text-decoration:none;position:relative;padding-top:8px}
+.nav a i{position:absolute;top:-2px;left:0;font-style:normal;font-size:8px;
+  letter-spacing:.06em;color:var(--mute)}
+.nav a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.stash{border:2px solid var(--black);border-radius:999px;padding:7px 15px;
+  font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--slime);white-space:nowrap}
+
+/* ── ticker ──────────────────────────────────────────── */
+.ticker{background:var(--black);color:var(--slime);overflow:hidden;
+  border-bottom:2px solid var(--black)}
+.ticker ul{display:flex;gap:44px;margin:0;padding:9px 0;list-style:none;
+  white-space:nowrap;font-family:var(--display);font-style:italic;font-weight:800;
+  text-transform:uppercase;font-size:12px;letter-spacing:.06em;
+  animation:roll 26s linear infinite}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* ── product ─────────────────────────────────────────── */
+.crumb{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mute);padding:20px 0 0;font-weight:600}
+.pdp{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;padding:18px 0 56px}
+.shots{display:grid;gap:10px}
+.shot{position:relative;background:#0a0a0c;border:2px solid var(--black);overflow:hidden}
+.shot img{width:100%}
+.shot--hero{aspect-ratio:1/1}
+.shot--hero img{height:100%;object-fit:cover}
+.shots__row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* the two thumbs crop to a square rather than letterboxing inside the row's
+   height, which is what left a short render floating in a field of black */
+.shots__row .shot{aspect-ratio:1/1}
+.shots__row .shot img{height:100%;object-fit:cover}
+.tag{position:absolute;left:12px;top:12px;background:var(--pineapple);
+  border:2px solid var(--black);border-radius:999px;padding:5px 12px;
+  font-weight:800;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+
+.buy h1{margin:2px 0 0;font-size:clamp(40px,5.2vw,62px)}
+.sub{font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mute)}
+.price{display:flex;align-items:baseline;gap:8px;margin:16px 0 0}
+.price b{font-family:var(--display);font-style:italic;font-weight:900;font-size:34px}
+.price span{font-size:11px;letter-spacing:.1em;font-weight:700;color:var(--mute)}
+.acts{display:flex;gap:10px;margin:20px 0 0;flex-wrap:wrap}
+.btn{border:2px solid var(--black);border-radius:999px;padding:12px 22px;
+  font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--white);cursor:pointer;font-family:var(--body)}
+.btn--go{background:var(--slime)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--black)}
+.swatches{display:flex;gap:8px;margin:22px 0 0;align-items:center}
+.sw{width:26px;height:26px;border:2px solid var(--black);border-radius:50%}
+.sw[aria-checked="true"]{outline:2px solid var(--black);outline-offset:3px}
+h2.sec{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
+  margin:30px 0 10px;padding-top:16px;border-top:2px solid var(--black)}
+.buy p{margin:0 0 12px;max-width:44ch;color:rgba(0,0,0,.78)}
+.specs{list-style:none;margin:0;padding:0;font-size:14px}
+.specs li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule)}
+.specs li::before{content:"→";font-weight:800;flex:none}
+.specs b{font-weight:700}
+
+/* ── slime band ──────────────────────────────────────── */
+.band{background:var(--slime);border-top:2px solid var(--black);
+  border-bottom:2px solid var(--black);
+  background-image:radial-gradient(rgba(0,0,0,.16) 1.1px,transparent 1.2px);
+  background-size:9px 9px}
+.band .wrap{padding-top:52px;padding-bottom:52px;text-align:center}
+.band h2{margin:0;font-size:clamp(34px,6vw,74px)}
+.band p{margin:12px auto 0;max-width:46ch;font-weight:600}
+
+/* ── related ─────────────────────────────────────────── */
+.rel{padding:48px 0 60px}
+.rel h2{margin:0 0 20px;font-size:22px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{border:2px solid var(--black);padding:16px;background:var(--white)}
+.card .sq{aspect-ratio:4/3;border:2px solid var(--black);margin:0 0 12px;
+  display:grid;place-items:center;font-family:var(--display);font-style:italic;
+  font-weight:900;font-size:30px;text-transform:uppercase;color:var(--black);
+  background-image:radial-gradient(rgba(0,0,0,.20) 1.1px,transparent 1.2px);
+  background-size:8px 8px}
+.card h3{margin:0;font-size:15px;font-weight:800}
+.card p{margin:3px 0 0;font-size:12px;color:var(--mute);font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase}
+
+/* ── foot ────────────────────────────────────────────── */
+.foot{background:var(--black);color:var(--white);padding:40px 0 30px}
+.foot .wrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.foot p{margin:0;font-size:12px;color:rgba(255,255,255,.62);max-width:34ch}
+.callus{margin-left:auto;font-family:var(--display);font-style:italic;
+  font-weight:900;text-transform:uppercase;font-size:22px;color:var(--pineapple)}
+
+@media (max-width:860px){
+  .pdp{grid-template-columns:1fr;gap:26px}
+  .cards{grid-template-columns:1fr}
+  .nav{display:none}
+}
+
+/* A motion preference is an accessibility setting, not a style. It wins over
+   everything here, so no animation can be added later that forgets to opt in. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;
+    scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker" aria-hidden="true">
+  <ul>
+    <li>Let the good times roll</li><li>The best is yet to come</li>
+    <li>Up, up, and away</li><li>All the stuff for all the puff</li>
+    <li>Let the good times roll</li><li>The best is yet to come</li>
+    <li>Up, up, and away</li><li>All the stuff for all the puff</li>
+  </ul>
+</div>
+
+<header class="bar">
+  <div class="wrap bar__in">
+    <a class="mark" href="#" aria-label="Puff Junction">{{SVG:pj-lockup-dark.svg}}</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#"><i>01</i>Menu</a><a href="#"><i>02</i>About</a>
+      <a href="#"><i>03</i>Shop</a><a href="#"><i>04</i>Connect</a>
+    </nav>
+    <button class="stash" type="button">Stash · 2</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="crumb">Shop / Grinders / Featured</p>
+    <div class="pdp">
+      <div class="shots">
+        <figure class="shot shot--hero">
+          <span class="tag">Concrete &amp; brass</span>
+          <img src="{{ASSET:pj-iso.jpg}}" alt="The Grinder, three-quarter view: a square concrete body with a knurled brass cylinder on top." />
+        </figure>
+        <div class="shots__row">
+          <figure class="shot"><img src="{{ASSET:pj-top.jpg}}" alt="Top view: the brass disc centred on the square face, logo debossed." /></figure>
+          <figure class="shot"><img src="{{ASSET:pj-front.jpg}}" alt="Front elevation showing the illustrated side panels." /></figure>
+        </div>
+      </div>
+
+      <div class="buy">
+        <p class="sub">Grinders · Concrete · Featured</p>
+        <h1 class="d">The Grinder</h1>
+        <div class="price"><b>$180</b><span>USD</span></div>
+
+        <div class="acts">
+          <button class="btn btn--go" type="button">Add to stash</button>
+          <button class="btn" type="button">Wishlist</button>
+        </div>
+
+        <div class="swatches" role="radiogroup" aria-label="Colourway">
+          <span class="sw" style="background:#D6FD4A" role="radio" aria-checked="true" aria-label="Slime" tabindex="0"></span>
+          <span class="sw" style="background:#FF8FF1" role="radio" aria-checked="false" aria-label="Flamingo" tabindex="-1"></span>
+          <span class="sw" style="background:#A5E4FF" role="radio" aria-checked="false" aria-label="Dream" tabindex="-1"></span>
+          <span class="sw" style="background:#FEF200" role="radio" aria-checked="false" aria-label="Pineapple" tabindex="-1"></span>
+        </div>
+
+        <h2 class="sec">About</h2>
+        <p>Four pieces of cast concrete and machined brass, stacked. The lid is
+          knurled so it turns with one hand, and the mark on top is pressed two
+          tenths of a millimetre into the metal — you find it with your thumb
+          before you find it with your eyes.</p>
+        <p>The sides are ours: pop-art panels printed edge to edge, so the thing
+          reads as an object on a shelf long before it reads as a grinder.</p>
+
+        <h2 class="sec">Specs</h2>
+        <ul class="specs">
+          <li><span><b>85 × 85 mm</b> square body, 57 mm tall</span></li>
+          <li><span><b>Ø63 mm</b> brass cylinder, standing 15 mm proud</span></li>
+          <li><span><b>Eleven parts</b> — two magnets, threaded lid, mesh and holder</span></li>
+          <li><span><b>Diamond knurl</b> on the turning band, 1.26 mm pitch</span></li>
+          <li><span>Cast concrete, machined brass, neodymium magnets</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap">
+      <h2 class="d">All the stuff<br />for all the puff.</h2>
+      <p>We're not just in the business of selling cannabis accessories;
+         we're in the business of creating cultural artifacts.</p>
+    </div>
+  </section>
+
+  <section class="wrap rel">
+    <h2 class="d">Related items</h2>
+    <div class="cards">
+      <article class="card"><div class="sq" style="background-color:var(--flamingo)">Lighter</div><h3>The Lighter</h3><p>Brass · Refillable</p></article>
+      <article class="card"><div class="sq" style="background-color:var(--dream)">Pouch</div><h3>The Pouch</h3><p>Canvas · Smell-proof</p></article>
+      <article class="card"><div class="sq" style="background-color:var(--pineapple)">Tray</div><h3>The Tray</h3><p>Concrete · Two sizes</p></article>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="mark">{{SVG:pj-lockup.svg}}</span>
+    <p>For those that desire only the highest, your next adventure awaits.</p>
+    <span class="callus">1-800-CALL-PUFF</span>
+  </div>
+</footer>
+
+</body>
+</html>
