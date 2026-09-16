@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Shapshyftrs</title>
+<meta name="description" content="Send us the app in your head. You get back something you can open, click through, and put in front of people." />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   SHAPSHYFTRS
+
+   A dark gallery. The page's own chrome is monochrome on purpose —
+   bone type on near-black, one bone-filled button — so that the only
+   chroma anywhere belongs to the work: brass on the grinder, yellow
+   in the lenses, electric blue in the digs mark, orange in Antaeus.
+   Each brand owns exactly one accent inside its own panel and nowhere
+   else. That is the whole colour system.
+
+   Photography leads here, which inverts the rule the Antaeus product
+   page runs on. That rule exists because a dense software console has
+   no thumbnail form. Product renders and lightbox shots are built to
+   be looked at and hold up at any size — suppressing them in favour of
+   drawn scenes would follow the letter of the rule and lose the point
+   of it. Scenes are drawn where there is nothing honest to photograph:
+   the prototype we hand over, because no client work is public.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#0b0c0e; --bg-2:#101216; --raised:#16191e; --hair:rgba(242,243,245,.13);
+  --hair-soft:rgba(242,243,245,.07);
+  --ink:#f2f3f5; --ink-70:rgba(242,243,245,.72); --ink-55:rgba(242,243,245,.58);
+  /* .42 measured 3.78:1 on this field — fine for large text, short of the
+     4.5:1 small text needs, and every kicker and micro-label uses it.
+     .52 is 5.2:1: still clearly recessive, and legible. */
+  --ink-40:rgba(242,243,245,.52);
+  /* Per-brand accents; each appears in one panel only. Brass, lens,
+     orange and iris all clear 4.5:1 as text on this field. The digs blue
+     is 3.32:1 — too dark to set small type in — so it keeps its true
+     value for fills and carries a lightened twin for text. */
+  --brass:#c8a24e; --lens:#f2d024; --digs:#2d4bff; --orange:#e6701e; --iris:#a89bd6;
+  --digs-text:#6076ff;
+  /* orange at #e6701e is only 3.13:1 under white; this is 4.68:1. */
+  --orange-solid:#b55817;
+  --serif:"DM Serif Display",Georgia,serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --wrap:1180px; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 22px}
+.band{padding:clamp(72px,11vw,150px) 0;position:relative}
+.band--sunk{background:var(--bg-2)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--bg);padding:10px 16px;z-index:99}
+.skip:focus{left:12px;top:12px}
+
+/* ── type ─────────────────────────────────────────────── */
+.kick{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-40);margin:0}
+.kick--b{color:var(--accent-text,var(--ink-40))}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-.018em;margin:0;line-height:1.03}
+.h-hero{font-size:clamp(2.7rem,7.4vw,6rem)}
+.h-sec{font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.06}
+.h-sub{font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.12}
+.lede{font-size:clamp(1.02rem,1.55vw,1.2rem);color:var(--ink-70);max-width:58ch;margin:0}
+.copy{color:var(--ink-70);max-width:62ch;margin:0}
+.copy b,.lede b{color:var(--ink);font-weight:600}
+
+/* ── nav ──────────────────────────────────────────────── */
+.nav{position:sticky;top:0;z-index:40;background:rgba(11,12,14,.86);
+  backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
+  border-bottom:1px solid var(--hair-soft)}
+.nav .wrap{display:flex;align-items:center;gap:20px;height:56px}
+.wordmark{font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.24em;
+  text-decoration:none;white-space:nowrap}
+.nav ul{display:flex;gap:22px;list-style:none;margin:0 0 0 auto;padding:0}
+/* :not(.btn) is load-bearing — `.nav a:not(.wordmark)` is (0,2,1) and
+   `.btn` is only (0,1,0), so without it this rule wins and repaints
+   the nav call-to-action bone-on-bone, i.e. invisible. */
+.nav a:not(.wordmark):not(.btn){font-size:.85rem;color:var(--ink-55);text-decoration:none}
+.nav a:not(.wordmark):not(.btn):hover{color:var(--ink)}
+@media(max-width:820px){.nav ul{display:none}}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:var(--bg);
+  font-weight:600;font-size:.94rem;border-radius:999px;padding:13px 24px;text-decoration:none;
+  transition:transform .16s var(--ease),opacity .16s var(--ease)}
+.btn:hover{transform:translateY(-1px);opacity:.9}
+.btn--sm{padding:9px 18px;font-size:.85rem}
+.btn--ghost{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--hair)}
+.btn--ghost:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+.nav .btn{margin-left:auto}
+@media(min-width:821px){.nav .btn{margin-left:0}}
+
+/* ── hero ─────────────────────────────────────────────── */
+.hero{padding:clamp(60px,10vw,120px) 0 0;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-10% -20% auto;height:70%;
+  background:radial-gradient(60% 70% at 50% 0%,rgba(200,162,78,.10),transparent 70%);
+  pointer-events:none}
+.hero__in{position:relative;text-align:center}
+.hero h1{margin:22px auto 0;max-width:15ch}
+.hero .lede{margin:26px auto 0;text-align:center;max-width:54ch}
+.hero__cta{margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero__note{margin:20px 0 0;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-40)}
+
+/* the five marks under the hero — the proof, compressed to one line */
+.marks{margin:clamp(46px,7vw,84px) auto 0;display:flex;align-items:center;justify-content:center;
+  gap:clamp(22px,4.4vw,58px);flex-wrap:wrap;padding-bottom:clamp(50px,8vw,96px)}
+.marks span{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-40);white-space:nowrap}
+.marks i{width:3px;height:3px;border-radius:50%;background:var(--ink-40);display:block}
+@media(max-width:700px){.marks i{display:none}}
+
+/* ── the offer ────────────────────────────────────────── */
+.offer{display:grid;gap:clamp(20px,2.4vw,26px);margin-top:clamp(40px,6vw,64px)}
+@media(min-width:900px){.offer{grid-template-columns:1.25fr 1fr}}
+.base{background:var(--raised);border:1px solid var(--hair);border-radius:16px;
+  padding:clamp(24px,3.4vw,38px);position:relative;overflow:hidden}
+.base::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ink)}
+.base h3{font-size:clamp(1.5rem,2.6vw,2.05rem);margin-top:12px}
+.base .copy{margin-top:14px}
+.addons{display:flex;flex-direction:column;gap:14px}
+.addon{background:var(--raised);border:1px solid var(--hair);border-radius:14px;
+  padding:19px 21px;display:flex;gap:15px;align-items:flex-start}
+.addon em{font-family:var(--mono);font-style:normal;font-size:.66rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-40);flex:none;padding-top:4px;width:48px}
+.addon b{display:block;font-weight:600;font-size:.98rem}
+.addon span{display:block;color:var(--ink-55);font-size:.9rem;margin-top:3px;line-height:1.5}
+
+/* ── drawn prototype scene ────────────────────────────── */
+.proto{background:var(--raised);border:1px solid var(--hair);border-radius:14px;overflow:hidden;
+  margin-top:26px}
+.proto__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--hair-soft);
+  background:rgba(255,255,255,.02)}
+.proto__bar i{width:8px;height:8px;border-radius:50%;background:rgba(242,243,245,.16);flex:none}
+.proto__bar u{margin-left:9px;font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;
+  color:var(--ink-40);text-decoration:none}
+.proto__body{padding:clamp(18px,2.6vw,26px)}
+.proto__row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hair-soft)}
+.proto__row:last-child{border-bottom:0}
+.proto__row b{font-size:.9rem;font-weight:600;min-width:84px}
+.proto__row span{font-size:.86rem;color:var(--ink-55);flex:1}
+.proto__row em{font-family:var(--mono);font-style:normal;font-size:.66rem;color:var(--ink-40)}
+.proto__cta{display:inline-block;margin-top:16px;background:var(--ink);color:var(--bg);
+  font-size:.82rem;font-weight:600;border-radius:999px;padding:9px 18px}
+.proto__hint{margin:13px 0 0;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-40)}
+
+/* ── brand panels ─────────────────────────────────────── */
+.brand{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--hair-soft);
+  --accent-text:var(--accent);--accent-on:var(--bg)}
+.brand__in{display:grid;gap:clamp(26px,4vw,52px);align-items:center}
+@media(min-width:900px){
+  .brand__in{grid-template-columns:1fr 1.1fr}
+  .brand--flip .brand__fig{order:2}
+}
+.brand__fig{position:relative;border-radius:14px;overflow:hidden;background:#000;
+  border:1px solid var(--hair-soft)}
+.brand__fig img{width:100%}
+.brand__fig--pad{background:var(--bg-2);padding:clamp(26px,5vw,58px);display:flex;
+  align-items:center;justify-content:center;min-height:240px}
+.brand__fig--pad img{width:auto;max-height:230px;margin:0 auto}
+.brand__stack{display:flex;flex-direction:column;gap:14px}
+.fig-cap{font-family:var(--mono);font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-40);padding:11px 14px;border-top:1px solid var(--hair-soft);background:var(--bg-2)}
+.brand h2{margin-top:13px;font-size:clamp(1.75rem,3.4vw,2.7rem)}
+.brand .copy{margin-top:16px}
+.brand__facts{margin:22px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.brand__facts li{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-55);border:1px solid var(--hair);border-radius:999px;padding:6px 13px}
+.brand__facts li.is-key{color:var(--accent-on);background:var(--accent);
+  border-color:var(--accent);font-weight:700}
+
+/* ── the punchline strip ──────────────────────────────── */
+.hold{text-align:center}
+.hold .h-sec{margin:16px auto 0;max-width:19ch}
+.hold .copy{margin:24px auto 0;text-align:left}
+
+/* ── method ───────────────────────────────────────────── */
+.steps{counter-reset:s;margin:clamp(38px,5vw,60px) 0 0;padding:0;list-style:none;
+  display:grid;gap:2px;background:var(--hair-soft);border:1px solid var(--hair-soft);border-radius:14px;
+  overflow:hidden}
+@media(min-width:860px){.steps{grid-template-columns:repeat(4,1fr)}}
+.steps li{counter-increment:s;background:var(--bg);padding:clamp(22px,2.8vw,30px)}
+.steps li::before{content:counter(s,decimal-leading-zero);display:block;font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.14em;color:var(--ink-40)}
+.steps b{display:block;font-family:var(--serif);font-size:1.22rem;font-weight:400;margin-top:11px}
+.steps span{display:block;color:var(--ink-55);font-size:.9rem;margin-top:8px;line-height:1.55}
+
+/* ── faq ──────────────────────────────────────────────── */
+.faq{margin-top:clamp(34px,4.6vw,54px);border-top:1px solid var(--hair-soft)}
+.faq details{border-bottom:1px solid var(--hair-soft)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 40px 22px 0;position:relative;
+  font-family:var(--serif);font-size:clamp(1.05rem,1.9vw,1.32rem)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:50%;width:11px;height:11px;
+  border-right:1.5px solid var(--ink-40);border-bottom:1.5px solid var(--ink-40);
+  transform:translateY(-70%) rotate(45deg);transition:transform .22s var(--ease)}
+.faq details[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+.faq .a{padding:0 0 24px;color:var(--ink-70);max-width:66ch}
+.faq .a p{margin:0 0 12px}.faq .a p:last-child{margin:0}
+
+/* ── close ────────────────────────────────────────────── */
+.close{text-align:center}
+.close .h-sec{margin:16px auto 0;max-width:16ch}
+.close .lede{margin:22px auto 0}
+.close .btn{margin-top:30px}
+.foot{border-top:1px solid var(--hair-soft);padding:34px 0 46px;color:var(--ink-40);font-size:.82rem}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot a{color:var(--ink-55);text-decoration:none}.foot a:hover{color:var(--ink)}
+.foot .sp{margin-left:auto}
+@media(max-width:620px){.foot .sp{margin-left:0;width:100%}}
+
+/* ── staged entrance ──────────────────────────────────────
+   Resting state is VISIBLE. The hidden state is only applied once JS
+   has added .anim to <html>, so with scripting off — or under
+   prefers-reduced-motion, which never adds the class — every section
+   renders in full immediately. */
+.anim .rv{opacity:0;transform:translateY(12px);
+  transition:opacity .62s var(--ease),transform .62s var(--ease)}
+.anim .rv.lit{opacity:1;transform:none}
+.anim .rv[data-d="1"]{transition-delay:.08s}
+.anim .rv[data-d="2"]{transition-delay:.16s}
+.anim .rv[data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){
+  .anim .rv{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav" aria-label="Primary">
+  <div class="wrap">
+    <a class="wordmark" href="#top">SHAPSHYFTRS</a>
+    <ul>
+      <li><a href="#what">What you get</a></li>
+      <li><a href="#work">The work</a></li>
+      <li><a href="#how">How it runs</a></li>
+      <li><a href="#questions">Questions</a></li>
+    </ul>
+    <a class="btn btn--sm" href="#start">Send the idea</a>
+  </div>
+</nav>
+
+<main id="main">
+<header class="hero" id="top">
+  <div class="wrap hero__in">
+    <p class="kick rv">Shapshyftrs · mockups for app ideas</p>
+    <h1 class="h-hero rv" data-d="1">Your idea, real enough<br />to argue with.</h1>
+    <p class="lede rv" data-d="2">
+      Send us the app in your head. You get back something you can open in a browser, click
+      through, and put in front of the people whose reaction actually matters.
+    </p>
+    <div class="hero__cta rv" data-d="3">
+      <a class="btn" href="#start">Send the idea →</a>
+      <a class="btn btn--ghost" href="#work">See what we've made</a>
+    </div>
+    <p class="hero__note rv" data-d="3">Five working days · not a deck, not a wireframe</p>
+
+    <div class="marks rv" data-d="3" aria-label="Brands built by Shapshyftrs">
+      <span>Puff Junction</span><i aria-hidden="true"></i>
+      <span>Darkest Shades</span><i aria-hidden="true"></i>
+      <span>Digs</span><i aria-hidden="true"></i>
+      <span>Antaeus</span><i aria-hidden="true"></i>
+      <span>AESDR</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══ what you get ══════════════════════════════════════ -->
+<section class="band band--sunk" id="what" aria-labelledby="w-h">
+  <div class="wrap">
+    <p class="kick rv">What you get</p>
+    <h2 class="h-sec rv" data-d="1" id="w-h" style="margin-top:14px;max-width:17ch">A thing that opens.</h2>
+    <p class="copy rv" data-d="2" style="margin-top:24px">
+      A deck describes an app. A wireframe suggests one. Neither gives anyone something to push
+      against, so the feedback comes back polite and useless. What we hand over is
+      <b>real HTML you open in a browser</b> — screens that respond, states that change,
+      a flow you can walk someone through without narrating what they're supposed to imagine.
+    </p>
+
+    <div class="offer">
+      <div class="base rv" data-d="1">
+        <p class="kick">Base · every project</p>
+        <h3>The clickable prototype.</h3>
+        <p class="copy">
+          The core screens of your idea, built and wired together. Click a thing and it does
+          something. Open it on a phone and it works there too. Send the link to someone and
+          they don't need you on the call to understand it.
+        </p>
+
+        <div class="proto" role="img" aria-label="Example of a handed-over prototype: a browser window with three interface rows and a primary action.">
+          <div class="proto__bar" aria-hidden="true">
+            <i></i><i></i><i></i><u>your-idea.prototype</u>
+          </div>
+          <div class="proto__body">
+            <p class="kick" style="margin-bottom:8px">Today</p>
+            <div class="proto__row"><b>Three rows</b><span>each one responds when you click it</span><em>live</em></div>
+            <div class="proto__row"><b>A real state</b><span>empty, loading and full all drawn</span><em>live</em></div>
+            <div class="proto__row"><b>The one move</b><span>the action the screen exists for</span><em>live</em></div>
+            <span class="proto__cta">Do the thing →</span>
+            <p class="proto__hint">Drawn here as an example · your prototype is your idea, not this</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="addons">
+        <div class="addon rv" data-d="1">
+          <em>Add</em>
+          <div><b>Three directions, you pick one</b>
+          <span>Three genuinely different takes on the same screen — not three shades of one idea. You choose, we settle it. This is how all five brands below were designed.</span></div>
+        </div>
+        <div class="addon rv" data-d="2">
+          <em>Add</em>
+          <div><b>Key screens as static designs</b>
+          <span>Finished, high-resolution screens for the places a prototype isn't the right object — a deck, an investor update, an app-store listing.</span></div>
+        </div>
+        <div class="addon rv" data-d="3">
+          <em>Add</em>
+          <div><b>A design system to build against</b>
+          <span>Colour, type, spacing and components written down as rules, so whoever builds it doesn't reinvent a decision you already made.</span></div>
+        </div>
+        <p class="copy rv" data-d="3" style="font-size:.88rem;color:var(--ink-40);margin-top:4px">
+          The prototype is the whole job on its own. The three above are there when the idea
+          needs to survive somewhere else too.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ the work ══════════════════════════════════════════ -->
+<section class="band" id="work" aria-labelledby="k-h">
+  <div class="wrap">
+    <p class="kick rv">The work</p>
+    <h2 class="h-sec rv" data-d="1" id="k-h" style="margin-top:14px;max-width:20ch">Five brands. Three of them you can hold.</h2>
+    <p class="copy rv" data-d="2" style="margin-top:24px">
+      Most people who will mock up your app have only ever made software, where a bad guess
+      costs a revision. Three of these went to a factory. A drawing that wasn't real enough
+      came back as a part that didn't fit, paid for, in a box. <b>That is where you learn what
+      "real enough to act on" actually means</b> — and it is the whole job of a mockup.
+    </p>
+  </div>
+</section>
+
+<!-- Puff Junction ─ brass -->
+<section class="brand" style="--accent:var(--brass)" aria-labelledby="b-pj">
+  <div class="wrap brand__in">
+    <div class="brand__stack rv">
+      <figure class="brand__fig" style="margin:0">
+        <img src="shapshyftrs/pj-explode.jpg" width="1500" height="1500" loading="lazy" decoding="async"
+             alt="An exploded render of the Puff Junction grinder: a knurled brass lid above the cutting teeth, two illustrated square housings, and the base." />
+      </figure>
+      <figure class="brand__fig" style="margin:0">
+        <img src="shapshyftrs/pj-isometric.jpg" width="1100" height="1100" loading="lazy" decoding="async"
+             alt="The same grinder assembled: a squared black body with illustrated side panels under a brass lid." />
+        <figcaption class="fig-cap">The parts, and the thing they become</figcaption>
+      </figure>
+    </div>
+    <div>
+      <p class="kick kick--b rv" data-d="1">Puff Junction · smoking accessories</p>
+      <h2 class="rv" data-d="1" id="b-pj">Thirteen technical drawings and a grinder that exists.</h2>
+      <p class="copy rv" data-d="2">
+        A grinder, a lighter, a stash box, a tray, an ashtray, a pouch. Drawn, rendered,
+        dimensioned, quoted and manufactured — the brass lid knurled, the housings printed with
+        artwork commissioned for the panels. The renders here are ours. So are the STEP files
+        the factory cut from.
+      </p>
+      <ul class="brand__facts rv" data-d="3">
+        <li class="is-key">Manufactured</li><li>13 technical drawings</li><li>3D STEP + SolidWorks</li>
+        <li>Factory quote</li><li>Six-product line</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Darkest Shades ─ lens yellow -->
+<section class="brand brand--flip" style="--accent:var(--lens)" aria-labelledby="b-ds">
+  <div class="wrap brand__in">
+    <div class="brand__stack rv">
+      <figure class="brand__fig" style="margin:0">
+        <img src="shapshyftrs/ds-eyewear.jpg" width="1400" height="787" loading="lazy" decoding="async"
+             alt="A finished pair of Darkest Shades sunglasses: thick black acetate frame, yellow lenses, the brand name stamped into the temple." />
+      </figure>
+      <figure class="brand__fig brand__fig--pad" style="margin:0;min-height:130px">
+        <img src="shapshyftrs/ds-emblem.png" width="520" height="238" loading="lazy" decoding="async"
+             style="max-height:76px"
+             alt="The Darkest Shades eclipse emblem, drawn in gold." />
+      </figure>
+    </div>
+    <div>
+      <p class="kick kick--b rv" data-d="1">Darkest Shades · eyewear</p>
+      <h2 class="rv" data-d="1" id="b-ds">We didn't render these. We made them, then shot them 323 times.</h2>
+      <p class="copy rv" data-d="2">
+        Acetate frames with the name stamped into the temple, taken from concept development
+        through 3D files and technical drawings to a sample you can put on your face. The
+        photograph above is a lightbox shot of the real thing — one of three hundred and
+        twenty-three.
+      </p>
+      <ul class="brand__facts rv" data-d="3">
+        <li class="is-key">Manufactured</li><li>323 lightbox shots</li><li>31 3D files</li>
+        <li>20 technical drawings</li><li>Brand guidelines</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Digs ─ electric blue -->
+<section class="brand" style="--accent:var(--digs);--accent-text:var(--digs-text);--accent-on:#fff"
+         aria-labelledby="b-dg">
+  <div class="wrap brand__in">
+    <div class="brand__stack rv">
+      <figure class="brand__fig brand__fig--pad" style="margin:0;min-height:190px">
+        <img src="shapshyftrs/digs-mark.png" width="900" height="369" loading="lazy" decoding="async"
+             alt="The Digs lockup: a heavy white wordmark with a hand-drawn electric-blue tagline struck through it." />
+      </figure>
+      <figure class="brand__fig" style="margin:0">
+        <img src="shapshyftrs/digs-knit.jpg" width="1200" height="781" loading="lazy" decoding="async"
+             alt="Close crop of the ribbed grey knit from the Digs thermal sample." />
+      </figure>
+    </div>
+    <div>
+      <p class="kick kick--b rv" data-d="1">Digs · apparel</p>
+      <h2 class="rv" data-d="1" id="b-dg">A wordmark, a fabric spec, and a sample that came back.</h2>
+      <p class="copy rv" data-d="2">
+        An identity built out properly — brandmark and wordmark in every colourway and format a
+        printer or a factory will ask for — then used: tech packs, fabric specification sheets,
+        embroidery files, and garments cut from them. The knit beside this arrived in a box.
+      </p>
+      <ul class="brand__facts rv" data-d="3">
+        <li class="is-key">Manufactured</li><li>85 logo files</li><li>Tech packs</li>
+        <li>Fabric specs</li><li>Brand strategy</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Antaeus ─ orange. the software one, drawn not photographed:
+     a console has no thumbnail form, which is the whole reason
+     the scene rule exists. -->
+<section class="brand brand--flip" style="--accent:var(--orange)" aria-labelledby="b-an">
+  <div class="wrap brand__in">
+    <figure class="brand__fig brand__fig--pad rv" style="margin:0;flex-direction:column;gap:22px">
+      <svg viewBox="0 0 48 48" width="74" height="74" aria-hidden="true"
+           style="fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:square">
+        <path d="M14 38L24 10l10 28" /><path d="M18.2 28h11.6" /><path d="M2 38h44" />
+      </svg>
+      <div style="width:100%;max-width:330px;text-align:left">
+        <p class="kick" style="color:var(--orange)">The one move · #1 of 12</p>
+        <p style="font-family:var(--serif);font-size:1.28rem;margin:9px 0 0">Reach out to Chomps.</p>
+        <p style="font-size:.85rem;color:var(--ink-55);margin:8px 0 0;line-height:1.5">
+          Two plants announced, no recruiting bench. Running hot.</p>
+        <span style="display:inline-block;margin-top:14px;background:var(--orange-solid);color:#fff;
+          font-size:.78rem;font-weight:600;border-radius:999px;padding:8px 16px">Compose it →</span>
+      </div>
+    </figure>
+    <div>
+      <p class="kick kick--b rv" data-d="1">Antaeus · go-to-market software</p>
+      <h2 class="rv" data-d="1" id="b-an">Twenty-two rooms, and ninety-one mockups to get there.</h2>
+      <p class="copy rv" data-d="2">
+        A working platform for founder-led sales teams — not a prototype, a product with a
+        database, tests and a deploy pipeline. Every room in it was designed the way the add-on
+        above describes: three directions, one picked, then settled. <b>Ninety-one of those
+        mockups are on disk.</b> The panel beside this is one of its screens, drawn here rather
+        than screenshotted, because a dense console shrunk into a card turns to mush.
+      </p>
+      <ul class="brand__facts rv" data-d="3">
+        <li class="is-key">Shipped</li><li>22 rooms</li><li>91 mockups</li>
+        <li>10 design specs</li><li>3,700+ tests</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- AESDR ─ iridescent -->
+<section class="brand" style="--accent:var(--iris)" aria-labelledby="b-ae">
+  <div class="wrap brand__in">
+    <figure class="brand__fig brand__fig--pad rv" style="margin:0">
+      <img src="shapshyftrs/leponeus.png" width="700" height="700" loading="lazy" decoding="async"
+           alt="Leponeus, the AESDR mascot: a hare's head and ears on a tortoise's body, shell and scales rendered in iridescent pinks and blues, wearing a thin red collar." />
+    </figure>
+    <div>
+      <p class="kick kick--b rv" data-d="1">AESDR · courseware</p>
+      <h2 class="rv" data-d="1" id="b-ae">Twelve courses and a mascot that is an argument.</h2>
+      <p class="copy rv" data-d="2">
+        A course platform for people in their first two years of a sales job, with an app,
+        a progress model and twelve courses behind it. Leponeus is a hare's head on a
+        tortoise's body — the fable, in one object, for an audience being sold speed by
+        everyone else. <b>That is what a brand decision looks like when it is doing work</b>
+        rather than decorating.
+      </p>
+      <ul class="brand__facts rv" data-d="3">
+        <li class="is-key">Shipped</li><li>12 courses</li><li>Mascot · 8 poses</li>
+        <li>18 icons</li><li>Full design canon</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ the punchline ═════════════════════════════════════ -->
+<section class="band band--sunk" aria-labelledby="h-h">
+  <div class="wrap hold">
+    <p class="kick rv">Why it matters for your app</p>
+    <h2 class="h-sec rv" data-d="1" id="h-h">A mockup is a bet about what people will understand.</h2>
+    <p class="copy rv" data-d="2">
+      Everything above is the same job in different materials. Decide what the thing is. Make it
+      specific enough that someone else can react to it. Find out you were wrong about something
+      while it is still cheap to be wrong. Then make it again.
+    </p>
+    <p class="copy rv" data-d="3" style="margin-top:16px">
+      An app idea is at exactly the stage a grinder is when it is still a sketch — the moment
+      where being vague is comfortable and expensive. <b>We are good at ending that moment
+      quickly.</b>
+    </p>
+  </div>
+</section>
+
+<!-- ══ how it runs ═══════════════════════════════════════ -->
+<section class="band" id="how" aria-labelledby="m-h">
+  <div class="wrap">
+    <p class="kick rv">How it runs</p>
+    <h2 class="h-sec rv" data-d="1" id="m-h" style="margin-top:14px;max-width:18ch">Five working days, four steps.</h2>
+    <ol class="steps rv" data-d="2">
+      <li><b>You talk, we listen</b><span>One call, or a long message if you'd rather. What the app is, who it's for, and the one thing it has to do well. No forms.</span></li>
+      <li><b>We show the shape early</b><span>Before anything is polished you see the structure, so a wrong turn costs a day rather than the week.</span></li>
+      <li><b>We build it</b><span>Real screens, real states, wired together. Not images of an app — an app-shaped thing that opens in a browser.</span></li>
+      <li><b>You get the files</b><span>A link to send people and the source itself. It's yours. Take it to any developer you like, including one who isn't us.</span></li>
+    </ol>
+    <p class="copy rv" data-d="3" style="margin-top:26px">
+      Five days is the working number for one app's core flow. A bigger idea takes longer and we
+      will say so before you commit, not after.
+    </p>
+  </div>
+</section>
+
+<!-- ══ questions ═════════════════════════════════════════ -->
+<section class="band band--sunk" id="questions" aria-labelledby="q-h">
+  <div class="wrap">
+    <p class="kick rv">Questions</p>
+    <h2 class="h-sec rv" data-d="1" id="q-h" style="margin-top:14px">Straight answers.</h2>
+    <div class="faq rv" data-d="2">
+      <details name="faq">
+        <summary>Can't I just get an AI to do this?</summary>
+        <div class="a"><p>You can, and for a rough first look you probably should — it costs you an afternoon. What you tend to get back is a plausible-looking screen that falls apart the moment someone asks why the second step exists. The work here is the deciding: what the app is actually for, what to leave out, and which single thing the main screen is built around. The drawing is the easy half.</p></div>
+      </details>
+      <details name="faq">
+        <summary>Do you build the real app afterwards?</summary>
+        <div class="a"><p>Not as part of this. The prototype is the deliverable, and you own the source. Plenty of people take it to their own developer or use it to hire one — that's a good outcome, and it's why we hand over files rather than a viewing link you have to keep paying for.</p></div>
+      </details>
+      <details name="faq">
+        <summary>What if I don't like it?</summary>
+        <div class="a"><p>That's what step two exists for. You see the structure before anything is polished, which is the cheapest point to change direction. If the whole thing is wrong at that stage, say so and we start again or we stop — you shouldn't be paying for a week that went the wrong way in the first hour.</p></div>
+      </details>
+      <details name="faq">
+        <summary>Will you sign an NDA?</summary>
+        <div class="a"><p>Yes, before you tell us anything. Nothing about your idea shows up on this page or anywhere else without you saying so in writing. Every project pictured above is our own — that's why we can show it.</p></div>
+      </details>
+      <details name="faq">
+        <summary>Why is none of your client work on this page?</summary>
+        <div class="a"><p>Because there isn't any to show yet. This is a new offering, and everything above is work we own and made ourselves. We would rather tell you that than fill a page with invented case studies and testimonials from people who don't exist.</p></div>
+      </details>
+      <details name="faq">
+        <summary>What do you need from me to start?</summary>
+        <div class="a"><p>The idea in whatever form it's in — a paragraph, a voice note, a napkin photo, a half-built thing you've stalled on. If you can say who it's for and what it has to do, that's enough to begin.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══ close ═════════════════════════════════════════════ -->
+<section class="band" id="start" aria-labelledby="c-h">
+  <div class="wrap close">
+    <p class="kick rv">Start</p>
+    <h2 class="h-sec rv" data-d="1" id="c-h">Send us the app in your head.</h2>
+    <p class="lede rv" data-d="2">
+      A paragraph is enough. We'll tell you what we think it is, what we'd leave out, and
+      whether five days is the right number — before you commit to anything.
+    </p>
+    <a class="btn rv" data-d="3" href="mailto:hello@shapshyftrs.com?subject=App%20idea">Send the idea →</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="wordmark" style="color:var(--ink-55)">SHAPSHYFTRS</span>
+    <a href="#work">The work</a><a href="#how">How it runs</a><a href="#questions">Questions</a>
+    <span class="sp">Puff Junction · Darkest Shades · Digs · Antaeus · AESDR</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var pending = Array.prototype.slice.call(document.querySelectorAll(".rv"));
+
+  function lightAll() {
+    pending.forEach(function (el) { el.classList.add("lit"); });
+    pending = [];
+  }
+
+  if (reduce) {
+    /* Never opt in to .anim — the CSS resting state is already the final
+       state, so there is nothing to reveal and nothing to wait for. */
+    lightAll();
+  } else {
+    document.documentElement.classList.add("anim");
+
+    /* A rAF-throttled scroll sweep rather than IntersectionObserver.
+       The observer loses elements when the page is jumped rather than
+       scrolled (an anchor link, a restored position, a find-in-page),
+       which leaves whole sections sitting at opacity 0. A sweep can't:
+       it re-measures everything still pending on every frame it runs. */
+    var ticking = false;
+    function sweep() {
+      ticking = false;
+      var fold = window.innerHeight * 0.92;
+      pending = pending.filter(function (el) {
+        if (el.getBoundingClientRect().top < fold) { el.classList.add("lit"); return false; }
+        return true;
+      });
+      if (!pending.length) {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+      }
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(sweep);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    sweep();
+    /* Fonts landing late reflows the page; re-measure once when they do. */
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(onScroll); }
+  }
+
+  /* One FAQ open at a time. <details name> does this natively in current
+     browsers; this keeps the behaviour identical everywhere else. */
+  var faqs = Array.prototype.slice.call(document.querySelectorAll('.faq details'));
+  faqs.forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (!d.open) return;
+      faqs.forEach(function (o) { if (o !== d) o.open = false; });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

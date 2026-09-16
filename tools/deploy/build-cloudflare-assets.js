@@ -56,6 +56,10 @@ const include = [
   // Legal pages — required for footer links and signup flow.
   "privacy.html",
   "terms.html",
+  // Shapshyftrs — the cross-brand marketing page for the app-mockup
+  // offering. Dark gallery field; its imagery lives in /shapshyftrs/.
+  "shapshyftrs.html",
+  "shapshyftrs",
   // The flagship product page — the full top-to-bottom tour of the
   // rooms, modelled on the composition and interaction vocabulary of a
   // flagship consumer product page (sticky local nav, an autoplaying
