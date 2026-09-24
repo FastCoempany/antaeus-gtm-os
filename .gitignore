@@ -14,3 +14,7 @@ dist/
 .env.*.local
 playwright-report/
 test-results/
+
+# cut-out masters delivered to the founder; the 1400px WebP set in brand-cutouts/ is the committed copy
+digs-cutouts/
+digs-cutouts.zip
