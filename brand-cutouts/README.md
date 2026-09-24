@@ -13,7 +13,7 @@ that on noise.
 | Prefix | Brand | What it is |
 |---|---|---|
 | `ds-` | Darkest Shades | 11 frames from the lightbox set. Colourways, angles, and `ds-IMG_3477` which carries the name stamped into the temple. |
-| `digs-` | Digs | The AC-LST-001 thermal sample. `digs-form` is the garment off its dress form and stood upright, wordmark at the chest. |
+| `digs-` | Digs | The AC-LST-001 thermal sample, four views. Shot with the dress form lying horizontal, so all four are rotated upright. `digs-thermal-wordmark` carries the wordmark at the neck. |
 | `pj-` | Puff Junction | Three grinder renders and two frames of the 3D-printed pouch prototype. |
 
 ## Regenerating
@@ -35,5 +35,12 @@ default 0.02 it goes, and a genuinely detached temple arm stays.
 ## What not to run through it
 
 A tight detail crop has no figure to separate from its ground — the frame *is*
-the subject. The Digs woven-label close-up and the fabric macro are used as
-rectangles for exactly that reason. Cutting them out returns a torn scrap.
+the subject. The Digs woven-label close-up, the waffle-knit macro and the
+folded-cuff frame are used as rectangles for exactly that reason. The last one
+was cut and then dropped: it fills its own frame and runs off three edges, so
+the cut-out was a ragged rectangle rather than an object.
+
+Provenance matters as much as technique. Nothing from `THERMAL.LONG.SLEEVE.zip`
+is in here — that folder is a benchmark set (Buck Mason, Vince, a Ralph
+Lauren-style crest, one still wearing a price sticker), the garments the Digs
+thermal was specced against rather than ours.
