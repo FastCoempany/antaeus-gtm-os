@@ -32,6 +32,19 @@ tools/render.mjs       frames via headless Chromium → ffmpeg → MP4
 tools/stills.mjs       render individual frames for review
 ```
 
+### The voice
+
+`audio/vo/primary/` is MiniMax Speech 2.8 HD, voice `English_Trustworth_Man`, at speed 0.9 (the calmer read the
+brief asks for). Every line was transcribed back with Whisper (`manifest.json` carries the heard text and word
+timestamps; the film's on-screen text is cued from those timestamps). `audio/vo/trustworth-speed100/` is the same
+voice at normal speed, kept for comparison. To try another voice, run `audio/vo.mjs` with a different model/voice
+into a new folder and point `tools/build.mjs` at it; the cue sheet, music sections and mix re-time themselves.
+
+OpenRouter note: paid speech calls need purchased credits on the account. The account used here had none and
+OpenRouter stopped serving speech after about twenty cents of usage, so only the primary take (plus the speed-1.0
+comparison) exists. With credits, `google/lyria-3-clip-preview` can also replace the synthesized music bed (a
+prompt for it is in `audio/compose.mjs`'s header comment); the mixer treats any 48 kHz stereo WAV as the bed.
+
 ### Regenerate everything
 
 ```bash

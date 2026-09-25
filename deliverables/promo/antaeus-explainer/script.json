@@ -4,8 +4,8 @@
  "tagline": "Your first hire could run this.",
  "total_words": 107,
  "outro": 1.4,
- "musicGain": 0.5,
- "musicDuck": 0.4,
+ "musicGain": 0.62,
+ "musicDuck": 0.36,
  "musicSeed": 7,
  "beats": [
   {

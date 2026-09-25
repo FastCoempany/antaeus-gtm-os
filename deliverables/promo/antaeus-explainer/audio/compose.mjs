@@ -1,4 +1,8 @@
 /* compose.mjs — the music bed for the Antaeus explainer, composed in code.
+   (If you would rather generate a bed with a music model, a prompt that fits the film: "Instrumental only, no vocals.
+   Whimsical, gentle, hand-made feel: kalimba and nylon-string guitar over a warm upright bass and brushed snare,
+   unhurried, around 104 BPM, major key, a soft dip around two-thirds in and a warm resolution at the end."
+   Save it as audio/music.wav (48 kHz stereo) and skip this script in tools/build.mjs.)
    A whimsical, unhurried piece: nylon-string plucks (Karplus–Strong), music-box bells, an upright-ish bass,
    shaker + soft woodblock. Sections follow the film's beats (times in seconds, passed in via a JSON file or defaults). */
 import * as S from './synth.mjs';
