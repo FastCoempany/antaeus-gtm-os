@@ -282,8 +282,8 @@ export function stickyNote(ctx, x, y, s, o = {}) {
 export function dealCard(ctx, x, y, w, h, o = {}) {
   const { name = 'Boeing', line = 'Waiting on legal', value = '', rotate = 0, seed = 31, fill = C.paper, rule = null, alpha = 1, lifted = 0, tapeOn = false, boil = 0, small = false } = o;
   const pts = rough(rectPts(x, y, w, h), seed, 1.6, 3);
-  paperShape(ctx, pts, { fill, rotate, cx: x + w / 2, cy: y + h / 2, shadow: 0.18 + lifted * 0.1, dy: 5 + lifted * 14, blur: 12 + lifted * 16, alpha: alpha * (1 - lifted * 0.35) });
-  ctx.save(); ctx.globalAlpha *= alpha * (1 - lifted * 0.35); ctx.translate(x + w / 2, y + h / 2); ctx.rotate(rotate); ctx.translate(-(x + w / 2), -(y + h / 2));
+  paperShape(ctx, pts, { fill, rotate, cx: x + w / 2, cy: y + h / 2, shadow: 0.18 + lifted * 0.1, dy: 5 + lifted * 14, blur: 12 + lifted * 16, alpha: alpha * (1 - lifted * 0.55), edge: 0.1 + lifted * 0.35 });
+  ctx.save(); ctx.globalAlpha *= alpha * (1 - lifted * 0.55); ctx.translate(x + w / 2, y + h / 2); ctx.rotate(rotate); ctx.translate(-(x + w / 2), -(y + h / 2));
   if (rule) { ink(ctx, [[x + 10, y + 8], [x + 10, y + h - 8]], { color: rule, width: 5, seed: seed + 5, boil, jitter: 0.6 }); }
   const px = x + (rule ? 26 : 16);
   text(ctx, name, px, y + (small ? h * 0.52 : h * 0.42), { font: 'serif', size: small ? h * 0.42 : h * 0.34, color: C.ink });
@@ -329,7 +329,7 @@ export function coffeeCup(ctx, x, y, s, o = {}) {
   const { seed = 61, boil = 0, steam = 0 } = o;
   paperShape(ctx, rough([[x - s * .4, y - s * .5], [x + s * .4, y - s * .5], [x + s * .32, y + s * .5], [x - s * .32, y + s * .5]], seed, 1.2), { fill: C.paper, shadow: 0.16, dy: 3 });
   ink(ctx, [[x + s * .42, y - s * .3], [x + s * .7, y - s * .25], [x + s * .7, y + s * .15], [x + s * .35, y + s * .2]], { color: C.ink, width: 3, seed: seed + 1, boil, jitter: 0.7, curve: true });
-  ink(ctx, [[x - s * .28, y - s * .1], [x + s * .28, y - s * .1]], { color: C.orange, width: 3, seed: seed + 2, boil, jitter: 0.5 });
+  ink(ctx, [[x - s * .28, y - s * .1], [x + s * .28, y - s * .1]], { color: C.ink30, width: 3, seed: seed + 2, boil, jitter: 0.5 });
   if (steam > 0) for (let i = 0; i < 2; i++) { const px = x - s * .15 + i * s * .3; ink(ctx, [[px, y - s * .6], [px + 4, y - s * .8], [px - 4, y - s * 1.0], [px + 3, y - s * 1.2]], { color: C.ink30, width: 2, seed: seed + 5 + i, boil, jitter: 1, curve: true, alpha: steam }); }
 }
 export function laptop(ctx, x, y, s, o = {}) {
@@ -352,7 +352,7 @@ export function phone(ctx, x, y, s, angle, o = {}) {
 export function figure(ctx, x, floor, s, o = {}) {
   const { jacket = C.ink, hair = C.hairDark, skin = C.skin, seed = 100, boil = 0, pose = {}, face = {}, alpha = 1, flip = 1, hold = null, hairStyle = 0, outline = 3, customHead = null, headLift = 0, headRot = 0, headScale = 1 } = o;
   const { armL = 0.1, armR = -0.1, legL = 0, legR = 0, tilt = 0, lean = 0, bob = 0 } = pose;
-  const { mouth = 0.3, brows = 0, blink = 0, eyesX = 0, eyesY = 0 } = face;
+  const { mouth = 0.3, blink = 0, eyesX = 0, eyesY = 0 } = face; const brows = mouth > 0.45 ? (face.brows ?? 0) * 0.25 : (face.brows ?? 0);
   const H = 300 * s; const y0 = floor + bob;
   const legH = H * 0.27, torsoH = H * 0.33, headR = H * 0.135;
   const hipY = y0 - legH, shoulderY = hipY - torsoH + H * 0.03, headY = shoulderY - headR * 1.15;
