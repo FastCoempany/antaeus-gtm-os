@@ -14,7 +14,7 @@ const standing = { legL: 0, legR: 0, armL: 0.1, armR: -0.1, bob: 0 };
 const HIRE = { seed: 130, flip: -1, jacket: '#b5875a', hair: P.C.hairDark, hairStyle: 1 };
 const FOUNDER = { seed: 100, jacket: P.C.ink, hair: P.C.hairDark };
 const tileW = 178, tileH = 72; const TILE = (i) => [1330 + (i % 2) * (tileW + 8), GY - tileH - Math.floor(i / 2) * (tileH + 6)];
-const HIRE_WAIT = 1830; const AX = 940; // the small A's home on the line // the hire waits at the right margin from the head beat to the book beat
+const HIRE_WAIT = 1830; const AX = 1000; // the small A's home on the line // the hire waits at the right margin from the head beat to the book beat
 
 // ───────────────────────────── the plan ─────────────────────────────
 export function plan(cues) {
@@ -27,14 +27,14 @@ export function plan(cues) {
     // hook
     deskIn: B.hook.start + 0.1, founderIn: B.hook.start + 0.2, label: B.hook.start + 0.9, notes: wordAt(B.hook, 'forty', 0.35) - 0.2, notesEnd: Math.max(wordAt(B.hook, 'forty', 0.35) + 1.6, B.hook.end - 0.9), loud: wordAt(B.hook, 'loudest', 0.7),
     // head
-    bubble: B.head.start + 0.15, hireIn: B.head.start + 0.3, hireStop: B.head.start + 1.9, handover: wordAt(B.head, 'hand', 0.62) - 0.15, snap: wordAt(B.head, 'hand', 0.62) + 0.55, qmark: wordAt(B.head, 'hand', 0.62) + 0.95, liftText: wordAt(B.head, 'hand', 0.62), tile: B.head.start + 0.9,
+    bubble: B.head.start + 0.15, hireIn: Math.max(B.head.start + 0.3, wordAt(B.head, "can't", 0.42) - 0.7), hireStop: Math.max(B.head.start + 0.3, wordAt(B.head, "can't", 0.42) - 0.7) + 1.25, handover: wordAt(B.head, 'hand', 0.62) - 0.15, snap: wordAt(B.head, 'hand', 0.62) + 0.55, qmark: wordAt(B.head, 'hand', 0.62) + 0.95, liftText: wordAt(B.head, 'hand', 0.62), tile: B.head.start + 0.9,
     // myth
     handIn: B.myth.start + 0.05, pinch: B.myth.start + 0.55, pull: B.myth.start + 0.65, taut: B.myth.start + 1.45, giantIn: B.myth.start + 1.7, title: wordAt(B.myth, 'antaeus', 0.05), named: wordAt(B.myth, 'antaeus', 0.05) + 0.7, ticks: B.myth.start + 2.5,
     heave: Math.min(wordAt(B.myth, 'lifted', 0.78) - 0.1, B.myth.end - 3.0), liftedLabel: Math.min(wordAt(B.myth, 'lifted', 0.78) + 0.15, B.myth.end - 2.4), reground: Math.max(Math.min(wordAt(B.myth, 'weak', 0.93) + 0.45, B.myth.end - 1.3), Math.min(wordAt(B.myth, 'lifted', 0.78) - 0.1, B.myth.end - 3.0) + 1.5), giantFade: B.tell.start + 0.1, markIn: B.tell.start + 0.5,
     // tell
-    tellWalk: B.tell.start + 0.2, card1: Math.max(wordAt(B.tell, 'who', 0.18) - 0.1, B.tell.start + 1.3), card2: Math.max(wordAt(B.tell, 'chasing', 0.55) - 0.35, B.tell.start + 2.6), fills: wordAt(B.tell, 'fills', 0.86) - 0.1,
+    tellWalk: B.tell.start + 0.2, tellText: wordAt(B.tell, 'tell', 0.05), card1: Math.max(wordAt(B.tell, 'who', 0.18) - 0.1, B.tell.start + 1.3), card2: Math.max(wordAt(B.tell, 'chasing', 0.55) - 0.35, B.tell.start + 2.6), fills: wordAt(B.tell, 'fills', 0.86) - 0.1,
     // morning
-    sunrise: B.morning.start, relabel: B.morning.start + 0.6, square: B.morning.start + 0.5, plane: wordAt(B.morning, 'morning', 0.12) + 0.3, planeLand: wordAt(B.morning, 'morning', 0.12) + 1.2, stackUp: wordAt(B.morning, 'one', 0.5) - 0.4, oneCard: wordAt(B.morning, 'one', 0.5), why: wordAt(B.morning, 'why', 0.9) - 0.1,
+    sunrise: B.morning.start + 0.05, relabel: B.morning.start + 0.7, square: B.morning.start + 1.1, plane: wordAt(B.morning, 'morning', 0.12) + 0.3, planeLand: wordAt(B.morning, 'morning', 0.12) + 1.2, stackUp: wordAt(B.morning, 'one', 0.5) - 0.4, oneCard: wordAt(B.morning, 'one', 0.5), why: wordAt(B.morning, 'why', 0.9) - 0.1,
     // slip
     slideOut: B.slip.start + 0.1, drift: B.slip.start + 0.6, run: B.slip.start + 0.7, redNote: wordAt(B.slip, 'slip', 0.3) + 0.25, miss: wordAt(B.slip, 'says', 0.5), strip: wordAt(B.slip, 'smallest', 0.7) - 0.2, pickStrip: wordAt(B.slip, 'smallest', 0.7) + 0.4, press: Math.min(B.slip.end - 0.9, wordAt(B.slip, 'saves', 0.9) + 0.25), backLabel: Math.min(B.slip.end - 0.5, wordAt(B.slip, 'saves', 0.9) + 0.7),
     // book
@@ -93,11 +93,11 @@ export function buildFilm(cues) {
     for (let i = 0; i < 40; i++) {
       const at = T.notes + (T.notesEnd - T.notes) * Math.pow(i / 40, 1.6); const p = E(t, at, at + 0.35, ease.outCubic); if (p <= 0) { r(); r(); r(); continue; }
       const ox = P.rnd(r, -120, 120), oy = -i * 3.2 - P.rnd(r, 0, 10), rot = P.rnd(r, -0.35, 0.35);
-      const x = lerp(hx + ox, hx - 20 + (i % 2) * 2, sq), y = lerp(hy + oy, hy - 56 - i * 1.6, sq) - (1 - p) * 180;
+      const x = lerp(hx + ox, hx - 20 + (i % 2) * 2, sq), y = lerp(hy + oy, hy - 20 - i * 1.6, sq) - (1 - p) * 180;
       P.stickyNote(ctx, x - 40, y - 80 + 24, 80, { rotate: rot * (1 - sq) + sq * 0.02, seed: 300 + i, color: i % 5 === 0 ? P.C.sticky2 : P.C.sticky, text: i < 6 ? COMPANIES[i] : (i < 12 ? 'call\nback?' : ''), fontSize: 16, alpha: p });
     }
     // the loud note: hops on top of the heap, flattened at the squaring, asleep at the end
-    if (t > T.loud) { const lp = E(t, T.loud, T.loud + 0.5, ease.outBack); const hop = (t < T.square) ? Math.abs(Math.sin((t - T.loud) * 5.1)) * 26 : 0; const x = lerp(hx + 40, hx - 10, sq), y = hy - 190 * (1 - sq) - 140 * sq - hop - (1 - lp) * 200; const rotate = lerp(0.12, 0.03, sq);
+    if (t > T.loud) { const lp = E(t, T.loud, T.loud + 0.5, ease.outBack); const hop = (t < T.square) ? Math.abs(Math.sin((t - T.loud) * 5.1)) * 26 : 0; const x = lerp(hx + 40, hx - 10, sq), y = hy - 190 * (1 - sq) - 118 * sq - hop - (1 - lp) * 200; const rotate = lerp(0.12, 0.03, sq);
       P.stickyNote(ctx, x - 60, y, 120, { rotate, seed: 399, color: P.C.sticky2, text: '', alpha: lp });
       ctx.save(); ctx.translate(x, y + 60); ctx.rotate(rotate);
       P.text(ctx, '!!!', 0, -12, { font: 'hand', size: 40 * (1 - sq * 0.4), weight: 700, align: 'center', color: P.C.ink });
@@ -145,13 +145,13 @@ export function buildFilm(cues) {
       const deal = Math.max(pulse(t, T.card1 - 0.25, T.card1 + 0.5, 0.25), pulse(t, T.card2 - 0.25, T.card2 + 1.2, 0.25)); pose.armR = 0.2 + 1.5 * deal; face.mouth = 0.45; face.brows = 0.3;
     } else if (t < B.slip.start) { const w = E(t, T.sunrise, T.sunrise + 0.9, ease.inOutCubic); fx = lerp(800, FX, w); moving = w > 0 && w < 1; face.mouth = 0.5; face.brows = 0.35; }
     else if (t < B.book.start) { // slip: runs over, reaches, misses, picks up the strip, presses the card down
-      const run = E(t, T.run, T.run + 0.9, ease.inOutCubic); fx = lerp(FX, 1045, run); moving = run > 0 && run < 1;
+      const run = E(t, T.run, T.run + 0.9, ease.inOutCubic); fx = lerp(FX, 1090, run); moving = run > 0 && run < 1;
       const reach = pulse(t, T.miss - 0.3, T.miss + 0.7, 0.3); const pick = pulse(t, T.pickStrip - 0.25, T.pickStrip + 0.5, 0.25); const pressUp = E(t, T.press - 0.5, T.press - 0.1, ease.outCubic); const pressDown = E(t, T.press - 0.1, T.press + 0.35, ease.inOutCubic); const pressRel = E(t, T.press + 0.9, T.press + 1.4);
       pose.armR = 0.2 + 2.5 * reach - 0.5 * pick + (2.2 * pressUp - 1.85 * pressDown) * (1 - pressRel); pose.armL = 1.2 * pick; pose.bob = -reach * 14; pose.lean = 0.28 * pressDown * (1 - pressRel); face.brows = -0.5 + 0.9 * E(t, T.press, T.press + 0.5); face.mouth = -0.3 + 0.9 * E(t, T.press, T.press + 0.5);
-    } else if (t < B.hire.start) { const w = E(t, T.gather, T.gather + 1.0, ease.inOutCubic); fx = lerp(1045, 800, w); moving = w > 0 && w < 1; face.mouth = 0.55; face.brows = 0.35; }
+    } else if (t < B.hire.start) { const w = E(t, T.gather, T.gather + 1.0, ease.inOutCubic); fx = lerp(1090, 800, w); moving = w > 0 && w < 1; face.mouth = 0.55; face.brows = 0.35; }
     else { // hire: takes the mug, walks to the left margin, leans, watches
       const back = E(t, T.hireWalk, T.hireWalk + 0.9, ease.inOutCubic); const lean = E(t, T.founderLean, T.founderLean + 1.5, ease.inOutCubic);
-      fx = lerp(lerp(800, FX, back), 150, lean); moving = (back > 0 && back < 1) || (lean > 0 && lean < 1); flip = lean > 0.15 ? 1 : -1;
+      fx = lerp(lerp(800, FX, back), 200, lean); moving = (back > 0 && back < 1) || (lean > 0 && lean < 1); flip = lean > 0.15 ? 1 : -1;
       const mug = E(t, T.mugUp, T.mugUp + 0.4, ease.outCubic); pose.armL = 0.9 * mug; face.mouth = 0.6; face.brows = 0.4;
     }
     if (moving) { const wk = walk(t, 2.3); pose = { ...pose, legL: wk.legL, legR: wk.legR, bob: wk.bob + (pose.bob || 0), armL: pose.armL === standing.armL ? wk.armL : pose.armL, armR: pose.armR === standing.armR ? wk.armR : pose.armR }; }
@@ -164,8 +164,8 @@ export function buildFilm(cues) {
       const ho = E(t, T.handover, T.handover + 0.55, ease.inOutCubic) * (1 - E(t, T.snap, T.snap + 0.45, ease.outElastic));
       const bx = fig.head[0] + 120 + ho * 420, by = fig.head[1] - 300 + Math.sin(t * 2) * 6; const bw = 460 * bIn * deflate, bh = 250 * bIn * deflate;
       // the string: a tangled knot from her temple to the bubble, with a loose end to the floor
-      if (bIn > 0.3 && deflate > 0.05) { const tx = fig.head[0] + 40, ty = fig.head[1] - 20; const r = P.rng(88 + b % 3); const pts = [[tx, ty]]; for (let i = 1; i <= 7; i++) pts.push([lerp(tx, bx - 30, i / 8) + P.rnd(r, -40, 40) * deflate, lerp(ty, by + bh * 0.4, i / 8) + P.rnd(r, -36, 36) * deflate]); pts.push([bx - 30, by + bh * 0.45]); P.ink(ctx, pts, { width: 3, seed: 89, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); const knot = [[tx + 60, ty - 40], [tx + 90, ty - 10], [tx + 50, ty], [tx + 85, ty - 45], [tx + 55, ty - 25], [tx + 95, ty - 28]]; P.ink(ctx, knot, { width: 3, seed: 90, boil: b, jitter: 1.4, curve: true, color: P.C.ink70, alpha: deflate }); const loose = [[tx + 70, ty + 10], [tx + 90, ty + 120], [tx + 60, ty + 260], [tx + 110, GY - 4]]; P.ink(ctx, P.partial(loose, deflate), { width: 3, seed: 91, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); }
-      if (bw > 4) { P.cloud(ctx, bx, by, bw, bh, { seed: 400, outline: 4 }); for (let k = 0; k < 2; k++) P.paperBlob(ctx, fig.head[0] + 70 + k * 34 + ho * 60 * k, fig.head[1] - 110 - k * 62, 16 + k * 10, 14 + k * 8, { seed: 410 + k, n: 9, wob: 0.06, outline: 3, alpha: deflate });
+      if (bIn > 0.3 && deflate > 0.05) { const tx = fig.head[0] + 40, ty = fig.head[1] - 20; const r = P.rng(88 + b % 3); const pts = [[tx, ty]]; for (let i = 1; i <= 7; i++) pts.push([lerp(tx, bx - 30, i / 8) + P.rnd(r, -40, 40) * deflate, lerp(ty, by + bh * 0.4, i / 8) + P.rnd(r, -36, 36) * deflate]); pts.push([bx - 30, by + bh * 0.45]); P.ink(ctx, pts, { width: 3, seed: 89, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); const knot = [[tx + 60, ty - 40], [tx + 90, ty - 10], [tx + 50, ty], [tx + 85, ty - 45], [tx + 55, ty - 25], [tx + 95, ty - 28]]; P.ink(ctx, knot, { width: 3, seed: 90, boil: b, jitter: 1.4, curve: true, color: P.C.ink70, alpha: deflate }); const loose = [[tx + 70, ty + 10], [tx + 110, ty + 120], [tx + 150, ty + 200], [tx + 200, ty + 250]]; P.ink(ctx, P.partial(loose, deflate), { width: 3, seed: 91, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); }
+      if (bw > 4) { P.cloud(ctx, bx, by, bw, bh, { seed: 400, outline: 4 }); for (let k = 0; k < 2; k++) P.paperBlob(ctx, fig.head[0] + 70 + k * 34 + ho * 420 * (0.25 + 0.3 * k), fig.head[1] - 110 - k * 62, 16 + k * 10, 14 + k * 8, { seed: 410 + k, n: 9, wob: 0.06, outline: 3, alpha: deflate });
         const CARDS = [['Chipotle', 'waiting on legal'], ['Sweetgreen', 'our contact left?'], ['Notion', 'call back Tuesday']];
         CARDS.forEach(([n, l], i) => { const cx = bx - 150 + i * 150, cy = by - 40 + Math.sin(t * 2.6 + i) * 8 + (i % 2) * 40; const s = bIn * deflate; if (s < 0.2) return; ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s); ctx.rotate((i - 1) * 0.08 + Math.sin(t * 1.7 + i) * 0.04); P.dealCard(ctx, -70, -28, 150, 56, { name: n, line: l, seed: 420 + i, fill: i % 2 ? P.C.cream : P.C.paper }); ctx.restore(); }); }
     }
@@ -179,15 +179,15 @@ export function buildFilm(cues) {
       for (let i = 0; i < 6; i++) { const fp = E(t, T.fan + i * 0.1, T.fan + i * 0.1 + 0.5, ease.outBackSoft); if (fp <= 0) continue; const tx = [440, 620, 800, 1240, 1900, 2080][i]; ctx.save(); ctx.globalAlpha = fp; ctx.translate(lerp(hx, tx, fp), GY - tileH * 0.7); ctx.scale(0.7, 0.7); P.dealCard(ctx, 0, 0, tileW, tileH, { name: COMPANIES[i], small: true, seed: 520 + i }); ctx.restore(); } }
 
     // ── myth: the hand pulls the string taut; the giant; lifted / grounded ──
-    if (t > T.handIn && t < T.taut + 0.6) { const hIn = E(t, T.handIn, T.pinch, ease.outCubic); const pullP = E(t, T.pull, T.taut, ease.inOutCubic); const out = E(t, T.taut, T.taut + 0.6, ease.inCubic); const sx = fig.head[0] + 150; const hx = lerp(2100, sx, hIn) + pullP * 1500 + out * 600, hy = lerp(GY - 300, GY - 10, hIn) - (1 - hIn) * 0 + out * 300; P.hand(ctx, hx + 0, hy, 150, Math.PI, { seed: 200, pointing: false }); }
+    if (t > T.handIn && t < T.taut + 0.6) { const hIn = E(t, T.handIn, T.pinch, ease.outCubic); const pullP = E(t, T.pull, T.taut, ease.inOutCubic); const out = E(t, T.taut, T.taut + 0.6, ease.inCubic); const sx = fig.head[0] + 250; const hx = lerp(2100, sx, hIn) + pullP * 1500 + out * 600, hy = lerp(GY - 380, fig.head[1] + 230, hIn) + pullP * (GY - 10 - (fig.head[1] + 230)) + out * 300; P.hand(ctx, hx, hy, 130, Math.PI, { seed: 200, pointing: false }); }
     const gIn = bounceIn(t, T.giantIn, 0.7);
-    if (gIn > 0 && t < T.giantFade + 0.75) { const heave = E(t, T.heave, T.heave + 0.9, ease.inOutCubic) * (1 - E(t, T.reground - 0.35, T.reground, ease.inCubic)); const fade = E(t, T.giantFade, T.giantFade + 0.5, ease.inCubic); const gx = 1080;
+    if (gIn > 0 && t < T.giantFade + 0.75) { const heave = E(t, T.heave, T.heave + 0.9, ease.inOutCubic) * (1 - E(t, T.reground - 0.35, T.reground, ease.inCubic)); const fade = E(t, T.giantFade, T.giantFade + 0.5, ease.inCubic); const gx = 1150;
       const grounded = (1 - heave) * gIn * (1 - fade); if (t > T.ticks && grounded > 0.6) { const k = 0.5 + 0.5 * Math.sin(t * 6); for (let i = -2; i <= 2; i++) { if (i === 0) continue; const xx = gx + i * 70; P.ink(ctx, [[xx, GY - 8 - k * 4], [xx + (i < 0 ? -14 : 14), GY - 30 - k * 8]], { color: P.C.forest, width: 5, seed: 910 + i, boil: b, jitter: 0.6, alpha: grounded }); } }
       P.giant(ctx, gx, GY + (1 - gIn) * -560, 1.18, { seed: 500, boil: b, lifted: heave, alpha: 1 - fade });
       // the hand lifts him by the shoulders, then sets him down
       if (t > T.heave - 0.5 && t < T.reground + 0.5) { const hin = E(t, T.heave - 0.5, T.heave, ease.outCubic), hout = E(t, T.reground, T.reground + 0.5, ease.inCubic); const lift = heave; P.hand(ctx, gx + 250 + (1 - hin) * 700 + hout * 700, GY - 520 - lift * 150 - (1 - hin) * 200 - hout * 300, 150, Math.PI * 1.08, { seed: 201, pointing: false }); }
-      doodle(ctx, 'lifted = weak · same with deals', 1330, 380, T.liftedLabel, t, { size: 44, rotate: 0.04, color: P.C.ink70, dur: 0.35, alpha: 1 - E(t, T.reground, T.reground + 0.4) });
-      doodle(ctx, 'grounded = strong', 1330, 820, T.reground + 0.35, t, { size: 42, rotate: -0.02, color: P.C.forest, alpha: 1 - E(t, T.giantFade, T.giantFade + 0.4) }); }
+      doodle(ctx, 'lifted = weak · same with deals', 1380, 380, T.liftedLabel, t, { size: 44, rotate: 0.04, color: P.C.ink70, dur: 0.35, alpha: 1 - E(t, T.reground, T.reground + 0.4) });
+      doodle(ctx, 'grounded = strong', 1400, 820, T.reground + 0.35, t, { size: 42, rotate: -0.02, color: P.C.forest, alpha: 1 - E(t, T.giantFade, T.giantFade + 0.4) }); }
     if (t > T.title && t < B.tell.start + 0.4) { const a = 1 - E(t, B.tell.start, B.tell.start + 0.4); serifLine(ctx, 'Antaeus', 520, 200, T.title, t, { size: 110, alpha: a }); doodle(ctx, 'named for the giant', 520, 262, T.named, t, { size: 40, align: 'center', rotate: -0.02, color: P.C.ink70, alpha: a }); }
 
     // ── tell: she deals the cards; blue slips fill in the rest ──
@@ -209,7 +209,7 @@ export function buildFilm(cues) {
       // "it fills in the rest": three blue slips slide out from behind the wall, one at a time
       const FILLS = [['Boeing · new head of operations', 0], ['Notion · hiring twelve sellers', 5], ['Chipotle · opening forty stores', 4]];
       FILLS.forEach(([str, k], i) => { const at = T.fills + i * 0.45; const p = E(t, at, at + 0.6, ease.outBackSoft); if (p <= 0) return; const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic); const col = k % 2; const x0 = 1330 + col * 120 - (col ? 0 : 60), y0 = GY - 3 * tileH - 90 - i * 62; const x = lerp(lerp(x0 + 60, x0, p), 1250 - 120, gth), y = lerp(y0, GY - 140, gth); if (p > 0.9 && gth <= 0 && t < T.oneCard) { const [ax, ay] = TILE(k); P.doodleArrow(ctx, [x0 + 150, y0 + 26], [ax + tileW / 2, ay - 6], { boil: b, curve: 0.12, width: 3, color: P.C.blue, head: 12, p: E(t, at + 0.5, at + 0.9) }); } const a = (1 - E(t, T.oneCard - 0.35, T.oneCard + 0.1)); ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(lerp(1, 0.7, gth), lerp(1, 0.7, gth)); P.paperLabel(ctx, str, 0, 0, { font: 'hand', size: 28, weight: 700, fill: P.C.bluePaper, color: P.C.ink, seed: 730 + i, rotate: (i - 1) * 0.02, padY: 3, pad: 12, alpha: p }); ctx.restore(); });
-      if (tellFade > 0) serifLine(ctx, 'Tell it once.', W / 2, 200, T.card1 + 0.2, t, { size: 74, alpha: tellFade });
+      if (tellFade > 0) serifLine(ctx, 'Tell it once.', W / 2, 200, T.tellText, t, { size: 74, alpha: tellFade });
     }
     // ── morning: the airplane signal, the one card, the why ──
     if (t > T.plane && t < T.gather) { const p = E(t, T.plane, T.planeLand, ease.inOutCubic); const [ox, oy] = TILE(2); const x = lerp(2100, ox + tileW - 30, p), y = lerp(80, oy - 30, p) - Math.sin(p * Math.PI) * 120; const land = E(t, T.planeLand, T.planeLand + 0.3, ease.outBounce); const oc = E(t, T.oneCard, T.oneCard + 0.8, ease.outBackSoft); const px = lerp(x, 980 + tileW * 3.3 - 40, oc), py = lerp(y + land * 10, 420 - 40, oc); const a = 1 - E(t, T.oneCard + 0.9, T.oneCard + 1.3);
@@ -218,13 +218,13 @@ export function buildFilm(cues) {
     // ── slip: Sweetgreen slides out of the stack, drifts, gets pressed back down by the founder ──
     if (t > T.slideOut && t < T.gather + 1.2) {
       const so = E(t, T.slideOut, T.slideOut + 0.5, ease.inOutCubic); const up = E(t, T.drift, T.drift + 1.6, ease.inOutCubic) * (1 - E(t, T.press - 0.1, T.press + 0.35, ease.inOutCubic)); const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic);
-      const [sx0] = TILE(4); const x0 = lerp(sx0, 1150, so), y0 = GY - tileH; const x = lerp(x0, 1250 - 90, gth), y = lerp(y0 - up * 240, GY - 110 - 12, gth); const alpha = 1 - E(t, T.formed - 0.1, T.formed + 0.1);
+      const [sx0] = TILE(4); const x0 = lerp(sx0, 1175, so), y0 = GY - tileH; const x = lerp(x0, 1250 - 90, gth), y = lerp(y0 - up * 240, GY - 110 - 12, gth); const alpha = 1 - E(t, T.formed - 0.1, T.formed + 0.1);
       if (up > 0 && up < 1) P.ink(ctx, [[x + tileW / 2, GY - 6], [x + tileW / 2 + 8, GY - 6 - up * 200]], { color: P.C.ink30, width: 2, seed: 1200, boil: b, jitter: 1 });
       if (up > 0.5 && t < T.press) doodle(ctx, 'lifted', x + tileW + 30, y - 40, T.drift + 0.9, t, { size: 40, color: P.C.ink70, rotate: -0.08, alpha: 1 - E(t, T.press - 0.2, T.press) });
       ctx.save(); ctx.translate(x, y); ctx.scale(lerp(1, 0.7, gth), lerp(1, 0.7, gth)); P.dealCard(ctx, 0, 0, tileW, tileH, { name: 'Sweetgreen', small: true, seed: 524, rotate: up * 0.22, lifted: up, alpha }); ctx.restore();
       const redA = 1 - E(t, T.press, T.press + 0.35); if (t > T.redNote && redA > 0) { ctx.save(); ctx.globalAlpha = redA; ctx.translate(x + tileW + 8, y - 26 + (1 - redA) * 60); ctx.rotate(0.06 + (1 - redA) * 0.8); P.paperLabel(ctx, '11 days quiet · no next step', 0, 0, { font: 'hand', size: 30, weight: 700, fill: P.C.redPaper, color: P.C.red, seed: 1211, pad: 12, padY: 3 }); ctx.restore(); }
       const st = E(t, T.strip, T.strip + 0.6, ease.outBackSoft); const held = E(t, T.pickStrip, T.pickStrip + 0.4, ease.inOutCubic);
-      if (st > 0 && t < T.press + 0.2) { const sx = lerp(-700, 1150, st), sy = lerp(GY - 58, y + tileH + 8, held); P.paperLabel(ctx, "smallest step: book Thursday's call", sx, sy, { font: 'hand', size: 32, weight: 700, fill: P.C.bluePaper, seed: 1210, rotate: -0.01, pad: 14, padY: 4 }); }
+      if (st > 0 && t < T.press + 0.2) { const sx = lerp(-700, 1175, st), sy = lerp(GY - 58, y + tileH + 8, held); P.paperLabel(ctx, "smallest step: book Thursday's call", sx, sy, { font: 'hand', size: 32, weight: 700, fill: P.C.bluePaper, seed: 1210, rotate: -0.01, pad: 14, padY: 4 }); }
       if (t > T.press) { const k = E(t, T.press, T.press + 0.4, ease.outBack); const a = 1 - E(t, T.gather, T.gather + 0.5); P.ink(ctx, [[x - 14, GY - 8], [x - 4, GY - 26 * k]], { color: P.C.forest, width: 5, seed: 1220, boil: b, jitter: 0.5, alpha: a }); P.ink(ctx, [[x + tileW + 14, GY - 8], [x + tileW + 4, GY - 26 * k]], { color: P.C.forest, width: 5, seed: 1221, boil: b, jitter: 0.5, alpha: a }); doodle(ctx, 'back on the ground', x + tileW / 2, GY + 64, T.backLabel, t, { size: 40, color: P.C.forest, align: 'center', rotate: 0, alpha: a }); }
       const sA = 1 - E(t, T.gather, T.gather + 0.4); serifLine(ctx, 'It catches a deal slipping.', W / 2, 200, T.drift + 0.2, t, { size: 74, alpha: sA });
     }
@@ -244,7 +244,7 @@ export function buildFilm(cues) {
     }
     if (t > B.hire.start) serifLine(ctx, 'Your first sales hire runs it without you.', 860, 200, B.hire.voStart != null ? B.hire.voStart + 0.15 : B.hire.start + 0.4, t, { size: 58 });
     // hook + head text
-    if (t > T.label && t < T.gather) { const re = E(t, T.relabel, T.relabel + 0.5, ease.outCubic); const a = (t < T.relabel ? 1 : 1) * (1 - E(t, T.gather - 0.5, T.gather)); const lift = t > T.relabel && t < T.relabel + 0.5 ? Math.sin(re * Math.PI) * 30 : 0; P.tape(ctx, 110, 96 - lift, 380, 44, -0.02 + (re > 0 ? 0.01 : 0), 30, { alpha: a }); P.text(ctx, re > 0.5 ? 'Founder · Tuesday morning' : 'Founder · Monday morning', 300, 128 - lift, { font: 'hand', size: 34, weight: 700, align: 'center', alpha: a, rotate: -0.02 }); }
+    if (t > T.label && t < T.gather && (t < T.taut || t > T.relabel)) { const re = E(t, T.relabel, T.relabel + 0.5, ease.outCubic); const a = (t < T.taut ? 1 - E(t, T.pull, T.taut) : 1) * (1 - E(t, T.gather - 0.5, T.gather)); const lift = t > T.relabel && t < T.relabel + 0.5 ? Math.sin(re * Math.PI) * 30 : 0; P.tape(ctx, 110, 96 - lift, 380, 44, -0.02 + (re > 0 ? 0.01 : 0), 30, { alpha: a }); P.text(ctx, re > 0.5 ? 'Founder · Tuesday morning' : 'Founder · Monday morning', 300, 128 - lift, { font: 'hand', size: 34, weight: 700, align: 'center', alpha: a, rotate: -0.02 }); }
     if (t > T.notes && t < T.bubble + 0.6) { const a = 1 - E(t, T.bubble, T.bubble + 0.6); const n = Math.floor(8 * seg(t, T.notes, T.notesEnd)); ctx.save(); ctx.globalAlpha = a * 0.8; for (let g = 0; g < n; g++) { const x = 130 + g * 58, y = 190; for (let k = 0; k < 4; k++) P.ink(ctx, [[x + k * 10, y], [x + k * 10 + 2, y + 34]], { width: 3, seed: 1000 + g * 5 + k, boil: b, jitter: 0.6 }); P.ink(ctx, [[x - 4, y + 30], [x + 38, y + 4]], { width: 3, seed: 1004 + g * 5, boil: b, jitter: 0.6 }); } if (n >= 8) P.text(ctx, '40', 600, 226, { font: 'hand', size: 44, weight: 700, color: P.C.ink70 }); ctx.restore(); }
     if (t > T.liftText && t < T.taut) serifLine(ctx, "You can't hand over your head.", W / 2, 200, T.liftText, t, { size: 78, alpha: 1 - E(t, B.myth.start - 0.4, B.myth.start + 0.1) });
     P.grain(ctx, W, H); P.vignette(ctx, W, H, 0.08);
@@ -253,29 +253,30 @@ export function buildFilm(cues) {
   // ── the end card ──
   function endCard(ctx, t) {
     const b = boilAt(t); P.field(ctx, W, H, { warm: 0.12 });
-    if (t > T.ctaLine) P.ink(ctx, P.partial([[120, GY], [W - 120, GY + 1]], E(t, T.ctaLine, T.ctaLine + 0.8, ease.inOutCubic)), { width: 7, seed: 9, boil: b, jitter: 1.1 });
+    P.ink(ctx, [[-40, GY], [W + 40, GY + 1]], { width: 7, seed: 9, boil: b, jitter: 1.1 });
+    desk(ctx, t, b);
     const mp = E(t, T.mark, T.mark + 1.2, ease.inOutCubic);
-    if (mp > 0) P.mark(ctx, 600, GY, 560, { progress: 0.3 + mp * 0.7, boil: b, groundLen: 0, stroke: 3.2 });
+    if (mp > 0) P.mark(ctx, 780, GY, 500, { progress: 0.3 + mp * 0.7, boil: b, groundLen: 0, stroke: 3.2 });
     
-    serifLine(ctx, 'Antaeus', 1020, GY - 330, T.name, t, { size: 160, align: 'left' });
-    serifLine(ctx, cues.tagline || 'Your first hire could run this.', 1024, GY - 228, T.tagline, t, { size: 56, align: 'left', italic: true, color: P.C.ink70 });
+    serifLine(ctx, 'Antaeus', 1060, GY - 330, T.name, t, { size: 160, align: 'left' });
+    serifLine(ctx, cues.tagline || 'Your first hire could run this.', 1064, GY - 228, T.tagline, t, { size: 56, align: 'left', italic: true, color: P.C.ink70 });
     const up = E(t, T.url, T.url + 0.6, ease.outBackSoft);
-    if (up > 0) P.paperLabel(ctx, 'antaeus.app', 1020, GY - 140 + (1 - up) * 120, { font: 'serif', size: 80, fill: P.C.paper, seed: 1510, rotate: -0.01, pad: 22, padY: 6, alpha: up });
+    if (up > 0) P.paperLabel(ctx, 'antaeus.app', 1060, GY - 140 + (1 - up) * 120, { font: 'serif', size: 80, fill: P.C.paper, seed: 1510, rotate: -0.01, pad: 22, padY: 6, alpha: up });
     const bp = E(t, T.button, T.button + 0.6, ease.outBackSoft); const breathe = 1 + 0.012 * Math.sin((t - T.button) * 1.6);
-    if (bp > 0) { const bx = 1020, by = GY + 16 + (1 - bp) * 200; ctx.save(); ctx.translate(bx + 150, by + 34); ctx.scale(breathe, breathe); ctx.translate(-(bx + 150), -(by + 34)); P.paperRect(ctx, bx, by, 300, 68, { fill: P.C.orange, seed: 1530, shadow: 0.22, dy: 6, outline: 4, texture: 0.08, amp: 1.4 }); P.text(ctx, 'Try the demo', bx + 150, by + 46, { font: 'sans', size: 30, weight: 700, color: '#ffffff', align: 'center' }); ctx.restore();
+    if (bp > 0) { const bx = 1060, by = GY + 16 + (1 - bp) * 200; ctx.save(); ctx.translate(bx + 150, by + 34); ctx.scale(breathe, breathe); ctx.translate(-(bx + 150), -(by + 34)); P.paperRect(ctx, bx, by, 300, 68, { fill: P.C.orange, seed: 1530, shadow: 0.22, dy: 6, outline: 4, texture: 0.08, amp: 1.4 }); P.text(ctx, 'Try the demo', bx + 150, by + 46, { font: 'sans', size: 30, weight: 700, color: '#ffffff', align: 'center' }); ctx.restore();
       if (t > T.button - 0.5 && t < T.button + 1.1) { const hin = E(t, T.button - 0.5, T.button + 0.1, ease.outCubic), hout = E(t, T.button + 0.6, T.button + 1.1, ease.inCubic); const pressk = pulse(t, T.button + 0.1, T.button + 0.6, 0.2); P.hand(ctx, bx + 330 + 1.1 * 140 + (1 - hin) * 500 + hout * 500 - pressk * 14, by + 40 + pressk * 6, 140, Math.PI, { seed: 230, pointing: true }); } }
-    doodle(ctx, 'free · no card needed', 1020, GY + 130, T.ctaNotes, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
-    doodle(ctx, 'a sample company inside', 1360, GY + 130, T.ctaNotes + 0.4, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
-    doodle(ctx, 'works beside what you already use', 1020, GY + 168, T.ctaNotes + 0.8, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
-    // the loud note, asleep on a neat little stack
-    if (t > T.zzz - 0.3) { const a = E(t, T.zzz - 0.3, T.zzz, ease.outCubic); ctx.save(); ctx.globalAlpha = a; for (let i = 0; i < 5; i++) P.stickyNote(ctx, 150, GY + 4 - i * 5, 80, { seed: 1540 + i, rotate: 0.02, color: i % 2 ? P.C.sticky2 : P.C.sticky, text: '' }); P.stickyNote(ctx, 146, GY - 28, 90, { seed: 1550, rotate: -0.03, color: P.C.sticky2, text: '' }); P.ink(ctx, [[170, GY + 14], [212, GY + 14]], { width: 3, seed: 1551, boil: b, jitter: 0.5 }); P.text(ctx, 'zzz', 250, GY - 20 - Math.sin(t * 1.4) * 6, { font: 'hand', size: 30 * E(t, T.zzz, T.zzz + 0.4), weight: 700, color: P.C.ink50, rotate: -0.2 }); ctx.restore(); }
+    doodle(ctx, 'free · no card needed', 1060, GY + 130, T.ctaNotes, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    doodle(ctx, 'a sample company inside', 1400, GY + 130, T.ctaNotes + 0.4, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    doodle(ctx, 'works beside what you already use', 1060, GY + 168, T.ctaNotes + 0.8, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    // the loud note is asleep on the desk's neat stack
+    if (t > T.zzz) P.text(ctx, 'zzz', DESK.x + 400, DESK.top - 150 - Math.sin(t * 1.4) * 6, { font: 'hand', size: 34 * E(t, T.zzz, T.zzz + 0.4), weight: 700, color: P.C.ink50, rotate: -0.2 });
     P.grain(ctx, W, H); P.vignette(ctx, W, H, 0.08);
   }
 
   const zoomAt = (ctx, z, cy = 800) => { ctx.translate(W / 2, cy); ctx.scale(z, z); ctx.translate(-W / 2, -cy); };
   const zoomFor = (t) => { // slow, deliberate push-ins per beat; never a cut
-    const base = 1.06; const push = (a, bb, k) => k * E(t, a, bb, ease.inOutCubic);
-    return base + push(B.hook.start, B.head.end, 0.06) - push(B.myth.start, B.myth.start + 0.9, 0.08) + push(B.tell.start, B.morning.end, 0.03) + push(B.slip.start, B.slip.end, 0.03) - push(B.book.start, B.book.start + 0.8, 0.05);
+    const base = 1.03; const push = (a, bb, k) => k * E(t, a, bb, ease.inOutCubic);
+    return base + push(B.hook.start, B.head.end, 0.03) - push(B.myth.start, B.myth.start + 0.9, 0.04) + push(B.tell.start, B.morning.end, 0.02) + push(B.slip.start, B.slip.end, 0.02) - push(B.book.start, B.book.start + 0.8, 0.03);
   };
   function render(ctx, t) {
     ctx.save();
