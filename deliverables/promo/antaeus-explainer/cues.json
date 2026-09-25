@@ -1,0 +1,1634 @@
+{
+ "duration": 56.919,
+ "beats": [
+  {
+   "id": 1,
+   "role": "hook",
+   "start": 0,
+   "end": 4.605,
+   "voStart": 0.55,
+   "voEnd": 4.105,
+   "on_screen": "Masking-tape label, handwritten, top-left: \"Founder · Monday morning\" · tally marks in the margin, in gates of five, up to 40 · the first six notes read Boeing, Starbucks, Notion, OpenAI, Chipotle, Sweetgreen · the loud note reads \"!!!\"",
+   "words": [
+    {
+     "w": "You've",
+     "s": 0,
+     "e": 0.22
+    },
+    {
+     "w": "got",
+     "s": 0.22,
+     "e": 0.38
+    },
+    {
+     "w": "40",
+     "s": 0.38,
+     "e": 0.72
+    },
+    {
+     "w": "deals",
+     "s": 0.72,
+     "e": 1.14
+    },
+    {
+     "w": "and",
+     "s": 1.14,
+     "e": 1.82
+    },
+    {
+     "w": "the",
+     "s": 1.82,
+     "e": 1.96
+    },
+    {
+     "w": "loudest",
+     "s": 1.96,
+     "e": 2.34
+    },
+    {
+     "w": "sticky",
+     "s": 2.34,
+     "e": 2.64
+    },
+    {
+     "w": "note",
+     "s": 2.64,
+     "e": 2.92
+    },
+    {
+     "w": "wins.",
+     "s": 2.92,
+     "e": 3.2
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "role": "head",
+   "start": 4.605,
+   "end": 11.605,
+   "voStart": 4.905,
+   "voEnd": 10.021,
+   "on_screen": "Serif, lower third, set on the word \"hand\": \"You can't hand over your head.\" · thought-bubble cards in handwriting: \"Chipotle · waiting on legal\" / \"Sweetgreen · our contact left?\" / \"Notion · call back Tuesday\" · small paper tile taped top-right, navy: \"You are the system\" · a boiling handwritten \"?\" above the hire",
+   "words": [
+    {
+     "w": "You",
+     "s": 0,
+     "e": 0.18
+    },
+    {
+     "w": "know",
+     "s": 0.18,
+     "e": 0.42
+    },
+    {
+     "w": "where",
+     "s": 0.42,
+     "e": 0.72
+    },
+    {
+     "w": "they",
+     "s": 0.72,
+     "e": 0.92
+    },
+    {
+     "w": "really",
+     "s": 0.92,
+     "e": 1.2
+    },
+    {
+     "w": "stand.",
+     "s": 1.2,
+     "e": 1.66
+    },
+    {
+     "w": "You",
+     "s": 1.98,
+     "e": 2.34
+    },
+    {
+     "w": "can't",
+     "s": 2.34,
+     "e": 2.76
+    },
+    {
+     "w": "hand",
+     "s": 2.76,
+     "e": 2.96
+    },
+    {
+     "w": "over",
+     "s": 2.96,
+     "e": 3.34
+    },
+    {
+     "w": "your",
+     "s": 3.34,
+     "e": 4.48
+    },
+    {
+     "w": "head.",
+     "s": 4.48,
+     "e": 4.8
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "role": "myth",
+   "start": 11.605,
+   "end": 19.619,
+   "voStart": 12.305,
+   "voEnd": 19.119,
+   "on_screen": "Serif, top of page: \"Antaeus\" · handwritten beneath it: \"named for the giant\" · handwritten beside the lifted giant: \"lifted = weak · same with deals\" · handwritten by the green ticks on the landing: \"grounded = strong\"",
+   "words": [
+    {
+     "w": "Nobody",
+     "s": 0,
+     "e": 0.4
+    },
+    {
+     "w": "could",
+     "s": 0.4,
+     "e": 0.8
+    },
+    {
+     "w": "beat",
+     "s": 0.8,
+     "e": 1.06
+    },
+    {
+     "w": "the",
+     "s": 1.06,
+     "e": 1.26
+    },
+    {
+     "w": "giant",
+     "s": 1.26,
+     "e": 1.58
+    },
+    {
+     "w": "Anteus",
+     "s": 1.58,
+     "e": 2.3
+    },
+    {
+     "w": "while",
+     "s": 2.3,
+     "e": 2.7
+    },
+    {
+     "w": "his",
+     "s": 2.7,
+     "e": 2.94
+    },
+    {
+     "w": "feet",
+     "s": 2.94,
+     "e": 3.22
+    },
+    {
+     "w": "touched",
+     "s": 3.22,
+     "e": 3.58
+    },
+    {
+     "w": "the",
+     "s": 3.58,
+     "e": 3.78
+    },
+    {
+     "w": "ground.",
+     "s": 3.78,
+     "e": 4.12
+    },
+    {
+     "w": "Lifted,",
+     "s": 4.76,
+     "e": 5.4
+    },
+    {
+     "w": "he",
+     "s": 5.76,
+     "e": 5.82
+    },
+    {
+     "w": "went",
+     "s": 5.82,
+     "e": 6.1
+    },
+    {
+     "w": "weak.",
+     "s": 6.1,
+     "e": 6.4
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "role": "tell",
+   "start": 19.619,
+   "end": 27.619,
+   "voStart": 20.569,
+   "voEnd": 25.515,
+   "on_screen": "Serif: \"Tell it once.\" · handwritten index card: \"who we sell to\" (an illegible scribble beneath) · company cards in navy serif: Boeing, Starbucks, OpenAI, Chipotle, Sweetgreen, Notion · handwritten label: \"where each deal stands\" · blue slips, one at a time: Boeing · \"new head of operations\" / Notion · \"hiring twelve sellers\" / Chipotle · \"opening forty stores\"",
+   "words": [
+    {
+     "w": "Tell",
+     "s": 0,
+     "e": 0.2
+    },
+    {
+     "w": "it",
+     "s": 0.2,
+     "e": 0.38
+    },
+    {
+     "w": "once",
+     "s": 0.38,
+     "e": 0.62
+    },
+    {
+     "w": "who",
+     "s": 0.62,
+     "e": 0.94
+    },
+    {
+     "w": "you",
+     "s": 0.94,
+     "e": 1.12
+    },
+    {
+     "w": "sell",
+     "s": 1.12,
+     "e": 1.4
+    },
+    {
+     "w": "to",
+     "s": 1.4,
+     "e": 1.66
+    },
+    {
+     "w": "and",
+     "s": 1.66,
+     "e": 2.48
+    },
+    {
+     "w": "who",
+     "s": 2.48,
+     "e": 2.66
+    },
+    {
+     "w": "you're",
+     "s": 2.66,
+     "e": 2.84
+    },
+    {
+     "w": "chasing.",
+     "s": 2.84,
+     "e": 3.22
+    },
+    {
+     "w": "It",
+     "s": 3.5,
+     "e": 3.82
+    },
+    {
+     "w": "fills",
+     "s": 3.82,
+     "e": 4.12
+    },
+    {
+     "w": "in",
+     "s": 4.12,
+     "e": 4.32
+    },
+    {
+     "w": "the",
+     "s": 4.32,
+     "e": 4.44
+    },
+    {
+     "w": "rest.",
+     "s": 4.44,
+     "e": 4.72
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "role": "morning",
+   "start": 27.619,
+   "end": 33.619,
+   "voStart": 28.119,
+   "voEnd": 32.222,
+   "on_screen": "Serif: \"The one thing to do first.\" · the tape label re-lands: \"Founder · Tuesday morning\" · blue airplane stamp: \"JUST RAISED MONEY\" · orange-ruled card: \"Write to OpenAI first\" · blue handwriting beneath it: \"why: fresh money · hiring fast\"",
+   "words": [
+    {
+     "w": "Every",
+     "s": 0,
+     "e": 0.26
+    },
+    {
+     "w": "morning,",
+     "s": 0.26,
+     "e": 0.66
+    },
+    {
+     "w": "it",
+     "s": 0.96,
+     "e": 1.16
+    },
+    {
+     "w": "hands",
+     "s": 1.16,
+     "e": 1.42
+    },
+    {
+     "w": "you",
+     "s": 1.42,
+     "e": 1.56
+    },
+    {
+     "w": "the",
+     "s": 1.56,
+     "e": 1.7
+    },
+    {
+     "w": "one",
+     "s": 1.7,
+     "e": 1.94
+    },
+    {
+     "w": "thing",
+     "s": 1.94,
+     "e": 2.18
+    },
+    {
+     "w": "to",
+     "s": 2.18,
+     "e": 2.34
+    },
+    {
+     "w": "do",
+     "s": 2.34,
+     "e": 2.5
+    },
+    {
+     "w": "first,",
+     "s": 2.5,
+     "e": 2.82
+    },
+    {
+     "w": "and",
+     "s": 3.2,
+     "e": 3.6
+    },
+    {
+     "w": "why.",
+     "s": 3.6,
+     "e": 3.88
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "role": "slip",
+   "start": 33.619,
+   "end": 40.619,
+   "voStart": 34.119,
+   "voEnd": 38.3,
+   "on_screen": "Red handwritten tag (the only red in the film): \"11 days quiet · no next step\" · navy handwritten beside the drifting card: \"lifted\" · blue strip: \"smallest step: book Thursday's call\" · forest-green handwriting: \"back on the ground\"",
+   "words": [
+    {
+     "w": "when",
+     "s": 0,
+     "e": 0.2
+    },
+    {
+     "w": "a",
+     "s": 0.2,
+     "e": 0.3
+    },
+    {
+     "w": "deal",
+     "s": 0.3,
+     "e": 0.52
+    },
+    {
+     "w": "slips,",
+     "s": 0.52,
+     "e": 1
+    },
+    {
+     "w": "it",
+     "s": 1.24,
+     "e": 1.4
+    },
+    {
+     "w": "says",
+     "s": 1.4,
+     "e": 1.62
+    },
+    {
+     "w": "so,",
+     "s": 1.62,
+     "e": 1.94
+    },
+    {
+     "w": "with",
+     "s": 2.22,
+     "e": 2.38
+    },
+    {
+     "w": "the",
+     "s": 2.38,
+     "e": 2.5
+    },
+    {
+     "w": "smallest",
+     "s": 2.5,
+     "e": 2.88
+    },
+    {
+     "w": "step",
+     "s": 2.88,
+     "e": 3.26
+    },
+    {
+     "w": "that",
+     "s": 3.26,
+     "e": 3.52
+    },
+    {
+     "w": "saves",
+     "s": 3.52,
+     "e": 3.82
+    },
+    {
+     "w": "it.",
+     "s": 3.82,
+     "e": 4.04
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "role": "book",
+   "start": 40.619,
+   "end": 44.219,
+   "voStart": 40.919,
+   "voEnd": 43.641,
+   "on_screen": "Serif: \"The handoff book.\" · handwritten on the forest-green cover: \"If a hire started Monday\" · seven small tabs, legible if paused, not meant to be read at speed: who we win with · outreach that landed · questions that won · where deals leak · the losses · why we win · the week",
+   "words": [
+    {
+     "w": "Everything",
+     "s": 0,
+     "e": 0.4
+    },
+    {
+     "w": "settles",
+     "s": 0.4,
+     "e": 0.9
+    },
+    {
+     "w": "into",
+     "s": 0.9,
+     "e": 1.08
+    },
+    {
+     "w": "a",
+     "s": 1.08,
+     "e": 1.3
+    },
+    {
+     "w": "short",
+     "s": 1.3,
+     "e": 1.62
+    },
+    {
+     "w": "handoff",
+     "s": 1.62,
+     "e": 2.18
+    },
+    {
+     "w": "book.",
+     "s": 2.18,
+     "e": 2.44
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "role": "hire",
+   "start": 44.219,
+   "end": 49.919,
+   "voStart": 44.569,
+   "voEnd": 48.058,
+   "on_screen": "Top-corner paper tile flips like a scoreboard on \"without you\": \"You are the system\" (navy) → \"Hire-ready\" (forest green)",
+   "words": [
+    {
+     "w": "Your",
+     "s": 0,
+     "e": 0.16
+    },
+    {
+     "w": "first",
+     "s": 0.16,
+     "e": 0.46
+    },
+    {
+     "w": "sales",
+     "s": 0.46,
+     "e": 0.78
+    },
+    {
+     "w": "hire",
+     "s": 0.78,
+     "e": 1.08
+    },
+    {
+     "w": "walks",
+     "s": 1.08,
+     "e": 1.46
+    },
+    {
+     "w": "in",
+     "s": 1.46,
+     "e": 1.8
+    },
+    {
+     "w": "and",
+     "s": 1.8,
+     "e": 2.44
+    },
+    {
+     "w": "runs",
+     "s": 2.44,
+     "e": 2.68
+    },
+    {
+     "w": "it",
+     "s": 2.68,
+     "e": 2.82
+    },
+    {
+     "w": "without",
+     "s": 2.82,
+     "e": 3.06
+    },
+    {
+     "w": "you.",
+     "s": 3.06,
+     "e": 3.32
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "role": "cta",
+   "start": 49.919,
+   "end": 55.519,
+   "voStart": 50.669,
+   "voEnd": 54.65,
+   "on_screen": "Serif: \"Antaeus\" · serif tagline: \"Your first hire could run this.\" · serif on the ground line: \"antaeus.app\" · orange paper button: \"Try the demo\" · handwritten: \"free · no card needed\" · handwritten: \"a sample company inside\" · handwritten: \"works beside what you already use\" · tiny \"zzz\" over the sleeping loud note",
+   "words": [
+    {
+     "w": "Anteas,",
+     "s": 0,
+     "e": 0.7
+    },
+    {
+     "w": "try",
+     "s": 0.88,
+     "e": 1.18
+    },
+    {
+     "w": "the",
+     "s": 1.18,
+     "e": 1.36
+    },
+    {
+     "w": "demo",
+     "s": 1.36,
+     "e": 1.72
+    },
+    {
+     "w": "at",
+     "s": 1.72,
+     "e": 2.08
+    },
+    {
+     "w": "Anteas",
+     "s": 2.08,
+     "e": 2.98
+    },
+    {
+     "w": ".app.",
+     "s": 2.98,
+     "e": 3.66
+    }
+   ]
+  }
+ ],
+ "vo": [
+  {
+   "file": "vo-01.wav",
+   "at": 0.55,
+   "duration": 3.555208,
+   "text": "You've got forty deals, and the loudest sticky note wins."
+  },
+  {
+   "file": "vo-02.wav",
+   "at": 4.905,
+   "duration": 5.1155,
+   "text": "You know where they really stand. You can't hand over your head."
+  },
+  {
+   "file": "vo-03.wav",
+   "at": 12.305,
+   "duration": 6.813833,
+   "text": "Nobody could beat the giant Antaeus while his feet touched the ground. Lifted, he went weak."
+  },
+  {
+   "file": "vo-04.wav",
+   "at": 20.569,
+   "duration": 4.945979,
+   "text": "Tell it once who you sell to and who you're chasing. It fills in the rest."
+  },
+  {
+   "file": "vo-05.wav",
+   "at": 28.119,
+   "duration": 4.102729,
+   "text": "Every morning, it hands you the one thing to do first, and why."
+  },
+  {
+   "file": "vo-06.wav",
+   "at": 34.119,
+   "duration": 4.180813,
+   "text": "When a deal slips, it says so, with the smallest step that saves it."
+  },
+  {
+   "file": "vo-07.wav",
+   "at": 40.919,
+   "duration": 2.722313,
+   "text": "Everything settles into a short handoff book."
+  },
+  {
+   "file": "vo-08.wav",
+   "at": 44.569,
+   "duration": 3.489333,
+   "text": "Your first sales hire walks in and runs it without you."
+  },
+  {
+   "file": "vo-09.wav",
+   "at": 50.669,
+   "duration": 3.981417,
+   "text": "Antaeus. Try the demo at antaeus dot app."
+  }
+ ],
+ "audio": "audio/mix.mp3",
+ "tagline": "Your first hire could run this.",
+ "sfx": [
+  {
+   "kind": "slide",
+   "at": 0.1,
+   "level": 0.45,
+   "seed": 1,
+   "dur": 0.6
+  },
+  {
+   "kind": "thunk",
+   "at": 0.7,
+   "level": 0.5,
+   "seed": 2,
+   "f": 80
+  },
+  {
+   "kind": "tape",
+   "at": 0.9,
+   "level": 0.35,
+   "seed": 3
+  },
+  {
+   "kind": "slide",
+   "at": 1.594,
+   "level": 0.3,
+   "seed": 10,
+   "dur": 0.25
+  },
+  {
+   "kind": "slide",
+   "at": 1.6,
+   "level": 0.3,
+   "seed": 11,
+   "dur": 0.25
+  },
+  {
+   "kind": "slide",
+   "at": 1.612,
+   "level": 0.3,
+   "seed": 12,
+   "dur": 0.25
+  },
+  {
+   "kind": "slide",
+   "at": 1.628,
+   "level": 0.3,
+   "seed": 13,
+   "dur": 0.25
+  },
+  {
+   "kind": "slide",
+   "at": 1.647,
+   "level": 0.3,
+   "seed": 14,
+   "dur": 0.25
+  },
+  {
+   "kind": "slide",
+   "at": 1.67,
+   "level": 0.3,
+   "seed": 15,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.696,
+   "level": 0.14,
+   "seed": 16,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.724,
+   "level": 0.14,
+   "seed": 17,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.755,
+   "level": 0.14,
+   "seed": 18,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.788,
+   "level": 0.14,
+   "seed": 19,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.824,
+   "level": 0.14,
+   "seed": 20,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.862,
+   "level": 0.14,
+   "seed": 21,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.902,
+   "level": 0.14,
+   "seed": 22,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.944,
+   "level": 0.14,
+   "seed": 23,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 1.988,
+   "level": 0.14,
+   "seed": 24,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.034,
+   "level": 0.14,
+   "seed": 25,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.081,
+   "level": 0.14,
+   "seed": 26,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.131,
+   "level": 0.14,
+   "seed": 27,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.183,
+   "level": 0.14,
+   "seed": 28,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.236,
+   "level": 0.14,
+   "seed": 29,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.291,
+   "level": 0.14,
+   "seed": 30,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.347,
+   "level": 0.14,
+   "seed": 31,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.405,
+   "level": 0.14,
+   "seed": 32,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.465,
+   "level": 0.14,
+   "seed": 33,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.526,
+   "level": 0.14,
+   "seed": 34,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.589,
+   "level": 0.14,
+   "seed": 35,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.654,
+   "level": 0.14,
+   "seed": 36,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.72,
+   "level": 0.14,
+   "seed": 37,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.787,
+   "level": 0.14,
+   "seed": 38,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.856,
+   "level": 0.14,
+   "seed": 39,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.926,
+   "level": 0.14,
+   "seed": 40,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 2.998,
+   "level": 0.14,
+   "seed": 41,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.071,
+   "level": 0.14,
+   "seed": 42,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.146,
+   "level": 0.14,
+   "seed": 43,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.222,
+   "level": 0.14,
+   "seed": 44,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.299,
+   "level": 0.14,
+   "seed": 45,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.378,
+   "level": 0.14,
+   "seed": 46,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.457,
+   "level": 0.14,
+   "seed": 47,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.539,
+   "level": 0.14,
+   "seed": 48,
+   "dur": 0.25
+  },
+  {
+   "kind": "tick",
+   "at": 3.621,
+   "level": 0.14,
+   "seed": 49,
+   "dur": 0.25
+  },
+  {
+   "kind": "pop",
+   "at": 2.71,
+   "level": 0.22,
+   "seed": 60,
+   "f": 900
+  },
+  {
+   "kind": "pop",
+   "at": 3.33,
+   "level": 0.22,
+   "seed": 61,
+   "f": 900
+  },
+  {
+   "kind": "pop",
+   "at": 3.95,
+   "level": 0.22,
+   "seed": 62,
+   "f": 900
+  },
+  {
+   "kind": "pop",
+   "at": 4.57,
+   "level": 0.22,
+   "seed": 63,
+   "f": 900
+  },
+  {
+   "kind": "pop",
+   "at": 5.19,
+   "level": 0.22,
+   "seed": 64,
+   "f": 900
+  },
+  {
+   "kind": "pop",
+   "at": 5.81,
+   "level": 0.22,
+   "seed": 65,
+   "f": 900
+  },
+  {
+   "kind": "scribble",
+   "at": 4.755,
+   "level": 0.35,
+   "dur": 0.6,
+   "seed": 70
+  },
+  {
+   "kind": "slide",
+   "at": 4.905,
+   "level": 0.3,
+   "seed": 71,
+   "dur": 0.7
+  },
+  {
+   "kind": "whoosh",
+   "at": 7.515,
+   "level": 0.3,
+   "seed": 72,
+   "rising": true,
+   "dur": 0.6
+  },
+  {
+   "kind": "pop",
+   "at": 8.215,
+   "level": 0.5,
+   "seed": 73,
+   "f": 300
+  },
+  {
+   "kind": "rustle",
+   "at": 8.215,
+   "level": 0.35,
+   "seed": 74,
+   "dur": 0.5
+  },
+  {
+   "kind": "pop",
+   "at": 8.615,
+   "level": 0.3,
+   "seed": 75,
+   "f": 720
+  },
+  {
+   "kind": "tape",
+   "at": 5.505,
+   "level": 0.3,
+   "seed": 76
+  },
+  {
+   "kind": "whoosh",
+   "at": 12.255,
+   "level": 0.5,
+   "seed": 80,
+   "rising": true,
+   "dur": 0.8
+  },
+  {
+   "kind": "pop",
+   "at": 13.055,
+   "level": 0.6,
+   "seed": 81,
+   "f": 240
+  },
+  {
+   "kind": "thunk",
+   "at": 13.855,
+   "level": 0.75,
+   "seed": 82,
+   "f": 65
+  },
+  {
+   "kind": "scribble",
+   "at": 12.646,
+   "level": 0.4,
+   "dur": 0.7,
+   "seed": 83
+  },
+  {
+   "kind": "scribble",
+   "at": 13.346,
+   "level": 0.3,
+   "dur": 0.5,
+   "seed": 84
+  },
+  {
+   "kind": "whoosh",
+   "at": 16.619,
+   "level": 0.45,
+   "seed": 85,
+   "rising": true,
+   "dur": 0.8
+  },
+  {
+   "kind": "scribble",
+   "at": 17.219,
+   "level": 0.3,
+   "dur": 0.45,
+   "seed": 86
+  },
+  {
+   "kind": "whoosh",
+   "at": 18.019,
+   "level": 0.35,
+   "seed": 87,
+   "rising": false,
+   "dur": 0.45
+  },
+  {
+   "kind": "thunk",
+   "at": 18.319,
+   "level": 0.8,
+   "seed": 88,
+   "f": 62
+  },
+  {
+   "kind": "ding",
+   "at": 18.399,
+   "level": 0.25,
+   "f": 1318
+  },
+  {
+   "kind": "pop",
+   "at": 20.119,
+   "level": 0.35,
+   "seed": 89,
+   "f": 520
+  },
+  {
+   "kind": "slide",
+   "at": 21.089,
+   "level": 0.4,
+   "seed": 90
+  },
+  {
+   "kind": "thunk",
+   "at": 21.539,
+   "level": 0.35,
+   "seed": 91
+  },
+  {
+   "kind": "tape",
+   "at": 23.059,
+   "level": 0.25,
+   "seed": 92
+  },
+  {
+   "kind": "tape",
+   "at": 23.219,
+   "level": 0.25,
+   "seed": 93
+  },
+  {
+   "kind": "tape",
+   "at": 23.379,
+   "level": 0.25,
+   "seed": 94
+  },
+  {
+   "kind": "tape",
+   "at": 23.539,
+   "level": 0.25,
+   "seed": 95
+  },
+  {
+   "kind": "tape",
+   "at": 23.699,
+   "level": 0.25,
+   "seed": 96
+  },
+  {
+   "kind": "tape",
+   "at": 23.859,
+   "level": 0.25,
+   "seed": 97
+  },
+  {
+   "kind": "slide",
+   "at": 24.289,
+   "level": 0.3,
+   "seed": 100,
+   "dur": 0.35
+  },
+  {
+   "kind": "slide",
+   "at": 24.739,
+   "level": 0.3,
+   "seed": 101,
+   "dur": 0.35
+  },
+  {
+   "kind": "slide",
+   "at": 25.189,
+   "level": 0.3,
+   "seed": 102,
+   "dur": 0.35
+  },
+  {
+   "kind": "pop",
+   "at": 5.505,
+   "level": 0.25,
+   "seed": 104,
+   "f": 560
+  },
+  {
+   "kind": "whoosh",
+   "at": 27.619,
+   "level": 0.2,
+   "seed": 110,
+   "rising": true,
+   "dur": 0.9
+  },
+  {
+   "kind": "tape",
+   "at": 28.219,
+   "level": 0.3,
+   "seed": 109
+  },
+  {
+   "kind": "slide",
+   "at": 28.119,
+   "level": 0.45,
+   "seed": 111,
+   "dur": 0.7
+  },
+  {
+   "kind": "pop",
+   "at": 28.719,
+   "level": 0.25,
+   "seed": 112,
+   "f": 1100
+  },
+  {
+   "kind": "whoosh",
+   "at": 28.679,
+   "level": 0.3,
+   "seed": 113,
+   "rising": false,
+   "dur": 0.8
+  },
+  {
+   "kind": "flip",
+   "at": 29.579,
+   "level": 0.35,
+   "seed": 114
+  },
+  {
+   "kind": "slide",
+   "at": 29.419,
+   "level": 0.2,
+   "seed": 115,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 29.499,
+   "level": 0.2,
+   "seed": 116,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 29.579,
+   "level": 0.2,
+   "seed": 117,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 29.659,
+   "level": 0.2,
+   "seed": 118,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 29.739,
+   "level": 0.2,
+   "seed": 119,
+   "dur": 0.3
+  },
+  {
+   "kind": "thunk",
+   "at": 30.419,
+   "level": 0.5,
+   "seed": 120,
+   "f": 100
+  },
+  {
+   "kind": "tape",
+   "at": 30.519,
+   "level": 0.45,
+   "seed": 121
+  },
+  {
+   "kind": "scribble",
+   "at": 31.619,
+   "level": 0.3,
+   "dur": 0.7,
+   "seed": 122
+  },
+  {
+   "kind": "slide",
+   "at": 33.719,
+   "level": 0.3,
+   "seed": 130
+  },
+  {
+   "kind": "whoosh",
+   "at": 34.219,
+   "level": 0.4,
+   "seed": 131,
+   "rising": true,
+   "dur": 1
+  },
+  {
+   "kind": "scribble",
+   "at": 35.623,
+   "level": 0.35,
+   "dur": 0.5,
+   "seed": 132
+  },
+  {
+   "kind": "slide",
+   "at": 36.419,
+   "level": 0.35,
+   "seed": 133
+  },
+  {
+   "kind": "thunk",
+   "at": 37.889,
+   "level": 0.65,
+   "seed": 134,
+   "f": 80
+  },
+  {
+   "kind": "ding",
+   "at": 37.939,
+   "level": 0.22,
+   "f": 1568
+  },
+  {
+   "kind": "rustle",
+   "at": 38.089,
+   "level": 0.25,
+   "seed": 135,
+   "dur": 0.4
+  },
+  {
+   "kind": "scribble",
+   "at": 38.339,
+   "level": 0.3,
+   "dur": 0.4,
+   "seed": 136
+  },
+  {
+   "kind": "rustle",
+   "at": 40.719,
+   "level": 0.45,
+   "seed": 140,
+   "dur": 0.9
+  },
+  {
+   "kind": "thunk",
+   "at": 41.569,
+   "level": 0.4,
+   "seed": 141,
+   "f": 110
+  },
+  {
+   "kind": "flip",
+   "at": 41.869,
+   "level": 0.25,
+   "seed": 142
+  },
+  {
+   "kind": "flip",
+   "at": 41.959,
+   "level": 0.25,
+   "seed": 143
+  },
+  {
+   "kind": "flip",
+   "at": 42.049,
+   "level": 0.25,
+   "seed": 144
+  },
+  {
+   "kind": "flip",
+   "at": 42.139,
+   "level": 0.25,
+   "seed": 145
+  },
+  {
+   "kind": "flip",
+   "at": 42.229,
+   "level": 0.25,
+   "seed": 146
+  },
+  {
+   "kind": "flip",
+   "at": 42.319,
+   "level": 0.25,
+   "seed": 147
+  },
+  {
+   "kind": "flip",
+   "at": 42.409,
+   "level": 0.25,
+   "seed": 148
+  },
+  {
+   "kind": "scribble",
+   "at": 42.019,
+   "level": 0.3,
+   "dur": 0.6,
+   "seed": 150
+  },
+  {
+   "kind": "tape",
+   "at": 42.519,
+   "level": 0.3,
+   "seed": 151
+  },
+  {
+   "kind": "thunk",
+   "at": 42.719,
+   "level": 0.55,
+   "seed": 152,
+   "f": 95
+  },
+  {
+   "kind": "slide",
+   "at": 44.269,
+   "level": 0.3,
+   "seed": 160,
+   "dur": 0.8
+  },
+  {
+   "kind": "flip",
+   "at": 47.149,
+   "level": 0.35,
+   "seed": 161
+  },
+  {
+   "kind": "slide",
+   "at": 47.009,
+   "level": 0.2,
+   "seed": 190,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 47.109,
+   "level": 0.2,
+   "seed": 191,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 47.209,
+   "level": 0.2,
+   "seed": 192,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 47.309,
+   "level": 0.2,
+   "seed": 193,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 47.409,
+   "level": 0.2,
+   "seed": 194,
+   "dur": 0.3
+  },
+  {
+   "kind": "slide",
+   "at": 47.509,
+   "level": 0.2,
+   "seed": 195,
+   "dur": 0.3
+  },
+  {
+   "kind": "pop",
+   "at": 46.789,
+   "level": 0.25,
+   "seed": 162,
+   "f": 1400
+  },
+  {
+   "kind": "slide",
+   "at": 47.089,
+   "level": 0.25,
+   "seed": 163,
+   "dur": 0.8
+  },
+  {
+   "kind": "flip",
+   "at": 47.829,
+   "level": 0.5,
+   "seed": 164
+  },
+  {
+   "kind": "ding",
+   "at": 47.979,
+   "level": 0.3,
+   "f": 1760
+  },
+  {
+   "kind": "flip",
+   "at": 49.569,
+   "level": 0.6,
+   "seed": 170
+  },
+  {
+   "kind": "scribble",
+   "at": 49.969,
+   "level": 0.45,
+   "dur": 0.7,
+   "seed": 171,
+   "speed": 4
+  },
+  {
+   "kind": "scribble",
+   "at": 50.369,
+   "level": 0.5,
+   "dur": 1,
+   "seed": 172,
+   "speed": 6
+  },
+  {
+   "kind": "thunk",
+   "at": 51.419,
+   "level": 0.35,
+   "seed": 173,
+   "f": 110
+  },
+  {
+   "kind": "slide",
+   "at": 52.019,
+   "level": 0.3,
+   "seed": 174
+  },
+  {
+   "kind": "thunk",
+   "at": 53.149,
+   "level": 0.4,
+   "seed": 175,
+   "f": 95
+  },
+  {
+   "kind": "slide",
+   "at": 53.899,
+   "level": 0.35,
+   "seed": 176
+  },
+  {
+   "kind": "thunk",
+   "at": 54.349,
+   "level": 0.45,
+   "seed": 177,
+   "f": 120
+  },
+  {
+   "kind": "scribble",
+   "at": 54.449,
+   "level": 0.3,
+   "dur": 0.6,
+   "seed": 178
+  },
+  {
+   "kind": "pop",
+   "at": 54.949,
+   "level": 0.2,
+   "seed": 179,
+   "f": 400
+  }
+ ],
+ "music": {
+  "gain": 0.5,
+  "duck": 0.4,
+  "fadeOut": 54.718999999999994,
+  "fadeLen": 2.2
+ },
+ "sections": {
+  "intro": 0,
+  "problem": 4.605,
+  "idea": 18.319,
+  "does": 19.619,
+  "drift": 34.219,
+  "recover": 37.889,
+  "handoff": 40.619,
+  "cta": 49.919,
+  "end": 56.919
+ }
+}

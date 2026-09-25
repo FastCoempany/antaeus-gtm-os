@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><title>paper test</title>
+<style>
+@font-face{font-family:"DM Serif Display";src:url(fonts/DMSerifDisplay-normal-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"DM Serif Display";src:url(fonts/DMSerifDisplay-italic-400.woff2) format("woff2");font-weight:400;font-style:italic}
+@font-face{font-family:"Public Sans";src:url(fonts/PublicSans-normal-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Public Sans";src:url(fonts/PublicSans-normal-600.woff2) format("woff2");font-weight:600}
+@font-face{font-family:"Public Sans";src:url(fonts/PublicSans-normal-700.woff2) format("woff2");font-weight:700}
+@font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono-normal-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono-normal-700.woff2) format("woff2");font-weight:700}
+@font-face{font-family:"Caveat";src:url(fonts/Caveat-variable.woff2) format("woff2");font-weight:400 700}
+@font-face{font-family:"Kalam";src:url(fonts/Kalam-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Kalam";src:url(fonts/Kalam-700.woff2) format("woff2");font-weight:700}
+@font-face{font-family:"Patrick Hand";src:url(fonts/PatrickHand-400.woff2) format("woff2");font-weight:400}
+html,body{margin:0;background:#222}canvas{display:block;width:1920px;height:1080px}
+</style></head><body><canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+import * as P from './src/paper.js';
+import { boilAt, walk, blink } from './src/engine.js';
+const W=1920,H=1080; const ctx=document.getElementById('c').getContext('2d');
+async function ready(){ await Promise.all(['400 40px "DM Serif Display"','italic 400 40px "DM Serif Display"','400 20px "Public Sans"','600 20px "Public Sans"','700 20px "JetBrains Mono"','600 30px "Caveat"','400 30px "Kalam"','400 30px "Patrick Hand"'].map(f=>document.fonts.load(f))); await document.fonts.ready; }
+window.__render = function(t){
+  const b = boilAt(t);
+  P.field(ctx,W,H);
+  // ground line
+  P.ink(ctx,[[80,880],[1840,880]],{width:6,seed:1,boil:b,jitter:1.2});
+  // figures
+  const w = walk(t);
+  P.figure(ctx, 420, 880, 1.0, {seed:100, boil:b, pose:{armL:0.5, armR:-0.2, tilt:0.08, ...w}, face:{mouth:0.4, brows:0.3, blink:blink(t,1)}});
+  P.figure(ctx, 760, 880, 0.9, {seed:130, boil:b, jacket:P.C.forest, hair:P.C.hairBrown, hairStyle:1, pose:{armL:-0.3, armR:1.2}, face:{mouth:-0.4, brows:-0.6}});
+  // mark
+  P.mark(ctx, 1500, 880, 320, {boil:b, progress:1, lifted:0});
+  P.mark(ctx, 1150, 600, 160, {boil:b, progress:1, lifted:0.8});
+  // cards / notes
+  P.stickyNote(ctx, 120, 120, 150, {text:'call\nBoeing', rotate:-0.08, seed:3});
+  P.stickyNote(ctx, 250, 180, 140, {text:'legal?', rotate:0.12, seed:4, color:P.C.sticky2});
+  P.dealCard(ctx, 460, 140, 340, 96, {name:'Starbucks', line:'no next step · 21 days quiet', value:'$180k', rotate:-0.03, seed:5, rule:P.C.red, tapeOn:true});
+  P.dealCard(ctx, 460, 270, 340, 96, {name:'OpenAI', line:'pilot running', value:'$2.0M', rotate:0.02, seed:6, rule:P.C.orange});
+  P.dealCard(ctx, 460, 400, 340, 96, {name:'Chipotle', line:'meeting Thursday', value:'$95k', rotate:-0.01, seed:7, lifted:0.7});
+  P.paperPlane(ctx, 1000, 200, 60, -0.3, {seed:8});
+  P.book(ctx, 1500, 300, 220, 280, {open:0, title:'The\nhandoff'});
+  P.book(ctx, 1100, 380, 200, 240, {open:1});
+  P.coffeeCup(ctx, 300, 700, 60, {boil:b, steam:1});
+  P.laptop(ctx, 900, 860, 200, {boil:b});
+  P.phone(ctx, 1300, 760, 90, 0.2, {ring:1, boil:b});
+  P.tape(ctx, 150, 500, 120, 30, -0.15, 9);
+  P.doodleArrow(ctx, [860, 300], [1080, 220], {boil:b, color:P.C.orange});
+  P.scribbleCircle(ctx, 1500, 300, 150, 170, {boil:b, color:P.C.orange});
+  P.scribbleUnderline(ctx, 820, 1000, 1010, {boil:b});
+  P.hatch(ctx, 100, 560, 200, 100, {seed:2});
+  P.text(ctx, 'Your whole picture of revenue lives in one place.', 960, 80, {font:'serif', size:56, align:'center'});
+  P.text(ctx, 'your head', 960, 640, {font:'hand', size:60, weight:700, align:'center', color:P.C.orange, rotate:-0.05});
+  P.text(ctx, 'WATCHING · COUNTING · REMEMBERING', 960, 1040, {font:'mono', size:18, weight:700, align:'center', color:P.C.ink50, spacing:3});
+  P.paperLabel(ctx, 'Antaeus', 1500, 960, {font:'serif', size:52, align:'center', tapeOn:true, rotate:-0.02});
+  P.paperLabel(ctx, 'the one thing to do first', 1150, 700, {font:'hand', size:36, weight:600, fill:P.C.cream, rotate:0.03, seed:12});
+  P.hand(ctx, 1700, 500, 120, Math.PI*0.85, {seed:200});
+  P.hand(ctx, 1750, 200, 100, Math.PI*0.6, {seed:210, pointing:false, pinch:1});
+  P.grain(ctx,W,H); P.vignette(ctx,W,H,0.08);
+};
+ready().then(()=>{ window.__ready = true; window.__render(0.4); });
+</script></body></html>
