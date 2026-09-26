@@ -13,7 +13,9 @@ const FX = 740; // where the founder stands (right of the desk)
 const standing = { legL: 0, legR: 0, armL: 0.1, armR: -0.1, bob: 0 };
 const HIRE = { seed: 130, flip: -1, jacket: '#b5875a', hair: P.C.hairDark, hairStyle: 1 };
 const FOUNDER = { seed: 100, jacket: P.C.ink, hair: P.C.hairDark };
-const tileW = 178, tileH = 72; const TILE = (i) => [1330 + (i % 2) * (tileW + 8), GY - tileH - Math.floor(i / 2) * (tileH + 6)];
+const tileW = 178, tileH = 72;
+/** the morning card: the one orange thing, standing on the line in front of the wall */
+const ONE = { x: 1170, y: GY - 240, s: 3.0, w: 178, h: 72 * 1.1 }; const TILE = (i) => [1330 + (i % 2) * (tileW + 8), GY - tileH - Math.floor(i / 2) * (tileH + 6)];
 const HIRE_WAIT = 1830; const AX = 1000; // the small A's home on the line // the hire waits at the right margin from the head beat to the book beat
 
 // ───────────────────────────── the plan ─────────────────────────────
@@ -162,7 +164,7 @@ export function buildFilm(cues) {
     if (t > T.bubble && t < T.taut) {
       const bIn = E(t, T.bubble, T.bubble + 0.6, ease.outBackSoft); const deflate = 1 - E(t, T.pull, T.taut, ease.inCubic);
       const ho = E(t, T.handover, T.handover + 0.55, ease.inOutCubic) * (1 - E(t, T.snap, T.snap + 0.45, ease.outElastic));
-      const bx = fig.head[0] + 120 + ho * 420, by = fig.head[1] - 300 + Math.sin(t * 2) * 6; const bw = 460 * bIn * deflate, bh = 250 * bIn * deflate;
+      const bx = fig.head[0] + 120 + ho * 420, by = fig.head[1] - 300 + ho * 34 + Math.sin(t * 2) * 6; const bw = 460 * bIn * deflate, bh = 250 * bIn * deflate;
       // the string: a tangled knot from her temple to the bubble, with a loose end to the floor
       if (bIn > 0.3 && deflate > 0.05) { const tx = fig.head[0] + 40, ty = fig.head[1] - 20; const r = P.rng(88 + b % 3); const pts = [[tx, ty]]; for (let i = 1; i <= 7; i++) pts.push([lerp(tx, bx - 30, i / 8) + P.rnd(r, -40, 40) * deflate, lerp(ty, by + bh * 0.4, i / 8) + P.rnd(r, -36, 36) * deflate]); pts.push([bx - 30, by + bh * 0.45]); P.ink(ctx, pts, { width: 3, seed: 89, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); const knot = [[tx + 60, ty - 40], [tx + 90, ty - 10], [tx + 50, ty], [tx + 85, ty - 45], [tx + 55, ty - 25], [tx + 95, ty - 28]]; P.ink(ctx, knot, { width: 3, seed: 90, boil: b, jitter: 1.4, curve: true, color: P.C.ink70, alpha: deflate }); const loose = [[tx + 70, ty + 10], [tx + 110, ty + 120], [tx + 150, ty + 200], [tx + 200, ty + 250]]; P.ink(ctx, P.partial(loose, deflate), { width: 3, seed: 91, boil: b, jitter: 1.5, curve: true, color: P.C.ink70, alpha: deflate }); }
       if (bw > 4) { P.cloud(ctx, bx, by, bw, bh, { seed: 400, outline: 4 }); for (let k = 0; k < 2; k++) P.paperBlob(ctx, fig.head[0] + 70 + k * 34 + ho * 420 * (0.25 + 0.3 * k), fig.head[1] - 110 - k * 62, 16 + k * 10, 14 + k * 8, { seed: 410 + k, n: 9, wob: 0.06, outline: 3, alpha: deflate });
@@ -176,7 +178,7 @@ export function buildFilm(cues) {
     if (t > T.hireWalk) { const hw = E(t, T.hireWalk, T.hireWalk + 1.2, ease.inOutCubic); const hx = lerp(HIRE_WAIT, 1720, hw); const pick = E(t, T.pickup, T.pickup + 0.7, ease.inOutCubic); const wk = hw < 1 ? walk(t, 2.4) : standing;
       P.figure(ctx, hx, GY, FS * 0.94, { ...HIRE, boil: b, pose: { ...wk, armL: hw < 1 ? wk.armL : -1.2 * pick, armR: hw < 1 ? wk.armR : 1.6 * pick, tilt: 0.04 * pick }, face: { mouth: 0.7, brows: 0.4, blink: blink(t, 2) } });
       world.hireX = hx; world.pick = pick;
-      for (let i = 0; i < 6; i++) { const fp = E(t, T.fan + i * 0.1, T.fan + i * 0.1 + 0.5, ease.outBackSoft); if (fp <= 0) continue; const tx = [440, 620, 800, 1240, 1900, 2080][i]; ctx.save(); ctx.globalAlpha = fp; ctx.translate(lerp(hx, tx, fp), GY - tileH * 0.7); ctx.scale(0.7, 0.7); P.dealCard(ctx, 0, 0, tileW, tileH, { name: COMPANIES[i], small: true, seed: 520 + i }); ctx.restore(); } }
+      for (let i = 0; i < 4; i++) { const fp = E(t, T.fan + i * 0.1, T.fan + i * 0.1 + 0.5, ease.outBackSoft); if (fp <= 0) continue; const tx = [440, 620, 800, 1240][i]; ctx.save(); ctx.globalAlpha = fp; ctx.translate(lerp(hx, tx, fp), GY - tileH * 0.7); ctx.scale(0.7, 0.7); P.dealCard(ctx, 0, 0, tileW, tileH, { name: COMPANIES[i], small: true, seed: 520 + i }); ctx.restore(); } }
 
     // ── myth: the hand pulls the string taut; the giant; lifted / grounded ──
     if (t > T.handIn && t < T.taut + 0.6) { const hIn = E(t, T.handIn, T.pinch, ease.outCubic); const pullP = E(t, T.pull, T.taut, ease.inOutCubic); const out = E(t, T.taut, T.taut + 0.6, ease.inCubic); const sx = fig.head[0] + 250; const hx = lerp(2100, sx, hIn) + pullP * 1500 + out * 600, hy = lerp(GY - 380, fig.head[1] + 230, hIn) + pullP * (GY - 10 - (fig.head[1] + 230)) + out * 300; P.hand(ctx, hx, hy, 130, Math.PI, { seed: 200, pointing: false }); }
@@ -195,26 +197,33 @@ export function buildFilm(cues) {
       const tellFade = 1 - E(t, T.stackUp, T.stackUp + 0.4);
       const c1 = E(t, T.card1, T.card1 + 0.6, ease.outBackSoft);
       if (c1 > 0 && tellFade > 0) { const cw = 220, ch = 210, x = 1090, y = GY - ch - (1 - c1) * 380; ctx.save(); ctx.globalAlpha = tellFade; P.paperRect(ctx, x, y, cw, ch, { fill: P.C.cream, seed: 700, shadow: 0.18, dy: 5, outline: 4, rotate: -0.02, cx: x + cw / 2, cy: y + ch / 2 }); P.paperBlob(ctx, x + cw / 2, y + 76, 36, 40, { fill: P.C.skin, seed: 701, n: 10, wob: 0.05 }); P.paperShape(ctx, P.rough([[x + 66, y + 160], [x + 176, y + 160], [x + 160, y + 112], [x + 82, y + 112]], 702, 1.5), { fill: P.C.ink70, shadow: 0.1, curve: true }); P.text(ctx, 'who we sell to', x + cw / 2, y + 194, { font: 'hand', size: 30, weight: 700, align: 'center' }); ctx.restore(); }
-      // the six company cards, taped down one by one (a small wall, two rows of three)
+      // the six company cards, taped down one by one (a small wall, two rows of three); the morning card is drawn after the wall
+      let oneCardDraw = null;
       for (let i = 0; i < 6; i++) { const p = E(t, T.card2 + i * 0.16, T.card2 + i * 0.16 + 0.45, ease.outBackSoft); if (p <= 0) continue; const [tx, ty] = TILE(i); const su = E(t, T.stackUp + i * 0.06, T.stackUp + i * 0.06 + 0.6, ease.inOutCubic); const isOne = i === 2;
         let x = tx, y = ty - (1 - p) * 300, alpha = 1, rot = 0, scale = 1;
-        if (isOne) { const oc = E(t, T.oneCard, T.oneCard + 0.8, ease.outBackSoft); x = lerp(tx, 980, oc); y = lerp(ty, 420, oc); scale = lerp(1, 3.3, oc); }
+        if (isOne) { const oc = E(t, T.oneCard, T.oneCard + 0.8, ease.outBackSoft); x = lerp(tx, ONE.x, oc); y = lerp(ty, ONE.y, oc); scale = lerp(1, ONE.s, oc); }
         else { alpha = 1 - su * 0.5; }
         const gone = (i === 4 && t > T.slideOut); if (gone) continue; if (isOne) alpha *= 1 - E(t, T.slideOut, T.slideOut + 0.5);
         const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic); x = lerp(x, 1250 - 90, gth); y = lerp(y, GY - 110 - i * 3, gth); scale = lerp(scale, 0.7, gth); alpha *= 1 - E(t, T.formed - 0.1, T.formed + 0.1);
-        ctx.save(); ctx.translate(x, y); ctx.scale(scale, scale);
-        if (isOne && scale > 1.2) { const k = seg(scale, 1.2, 3.3); P.dealCard(ctx, 0, 0, tileW, tileH * 0.78, { name: 'OpenAI', line: 'write to OpenAI first', value: '', seed: 522, rule: k > 0.6 ? P.C.orange : null, alpha, small: false }); }
-        else P.dealCard(ctx, 0, 0, tileW, tileH, { name: COMPANIES[i], small: true, seed: 520 + i, alpha, rotate: rot, tapeOn: p > 0.9 && su < 0.5 && !isOne });
-        ctx.restore(); }
+        const drawTile = () => { ctx.save(); ctx.translate(x, y); ctx.scale(scale, scale);
+          if (isOne && scale > 1.2) { const k = seg(scale, 1.2, ONE.s); P.dealCard(ctx, 0, 0, ONE.w, ONE.h, { name: 'OpenAI', line: 'write to OpenAI first', value: '', seed: 522, rule: k > 0.6 ? P.C.orange : null, alpha, small: false }); }
+          else P.dealCard(ctx, 0, 0, tileW, tileH, { name: COMPANIES[i], small: true, seed: 520 + i, alpha, rotate: rot, tapeOn: p > 0.9 && su < 0.5 && !isOne });
+          ctx.restore(); };
+        if (isOne && scale > 1.2) oneCardDraw = drawTile; else drawTile(); }
+      if (oneCardDraw) oneCardDraw();
       // "it fills in the rest": three blue slips slide out from behind the wall, one at a time
-      const FILLS = [['Boeing · new head of operations', 0], ['Notion · hiring twelve sellers', 5], ['Chipotle · opening forty stores', 4]];
-      FILLS.forEach(([str, k], i) => { const at = T.fills + i * 0.45; const p = E(t, at, at + 0.6, ease.outBackSoft); if (p <= 0) return; const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic); const col = k % 2; const x0 = 1330 + col * 120 - (col ? 0 : 60), y0 = GY - 3 * tileH - 90 - i * 62; const x = lerp(lerp(x0 + 60, x0, p), 1250 - 120, gth), y = lerp(y0, GY - 140, gth); if (p > 0.9 && gth <= 0 && t < T.oneCard) { const [ax, ay] = TILE(k); P.doodleArrow(ctx, [x0 + 150, y0 + 26], [ax + tileW / 2, ay - 6], { boil: b, curve: 0.12, width: 3, color: P.C.blue, head: 12, p: E(t, at + 0.5, at + 0.9) }); } const a = (1 - E(t, T.oneCard - 0.35, T.oneCard + 0.1)); ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(lerp(1, 0.7, gth), lerp(1, 0.7, gth)); P.paperLabel(ctx, str, 0, 0, { font: 'hand', size: 28, weight: 700, fill: P.C.bluePaper, color: P.C.ink, seed: 730 + i, rotate: (i - 1) * 0.02, padY: 3, pad: 12, alpha: p }); ctx.restore(); });
+      const FILLS = [
+        ['Sweetgreen · new head of operations', 1000, GY - 430, [1270, GY - 388], [TILE(4)[0] + tileW / 2, TILE(4)[1] - 6], 0.1],
+        ['Notion · hiring twelve sellers', 1380, GY - 348, [1600, GY - 306], [TILE(5)[0] + tileW / 2, TILE(5)[1] - 6], 0.1],
+        ['Chipotle · opening forty stores', 1500, GY - 430, [1780, GY - 388], [TILE(3)[0] + tileW + 6, TILE(3)[1] + 36], 0],
+      ];
+      FILLS.forEach(([str, x0, y0, a0, a1, curve], i) => { const at = T.fills + i * 0.45; const p = E(t, at, at + 0.6, ease.outBackSoft); if (p <= 0) return; const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic); const x = lerp(lerp(x0 + 60, x0, p), 1250 - 120, gth), y = lerp(y0, GY - 140, gth); if (p > 0.9 && gth <= 0 && t < T.oneCard) P.doodleArrow(ctx, a0, a1, { boil: b, curve, width: 3, color: P.C.blue, head: 12, p: E(t, at + 0.5, at + 0.9) }); const a = (1 - E(t, T.oneCard - 0.35, T.oneCard + 0.1)); ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.scale(lerp(1, 0.7, gth), lerp(1, 0.7, gth)); P.paperLabel(ctx, str, 0, 0, { font: 'hand', size: 28, weight: 700, fill: P.C.bluePaper, color: P.C.ink, seed: 730 + i, rotate: (i - 1) * 0.02, padY: 3, pad: 12, alpha: p }); ctx.restore(); });
       if (tellFade > 0) serifLine(ctx, 'Tell it once.', W / 2, 200, T.tellText, t, { size: 74, alpha: tellFade });
     }
     // ── morning: the airplane signal, the one card, the why ──
-    if (t > T.plane && t < T.gather) { const p = E(t, T.plane, T.planeLand, ease.inOutCubic); const [ox, oy] = TILE(2); const x = lerp(2100, ox + tileW - 30, p), y = lerp(80, oy - 30, p) - Math.sin(p * Math.PI) * 120; const land = E(t, T.planeLand, T.planeLand + 0.3, ease.outBounce); const oc = E(t, T.oneCard, T.oneCard + 0.8, ease.outBackSoft); const px = lerp(x, 980 + tileW * 3.3 - 40, oc), py = lerp(y + land * 10, 420 - 40, oc); const a = 1 - E(t, T.oneCard + 0.9, T.oneCard + 1.3);
+    if (t > T.plane && t < T.gather) { const p = E(t, T.plane, T.planeLand, ease.inOutCubic); const [ox, oy] = TILE(2); const x = lerp(2100, ox + tileW - 30, p), y = lerp(80, oy - 30, p) - Math.sin(p * Math.PI) * 120; const land = E(t, T.planeLand, T.planeLand + 0.3, ease.outBounce); const oc = E(t, T.oneCard, T.oneCard + 0.8, ease.outBackSoft); const px = lerp(x, ONE.x + ONE.w * ONE.s - 40, oc), py = lerp(y + land * 10, ONE.y - 40, oc); const a = 1 - E(t, T.oneCard + 0.9, T.oneCard + 1.3);
       if (a > 0) { ctx.save(); ctx.globalAlpha = a; P.paperPlane(ctx, px, py, 44, Math.PI * 0.9 + p * 0.3, { seed: 720 }); P.text(ctx, 'JUST RAISED MONEY', px + 6, py - 26, { font: 'mono', size: 15, weight: 700, color: P.C.blue, align: 'center', spacing: 1, rotate: -0.1 }); ctx.restore(); } }
-    if (t > T.oneCard && t < T.gather + 0.3) { const a = 1 - E(t, T.slideOut, T.slideOut + 0.5); doodle(ctx, 'do this first →', 700, 400, T.oneCard + 0.5, t, { size: 44, color: P.C.ink70, rotate: -0.06, alpha: a }); doodle(ctx, 'why: fresh money · hiring fast', 1290, 700, T.why, t, { size: 38, color: P.C.blue, align: 'center', rotate: 0, dur: 0.9, alpha: a }); serifLine(ctx, 'The one thing to do first.', W / 2, 200, T.oneCard + 0.1, t, { size: 74, alpha: a }); }
+    if (t > T.oneCard && t < T.gather + 0.3) { const a = 1 - E(t, T.slideOut, T.slideOut + 0.5); doodle(ctx, 'do this first', 1000, ONE.y - 56, T.oneCard + 0.5, t, { size: 44, color: P.C.ink70, rotate: -0.05, alpha: a }); if (t > T.oneCard + 0.9 && a > 0) { ctx.save(); ctx.globalAlpha *= a; P.doodleArrow(ctx, [1128, ONE.y - 44], [1212, ONE.y - 4], { boil: b, curve: 0.2, width: 3, color: P.C.ink70, head: 12, p: E(t, T.oneCard + 0.9, T.oneCard + 1.25) }); ctx.restore(); } doodle(ctx, 'why: fresh money · hiring fast', ONE.x + ONE.w * ONE.s / 2, GY + 64, T.why, t, { size: 38, color: P.C.blue, align: 'center', rotate: 0, dur: 0.9, alpha: a }); serifLine(ctx, 'The one thing to do first.', W / 2, 200, T.oneCard + 0.1, t, { size: 74, alpha: a }); }
     // ── slip: Sweetgreen slides out of the stack, drifts, gets pressed back down by the founder ──
     if (t > T.slideOut && t < T.gather + 1.2) {
       const so = E(t, T.slideOut, T.slideOut + 0.5, ease.inOutCubic); const up = E(t, T.drift, T.drift + 1.6, ease.inOutCubic) * (1 - E(t, T.press - 0.1, T.press + 0.35, ease.inOutCubic)); const gth = E(t, T.gather, T.gather + 0.8, ease.inOutCubic);
@@ -261,13 +270,13 @@ export function buildFilm(cues) {
     serifLine(ctx, 'Antaeus', 1060, GY - 330, T.name, t, { size: 160, align: 'left' });
     serifLine(ctx, cues.tagline || 'Your first hire could run this.', 1064, GY - 228, T.tagline, t, { size: 56, align: 'left', italic: true, color: P.C.ink70 });
     const up = E(t, T.url, T.url + 0.6, ease.outBackSoft);
-    if (up > 0) P.paperLabel(ctx, 'antaeus.app', 1060, GY - 140 + (1 - up) * 120, { font: 'serif', size: 80, fill: P.C.paper, seed: 1510, rotate: -0.01, pad: 22, padY: 6, alpha: up });
+    if (up > 0) P.paperLabel(ctx, 'antaeus.app', 1060, GY - 104 + (1 - up) * 120, { font: 'serif', size: 80, fill: P.C.paper, seed: 1510, rotate: -0.01, pad: 22, padY: 6, alpha: up });
     const bp = E(t, T.button, T.button + 0.6, ease.outBackSoft); const breathe = 1 + 0.012 * Math.sin((t - T.button) * 1.6);
-    if (bp > 0) { const bx = 1060, by = GY + 16 + (1 - bp) * 200; ctx.save(); ctx.translate(bx + 150, by + 34); ctx.scale(breathe, breathe); ctx.translate(-(bx + 150), -(by + 34)); P.paperRect(ctx, bx, by, 300, 68, { fill: P.C.orange, seed: 1530, shadow: 0.22, dy: 6, outline: 4, texture: 0.08, amp: 1.4 }); P.text(ctx, 'Try the demo', bx + 150, by + 46, { font: 'sans', size: 30, weight: 700, color: '#ffffff', align: 'center' }); ctx.restore();
-      if (t > T.button - 0.5 && t < T.button + 1.1) { const hin = E(t, T.button - 0.5, T.button + 0.1, ease.outCubic), hout = E(t, T.button + 0.6, T.button + 1.1, ease.inCubic); const pressk = pulse(t, T.button + 0.1, T.button + 0.6, 0.2); P.hand(ctx, bx + 330 + 1.1 * 140 + (1 - hin) * 500 + hout * 500 - pressk * 14, by + 40 + pressk * 6, 140, Math.PI, { seed: 230, pointing: true }); } }
-    doodle(ctx, 'free · no card needed', 1060, GY + 130, T.ctaNotes, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
-    doodle(ctx, 'a sample company inside', 1400, GY + 130, T.ctaNotes + 0.4, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
-    doodle(ctx, 'works beside what you already use', 1060, GY + 168, T.ctaNotes + 0.8, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    if (bp > 0) { const bx = 1580, by = GY - 70 + (1 - bp) * 200; ctx.save(); ctx.translate(bx + 150, by + 34); ctx.scale(breathe, breathe); ctx.translate(-(bx + 150), -(by + 34)); P.paperRect(ctx, bx, by, 300, 68, { fill: P.C.orange, seed: 1530, shadow: 0.22, dy: 6, outline: 4, texture: 0.08, amp: 1.4 }); P.text(ctx, 'Try the demo', bx + 150, by + 46, { font: 'sans', size: 30, weight: 700, color: '#ffffff', align: 'center' }); ctx.restore();
+      if (t > T.button - 0.5 && t < T.button + 1.1) { const hin = E(t, T.button - 0.5, T.button + 0.1, ease.outCubic), hout = E(t, T.button + 0.6, T.button + 1.1, ease.inCubic); const pressk = pulse(t, T.button + 0.1, T.button + 0.6, 0.2); P.hand(ctx, bx + 250, by - 127 - (1 - hin) * 360 - hout * 360 + pressk * 8, 110, Math.PI / 2, { seed: 230, pointing: true }); } }
+    doodle(ctx, 'free · no card needed', 1060, GY + 56, T.ctaNotes, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    doodle(ctx, 'a sample company inside', 1400, GY + 56, T.ctaNotes + 0.4, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
+    doodle(ctx, 'works beside what you already use', 1060, GY + 96, T.ctaNotes + 0.8, t, { size: 30, color: P.C.ink70, rotate: -0.02 });
     // the loud note is asleep on the desk's neat stack
     if (t > T.zzz) P.text(ctx, 'zzz', DESK.x + 400, DESK.top - 150 - Math.sin(t * 1.4) * 6, { font: 'hand', size: 34 * E(t, T.zzz, T.zzz + 0.4), weight: 700, color: P.C.ink50, rotate: -0.2 });
     P.grain(ctx, W, H); P.vignette(ctx, W, H, 0.08);
