@@ -4,3 +4,4 @@ audio/music.wav
 audio/mix.wav
 audio/vo/*/*.wav
 audio/music-sections.json
+__pycache__/
