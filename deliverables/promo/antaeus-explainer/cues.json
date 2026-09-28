@@ -1,5 +1,5 @@
 {
- "duration": 57.273,
+ "duration": 57.873,
  "beats": [
   {
    "id": 1,
@@ -1428,7 +1428,7 @@
   {
    "kind": "scribble",
    "at": 50.487,
-   "level": 0.5,
+   "level": 0.3,
    "dur": 1,
    "seed": 172,
    "speed": 6
@@ -1484,8 +1484,8 @@
  "music": {
   "gain": 0.62,
   "duck": 0.32,
-  "fadeOut": 55.773,
-  "fadeLen": 1.5
+  "fadeOut": 55.772999999999996,
+  "fadeLen": 2.1
  },
  "sections": {
   "intro": 0,
@@ -1496,6 +1496,6 @@
   "recover": 38.387,
   "handoff": 40.737,
   "cta": 50.037,
-  "end": 57.273
+  "end": 57.873
  }
 }

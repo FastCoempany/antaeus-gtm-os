@@ -9,8 +9,8 @@ const out = new S.Buf(cues.duration + 0.5);
 // ── music with ducking envelope ──
 const music = S.readWav(musicPath); const mg = cues.music?.gain ?? 0.55, duck = cues.music?.duck ?? 0.42;
 const envl = new Float32Array(out.n).fill(1);
-// duck windows around each line; windows closer than 1 s are merged so a short breath between lines stays ducked
-const wins = cues.vo.map(v => [v.at - 0.25, v.at + v.duration + 0.35]).sort((a, b) => a[0] - b[0]).reduce((acc, w) => { const last = acc[acc.length - 1]; if (last && w[0] - last[1] < 1.0) last[1] = Math.max(last[1], w[1]); else acc.push([...w]); return acc; }, []);
+// duck windows around each line; windows closer than 1.5 s are merged so a short breath between lines stays ducked
+const wins = cues.vo.map(v => [v.at - 0.25, v.at + v.duration + 0.35]).sort((a, b) => a[0] - b[0]).reduce((acc, w) => { const last = acc[acc.length - 1]; if (last && w[0] - last[1] < 1.5) last[1] = Math.max(last[1], w[1]); else acc.push([...w]); return acc; }, []);
 for (const [a, b] of wins) { const s = Math.floor(a * S.SR), e = Math.floor(b * S.SR); for (let i = Math.max(0, s); i < Math.min(out.n, e); i++) envl[i] = duck; }
 // smooth the envelope: ~0.4 s release so the bed comes back gently, attack 2.2x faster so it gets out of the voice's way
 let sm = 1; const k = 1 / (0.4 * S.SR); const env2 = new Float32Array(out.n); for (let i = 0; i < out.n; i++) { sm += (envl[i] - sm) * k * (envl[i] < sm ? 2.2 : 1); env2[i] = sm; }

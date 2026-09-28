@@ -1,6 +1,6 @@
 # Antaeus — the explainer (paper-collage, pure JavaScript)
 
-A 57-second animated explainer for antaeus.app in a hand-drawn paper-collage style. Everything
+A 58-second animated explainer for antaeus.app in a hand-drawn paper-collage style. Everything
 on screen is drawn procedurally on a `<canvas>` at 1920×1080 — no video editor, no animation library,
 no image assets. The paper sound effects are synthesized in JavaScript. The voiceover (Fish Audio) and
 the music bed (Google Lyria) are generated through OpenRouter. Both were chosen by two listening models

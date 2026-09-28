@@ -3,7 +3,7 @@
  "logline": "One founder, one Monday morning, forty deals shouting for attention and a new hire holding out empty hands \u2014 until the tangle tied to her head is pulled taut into a ground line, the one thing to do first shows up in orange with its reason in blue, she presses a slipping deal back onto the ground with her own hand, and everything she did settles into a short green book her first sales hire can run from.",
  "tagline": "Your first hire could run this.",
  "total_words": 107,
- "outro": 1.4,
+ "outro": 2.0,
  "musicGain": 0.62,
  "musicDuck": 0.32,
  "musicSeed": 7,
@@ -127,6 +127,6 @@
   }
  ],
  "voiceDir": "audio/vo/fish-adrian",
- "musicFadeLen": 1.5,
+ "musicFadeLen": 2.1,
  "musicBed": "audio/music-lyria.flac"
 }
