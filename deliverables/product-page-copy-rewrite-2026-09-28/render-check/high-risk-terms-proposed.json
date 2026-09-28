@@ -1,0 +1,44 @@
+[
+ {
+  "kind": "text",
+  "line": 1143,
+  "term": "cold",
+  "context": "Preparing for a cold call."
+ },
+ {
+  "kind": "text",
+  "line": 1179,
+  "term": "cold",
+  "context": "Cold call"
+ },
+ {
+  "kind": "text",
+  "line": 1209,
+  "term": "cold",
+  "context": "Cold call."
+ },
+ {
+  "kind": "text",
+  "line": 1277,
+  "term": "warm",
+  "context": "Warm introduction."
+ },
+ {
+  "kind": "text",
+  "line": 1414,
+  "term": "autopsy",
+  "context": "Future Autopsy"
+ },
+ {
+  "kind": "js",
+  "line": 1848,
+  "term": "motion",
+  "context": "(prefers-reduced-motion: reduce)"
+ },
+ {
+  "kind": "js",
+  "line": 2101,
+  "term": "autopsy",
+  "context": "Future Autopsy projects deal-loss risk. For an open deal, it shows how the"
+ }
+]

@@ -1,0 +1,104 @@
+[
+ {
+  "kind": "attr:aria-label",
+  "line": 989,
+  "term": "room",
+  "context": "Open a room"
+ },
+ {
+  "kind": "attr:aria-label",
+  "line": 997,
+  "term": "room",
+  "context": "Previous room"
+ },
+ {
+  "kind": "attr:aria-label",
+  "line": 1001,
+  "term": "room",
+  "context": "Next room"
+ },
+ {
+  "kind": "text",
+  "line": 1143,
+  "term": "cold",
+  "context": "Preparing for a cold call."
+ },
+ {
+  "kind": "text",
+  "line": 1179,
+  "term": "cold",
+  "context": "Cold call"
+ },
+ {
+  "kind": "text",
+  "line": 1209,
+  "term": "cold",
+  "context": "Cold call."
+ },
+ {
+  "kind": "text",
+  "line": 1277,
+  "term": "warm",
+  "context": "Warm introduction."
+ },
+ {
+  "kind": "text",
+  "line": 1414,
+  "term": "autopsy",
+  "context": "Future Autopsy"
+ },
+ {
+  "kind": "js",
+  "line": 1848,
+  "term": "motion",
+  "context": "(prefers-reduced-motion: reduce)"
+ },
+ {
+  "kind": "js",
+  "line": 2082,
+  "term": "cold",
+  "context": ". None of the cold ones landed."
+ },
+ {
+  "kind": "js",
+  "line": 2086,
+  "term": "line",
+  "context": "answer you tap what you heard — it hands you the exact next line."
+ },
+ {
+  "kind": "js",
+  "line": 2101,
+  "term": "autopsy",
+  "context": "Future Autopsy writes the story of how a deal dies before it does — names"
+ },
+ {
+  "kind": "js",
+  "line": 2101,
+  "term": "dies",
+  "context": "Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you hav"
+ },
+ {
+  "kind": "js",
+  "line": 2101,
+  "term": "room",
+  "context": "ttern, counts the days you have left, and routes you to the room where the fix happens."
+ },
+ {
+  "kind": "js",
+  "line": 2105,
+  "term": "dies",
+  "context": "Warby Parker dies in 20 days, and here is how."
+ },
+ {
+  "kind": "js",
+  "line": 2109,
+  "term": "room",
+  "context": "get a second name in the room this week"
+ },
+ {
+  "kind": "js",
+  "line": 2113,
+  "term": "room",
+  "context": "ard — and each one carries a thing to notice that no single room could have told you on its own."
+ }
+]

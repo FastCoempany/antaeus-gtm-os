@@ -1,0 +1,5441 @@
+{
+ "file": "../final/antaeus-product-page.copy-map-applied+proposed-addendum.html",
+ "label": "proposed",
+ "viewports": {
+  "desktop": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "HIRE-READY AND REPEATABLE",
+      "sw": 148,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has had no recorded progress since the proposal.",
+      "sw": 367,
+      "cw": 237,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Liquid Death has had no recent buyer activity.",
+      "sw": 264,
+      "cw": 237,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Why Antaeus",
+      "w": 76,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Product areas",
+      "w": 80,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Compare",
+      "w": 52,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Questions",
+      "w": 58,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Sign in",
+      "w": 40,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 153,
+      "h": 40,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What a new hire sees on day one",
+      "w": 144,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Morning briefing",
+      "w": 178,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Live discovery call",
+      "w": 189,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Deal at risk",
+      "w": 142,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Sales handoff",
+      "w": 159,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "Turn the sales process you built into a system your first hire can use.",
+      "lines": 5,
+      "w": 675,
+      "h": 439
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 978,
+      "h": 36
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 459,
+      "h": 61
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "Your highest-priority action, with the reason it ranks first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "Deals at risk this week, with the next corrective action for each.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 deals are at risk.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A live discovery-call console.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 2,
+      "w": 302,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot plan the buyer's manager can use to make a decision.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "What a new hire gets on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 177,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Can a new hire execute your sales process without you?",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One sales process, usable by both founder and first hire.",
+      "lines": 3,
+      "w": 565,
+      "h": 183
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 1054,
+      "h": 36
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 1,
+      "w": 641,
+      "h": 20
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 1136,
+      "h": 61
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "Antaeus continues reviewing workspace activity when you're away.",
+      "lines": 4,
+      "w": 475,
+      "h": 244
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "lines": 4,
+      "w": 654,
+      "h": 244
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "For common sales situations.",
+      "lines": 2,
+      "w": 289,
+      "h": 79
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "Standardize outreach instead of improvising it.",
+      "lines": 2,
+      "w": 683,
+      "h": 122
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Workflows from prospecting through signature.",
+      "lines": 3,
+      "w": 398,
+      "h": 119
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 382,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "lines": 3,
+      "w": 594,
+      "h": 183
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two product areas. Here are three.",
+      "lines": 3,
+      "w": 475,
+      "h": 183
+     },
+     {
+      "sel": "h3",
+      "text": "Run the discovery call from this workspace.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 275,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "Projects deal-loss risk before the deal is lost.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 275,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Workspace changes detected while you were away.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Open the Ground to see the workspace map.",
+      "lines": 2,
+      "w": 594,
+      "h": 122
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "You own the workspace data and can export it.",
+      "lines": 3,
+      "w": 535,
+      "h": 183
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 505,
+      "h": 122
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Designed for the point when the founder is no longer the only person who understands the s",
+      "lines": 5,
+      "w": 268,
+      "h": 123
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Compare Antaeus with a CRM and a spreadsheet.",
+      "lines": 3,
+      "w": 565,
+      "h": 183
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Current beta limitations.",
+      "lines": 2,
+      "w": 361,
+      "h": 79
+     },
+     {
+      "sel": "h3",
+      "text": "The product is still in beta.",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Antaeus uses language models for analysis and drafting.",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 1136,
+      "h": 61
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "lines": 4,
+      "w": 654,
+      "h": 244
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 19
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 1144
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 920
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1318
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 573
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2465
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1517
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2424
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1543
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1262
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1247
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 944
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 960
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 1467
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 497
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 1114
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 760
+     },
+     {
+      "sel": "footer",
+      "h": 517
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 20807
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "Morning briefing. Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 1,
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+      "stage": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 2,
+      "cap": "Deal at risk. Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker is projected to be lost within 20 days.\n\nThe deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as no decision, like most of your lost deals.\n\nPattern\npressure before clarity\nseen 4×\nSmallest fix\nadd a second stakeholder this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 3,
+      "cap": "Sales handoff. The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.\n\nPattern: every deal you won was mid-market, while your stated target is enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
+     },
+     {
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
+     },
+     {
+      "text": "Deal at risk",
+      "aria": "Show example: Deal at risk"
+     },
+     {
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "25% win-rate benchmark",
+      "pace-as": "typical range 20–30%",
+      "pace-b": "3× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "45-day sales-cycle benchmark",
+      "pace-cs": "typical range 30–60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "15% win-rate benchmark",
+      "pace-as": "typical range 10–18%",
+      "pace-b": "4.5× pipeline coverage",
+      "pace-bs": "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
+      "pace-c": "180-day sales-cycle benchmark",
+      "pace-cs": "typical range 120–270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "12% win-rate benchmark",
+      "pace-as": "typical range 8–15%",
+      "pace-b": "5× pipeline coverage",
+      "pace-bs": "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
+      "pace-c": "240-day sales-cycle benchmark",
+      "pace-cs": "typical range 180–360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     }
+    ],
+    "swatches": [
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "tablet": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 144,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "HIRE-READY AND REPEATABLE",
+      "sw": 148,
+      "cw": 144,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 61,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 61,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 61,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "HIRE-READY AND REPEATABLE",
+      "sw": 148,
+      "cw": 61,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has had no recorded progress since the proposal.",
+      "sw": 367,
+      "cw": 250,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Liquid Death has had no recent buyer activity.",
+      "sw": 264,
+      "cw": 250,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Why Antaeus",
+      "w": 76,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Product areas",
+      "w": 80,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Compare",
+      "w": 52,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Questions",
+      "w": 58,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Sign in",
+      "w": 40,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 153,
+      "h": 40,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What a new hire sees on day one",
+      "w": 144,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Morning briefing",
+      "w": 178,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Live discovery call",
+      "w": 189,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Deal at risk",
+      "w": 142,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Sales handoff",
+      "w": 159,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "Turn the sales process you built into a system your first hire can use.",
+      "lines": 5,
+      "w": 519,
+      "h": 337
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 742,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 356,
+      "h": 47
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "Your highest-priority action, with the reason it ranks first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "Deals at risk this week, with the next corrective action for each.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 deals are at risk.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A live discovery-call console.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 2,
+      "w": 302,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot plan the buyer's manager can use to make a decision.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "What a new hire gets on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 177,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Can a new hire execute your sales process without you?",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One sales process, usable by both founder and first hire.",
+      "lines": 3,
+      "w": 438,
+      "h": 142
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 718,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 1,
+      "w": 433,
+      "h": 20
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 776,
+      "h": 47
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "Antaeus continues reviewing workspace activity when you're away.",
+      "lines": 4,
+      "w": 369,
+      "h": 189
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "lines": 4,
+      "w": 507,
+      "h": 189
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "For common sales situations.",
+      "lines": 2,
+      "w": 224,
+      "h": 61
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "Standardize outreach instead of improvising it.",
+      "lines": 2,
+      "w": 530,
+      "h": 95
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Workflows from prospecting through signature.",
+      "lines": 3,
+      "w": 308,
+      "h": 92
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 382,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "lines": 3,
+      "w": 461,
+      "h": 142
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two product areas. Here are three.",
+      "lines": 3,
+      "w": 369,
+      "h": 142
+     },
+     {
+      "sel": "h3",
+      "text": "Run the discovery call from this workspace.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 287,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "Projects deal-loss risk before the deal is lost.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 287,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Workspace changes detected while you were away.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Open the Ground to see the workspace map.",
+      "lines": 2,
+      "w": 461,
+      "h": 95
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "You own the workspace data and can export it.",
+      "lines": 3,
+      "w": 415,
+      "h": 142
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 392,
+      "h": 95
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Designed for the point when the founder is no longer the only person who understands the s",
+      "lines": 5,
+      "w": 268,
+      "h": 123
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Compare Antaeus with a CRM and a spreadsheet.",
+      "lines": 3,
+      "w": 438,
+      "h": 142
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Current beta limitations.",
+      "lines": 2,
+      "w": 280,
+      "h": 61
+     },
+     {
+      "sel": "h3",
+      "text": "The product is still in beta.",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Antaeus uses language models for analysis and drafting.",
+      "lines": 2,
+      "w": 376,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 776,
+      "h": 47
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "lines": 4,
+      "w": 507,
+      "h": 189
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 951
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 846
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1087
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 526
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2053
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1306
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2037
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1234
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1446
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 960
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 787
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 814
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 1397
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 449
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 952
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 595
+     },
+     {
+      "sel": "footer",
+      "h": 517
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 18091
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "Morning briefing. Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+      "stage": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "Deal at risk. Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker is projected to be lost within 20 days.\n\nThe deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as no decision, like most of your lost deals.\n\nPattern\npressure before clarity\nseen 4×\nSmallest fix\nadd a second stakeholder this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "Sales handoff. The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.\n\nPattern: every deal you won was mid-market, while your stated target is enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
+     },
+     {
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
+     },
+     {
+      "text": "Deal at risk",
+      "aria": "Show example: Deal at risk"
+     },
+     {
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "25% win-rate benchmark",
+      "pace-as": "typical range 20–30%",
+      "pace-b": "3× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "45-day sales-cycle benchmark",
+      "pace-cs": "typical range 30–60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "15% win-rate benchmark",
+      "pace-as": "typical range 10–18%",
+      "pace-b": "4.5× pipeline coverage",
+      "pace-bs": "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
+      "pace-c": "180-day sales-cycle benchmark",
+      "pace-cs": "typical range 120–270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "12% win-rate benchmark",
+      "pace-as": "typical range 8–15%",
+      "pace-b": "5× pipeline coverage",
+      "pace-bs": "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
+      "pace-c": "240-day sales-cycle benchmark",
+      "pace-cs": "typical range 180–360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     }
+    ],
+    "swatches": [
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "mobile": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 103,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 103,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 71,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no champion activity",
+      "sw": 119,
+      "cw": 76,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 94,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "this week without a corrective action",
+      "sw": 211,
+      "cw": 181,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no buyer activity for 14 days — highest-risk open deal",
+      "sw": 305,
+      "cw": 211,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · limited recruiting capacity",
+      "sw": 290,
+      "cw": 236,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 182,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has had no recorded progress since the proposal.",
+      "sw": 367,
+      "cw": 217,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Liquid Death has had no recent buyer activity.",
+      "sw": 264,
+      "cw": 217,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What a new hire sees on day one",
+      "w": 144,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Morning briefing",
+      "w": 178,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Live discovery call",
+      "w": 189,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Deal at risk",
+      "w": 142,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Sales handoff",
+      "w": 159,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "Turn the sales process you built into a system your first hire can use.",
+      "lines": 5,
+      "w": 346,
+      "h": 227
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 320,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "Your highest-priority action, with the reason it ranks first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 208,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "Deals at risk this week, with the next corrective action for each.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 deals are at risk.",
+      "lines": 1,
+      "w": 208,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A live discovery-call console.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 3,
+      "w": 208,
+      "h": 67
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot plan the buyer's manager can use to make a decision.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "What a new hire gets on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 116,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Can a new hire execute your sales process without you?",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One sales process, usable by both founder and first hire.",
+      "lines": 3,
+      "w": 320,
+      "h": 104
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 296,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 173,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 346,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "Antaeus continues reviewing workspace activity when you're away.",
+      "lines": 4,
+      "w": 270,
+      "h": 138
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "lines": 5,
+      "w": 346,
+      "h": 173
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "For common sales situations.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "Standardize outreach instead of improvising it.",
+      "lines": 3,
+      "w": 346,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Workflows from prospecting through signature.",
+      "lines": 3,
+      "w": 265,
+      "h": 79
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 280,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 280,
+      "h": 38
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 280,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "lines": 3,
+      "w": 337,
+      "h": 104
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two product areas. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "Run the discovery call from this workspace.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "Projects deal-loss risk before the deal is lost.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 254,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Workspace changes detected while you were away.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Open the Ground to see the workspace map.",
+      "lines": 2,
+      "w": 337,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "You own the workspace data and can export it.",
+      "lines": 3,
+      "w": 303,
+      "h": 104
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 287,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "lines": 3,
+      "w": 239,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 239,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 239,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Designed for the point when the founder is no longer the only person who understands the s",
+      "lines": 5,
+      "w": 239,
+      "h": 123
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Compare Antaeus with a CRM and a spreadsheet.",
+      "lines": 3,
+      "w": 320,
+      "h": 104
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Current beta limitations.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "The product is still in beta.",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Antaeus uses language models for analysis and drafting.",
+      "lines": 2,
+      "w": 346,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 346,
+      "h": 35
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "lines": 4,
+      "w": 346,
+      "h": 138
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 929
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 911
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1177
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 638
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2321
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1200
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2145
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1258
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1876
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1349
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 694
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 737
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2691
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 604
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 970
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 521
+     },
+     {
+      "sel": "footer",
+      "h": 569
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 20742
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "Morning briefing. Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+      "stage": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "Deal at risk. Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker is projected to be lost within 20 days.\n\nThe deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as no decision, like most of your lost deals.\n\nPattern\npressure before clarity\nseen 4×\nSmallest fix\nadd a second stakeholder this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "Sales handoff. The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.\n\nPattern: every deal you won was mid-market, while your stated target is enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
+     },
+     {
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
+     },
+     {
+      "text": "Deal at risk",
+      "aria": "Show example: Deal at risk"
+     },
+     {
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "25% win-rate benchmark",
+      "pace-as": "typical range 20–30%",
+      "pace-b": "3× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "45-day sales-cycle benchmark",
+      "pace-cs": "typical range 30–60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "15% win-rate benchmark",
+      "pace-as": "typical range 10–18%",
+      "pace-b": "4.5× pipeline coverage",
+      "pace-bs": "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
+      "pace-c": "180-day sales-cycle benchmark",
+      "pace-cs": "typical range 120–270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "12% win-rate benchmark",
+      "pace-as": "typical range 8–15%",
+      "pace-b": "5× pipeline coverage",
+      "pace-bs": "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
+      "pace-c": "240-day sales-cycle benchmark",
+      "pace-cs": "typical range 180–360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     }
+    ],
+    "swatches": [
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "phone-360": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 93,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 93,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 93,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 47,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no champion activity",
+      "sw": 119,
+      "cw": 53,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 71,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "this week without a corrective action",
+      "sw": 211,
+      "cw": 151,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no buyer activity for 14 days — highest-risk open deal",
+      "sw": 305,
+      "cw": 181,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 86,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 86,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 86,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · limited recruiting capacity",
+      "sw": 290,
+      "cw": 206,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 157,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has had no recorded progress since the proposal.",
+      "sw": 367,
+      "cw": 187,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Liquid Death has had no recent buyer activity.",
+      "sw": 264,
+      "cw": 187,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 185,
+      "h": 49,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What a new hire sees on day one",
+      "w": 144,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Morning briefing",
+      "w": 178,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Live discovery call",
+      "w": 189,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Deal at risk",
+      "w": 142,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Sales handoff",
+      "w": 159,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "Turn the sales process you built into a system your first hire can use.",
+      "lines": 6,
+      "w": 316,
+      "h": 273
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 290,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "Your highest-priority action, with the reason it ranks first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 185,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "Deals at risk this week, with the next corrective action for each.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 deals are at risk.",
+      "lines": 1,
+      "w": 185,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A live discovery-call console.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 3,
+      "w": 185,
+      "h": 67
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot plan the buyer's manager can use to make a decision.",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "What a new hire gets on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 3,
+      "w": 93,
+      "h": 58
+     },
+     {
+      "sel": "h3",
+      "text": "Can a new hire execute your sales process without you?",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One sales process, usable by both founder and first hire.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 266,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 154,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 316,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "Antaeus continues reviewing workspace activity when you're away.",
+      "lines": 4,
+      "w": 270,
+      "h": 138
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "lines": 5,
+      "w": 316,
+      "h": 173
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "For common sales situations.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "Standardize outreach instead of improvising it.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Workflows from prospecting through signature.",
+      "lines": 3,
+      "w": 265,
+      "h": 79
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 254,
+      "h": 38
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 254,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "lines": 4,
+      "w": 316,
+      "h": 138
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two product areas. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "Run the discovery call from this workspace.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 2,
+      "w": 224,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Projects deal-loss risk before the deal is lost.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 224,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Workspace changes detected while you were away.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Open the Ground to see the workspace map.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "You own the workspace data and can export it.",
+      "lines": 3,
+      "w": 303,
+      "h": 104
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 287,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "lines": 3,
+      "w": 216,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 216,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 216,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Designed for the point when the founder is no longer the only person who understands the s",
+      "lines": 5,
+      "w": 216,
+      "h": 123
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Compare Antaeus with a CRM and a spreadsheet.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Current beta limitations.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "The product is still in beta.",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Antaeus uses language models for analysis and drafting.",
+      "lines": 2,
+      "w": 316,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 316,
+      "h": 35
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "lines": 5,
+      "w": 316,
+      "h": 173
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 1023
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 914
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1249
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 638
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2397
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1214
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2245
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1349
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1932
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1394
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 700
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 779
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2731
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 604
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 992
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 556
+     },
+     {
+      "sel": "footer",
+      "h": 588
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 21452
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "Morning briefing. Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+      "stage": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "Deal at risk. Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker is projected to be lost within 20 days.\n\nThe deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as no decision, like most of your lost deals.\n\nPattern\npressure before clarity\nseen 4×\nSmallest fix\nadd a second stakeholder this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "Sales handoff. The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.\n\nPattern: every deal you won was mid-market, while your stated target is enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
+     },
+     {
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
+     },
+     {
+      "text": "Deal at risk",
+      "aria": "Show example: Deal at risk"
+     },
+     {
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "25% win-rate benchmark",
+      "pace-as": "typical range 20–30%",
+      "pace-b": "3× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "45-day sales-cycle benchmark",
+      "pace-cs": "typical range 30–60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "15% win-rate benchmark",
+      "pace-as": "typical range 10–18%",
+      "pace-b": "4.5× pipeline coverage",
+      "pace-bs": "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
+      "pace-c": "180-day sales-cycle benchmark",
+      "pace-cs": "typical range 120–270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "12% win-rate benchmark",
+      "pace-as": "typical range 8–15%",
+      "pace-b": "5× pipeline coverage",
+      "pace-bs": "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
+      "pace-c": "240-day sales-cycle benchmark",
+      "pace-cs": "typical range 180–360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     }
+    ],
+    "swatches": [
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "phone-320": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 79,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 79,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 79,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 16,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no champion activity",
+      "sw": 119,
+      "cw": 21,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 40,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "this week without a corrective action",
+      "sw": 211,
+      "cw": 111,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no buyer activity for 14 days — highest-risk open deal",
+      "sw": 305,
+      "cw": 141,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "FOUNDER-DEPENDENT",
+      "sw": 101,
+      "cw": 73,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "PARTIALLY DOCUMENTED",
+      "sw": 119,
+      "cw": 73,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "USABLE WITH FOUNDER SUPPORT",
+      "sw": 160,
+      "cw": 73,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · limited recruiting capacity",
+      "sw": 290,
+      "cw": 166,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 123,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "pressure before clarity",
+      "sw": 132,
+      "cw": 101,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "pressure before clarity",
+      "sw": 132,
+      "cw": 97,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has had no recorded progress since the proposal.",
+      "sw": 367,
+      "cw": 147,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Liquid Death has had no recent buyer activity.",
+      "sw": 264,
+      "cw": 147,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 154,
+      "h": 49,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What a new hire sees on day one",
+      "w": 144,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Morning briefing",
+      "w": 178,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Live discovery call",
+      "w": 189,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Deal at risk",
+      "w": 142,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "Sales handoff",
+      "w": 159,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "Turn the sales process you built into a system your first hire can use.",
+      "lines": 6,
+      "w": 276,
+      "h": 273
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 250,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "Your highest-priority action, with the reason it ranks first.",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 2,
+      "w": 154,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "Deals at risk this week, with the next corrective action for each.",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 deals are at risk.",
+      "lines": 1,
+      "w": 154,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A live discovery-call console.",
+      "lines": 2,
+      "w": 200,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 4,
+      "w": 154,
+      "h": 89
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot plan the buyer's manager can use to make a decision.",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h3",
+      "text": "What a new hire gets on day one.",
+      "lines": 2,
+      "w": 200,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 4,
+      "w": 68,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Can a new hire execute your sales process without you?",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One sales process, usable by both founder and first hire.",
+      "lines": 4,
+      "w": 276,
+      "h": 138
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 226,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 130,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 276,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "Antaeus continues reviewing workspace activity when you're away.",
+      "lines": 4,
+      "w": 270,
+      "h": 138
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "lines": 5,
+      "w": 276,
+      "h": 173
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "For common sales situations.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "Standardize outreach instead of improvising it.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Workflows from prospecting through signature.",
+      "lines": 3,
+      "w": 265,
+      "h": 79
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 221,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 221,
+      "h": 38
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 221,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "lines": 5,
+      "w": 276,
+      "h": 173
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two product areas. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "Run the discovery call from this workspace.",
+      "lines": 2,
+      "w": 230,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 2,
+      "w": 184,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Projects deal-loss risk before the deal is lost.",
+      "lines": 2,
+      "w": 230,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker is projected to be lost within 20 days.",
+      "lines": 2,
+      "w": 184,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "Workspace changes detected while you were away.",
+      "lines": 3,
+      "w": 230,
+      "h": 94
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Open the Ground to see the workspace map.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "You own the workspace data and can export it.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Designed for the point when the founder is no longer the only person who understands the s",
+      "lines": 6,
+      "w": 187,
+      "h": 147
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Compare Antaeus with a CRM and a spreadsheet.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Current beta limitations.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "The product is still in beta.",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Antaeus uses language models for analysis and drafting.",
+      "lines": 2,
+      "w": 276,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "lines": 5,
+      "w": 276,
+      "h": 173
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 1081
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 969
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1335
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 652
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2484
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1188
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2322
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1427
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 2054
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1415
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 682
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 825
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2855
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 649
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 1069
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 581
+     },
+     {
+      "sel": "footer",
+      "h": 588
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 22356
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "Morning briefing. Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+      "stage": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "Deal at risk. Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker is projected to be lost within 20 days.\n\nThe deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as no decision, like most of your lost deals.\n\nPattern\npressure before clarity\nseen 4×\nSmallest fix\nadd a second stakeholder this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "Sales handoff. The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.\n\nPattern: every deal you won was mid-market, while your stated target is enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
+     },
+     {
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
+     },
+     {
+      "text": "Deal at risk",
+      "aria": "Show example: Deal at risk"
+     },
+     {
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "25% win-rate benchmark",
+      "pace-as": "typical range 20–30%",
+      "pace-b": "3× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "45-day sales-cycle benchmark",
+      "pace-cs": "typical range 30–60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "15% win-rate benchmark",
+      "pace-as": "typical range 10–18%",
+      "pace-b": "4.5× pipeline coverage",
+      "pace-bs": "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
+      "pace-c": "180-day sales-cycle benchmark",
+      "pace-cs": "typical range 120–270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "12% win-rate benchmark",
+      "pace-as": "typical range 8–15%",
+      "pace-b": "5× pipeline coverage",
+      "pace-bs": "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
+      "pace-c": "240-day sales-cycle benchmark",
+      "pace-cs": "typical range 180–360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "20% win-rate benchmark",
+      "pace-as": "typical range 15–25%",
+      "pace-b": "3.5× pipeline coverage",
+      "pace-bs": "enough active pipeline to absorb normal deal slippage",
+      "pace-c": "90-day sales-cycle benchmark",
+      "pace-cs": "typical range 60–120 days"
+     }
+    ],
+    "swatches": [
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  }
+ }
+}

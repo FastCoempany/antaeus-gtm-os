@@ -1,0 +1,5171 @@
+{
+ "file": "../source.html",
+ "label": "before",
+ "viewports": {
+  "desktop": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has not moved since the proposal.",
+      "sw": 279,
+      "cw": 237,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Why Antaeus",
+      "w": 76,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "The rooms",
+      "w": 60,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Compare",
+      "w": 52,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Questions",
+      "w": 58,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Sign in",
+      "w": 40,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 153,
+      "h": 40,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What they read on day one",
+      "w": 107,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The morning read",
+      "w": 184,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A live call",
+      "w": 131,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A deal going quiet",
+      "w": 188,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The handoff",
+      "w": 147,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "You built it. They can run it.",
+      "lines": 2,
+      "w": 675,
+      "h": 176
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 978,
+      "h": 36
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 459,
+      "h": 61
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you watch, sorted by what just moved.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One thing to do first, and why it came up first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "The deals that will slip this week, and the smallest fix.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 will slip.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A console you run the discovery call from, live.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 2,
+      "w": 302,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot that gives their boss something to act on.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Everything a first hire opens on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 177,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "One question, answered honestly: could someone else run this?",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One motion. Two people who run it.",
+      "lines": 3,
+      "w": 565,
+      "h": 183
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 1054,
+      "h": 36
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 1,
+      "w": 641,
+      "h": 20
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 1136,
+      "h": 61
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "It keeps reading when you stop.",
+      "lines": 2,
+      "w": 475,
+      "h": 122
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "The work changes shape. The system keeps up.",
+      "lines": 2,
+      "w": 654,
+      "h": 122
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Whatever shape your week takes.",
+      "lines": 2,
+      "w": 289,
+      "h": 79
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "The part most founders make up as they go.",
+      "lines": 2,
+      "w": 683,
+      "h": 122
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Everything between finding them and signing.",
+      "lines": 2,
+      "w": 398,
+      "h": 79
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 382,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Do you have enough going to hit the number?",
+      "lines": 3,
+      "w": 594,
+      "h": 183
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two rooms. Here are three.",
+      "lines": 3,
+      "w": 475,
+      "h": 183
+     },
+     {
+      "sel": "h3",
+      "text": "You run the call from it, while you are on the call.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 275,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "It writes how the deal dies before it does.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 275,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "What the system saw while you were out.",
+      "lines": 2,
+      "w": 321,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Touch the ground. The map comes up.",
+      "lines": 2,
+      "w": 594,
+      "h": 122
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "It's yours, and you can take it.",
+      "lines": 2,
+      "w": 535,
+      "h": 122
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 505,
+      "h": 122
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. It pays you back every morning.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "The point is the day you stop being the only one who knows.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Keep looking. Then come back.",
+      "lines": 2,
+      "w": 565,
+      "h": 122
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Where we're honest with you.",
+      "lines": 2,
+      "w": 361,
+      "h": 79
+     },
+     {
+      "sel": "h3",
+      "text": "It is beta, and it reads like beta.",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Models are under the hood, not on the label.",
+      "lines": 1,
+      "w": 546,
+      "h": 31
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 1136,
+      "h": 61
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Do the hard part once. It plays back every morning.",
+      "lines": 3,
+      "w": 654,
+      "h": 183
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 19
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 880
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 932
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1382
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 573
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2379
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1374
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2440
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1543
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1253
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1225
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 883
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 844
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 1327
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 474
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 1114
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 699
+     },
+     {
+      "sel": "footer",
+      "h": 517
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 19973
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 1,
+      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 2,
+      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     },
+     {
+      "i": 3,
+      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nThe week to run\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 0
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "The morning read",
+      "aria": "See The morning read"
+     },
+     {
+      "text": "A live call",
+      "aria": "See A live call"
+     },
+     {
+      "text": "A deal going quiet",
+      "aria": "See A deal going quiet"
+     },
+     {
+      "text": "The handoff",
+      "aria": "See The handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — saw the two plants going up.\n\nThat is a few hundred production hires on a deadline, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.\n\nWorth twenty minutes to compare notes on how you are staffing the openings?\n\nWhy now\nTwo plants announced · no recruiting bench\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · THE SHAPE OF IT\n\nOpen\nFind the pain\nShow it is real\nAsk for the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.\n\nRead before you dial · log what happened after · never during\n\nCold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · ONE MOVE\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.\n\nDiscovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "1 in 4 closes",
+      "pace-as": "how often deals this size are won — the band is 20 to 30%",
+      "pace-b": "3× in flight",
+      "pace-bs": "enough going at once that one slipping does not sink the quarter",
+      "pace-c": "45 days",
+      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "1 in 7 closes",
+      "pace-as": "how often deals this size are won — the band is 10 to 18%",
+      "pace-b": "4.5× in flight",
+      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
+      "pace-c": "180 days",
+      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "1 in 8 closes",
+      "pace-as": "how often deals this size are won — the band is 8 to 15%",
+      "pace-b": "5× in flight",
+      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
+      "pace-c": "240 days",
+      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     }
+    ],
+    "swatches": [
+     "THE MOST VALUABLE MOVE ON YOUR BOARD\n\nReach out to Chomps.\n\nTwo plants announced this month, a few hundred production hires, no recruiting bench. The account is",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "tablet": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 68,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has not moved since the proposal.",
+      "sw": 279,
+      "cw": 250,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Why Antaeus",
+      "w": 76,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "The rooms",
+      "w": 60,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Compare",
+      "w": 52,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Questions",
+      "w": 58,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a",
+      "text": "Sign in",
+      "w": 40,
+      "h": 18,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 153,
+      "h": 40,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What they read on day one",
+      "w": 107,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The morning read",
+      "w": 184,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A live call",
+      "w": 131,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A deal going quiet",
+      "w": 188,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The handoff",
+      "w": 147,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "You built it. They can run it.",
+      "lines": 2,
+      "w": 519,
+      "h": 135
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 742,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 356,
+      "h": 47
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you watch, sorted by what just moved.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One thing to do first, and why it came up first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "The deals that will slip this week, and the smallest fix.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 will slip.",
+      "lines": 1,
+      "w": 302,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A console you run the discovery call from, live.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 2,
+      "w": 302,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot that gives their boss something to act on.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Everything a first hire opens on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 177,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "One question, answered honestly: could someone else run this?",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One motion. Two people who run it.",
+      "lines": 3,
+      "w": 438,
+      "h": 142
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 718,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 1,
+      "w": 433,
+      "h": 20
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 776,
+      "h": 47
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "It keeps reading when you stop.",
+      "lines": 2,
+      "w": 369,
+      "h": 95
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "The work changes shape. The system keeps up.",
+      "lines": 2,
+      "w": 507,
+      "h": 95
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Whatever shape your week takes.",
+      "lines": 2,
+      "w": 224,
+      "h": 61
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "The part most founders make up as they go.",
+      "lines": 2,
+      "w": 530,
+      "h": 95
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Everything between finding them and signing.",
+      "lines": 2,
+      "w": 308,
+      "h": 61
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 382,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 382,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Do you have enough going to hit the number?",
+      "lines": 3,
+      "w": 461,
+      "h": 142
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two rooms. Here are three.",
+      "lines": 3,
+      "w": 369,
+      "h": 142
+     },
+     {
+      "sel": "h3",
+      "text": "You run the call from it, while you are on the call.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 287,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "It writes how the deal dies before it does.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 287,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "What the system saw while you were out.",
+      "lines": 2,
+      "w": 333,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Touch the ground. The map comes up.",
+      "lines": 2,
+      "w": 461,
+      "h": 95
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "It's yours, and you can take it.",
+      "lines": 2,
+      "w": 415,
+      "h": 95
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 392,
+      "h": 95
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. It pays you back every morning.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 268,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "The point is the day you stop being the only one who knows.",
+      "lines": 3,
+      "w": 268,
+      "h": 74
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Keep looking. Then come back.",
+      "lines": 2,
+      "w": 438,
+      "h": 95
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Where we're honest with you.",
+      "lines": 2,
+      "w": 280,
+      "h": 61
+     },
+     {
+      "sel": "h3",
+      "text": "It is beta, and it reads like beta.",
+      "lines": 1,
+      "w": 376,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Models are under the hood, not on the label.",
+      "lines": 2,
+      "w": 376,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 776,
+      "h": 47
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Do the hard part once. It plays back every morning.",
+      "lines": 3,
+      "w": 507,
+      "h": 142
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 728
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 857
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1093
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 526
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 1975
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1190
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2056
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1234
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1433
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 938
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 739
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 698
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 1231
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 427
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 952
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 548
+     },
+     {
+      "sel": "footer",
+      "h": 517
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 17275
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nThe week to run\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "The morning read",
+      "aria": "See The morning read"
+     },
+     {
+      "text": "A live call",
+      "aria": "See A live call"
+     },
+     {
+      "text": "A deal going quiet",
+      "aria": "See A deal going quiet"
+     },
+     {
+      "text": "The handoff",
+      "aria": "See The handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — saw the two plants going up.\n\nThat is a few hundred production hires on a deadline, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.\n\nWorth twenty minutes to compare notes on how you are staffing the openings?\n\nWhy now\nTwo plants announced · no recruiting bench\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · THE SHAPE OF IT\n\nOpen\nFind the pain\nShow it is real\nAsk for the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.\n\nRead before you dial · log what happened after · never during\n\nCold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · ONE MOVE\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.\n\nDiscovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "1 in 4 closes",
+      "pace-as": "how often deals this size are won — the band is 20 to 30%",
+      "pace-b": "3× in flight",
+      "pace-bs": "enough going at once that one slipping does not sink the quarter",
+      "pace-c": "45 days",
+      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "1 in 7 closes",
+      "pace-as": "how often deals this size are won — the band is 10 to 18%",
+      "pace-b": "4.5× in flight",
+      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
+      "pace-c": "180 days",
+      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "1 in 8 closes",
+      "pace-as": "how often deals this size are won — the band is 8 to 15%",
+      "pace-b": "5× in flight",
+      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
+      "pace-c": "240 days",
+      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     }
+    ],
+    "swatches": [
+     "THE MOST VALUABLE MOVE ON YOUR BOARD\n\nReach out to Chomps.\n\nTwo plants announced this month, a few hundred production hires, no recruiting bench. The account is",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "mobile": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 103,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 71,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "champion went quiet",
+      "sw": 120,
+      "cw": 76,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 94,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 96,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · no recruiting bench",
+      "sw": 251,
+      "cw": 236,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 208,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has not moved since the proposal.",
+      "sw": 279,
+      "cw": 217,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 192,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What they read on day one",
+      "w": 107,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The morning read",
+      "w": 184,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A live call",
+      "w": 131,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A deal going quiet",
+      "w": 188,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The handoff",
+      "w": 147,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "You built it. They can run it.",
+      "lines": 2,
+      "w": 346,
+      "h": 91
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 320,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you watch, sorted by what just moved.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One thing to do first, and why it came up first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 208,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "The deals that will slip this week, and the smallest fix.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 will slip.",
+      "lines": 1,
+      "w": 208,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A console you run the discovery call from, live.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 3,
+      "w": 208,
+      "h": 67
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot that gives their boss something to act on.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Everything a first hire opens on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 116,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "One question, answered honestly: could someone else run this?",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One motion. Two people who run it.",
+      "lines": 3,
+      "w": 320,
+      "h": 104
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 296,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 173,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 346,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "It keeps reading when you stop.",
+      "lines": 2,
+      "w": 270,
+      "h": 69
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "The work changes shape. The system keeps up.",
+      "lines": 3,
+      "w": 346,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Whatever shape your week takes.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "The part most founders make up as they go.",
+      "lines": 2,
+      "w": 346,
+      "h": 69
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Everything between finding them and signing.",
+      "lines": 2,
+      "w": 265,
+      "h": 53
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 280,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 280,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 280,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Do you have enough going to hit the number?",
+      "lines": 3,
+      "w": 337,
+      "h": 104
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two rooms. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "You run the call from it, while you are on the call.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "It writes how the deal dies before it does.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "What the system saw while you were out.",
+      "lines": 2,
+      "w": 300,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Touch the ground. The map comes up.",
+      "lines": 2,
+      "w": 337,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "It's yours, and you can take it.",
+      "lines": 2,
+      "w": 303,
+      "h": 69
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 287,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. It pays you back every morning.",
+      "lines": 2,
+      "w": 239,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 239,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 239,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "The point is the day you stop being the only one who knows.",
+      "lines": 3,
+      "w": 239,
+      "h": 74
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Keep looking. Then come back.",
+      "lines": 2,
+      "w": 320,
+      "h": 69
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Where we're honest with you.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "It is beta, and it reads like beta.",
+      "lines": 1,
+      "w": 346,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Models are under the hood, not on the label.",
+      "lines": 2,
+      "w": 346,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 346,
+      "h": 35
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Do the hard part once. It plays back every morning.",
+      "lines": 3,
+      "w": 346,
+      "h": 104
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 777
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 909
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1213
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 624
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2355
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1130
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2134
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1222
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1828
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1327
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 639
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 642
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2479
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 604
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 970
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 461
+     },
+     {
+      "sel": "footer",
+      "h": 569
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 20017
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nThe week to run\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "The morning read",
+      "aria": "See The morning read"
+     },
+     {
+      "text": "A live call",
+      "aria": "See A live call"
+     },
+     {
+      "text": "A deal going quiet",
+      "aria": "See A deal going quiet"
+     },
+     {
+      "text": "The handoff",
+      "aria": "See The handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — saw the two plants going up.\n\nThat is a few hundred production hires on a deadline, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.\n\nWorth twenty minutes to compare notes on how you are staffing the openings?\n\nWhy now\nTwo plants announced · no recruiting bench\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · THE SHAPE OF IT\n\nOpen\nFind the pain\nShow it is real\nAsk for the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.\n\nRead before you dial · log what happened after · never during\n\nCold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · ONE MOVE\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.\n\nDiscovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "1 in 4 closes",
+      "pace-as": "how often deals this size are won — the band is 20 to 30%",
+      "pace-b": "3× in flight",
+      "pace-bs": "enough going at once that one slipping does not sink the quarter",
+      "pace-c": "45 days",
+      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "1 in 7 closes",
+      "pace-as": "how often deals this size are won — the band is 10 to 18%",
+      "pace-b": "4.5× in flight",
+      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
+      "pace-c": "180 days",
+      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "1 in 8 closes",
+      "pace-as": "how often deals this size are won — the band is 8 to 15%",
+      "pace-b": "5× in flight",
+      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
+      "pace-c": "240 days",
+      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     }
+    ],
+    "swatches": [
+     "THE MOST VALUABLE MOVE ON YOUR BOARD\n\nReach out to Chomps.\n\nTwo plants announced this month, a few hundred production hires, no recruiting bench. The account is",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "phone-360": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 93,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 47,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "champion went quiet",
+      "sw": 120,
+      "cw": 53,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 71,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "quiet 14 days — your worst open deal",
+      "sw": 211,
+      "cw": 181,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 86,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · no recruiting bench",
+      "sw": 251,
+      "cw": 206,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 183,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has not moved since the proposal.",
+      "sw": 279,
+      "cw": 187,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 185,
+      "h": 49,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What they read on day one",
+      "w": 107,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The morning read",
+      "w": 184,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A live call",
+      "w": 131,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A deal going quiet",
+      "w": 188,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The handoff",
+      "w": 147,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "You built it. They can run it.",
+      "lines": 2,
+      "w": 316,
+      "h": 91
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 290,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you watch, sorted by what just moved.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One thing to do first, and why it came up first.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 185,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "The deals that will slip this week, and the smallest fix.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 will slip.",
+      "lines": 1,
+      "w": 185,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A console you run the discovery call from, live.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 3,
+      "w": 185,
+      "h": 67
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot that gives their boss something to act on.",
+      "lines": 3,
+      "w": 211,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Everything a first hire opens on day one.",
+      "lines": 2,
+      "w": 211,
+      "h": 51
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 3,
+      "w": 93,
+      "h": 58
+     },
+     {
+      "sel": "h3",
+      "text": "One question, answered honestly: could someone else run this?",
+      "lines": 4,
+      "w": 211,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One motion. Two people who run it.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 266,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 154,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 316,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "It keeps reading when you stop.",
+      "lines": 2,
+      "w": 270,
+      "h": 69
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "The work changes shape. The system keeps up.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Whatever shape your week takes.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "The part most founders make up as they go.",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Everything between finding them and signing.",
+      "lines": 2,
+      "w": 265,
+      "h": 53
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 254,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 254,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Do you have enough going to hit the number?",
+      "lines": 3,
+      "w": 316,
+      "h": 104
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two rooms. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "You run the call from it, while you are on the call.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 2,
+      "w": 224,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "It writes how the deal dies before it does.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 224,
+      "h": 19
+     },
+     {
+      "sel": "h3",
+      "text": "What the system saw while you were out.",
+      "lines": 2,
+      "w": 270,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Touch the ground. The map comes up.",
+      "lines": 2,
+      "w": 316,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "It's yours, and you can take it.",
+      "lines": 2,
+      "w": 303,
+      "h": 69
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 287,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. It pays you back every morning.",
+      "lines": 3,
+      "w": 216,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 2,
+      "w": 216,
+      "h": 49
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 216,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "The point is the day you stop being the only one who knows.",
+      "lines": 3,
+      "w": 216,
+      "h": 74
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Keep looking. Then come back.",
+      "lines": 2,
+      "w": 316,
+      "h": 69
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Where we're honest with you.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "It is beta, and it reads like beta.",
+      "lines": 1,
+      "w": 316,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Models are under the hood, not on the label.",
+      "lines": 2,
+      "w": 316,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 1,
+      "w": 316,
+      "h": 35
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Do the hard part once. It plays back every morning.",
+      "lines": 4,
+      "w": 316,
+      "h": 138
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 791
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 926
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1259
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 638
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2426
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1124
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2273
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1247
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1868
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1337
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 645
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 688
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2602
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 604
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 992
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 521
+     },
+     {
+      "sel": "footer",
+      "h": 588
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 20659
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nThe week to run\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "The morning read",
+      "aria": "See The morning read"
+     },
+     {
+      "text": "A live call",
+      "aria": "See A live call"
+     },
+     {
+      "text": "A deal going quiet",
+      "aria": "See A deal going quiet"
+     },
+     {
+      "text": "The handoff",
+      "aria": "See The handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — saw the two plants going up.\n\nThat is a few hundred production hires on a deadline, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.\n\nWorth twenty minutes to compare notes on how you are staffing the openings?\n\nWhy now\nTwo plants announced · no recruiting bench\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · THE SHAPE OF IT\n\nOpen\nFind the pain\nShow it is real\nAsk for the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.\n\nRead before you dial · log what happened after · never during\n\nCold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · ONE MOVE\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.\n\nDiscovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "1 in 4 closes",
+      "pace-as": "how often deals this size are won — the band is 20 to 30%",
+      "pace-b": "3× in flight",
+      "pace-bs": "enough going at once that one slipping does not sink the quarter",
+      "pace-c": "45 days",
+      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "1 in 7 closes",
+      "pace-as": "how often deals this size are won — the band is 10 to 18%",
+      "pace-b": "4.5× in flight",
+      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
+      "pace-c": "180 days",
+      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "1 in 8 closes",
+      "pace-as": "how often deals this size are won — the band is 8 to 15%",
+      "pace-b": "5× in flight",
+      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
+      "pace-c": "240 days",
+      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     }
+    ],
+    "swatches": [
+     "THE MOST VALUABLE MOVE ON YOUR BOARD\n\nReach out to Chomps.\n\nTwo plants announced this month, a few hundred production hires, no recruiting bench. The account is",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  },
+  "phone-320": {
+   "probe": {
+    "pageOverflowX": 0,
+    "clipped": [
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 79,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "no next step at all",
+      "sw": 103,
+      "cw": 16,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "champion went quiet",
+      "sw": 120,
+      "cw": 21,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "verbal yes · terms open",
+      "sw": 133,
+      "cw": 40,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "this week if nothing changes",
+      "sw": 165,
+      "cw": 159,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "quiet 14 days — your worst open deal",
+      "sw": 211,
+      "cw": 141,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 73,
+      "sh": 13,
+      "ch": 13,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Two plants announced · no recruiting bench",
+      "sw": 251,
+      "cw": 166,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "12 months of fees, breach capped higher",
+      "sw": 233,
+      "cw": 149,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "pressure before clarity",
+      "sw": 132,
+      "cw": 101,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "pressure before clarity",
+      "sw": 132,
+      "cw": 97,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     },
+     {
+      "sel": "span",
+      "text": "Warby Parker has not moved since the proposal.",
+      "sw": 279,
+      "cw": 147,
+      "sh": 19,
+      "ch": 19,
+      "ov": "hidden",
+      "to": "ellipsis"
+     }
+    ],
+    "overflowX": [],
+    "controls": [
+     {
+      "sel": "a.gn-brand",
+      "text": "ANTAEUS",
+      "w": 107,
+      "h": 22,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move",
+      "text": "Create workspace",
+      "w": 136,
+      "h": 37,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“We just cope”",
+      "w": 102,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "“We hired two more recruiters”",
+      "w": 154,
+      "h": 49,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "“Not a priority”",
+      "w": 104,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.dot.is-on",
+      "text": "",
+      "w": 34,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.dot",
+      "text": "",
+      "w": 12,
+      "h": 8,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button#hl-pp.pp",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Compose it →",
+      "w": 106,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What you see every morning",
+      "w": 103,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.sw",
+      "text": "What they read on day one",
+      "w": 107,
+      "h": 74,
+      "lines": 4,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The morning read",
+      "w": 184,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A live call",
+      "w": 131,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "A deal going quiet",
+      "w": 188,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.chip",
+      "text": "The handoff",
+      "w": 147,
+      "h": 45,
+      "lines": 2,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-out.tab",
+      "text": "Outbound",
+      "w": 104,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-cold.tab",
+      "text": "Cold call",
+      "w": 96,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-li.tab",
+      "text": "LinkedIn",
+      "w": 95,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button#ct-disco.tab",
+      "text": "Discovery",
+      "w": 103,
+      "h": 39,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.sc-btn",
+      "text": "Copy the message",
+      "w": 135,
+      "h": 34,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "247 found",
+      "w": 79,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "31 confirmed",
+      "w": 94,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "→ sent",
+      "w": 60,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Geography",
+      "w": 83,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Vertical",
+      "w": 66,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Size",
+      "w": 47,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "A live trigger",
+      "w": 93,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "You",
+      "w": 43,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span.on",
+      "text": "Rafael at Sweetgreen",
+      "w": 142,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "span",
+      "text": "Portillo’s",
+      "w": 70,
+      "h": 31,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "select#acv",
+      "text": "Deals around $15k Deals around $60k Deals around $150k Deals above $400k",
+      "w": 207,
+      "h": 45,
+      "lines": 0,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "button.arw",
+      "text": "",
+      "w": 38,
+      "h": 38,
+      "lines": 1,
+      "fits": true
+     },
+     {
+      "sel": "a.btn.btn--move.btn--lg",
+      "text": "Create workspace",
+      "w": 185,
+      "h": 51,
+      "lines": 1,
+      "fits": true
+     }
+    ],
+    "headings": [
+     {
+      "sel": "h1.h-hero.rv.in.lit",
+      "text": "You built it. They can run it.",
+      "lines": 3,
+      "w": 276,
+      "h": 136
+     },
+     {
+      "sel": "h2.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 250,
+      "h": 25
+     },
+     {
+      "sel": "h2#hl-h.h-sec",
+      "text": "Get the highlights.",
+      "lines": 1,
+      "w": 260,
+      "h": 35
+     },
+     {
+      "sel": "h3",
+      "text": "Every account you watch, sorted by what just moved.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One thing to do first, and why it came up first.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 2,
+      "w": 154,
+      "h": 45
+     },
+     {
+      "sel": "h3",
+      "text": "The deals that will slip this week, and the smallest fix.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "3 will slip.",
+      "lines": 1,
+      "w": 154,
+      "h": 22
+     },
+     {
+      "sel": "h3",
+      "text": "A console you run the discovery call from, live.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Walk me through what happens the week a new store opens.",
+      "lines": 4,
+      "w": 154,
+      "h": 89
+     },
+     {
+      "sel": "h3",
+      "text": "A pilot that gives their boss something to act on.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "Everything a first hire opens on day one.",
+      "lines": 3,
+      "w": 200,
+      "h": 77
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 4,
+      "w": 68,
+      "h": 77
+     },
+     {
+      "sel": "h3",
+      "text": "One question, answered honestly: could someone else run this?",
+      "lines": 4,
+      "w": 200,
+      "h": 102
+     },
+     {
+      "sel": "h2#hf-h.h-sec.rv.in.lit",
+      "text": "One motion. Two people who run it.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Reach out to Chomps.",
+      "lines": 1,
+      "w": 226,
+      "h": 25
+     },
+     {
+      "sel": "h3.sc-h",
+      "text": "Who hits, who misses, and why",
+      "lines": 2,
+      "w": 130,
+      "h": 41
+     },
+     {
+      "sel": "h2#pv-h.h-sec.rv.in.lit",
+      "text": "Take a closer look.",
+      "lines": 1,
+      "w": 276,
+      "h": 35
+     },
+     {
+      "sel": "h2#br-h.h-sec.rv.in.lit",
+      "text": "It keeps reading when you stop.",
+      "lines": 2,
+      "w": 270,
+      "h": 69
+     },
+     {
+      "sel": "h4",
+      "text": "Good morning",
+      "lines": 1,
+      "w": 135,
+      "h": 32
+     },
+     {
+      "sel": "h2#wk-h.h-sec.rv.in.lit",
+      "text": "The work changes shape. The system keeps up.",
+      "lines": 4,
+      "w": 276,
+      "h": 138
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Whatever shape your week takes.",
+      "lines": 2,
+      "w": 193,
+      "h": 53
+     },
+     {
+      "sel": "h2#cf-h.h-sec.rv.in.lit",
+      "text": "The part most founders make up as they go.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h3.h-sub.rv.in.lit",
+      "text": "Everything between finding them and signing.",
+      "lines": 2,
+      "w": 265,
+      "h": 53
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“Companies that are hiring”",
+      "lines": 1,
+      "w": 221,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
+      "w": 221,
+      "h": 19
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "$580k against $800k",
+      "lines": 1,
+      "w": 221,
+      "h": 23
+     },
+     {
+      "sel": "h2#pc-h.h-sec.rv.in.lit",
+      "text": "Do you have enough going to hit the number?",
+      "lines": 4,
+      "w": 276,
+      "h": 138
+     },
+     {
+      "sel": "h2#ar-h.h-sec.rv.in.lit",
+      "text": "Twenty-two rooms. Here are three.",
+      "lines": 3,
+      "w": 270,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "You run the call from it, while you are on the call.",
+      "lines": 2,
+      "w": 230,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "“We just hired two more recruiters.”",
+      "lines": 2,
+      "w": 184,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "It writes how the deal dies before it does.",
+      "lines": 2,
+      "w": 230,
+      "h": 62
+     },
+     {
+      "sel": "h4.sc-h",
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 2,
+      "w": 184,
+      "h": 38
+     },
+     {
+      "sel": "h3",
+      "text": "What the system saw while you were out.",
+      "lines": 2,
+      "w": 230,
+      "h": 62
+     },
+     {
+      "sel": "h2#gd-h.h-sec.rv.in.lit",
+      "text": "Touch the ground. The map comes up.",
+      "lines": 3,
+      "w": 276,
+      "h": 104
+     },
+     {
+      "sel": "h3",
+      "text": "The Ground",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "The Live Edge",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h2#tr-h.h-sec.rv.in.lit",
+      "text": "It's yours, and you can take it.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h2#wy-h.h-sec.rv.in.lit",
+      "text": "Why founders start here.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h3",
+      "text": "Set it up once. It pays you back every morning.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "No card, no seat count, no call with anyone.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "Download the whole workspace whenever you want.",
+      "lines": 3,
+      "w": 187,
+      "h": 74
+     },
+     {
+      "sel": "h3",
+      "text": "The point is the day you stop being the only one who knows.",
+      "lines": 4,
+      "w": 187,
+      "h": 98
+     },
+     {
+      "sel": "h2#cm-h.h-sec.rv.in.lit",
+      "text": "Keep looking. Then come back.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h2#vl-h.h-sub.rv.in.lit",
+      "text": "Where we're honest with you.",
+      "lines": 2,
+      "w": 241,
+      "h": 53
+     },
+     {
+      "sel": "h3",
+      "text": "It is beta, and it reads like beta.",
+      "lines": 1,
+      "w": 276,
+      "h": 31
+     },
+     {
+      "sel": "h3",
+      "text": "Models are under the hood, not on the label.",
+      "lines": 2,
+      "w": 276,
+      "h": 61
+     },
+     {
+      "sel": "h2#fq-h.h-sec.rv.in.lit",
+      "text": "Questions? Answers.",
+      "lines": 2,
+      "w": 276,
+      "h": 69
+     },
+     {
+      "sel": "h2#cl-h.h-sec.rv.in.lit",
+      "text": "Do the hard part once. It plays back every morning.",
+      "lines": 4,
+      "w": 276,
+      "h": 138
+     }
+    ],
+    "sections": [
+     {
+      "sel": "nav.globalnav",
+      "h": 47
+     },
+     {
+      "sel": "nav.localnav__sections",
+      "h": 0
+     },
+     {
+      "sel": "header#top.hero",
+      "h": 857
+     },
+     {
+      "sel": "section#highlights.band.band--tight",
+      "h": 980
+     },
+     {
+      "sel": "section#handoff.band.band--white",
+      "h": 1371
+     },
+     {
+      "sel": "section#rooms.band.pv.band--white",
+      "h": 652
+     },
+     {
+      "sel": "section#briefing.band.band--sunk",
+      "h": 2511
+     },
+     {
+      "sel": "section#week.band.band--white",
+      "h": 1137
+     },
+     {
+      "sel": "section#craft.band.band--sunk",
+      "h": 2410
+     },
+     {
+      "sel": "section#pace.band.band--white",
+      "h": 1370
+     },
+     {
+      "sel": "section#all-rooms.band.band--sunk",
+      "h": 1956
+     },
+     {
+      "sel": "section#ground.band.band--white",
+      "h": 1392
+     },
+     {
+      "sel": "section#trust.band.band--ink",
+      "h": 627
+     },
+     {
+      "sel": "section#why.band.band--white",
+      "h": 709
+     },
+     {
+      "sel": "section#compare.band.band--sunk",
+      "h": 2699
+     },
+     {
+      "sel": "section#values.band.band--tight.band--white",
+      "h": 649
+     },
+     {
+      "sel": "section#faq.band.band--sunk",
+      "h": 1069
+     },
+     {
+      "sel": "section.band.close.band--white",
+      "h": 521
+     },
+     {
+      "sel": "footer",
+      "h": 606
+     },
+     {
+      "sel": "nav",
+      "h": 19
+     }
+    ],
+    "docHeight": 21681
+   },
+   "inter": {
+    "viewer": [
+     {
+      "i": 0,
+      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 1,
+      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 2,
+      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     },
+     {
+      "i": 3,
+      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nThe week to run\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "open": true,
+      "clipped": [],
+      "overflowX": 2
+     }
+    ],
+    "chipLabels": [
+     {
+      "text": "The morning read",
+      "aria": "See The morning read"
+     },
+     {
+      "text": "A live call",
+      "aria": "See A live call"
+     },
+     {
+      "text": "A deal going quiet",
+      "aria": "See A deal going quiet"
+     },
+     {
+      "text": "The handoff",
+      "aria": "See The handoff"
+     }
+    ],
+    "tabs": [
+     {
+      "i": 0,
+      "label": "Outbound",
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — saw the two plants going up.\n\nThat is a few hundred production hires on a deadline, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.\n\nWorth twenty minutes to compare notes on how you are staffing the openings?\n\nWhy now\nTwo plants announced · no recruiting bench\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone."
+     },
+     {
+      "i": 1,
+      "label": "Cold call",
+      "panel": "BEFORE YOU DIAL · THE SHAPE OF IT\n\nOpen\nFind the pain\nShow it is real\nAsk for the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.\n\nRead before you dial · log what happened after · never during\n\nCold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking."
+     },
+     {
+      "i": 2,
+      "label": "LinkedIn",
+      "panel": "GYMSHARK · ONE MOVE\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening."
+     },
+     {
+      "i": 3,
+      "label": "Discovery",
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.\n\nDiscovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went."
+     }
+    ],
+    "pace": [
+     {
+      "v": "smb",
+      "pace-a": "1 in 4 closes",
+      "pace-as": "how often deals this size are won — the band is 20 to 30%",
+      "pace-b": "3× in flight",
+      "pace-bs": "enough going at once that one slipping does not sink the quarter",
+      "pace-c": "45 days",
+      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     },
+     {
+      "v": "ent",
+      "pace-a": "1 in 7 closes",
+      "pace-as": "how often deals this size are won — the band is 10 to 18%",
+      "pace-b": "4.5× in flight",
+      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
+      "pace-c": "180 days",
+      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+     },
+     {
+      "v": "str",
+      "pace-a": "1 in 8 closes",
+      "pace-as": "how often deals this size are won — the band is 8 to 15%",
+      "pace-b": "5× in flight",
+      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
+      "pace-c": "240 days",
+      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+     },
+     {
+      "v": "mid",
+      "pace-a": "1 in 5 closes",
+      "pace-as": "how often deals this size are won — the band is 15 to 25%",
+      "pace-b": "3.5× in flight",
+      "pace-bs": "enough going at once that a couple of slips do not sink the quarter",
+      "pace-c": "90 days",
+      "pace-cs": "how long one usually takes to close — the range is 60 to 120 days"
+     }
+    ],
+    "swatches": [
+     "THE MOST VALUABLE MOVE ON YOUR BOARD\n\nReach out to Chomps.\n\nTwo plants announced this month, a few hundred production hires, no recruiting bench. The account is",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
+    ]
+   },
+   "errors": [],
+   "fontsOk": [
+    "DM Serif Display 400",
+    "JetBrains Mono 400",
+    "JetBrains Mono 700",
+    "Public Sans 400",
+    "Public Sans 500",
+    "Public Sans 600",
+    "Public Sans 700"
+   ]
+  }
+ }
+}

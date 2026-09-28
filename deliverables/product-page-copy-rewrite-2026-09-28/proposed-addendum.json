@@ -1,0 +1,833 @@
+{
+ "note": "PROPOSED — not part of the approved PR #314 map. Covers visible copy the map never audited (JS product-viewer scenes, Pace BENCH bands, aria-labels, alt text, title). Same raw-substring-swap form the builder applies. Needs founder approval before the proposed build ships.",
+ "entries": [
+  {
+   "loc": "2074 MOMENTS[0].chip",
+   "kind": "js-moment-chip",
+   "original": "\"The morning read\"",
+   "replacement": "\"Morning briefing\"",
+   "provenance": "new",
+   "source_unit": "201 (The Briefing, kept feature name)",
+   "rationale": "\"Morning read\" is a private noun; the scene is The Briefing's morning summary. Chip labels are microcopy, so a literal noun phrase. Also feeds the chip aria-label (\"Show example: Morning briefing\")."
+  },
+  {
+   "loc": "2075 MOMENTS[0].cap",
+   "kind": "js-moment-cap",
+   "original": "<b>The morning read.</b> Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
+   "replacement": "<b>Morning briefing.</b> Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+   "provenance": "map-adapted",
+   "source_unit": "95, 96",
+   "rationale": "Near-twin of unit 95 (same claim, shorter). Reuses the approved wording (\"Every 30 minutes, Antaeus reviews\", \"those findings in plain language\", \"ranks the highest-priority action\"); drops the three examples the scene itself shows. \"Then\" replaces a second \"and\" so the sentence parses on first read, and \"the reason for that ranking\" avoids the draft's \"the reason that action ranks first\", where \"that\" can be misread as a conjunction. Removes the personification (\"noticed\", \"on its own\") and \"the one thing worth doing first\". Render note for all four captions, measured with the page fonts loaded: each is one line taller on desktop (92→116px); at 390px three are one line taller and the handoff caption two (188–212→212–236px); at 360px one to two lines taller (188–212→236–260px). Nothing clips and there are no page errors."
+  },
+  {
+   "loc": "2078 MOMENTS[0].scene kicker",
+   "kind": "js-moment-scene-text",
+   "original": ">While you were out</p>'",
+   "replacement": ">While you were out</p>'",
+   "provenance": "keep",
+   "source_unit": "84",
+   "rationale": "Identical to unit 84, which the map keeps. Literal time label."
+  },
+  {
+   "loc": "2079 MOMENTS[0].scene row 1 (20d · Warby Parker)",
+   "kind": "js-moment-scene-text",
+   "original": "<em class=\"sc-day sc-day--red\">20d</em><span><b>Warby Parker</b> has sat at proposal for three weeks with no next step.</span>",
+   "replacement": "<em class=\"sc-day sc-day--red\">20d</em><span><b>Warby Parker</b> has sat at proposal for three weeks with no next step.</span>",
+   "provenance": "keep",
+   "source_unit": "87",
+   "rationale": "Text identical to unit 87 (minus its link), which the map keeps. Names the stage, the duration, and the missing item."
+  },
+  {
+   "loc": "2080 MOMENTS[0].scene row 2 badge + name (14d · Liquid Death)",
+   "kind": "js-moment-scene-text",
+   "original": "data-a=\"3\"><em class=\"sc-day sc-day--amber\">14d</em><span><b>Liquid Death</b>",
+   "replacement": "data-a=\"3\"><em class=\"sc-day sc-day--amber\">14d</em><span><b>Liquid Death</b>",
+   "provenance": "keep",
+   "source_unit": "88",
+   "rationale": "Duration badge and account name are literal; unchanged."
+  },
+  {
+   "loc": "2080 MOMENTS[0].scene row 2 text",
+   "kind": "js-moment-scene-text",
+   "original": "has gone quiet — their people team is three deep and mid-launch.</span>",
+   "replacement": "has had no recent buyer activity for 14 days; its people team is three people and mid-launch.</span>",
+   "provenance": "map-adapted",
+   "source_unit": "88",
+   "rationale": "Same sentence as unit 88 minus the \"Open the account →\" link the scene lacks; approved replacement reused verbatim so this row matches its static twin. Note: this row is single-line (nowrap + ellipsis), so the longer text truncates earlier on narrow screens (390px, page fonts: 259 of 606px visible; the original was already truncated at 259 of 453px). Fits fully on desktop."
+  },
+  {
+   "loc": "2081 MOMENTS[0].scene row 3 (8d · Notion pilot)",
+   "kind": "js-moment-scene-text",
+   "original": "<em class=\"sc-day sc-day--blue\">8d</em><span>The <b>Notion pilot</b> is eight days in and two of four recruiters have not touched it.</span>",
+   "replacement": "<em class=\"sc-day sc-day--blue\">8d</em><span>The <b>Notion pilot</b> is eight days in and two of four recruiters have not touched it.</span>",
+   "provenance": "keep",
+   "source_unit": "89",
+   "rationale": "Near-identical to unit 89 (\"two of the four\"), which the map keeps. Literal pilot-adoption fact."
+  },
+  {
+   "loc": "2082 MOMENTS[0].scene note",
+   "kind": "js-moment-scene-text",
+   "original": "And one you did not ask for — <b>every deal you have won rode a dated expansion event</b>. None of the cold ones landed.",
+   "replacement": "And one pattern you did not ask about: <b>every deal you have won followed a dated expansion event</b>. None of the deals without a dated trigger closed.",
+   "provenance": "map-adapted",
+   "source_unit": "leaf: \"Every deal you have won rode a dated expansion event. None of the cold ones landed.\" (raw nodes 208, 215)",
+   "rationale": "Near-twin of the Briefing \"Challenge\" ticker line; applies the approved leaf replacement across the <b> split. Names the referent of \"one\" (a pattern) and keeps the point that the user did not request this finding. A colon replaces the em dash to introduce the pattern, matching how the map rewrote the same construction in units 58 and 78 (\"Pattern: ...\")."
+  },
+  {
+   "loc": "2085 MOMENTS[1].chip",
+   "kind": "js-moment-chip",
+   "original": "\"A live call\"",
+   "replacement": "\"Live discovery call\"",
+   "provenance": "map-adapted",
+   "source_unit": "43",
+   "rationale": "\"A live call\" could mean a cold call; the scene is Discovery Studio. Adapted from unit 43 (\"A live discovery-call console.\") as a chip label."
+  },
+  {
+   "loc": "2086 MOMENTS[1].cap",
+   "kind": "js-moment-cap",
+   "original": "<b>A live call.</b> Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
+   "replacement": "<b>Live discovery call.</b> Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+   "provenance": "map-adapted",
+   "source_unit": "144, 192, 44",
+   "rationale": "Near-twin of unit 144 (the Discovery tab caption). Defines Discovery Studio literally on first use (COPY_STANDARD §4), reuses the approved \"Select the buyer response you heard … recommended follow-up\" wording, and drops \"hands you the exact next line\" (personification + \"line\"). Avoids bare \"evidence\" from unit 144 per canon §13. \"During the call\" (the bold label directly before it names the call) replaces the draft's \"during a discovery call\", which repeated \"discovery\" and made this the tallest caption at 360px (284px; now 260px)."
+  },
+  {
+   "loc": "2089 MOMENTS[1].scene kicker",
+   "kind": "js-moment-scene-text",
+   "original": "Pain &amp; consequence · make the cost real",
+   "replacement": "Problem and business impact · live",
+   "provenance": "map-adapted",
+   "source_unit": "45, 140",
+   "rationale": "Uses the exact segment label the map approved for this same scene's static twins (units 45 and 140: \"Pain & consequence · live\" → \"Problem and business impact · live\"), so the viewer scene and the static Discovery scenes show the same label. \"Live\" marks the segment in progress, as in those twins; the segment name already says the focus is business impact, and the listen-for line below names the cost. The draft's \"· quantify the cost\" wrapped this one-line kicker to two lines at 390px, where the original did not; this label fits on one line at 390px and 360px. No ampersand remains, so no &amp; entity is needed."
+  },
+  {
+   "loc": "2090 MOMENTS[1].scene question",
+   "kind": "js-moment-scene-text",
+   "original": "Walk me through what happens the week a new store opens.</h3>'",
+   "replacement": "Walk me through what happens the week a new store opens.</h3>'",
+   "provenance": "keep",
+   "source_unit": "46, 141",
+   "rationale": "Identical to units 46/141, which the map keeps. It is the literal question the seller asks."
+  },
+  {
+   "loc": "2091 MOMENTS[1].scene listen-for",
+   "kind": "js-moment-scene-text",
+   "original": "Listen for whether this pain is really <b>theirs to fix</b>, or a polite nice-to-have — and who flinches when you name the cost.",
+   "replacement": "Listen for whether <b>the buyer owns the problem</b> or treats it as a nice-to-have, and who is accountable for its cost.",
+   "provenance": "map-adapted",
+   "source_unit": "142, 47",
+   "rationale": "Near-twin of unit 142; reuses its approved replacement and keeps this version's extra clause (\"or a polite nice-to-have\") in literal form. Bold moves to the phrase that replaced \"theirs to fix\"."
+  },
+  {
+   "loc": "2093 MOMENTS[1].scene response 1",
+   "kind": "js-moment-scene-text",
+   "original": "'<span data-a=\"4\">“It is messy but we cope”</span>'",
+   "replacement": "'<span data-a=\"4\">“It is messy but we cope”</span>'",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Quoted buyer speech; literal. The static twin (line 1231) is also unchanged by the map."
+  },
+  {
+   "loc": "2094 MOMENTS[1].scene response 2 (selected)",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"on\" data-a=\"5\">“We just hired two more recruiters”</span>'",
+   "replacement": "'<span class=\"on\" data-a=\"5\">“We just hired two more recruiters”</span>'",
+   "provenance": "keep",
+   "source_unit": "194",
+   "rationale": "Quoted buyer speech; unit 194 keeps the same quote."
+  },
+  {
+   "loc": "2095 MOMENTS[1].scene response 3",
+   "kind": "js-moment-scene-text",
+   "original": "'<span data-a=\"6\">“Not a top priority”</span>'",
+   "replacement": "'<span data-a=\"6\">“Not a top priority”</span>'",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Quoted buyer speech; literal."
+  },
+  {
+   "loc": "2097 MOMENTS[1].scene recommended follow-up",
+   "kind": "js-moment-scene-text",
+   "original": "They hired around it. <b>Ask what that cost, and who signed it off</b> — you have just found your economic buyer.",
+   "replacement": "They added recruiters instead of changing the underlying process. <b>Ask what the added headcount cost and who approved the expense</b>; that identifies the budget owner.",
+   "provenance": "map-adapted",
+   "source_unit": "143",
+   "rationale": "Near-twin of unit 143 (differs by one comma); approved replacement reused with the <b> kept on the recommended question."
+  },
+  {
+   "loc": "2100 MOMENTS[2].chip",
+   "kind": "js-moment-chip",
+   "original": "\"A deal going quiet\"",
+   "replacement": "\"Deal at risk\"",
+   "provenance": "map-adapted",
+   "source_unit": "39; leaf \"3 will slip\"",
+   "rationale": "\"Going quiet\" is the idiom COPY_STANDARD §13 replaces. The scene is a projected deal loss; the map already uses \"deals at risk\" for this concept (unit 39, leaf \"3 deals are at risk\")."
+  },
+  {
+   "loc": "2101 MOMENTS[2].cap",
+   "kind": "js-moment-cap",
+   "original": "<b>A deal going quiet.</b> Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
+   "replacement": "<b>Deal at risk.</b> Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+   "provenance": "map-adapted",
+   "source_unit": "167, 197, 198",
+   "rationale": "Near-twin of unit 167. COPY_STANDARD §4 keeps the name Future Autopsy only if the copy says it projects deal-loss risk, so the first sentence does that. \"Counts the days you have left\" becomes \"the estimated days until that loss\" (unit 198's \"estimated time remaining\", with the end point named; \"that loss\" refers to \"how the deal is likely to be lost\" in the same sentence). \"Routes you to the room where the fix happens\" → \"links to the workflow where you can address\" (unit 167)."
+  },
+  {
+   "loc": "2104 MOMENTS[2].scene kicker",
+   "kind": "js-moment-scene-text",
+   "original": ">Written 45 days early</p>'",
+   "replacement": ">Written 45 days early</p>'",
+   "provenance": "keep",
+   "source_unit": "165",
+   "rationale": "Identical to unit 165, which the map keeps. Demo fact \"45 days\" preserved."
+  },
+  {
+   "loc": "2105 MOMENTS[2].scene headline",
+   "kind": "js-moment-scene-text",
+   "original": "Warby Parker dies in 20 days, and here is how.",
+   "replacement": "Warby Parker is projected to be lost within 20 days.",
+   "provenance": "map-adapted",
+   "source_unit": "166, 200",
+   "rationale": "Near-twin of units 166/200 (\"Warby Parker dies in 20 days.\"); uses their approved replacement verbatim. The extra clause \"and here is how\" is dropped because the paragraph directly below gives the projected sequence, and the shorter headline matches the two static scenes."
+  },
+  {
+   "loc": "2106 MOMENTS[2].scene projection",
+   "kind": "js-moment-scene-text",
+   "original": "You have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as <b>no decision</b> — the way most of your losses have gone.",
+   "replacement": "The deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as <b>no decision</b>, like most of your lost deals.",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "No static twin. Follows evidence → projection → comparison (COPY_STANDARD §7): the evidence (one champion, no one senior to him), then what Antaeus projects, then how most past losses ended. Keeps the projection explicit (\"Antaeus projects that …\") rather than a hypothetical \"If …\", and fixes the draft's \"no one else signs\", which implied Marcus could sign. Replaces \"goes quiet\" with the observable behavior and \"it\" with \"the deal\". Keeps Marcus, week two, and \"no decision\". Measured with page fonts: two lines on desktop like the original (the draft needed three), one line more than the original at 390px and two more at 360px, the same height as the draft at those widths."
+  },
+  {
+   "loc": "2108 MOMENTS[2].scene pattern row",
+   "kind": "js-moment-scene-text",
+   "original": "data-a=\"5\"><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em>",
+   "replacement": "data-a=\"5\"><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em>",
+   "provenance": "keep",
+   "source_unit": "raw nodes 372-374 (craft), 426-428 (all-rooms)",
+   "rationale": "The map left the identical static rows unchanged. \"pressure before clarity\" is the product's own name for this Future Autopsy loss pattern (canon §4.14); changing it only here would make this scene disagree with the two static copies. If the founder wants it made more literal, all three should change together."
+  },
+  {
+   "loc": "2109 MOMENTS[2].scene fix label",
+   "kind": "js-moment-scene-text",
+   "original": "<b>The smallest fix</b>",
+   "replacement": "<b>Smallest fix</b>",
+   "provenance": "new",
+   "source_unit": "198, 39",
+   "rationale": "\"The smallest fix\" is already plain English; dropping \"The\" makes it a noun label (COPY_STANDARD §14) and gives the action more room in this single-line, ellipsis-truncated row. Measured at 390px with page fonts, \"Smallest fix\" leaves 214px, so \"add a second stakeholder this week\" (214px) shows in full; with \"The smallest fix\" it was cut off (191 of 206px). \"Smallest corrective action\" (the map's prose wording, unit 198) would leave only 130px at 390px, so it is not used in this row."
+  },
+  {
+   "loc": "2109 MOMENTS[2].scene fix value",
+   "kind": "js-moment-scene-text",
+   "original": "<span>get a second name in the room this week</span>",
+   "replacement": "<span>add a second stakeholder this week</span>",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "\"A second name in the room\" is a metaphor (and \"room\" is a scrutinized term); the literal action is adding another stakeholder to the deal. Kept short because this row is single-line with ellipsis: with the \"Smallest fix\" label it shows in full on desktop and at 390px and loses only the last few characters at 360px (184 of 206px); the original value was cut off at both phone widths (191 and 161 of 235px)."
+  },
+  {
+   "loc": "2112 MOMENTS[3].chip",
+   "kind": "js-moment-chip",
+   "original": "\"The handoff\"",
+   "replacement": "\"Sales handoff\"",
+   "provenance": "map-exact",
+   "source_unit": "68",
+   "rationale": "Identical to unit 68's original (\"The handoff\"); approved replacement reused."
+  },
+  {
+   "loc": "2113 MOMENTS[3].cap",
+   "kind": "js-moment-cap",
+   "original": "<b>The handoff.</b> Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
+   "replacement": "<b>Sales handoff.</b> The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+   "provenance": "new",
+   "source_unit": "55, 56, 75, 68",
+   "rationale": "No static twin for this sentence. Written as complete sentences like the other three captions; the draft's first sentence had no main verb (COPY_STANDARD §19). Uses the map's terms: \"operating guide\" (unit 56), \"new hire … day one\" (unit 55), \"readiness areas\" (unit 75, which renamed \"parts\"). \"A thing to notice that no single room could have told you\" becomes a literal description of the cross-workflow pattern, which the map renders as \"Pattern: …\" (unit 78). \"Workflows\" instead of \"product areas\" avoids two meanings of \"area\" in one sentence."
+  },
+  {
+   "loc": "2116 MOMENTS[3].scene kicker",
+   "kind": "js-moment-scene-text",
+   "original": "style=\"color:var(--forest)\">If a hire started Monday · 5 of 7 parts ready</p>'",
+   "replacement": "style=\"color:var(--forest)\">If a hire started Monday · 5 of 7 readiness areas complete</p>'",
+   "provenance": "map-exact",
+   "source_unit": "75",
+   "rationale": "Identical to unit 75's original; approved replacement reused."
+  },
+  {
+   "loc": "2119 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"done\">Who hits, who misses</span>'",
+   "replacement": "'<span class=\"done\">Who hits, who misses</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 138-142 (handoff), 99-103 (highlights)",
+   "rationale": "Identical to the static handoff contents labels, which the map left unchanged. These are the product's own handoff-guide section titles (canon §4.19). Flag: \"landed\" and \"leak\" are mildly figurative; if the founder wants them changed, change the static copies at the same time so the two scenes match."
+  },
+  {
+   "loc": "2120 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"done\">What actually landed</span>'",
+   "replacement": "'<span class=\"done\">What actually landed</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 138-142 (handoff), 99-103 (highlights)",
+   "rationale": "Identical to the static handoff contents labels, which the map left unchanged. These are the product's own handoff-guide section titles (canon §4.19). Flag: \"landed\" and \"leak\" are mildly figurative; if the founder wants them changed, change the static copies at the same time so the two scenes match."
+  },
+  {
+   "loc": "2121 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"done\">The questions that won</span>'",
+   "replacement": "'<span class=\"done\">The questions that won</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 138-142 (handoff), 99-103 (highlights)",
+   "rationale": "Identical to the static handoff contents labels, which the map left unchanged. These are the product's own handoff-guide section titles (canon §4.19). Flag: \"landed\" and \"leak\" are mildly figurative; if the founder wants them changed, change the static copies at the same time so the two scenes match."
+  },
+  {
+   "loc": "2122 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"done\">Where deals leak</span>'",
+   "replacement": "'<span class=\"done\">Where deals leak</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 138-142 (handoff), 99-103 (highlights)",
+   "rationale": "Identical to the static handoff contents labels, which the map left unchanged. These are the product's own handoff-guide section titles (canon §4.19). Flag: \"landed\" and \"leak\" are mildly figurative; if the founder wants them changed, change the static copies at the same time so the two scenes match."
+  },
+  {
+   "loc": "2123 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span class=\"done\">The losses you paid for</span>'",
+   "replacement": "'<span class=\"done\">The losses you paid for</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 138-142 (handoff), 99-103 (highlights)",
+   "rationale": "Identical to the static handoff contents labels, which the map left unchanged. These are the product's own handoff-guide section titles (canon §4.19). Flag: \"landed\" and \"leak\" are mildly figurative; if the founder wants them changed, change the static copies at the same time so the two scenes match."
+  },
+  {
+   "loc": "2124 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span>Why you win</span>'",
+   "replacement": "'<span>Why you win</span>'",
+   "provenance": "keep",
+   "source_unit": "raw nodes 143, 104",
+   "rationale": "Identical to the static label the map left unchanged; literal."
+  },
+  {
+   "loc": "2125 MOMENTS[3].scene contents item",
+   "kind": "js-moment-scene-text",
+   "original": "'<span>The week to run</span>'",
+   "replacement": "'<span>Weekly operating plan</span>'",
+   "provenance": "map-exact",
+   "source_unit": "leaf: \"The week to run\" (raw nodes 105, 144)",
+   "rationale": "Exact standalone_leaf_replacements key; approved replacement reused. If the map build already applied this leaf globally, this entry is already satisfied."
+  },
+  {
+   "loc": "2128 MOMENTS[3].scene heading",
+   "kind": "js-moment-scene-text",
+   "original": ">Who hits, who misses, and why</h3>'",
+   "replacement": ">Who hits, who misses, and why</h3>'",
+   "provenance": "keep",
+   "source_unit": "76, 57",
+   "rationale": "Identical to units 76/57, which the map keeps."
+  },
+  {
+   "loc": "2129 MOMENTS[3].scene paragraph",
+   "kind": "js-moment-scene-text",
+   "original": "Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.",
+   "replacement": "Every deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.",
+   "provenance": "map-adapted",
+   "source_unit": "77",
+   "rationale": "Near-twin of unit 77 (\"had to go ask\" vs \"had to go and ask for it\"); approved replacement reused verbatim."
+  },
+  {
+   "loc": "2130 MOMENTS[3].scene note",
+   "kind": "js-moment-scene-text",
+   "original": "One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>'",
+   "replacement": "Pattern: <b>every deal you won was mid-market</b>, while your stated target is enterprise.</p>'",
+   "provenance": "map-exact",
+   "source_unit": "78",
+   "rationale": "Text identical to unit 78's original; approved replacement reused, with the original <b> kept on the finding."
+  },
+  {
+   "loc": "2145 chip aria-label (\"See \" + r.chip)",
+   "kind": "js-aria-label",
+   "original": "\"See \" + r.chip",
+   "replacement": "\"Show example: \" + r.chip",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "Each chip opens an example scene. Produces e.g. \"Show example: Morning briefing\", which reads correctly with the rewritten chip names (the old form produced \"See The morning read\")."
+  },
+  {
+   "loc": "1973 highlight dot aria-label",
+   "kind": "js-aria-label",
+   "original": "\"Highlight \" + (i + 1) + \" of \" + cards.length",
+   "replacement": "\"Highlight \" + (i + 1) + \" of \" + cards.length",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal position label (\"Highlight 2 of 6\")."
+  },
+  {
+   "loc": "2016 play/pause aria-label",
+   "kind": "js-aria-label",
+   "original": "v ? \"Pause highlights\" : \"Play highlights\"",
+   "replacement": "v ? \"Pause highlights\" : \"Play highlights\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal verb + object."
+  },
+  {
+   "loc": "956 aria-label (handoff view switch group)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Whose view\"",
+   "replacement": "aria-label=\"Founder view or new-hire view\"",
+   "provenance": "new",
+   "source_unit": "79, 80",
+   "rationale": "The group switches between \"What you see every morning\" and \"What a new hire sees on day one\" (unit 80). \"Whose view\" relies on a referent outside the control; the new label names both options."
+  },
+  {
+   "loc": "989 aria-label (product viewer chip group)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Open a room\"",
+   "replacement": "aria-label=\"Product area examples\"",
+   "provenance": "map-adapted",
+   "source_unit": "3, 9",
+   "rationale": "The map renames \"rooms\" to \"Product areas\" (units 3, 9). The chips open example scenes, so the group label names that."
+  },
+  {
+   "loc": "992 aria-label (viewer close)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Close\"",
+   "replacement": "aria-label=\"Close\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal control label."
+  },
+  {
+   "loc": "997 aria-label (viewer previous)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Previous room\"",
+   "replacement": "aria-label=\"Previous example\"",
+   "provenance": "map-adapted",
+   "source_unit": "3, 9",
+   "rationale": "The arrow cycles through the four example scenes, not rooms; matches the group label."
+  },
+  {
+   "loc": "1001 aria-label (viewer next)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Next room\"",
+   "replacement": "aria-label=\"Next example\"",
+   "provenance": "map-adapted",
+   "source_unit": "3, 9",
+   "rationale": "Same as the previous-arrow label."
+  },
+  {
+   "loc": "1136 aria-label (week rail)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Through the week\"",
+   "replacement": "aria-label=\"Common sales situations\"",
+   "provenance": "map-adapted",
+   "source_unit": "108, 105",
+   "rationale": "The rail lists the situations in the section whose subheading the map rewrote to \"For common sales situations.\" (unit 108)."
+  },
+  {
+   "loc": "1177 aria-label (craft tablist)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Ways to reach out\"",
+   "replacement": "aria-label=\"Outreach and discovery workflows\"",
+   "provenance": "new",
+   "source_unit": "115-121",
+   "rationale": "The tabs are Outbound, Cold call, LinkedIn, and Discovery; Discovery is not outreach, so the label names both kinds of workflow."
+  },
+  {
+   "loc": "1245 aria-label (workflow card rail)",
+   "kind": "aria-label",
+   "original": "aria-label=\"More of the work\"",
+   "replacement": "aria-label=\"Workflows from prospecting through signature\"",
+   "provenance": "map-adapted",
+   "source_unit": "145",
+   "rationale": "Labels the rail under the subheading the map rewrote to \"Workflows from prospecting through signature.\" (unit 145)."
+  },
+  {
+   "loc": "1611 aria-label (why-start rail)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Why start here\"",
+   "replacement": "aria-label=\"Why start here\"",
+   "provenance": "keep",
+   "source_unit": "229",
+   "rationale": "Matches the section heading \"Why founders start here.\", which the map keeps."
+  },
+  {
+   "loc": "1648 aria-label (comparison table)",
+   "kind": "aria-label",
+   "original": "aria-label=\"How the three compare\"",
+   "replacement": "aria-label=\"Antaeus compared with a CRM and a spreadsheet\"",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "\"The three\" has no referent inside the table label; names the three columns (Antaeus, A CRM, A spreadsheet)."
+  },
+  {
+   "loc": "2220 BENCH.smb.a",
+   "kind": "js-bench-a",
+   "original": "\"1 in 4 closes\"",
+   "replacement": "\"25% win-rate benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183's approved mid-band text, with this band's win rate from ACV_BENCHMARKS (25%; \"1 in 4 closes\" was the same figure stated as a ratio)."
+  },
+  {
+   "loc": "2220 BENCH.smb.as",
+   "kind": "js-bench-as",
+   "original": "\"how often deals this size are won — the band is 20 to 30%\"",
+   "replacement": "\"typical range 20–30%\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183; range 20–30% from ACV_BENCHMARKS (unchanged from the original band)."
+  },
+  {
+   "loc": "2221 BENCH.smb.b",
+   "kind": "js-bench-b",
+   "original": "\"3× in flight\"",
+   "replacement": "\"3× pipeline coverage\"",
+   "provenance": "map-adapted",
+   "source_unit": "184",
+   "rationale": "Same pattern as unit 184 (\"in flight\" → \"pipeline coverage\"); 3× coverage unchanged."
+  },
+  {
+   "loc": "2221 BENCH.smb.bs",
+   "kind": "js-bench-bs",
+   "original": "\"enough going at once that one slipping does not sink the quarter\"",
+   "replacement": "\"enough active pipeline to absorb normal deal slippage\"",
+   "provenance": "map-adapted",
+   "source_unit": "184",
+   "rationale": "Same meaning as the mid-band rationale (pipeline cushion against a deal that slips); the approved mid replacement fits unchanged."
+  },
+  {
+   "loc": "2222 BENCH.smb.c",
+   "kind": "js-bench-c",
+   "original": "\"45 days\"",
+   "replacement": "\"45-day sales-cycle benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; 45-day cycle unchanged."
+  },
+  {
+   "loc": "2222 BENCH.smb.cs",
+   "kind": "js-bench-cs",
+   "original": "\"how long one usually takes to close — the range is 30 to 60 days\"",
+   "replacement": "\"typical range 30–60 days\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; range 30–60 days unchanged."
+  },
+  {
+   "loc": "2223 BENCH.mid.a",
+   "kind": "js-bench-a",
+   "original": "\"1 in 5 closes\"",
+   "replacement": "\"20% win-rate benchmark\"",
+   "provenance": "map-exact",
+   "source_unit": "183",
+   "rationale": "Identical to the <b id=\"pace-a\"> half of unit 183; approved replacement reused (text before \" · \")."
+  },
+  {
+   "loc": "2223 BENCH.mid.as",
+   "kind": "js-bench-as",
+   "original": "\"how often deals this size are won — the band is 15 to 25%\"",
+   "replacement": "\"typical range 15–25%\"",
+   "provenance": "map-exact",
+   "source_unit": "183",
+   "rationale": "Identical to the <span id=\"pace-as\"> half of unit 183; approved replacement reused."
+  },
+  {
+   "loc": "2224 BENCH.mid.b",
+   "kind": "js-bench-b",
+   "original": "\"3.5× in flight\"",
+   "replacement": "\"3.5× pipeline coverage\"",
+   "provenance": "map-exact",
+   "source_unit": "184",
+   "rationale": "Identical to the <b id=\"pace-b\"> half of unit 184; approved replacement reused."
+  },
+  {
+   "loc": "2224 BENCH.mid.bs",
+   "kind": "js-bench-bs",
+   "original": "\"enough going at once that a couple of slips do not sink the quarter\"",
+   "replacement": "\"enough active pipeline to absorb normal deal slippage\"",
+   "provenance": "map-exact",
+   "source_unit": "184",
+   "rationale": "Identical to unit 184's original span text; approved replacement reused (text after \" · \")."
+  },
+  {
+   "loc": "2225 BENCH.mid.c",
+   "kind": "js-bench-c",
+   "original": "\"90 days\"",
+   "replacement": "\"90-day sales-cycle benchmark\"",
+   "provenance": "map-exact",
+   "source_unit": "185",
+   "rationale": "Identical to the <b id=\"pace-c\"> half of unit 185; approved replacement reused. Render note (page fonts): at 390px the win-rate and sales-cycle values wrap to two lines in every band (31→62px), and at 360px the 3.5× and 4.5× coverage values also wrap; the map's static mid-band text is the same string and wraps the same way. Nothing overflows."
+  },
+  {
+   "loc": "2225 BENCH.mid.cs",
+   "kind": "js-bench-cs",
+   "original": "\"how long one usually takes to close — the range is 60 to 120 days\"",
+   "replacement": "\"typical range 60–120 days\"",
+   "provenance": "map-exact",
+   "source_unit": "185",
+   "rationale": "Identical to the <span id=\"pace-cs\"> half of unit 185; approved replacement reused."
+  },
+  {
+   "loc": "2226 BENCH.ent.a",
+   "kind": "js-bench-a",
+   "original": "\"1 in 7 closes\"",
+   "replacement": "\"15% win-rate benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183's approved mid-band text, with this band's win rate from ACV_BENCHMARKS (15%; the old \"1 in 7 closes\" was a rounded approximation)."
+  },
+  {
+   "loc": "2226 BENCH.ent.as",
+   "kind": "js-bench-as",
+   "original": "\"how often deals this size are won — the band is 10 to 18%\"",
+   "replacement": "\"typical range 10–18%\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183; range 10–18% from ACV_BENCHMARKS (unchanged from the original band)."
+  },
+  {
+   "loc": "2227 BENCH.ent.b",
+   "kind": "js-bench-b",
+   "original": "\"4.5× in flight\"",
+   "replacement": "\"4.5× pipeline coverage\"",
+   "provenance": "map-adapted",
+   "source_unit": "184",
+   "rationale": "Same pattern as unit 184 (\"in flight\" → \"pipeline coverage\"); 4.5× coverage unchanged."
+  },
+  {
+   "loc": "2227 BENCH.ent.bs",
+   "kind": "js-bench-bs",
+   "original": "\"fewer, larger deals means more cover for each one that stalls\"",
+   "replacement": "\"fewer, larger deals, so more pipeline is needed to cover each stalled deal\"",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "Band-specific reason; \"more cover for each one that stalls\" restated literally with no ambiguous \"one\"."
+  },
+  {
+   "loc": "2228 BENCH.ent.c",
+   "kind": "js-bench-c",
+   "original": "\"180 days\"",
+   "replacement": "\"180-day sales-cycle benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; 180-day cycle unchanged."
+  },
+  {
+   "loc": "2228 BENCH.ent.cs",
+   "kind": "js-bench-cs",
+   "original": "\"how long one usually takes to close — the range is 120 to 270 days\"",
+   "replacement": "\"typical range 120–270 days\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; range 120–270 days unchanged."
+  },
+  {
+   "loc": "2229 BENCH.str.a",
+   "kind": "js-bench-a",
+   "original": "\"1 in 8 closes\"",
+   "replacement": "\"12% win-rate benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183's approved mid-band text, with this band's win rate from ACV_BENCHMARKS (12%; the old \"1 in 8 closes\" was a rounded approximation)."
+  },
+  {
+   "loc": "2229 BENCH.str.as",
+   "kind": "js-bench-as",
+   "original": "\"how often deals this size are won — the band is 8 to 15%\"",
+   "replacement": "\"typical range 8–15%\"",
+   "provenance": "map-adapted",
+   "source_unit": "183",
+   "rationale": "Same pattern as unit 183; range 8–15% from ACV_BENCHMARKS (unchanged from the original band)."
+  },
+  {
+   "loc": "2230 BENCH.str.b",
+   "kind": "js-bench-b",
+   "original": "\"5× in flight\"",
+   "replacement": "\"5× pipeline coverage\"",
+   "provenance": "map-adapted",
+   "source_unit": "184",
+   "rationale": "Same pattern as unit 184 (\"in flight\" → \"pipeline coverage\"); 5× coverage unchanged."
+  },
+  {
+   "loc": "2230 BENCH.str.bs",
+   "kind": "js-bench-bs",
+   "original": "\"at this size a single deal going quiet can be the whole quarter\"",
+   "replacement": "\"at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk\"",
+   "provenance": "new",
+   "source_unit": "",
+   "rationale": "Band-specific reason; replaces \"a single deal going quiet can be the whole quarter\" (idiom + compressed causality) with the explicit cause and effect. Render note: three lines at 390px, two at desktop; no overflow."
+  },
+  {
+   "loc": "2231 BENCH.str.c",
+   "kind": "js-bench-c",
+   "original": "\"240 days\"",
+   "replacement": "\"240-day sales-cycle benchmark\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; 240-day cycle unchanged."
+  },
+  {
+   "loc": "2231 BENCH.str.cs",
+   "kind": "js-bench-cs",
+   "original": "\"how long one usually takes to close — the range is 180 to 360 days\"",
+   "replacement": "\"typical range 180–360 days\"",
+   "provenance": "map-adapted",
+   "source_unit": "185",
+   "rationale": "Same pattern as unit 185; range 180–360 days unchanged."
+  },
+  {
+   "loc": "544 aria-label (global nav)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Global\"",
+   "replacement": "aria-label=\"Global\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Names the main navigation landmark; literal."
+  },
+  {
+   "loc": "546 aria-label (brand link)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Antaeus home\"",
+   "replacement": "aria-label=\"Antaeus home\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Link destination named literally."
+  },
+  {
+   "loc": "564 aria-label (local nav)",
+   "kind": "aria-label",
+   "original": "aria-label=\"On this page\"",
+   "replacement": "aria-label=\"On this page\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Names the in-page section navigation; literal."
+  },
+  {
+   "loc": "630 aria-label (highlights rail)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Highlights\"",
+   "replacement": "aria-label=\"Highlights\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Names the highlight card rail; literal."
+  },
+  {
+   "loc": "761 aria-label (highlight dots tablist)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Highlight\"",
+   "replacement": "aria-label=\"Highlight\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Tablist whose tabs read \"Highlight N of M\" (line 1973); literal."
+  },
+  {
+   "loc": "762 aria-label (play/pause initial state)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Pause highlights\"",
+   "replacement": "aria-label=\"Pause highlights\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Static initial value of the control the JS at line 2016 toggles; literal verb + object."
+  },
+  {
+   "loc": "1162, 1289, 1512, 1637 aria-label (rail arrows, previous)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Previous\"",
+   "replacement": "aria-label=\"Previous\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Four identical rail-arrow labels (intended for every occurrence); literal control label, same register as \"Close\"."
+  },
+  {
+   "loc": "1162, 1289, 1512, 1637 aria-label (rail arrows, next)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Next\"",
+   "replacement": "aria-label=\"Next\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Four identical rail-arrow labels (intended for every occurrence); literal control label, same register as \"Close\"."
+  },
+  {
+   "loc": "1504 aria-label (trust rail)",
+   "kind": "aria-label",
+   "original": "aria-label=\"How your data is handled\"",
+   "replacement": "aria-label=\"How your data is handled\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Names what the rail covers; literal."
+  },
+  {
+   "loc": "1829 aria-label (footer legal nav)",
+   "kind": "aria-label",
+   "original": "aria-label=\"Legal\"",
+   "replacement": "aria-label=\"Legal\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Names the footer legal links; literal."
+  },
+  {
+   "loc": "1138 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"A dark office with one desk lit, someone working alone.\"",
+   "replacement": "alt=\"A dark office with one desk lit, someone working alone.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; no product claim."
+  },
+  {
+   "loc": "1142 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"A person sitting by a large window, looking at their phone mid-call.\"",
+   "replacement": "alt=\"A person sitting by a large window, looking at their phone mid-call.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; no product claim."
+  },
+  {
+   "loc": "1146 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"An office building at night, lit windows with people still inside.\"",
+   "replacement": "alt=\"An office building at night, lit windows with people still inside.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; no product claim."
+  },
+  {
+   "loc": "1150 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"Someone writing in a notebook at a desk under a lamp.\"",
+   "replacement": "alt=\"Someone writing in a notebook at a desk under a lamp.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; no product claim."
+  },
+  {
+   "loc": "1154 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"A person at a monitor in low light, thinking.\"",
+   "replacement": "alt=\"A person at a monitor in low light, thinking.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; \"thinking\" describes the person in the photo, not the software."
+  },
+  {
+   "loc": "1158 img alt",
+   "kind": "img-alt",
+   "original": "alt=\"A quiet modern lobby with tall windows, nobody in it.\"",
+   "replacement": "alt=\"A quiet modern lobby with tall windows, nobody in it.\"",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Literal description of the photo; \"quiet\" describes the room, not a deal."
+  },
+  {
+   "loc": "1 <title>",
+   "kind": "title",
+   "original": "<title>Antaeus</title>",
+   "replacement": "<title>Antaeus</title>",
+   "provenance": "keep",
+   "source_unit": "",
+   "rationale": "Product name only; literal."
+  }
+ ]
+}

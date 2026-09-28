@@ -1,0 +1,102 @@
+diff --git a/antaeus-product-page.copy-map-applied.html b/antaeus-product-page.copy-map-applied+proposed-addendum.html
+index 48e67b2..0133259 100644
+--- a/antaeus-product-page.copy-map-applied.html
++++ b/antaeus-product-page.copy-map-applied+proposed-addendum.html
+@@ -956 +956 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <div class="swatches" role="group" aria-label="Whose view">
++      <div class="swatches" role="group" aria-label="Founder view or new-hire view">
+@@ -989 +989 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <div class="pv__chips" id="pv-chips" role="group" aria-label="Open a room"></div>
++  <div class="pv__chips" id="pv-chips" role="group" aria-label="Product area examples"></div>
+@@ -997 +997 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <button class="pv__arw" id="pv-prev" aria-label="Previous room">
++      <button class="pv__arw" id="pv-prev" aria-label="Previous example">
+@@ -1001 +1001 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <button class="pv__arw" id="pv-next" aria-label="Next room">
++      <button class="pv__arw" id="pv-next" aria-label="Next example">
+@@ -1136 +1136 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="Through the week">
++  <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="Common sales situations">
+@@ -1177 +1177 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <div class="tabs" id="craft-tabs" role="tablist" aria-label="Ways to reach out">
++    <div class="tabs" id="craft-tabs" role="tablist" aria-label="Outreach and discovery workflows">
+@@ -1245 +1245 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="More of the work">
++  <div class="rail rail--edge rail--start" style="margin-top:26px" role="group" aria-label="Workflows from prospecting through signature">
+@@ -1648 +1648 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    <div class="cmp rv" role="table" aria-label="How the three compare">
++    <div class="cmp rv" role="table" aria-label="Antaeus compared with a CRM and a spreadsheet">
+@@ -2074,2 +2074,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    { chip: "The morning read",
+-      cap: "<b>The morning read.</b> Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
++    { chip: "Morning briefing",
++      cap: "<b>Morning briefing.</b> Every 30 minutes, Antaeus reviews workspace data for changes and risks, then summarizes those findings in plain language. Each morning, it ranks the highest-priority action and shows the reason for that ranking.",
+@@ -2080 +2080 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<div class="sc-row" data-a="3"><em class="sc-day sc-day--amber">14d</em><span><b>Liquid Death</b> has gone quiet — their people team is three deep and mid-launch.</span></div>' +
++          '<div class="sc-row" data-a="3"><em class="sc-day sc-day--amber">14d</em><span><b>Liquid Death</b> has had no recent buyer activity for 14 days; its people team is three people and mid-launch.</span></div>' +
+@@ -2082 +2082 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<p class="sc-note" data-a="5">And one you did not ask for — <b>every deal you have won rode a dated expansion event</b>. None of the cold ones landed.</p>' +
++          '<p class="sc-note" data-a="5">And one pattern you did not ask about: <b>every deal you have won followed a dated expansion event</b>. None of the deals without a dated trigger closed.</p>' +
+@@ -2085,2 +2085,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    { chip: "A live call",
+-      cap: "<b>A live call.</b> Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
++    { chip: "Live discovery call",
++      cap: "<b>Live discovery call.</b> Discovery Studio is the console you use during the call, not a place for notes afterward. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up question.",
+@@ -2089 +2089 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · make the cost real</p>' +
++          '<p class="sc-kick sc-kick--sys" data-a="1">Problem and business impact · live</p>' +
+@@ -2091 +2091 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<p class="sc-listen" data-a="3">Listen for whether this pain is really <b>theirs to fix</b>, or a polite nice-to-have — and who flinches when you name the cost.</p>' +
++          '<p class="sc-listen" data-a="3">Listen for whether <b>the buyer owns the problem</b> or treats it as a nice-to-have, and who is accountable for its cost.</p>' +
+@@ -2097 +2097 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<p class="sc-note" data-a="7">They hired around it. <b>Ask what that cost, and who signed it off</b> — you have just found your economic buyer.</p>' +
++          '<p class="sc-note" data-a="7">They added recruiters instead of changing the underlying process. <b>Ask what the added headcount cost and who approved the expense</b>; that identifies the budget owner.</p>' +
+@@ -2100,2 +2100,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    { chip: "A deal going quiet",
+-      cap: "<b>A deal going quiet.</b> Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
++    { chip: "Deal at risk",
++      cap: "<b>Deal at risk.</b> Future Autopsy projects deal-loss risk. For an open deal, it shows how the deal is likely to be lost, the recurring risk pattern, and the estimated days until that loss, then links to the workflow where you can address the risk.",
+@@ -2105,2 +2105,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<h3 class="sc-h" data-a="2">Warby Parker dies in 20 days, and here is how.</h3>' +
+-          '<p class="sc-p" data-a="3">You have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as <b>no decision</b> — the way most of your losses have gone.</p>' +
++          '<h3 class="sc-h" data-a="2">Warby Parker is projected to be lost within 20 days.</h3>' +
++          '<p class="sc-p" data-a="3">The deal has one champion, Marcus, and no one senior to him is involved. Antaeus projects that Marcus stops responding in week two, no one signs, and the deal closes as <b>no decision</b>, like most of your lost deals.</p>' +
+@@ -2109 +2109 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<div class="sc-row" data-a="6"><b>The smallest fix</b><span>get a second name in the room this week</span></div>' +
++          '<div class="sc-row" data-a="6"><b>Smallest fix</b><span>add a second stakeholder this week</span></div>' +
+@@ -2112,2 +2112,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    { chip: "The handoff",
+-      cap: "<b>The handoff.</b> Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
++    { chip: "Sales handoff",
++      cap: "<b>Sales handoff.</b> The handoff is an operating guide that a new hire reads on day one. It covers seven readiness areas in prose rather than in a dashboard, and each area includes one pattern that Antaeus finds only by comparing data across different workflows.",
+@@ -2116 +2116 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          '<p class="sc-kick" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 parts ready</p>' +
++          '<p class="sc-kick" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 readiness areas complete</p>' +
+@@ -2129,2 +2129,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-              '<p class="sc-p" data-a="4">Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.</p>' +
+-              '<p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>' +
++              '<p class="sc-p" data-a="4">Every deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.</p>' +
++              '<p class="sc-note" data-a="5">Pattern: <b>every deal you won was mid-market</b>, while your stated target is enterprise.</p>' +
+@@ -2145 +2145 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      b.setAttribute("aria-label", "See " + r.chip);
++      b.setAttribute("aria-label", "Show example: " + r.chip);
+@@ -2220,3 +2220,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    smb: { a: "1 in 4 closes",  as: "how often deals this size are won — the band is 20 to 30%",
+-           b: "3× in flight",   bs: "enough going at once that one slipping does not sink the quarter",
+-           c: "45 days",        cs: "how long one usually takes to close — the range is 30 to 60 days" },
++    smb: { a: "25% win-rate benchmark",  as: "typical range 20–30%",
++           b: "3× pipeline coverage",   bs: "enough active pipeline to absorb normal deal slippage",
++           c: "45-day sales-cycle benchmark",        cs: "typical range 30–60 days" },
+@@ -2226,6 +2226,6 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    ent: { a: "1 in 7 closes",  as: "how often deals this size are won — the band is 10 to 18%",
+-           b: "4.5× in flight", bs: "fewer, larger deals means more cover for each one that stalls",
+-           c: "180 days",       cs: "how long one usually takes to close — the range is 120 to 270 days" },
+-    str: { a: "1 in 8 closes",  as: "how often deals this size are won — the band is 8 to 15%",
+-           b: "5× in flight",   bs: "at this size a single deal going quiet can be the whole quarter",
+-           c: "240 days",       cs: "how long one usually takes to close — the range is 180 to 360 days" }
++    ent: { a: "15% win-rate benchmark",  as: "typical range 10–18%",
++           b: "4.5× pipeline coverage", bs: "fewer, larger deals, so more pipeline is needed to cover each stalled deal",
++           c: "180-day sales-cycle benchmark",       cs: "typical range 120–270 days" },
++    str: { a: "12% win-rate benchmark",  as: "typical range 8–15%",
++           b: "5× pipeline coverage",   bs: "at this deal size, one deal can be the entire quarterly target, so a single stalled deal puts the quarter at risk",
++           c: "240-day sales-cycle benchmark",       cs: "typical range 180–360 days" }

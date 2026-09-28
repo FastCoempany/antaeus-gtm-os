@@ -1,0 +1,612 @@
+diff --git a/antaeusproductpage-3.source.html b/antaeus-product-page.copy-map-applied.html
+index f32f5fc..48e67b2 100644
+--- a/antaeusproductpage-3.source.html
++++ b/antaeus-product-page.copy-map-applied.html
+@@ -552 +552 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <a href="#rooms">The rooms</a>
++      <a href="#rooms">Product areas</a>
+@@ -565,4 +565,4 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <a href="#handoff">Handoff</a>
+-      <a href="#rooms">Rooms</a>
+-      <a href="#briefing">What it sees</a>
+-      <a href="#pace">Pace</a>
++      <a href="#handoff">Sales handoff</a>
++      <a href="#rooms">Product areas</a>
++      <a href="#briefing">Activity monitoring</a>
++      <a href="#pace">Revenue plan</a>
+@@ -585,2 +585,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h1 class="h-hero rv in" data-d="1">You built it.<br />They can run it.</h1>
+-    <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />After that it reads your whole way of selling back to you every morning.</p>
++    <h1 class="h-hero rv in" data-d="1">Turn the sales process you built into a system your first hire can use.</h1>
++    <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />Each morning, Antaeus reviews your accounts, deals, calls, and sales activity and tells you what needs attention.</p>
+@@ -590 +590 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-kick" data-a="1">Where your whole motion stands</p>
++      <p class="sc-kick" data-a="1">How ready your sales process is to hand off</p>
+@@ -592,3 +592,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <div><i></i><span>You are the system</span></div>
+-        <div><i></i><span>Building</span></div>
+-        <div class="at"><i></i><span>Inheritable</span></div>
++        <div><i></i><span>Founder-dependent</span></div>
++        <div><i></i><span>Partially documented</span></div>
++        <div class="at"><i></i><span>Usable with founder support</span></div>
+@@ -596 +596 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <div><i></i><span>Repeatable</span></div>
++        <div><i></i><span>Hire-ready and repeatable</span></div>
+@@ -599 +599 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-kick sc-kick--move" data-a="3">The most valuable move on your board · #1 of 12</p>
++      <p class="sc-kick sc-kick--move" data-a="3">Highest-priority action · #1 of 12</p>
+@@ -601 +601 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-p" data-a="5">They announced two plants this month — a few hundred production hires on a deadline, and no recruiting team to absorb it. <b>Nobody has called them.</b> Reaching out is the part of your motion furthest behind.</p>
++      <p class="sc-p" data-a="5">Chomps announced two plants this month, creating several hundred production hires on a deadline, and appears to have limited recruiting capacity. <b>Your workspace shows no outreach to Chomps.</b> Antaeus ranks outreach as your least-completed sales activity.</p>
+@@ -603 +603 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-quiet" data-a="7">· clearly the top one &nbsp;·&nbsp; then: Warby Parker, Sweetgreen</p>
++      <p class="sc-quiet" data-a="7">Ranked #1 &nbsp;·&nbsp; Next: Warby Parker, Sweetgreen</p>
+@@ -612 +612 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <p><b>Free while we're in beta.</b><br /><span>No card. Bring one afternoon and what's in your head.</span></p>
++    <p><b>Free while we're in beta.</b><br /><span>No card. Spend one afternoon entering the sales knowledge only you know.</span></p>
+@@ -633,2 +633,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>Every account you watch, sorted by what just moved.</h3>
+-      <p class="hc-note">Act now, reach while they’re warm, emerging, going cold.</p>
++      <h3>Every account you follow, ranked by recent activity and company changes.</h3>
++      <p class="hc-note">See which accounts need action now, which have new signals, and which have had no recent activity.</p>
+@@ -637 +637 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick sc-kick--move" data-a="1">Act now — hot, and something just moved</p>
++          <p class="sc-kick sc-kick--move" data-a="1">High priority · recent company change</p>
+@@ -649,2 +649,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>One thing to do first, and why it came up first.</h3>
+-      <p class="hc-note">Not a list of fourteen. The single most valuable one, with its reason shown.</p>
++      <h3>Your highest-priority action, with the reason it ranks first.</h3>
++      <p class="hc-note">Not a fourteen-item task list. Antaeus ranks one action first and shows the evidence behind the ranking.</p>
+@@ -655 +655 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-p" data-a="3">Two plants announced, a few hundred hires, no recruiting bench. <b>Running hot</b>, and outreach is your weakest part.</p>
++          <p class="sc-p" data-a="3">Two plants announced, several hundred hires planned, no apparent recruiting bench. <b>Antaeus ranks Chomps highly</b> because the account has a recent hiring trigger and outreach is your least-completed activity.</p>
+@@ -657 +657 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-quiet" data-a="5">· then: Warby Parker, Sweetgreen</p>
++          <p class="sc-quiet" data-a="5">Next: Warby Parker, Sweetgreen</p>
+@@ -663,2 +663,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>The deals that will slip this week, and the smallest fix.</h3>
+-      <p class="hc-note">Where a deal says it is matters less than what it is actually stuck on.</p>
++      <h3>Deals at risk this week, with the next corrective action for each.</h3>
++      <p class="hc-note">Pipeline stage alone does not show deal risk. Antaeus also tracks unresolved blockers and buyer activity.</p>
+@@ -668 +668 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <h4 class="sc-h" data-a="2">3 will slip.</h4>
++          <h4 class="sc-h" data-a="2">3 deals are at risk.</h4>
+@@ -671 +671 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div class="sc-row sc-row--warm" data-a="4"><b>Liquid Death</b><span>champion went quiet</span><em class="sc-day sc-day--amber">14d</em></div>
++            <div class="sc-row sc-row--warm" data-a="4"><b>Liquid Death</b><span>no champion activity</span><em class="sc-day sc-day--amber">14d</em></div>
+@@ -679,2 +679,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>A console you run the discovery call from, live.</h3>
+-      <p class="hc-note">They say something. You tap what you heard. It hands you the next line.</p>
++      <h3>A live discovery-call console.</h3>
++      <p class="hc-note">Select the buyer response you heard. Antaeus shows the recommended follow-up question.</p>
+@@ -683 +683 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · live</p>
++          <p class="sc-kick sc-kick--sys" data-a="1">Problem and business impact · live</p>
+@@ -685 +685 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-listen" data-a="3">Listen for whether this is really <b>theirs to fix</b> — and who flinches when you name the cost.</p>
++          <p class="sc-listen" data-a="3">Listen for whether <b>the buyer owns the problem</b> and who is accountable for its cost.</p>
+@@ -691 +691 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-quiet" data-a="7">Tap what you heard to get your next line</p>
++          <p class="sc-quiet" data-a="7">Select the response to see the recommended follow-up</p>
+@@ -698,2 +698,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>A pilot that gives their boss something to act on.</h3>
+-      <p class="hc-note">Walked through, one step at a time, with the people you need to pull in.</p>
++      <h3>A pilot plan the buyer's manager can use to make a decision.</h3>
++      <p class="hc-note">Antaeus walks you through the pilot steps and identifies which stakeholders still need to participate.</p>
+@@ -702 +702 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick" data-a="1">Who is hands-on</p>
++          <p class="sc-kick" data-a="1">Active pilot participants</p>
+@@ -718,2 +718,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>Everything a first hire opens on day one.</h3>
+-      <p class="hc-note">Written like a document a sharp operator left for their replacement.</p>
++      <h3>What a new hire gets on day one.</h3>
++      <p class="hc-note">A structured operating guide with the context and decisions behind your sales process.</p>
+@@ -730 +730 @@ section[id],header[id]{scroll-margin-top:92px}
+-              <span data-a="4">The week to run</span>
++              <span data-a="4">Weekly operating plan</span>
+@@ -735 +735 @@ section[id],header[id]{scroll-margin-top:92px}
+-              <p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but your stated target is enterprise.</p>
++              <p class="sc-note" data-a="5">Pattern: <b>every deal you won was mid-market</b>, while your stated target is enterprise.</p>
+@@ -743,2 +743,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <h3>One question, answered honestly: could someone else run this?</h3>
+-      <p class="hc-note">Five states, and what it takes to reach the next one.</p>
++      <h3>Can a new hire execute your sales process without you?</h3>
++      <p class="hc-note">Five readiness states, with explicit requirements for each.</p>
+@@ -747 +747 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick" data-a="1">Could a hire run this on Monday?</p>
++          <p class="sc-kick" data-a="1">Could a new hire execute this process on Monday?</p>
+@@ -749 +749 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div class="sc-rung" data-a="5"><i></i>Hire-ready, repeatable</div>
++            <div class="sc-rung" data-a="5"><i></i>Hire-ready and repeatable</div>
+@@ -751,3 +751,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div class="sc-rung sc-rung--here" data-a="3"><i></i>Inheritable, with you there</div>
+-            <div class="sc-rung sc-rung--past" data-a="2"><i></i>Building</div>
+-            <div class="sc-rung sc-rung--past" data-a="1"><i></i>You are the system</div>
++            <div class="sc-rung sc-rung--here" data-a="3"><i></i>Usable with founder support</div>
++            <div class="sc-rung sc-rung--past" data-a="2"><i></i>Partially documented</div>
++            <div class="sc-rung sc-rung--past" data-a="1"><i></i>Founder-dependent</div>
+@@ -755 +755 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-quiet" data-a="6">Left “you are the system” behind 3 weeks ago</p>
++          <p class="sc-quiet" data-a="6">Changed from Founder-dependent 3 weeks ago</p>
+@@ -846 +846 @@ section[id],header[id]{scroll-margin-top:92px}
+-.twoup{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,40px);
++.twoup{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);
+@@ -863 +863 @@ section[id],header[id]{scroll-margin-top:92px}
+-@media(max-width:420px){.twoup{grid-template-columns:1fr;gap:26px}}
++@media(max-width:420px){.twoup{grid-template-columns:minmax(0,1fr);gap:26px}}
+@@ -915,2 +915,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <p class="kick rv">The handoff</p>
+-    <h2 class="h-sec rv" data-d="1" id="hf-h" style="max-width:19ch;margin-top:14px">One motion.<br />Two people who run it.</h2>
++    <p class="kick rv">Sales handoff</p>
++    <h2 class="h-sec rv" data-d="1" id="hf-h" style="max-width:19ch;margin-top:14px">One sales process,<br />usable by both founder and first hire.</h2>
+@@ -918 +918 @@ section[id],header[id]{scroll-margin-top:92px}
+-      Your motion is the whole way you win revenue — who you go after, how you reach them, what you say on the call, how a deal gets to signed. In a founder-led company all of that lives in one head. Antaeus is where it stops doing that. The accounts you watch, <b>where every deal actually stands</b>, the questions that won a second meeting, what the pilot showed — it all piles up as you work, inside the rooms you already work in. Nothing gets filed away for later. So when the first serious hire starts, <b>they open the same workspace you've been living in</b> and read it themselves. You don't sit next to them for a month explaining what you meant.
++      Your sales process includes who you target, how you reach them, what you ask on calls, how you qualify opportunities, and how you advance a deal to signature. In a founder-led company, much of that knowledge is undocumented. Antaeus records it as you work: account priorities, <b>actual deal status</b>, discovery questions that worked, pilot results, and the reasoning behind decisions. When your first go-to-market hire starts, <b>they use the same workspace</b> and can read that context directly instead of relying on you to explain it from memory.
+@@ -925 +925 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <p class="sc-kick sc-kick--move" data-a="1">The most valuable move on your board</p>
++            <p class="sc-kick sc-kick--move" data-a="1">Highest-priority action</p>
+@@ -927 +927 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <p class="sc-p" data-a="3">Two plants announced this month, a few hundred production hires, no recruiting bench. <b>The account is running hot</b>, and outreach is the part of your motion furthest behind.</p>
++            <p class="sc-p" data-a="3">Two plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ranks Chomps highly because <b>the account has a recent hiring trigger</b> and outreach is your least-completed activity.</p>
+@@ -930,2 +930,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div class="sc-row" data-a="5"><b>3 will slip</b><span>this week if nothing changes</span></div>
+-            <div class="sc-row" data-a="6"><b>Liquid Death</b><span>quiet 14 days — your worst open deal</span></div>
++            <div class="sc-row" data-a="5"><b>3 deals are at risk</b><span>this week without a corrective action</span></div>
++            <div class="sc-row" data-a="6"><b>Liquid Death</b><span>no buyer activity for 14 days — highest-risk open deal</span></div>
+@@ -936 +936 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <p class="sc-kick sc-kick--dur" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 parts ready</p>
++            <p class="sc-kick sc-kick--dur" data-a="1" style="color:var(--forest)">If a hire started Monday · 5 of 7 readiness areas complete</p>
+@@ -945 +945 @@ section[id],header[id]{scroll-margin-top:92px}
+-                <span>The week to run</span>
++                <span>Weekly operating plan</span>
+@@ -949,2 +949,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-                <p class="sc-p" data-a="4">Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go ask.</p>
+-                <p class="sc-note" data-a="5">One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>
++                <p class="sc-p" data-a="4">Every deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.</p>
++                <p class="sc-note" data-a="5">Pattern: <b>every deal you won was mid-market</b>, while your stated target is enterprise.</p>
+@@ -963 +963 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span class="sw__l">What they read<br />on day one</span>
++          <span class="sw__l">What a new hire sees<br />on day one</span>
+@@ -978 +978 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-kick sc-kick--sys" data-a="1">Watching · 28 accounts</p>
++      <p class="sc-kick sc-kick--sys" data-a="1">Tracked accounts · 28</p>
+@@ -985 +985 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="sc-quiet" data-a="6">Four need something today · three going cold</p>
++      <p class="sc-quiet" data-a="6">Four need action today · three have had no recent activity</p>
+@@ -1012 +1012 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h2 class="h-sec rv" data-d="1" id="br-h" style="margin-top:14px;max-width:16ch">It keeps reading<br />when you stop.</h2>
++    <h2 class="h-sec rv" data-d="1" id="br-h" style="margin-top:14px;max-width:16ch">Antaeus continues reviewing workspace activity<br />when you're away.</h2>
+@@ -1023 +1023 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span>You always open <u>the account you flagged</u> after I mark a deal quiet — want me to just take you there?</span>
++          <span>You always open <u>the account you flagged</u> after I flag a deal with no recent activity — open that account automatically?</span>
+@@ -1027 +1027 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p class="brf-sec" data-a="3">Your work <small>inside your own deals and accounts</small></p>
++        <p class="brf-sec" data-a="3">Updates <small>from your deals and accounts</small></p>
+@@ -1035 +1035 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p><b>Liquid Death</b> has gone quiet — their people team is three deep and mid-launch.<a href="#rooms">Open the account →</a></p>
++          <p><b>Liquid Death</b> has had no recent buyer activity for 14 days; its people team is three people and mid-launch. <a href="#rooms">Open the account →</a></p>
+@@ -1043 +1043 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p>No discovery calls logged this week — <b>the rhythm is slipping</b>.<a href="#rooms">Pick up a call →</a></p>
++          <p>No discovery calls logged this week — <b>below your planned weekly activity</b>. <a href="#rooms">Review a call →</a></p>
+@@ -1064 +1064 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span><em>Challenge</em>Every deal you have won rode a dated expansion event. None of the cold ones landed. <u>Revisit who you sell to ↗</u></span>
++          <span><em>Challenge</em>Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed. <u>Revisit who you sell to ↗</u></span>
+@@ -1067 +1067 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span><em>Challenge</em>Every deal you have won rode a dated expansion event. None of the cold ones landed. <u>Revisit who you sell to ↗</u></span>
++          <span><em>Challenge</em>Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed. <u>Revisit who you sell to ↗</u></span>
+@@ -1075 +1075 @@ section[id],header[id]{scroll-margin-top:92px}
+-      Every half hour the system goes back over your workspace on its own and writes down what it noticed — <b>a deal that has not moved in three weeks</b>, an account you watched that has gone quiet, a pilot where half the people you enrolled never signed in. Not charts. Plain sentences, the way a colleague would say them to you. In the morning you get <b>the short version and the one thing worth doing first</b>, and the reason it came up first is right there next to it.
++      Every 30 minutes, Antaeus reviews workspace data for changes and risks: <b>deals without recent progress</b>, accounts without recent engagement, and pilots with low participant adoption. It summarizes those findings in plain language. Each morning, it also ranks <b>the highest-priority action</b> and shows why it ranked first.
+@@ -1079,3 +1079,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="spec rv"><b>Every 30 minutes</b><span>the system re-reads your whole workspace on its own</span></p>
+-      <p class="spec spec--sys rv" data-d="1"><b>One ranked move</b><span>with the plain reason it came up ahead of the other thirteen</span></p>
+-      <p class="spec rv" data-d="2"><b>22 rooms, one motion</b><span>the work carries between them — you never restate anything</span></p>
++      <p class="spec rv"><b>Every 30 minutes</b> <span>Antaeus reviews the latest workspace data</span></p>
++      <p class="spec spec--sys rv" data-d="1"><b>One ranked action</b> <span>with the evidence behind its priority</span></p>
++      <p class="spec rv" data-d="2"><b>22 product areas</b> <span>share the same account and deal context; you enter information once</span></p>
+@@ -1091,2 +1091,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span class="t">A spreadsheet and what you remember</span>
+-          <span class="n">You are the system</span>
++          <span class="t">Spreadsheet + undocumented founder knowledge</span>
++          <span class="n">Founder-dependent</span>
+@@ -1102,3 +1102,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div><i></i><span>You are the system</span></div>
+-            <div><i></i><span>Building</span></div>
+-            <div class="at"><i></i><span>Inheritable</span></div>
++            <div><i></i><span>Founder-dependent</span></div>
++            <div><i></i><span>Partially documented</span></div>
++            <div class="at"><i></i><span>Usable with founder support</span></div>
+@@ -1106 +1106 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <div><i></i><span>Repeatable</span></div>
++            <div><i></i><span>Hire-ready and repeatable</span></div>
+@@ -1110,2 +1110,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <span class="t">The same motion, six weeks in</span>
+-          <span class="n">Someone else could run it</span>
++          <span class="t">Six weeks later</span>
++          <span class="n">A new hire can execute the process</span>
+@@ -1125,2 +1125,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <p class="kick rv">However the week goes</p>
+-    <h2 class="h-sec rv" data-d="1" id="wk-h" style="margin-top:14px;max-width:22ch">The work changes shape.<br />The system keeps up.</h2>
++    <p class="kick rv">For different kinds of sales days</p>
++    <h2 class="h-sec rv" data-d="1" id="wk-h" style="margin-top:14px;max-width:22ch">Antaeus supports the same workflow whether you have one call or several deals at risk.</h2>
+@@ -1128 +1128 @@ section[id],header[id]{scroll-margin-top:92px}
+-      Some mornings you have an hour and one call. Some weeks you are three deals behind and cannot tell which one is worth saving. The rooms hold their shape either way.
++      Some mornings you have an hour and one call. Other weeks, several deals need attention at once. The same tools and account context remain available in either case.
+@@ -1133 +1133 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h3 class="h-sub rv" style="max-width:16ch">Whatever shape your week takes.</h3>
++    <h3 class="h-sub rv" style="max-width:16ch">For common sales situations.</h3>
+@@ -1139 +1139 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>Monday, and it's all yours.</b> Open one room and read the state of the whole motion in a sentence, then the single thing worth doing before lunch.</p>
++      <p><b>Starting the week.</b> Open any product area to see the current state of your accounts and deals, then the highest-priority action for the day.</p>
+@@ -1143 +1143 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>A call you're walking into cold.</b> The shape of it, the pushback you're likely to get, and a line ready for each one — read before you dial, not during.</p>
++      <p><b>Preparing for a cold call.</b> Review the call structure, likely objections, and recommended responses before you dial.</p>
+@@ -1147 +1147 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>The deal that went quiet.</b> The system noticed before you did, says how long it's been, and names the smallest thing that would move it.</p>
++      <p><b>A deal with no recent buyer activity.</b> Antaeus shows how long activity has been stalled and recommends the smallest next action that could restore progress.</p>
+@@ -1151 +1151 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>What you learned on the call.</b> Captured while you're still in it, then carried into the deal — so nobody has to ask you what happened later.</p>
++      <p><b>What you learned on the call.</b> Capture it during the call and attach it to the deal so the next person sees the same context.</p>
+@@ -1155 +1155 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>The week you're behind.</b> It says so plainly — how far, which assumption was optimistic, and what it costs if you're wrong about it.</p>
++      <p><b>A week behind plan.</b> Antaeus shows the activity gap, which planning assumption is too optimistic, and the projected impact.</p>
+@@ -1159 +1159 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p><b>The day someone else takes it.</b> They open the workspace and read it. You are in the room to answer questions, not to be the only copy.</p>
++      <p><b>A new hire takes over.</b> They can read the workflow, deal context, and documented reasoning in the workspace; you only need to answer exceptions and questions.</p>
+@@ -1169 +1169 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h2 class="h-sec rv" data-d="1" id="cf-h" style="margin-top:14px;max-width:23ch">The part most founders make up as they go.</h2>
++    <h2 class="h-sec rv" data-d="1" id="cf-h" style="margin-top:14px;max-width:23ch">Standardize outreach instead of improvising it.</h2>
+@@ -1171 +1171 @@ section[id],header[id]{scroll-margin-top:92px}
+-      Outreach that could have gone to anyone gets treated like it went to nobody. Antaeus will not let a line leave without <b>the account, the person, and the thing that just happened to them</b> attached to it. Same on the call: whatever the buyer says, <b>there is a next line ready</b>, and what you learn is captured while you are still in the room.
++      Antaeus requires every outreach draft to reference <b>a specific account, contact, and recent trigger</b>. During a live call, it shows <b>the next recommended question</b> based on the buyer response you select, and it records the result with the deal.
+@@ -1189 +1189 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-p" data-a="2" style="font-size:.95rem;color:var(--ink70)">Lena — saw the two plants going up.<br /><br />That is <b>a few hundred production hires on a deadline</b>, and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first.<br /><br />Worth twenty minutes to compare notes on how you are staffing the openings?</p>
++          <p class="sc-p" data-a="2" style="font-size:.95rem;color:var(--ink70)">Lena — I saw Chomps announce two new plants.<br /><br />That creates <b>several hundred production hires on a deadline</b>, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.<br /><br />Worth twenty minutes next week to compare how you are staffing the openings?</p>
+@@ -1191,2 +1191,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <div class="sc-row" data-a="3"><em class="sc-day sc-day--blue">Why now</em><span>Two plants announced · no recruiting bench</span></div>
+-          <div class="sc-row" data-a="4"><b>The ask</b><span>20 minutes next week</span></div>
++          <div class="sc-row" data-a="3"><em class="sc-day sc-day--blue">Why now</em><span>Two plants announced · limited recruiting capacity</span></div>
++          <div class="sc-row" data-a="4"><b>Buyer request</b><span>20 minutes next week</span></div>
+@@ -1195 +1195 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p class="tabcap"><b>Outbound.</b> Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone.</p>
++        <p class="tabcap"><b>Outbound.</b> Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect.</p>
+@@ -1199 +1199 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick" data-a="1">Before you dial · the shape of it</p>
++          <p class="sc-kick" data-a="1">Before you dial · call structure</p>
+@@ -1201 +1201 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <span>Open</span><span class="on">Find the pain</span><span>Show it is real</span><span>Ask for the meeting</span><span>Wrap</span>
++            <span>Open</span><span class="on">Identify the problem</span><span>Confirm business impact</span><span>Request the meeting</span><span>Wrap</span>
+@@ -1206,2 +1206,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-note" data-a="5">Small teams feel a bad hire hardest. Ask what <b>one wrong store manager</b> cost them last year — nobody argues with a number they said out loud.</p>
+-          <p class="sc-quiet" data-a="6">Read before you dial · log what happened after · never during</p>
++          <p class="sc-note" data-a="5">Small teams feel a bad hire hardest. Ask what <b>one unsuccessful store-manager hire</b> cost last year. Their answer gives you a concrete financial impact to discuss.</p>
++          <p class="sc-quiet" data-a="6">Review before you dial · log the outcome after the call</p>
+@@ -1209 +1209 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p class="tabcap"><b>Cold call.</b> The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking.</p>
++        <p class="tabcap"><b>Cold call.</b> Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking.</p>
+@@ -1213 +1213 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick" data-a="1">Gymshark · one move</p>
++          <p class="sc-kick" data-a="1">Gymshark · recommended LinkedIn action</p>
+@@ -1223 +1223 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p class="tabcap"><b>LinkedIn.</b> One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening.</p>
++        <p class="tabcap"><b>LinkedIn.</b> For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message.</p>
+@@ -1227 +1227 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-kick sc-kick--sys" data-a="1">Pain &amp; consequence · live</p>
++          <p class="sc-kick sc-kick--sys" data-a="1">Problem and business impact · live</p>
+@@ -1229 +1229 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-listen" data-a="3">Listen for whether this pain is really <b>theirs to fix</b> — and who flinches when you name the cost.</p>
++          <p class="sc-listen" data-a="3">Listen for whether the buyer <b>owns the problem</b> and who is accountable for its cost.</p>
+@@ -1235 +1235 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-note" data-a="7">They hired around it. <b>Ask what that cost and who signed it off</b> — you have just found your economic buyer.</p>
++          <p class="sc-note" data-a="7">They added recruiters instead of changing the underlying process. <b>Ask what the added headcount cost and who approved the expense</b>; that identifies the budget owner.</p>
+@@ -1237 +1237 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p class="tabcap"><b>Discovery.</b> A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went.</p>
++        <p class="tabcap"><b>Discovery.</b> Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow.</p>
+@@ -1243 +1243 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h3 class="h-sub rv" style="max-width:22ch">Everything between finding them and signing.</h3>
++    <h3 class="h-sub rv" style="max-width:22ch">Workflows from prospecting through signature.</h3>
+@@ -1247 +1247 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">Describe who you are after</p>
++  <p class="sc-kick" data-a="1">Describe your target companies</p>
+@@ -1250 +1250 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>Finding them.</b> Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.</p></article>
++</div></figure><p><b>Prospecting.</b> Describe your target companies in plain language and save the search. Before a company is added to your tracked accounts, Antaeus records whether it fits your target, the likely reason to engage, and the intended outreach channel.</p></article>
+@@ -1252 +1252 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">How is this market cut?</p>
++  <p class="sc-kick" data-a="1">Segment the market by</p>
+@@ -1256 +1256 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>Carving the market.</b> Cut it by geography, industry, size, named accounts, or a live trigger — and blend them. Every division says why you're the right team to win it.</p></article>
++</div></figure><p><b>Market segmentation.</b> Segment by geography, industry, company size, named accounts, recent trigger, or a combination. For each segment, document why your team is positioned to win.</p></article>
+@@ -1258 +1258 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">Too broad to hunt</p>
++  <p class="sc-kick" data-a="1">Target definition is too broad</p>
+@@ -1260,2 +1260,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-note" data-a="4">Sharper — <b>growth consumer brands whose expansion news dates the hiring need</b>.</p>
+-</div></figure><p><b>Who you sell to.</b> One sharp definition, pushed on until it's a target you can actually hunt. Every other room works against it from then on.</p></article>
++  <p class="sc-note" data-a="4">More specific — <b>growth-stage consumer brands whose announced expansion creates a dated hiring need</b>.</p>
++</div></figure><p><b>Ideal customer profile.</b> Refine the definition until it identifies a specific, searchable target. Antaeus uses that target definition across the rest of the workspace.</p></article>
+@@ -1263 +1263 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">Who is hands-on</p>
++  <p class="sc-kick" data-a="1">Active pilot participants</p>
+@@ -1266 +1266 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>Running the pilot.</b> Walked through step by step: what it has to show, who needs to be hands-on, who's still missing, and a write-up the champion can defend without you.</p></article>
++</div></figure><p><b>Pilot planning.</b> Antaeus guides the pilot step by step: success criteria, participating stakeholders, missing stakeholders, and a summary the champion can share internally.</p></article>
+@@ -1268 +1268 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">The one thing blocking</p>
++  <p class="sc-kick" data-a="1">Current blocker</p>
+@@ -1270 +1270 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <div class="sc-row" data-a="3" style="box-shadow:inset 3px 0 0 var(--forest);padding-left:10px"><b>Your line</b><span>12 months of fees, breach capped higher</span></div>
++  <div class="sc-row" data-a="3" style="box-shadow:inset 3px 0 0 var(--forest);padding-left:10px"><b>Your position</b><span>12 months of fees, breach capped higher</span></div>
+@@ -1272 +1272 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>The run to a signature.</b> After they say yes, security, legal and finance can still kill it. It leads with the one front actually blocking, their ask against your line, and what you can trade.</p></article>
++</div></figure><p><b>Contracting.</b> After verbal approval, security, legal, and finance can still block signature. Antaeus shows the current blocking issue, the buyer's request, your position, and available trade-offs.</p></article>
+@@ -1274 +1274 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">The relay</p>
++  <p class="sc-kick" data-a="1">Referral path</p>
+@@ -1276,2 +1276,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-note" data-a="5">One Chicago operator to another. All he has to do is <b>change a couple of lines and hit send</b>.</p>
+-</div></figure><p><b>Calling in a favor.</b> Your investors, advisors and happy customers, matched to the deal they can actually move. It writes both notes — yours to them, and the one they forward.</p></article>
++  <p class="sc-note" data-a="5">One Chicago operator to another. The draft is nearly complete; Rafael only needs to <b>personalize it and send</b>.</p>
++</div></figure><p><b>Warm introduction.</b> Antaeus matches investors, advisors, and customers to deals where they have a relevant connection, then drafts your request and the message they can forward.</p></article>
+@@ -1280 +1280 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <h4 class="sc-h" data-a="2" style="font-size:1rem">Warby Parker dies in 20 days.</h4>
++  <h4 class="sc-h" data-a="2" style="font-size:1rem">Warby Parker is projected to be lost within 20 days.</h4>
+@@ -1282 +1282 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>The autopsy, early.</b> It writes the story of how the deal dies before it does, names the pattern, and routes you to the room where the fix happens.</p></article>
++</div></figure><p><b>Deal risk analysis.</b> Antaeus projects how the deal is likely to fail, identifies the recurring risk pattern, and links to the workflow where you can address it.</p></article>
+@@ -1284 +1284 @@ section[id],header[id]{scroll-margin-top:92px}
+-  <p class="sc-kick" data-a="1">Projected landing</p>
++  <p class="sc-kick" data-a="1">Projected revenue</p>
+@@ -1287 +1287 @@ section[id],header[id]{scroll-margin-top:92px}
+-</div></figure><p><b>Your number, backwards.</b> The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.</p></article>
++</div></figure><p><b>Revenue target plan.</b> Antaeus converts the annual target into required daily activity, checks the plan against benchmark assumptions, and identifies the assumption creating the largest risk.</p></article>
+@@ -1293,3 +1293,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="spec rv"><b>10 frameworks</b><span>discovery question sets tuned to what you actually sell</span></p>
+-      <p class="spec spec--sys rv" data-d="1"><b>6 buyer lenses</b><span>the questions change depending on who is in the room</span></p>
+-      <p class="spec rv" data-d="2"><b>Every branch answered</b><span>whatever they say back, there is a next line and somewhere to go</span></p>
++      <p class="spec rv"><b>10 discovery frameworks</b> <span>tuned to what you sell</span></p>
++      <p class="spec spec--sys rv" data-d="1"><b>6 buyer-role views</b> <span>that change the questions by stakeholder</span></p>
++      <p class="spec rv" data-d="2"><b>Recommended follow-up</b> <span>for each buyer response</span></p>
+@@ -1366 +1366 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:20ch">Do you have enough<br />going to hit the number?</h2>
++    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:20ch">Is your current pipeline and activity enough to hit the revenue target?</h2>
+@@ -1368 +1368 @@ section[id],header[id]{scroll-margin-top:92px}
+-      Give it your number and Antaeus works backwards to the only thing you control — <b>what you do every working day</b>. Then it does the part most planning tools skip: it tells you whether the plan is realistic for deals your size, <b>names the one assumption that's optimistic</b>, and says what it costs you if that assumption is wrong.
++      Enter your revenue target. Antaeus converts it into <b>required daily activity</b> using your deal size, win-rate, and sales-cycle assumptions. It compares those assumptions with benchmarks for similar deal sizes, <b>identifies which assumption makes the plan unrealistic</b>, and shows the projected impact if that assumption is wrong.
+@@ -1382,3 +1382,3 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="spec rv"><b id="pace-a">1 in 5 closes</b><span id="pace-as">how often deals this size are won — the band is 15 to 25%</span></p>
+-      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× in flight</b><span id="pace-bs">enough going at once that a couple of slips do not sink the quarter</span></p>
+-      <p class="spec rv" data-d="2"><b id="pace-c">90 days</b><span id="pace-cs">how long one usually takes to close — the range is 60 to 120 days</span></p>
++      <p class="spec rv"><b id="pace-a">20% win-rate benchmark</b> <span id="pace-as">typical range 15–25%</span></p>
++      <p class="spec spec--sys rv" data-d="1"><b id="pace-b">3.5× pipeline coverage</b> <span id="pace-bs">enough active pipeline to absorb normal deal slippage</span></p>
++      <p class="spec rv" data-d="2"><b id="pace-c">90-day sales-cycle benchmark</b> <span id="pace-cs">typical range 60–120 days</span></p>
+@@ -1386 +1386 @@ section[id],header[id]{scroll-margin-top:92px}
+-      <p class="bench">These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.</p>
++      <p class="bench">These are benchmark ranges for the selected deal size. Antaeus compares your planning assumptions with them and flags assumptions outside the typical range.</p>
+@@ -1395,2 +1395,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <p class="kick rv">All of it</p>
+-    <h2 class="h-sec rv" data-d="1" id="ar-h" style="margin-top:14px;max-width:16ch">Twenty-two rooms.<br />Here are three.</h2>
++    <p class="kick rv">Product coverage</p>
++    <h2 class="h-sec rv" data-d="1" id="ar-h" style="margin-top:14px;max-width:16ch">Twenty-two product areas.<br />Here are three.</h2>
+@@ -1398 +1398 @@ section[id],header[id]{scroll-margin-top:92px}
+-      They are not tabs. Work done in one shows up in the next without you retyping it — the account you added this morning is the account the call is about this afternoon. We are not going to lay the whole thing out on a marketing page. You will see it when you are inside.
++      These are connected workflows, not separate tabs. Data entered in one workflow is available in the others, so an account added during prospecting is the same account used in call preparation later that day. This page shows three; the full workspace contains twenty-two.
+@@ -1404,2 +1404,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <h3>You run the call from it, while you are on the call.</h3>
+-        <p class="d">Ten frameworks, six buyer lenses, and a next line ready for whatever they say back. Not notes you write afterwards.</p>
++        <h3>Run the discovery call from this workspace.</h3>
++        <p class="d">Ten discovery frameworks, six buyer-role views, and recommended follow-up questions based on the response you select. Use it during the call, not only for notes afterward.</p>
+@@ -1409 +1409 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <p class="sc-note" data-a="4">They hired around it. <b>Ask what that cost and who signed it off.</b></p>
++          <p class="sc-note" data-a="4">They added recruiters instead of changing the process. <b>Ask what the added headcount cost and who approved it.</b></p>
+@@ -1415,2 +1415,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <h3>It writes how the deal dies before it does.</h3>
+-        <p class="d">The pattern, the days you have left, and the smallest thing that would change the ending.</p>
++        <h3>Projects deal-loss risk before the deal is lost.</h3>
++        <p class="d">Shows the recurring risk pattern, estimated time remaining, and the smallest corrective action.</p>
+@@ -1419 +1419 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <h4 class="sc-h" data-a="2" style="font-size:.98rem">Warby Parker dies in 20 days.</h4>
++          <h4 class="sc-h" data-a="2" style="font-size:.98rem">Warby Parker is projected to be lost within 20 days.</h4>
+@@ -1426,2 +1426,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <h3>What the system saw while you were out.</h3>
+-        <p class="d">Written the way a colleague would say it, every morning, whether or not you opened anything yesterday.</p>
++        <h3>Workspace changes detected while you were away.</h3>
++        <p class="d">A plain-language summary of account, deal, and pilot changes, generated each morning whether or not you used Antaeus the previous day.</p>
+@@ -1430,2 +1430,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-          <div class="sc-row" data-a="2"><em class="sc-day sc-day--red">20d</em><span><b>Warby Parker</b> has not moved since the proposal.</span></div>
+-          <div class="sc-row" data-a="4"><em class="sc-day sc-day--amber">14d</em><span><b>Liquid Death</b> went quiet.</span></div>
++          <div class="sc-row" data-a="2"><em class="sc-day sc-day--red">20d</em><span><b>Warby Parker</b> has had no recorded progress since the proposal.</span></div>
++          <div class="sc-row" data-a="4"><em class="sc-day sc-day--amber">14d</em><span><b>Liquid Death</b> has had no recent buyer activity.</span></div>
+@@ -1437 +1437 @@ section[id],header[id]{scroll-margin-top:92px}
+-      The other <span class="n">nineteen</span> do the rest of it — <b>who you go after and how you carve the market</b>, finding real companies and confirming them, the line you send and the call you walk into, the pilot, the run through security and legal to a signature, your number worked back to a daily habit, and the handoff itself.
++      The other <span class="n">nineteen</span> cover <b>market segmentation</b>, account discovery and qualification, outreach, call preparation, pilots, security and legal, revenue planning, and the handoff to your first hire.
+@@ -1446 +1446 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h2 class="h-sec rv" data-d="1" id="gd-h" style="margin-top:14px;max-width:20ch">Touch the ground.<br />The map comes up.</h2>
++    <h2 class="h-sec rv" data-d="1" id="gd-h" style="margin-top:14px;max-width:20ch">Open the Ground to see the workspace map.</h2>
+@@ -1448 +1448 @@ section[id],header[id]{scroll-margin-top:92px}
+-      There is no menu bar down the side of the screen. Every room stands on <b>a quiet line at the foot of the page</b> — press it, or press G, and the whole motion rises up as a map with you-are-here lit and the system's suggestion glowing. It's the myth the product is named after: Antaeus was unbeatable while he was touching the earth.
++      Antaeus does not use a permanent left-side navigation bar. <b>A thin control at the bottom of every product area</b> opens the workspace map; press the control or G to see all twenty-two areas, your current location, and Antaeus's recommended next area. The control is called the Ground, after the Antaeus myth.
+@@ -1455 +1455 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <p class="sc-kick" data-a="1">The ground · your whole motion</p>
++            <p class="sc-kick" data-a="1">The Ground · workspace map</p>
+@@ -1467 +1467 @@ section[id],header[id]{scroll-margin-top:92px}
+-            <p class="sc-quiet" data-a="4">Twenty-two of them. Press the line and they come up.</p>
++            <p class="sc-quiet" data-a="4">Twenty-two product areas. Open the Ground to view them.</p>
+@@ -1471 +1471 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p>One line, every room. Press it and the map of your whole motion rises from beneath the page, with you-are-here lit and the system's suggestion glowing. Summoned, then gone — it never sits there taking up the screen.</p>
++        <p>The Ground is the navigation map for all twenty-two product areas. Open it from the bottom of any page or press G to see your current location and Antaeus's recommended next area. Close it when you're done; it does not remain on screen.</p>
+@@ -1483,4 +1483,4 @@ section[id],header[id]{scroll-margin-top:92px}
+-                <p class="big" data-a="3"><b>Gymshark</b> — Poppy replied after 12 quiet days. <em style="font-style:normal;color:var(--ink-note)">28m</em></p>
+-                <p data-a="4">Captured your send to <b>Lena at Chomps</b> — counted.</p>
+-                <p data-a="5">Calendar — Thursday with <b>Notion</b> confirmed.</p>
+-                <p data-a="6">Still no dated next step on <b>Warby Parker</b>.</p>
++                <p class="big" data-a="3"><b>Gymshark</b> — Poppy replied after 12 days without a response. <em style="font-style:normal;color:var(--ink-note)">28m</em></p>
++                <p data-a="4">Email to <b>Lena at Chomps</b> captured and counted.</p>
++                <p data-a="5">Calendar · Thursday meeting with <b>Notion</b> confirmed.</p>
++                <p data-a="6"><b>Warby Parker</b> still has no dated next step.</p>
+@@ -1492 +1492 @@ section[id],header[id]{scroll-margin-top:92px}
+-        <p>A hairline down the left margin carrying today's count against your daily number, and a running list of what moved — tagged by whether it was you, the system, or the buyer. Switch it off and it folds to the wall in three beats you can see.</p>
++        <p>The Live Edge is a collapsible activity panel on the left side of the workspace. It shows today's message-and-call count against your daily target and a chronological list of recent actions, labeled by actor: you, Antaeus, or the buyer. Turn it off to collapse the panel.</p>
+@@ -1502 +1502 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <h2 class="h-sec rv" data-d="1" id="tr-h" style="margin-top:14px;max-width:18ch">It's yours, and<br />you can take it.</h2>
++    <h2 class="h-sec rv" data-d="1" id="tr-h" style="margin-top:14px;max-width:18ch">You own the workspace data<br />and can export it.</h2>
+@@ -1505,6 +1505,6 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M10 20a10 10 0 0 1 19.4-3.4A8 8 0 1 1 34 34H14a8 8 0 0 1-4-14z"/><path d="M24 22v10m0 0l-4-4m4 4l4-4"/></svg></figure><p><b>Saved as you work.</b> Your workspace lives in the cloud, not trapped on one laptop. Close the lid mid-sentence and open it somewhere else.</p></article>
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 6l14 6v11c0 9-6 16.5-14 19-8-2.5-14-10-14-19V12z"/><path d="M18 24l4.5 4.5L31 20"/></svg></figure><p><b>Nothing sold, nothing shared.</b> Your accounts, deals and calls are your commercial position. They are not a dataset we resell or train a public model on.</p></article>
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M12 8h18l8 8v24a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/><path d="M30 8v8h8"/><path d="M17 27h14M17 33h9"/></svg></figure><p><b>Take a full copy, any time.</b> One button downloads everything in your workspace as a plain file. No ticket, no export queue, no waiting on us.</p></article>
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M14 16h20v22a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z"/><path d="M10 16h28M20 11h8M21 24v10M27 24v10"/></svg></figure><p><b>Delete it and mean it.</b> Type the words and it's gone — the accounts, the deals, the pilot results, all of it. Not archived somewhere we can still read.</p></article>
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7"/><path d="M11 40c0-7.2 5.8-13 13-13s13 5.8 13 13"/></svg></figure><p><b>Read-only for a hire.</b> Share the workspace with someone who is starting Monday without handing them your logins or the ability to change anything.</p></article>
+-    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 5v14M24 5l-5 5M24 5l5 5"/><path d="M8 24v16a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V24"/><path d="M8 24h32"/></svg></figure><p><b>An offline copy too.</b> If you want a version that never leaves the machine you're on, the app will hand you one. It's tucked away, because most people never need it.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M10 20a10 10 0 0 1 19.4-3.4A8 8 0 1 1 34 34H14a8 8 0 0 1-4-14z"/><path d="M24 22v10m0 0l-4-4m4 4l4-4"/></svg></figure><p><b>Saved automatically.</b> Your workspace is stored in the cloud and syncs across devices. Close one device mid-edit and continue from another.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 6l14 6v11c0 9-6 16.5-14 19-8-2.5-14-10-14-19V12z"/><path d="M18 24l4.5 4.5L31 20"/></svg></figure><p><b>Your data is not sold or used to train public models.</b> Your accounts, deals, and calls are not a dataset Antaeus resells.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M12 8h18l8 8v24a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/><path d="M30 8v8h8"/><path d="M17 27h14M17 33h9"/></svg></figure><p><b>Export a full copy at any time.</b> One button downloads everything in your workspace as a plain file. No support ticket or export queue is required.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M14 16h20v22a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z"/><path d="M10 16h28M20 11h8M21 24v10M27 24v10"/></svg></figure><p><b>Delete the workspace.</b> Type the confirmation phrase and Antaeus deletes the accounts, deals, pilot results, and other workspace data instead of archiving them for continued access.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7"/><path d="M11 40c0-7.2 5.8-13 13-13s13 5.8 13 13"/></svg></figure><p><b>Give a new hire read-only access.</b> They can view the workspace without receiving your login credentials or permission to change data.</p></article>
++    <article class="dcard"><figure><svg viewBox="0 0 48 48"><path d="M24 5v14M24 5l-5 5M24 5l5 5"/><path d="M8 24v16a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V24"/><path d="M8 24h32"/></svg></figure><p><b>Create an offline copy.</b> If you need a copy stored only on the current device, Antaeus can create one. The option is secondary because most users will not need it.</p></article>
+@@ -1614,2 +1614,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <h3>Set it up once. It pays you back every morning.</h3>
+-      <p>The setup asks for the thinking only you have — who you really sell to, who you're chasing, where each deal is genuinely stuck. Nothing you'd have to look up. Everything a tool can find, it finds.</p>
++      <h3>Set it up once. Get a prioritized briefing every morning.</h3>
++      <p>Setup asks for information only you know: your actual target customer, the accounts you are pursuing, and the current blocker in each deal. Antaeus looks up public company information itself, so you only enter context it cannot retrieve.</p>
+@@ -1625 +1625 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <p class="kick kick--sys">Yours to take</p>
++      <p class="kick kick--sys">Exportable</p>
+@@ -1627 +1627 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <p>One button, one file, everything in it. If you leave, you leave with the thing you built — not with a support ticket.</p>
++      <p>One button exports the entire workspace to a single file. If you leave, you keep a complete copy without opening a support ticket.</p>
+@@ -1631,3 +1631,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <p class="kick">Built for the handoff</p>
+-      <h3>The point is the day you stop being the only one who knows.</h3>
+-      <p>Every other tool is built to report on the motion. This one is built so the motion survives leaving your head.</p>
++      <p class="kick">For the first sales hire</p>
++      <h3>Designed for the point when the founder is no longer the only person who understands the sales process.</h3>
++      <p>Most sales tools record activity for reporting. Antaeus also documents the reasoning, account context, and sales process a new hire needs to execute the work without relying on undocumented founder knowledge.</p>
+@@ -1643 +1643 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    <h2 class="h-sec rv" id="cm-h" style="max-width:19ch">Keep looking.<br />Then come back.</h2>
++    <h2 class="h-sec rv" id="cm-h" style="max-width:19ch">Compare Antaeus with a CRM<br />and a spreadsheet.</h2>
+@@ -1645 +1645 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      Most founders have already tried the other two. Here is the honest difference, without pretending either one is useless.
++      A CRM and a spreadsheet solve different problems. This comparison shows what each is designed to do.
+@@ -1650,3 +1650,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="hd" role="columnheader"><b>Antaeus</b><span>A revenue operating system built for the handoff</span></div>
+-      <div class="hd" role="columnheader"><b>A CRM</b><span>A record of what happened, for whoever asks</span></div>
+-      <div class="hd" role="columnheader"><b>A spreadsheet</b><span>Fast, free, and only in your head</span></div>
++      <div class="hd" role="columnheader"><b>Antaeus</b><span>A revenue operating system for founder-led sales and the first go-to-market hire</span></div>
++      <div class="hd" role="columnheader"><b>A CRM</b><span>Activity and pipeline records for reporting</span></div>
++      <div class="hd" role="columnheader"><b>A spreadsheet</b><span>Flexible manual tracking that depends on what you document</span></div>
+@@ -1655 +1655 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v v--us">Telling you what to do next, and why that one</div>
++      <div class="v v--us">Rank the next sales action and show why it ranks first</div>
+@@ -1657 +1657 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v">Whatever you decided it was for</div>
++      <div class="v">Flexible manual tracking</div>
+@@ -1660 +1660 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v v--us">A founder selling, and the first hire who takes over</div>
++      <div class="v v--us">Founder-led sales teams preparing for the first go-to-market hire</div>
+@@ -1662 +1662 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v">You, this quarter</div>
++      <div class="v">An individual founder or small team needing lightweight tracking</div>
+@@ -1665,3 +1665,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v v--us">One ranked thing to do, with its reason shown</div>
+-      <div class="v">A list of everything, sorted how you last sorted it</div>
+-      <div class="v">Whatever you typed last</div>
++      <div class="v v--us">Highest-priority action, with the evidence behind the ranking</div>
++      <div class="v">Full activity list using the user's last sort</div>
++      <div class="v">Last-entered data</div>
+@@ -1669,2 +1669,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="rowlbl">Runs the live call</div>
+-      <div class="v v--us"><span class="mark-y">Yes</span> — question, what to listen for, the next line</div>
++      <div class="rowlbl">Provides live call guidance</div>
++      <div class="v v--us"><span class="mark-y">Yes</span> — current question, evidence to listen for, and recommended follow-up</div>
+@@ -1674,3 +1674,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="rowlbl">Says when the plan isn't real</div>
+-      <div class="v v--us"><span class="mark-y">Yes</span> — names the optimistic assumption and its cost</div>
+-      <div class="v"><span class="mark-n">No</span> — it reports the forecast you entered</div>
++      <div class="rowlbl">Flags unrealistic planning assumptions</div>
++      <div class="v v--us"><span class="mark-y">Yes</span> — identifies the assumption outside the benchmark range and shows its projected impact</div>
++      <div class="v"><span class="mark-n">No</span> — reports the forecast entered by the user</div>
+@@ -1679,2 +1679,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="rowlbl">A hire can inherit it</div>
+-      <div class="v v--us"><span class="mark-y">Yes</span> — seven parts written as prose they read on day one</div>
++      <div class="rowlbl">Supports handoff to a new hire</div>
++      <div class="v v--us"><span class="mark-y">Yes</span> — seven documented areas a new hire can read on day one</div>
+@@ -1682 +1682 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v"><span class="mark-n">No</span> — the reasoning was never written down</div>
++      <div class="v"><span class="mark-n">No</span> — reasoning remains undocumented unless you write it separately</div>
+@@ -1685 +1685 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      <div class="v v--us">An afternoon of real thinking</div>
++      <div class="v v--us">About one afternoon of founder input</div>
+@@ -1690 +1690 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      If you have a twelve-person sales team and a forecasting problem, buy a CRM. This is for the stretch before that, when the motion is still one person's and the first hire starts in six weeks.
++      If you already have a twelve-person sales team and mainly need forecasting and reporting, use a CRM. Antaeus is designed for founder-led sales before that point, when the process still depends heavily on the founder and the first sales hire is approaching.
+@@ -1698 +1698 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    <h2 class="h-sub rv" id="vl-h" style="max-width:20ch">Where we're honest with you.</h2>
++    <h2 class="h-sub rv" id="vl-h" style="max-width:20ch">Current beta limitations.</h2>
+@@ -1701,2 +1701,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <h3>It is beta, and it reads like beta.</h3>
+-        <p>Some rooms are deeper than others. When something is thin, the app says so in plain words rather than showing you a confident empty state. You will find rough edges; we would rather you find them than not be told.</p>
++        <h3>The product is still in beta.</h3>
++        <p>Some product areas are more complete than others. When data or functionality is limited, the interface states that directly instead of presenting a confident result. Expect rough edges while the beta is active.</p>
+@@ -1705,2 +1705,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <h3>Models are under the hood, not on the label.</h3>
+-        <p>Antaeus uses language models to read your workspace and draft what it hands you. It is not the pitch. Every line the system writes goes through the same voice rules the rest of the product does, and you can see what it based a read on.</p>
++        <h3>Antaeus uses language models for analysis and drafting.</h3>
++        <p>Antaeus uses language models to analyze workspace data and draft text. Model branding is not part of the product pitch. Generated text follows the same writing rules as the rest of Antaeus, and the interface shows the source data behind each analysis.</p>
+@@ -1719 +1719 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>No. A CRM stores what already happened so somebody can report on it. Antaeus ranks what should happen next and shows the reason it came up first. It also has none of the things a CRM is really bought for — territories, quotas across a team, admin roles, forecasting rollups. If those are your problem, this is not your tool.</p></div>
++        <div class="a"><p>No. A CRM primarily stores activity and pipeline data for reporting. Antaeus ranks next actions and shows the evidence behind each ranking. It does not include team territories, multi-rep quotas, admin-role management, or forecast rollups. If those are your primary needs, use a CRM.</p></div>
+@@ -1723 +1723 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>An afternoon. It asks for three things only you know: <b>who you really sell to</b>, <b>the companies you're chasing</b>, and <b>where each live deal genuinely stands</b> — who your champion is, who signs, what it's stuck on. Ten live deals is the floor where the picture gets useful; fewer is allowed and the app tells you plainly that it stays thin.</p><p>Everything the app can look up — what a company does, how big it is, what just happened to them — it looks up itself. You are never typing something a tool could have found.</p></div>
++        <div class="a"><p>About one afternoon. Setup asks for three categories of founder context: <b>your actual target customer</b>, <b>the companies you are pursuing</b>, and <b>the current status of each active deal</b> — including the champion, signer, and unresolved blocker. Antaeus is most useful with at least ten active deals; with fewer, the interface indicates that the analysis is based on limited data.</p><p>Antaeus looks up public company information such as company description, size, and recent events. You enter the private sales context the system cannot retrieve.</p></div>
+@@ -1727 +1727 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>Because the part that matters cannot be imported. Why a deal is stuck, what made a win winnable, who actually decides — that lives in your head and nowhere else. We could hide that behind a friendly three-field form and give you something shallow, or ask for it once and give you a system that reads your motion back to you every morning afterwards. We chose the second and we say so up front instead of apologising for it.</p></div>
++        <div class="a"><p>Because the most important deal context is not available from external systems: why a deal is blocked, why a previous win succeeded, and who actually makes the decision. Antaeus asks you to enter that context once during setup, then uses it in later account, deal, and action recommendations. We prefer asking for the information explicitly rather than producing shallow recommendations from incomplete data.</p></div>
+@@ -1731 +1731 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>The opposite. It is aimed at the stretch when the founder is still the one selling and the first serious go-to-market hire hasn't started yet or just did. If you already have a sales org, you have different problems and better-suited tools.</p></div>
++        <div class="a"><p>No. Antaeus is designed for the period when the founder is still selling and the first serious go-to-market hire has not started yet or has just started. An established sales organization has different needs and better-suited tools.</p></div>
+@@ -1735 +1735 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>Most of them are a prettier database or a chat box bolted to one. The test to apply: open it on a Monday and see whether it tells you the single thing to do first and <b>why that one and not the other thirteen</b>. If it shows you a list and lets you choose, it is a database. Antaeus ranks, shows its reasoning, and lets you disagree with it.</p></div>
++        <div class="a"><p>Many alternatives are databases with chat interfaces. A useful test is whether the product ranks one next action and <b>explains the evidence for that ranking</b>, or only shows a list for you to sort yourself. Antaeus ranks actions, exposes the reasoning, and lets you disagree with the recommendation.</p></div>
+@@ -1739 +1739 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>No. It writes the line with you and you send it from wherever you already send mail. It can count what you sent — point it at your calendar and meetings get logged without you typing them twice. It never dials, and it will never take an action toward a buyer on its own.</p></div>
++        <div class="a"><p>No. Antaeus drafts outreach and call language, but you send messages through your existing email tools. It can record sent outreach and calendar meetings without duplicate data entry. It does not place calls or contact buyers autonomously.</p></div>
+@@ -1743 +1743 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>It is one question answered honestly: could a person who starts Monday run this motion without you sitting next to them. Antaeus answers it with a state, not a score — from <b>you are the system</b>, through <b>building</b> and <b>inheritable with you there to answer questions</b>, up to <b>hire-ready</b>, and then <b>hire-ready and repeatable</b> once you have won and lost enough to see the pattern. Each state has conditions you can read, and the app says what it would take to reach the next one.</p></div>
++        <div class="a"><p>Ready to hand off means a new hire can execute the sales process without constant founder guidance. Antaeus reports one of five readiness states: <b>Founder-dependent</b>, <b>Partially documented</b>, <b>Usable with founder support</b>, <b>Hire-ready</b>, and <b>Hire-ready and repeatable</b>. Each state has explicit conditions, and Antaeus shows which requirements remain before the workspace reaches the next state.</p></div>
+@@ -1747 +1747 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>Yes, under the hood — to read your workspace, notice what moved, and draft what it hands you. It is not what we are selling. You are not buying a model; you are buying a system that ranks your revenue work and survives leaving your head. If the interesting part of a tool is which model it runs, it usually has nothing else.</p></div>
++        <div class="a"><p>Yes. Antaeus uses language models to analyze workspace data, detect changes, and draft text. The product value is the workflow and ranking system, not a particular model. The system documents enough of your sales process that another person can use the workspace without relying on undocumented founder knowledge.</p></div>
+@@ -1751 +1751 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-        <div class="a"><p>It stays yours. Download the whole workspace as one file whenever you want, put a copy back, or delete everything behind a type-the-words confirmation. We do not sell it and we do not train public models on your accounts and deals.</p></div>
++        <div class="a"><p>It stays yours. You can export the full workspace as one file, restore a copy, or delete the workspace after a typed confirmation. Antaeus does not sell your workspace data or use your accounts and deals to train public models.</p></div>
+@@ -1765 +1765 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    <h2 class="h-sec rv" id="cl-h" style="max-width:22ch;margin-inline:auto">Do the hard part once.<br />It plays back every morning.</h2>
++    <h2 class="h-sec rv" id="cl-h" style="max-width:22ch;margin-inline:auto">Document the sales process once.<br />Get a prioritized briefing every morning.</h2>
+@@ -1767 +1767 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      One afternoon, and the workspace is awake. Tomorrow it hands you the first move.
++      Setup takes about one afternoon. The next morning, Antaeus ranks your highest-priority action and shows why.
+@@ -1790,3 +1790,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          <li><a href="#all-rooms">Every room</a></li>
+-          <li><a href="#briefing">What it sees</a></li>
+-          <li><a href="#pace">Pace and your number</a></li>
++          <li><a href="#all-rooms">Every product area</a></li>
++          <li><a href="#briefing">Activity monitoring</a></li>
++          <li><a href="#pace">Revenue plan and targets</a></li>
+@@ -1810 +1810 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-          <li><a href="#values">Where we're honest</a></li>
++          <li><a href="#values">Beta limitations</a></li>
+@@ -1838,2 +1838,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-      Screens throughout this page are real rooms from the app shown with sample data.
+-      Benchmark figures in <a href="#pace" style="color:inherit;text-decoration:underline">Pace</a> are typical reads for the deal size selected, not a promise about your motion.
++      Screens throughout this page show real product areas with sample data.
++      Benchmark figures in <a href="#pace" style="color:inherit;text-decoration:underline">Pace</a> are typical ranges for the selected deal size, not a promise about your results.
+@@ -2125 +2125 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-              '<span>The week to run</span>' +
++              '<span>Weekly operating plan</span>' +
+@@ -2223,3 +2223,3 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
+-    mid: { a: "1 in 5 closes",  as: "how often deals this size are won — the band is 15 to 25%",
+-           b: "3.5× in flight", bs: "enough going at once that a couple of slips do not sink the quarter",
+-           c: "90 days",        cs: "how long one usually takes to close — the range is 60 to 120 days" },
++    mid: { a: "20% win-rate benchmark",  as: "typical range 15–25%",
++           b: "3.5× pipeline coverage", bs: "enough active pipeline to absorb normal deal slippage",
++           c: "90-day sales-cycle benchmark",        cs: "typical range 60–120 days" },

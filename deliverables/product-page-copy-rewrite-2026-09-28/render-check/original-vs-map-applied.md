@@ -1,0 +1,212 @@
+## desktop
+- document height: 19973 → 20807 (+834px); horizontal page overflow: 0 → 0; console/page errors: 0 → 0 
+- text clipped by its own box (ellipsis/overflow): 2 → 6
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 96px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 96px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 96px, ellipsis)
+  - NEW clip `span` "HIRE-READY AND REPEATABLE" (needs 148px, box 96px, ellipsis)
+  - NEW clip `span` "Warby Parker has had no recorded progress since the proposal." (needs 367px, box 237px, ellipsis)
+  - NEW clip `span` "Liquid Death has had no recent buyer activity." (needs 264px, box 237px, ellipsis)
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "Warby Parker has not moved since the proposal."
+- heading lines 2 → 5: "Turn the sales process you built into a system your first hire can use." (was "You built it. They can run it.")
+- heading lines 3 → 4: "Every account you follow, ranked by recent activity and company changes." (was "Every account you watch, sorted by what just moved.")
+- heading lines 3 → 4: "Deals at risk this week, with the next corrective action for each." (was "The deals that will slip this week, and the smallest fix.")
+- heading lines 3 → 2: "A live discovery-call console." (was "A console you run the discovery call from, live.")
+- heading lines 3 → 4: "A pilot plan the buyer's manager can use to make a decision." (was "A pilot that gives their boss something to act on.")
+- heading lines 4 → 3: "Can a new hire execute your sales process without you?" (was "One question, answered honestly: could someone else run this?")
+- heading lines 2 → 4: "Antaeus continues reviewing workspace activity when you're away." (was "It keeps reading when you stop.")
+- heading lines 2 → 4: "Antaeus supports the same workflow whether you have one call or several deals at risk." (was "The work changes shape. The system keeps up.")
+- heading lines 2 → 3: "Workflows from prospecting through signature." (was "Everything between finding them and signing.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 2 → 3: "You own the workspace data and can export it." (was "It's yours, and you can take it.")
+- heading lines 2 → 3: "Set it up once. Get a prioritized briefing every morning." (was "Set it up once. It pays you back every morning.")
+- heading lines 3 → 5: "Designed for the point when the founder is no longer the only person who understands the s" (was "The point is the day you stop being the only one who knows.")
+- heading lines 2 → 3: "Compare Antaeus with a CRM and a spreadsheet." (was "Keep looking. Then come back.")
+- heading lines 3 → 4: "Document the sales process once. Get a prioritized briefing every morning." (was "Do the hard part once. It plays back every morning.")
+- section `header#top.hero` height 880 → 1144 (+264px)
+- section `section#handoff.band.band--white` height 1382 → 1318 (-64px)
+- section `section#briefing.band.band--sunk` height 2379 → 2465 (+86px)
+- section `section#week.band.band--white` height 1374 → 1517 (+143px)
+- section `section#trust.band.band--ink` height 883 → 944 (+61px)
+- section `section#why.band.band--white` height 844 → 960 (+116px)
+- section `section#compare.band.band--sunk` height 1327 → 1467 (+140px)
+- section `section.band.close.band--white` height 699 → 760 (+61px)
+## tablet
+- document height: 17275 → 18091 (+816px); horizontal page overflow: 0 → 0; console/page errors: 0 → 0 
+- text clipped by its own box (ellipsis/overflow): 2 → 8
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 144px, ellipsis)
+  - NEW clip `span` "HIRE-READY AND REPEATABLE" (needs 148px, box 144px, ellipsis)
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 61px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 61px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 61px, ellipsis)
+  - NEW clip `span` "HIRE-READY AND REPEATABLE" (needs 148px, box 61px, ellipsis)
+  - NEW clip `span` "Warby Parker has had no recorded progress since the proposal." (needs 367px, box 250px, ellipsis)
+  - NEW clip `span` "Liquid Death has had no recent buyer activity." (needs 264px, box 250px, ellipsis)
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "Warby Parker has not moved since the proposal."
+- heading lines 2 → 5: "Turn the sales process you built into a system your first hire can use." (was "You built it. They can run it.")
+- heading lines 3 → 4: "Every account you follow, ranked by recent activity and company changes." (was "Every account you watch, sorted by what just moved.")
+- heading lines 3 → 4: "Deals at risk this week, with the next corrective action for each." (was "The deals that will slip this week, and the smallest fix.")
+- heading lines 3 → 2: "A live discovery-call console." (was "A console you run the discovery call from, live.")
+- heading lines 3 → 4: "A pilot plan the buyer's manager can use to make a decision." (was "A pilot that gives their boss something to act on.")
+- heading lines 4 → 3: "Can a new hire execute your sales process without you?" (was "One question, answered honestly: could someone else run this?")
+- heading lines 2 → 4: "Antaeus continues reviewing workspace activity when you're away." (was "It keeps reading when you stop.")
+- heading lines 2 → 4: "Antaeus supports the same workflow whether you have one call or several deals at risk." (was "The work changes shape. The system keeps up.")
+- heading lines 2 → 3: "Workflows from prospecting through signature." (was "Everything between finding them and signing.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 2 → 3: "You own the workspace data and can export it." (was "It's yours, and you can take it.")
+- heading lines 2 → 3: "Set it up once. Get a prioritized briefing every morning." (was "Set it up once. It pays you back every morning.")
+- heading lines 3 → 5: "Designed for the point when the founder is no longer the only person who understands the s" (was "The point is the day you stop being the only one who knows.")
+- heading lines 2 → 3: "Compare Antaeus with a CRM and a spreadsheet." (was "Keep looking. Then come back.")
+- heading lines 3 → 4: "Document the sales process once. Get a prioritized briefing every morning." (was "Do the hard part once. It plays back every morning.")
+- section `header#top.hero` height 728 → 951 (+223px)
+- section `section#briefing.band.band--sunk` height 1975 → 2053 (+78px)
+- section `section#week.band.band--white` height 1190 → 1306 (+116px)
+- section `section#why.band.band--white` height 698 → 814 (+116px)
+- section `section#compare.band.band--sunk` height 1231 → 1397 (+166px)
+- viewer scene 0: page overflow 2
+- viewer scene 1: page overflow 2
+- viewer scene 2: page overflow 2
+- viewer scene 3: page overflow 2
+## mobile
+- document height: 20017 → 20742 (+725px); horizontal page overflow: 0 → 0; console/page errors: 0 → 0 
+- text clipped by its own box (ellipsis/overflow): 8 → 14
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 103px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 103px, ellipsis)
+  - NEW clip `span` "no champion activity" (needs 119px, box 76px, ellipsis)
+  - NEW clip `span` "this week without a corrective action" (needs 211px, box 181px, ellipsis)
+  - NEW clip `span` "no buyer activity for 14 days — highest-risk open deal" (needs 305px, box 211px, ellipsis)
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 96px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 96px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 96px, ellipsis)
+  - NEW clip `span` "Two plants announced · limited recruiting capacity" (needs 290px, box 236px, ellipsis)
+  - NEW clip `span` "Warby Parker has had no recorded progress since the proposal." (needs 367px, box 217px, ellipsis)
+  - NEW clip `span` "Liquid Death has had no recent buyer activity." (needs 264px, box 217px, ellipsis)
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "champion went quiet"
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "Two plants announced · no recruiting bench"
+  - no longer clipped: "Warby Parker has not moved since the proposal."
+- heading lines 2 → 5: "Turn the sales process you built into a system your first hire can use." (was "You built it. They can run it.")
+- heading lines 3 → 4: "Every account you follow, ranked by recent activity and company changes." (was "Every account you watch, sorted by what just moved.")
+- heading lines 3 → 4: "Deals at risk this week, with the next corrective action for each." (was "The deals that will slip this week, and the smallest fix.")
+- heading lines 3 → 2: "A live discovery-call console." (was "A console you run the discovery call from, live.")
+- heading lines 3 → 4: "A pilot plan the buyer's manager can use to make a decision." (was "A pilot that gives their boss something to act on.")
+- heading lines 4 → 3: "Can a new hire execute your sales process without you?" (was "One question, answered honestly: could someone else run this?")
+- heading lines 2 → 4: "Antaeus continues reviewing workspace activity when you're away." (was "It keeps reading when you stop.")
+- heading lines 3 → 5: "Antaeus supports the same workflow whether you have one call or several deals at risk." (was "The work changes shape. The system keeps up.")
+- heading lines 2 → 3: "Standardize outreach instead of improvising it." (was "The part most founders make up as they go.")
+- heading lines 2 → 3: "Workflows from prospecting through signature." (was "Everything between finding them and signing.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 2 → 3: "You own the workspace data and can export it." (was "It's yours, and you can take it.")
+- heading lines 2 → 3: "Set it up once. Get a prioritized briefing every morning." (was "Set it up once. It pays you back every morning.")
+- heading lines 3 → 5: "Designed for the point when the founder is no longer the only person who understands the s" (was "The point is the day you stop being the only one who knows.")
+- heading lines 2 → 3: "Compare Antaeus with a CRM and a spreadsheet." (was "Keep looking. Then come back.")
+- heading lines 3 → 4: "Document the sales process once. Get a prioritized briefing every morning." (was "Do the hard part once. It plays back every morning.")
+- section `header#top.hero` height 777 → 929 (+152px)
+- section `section#week.band.band--white` height 1130 → 1200 (+70px)
+- section `section#why.band.band--white` height 642 → 737 (+95px)
+- section `section#compare.band.band--sunk` height 2479 → 2691 (+212px)
+- viewer scene 0: page overflow 2
+- viewer scene 1: page overflow 2
+- viewer scene 2: page overflow 2
+- viewer scene 3: page overflow 2
+## phone-360
+- document height: 20659 → 21452 (+793px); horizontal page overflow: 0 → 0; console/page errors: 0 → 0 
+- text clipped by its own box (ellipsis/overflow): 9 → 15
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 93px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 93px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 93px, ellipsis)
+  - NEW clip `span` "no champion activity" (needs 119px, box 53px, ellipsis)
+  - NEW clip `span` "this week without a corrective action" (needs 211px, box 151px, ellipsis)
+  - NEW clip `span` "no buyer activity for 14 days — highest-risk open deal" (needs 305px, box 181px, ellipsis)
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 86px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 86px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 86px, ellipsis)
+  - NEW clip `span` "Two plants announced · limited recruiting capacity" (needs 290px, box 206px, ellipsis)
+  - NEW clip `span` "Warby Parker has had no recorded progress since the proposal." (needs 367px, box 187px, ellipsis)
+  - NEW clip `span` "Liquid Death has had no recent buyer activity." (needs 264px, box 187px, ellipsis)
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "champion went quiet"
+  - no longer clipped: "quiet 14 days — your worst open deal"
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "Two plants announced · no recruiting bench"
+  - no longer clipped: "Warby Parker has not moved since the proposal."
+- heading lines 2 → 6: "Turn the sales process you built into a system your first hire can use." (was "You built it. They can run it.")
+- heading lines 3 → 4: "Every account you follow, ranked by recent activity and company changes." (was "Every account you watch, sorted by what just moved.")
+- heading lines 3 → 4: "Deals at risk this week, with the next corrective action for each." (was "The deals that will slip this week, and the smallest fix.")
+- heading lines 3 → 2: "A live discovery-call console." (was "A console you run the discovery call from, live.")
+- heading lines 3 → 4: "A pilot plan the buyer's manager can use to make a decision." (was "A pilot that gives their boss something to act on.")
+- heading lines 4 → 3: "Can a new hire execute your sales process without you?" (was "One question, answered honestly: could someone else run this?")
+- heading lines 2 → 4: "Antaeus continues reviewing workspace activity when you're away." (was "It keeps reading when you stop.")
+- heading lines 3 → 5: "Antaeus supports the same workflow whether you have one call or several deals at risk." (was "The work changes shape. The system keeps up.")
+- heading lines 2 → 3: "Workflows from prospecting through signature." (was "Everything between finding them and signing.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 3 → 4: "Is your current pipeline and activity enough to hit the revenue target?" (was "Do you have enough going to hit the number?")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 2 → 3: "Open the Ground to see the workspace map." (was "Touch the ground. The map comes up.")
+- heading lines 2 → 3: "You own the workspace data and can export it." (was "It's yours, and you can take it.")
+- heading lines 3 → 5: "Designed for the point when the founder is no longer the only person who understands the s" (was "The point is the day you stop being the only one who knows.")
+- heading lines 2 → 3: "Compare Antaeus with a CRM and a spreadsheet." (was "Keep looking. Then come back.")
+- heading lines 4 → 5: "Document the sales process once. Get a prioritized briefing every morning." (was "Do the hard part once. It plays back every morning.")
+- section `header#top.hero` height 791 → 1023 (+232px)
+- section `section#week.band.band--white` height 1124 → 1214 (+90px)
+- section `section#pace.band.band--white` height 1247 → 1349 (+102px)
+- section `section#all-rooms.band.band--sunk` height 1868 → 1932 (+64px)
+- section `section#why.band.band--white` height 688 → 779 (+91px)
+- section `section#compare.band.band--sunk` height 2602 → 2731 (+129px)
+- viewer scene 0: page overflow 2
+- viewer scene 1: page overflow 2
+- viewer scene 2: page overflow 2
+- viewer scene 3: page overflow 2
+## phone-320
+- document height: 21681 → 22356 (+675px); horizontal page overflow: 0 → 0; console/page errors: 0 → 0 
+- text clipped by its own box (ellipsis/overflow): 12 → 17
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 79px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 79px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 79px, ellipsis)
+  - NEW clip `span` "no champion activity" (needs 119px, box 21px, ellipsis)
+  - NEW clip `span` "this week without a corrective action" (needs 211px, box 111px, ellipsis)
+  - NEW clip `span` "no buyer activity for 14 days — highest-risk open deal" (needs 305px, box 141px, ellipsis)
+  - NEW clip `span` "FOUNDER-DEPENDENT" (needs 101px, box 73px, ellipsis)
+  - NEW clip `span` "PARTIALLY DOCUMENTED" (needs 119px, box 73px, ellipsis)
+  - NEW clip `span` "USABLE WITH FOUNDER SUPPORT" (needs 160px, box 73px, ellipsis)
+  - NEW clip `span` "Two plants announced · limited recruiting capacity" (needs 290px, box 166px, ellipsis)
+  - NEW clip `span` "Warby Parker has had no recorded progress since the proposal." (needs 367px, box 147px, ellipsis)
+  - NEW clip `span` "Liquid Death has had no recent buyer activity." (needs 264px, box 147px, ellipsis)
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "champion went quiet"
+  - no longer clipped: "this week if nothing changes"
+  - no longer clipped: "quiet 14 days — your worst open deal"
+  - no longer clipped: "YOU ARE THE SYSTEM"
+  - no longer clipped: "Two plants announced · no recruiting bench"
+  - no longer clipped: "Warby Parker has not moved since the proposal."
+- heading lines 3 → 6: "Turn the sales process you built into a system your first hire can use." (was "You built it. They can run it.")
+- heading lines 3 → 4: "Every account you follow, ranked by recent activity and company changes." (was "Every account you watch, sorted by what just moved.")
+- heading lines 3 → 4: "Your highest-priority action, with the reason it ranks first." (was "One thing to do first, and why it came up first.")
+- heading lines 3 → 4: "Deals at risk this week, with the next corrective action for each." (was "The deals that will slip this week, and the smallest fix.")
+- heading lines 3 → 2: "A live discovery-call console." (was "A console you run the discovery call from, live.")
+- heading lines 3 → 4: "A pilot plan the buyer's manager can use to make a decision." (was "A pilot that gives their boss something to act on.")
+- heading lines 3 → 2: "What a new hire gets on day one." (was "Everything a first hire opens on day one.")
+- heading lines 3 → 4: "One sales process, usable by both founder and first hire." (was "One motion. Two people who run it.")
+- heading lines 2 → 4: "Antaeus continues reviewing workspace activity when you're away." (was "It keeps reading when you stop.")
+- heading lines 4 → 5: "Antaeus supports the same workflow whether you have one call or several deals at risk." (was "The work changes shape. The system keeps up.")
+- heading lines 2 → 3: "Workflows from prospecting through signature." (was "Everything between finding them and signing.")
+- heading lines 1 → 2: "Warby Parker is projected to be lost within 20 days." (was "Warby Parker dies in 20 days.")
+- heading lines 4 → 5: "Is your current pipeline and activity enough to hit the revenue target?" (was "Do you have enough going to hit the number?")
+- heading lines 2 → 3: "Workspace changes detected while you were away." (was "What the system saw while you were out.")
+- heading lines 2 → 3: "You own the workspace data and can export it." (was "It's yours, and you can take it.")
+- heading lines 4 → 6: "Designed for the point when the founder is no longer the only person who understands the s" (was "The point is the day you stop being the only one who knows.")
+- heading lines 2 → 3: "Compare Antaeus with a CRM and a spreadsheet." (was "Keep looking. Then come back.")
+- heading lines 4 → 5: "Document the sales process once. Get a prioritized briefing every morning." (was "Do the hard part once. It plays back every morning.")
+- section `header#top.hero` height 857 → 1081 (+224px)
+- section `section#craft.band.band--sunk` height 2410 → 2322 (-88px)
+- section `section#all-rooms.band.band--sunk` height 1956 → 2054 (+98px)
+- section `section#why.band.band--white` height 709 → 825 (+116px)
+- section `section#compare.band.band--sunk` height 2699 → 2855 (+156px)
+- viewer scene 0: page overflow 2
+- viewer scene 1: page overflow 2
+- viewer scene 2: page overflow 2
+- viewer scene 3: page overflow 2
