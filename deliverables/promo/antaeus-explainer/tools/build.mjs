@@ -1,9 +1,9 @@
 /* build.mjs — the pipeline: script.json + VO manifest → cues.json → music (re-timed) → mix.wav → mix.mp3/ogg.
-   usage: node tools/build.mjs [voiceDir=audio/vo/primary]                                                      */
+   usage: node tools/build.mjs [voiceDir = script.json voiceDir, else audio/vo/primary]                                                      */
 import fs from 'node:fs'; import path from 'node:path'; import { execFileSync } from 'node:child_process';
 const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
-const voiceDir = path.resolve(ROOT, process.argv[2] || 'audio/vo/primary');
 const script = JSON.parse(fs.readFileSync(path.join(ROOT, 'script.json'), 'utf8'));
+const voiceDir = path.resolve(ROOT, process.argv[2] || script.voiceDir || 'audio/vo/primary');
 const man = JSON.parse(fs.readFileSync(path.join(voiceDir, 'manifest.json'), 'utf8'));
 const { sfxFor, musicSectionsFor } = await import(path.join(ROOT, 'src/scenes.js'));
 
@@ -24,7 +24,8 @@ for (const b of script.beats) {
 const duration = +(t + (script.outro ?? 1.2)).toFixed(3);
 const cues = { duration, beats, vo, audio: 'audio/mix.mp3', tagline: script.tagline };
 cues.sfx = sfxFor(cues);
-cues.music = { gain: script.musicGain ?? 0.5, duck: script.musicDuck ?? 0.4, fadeOut: duration - 2.2, fadeLen: 2.2 };
+const fadeLen = script.musicFadeLen ?? 2.2;
+cues.music = { gain: script.musicGain ?? 0.5, duck: script.musicDuck ?? 0.4, fadeOut: duration - fadeLen, fadeLen };
 cues.sections = musicSectionsFor(cues);
 fs.writeFileSync(path.join(ROOT, 'cues.json'), JSON.stringify(cues, null, 1));
 console.log('cues.json →', beats.map(b => `${b.role || b.id}@${b.start}`).join('  '), '| duration', duration);

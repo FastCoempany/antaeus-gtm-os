@@ -1,17 +1,19 @@
 /* vo.mjs — generate the voiceover lines through OpenRouter's speech endpoint, convert to 48k WAV,
    verify each line with local Whisper (words + timestamps), and write a manifest the timeline consumes.
-   usage: ENV_FILE=... node vo.mjs <script.json> <outdir> [model] [voice] [speed]                            */
+   usage: ENV_FILE=... node vo.mjs <script.json> <outdir> [model] [voice] [speed] [nameAs]
+   nameAs: how to spell the brand for this engine so it says an-TEE-us (engines differ; e.g. 'Antee-us' for Fish Audio).
+   Existing vo-XX.mp3 files in <outdir> are reused (no paid call) unless FORCE=1.                              */
 import fs from 'node:fs'; import path from 'node:path'; import { execFileSync } from 'node:child_process';
-const [scriptPath, outdir, model = 'minimax/speech-2.8-hd', voice = 'English_Trustworth_Man', speed = '1.0'] = process.argv.slice(2);
-const key = (fs.readFileSync(process.env.ENV_FILE, 'utf8').match(/OPENROUTER_API_KEY=(\S+)/) || [])[1];
+const [scriptPath, outdir, model = 'minimax/speech-2.8-hd', voice = 'English_Trustworth_Man', speed = '1.0', nameAs = ''] = process.argv.slice(2);
+const key = process.env.ENV_FILE ? (fs.readFileSync(process.env.ENV_FILE, 'utf8').match(/OPENROUTER_API_KEY=(\S+)/) || [])[1] : process.env.OPENROUTER_API_KEY;
 const script = JSON.parse(fs.readFileSync(scriptPath, 'utf8'));
 fs.mkdirSync(outdir, { recursive: true });
-const manifest = { model, voice, speed: +speed, lines: [] };
+const manifest = { model, voice, speed: +speed, nameAs: nameAs || null, lines: [] };
 let totalChars = 0;
 for (const b of script.beats) {
   if (!b.vo || !b.vo.trim()) continue;
   const id = String(b.id).padStart(2, '0'); const mp3 = path.join(outdir, `vo-${id}.mp3`), wav = path.join(outdir, `vo-${id}.wav`);
-  const spoken = (b.vo_spoken || b.vo).trim(); totalChars += spoken.length;
+  const spoken = (b.vo_spoken || b.vo).trim().replace(/Antaeus/g, nameAs || 'Antaeus'); totalChars += spoken.length;
   if (!fs.existsSync(mp3) || process.env.FORCE) {
     const body = { model, input: spoken, voice, response_format: 'mp3', speed: +speed };
     const res = await fetch('https://openrouter.ai/api/v1/audio/speech', { method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });

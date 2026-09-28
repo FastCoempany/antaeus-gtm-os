@@ -1,0 +1,629 @@
+{
+ "model": "fish-audio/s2.1-pro",
+ "voice": "bf322df2096a46f18c579d0baa36f41d",
+ "speed": 1,
+ "nameAs": "Antee-us",
+ "lines": [
+  {
+   "id": 1,
+   "text": "You've got forty deals, and the loudest sticky note wins.",
+   "spoken": "You've got forty deals, and the loudest sticky note wins.",
+   "file": "vo-01.wav",
+   "duration": 3.686667,
+   "heard": "You've got 40 deals and the loudest sticky note wins.",
+   "words": [
+    {
+     "w": "You've",
+     "s": 0.0,
+     "e": 0.22
+    },
+    {
+     "w": "got",
+     "s": 0.22,
+     "e": 0.4
+    },
+    {
+     "w": "40",
+     "s": 0.4,
+     "e": 0.76
+    },
+    {
+     "w": "deals",
+     "s": 0.76,
+     "e": 1.22
+    },
+    {
+     "w": "and",
+     "s": 1.22,
+     "e": 1.86
+    },
+    {
+     "w": "the",
+     "s": 1.86,
+     "e": 2.0
+    },
+    {
+     "w": "loudest",
+     "s": 2.0,
+     "e": 2.42
+    },
+    {
+     "w": "sticky",
+     "s": 2.42,
+     "e": 2.68
+    },
+    {
+     "w": "note",
+     "s": 2.68,
+     "e": 2.98
+    },
+    {
+     "w": "wins.",
+     "s": 2.98,
+     "e": 3.28
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "text": "You know where they really stand. You can't hand over your head.",
+   "spoken": "You know where they really stand. You can't hand over... your head.",
+   "file": "vo-02.wav",
+   "duration": 5.016083,
+   "heard": "You know where they really stand. You can't hand over your head.",
+   "words": [
+    {
+     "w": "You",
+     "s": 0.0,
+     "e": 0.18
+    },
+    {
+     "w": "know",
+     "s": 0.18,
+     "e": 0.36
+    },
+    {
+     "w": "where",
+     "s": 0.36,
+     "e": 0.56
+    },
+    {
+     "w": "they",
+     "s": 0.56,
+     "e": 0.72
+    },
+    {
+     "w": "really",
+     "s": 0.72,
+     "e": 1.0
+    },
+    {
+     "w": "stand.",
+     "s": 1.0,
+     "e": 1.54
+    },
+    {
+     "w": "You",
+     "s": 2.3,
+     "e": 2.68
+    },
+    {
+     "w": "can't",
+     "s": 2.68,
+     "e": 3.04
+    },
+    {
+     "w": "hand",
+     "s": 3.04,
+     "e": 3.28
+    },
+    {
+     "w": "over",
+     "s": 3.28,
+     "e": 3.62
+    },
+    {
+     "w": "your",
+     "s": 3.62,
+     "e": 4.46
+    },
+    {
+     "w": "head.",
+     "s": 4.46,
+     "e": 4.76
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "text": "Nobody could beat the giant Antaeus while his feet touched the ground. Lifted, he went weak.",
+   "spoken": "Nobody could beat the giant Antee-us while his feet touched the ground. Lifted, he went weak.",
+   "file": "vo-03.wav",
+   "duration": 6.407625,
+   "heard": "Nobody could beat the giant Anteus while his feet touched the ground. Lifted, he went weak.",
+   "words": [
+    {
+     "w": "Nobody",
+     "s": 0.0,
+     "e": 0.34
+    },
+    {
+     "w": "could",
+     "s": 0.34,
+     "e": 0.66
+    },
+    {
+     "w": "beat",
+     "s": 0.66,
+     "e": 0.86
+    },
+    {
+     "w": "the",
+     "s": 0.86,
+     "e": 1.04
+    },
+    {
+     "w": "giant",
+     "s": 1.04,
+     "e": 1.34
+    },
+    {
+     "w": "Anteus",
+     "s": 1.34,
+     "e": 2.08
+    },
+    {
+     "w": "while",
+     "s": 2.08,
+     "e": 2.56
+    },
+    {
+     "w": "his",
+     "s": 2.56,
+     "e": 2.76
+    },
+    {
+     "w": "feet",
+     "s": 2.76,
+     "e": 3.0
+    },
+    {
+     "w": "touched",
+     "s": 3.0,
+     "e": 3.38
+    },
+    {
+     "w": "the",
+     "s": 3.38,
+     "e": 3.54
+    },
+    {
+     "w": "ground.",
+     "s": 3.54,
+     "e": 3.86
+    },
+    {
+     "w": "Lifted,",
+     "s": 4.66,
+     "e": 5.24
+    },
+    {
+     "w": "he",
+     "s": 5.58,
+     "e": 5.64
+    },
+    {
+     "w": "went",
+     "s": 5.64,
+     "e": 5.86
+    },
+    {
+     "w": "weak.",
+     "s": 5.86,
+     "e": 6.12
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "text": "Tell it once who you sell to and who you're chasing. It fills in the rest.",
+   "spoken": "Tell it once who you sell to, and who you're chasing. It fills in the rest.",
+   "file": "vo-04.wav",
+   "duration": 5.485729,
+   "heard": "Tell it once who you sell to, and who you're chasing. It fills in the rest.",
+   "words": [
+    {
+     "w": "Tell",
+     "s": 0.0,
+     "e": 0.2
+    },
+    {
+     "w": "it",
+     "s": 0.2,
+     "e": 0.34
+    },
+    {
+     "w": "once",
+     "s": 0.34,
+     "e": 0.6
+    },
+    {
+     "w": "who",
+     "s": 0.6,
+     "e": 0.82
+    },
+    {
+     "w": "you",
+     "s": 0.82,
+     "e": 0.94
+    },
+    {
+     "w": "sell",
+     "s": 0.94,
+     "e": 1.2
+    },
+    {
+     "w": "to,",
+     "s": 1.2,
+     "e": 1.44
+    },
+    {
+     "w": "and",
+     "s": 1.94,
+     "e": 2.26
+    },
+    {
+     "w": "who",
+     "s": 2.26,
+     "e": 2.42
+    },
+    {
+     "w": "you're",
+     "s": 2.42,
+     "e": 2.6
+    },
+    {
+     "w": "chasing.",
+     "s": 2.6,
+     "e": 3.0
+    },
+    {
+     "w": "It",
+     "s": 4.06,
+     "e": 4.26
+    },
+    {
+     "w": "fills",
+     "s": 4.26,
+     "e": 4.54
+    },
+    {
+     "w": "in",
+     "s": 4.54,
+     "e": 4.8
+    },
+    {
+     "w": "the",
+     "s": 4.8,
+     "e": 4.92
+    },
+    {
+     "w": "rest.",
+     "s": 4.92,
+     "e": 5.2
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "text": "Every morning, it hands you the one thing to do first, and why.",
+   "spoken": "Every morning, it hands you the one thing to do first, and why.",
+   "file": "vo-05.wav",
+   "duration": 4.094583,
+   "heard": "Every morning, it hands you the one thing to do first and why.",
+   "words": [
+    {
+     "w": "Every",
+     "s": 0.0,
+     "e": 0.26
+    },
+    {
+     "w": "morning,",
+     "s": 0.26,
+     "e": 0.66
+    },
+    {
+     "w": "it",
+     "s": 0.92,
+     "e": 1.18
+    },
+    {
+     "w": "hands",
+     "s": 1.18,
+     "e": 1.46
+    },
+    {
+     "w": "you",
+     "s": 1.46,
+     "e": 1.64
+    },
+    {
+     "w": "the",
+     "s": 1.64,
+     "e": 1.76
+    },
+    {
+     "w": "one",
+     "s": 1.76,
+     "e": 2.04
+    },
+    {
+     "w": "thing",
+     "s": 2.04,
+     "e": 2.32
+    },
+    {
+     "w": "to",
+     "s": 2.32,
+     "e": 2.5
+    },
+    {
+     "w": "do",
+     "s": 2.5,
+     "e": 2.64
+    },
+    {
+     "w": "first",
+     "s": 2.64,
+     "e": 2.96
+    },
+    {
+     "w": "and",
+     "s": 2.96,
+     "e": 3.48
+    },
+    {
+     "w": "why.",
+     "s": 3.48,
+     "e": 3.78
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "text": "When a deal slips, it says so, with the smallest step that saves it.",
+   "spoken": "When a deal slips, it says so, with the smallest step that saves it.",
+   "file": "vo-06.wav",
+   "duration": 4.623688,
+   "heard": "When a deal slips, it says so with the smallest step that saves it.",
+   "words": [
+    {
+     "w": "When",
+     "s": 0.0,
+     "e": 0.16
+    },
+    {
+     "w": "a",
+     "s": 0.16,
+     "e": 0.26
+    },
+    {
+     "w": "deal",
+     "s": 0.26,
+     "e": 0.5
+    },
+    {
+     "w": "slips,",
+     "s": 0.5,
+     "e": 0.98
+    },
+    {
+     "w": "it",
+     "s": 1.4,
+     "e": 1.56
+    },
+    {
+     "w": "says",
+     "s": 1.56,
+     "e": 1.82
+    },
+    {
+     "w": "so",
+     "s": 1.82,
+     "e": 2.2
+    },
+    {
+     "w": "with",
+     "s": 2.2,
+     "e": 2.72
+    },
+    {
+     "w": "the",
+     "s": 2.72,
+     "e": 2.88
+    },
+    {
+     "w": "smallest",
+     "s": 2.88,
+     "e": 3.3
+    },
+    {
+     "w": "step",
+     "s": 3.3,
+     "e": 3.7
+    },
+    {
+     "w": "that",
+     "s": 3.7,
+     "e": 3.9
+    },
+    {
+     "w": "saves",
+     "s": 3.9,
+     "e": 4.2
+    },
+    {
+     "w": "it.",
+     "s": 4.2,
+     "e": 4.42
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "text": "Everything settles into a short handoff book.",
+   "spoken": "Everything settles into a short handoff book.",
+   "file": "vo-07.wav",
+   "duration": 2.7175,
+   "heard": "Everything settles into a shorthand -off book.",
+   "words": [
+    {
+     "w": "Everything",
+     "s": 0.0,
+     "e": 0.42
+    },
+    {
+     "w": "settles",
+     "s": 0.42,
+     "e": 1.0
+    },
+    {
+     "w": "into",
+     "s": 1.0,
+     "e": 1.2
+    },
+    {
+     "w": "a",
+     "s": 1.2,
+     "e": 1.42
+    },
+    {
+     "w": "shorthand",
+     "s": 1.42,
+     "e": 1.98
+    },
+    {
+     "w": "-off",
+     "s": 1.98,
+     "e": 2.16
+    },
+    {
+     "w": "book.",
+     "s": 2.16,
+     "e": 2.46
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "text": "Your first sales hire walks in and runs it without you.",
+   "spoken": "Your first sales hire walks in, and runs it without you.",
+   "file": "vo-08.wav",
+   "duration": 3.709021,
+   "heard": "Your first sales hire walks in and runs it without you.",
+   "words": [
+    {
+     "w": "Your",
+     "s": 0.0,
+     "e": 0.16
+    },
+    {
+     "w": "first",
+     "s": 0.16,
+     "e": 0.46
+    },
+    {
+     "w": "sales",
+     "s": 0.46,
+     "e": 0.82
+    },
+    {
+     "w": "hire",
+     "s": 0.82,
+     "e": 1.16
+    },
+    {
+     "w": "walks",
+     "s": 1.16,
+     "e": 1.56
+    },
+    {
+     "w": "in",
+     "s": 1.56,
+     "e": 1.86
+    },
+    {
+     "w": "and",
+     "s": 1.86,
+     "e": 2.52
+    },
+    {
+     "w": "runs",
+     "s": 2.52,
+     "e": 2.8
+    },
+    {
+     "w": "it",
+     "s": 2.8,
+     "e": 2.98
+    },
+    {
+     "w": "without",
+     "s": 2.98,
+     "e": 3.24
+    },
+    {
+     "w": "you.",
+     "s": 3.24,
+     "e": 3.54
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "text": "Antaeus. Try the demo at antaeus dot app.",
+   "spoken": "Antee-us. Try the demo at Antee-us dot app.",
+   "file": "vo-09.wav",
+   "duration": 4.586833,
+   "heard": "NTS. Try the demo at NTS .app.",
+   "words": [
+    {
+     "w": "NTS.",
+     "s": 0.0,
+     "e": 0.52
+    },
+    {
+     "w": "Try",
+     "s": 1.22,
+     "e": 1.9
+    },
+    {
+     "w": "the",
+     "s": 1.9,
+     "e": 2.1
+    },
+    {
+     "w": "demo",
+     "s": 2.1,
+     "e": 2.5
+    },
+    {
+     "w": "at",
+     "s": 2.5,
+     "e": 3.0
+    },
+    {
+     "w": "NTS",
+     "s": 3.0,
+     "e": 3.64
+    },
+    {
+     "w": ".app.",
+     "s": 3.64,
+     "e": 4.3
+    }
+   ]
+  }
+ ],
+ "totalChars": 567
+}

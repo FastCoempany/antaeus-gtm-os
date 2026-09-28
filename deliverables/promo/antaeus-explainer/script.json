@@ -5,7 +5,7 @@
  "total_words": 107,
  "outro": 1.4,
  "musicGain": 0.62,
- "musicDuck": 0.36,
+ "musicDuck": 0.32,
  "musicSeed": 7,
  "beats": [
   {
@@ -125,5 +125,8 @@
    "visual": "The book, the cards, the founder and the hire fade off the page; what stays is the ground line, the small A, and the desk in the bottom-left corner with its neat stack. The A slides to the centre of the line and, on the spoken 'Antaeus', the marker draws over it large in three strokes: the left leg up to the apex, the right leg down, then the low crossbar last, settling like a needle on a gauge; the line already runs well past both feet. Navy only, edges boiling gently \u2014 the mark never takes the orange. The serif 'Antaeus' sets beside the mark, the tagline beneath it, then 'antaeus.app' in serif sitting on the ground line as the URL is spoken. The calm hand places a single orange paper button \u2014 'Try the demo' \u2014 just under the URL and presses it flat: the one thing to do next, the second and last orange in the film. It gives one slow paper breath (lifts a millimetre, settles). Three small handwritten notes settle in the margin, one after another. On the desk corner the loud note is asleep on top of the neat stack with a tiny 'zzz'. Hold on the mark for the last second; soft page flip to black at 55.0.",
    "sound": "Three pen strokes for the A with a slight squeak at the apex; a soft thunk as the crossbar settles; a pen flourish for the wordmark and the URL; a paper slide and a light press for the orange button; three tiny pen scribbles for the notes; a paper sigh for the 'zzz'. Music resolves on a warm chord and holds; a soft page-flip to black at the very end."
   }
- ]
+ ],
+ "voiceDir": "audio/vo/fish-adrian",
+ "musicFadeLen": 1.5,
+ "musicBed": "audio/music-lyria.flac"
 }
