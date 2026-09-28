@@ -28,12 +28,20 @@ cues.music = { gain: script.musicGain ?? 0.5, duck: script.musicDuck ?? 0.4, fad
 cues.sections = musicSectionsFor(cues);
 fs.writeFileSync(path.join(ROOT, 'cues.json'), JSON.stringify(cues, null, 1));
 console.log('cues.json →', beats.map(b => `${b.role || b.id}@${b.start}`).join('  '), '| duration', duration);
-// ── music re-timed to the cue sheet ──
-const sectionsFile = path.join(ROOT, 'audio', 'music-sections.json');
-fs.writeFileSync(sectionsFile, JSON.stringify({ sections: cues.sections, seed: script.musicSeed ?? 7 }));
-execFileSync('node', [path.join(ROOT, 'audio/compose.mjs'), sectionsFile, path.join(ROOT, 'audio/music.wav')], { stdio: 'inherit' });
+// ── music: an outside bed when script.json names one (script.musicBed, e.g. a Lyria track already fitted to the film),
+//    otherwise the composed bed, re-timed to the cue sheet. The mixer reads 16-bit 48 kHz stereo WAV only. ──
+const musicWav = path.join(ROOT, 'audio/music.wav');
+if (script.musicBed) {
+  const bed = path.resolve(ROOT, script.musicBed); const len = (duration + 0.6).toFixed(3);
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', bed, '-ar', '48000', '-ac', '2', '-af', `apad=whole_dur=${len}`, '-t', len, '-c:a', 'pcm_s16le', musicWav]);
+  console.log('music bed:', script.musicBed);
+} else {
+  const sectionsFile = path.join(ROOT, 'audio', 'music-sections.json');
+  fs.writeFileSync(sectionsFile, JSON.stringify({ sections: cues.sections, seed: script.musicSeed ?? 7 }));
+  execFileSync('node', [path.join(ROOT, 'audio/compose.mjs'), sectionsFile, musicWav], { stdio: 'inherit' });
+}
 // ── mix ──
-execFileSync('node', [path.join(ROOT, 'audio/mix.mjs'), path.join(ROOT, 'cues.json'), voiceDir, path.join(ROOT, 'audio/music.wav'), path.join(ROOT, 'audio/mix.wav')], { stdio: 'inherit' });
+execFileSync('node', [path.join(ROOT, 'audio/mix.mjs'), path.join(ROOT, 'cues.json'), voiceDir, musicWav, path.join(ROOT, 'audio/mix.wav')], { stdio: 'inherit' });
 execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(ROOT, 'audio/mix.wav'), '-c:a', 'libmp3lame', '-b:a', '192k', path.join(ROOT, 'audio/mix.mp3')]);
 execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', path.join(ROOT, 'audio/mix.wav'), '-c:a', 'libopus', '-b:a', '128k', path.join(ROOT, 'audio/mix.ogg')]);
 console.log('audio built: audio/mix.wav, mix.mp3, mix.ogg');
