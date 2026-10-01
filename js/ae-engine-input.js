@@ -11,7 +11,7 @@
     proposed_ae: ['annual_quota', 'quota_metric', 'quota_includes_expansion', 'proposed_start_date', 'ramp_months', 'ramp_definition', 'monthly_ramp_schedule', 'base_salary', 'variable_comp_target', 'other_loaded_cost_estimate'],
     economics: ['average_acv', 'median_acv', 'gross_margin_pct', 'average_sales_cycle_days', 'sales_cycle_definition', 'qualified_stage_definition', 'acv_metric'],
     conversion: ['non_founder_qualified_opps_trailing_12m', 'non_founder_wins_trailing_12m', 'non_founder_qualified_opp_to_win_pct', 'qualified_opps_trailing_12m', 'closed_won_trailing_12m', 'qualified_opp_to_win_pct', 'meeting_to_qualified_opp_pct', 'conversion_evidence_window_start', 'conversion_evidence_window_end', 'material_gtm_change_date'],
-    demand: ['pipeline_value_type', 'pipeline_metric', 'current_qualified_pipeline_value', 'pipeline_likely_open_at_ae_start', 'allocatable_qualified_pipeline', 'allocatable_current_pipeline', 'monthly_qualified_pipeline_created_value', 'monthly_qualified_opps_created', 'territory_reserved_for_new_ae', 'new_ae_pipeline_share_pct', 'pipeline_creation_is_seasonal', 'monthly_pipeline_series'],
+    demand: ['pipeline_value_type', 'pipeline_metric', 'current_qualified_pipeline_value', 'pipeline_likely_open_at_ae_start', 'allocatable_qualified_pipeline', 'allocatable_current_pipeline', 'monthly_qualified_pipeline_created_value', 'monthly_qualified_opps_created', 'territory_reserved_for_new_ae', 'new_ae_pipeline_share_pct', 'pipeline_creation_is_seasonal', 'monthly_pipeline_series', 'current_pipeline_reserved_for_existing_team'],
     repeatability: ['wins_trailing_12m', 'non_founder_wins_trailing_12m', 'founder_primary_seller_share_pct', 'icp_documented', 'qualification_documented', 'discovery_documented', 'sales_stages_documented', 'rep_can_run_discovery_without_founder', 'founder_required_late_stage', 'repeatable_use_cases_count', 'founder_can_articulate_path'],
     timing: ['revenue_needed_by_date', 'recruiting_lead_time_days', 'first_revenue_expected_by_company', 'decision_date'],
     management: ['direct_manager_exists', 'weekly_1to1_capacity', 'weekly_pipeline_review_capacity', 'onboarding_owner_named', 'onboarding_plan_exists', 'manager_is_also_primary_seller']
@@ -85,7 +85,7 @@
     const fatal = (code,fields,message) => issue('fatal_errors',code,fields,message);
     const clarify = (code,fields,message) => issue('clarifications',code,fields,message);
     const warning = (code,fields,message) => issue('warnings',code,fields,message);
-    const numericName = /(?:quota$|_arr$|new_arr_target_horizon$|pipeline.*(?:value|pipeline)$|_pipeline$|salary$|comp_target$|cost_estimate$|acv$|_pct$|_days$|_months$|_count$|_opps(?:_trailing_12m)?$|_wins(?:_trailing_12m)?$|wins_trailing_12m$|closed_won_trailing_12m$|carriers$|reports$|start_month_index$|departure_month_index$|post_change_wins$)/;
+    const numericName = /(?:quota$|_arr$|new_arr_target_horizon$|pipeline.*(?:value|pipeline)$|_pipeline$|salary$|comp_target$|cost_estimate$|acv$|_pct$|_days$|_months$|_count$|_opps(?:_trailing_12m)?$|_wins(?:_trailing_12m)?$|wins_trailing_12m$|closed_won_trailing_12m$|carriers$|reports$|start_month_index$|departure_month_index$|post_change_wins$|_reserved_for_existing_team$)/;
     function walk(obj,path) {
       if (!obj || typeof obj !== 'object') return;
       Object.entries(obj).forEach(([key,value]) => {
@@ -139,6 +139,19 @@
     if(t.target_includes_renewal===true)clarify('renewal_basis_conflict',['target.target_includes_renewal'],'Separate renewal revenue before treating the target as new sales.');
     if(p.pipeline_value_type!=null&&p.pipeline_value_type!=='unweighted')clarify('pipeline_value_type',['demand.pipeline_value_type'],'Supply unweighted qualified pipeline. Weighted and forecast-category values cannot enter the unweighted demand formula.');
     if (p.allocatable_qualified_pipeline!=null && p.current_qualified_pipeline_value!=null && p.monthly_qualified_pipeline_created_value!=null && !p.monthly_pipeline_series && d.analysis_horizon_months!=null && p.allocatable_qualified_pipeline>p.current_qualified_pipeline_value+p.monthly_qualified_pipeline_created_value*d.analysis_horizon_months) clarify('allocation_exceeds_pool',['demand.allocatable_qualified_pipeline','demand.current_qualified_pipeline_value','demand.monthly_qualified_pipeline_created_value'],'Declared allocation exceeds even the full unlagged pipeline pool.');
+    // Current supply cannot borrow from future creation: every current ownership
+    // claim plus the existing team's current reservation must fit the current
+    // cycle-eligible pool (the same pool the demand math uses).
+    const currentPool=typeof p.current_qualified_pipeline_in_horizon==='number'?p.current_qualified_pipeline_in_horizon:p.current_qualified_pipeline_value;
+    if(typeof currentPool==='number'&&currentPool>=0){
+      const reserved=typeof p.current_pipeline_reserved_for_existing_team==='number'?p.current_pipeline_reserved_for_existing_team:0;
+      const claims=[];
+      if(typeof p.allocatable_current_qualified_pipeline==='number')claims.push(p.allocatable_current_qualified_pipeline);
+      if(typeof p.new_ae_pipeline_share_pct==='number'&&p.new_ae_pipeline_share_pct>=0&&p.new_ae_pipeline_share_pct<=1)claims.push(currentPool*p.new_ae_pipeline_share_pct);
+      const largest=claims.length?Math.max(...claims):0;
+      const total=largest+reserved;
+      if(total>currentPool&&total-currentPool>Math.max(total,currentPool)*8*Number.EPSILON)clarify('current_allocation_exceeds_current_pool',['demand.allocatable_current_qualified_pipeline','demand.new_ae_pipeline_share_pct','demand.current_pipeline_reserved_for_existing_team','demand.current_qualified_pipeline_in_horizon','demand.current_qualified_pipeline_value'],'Current pipeline allocated to the new AE plus current pipeline reserved for the existing team exceeds the current cycle-eligible pipeline pool. Future pipeline creation cannot be counted as pipeline that exists today; reconcile current ownership.');
+    }
     const currencies = Object.values(FIELDS).length && Object.keys(FIELDS).map(g=>input[g]?.currency).filter(Boolean);
     if(new Set(currencies).size>1)fatal('mixed_currency',Object.keys(FIELDS).map(g=>g+'.currency'),'Mixed currencies require explicit supplied conversion before engine entry.');
     if(d.hire_reason==='replacement'&&(team.departing_seller_index==null||day(team.departure_date)===null))clarify('replacement_details',['current_team.departing_seller_index','current_team.departure_date'],'Identify the departing seller and departure date before calculating replacement capacity.');

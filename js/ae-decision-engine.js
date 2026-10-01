@@ -22,11 +22,26 @@
       team.no_non_founder_sellers_history === true || team.non_founder_sellers_have_existed === false);
   }
 
+  // Maps founder_required_late_stage onto the policy-owned independence classes.
+  // Anything the policy does not list (null, unknown or an unrecognized value)
+  // is 'unknown': it can never establish demonstrated independence.
+  function classifyFounderLateStage(value, policy) {
+    var mapping = (policy.repeatability || {}).founderLateStage;
+    if (!mapping || !Array.isArray(mapping.demonstrated) || !Array.isArray(mapping.emerging) || !Array.isArray(mapping.dependent)) {
+      throw new TypeError('Policy ' + policy.version + ' must define repeatability.founderLateStage {demonstrated, emerging, dependent}.');
+    }
+    if (mapping.dependent.indexOf(value) !== -1) return 'dependent';
+    if (mapping.emerging.indexOf(value) !== -1) return 'emerging';
+    if (mapping.demonstrated.indexOf(value) !== -1) return 'demonstrated';
+    return 'unknown';
+  }
+
   function classifyRepeatability(input, winRate, policy, demand) {
     policy = policy || defaultPolicy;
     winRate = winRate || {};
     demand = demand || {};
     var r = section(input, 'repeatability');
+    var lateStage = classifyFounderLateStage(r.founder_required_late_stage, policy);
     var conversion = section(input, 'conversion');
     var documented = ['icp_documented', 'qualification_documented', 'discovery_documented', 'sales_stages_documented']
       .filter(function (key) { return positiveDocumentation(r[key]); }).length;
@@ -43,6 +58,7 @@
       state: 'unknown', first_ae: isFirstAE, non_founder_wins: numeric(nfWins) ? nfWins : null,
       non_founder_qualified_opps: numeric(nfOpps) ? nfOpps : null,
       founder_required_late_stage: known(r.founder_required_late_stage) ? r.founder_required_late_stage : null,
+      founder_late_stage_class: lateStage,
       documented_process_items: documented, evidence_window: winRate.source === 'post_change_counts' ? 'post_change' : 'supplied_window',
       evidence_gaps: [], disclosures: []
     };
@@ -70,20 +86,22 @@
       return result;
     }
     // Evidence of dependence takes precedence over a count of past wins.
-    if (r.founder_required_late_stage === 'almost_always' || r.founder_primary_seller_share_pct === 1 ||
+    if (lateStage === 'dependent' || r.founder_primary_seller_share_pct === 1 ||
         (nfWins === 0 && r.wins_trailing_12m > 0)) {
       result.state = 'founder_dependent';
     } else if (nfWins >= policy.repeatability.demonstratedNonFounderWins && nfOpps > 0 &&
-        known(r.founder_required_late_stage) && documented >= policy.repeatability.documentedProcessMinimum &&
+        lateStage === 'demonstrated' && documented >= policy.repeatability.documentedProcessMinimum &&
         numeric(winRate.value) && winRate.scenario_only !== true && winRate.transferable !== false) {
       result.state = 'demonstrated';
     } else if (nfWins > 0 || (numeric(winRate.value) && documented > 0)) {
+      // Includes otherwise-strong evidence whose founder is still sometimes/often
+      // required late-stage: that motion is not yet operationally independent.
       result.state = 'emerging';
     }
     if (winRate.source === 'post_change_counts' && conversion.post_change_non_founder !== true) result.evidence_gaps.push('conversion.post_change_non_founder');
     if (!numeric(nfWins)) result.evidence_gaps.push(winRate.source === 'post_change_counts' ? 'conversion.post_change_wins' : 'conversion.non_founder_wins_trailing_12m');
     if (!numeric(nfOpps)) result.evidence_gaps.push(winRate.source === 'post_change_counts' ? 'conversion.post_change_qualified_opps' : 'conversion.non_founder_qualified_opps_trailing_12m');
-    if (!known(r.founder_required_late_stage)) result.evidence_gaps.push('repeatability.founder_required_late_stage');
+    if (lateStage === 'unknown') result.evidence_gaps.push('repeatability.founder_required_late_stage');
     return result;
   }
 
@@ -250,14 +268,24 @@
       add('pipeline_supply', 'demand_sufficiency', demandHard ? severity.blocking : severity.material,
         normalizedShortfall(demand.coverage, policy.demand.sufficientThreshold), demandHard, 'Allocatable qualified pipeline is below the calculated requirement.');
     } else if (demand.state === 'unknown') add('unknown_pipeline_allocation', 'demand_sufficiency', severity.material, null, false, 'Demand coverage is unknown.');
-    if (numeric(demand.pipeline_creation_ratio) && demand.pipeline_creation_ratio < policy.demand.sufficientThreshold) {
-      add('pipeline_creation', 'demand_sufficiency', severity.material,
-        normalizedShortfall(demand.pipeline_creation_ratio, policy.demand.sufficientThreshold), false, 'Monthly pipeline creation is below the calculated requirement.');
-    }
-    if (numeric(demand.opportunity_creation_ratio) && demand.opportunity_creation_ratio < policy.demand.sufficientThreshold) {
-      add('opportunity_creation', 'demand_sufficiency', severity.material,
-        normalizedShortfall(demand.opportunity_creation_ratio, policy.demand.sufficientThreshold), false, 'Monthly opportunity creation is below the calculated requirement.');
-    }
+    // Monthly creation must sustain the seat, not only the horizon total. A
+    // creation test that cannot be established (unknown or unbounded) cannot
+    // count as satisfied: otherwise removing adverse creation evidence would
+    // make the recommendation more aggressive (§8.8).
+    [['pipeline_creation', demand.pipeline_creation_ratio, demand.pipeline_creation_state, 'pipeline'],
+      ['opportunity_creation', demand.opportunity_creation_ratio, demand.opportunity_creation_state, 'opportunity']].forEach(function (test) {
+      var code = test[0], ratio = test[1], creationState = test[2], noun = test[3];
+      if (numeric(ratio) && ratio < policy.demand.sufficientThreshold) {
+        add(code, 'demand_sufficiency', severity.material, normalizedShortfall(ratio, policy.demand.sufficientThreshold), false,
+          'Monthly ' + noun + ' creation is below the calculated requirement.');
+      } else if (creationState === 'unbounded') {
+        add(code, 'demand_sufficiency', severity.material, 1, false,
+          'No ' + noun + ' created inside the horizon can close in time to cover the remaining requirement.');
+      } else if (creationState === 'unknown') {
+        add(code, 'demand_sufficiency', severity.material, null, false,
+          'Monthly ' + noun + ' creation sufficiency cannot be established from the supplied evidence.');
+      }
+    });
     if (repeatability.state === 'founder_motion_not_yet_externalizable') add('transferability', 'repeatability', severity.blocking, null, true, 'The founder motion is not yet ready to hand over.');
     else if (repeatability.state === 'founder_dependent') {
       var independent = section(input, 'proposed_ae').expected_to_run_independently !== false;
@@ -336,17 +364,33 @@
         d.state === 'unknown' ? ['demand.pipeline_likely_open_at_ae_start', 'demand.new_ae_pipeline_share_pct'] : [],
         'Rerun when allocatable qualified pipeline reaches the calculated requirement.');
     }
+    var observedPipeline = d.observed_monthly_pipeline_creation !== undefined ? d.observed_monthly_pipeline_creation :
+      section(input, 'demand').monthly_qualified_pipeline_created_value;
+    var observedOpps = d.observed_monthly_opps_created !== undefined ? d.observed_monthly_opps_created :
+      section(input, 'demand').monthly_qualified_opps_created;
     if (numeric(d.required_monthly_pipeline_creation) && d.required_monthly_pipeline_creation > 0) {
-      var observed = section(input, 'demand').monthly_qualified_pipeline_created_value;
-      add('pipeline_creation', observed, d.required_monthly_pipeline_creation,
-        numeric(observed) ? Math.max(0, d.required_monthly_pipeline_creation - observed) : null,
-        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], [],
+      add('pipeline_creation', observedPipeline, d.required_monthly_pipeline_creation,
+        numeric(observedPipeline) ? Math.max(0, d.required_monthly_pipeline_creation - observedPipeline) : null,
+        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
         'Rerun when the observed monthly pipeline creation available to the new seat meets the requirement.');
+    } else if (d.pipeline_creation_state === 'unknown' || d.pipeline_creation_state === 'unbounded') {
+      add('pipeline_creation', numeric(observedPipeline) ? observedPipeline : null, null, null,
+        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
+        d.pipeline_creation_state === 'unbounded' ?
+          'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.' :
+          'Supply the listed evidence and rerun to establish the monthly pipeline creation requirement.');
     }
     if (numeric(d.required_monthly_opps) && d.required_monthly_opps > 0) {
-      add('opportunity_creation', section(input, 'demand').monthly_qualified_opps_created, d.required_monthly_opps, null,
-        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], [],
+      add('opportunity_creation', observedOpps, d.required_monthly_opps,
+        numeric(observedOpps) ? Math.max(0, d.required_monthly_opps - observedOpps) : null,
+        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
         'Rerun when qualified opportunity creation available to the new seat meets the requirement.');
+    } else if (d.opportunity_creation_state === 'unknown' || d.opportunity_creation_state === 'unbounded') {
+      add('opportunity_creation', numeric(observedOpps) ? observedOpps : null, null, null,
+        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
+        d.opportunity_creation_state === 'unbounded' ?
+          'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.' :
+          'Supply the listed evidence and rerun to establish the monthly qualified opportunity requirement.');
     }
     if (e.state !== 'supported' && numeric(e.contribution)) {
       var requiredGap = e.contribution * policy.economic.fullUseThreshold;

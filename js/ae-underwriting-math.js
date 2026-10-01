@@ -16,6 +16,9 @@
     return value !== null && value >= 0 ? value : null;
   }
   function safe(value) { return Number.isFinite(value) ? value : null; }
+  // Floating-point comparison only (no business materiality): a sum that equals
+  // its bound up to rounding is not treated as exceeding it.
+  function exceeds(a, b) { return a > b && a - b > Math.max(Math.abs(a), Math.abs(b)) * 8 * Number.EPSILON; }
   function result(value, details) {
     return Object.assign({ value: safe(value), assumptions: [], warnings: [], trace: {} }, details || {});
   }
@@ -322,15 +325,46 @@
     if (out.measures.length && out.surplus !== null) out.measures.push({ source: 'theoretical_surplus_cap', value: out.surplus });
     if (out.measures.length) out.value = Math.min.apply(Math, out.measures.map(function (item) { return item.value; }));
     else out.warnings.push('unknown_pipeline_allocation');
-    var current = nonnegative(demand.allocatable_current_qualified_pipeline);
-    if (current !== null) out.current_allocatable = current;
-    else if (share !== null && args.demandPool && nonnegative(args.demandPool.current) !== null) out.current_allocatable = safe(args.demandPool.current * share);
+    // Current allocation is temporal: it is bounded by the cycle-eligible
+    // pipeline that exists today, net of any current pipeline reserved for the
+    // existing team/founder. Horizon-wide allocation (which can include future
+    // creation) is never the bound that makes a current claim admissible.
+    var currentPool = args.demandPool ? nonnegative(args.demandPool.current) : null;
+    var reserved = nonnegative(demand.current_pipeline_reserved_for_existing_team);
+    var available = currentPool === null ? null : Math.max(0, currentPool - (reserved === null ? 0 : reserved));
+    var currentClaims = [];
+    var explicitCurrent = nonnegative(demand.allocatable_current_qualified_pipeline);
+    if (explicitCurrent !== null) currentClaims.push({ source: 'explicit_current_allocation', value: explicitCurrent });
+    if (share !== null && currentPool !== null) currentClaims.push({ source: 'explicit_share_of_current_pool', value: safe(currentPool * share) });
+    var claimed = currentClaims.length ? Math.min.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
+    var largestClaim = currentClaims.length ? Math.max.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
+    if (claimed === null) {
+      out.warnings.push('unknown_current_pipeline_allocation');
+    } else if (available === null) {
+      // A zero claim needs no pool evidence; any positive claim cannot be checked
+      // against what exists today, so it stays unknown.
+      if (claimed === 0) out.current_allocatable = 0;
+      else out.warnings.push('unknown_current_pipeline_pool');
+    } else if (exceeds(largestClaim + (reserved === null ? 0 : reserved), currentPool)) {
+      // Every current ownership statement must fit the current pool. A claim that
+      // only fits by borrowing future creation or the existing team's reservation
+      // is contradictory, so ownership is not established.
+      out.warnings.push('current_allocation_exceeds_current_pool');
+    } else {
+      out.current_allocatable = claimed;
+    }
+    // A seller's current allocation also cannot exceed its own total allocation.
     if (out.current_allocatable !== null && out.value !== null) out.current_allocatable = Math.min(out.current_allocatable, out.value);
     if (declared !== null && pool !== null && declared > pool) out.warnings.push('allocation_exceeds_pipeline_pool');
     out.trace.declared_allocation = declared;
     out.trace.share = share;
     out.trace.surplus = out.surplus;
     out.trace.measures = out.measures;
+    out.trace.current_pool = currentPool;
+    out.trace.current_reserved_for_existing_team = reserved;
+    out.trace.current_available_to_new_ae = available;
+    out.trace.current_claims = currentClaims;
+    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool; capped by total allocation';
     return out;
   }
 

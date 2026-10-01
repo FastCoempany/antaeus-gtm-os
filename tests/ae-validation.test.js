@@ -134,6 +134,35 @@ test('normalization does not mutate source input or admit prototype keys', () =>
   assert.equal(Object.hasOwn(normalized.company, '__proto__'), false);
 });
 
+// Current-vs-future pipeline ownership (PR #315 audit, defect 3).
+const currentPool = overrides => makeCase({ demand: Object.assign({ current_qualified_pipeline_in_horizon: 1000000, current_qualified_pipeline_value: 1000000, allocatable_qualified_pipeline: 3000000 }, overrides) });
+const ownershipConflict = input => validation(input).clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool');
+for (const [name, overrides] of [
+  ['current allocation exceeds current pool', { allocatable_current_qualified_pipeline: 1500000 }],
+  ['current allocation plus reservation exceeds current pool', { allocatable_current_qualified_pipeline: 500000, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['current share plus reservation exceeds current pool', { allocatable_current_qualified_pipeline: null, new_ae_pipeline_share_pct: 0.5, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['reservation alone exceeds current pool', { allocatable_current_qualified_pipeline: null, current_pipeline_reserved_for_existing_team: 1000001 }],
+  ['current allocation from a pool that is all future creation', { current_qualified_pipeline_in_horizon: 0, current_qualified_pipeline_value: 0, allocatable_current_qualified_pipeline: 1 }]
+]) test('current ownership clarification: ' + name, () => {
+  assert.ok(ownershipConflict(currentPool(overrides)));
+  assertBlocked(currentPool(overrides));
+});
+for (const [name, overrides] of [
+  ['allocation equal to the pool', { allocatable_current_qualified_pipeline: 1000000 }],
+  ['allocation plus reservation equal to the pool', { allocatable_current_qualified_pipeline: 400000, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['share plus reservation equal to the pool up to rounding', { current_qualified_pipeline_in_horizon: 3, current_qualified_pipeline_value: 3, allocatable_qualified_pipeline: 3, allocatable_current_qualified_pipeline: null, new_ae_pipeline_share_pct: 0.1, current_pipeline_reserved_for_existing_team: 2.7 }],
+  ['unknown reservation with an admissible allocation', { allocatable_current_qualified_pipeline: 900000, current_pipeline_reserved_for_existing_team: { value: null, status: 'unknown', source: 'unknown' } }]
+]) test('current ownership fits the current pool: ' + name, () => assert.equal(ownershipConflict(currentPool(overrides)), false));
+for (const [name, value] of [['numeric text', '600000'], ['negative', -1], ['NaN', NaN], ['boolean', true]]) {
+  test('current existing-team reservation rejects ' + name, () => assertBlocked(assign('demand.current_pipeline_reserved_for_existing_team', value), true));
+}
+test('unknown current existing-team reservation stays unknown, never zero', () => {
+  const normalized = engine.normalizeInput(assign('demand.current_pipeline_reserved_for_existing_team', { value: 123, status: 'unknown', source: 'unknown' }));
+  assert.equal(normalized.demand.current_pipeline_reserved_for_existing_team, null);
+  assert.ok(normalized.unknowns.includes('demand.current_pipeline_reserved_for_existing_team'));
+  assert.equal(engine.normalizeInput(makeCase()).demand.current_pipeline_reserved_for_existing_team, null);
+});
+
 if (failures.length) {
   failures.forEach(failure => console.error('FAIL ' + failure));
   console.error(`AE validation: ${passed} passed, ${failures.length} failed`);
