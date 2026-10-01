@@ -208,16 +208,20 @@ test('A4 keeps the range rule separate from the monotonicity rule', () => {
   assert.ok(scheduleCodes([-0.1, 1]).includes('invalid_ramp_schedule'));
   assert.ok(!scheduleCodes([-0.1, 1]).includes('non_monotone_ramp_schedule'));
 });
-test('A5 a conflicting series and single monthly value is recorded as a clarification, not a fatal error', () => {
-  const result = engine.underwrite(makeCase({ demand: { monthly_pipeline_series: Array(12).fill(300000), monthly_qualified_pipeline_created_value: 650000 } }));
-  assert.equal(result.validation.fatal_errors.length, 0);
-  const issue = result.validation.clarifications.find(item => item.code === 'creation_source_conflict');
-  assert.deepEqual(issue.fields, ['demand.monthly_pipeline_series', 'demand.monthly_qualified_pipeline_created_value']);
-  assert.equal(result.decision.state, 'insufficient_evidence');
-  assert.equal(result.enhanced_review_required, true);
+test('A5 (1.3.0) a series and a different single monthly value raise no validation issue', () => {
+  for (const seasonal of [true, false, null]) {
+    const result = engine.underwrite(makeCase({ demand: { pipeline_creation_is_seasonal: seasonal, monthly_pipeline_series: Array(12).fill(300000), monthly_qualified_pipeline_created_value: 650000 } }));
+    assert.equal(result.validation.fatal_errors.length, 0);
+    assert.ok(!result.validation.clarifications.some(item => item.code === 'creation_source_conflict'), String(seasonal));
+  }
 });
-test('A5 a matching series and single monthly value raise nothing', () => {
-  assert.ok(!engine.underwrite(makeCase({ demand: { monthly_pipeline_series: Array(12).fill(650000), monthly_qualified_pipeline_created_value: 650000 } })).validation.clarifications.length);
+test('A5 (1.3.0) the single monthly value role is recorded for audit', () => {
+  const role = demand => engine.underwrite(makeCase({ demand })).audit.math.demand.single_monthly_value_role;
+  assert.equal(role({ pipeline_creation_is_seasonal: false }), 'modeling');
+  assert.equal(role({ pipeline_creation_is_seasonal: true }), 'illustrative');
+  assert.equal(role({ pipeline_creation_is_seasonal: null }), 'illustrative');
+  assert.equal(role({ monthly_pipeline_series: Array(12).fill(650000) }), 'reference');
+  assert.equal(role({ monthly_qualified_pipeline_created_value: null }), null);
 });
 test('B2 a supplied zero existing-team rate with positive team bookings is a recorded contradiction', () => {
   const result = engine.underwrite(makeCase({ conversion: { existing_team_qualified_opp_to_win_pct: 0 } }));

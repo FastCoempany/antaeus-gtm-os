@@ -532,7 +532,7 @@ test('§14.17 unknown never becomes zero in the remediation fields', () => {
 test('§14.18 policy and engine version changes are explicit and recorded', () => {
   assert.equal(policy.version, 'ae-policy-1.1.0');
   const output = run(strong());
-  assert.equal(output.policy_version, 'ae-policy-1.1.0'); assert.equal(output.engine_version, 'ae-engine-1.2.0'); assert.equal(engine.engine_version, 'ae-engine-1.2.0');
+  assert.equal(output.policy_version, 'ae-policy-1.1.0'); assert.equal(output.engine_version, 'ae-engine-1.3.0'); assert.equal(engine.engine_version, 'ae-engine-1.3.0');
   assert.deepEqual(JSON.parse(JSON.stringify(output.audit.policy_snapshot)), JSON.parse(JSON.stringify(policy)));
 });
 test('§14.19 low-confidence evidence cannot yield SUPPORTED', () => {
@@ -661,6 +661,34 @@ test('B3 removing the ramp definition never strengthens the decision across scen
     const after = run(unknown);
     assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${name} ${mode}: ${before.decision.state} -> ${after.decision.state}`);
     assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${name} ${mode} confidence`);
+  }
+});
+
+// Final pre-merge correction (engine 1.3.0): series vs single monthly value.
+test('A5 (1.3.0) removing a seasonal series, or the seasonality answer, never strengthens any scenario', () => {
+  const SERIES = [200000, 220000, 240000, 300000, 350000, 400000, 450000, 500000, 550000, 900000, 1100000, 1300000];
+  let checked = 0;
+  for (const [name, build] of Object.entries(SCENARIOS)) for (const scale of [0.5, 1, 3]) {
+    const withSeries = () => { const input = build(); Object.assign(input.demand, { pipeline_creation_is_seasonal: true, monthly_pipeline_series: SERIES.map(v => v * scale) }); return input; };
+    const before = run(withSeries());
+    if (before.validation.clarifications.length || before.validation.fatal_errors.length) continue;
+    assert.ok(!before.validation.clarifications.some(c => c.code === 'creation_source_conflict'), name);
+    for (const [label, erase] of [['series', i => { i.demand.monthly_pipeline_series = null; }], ['series and seasonality', i => { i.demand.monthly_pipeline_series = null; i.demand.pipeline_creation_is_seasonal = null; }], ['single value', i => { i.demand.monthly_qualified_pipeline_created_value = null; }]]) {
+      const input = withSeries(); erase(input);
+      const after = run(input); checked += 1;
+      assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${name} x${scale} minus ${label}: ${before.decision.state} -> ${after.decision.state}`);
+      assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${name} x${scale} minus ${label}: ${before.decision.confidence} -> ${after.decision.confidence}`);
+    }
+  }
+  assert.ok(checked >= 120);
+});
+test('A5 (1.3.0) the single monthly value never changes the result while a series is supplied', () => {
+  for (const [name, build] of Object.entries(SCENARIOS)) for (const seasonal of [true, false, null]) {
+    const a = build(), b = build();
+    for (const input of [a, b]) Object.assign(input.demand, { pipeline_creation_is_seasonal: seasonal, monthly_pipeline_series: Array(12).fill(700000) });
+    a.demand.monthly_qualified_pipeline_created_value = 50000; b.demand.monthly_qualified_pipeline_created_value = 5000000;
+    const x = run(a), y = run(b);
+    assert.deepEqual([x.decision.state, x.decision.primary_constraint, x.decision.confidence, x.calculations.pipeline_pool, x.calculations.observed_monthly_pipeline_creation], [y.decision.state, y.decision.primary_constraint, y.decision.confidence, y.calculations.pipeline_pool, y.calculations.observed_monthly_pipeline_creation], name + ' ' + seasonal);
   }
 });
 

@@ -169,7 +169,7 @@
     if (repeatability.first_ae === true) moderate.push('first_ae_transferability_unproven');
     var suppliedDemand = section(input, 'demand');
     if (suppliedDemand.pipeline_creation_is_seasonal === true && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
-      moderate.push('seasonal_pipeline_linear_extrapolation');
+      moderate.push('seasonal_creation_without_series');
     } else if (suppliedDemand.pipeline_creation_is_seasonal !== false && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
       // Unknown seasonality can hide a seasonal pattern the flat monthly value
       // misstates; it can never carry more confidence than a declared one.

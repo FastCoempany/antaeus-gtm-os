@@ -2,7 +2,7 @@
 
 Scope: Step 3, Step 4 and their tests only. Source: `deliverables/plans/ae_hiring_underwriting_master_spec.md` at commit `1114340`. The source filename uses underscores. The master spec has not been edited.
 
-Current versions: `ae-engine-1.2.0`, `ae-policy-1.1.0`, schema `ae-underwriting-1.0`. The 1.1.0 remediation follows `deliverables/plans/pr315_ae_underwriting_engine_audit.md`; see [Remediation 1.1.0](#remediation-110-pr-315-audit). The 1.2.0 second hardening pass follows the PR #316 second adversarial audit; see [Second hardening 1.2.0](#second-hardening-120-pr-316-second-audit).
+Current versions: `ae-engine-1.3.0`, `ae-policy-1.1.0`, schema `ae-underwriting-1.0`. The 1.1.0 remediation follows `deliverables/plans/pr315_ae_underwriting_engine_audit.md`; see [Remediation 1.1.0](#remediation-110-pr-315-audit). The 1.2.0 second hardening pass follows the PR #316 second adversarial audit; see [Second hardening 1.2.0](#second-hardening-120-pr-316-second-audit). The 1.3.0 final pre-merge correction follows the PR #316 final pre-merge audit; see [Final pre-merge correction 1.3.0](#final-pre-merge-correction-130).
 
 ## Run
 
@@ -12,13 +12,13 @@ npm run test:ae
 
 No installation or added test framework is required. Node runs four suites: formulas/reference case and remediation regressions, validation, all 24 golden cases, and adversarial invariants (including an explicit §14 block). `npm test` runs this suite through `pretest` before the existing Vitest tests.
 
-| Suite | 1.0.0 (PR #315) | 1.1.0 | 1.2.0 |
-| --- | ---: | ---: | ---: |
-| `tests/ae-underwriting-engine.test.js` | 26 | 100 | 129 |
-| `tests/ae-validation.test.js` | 67 | 91 | 106 |
-| `tests/ae-golden-cases.js` | 24 | 24 | 24 |
-| `tests/ae-invariants.test.js` | 65 | 87 | 98 |
-| Total | 182 | 302 | 357 |
+| Suite | 1.0.0 (PR #315) | 1.1.0 | 1.2.0 | 1.3.0 |
+| --- | ---: | ---: | ---: | ---: |
+| `tests/ae-underwriting-engine.test.js` | 26 | 100 | 129 | 143 |
+| `tests/ae-validation.test.js` | 67 | 91 | 106 | 106 |
+| `tests/ae-golden-cases.js` | 24 | 24 | 24 | 24 |
+| `tests/ae-invariants.test.js` | 65 | 87 | 98 | 100 |
+| Total | 182 | 302 | 357 | 373 |
 
 ## Entry point
 
@@ -118,7 +118,7 @@ Now, before any decision call, the demand test carries:
 | --- | --- |
 | `required_monthly_pipeline_creation` | `max(0, qualified_pipeline_required - allocatable_current_pipeline) / eligible_creation_months` (§4.22). `0` when current allocation covers the requirement; `null` when unknown or unbounded. |
 | `required_monthly_opps` | `required_monthly_pipeline_creation / average_acv` (§4.23; equal to remaining opportunities / eligible months). `0` when no creation is required. |
-| `observed_monthly_pipeline_creation` | The supplied monthly value. When a `monthly_pipeline_series` is supplied, the series' creation inside the eligible window divided by `eligible_creation_months` (§3.3 P). Since 1.2.0, when both are supplied they must agree on that average or the case stops for clarification (A5 below). |
+| `observed_monthly_pipeline_creation` | The supplied monthly value. When a `monthly_pipeline_series` is supplied, the series' creation inside the eligible window divided by `eligible_creation_months` (§3.3 P). Without a series, the single monthly value counts only when `pipeline_creation_is_seasonal` is `false`; otherwise observed creation is unknown (1.3.0, below). |
 | `pipeline_creation_ratio` | `observed_monthly_pipeline_creation / required_monthly_pipeline_creation`. |
 | `opportunity_creation_ratio` | `demand.monthly_qualified_opps_created / required_monthly_opps`. |
 | `pipeline_creation_state`, `opportunity_creation_state` | `sufficient` (ratio ≥ `policy.demand.sufficientThreshold`), `short`, `not_required` (requirement 0), `unknown`, or `unbounded`. |
@@ -179,7 +179,7 @@ The criterion is unchanged and stored with the date. The domain floor is returne
 ### Spec interpretations made explicit
 
 1. §4.24 lists "founder is not `almost_always` required late-stage" as a `demonstrated` criterion, while its `emerging` examples include "founder is sometimes/often involved." 1.1.0 follows the audit's tighter, versioned rule (only `rarely` is eligible). The master spec text is unchanged; the conflict is recorded here and in the remediation PR.
-2. §4.22 compares observed monthly creation with the requirement. With a supplied monthly series, the observed figure is the series' eligible-window average; for a constant monthly value this equals the supplied value. (1.2.0: a series and a disagreeing single value now require clarification; see A5.)
+2. §4.22 compares observed monthly creation with the requirement. With a supplied monthly series, the observed figure is the series' eligible-window average; for a constant monthly value this equals the supplied value. (1.3.0: a supplied series is authoritative and the single value is reference metadata; see the 1.3.0 section.)
 3. `observed` creation is company-wide creation as supplied, compared with the new seat's requirement (§4.22's formula). It is not netted against the existing team's own creation needs; the existing team's share of supply is handled by the horizon surplus cap and the current reservation.
 4. `revenue_needed_by_date` is a requirement parameter, not evidence. Without it the horizon end is the deadline, so removing it can relax timing. It is excluded from the missingness sweep for that reason.
 
@@ -211,7 +211,9 @@ Current allocation is now also bounded by `demand.pipeline_likely_open_at_ae_sta
 
 Validation rejects a supplied `monthly_ramp_schedule` (or its `ramp_schedule` alias) whose factor ever decreases, with the fatal error `non_monotone_ramp_schedule`. The range rule (`invalid_ramp_schedule`: every factor finite and within 0..1) is unchanged. §14.3 (a later start never adds in-horizon contribution) is tested across every accepted shape in both ramp modes.
 
-### A5. A monthly series and a single monthly value must agree
+### A5. A monthly series and a single monthly value must agree (superseded in 1.3.0)
+
+*Superseded by [Final pre-merge correction 1.3.0](#final-pre-merge-correction-130): the equality comparison below treated two differently scoped numbers as one measurement. It is no longer applied.*
 
 When both `monthly_pipeline_series` and `monthly_qualified_pipeline_created_value` are supplied, the series' eligible-window average is compared with the single value. Two cases raise the clarification `creation_source_conflict` (with `series_window_average` and `single_monthly_value`), and no decision is reached until it is reconciled:
 
@@ -230,7 +232,7 @@ Any unanswered `direct_manager_exists`, `weekly_1to1_capacity`, `weekly_pipeline
 
 ### B3. Unknown ramp keeps both interpretations
 
-With `ramp_definition` unknown, both interpretations are evaluated end to end: tests, sensitivity, decision, the zero-conversion rule and the latest viable start. The reported decision is the weaker of the two branches, capped at conditional. 1.1.0 forced `conditional` whenever branches differed, which let a pipeline-productivity `not_yet_supported` become `conditional` once `ramp_definition` was deleted. The governing branch's primary constraint is kept. Every other operating constraint from either branch is preserved in the secondaries, and `ramp_ambiguity` is added alongside them, never in place of the operating constraint. `decision.ramp_branches` (also `ramp_interpretations`) carries each branch's decision, primary, secondaries, confidence, timing and latest viable start. `tests.timing_management.timing` carries `latest_viable_start_by_ramp`, a `latest_viable_start_range`, and a conservative single `latest_viable_start`: the earliest branch value, the latest start viable under both interpretations. Outputs (tests, calculations, conditions) come from the governing branch.
+With `ramp_definition` unknown, both interpretations are evaluated end to end: tests, sensitivity, decision, the zero-conversion rule and the latest viable start. The reported decision is the weaker of the two branches, capped at conditional. 1.1.0 forced `conditional` whenever branches differed, which let a pipeline-productivity `not_yet_supported` become `conditional` once `ramp_definition` was deleted. The governing branch's primary constraint is kept. Every other operating constraint from either branch is preserved in the secondaries, and `ramp_ambiguity` is added alongside them, never in place of the operating constraint. `decision.ramp_branches` (also `ramp_interpretations`) carries each branch's decision, primary, secondaries, confidence, timing and latest viable start. `tests.timing_management.timing` carries `latest_viable_start_by_ramp`, a `latest_viable_start_range`, and a single `latest_viable_start` (1.3.0 refines how a branch's `null` is read; see below). Outputs (tests, calculations, conditions) come from the governing branch.
 
 ### B4. Low confidence is attributed to its cause
 
@@ -252,15 +254,87 @@ Reasons with their own constraint source (unknown core test, sensitivity flip, u
 
 - **G07** (founder-inclusive rate only): now `insufficient_evidence` / `unknown_conversion` (A2). The master spec's G07 expects `conditional`; see ambiguity 1.
 - **G12** (unknown ramp, branches differ): now `not_yet_supported` / `sales_cycle_timing`, the pipeline-productivity branch (B3). The allowed list gained `not_yet_supported`. The spec's G12 requirement ("never supported without resolving the ambiguity") still holds.
-- **G24** (seasonal series): the fixture drops Appendix B's single monthly value (650,000), because it conflicts with the series' window average (A5). The spec expects the series to be used; with only the series supplied it is.
+- **G24** (seasonal series): 1.2.0 dropped Appendix B's single monthly value; 1.3.0 restores the spec's literal fixture (series plus the recent single value), and the series drives the math with the single value as reference.
 
 ### Remaining ambiguities (founder decision before freeze)
 
 1. A2 vs master spec §4.4 Priority 5 and G07: the spec allows a founder-inclusive-only rate to support a conditional decision as an illustrative scenario. 1.2.0 follows the audit: the rate stays illustrative, but the decision is insufficient evidence.
-2. A5 strictness: any difference beyond numerical equality between a series and a single value stops the case. A tolerance band would be friendlier to hand-typed values but reopens the deletion hole.
+2. A5 strictness: resolved in 1.3.0 by source semantics rather than a tolerance band (see below).
 3. A3 strictness: every positive current claim needs `pipeline_likely_open_at_ae_start`, with no "materially later" exemption.
 4. B3 reports outputs from the governing (weaker) ramp branch, so calculations for an unknown ramp can come from the pipeline-productivity branch rather than always from closed bookings.
 5. Company-wide versus seat-allocatable creation (audit §16) and the §4.24 founder-dependence wording (audit §17) remain open, unchanged.
+
+## Final pre-merge correction 1.3.0
+
+The PR #316 final pre-merge audit found two semantic defects in 1.2.0. Both were corrected on this branch, and every 1.2.0 regression still passes.
+
+### Versions
+
+| | Old | New | Reason |
+| --- | --- | --- | --- |
+| Engine | `ae-engine-1.2.0` | `ae-engine-1.3.0` | Identical normalized inputs produce different outputs. Minor bump, matching the 1.1.0 and 1.2.0 convention for output-changing corrections. |
+| Policy | `ae-policy-1.1.0` | unchanged | No rule or value in `js/ae-policy.js` changed. |
+| Schema | `ae-underwriting-1.0` | unchanged | No new input field. New outputs are additive. |
+
+### 1. Monthly series vs single monthly value: source semantics, not equality
+
+1.2.0 compared a series' eligible-window average with the single monthly value and raised `creation_source_conflict` unless they were numerically equal. For seasonal data that is wrong. The single value is often a recent month, which legitimately differs from a multi-month seasonal average (§4.22: use a series, do not extrapolate one month). 1.3.0 removes the comparison and the clarification. The two inputs now have explicit, distinct meanings:
+
+| Input | Meaning |
+| --- | --- |
+| `demand.monthly_pipeline_series` | The monthly creation pattern, indexed from the horizon start. When supplied it is **authoritative** for all creation modeling. Unknown months inside the eligible window make creation unknown, with warning `incomplete_monthly_pipeline_series` and the series named as an evidence gap. |
+| `demand.monthly_qualified_pipeline_created_value` | A single monthly creation figure, which the intake should label as **recent / typical monthly creation**. Its role is recorded as `audit.math.demand.single_monthly_value_role`. |
+
+The role of the single value depends on what else is supplied:
+
+| Inputs | Role | Effect |
+| --- | --- | --- |
+| A series is supplied | `reference` | Kept for audit only; never compared with the series and never changes the result. |
+| No series, `pipeline_creation_is_seasonal === false` | `modeling` | Extrapolated flat across the eligible window, as before. |
+| No series, seasonality `true` or unanswered | `illustrative` | Shown as `illustrative_flat_future`, but creation and the future pool are unknown. Warning `seasonal_creation_requires_series` or `creation_seasonality_unconfirmed`. The evidence gaps name the series, and also the seasonality answer when it is unanswered. |
+
+An unanswered seasonality question is treated like a seasonal one, because B1 requires that deleting `pipeline_creation_is_seasonal` can never strengthen a decision. If an unanswered flag let the single value prove creation, deleting a `true` flag would lift the result. The single value therefore establishes creation only when creation is confirmed not seasonal.
+
+When the future pool is unknown and the known part of the pool cannot prove the existing-team surplus cap non-binding, the existing 1.1.0 pool-unknown gate makes the case `insufficient_evidence`. Otherwise creation is unknown: a material constraint plus low confidence.
+
+Guarantees:
+
+- deleting a seasonal series (with or without the seasonality answer) never strengthens the decision or raises confidence;
+- with a series supplied, the single value never changes the decision.
+
+The differential corpus found 52 deletion pairs on `e4e3060` where removing evidence strengthened the result, including G02 going from not-yet to supported when its seasonal series was deleted. 1.3.0 has none.
+
+### 2. Unknown-ramp latest viable start: `null` read with branch state
+
+1.2.0 discarded every `null` branch date and reported the other branch's date as "viable under both interpretations." A `null` means different things, so each branch now carries `latest_start_status`:
+
+- `not_needed`: timing compatible, no corrective date;
+- `date`;
+- `none`: the search ran and no start works;
+- `unknown`: the search could not run.
+
+`reconcileRampLatestStart()` (exported) produces the combined result:
+
+| Branch statuses | `latest_viable_start` | `latest_viable_start_reason` |
+| --- | --- | --- |
+| both `date` | the earlier date | `null` |
+| `not_needed` + `date` | the dated branch | `null` |
+| any `none` | `null` | `no_common_viable_start_across_ramp_interpretations` |
+| any `unknown` (no `none`) | `null` | `latest_start_unknown_for_a_ramp_interpretation` |
+| both `not_needed` | `null` | `null`; no corrective timing condition is created |
+
+Branch detail is kept in `latest_viable_start_by_ramp` and `latest_start_status_by_ramp`. A known ramp whose search finds nothing reports `latest_viable_start_reason: 'no_viable_start'`.
+
+When only the non-governing interpretation needs a timing correction, its timing condition is still reported, dated with the combined latest start. The governing-branch rule from 1.2.0 (the weaker decision governs; ties go to closed bookings) is unchanged.
+
+Not every combination occurs end to end. Both branches share the deadline, and pipeline productivity's search floor is never later than closed bookings', so a dated closed-bookings branch implies a dated pipeline-productivity branch. "One `none`, one `date`" is therefore covered by direct tests of the exported function.
+
+### Remaining non-blocking product decisions
+
+1. **Intake wording.** Label the single value "recent/typical monthly qualified pipeline created". Make `pipeline_creation_is_seasonal` required, because without a series an unanswered flag now leaves creation unknown.
+2. **Pipeline open at AE start.** Make `pipeline_likely_open_at_ae_start` conditionally required whenever positive current pipeline is claimed for the new AE (A3).
+3. **Company-wide vs seat-allocatable creation (audit §16).** Resolve before intake and report language freeze.
+4. **Master-spec reconciliation after merge.** Reconcile G07 (A2: founder-inclusive-only conversion is insufficient evidence) and the §4.24 founder-dependence wording with policy 1.1.0.
 
 ## Boundaries
 

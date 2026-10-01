@@ -281,12 +281,26 @@
     var cutoff = h.end - Math.ceil(cycle);
     out.creation_cutoff_date = formatDate(cutoff);
     out.eligible_creation_months = monthsBetween(h.start, cutoff);
-    var monthly = nonnegative(demand.monthly_qualified_pipeline_created_value);
+    // Source semantics (1.3.0). A supplied monthly series is the authoritative
+    // creation pattern; the single monthly value is then reference metadata (often a
+    // recent month) and is never compared with the series average. Without a series,
+    // the single value models creation only when creation is confirmed not seasonal:
+    // a flat extrapolation of one month cannot establish seasonal (or possibly
+    // seasonal) creation, so it is kept as an illustrative scenario and creation
+    // stays unknown. Deleting a seasonal series therefore cannot strengthen a result.
+    var singleValue = nonnegative(demand.monthly_qualified_pipeline_created_value);
     var series = Array.isArray(demand.monthly_pipeline_series) ? demand.monthly_pipeline_series : null;
+    var singleModels = !series && demand.pipeline_creation_is_seasonal === false;
+    var monthly = singleModels ? singleValue : null;
     var future = 0, parts = [], known = true;
-    if (demand.pipeline_creation_is_seasonal === true && !series) {
-      out.assumptions.push('Seasonal pipeline creation is extrapolated linearly from the supplied monthly value because no monthly series was supplied.');
-      out.warnings.push('seasonal_linear_simplification');
+    out.single_monthly_value_role = singleValue === null ? null : series ? 'reference' : singleModels ? 'modeling' : 'illustrative';
+    out.trace.single_monthly_value = singleValue;
+    out.trace.single_monthly_value_role = out.single_monthly_value_role;
+    if (!series && !singleModels && singleValue !== null) {
+      out.assumptions.push(demand.pipeline_creation_is_seasonal === true ?
+        'Seasonal pipeline creation needs a monthly series; the single monthly value is shown only as an illustrative flat scenario.' :
+        'Pipeline creation is not confirmed non-seasonal; the single monthly value is shown only as an illustrative flat scenario until seasonality is confirmed or a monthly series is supplied.');
+      out.warnings.push(demand.pipeline_creation_is_seasonal === true ? 'seasonal_creation_requires_series' : 'creation_seasonality_unconfirmed');
     }
     for (var day = h.start; day <= cutoff;) {
       var next = addMonths(monthStart(day), 1), end = Math.min(next - 1, cutoff);
@@ -299,11 +313,15 @@
       day = end + 1;
     }
     out.future = known ? safe(future) : null;
+    if (!series && !singleModels && singleValue !== null) {
+      var eligibleFraction = parts.reduce(function (sum, part) { return sum + part.eligible_fraction; }, 0);
+      out.trace.illustrative_flat_future = safe(singleValue * eligibleFraction);
+    }
     out.value = current === null || out.future === null ? null : safe(current + out.future);
     out.trace.current = current;
     out.trace.cycle_days = cycle;
     out.trace.future = parts;
-    if (!known) out.warnings.push(series ? 'incomplete_monthly_pipeline_series' : 'unknown_monthly_pipeline_creation');
+    if (!known && (series || singleModels || singleValue === null)) out.warnings.push(series ? 'incomplete_monthly_pipeline_series' : 'unknown_monthly_pipeline_creation');
     return out;
   }
 

@@ -690,7 +690,7 @@ test('A3: pipeline open at start larger than the claim leaves the claim unchange
 const FLAT=n=>Array(12).fill(n);
 const windowAverage=series=>engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:null}})).calculations.observed_monthly_pipeline_creation;
 const SEASONAL=[200000,220000,240000,300000,350000,400000,450000,500000,550000,900000,1100000,1300000];
-test('A5: agreeing series and single value raise no conflict and use the series',()=>{
+test('A5: matching series and single value use the series',()=>{
   for(const series of [FLAT(1000000),SEASONAL]) {
     const average=windowAverage(series);
     const r=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:series===SEASONAL,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:average}}));
@@ -699,20 +699,59 @@ test('A5: agreeing series and single value raise no conflict and use the series'
     assert.equal(r.audit.math.demand.future.length,r.audit.math.demand.future.filter(m=>m.series_index!==undefined).length);
   }
 });
-test('A5: a materially different series and single value require clarification and no definitive decision',()=>{
-  for(const [name,series,scalar] of [['adverse series, favorable single value',FLAT(300000),1000000],['favorable series, adverse single value',FLAT(1300000),300000],['seasonal series, flat single value',SEASONAL,650000]]) {
-    const r=engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:scalar}}));
-    const conflict=r.validation.clarifications.find(c=>c.code==='creation_source_conflict');
-    assert.ok(conflict,name);assert.equal(conflict.single_monthly_value,scalar);
-    assert.equal(r.decision.state,'insufficient_evidence',name);assert.equal(r.decision.primary_constraint,'data_conflict',name);
-    assert.ok(r.evidence_gaps.some(g=>g.field.includes('demand.monthly_pipeline_series')),name);
+test('A5 (1.3.0): a seasonal series with a different recent single value is not a conflict; the series drives the math',()=>{
+  const r=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:true,monthly_pipeline_series:SEASONAL,monthly_qualified_pipeline_created_value:1300000}}));
+  assert.ok(!r.validation.clarifications.length);
+  assert.equal(r.calculations.observed_monthly_pipeline_creation,windowAverage(SEASONAL));
+  assert.notEqual(r.calculations.observed_monthly_pipeline_creation,1300000);
+  assert.equal(r.audit.math.demand.single_monthly_value_role,'reference');
+  assert.equal(r.audit.math.demand.single_monthly_value,1300000);
+  const seriesOnly=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:true,monthly_pipeline_series:SEASONAL,monthly_qualified_pipeline_created_value:null}}));
+  assert.equal(r.decision.state,seriesOnly.decision.state);assert.equal(r.calculations.pipeline_pool,seriesOnly.calculations.pipeline_pool);
+});
+test('A5 (1.3.0): a nonseasonal series and a single value use deterministic series precedence without a conflict',()=>{
+  for(const [series,scalar] of [[FLAT(300000),1000000],[FLAT(1300000),300000]]) {
+    const r=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:false,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:scalar}}));
+    assert.ok(!r.validation.clarifications.length);
+    assert.equal(r.calculations.observed_monthly_pipeline_creation,windowAverage(series));
+    assert.equal(r.audit.math.demand.single_monthly_value_role,'reference');
+    const seriesOnly=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:false,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:null}}));
+    assert.deepEqual([r.decision.state,r.decision.primary_constraint,r.calculations.pipeline_pool],[seriesOnly.decision.state,seriesOnly.decision.primary_constraint,seriesOnly.calculations.pipeline_pool]);
   }
 });
-test('A5: a series with unknown months in the window cannot be reconciled with a single value',()=>{
-  const series=FLAT(1000000);series[4]=null;
-  const r=engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:1000000}}));
-  const conflict=r.validation.clarifications.find(c=>c.code==='creation_source_conflict');
-  assert.ok(conflict);assert.equal(conflict.series_window_average,null);assert.equal(r.decision.state,'insufficient_evidence');
+test('A5 (1.3.0): a series with an unknown eligible month leaves creation unknown with an evidence gap, not a conflict',()=>{
+  const series=SEASONAL.slice();series[4]=null;
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{pipeline_creation_is_seasonal:true,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:1300000}}));
+  assert.ok(!r.validation.clarifications.length);
+  assert.equal(r.calculations.observed_monthly_pipeline_creation,null);
+  assert.ok(r.warnings.includes('incomplete_monthly_pipeline_series'));
+  assert.ok(r.evidence_gaps.some(g=>g.field==='demand.monthly_pipeline_series'));
+  assert.notEqual(r.decision.state,'supported');
+});
+test('A5 (1.3.0): without a series, a single value proves creation only when creation is confirmed not seasonal',()=>{
+  const confirmed=engine.underwrite(strong(DEEP_POOL,{demand:{pipeline_creation_is_seasonal:false}}));
+  assert.equal(confirmed.calculations.observed_monthly_pipeline_creation,1000000);assert.equal(confirmed.audit.math.demand.single_monthly_value_role,'modeling');
+  for(const seasonal of [true,null]) {
+    const r=engine.underwrite(strong(DEEP_POOL,{demand:{pipeline_creation_is_seasonal:seasonal}}));
+    assert.equal(r.audit.math.demand.single_monthly_value_role,'illustrative',String(seasonal));
+    assert.equal(r.calculations.observed_monthly_pipeline_creation,null);
+    assert.equal(r.tests.demand_sufficiency.pipeline_creation_state,'unknown');
+    assert.ok(r.audit.math.demand.illustrative_flat_future>0);
+    assert.ok(r.evidence_gaps.some(g=>g.field==='demand.monthly_pipeline_series'));
+    assert.ok(rank[r.decision.state]<=rank[confirmed.decision.state]);assert.ok(confidenceRank[r.decision.confidence]<=confidenceRank[confirmed.decision.confidence]);
+  }
+  assert.ok(engine.underwrite(strong(DEEP_POOL,{demand:{pipeline_creation_is_seasonal:null}})).evidence_gaps.some(g=>g.field==='demand.pipeline_creation_is_seasonal'));
+});
+test('A5 (1.3.0): deleting a seasonal series never strengthens the decision or raises confidence',()=>{
+  for(const extra of [{},DEEP_POOL,{demand:{allocatable_qualified_pipeline:2900000,pipeline_likely_open_at_ae_start:2900000}}]) for(const series of [SEASONAL,SEASONAL.map(v=>v*3),FLAT(400000)]) for(const scalar of [1300000,200000,null]) {
+    const base=strong(extra,{demand:{pipeline_creation_is_seasonal:true,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:scalar}});
+    const before=engine.underwrite(base);
+    const input=structuredClone(base);input.demand.monthly_pipeline_series=null;
+    const after=engine.underwrite(input);
+    assert.ok(rank[after.decision.state]<=rank[before.decision.state],`${before.decision.state} -> ${after.decision.state}`);
+    assert.ok(confidenceRank[after.decision.confidence]<=confidenceRank[before.decision.confidence],`confidence ${before.decision.confidence} -> ${after.decision.confidence}`);
+    assert.notEqual(after.tests.demand_sufficiency.pipeline_creation_state,'sufficient');
+  }
 });
 test('A5: deleting either source of an agreeing pair cannot strengthen the decision (seasonal and nonseasonal)',()=>{
   for(const [series,seasonal] of [[FLAT(1000000),false],[FLAT(500000),false],[SEASONAL,true]]) {
@@ -848,7 +887,7 @@ test('B1: unanswered management questions keep confidence low',()=>{
 test('B1: unknown seasonality never carries more confidence than a declared flag',()=>{
   const declared=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:false}}));
   const unknown=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:null}}));
-  assert.ok(unknown.confidence.reasons.includes('seasonality_unknown'));
+  assert.ok(unknown.confidence.reasons.includes('seasonality_unknown')||unknown.confidence.reasons.includes('evidence_gate_failed'));
   assert.ok(confidenceRank[unknown.decision.confidence]<=confidenceRank[declared.decision.confidence]);
   assert.ok(rank[unknown.decision.state]<=rank[declared.decision.state]);
   const seasonal=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:true}}));
@@ -883,6 +922,76 @@ test('A2: the first-AE founder-inclusive path is unchanged',()=>{
   const r=engine.underwrite(makeCase(first));
   assert.equal(r.conversion.conversion_basis,'first_ae_founder_inclusive');
   assert.ok(['conditional','supported'].includes(r.decision.state));assert.equal(r.decision.primary_constraint,'transferability');
+});
+// Final pre-merge correction (engine 1.3.0): unknown-ramp latest-start null semantics.
+const branch=(status,date=null)=>({latest_start_status:status,latest_viable_start:date});
+const reconcile=(closed,productivity)=>engine.reconcileRampLatestStart({closed_bookings:closed,pipeline_productivity:productivity});
+test('latest start reconciliation: both branches dated -> the earlier date',()=>{
+  const r=reconcile(branch('date','2027-02-01'),branch('date','2026-10-30'));
+  assert.equal(r.latest_viable_start,'2026-10-30');assert.equal(r.latest_viable_start_reason,null);
+  assert.deepEqual(r.latest_viable_start_range,['2026-10-30','2027-02-01']);
+  assert.deepEqual(r.latest_viable_start_by_ramp,{closed_bookings:'2027-02-01',pipeline_productivity:'2026-10-30'});
+});
+test('latest start reconciliation: compatible/null + incompatible/date -> the restrictive date',()=>{
+  for(const [c,p] of [[branch('not_needed'),branch('date','2026-10-30')],[branch('date','2026-10-30'),branch('not_needed')]]) {
+    const r=reconcile(c,p);
+    assert.equal(r.latest_viable_start,'2026-10-30');assert.equal(r.latest_viable_start_reason,null);assert.equal(r.latest_viable_start_range,null);
+  }
+});
+test('latest start reconciliation: incompatible/null + a dated branch -> null with no common viable start',()=>{
+  for(const [c,p] of [[branch('none'),branch('date','2026-10-30')],[branch('date','2027-02-01'),branch('none')]]) {
+    const r=reconcile(c,p);
+    assert.equal(r.latest_viable_start,null);
+    assert.equal(r.latest_viable_start_reason,'no_common_viable_start_across_ramp_interpretations');
+    assert.ok(Object.values(r.latest_viable_start_by_ramp).some(v=>v!==null),'branch-specific dates are kept to explain why');
+  }
+  assert.equal(reconcile(branch('none'),branch('not_needed')).latest_viable_start_reason,'no_common_viable_start_across_ramp_interpretations');
+});
+test('latest start reconciliation: both incompatible/null -> null',()=>{
+  const r=reconcile(branch('none'),branch('none'));
+  assert.equal(r.latest_viable_start,null);assert.equal(r.latest_viable_start_reason,'no_common_viable_start_across_ramp_interpretations');
+});
+test('latest start reconciliation: both compatible -> no corrective date or reason',()=>{
+  const r=reconcile(branch('not_needed'),branch('not_needed'));
+  assert.equal(r.latest_viable_start,null);assert.equal(r.latest_viable_start_reason,null);assert.equal(r.latest_viable_start_range,null);
+});
+test('latest start reconciliation: a branch whose search could not run makes the common start unknown',()=>{
+  const r=reconcile(branch('unknown'),branch('date','2026-10-30'));
+  assert.equal(r.latest_viable_start,null);assert.equal(r.latest_viable_start_reason,'latest_start_unknown_for_a_ramp_interpretation');
+});
+const UNKNOWN_RAMP_AT=(start,need,extra={})=>makeCase(deepMerge({proposed_ae:{ramp_definition:'unknown',start_month_index:null,proposed_start_date:start},timing:{revenue_needed_by_date:need}},extra));
+test('unknown ramp end to end: both branches dated',()=>{
+  const r=engine.underwrite(UNKNOWN_RAMP_AT('2026-12-01','2027-01-05',{proposed_ae:{monthly_ramp_schedule:[0,0,1],ramp_months:null}}));
+  const t=r.tests.timing_management.timing;
+  assert.deepEqual(t.latest_start_status_by_ramp,{closed_bookings:'date',pipeline_productivity:'date'});
+  assert.equal(t.latest_viable_start,[t.latest_viable_start_by_ramp.closed_bookings,t.latest_viable_start_by_ramp.pipeline_productivity].sort()[0]);
+});
+test('unknown ramp end to end: compatible closed-bookings branch, dated pipeline-productivity branch',()=>{
+  const r=engine.underwrite(UNKNOWN_RAMP_AT('2026-12-01','2027-01-05'));
+  const t=r.tests.timing_management.timing;
+  assert.deepEqual(t.latest_start_status_by_ramp,{closed_bookings:'not_needed',pipeline_productivity:'date'});
+  assert.equal(t.latest_viable_start,t.latest_viable_start_by_ramp.pipeline_productivity);assert.notEqual(t.latest_viable_start,null);
+  // The timing correction from the branch that needs it is reported, dated with the combined date.
+  const timingCondition=r.conditions.find(c=>c.code==='sales_cycle_timing'||c.code==='late_start');
+  assert.ok(timingCondition);assert.equal(timingCondition.deadline,t.latest_viable_start);
+});
+test('unknown ramp end to end: no viable start under either interpretation',()=>{
+  const r=engine.underwrite(UNKNOWN_RAMP_AT('2026-06-01','2026-09-01'));
+  const t=r.tests.timing_management.timing;
+  assert.deepEqual(t.latest_start_status_by_ramp,{closed_bookings:'none',pipeline_productivity:'none'});
+  assert.equal(t.latest_viable_start,null);assert.equal(t.latest_viable_start_reason,'no_common_viable_start_across_ramp_interpretations');
+  assert.notEqual(r.decision.state,'supported');
+});
+test('unknown ramp end to end: both branches compatible manufacture no corrective latest start',()=>{
+  const r=engine.underwrite(UNKNOWN_RAMP_AT('2026-06-01','2027-01-05'));
+  const t=r.tests.timing_management.timing;
+  assert.deepEqual(t.latest_start_status_by_ramp,{closed_bookings:'not_needed',pipeline_productivity:'not_needed'});
+  assert.equal(t.latest_viable_start,null);assert.equal(t.latest_viable_start_reason,null);
+  assert.ok(!r.conditions.some(c=>c.code==='sales_cycle_timing'||c.code==='late_start'));
+});
+test('a known ramp records why its latest start is null',()=>{
+  const t=engine.underwrite(makeCase({proposed_ae:{start_month_index:null,proposed_start_date:'2026-06-01'},timing:{revenue_needed_by_date:'2026-09-01'}})).tests.timing_management.timing;
+  assert.equal(t.latest_viable_start,null);assert.equal(t.latest_viable_start_reason,'no_viable_start');
 });
 if(failures.length){failures.forEach(f=>console.error('FAIL '+f));process.exitCode=1;}
 console.log(`AE engine: ${passed} passed, ${failures.length} failed`);

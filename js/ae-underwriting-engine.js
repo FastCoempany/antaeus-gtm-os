@@ -3,7 +3,7 @@
   else root.AEUnderwriting = factory(root.AE_HIRE_POLICY,root.AEEngineInput,root.AEUnderwritingMath,root.AEDecisionEngine);
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (DEFAULT_POLICY,Input,MathEngine,Decision) {
   'use strict';
-  const ENGINE_VERSION='ae-engine-1.2.0';
+  const ENGINE_VERSION='ae-engine-1.3.0';
   const number=v=>typeof v==='number'&&Number.isFinite(v);
   const value=v=>number(v)?v:(v&&number(v.value)?v.value:null);
   const divide=(a,b)=>number(a)&&number(b)&&b>0&&Number.isFinite(a/b)?a/b:null;
@@ -140,14 +140,19 @@
     const creationUnbounded=creationUnboundedReason!==null;
     const requiredMonthly=pipelineGap===0?0:creationUnbounded?null:divide(pipelineGap,eligible);
     const requiredOpps=requiredMonthly===0?0:divide(requiredMonthly,input.economics.average_acv);
-    // A supplied monthly series takes precedence over the single monthly value,
-    // exactly as in the demand pool: observed creation is the series' eligible-window average.
+    // Observed creation follows the demand pool's source semantics: a supplied series
+    // is authoritative (its eligible-window average); without one, the single monthly
+    // value counts only when creation is confirmed not seasonal.
     const seriesSupplied=Array.isArray(input.demand.monthly_pipeline_series);
-    const observedMonthly=seriesSupplied?(demandPool.future!==null&&number(eligible)&&eligible>0?demandPool.future/eligible:null):value(input.demand.monthly_qualified_pipeline_created_value);
+    const singleModels=!seriesSupplied&&input.demand.pipeline_creation_is_seasonal===false;
+    const observedMonthly=seriesSupplied?(demandPool.future!==null&&number(eligible)&&eligible>0?demandPool.future/eligible:null):singleModels?value(input.demand.monthly_qualified_pipeline_created_value):null;
     const observedOpps=value(input.demand.monthly_qualified_opps_created);
     const pipelineCreation=testCreationSufficiency({observed:observedMonthly,required:requiredMonthly,unbounded:creationUnbounded,policy});
     const opportunityCreation=testCreationSufficiency({observed:observedOpps,required:requiredOpps,unbounded:creationUnbounded,policy});
-    const creationField=seriesSupplied?'demand.monthly_pipeline_series':'demand.monthly_qualified_pipeline_created_value';
+    // Evidence that would establish creation: the series itself; the single value
+    // when creation is confirmed not seasonal; otherwise a series (or, when
+    // seasonality is unanswered, confirmation that creation is not seasonal).
+    const creationFields=seriesSupplied?['demand.monthly_pipeline_series']:singleModels?['demand.monthly_qualified_pipeline_created_value']:input.demand.pipeline_creation_is_seasonal===true?['demand.monthly_pipeline_series']:['demand.monthly_pipeline_series','demand.pipeline_creation_is_seasonal'];
     const requirementMissing=[];
     // Name only root causes not already reported elsewhere (contradictions and
     // weighted pipeline are clarifications; an invalid basis nulls the funnel).
@@ -159,7 +164,7 @@
       if(currentAlloc===null&&allocation.warnings.includes('unknown_pipeline_open_at_ae_start'))requirementMissing.push('demand.pipeline_likely_open_at_ae_start');
     }
     if(pipelineGap!==null&&pipelineGap>0&&!number(eligible))requirementMissing.push(number(input.economics.average_sales_cycle_days)?'economics.sales_cycle_definition':'economics.average_sales_cycle_days');
-    const pipelineCreationMissing=pipelineCreation.state!=='unknown'?[]:unique([...requirementMissing,...(observedMonthly===null?[creationField]:[])]);
+    const pipelineCreationMissing=pipelineCreation.state!=='unknown'?[]:unique([...requirementMissing,...(observedMonthly===null?creationFields:[])]);
     const opportunityCreationMissing=opportunityCreation.state!=='unknown'?[]:unique([...requirementMissing,...(requiredMonthly!==null&&requiredMonthly>0&&!(number(input.economics.average_acv)&&input.economics.average_acv>0)?['economics.average_acv']:[]),...(observedOpps===null?['demand.monthly_qualified_opps_created']:[])]);
     Object.assign(demand,{required_monthly_pipeline_creation:requiredMonthly,required_monthly_opps:requiredOpps,observed_monthly_pipeline_creation:observedMonthly,observed_monthly_opps_created:observedOpps,creation_window_start:demandPool.trace.horizon_start,creation_unbounded_reason:creationUnboundedReason,pipeline_creation_ratio:pipelineCreation.ratio,pipeline_creation_state:pipelineCreation.state,pipeline_creation_missing:pipelineCreationMissing,opportunity_creation_ratio:opportunityCreation.ratio,opportunity_creation_state:opportunityCreation.state,opportunity_creation_missing:opportunityCreationMissing,creation_cutoff_date:demandPool.creation_cutoff_date,allocation_uncertain:allocation.surplus===null||(teamDemandUnbounded&&teamRateInfo.source==='transferable_rate')});
     const repeatability=Decision.classifyRepeatability(input,winRate,policy,demand);
@@ -195,7 +200,7 @@
       if(!capNonBinding) {
         if(demandPool.current===null)blockerUnknowns.push('demand.current_qualified_pipeline_value');
         if(demandPool.creation_cutoff_date===null)blockerUnknowns.push(number(input.economics.average_sales_cycle_days)?'economics.sales_cycle_definition':'economics.average_sales_cycle_days');
-        else if(demandPool.future===null)blockerUnknowns.push(creationField);
+        else if(demandPool.future===null)blockerUnknowns.push(...creationFields);
       }
     }
     for(const field of ['direct_manager_exists','onboarding_owner_named','weekly_pipeline_review_capacity'])if(input.management[field]===null)blockerUnknowns.push('management.'+field);
@@ -235,6 +240,21 @@
     }
     context.details={funnel,demandPool,allocation};
     return context;
+  }
+  // Combines the two ramp interpretations' latest viable starts. Each branch carries
+  // latest_start_status: not_needed (timing already compatible), date, none (the
+  // search ran and no start works) or unknown (the search could not run). The single
+  // value is the latest start viable under BOTH interpretations: a branch with no
+  // viable start means there is no common start; an unknown branch means none can be
+  // established; a compatible branch does not constrain it.
+  function reconcileRampLatestStart(branches) {
+    const keys=['closed_bookings','pipeline_productivity'];
+    const statuses=keys.map(k=>branches[k].latest_start_status);
+    const starts=keys.filter((k,i)=>statuses[i]==='date').map(k=>branches[k].latest_viable_start).sort();
+    const out={latest_viable_start_by_ramp:Object.fromEntries(keys.map(k=>[k,branches[k].latest_viable_start??null])),latest_start_status_by_ramp:Object.fromEntries(keys.map((k,i)=>[k,statuses[i]])),latest_viable_start_range:starts.length===2?[starts[0],starts[1]]:null};
+    if(statuses.includes('none'))return {...out,latest_viable_start:null,latest_viable_start_reason:'no_common_viable_start_across_ramp_interpretations'};
+    if(statuses.includes('unknown'))return {...out,latest_viable_start:null,latest_viable_start_reason:'latest_start_unknown_for_a_ramp_interpretation'};
+    return {...out,latest_viable_start:starts.length?starts[0]:null,latest_viable_start_reason:null};
   }
   function runSensitivity(input,policy=DEFAULT_POLICY,baseContext=null) {
     const base=baseContext||analyze(input,policy),rows=[];
@@ -278,18 +298,6 @@
     const timestamp=options.calculation_timestamp??raw.calculation_timestamp??null;
     const suppliedPool=input.validation.fatal_errors.length?{value:null}:MathEngine.calculateDemandPool(input,frozenPolicy);
     if(number(suppliedPool.value)&&number(input.demand.allocatable_qualified_pipeline)&&input.demand.allocatable_qualified_pipeline>suppliedPool.value)input.validation.clarifications.push({code:'allocation_exceeds_pipeline_pool',fields:['demand.allocatable_qualified_pipeline'],message:'Declared allocation exceeds the cycle-eligible pipeline pool; reconcile allocation and source data.'});
-    // A monthly series and a single monthly creation value describe the same
-    // creation. When both are supplied they must agree on the eligible-window
-    // average; otherwise deleting the less favorable source would strengthen the
-    // result (§8.8). V1 has no materiality band: any difference beyond numerical
-    // equality is a conflict to reconcile, as is a series with unknown months in
-    // the window (it can neither confirm nor replace the single value).
-    const creationSeries=input.demand.monthly_pipeline_series,creationScalar=input.demand.monthly_qualified_pipeline_created_value;
-    if(Array.isArray(creationSeries)&&number(creationScalar)&&number(suppliedPool.eligible_creation_months)&&suppliedPool.eligible_creation_months>0) {
-      const seriesAverage=suppliedPool.future===null?null:suppliedPool.future/suppliedPool.eligible_creation_months;
-      const tolerance=frozenPolicy.validation.equalityTolerance*Math.max(Math.abs(creationScalar),Math.abs(seriesAverage??0));
-      if(seriesAverage===null||Math.abs(seriesAverage-creationScalar)>tolerance)input.validation.clarifications.push({code:'creation_source_conflict',fields:['demand.monthly_pipeline_series','demand.monthly_qualified_pipeline_created_value'],series_window_average:seriesAverage,single_monthly_value:creationScalar,message:seriesAverage===null?'The monthly pipeline series has unknown months inside the creation window, so it cannot confirm the single monthly creation value. Complete the series or remove one source.':'The monthly pipeline series averages a different amount over the creation window than the single monthly creation value. Reconcile the two before deciding.'});
-    }
     // Positive existing-team (or founder) bookings with a known zero conversion
     // measured for that team contradict each other. The engine models the
     // requirement as unbounded (surplus 0) and asks for the conflict to be resolved.
@@ -352,6 +360,8 @@
             } else for(let day=limit;day>=floor;day-=1)if(positiveBy(day)){last=day;break;}
           }
           ctx.timing.latest_viable_start=last===null?null:Input.iso(last);
+          ctx.timing.latest_start_searched=true;
+          ctx.timing.latest_viable_start_reason=last===null?'no_viable_start':null;
           ctx.timing.latest_start_criterion='positive modeled contribution by the required date; does not promise to close the full revenue gap';
           ctx.timing.latest_start_search_floor=Input.iso(floor);
         }
@@ -368,7 +378,11 @@
       // ramp_ambiguity is added alongside them, never in place of them.
       const closed=context,productivity=evaluate('pipeline_productivity');
       const rank=frozenPolicy.decisionRank,confidenceOrder=['insufficient','low','moderate','high'];
-      const summary=ctx=>({contribution:ctx.hireCapacity.value,decision:ctx.decision.state,primary_constraint:ctx.decision.primary_constraint,secondary_constraints:ctx.decision.secondary_constraints.slice(),confidence:ctx.decision.confidence,timing:ctx.timing.state,latest_viable_start:ctx.timing.latest_viable_start??null});
+      // A branch's null latest start means different things: a compatible branch
+      // needed no corrective date (not_needed); an incompatible branch whose search
+      // found nothing has no viable start (none); a search that could not run is unknown.
+      const startStatus=ctx=>ctx.timing.state==='compatible'?'not_needed':ctx.timing.latest_start_searched!==true?'unknown':ctx.timing.latest_viable_start===null?'none':'date';
+      const summary=ctx=>({contribution:ctx.hireCapacity.value,decision:ctx.decision.state,primary_constraint:ctx.decision.primary_constraint,secondary_constraints:ctx.decision.secondary_constraints.slice(),confidence:ctx.decision.confidence,timing:ctx.timing.state,latest_viable_start:ctx.timing.latest_viable_start??null,latest_start_status:startStatus(ctx)});
       branches={closed_bookings:summary(closed),pipeline_productivity:summary(productivity)};
       const governing=rank[productivity.decision.state]<rank[closed.decision.state]?productivity:closed,other=governing===closed?productivity:closed;
       const decision={...governing.decision};
@@ -386,15 +400,19 @@
       decision.ramp_branches=branches;
       context=governing;
       context.decision=decision;
-      const starts=[branches.closed_bookings.latest_viable_start,branches.pipeline_productivity.latest_viable_start].filter(v=>v!==null).sort();
-      context.timing.latest_viable_start_by_ramp={closed_bookings:branches.closed_bookings.latest_viable_start,pipeline_productivity:branches.pipeline_productivity.latest_viable_start};
-      context.timing.latest_viable_start_range=starts.length===2?[starts[0],starts[1]]:null;
-      // Conservative single value: the latest start viable under both interpretations.
-      if(starts.length)context.timing.latest_viable_start=starts[0];
+      Object.assign(context.timing,reconcileRampLatestStart(branches));
       context.ramp_governing_interpretation=governing===closed?'closed_bookings':'pipeline_productivity';
+      context.ramp_other_context=other;
     }
     const sensitivities=context.sensitivityRows,sensitivityReview=context.sensitivityReviewRows;
     const conditions=Decision.generateConditions(context,context.decision,frozenPolicy);
+    // When only the non-governing interpretation needs a timing correction, its
+    // timing condition is still reported, dated with the combined latest start.
+    const timingCodes=['late_start','sales_cycle_timing'];
+    if(unknownRamp&&context.decision.can_decide!==false&&context.ramp_other_context&&context.ramp_other_context.timing.state!=='compatible'&&!conditions.some(c=>timingCodes.includes(c.code))) {
+      const otherTiming=Decision.generateConditions(context.ramp_other_context,context.ramp_other_context.decision,frozenPolicy).find(c=>timingCodes.includes(c.code));
+      if(otherTiming)conditions.push({...otherTiming,required:context.timing.latest_viable_start,deadline:context.timing.latest_viable_start});
+    }
     if(unknownRamp)conditions.push({code:'ramp_ambiguity',current:branches,required:'Confirm whether ramp describes closed bookings or qualified pipeline productivity.',gap:null,deadline:input.proposed_ae.proposed_start_date,depends_on:['proposed_ae.ramp_definition'],evidence_required:['Company ramp definition'],retest_trigger:'Re-run when ramp meaning is confirmed.'});
     const {funnel,demandPool,allocation}=context.details;
     const assumptions=unique([...(context.winRate.assumptions||[]),...(context.existing.assumptions||[]),...(context.founder.assumptions||[]),...(context.hireCapacity.assumptions||[]),...(demandPool.assumptions||[]),...(allocation.assumptions||[])]);
@@ -404,10 +422,10 @@
     const lateStageField='repeatability.founder_required_late_stage',lateStageValue=input.repeatability.founder_required_late_stage;
     const evidenceGaps=context.evidenceGate.missing.map(field=>field===lateStageField?{field,severity:context.repeatability.state==='founder_dependent'?'informational':'decision_critical',required:lateStageValue==null?'Supply '+field:'Replace the unrecognized value with rarely, sometimes, often, almost_always or unknown.'}:{field,severity:'decision_critical',required:'Supply '+field});
     input.validation.clarifications.forEach(issue=>evidenceGaps.push({field:issue.fields.join(', '),severity:'decision_critical',required:issue.message}));
-    const formulas={target:'supplied target',existing_capacity:'sum(seller quota / 12 × active month fractions × supplied attainment)',nominal_existing_capacity:'sum(seller quota / 12 × active month fractions)',existing_finance_plan:'supplied finance plan; retained separately',founder_contribution:'separate founder commitment only if remaining seller and not in current team',residual_gap_raw:'target - existing_capacity - founder_contribution',residual_gap:'max(0, residual_gap_raw)',proposed_ae_contribution:'sum(quota / 12 × ramp factor × eligible month fraction)',months_available:'sum(day fractions of active months inside horizon)',gap_coverage:'proposed_ae_contribution / residual_gap when gap > 0',seat_utilization_against_gap:'min(residual_gap / proposed_ae_contribution, 1)',wins_required:'proposed_ae_contribution / average_acv',practical_wins_required:'ceil(wins_required)',qualified_opps_required:'wins_required / transferable_win_rate',qualified_pipeline_required:'proposed_ae_contribution / transferable_win_rate; unbounded at zero rate',meetings_required:'qualified_opps_required / meeting_to_qualified_opp_pct',pipeline_pool:'eligible current pipeline + future pipeline that can close inside horizon',existing_pipeline_required:'existing_capacity / existing_team_win_rate',existing_team_conversion_rate:'supplied existing-team rate, else all-seller counts or supplied rate, else the transferable rate (a supplied 0 stays 0)',existing_pipeline_requirement_status:'unbounded when existing-team conversion is 0 and existing or founder bookings are positive (surplus is then 0); unknown when not calculable',founder_pipeline_required:'separate founder_contribution / existing_team_win_rate',theoretical_pipeline_surplus:'max(0, pipeline_pool - existing_pipeline_required - founder_pipeline_required)',allocatable_pipeline:'minimum supported explicit allocation measures and surplus cap',allocatable_current_pipeline:'minimum(explicit current allocation, current pool × explicit share, pipeline likely open at AE start) when every claim + current existing-team reservation <= current cycle-eligible pool (a positive explicit claim also needs a known reservation unless the existing team has no pipeline demand or the claim fits within an explicit share of the current pool); 0 for a zero claim; capped by allocatable_pipeline; otherwise unknown (never future creation; a positive claim without pipeline_likely_open_at_ae_start is unknown)',demand_coverage:'allocatable_pipeline / qualified_pipeline_required',eligible_creation_months:'sum(month fractions whose qualified pipeline can close by horizon end)',required_monthly_pipeline_creation:'max(0, qualified_pipeline_required - allocatable_current_pipeline) / eligible_creation_months; null when unknown or unbounded (no eligible creation month)',required_monthly_opps:'required_monthly_pipeline_creation / average_acv',observed_monthly_pipeline_creation:'supplied monthly qualified pipeline creation; with a supplied monthly series, the series creation inside the eligible window / eligible_creation_months',pipeline_creation_ratio:'observed_monthly_pipeline_creation / required_monthly_pipeline_creation; null when the requirement is zero, unknown or unbounded',monthly_pipeline_creation_gap:'max(0, required_monthly_pipeline_creation - observed_monthly_pipeline_creation)',opportunity_creation_ratio:'observed monthly qualified opportunities created / required_monthly_opps; null when the requirement is zero, unknown or unbounded',monthly_opportunity_creation_gap:'max(0, required_monthly_opps - observed monthly qualified opportunities created)',ote:'base_salary + variable_comp_target',loaded_cost:'ote + supplied other_loaded_cost_estimate',gross_profit_from_modeled_bookings:'proposed_ae_contribution × gross_margin_pct',gross_profit_to_loaded_cost:'gross_profit_from_modeled_bookings / loaded_cost'};
+    const formulas={target:'supplied target',existing_capacity:'sum(seller quota / 12 × active month fractions × supplied attainment)',nominal_existing_capacity:'sum(seller quota / 12 × active month fractions)',existing_finance_plan:'supplied finance plan; retained separately',founder_contribution:'separate founder commitment only if remaining seller and not in current team',residual_gap_raw:'target - existing_capacity - founder_contribution',residual_gap:'max(0, residual_gap_raw)',proposed_ae_contribution:'sum(quota / 12 × ramp factor × eligible month fraction)',months_available:'sum(day fractions of active months inside horizon)',gap_coverage:'proposed_ae_contribution / residual_gap when gap > 0',seat_utilization_against_gap:'min(residual_gap / proposed_ae_contribution, 1)',wins_required:'proposed_ae_contribution / average_acv',practical_wins_required:'ceil(wins_required)',qualified_opps_required:'wins_required / transferable_win_rate',qualified_pipeline_required:'proposed_ae_contribution / transferable_win_rate; unbounded at zero rate',meetings_required:'qualified_opps_required / meeting_to_qualified_opp_pct',pipeline_pool:'eligible current pipeline + future pipeline that can close inside horizon',existing_pipeline_required:'existing_capacity / existing_team_win_rate',existing_team_conversion_rate:'supplied existing-team rate, else all-seller counts or supplied rate, else the transferable rate (a supplied 0 stays 0)',existing_pipeline_requirement_status:'unbounded when existing-team conversion is 0 and existing or founder bookings are positive (surplus is then 0); unknown when not calculable',founder_pipeline_required:'separate founder_contribution / existing_team_win_rate',theoretical_pipeline_surplus:'max(0, pipeline_pool - existing_pipeline_required - founder_pipeline_required)',allocatable_pipeline:'minimum supported explicit allocation measures and surplus cap',allocatable_current_pipeline:'minimum(explicit current allocation, current pool × explicit share, pipeline likely open at AE start) when every claim + current existing-team reservation <= current cycle-eligible pool (a positive explicit claim also needs a known reservation unless the existing team has no pipeline demand or the claim fits within an explicit share of the current pool); 0 for a zero claim; capped by allocatable_pipeline; otherwise unknown (never future creation; a positive claim without pipeline_likely_open_at_ae_start is unknown)',demand_coverage:'allocatable_pipeline / qualified_pipeline_required',eligible_creation_months:'sum(month fractions whose qualified pipeline can close by horizon end)',required_monthly_pipeline_creation:'max(0, qualified_pipeline_required - allocatable_current_pipeline) / eligible_creation_months; null when unknown or unbounded (no eligible creation month)',required_monthly_opps:'required_monthly_pipeline_creation / average_acv',observed_monthly_pipeline_creation:'with a supplied monthly series (authoritative), the series creation inside the eligible window / eligible_creation_months; otherwise the single monthly value only when pipeline_creation_is_seasonal is false; else unknown (the single value is then reference or illustrative only)',pipeline_creation_ratio:'observed_monthly_pipeline_creation / required_monthly_pipeline_creation; null when the requirement is zero, unknown or unbounded',monthly_pipeline_creation_gap:'max(0, required_monthly_pipeline_creation - observed_monthly_pipeline_creation)',opportunity_creation_ratio:'observed monthly qualified opportunities created / required_monthly_opps; null when the requirement is zero, unknown or unbounded',monthly_opportunity_creation_gap:'max(0, required_monthly_opps - observed monthly qualified opportunities created)',ote:'base_salary + variable_comp_target',loaded_cost:'ote + supplied other_loaded_cost_estimate',gross_profit_from_modeled_bookings:'proposed_ae_contribution × gross_margin_pct',gross_profit_to_loaded_cost:'gross_profit_from_modeled_bookings / loaded_cost'};
     Object.entries(context.calculations).forEach(([key,val])=>{audit.formulas[key]={formula:formulas[key],value:val,inputs:'audit.input_snapshot',policy:'audit.policy_snapshot'};});
     audit.math={conversion:context.winRate.trace,existing:context.existing.trace,hire:context.hireCapacity.trace,funnel:funnel.trace,demand:demandPool.trace,allocation:allocation.trace};
     return freeze({...metadata,status:'complete',decision:context.decision,tests:{economic_need:context.economic,demand_sufficiency:context.demand,repeatability:context.repeatability,timing_management:{state:context.timing.state,timing:context.timing,management:context.management}},calculations:context.calculations,conversion:context.winRate,confidence:context.confidence,calculation_statuses:funnel.statuses,ramp_interpretations:branches,contribution_range:branches&&branches.closed_bookings.contribution!==null&&branches.pipeline_productivity.contribution!==null?[Math.min(branches.closed_bookings.contribution,branches.pipeline_productivity.contribution),Math.max(branches.closed_bookings.contribution,branches.pipeline_productivity.contribution)]:null,sensitivity:sensitivities,sensitivity_review:sensitivityReview,enhanced_review_required:sensitivityReview.some(row=>row.decision_changed)||unknownRamp||context.winRate.scenario_only||input.validation.clarifications.length>0,sensitivity_ranking:[...sensitivities].filter(s=>s.change!==0&&s.status==='calculated').sort((a,b)=>Number(b.decision_changed)-Number(a.decision_changed)||(b.absolute_change||0)-(a.absolute_change||0)),conditions,evidence_gaps:evidenceGaps,assumptions,warnings,validation:input.validation,audit});
   }
-  return {engine_version:ENGINE_VERSION,normalizeInput:Input.normalizeInput,validateInput:Input.validateInput,selectTransferableWinRate,calculateNonDuplicatedFounderContribution,...MathEngine,...Decision,testEconomicNeed,testDemandSufficiency,testCreationSufficiency,testTiming,runSensitivity,underwrite};
+  return {engine_version:ENGINE_VERSION,normalizeInput:Input.normalizeInput,validateInput:Input.validateInput,selectTransferableWinRate,calculateNonDuplicatedFounderContribution,...MathEngine,...Decision,testEconomicNeed,testDemandSufficiency,testCreationSufficiency,testTiming,reconcileRampLatestStart,runSensitivity,underwrite};
 });
