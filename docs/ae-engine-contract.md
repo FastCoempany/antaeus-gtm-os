@@ -14,11 +14,11 @@ No installation or added test framework is required. Node runs four suites: form
 
 | Suite | 1.0.0 (PR #315) | 1.1.0 |
 | --- | ---: | ---: |
-| `tests/ae-underwriting-engine.test.js` | 26 | 76 |
-| `tests/ae-validation.test.js` | 67 | 81 |
+| `tests/ae-underwriting-engine.test.js` | 26 | 92 |
+| `tests/ae-validation.test.js` | 67 | 97 |
 | `tests/ae-golden-cases.js` | 24 | 24 |
 | `tests/ae-invariants.test.js` | 65 | 87 |
-| Total | 182 | 268 |
+| Total | 182 | 300 |
 
 ## Entry point
 
@@ -54,7 +54,8 @@ Additional explicit fields needed to make the written semantics executable:
 | `demand.current_qualified_pipeline_in_horizon` | Current pipeline expected to close in the horizon. |
 | `demand.allocatable_qualified_pipeline` | Declared allocation to the proposed seller over the contribution horizon. |
 | `demand.allocatable_current_qualified_pipeline` | Explicit allocation to the proposed seller of pipeline that exists today (inside the current cycle-eligible pool), used for monthly creation requirements. `allocatable_current_pipeline` is an alias. Never derived from horizon-wide allocation or surplus. |
-| `demand.current_pipeline_reserved_for_existing_team` | Optional (1.1.0). Pipeline inside the current cycle-eligible pool that current sellers and a separately selling founder already own or need. Nonnegative currency or explicit unknown. When supplied, every current claim for the new seller plus this reservation must fit the current pool. It does not change horizon allocation, whose existing-team demand is already netted through the surplus cap. |
+| `demand.current_pipeline_reserved_for_existing_team` | Optional (1.1.0). Pipeline inside the current cycle-eligible pool that current sellers and a separately selling founder already own or need. Nonnegative currency or explicit unknown. Every current claim for the new seller plus this reservation must fit the current pool. A positive explicit current allocation is admitted only when this reservation is known, or when the existing team and founder have no pipeline demand. It does not change horizon allocation, whose existing-team demand is already netted through the surplus cap. |
+| `demand.current_qualified_pipeline_in_horizon` | Type-checked from 1.1.0 (numbers or explicit unknown only) and must not exceed `current_qualified_pipeline_value`. |
 | `decision.evaluating_first_professional_ae` | Distinguishes a first hire from a company that currently has no sellers after prior AE employment. |
 | `repeatability.founder_can_articulate_path` | Explicit buyer/problem/trigger/close-path evidence required by §4A. |
 | `current_team.founder_expected_to_remain_seller` | Positive founder commitments count only when continued selling is explicit. |
@@ -120,11 +121,14 @@ Now, before any decision call, the demand test carries:
 | `observed_monthly_pipeline_creation` | The supplied monthly value. When a `monthly_pipeline_series` is supplied, the series' creation inside the eligible window divided by `eligible_creation_months`, because a supplied series takes precedence over a single monthly value everywhere in the engine (§3.3 P). |
 | `pipeline_creation_ratio` | `observed_monthly_pipeline_creation / required_monthly_pipeline_creation`. |
 | `opportunity_creation_ratio` | `demand.monthly_qualified_opps_created / required_monthly_opps`. |
-| `pipeline_creation_state`, `opportunity_creation_state` | `sufficient` (ratio ≥ `policy.demand.sufficientThreshold`), `short`, `not_required` (requirement 0), `unknown`, or `unbounded` (positive remaining requirement with zero eligible creation months, or a zero-conversion unbounded pipeline requirement). |
+| `pipeline_creation_state`, `opportunity_creation_state` | `sufficient` (ratio ≥ `policy.demand.sufficientThreshold`), `short`, `not_required` (requirement 0), `unknown`, or `unbounded`. |
+| `creation_unbounded_reason` | `zero_conversion` (observed conversion is 0, so no creation rate suffices) or `no_eligible_creation_month` (a positive remaining requirement but no month whose pipeline can close inside the horizon). |
+| `creation_window_start` | Start of the eligible creation window (the horizon start). Creation conditions are dated here: the required rate is an average over the window, so it must hold from its start. |
+| `pipeline_creation_missing`, `opportunity_creation_missing` | The specific inputs that would establish an `unknown` creation test (for example the current allocation, the reservation, the qualified cycle definition, ACV or the observed rate). They also appear in `evidence_gaps`. |
 
 Both ratios are also in `calculations`, with `observed_monthly_pipeline_creation` and `monthly_opportunity_creation_gap`, and every one has a formula trace. A supplied zero creation rate is a known zero ratio. A zero requirement produces a `null` ratio with state `not_required`; it never becomes `Infinity`.
 
-Decision rules: a `short` ratio adds a material `pipeline_creation` / `opportunity_creation` constraint with its normalized shortfall. `unknown` and `unbounded` add the same material constraint (shortfall 1 for unbounded, null for unknown) and name the missing evidence. Without that, removing adverse creation evidence would make the recommendation more aggressive than keeping it (§8.8). These constraints are material, never hard: creation shortfalls make a seat conditional; a horizon pipeline shortfall remains the hard demand failure.
+Decision rules: a `short` ratio adds a material `pipeline_creation` / `opportunity_creation` constraint with its normalized shortfall. `unknown` and `unbounded` add the same material constraint (shortfall 1 for unbounded, null for unknown) and name the missing evidence. Without that, removing adverse creation evidence would make the recommendation more aggressive than keeping it (§8.8). These constraints are material, never hard: creation shortfalls make a seat conditional; a horizon pipeline shortfall remains the hard demand failure. An `unknown` creation test also adds the low-confidence reason `creation_sufficiency_unknown` (§5.12: uncertain allocatable pipeline). Otherwise the unknown test would pin the decision at conditional, hide modest-sensitivity flips, and let a deletion raise confidence (§14.7). A decision flip in the `pipeline_creation` sensitivity scenario is coded `pipeline_creation`, not `pipeline_supply`. The remaining pipeline gap treats differences within `policy.validation.equalityTolerance` (relative, numerical equality only) as zero, so summation rounding never creates a fractional-cent creation requirement.
 
 Evidence gate (1.1.0): when the demand pool is unknown because current pipeline, the qualified cycle or creation evidence is missing, the existing-team surplus cap disappears. If the known part of the pool cannot prove that cap non-binding (allocation ≤ known pool − existing-team demand, and ≤ known pool × any explicit share), the missing pool input is outcome-determinative and fails the gate. Before 1.1.0, deleting monthly creation, the cycle or the current pipeline value from a surplus-capped `not_yet_supported` case returned `conditional`. When the known pool already proves the cap non-binding, the gate still passes and the case stays conditional with the evidence gap listed.
 
@@ -141,19 +145,36 @@ Evidence gate (1.1.0): when the demand pool is unknown because current pipeline,
 | `almost_always` | `dependent` | `founder_dependent`. |
 | unknown or any unlisted value | `unknown` | Cannot be `demonstrated`; evidence-gate blocker and evidence gap. |
 
-The class is returned as `tests.repeatability.founder_late_stage_class`. Decision code reads only the policy lists; a policy without the mapping throws a `TypeError` rather than guessing. The first-AE branch (§4A) is unchanged and does not consult this mapping.
+The class is returned as `tests.repeatability.founder_late_stage_class`. Decision code reads only the policy lists; a policy without the mapping throws a `TypeError` rather than guessing. An unrecognized supplied value (not `rarely`, `sometimes`, `often`, `almost_always` or unknown) raises the clarification `unrecognized_founder_late_stage`. A missing value blocks the evidence gate only when it could decide the case. If founder dependence is already established by other evidence (100% founder-primary share, or zero non-founder wins with company wins), the case stays `not_yet_supported` with the gap listed. A gate that fails only on repeatability evidence reports `transferability` as its primary constraint. The first-AE branch (§4A) is unchanged and does not consult this mapping.
 
 ### 3. Current supply cannot borrow from future pipeline
 
 Before 1.1.0, `allocatable_current_qualified_pipeline` was capped only by the horizon-wide allocation, which can include future creation. A $1.5M current claim on a $1.0M current pool survived whenever the horizon allocation was larger, understating the monthly creation requirement.
 
-Now the current pool is `demand.current_qualified_pipeline_in_horizon` (falling back to `current_qualified_pipeline_value`, the same pool the demand math uses). Current claims are the explicit current allocation and, when a share is supplied, `current pool × new_ae_pipeline_share_pct`. Current allocation is the smallest claim only when the largest claim plus `current_pipeline_reserved_for_existing_team` (0 when unknown) fits the current pool. Otherwise ownership is not established: current allocation is `null`, the warning `current_allocation_exceeds_current_pool` is recorded, and validation raises the clarification of the same code (so no decision is reached until reconciled). A zero claim needs no pool evidence. A positive claim against an unknown pool is `null`. No claim at all is `null` (`unknown_current_pipeline_allocation`). Current allocation remains capped by the seller's total allocation. Comparisons tolerate floating-point rounding only, not any business tolerance.
+Now the current pool is `demand.current_qualified_pipeline_in_horizon` (falling back to `current_qualified_pipeline_value`, the same pool the demand math uses). Current claims are the explicit current allocation and, when a share is supplied, `current pool × new_ae_pipeline_share_pct`.
+
+Current allocation is the smallest claim only when two conditions hold. First, the largest claim plus `current_pipeline_reserved_for_existing_team` fits the current pool. An unknown reservation is used here only at its lower bound, zero, to detect a contradiction. Second, a positive explicit dollar claim has a known reservation, unless the existing team and founder have no pipeline demand. A dollar claim says nothing about what current sellers already hold, while an explicit share is itself a split of the pool.
+
+When ownership is not established, current allocation is `null` with a specific warning:
+
+- `current_allocation_exceeds_current_pool`: validation also raises the clarification of the same code, so no decision is reached until reconciled.
+- `unknown_current_reservation`.
+- `unknown_current_pipeline_pool`: a positive claim, or a share, against an unknown pool. A zero claim needs no pool evidence.
+- `unknown_current_pipeline_allocation`: no claim at all.
+
+Current allocation remains capped by the seller's total allocation. Current-pool comparisons tolerate floating-point rounding only, not any business tolerance.
 
 ### 4. Latest viable start can precede the horizon
 
 Before 1.1.0 the binary search started at `target_period_start`, so a pipeline-productivity seat whose pipeline must be generated before the horizon (Jan 1 horizon, Feb 1 deadline, 94-day cycle) returned `null`.
 
-The search domain now runs from `target_period_start − lag − (rampSpan + 1) × 31 days` to `min(revenue_needed_by_date, target_period_end)`, where `lag` is the ceiling of the qualified cycle for pipeline-productivity ramps (0 for closed bookings, which receive no second delay) and `rampSpan` is the largest of `policy.validation.rampMax`, the supplied ramp months and the supplied schedule length. The extra month covers hire-date anniversary rounding. If any start yields positive modeled contribution, the latest one lies inside this domain. The criterion is unchanged and stored with the date.
+The search domain now runs from a floor to the deadline `min(revenue_needed_by_date, target_period_end)`. The floor is `target_period_start − lag − (firstPositiveMonth + 1) × 31 days`, clamped to `0001-01-01`. `lag` is the ceiling of the qualified cycle for pipeline-productivity ramps; it is 0 for closed bookings, which receive no second delay. `firstPositiveMonth` is the first ramp month with a positive factor: 0 for a linear ramp, otherwise the index in the supplied schedule.
+
+Why the floor is safe: a start whose first positive month falls on the last eligible generation day (deadline − lag) is always viable. So the latest viable start, if one exists, lies inside the domain; the extra month covers hire-date anniversary rounding.
+
+Search method: binary search is used only where "positive by the deadline" is monotone in the start date, which holds for a linear ramp or a nondecreasing schedule ending at 1. Any other supplied schedule is scanned day by day from the deadline down, so the result is always the true latest start.
+
+The criterion is unchanged and stored with the date. The domain floor is returned as `latest_start_search_floor`. A start after the horizon now produces a condition coded `late_start` (previously always `sales_cycle_timing`).
 
 ### Spec interpretations made explicit
 
