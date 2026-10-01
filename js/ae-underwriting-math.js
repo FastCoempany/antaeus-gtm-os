@@ -314,7 +314,10 @@
     var out = result(null, { surplus: null, measures: [], current_allocatable: null });
     out.trace = { formula: 'minimum(supported explicit allocation, pool * explicit share, supported theoretical surplus)', pool: pool, existing_team_requirement: existing };
     if (demand.pipeline_value_type !== 'unweighted') { out.warnings.push('unweighted_pipeline_required'); return out; }
-    out.surplus = pool === null || existing === null ? null : Math.max(0, pool - existing);
+    // An unbounded existing-team requirement (known zero team conversion with
+    // positive team bookings) consumes all supply: the surplus cap is 0.
+    out.surplus = args.existingDemandUnbounded === true ? 0 : pool === null || existing === null ? null : Math.max(0, pool - existing);
+    out.trace.existing_team_requirement_unbounded = args.existingDemandUnbounded === true;
     var declared = nonnegative(demand.allocatable_qualified_pipeline);
     var share = number(demand.new_ae_pipeline_share_pct);
     if (share !== null && (share < 0 || share > 1)) share = null;
@@ -366,6 +369,24 @@
     } else {
       out.current_allocatable = claimed;
     }
+    // Inherited pipeline must still be open when the seller starts: a deal that
+    // closes before the start date cannot be handed over. Current supply is
+    // therefore bounded by pipeline_likely_open_at_ae_start. Without that answer
+    // survival to the start date is not established, so a positive claim stays
+    // unknown rather than assuming every current deal is still open (a known
+    // zero claim needs no survival evidence).
+    var openAtStart = nonnegative(demand.pipeline_likely_open_at_ae_start);
+    out.trace.current_claim_before_start_survival = out.current_allocatable;
+    if (out.current_allocatable !== null && out.current_allocatable > 0) {
+      if (openAtStart === null) {
+        out.current_allocatable = null;
+        out.warnings.push('unknown_pipeline_open_at_ae_start');
+      } else if (openAtStart < out.current_allocatable) {
+        out.current_allocatable = openAtStart;
+        out.warnings.push('current_allocation_limited_by_pipeline_open_at_ae_start');
+      }
+    }
+    out.trace.pipeline_open_at_ae_start = openAtStart;
     // A seller's current allocation also cannot exceed its own total allocation.
     if (out.current_allocatable !== null && out.value !== null) out.current_allocatable = Math.min(out.current_allocatable, out.value);
     if (declared !== null && pool !== null && declared > pool) out.warnings.push('allocation_exceeds_pipeline_pool');
@@ -377,7 +398,7 @@
     out.trace.current_reserved_for_existing_team = reserved;
     out.trace.current_available_to_new_ae = available;
     out.trace.current_claims = currentClaims;
-    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand, or fits within the explicit share of the current pool); capped by total allocation';
+    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share, pipeline likely open at AE start) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand, or fits within the explicit share of the current pool); a positive claim with unknown pipeline open at AE start is unknown; capped by total allocation';
     return out;
   }
 

@@ -601,15 +601,288 @@ function bruteLatest(input,limit,mode) {
 }
 for(const [name,overrides,limit,mode] of [
   ['schedule not ending at 1',{proposed_ae:{monthly_ramp_schedule:[0.25,0.5,0.75],proposed_start_date:'2028-01-01'},timing:{revenue_needed_by_date:'2027-02-15'}},'2027-02-15','closed_bookings'],
-  ['non-monotone schedule',{proposed_ae:{monthly_ramp_schedule:[1,0,0,0,0.25,1],proposed_start_date:'2028-01-01'},timing:{revenue_needed_by_date:'2027-03-16'}},'2027-03-16','closed_bookings'],
-  ['non-monotone schedule with a gap',{proposed_ae:{monthly_ramp_schedule:[0.5,0,0,0,0,0,1],proposed_start_date:'2027-03-01'},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','closed_bookings'],
-  ['non-monotone pipeline-productivity schedule',{proposed_ae:{ramp_definition:'pipeline_productivity',monthly_ramp_schedule:[0.5,0,0.2,1]},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','pipeline_productivity']
+  ['zero-led nondecreasing schedule',{proposed_ae:{monthly_ramp_schedule:[0,0,0,0.25,1],proposed_start_date:'2028-01-01'},timing:{revenue_needed_by_date:'2027-03-16'}},'2027-03-16','closed_bookings'],
+  ['schedule with flat steps',{proposed_ae:{monthly_ramp_schedule:[0,0.5,0.5,0.5,1],proposed_start_date:'2027-03-01'},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','closed_bookings'],
+  ['zero-led pipeline-productivity schedule',{proposed_ae:{ramp_definition:'pipeline_productivity',monthly_ramp_schedule:[0,0.2,0.2,1]},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','pipeline_productivity']
 ]) test('review: latest viable start matches brute force for a '+name,()=>{
   const input=makeCase(overrides);
   const t=timingOf(engine.underwrite(input));
   assert.notEqual(t.state,'compatible');
   assert.equal(t.latest_viable_start,bruteLatest(input,limit,mode));
   assert.notEqual(t.latest_viable_start,null);
+});
+
+// ---------------------------------------------------------------------------
+// Second hardening pass (PR #316 second adversarial audit, engine 1.2.0).
+const EARLY_CLOSE={timing:{first_revenue_expected_by_company:'2027-04-15'},demand:{current_pipeline_reserved_for_existing_team:1500000}};
+const CURRENT_VARIANTS={
+  'canonical null':{demand:{allocatable_current_qualified_pipeline:null}},
+  'alias null':{demand:{allocatable_current_qualified_pipeline:null,allocatable_current_pipeline:null}},
+  'canonical 0':{demand:{allocatable_current_qualified_pipeline:0}},
+  'alias 0':{demand:{allocatable_current_qualified_pipeline:null,allocatable_current_pipeline:0}},
+  'positive canonical':{demand:{allocatable_current_qualified_pipeline:1500000}},
+  'positive alias':{demand:{allocatable_current_qualified_pipeline:null,allocatable_current_pipeline:1500000}}
+};
+const summary=r=>({state:r.decision.state,primary:r.decision.primary_constraint,secondary:r.decision.secondary_constraints,confidence:r.decision.confidence,timing:r.tests.timing_management.timing.state,reason:r.tests.timing_management.timing.reason,current:r.calculations.allocatable_current_pipeline});
+test('A1: alias and canonical current allocation produce identical timing and decisions',()=>{
+  const out=Object.fromEntries(Object.entries(CURRENT_VARIANTS).map(([k,v])=>[k,summary(engine.underwrite(strong(EARLY_CLOSE,v)))]));
+  assert.deepEqual(out['alias null'],out['canonical null']);
+  assert.deepEqual(out['alias 0'],out['canonical 0']);
+  assert.deepEqual(out['positive alias'],out['positive canonical']);
+});
+test('A1: a supplied zero current allocation inherits nothing and keeps the first-close plausibility check',()=>{
+  for(const name of ['canonical 0','alias 0','canonical null','alias null']) {
+    const t=engine.underwrite(strong(EARLY_CLOSE,CURRENT_VARIANTS[name])).tests.timing_management.timing;
+    assert.equal(t.state,'tight',name);assert.equal(t.reason,'first_close_plausibility',name);
+  }
+  const zero=engine.underwrite(strong(EARLY_CLOSE,CURRENT_VARIANTS['alias 0']));
+  assert.notEqual(zero.decision.state,'supported');assert.equal(zero.calculations.allocatable_current_pipeline,0);
+});
+test('A1: only an established positive current allocation lifts the first-close plausibility check',()=>{
+  for(const name of ['positive canonical','positive alias']) {
+    const r=engine.underwrite(strong(EARLY_CLOSE,CURRENT_VARIANTS[name]));
+    assert.equal(r.calculations.allocatable_current_pipeline,1500000,name);assert.equal(r.tests.timing_management.timing.reason,null,name);
+  }
+  // A positive claim that is not established (no pipeline open at start) inherits nothing.
+  const unproven=engine.underwrite(strong(EARLY_CLOSE,CURRENT_VARIANTS['positive alias'],{demand:{pipeline_likely_open_at_ae_start:null}}));
+  assert.equal(unproven.calculations.allocatable_current_pipeline,null);
+  assert.equal(unproven.tests.timing_management.timing.reason,'first_close_plausibility');
+});
+test('A1: timing reads the calculated allocation, never the raw alias field',()=>{
+  const input=engine.normalizeInput(strong(EARLY_CLOSE,CURRENT_VARIANTS['alias 0']));
+  const hire=engine.calculateHireContribution(input,12/57,policy);
+  assert.equal(engine.testTiming(input,hire,policy,0).reason,'first_close_plausibility');
+  assert.equal(engine.testTiming(input,hire,policy,null).reason,'first_close_plausibility');
+  assert.equal(engine.testTiming(input,hire,policy,1500000).reason,null);
+});
+const SURVIVAL=likely=>strong({demand:{current_qualified_pipeline_in_horizon:3000000,current_qualified_pipeline_value:3000000,pipeline_likely_open_at_ae_start:likely,allocatable_current_qualified_pipeline:2000000,current_pipeline_reserved_for_existing_team:1000000,allocatable_qualified_pipeline:4000000}});
+test('A3: current supply is bounded by pipeline still open at the AE start ($3M / $1M / $2M / $4M)',()=>{
+  const r=engine.underwrite(SURVIVAL(1000000));
+  assert.equal(r.calculations.allocatable_current_pipeline,1000000);
+  assert.notEqual(r.calculations.allocatable_current_pipeline,2000000);
+  assert.equal(r.calculations.allocatable_pipeline,4000000);
+  assert.ok(r.warnings.includes('current_allocation_limited_by_pipeline_open_at_ae_start'));
+  assert.equal(r.audit.math.allocation.pipeline_open_at_ae_start,1000000);
+  assert.equal(r.audit.math.allocation.current_claim_before_start_survival,2000000);
+});
+test('A3: less pipeline surviving to start raises monthly creation while horizon coverage is unchanged',()=>{
+  const ample=engine.underwrite(SURVIVAL(3000000)),thin=engine.underwrite(SURVIVAL(1000000));
+  assert.equal(ample.calculations.allocatable_current_pipeline,2000000);
+  assert.equal(thin.calculations.demand_coverage,ample.calculations.demand_coverage);
+  assert.equal(thin.calculations.allocatable_pipeline,ample.calculations.allocatable_pipeline);
+  assert.ok(thin.calculations.required_monthly_pipeline_creation>ample.calculations.required_monthly_pipeline_creation);
+  close(thin.calculations.required_monthly_pipeline_creation-ample.calculations.required_monthly_pipeline_creation,1000000/thin.calculations.eligible_creation_months);
+});
+test('A3: unknown pipeline open at start never assumes every current deal survives',()=>{
+  const r=engine.underwrite(SURVIVAL(null));
+  assert.equal(r.calculations.allocatable_current_pipeline,null);
+  assert.equal(r.tests.demand_sufficiency.pipeline_creation_state,'unknown');
+  assert.ok(r.tests.demand_sufficiency.pipeline_creation_missing.includes('demand.pipeline_likely_open_at_ae_start'));
+  assert.ok(r.evidence_gaps.some(g=>g.field==='demand.pipeline_likely_open_at_ae_start'));
+  assert.ok(rank[r.decision.state]<=rank[engine.underwrite(SURVIVAL(3000000)).decision.state]);
+  // A known zero claim needs no survival evidence.
+  assert.equal(engine.underwrite(strong({demand:{pipeline_likely_open_at_ae_start:null,allocatable_current_qualified_pipeline:0}})).calculations.allocatable_current_pipeline,0);
+});
+test('A3: pipeline open at start larger than the claim leaves the claim unchanged',()=>{
+  for(const likely of [2000000,2500000,3000000])assert.equal(engine.underwrite(SURVIVAL(likely)).calculations.allocatable_current_pipeline,2000000);
+});
+// A5: monthly series vs single monthly creation value.
+const FLAT=n=>Array(12).fill(n);
+const windowAverage=series=>engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:null}})).calculations.observed_monthly_pipeline_creation;
+const SEASONAL=[200000,220000,240000,300000,350000,400000,450000,500000,550000,900000,1100000,1300000];
+test('A5: agreeing series and single value raise no conflict and use the series',()=>{
+  for(const series of [FLAT(1000000),SEASONAL]) {
+    const average=windowAverage(series);
+    const r=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:series===SEASONAL,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:average}}));
+    assert.ok(!r.validation.clarifications.some(c=>c.code==='creation_source_conflict'));
+    assert.equal(r.calculations.observed_monthly_pipeline_creation,average);
+    assert.equal(r.audit.math.demand.future.length,r.audit.math.demand.future.filter(m=>m.series_index!==undefined).length);
+  }
+});
+test('A5: a materially different series and single value require clarification and no definitive decision',()=>{
+  for(const [name,series,scalar] of [['adverse series, favorable single value',FLAT(300000),1000000],['favorable series, adverse single value',FLAT(1300000),300000],['seasonal series, flat single value',SEASONAL,650000]]) {
+    const r=engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:scalar}}));
+    const conflict=r.validation.clarifications.find(c=>c.code==='creation_source_conflict');
+    assert.ok(conflict,name);assert.equal(conflict.single_monthly_value,scalar);
+    assert.equal(r.decision.state,'insufficient_evidence',name);assert.equal(r.decision.primary_constraint,'data_conflict',name);
+    assert.ok(r.evidence_gaps.some(g=>g.field.includes('demand.monthly_pipeline_series')),name);
+  }
+});
+test('A5: a series with unknown months in the window cannot be reconciled with a single value',()=>{
+  const series=FLAT(1000000);series[4]=null;
+  const r=engine.underwrite(strong({demand:{monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:1000000}}));
+  const conflict=r.validation.clarifications.find(c=>c.code==='creation_source_conflict');
+  assert.ok(conflict);assert.equal(conflict.series_window_average,null);assert.equal(r.decision.state,'insufficient_evidence');
+});
+test('A5: deleting either source of an agreeing pair cannot strengthen the decision (seasonal and nonseasonal)',()=>{
+  for(const [series,seasonal] of [[FLAT(1000000),false],[FLAT(500000),false],[SEASONAL,true]]) {
+    const average=windowAverage(series);
+    const both=strong(DEEP_POOL,{demand:{pipeline_creation_is_seasonal:seasonal,monthly_pipeline_series:series,monthly_qualified_pipeline_created_value:average}});
+    const before=engine.underwrite(both);
+    assert.equal(before.validation.clarifications.length,0);
+    for(const drop of ['monthly_pipeline_series','monthly_qualified_pipeline_created_value']) {
+      const input=structuredClone(both);input.demand[drop]=null;
+      const after=engine.underwrite(input);
+      assert.ok(rank[after.decision.state]<=rank[before.decision.state],drop+': '+before.decision.state+' -> '+after.decision.state);
+      assert.ok(confidenceRank[after.decision.confidence]<=confidenceRank[before.decision.confidence],drop+' confidence');
+    }
+  }
+});
+test('A5: only one source supplied is used as given',()=>{
+  const scalarOnly=engine.underwrite(strong());
+  assert.equal(scalarOnly.calculations.observed_monthly_pipeline_creation,1000000);
+  assert.ok(!scalarOnly.validation.clarifications.length);
+  const seriesOnly=engine.underwrite(strong({demand:{monthly_pipeline_series:SEASONAL,monthly_qualified_pipeline_created_value:null}}));
+  assert.ok(!seriesOnly.validation.clarifications.length);assert.equal(seriesOnly.calculations.observed_monthly_pipeline_creation,windowAverage(SEASONAL));
+});
+// B2: zero existing-team conversion.
+test('B2: zero vs null vs small existing-team conversion',()=>{
+  const at=rate=>engine.underwrite(makeCase({conversion:{existing_team_qualified_opp_to_win_pct:rate}}));
+  const zero=at(0),missing=at(null),small=at(0.01);
+  assert.equal(zero.calculations.existing_team_conversion_rate,0);
+  assert.equal(zero.calculations.existing_pipeline_requirement_status,'unbounded');
+  assert.equal(zero.calculations.existing_pipeline_required,null);
+  assert.equal(zero.calculations.theoretical_pipeline_surplus,0,'the surplus cap is kept at zero, never dropped');
+  assert.ok(zero.validation.clarifications.some(c=>c.code==='existing_team_zero_conversion'));
+  assert.equal(zero.decision.state,'insufficient_evidence');
+  assert.equal(missing.calculations.existing_pipeline_requirement_status,'calculated');
+  assert.ok(!missing.validation.clarifications.some(c=>c.code==='existing_team_zero_conversion'));
+  assert.equal(small.calculations.existing_pipeline_requirement_status,'calculated');
+  close(small.calculations.existing_pipeline_required,small.calculations.existing_capacity/0.01);
+  assert.ok(small.calculations.theoretical_pipeline_surplus<=missing.calculations.theoretical_pipeline_surplus);
+  assert.ok(rank[zero.decision.state]<=rank[small.decision.state]&&rank[small.decision.state]<=rank[missing.decision.state]+1);
+});
+test('B2: zero all-seller wins over positive opportunities is a known zero, not absent',()=>{
+  const r=engine.underwrite(makeCase({conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:0.21,qualified_opps_trailing_12m:40,closed_won_trailing_12m:0,qualified_opp_to_win_pct:null},repeatability:{wins_trailing_12m:0,non_founder_wins_trailing_12m:null}}));
+  assert.equal(r.validation.fatal_errors.length,0);
+  assert.equal(r.calculations.existing_team_conversion_rate,0);
+  assert.equal(r.calculations.theoretical_pipeline_surplus,0);
+  assert.ok(r.validation.clarifications.some(c=>c.code==='existing_team_zero_conversion'&&c.fields.includes('conversion.closed_won_trailing_12m')));
+});
+test('B2: a zero transferable fallback rate keeps the cap at zero without a clarification and stays uncertain',()=>{
+  const r=engine.underwrite(makeCase({conversion:{non_founder_qualified_opps_trailing_12m:20,non_founder_wins_trailing_12m:0,non_founder_qualified_opp_to_win_pct:0},repeatability:{non_founder_wins_trailing_12m:0}}));
+  assert.equal(r.calculations.existing_pipeline_requirement_status,'unbounded');assert.equal(r.calculations.theoretical_pipeline_surplus,0);
+  assert.ok(!r.validation.clarifications.some(c=>c.code==='existing_team_zero_conversion'));
+  assert.equal(r.decision.state,'not_yet_supported');assert.equal(r.tests.demand_sufficiency.allocation_uncertain,true);
+});
+// B3: unknown ramp keeps both interpretations.
+const G12_LIKE={proposed_ae:{ramp_definition:'unknown',start_month_index:5},demand:{pipeline_likely_open_at_ae_start:3100000,allocatable_qualified_pipeline:3100000},timing:{revenue_needed_by_date:'2027-06-01'}};
+test('B3: each interpretation keeps its decision, constraints and latest viable start',()=>{
+  const r=engine.underwrite(makeCase(G12_LIKE));
+  const b=r.decision.ramp_branches;
+  assert.ok(b&&b.closed_bookings&&b.pipeline_productivity);
+  assert.notEqual(b.closed_bookings.decision,b.pipeline_productivity.decision);
+  for(const branch of Object.values(b)){assert.ok('primary_constraint' in branch&&Array.isArray(branch.secondary_constraints)&&'latest_viable_start' in branch);}
+  assert.deepEqual(r.ramp_interpretations,b);
+  // The weaker interpretation governs; its operating constraint is preserved.
+  const weaker=rank[b.closed_bookings.decision]<=rank[b.pipeline_productivity.decision]?b.closed_bookings:b.pipeline_productivity;
+  assert.equal(r.decision.state,weaker.decision);assert.equal(r.decision.primary_constraint,weaker.primary_constraint);
+  assert.notEqual(r.decision.primary_constraint,'ramp_ambiguity');
+  assert.ok(r.decision.secondary_constraints.includes('ramp_ambiguity'));
+  for(const branch of Object.values(b))if(branch.primary_constraint&&branch.primary_constraint!==r.decision.primary_constraint)assert.ok(r.decision.secondary_constraints.includes(branch.primary_constraint));
+  assert.equal(new Set(r.decision.secondary_constraints).size,r.decision.secondary_constraints.length);
+  assert.ok(!r.decision.secondary_constraints.includes(r.decision.primary_constraint));
+});
+test('B3: latest viable start is reported per interpretation with a conservative single value',()=>{
+  const r=engine.underwrite(makeCase(deepMerge(G12_LIKE,{proposed_ae:{start_month_index:null,proposed_start_date:'2027-09-01'}})));
+  const t=r.tests.timing_management.timing;
+  assert.ok(t.latest_viable_start_by_ramp);
+  const values=[t.latest_viable_start_by_ramp.closed_bookings,t.latest_viable_start_by_ramp.pipeline_productivity];
+  assert.ok(values.every(v=>v!==null));assert.notEqual(values[0],values[1]);
+  assert.deepEqual(t.latest_viable_start_range,[...values].sort());
+  assert.equal(t.latest_viable_start,[...values].sort()[0]);
+});
+test('B3: an unknown ramp is never stronger than either known interpretation',()=>{
+  for(const extra of [{},G12_LIKE,{demand:{pipeline_likely_open_at_ae_start:1000000,allocatable_qualified_pipeline:1000000}},STRONG,{economics:{average_sales_cycle_days:180}}]) {
+    const unknown=engine.underwrite(makeCase(deepMerge(extra,{proposed_ae:{ramp_definition:'unknown'}})));
+    for(const mode of ['closed_bookings','pipeline_productivity']) {
+      const known=engine.underwrite(makeCase(deepMerge(extra,{proposed_ae:{ramp_definition:mode}})));
+      assert.ok(rank[unknown.decision.state]<=rank[known.decision.state],mode+': '+known.decision.state+' vs unknown '+unknown.decision.state);
+      assert.ok(confidenceRank[unknown.decision.confidence]<=confidenceRank[known.decision.confidence],mode+' confidence');
+    }
+    assert.notEqual(unknown.decision.state,'supported');
+  }
+});
+// B4: low confidence is attributed to its cause.
+test('B4: demand-only low confidence creates no transferability constraint or condition',()=>{
+  const r=engine.underwrite(strong({demand:{monthly_qualified_opps_created:null}}));
+  assert.equal(r.decision.confidence,'low');
+  assert.ok(r.confidence.reasons.includes('creation_sufficiency_unknown'));
+  assert.ok(!r.confidence.reasons.some(x=>['transferability_unproven','very_thin_conversion_sample','unknown_conversion','unknown_conversion_sample'].includes(x)));
+  assert.equal(r.tests.repeatability.state,'demonstrated');
+  assert.ok(!codes(r).includes('transferability'));assert.ok(!r.conditions.some(c=>c.code==='transferability'));
+  assert.ok(codes(r).includes('opportunity_creation'));
+  assert.equal(r.decision.constraints.find(c=>c.code==='opportunity_creation').dimension,'demand_sufficiency');
+});
+test('B4: ramp-only low confidence is a timing constraint, not transferability',()=>{
+  const r=engine.underwrite(strong({proposed_ae:{ramp_definition:'unknown'}}));
+  assert.ok(r.confidence.reasons.includes('ramp_ambiguity'));
+  assert.ok(!r.confidence.reasons.some(x=>['transferability_unproven','very_thin_conversion_sample','unknown_conversion'].includes(x)));
+  assert.ok(!codes(r).includes('transferability'));assert.ok(!r.conditions.some(c=>c.code==='transferability'));
+  assert.equal(r.decision.constraints.find(c=>c.code==='ramp_ambiguity').dimension,'timing');
+});
+test('B4: weak pipeline evidence is a demand constraint, not transferability',()=>{
+  const r=engine.underwrite(strong({provenance:{pipeline:'founder_estimate'}}));
+  assert.deepEqual(r.confidence.reasons.filter(x=>!['linear_ramp_assumption'].includes(x)),['pipeline_source_weak_or_unknown']);
+  assert.equal(r.decision.state,'conditional');assert.equal(r.decision.primary_constraint,'unknown_pipeline_allocation');
+  assert.deepEqual(r.decision.constraints.map(c=>c.dimension),['demand_sufficiency']);
+  assert.ok(!codes(r).includes('transferability'));assert.ok(!r.conditions.some(c=>c.code==='transferability'));
+});
+test('B4: conversion causes still map to repeatability',()=>{
+  const thin=engine.underwrite(strong({conversion:{non_founder_qualified_opps_trailing_12m:2,non_founder_wins_trailing_12m:2,non_founder_qualified_opp_to_win_pct:1},repeatability:{non_founder_wins_trailing_12m:2}}));
+  assert.ok(codes(thin).includes('thin_conversion_sample'));
+  assert.equal(thin.decision.constraints.find(c=>c.code==='thin_conversion_sample').dimension,'repeatability');
+  const scenario=engine.underwrite(strong({decision:{new_ae_market_same_as_history:'no'}}));
+  assert.ok(scenario.confidence.reasons.includes('transferability_unproven'));
+  assert.equal(scenario.decision.constraints.find(c=>c.code==='transferability'&&c.severity>=2).dimension,'repeatability');
+  assert.ok(scenario.conditions.some(c=>c.code==='transferability'));
+});
+// B1: management and seasonality answers.
+test('B1: unanswered management questions keep confidence low',()=>{
+  for(const field of ['direct_manager_exists','weekly_1to1_capacity','weekly_pipeline_review_capacity','onboarding_owner_named','onboarding_plan_exists']) {
+    const r=engine.underwrite(strong({management:{[field]:null}}));
+    assert.ok(['low','insufficient'].includes(r.decision.confidence),field);
+    assert.notEqual(r.decision.state,'supported',field);
+  }
+});
+test('B1: unknown seasonality never carries more confidence than a declared flag',()=>{
+  const declared=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:false}}));
+  const unknown=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:null}}));
+  assert.ok(unknown.confidence.reasons.includes('seasonality_unknown'));
+  assert.ok(confidenceRank[unknown.decision.confidence]<=confidenceRank[declared.decision.confidence]);
+  assert.ok(rank[unknown.decision.state]<=rank[declared.decision.state]);
+  const seasonal=engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:true}}));
+  assert.ok(confidenceRank[unknown.decision.confidence]<=confidenceRank[seasonal.decision.confidence]||seasonal.decision.confidence===unknown.decision.confidence);
+  assert.ok(!engine.underwrite(strong({demand:{pipeline_creation_is_seasonal:null,monthly_pipeline_series:FLAT(1000000),monthly_qualified_pipeline_created_value:null}})).confidence.reasons.includes('seasonality_unknown'));
+});
+// A2: transferable conversion basis.
+test('A2: conversion basis is recorded independently of market or stage qualification',()=>{
+  const rate=o=>engine.selectTransferableWinRate(engine.normalizeInput(makeCase(o)),policy);
+  assert.equal(rate({}).conversion_basis,'non_founder');
+  assert.equal(rate({conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:30,closed_won_trailing_12m:9},repeatability:{wins_trailing_12m:9,non_founder_wins_trailing_12m:null}}).conversion_basis,'founder_inclusive_fallback');
+  assert.equal(rate({decision:{new_ae_market_same_as_history:'no'},conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:30,closed_won_trailing_12m:9}}).conversion_basis,'founder_inclusive_fallback');
+  assert.equal(rate({conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opp_to_win_pct:null}}).conversion_basis,'unknown');
+  assert.equal(rate({conversion:{material_gtm_change_date:'2026-06-01',post_change_wins:3,post_change_qualified_opps:40,post_change_non_founder:true}}).conversion_basis,'non_founder');
+  assert.equal(rate({conversion:{material_gtm_change_date:'2026-06-01',post_change_wins:3,post_change_qualified_opps:40}}).conversion_basis,'post_change_founder_inclusive');
+  assert.equal(rate({conversion:{material_gtm_change_date:'2026-06-01'}}).conversion_basis,'pre_change_history');
+});
+test('A2: unknown transferable conversion is insufficient evidence for a positive-contribution seat',()=>{
+  const r=engine.underwrite(strong({conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opp_to_win_pct:null}}));
+  assert.equal(r.decision.state,'insufficient_evidence');assert.equal(r.decision.primary_constraint,'unknown_conversion');
+  assert.ok(r.evidence_gaps.some(g=>g.field==='conversion.qualified_opportunity_win_rate'));
+});
+test('A2: an independent hard blocker keeps NOT YET SUPPORTED without usable conversion',()=>{
+  const r=engine.underwrite(makeCase({target:{new_arr_target_horizon:1250000},conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:30,closed_won_trailing_12m:9},repeatability:{wins_trailing_12m:9,non_founder_wins_trailing_12m:null}}));
+  assert.equal(r.conversion.conversion_basis,'founder_inclusive_fallback');
+  assert.equal(r.decision.state,'not_yet_supported');assert.equal(r.decision.primary_constraint,'no_capacity_gap');
+  const late=engine.underwrite(makeCase({proposed_ae:{start_month_index:13},conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:30,closed_won_trailing_12m:9},repeatability:{wins_trailing_12m:9,non_founder_wins_trailing_12m:null}}));
+  assert.equal(late.calculations.proposed_ae_contribution,0);assert.notEqual(late.decision.primary_constraint,'unknown_conversion');
+});
+test('A2: the first-AE founder-inclusive path is unchanged',()=>{
+  const first={decision:{evaluating_first_professional_ae:true},current_team:{current_quota_carriers:0,sellers:[],founder_committed_new_arr:650000,founder_expected_to_remain_seller:true},conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:42,closed_won_trailing_12m:11,qualified_opp_to_win_pct:11/42},repeatability:{wins_trailing_12m:11,non_founder_wins_trailing_12m:0,founder_primary_seller_share_pct:1,icp_documented:'yes',qualification_documented:'yes',discovery_documented:'yes',sales_stages_documented:'partial',rep_can_run_discovery_without_founder:'unknown',founder_required_late_stage:'almost_always',repeatable_use_cases_count:2,founder_can_articulate_path:true}};
+  const r=engine.underwrite(makeCase(first));
+  assert.equal(r.conversion.conversion_basis,'first_ae_founder_inclusive');
+  assert.ok(['conditional','supported'].includes(r.decision.state));assert.equal(r.decision.primary_constraint,'transferability');
 });
 if(failures.length){failures.forEach(f=>console.error('FAIL '+f));process.exitCode=1;}
 console.log(`AE engine: ${passed} passed, ${failures.length} failed`);

@@ -170,7 +170,17 @@
     var suppliedDemand = section(input, 'demand');
     if (suppliedDemand.pipeline_creation_is_seasonal === true && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
       moderate.push('seasonal_pipeline_linear_extrapolation');
+    } else if (suppliedDemand.pipeline_creation_is_seasonal !== false && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
+      // Unknown seasonality can hide a seasonal pattern the flat monthly value
+      // misstates; it can never carry more confidence than a declared one.
+      moderate.push('seasonality_unknown');
     }
+    // An unanswered management question pins the decision at conditional and so
+    // hides sensitivity flips; without this, deleting a management answer could
+    // raise confidence (§8.8 / §14.7).
+    var managementSection = section(input, 'management');
+    if (['direct_manager_exists', 'weekly_1to1_capacity', 'weekly_pipeline_review_capacity', 'onboarding_owner_named',
+      'onboarding_plan_exists'].some(function (key) { return !known(managementSection[key]); })) low.push('management_evidence_unknown');
     var team = section(input, 'current_team');
     var sellers = Array.isArray(team.sellers) ? team.sellers : [];
     if (sellers.some(function (seller) { return !numeric(seller.trailing_attainment_pct); }) ||
@@ -220,6 +230,34 @@
     }
     return ordered;
   }
+  // Maps each low-confidence reason to the constraint (code, dimension) it
+  // describes. Reasons with their own constraint source (an unknown core test,
+  // a sensitivity flip, an unresolved conflict) are not duplicated here.
+  var LOW_REASON_CONSTRAINT = {
+    very_thin_conversion_sample: ['thin_conversion_sample', 'repeatability'],
+    transferability_unproven: ['transferability', 'repeatability'],
+    unknown_conversion: ['transferability', 'repeatability'],
+    unknown_conversion_sample: ['transferability', 'repeatability'],
+    conversion_source_weak_or_unknown: ['transferability', 'repeatability'],
+    unknown_pipeline_allocation: ['unknown_pipeline_allocation', 'demand_sufficiency'],
+    pipeline_source_weak_or_unknown: ['unknown_pipeline_allocation', 'demand_sufficiency'],
+    ramp_ambiguity: ['ramp_ambiguity', 'timing'],
+    management_evidence_unknown: ['management_capacity', 'management'],
+    attainment_source_weak_or_unknown: ['unknown_current_capacity', 'economic_need']
+  };
+  function lowConfidenceConstraints(confidence, demand) {
+    var out = [];
+    (confidence.reasons || []).forEach(function (reason) {
+      var item = LOW_REASON_CONSTRAINT[reason];
+      if (reason === 'creation_sufficiency_unknown') {
+        item = [demand.pipeline_creation_state === 'unknown' ? 'pipeline_creation' : 'opportunity_creation', 'demand_sufficiency'];
+      }
+      if (item && !out.some(function (existing) { return existing[0] === item[0]; })) out.push(item);
+    });
+    return out;
+  }
+  var REPEATABILITY_LOW_REASONS = ['very_thin_conversion_sample', 'transferability_unproven', 'unknown_conversion',
+    'unknown_conversion_sample', 'conversion_source_weak_or_unknown'];
   function closureSupported(demand) {
     return demand.shortfall_closure_supported === true && numeric(demand.closure_amount) &&
       numeric(demand.required) && numeric(demand.allocatable) &&
@@ -311,8 +349,14 @@
       add('ramp_ambiguity', 'timing', severity.material, null, false, 'Specify whether ramp describes bookings or pipeline productivity.');
     }
     if (confidence.state === 'low' || confidence.state === 'insufficient') {
-      var thin = (confidence.reasons || []).indexOf('very_thin_conversion_sample') !== -1;
-      add(thin ? 'thin_conversion_sample' : 'transferability', 'repeatability', severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+      // Low confidence is attributed to the dimension that caused it. Demand or
+      // timing uncertainty is never relabeled as a transferability problem.
+      var lowCodes = lowConfidenceConstraints(confidence, demand);
+      lowCodes.forEach(function (item) {
+        if (!constraints.some(function (existing) { return existing.code === item[0] && existing.severity >= severity.material; })) {
+          add(item[0], item[1], severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+        }
+      });
     }
     (context.sensitivities || []).filter(function (scenario) {
       return scenario.decision_changed === true && scenario.deterioration !== false;
@@ -326,6 +370,12 @@
       add(creationFlip ? creationCode : timingVariable ? 'sales_cycle_timing' : 'pipeline_supply', creationFlip || !timingVariable ? 'demand_sufficiency' : 'timing',
         severity.material, null, false, 'The ' + scenario.variable + ' model scenario changes the decision.');
     });
+    // Low confidence with no attributable cause and no other material constraint
+    // (rare) is named as a generic evidence condition, never as transferability.
+    if ((confidence.state === 'low' || confidence.state === 'insufficient') &&
+        !constraints.some(function (item) { return item.severity >= severity.material; })) {
+      add('evidence_confidence', 'evidence', severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+    }
     var ordered = orderConstraints(constraints, policy);
     var allSupported = economic.state === 'supported' && demand.state === 'sufficient' && timing.state === 'compatible' &&
       (management.state === 'ready' || management.state === 'conditional' && management.nonmaterial_gap) &&
@@ -421,7 +471,9 @@
     if (r.first_ae) add('transferability', r.state, 'documented_buyer_use_case_qualification_and_close_path', null, start,
       ['first_ae_execution_risk'], ['repeatability.founder_can_articulate_path'],
       'Reassess transferability when the first non-founder conversion evidence exists.');
-    else if (r.state !== 'demonstrated' || decision.confidence === 'low') add('transferability', r.non_founder_qualified_opps,
+    else if (r.state !== 'demonstrated' || (decision.confidence === 'low' && ((context.confidence || {}).reasons || []).some(function (reason) {
+      return REPEATABILITY_LOW_REASONS.indexOf(reason) !== -1;
+    }))) add('transferability', r.non_founder_qualified_opps,
       policy.conversionSample.thinBelow, numeric(r.non_founder_qualified_opps) ? Math.max(0, policy.conversionSample.thinBelow - r.non_founder_qualified_opps) : null,
       start, ['relevant_non_founder_evidence_window'], ['conversion.non_founder_qualified_opps_trailing_12m',
         'conversion.non_founder_wins_trailing_12m', 'repeatability.founder_required_late_stage'],

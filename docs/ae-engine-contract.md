@@ -2,7 +2,7 @@
 
 Scope: Step 3, Step 4 and their tests only. Source: `deliverables/plans/ae_hiring_underwriting_master_spec.md` at commit `1114340`. The source filename uses underscores. The master spec has not been edited.
 
-Current versions: `ae-engine-1.1.0`, `ae-policy-1.1.0`, schema `ae-underwriting-1.0`. The 1.1.0 remediation follows `deliverables/plans/pr315_ae_underwriting_engine_audit.md`; see [Remediation 1.1.0](#remediation-110-pr-315-audit).
+Current versions: `ae-engine-1.2.0`, `ae-policy-1.1.0`, schema `ae-underwriting-1.0`. The 1.1.0 remediation follows `deliverables/plans/pr315_ae_underwriting_engine_audit.md`; see [Remediation 1.1.0](#remediation-110-pr-315-audit). The 1.2.0 second hardening pass follows the PR #316 second adversarial audit; see [Second hardening 1.2.0](#second-hardening-120-pr-316-second-audit).
 
 ## Run
 
@@ -12,13 +12,13 @@ npm run test:ae
 
 No installation or added test framework is required. Node runs four suites: formulas/reference case and remediation regressions, validation, all 24 golden cases, and adversarial invariants (including an explicit §14 block). `npm test` runs this suite through `pretest` before the existing Vitest tests.
 
-| Suite | 1.0.0 (PR #315) | 1.1.0 |
-| --- | ---: | ---: |
-| `tests/ae-underwriting-engine.test.js` | 26 | 100 |
-| `tests/ae-validation.test.js` | 67 | 91 |
-| `tests/ae-golden-cases.js` | 24 | 24 |
-| `tests/ae-invariants.test.js` | 65 | 87 |
-| Total | 182 | 302 |
+| Suite | 1.0.0 (PR #315) | 1.1.0 | 1.2.0 |
+| --- | ---: | ---: | ---: |
+| `tests/ae-underwriting-engine.test.js` | 26 | 100 | 129 |
+| `tests/ae-validation.test.js` | 67 | 91 | 106 |
+| `tests/ae-golden-cases.js` | 24 | 24 | 24 |
+| `tests/ae-invariants.test.js` | 65 | 87 | 98 |
+| Total | 182 | 302 | 357 |
 
 ## Entry point
 
@@ -118,7 +118,7 @@ Now, before any decision call, the demand test carries:
 | --- | --- |
 | `required_monthly_pipeline_creation` | `max(0, qualified_pipeline_required - allocatable_current_pipeline) / eligible_creation_months` (§4.22). `0` when current allocation covers the requirement; `null` when unknown or unbounded. |
 | `required_monthly_opps` | `required_monthly_pipeline_creation / average_acv` (§4.23; equal to remaining opportunities / eligible months). `0` when no creation is required. |
-| `observed_monthly_pipeline_creation` | The supplied monthly value. When a `monthly_pipeline_series` is supplied, the series' creation inside the eligible window divided by `eligible_creation_months`, because a supplied series takes precedence over a single monthly value everywhere in the engine (§3.3 P). |
+| `observed_monthly_pipeline_creation` | The supplied monthly value. When a `monthly_pipeline_series` is supplied, the series' creation inside the eligible window divided by `eligible_creation_months` (§3.3 P). Since 1.2.0, when both are supplied they must agree on that average or the case stops for clarification (A5 below). |
 | `pipeline_creation_ratio` | `observed_monthly_pipeline_creation / required_monthly_pipeline_creation`. |
 | `opportunity_creation_ratio` | `demand.monthly_qualified_opps_created / required_monthly_opps`. |
 | `pipeline_creation_state`, `opportunity_creation_state` | `sufficient` (ratio ≥ `policy.demand.sufficientThreshold`), `short`, `not_required` (requirement 0), `unknown`, or `unbounded`. |
@@ -172,16 +172,95 @@ The search domain now runs from a floor to the deadline `min(revenue_needed_by_d
 
 Why the floor is safe: a start whose first positive month falls on the last eligible generation day (deadline − lag) is always viable. So the latest viable start, if one exists, lies inside the domain; the extra month covers hire-date anniversary rounding.
 
-Search method: binary search is used only where "positive by the deadline" is monotone in the start date, which holds for a linear ramp or a nondecreasing schedule ending at 1. Any other supplied schedule is scanned day by day from the deadline down, so the result is always the true latest start. A schedule with no positive month has no viable start and skips the search.
+Search method: binary search is used only where "positive by the deadline" is monotone in the start date, which holds for a linear ramp or a nondecreasing schedule ending at 1. Any other supplied schedule is scanned day by day from the deadline down, so the result is always the true latest start. A schedule with no positive month has no viable start and skips the search. Since 1.2.0 validation rejects decreasing schedules (A4), so the scan only serves nondecreasing schedules that do not end at 1.
 
 The criterion is unchanged and stored with the date. The domain floor is returned as `latest_start_search_floor`. A start after the horizon now produces a condition coded `late_start` (previously always `sales_cycle_timing`).
 
 ### Spec interpretations made explicit
 
 1. §4.24 lists "founder is not `almost_always` required late-stage" as a `demonstrated` criterion, while its `emerging` examples include "founder is sometimes/often involved." 1.1.0 follows the audit's tighter, versioned rule (only `rarely` is eligible). The master spec text is unchanged; the conflict is recorded here and in the remediation PR.
-2. §4.22 compares observed monthly creation with the requirement. With a supplied monthly series, the observed figure is the series' eligible-window average; for a constant monthly value this equals the supplied value.
+2. §4.22 compares observed monthly creation with the requirement. With a supplied monthly series, the observed figure is the series' eligible-window average; for a constant monthly value this equals the supplied value. (1.2.0: a series and a disagreeing single value now require clarification; see A5.)
 3. `observed` creation is company-wide creation as supplied, compared with the new seat's requirement (§4.22's formula). It is not netted against the existing team's own creation needs; the existing team's share of supply is handled by the horizon surplus cap and the current reservation.
 4. `revenue_needed_by_date` is a requirement parameter, not evidence. Without it the horizon end is the deadline, so removing it can relax timing. It is excluded from the missingness sweep for that reason.
+
+## Second hardening 1.2.0 (PR #316 second audit)
+
+The PR #316 second adversarial audit found nine further cases where removed or mis-read evidence could strengthen a decision or mislabel its cause. Every fix below was reproduced on the PR #316 head `cf342d2` before the change, and every regression test named here fails on that head.
+
+### Versions
+
+| | Old | New | Reason |
+| --- | --- | --- | --- |
+| Engine | `ae-engine-1.1.0` | `ae-engine-1.2.0` | Identical normalized inputs now produce different outputs (A1–A5, B1–B4). Replay of a 1.1.0 result needs the 1.1.0 engine. |
+| Policy | `ae-policy-1.1.0` | unchanged | No rule or value in `js/ae-policy.js` changed. The audit snapshot (`audit.policy_snapshot`) is byte-identical to 1.1.0, so a new policy version would label two identical policy objects differently. Every 1.2.0 change is validation, evidence-gate or attribution logic in the engine; the materiality used by A5 is the existing `validation.equalityTolerance`. |
+| Schema | `ae-underwriting-1.0` | unchanged | No new input field. New outputs are additive. |
+
+### A1. Timing reads the calculated current allocation
+
+`testTiming()` read the raw alias `demand.allocatable_current_pipeline`. A supplied alias of `0` (not `null`) suppressed the first-close plausibility check, while the canonical `allocatable_current_qualified_pipeline` of `0` did not, so alias choice changed the decision. Timing now takes the calculated `allocation.current_allocatable`. Only an established positive current allocation can make a first close before `start + qualified cycle` plausible; zero, unknown and unestablished claims inherit nothing. The six-way matrix (canonical/alias × null/0/positive) produces identical decisions pairwise.
+
+### A2. Missing transferable conversion is insufficient evidence
+
+`selectTransferableWinRate()` now records `conversion_basis`: `non_founder`, `founder_inclusive_fallback`, `post_change_founder_inclusive`, `pre_change_history`, `first_ae_founder_inclusive` or `unknown`. The basis is kept separately from `transferability_assumption`, which a later market or stage qualification can overwrite. For a seat with positive modeled contribution, a basis of `unknown`, `founder_inclusive_fallback`, `post_change_founder_inclusive` or `pre_change_history` cannot establish the demand requirement. The case is then `insufficient_evidence` with primary `unknown_conversion` and the missing non-founder inputs listed. The exception is an independent hard blocker that already proves `not_yet_supported` (any hard constraint other than `pipeline_supply`, which itself depends on conversion), which keeps that result. The founder-inclusive rate is still used for the illustrative calculations, so it remains visible as a scenario. The first-AE branch (§4A) is unchanged.
+
+### A3. Current supply must still be open at the AE start
+
+Current allocation is now also bounded by `demand.pipeline_likely_open_at_ae_start`: current supply = `min(established current claim, pipeline likely open at AE start)`. A positive current claim with that answer unknown is `null` (`unknown_pipeline_open_at_ae_start`), so the creation test is unknown and names the field. V1 defines no "materially later" threshold. Any positive claim needs the survival answer, because exempting short delays would let deleting the answer lift a capped claim. A known zero claim needs no survival evidence. Horizon-wide allocation and coverage are unchanged; only the current share that reduces the monthly creation requirement is bounded. Trace fields are `pipeline_open_at_ae_start` and `current_claim_before_start_survival`.
+
+### A4. Ramp schedules must be nondecreasing
+
+Validation rejects a supplied `monthly_ramp_schedule` (or its `ramp_schedule` alias) whose factor ever decreases, with the fatal error `non_monotone_ramp_schedule`. The range rule (`invalid_ramp_schedule`: every factor finite and within 0..1) is unchanged. §14.3 (a later start never adds in-horizon contribution) is tested across every accepted shape in both ramp modes.
+
+### A5. A monthly series and a single monthly value must agree
+
+When both `monthly_pipeline_series` and `monthly_qualified_pipeline_created_value` are supplied, the series' eligible-window average is compared with the single value. Two cases raise the clarification `creation_source_conflict` (with `series_window_average` and `single_monthly_value`), and no decision is reached until it is reconciled:
+
+- the two differ by more than `validation.equalityTolerance` (relative);
+- the series has unknown months inside the window.
+
+V1 deliberately has no business-materiality band. Any band lets deleting the less favorable source strengthen the result by up to the band. When they agree, the series drives the temporal math. When only one is supplied, it is used as given.
+
+### B1. Unknown management or seasonality cannot raise confidence
+
+Any unanswered `direct_manager_exists`, `weekly_1to1_capacity`, `weekly_pipeline_review_capacity`, `onboarding_owner_named` or `onboarding_plan_exists` adds the low-confidence reason `management_evidence_unknown`. Previously an unanswered question pinned the decision at conditional, hid modest-sensitivity flips and lifted confidence. An unknown `pipeline_creation_is_seasonal` with no monthly series adds the moderate reason `seasonality_unknown`, equal to the declared-seasonal penalty. Both are covered by one-field-at-a-time deletion sweeps.
+
+### B2. Zero existing-team conversion is explicit
+
+`existingWinRate()` returns `{ value, source }` and tests numeric type, never truthiness. At a known zero team rate with positive existing or founder bookings, the existing-team pipeline requirement is unbounded: `existing_pipeline_requirement_status = 'unbounded'` and `existing_pipeline_required = null` (never `Infinity`). The theoretical surplus cap is `0`, never dropped. When that zero is supplied for the team itself (existing-team rate, all-seller counts or the supplied all-seller rate), it contradicts the team's positive bookings and raises the clarification `existing_team_zero_conversion`. When it only comes from the zero transferable fallback (the proposed seller's own zero conversion), there is no clarification. The zero-conversion `not_yet_supported` rule still applies, and allocation stays flagged uncertain because the team rate itself is not observed. New calculations: `existing_team_conversion_rate` and `existing_pipeline_requirement_status`.
+
+### B3. Unknown ramp keeps both interpretations
+
+With `ramp_definition` unknown, both interpretations are evaluated end to end: tests, sensitivity, decision, the zero-conversion rule and the latest viable start. The reported decision is the weaker of the two branches, capped at conditional. 1.1.0 forced `conditional` whenever branches differed, which let a pipeline-productivity `not_yet_supported` become `conditional` once `ramp_definition` was deleted. The governing branch's primary constraint is kept. Every other operating constraint from either branch is preserved in the secondaries, and `ramp_ambiguity` is added alongside them, never in place of the operating constraint. `decision.ramp_branches` (also `ramp_interpretations`) carries each branch's decision, primary, secondaries, confidence, timing and latest viable start. `tests.timing_management.timing` carries `latest_viable_start_by_ramp`, a `latest_viable_start_range`, and a conservative single `latest_viable_start`: the earliest branch value, the latest start viable under both interpretations. Outputs (tests, calculations, conditions) come from the governing branch.
+
+### B4. Low confidence is attributed to its cause
+
+Low confidence no longer becomes a `transferability` constraint by default. Each reason maps to the constraint it describes:
+
+| Reasons | Constraint | Dimension |
+| --- | --- | --- |
+| `very_thin_conversion_sample` | `thin_conversion_sample` | repeatability |
+| `transferability_unproven`, `unknown_conversion`, `unknown_conversion_sample`, `conversion_source_weak_or_unknown` | `transferability` | repeatability |
+| `unknown_pipeline_allocation`, `pipeline_source_weak_or_unknown` | `unknown_pipeline_allocation` | demand |
+| `creation_sufficiency_unknown` | `pipeline_creation` / `opportunity_creation` | demand |
+| `ramp_ambiguity` | `ramp_ambiguity` | timing |
+| `management_evidence_unknown` | `management_capacity` | management |
+| `attainment_source_weak_or_unknown` | `unknown_current_capacity` | economic need |
+
+Reasons with their own constraint source (unknown core test, sensitivity flip, unresolved conflict) are not duplicated. If low confidence has no attributable cause and no other material constraint exists, the generic `evidence_confidence` is used. The `transferability` condition for a later AE now fires on low confidence only when a repeatability or conversion reason is present.
+
+### Golden fixtures changed in 1.2.0
+
+- **G07** (founder-inclusive rate only): now `insufficient_evidence` / `unknown_conversion` (A2). The master spec's G07 expects `conditional`; see ambiguity 1.
+- **G12** (unknown ramp, branches differ): now `not_yet_supported` / `sales_cycle_timing`, the pipeline-productivity branch (B3). The allowed list gained `not_yet_supported`. The spec's G12 requirement ("never supported without resolving the ambiguity") still holds.
+- **G24** (seasonal series): the fixture drops Appendix B's single monthly value (650,000), because it conflicts with the series' window average (A5). The spec expects the series to be used; with only the series supplied it is.
+
+### Remaining ambiguities (founder decision before freeze)
+
+1. A2 vs master spec §4.4 Priority 5 and G07: the spec allows a founder-inclusive-only rate to support a conditional decision as an illustrative scenario. 1.2.0 follows the audit: the rate stays illustrative, but the decision is insufficient evidence.
+2. A5 strictness: any difference beyond numerical equality between a series and a single value stops the case. A tolerance band would be friendlier to hand-typed values but reopens the deletion hole.
+3. A3 strictness: every positive current claim needs `pipeline_likely_open_at_ae_start`, with no "materially later" exemption.
+4. B3 reports outputs from the governing (weaker) ramp branch, so calculations for an unknown ramp can come from the pipeline-productivity branch rather than always from closed bookings.
+5. Company-wide versus seat-allocatable creation (audit §16) and the §4.24 founder-dependence wording (audit §17) remain open, unchanged.
 
 ## Boundaries
 

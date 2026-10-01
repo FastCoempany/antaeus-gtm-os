@@ -433,7 +433,15 @@ const EVIDENCE = [
   ['current pipeline pool', i => { i.demand.current_qualified_pipeline_value = null; i.demand.current_qualified_pipeline_in_horizon = null; }],
   ['qualified sales cycle', i => { i.economics.average_sales_cycle_days = null; }],
   ['average ACV', i => { i.economics.average_acv = null; }],
-  ['founder late-stage requirement', i => { i.repeatability.founder_required_late_stage = null; }]
+  ['founder late-stage requirement', i => { i.repeatability.founder_required_late_stage = null; }],
+  // Second hardening pass (1.2.0): A2, A3, A5, B1, B3 evidence.
+  ['non-founder conversion counts', i => { i.conversion.non_founder_wins_trailing_12m = null; i.conversion.non_founder_qualified_opps_trailing_12m = null; }],
+  ['all non-founder conversion evidence', i => { i.conversion.non_founder_wins_trailing_12m = null; i.conversion.non_founder_qualified_opps_trailing_12m = null; i.conversion.non_founder_qualified_opp_to_win_pct = null; }],
+  ['pipeline likely open at AE start', i => { i.demand.pipeline_likely_open_at_ae_start = null; }],
+  ['ramp definition', i => { i.proposed_ae.ramp_definition = null; }],
+  ['pipeline creation seasonality', i => { i.demand.pipeline_creation_is_seasonal = null; }],
+  ...['direct_manager_exists', 'weekly_1to1_capacity', 'weekly_pipeline_review_capacity', 'onboarding_owner_named', 'onboarding_plan_exists']
+    .map(field => ['management.' + field, i => { i.management[field] = null; }])
   // revenue_needed_by_date is deliberately absent: it is a nullable requirement
   // parameter (§3.3 I), not evidence. Without it the horizon end is the deadline,
   // so removing it changes the question being underwritten.
@@ -524,7 +532,7 @@ test('§14.17 unknown never becomes zero in the remediation fields', () => {
 test('§14.18 policy and engine version changes are explicit and recorded', () => {
   assert.equal(policy.version, 'ae-policy-1.1.0');
   const output = run(strong());
-  assert.equal(output.policy_version, 'ae-policy-1.1.0'); assert.equal(output.engine_version, 'ae-engine-1.1.0'); assert.equal(engine.engine_version, 'ae-engine-1.1.0');
+  assert.equal(output.policy_version, 'ae-policy-1.1.0'); assert.equal(output.engine_version, 'ae-engine-1.2.0'); assert.equal(engine.engine_version, 'ae-engine-1.2.0');
   assert.deepEqual(JSON.parse(JSON.stringify(output.audit.policy_snapshot)), JSON.parse(JSON.stringify(policy)));
 });
 test('§14.19 low-confidence evidence cannot yield SUPPORTED', () => {
@@ -565,6 +573,94 @@ test('remediation: latest viable start is the true latest positive start and nev
     probe(timing.latest_viable_start, true);
     probe(new Date(Date.parse(timing.latest_viable_start + 'T00:00:00Z') + 86400000).toISOString().slice(0, 10), false);
     if (cycle === 94) { if (prior !== null) assert.ok(timing.latest_viable_start >= prior); prior = timing.latest_viable_start; }
+  }
+});
+
+// Second hardening pass (engine 1.2.0).
+// A2: a known short-demand case built on adverse non-founder conversion. The
+// all-seller (founder-inclusive) rate is far higher, so any silent fallback to it
+// would lift the decision.
+const ADVERSE_NF = { conversion: { non_founder_wins_trailing_12m: 5, non_founder_qualified_opps_trailing_12m: 57, non_founder_qualified_opp_to_win_pct: 5 / 57, qualified_opps_trailing_12m: 80, closed_won_trailing_12m: 30, qualified_opp_to_win_pct: 30 / 80 }, repeatability: { wins_trailing_12m: 30, founder_primary_seller_share_pct: 0.3, non_founder_wins_trailing_12m: 5 } };
+const NO_NF = { conversion: { non_founder_wins_trailing_12m: null, non_founder_qualified_opps_trailing_12m: null, non_founder_qualified_opp_to_win_pct: null } };
+const PIVOT = { conversion: { material_gtm_change_date: '2026-06-01', post_change_wins: 3, post_change_qualified_opps: 40, post_change_non_founder: true } };
+const A2_CASES = [
+  ['count-based non-founder rate removal', [ADVERSE_NF], NO_NF],
+  ['supplied credible non-founder rate removal', [ADVERSE_NF, { conversion: { non_founder_wins_trailing_12m: null, non_founder_qualified_opps_trailing_12m: null } }], { conversion: { non_founder_qualified_opp_to_win_pct: null } }],
+  ['post-pivot non-founder attribution removal', [ADVERSE_NF, PIVOT], { conversion: { post_change_non_founder: null } }],
+  ['post-pivot non-founder count removal', [ADVERSE_NF, PIVOT], { conversion: { post_change_wins: null, post_change_qualified_opps: null } }],
+  ['founder-inclusive fallback after removing every non-founder input', [ADVERSE_NF], deepMerge(NO_NF, { repeatability: { non_founder_wins_trailing_12m: null } })],
+  ['new-market scenario conversion', [ADVERSE_NF, { decision: { new_ae_market_same_as_history: 'no' } }], NO_NF]
+];
+for (const [name, base, removal] of A2_CASES) {
+  test('A2 ' + name + ' never strengthens the decision or raises confidence', () => {
+    const before = run(strong(...base));
+    assert.equal(before.validation.clarifications.length, 0, name + ' base must be complete');
+    assert.equal(before.decision.state, 'not_yet_supported', name + ' base is known short demand');
+    const after = run(strong(...base, removal));
+    assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${before.decision.state} -> ${after.decision.state}`);
+    assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `confidence ${before.decision.confidence} -> ${after.decision.confidence}`);
+    // With no independent hard blocker the seat cannot be underwritten.
+    assert.equal(after.decision.state, 'insufficient_evidence'); assert.equal(after.decision.primary_constraint, 'unknown_conversion');
+  });
+}
+test('A2 the sweep holds across demand levels and scenario overlays', () => {
+  for (const allocation of [1000000, 2900000, 4200000, 8000000]) for (const overlay of [{}, { decision: { new_ae_market_same_as_history: 'no' } }, PIVOT, { proposed_ae: { ramp_definition: 'pipeline_productivity' } }]) {
+    const base = [ADVERSE_NF, overlay, { demand: { allocatable_qualified_pipeline: allocation, pipeline_likely_open_at_ae_start: allocation } }];
+    const before = run(strong(...base));
+    if (before.validation.clarifications.length) continue;
+    for (const removal of [NO_NF, { conversion: { non_founder_qualified_opp_to_win_pct: null, non_founder_wins_trailing_12m: null } }, { conversion: { post_change_non_founder: null } }, { conversion: { post_change_wins: null } }]) {
+      const after = run(strong(...base, removal));
+      assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${allocation} ${JSON.stringify(removal)}: ${before.decision.state} -> ${after.decision.state}`);
+      assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${allocation} confidence`);
+    }
+  }
+});
+// A4: §14.3 for every accepted (nondecreasing) schedule shape.
+const ACCEPTED_SHAPES = [[1], [0.25, 0.5, 0.75, 1], [0.5, 0.5, 0.5, 1], [0, 0, 1], [0, 0.5, 0.5, 1], [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 1], [0.3, 1, 1, 1]];
+test('A4 §14.3 delaying the start cannot increase contribution for any accepted schedule shape', () => {
+  const starts = ['2026-06-01', '2026-11-20', '2027-01-01', '2027-01-31', '2027-02-28', '2027-04-15', '2027-07-01', '2027-10-10', '2027-12-31', '2028-01-01'];
+  for (const shape of ACCEPTED_SHAPES) for (const mode of ['closed_bookings', 'pipeline_productivity']) {
+    assert.equal(engine.normalizeInput(makeCase({ proposed_ae: { monthly_ramp_schedule: shape, ramp_months: null } })).validation.fatal_errors.length, 0, JSON.stringify(shape));
+    let prior = Infinity;
+    for (const start of starts) {
+      const input = engine.normalizeInput(makeCase({ proposed_ae: { ramp_definition: mode, monthly_ramp_schedule: shape, ramp_months: null, proposed_start_date: start } }));
+      const value = engine.calculateHireContribution(input, 12 / 57, policy, mode).value;
+      assert.ok(value <= prior + epsilon, `${JSON.stringify(shape)} ${mode} ${start}: ${value} > ${prior}`); prior = value;
+    }
+  }
+});
+test('A4 a non-monotone schedule never reaches the contribution model', () => {
+  for (const shape of [[1, 0, 1], [0.5, 0.25, 0.75], [0.5, 1, 0.75]]) {
+    const output = run(makeCase({ proposed_ae: { monthly_ramp_schedule: shape, ramp_months: null } }));
+    assert.equal(output.status, 'validation_stop'); assert.deepEqual(output.calculations, {});
+  }
+});
+// B1: one management or seasonality answer removed at a time, across scenarios.
+test('B1 removing one management or seasonality answer never raises confidence or strengthens the decision', () => {
+  const fields = [['management', 'direct_manager_exists'], ['management', 'weekly_1to1_capacity'], ['management', 'weekly_pipeline_review_capacity'], ['management', 'onboarding_owner_named'], ['management', 'onboarding_plan_exists'], ['demand', 'pipeline_creation_is_seasonal']];
+  const bases = { ...SCENARIOS, reference: () => makeCase(), seasonal: () => strong({ demand: { pipeline_creation_is_seasonal: true } }), productivity: () => makeCase({ proposed_ae: { ramp_definition: 'pipeline_productivity' } }) };
+  let checked = 0;
+  for (const [name, build] of Object.entries(bases)) {
+    const before = run(build());
+    if (before.validation.clarifications.length || before.validation.fatal_errors.length) continue;
+    for (const [group, field] of fields) {
+      const input = build(); input[group][field] = null;
+      const after = run(input); checked += 1;
+      assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${name} minus ${field}: ${before.decision.state} -> ${after.decision.state}`);
+      assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${name} minus ${field}: ${before.decision.confidence} -> ${after.decision.confidence}`);
+    }
+  }
+  assert.ok(checked >= 90);
+});
+// B3: an unknown ramp meaning is never stronger than either known meaning.
+test('B3 removing the ramp definition never strengthens the decision across scenarios', () => {
+  for (const [name, build] of Object.entries(SCENARIOS)) for (const mode of ['closed_bookings', 'pipeline_productivity']) {
+    const known = build(); known.proposed_ae.ramp_definition = mode;
+    const before = run(known); if (before.validation.clarifications.length) continue;
+    const unknown = build(); unknown.proposed_ae.ramp_definition = null;
+    const after = run(unknown);
+    assert.ok(decisionRank[after.decision.state] <= decisionRank[before.decision.state], `${name} ${mode}: ${before.decision.state} -> ${after.decision.state}`);
+    assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${name} ${mode} confidence`);
   }
 });
 

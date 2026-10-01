@@ -184,6 +184,53 @@ for (const value of ['never', 'Often', ' rarely', 7]) test('unrecognized founder
   assert.ok(result.evidence_gaps.some(gap => gap.field === 'repeatability.founder_required_late_stage'));
 });
 
+// Second hardening pass (engine 1.2.0). A4: ramp schedules must be nondecreasing.
+const schedule = factors => makeCase({ proposed_ae: { monthly_ramp_schedule: factors, ramp_months: null } });
+const scheduleCodes = factors => validation(schedule(factors)).fatal_errors.map(issue => issue.code);
+for (const [name, factors] of [['increasing', [0.25, 0.5, 0.75, 1]], ['equal factors', [0.5, 0.5, 0.5, 1]], ['all ones', [1, 1, 1]], ['zero-led', [0, 0, 0.5, 1]], ['single factor', [1]]]) {
+  test(`A4 accepts a ${name} ramp schedule`, () => {
+    assert.deepEqual(scheduleCodes(factors), []);
+    assert.notEqual(engine.underwrite(schedule(factors)).status, 'validation_stop');
+  });
+}
+for (const [name, factors] of [['declining', [0.5, 0.25, 0.75]], ['decline after 1', [0.5, 1, 0.75]], ['dip and recover', [1, 0, 1]], ['late decline', [0.25, 0.5, 1, 1, 0.9]]]) {
+  test(`A4 rejects a ${name} ramp schedule`, () => {
+    assert.deepEqual(scheduleCodes(factors), ['non_monotone_ramp_schedule']);
+    assertBlocked(schedule(factors), true);
+    assert.equal(engine.underwrite(schedule(factors)).decision.primary_constraint, 'data_conflict');
+  });
+}
+test('A4 applies the same rule to the ramp_schedule alias', () => {
+  assert.deepEqual(validation(makeCase({ proposed_ae: { ramp_schedule: [1, 0.5, 1], ramp_months: null } })).fatal_errors.map(issue => issue.code), ['non_monotone_ramp_schedule']);
+});
+test('A4 keeps the range rule separate from the monotonicity rule', () => {
+  assert.deepEqual(scheduleCodes([0.5, 1.5]), ['invalid_ramp_schedule']);
+  assert.ok(scheduleCodes([-0.1, 1]).includes('invalid_ramp_schedule'));
+  assert.ok(!scheduleCodes([-0.1, 1]).includes('non_monotone_ramp_schedule'));
+});
+test('A5 a conflicting series and single monthly value is recorded as a clarification, not a fatal error', () => {
+  const result = engine.underwrite(makeCase({ demand: { monthly_pipeline_series: Array(12).fill(300000), monthly_qualified_pipeline_created_value: 650000 } }));
+  assert.equal(result.validation.fatal_errors.length, 0);
+  const issue = result.validation.clarifications.find(item => item.code === 'creation_source_conflict');
+  assert.deepEqual(issue.fields, ['demand.monthly_pipeline_series', 'demand.monthly_qualified_pipeline_created_value']);
+  assert.equal(result.decision.state, 'insufficient_evidence');
+  assert.equal(result.enhanced_review_required, true);
+});
+test('A5 a matching series and single monthly value raise nothing', () => {
+  assert.ok(!engine.underwrite(makeCase({ demand: { monthly_pipeline_series: Array(12).fill(650000), monthly_qualified_pipeline_created_value: 650000 } })).validation.clarifications.length);
+});
+test('B2 a supplied zero existing-team rate with positive team bookings is a recorded contradiction', () => {
+  const result = engine.underwrite(makeCase({ conversion: { existing_team_qualified_opp_to_win_pct: 0 } }));
+  const issue = result.validation.clarifications.find(item => item.code === 'existing_team_zero_conversion');
+  assert.deepEqual(issue.fields, ['conversion.existing_team_qualified_opp_to_win_pct']);
+  assert.notEqual(result.decision.state, 'supported');
+});
+test('B2 a zero existing-team rate with no team or founder bookings is not a contradiction', () => {
+  const result = engine.underwrite(makeCase({ conversion: { existing_team_qualified_opp_to_win_pct: 0 }, current_team: { current_quota_carriers: 0, sellers: [], founder_committed_new_arr: 0 } }));
+  assert.ok(!result.validation.clarifications.some(item => item.code === 'existing_team_zero_conversion'));
+  assert.equal(result.calculations.existing_pipeline_requirement_status, 'calculated');
+});
+
 if (failures.length) {
   failures.forEach(failure => console.error('FAIL ' + failure));
   console.error(`AE validation: ${passed} passed, ${failures.length} failed`);

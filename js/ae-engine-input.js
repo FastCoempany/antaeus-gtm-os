@@ -107,7 +107,10 @@
     if (d.analysis_horizon_months != null && (!Number.isInteger(d.analysis_horizon_months)||d.analysis_horizon_months<limits.horizonMin||d.analysis_horizon_months>limits.horizonMax)) fatal('invalid_horizon',['decision.analysis_horizon_months'],'Supported horizons are 6–18 whole months.');
     if (a.ramp_months != null && (a.ramp_months<limits.rampMin||a.ramp_months>limits.rampMax)) fatal('invalid_ramp',['proposed_ae.ramp_months'],'Ramp must be between 0 and 12 months.');
     if (e.average_sales_cycle_days != null && !e.sales_cycle_manual_override && (e.average_sales_cycle_days<limits.cycleMinDays||e.average_sales_cycle_days>limits.cycleMaxDays)) fatal('invalid_cycle',['economics.average_sales_cycle_days'],'Sales cycle is outside the supported range.');
-    ['monthly_ramp_schedule'].forEach(k=>{if(a[k] != null && (!Array.isArray(a[k]) || !a[k].length || a[k].some(v=>typeof v!=='number'||!Number.isFinite(v)||v<0||v>1))) fatal('invalid_ramp_schedule',['proposed_ae.'+k],'Ramp factors must be finite decimals from 0 through 1.');});
+    ['monthly_ramp_schedule'].forEach(k=>{if(a[k] != null && (!Array.isArray(a[k]) || !a[k].length || a[k].some(v=>typeof v!=='number'||!Number.isFinite(v)||v<0||v>1))) fatal('invalid_ramp_schedule',['proposed_ae.'+k],'Ramp factors must be finite decimals from 0 through 1.');
+      // V1 accepts only nondecreasing schedules: a factor that falls back after
+      // rising would let a later start earn more in-horizon contribution (§14.3).
+      else if(Array.isArray(a[k]) && a[k].some((v,i)=>i>0&&v<a[k][i-1])) fatal('non_monotone_ramp_schedule',['proposed_ae.'+k],'Ramp factors must never decrease from one month to the next.');});
     if (p.monthly_pipeline_series != null && (!Array.isArray(p.monthly_pipeline_series)||p.monthly_pipeline_series.some(v=>v!==null&&(typeof v!=='number'||!Number.isFinite(v)||v<0)))) fatal('invalid_pipeline_series',['demand.monthly_pipeline_series'],'Pipeline series must contain nonnegative numbers or explicit unknowns.');
     const compare=(x,y,fields)=>{if(x!=null&&y!=null&&x>y)fatal('contradictory_counts',fields,'Wins or subset counts exceed their denominator or total.');};
     compare(c.closed_won_trailing_12m,c.qualified_opps_trailing_12m,['conversion.closed_won_trailing_12m','conversion.qualified_opps_trailing_12m']);
