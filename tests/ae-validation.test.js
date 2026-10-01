@@ -177,13 +177,11 @@ test('in-horizon current pipeline cannot exceed total current pipeline', () => {
   assertBlocked(input);
   assert.ok(!validation(makeCase({ demand: { current_qualified_pipeline_in_horizon: 3400000, current_qualified_pipeline_value: 3400000 } })).clarifications.some(issue => issue.code === 'current_horizon_pipeline_exceeds_current_pipeline'));
 });
-for (const value of ['never', 'Often', ' rarely', 7]) test('unrecognized founder late-stage answer requires clarification: ' + JSON.stringify(value), () => {
-  const input = assign('repeatability.founder_required_late_stage', value);
-  assert.ok(validation(input).clarifications.some(issue => issue.code === 'unrecognized_founder_late_stage'));
-  assertBlocked(input);
-});
-for (const value of ['rarely', 'sometimes', 'often', 'almost_always', 'unknown', null]) test('recognized or unknown founder late-stage answer needs no clarification: ' + String(value), () => {
-  assert.ok(!validation(assign('repeatability.founder_required_late_stage', value)).clarifications.some(issue => issue.code === 'unrecognized_founder_late_stage'));
+for (const value of ['never', 'Often', ' rarely', 7]) test('unrecognized founder late-stage answer cannot support a later AE: ' + JSON.stringify(value), () => {
+  const result = engine.underwrite(assign('repeatability.founder_required_late_stage', value));
+  assert.notEqual(result.decision.state, 'supported');
+  assert.equal(result.tests.repeatability.founder_late_stage_class, 'unknown');
+  assert.ok(result.evidence_gaps.some(gap => gap.field === 'repeatability.founder_required_late_stage'));
 });
 
 if (failures.length) {

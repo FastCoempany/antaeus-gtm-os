@@ -549,7 +549,7 @@ test('remediation: current allocation never exceeds the current pool net of the 
     const result = engine.calculateAllocatablePipeline({ input, demandPool: engine.calculateDemandPool(input, policy), existingDemand });
     if (result.current_allocatable !== null) {
       lessOrEqual(result.current_allocatable + (reserved ?? 0), pool, 'current claim + reservation');
-      if (explicit !== null && explicit > 0 && reserved === null) assert.equal(existingDemand, 0, 'an unknown reservation cannot admit a positive dollar claim while current sellers need pipeline');
+      if (explicit !== null && explicit > 0 && reserved === null) assert.ok(existingDemand === 0 || (share !== null && explicit <= pool * share), 'an unknown reservation admits a positive dollar claim only with no existing demand or inside an explicit share');
       assert.equal(input.validation.clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool'), false);
     } else if (explicit !== null || share !== null) assert.ok(input.validation.clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool') || result.warnings.length > 0);
   }

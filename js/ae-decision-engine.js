@@ -256,10 +256,7 @@
       var conflict = (validation.clarifications || []).length > 0;
       return { state: 'insufficient_evidence', confidence: 'insufficient', can_decide: false,
         primary_constraint: conflict ? 'data_conflict' : (gate.primary_constraint ||
-          (Array.isArray(gate.blocking_missing) && gate.blocking_missing.length && gate.blocking_missing.every(function (item) {
-            return String(item.field || item).indexOf('repeatability.') === 0;
-          }) ? 'transferability' :
-          missing.some(function (item) { return String(item.field || item).indexOf('conversion') !== -1; }) ? 'unknown_conversion' :
+          (missing.some(function (item) { return String(item.field || item).indexOf('conversion') !== -1; }) ? 'unknown_conversion' :
             missing.some(function (item) { return String(item.field || item).indexOf('capacity') !== -1; }) ? 'unknown_current_capacity' : 'unknown_pipeline_allocation')),
         secondary_constraints: [], reasons: conflict ? validation.clarifications.slice() : missing,
         missing_evidence: missing, constraints: [] };
@@ -321,7 +318,12 @@
       return scenario.decision_changed === true && scenario.deterioration !== false;
     }).forEach(function (scenario) {
       var timingVariable = ['ramp_duration', 'sales_cycle', 'start_date'].indexOf(scenario.variable) !== -1;
-      add(timingVariable ? 'sales_cycle_timing' : scenario.variable === 'pipeline_creation' ? 'pipeline_creation' : 'pipeline_supply', timingVariable ? 'timing' : 'demand_sufficiency',
+      // A flip whose scenario fails on monthly creation is a creation constraint,
+      // whichever variable moved; otherwise keep the variable's dimension.
+      var creationFlip = scenario.variable === 'pipeline_creation' ||
+        scenario.primary_constraint === 'pipeline_creation' || scenario.primary_constraint === 'opportunity_creation';
+      var creationCode = scenario.primary_constraint === 'opportunity_creation' ? 'opportunity_creation' : 'pipeline_creation';
+      add(creationFlip ? creationCode : timingVariable ? 'sales_cycle_timing' : 'pipeline_supply', creationFlip || !timingVariable ? 'demand_sufficiency' : 'timing',
         severity.material, null, false, 'The ' + scenario.variable + ' model scenario changes the decision.');
     });
     var ordered = orderConstraints(constraints, policy);
@@ -374,7 +376,10 @@
     }
     // The required monthly rate is an average over the eligible creation window, so
     // it must hold from the window start, not be reached by the window's end.
+    // A window that opened before the decision date is due at the decision date.
+    var decisionDate = section(input, 'timing').decision_date;
     var creationDeadline = d.creation_window_start || start;
+    if (typeof decisionDate === 'string' && typeof creationDeadline === 'string' && decisionDate > creationDeadline) creationDeadline = decisionDate;
     var unboundedTrigger = d.creation_unbounded_reason === 'zero_conversion' ?
       'Rerun when observed qualified-opportunity conversion is above zero.' :
       'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.';

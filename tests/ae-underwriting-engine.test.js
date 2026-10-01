@@ -498,13 +498,62 @@ test('review: late-stage evidence does not block when founder dependence is alre
     if(value===null)assert.ok(r.evidence_gaps.some(g=>g.field==='repeatability.founder_required_late_stage'));
   }
 });
-test('review: a repeatability-only evidence gap is labeled transferability, and an unrecognized value is a clarification',()=>{
+test('review: a repeatability-only evidence gap is labeled transferability; an unrecognized value is named as such',()=>{
   const missing=engine.underwrite(strong({repeatability:{founder_required_late_stage:null}}));
   assert.equal(missing.decision.state,'insufficient_evidence');assert.equal(missing.decision.primary_constraint,'transferability');
-  const unrecognized=engine.underwrite(strong({repeatability:{founder_required_late_stage:'never'}}));
-  assert.ok(unrecognized.validation.clarifications.some(c=>c.code==='unrecognized_founder_late_stage'));
-  assert.equal(unrecognized.decision.state,'insufficient_evidence');
-  for(const value of ['rarely','sometimes','often','almost_always'])assert.ok(!engine.normalizeInput(strong({repeatability:{founder_required_late_stage:value}})).validation.clarifications.some(c=>c.code==='unrecognized_founder_late_stage'));
+  for(const value of ['never','Often',' rarely',7]) {
+    const r=engine.underwrite(strong({repeatability:{founder_required_late_stage:value}}));
+    assert.equal(r.decision.state,'insufficient_evidence',String(value));assert.equal(r.decision.primary_constraint,'transferability');
+    assert.match(r.evidence_gaps.find(g=>g.field==='repeatability.founder_required_late_stage').required,/unrecognized value/);
+  }
+});
+test('review: the transferability label never masks another gate failure',()=>{
+  const capacity=engine.underwrite(strong({repeatability:{founder_required_late_stage:null},current_team:{sellers:null,current_quota_carriers:null,aggregate_annual_quota:null}}));
+  assert.equal(capacity.decision.state,'insufficient_evidence');assert.equal(capacity.decision.primary_constraint,'unknown_current_capacity');
+  const conversion=engine.underwrite(strong({repeatability:{founder_required_late_stage:null},conversion:{non_founder_wins_trailing_12m:null,non_founder_qualified_opps_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null}}));
+  assert.notEqual(conversion.decision.primary_constraint,'transferability');
+  const target=engine.underwrite(strong({repeatability:{founder_required_late_stage:null},target:{new_arr_target_horizon:null}}));
+  assert.notEqual(target.decision.primary_constraint,'transferability');
+});
+test('review: an unrecognized late-stage answer does not block the first-AE branch, which never reads it',()=>{
+  const firstAE={decision:{evaluating_first_professional_ae:true},current_team:{current_quota_carriers:0,sellers:[],founder_committed_new_arr:650000,founder_expected_to_remain_seller:true},conversion:{non_founder_qualified_opps_trailing_12m:null,non_founder_wins_trailing_12m:null,non_founder_qualified_opp_to_win_pct:null,qualified_opps_trailing_12m:42,closed_won_trailing_12m:11,qualified_opp_to_win_pct:11/42},repeatability:{wins_trailing_12m:11,non_founder_wins_trailing_12m:0,founder_primary_seller_share_pct:1,sales_stages_documented:'partial',repeatable_use_cases_count:2,founder_can_articulate_path:true}};
+  const known=engine.underwrite(makeCase(deepMerge(firstAE,{repeatability:{founder_required_late_stage:'almost_always'}})));
+  const odd=engine.underwrite(makeCase(deepMerge(firstAE,{repeatability:{founder_required_late_stage:'Almost always'}})));
+  assert.equal(odd.decision.state,known.decision.state);assert.equal(odd.decision.confidence,known.decision.confidence);
+});
+test('review: a non-determinative late-stage gap is informational',()=>{
+  const r=engine.underwrite(strong({repeatability:{founder_required_late_stage:null,founder_primary_seller_share_pct:1,non_founder_wins_trailing_12m:0},conversion:{non_founder_wins_trailing_12m:0,non_founder_qualified_opps_trailing_12m:20,non_founder_qualified_opp_to_win_pct:0}}));
+  assert.equal(r.evidence_gaps.find(g=>g.field==='repeatability.founder_required_late_stage').severity,'informational');
+});
+test('review: an explicit current claim inside an admitted share needs no separate reservation',()=>{
+  const both=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:1000000,new_ae_pipeline_share_pct:0.4}}));
+  close(both.calculations.allocatable_current_pipeline,1000000);
+  const shareOnly=structuredClone(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:1000000,new_ae_pipeline_share_pct:0.4}}));delete shareOnly.demand.allocatable_current_qualified_pipeline;
+  const after=engine.underwrite(shareOnly);
+  assert.ok(confidenceRank[after.decision.confidence]<=confidenceRank[both.decision.confidence]||after.calculations.allocatable_current_pipeline>=both.calculations.allocatable_current_pipeline);
+  const outside=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:5000000,new_ae_pipeline_share_pct:0.4}}));
+  assert.equal(outside.calculations.allocatable_current_pipeline,null,'a dollar claim beyond the share still needs the reservation');
+});
+test('review: unknown pool and unknown reservation are requested together',()=>{
+  const r=engine.underwrite(strong({demand:{current_qualified_pipeline_in_horizon:null,current_qualified_pipeline_value:null,allocatable_current_qualified_pipeline:500000}}));
+  const fields=r.evidence_gaps.map(g=>g.field);
+  assert.ok(fields.includes('demand.current_qualified_pipeline_value'));assert.ok(fields.includes('demand.current_pipeline_reserved_for_existing_team'));
+});
+test('review: any sensitivity flip whose scenario fails on monthly creation is coded as creation',()=>{
+  const required=engine.underwrite(strong(DEEP_POOL)).calculations.required_monthly_pipeline_creation;
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:required*1.05}}));
+  const rows=[...r.sensitivity,...r.sensitivity_review].filter(row=>row.decision_changed&&['pipeline_creation','opportunity_creation'].includes(row.primary_constraint));
+  assert.ok(rows.length>0);
+  for(const row of rows)assert.ok((r.decision.constraints||[]).some(c=>['pipeline_creation','opportunity_creation'].includes(c.code)&&c.reason.indexOf('The '+row.variable+' model scenario')===0),row.variable);
+  assert.notEqual(r.decision.primary_constraint,'pipeline_supply','horizon coverage is sufficient, so a creation-driven flip is not a pipeline supply constraint');
+});
+test('review: creation conditions are never due before the decision date',()=>{
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:300000},timing:{decision_date:'2027-02-15'}}));
+  assert.equal(r.conditions.find(c=>c.code==='pipeline_creation').deadline,'2027-02-15');
+});
+test('review: a schedule with no positive month skips the latest-start search',()=>{
+  const r=engine.underwrite(makeCase({proposed_ae:{monthly_ramp_schedule:Array(600).fill(0)},timing:{revenue_needed_by_date:'2027-02-01'}}));
+  assert.equal(r.tests.timing_management.timing.latest_viable_start,null);
 });
 test('review: a decision flip from the pipeline creation scenario is attributed to pipeline creation',()=>{
   const required=engine.underwrite(strong(DEEP_POOL)).calculations.required_monthly_pipeline_creation;

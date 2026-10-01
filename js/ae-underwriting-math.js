@@ -347,17 +347,21 @@
       // A zero claim needs no pool evidence; any positive claim cannot be checked
       // against what exists today, so it stays unknown.
       if (claimed === 0) out.current_allocatable = 0;
-      else out.warnings.push('unknown_current_pipeline_pool');
+      else {
+        out.warnings.push('unknown_current_pipeline_pool');
+        if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown) out.warnings.push('unknown_current_reservation');
+      }
     } else if (exceeds(largestClaim + (reserved === null ? 0 : reserved), currentPool)) {
       // Every current ownership statement must fit the current pool (an unknown
       // reservation is only used at its lower bound, zero, to detect this). A claim
       // that only fits by borrowing future creation or the existing team's
       // reservation is contradictory, so ownership is not established.
       out.warnings.push('current_allocation_exceeds_current_pool');
-    } else if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown) {
+    } else if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown && !(share !== null && explicitCurrent <= currentPool * share)) {
       // A dollar claim says nothing about what current sellers already hold. Without
       // their reservation it cannot be shown not to double-count their pipeline. An
-      // explicit share is itself a split of the pool, so it needs no reservation.
+      // explicit share is itself a split of the pool, so it needs no reservation, and
+      // a dollar claim inside that share is established by it.
       out.warnings.push('unknown_current_reservation');
     } else {
       out.current_allocatable = claimed;
