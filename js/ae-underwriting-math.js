@@ -377,7 +377,7 @@
     out.trace.current_reserved_for_existing_team = reserved;
     out.trace.current_available_to_new_ae = available;
     out.trace.current_claims = currentClaims;
-    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand); capped by total allocation';
+    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand, or fits within the explicit share of the current pool); capped by total allocation';
     return out;
   }
 

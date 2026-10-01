@@ -153,7 +153,7 @@ Before 1.1.0, `allocatable_current_qualified_pipeline` was capped only by the ho
 
 Now the current pool is `demand.current_qualified_pipeline_in_horizon` (falling back to `current_qualified_pipeline_value`, the same pool the demand math uses). Current claims are the explicit current allocation and, when a share is supplied, `current pool × new_ae_pipeline_share_pct`.
 
-Current allocation is the smallest claim only when two conditions hold. First, the largest claim plus `current_pipeline_reserved_for_existing_team` fits the current pool. An unknown reservation is used here only at its lower bound, zero, to detect a contradiction. Second, a positive explicit dollar claim has a known reservation, unless the existing team and founder have no pipeline demand. A dollar claim says nothing about what current sellers already hold, while an explicit share is itself a split of the pool.
+Current allocation is the smallest claim only when two conditions hold. First, the largest claim plus `current_pipeline_reserved_for_existing_team` fits the current pool. An unknown reservation is used here only at its lower bound, zero, to detect a contradiction. Second, a positive explicit dollar claim has a known reservation, unless the existing team and founder have no pipeline demand or the claim fits within the explicit share of the current pool. A dollar claim says nothing about what current sellers already hold, while an explicit share is itself a split of the pool.
 
 When ownership is not established, current allocation is `null` with a specific warning:
 
