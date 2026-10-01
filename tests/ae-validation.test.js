@@ -163,6 +163,29 @@ test('unknown current existing-team reservation stays unknown, never zero', () =
   assert.equal(engine.normalizeInput(makeCase()).demand.current_pipeline_reserved_for_existing_team, null);
 });
 
+for (const [name, value] of [['numeric text', '1000000'], ['boolean', true], ['bare object without a status', { value: 1000000 }], ['negative', -1]]) {
+  test('in-horizon current pipeline rejects ' + name, () => assertBlocked(assign('demand.current_qualified_pipeline_in_horizon', value), true));
+}
+test('in-horizon current pipeline wrapped as explicit unknown stays unknown', () => {
+  const normalized = engine.normalizeInput(assign('demand.current_qualified_pipeline_in_horizon', { value: 5, status: 'unknown', source: 'unknown' }));
+  assert.equal(normalized.demand.current_qualified_pipeline_in_horizon, null);
+  assert.equal(normalized.validation.fatal_errors.length, 0);
+});
+test('in-horizon current pipeline cannot exceed total current pipeline', () => {
+  const input = makeCase({ demand: { current_qualified_pipeline_in_horizon: 3400001, current_qualified_pipeline_value: 3400000 } });
+  assert.ok(validation(input).clarifications.some(issue => issue.code === 'current_horizon_pipeline_exceeds_current_pipeline'));
+  assertBlocked(input);
+  assert.ok(!validation(makeCase({ demand: { current_qualified_pipeline_in_horizon: 3400000, current_qualified_pipeline_value: 3400000 } })).clarifications.some(issue => issue.code === 'current_horizon_pipeline_exceeds_current_pipeline'));
+});
+for (const value of ['never', 'Often', ' rarely', 7]) test('unrecognized founder late-stage answer requires clarification: ' + JSON.stringify(value), () => {
+  const input = assign('repeatability.founder_required_late_stage', value);
+  assert.ok(validation(input).clarifications.some(issue => issue.code === 'unrecognized_founder_late_stage'));
+  assertBlocked(input);
+});
+for (const value of ['rarely', 'sometimes', 'often', 'almost_always', 'unknown', null]) test('recognized or unknown founder late-stage answer needs no clarification: ' + String(value), () => {
+  assert.ok(!validation(assign('repeatability.founder_required_late_stage', value)).clarifications.some(issue => issue.code === 'unrecognized_founder_late_stage'));
+});
+
 if (failures.length) {
   failures.forEach(failure => console.error('FAIL ' + failure));
   console.error(`AE validation: ${passed} passed, ${failures.length} failed`);

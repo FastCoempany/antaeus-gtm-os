@@ -331,7 +331,10 @@
     // creation) is never the bound that makes a current claim admissible.
     var currentPool = args.demandPool ? nonnegative(args.demandPool.current) : null;
     var reserved = nonnegative(demand.current_pipeline_reserved_for_existing_team);
-    var available = currentPool === null ? null : Math.max(0, currentPool - (reserved === null ? 0 : reserved));
+    // With no existing-team or founder pipeline demand there is nothing to
+    // reserve; otherwise an unknown reservation stays unknown (never zero).
+    var reservationKnown = reserved !== null || existing === 0;
+    var available = currentPool === null || !reservationKnown ? null : Math.max(0, currentPool - (reserved === null ? 0 : reserved));
     var currentClaims = [];
     var explicitCurrent = nonnegative(demand.allocatable_current_qualified_pipeline);
     if (explicitCurrent !== null) currentClaims.push({ source: 'explicit_current_allocation', value: explicitCurrent });
@@ -339,17 +342,23 @@
     var claimed = currentClaims.length ? Math.min.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
     var largestClaim = currentClaims.length ? Math.max.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
     if (claimed === null) {
-      out.warnings.push('unknown_current_pipeline_allocation');
-    } else if (available === null) {
+      out.warnings.push(share !== null && currentPool === null ? 'unknown_current_pipeline_pool' : 'unknown_current_pipeline_allocation');
+    } else if (currentPool === null) {
       // A zero claim needs no pool evidence; any positive claim cannot be checked
       // against what exists today, so it stays unknown.
       if (claimed === 0) out.current_allocatable = 0;
       else out.warnings.push('unknown_current_pipeline_pool');
     } else if (exceeds(largestClaim + (reserved === null ? 0 : reserved), currentPool)) {
-      // Every current ownership statement must fit the current pool. A claim that
-      // only fits by borrowing future creation or the existing team's reservation
-      // is contradictory, so ownership is not established.
+      // Every current ownership statement must fit the current pool (an unknown
+      // reservation is only used at its lower bound, zero, to detect this). A claim
+      // that only fits by borrowing future creation or the existing team's
+      // reservation is contradictory, so ownership is not established.
       out.warnings.push('current_allocation_exceeds_current_pool');
+    } else if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown) {
+      // A dollar claim says nothing about what current sellers already hold. Without
+      // their reservation it cannot be shown not to double-count their pipeline. An
+      // explicit share is itself a split of the pool, so it needs no reservation.
+      out.warnings.push('unknown_current_reservation');
     } else {
       out.current_allocatable = claimed;
     }
@@ -364,7 +373,7 @@
     out.trace.current_reserved_for_existing_team = reserved;
     out.trace.current_available_to_new_ae = available;
     out.trace.current_claims = currentClaims;
-    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool; capped by total allocation';
+    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand); capped by total allocation';
     return out;
   }
 

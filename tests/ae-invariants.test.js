@@ -364,7 +364,13 @@ const SCENARIOS = {
   preHorizonTiming: () => strong({ proposed_ae: { ramp_definition: 'pipeline_productivity' }, timing: { revenue_needed_by_date: '2027-02-01' } }),
   surplusCapped: () => strong({ demand: { monthly_qualified_pipeline_created_value: 100000 } }),
   firstAE: () => makeCase(FIRST_AE),
-  reference: () => makeCase()
+  reference: () => makeCase(),
+  // Review additions: a pipeline-productivity base (G10), a base whose opportunity
+  // creation sits just above requirement, and a base with an admitted positive
+  // current allocation backed by a known reservation.
+  pipelineProductivity: () => makeCase({ proposed_ae: { ramp_definition: 'pipeline_productivity' } }),
+  nearOpportunity: () => strong({ demand: { monthly_qualified_opps_created: 7 } }),
+  currentReserved: () => strong(DEEP_POOL, { demand: { allocatable_current_qualified_pipeline: 1000000, current_pipeline_reserved_for_existing_team: 6000000 } })
 };
 const all = () => Object.entries(SCENARIOS).map(([name, build]) => [name, run(build())]);
 const repeatabilityRank = { founder_dependent: 0, unknown: 1, emerging: 2, demonstrated: 3 };
@@ -404,7 +410,7 @@ test('§14.4 lengthening ramp cannot increase in-horizon contribution in either 
 });
 test('§14.5 more allocatable pipeline cannot reduce coverage; more current allocation or creation cannot worsen the creation test', () => {
   for (const amount of [1000000, 2900000, 4200000]) lessOrEqual(run(strong(DEEP_POOL, { demand: { allocatable_qualified_pipeline: amount } })).calculations.demand_coverage, run(strong(DEEP_POOL, { demand: { allocatable_qualified_pipeline: amount * 1.1 } })).calculations.demand_coverage, 'coverage');
-  for (const current of [0, 500000, 1000000, 2000000]) lessOrEqual(run(strong(DEEP_POOL, { demand: { allocatable_current_qualified_pipeline: current + 250000 } })).calculations.required_monthly_pipeline_creation, run(strong(DEEP_POOL, { demand: { allocatable_current_qualified_pipeline: current } })).calculations.required_monthly_pipeline_creation, 'current allocation');
+  for (const current of [0, 500000, 1000000, 2000000]) lessOrEqual(run(strong(DEEP_POOL, { demand: { allocatable_current_qualified_pipeline: current + 250000, current_pipeline_reserved_for_existing_team: 6000000 } })).calculations.required_monthly_pipeline_creation, run(strong(DEEP_POOL, { demand: { allocatable_current_qualified_pipeline: current, current_pipeline_reserved_for_existing_team: 6000000 } })).calculations.required_monthly_pipeline_creation, 'current allocation');
   let priorRatio = -Infinity, priorState = -Infinity;
   for (const created of [0, 100000, 300000, 358000, 360000, 800000]) {
     const demand = run(strong(DEEP_POOL, { demand: { monthly_qualified_pipeline_created_value: created } })).tests.demand_sufficiency;
@@ -448,7 +454,7 @@ test('§14.7 / §14.20 removing remediation-area evidence never raises confidenc
       assert.ok(confidenceRank[after.decision.confidence] <= confidenceRank[before.decision.confidence], `${name} minus ${field}: confidence ${before.decision.confidence} -> ${after.decision.confidence}`);
     }
   }
-  assert.ok(bases >= 10, 'the sweep must cover the complete remediation scenarios');
+  assert.ok(bases >= 13, 'the sweep must cover the complete remediation scenarios');
 });
 test('§14.8 weighted pipeline cannot reach the unweighted creation formula silently', () => {
   const output = run(strong({ demand: { pipeline_value_type: 'probability_weighted' } }));
@@ -539,9 +545,11 @@ test('remediation: current allocation never exceeds the current pool net of the 
     const pool = Math.round(ownershipRandom() * 3000000), reserved = ownershipRandom() < 0.3 ? null : Math.round(ownershipRandom() * 3000000);
     const explicit = ownershipRandom() < 0.3 ? null : Math.round(ownershipRandom() * 3000000), share = ownershipRandom() < 0.5 ? null : Math.round(ownershipRandom() * 100) / 100;
     const input = engine.normalizeInput(makeCase({ demand: { current_qualified_pipeline_in_horizon: pool, current_qualified_pipeline_value: pool, current_pipeline_reserved_for_existing_team: reserved, allocatable_current_qualified_pipeline: explicit, new_ae_pipeline_share_pct: share, allocatable_qualified_pipeline: 9000000 } }));
-    const result = engine.calculateAllocatablePipeline({ input, demandPool: engine.calculateDemandPool(input, policy), existingDemand: 0 });
+    const existingDemand = ownershipRandom() < 0.5 ? 0 : 500000;
+    const result = engine.calculateAllocatablePipeline({ input, demandPool: engine.calculateDemandPool(input, policy), existingDemand });
     if (result.current_allocatable !== null) {
       lessOrEqual(result.current_allocatable + (reserved ?? 0), pool, 'current claim + reservation');
+      if (explicit !== null && explicit > 0 && reserved === null) assert.equal(existingDemand, 0, 'an unknown reservation cannot admit a positive dollar claim while current sellers need pipeline');
       assert.equal(input.validation.clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool'), false);
     } else if (explicit !== null || share !== null) assert.ok(input.validation.clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool') || result.warnings.length > 0);
   }

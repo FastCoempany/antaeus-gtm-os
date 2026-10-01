@@ -162,6 +162,10 @@
         !Array.isArray(proposed.ramp_schedule))) moderate.push('linear_ramp_assumption');
     if (demand.state === 'unknown' || demand.allocation_uncertain === true) low.push('unknown_pipeline_allocation');
     if (demand.allocation_partially_estimated === true) moderate.push('estimated_pipeline_allocation');
+    // Unknown creation sufficiency is uncertain demand evidence. Without this, an
+    // unknown creation test pins the decision at conditional and hides sensitivity
+    // flips, so deleting creation evidence would raise confidence (§14.7).
+    if (demand.pipeline_creation_state === 'unknown' || demand.opportunity_creation_state === 'unknown') low.push('creation_sufficiency_unknown');
     if (repeatability.first_ae === true) moderate.push('first_ae_transferability_unproven');
     var suppliedDemand = section(input, 'demand');
     if (suppliedDemand.pipeline_creation_is_seasonal === true && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
@@ -252,7 +256,10 @@
       var conflict = (validation.clarifications || []).length > 0;
       return { state: 'insufficient_evidence', confidence: 'insufficient', can_decide: false,
         primary_constraint: conflict ? 'data_conflict' : (gate.primary_constraint ||
-          (missing.some(function (item) { return String(item.field || item).indexOf('conversion') !== -1; }) ? 'unknown_conversion' :
+          (Array.isArray(gate.blocking_missing) && gate.blocking_missing.length && gate.blocking_missing.every(function (item) {
+            return String(item.field || item).indexOf('repeatability.') === 0;
+          }) ? 'transferability' :
+          missing.some(function (item) { return String(item.field || item).indexOf('conversion') !== -1; }) ? 'unknown_conversion' :
             missing.some(function (item) { return String(item.field || item).indexOf('capacity') !== -1; }) ? 'unknown_current_capacity' : 'unknown_pipeline_allocation')),
         secondary_constraints: [], reasons: conflict ? validation.clarifications.slice() : missing,
         missing_evidence: missing, constraints: [] };
@@ -279,7 +286,8 @@
         add(code, 'demand_sufficiency', severity.material, normalizedShortfall(ratio, policy.demand.sufficientThreshold), false,
           'Monthly ' + noun + ' creation is below the calculated requirement.');
       } else if (creationState === 'unbounded') {
-        add(code, 'demand_sufficiency', severity.material, 1, false,
+        add(code, 'demand_sufficiency', severity.material, 1, false, demand.creation_unbounded_reason === 'zero_conversion' ?
+          'At the observed zero conversion rate no amount of monthly ' + noun + ' creation meets the requirement.' :
           'No ' + noun + ' created inside the horizon can close in time to cover the remaining requirement.');
       } else if (creationState === 'unknown') {
         add(code, 'demand_sufficiency', severity.material, null, false,
@@ -313,7 +321,7 @@
       return scenario.decision_changed === true && scenario.deterioration !== false;
     }).forEach(function (scenario) {
       var timingVariable = ['ramp_duration', 'sales_cycle', 'start_date'].indexOf(scenario.variable) !== -1;
-      add(timingVariable ? 'sales_cycle_timing' : 'pipeline_supply', timingVariable ? 'timing' : 'demand_sufficiency',
+      add(timingVariable ? 'sales_cycle_timing' : scenario.variable === 'pipeline_creation' ? 'pipeline_creation' : 'pipeline_supply', timingVariable ? 'timing' : 'demand_sufficiency',
         severity.material, null, false, 'The ' + scenario.variable + ' model scenario changes the decision.');
     });
     var ordered = orderConstraints(constraints, policy);
@@ -364,6 +372,12 @@
         d.state === 'unknown' ? ['demand.pipeline_likely_open_at_ae_start', 'demand.new_ae_pipeline_share_pct'] : [],
         'Rerun when allocatable qualified pipeline reaches the calculated requirement.');
     }
+    // The required monthly rate is an average over the eligible creation window, so
+    // it must hold from the window start, not be reached by the window's end.
+    var creationDeadline = d.creation_window_start || start;
+    var unboundedTrigger = d.creation_unbounded_reason === 'zero_conversion' ?
+      'Rerun when observed qualified-opportunity conversion is above zero.' :
+      'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.';
     var observedPipeline = d.observed_monthly_pipeline_creation !== undefined ? d.observed_monthly_pipeline_creation :
       section(input, 'demand').monthly_qualified_pipeline_created_value;
     var observedOpps = d.observed_monthly_opps_created !== undefined ? d.observed_monthly_opps_created :
@@ -371,25 +385,23 @@
     if (numeric(d.required_monthly_pipeline_creation) && d.required_monthly_pipeline_creation > 0) {
       add('pipeline_creation', observedPipeline, d.required_monthly_pipeline_creation,
         numeric(observedPipeline) ? Math.max(0, d.required_monthly_pipeline_creation - observedPipeline) : null,
-        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
+        creationDeadline, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
         'Rerun when the observed monthly pipeline creation available to the new seat meets the requirement.');
     } else if (d.pipeline_creation_state === 'unknown' || d.pipeline_creation_state === 'unbounded') {
       add('pipeline_creation', numeric(observedPipeline) ? observedPipeline : null, null, null,
-        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
-        d.pipeline_creation_state === 'unbounded' ?
-          'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.' :
+        creationDeadline, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
+        d.pipeline_creation_state === 'unbounded' ? unboundedTrigger :
           'Supply the listed evidence and rerun to establish the monthly pipeline creation requirement.');
     }
     if (numeric(d.required_monthly_opps) && d.required_monthly_opps > 0) {
       add('opportunity_creation', observedOpps, d.required_monthly_opps,
         numeric(observedOpps) ? Math.max(0, d.required_monthly_opps - observedOpps) : null,
-        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
+        creationDeadline, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
         'Rerun when qualified opportunity creation available to the new seat meets the requirement.');
     } else if (d.opportunity_creation_state === 'unknown' || d.opportunity_creation_state === 'unbounded') {
       add('opportunity_creation', numeric(observedOpps) ? observedOpps : null, null, null,
-        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
-        d.opportunity_creation_state === 'unbounded' ?
-          'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.' :
+        creationDeadline, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
+        d.opportunity_creation_state === 'unbounded' ? unboundedTrigger :
           'Supply the listed evidence and rerun to establish the monthly qualified opportunity requirement.');
     }
     if (e.state !== 'supported' && numeric(e.contribution)) {
@@ -398,7 +410,7 @@
         numeric(e.gap) ? Math.max(0, requiredGap - e.gap) : null, start, ['current_team_capacity', 'proposed_ae_contribution'], [],
         'Rerun when the revenue capacity gap meets the requirement or the proposed seat scope changes.');
     }
-    if (t.state !== 'compatible') add(t.late_start ? 'late_start' : 'sales_cycle_timing', start, t.latest_viable_start, null,
+    if (t.state !== 'compatible') add(t.late_start === true || t.reason === 'late_start' ? 'late_start' : 'sales_cycle_timing', start, t.latest_viable_start, null,
       t.latest_viable_start, ['ramp_definition', 'ramp_schedule', 'qualified_opportunity_sales_cycle'], [],
       'Rerun when the proposed start or revenue window changes to permit the required contribution.');
     if (r.first_ae) add('transferability', r.state, 'documented_buyer_use_case_qualification_and_close_path', null, start,

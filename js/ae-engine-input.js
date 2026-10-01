@@ -85,7 +85,7 @@
     const fatal = (code,fields,message) => issue('fatal_errors',code,fields,message);
     const clarify = (code,fields,message) => issue('clarifications',code,fields,message);
     const warning = (code,fields,message) => issue('warnings',code,fields,message);
-    const numericName = /(?:quota$|_arr$|new_arr_target_horizon$|pipeline.*(?:value|pipeline)$|_pipeline$|salary$|comp_target$|cost_estimate$|acv$|_pct$|_days$|_months$|_count$|_opps(?:_trailing_12m)?$|_wins(?:_trailing_12m)?$|wins_trailing_12m$|closed_won_trailing_12m$|carriers$|reports$|start_month_index$|departure_month_index$|post_change_wins$|_reserved_for_existing_team$)/;
+    const numericName = /(?:quota$|_arr$|new_arr_target_horizon$|pipeline.*(?:value|pipeline)$|_pipeline$|salary$|comp_target$|cost_estimate$|acv$|_pct$|_days$|_months$|_count$|_opps(?:_trailing_12m)?$|_wins(?:_trailing_12m)?$|wins_trailing_12m$|closed_won_trailing_12m$|carriers$|reports$|start_month_index$|departure_month_index$|post_change_wins$|_reserved_for_existing_team$|_in_horizon$)/;
     function walk(obj,path) {
       if (!obj || typeof obj !== 'object') return;
       Object.entries(obj).forEach(([key,value]) => {
@@ -142,6 +142,8 @@
     // Current supply cannot borrow from future creation: every current ownership
     // claim plus the existing team's current reservation must fit the current
     // cycle-eligible pool (the same pool the demand math uses).
+    // Pipeline expected to close inside the horizon is a subset of current pipeline.
+    if(typeof p.current_qualified_pipeline_in_horizon==='number'&&typeof p.current_qualified_pipeline_value==='number'&&p.current_qualified_pipeline_in_horizon>p.current_qualified_pipeline_value)clarify('current_horizon_pipeline_exceeds_current_pipeline',['demand.current_qualified_pipeline_in_horizon','demand.current_qualified_pipeline_value'],'Current pipeline expected to close inside the horizon exceeds total current qualified pipeline; reconcile the two values.');
     const currentPool=typeof p.current_qualified_pipeline_in_horizon==='number'?p.current_qualified_pipeline_in_horizon:p.current_qualified_pipeline_value;
     if(typeof currentPool==='number'&&currentPool>=0){
       const reserved=typeof p.current_pipeline_reserved_for_existing_team==='number'?p.current_pipeline_reserved_for_existing_team:0;
@@ -152,6 +154,10 @@
       const total=largest+reserved;
       if(total>currentPool&&total-currentPool>Math.max(total,currentPool)*8*Number.EPSILON)clarify('current_allocation_exceeds_current_pool',['demand.allocatable_current_qualified_pipeline','demand.new_ae_pipeline_share_pct','demand.current_pipeline_reserved_for_existing_team','demand.current_qualified_pipeline_in_horizon','demand.current_qualified_pipeline_value'],'Current pipeline allocated to the new AE plus current pipeline reserved for the existing team exceeds the current cycle-eligible pipeline pool. Future pipeline creation cannot be counted as pipeline that exists today; reconcile current ownership.');
     }
+    // founder_required_late_stage is an enum owned by the policy mapping; an
+    // unrecognized answer is a data problem, not a missing one.
+    const lateStage=policy.repeatability&&policy.repeatability.founderLateStage;
+    if(r.founder_required_late_stage!=null&&lateStage&&![...(lateStage.demonstrated||[]),...(lateStage.emerging||[]),...(lateStage.dependent||[])].includes(r.founder_required_late_stage))clarify('unrecognized_founder_late_stage',['repeatability.founder_required_late_stage'],'Use rarely, sometimes, often, almost_always or unknown for how often the founder is required late-stage.');
     const currencies = Object.values(FIELDS).length && Object.keys(FIELDS).map(g=>input[g]?.currency).filter(Boolean);
     if(new Set(currencies).size>1)fatal('mixed_currency',Object.keys(FIELDS).map(g=>g+'.currency'),'Mixed currencies require explicit supplied conversion before engine entry.');
     if(d.hire_reason==='replacement'&&(team.departing_seller_index==null||day(team.departure_date)===null))clarify('replacement_details',['current_team.departing_seller_index','current_team.departure_date'],'Identify the departing seller and departure date before calculating replacement capacity.');

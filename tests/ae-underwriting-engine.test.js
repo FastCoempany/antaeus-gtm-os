@@ -211,7 +211,7 @@ test('defect 1 boundary: creation exactly at requirement is sufficient; one doll
   const required=engine.underwrite(strong(DEEP_POOL)).calculations.required_monthly_pipeline_creation;
   const at=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:required}}));
   assert.equal(at.calculations.pipeline_creation_ratio,1);assert.equal(at.tests.demand_sufficiency.pipeline_creation_state,'sufficient');
-  assert.ok(!codes(at).includes('pipeline_creation'),'a ratio of exactly 1.00x is not a creation shortfall');
+  assert.ok(!(at.decision.constraints||[]).some(c=>c.code==='pipeline_creation'&&c.reason==='Monthly pipeline creation is below the calculated requirement.'),'a ratio of exactly 1.00x is not a creation shortfall');
   const below=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:required-1}}));
   assert.ok(below.calculations.pipeline_creation_ratio<1);assert.equal(below.tests.demand_sufficiency.pipeline_creation_state,'short');
   assert.ok(codes(below).includes('pipeline_creation'));assert.notEqual(below.decision.state,'supported');
@@ -255,7 +255,7 @@ test('defect 1: no eligible creation month makes the remaining requirement unbou
   for(const v of Object.values(r.calculations))if(typeof v==='number')assert.ok(Number.isFinite(v));
 });
 test('defect 1: current allocation covering the requirement needs no creation and adds no creation constraint',()=>{
-  const r=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:3300000}}));
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:3300000,current_pipeline_reserved_for_existing_team:6000000}}));
   assert.equal(r.calculations.required_monthly_pipeline_creation,0);assert.equal(r.calculations.required_monthly_opps,0);
   assert.equal(r.calculations.pipeline_creation_ratio,null);assert.equal(r.tests.demand_sufficiency.pipeline_creation_state,'not_required');
   assert.ok(!codes(r).some(c=>/creation/.test(c)));assert.equal(r.decision.state,'supported');
@@ -352,8 +352,8 @@ test('defect 3 case B: current allocation never double-counts the existing team 
   close(share.current_allocatable,300000);
 });
 test('defect 3 case C: lowering current allocation raises required monthly creation while horizon coverage is unchanged',()=>{
-  const higher=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:1000000}}));
-  const lower=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:0}}));
+  const higher=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:1000000,current_pipeline_reserved_for_existing_team:6000000}}));
+  const lower=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:0,current_pipeline_reserved_for_existing_team:6000000}}));
   assert.equal(higher.calculations.allocatable_pipeline,lower.calculations.allocatable_pipeline);
   assert.equal(higher.calculations.demand_coverage,lower.calculations.demand_coverage);
   assert.ok(lower.calculations.required_monthly_pipeline_creation>higher.calculations.required_monthly_pipeline_creation);
@@ -433,16 +433,134 @@ test('defect 4: pipeline-productivity latest start still carries the qualified-c
 test('defect 4: the search floor is deterministic and derived from the ramp and cycle domain',()=>{
   const first=timingOf(engine.underwrite(productivity({timing:{revenue_needed_by_date:'2027-02-01'}})));
   assert.deepEqual(first,timingOf(engine.underwrite(productivity({timing:{revenue_needed_by_date:'2027-02-01'}}))));
-  const expected=new Date(Date.parse('2027-01-01T00:00:00Z')-(94+(policy.validation.rampMax+1)*31)*86400000).toISOString().slice(0,10);
+  // Linear ramp: the first month is already positive, so floor = start - 94-day lag - 1 month (31 days) of slack.
+  const expected=new Date(Date.parse('2027-01-01T00:00:00Z')-(94+31)*86400000).toISOString().slice(0,10);
   assert.equal(first.latest_start_search_floor,expected);
-  const schedule=timingOf(engine.underwrite(productivity({proposed_ae:{monthly_ramp_schedule:[...Array(20).fill(0.2),1]},timing:{revenue_needed_by_date:'2027-02-01'}})));
-  assert.ok(schedule.latest_start_search_floor<first.latest_start_search_floor,'a longer supplied schedule extends the floor');
+  const schedule=timingOf(engine.underwrite(productivity({proposed_ae:{monthly_ramp_schedule:[...Array(20).fill(0),1]},timing:{revenue_needed_by_date:'2027-02-01'}})));
+  assert.ok(schedule.latest_start_search_floor<first.latest_start_search_floor,'leading zero months in a supplied schedule extend the floor');
   assert.notEqual(schedule.latest_viable_start,null);
+  const long=timingOf(engine.underwrite(productivity({proposed_ae:{monthly_ramp_schedule:Array(24000).fill(1)},timing:{revenue_needed_by_date:'2027-02-01'}})));
+  assert.equal(long.latest_start_search_floor,expected,'a long schedule whose first month is positive does not move the floor');
+  assert.equal(long.latest_viable_start,'2026-10-30');
 });
 test('defect 4: the existing after-horizon start condition keeps its latest viable start',()=>{
   const r=engine.underwrite(makeCase({proposed_ae:{proposed_start_date:'2028-01-01'}}));
   assert.equal(timingOf(r).latest_viable_start,'2027-12-31');
-  assert.equal(r.conditions.find(c=>c.code==='late_start'||c.code==='sales_cycle_timing').deadline,'2027-12-31');
+  const condition=r.conditions.find(c=>c.code==='late_start');
+  assert.ok(condition,'a late start carries a late_start condition');assert.equal(condition.deadline,'2027-12-31');
+});
+
+// ---------------------------------------------------------------------------
+// Adversarial-review hardening (findings verified on the remediation branch).
+test('review: unknown creation sufficiency lowers confidence so deleting creation evidence cannot raise it',()=>{
+  const base=makeCase({proposed_ae:{ramp_definition:'pipeline_productivity'}});
+  const before=engine.underwrite(base);
+  for(const erase of [i=>{i.demand.monthly_qualified_opps_created=null;},i=>{i.economics.average_acv=null;},i=>{i.demand.allocatable_current_qualified_pipeline=null;}]) {
+    const input=structuredClone(base);erase(input);const after=engine.underwrite(input);
+    assert.ok(confidenceRank[after.decision.confidence]<=confidenceRank[before.decision.confidence],before.decision.confidence+' -> '+after.decision.confidence);
+    assert.ok(after.confidence.reasons.includes('creation_sufficiency_unknown'));
+  }
+});
+test('review: a positive current claim needs the existing-team reservation when current sellers need pipeline',()=>{
+  const unknown=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:3300000}}));
+  assert.equal(unknown.calculations.allocatable_current_pipeline,null,'an unknown reservation is never treated as zero');
+  assert.equal(unknown.audit.math.allocation.current_available_to_new_ae,null);
+  assert.equal(unknown.tests.demand_sufficiency.pipeline_creation_state,'unknown');assert.notEqual(unknown.decision.state,'supported');
+  assert.ok(unknown.evidence_gaps.some(g=>g.field==='demand.current_pipeline_reserved_for_existing_team'));
+  const known=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:3300000,current_pipeline_reserved_for_existing_team:6000000}}));
+  close(known.calculations.allocatable_current_pipeline,3300000);close(known.audit.math.allocation.current_available_to_new_ae,6000000);
+  const shareOnly=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:null,new_ae_pipeline_share_pct:0.4}}));
+  close(shareOnly.calculations.allocatable_current_pipeline,4200000,1e-6);
+});
+test('review: with no existing-team pipeline demand a positive current claim needs no reservation',()=>{
+  const input=engine.normalizeInput(makeCase({demand:{current_qualified_pipeline_in_horizon:1000000,current_qualified_pipeline_value:1000000,allocatable_current_qualified_pipeline:400000}}));
+  const pool=engine.calculateDemandPool(input,policy);
+  close(engine.calculateAllocatablePipeline({input,demandPool:pool,existingDemand:0}).current_allocatable,400000);
+  const withDemand=engine.calculateAllocatablePipeline({input,demandPool:pool,existingDemand:500000});
+  assert.equal(withDemand.current_allocatable,null);assert.ok(withDemand.warnings.includes('unknown_current_reservation'));
+});
+test('review: a share against an unknown current pool names the missing pool',()=>{
+  const input=engine.normalizeInput(makeCase({demand:{current_qualified_pipeline_in_horizon:null,current_qualified_pipeline_value:null,allocatable_current_qualified_pipeline:null,new_ae_pipeline_share_pct:0.5}}));
+  const result=engine.calculateAllocatablePipeline({input,demandPool:engine.calculateDemandPool(input,policy),existingDemand:0});
+  assert.equal(result.current_allocatable,null);assert.ok(result.warnings.includes('unknown_current_pipeline_pool'));
+  assert.ok(!result.warnings.includes('unknown_current_pipeline_allocation'));
+});
+test('review: in-horizon current pipeline larger than total current pipeline is a contradiction',()=>{
+  const r=engine.underwrite(strong({demand:{current_qualified_pipeline_in_horizon:12000000,current_qualified_pipeline_value:1000000,allocatable_current_qualified_pipeline:3300000,current_pipeline_reserved_for_existing_team:0}}));
+  assert.ok(r.validation.clarifications.some(c=>c.code==='current_horizon_pipeline_exceeds_current_pipeline'));
+  assert.equal(r.decision.state,'insufficient_evidence');
+});
+test('review: late-stage evidence does not block when founder dependence is already established',()=>{
+  const dependent={repeatability:{founder_primary_seller_share_pct:1,non_founder_wins_trailing_12m:0},conversion:{non_founder_wins_trailing_12m:0,non_founder_qualified_opps_trailing_12m:20,non_founder_qualified_opp_to_win_pct:0}};
+  for(const value of ['often','almost_always',null]) {
+    const r=engine.underwrite(strong(dependent,{repeatability:{founder_required_late_stage:value}}));
+    assert.equal(r.tests.repeatability.state,'founder_dependent');assert.equal(r.decision.state,'not_yet_supported',String(value));
+    if(value===null)assert.ok(r.evidence_gaps.some(g=>g.field==='repeatability.founder_required_late_stage'));
+  }
+});
+test('review: a repeatability-only evidence gap is labeled transferability, and an unrecognized value is a clarification',()=>{
+  const missing=engine.underwrite(strong({repeatability:{founder_required_late_stage:null}}));
+  assert.equal(missing.decision.state,'insufficient_evidence');assert.equal(missing.decision.primary_constraint,'transferability');
+  const unrecognized=engine.underwrite(strong({repeatability:{founder_required_late_stage:'never'}}));
+  assert.ok(unrecognized.validation.clarifications.some(c=>c.code==='unrecognized_founder_late_stage'));
+  assert.equal(unrecognized.decision.state,'insufficient_evidence');
+  for(const value of ['rarely','sometimes','often','almost_always'])assert.ok(!engine.normalizeInput(strong({repeatability:{founder_required_late_stage:value}})).validation.clarifications.some(c=>c.code==='unrecognized_founder_late_stage'));
+});
+test('review: a decision flip from the pipeline creation scenario is attributed to pipeline creation',()=>{
+  const required=engine.underwrite(strong(DEEP_POOL)).calculations.required_monthly_pipeline_creation;
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:required*1.05}}));
+  assert.equal(r.tests.demand_sufficiency.pipeline_creation_state,'sufficient');
+  const flips=(r.decision.constraints||[]).filter(c=>/pipeline_creation model scenario/.test(c.reason));
+  assert.ok(flips.length>0,'the -20% creation scenario flips this case');
+  assert.ok(flips.every(c=>c.code==='pipeline_creation'));
+});
+test('review: creation conditions are due at the start of the eligible creation window',()=>{
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{monthly_qualified_pipeline_created_value:300000,monthly_qualified_opps_created:5}}));
+  for(const code of ['pipeline_creation','opportunity_creation'])assert.equal(r.conditions.find(c=>c.code===code).deadline,'2027-01-01',code);
+  assert.equal(r.tests.demand_sufficiency.creation_window_start,'2027-01-01');
+});
+test('review: zero conversion explains an unbounded creation requirement by the conversion, not the window',()=>{
+  const r=engine.underwrite(strong({conversion:{non_founder_wins_trailing_12m:0,non_founder_qualified_opps_trailing_12m:20,non_founder_qualified_opp_to_win_pct:0},repeatability:{non_founder_wins_trailing_12m:0}}));
+  const d=r.tests.demand_sufficiency;
+  assert.equal(d.pipeline_creation_state,'unbounded');assert.equal(d.creation_unbounded_reason,'zero_conversion');
+  assert.ok(r.calculations.eligible_creation_months>0);
+  assert.ok((r.decision.constraints||[]).filter(c=>c.code==='pipeline_creation').every(c=>/zero conversion/.test(c.reason)));
+  assert.match(r.conditions.find(c=>c.code==='pipeline_creation').retest_trigger,/conversion is above zero/);
+  const window=engine.underwrite(strong(DEEP_POOL,{economics:{average_sales_cycle_days:400}}));
+  assert.equal(window.tests.demand_sufficiency.creation_unbounded_reason,'no_eligible_creation_month');
+});
+test('review: creation evidence gaps name the real cause',()=>{
+  const definition=engine.underwrite(strong(DEEP_POOL,{economics:{sales_cycle_definition:'first_meeting_to_close'}}));
+  assert.ok(definition.evidence_gaps.some(g=>g.field==='economics.sales_cycle_definition'));
+  assert.ok(!definition.tests.demand_sufficiency.pipeline_creation_missing.includes('economics.average_sales_cycle_days'));
+  const zeroACV=engine.underwrite(strong({economics:{average_acv:0}}));
+  assert.equal(zeroACV.tests.demand_sufficiency.opportunity_creation_state,'unknown');
+  assert.ok(zeroACV.tests.demand_sufficiency.opportunity_creation_missing.includes('economics.average_acv'));
+});
+test('review: floating-point noise in the requirement is not a remaining creation gap',()=>{
+  const r=engine.underwrite(strong(DEEP_POOL,{demand:{allocatable_current_qualified_pipeline:675000/(12/57),current_pipeline_reserved_for_existing_team:6000000}}));
+  assert.equal(r.calculations.required_monthly_pipeline_creation,0);assert.equal(r.tests.demand_sufficiency.pipeline_creation_state,'not_required');
+  assert.ok(!(r.decision.constraints||[]).some(c=>c.code==='pipeline_creation'&&c.normalized_shortfall===1));
+});
+function bruteLatest(input,limit,mode) {
+  const normalized=engine.normalizeInput(structuredClone(input));
+  for(let day=Date.parse(limit+'T00:00:00Z');day>=Date.parse('2024-01-01T00:00:00Z');day-=86400000) {
+    const probe=structuredClone(normalized);probe.proposed_ae.proposed_start_date=new Date(day).toISOString().slice(0,10);probe.target.target_period_end=limit;
+    if(engine.calculateHireContribution(probe,12/57,policy,mode).value>0)return probe.proposed_ae.proposed_start_date;
+  }
+  return null;
+}
+for(const [name,overrides,limit,mode] of [
+  ['schedule not ending at 1',{proposed_ae:{monthly_ramp_schedule:[0.25,0.5,0.75],proposed_start_date:'2028-01-01'},timing:{revenue_needed_by_date:'2027-02-15'}},'2027-02-15','closed_bookings'],
+  ['non-monotone schedule',{proposed_ae:{monthly_ramp_schedule:[1,0,0,0,0.25,1],proposed_start_date:'2028-01-01'},timing:{revenue_needed_by_date:'2027-03-16'}},'2027-03-16','closed_bookings'],
+  ['non-monotone schedule with a gap',{proposed_ae:{monthly_ramp_schedule:[0.5,0,0,0,0,0,1],proposed_start_date:'2027-03-01'},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','closed_bookings'],
+  ['non-monotone pipeline-productivity schedule',{proposed_ae:{ramp_definition:'pipeline_productivity',monthly_ramp_schedule:[0.5,0,0.2,1]},timing:{revenue_needed_by_date:'2027-02-01'}},'2027-02-01','pipeline_productivity']
+]) test('review: latest viable start matches brute force for a '+name,()=>{
+  const input=makeCase(overrides);
+  const t=timingOf(engine.underwrite(input));
+  assert.notEqual(t.state,'compatible');
+  assert.equal(t.latest_viable_start,bruteLatest(input,limit,mode));
+  assert.notEqual(t.latest_viable_start,null);
 });
 if(failures.length){failures.forEach(f=>console.error('FAIL '+f));process.exitCode=1;}
 console.log(`AE engine: ${passed} passed, ${failures.length} failed`);
