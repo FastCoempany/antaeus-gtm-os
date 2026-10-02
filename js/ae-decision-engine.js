@@ -22,11 +22,26 @@
       team.no_non_founder_sellers_history === true || team.non_founder_sellers_have_existed === false);
   }
 
+  // Maps founder_required_late_stage onto the policy-owned independence classes.
+  // Anything the policy does not list (null, unknown or an unrecognized value)
+  // is 'unknown': it can never establish demonstrated independence.
+  function classifyFounderLateStage(value, policy) {
+    var mapping = (policy.repeatability || {}).founderLateStage;
+    if (!mapping || !Array.isArray(mapping.demonstrated) || !Array.isArray(mapping.emerging) || !Array.isArray(mapping.dependent)) {
+      throw new TypeError('Policy ' + policy.version + ' must define repeatability.founderLateStage {demonstrated, emerging, dependent}.');
+    }
+    if (mapping.dependent.indexOf(value) !== -1) return 'dependent';
+    if (mapping.emerging.indexOf(value) !== -1) return 'emerging';
+    if (mapping.demonstrated.indexOf(value) !== -1) return 'demonstrated';
+    return 'unknown';
+  }
+
   function classifyRepeatability(input, winRate, policy, demand) {
     policy = policy || defaultPolicy;
     winRate = winRate || {};
     demand = demand || {};
     var r = section(input, 'repeatability');
+    var lateStage = classifyFounderLateStage(r.founder_required_late_stage, policy);
     var conversion = section(input, 'conversion');
     var documented = ['icp_documented', 'qualification_documented', 'discovery_documented', 'sales_stages_documented']
       .filter(function (key) { return positiveDocumentation(r[key]); }).length;
@@ -43,6 +58,7 @@
       state: 'unknown', first_ae: isFirstAE, non_founder_wins: numeric(nfWins) ? nfWins : null,
       non_founder_qualified_opps: numeric(nfOpps) ? nfOpps : null,
       founder_required_late_stage: known(r.founder_required_late_stage) ? r.founder_required_late_stage : null,
+      founder_late_stage_class: lateStage,
       documented_process_items: documented, evidence_window: winRate.source === 'post_change_counts' ? 'post_change' : 'supplied_window',
       evidence_gaps: [], disclosures: []
     };
@@ -70,20 +86,22 @@
       return result;
     }
     // Evidence of dependence takes precedence over a count of past wins.
-    if (r.founder_required_late_stage === 'almost_always' || r.founder_primary_seller_share_pct === 1 ||
+    if (lateStage === 'dependent' || r.founder_primary_seller_share_pct === 1 ||
         (nfWins === 0 && r.wins_trailing_12m > 0)) {
       result.state = 'founder_dependent';
     } else if (nfWins >= policy.repeatability.demonstratedNonFounderWins && nfOpps > 0 &&
-        known(r.founder_required_late_stage) && documented >= policy.repeatability.documentedProcessMinimum &&
+        lateStage === 'demonstrated' && documented >= policy.repeatability.documentedProcessMinimum &&
         numeric(winRate.value) && winRate.scenario_only !== true && winRate.transferable !== false) {
       result.state = 'demonstrated';
     } else if (nfWins > 0 || (numeric(winRate.value) && documented > 0)) {
+      // Includes otherwise-strong evidence whose founder is still sometimes/often
+      // required late-stage: that motion is not yet operationally independent.
       result.state = 'emerging';
     }
     if (winRate.source === 'post_change_counts' && conversion.post_change_non_founder !== true) result.evidence_gaps.push('conversion.post_change_non_founder');
     if (!numeric(nfWins)) result.evidence_gaps.push(winRate.source === 'post_change_counts' ? 'conversion.post_change_wins' : 'conversion.non_founder_wins_trailing_12m');
     if (!numeric(nfOpps)) result.evidence_gaps.push(winRate.source === 'post_change_counts' ? 'conversion.post_change_qualified_opps' : 'conversion.non_founder_qualified_opps_trailing_12m');
-    if (!known(r.founder_required_late_stage)) result.evidence_gaps.push('repeatability.founder_required_late_stage');
+    if (lateStage === 'unknown') result.evidence_gaps.push('repeatability.founder_required_late_stage');
     return result;
   }
 
@@ -144,11 +162,25 @@
         !Array.isArray(proposed.ramp_schedule))) moderate.push('linear_ramp_assumption');
     if (demand.state === 'unknown' || demand.allocation_uncertain === true) low.push('unknown_pipeline_allocation');
     if (demand.allocation_partially_estimated === true) moderate.push('estimated_pipeline_allocation');
+    // Unknown creation sufficiency is uncertain demand evidence. Without this, an
+    // unknown creation test pins the decision at conditional and hides sensitivity
+    // flips, so deleting creation evidence would raise confidence (§14.7).
+    if (demand.pipeline_creation_state === 'unknown' || demand.opportunity_creation_state === 'unknown') low.push('creation_sufficiency_unknown');
     if (repeatability.first_ae === true) moderate.push('first_ae_transferability_unproven');
     var suppliedDemand = section(input, 'demand');
     if (suppliedDemand.pipeline_creation_is_seasonal === true && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
-      moderate.push('seasonal_pipeline_linear_extrapolation');
+      moderate.push('seasonal_creation_without_series');
+    } else if (suppliedDemand.pipeline_creation_is_seasonal !== false && !Array.isArray(suppliedDemand.monthly_pipeline_series)) {
+      // Unknown seasonality can hide a seasonal pattern the flat monthly value
+      // misstates; it can never carry more confidence than a declared one.
+      moderate.push('seasonality_unknown');
     }
+    // An unanswered management question pins the decision at conditional and so
+    // hides sensitivity flips; without this, deleting a management answer could
+    // raise confidence (§8.8 / §14.7).
+    var managementSection = section(input, 'management');
+    if (['direct_manager_exists', 'weekly_1to1_capacity', 'weekly_pipeline_review_capacity', 'onboarding_owner_named',
+      'onboarding_plan_exists'].some(function (key) { return !known(managementSection[key]); })) low.push('management_evidence_unknown');
     var team = section(input, 'current_team');
     var sellers = Array.isArray(team.sellers) ? team.sellers : [];
     if (sellers.some(function (seller) { return !numeric(seller.trailing_attainment_pct); }) ||
@@ -198,6 +230,34 @@
     }
     return ordered;
   }
+  // Maps each low-confidence reason to the constraint (code, dimension) it
+  // describes. Reasons with their own constraint source (an unknown core test,
+  // a sensitivity flip, an unresolved conflict) are not duplicated here.
+  var LOW_REASON_CONSTRAINT = {
+    very_thin_conversion_sample: ['thin_conversion_sample', 'repeatability'],
+    transferability_unproven: ['transferability', 'repeatability'],
+    unknown_conversion: ['transferability', 'repeatability'],
+    unknown_conversion_sample: ['transferability', 'repeatability'],
+    conversion_source_weak_or_unknown: ['transferability', 'repeatability'],
+    unknown_pipeline_allocation: ['unknown_pipeline_allocation', 'demand_sufficiency'],
+    pipeline_source_weak_or_unknown: ['unknown_pipeline_allocation', 'demand_sufficiency'],
+    ramp_ambiguity: ['ramp_ambiguity', 'timing'],
+    management_evidence_unknown: ['management_capacity', 'management'],
+    attainment_source_weak_or_unknown: ['unknown_current_capacity', 'economic_need']
+  };
+  function lowConfidenceConstraints(confidence, demand) {
+    var out = [];
+    (confidence.reasons || []).forEach(function (reason) {
+      var item = LOW_REASON_CONSTRAINT[reason];
+      if (reason === 'creation_sufficiency_unknown') {
+        item = [demand.pipeline_creation_state === 'unknown' ? 'pipeline_creation' : 'opportunity_creation', 'demand_sufficiency'];
+      }
+      if (item && !out.some(function (existing) { return existing[0] === item[0]; })) out.push(item);
+    });
+    return out;
+  }
+  var REPEATABILITY_LOW_REASONS = ['very_thin_conversion_sample', 'transferability_unproven', 'unknown_conversion',
+    'unknown_conversion_sample', 'conversion_source_weak_or_unknown'];
   function closureSupported(demand) {
     return demand.shortfall_closure_supported === true && numeric(demand.closure_amount) &&
       numeric(demand.required) && numeric(demand.allocatable) &&
@@ -250,14 +310,25 @@
       add('pipeline_supply', 'demand_sufficiency', demandHard ? severity.blocking : severity.material,
         normalizedShortfall(demand.coverage, policy.demand.sufficientThreshold), demandHard, 'Allocatable qualified pipeline is below the calculated requirement.');
     } else if (demand.state === 'unknown') add('unknown_pipeline_allocation', 'demand_sufficiency', severity.material, null, false, 'Demand coverage is unknown.');
-    if (numeric(demand.pipeline_creation_ratio) && demand.pipeline_creation_ratio < policy.demand.sufficientThreshold) {
-      add('pipeline_creation', 'demand_sufficiency', severity.material,
-        normalizedShortfall(demand.pipeline_creation_ratio, policy.demand.sufficientThreshold), false, 'Monthly pipeline creation is below the calculated requirement.');
-    }
-    if (numeric(demand.opportunity_creation_ratio) && demand.opportunity_creation_ratio < policy.demand.sufficientThreshold) {
-      add('opportunity_creation', 'demand_sufficiency', severity.material,
-        normalizedShortfall(demand.opportunity_creation_ratio, policy.demand.sufficientThreshold), false, 'Monthly opportunity creation is below the calculated requirement.');
-    }
+    // Monthly creation must sustain the seat, not only the horizon total. A
+    // creation test that cannot be established (unknown or unbounded) cannot
+    // count as satisfied: otherwise removing adverse creation evidence would
+    // make the recommendation more aggressive (§8.8).
+    [['pipeline_creation', demand.pipeline_creation_ratio, demand.pipeline_creation_state, 'pipeline'],
+      ['opportunity_creation', demand.opportunity_creation_ratio, demand.opportunity_creation_state, 'opportunity']].forEach(function (test) {
+      var code = test[0], ratio = test[1], creationState = test[2], noun = test[3];
+      if (numeric(ratio) && ratio < policy.demand.sufficientThreshold) {
+        add(code, 'demand_sufficiency', severity.material, normalizedShortfall(ratio, policy.demand.sufficientThreshold), false,
+          'Monthly ' + noun + ' creation is below the calculated requirement.');
+      } else if (creationState === 'unbounded') {
+        add(code, 'demand_sufficiency', severity.material, 1, false, demand.creation_unbounded_reason === 'zero_conversion' ?
+          'At the observed zero conversion rate no amount of monthly ' + noun + ' creation meets the requirement.' :
+          'No ' + noun + ' created inside the horizon can close in time to cover the remaining requirement.');
+      } else if (creationState === 'unknown') {
+        add(code, 'demand_sufficiency', severity.material, null, false,
+          'Monthly ' + noun + ' creation sufficiency cannot be established from the supplied evidence.');
+      }
+    });
     if (repeatability.state === 'founder_motion_not_yet_externalizable') add('transferability', 'repeatability', severity.blocking, null, true, 'The founder motion is not yet ready to hand over.');
     else if (repeatability.state === 'founder_dependent') {
       var independent = section(input, 'proposed_ae').expected_to_run_independently !== false;
@@ -278,16 +349,33 @@
       add('ramp_ambiguity', 'timing', severity.material, null, false, 'Specify whether ramp describes bookings or pipeline productivity.');
     }
     if (confidence.state === 'low' || confidence.state === 'insufficient') {
-      var thin = (confidence.reasons || []).indexOf('very_thin_conversion_sample') !== -1;
-      add(thin ? 'thin_conversion_sample' : 'transferability', 'repeatability', severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+      // Low confidence is attributed to the dimension that caused it. Demand or
+      // timing uncertainty is never relabeled as a transferability problem.
+      var lowCodes = lowConfidenceConstraints(confidence, demand);
+      lowCodes.forEach(function (item) {
+        if (!constraints.some(function (existing) { return existing.code === item[0] && existing.severity >= severity.material; })) {
+          add(item[0], item[1], severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+        }
+      });
     }
     (context.sensitivities || []).filter(function (scenario) {
       return scenario.decision_changed === true && scenario.deterioration !== false;
     }).forEach(function (scenario) {
       var timingVariable = ['ramp_duration', 'sales_cycle', 'start_date'].indexOf(scenario.variable) !== -1;
-      add(timingVariable ? 'sales_cycle_timing' : 'pipeline_supply', timingVariable ? 'timing' : 'demand_sufficiency',
+      // A flip whose scenario fails on monthly creation is a creation constraint,
+      // whichever variable moved; otherwise keep the variable's dimension.
+      var creationFlip = scenario.variable === 'pipeline_creation' ||
+        scenario.primary_constraint === 'pipeline_creation' || scenario.primary_constraint === 'opportunity_creation';
+      var creationCode = scenario.primary_constraint === 'opportunity_creation' ? 'opportunity_creation' : 'pipeline_creation';
+      add(creationFlip ? creationCode : timingVariable ? 'sales_cycle_timing' : 'pipeline_supply', creationFlip || !timingVariable ? 'demand_sufficiency' : 'timing',
         severity.material, null, false, 'The ' + scenario.variable + ' model scenario changes the decision.');
     });
+    // Low confidence with no attributable cause and no other material constraint
+    // (rare) is named as a generic evidence condition, never as transferability.
+    if ((confidence.state === 'low' || confidence.state === 'insufficient') &&
+        !constraints.some(function (item) { return item.severity >= severity.material; })) {
+      add('evidence_confidence', 'evidence', severity.material, null, false, 'Evidence confidence does not support an unconditional decision.');
+    }
     var ordered = orderConstraints(constraints, policy);
     var allSupported = economic.state === 'supported' && demand.state === 'sufficient' && timing.state === 'compatible' &&
       (management.state === 'ready' || management.state === 'conditional' && management.nonmaterial_gap) &&
@@ -336,17 +424,40 @@
         d.state === 'unknown' ? ['demand.pipeline_likely_open_at_ae_start', 'demand.new_ae_pipeline_share_pct'] : [],
         'Rerun when allocatable qualified pipeline reaches the calculated requirement.');
     }
+    // The required monthly rate is an average over the eligible creation window, so
+    // it must hold from the window start, not be reached by the window's end.
+    // A window that opened before the decision date is due at the decision date.
+    var decisionDate = section(input, 'timing').decision_date;
+    var creationDeadline = d.creation_window_start || start;
+    if (typeof decisionDate === 'string' && typeof creationDeadline === 'string' && decisionDate > creationDeadline) creationDeadline = decisionDate;
+    var unboundedTrigger = d.creation_unbounded_reason === 'zero_conversion' ?
+      'Rerun when observed qualified-opportunity conversion is above zero.' :
+      'Rerun when current allocatable pipeline or the revenue window permits the remaining requirement to close in time.';
+    var observedPipeline = d.observed_monthly_pipeline_creation !== undefined ? d.observed_monthly_pipeline_creation :
+      section(input, 'demand').monthly_qualified_pipeline_created_value;
+    var observedOpps = d.observed_monthly_opps_created !== undefined ? d.observed_monthly_opps_created :
+      section(input, 'demand').monthly_qualified_opps_created;
     if (numeric(d.required_monthly_pipeline_creation) && d.required_monthly_pipeline_creation > 0) {
-      var observed = section(input, 'demand').monthly_qualified_pipeline_created_value;
-      add('pipeline_creation', observed, d.required_monthly_pipeline_creation,
-        numeric(observed) ? Math.max(0, d.required_monthly_pipeline_creation - observed) : null,
-        d.creation_cutoff_date || start, ['eligible_creation_months', 'current_allocatable_pipeline'], [],
+      add('pipeline_creation', observedPipeline, d.required_monthly_pipeline_creation,
+        numeric(observedPipeline) ? Math.max(0, d.required_monthly_pipeline_creation - observedPipeline) : null,
+        creationDeadline, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
         'Rerun when the observed monthly pipeline creation available to the new seat meets the requirement.');
+    } else if (d.pipeline_creation_state === 'unknown' || d.pipeline_creation_state === 'unbounded') {
+      add('pipeline_creation', numeric(observedPipeline) ? observedPipeline : null, null, null,
+        creationDeadline, ['eligible_creation_months', 'current_allocatable_pipeline'], d.pipeline_creation_missing || [],
+        d.pipeline_creation_state === 'unbounded' ? unboundedTrigger :
+          'Supply the listed evidence and rerun to establish the monthly pipeline creation requirement.');
     }
     if (numeric(d.required_monthly_opps) && d.required_monthly_opps > 0) {
-      add('opportunity_creation', section(input, 'demand').monthly_qualified_opps_created, d.required_monthly_opps, null,
-        d.creation_cutoff_date || start, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], [],
+      add('opportunity_creation', observedOpps, d.required_monthly_opps,
+        numeric(observedOpps) ? Math.max(0, d.required_monthly_opps - observedOpps) : null,
+        creationDeadline, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
         'Rerun when qualified opportunity creation available to the new seat meets the requirement.');
+    } else if (d.opportunity_creation_state === 'unknown' || d.opportunity_creation_state === 'unbounded') {
+      add('opportunity_creation', numeric(observedOpps) ? observedOpps : null, null, null,
+        creationDeadline, ['average_acv', 'selected_win_rate', 'eligible_creation_months'], d.opportunity_creation_missing || [],
+        d.opportunity_creation_state === 'unbounded' ? unboundedTrigger :
+          'Supply the listed evidence and rerun to establish the monthly qualified opportunity requirement.');
     }
     if (e.state !== 'supported' && numeric(e.contribution)) {
       var requiredGap = e.contribution * policy.economic.fullUseThreshold;
@@ -354,13 +465,15 @@
         numeric(e.gap) ? Math.max(0, requiredGap - e.gap) : null, start, ['current_team_capacity', 'proposed_ae_contribution'], [],
         'Rerun when the revenue capacity gap meets the requirement or the proposed seat scope changes.');
     }
-    if (t.state !== 'compatible') add(t.late_start ? 'late_start' : 'sales_cycle_timing', start, t.latest_viable_start, null,
+    if (t.state !== 'compatible') add(t.late_start === true || t.reason === 'late_start' ? 'late_start' : 'sales_cycle_timing', start, t.latest_viable_start, null,
       t.latest_viable_start, ['ramp_definition', 'ramp_schedule', 'qualified_opportunity_sales_cycle'], [],
       'Rerun when the proposed start or revenue window changes to permit the required contribution.');
     if (r.first_ae) add('transferability', r.state, 'documented_buyer_use_case_qualification_and_close_path', null, start,
       ['first_ae_execution_risk'], ['repeatability.founder_can_articulate_path'],
       'Reassess transferability when the first non-founder conversion evidence exists.');
-    else if (r.state !== 'demonstrated' || decision.confidence === 'low') add('transferability', r.non_founder_qualified_opps,
+    else if (r.state !== 'demonstrated' || (decision.confidence === 'low' && ((context.confidence || {}).reasons || []).some(function (reason) {
+      return REPEATABILITY_LOW_REASONS.indexOf(reason) !== -1;
+    }))) add('transferability', r.non_founder_qualified_opps,
       policy.conversionSample.thinBelow, numeric(r.non_founder_qualified_opps) ? Math.max(0, policy.conversionSample.thinBelow - r.non_founder_qualified_opps) : null,
       start, ['relevant_non_founder_evidence_window'], ['conversion.non_founder_qualified_opps_trailing_12m',
         'conversion.non_founder_wins_trailing_12m', 'repeatability.founder_required_late_stage'],

@@ -134,6 +134,107 @@ test('normalization does not mutate source input or admit prototype keys', () =>
   assert.equal(Object.hasOwn(normalized.company, '__proto__'), false);
 });
 
+// Current-vs-future pipeline ownership (PR #315 audit, defect 3).
+const currentPool = overrides => makeCase({ demand: Object.assign({ current_qualified_pipeline_in_horizon: 1000000, current_qualified_pipeline_value: 1000000, allocatable_qualified_pipeline: 3000000 }, overrides) });
+const ownershipConflict = input => validation(input).clarifications.some(issue => issue.code === 'current_allocation_exceeds_current_pool');
+for (const [name, overrides] of [
+  ['current allocation exceeds current pool', { allocatable_current_qualified_pipeline: 1500000 }],
+  ['current allocation plus reservation exceeds current pool', { allocatable_current_qualified_pipeline: 500000, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['current share plus reservation exceeds current pool', { allocatable_current_qualified_pipeline: null, new_ae_pipeline_share_pct: 0.5, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['reservation alone exceeds current pool', { allocatable_current_qualified_pipeline: null, current_pipeline_reserved_for_existing_team: 1000001 }],
+  ['current allocation from a pool that is all future creation', { current_qualified_pipeline_in_horizon: 0, current_qualified_pipeline_value: 0, allocatable_current_qualified_pipeline: 1 }]
+]) test('current ownership clarification: ' + name, () => {
+  assert.ok(ownershipConflict(currentPool(overrides)));
+  assertBlocked(currentPool(overrides));
+});
+for (const [name, overrides] of [
+  ['allocation equal to the pool', { allocatable_current_qualified_pipeline: 1000000 }],
+  ['allocation plus reservation equal to the pool', { allocatable_current_qualified_pipeline: 400000, current_pipeline_reserved_for_existing_team: 600000 }],
+  ['share plus reservation equal to the pool up to rounding', { current_qualified_pipeline_in_horizon: 3, current_qualified_pipeline_value: 3, allocatable_qualified_pipeline: 3, allocatable_current_qualified_pipeline: null, new_ae_pipeline_share_pct: 0.1, current_pipeline_reserved_for_existing_team: 2.7 }],
+  ['unknown reservation with an admissible allocation', { allocatable_current_qualified_pipeline: 900000, current_pipeline_reserved_for_existing_team: { value: null, status: 'unknown', source: 'unknown' } }]
+]) test('current ownership fits the current pool: ' + name, () => assert.equal(ownershipConflict(currentPool(overrides)), false));
+for (const [name, value] of [['numeric text', '600000'], ['negative', -1], ['NaN', NaN], ['boolean', true]]) {
+  test('current existing-team reservation rejects ' + name, () => assertBlocked(assign('demand.current_pipeline_reserved_for_existing_team', value), true));
+}
+test('unknown current existing-team reservation stays unknown, never zero', () => {
+  const normalized = engine.normalizeInput(assign('demand.current_pipeline_reserved_for_existing_team', { value: 123, status: 'unknown', source: 'unknown' }));
+  assert.equal(normalized.demand.current_pipeline_reserved_for_existing_team, null);
+  assert.ok(normalized.unknowns.includes('demand.current_pipeline_reserved_for_existing_team'));
+  assert.equal(engine.normalizeInput(makeCase()).demand.current_pipeline_reserved_for_existing_team, null);
+});
+
+for (const [name, value] of [['numeric text', '1000000'], ['boolean', true], ['bare object without a status', { value: 1000000 }], ['negative', -1]]) {
+  test('in-horizon current pipeline rejects ' + name, () => assertBlocked(assign('demand.current_qualified_pipeline_in_horizon', value), true));
+}
+test('in-horizon current pipeline wrapped as explicit unknown stays unknown', () => {
+  const normalized = engine.normalizeInput(assign('demand.current_qualified_pipeline_in_horizon', { value: 5, status: 'unknown', source: 'unknown' }));
+  assert.equal(normalized.demand.current_qualified_pipeline_in_horizon, null);
+  assert.equal(normalized.validation.fatal_errors.length, 0);
+});
+test('in-horizon current pipeline cannot exceed total current pipeline', () => {
+  const input = makeCase({ demand: { current_qualified_pipeline_in_horizon: 3400001, current_qualified_pipeline_value: 3400000 } });
+  assert.ok(validation(input).clarifications.some(issue => issue.code === 'current_horizon_pipeline_exceeds_current_pipeline'));
+  assertBlocked(input);
+  assert.ok(!validation(makeCase({ demand: { current_qualified_pipeline_in_horizon: 3400000, current_qualified_pipeline_value: 3400000 } })).clarifications.some(issue => issue.code === 'current_horizon_pipeline_exceeds_current_pipeline'));
+});
+for (const value of ['never', 'Often', ' rarely', 7]) test('unrecognized founder late-stage answer cannot support a later AE: ' + JSON.stringify(value), () => {
+  const result = engine.underwrite(assign('repeatability.founder_required_late_stage', value));
+  assert.notEqual(result.decision.state, 'supported');
+  assert.equal(result.tests.repeatability.founder_late_stage_class, 'unknown');
+  assert.ok(result.evidence_gaps.some(gap => gap.field === 'repeatability.founder_required_late_stage'));
+});
+
+// Second hardening pass (engine 1.2.0). A4: ramp schedules must be nondecreasing.
+const schedule = factors => makeCase({ proposed_ae: { monthly_ramp_schedule: factors, ramp_months: null } });
+const scheduleCodes = factors => validation(schedule(factors)).fatal_errors.map(issue => issue.code);
+for (const [name, factors] of [['increasing', [0.25, 0.5, 0.75, 1]], ['equal factors', [0.5, 0.5, 0.5, 1]], ['all ones', [1, 1, 1]], ['zero-led', [0, 0, 0.5, 1]], ['single factor', [1]]]) {
+  test(`A4 accepts a ${name} ramp schedule`, () => {
+    assert.deepEqual(scheduleCodes(factors), []);
+    assert.notEqual(engine.underwrite(schedule(factors)).status, 'validation_stop');
+  });
+}
+for (const [name, factors] of [['declining', [0.5, 0.25, 0.75]], ['decline after 1', [0.5, 1, 0.75]], ['dip and recover', [1, 0, 1]], ['late decline', [0.25, 0.5, 1, 1, 0.9]]]) {
+  test(`A4 rejects a ${name} ramp schedule`, () => {
+    assert.deepEqual(scheduleCodes(factors), ['non_monotone_ramp_schedule']);
+    assertBlocked(schedule(factors), true);
+    assert.equal(engine.underwrite(schedule(factors)).decision.primary_constraint, 'data_conflict');
+  });
+}
+test('A4 applies the same rule to the ramp_schedule alias', () => {
+  assert.deepEqual(validation(makeCase({ proposed_ae: { ramp_schedule: [1, 0.5, 1], ramp_months: null } })).fatal_errors.map(issue => issue.code), ['non_monotone_ramp_schedule']);
+});
+test('A4 keeps the range rule separate from the monotonicity rule', () => {
+  assert.deepEqual(scheduleCodes([0.5, 1.5]), ['invalid_ramp_schedule']);
+  assert.ok(scheduleCodes([-0.1, 1]).includes('invalid_ramp_schedule'));
+  assert.ok(!scheduleCodes([-0.1, 1]).includes('non_monotone_ramp_schedule'));
+});
+test('A5 (1.3.0) a series and a different single monthly value raise no validation issue', () => {
+  for (const seasonal of [true, false, null]) {
+    const result = engine.underwrite(makeCase({ demand: { pipeline_creation_is_seasonal: seasonal, monthly_pipeline_series: Array(12).fill(300000), monthly_qualified_pipeline_created_value: 650000 } }));
+    assert.equal(result.validation.fatal_errors.length, 0);
+    assert.ok(!result.validation.clarifications.some(item => item.code === 'creation_source_conflict'), String(seasonal));
+  }
+});
+test('A5 (1.3.0) the single monthly value role is recorded for audit', () => {
+  const role = demand => engine.underwrite(makeCase({ demand })).audit.math.demand.single_monthly_value_role;
+  assert.equal(role({ pipeline_creation_is_seasonal: false }), 'modeling');
+  assert.equal(role({ pipeline_creation_is_seasonal: true }), 'illustrative');
+  assert.equal(role({ pipeline_creation_is_seasonal: null }), 'illustrative');
+  assert.equal(role({ monthly_pipeline_series: Array(12).fill(650000) }), 'reference');
+  assert.equal(role({ monthly_qualified_pipeline_created_value: null }), null);
+});
+test('B2 a supplied zero existing-team rate with positive team bookings is a recorded contradiction', () => {
+  const result = engine.underwrite(makeCase({ conversion: { existing_team_qualified_opp_to_win_pct: 0 } }));
+  const issue = result.validation.clarifications.find(item => item.code === 'existing_team_zero_conversion');
+  assert.deepEqual(issue.fields, ['conversion.existing_team_qualified_opp_to_win_pct']);
+  assert.notEqual(result.decision.state, 'supported');
+});
+test('B2 a zero existing-team rate with no team or founder bookings is not a contradiction', () => {
+  const result = engine.underwrite(makeCase({ conversion: { existing_team_qualified_opp_to_win_pct: 0 }, current_team: { current_quota_carriers: 0, sellers: [], founder_committed_new_arr: 0 } }));
+  assert.ok(!result.validation.clarifications.some(item => item.code === 'existing_team_zero_conversion'));
+  assert.equal(result.calculations.existing_pipeline_requirement_status, 'calculated');
+});
+
 if (failures.length) {
   failures.forEach(failure => console.error('FAIL ' + failure));
   console.error(`AE validation: ${passed} passed, ${failures.length} failed`);

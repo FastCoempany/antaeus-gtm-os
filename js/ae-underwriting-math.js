@@ -16,6 +16,9 @@
     return value !== null && value >= 0 ? value : null;
   }
   function safe(value) { return Number.isFinite(value) ? value : null; }
+  // Floating-point comparison only (no business materiality): a sum that equals
+  // its bound up to rounding is not treated as exceeding it.
+  function exceeds(a, b) { return a > b && a - b > Math.max(Math.abs(a), Math.abs(b)) * 8 * Number.EPSILON; }
   function result(value, details) {
     return Object.assign({ value: safe(value), assumptions: [], warnings: [], trace: {} }, details || {});
   }
@@ -278,12 +281,26 @@
     var cutoff = h.end - Math.ceil(cycle);
     out.creation_cutoff_date = formatDate(cutoff);
     out.eligible_creation_months = monthsBetween(h.start, cutoff);
-    var monthly = nonnegative(demand.monthly_qualified_pipeline_created_value);
+    // Source semantics (1.3.0). A supplied monthly series is the authoritative
+    // creation pattern; the single monthly value is then reference metadata (often a
+    // recent month) and is never compared with the series average. Without a series,
+    // the single value models creation only when creation is confirmed not seasonal:
+    // a flat extrapolation of one month cannot establish seasonal (or possibly
+    // seasonal) creation, so it is kept as an illustrative scenario and creation
+    // stays unknown. Deleting a seasonal series therefore cannot strengthen a result.
+    var singleValue = nonnegative(demand.monthly_qualified_pipeline_created_value);
     var series = Array.isArray(demand.monthly_pipeline_series) ? demand.monthly_pipeline_series : null;
+    var singleModels = !series && demand.pipeline_creation_is_seasonal === false;
+    var monthly = singleModels ? singleValue : null;
     var future = 0, parts = [], known = true;
-    if (demand.pipeline_creation_is_seasonal === true && !series) {
-      out.assumptions.push('Seasonal pipeline creation is extrapolated linearly from the supplied monthly value because no monthly series was supplied.');
-      out.warnings.push('seasonal_linear_simplification');
+    out.single_monthly_value_role = singleValue === null ? null : series ? 'reference' : singleModels ? 'modeling' : 'illustrative';
+    out.trace.single_monthly_value = singleValue;
+    out.trace.single_monthly_value_role = out.single_monthly_value_role;
+    if (!series && !singleModels && singleValue !== null) {
+      out.assumptions.push(demand.pipeline_creation_is_seasonal === true ?
+        'Seasonal pipeline creation needs a monthly series; the single monthly value is shown only as an illustrative flat scenario.' :
+        'Pipeline creation is not confirmed non-seasonal; the single monthly value is shown only as an illustrative flat scenario until seasonality is confirmed or a monthly series is supplied.');
+      out.warnings.push(demand.pipeline_creation_is_seasonal === true ? 'seasonal_creation_requires_series' : 'creation_seasonality_unconfirmed');
     }
     for (var day = h.start; day <= cutoff;) {
       var next = addMonths(monthStart(day), 1), end = Math.min(next - 1, cutoff);
@@ -296,11 +313,15 @@
       day = end + 1;
     }
     out.future = known ? safe(future) : null;
+    if (!series && !singleModels && singleValue !== null) {
+      var eligibleFraction = parts.reduce(function (sum, part) { return sum + part.eligible_fraction; }, 0);
+      out.trace.illustrative_flat_future = safe(singleValue * eligibleFraction);
+    }
     out.value = current === null || out.future === null ? null : safe(current + out.future);
     out.trace.current = current;
     out.trace.cycle_days = cycle;
     out.trace.future = parts;
-    if (!known) out.warnings.push(series ? 'incomplete_monthly_pipeline_series' : 'unknown_monthly_pipeline_creation');
+    if (!known && (series || singleModels || singleValue === null)) out.warnings.push(series ? 'incomplete_monthly_pipeline_series' : 'unknown_monthly_pipeline_creation');
     return out;
   }
 
@@ -311,7 +332,10 @@
     var out = result(null, { surplus: null, measures: [], current_allocatable: null });
     out.trace = { formula: 'minimum(supported explicit allocation, pool * explicit share, supported theoretical surplus)', pool: pool, existing_team_requirement: existing };
     if (demand.pipeline_value_type !== 'unweighted') { out.warnings.push('unweighted_pipeline_required'); return out; }
-    out.surplus = pool === null || existing === null ? null : Math.max(0, pool - existing);
+    // An unbounded existing-team requirement (known zero team conversion with
+    // positive team bookings) consumes all supply: the surplus cap is 0.
+    out.surplus = args.existingDemandUnbounded === true ? 0 : pool === null || existing === null ? null : Math.max(0, pool - existing);
+    out.trace.existing_team_requirement_unbounded = args.existingDemandUnbounded === true;
     var declared = nonnegative(demand.allocatable_qualified_pipeline);
     var share = number(demand.new_ae_pipeline_share_pct);
     if (share !== null && (share < 0 || share > 1)) share = null;
@@ -322,15 +346,77 @@
     if (out.measures.length && out.surplus !== null) out.measures.push({ source: 'theoretical_surplus_cap', value: out.surplus });
     if (out.measures.length) out.value = Math.min.apply(Math, out.measures.map(function (item) { return item.value; }));
     else out.warnings.push('unknown_pipeline_allocation');
-    var current = nonnegative(demand.allocatable_current_qualified_pipeline);
-    if (current !== null) out.current_allocatable = current;
-    else if (share !== null && args.demandPool && nonnegative(args.demandPool.current) !== null) out.current_allocatable = safe(args.demandPool.current * share);
+    // Current allocation is temporal: it is bounded by the cycle-eligible
+    // pipeline that exists today, net of any current pipeline reserved for the
+    // existing team/founder. Horizon-wide allocation (which can include future
+    // creation) is never the bound that makes a current claim admissible.
+    var currentPool = args.demandPool ? nonnegative(args.demandPool.current) : null;
+    var reserved = nonnegative(demand.current_pipeline_reserved_for_existing_team);
+    // With no existing-team or founder pipeline demand there is nothing to
+    // reserve; otherwise an unknown reservation stays unknown (never zero).
+    var reservationKnown = reserved !== null || existing === 0;
+    var available = currentPool === null || !reservationKnown ? null : Math.max(0, currentPool - (reserved === null ? 0 : reserved));
+    var currentClaims = [];
+    var explicitCurrent = nonnegative(demand.allocatable_current_qualified_pipeline);
+    if (explicitCurrent !== null) currentClaims.push({ source: 'explicit_current_allocation', value: explicitCurrent });
+    if (share !== null && currentPool !== null) currentClaims.push({ source: 'explicit_share_of_current_pool', value: safe(currentPool * share) });
+    var claimed = currentClaims.length ? Math.min.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
+    var largestClaim = currentClaims.length ? Math.max.apply(Math, currentClaims.map(function (item) { return item.value; })) : null;
+    if (claimed === null) {
+      out.warnings.push(share !== null && currentPool === null ? 'unknown_current_pipeline_pool' : 'unknown_current_pipeline_allocation');
+    } else if (currentPool === null) {
+      // A zero claim needs no pool evidence; any positive claim cannot be checked
+      // against what exists today, so it stays unknown.
+      if (claimed === 0) out.current_allocatable = 0;
+      else {
+        out.warnings.push('unknown_current_pipeline_pool');
+        if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown) out.warnings.push('unknown_current_reservation');
+      }
+    } else if (exceeds(largestClaim + (reserved === null ? 0 : reserved), currentPool)) {
+      // Every current ownership statement must fit the current pool (an unknown
+      // reservation is only used at its lower bound, zero, to detect this). A claim
+      // that only fits by borrowing future creation or the existing team's
+      // reservation is contradictory, so ownership is not established.
+      out.warnings.push('current_allocation_exceeds_current_pool');
+    } else if (explicitCurrent !== null && explicitCurrent > 0 && !reservationKnown && !(share !== null && explicitCurrent <= currentPool * share)) {
+      // A dollar claim says nothing about what current sellers already hold. Without
+      // their reservation it cannot be shown not to double-count their pipeline. An
+      // explicit share is itself a split of the pool, so it needs no reservation, and
+      // a dollar claim inside that share is established by it.
+      out.warnings.push('unknown_current_reservation');
+    } else {
+      out.current_allocatable = claimed;
+    }
+    // Inherited pipeline must still be open when the seller starts: a deal that
+    // closes before the start date cannot be handed over. Current supply is
+    // therefore bounded by pipeline_likely_open_at_ae_start. Without that answer
+    // survival to the start date is not established, so a positive claim stays
+    // unknown rather than assuming every current deal is still open (a known
+    // zero claim needs no survival evidence).
+    var openAtStart = nonnegative(demand.pipeline_likely_open_at_ae_start);
+    out.trace.current_claim_before_start_survival = out.current_allocatable;
+    if (out.current_allocatable !== null && out.current_allocatable > 0) {
+      if (openAtStart === null) {
+        out.current_allocatable = null;
+        out.warnings.push('unknown_pipeline_open_at_ae_start');
+      } else if (openAtStart < out.current_allocatable) {
+        out.current_allocatable = openAtStart;
+        out.warnings.push('current_allocation_limited_by_pipeline_open_at_ae_start');
+      }
+    }
+    out.trace.pipeline_open_at_ae_start = openAtStart;
+    // A seller's current allocation also cannot exceed its own total allocation.
     if (out.current_allocatable !== null && out.value !== null) out.current_allocatable = Math.min(out.current_allocatable, out.value);
     if (declared !== null && pool !== null && declared > pool) out.warnings.push('allocation_exceeds_pipeline_pool');
     out.trace.declared_allocation = declared;
     out.trace.share = share;
     out.trace.surplus = out.surplus;
     out.trace.measures = out.measures;
+    out.trace.current_pool = currentPool;
+    out.trace.current_reserved_for_existing_team = reserved;
+    out.trace.current_available_to_new_ae = available;
+    out.trace.current_claims = currentClaims;
+    out.trace.current_formula = 'minimum(explicit current allocation, current pool * explicit share, pipeline likely open at AE start) when every claim + current existing-team reservation <= current cycle-eligible pool and a positive explicit claim has a known reservation (or no existing-team pipeline demand, or fits within the explicit share of the current pool); a positive claim with unknown pipeline open at AE start is unknown; capped by total allocation';
     return out;
   }
 

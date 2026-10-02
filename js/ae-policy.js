@@ -11,7 +11,7 @@
   }
   // Operating policy, not external benchmarks. Changes require a new version.
   return freeze({
-    version: 'ae-policy-1.0.0',
+    version: 'ae-policy-1.1.0',
     economic: { fullUseThreshold: 0.80, partialUseThreshold: 0.50 },
     demand: { sufficientThreshold: 1, nearThreshold: 0.85 },
     conversionSample: { veryThinBelow: 10, thinBelow: 20 },
@@ -19,7 +19,16 @@
       demonstratedNonFounderWins: 5,
       documentedProcessMinimum: 2,
       firstAERelevantWins: 5,
-      firstAEUseCasesMinimum: 1
+      firstAEUseCasesMinimum: 1,
+      // 1.1.0: the field records when the founder is REQUIRED late-stage, not
+      // merely present. Only `rarely` is independent enough for demonstrated;
+      // `sometimes`/`often` cap a later-AE motion at emerging. Values outside
+      // these lists (including unknown) cannot establish independence.
+      founderLateStage: {
+        demonstrated: ['rarely'],
+        emerging: ['sometimes', 'often'],
+        dependent: ['almost_always']
+      }
     },
     evidence: {
       unknownCoreTestsLimit: 2,
