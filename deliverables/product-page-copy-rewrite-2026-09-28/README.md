@@ -54,7 +54,8 @@ The scan covers visible text, aria/alt/title attributes and JS string literals, 
 
 ## 4. Still open (not something the map can fix)
 
-- **Dashboard "move" kicker:** the live Dashboard still says "The most valuable move on your board". The page now says "Highest-priority action"; canon sides with the page, so the app should change.
+- **The app-wide language audit (founder, 2026-10-02).** The language across the whole app will be audited and changed, but the app is not being touched yet. Until then, the page's product mocks deliberately repeat the labels the app shows today. The map lists every one of those labels and where it lives in `src/` under `app_label_dependencies`. When the app audit changes them, update the page in the same pass so the footer stays true.
+- **Dashboard "move" kicker:** the live Dashboard still says "The most valuable move on your board", while the page says "Highest-priority action". This waits for the app audit; nothing in the app was changed.
 - **Product gaps behind the copy:** delete leaves share links, observations and captured meetings in place; the export leaves out signals, observations and captured meetings. The copy now names only what each actually covers.
 - **Founder calls:** whether "room" and "motion" are user-facing words; the Pace / Quota Workback name; whether COPY_STANDARD should be amended where it conflicts with canon (the personification ban, "evidence" as a preferred noun, "slip", "autopsy", the hot/warm/cold rule); where the four PR #314 docs should live and whether COPY_STANDARD enters the canon authority order. COPY_STANDARD.md, CODEX_HANDOFF.md and COPY_AUDIT_AND_REWRITE.md are not edited.
 - **Lint scores** (`issues_after`, `severity_after`) were not recomputed for revised units.

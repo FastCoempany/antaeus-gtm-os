@@ -15099,5 +15099,111 @@
     ],
     "lint_note": "issues_after / severity_after were not re-scored for revised units; see each unit's revision_2026_10_02.findings."
   },
-  "raw_text_node_rules": "covered_by_logical_unit = the innermost logical unit whose source inner-HTML span contains the text node (recomputed 2026-10-02 by offset, not by direct parent). Every node carries an explicit decision."
+  "raw_text_node_rules": "covered_by_logical_unit = the innermost logical unit whose source inner-HTML span contains the text node (recomputed 2026-10-02 by offset, not by direct parent). Every node carries an explicit decision.",
+  "app_label_dependencies": {
+    "note": "The product mocks on this page repeat labels the live app renders today. The app-wide language audit (founder, 2026-10-02) has not started and the app is not being changed yet. When it lands, re-sync every entry below on the page in the same pass, or the page footer stops being true.",
+    "entries": [
+      {
+        "labels": [
+          "You are the system",
+          "Building",
+          "Inheritable with guardrails",
+          "Inheritable",
+          "Hire-ready",
+          "Hire-ready, repeatable",
+          "Repeatable"
+        ],
+        "app_source": [
+          "src/lib/readiness/types.ts (VERDICT_LABEL)",
+          "src/dashboard/v4/ClimbDrawer.tsx",
+          "src/dashboard/v4/lib/cockpit.ts (GATE_LABELS)"
+        ],
+        "page": "units 62-67, 100, 297; leaves at the Dashboard and two-up ladders"
+      },
+      {
+        "labels": [
+          "Act now",
+          "Reach while warm",
+          "Emerging",
+          "Going cold",
+          "hot, and something just moved"
+        ],
+        "app_source": [
+          "src/signal-console/v4/lib/attention.ts (BAND_META)"
+        ],
+        "page": "units 30, 31, 83"
+      },
+      {
+        "labels": [
+          "Where your whole motion stands",
+          "The most valuable move on your board"
+        ],
+        "app_source": [
+          "src/dashboard/v4/DashboardV4.tsx"
+        ],
+        "page": "unit 18 matches the app; units 19 and 71 already say \"Highest-priority action\", so the app is the side that differs"
+      },
+      {
+        "labels": [
+          "Pain & consequence"
+        ],
+        "app_source": [
+          "src/discovery-studio/v4/DiscoveryStudioV4.tsx"
+        ],
+        "page": "units 45, 140; JS MOMENTS[1] kicker"
+      },
+      {
+        "labels": [
+          "One thing to notice",
+          "N of 7 parts ready"
+        ],
+        "app_source": [
+          "src/founding-gtm/v4/FoundingGtmV4.tsx"
+        ],
+        "page": "units 58, 75, 78; JS MOMENTS[3]"
+      },
+      {
+        "labels": [
+          "What the first week looks like (and the other six section titles)"
+        ],
+        "app_source": [
+          "src/founding-gtm/lib/types.ts (SECTION_TITLE)"
+        ],
+        "page": "leaf \"The week to run\"; handoff contents lists"
+      },
+      {
+        "labels": [
+          "Who's hands-on"
+        ],
+        "app_source": [
+          "src/pilot-desk/v4/PilotDeskV4.tsx"
+        ],
+        "page": "units 52, 156"
+      },
+      {
+        "labels": [
+          "The one thing blocking",
+          "Your line",
+          "papers you already hold"
+        ],
+        "app_source": [
+          "src/getting-to-signed/v4/GettingToSignedV4.tsx"
+        ],
+        "page": "units 159, 160, 161; Getting to Signed card rows"
+      },
+      {
+        "labels": [
+          "Open the call",
+          "Why it matters to them",
+          "Show them it's worked before",
+          "Ask for the meeting",
+          "Wrap up"
+        ],
+        "app_source": [
+          "src/cold-call-studio/v4/ColdCallStudioV4.tsx (STEP_META)"
+        ],
+        "page": "raw edit L1201 Cold Call step row"
+      }
+    ]
+  }
 }
