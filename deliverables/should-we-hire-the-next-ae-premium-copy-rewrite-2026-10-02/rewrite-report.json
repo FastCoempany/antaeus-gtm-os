@@ -1,0 +1,416 @@
+[
+ {
+  "section": "head",
+  "before": "content=\"Before you add the next quota-carrying AE, find out whether your sales motion can carry them, and what has to become true first if it can't. The method does the math. A person reads what it means.\"",
+  "after": "content=\"Before you hire another AE, find out whether your sales process can support one, and what has to change first if it can't. The analysis does the math. On the reviewed brief, a person goes through the results with you.\"",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "Most sales leaders get about 18&nbsp;months. The next AE hire is <em>where that clock starts.</em>",
+  "after": "Most sales leaders get about 18&nbsp;months to show results. <em>The next AE they hire often decides how those months go.</em>",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "Find out whether your company can carry another quota-carrying AE right now, and if it can’t, exactly what has to become true first. The method does the math and catches the numbers that don’t agree. On the reviewed brief, a person who has watched this hire go wrong five times reads what it means with you.",
+  "after": "Find out whether your company can support another AE with a quota right now and, if it can’t, exactly what has to change first. The analysis does the math and flags numbers that contradict each other. On the reviewed brief, the founder of Antaeus, who has watched this hire go wrong at five companies, goes through the results with you.",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "Should we add the next quota-carrying AE?",
+  "after": "Should we hire another AE?",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "</svg>Conditional</span>\n          <p>Pipeline supply is the limiting condition.</p>",
+  "after": "</svg>Supported with conditions</span>\n          <p>There isn’t enough qualified pipeline yet for another seller.</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Demand supply</dt>",
+  "after": "<dt>Pipeline supply</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "</svg>Thin</dd>",
+  "after": "</svg>Short</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Motion repeatability</dt>",
+  "after": "<dt>Repeatable without the founder</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Timing &amp; management</dt>",
+  "after": "<dt>Timing and management</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": ">Next AE economics<",
+  "after": ">What the new AE must produce<",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Wins required</dt>",
+  "after": "<dt>Deals to win</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Qualified opportunities required</dt>",
+  "after": "<dt>Qualified opportunities needed</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Qualified pipeline required</dt>",
+  "after": "<dt>Qualified pipeline needed</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": ">The hire becomes supportable when<",
+  "after": ">The hire is supported once<",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "Qualified pipeline you can hand the new AE reaches the required amount.",
+  "after": "The qualified pipeline you can hand the new AE reaches the amount needed.",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "The qualified opportunities you create each month can feed one more seat.",
+  "after": "You create enough new qualified opportunities each month for one more seller.",
+  "occurrences": 1
+ },
+ {
+  "section": "cost",
+  "before": "A hiring plan usually counts only the salary. Add the ramp, the recruiting and the pipeline that never closes, and the bill for a seat the motion couldn’t carry adds up fast.",
+  "after": "A hiring plan usually counts only the salary. Add the ramp time, the recruiting and the pipeline that never closes, and the cost of a hire your sales process couldn’t support adds up fast.",
+  "occurrences": 1
+ },
+ {
+  "section": "cost",
+  "before": "Accounts given to a seat the motion couldn’t feed. Many are hard to restart once the seller leaves.",
+  "after": "Accounts given to a new seller when there wasn’t enough pipeline to keep them busy. Many are hard to restart once the seller leaves.",
+  "occurrences": 1
+ },
+ {
+  "section": "cost",
+  "before": "the manager hours spent trying to make the seat work.",
+  "after": "the manager hours spent trying to make the hire work.",
+  "occurrences": 1
+ },
+ {
+  "section": "cost",
+  "before": "for one seat that doesn’t work out",
+  "after": "for one hire that doesn’t work out",
+  "occurrences": 1
+ },
+ {
+  "section": "clock",
+  "before": "Months 1 to 3: you ask for the seat and recruit.",
+  "after": "Months 1 to 3: you get the role approved and recruit.",
+  "occurrences": 1
+ },
+ {
+  "section": "clock",
+  "before": "Months 10 to 15: their number comes due.",
+  "after": "Months 10 to 15: they are expected to hit quota.",
+  "occurrences": 1
+ },
+ {
+  "section": "clock",
+  "before": "You ask for the seat and recruit",
+  "after": "You get the role approved and recruit",
+  "occurrences": 2
+ },
+ {
+  "section": "clock",
+  "before": "Their number comes due",
+  "after": "They’re expected to hit quota",
+  "occurrences": 2
+ },
+ {
+  "section": "clock",
+  "before": "By the time anyone can say a hire isn’t working, most of the clock is spent. The answer has to be right before the offer goes out.",
+  "after": "By the time anyone can tell a hire isn’t working, most of those 18 months are gone. That’s why the decision has to be checked before the offer goes out.",
+  "occurrences": 1
+ },
+ {
+  "section": "founder",
+  "before": "A sales leader sees the motion from inside one tenure: their own.",
+  "after": "A sales leader sees the sales process only from inside their own time in the job.",
+  "occurrences": 1
+ },
+ {
+  "section": "founder",
+  "before": "It was the decision to hire an AE into a motion that couldn’t carry them yet.",
+  "after": "It was the decision to hire an AE before the sales process could support one.",
+  "occurrences": 1
+ },
+ {
+  "section": "founder",
+  "before": "the numbers hadn’t supported the seat when it was opened",
+  "after": "the numbers hadn’t supported the role when it was opened",
+  "occurrences": 1
+ },
+ {
+  "section": "founder",
+  "before": "and at several of them I watched that work help carry the company into its next funding round. Antaeus is the check I wish those leaders had before the hire: does the motion survive the person running it?",
+  "after": "and at several of them that work helped the company raise its next funding round. Antaeus is the check I wish those leaders had before the hire: does the sales process still work when the person who built it isn’t the one selling?",
+  "occurrences": 1
+ },
+ {
+  "section": "founder",
+  "before": "The headcount decision is where most of those 18‑month clocks start.",
+  "after": "For most of those leaders, the 18 months started with a hiring decision.",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "Does the motion survive the person running it?</h2>",
+  "after": "Does your sales process still work without the person who built it?</h2>",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "A sales motion works the same way.",
+  "after": "A sales process works the same way: it holds up when it rests on things anyone can see and use, and fails when it depends on one person.",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "<h3>Lives in one head</h3>",
+  "after": "<h3>Depends on one person</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "A new AE inherits a quota and a guess.",
+  "after": "A new AE gets the quota but not the knowledge behind it.",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "<h3>A new AE can run it</h3>",
+  "after": "<h3>A new AE can use it</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "The pipeline, the win rate and the way deals move hold up without the founder on the call. A new AE inherits a system that already works.",
+  "after": "The pipeline, the win rate and the steps deals go through hold up without the founder on the call. A new AE takes over a process that already works.",
+  "occurrences": 1
+ },
+ {
+  "section": "living",
+  "before": "The brief tells you which one you have before you put another quota on it.",
+  "after": "The brief tells you which one you have before you hire another AE onto it.",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "The method does the math. A person reads what it means.</h2>",
+  "after": "The analysis does the math. A person helps you understand it.</h2>",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<h3 class=\"h3\">Demand supply</h3>",
+  "after": "<h3 class=\"h3\">Pipeline supply</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "Is there enough qualified pipeline to feed one more seller without starving the ones you have?",
+  "after": "Is there enough qualified pipeline for one more seller without taking deals your current sellers need?",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<h3 class=\"h3\">Motion repeatability</h3>",
+  "after": "<h3 class=\"h3\">Repeatable without the founder</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<h3 class=\"h3\">Timing &amp; management</h3>",
+  "after": "<h3 class=\"h3\">Timing and management</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "Can the hire ramp in time to matter to this year’s number, with a manager who has the hours to coach them?",
+  "after": "Can the hire ramp in time to help this year’s revenue target, with a manager who has the hours to coach them?",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<h3 class=\"h3\">The method</h3><span class=\"mono-label\">Runs on every brief</span>",
+  "after": "<h3 class=\"h3\">The analysis</h3><span class=\"mono-label\">Included in every brief</span>",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<strong>Catches numbers that don’t agree</strong>, like a win rate",
+  "after": "<strong>Flags numbers that contradict each other</strong>, like a win rate",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "<strong>Spends 60 minutes on what’s really happening</strong> behind the limiting condition, and goes through each condition the brief names.",
+  "after": "<strong>Spends 60 minutes with you on why the main limit exists</strong>, and goes through each condition the brief lists.",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "Is pipeline thin because the demand isn’t there, or because nobody is creating it yet? Those two lead to very different hires.",
+  "after": "Is pipeline short because there aren’t enough buyers, or because nobody is creating pipeline yet? Those two call for very different hires.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "One clear answer, and everything behind it.",
+  "after": "The brief gives you one clear answer and the reasoning behind it.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "Your numbers can carry another AE now.",
+  "after": "Your numbers support another AE now.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "<h3>Conditional</h3><p>The economics work, but something has to change first, and the brief names what.</p>",
+  "after": "<h3>Supported with conditions</h3><p>The numbers work, but something has to change first, and the brief names what.</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "The motion can’t carry another seat yet. The brief says what would change that.",
+  "after": "Your sales process can’t support another AE yet. The brief says what would change that.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "Too much is unknown to call it. The brief lists exactly what to go find out.",
+  "after": "Too many numbers are unknown to give an answer. The brief lists exactly what to go find out.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "Named plainly, like “pipeline supply is the limiting condition.”",
+  "after": "Named plainly, like “there isn’t enough qualified pipeline yet for another seller.”",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "the wins, qualified opportunities and pipeline the seat needs.",
+  "after": "the deals to win, qualified opportunities and pipeline the new AE needs.",
+  "occurrences": 1
+ },
+ {
+  "section": "get",
+  "before": "The input that moves the decision fastest, so you know where to look first.",
+  "after": "The number that would change the answer fastest if it were different, so you know where to look first.",
+  "occurrences": 1
+ },
+ {
+  "section": "no",
+  "before": "A “not yet” names the exact thing that has to become true first:",
+  "after": "A “not yet” names the exact thing that has to change first:",
+  "occurrences": 1
+ },
+ {
+  "section": "no",
+  "before": "the next time you ask for the seat.",
+  "after": "the next time you ask for the role.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "That’s what the brief is for: a method that checks the math, and on the reviewed brief, a person who has watched it go wrong reading what it means. It’s priced like the decision matters, because it does.",
+  "after": "That’s what the brief is for: an analysis that checks the math and, on the reviewed brief, a person who has watched this hire go wrong going through the results with you. It’s priced for a decision of that size.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "The method, on your numbers. You read the brief on your own.",
+  "after": "The analysis of your numbers, which you read on your own.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "to the pipeline the seat needs</li>",
+  "after": "to the pipeline the new AE needs</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "The method, plus a 60-minute call with a person who has watched this go wrong.",
+  "after": "The analysis, plus a 60-minute call with the founder, who has watched this hire go wrong.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "A 60-minute call on what’s really happening",
+  "after": "A 60-minute call on what’s behind your numbers",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "pipeline the new seat would need.",
+  "after": "pipeline the new AE would need.",
+  "occurrences": 1
+ },
+ {
+  "section": "how",
+  "before": "Every brief runs the same four tests on your numbers.",
+  "after": "Every brief applies the same four tests to your numbers.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "If I were the one asking for the seat,",
+  "after": "If I were the one asking for the role,",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "<h2 class=\"h2\" id=\"faq-title\">Before you buy.</h2>",
+  "after": "<h2 class=\"h2\" id=\"faq-title\">Questions before you buy</h2>",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "The self-serve brief is the method on its own:",
+  "after": "The self-serve brief is the analysis on its own:",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "The method also checks whether they agree with each other",
+  "after": "The analysis also checks whether they agree with each other",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "The brief answers whether your company should add the seat, not who should fill it.",
+  "after": "The brief answers whether your company should add the role, not who should fill it.",
+  "occurrences": 1
+ }
+]

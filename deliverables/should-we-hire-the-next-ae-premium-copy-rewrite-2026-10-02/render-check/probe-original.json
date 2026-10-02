@@ -1,0 +1,37 @@
+{
+ "320": {
+  "sideways": false,
+  "clipped": [],
+  "wide": [],
+  "h1lines": 8,
+  "errors": []
+ },
+ "360": {
+  "sideways": false,
+  "clipped": [],
+  "wide": [],
+  "h1lines": 7,
+  "errors": []
+ },
+ "390": {
+  "sideways": false,
+  "clipped": [],
+  "wide": [],
+  "h1lines": 6,
+  "errors": []
+ },
+ "820": {
+  "sideways": false,
+  "clipped": [],
+  "wide": [],
+  "h1lines": 3,
+  "errors": []
+ },
+ "1440": {
+  "sideways": false,
+  "clipped": [],
+  "wide": [],
+  "h1lines": 5,
+  "errors": []
+ }
+}
