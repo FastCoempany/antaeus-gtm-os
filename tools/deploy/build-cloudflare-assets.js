@@ -61,6 +61,10 @@ const include = [
   // understand the category before signing up. Linked from
   // start.html "What this actually is" CTA.
   "why-antaeus",
+  // AE Hiring Brief landing page (master spec Step 1A,
+  // deliverables/plans/ae_hiring_underwriting_master_spec.md §2).
+  // Static public page; styles in /css/service-page.css (copied via css/).
+  "should-we-hire-an-ae",
   // Activation-demo mockups (cinematic first-run explorations — Time /
   // Space / Story). Static, self-contained; viewable past the gate.
   "demo-a-time.html",
