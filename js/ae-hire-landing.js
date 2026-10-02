@@ -82,10 +82,12 @@
         attribution: { cta_zone: zone, referrer: document.referrer || null, path: window.location.pathname + window.location.search }
       })
     }).then(function (response) {
-      clearTimeout(timer);
       if (!response.ok) throw new Error('checkout_http_' + response.status);
+      // The timer stays armed while the body is read, so a response that sends
+      // headers and then stalls is aborted too.
       return response.json();
     }).then(function (body) {
+      clearTimeout(timer);
       if (!body || typeof body.url !== 'string') throw new Error('checkout_missing_url');
       // Stay pending: the browser is leaving for Stripe.
       window.location.assign(body.url);

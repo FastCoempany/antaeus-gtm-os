@@ -177,6 +177,40 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         await expect.poll(() => posts).toBe(2);
     });
 
+    test("a response whose body stalls is also timed out", async ({ page }) => {
+        await page.addInitScript(() => {
+            Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                configurable: true,
+                set(value) {
+                    Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                        value: { ...value, checkoutEndpoint: "/api/ae-hire/create-checkout", checkoutTimeoutMs: 400 },
+                        writable: true,
+                        configurable: true
+                    });
+                }
+            });
+            // Headers arrive (ok: true) but the JSON body never finishes unless aborted,
+            // which is how a real fetch behaves when its signal aborts mid-body.
+            const realFetch = window.fetch.bind(window);
+            window.fetch = (input: RequestInfo | URL, init?: RequestInit) => {
+                if (!String(input).includes("/api/ae-hire/create-checkout")) return realFetch(input, init);
+                const signal = init && init.signal;
+                return Promise.resolve({
+                    ok: true,
+                    status: 200,
+                    json: () => new Promise((_resolve, reject) => {
+                        if (signal) signal.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")));
+                    })
+                } as unknown as Response);
+            };
+        });
+        await page.goto(PATH, { waitUntil: "domcontentloaded" });
+        const hero = page.locator(".service-hero [data-ae-checkout]");
+        await hero.click();
+        await expect(page.locator("[data-checkout-notice]")).toContainText("Checkout could not start.");
+        await expect(hero).not.toHaveAttribute("aria-busy", "true");
+    });
+
     test("the fallback scroll respects reduced motion", async ({ browser }) => {
         for (const [reducedMotion, expected] of [["reduce", "auto"], ["no-preference", "smooth"]] as const) {
             const ctx = await browser.newContext({ reducedMotion });
