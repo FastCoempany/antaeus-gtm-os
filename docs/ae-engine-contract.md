@@ -262,7 +262,7 @@ Reasons with their own constraint source (unknown core test, sensitivity flip, u
 2. A5 strictness: resolved in 1.3.0 by source semantics rather than a tolerance band (see below).
 3. A3 strictness: every positive current claim needs `pipeline_likely_open_at_ae_start`, with no "materially later" exemption.
 4. B3 reports outputs from the governing (weaker) ramp branch, so calculations for an unknown ramp can come from the pipeline-productivity branch rather than always from closed bookings.
-5. Company-wide versus seat-allocatable creation (audit §16) and the §4.24 founder-dependence wording (audit §17) remain open, unchanged.
+5. Company-wide versus seat-allocatable creation (audit §16) was settled on 2026-10-02 as company-wide; the §4.24 founder-dependence wording (audit §17) is reconciled after merge. See [Product decisions](#product-decisions-founder-2026-10-02).
 
 ## Final pre-merge correction 1.3.0
 
@@ -329,12 +329,19 @@ When only the non-governing interpretation needs a timing correction, its timing
 
 Not every combination occurs end to end. Both branches share the deadline, and pipeline productivity's search floor is never later than closed bookings', so a dated closed-bookings branch implies a dated pipeline-productivity branch. "One `none`, one `date`" is therefore covered by direct tests of the exported function.
 
-### Remaining non-blocking product decisions
+### Product decisions (founder, 2026-10-02)
 
-1. **Intake wording.** Label the single value "recent/typical monthly qualified pipeline created". Make `pipeline_creation_is_seasonal` required, because without a series an unanswered flag now leaves creation unknown.
-2. **Pipeline open at AE start.** Make `pipeline_likely_open_at_ae_start` conditionally required whenever positive current pipeline is claimed for the new AE (A3).
-3. **Company-wide vs seat-allocatable creation (audit §16).** Resolve before intake and report language freeze.
-4. **Master-spec reconciliation after merge.** Reconcile G07 (A2: founder-inclusive-only conversion is insufficient evidence) and the §4.24 founder-dependence wording with policy 1.1.0.
+These settle the open items from the final pre-merge audit. They are intake and report wording plus scope. No engine code changes.
+
+1. **Single monthly value label.** The intake asks: *"Over the last few months, how much new pipeline do you create per month?"* This is the meaning the engine already assumes for `demand.monthly_qualified_pipeline_created_value`.
+2. **Seasonality is a required question.** It feeds `demand.pipeline_creation_is_seasonal`; without a monthly series, an unanswered flag leaves creation unknown.
+   - Question: *"Does your new pipeline change a lot by season?"*
+   - Help text: *"Say yes if some months are much busier than others. This keeps us from guessing a whole year from a few months."*
+3. **Pipeline open at AE start is asked when deals are handed over.** Whenever positive current pipeline is claimed for the new AE, the intake asks for `demand.pipeline_likely_open_at_ae_start` (A3). Proposed wording, not yet confirmed by the founder:
+   - Question: *"Which of these deals will still be open on the new hire's first day?"*
+   - Help text: *"Deals that close before they start can't be handed to them."*
+4. **Creation scope: company-wide.** Observed creation counts all new pipeline the company creates, compared with the new seat's requirement (§4.22 as written). This closes audit §16; the engine already behaves this way.
+5. **Master spec reconciliation after merge.** Update G07 (A2) and the §4.24 founder-dependence wording to match engine 1.3.0 and policy 1.1.0.
 
 ## Boundaries
 
