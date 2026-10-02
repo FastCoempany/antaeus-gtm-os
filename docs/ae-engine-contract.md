@@ -252,17 +252,17 @@ Reasons with their own constraint source (unknown core test, sensitivity flip, u
 
 ### Golden fixtures changed in 1.2.0
 
-- **G07** (founder-inclusive rate only): now `insufficient_evidence` / `unknown_conversion` (A2). The master spec's G07 expects `conditional`; see ambiguity 1.
+- **G07** (founder-inclusive rate only): now `insufficient_evidence` / `unknown_conversion` (A2). The master spec's G07 originally expected `conditional`; reconciled to this result on 2026-10-02 (PR #317).
 - **G12** (unknown ramp, branches differ): now `not_yet_supported` / `sales_cycle_timing`, the pipeline-productivity branch (B3). The allowed list gained `not_yet_supported`. The spec's G12 requirement ("never supported without resolving the ambiguity") still holds.
 - **G24** (seasonal series): 1.2.0 dropped Appendix B's single monthly value; 1.3.0 restores the spec's literal fixture (series plus the recent single value), and the series drives the math with the single value as reference.
 
 ### Remaining ambiguities (founder decision before freeze)
 
-1. A2 vs master spec §4.4 Priority 5 and G07: the spec allows a founder-inclusive-only rate to support a conditional decision as an illustrative scenario. 1.2.0 follows the audit: the rate stays illustrative, but the decision is insufficient evidence.
+1. A2 vs master spec §4.4 Priority 5 and G07: resolved. The spec was reconciled on 2026-10-02 (PR #317): a founder-inclusive-only rate stays illustrative and the decision is insufficient evidence.
 2. A5 strictness: resolved in 1.3.0 by source semantics rather than a tolerance band (see below).
-3. A3 strictness: every positive current claim needs `pipeline_likely_open_at_ae_start`, with no "materially later" exemption.
+3. A3 strictness: every positive current claim needs `pipeline_likely_open_at_ae_start`, with no "materially later" exemption. Kept by founder decision; the spec field table marks it conditionally required.
 4. B3 reports outputs from the governing (weaker) ramp branch, so calculations for an unknown ramp can come from the pipeline-productivity branch rather than always from closed bookings.
-5. Company-wide versus seat-allocatable creation (audit §16) was settled on 2026-10-02 as company-wide; the §4.24 founder-dependence wording (audit §17) is reconciled after merge. See [Product decisions](#product-decisions-founder-2026-10-02).
+5. Company-wide versus seat-allocatable creation (audit §16) was settled on 2026-10-02 as company-wide; the §4.24 founder-dependence wording (audit §17) was reconciled on 2026-10-02 (PR #317). See [Product decisions](#product-decisions-founder-2026-10-02).
 
 ## Final pre-merge correction 1.3.0
 

@@ -1590,7 +1590,7 @@ Fields:
 | `current_qualified_pipeline_value` | currency | yes |
 | `pipeline_value_type` | enum | yes |
 | `pipeline_stage_basis` | string/null | preferred |
-| `pipeline_likely_open_at_ae_start` | currency/null | preferred |
+| `pipeline_likely_open_at_ae_start` | currency/null | conditionally yes (required whenever positive current pipeline is claimed for the new AE) |
 | `monthly_qualified_pipeline_created_value` | currency/null | preferred |
 | `monthly_qualified_opps_created` | number/null | preferred |
 | `monthly_first_meetings` | number/null | optional |
