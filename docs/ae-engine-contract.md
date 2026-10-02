@@ -1,6 +1,6 @@
 # AE underwriting engine: implementation contract
 
-Scope: Step 3, Step 4 and their tests only. Source: `deliverables/plans/ae_hiring_underwriting_master_spec.md` at commit `1114340`. The source filename uses underscores. The master spec has not been edited.
+Scope: Step 3, Step 4 and their tests only. Source: `deliverables/plans/ae_hiring_underwriting_master_spec.md` at commit `1114340`. The source filename uses underscores. The master spec was edited only to reconcile it with the frozen engine 1.3.0 (marked *Reconciled with engine 1.3.0*).
 
 Current versions: `ae-engine-1.3.0`, `ae-policy-1.1.0`, schema `ae-underwriting-1.0`. The 1.1.0 remediation follows `deliverables/plans/pr315_ae_underwriting_engine_audit.md`; see [Remediation 1.1.0](#remediation-110-pr-315-audit). The 1.2.0 second hardening pass follows the PR #316 second adversarial audit; see [Second hardening 1.2.0](#second-hardening-120-pr-316-second-audit). The 1.3.0 final pre-merge correction follows the PR #316 final pre-merge audit; see [Final pre-merge correction 1.3.0](#final-pre-merge-correction-130).
 
@@ -337,11 +337,11 @@ These settle the open items from the final pre-merge audit. They are intake and 
 2. **Seasonality is a required question.** It feeds `demand.pipeline_creation_is_seasonal`; without a monthly series, an unanswered flag leaves creation unknown.
    - Question: *"Does your new pipeline change a lot by season?"*
    - Help text: *"Say yes if some months are much busier than others. This keeps us from guessing a whole year from a few months."*
-3. **Pipeline open at AE start is asked when deals are handed over.** Whenever positive current pipeline is claimed for the new AE, the intake asks for `demand.pipeline_likely_open_at_ae_start` (A3). Proposed wording, not yet confirmed by the founder:
+3. **Pipeline open at AE start is asked when deals are handed over.** Whenever positive current pipeline is claimed for the new AE, the intake asks for `demand.pipeline_likely_open_at_ae_start` (A3). Founder-confirmed wording (2026-10-02):
    - Question: *"Which of these deals will still be open on the new hire's first day?"*
    - Help text: *"Deals that close before they start can't be handed to them."*
 4. **Creation scope: company-wide.** Observed creation counts all new pipeline the company creates, compared with the new seat's requirement (§4.22 as written). This closes audit §16; the engine already behaves this way.
-5. **Master spec reconciliation after merge.** Update G07 (A2) and the §4.24 founder-dependence wording to match engine 1.3.0 and policy 1.1.0.
+5. **Master spec reconciliation.** Done after merge: G07, G12, §3.3 P, the field-table intake wording, §4.4 Priority 5, §4.22 and §4.24 now match engine 1.3.0 and policy 1.1.0.
 
 ## Boundaries
 
