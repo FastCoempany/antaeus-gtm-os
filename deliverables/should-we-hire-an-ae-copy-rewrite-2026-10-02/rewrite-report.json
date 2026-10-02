@@ -1,0 +1,608 @@
+[
+ {
+  "section": "head",
+  "before": "content=\"Underwrite the next sales hire using your revenue target, pipeline, conversion, ramp and current selling capacity. Get an AE Hiring Brief for $149.\"",
+  "after": "content=\"Find out whether your revenue target, pipeline, win rate, ramp time and current sales team can support another account executive. Get an AE Hiring Brief for $149.\"",
+  "occurrences": 1
+ },
+ {
+  "section": "nav",
+  "before": "<a href=\"#pricing\">$149</a>",
+  "after": "<a href=\"#pricing\">Pricing</a>",
+  "occurrences": 1
+ },
+ {
+  "section": "nav",
+  "before": "data-ae-checkout=\"nav\">Get the brief →</a>",
+  "after": "data-ae-checkout=\"nav\">Get the hiring brief →</a>",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "HEADCOUNT UNDERWRITING · B2B SALES",
+  "after": "SALES HIRING ANALYSIS · B2B",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "Before you hire the next AE, prove there’s a sales system for them to inherit.",
+  "after": "Before you hire another account executive, check that your pipeline and sales process can support one.",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "We work backward from your revenue target, pipeline, conversions, ramp, sales cycle and current selling capacity to determine whether another quota-carrying seat is supported — and what must become true if it isn’t.",
+  "after": "We start from your revenue target and work backward through your pipeline, win rates, sales cycle, ramp time and the sellers you already have. The brief tells you whether another salesperson with a quota is supported now and, if not, what would have to change first.",
+  "occurrences": 1
+ },
+ {
+  "section": "hero",
+  "before": "One-time analysis · No call required · Structured decision brief",
+  "after": "One-time analysis · No call required · Written brief",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "SAMPLE · AE CAPACITY DECISION",
+  "after": "SAMPLE RESULT · ADDING AN AE",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<span class=\"decision-state decision-state--conditional\">CONDITIONAL</span>",
+  "after": "<span class=\"decision-state decision-state--conditional\">YES, WITH CONDITIONS</span>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<p>Pipeline supply is the limiting condition.</p>",
+  "after": "<p>There isn’t enough qualified pipeline yet for another seller.</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Economic need</dt>",
+  "after": "<dt>Revenue need</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Demand supply</dt><dd class=\"decision-tag decision-tag--thin\">THIN</dd>",
+  "after": "<dt>Pipeline supply</dt><dd class=\"decision-tag decision-tag--thin\">SHORT</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Motion repeatability</dt>",
+  "after": "<dt>Repeatable without the founder</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Timing &amp; management</dt>",
+  "after": "<dt>Timing and management</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "NEXT AE ECONOMICS",
+  "after": "WHAT THE NEW AE MUST PRODUCE",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Horizon contribution</dt>",
+  "after": "<dt>Revenue in the plan period</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Wins required</dt>",
+  "after": "<dt>Deals to win</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Qualified opps required</dt>",
+  "after": "<dt>Qualified opportunities needed</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Qualified pipeline required</dt>",
+  "after": "<dt>Qualified pipeline needed</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "THE HIRE BECOMES SUPPORTABLE WHEN",
+  "after": "THE HIRE IS SUPPORTED ONCE",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Allocatable qualified pipeline</dt><dd>≥ required amount</dd>",
+  "after": "<dt>Qualified pipeline the new AE can take over</dt><dd>at least the amount needed</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Non-founder conversion evidence</dt><dd>sufficient</dd>",
+  "after": "<dt>Win rate on deals the founder didn’t sell</dt><dd>known well enough to plan on</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-sheet",
+  "before": "<dt>Monthly qualified opp creation</dt><dd>supports added seat</dd>",
+  "after": "<dt>New qualified opportunities per month</dt><dd>enough for one more seller</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "reframe",
+  "before": "<p class=\"service-kicker\">THE HEADCOUNT ERROR</p>",
+  "after": "<p class=\"service-kicker\">A COMMON HIRING MISTAKE</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "reframe",
+  "before": "A revenue target does not prove you need another salesperson.",
+  "after": "A revenue gap doesn’t mean you need another salesperson.",
+  "occurrences": 1
+ },
+ {
+  "section": "reframe",
+  "before": "A company can be short of revenue and still have enough selling capacity. The real constraint may be pipeline, conversion, territory supply, founder dependence, ramp timing or management capacity.",
+  "after": "A company can be short of revenue and still have enough sellers. The real limit may be too little pipeline, a low win rate, too few accounts to sell into, deals that only close when the founder sells them, the time a new hire needs to ramp, or no one with time to manage them.",
+  "occurrences": 1
+ },
+ {
+  "section": "reframe",
+  "before": "The analysis separates the revenue problem from the headcount question.",
+  "after": "The analysis looks at the revenue gap and the hiring question separately, so you can see which problem you actually have.",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "<p class=\"service-kicker\">WHAT WE UNDERWRITE</p>",
+  "after": "<p class=\"service-kicker\">WHAT WE CHECK</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "Four things have to survive the math.",
+  "after": "Another AE is supported only if four things hold up in the numbers.",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "01 — Economic Need",
+  "after": "01 — Revenue need",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "We compare the revenue plan with the productive capacity already in the system.",
+  "after": "We compare your revenue plan with what your current sellers can realistically close.",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "02 — Demand",
+  "after": "02 — Pipeline",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "Is there enough qualified opportunity for another seat?",
+  "after": "Is there enough qualified pipeline for another seller?",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "We test whether allocatable pipeline and pipeline creation can feed the proposed seller.",
+  "after": "We check whether there is enough existing pipeline to hand the new seller, and whether you create new opportunities fast enough to keep them busy.",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "Can another seller reproduce the motion?",
+  "after": "Can someone other than the founder close these deals?",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "We separate founder-led success from evidence that a non-founder seller can run the motion.",
+  "after": "We separate the deals the founder closed from the deals other sellers closed, and check whether there are enough of the second kind to plan on.",
+  "occurrences": 1
+ },
+ {
+  "section": "checks",
+  "before": "We reconcile recruiting timing, ramp, sales cycle and management capacity.",
+  "after": "We add up the time it takes to recruit, ramp and close a first deal, and check that someone has time to manage the new hire.",
+  "occurrences": 1
+ },
+ {
+  "section": "math",
+  "before": "<p class=\"service-kicker\">THE WORKBACK</p>",
+  "after": "<p class=\"service-kicker\">THE MATH</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "math",
+  "before": "Start with the revenue. Work backward until the seat either holds or breaks.",
+  "after": "We start with the revenue you need and work backward to the pipeline one more seller would require.",
+  "occurrences": 1
+ },
+ {
+  "section": "math",
+  "before": "That is only the beginning. We then ask whether the existing team already has unused capacity, whether the pipeline can actually be allocated to the new seller, whether the conversion rate is transferable beyond the founder, and whether the revenue can arrive inside the required period.",
+  "after": "That is only the first step. We then check whether your current team has room for more deals, whether that pipeline can actually be handed to a new seller, whether your win rate holds up when the founder isn’t selling, and whether the revenue can close within the period your plan needs it.",
+  "occurrences": 1
+ },
+ {
+  "section": "math",
+  "before": "The question is not whether you want another AE. It is whether the system can supply what that AE would need to produce.",
+  "after": "The question isn’t whether you want another AE. It’s whether your business can give that AE the pipeline and support they would need to reach their quota.",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "A decision brief, not a dashboard.",
+  "after": "You get a written brief that answers one hiring question.",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "Your AE Hiring Brief shows the argument, the math beneath it, the evidence that weakens it, and the conditions that would change the answer.",
+  "after": "Your AE Hiring Brief gives the answer, the math behind it, the facts that cut against it, and what would have to change for the answer to change.",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Decision</dt><dd>What the available evidence supports now.</dd>",
+  "after": "<dt>The answer</dt><dd>Whether the numbers you gave us support the hire today.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Capacity model</dt><dd>What the incremental seller must produce and how much of the revenue gap the seat can realistically cover.</dd>",
+  "after": "<dt>Seller capacity</dt><dd>What the new seller would need to close, and how much of your revenue gap one seller can realistically cover.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Funnel model</dt><dd>The qualified pipeline, opportunity and meeting volume implied by the target.</dd>",
+  "after": "<dt>Pipeline math</dt><dd>The qualified pipeline, opportunities and meetings your revenue target requires.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Timing model</dt><dd>When the seat can realistically begin contributing under the declared ramp structure.</dd>",
+  "after": "<dt>Timing</dt><dd>When the new seller can realistically start closing revenue, given the ramp time you told us.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Sensitivity</dt><dd>Which assumption changes the conclusion fastest.</dd>",
+  "after": "<dt>What changes the answer</dt><dd>The assumption that would change the answer fastest if it turned out to be wrong.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Hiring conditions</dt><dd>The explicit operating conditions that must become true before the seat is supportable.</dd>",
+  "after": "<dt>What has to be true first</dt><dd>The specific things that must be in place before the hire is supported.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "deliverable",
+  "before": "<dt>Evidence gaps</dt><dd>What the company does not currently know well enough to underwrite.</dd>",
+  "after": "<dt>What we couldn’t confirm</dt><dd>The numbers you don’t yet know well enough to plan a hire around.</dd>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "<dt>Allocatable at proposed AE start</dt>",
+  "after": "<dt>Pipeline the new AE could take over at start</dt>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "<p class=\"decision-state decision-state--conditional decision-state--large\">CONDITIONAL</p>",
+  "after": "<p class=\"decision-state decision-state--conditional decision-state--large\">YES, WITH CONDITIONS</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "Primary constraint: pipeline supply",
+  "after": "Main limit: not enough qualified pipeline",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "Another AE can be economically justified by the revenue plan, but the current pipeline-production rate does not yet support three fully productive sellers.",
+  "after": "The revenue plan justifies a third AE, but the business doesn’t yet create enough qualified pipeline to keep three sellers fully busy.",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "At the declared conversion rate, the proposed seat requires more qualified opportunity supply than is currently allocatable after the existing team’s demand is accounted for.",
+  "after": "At a 21% win rate, the new seller would need more qualified opportunities than are left over once the two current AEs have theirs.",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "The hire becomes supportable when:",
+  "after": "The hire is supported once:",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "allocatable qualified pipeline reaches the required coverage for the proposed contribution period;",
+  "after": "the qualified pipeline the new AE can take over is large enough to cover what they are expected to close in the plan period;",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "monthly qualified opportunity creation supports the additional seller after existing-team demand;",
+  "after": "the business creates enough new qualified opportunities each month to feed a third seller as well as the current two;",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "non-founder conversion evidence is strong enough to use as the planning rate;",
+  "after": "the win rate on deals the founder didn’t sell is known well enough to plan on;",
+  "occurrences": 1
+ },
+ {
+  "section": "sample-case",
+  "before": "the start date still allows the seller to contribute inside the required revenue window.",
+  "after": "the start date still leaves time for the new seller to close revenue inside the plan period.",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<p class=\"service-kicker\">THE INPUT</p>",
+  "after": "<p class=\"service-kicker\">WHAT WE ASK YOU FOR</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Proposed quota + compensation</li>",
+  "after": "<li>Proposed quota and pay</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>ACV + sales cycle</li>",
+  "after": "<li>Average deal size and sales cycle</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Conversion rates</li>",
+  "after": "<li>Win and conversion rates</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Pipeline creation</li>",
+  "after": "<li>New pipeline per month</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Founder involvement</li>",
+  "after": "<li>How much the founder sells</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Management capacity</li>",
+  "after": "<li>Who would manage the hire</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "<li>Required timing</li>",
+  "after": "<li>When you need the revenue</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "inputs",
+  "before": "Don’t know a number? Say so. Missing evidence is treated as missing evidence — not silently replaced with an industry benchmark.",
+  "after": "If you don’t know a number, say so. The brief lists it as unknown instead of quietly filling it in with an industry average.",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "Built for an actual headcount decision.",
+  "after": "Use it when you are deciding whether to hire a salesperson.",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "you are asking for another quota-carrying sales head;",
+  "after": "you want to add another salesperson with a quota;",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "you have real sales history but the capacity case is still mostly verbal;",
+  "after": "you have real sales history, but the case for the hire is still a conversation rather than numbers;",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "leadership is debating now versus next quarter.",
+  "after": "leadership is debating whether to hire now or next quarter.",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<h3>This is not</h3>",
+  "after": "<h3>It doesn’t cover</h3>",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<li>candidate evaluation;</li>",
+  "after": "<li>judging specific candidates;</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<li>recruiting;</li>",
+  "after": "<li>finding or recruiting candidates;</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<li>broad GTM consulting;</li>",
+  "after": "<li>general sales strategy consulting;</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<li>compensation design;</li>",
+  "after": "<li>designing the pay plan;</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "fit",
+  "before": "<li>a custom operating engagement.</li>",
+  "after": "<li>an ongoing consulting engagement.</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "ONE DECISION · ONE PRICE",
+  "after": "ONE HIRING QUESTION · ONE PRICE",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "One AE hiring analysis. One completed brief.",
+  "after": "One analysis of one AE hire, delivered as a written brief.",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>structured intake</li>",
+  "after": "<li>a structured questionnaire</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>capacity analysis</li>",
+  "after": "<li>your current sellers’ capacity</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>demand analysis</li>",
+  "after": "<li>pipeline supply</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>repeatability analysis</li>",
+  "after": "<li>win rates with and without the founder</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>timing analysis</li>",
+  "after": "<li>recruiting, ramp and timing</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>management analysis</li>",
+  "after": "<li>who has time to manage the hire</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>sensitivity analysis</li>",
+  "after": "<li>which assumption matters most</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>evidence-gap analysis</li>",
+  "after": "<li>what you didn’t know or couldn’t confirm</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "<li>AE Hiring Brief</li>",
+  "after": "<li>the written AE Hiring Brief</li>",
+  "occurrences": 1
+ },
+ {
+  "section": "pricing",
+  "before": "data-ae-checkout=\"pricing\">Underwrite the next AE →</a>",
+  "after": "data-ae-checkout=\"pricing\">Get the AE Hiring Brief →</a>",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "<h2 id=\"faq-title\">Before you buy.</h2>",
+  "after": "<h2 id=\"faq-title\">Questions before you buy</h2>",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "No. It evaluates whether the business and sales motion currently support adding the seat. Candidate quality is a separate question.",
+  "after": "No. It checks whether your business and sales process can support adding the role right now. Whether a particular candidate is good is a separate question.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "Use <em>I don’t know</em>. Unknown inputs remain unknown and appear as evidence gaps. We do not quietly replace them with generic industry assumptions.",
+  "after": "Answer <em>I don’t know</em>. The brief lists that number under what we couldn’t confirm. We don’t quietly fill it in with an industry average.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "Not for the $149 version. The analysis is based on the structured information you provide.",
+  "after": "No. The analysis uses only the answers you give in the questionnaire.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "A completed AE Hiring Brief containing the decision state, capacity and funnel math, timing analysis, sensitivity, evidence gaps and hiring conditions.",
+  "after": "A written AE Hiring Brief with the answer, the seller-capacity and pipeline math, the timing, the assumption that would change the answer most, what we couldn’t confirm, and what has to be true before you hire.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "The brief identifies the constraint and the conditions that would need to become true before the hire becomes supportable.",
+  "after": "The brief names what is holding the hire back and what would have to change before the hire is supported.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "No. It is an operating analysis of sales-capacity assumptions. Hiring and financial decisions remain with the company.",
+  "after": "No. It is an analysis of your sales numbers and the assumptions behind them. The decision to hire, and any financial decision, stays with you.",
+  "occurrences": 1
+ },
+ {
+  "section": "faq",
+  "before": "Not by default. The model prioritizes company-specific inputs. If an optional external assumption is ever used, it must be explicitly labeled as an external assumption rather than presented as company evidence.",
+  "after": "No, not by default. The analysis uses your company’s own numbers first. If an outside figure is ever used, the brief labels it as an outside assumption so it isn’t mistaken for your own data.",
+  "occurrences": 1
+ },
+ {
+  "section": "math",
+  "before": "<p>$1,200,000 incremental ARR</p>",
+  "after": "<p>$1,200,000 in new ARR</p>",
+  "occurrences": 1
+ },
+ {
+  "section": "final",
+  "before": "Know what has to be true before you put another quota on payroll.",
+  "after": "Find out what has to be true before you hire another salesperson with a quota.",
+  "occurrences": 1
+ }
+]
