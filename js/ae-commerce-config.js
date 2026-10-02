@@ -15,6 +15,9 @@ window.AE_HIRE_COMMERCE = {
   priceLabel: '$149',
   currency: 'USD',
   checkoutEndpoint: null,
+  // A checkout request that has not answered by then is aborted and the
+  // buyer can retry, so a stalled endpoint never leaves every CTA blocked.
+  checkoutTimeoutMs: 15000,
   intakePath: '/ae-hire/intake/',
   confirmationPath: '/ae-hire/confirmation/',
   supportEmail: 'hello@antaeus.app'

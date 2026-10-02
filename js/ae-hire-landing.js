@@ -22,6 +22,13 @@
 
   var notice = document.querySelector('[data-checkout-notice]');
 
+  function scrollBehavior() {
+    try {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'auto';
+    } catch (error) { /* fall through */ }
+    return 'smooth';
+  }
+
   function showNotice(message) {
     if (!notice) return;
     notice.textContent = message;
@@ -58,19 +65,24 @@
     if (!config.checkoutEndpoint) {
       showNotice('Checkout is not connected in this environment yet. Nothing was charged.');
       var pricing = document.getElementById('pricing');
-      if (pricing && pricing.scrollIntoView) pricing.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (pricing && pricing.scrollIntoView) pricing.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
       return;
     }
 
     setPending(true);
+    var controller = typeof AbortController === 'function' ? new AbortController() : null;
+    var timeoutMs = typeof config.checkoutTimeoutMs === 'number' && config.checkoutTimeoutMs > 0 ? config.checkoutTimeoutMs : 15000;
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, timeoutMs);
     fetch(config.checkoutEndpoint, {
       method: 'POST',
+      signal: controller ? controller.signal : undefined,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         product_code: config.productCode,
         attribution: { cta_zone: zone, referrer: document.referrer || null, path: window.location.pathname + window.location.search }
       })
     }).then(function (response) {
+      clearTimeout(timer);
       if (!response.ok) throw new Error('checkout_http_' + response.status);
       return response.json();
     }).then(function (body) {
@@ -78,6 +90,7 @@
       // Stay pending: the browser is leaving for Stripe.
       window.location.assign(body.url);
     }).catch(function (error) {
+      clearTimeout(timer);
       setPending(false);
       track('checkout_error', { message: String(error && error.message || error) });
       showNotice('Checkout could not start. Nothing was charged. Please try again, or email ' + (config.supportEmail || 'us') + '.');

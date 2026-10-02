@@ -152,6 +152,54 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         await expect(hero).not.toHaveAttribute("aria-busy", "true");
     });
 
+    test("a stalled checkout request times out and releases every CTA", async ({ page }) => {
+        await page.addInitScript(() => {
+            Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                configurable: true,
+                set(value) {
+                    Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                        value: { ...value, checkoutEndpoint: "/api/ae-hire/create-checkout", checkoutTimeoutMs: 400 },
+                        writable: true,
+                        configurable: true
+                    });
+                }
+            });
+        });
+        let posts = 0;
+        // Never answers: only the client-side timeout can end the request.
+        await page.route("**/api/ae-hire/create-checkout", () => { posts += 1; });
+        await page.goto(PATH, { waitUntil: "domcontentloaded" });
+        const hero = page.locator(".service-hero [data-ae-checkout]");
+        await hero.click();
+        await expect(page.locator("[data-checkout-notice]")).toContainText("Checkout could not start.");
+        await expect(hero).not.toHaveAttribute("aria-busy", "true");
+        await hero.click();
+        await expect.poll(() => posts).toBe(2);
+    });
+
+    test("the fallback scroll respects reduced motion", async ({ browser }) => {
+        for (const [reducedMotion, expected] of [["reduce", "auto"], ["no-preference", "smooth"]] as const) {
+            const ctx = await browser.newContext({ reducedMotion });
+            const page = await ctx.newPage();
+            try {
+                await page.goto(PATH, { waitUntil: "domcontentloaded" });
+                await page.evaluate(() => {
+                    const pricing = document.getElementById("pricing") as HTMLElement & { lastScroll?: string };
+                    const original = pricing.scrollIntoView.bind(pricing);
+                    pricing.scrollIntoView = (arg?: boolean | ScrollIntoViewOptions) => {
+                        pricing.lastScroll = typeof arg === "object" && arg ? String(arg.behavior) : "none";
+                        original(arg as ScrollIntoViewOptions);
+                    };
+                });
+                await page.locator(".service-hero [data-ae-checkout]").click();
+                const behavior = await page.evaluate(() => (document.getElementById("pricing") as HTMLElement & { lastScroll?: string }).lastScroll);
+                expect(behavior, reducedMotion).toBe(expected);
+            } finally {
+                await ctx.close();
+            }
+        }
+    });
+
     test("analytics failure never blocks checkout", async ({ page }) => {
         await page.addInitScript(() => {
             Object.defineProperty(window, "gtmAnalytics", {
