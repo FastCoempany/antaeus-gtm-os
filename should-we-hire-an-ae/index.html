@@ -16,7 +16,9 @@
 <body class="command-surface-page service-page ae-hire-page">
 <a class="service-skip" href="#main">Skip to content</a>
 
-<div class="service-config-banner" data-checkout-unconfigured hidden role="status">
+<!-- Visible by default so it shows even without JavaScript; the page script
+     hides it only once a configured checkout endpoint is detected. -->
+<div class="service-config-banner" data-checkout-unconfigured role="status">
   Checkout is not connected in this environment. The buttons on this page will not take payment.
 </div>
 

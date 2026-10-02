@@ -29,13 +29,29 @@
   }
 
   // Checkout that is not connected must be impossible to overlook (spec §2.9).
-  if (!config.checkoutEndpoint) {
-    var banner = document.querySelector('[data-checkout-unconfigured]');
-    if (banner) banner.hidden = false;
-    if (window.console && console.warn) console.warn('AE Hiring Brief checkout is not configured: window.AE_HIRE_COMMERCE.checkoutEndpoint is empty.');
+  // The banner is visible in the markup (so it shows without JS); it is hidden
+  // only when a checkout endpoint is actually configured.
+  var banner = document.querySelector('[data-checkout-unconfigured]');
+  if (config.checkoutEndpoint) {
+    if (banner) banner.hidden = true;
+  } else if (window.console && console.warn) {
+    console.warn('AE Hiring Brief checkout is not configured: window.AE_HIRE_COMMERCE.checkoutEndpoint is empty.');
+  }
+
+  var triggers = document.querySelectorAll('[data-ae-checkout]');
+  // One checkout request at a time across every CTA on the page, so a
+  // double-click or a second CTA can never create duplicate Stripe sessions.
+  var checkoutPending = false;
+  function setPending(pending) {
+    checkoutPending = pending;
+    Array.prototype.forEach.call(triggers, function (el) {
+      if (pending) { el.setAttribute('aria-busy', 'true'); el.setAttribute('aria-disabled', 'true'); }
+      else { el.removeAttribute('aria-busy'); el.removeAttribute('aria-disabled'); }
+    });
   }
 
   function startCheckout(trigger) {
+    if (checkoutPending) return;
     var zone = trigger.getAttribute('data-ae-checkout') || 'unknown';
     track('ae_checkout_click', { cta_zone: zone, product_code: config.productCode });
 
@@ -46,7 +62,7 @@
       return;
     }
 
-    trigger.setAttribute('aria-busy', 'true');
+    setPending(true);
     fetch(config.checkoutEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -59,15 +75,16 @@
       return response.json();
     }).then(function (body) {
       if (!body || typeof body.url !== 'string') throw new Error('checkout_missing_url');
+      // Stay pending: the browser is leaving for Stripe.
       window.location.assign(body.url);
     }).catch(function (error) {
-      trigger.removeAttribute('aria-busy');
+      setPending(false);
       track('checkout_error', { message: String(error && error.message || error) });
       showNotice('Checkout could not start. Nothing was charged. Please try again, or email ' + (config.supportEmail || 'us') + '.');
     });
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll('[data-ae-checkout]'), function (trigger) {
+  Array.prototype.forEach.call(triggers, function (trigger) {
     trigger.addEventListener('click', function (event) {
       event.preventDefault();
       startCheckout(trigger);

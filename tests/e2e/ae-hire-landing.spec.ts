@@ -117,6 +117,41 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         expect((posted as unknown as { product_code: string }).product_code).toBe("ae-hiring-brief-v1");
     });
 
+    test("a slow checkout cannot be started twice from any CTA", async ({ page }) => {
+        await page.addInitScript(() => {
+            Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                configurable: true,
+                set(value) {
+                    Object.defineProperty(window, "AE_HIRE_COMMERCE", {
+                        value: { ...value, checkoutEndpoint: "/api/ae-hire/create-checkout" },
+                        writable: true,
+                        configurable: true
+                    });
+                }
+            });
+        });
+        let posts = 0;
+        let release: () => void = () => {};
+        const held = new Promise<void>(resolve => { release = resolve; });
+        await page.route("**/api/ae-hire/create-checkout", async route => {
+            posts += 1;
+            await held;
+            await route.fulfill({ status: 500, contentType: "application/json", body: "{}" });
+        });
+        await page.goto(PATH, { waitUntil: "domcontentloaded" });
+        const hero = page.locator(".service-hero [data-ae-checkout]");
+        await hero.click();
+        await expect(hero).toHaveAttribute("aria-busy", "true");
+        await hero.click({ force: true });
+        await page.locator(".service-final [data-ae-checkout]").click({ force: true });
+        await page.locator("#pricing [data-ae-checkout]").click({ force: true });
+        expect(posts).toBe(1);
+        release();
+        // A failed request clears the guard so the buyer can retry.
+        await expect(page.locator("[data-checkout-notice]")).toContainText("Checkout could not start.");
+        await expect(hero).not.toHaveAttribute("aria-busy", "true");
+    });
+
     test("analytics failure never blocks checkout", async ({ page }) => {
         await page.addInitScript(() => {
             Object.defineProperty(window, "gtmAnalytics", {
@@ -165,6 +200,8 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
             await expect(page.locator("h1")).toBeVisible();
             await expect(page.locator("#sample")).toContainText("CONDITIONAL");
             await expect(page.locator(".faq-row").first()).toBeVisible();
+            // Missing checkout must be explicit even without JavaScript.
+            await expect(page.locator("[data-checkout-unconfigured]")).toBeVisible();
             const href = await page.locator(".service-hero [data-ae-checkout]").getAttribute("href");
             expect(href).toBe("#pricing");
         } finally {
