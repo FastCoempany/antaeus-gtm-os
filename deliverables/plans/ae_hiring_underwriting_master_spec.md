@@ -10,6 +10,7 @@
 **Design source of truth:** current Antaeus `body.command-surface-page` layer in `/css/app.css`  
 **Technical posture:** compatible with the current Antaeus pure HTML/CSS/JS architecture  
 **Document purpose:** remove product, analytical, design, and implementation ambiguity before coding
+**Engine reconciliation:** reconciled 2026-10-02 with the frozen engine `ae-engine-1.3.0` / policy `ae-policy-1.1.0` (PR #316). Where this spec and `docs/ae-engine-contract.md` once differed, the sections marked *Reconciled with engine 1.3.0* state the production rule.
 
 ---
 
@@ -1600,6 +1601,13 @@ Fields:
 | `monthly_pipeline_series` | currency[]/null | optional |
 | `new_ae_market_same_as_history` | enum: yes/partly/no | yes |
 
+*Reconciled with engine 1.3.0 (founder-approved intake wording, 2026-10-02):*
+
+- **`monthly_qualified_pipeline_created_value`** — ask: *"Over the last few months, how much new pipeline do you create per month?"* It is a recent, typical month. It is never compared with a monthly series. When a series is supplied, the series is used and this value is reference only. Without a series, it models creation only when `pipeline_creation_is_seasonal` is `false`.
+- **`pipeline_creation_is_seasonal`** — always asked. Question: *"Does your new pipeline change a lot by season?"* Help text: *"Say yes if some months are much busier than others. This keeps us from guessing a whole year from a few months."*
+- **`pipeline_likely_open_at_ae_start`** — required whenever positive current pipeline is claimed for the new AE. Question: *"Which of these deals will still be open on the new hire's first day?"* Help text: *"Deals that close before they start can't be handed to them."*
+- **Creation scope** — observed creation counts all new pipeline the company creates (company-wide), not only creation reserved for the new seat.
+
 ### H. Repeatability
 
 | Field | Type |
@@ -1724,6 +1732,8 @@ If pipeline creation is seasonal:
 - do not multiply a single recent monthly rate by the full horizon;
 - use a supplied monthly/quarterly series when possible;
 - otherwise lower confidence and display the linear extrapolation as an explicit simplification.
+
+*Reconciled with engine 1.3.0:* a supplied monthly series is authoritative for creation modeling. The single monthly value is then reference only and is never compared with the series average. Without a series, the single value models creation only when seasonality is confirmed `false`. When seasonality is `true` or unanswered, the flat extrapolation is shown as an illustrative scenario only. Creation sufficiency is then unknown, which limits confidence and can make the evidence insufficient. A series with unknown months inside the creation window also leaves creation unknown. Deleting a seasonal series or the seasonality answer can never strengthen the result.
 
 
 ## 3.4 Unknown Representation
@@ -1977,6 +1987,14 @@ When only founder-inclusive conversion exists:
 - mark `transferability_assumption = founder_inclusive`;
 - reduce confidence;
 - repeatability test cannot be `demonstrated` solely from that rate.
+
+*Reconciled with engine 1.3.0:* for a later AE with positive modeled contribution, the decision is `INSUFFICIENT EVIDENCE` (primary constraint `unknown_conversion`) in any of these cases:
+- conversion is unknown;
+- the rate falls back to founder-inclusive history because non-founder evidence is absent;
+- post-change conversion is not established as non-founder;
+- only pre-change history exists after a GTM pivot.
+
+The exception is an independent hard blocker (for example, no capacity gap or a late start), which keeps `NOT YET SUPPORTED`. The founder-inclusive rate still drives the illustrative calculations. Removing adverse non-founder evidence can therefore never strengthen the decision. The first-AE branch is unchanged.
 
 ### Priority 6
 Unknown.
@@ -2561,6 +2579,10 @@ required_monthly_pipeline_creation
 
 If observed production is below requirement, identify the monthly gap.
 
+*Reconciled with engine 1.3.0:*
+- `observed_monthly_pipeline_creation` is company-wide creation (founder decision, 2026-10-02). It is the supplied series' eligible-window average when a series exists. Otherwise it is the single monthly value, only when creation is confirmed non-seasonal (§3.3 P).
+- `P_alloc_current` is bounded by `pipeline_likely_open_at_ae_start`: deals that close before the AE starts cannot be handed over. A positive current claim without that answer leaves the requirement unknown.
+
 ---
 
 ## 4.23 Opportunity Creation Sufficiency
@@ -2594,8 +2616,17 @@ Default policy requires:
 - at least 5 non-founder wins in the selected evidence window;
 - non-founder qualified-opportunity denominator available;
 - non-founder conversion can be calculated or credibly sourced;
-- founder is not `almost_always` required late-stage;
+- founder is `rarely` required late-stage (policy `ae-policy-1.1.0`; see below);
 - at least two of ICP / qualification / discovery / sales stages are `yes` or `partial`.
+
+*Reconciled with policy 1.1.0:* the late-stage mapping is owned by `policy.repeatability.founderLateStage`:
+
+| `founder_required_late_stage` | Class | Effect |
+|---|---|---|
+| `rarely` | demonstrated-eligible | can be `demonstrated` if every other criterion passes |
+| `sometimes`, `often` | emerging | at best `emerging` |
+| `almost_always` | dependent | `founder_dependent` |
+| `unknown` / missing | unknown | evidence gap |
 
 The `5` is a **minimum evidence-policy threshold**, not a statistical claim that five wins prove repeatability.
 
@@ -4838,7 +4869,7 @@ January pipeline creation × 12 is used for a highly seasonal company.
 
 **Correction**
 
-Seasonality flag and optional monthly series. Linear extrapolation must be labeled when used.
+Seasonality flag and optional monthly series. Linear extrapolation must be labeled when used. Engine 1.3.0: without a series, a single month proves creation only when seasonality is confirmed `false` (§3.3 P).
 
 **Status:** patched.
 
@@ -5210,10 +5241,10 @@ Revenue plan does not require incremental seller capacity.
 - no non-founder denominator
 - otherwise strong demand
 
-**Expected**
-- founder rate used only as scenario
+**Expected** *(reconciled with engine 1.3.0)*
+- founder rate used only as an illustrative scenario
 - confidence cannot be high
-- conditional unless first-AE branch plus strong transferability evidence resolves risk
+- `INSUFFICIENT EVIDENCE`, primary `unknown_conversion`, unless an independent hard blocker gives `NOT YET SUPPORTED`; the first-AE branch is unaffected
 
 ---
 
@@ -5271,8 +5302,9 @@ Revenue plan does not require incremental seller capacity.
 - closed-bookings interpretation yields sufficient capacity/timing
 - pipeline-productivity interpretation misses target window
 
-**Expected**
-- `CONDITIONAL` or `INSUFFICIENT EVIDENCE`
+**Expected** *(reconciled with engine 1.3.0)*
+- the weaker interpretation governs: `NOT YET SUPPORTED`, `CONDITIONAL` or `INSUFFICIENT EVIDENCE`
+- `ramp_ambiguity` reported alongside the governing operating constraint
 - forbidden: `SUPPORTED`
 
 ---
@@ -6570,7 +6602,7 @@ Expected: not yet or insufficient.
 }
 ```
 
-Expected: confidence cannot be high.
+Expected: founder-inclusive rate is scenario-only; confidence cannot be high; `INSUFFICIENT EVIDENCE` / `unknown_conversion` (engine 1.3.0).
 
 ### G08
 ```js
@@ -6613,7 +6645,7 @@ Expected: both interpretations still demand-short; ambiguity disclosed.
 }
 ```
 
-Expected: if ramp interpretations produce different overall state, never supported without resolving ambiguity.
+Expected: if ramp interpretations produce different overall state, never supported without resolving ambiguity. Engine 1.3.0 reports the weaker interpretation's decision, here `NOT YET SUPPORTED` / `sales_cycle_timing`.
 
 ### G13 — replacement
 Add:
