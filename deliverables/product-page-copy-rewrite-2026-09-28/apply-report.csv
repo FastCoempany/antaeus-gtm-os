@@ -1,370 +1,459 @@
-kind,unit_id,source_line,status,original,replacement
-logical_unit,1,546,kept (no change per map),ANTAEUS,ANTAEUS
-logical_unit,2,551,kept (no change per map),Why Antaeus,Why Antaeus
-logical_unit,3,552,applied exactly,The rooms,Product areas
-logical_unit,4,553,kept (no change per map),Compare,Compare
-logical_unit,5,554,kept (no change per map),Questions,Questions
-logical_unit,6,555,kept (no change per map),Sign in,Sign in
-logical_unit,7,563,kept (no change per map),Antaeus,Antaeus
-logical_unit,8,565,applied exactly,Handoff,Sales handoff
-logical_unit,9,566,applied exactly,Rooms,Product areas
-logical_unit,10,567,applied exactly,What it sees,Activity monitoring
-logical_unit,11,568,applied exactly,Pace,Revenue plan
-logical_unit,12,569,kept (no change per map),Compare,Compare
-logical_unit,13,572,kept (no change per map),Explore,Explore
-logical_unit,14,573,kept (no change per map),Create workspace,Create workspace
-logical_unit,15,581,kept (no change per map),Antaeus,Antaeus
-logical_unit,16,585,applied exactly,You built it. They can run it.,Turn the sales process you built into a system your first hire can use.
-logical_unit,17,586,applied exactly,Private beta. Set up your workspace in an afternoon. After that it reads your whole way of selling back to you every morning.,"Private beta. Set up your workspace in an afternoon. Each morning, Antaeus reviews your accounts, deals, calls, and sales activity and tells you what needs attention."
-logical_unit,18,590,applied exactly,Where your whole motion stands,How ready your sales process is to hand off
-logical_unit,19,599,applied exactly,The most valuable move on your board · #1 of 12,Highest-priority action · #1 of 12
-logical_unit,20,600,kept (no change per map),Reach out to Chomps.,Reach out to Chomps.
-logical_unit,21,601,applied exactly,"They announced two plants this month — a few hundred production hires on a deadline, and no recruiting team to absorb it. Nobody has called them. Reaching out is the part of your motion furthest behind.","Chomps announced two plants this month, creating several hundred production hires on a deadline, and appears to have limited recruiting capacity. Your workspace shows no outreach to Chomps. Antaeus ranks outreach as your least-completed sales activity."
-logical_unit,22,602,kept (no change per map),Compose it →,Compose it →
-logical_unit,23,603,applied exactly,"· clearly the top one · then: Warby Parker, Sweetgreen","Ranked #1 · Next: Warby Parker, Sweetgreen"
-logical_unit,24,605,kept (no change per map),"A morning in a sample workspace. The companies are real and public; the people, deals and numbers are invented.","A morning in a sample workspace. The companies are real and public; the people, deals and numbers are invented."
-logical_unit,25,612,applied exactly,Free while we're in beta. No card. Bring one afternoon and what's in your head.,Free while we're in beta. No card. Spend one afternoon entering the sales knowledge only you know.
-logical_unit,26,613,kept (no change per map),Create workspace,Create workspace
-logical_unit,27,626,kept (no change per map),Get the highlights.,Get the highlights.
-logical_unit,28,627,kept (no change per map),Take the tour,Take the tour
-logical_unit,29,633,applied exactly,"Every account you watch, sorted by what just moved.","Every account you follow, ranked by recent activity and company changes."
-logical_unit,30,634,applied exactly,"Act now, reach while they’re warm, emerging, going cold.","See which accounts need action now, which have new signals, and which have had no recent activity."
-logical_unit,31,637,applied exactly,"Act now — hot, and something just moved",High priority · recent company change
-logical_unit,32,649,applied exactly,"One thing to do first, and why it came up first.","Your highest-priority action, with the reason it ranks first."
-logical_unit,33,650,applied exactly,"Not a list of fourteen. The single most valuable one, with its reason shown.",Not a fourteen-item task list. Antaeus ranks one action first and shows the evidence behind the ranking.
-logical_unit,34,653,kept (no change per map),#1 of 12,#1 of 12
-logical_unit,35,654,kept (no change per map),Reach out to Chomps.,Reach out to Chomps.
-logical_unit,36,655,applied exactly,"Two plants announced, a few hundred hires, no recruiting bench. Running hot , and outreach is your weakest part.","Two plants announced, several hundred hires planned, no apparent recruiting bench. Antaeus ranks Chomps highly because the account has a recent hiring trigger and outreach is your least-completed activity."
-logical_unit,37,656,kept (no change per map),Compose it →,Compose it →
-logical_unit,38,657,applied exactly,"· then: Warby Parker, Sweetgreen","Next: Warby Parker, Sweetgreen"
-logical_unit,39,663,applied exactly,"The deals that will slip this week, and the smallest fix.","Deals at risk this week, with the next corrective action for each."
-logical_unit,40,664,applied exactly,Where a deal says it is matters less than what it is actually stuck on.,Pipeline stage alone does not show deal risk. Antaeus also tracks unresolved blockers and buyer activity.
-logical_unit,41,667,kept (no change per map),If you do nothing this week,If you do nothing this week
-logical_unit,42,668,applied exactly,3 will slip.,3 deals are at risk.
-logical_unit,43,679,applied exactly,"A console you run the discovery call from, live.",A live discovery-call console.
-logical_unit,44,680,applied exactly,They say something. You tap what you heard. It hands you the next line.,Select the buyer response you heard. Antaeus shows the recommended follow-up question.
-logical_unit,45,683,applied exactly,Pain & consequence · live,Problem and business impact · live
-logical_unit,46,684,kept (no change per map),Walk me through what happens the week a new store opens.,Walk me through what happens the week a new store opens.
-logical_unit,47,685,applied exactly,Listen for whether this is really theirs to fix — and who flinches when you name the cost.,Listen for whether the buyer owns the problem and who is accountable for its cost.
-logical_unit,48,691,applied exactly,Tap what you heard to get your next line,Select the response to see the recommended follow-up
-logical_unit,49,694,kept (no change per map),Discovery Studio,Discovery Studio
-logical_unit,50,698,applied exactly,A pilot that gives their boss something to act on.,A pilot plan the buyer's manager can use to make a decision.
-logical_unit,51,699,applied exactly,"Walked through, one step at a time, with the people you need to pull in.",Antaeus walks you through the pilot steps and identifies which stakeholders still need to participate.
-logical_unit,52,702,applied exactly,Who is hands-on,Active pilot participants
-logical_unit,53,709,kept (no change per map),Someone from IT — nobody named yet. Ask the champion for an intro.,Someone from IT — nobody named yet. Ask the champion for an intro.
-logical_unit,54,712,kept (no change per map),5 of 7 using it day to day,5 of 7 using it day to day
-logical_unit,55,718,applied exactly,Everything a first hire opens on day one.,What a new hire gets on day one.
-logical_unit,56,719,applied exactly,Written like a document a sharp operator left for their replacement.,A structured operating guide with the context and decisions behind your sales process.
-logical_unit,57,733,kept (no change per map),"Who hits, who misses, and why","Who hits, who misses, and why"
-logical_unit,58,735,applied exactly,"One thing to notice — every deal you won was mid-market , but your stated target is enterprise.","Pattern: every deal you won was mid-market, while your stated target is enterprise."
-logical_unit,59,743,applied exactly,"One question, answered honestly: could someone else run this?",Can a new hire execute your sales process without you?
-logical_unit,60,744,applied exactly,"Five states, and what it takes to reach the next one.","Five readiness states, with explicit requirements for each."
-logical_unit,61,747,applied exactly,Could a hire run this on Monday?,Could a new hire execute this process on Monday?
-logical_unit,62,749,applied exactly,"Hire-ready, repeatable",Hire-ready and repeatable
-logical_unit,63,750,kept (no change per map),Hire-ready,Hire-ready
-logical_unit,64,751,applied exactly,"Inheritable, with you there",Usable with founder support
-logical_unit,65,752,applied exactly,Building,Partially documented
-logical_unit,66,753,applied exactly,You are the system,Founder-dependent
-logical_unit,67,755,applied exactly,Left “you are the system” behind 3 weeks ago,Changed from Founder-dependent 3 weeks ago
-logical_unit,68,915,applied exactly,The handoff,Sales handoff
-logical_unit,69,916,applied exactly,One motion. Two people who run it.,"One sales process, usable by both founder and first hire."
-logical_unit,70,917,applied exactly,"Your motion is the whole way you win revenue — who you go after, how you reach them, what you say on the call, how a deal gets to signed. In a founder-led company all of that lives in one head. Antaeus is where it stops doing that. The accounts you watch, where every deal actually stands , the questions that won a second meeting, what the pilot showed — it all piles up as you work, inside the rooms you already work in. Nothing gets filed away for later. So when the first serious hire starts, they open the same workspace you've been living in and read it themselves. You don't sit next to them for a month explaining what you meant.","Your sales process includes who you target, how you reach them, what you ask on calls, how you qualify opportunities, and how you advance a deal to signature. In a founder-led company, much of that knowledge is undocumented. Antaeus records it as you work: account priorities, actual deal status, discovery questions that worked, pilot results, and the reasoning behind decisions. When your first go-to-market hire starts, they use the same workspace and can read that context directly instead of relying on you to explain it from memory."
-logical_unit,71,925,applied exactly,The most valuable move on your board,Highest-priority action
-logical_unit,72,926,kept (no change per map),Reach out to Chomps.,Reach out to Chomps.
-logical_unit,73,927,applied exactly,"Two plants announced this month, a few hundred production hires, no recruiting bench. The account is running hot , and outreach is the part of your motion furthest behind.","Two plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ranks Chomps highly because the account has a recent hiring trigger and outreach is your least-completed activity."
-logical_unit,74,928,kept (no change per map),Compose it →,Compose it →
-logical_unit,75,936,applied exactly,If a hire started Monday · 5 of 7 parts ready,If a hire started Monday · 5 of 7 readiness areas complete
-logical_unit,76,948,kept (no change per map),"Who hits, who misses, and why","Who hits, who misses, and why"
-logical_unit,77,949,applied exactly,Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go ask.,Every deal you closed involved a stakeholder directly accountable for the relevant business metric. Stalled deals entered through teams that needed approval from another decision-maker.
-logical_unit,78,950,applied exactly,"One thing to notice — every deal you won was mid-market , but the target you wrote down says enterprise.","Pattern: every deal you won was mid-market, while your stated target is enterprise."
-logical_unit,79,957,kept (no change per map),What you see every morning,What you see every morning
-logical_unit,80,961,applied exactly,What they read on day one,What a new hire sees on day one
-logical_unit,81,973,kept (no change per map),Take a closer look.,Take a closer look.
-logical_unit,82,978,applied exactly,Watching · 28 accounts,Tracked accounts · 28
-logical_unit,83,985,applied exactly,Four need something today · three going cold,Four need action today · three have had no recent activity
-logical_unit,84,1011,kept (no change per map),While you were out,While you were out
-logical_unit,85,1012,applied exactly,It keeps reading when you stop.,Antaeus continues reviewing workspace activity when you're away.
-logical_unit,86,1027,applied exactly,Your work inside your own deals and accounts,Updates from your deals and accounts
-logical_unit,87,1031,kept (no change per map),Warby Parker has sat at proposal for three weeks with no next step. Open the deal →,Warby Parker has sat at proposal for three weeks with no next step. Open the deal →
-logical_unit,88,1035,applied exactly,Liquid Death has gone quiet — their people team is three deep and mid-launch. Open the account →,Liquid Death has had no recent buyer activity for 14 days; its people team is three people and mid-launch. Open the account →
-logical_unit,89,1039,kept (no change per map),The Notion pilot is eight days in and two of the four recruiters have not touched it. Open the pilot →,The Notion pilot is eight days in and two of the four recruiters have not touched it. Open the pilot →
-logical_unit,90,1043,applied exactly,No discovery calls logged this week — the rhythm is slipping . Pick up a call →,No discovery calls logged this week — below your planned weekly activity. Review a call →
-logical_unit,91,1054,kept (no change per map),Good morning,Good morning
-logical_unit,92,1055,kept (no change per map),7:41 AM · Chicago,7:41 AM · Chicago
-logical_unit,93,1057,kept (no change per map),7-day forecast ↗,7-day forecast ↗
-logical_unit,94,1058,kept (no change per map),78°,78°
-logical_unit,95,1074,applied exactly,"Every half hour the system goes back over your workspace on its own and writes down what it noticed — a deal that has not moved in three weeks , an account you watched that has gone quiet, a pilot where half the people you enrolled never signed in. Not charts. Plain sentences, the way a colleague would say them to you. In the morning you get the short version and the one thing worth doing first , and the reason it came up first is right there next to it.","Every 30 minutes, Antaeus reviews workspace data for changes and risks: deals without recent progress, accounts without recent engagement, and pilots with low participant adoption. It summarizes those findings in plain language. Each morning, it also ranks the highest-priority action and shows why it ranked first."
-logical_unit,96,1079,applied exactly,Every 30 minutes the system re-reads your whole workspace on its own,Every 30 minutes Antaeus reviews the latest workspace data
-logical_unit,97,1080,applied exactly,One ranked move with the plain reason it came up ahead of the other thirteen,One ranked action with the evidence behind its priority
-logical_unit,98,1081,applied exactly,"22 rooms, one motion the work carries between them — you never restate anything",22 product areas share the same account and deal context; you enter information once
-logical_unit,99,1091,applied exactly,A spreadsheet and what you remember,Spreadsheet + undocumented founder knowledge
-logical_unit,100,1092,applied exactly,You are the system,Founder-dependent
-logical_unit,101,1098,kept (no change per map),#1 of 12,#1 of 12
-logical_unit,102,1099,kept (no change per map),Reach out to Chomps.,Reach out to Chomps.
-logical_unit,103,1110,applied exactly,"The same motion, six weeks in",Six weeks later
-logical_unit,104,1111,applied exactly,Someone else could run it,A new hire can execute the process
-logical_unit,105,1125,applied exactly,However the week goes,For different kinds of sales days
-logical_unit,106,1126,applied exactly,The work changes shape. The system keeps up.,Antaeus supports the same workflow whether you have one call or several deals at risk.
-logical_unit,107,1127,applied exactly,Some mornings you have an hour and one call. Some weeks you are three deals behind and cannot tell which one is worth saving. The rooms hold their shape either way.,"Some mornings you have an hour and one call. Other weeks, several deals need attention at once. The same tools and account context remain available in either case."
-logical_unit,108,1133,applied exactly,Whatever shape your week takes.,For common sales situations.
-logical_unit,109,1139,applied exactly,"Monday, and it's all yours. Open one room and read the state of the whole motion in a sentence, then the single thing worth doing before lunch.","Starting the week. Open any product area to see the current state of your accounts and deals, then the highest-priority action for the day."
-logical_unit,110,1143,applied exactly,"A call you're walking into cold. The shape of it, the pushback you're likely to get, and a line ready for each one — read before you dial, not during.","Preparing for a cold call. Review the call structure, likely objections, and recommended responses before you dial."
-logical_unit,111,1147,applied exactly,"The deal that went quiet. The system noticed before you did, says how long it's been, and names the smallest thing that would move it.",A deal with no recent buyer activity. Antaeus shows how long activity has been stalled and recommends the smallest next action that could restore progress.
-logical_unit,112,1151,applied exactly,"What you learned on the call. Captured while you're still in it, then carried into the deal — so nobody has to ask you what happened later.",What you learned on the call. Capture it during the call and attach it to the deal so the next person sees the same context.
-logical_unit,113,1155,applied exactly,"The week you're behind. It says so plainly — how far, which assumption was optimistic, and what it costs if you're wrong about it.","A week behind plan. Antaeus shows the activity gap, which planning assumption is too optimistic, and the projected impact."
-logical_unit,114,1159,applied exactly,"The day someone else takes it. They open the workspace and read it. You are in the room to answer questions, not to be the only copy.","A new hire takes over. They can read the workflow, deal context, and documented reasoning in the workspace; you only need to answer exceptions and questions."
-logical_unit,115,1168,kept (no change per map),Reaching out,Reaching out
-logical_unit,116,1169,applied exactly,The part most founders make up as they go.,Standardize outreach instead of improvising it.
-logical_unit,117,1170,applied exactly,"Outreach that could have gone to anyone gets treated like it went to nobody. Antaeus will not let a line leave without the account, the person, and the thing that just happened to them attached to it. Same on the call: whatever the buyer says, there is a next line ready , and what you learn is captured while you are still in the room.","Antaeus requires every outreach draft to reference a specific account, contact, and recent trigger. During a live call, it shows the next recommended question based on the buyer response you select, and it records the result with the deal."
-logical_unit,118,1178,kept (no change per map),Outbound,Outbound
-logical_unit,119,1179,kept (no change per map),Cold call,Cold call
-logical_unit,120,1180,kept (no change per map),LinkedIn,LinkedIn
-logical_unit,121,1181,kept (no change per map),Discovery,Discovery
-logical_unit,122,1188,kept (no change per map),"Writing to Lena, Head of People at Chomps","Writing to Lena, Head of People at Chomps"
-logical_unit,123,1189,applied exactly,"Lena — saw the two plants going up. That is a few hundred production hires on a deadline , and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first. Worth twenty minutes to compare notes on how you are staffing the openings?","Lena — I saw Chomps announce two new plants. That creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck. Worth twenty minutes next week to compare how you are staffing the openings?"
-logical_unit,124,1193,kept (no change per map),Copy the message,Copy the message
-logical_unit,125,1195,applied exactly,"Outbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone.","Outbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
-logical_unit,126,1199,applied exactly,Before you dial · the shape of it,Before you dial · call structure
-logical_unit,127,1204,kept (no change per map),They will probably say,They will probably say
-logical_unit,128,1205,kept (no change per map),“We are too small for something like this.”,“We are too small for something like this.”
-logical_unit,129,1206,applied exactly,Small teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.,Small teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.
-logical_unit,130,1207,applied exactly,Read before you dial · log what happened after · never during,Review before you dial · log the outcome after the call
-logical_unit,131,1209,applied exactly,"Cold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking.","Cold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
-logical_unit,132,1213,applied exactly,Gymshark · one move,Gymshark · recommended LinkedIn action
-logical_unit,133,1215,kept (no change per map),Ask — only once it is warranted,Ask — only once it is warranted
-logical_unit,134,1216,kept (no change per map),"Connect, now she knows your name","Connect, now she knows your name"
-logical_unit,135,1217,kept (no change per map),Give her something before you ask,Give her something before you ask
-logical_unit,136,1218,kept (no change per map),Say something useful on her post,Say something useful on her post
-logical_unit,137,1219,kept (no change per map),Watch what she posts,Watch what she posts
-logical_unit,138,1221,kept (no change per map),Poppy accepted last week. Give her something today — do not ask yet.,Poppy accepted last week. Give her something today — do not ask yet.
-logical_unit,139,1223,applied exactly,"LinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening.","LinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
-logical_unit,140,1227,applied exactly,Pain & consequence · live,Problem and business impact · live
-logical_unit,141,1228,kept (no change per map),Walk me through what happens the week a new store opens.,Walk me through what happens the week a new store opens.
-logical_unit,142,1229,applied exactly,Listen for whether this pain is really theirs to fix — and who flinches when you name the cost.,Listen for whether the buyer owns the problem and who is accountable for its cost.
-logical_unit,143,1235,applied exactly,They hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.,They added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.
-logical_unit,144,1237,applied exactly,"Discovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went.",Discovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow.
-logical_unit,145,1243,applied exactly,Everything between finding them and signing.,Workflows from prospecting through signature.
-logical_unit,146,1247,applied exactly,Describe who you are after,Describe your target companies
-logical_unit,147,1248,kept (no change per map),“Fast-casual brands that just announced new market openings”,“Fast-casual brands that just announced new market openings”
-logical_unit,148,1250,applied exactly,"Finding them. Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.","Prospecting. Describe your target companies in plain language and save the search. Before a company is added to your tracked accounts, Antaeus records whether it fits your target, the likely reason to engage, and the intended outreach channel."
-logical_unit,149,1252,applied exactly,How is this market cut?,Segment the market by
-logical_unit,150,1255,kept (no change per map),247 of a 300 seat budget spent,247 of a 300 seat budget spent
-logical_unit,151,1256,applied exactly,"Carving the market. Cut it by geography, industry, size, named accounts, or a live trigger — and blend them. Every division says why you're the right team to win it.","Market segmentation. Segment by geography, industry, company size, named accounts, recent trigger, or a combination. For each segment, document why your team is positioned to win."
-logical_unit,152,1258,applied exactly,Too broad to hunt,Target definition is too broad
-logical_unit,153,1259,kept (no change per map),“Companies that are hiring”,“Companies that are hiring”
-logical_unit,154,1260,applied exactly,Sharper — growth consumer brands whose expansion news dates the hiring need .,More specific — growth-stage consumer brands whose announced expansion creates a dated hiring need.
-logical_unit,155,1261,applied exactly,"Who you sell to. One sharp definition, pushed on until it's a target you can actually hunt. Every other room works against it from then on.","Ideal customer profile. Refine the definition until it identifies a specific, searchable target. Antaeus uses that target definition across the rest of the workspace."
-logical_unit,156,1263,applied exactly,Who is hands-on,Active pilot participants
-logical_unit,157,1265,kept (no change per map),A hiring manager — nobody named yet.,A hiring manager — nobody named yet.
-logical_unit,158,1266,applied exactly,"Running the pilot. Walked through step by step: what it has to show, who needs to be hands-on, who's still missing, and a write-up the champion can defend without you.","Pilot planning. Antaeus guides the pilot step by step: success criteria, participating stakeholders, missing stakeholders, and a summary the champion can share internally."
-logical_unit,159,1268,applied exactly,The one thing blocking,Current blocker
-logical_unit,160,1271,kept (no change per map),Your papers already answer 36 of their 40 questions,Your papers already answer 36 of their 40 questions
-logical_unit,161,1272,applied exactly,"The run to a signature. After they say yes, security, legal and finance can still kill it. It leads with the one front actually blocking, their ask against your line, and what you can trade.","Contracting. After verbal approval, security, legal, and finance can still block signature. Antaeus shows the current blocking issue, the buyer's request, your position, and available trade-offs."
-logical_unit,162,1274,applied exactly,The relay,Referral path
-logical_unit,163,1276,applied exactly,One Chicago operator to another. All he has to do is change a couple of lines and hit send .,One Chicago operator to another. The draft is nearly complete; Rafael only needs to personalize it and send.
-logical_unit,164,1277,applied exactly,"Calling in a favor. Your investors, advisors and happy customers, matched to the deal they can actually move. It writes both notes — yours to them, and the one they forward.","Warm introduction. Antaeus matches investors, advisors, and customers to deals where they have a relevant connection, then drafts your request and the message they can forward."
-logical_unit,165,1279,kept (no change per map),Written 45 days early,Written 45 days early
-logical_unit,166,1280,applied exactly,Warby Parker dies in 20 days.,Warby Parker is projected to be lost within 20 days.
-logical_unit,167,1282,applied exactly,"The autopsy, early. It writes the story of how the deal dies before it does, names the pattern, and routes you to the room where the fix happens.","Deal risk analysis. Antaeus projects how the deal is likely to fail, identifies the recurring risk pattern, and links to the workflow where you can address it."
-logical_unit,168,1284,applied exactly,Projected landing,Projected revenue
-logical_unit,169,1285,kept (no change per map),$580k against $800k,$580k against $800k
-logical_unit,170,1286,kept (no change per map),One assumption is optimistic — you have never won at 28% .,One assumption is optimistic — you have never won at 28% .
-logical_unit,171,1287,applied exactly,"Your number, backwards. The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.","Revenue target plan. Antaeus converts the annual target into required daily activity, checks the plan against benchmark assumptions, and identifies the assumption creating the largest risk."
-logical_unit,172,1293,applied exactly,10 frameworks discovery question sets tuned to what you actually sell,10 discovery frameworks tuned to what you sell
-logical_unit,173,1294,applied exactly,6 buyer lenses the questions change depending on who is in the room,6 buyer-role views that change the questions by stakeholder
-logical_unit,174,1295,applied exactly,"Every branch answered whatever they say back, there is a next line and somewhere to go",Recommended follow-up for each buyer response
-logical_unit,175,1365,kept (no change per map),Pace,Pace
-logical_unit,176,1366,applied exactly,Do you have enough going to hit the number?,Is your current pipeline and activity enough to hit the revenue target?
-logical_unit,177,1367,applied exactly,"Give it your number and Antaeus works backwards to the only thing you control — what you do every working day . Then it does the part most planning tools skip: it tells you whether the plan is realistic for deals your size, names the one assumption that's optimistic , and says what it costs you if that assumption is wrong.","Enter your revenue target. Antaeus converts it into required daily activity using your deal size, win-rate, and sales-cycle assumptions. It compares those assumptions with benchmarks for similar deal sizes, identifies which assumption makes the plan unrealistic, and shows the projected impact if that assumption is wrong."
-logical_unit,178,1373,kept (no change per map),Show the benchmark for,Show the benchmark for
-logical_unit,179,1375,kept (no change per map),Deals around $15k,Deals around $15k
-logical_unit,180,1376,kept (no change per map),Deals around $60k,Deals around $60k
-logical_unit,181,1377,kept (no change per map),Deals around $150k,Deals around $150k
-logical_unit,182,1378,kept (no change per map),Deals above $400k,Deals above $400k
-logical_unit,183,1382,"applied (separator ""·"" dropped at hook boundary)",1 in 5 closes how often deals this size are won — the band is 15 to 25%,20% win-rate benchmark · typical range 15–25%
-logical_unit,184,1383,"applied (separator ""·"" dropped at hook boundary)",3.5× in flight enough going at once that a couple of slips do not sink the quarter,3.5× pipeline coverage · enough active pipeline to absorb normal deal slippage
-logical_unit,185,1384,"applied (separator ""·"" dropped at hook boundary)",90 days how long one usually takes to close — the range is 60 to 120 days,90-day sales-cycle benchmark · typical range 60–120 days
-logical_unit,186,1386,applied exactly,These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.,These are benchmark ranges for the selected deal size. Antaeus compares your planning assumptions with them and flags assumptions outside the typical range.
-logical_unit,187,1395,applied exactly,All of it,Product coverage
-logical_unit,188,1396,applied exactly,Twenty-two rooms. Here are three.,Twenty-two product areas. Here are three.
-logical_unit,189,1397,applied exactly,They are not tabs. Work done in one shows up in the next without you retyping it — the account you added this morning is the account the call is about this afternoon. We are not going to lay the whole thing out on a marketing page. You will see it when you are inside.,"These are connected workflows, not separate tabs. Data entered in one workflow is available in the others, so an account added during prospecting is the same account used in call preparation later that day. This page shows three; the full workspace contains twenty-two."
-logical_unit,190,1403,kept (no change per map),Discovery Studio,Discovery Studio
-logical_unit,191,1404,applied exactly,"You run the call from it, while you are on the call.",Run the discovery call from this workspace.
-logical_unit,192,1405,applied exactly,"Ten frameworks, six buyer lenses, and a next line ready for whatever they say back. Not notes you write afterwards.","Ten discovery frameworks, six buyer-role views, and recommended follow-up questions based on the response you select. Use it during the call, not only for notes afterward."
-logical_unit,193,1407,kept (no change per map),They just said,They just said
-logical_unit,194,1408,kept (no change per map),“We just hired two more recruiters.”,“We just hired two more recruiters.”
-logical_unit,195,1409,applied exactly,They hired around it. Ask what that cost and who signed it off.,They added recruiters instead of changing the process. Ask what the added headcount cost and who approved it.
-logical_unit,196,1414,kept (no change per map),Future Autopsy,Future Autopsy
-logical_unit,197,1415,applied exactly,It writes how the deal dies before it does.,Projects deal-loss risk before the deal is lost.
-logical_unit,198,1416,applied exactly,"The pattern, the days you have left, and the smallest thing that would change the ending.","Shows the recurring risk pattern, estimated time remaining, and the smallest corrective action."
-logical_unit,199,1418,kept (no change per map),45 days early,45 days early
-logical_unit,200,1419,applied exactly,Warby Parker dies in 20 days.,Warby Parker is projected to be lost within 20 days.
-logical_unit,201,1425,kept (no change per map),The Briefing,The Briefing
-logical_unit,202,1426,applied exactly,What the system saw while you were out.,Workspace changes detected while you were away.
-logical_unit,203,1427,applied exactly,"Written the way a colleague would say it, every morning, whether or not you opened anything yesterday.","A plain-language summary of account, deal, and pilot changes, generated each morning whether or not you used Antaeus the previous day."
-logical_unit,204,1429,kept (no change per map),This morning,This morning
-logical_unit,205,1436,applied exactly,"The other nineteen do the rest of it — who you go after and how you carve the market , finding real companies and confirming them, the line you send and the call you walk into, the pilot, the run through security and legal to a signature, your number worked back to a daily habit, and the handoff itself.","The other nineteen cover market segmentation, account discovery and qualification, outreach, call preparation, pilots, security and legal, revenue planning, and the handoff to your first hire."
-logical_unit,206,1445,kept (no change per map),Getting around,Getting around
-logical_unit,207,1446,applied exactly,Touch the ground. The map comes up.,Open the Ground to see the workspace map.
-logical_unit,208,1447,applied exactly,"There is no menu bar down the side of the screen. Every room stands on a quiet line at the foot of the page — press it, or press G, and the whole motion rises up as a map with you-are-here lit and the system's suggestion glowing. It's the myth the product is named after: Antaeus was unbeatable while he was touching the earth.","Antaeus does not use a permanent left-side navigation bar. A thin control at the bottom of every product area opens the workspace map; press the control or G to see all twenty-two areas, your current location, and Antaeus's recommended next area. The control is called the Ground, after the Antaeus myth."
-logical_unit,209,1455,applied exactly,The ground · your whole motion,The Ground · workspace map
-logical_unit,210,1467,applied exactly,Twenty-two of them. Press the line and they come up.,Twenty-two product areas. Open the Ground to view them.
-logical_unit,211,1470,kept (no change per map),The Ground,The Ground
-logical_unit,212,1471,applied exactly,"One line, every room. Press it and the map of your whole motion rises from beneath the page, with you-are-here lit and the system's suggestion glowing. Summoned, then gone — it never sits there taking up the screen.",The Ground is the navigation map for all twenty-two product areas. Open it from the bottom of any page or press G to see your current location and Antaeus's recommended next area. Close it when you're done; it does not remain on screen.
-logical_unit,213,1478,kept (no change per map),15 / 27 today,15 / 27 today
-logical_unit,214,1480,kept (no change per map),messages and calls,messages and calls
-logical_unit,215,1483,applied exactly,Gymshark — Poppy replied after 12 quiet days. 28m,Gymshark — Poppy replied after 12 days without a response. 28m
-logical_unit,216,1484,applied exactly,Captured your send to Lena at Chomps — counted.,Email to Lena at Chomps captured and counted.
-logical_unit,217,1485,applied exactly,Calendar — Thursday with Notion confirmed.,Calendar · Thursday meeting with Notion confirmed.
-logical_unit,218,1486,applied exactly,Still no dated next step on Warby Parker .,Warby Parker still has no dated next step.
-logical_unit,219,1491,kept (no change per map),The Live Edge,The Live Edge
-logical_unit,220,1492,applied exactly,"A hairline down the left margin carrying today's count against your daily number, and a running list of what moved — tagged by whether it was you, the system, or the buyer. Switch it off and it folds to the wall in three beats you can see.","The Live Edge is a collapsible activity panel on the left side of the workspace. It shows today's message-and-call count against your daily target and a chronological list of recent actions, labeled by actor: you, Antaeus, or the buyer. Turn it off to collapse the panel."
-logical_unit,221,1501,kept (no change per map),Your workspace,Your workspace
-logical_unit,222,1502,applied exactly,"It's yours, and you can take it.",You own the workspace data and can export it.
-logical_unit,223,1505,applied exactly,"Saved as you work. Your workspace lives in the cloud, not trapped on one laptop. Close the lid mid-sentence and open it somewhere else.",Saved automatically. Your workspace is stored in the cloud and syncs across devices. Close one device mid-edit and continue from another.
-logical_unit,224,1506,applied exactly,"Nothing sold, nothing shared. Your accounts, deals and calls are your commercial position. They are not a dataset we resell or train a public model on.","Your data is not sold or used to train public models. Your accounts, deals, and calls are not a dataset Antaeus resells."
-logical_unit,225,1507,applied exactly,"Take a full copy, any time. One button downloads everything in your workspace as a plain file. No ticket, no export queue, no waiting on us.",Export a full copy at any time. One button downloads everything in your workspace as a plain file. No support ticket or export queue is required.
-logical_unit,226,1508,applied exactly,"Delete it and mean it. Type the words and it's gone — the accounts, the deals, the pilot results, all of it. Not archived somewhere we can still read.","Delete the workspace. Type the confirmation phrase and Antaeus deletes the accounts, deals, pilot results, and other workspace data instead of archiving them for continued access."
-logical_unit,227,1509,applied exactly,Read-only for a hire. Share the workspace with someone who is starting Monday without handing them your logins or the ability to change anything.,Give a new hire read-only access. They can view the workspace without receiving your login credentials or permission to change data.
-logical_unit,228,1510,applied exactly,"An offline copy too. If you want a version that never leaves the machine you're on, the app will hand you one. It's tucked away, because most people never need it.","Create an offline copy. If you need a copy stored only on the current device, Antaeus can create one. The option is secondary because most users will not need it."
-logical_unit,229,1609,kept (no change per map),Why founders start here.,Why founders start here.
-logical_unit,230,1613,kept (no change per map),One afternoon,One afternoon
-logical_unit,231,1614,applied exactly,Set it up once. It pays you back every morning.,Set it up once. Get a prioritized briefing every morning.
-logical_unit,232,1615,applied exactly,"The setup asks for the thinking only you have — who you really sell to, who you're chasing, where each deal is genuinely stuck. Nothing you'd have to look up. Everything a tool can find, it finds.","Setup asks for information only you know: your actual target customer, the accounts you are pursuing, and the current blocker in each deal. Antaeus looks up public company information itself, so you only enter context it cannot retrieve."
-logical_unit,233,1616,kept (no change per map),Create workspace ›,Create workspace ›
-logical_unit,234,1619,kept (no change per map),Free in beta,Free in beta
-logical_unit,235,1620,kept (no change per map),"No card, no seat count, no call with anyone.","No card, no seat count, no call with anyone."
-logical_unit,236,1621,kept (no change per map),"We are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card.","We are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card."
-logical_unit,237,1622,kept (no change per map),Create workspace ›,Create workspace ›
-logical_unit,238,1625,applied exactly,Yours to take,Exportable
-logical_unit,239,1626,kept (no change per map),Download the whole workspace whenever you want.,Download the whole workspace whenever you want.
-logical_unit,240,1627,applied exactly,"One button, one file, everything in it. If you leave, you leave with the thing you built — not with a support ticket.","One button exports the entire workspace to a single file. If you leave, you keep a complete copy without opening a support ticket."
-logical_unit,241,1628,kept (no change per map),How your data works ›,How your data works ›
-logical_unit,242,1631,applied exactly,Built for the handoff,For the first sales hire
-logical_unit,243,1632,applied exactly,The point is the day you stop being the only one who knows.,Designed for the point when the founder is no longer the only person who understands the sales process.
-logical_unit,244,1633,applied exactly,Every other tool is built to report on the motion. This one is built so the motion survives leaving your head.,"Most sales tools record activity for reporting. Antaeus also documents the reasoning, account context, and sales process a new hire needs to execute the work without relying on undocumented founder knowledge."
-logical_unit,245,1634,kept (no change per map),Why Antaeus ›,Why Antaeus ›
-logical_unit,246,1643,applied exactly,Keep looking. Then come back.,Compare Antaeus with a CRM and a spreadsheet.
-logical_unit,247,1644,applied exactly,"Most founders have already tried the other two. Here is the honest difference, without pretending either one is useless.",A CRM and a spreadsheet solve different problems. This comparison shows what each is designed to do.
-logical_unit,248,1654,kept (no change per map),What it's for,What it's for
-logical_unit,249,1655,applied exactly,"Telling you what to do next, and why that one",Rank the next sales action and show why it ranks first
-logical_unit,250,1656,kept (no change per map),Storing what you already did,Storing what you already did
-logical_unit,251,1657,applied exactly,Whatever you decided it was for,Flexible manual tracking
-logical_unit,252,1659,kept (no change per map),Who it's built for,Who it's built for
-logical_unit,253,1660,applied exactly,"A founder selling, and the first hire who takes over",Founder-led sales teams preparing for the first go-to-market hire
-logical_unit,254,1661,kept (no change per map),A sales team big enough to need reporting,A sales team big enough to need reporting
-logical_unit,255,1662,applied exactly,"You, this quarter",An individual founder or small team needing lightweight tracking
-logical_unit,256,1664,kept (no change per map),On opening it,On opening it
-logical_unit,257,1665,applied exactly,"One ranked thing to do, with its reason shown","Highest-priority action, with the evidence behind the ranking"
-logical_unit,258,1666,applied exactly,"A list of everything, sorted how you last sorted it",Full activity list using the user's last sort
-logical_unit,259,1667,applied exactly,Whatever you typed last,Last-entered data
-logical_unit,260,1669,applied exactly,Runs the live call,Provides live call guidance
-logical_unit,261,1670,applied exactly,"Yes — question, what to listen for, the next line","Yes — current question, evidence to listen for, and recommended follow-up"
-logical_unit,262,1671,kept (no change per map),No — you log it afterwards,No — you log it afterwards
-logical_unit,263,1672,kept (no change per map),No,No
-logical_unit,264,1674,applied exactly,Says when the plan isn't real,Flags unrealistic planning assumptions
-logical_unit,265,1675,applied exactly,Yes — names the optimistic assumption and its cost,Yes — identifies the assumption outside the benchmark range and shows its projected impact
-logical_unit,266,1676,applied exactly,No — it reports the forecast you entered,No — reports the forecast entered by the user
-logical_unit,267,1677,kept (no change per map),No,No
-logical_unit,268,1679,applied exactly,A hire can inherit it,Supports handoff to a new hire
-logical_unit,269,1680,applied exactly,Yes — seven parts written as prose they read on day one,Yes — seven documented areas a new hire can read on day one
-logical_unit,270,1681,kept (no change per map),"Partly — they inherit the records, not the reasoning","Partly — they inherit the records, not the reasoning"
-logical_unit,271,1682,applied exactly,No — the reasoning was never written down,No — reasoning remains undocumented unless you write it separately
-logical_unit,272,1684,kept (no change per map),Setup cost,Setup cost
-logical_unit,273,1685,applied exactly,An afternoon of real thinking,About one afternoon of founder input
-logical_unit,274,1686,kept (no change per map),"Weeks, and usually someone to configure it","Weeks, and usually someone to configure it"
-logical_unit,275,1687,kept (no change per map),Ten minutes,Ten minutes
-logical_unit,276,1689,applied exactly,"If you have a twelve-person sales team and a forecasting problem, buy a CRM. This is for the stretch before that, when the motion is still one person's and the first hire starts in six weeks.","If you already have a twelve-person sales team and mainly need forecasting and reporting, use a CRM. Antaeus is designed for founder-led sales before that point, when the process still depends heavily on the founder and the first sales hire is approaching."
-logical_unit,277,1698,applied exactly,Where we're honest with you.,Current beta limitations.
-logical_unit,278,1701,applied exactly,"It is beta, and it reads like beta.",The product is still in beta.
-logical_unit,279,1702,applied exactly,"Some rooms are deeper than others. When something is thin, the app says so in plain words rather than showing you a confident empty state. You will find rough edges; we would rather you find them than not be told.","Some product areas are more complete than others. When data or functionality is limited, the interface states that directly instead of presenting a confident result. Expect rough edges while the beta is active."
-logical_unit,280,1705,applied exactly,"Models are under the hood, not on the label.",Antaeus uses language models for analysis and drafting.
-logical_unit,281,1706,applied exactly,"Antaeus uses language models to read your workspace and draft what it hands you. It is not the pitch. Every line the system writes goes through the same voice rules the rest of the product does, and you can see what it based a read on.","Antaeus uses language models to analyze workspace data and draft text. Model branding is not part of the product pitch. Generated text follows the same writing rules as the rest of Antaeus, and the interface shows the source data behind each analysis."
-logical_unit,282,1715,kept (no change per map),Questions? Answers.,Questions? Answers.
-logical_unit,283,1718,kept (no change per map),Is this a CRM?,Is this a CRM?
-logical_unit,284,1719,applied exactly,"No. A CRM stores what already happened so somebody can report on it. Antaeus ranks what should happen next and shows the reason it came up first. It also has none of the things a CRM is really bought for — territories, quotas across a team, admin roles, forecasting rollups. If those are your problem, this is not your tool.","No. A CRM primarily stores activity and pipeline data for reporting. Antaeus ranks next actions and shows the evidence behind each ranking. It does not include team territories, multi-rep quotas, admin-role management, or forecast rollups. If those are your primary needs, use a CRM."
-logical_unit,285,1722,kept (no change per map),What does setup actually involve?,What does setup actually involve?
-logical_unit,286,1723,applied exactly,"An afternoon. It asks for three things only you know: who you really sell to , the companies you're chasing , and where each live deal genuinely stands — who your champion is, who signs, what it's stuck on. Ten live deals is the floor where the picture gets useful; fewer is allowed and the app tells you plainly that it stays thin.","About one afternoon. Setup asks for three categories of founder context: your actual target customer, the companies you are pursuing, and the current status of each active deal — including the champion, signer, and unresolved blocker. Antaeus is most useful with at least ten active deals; with fewer, the interface indicates that the analysis is based on limited data."
-logical_unit,287,1723,applied exactly,"Everything the app can look up — what a company does, how big it is, what just happened to them — it looks up itself. You are never typing something a tool could have found.","Antaeus looks up public company information such as company description, size, and recent events. You enter the private sales context the system cannot retrieve."
-logical_unit,288,1726,kept (no change per map),Why does it ask for so much up front?,Why does it ask for so much up front?
-logical_unit,289,1727,applied exactly,"Because the part that matters cannot be imported. Why a deal is stuck, what made a win winnable, who actually decides — that lives in your head and nowhere else. We could hide that behind a friendly three-field form and give you something shallow, or ask for it once and give you a system that reads your motion back to you every morning afterwards. We chose the second and we say so up front instead of apologising for it.","Because the most important deal context is not available from external systems: why a deal is blocked, why a previous win succeeded, and who actually makes the decision. Antaeus asks you to enter that context once during setup, then uses it in later account, deal, and action recommendations. We prefer asking for the information explicitly rather than producing shallow recommendations from incomplete data."
-logical_unit,290,1730,kept (no change per map),Do I need a sales team for this to make sense?,Do I need a sales team for this to make sense?
-logical_unit,291,1731,applied exactly,"The opposite. It is aimed at the stretch when the founder is still the one selling and the first serious go-to-market hire hasn't started yet or just did. If you already have a sales org, you have different problems and better-suited tools.",No. Antaeus is designed for the period when the founder is still selling and the first serious go-to-market hire has not started yet or has just started. An established sales organization has different needs and better-suited tools.
-logical_unit,292,1734,kept (no change per map),How is it different from the tools I already turned down?,How is it different from the tools I already turned down?
-logical_unit,293,1735,applied exactly,"Most of them are a prettier database or a chat box bolted to one. The test to apply: open it on a Monday and see whether it tells you the single thing to do first and why that one and not the other thirteen . If it shows you a list and lets you choose, it is a database. Antaeus ranks, shows its reasoning, and lets you disagree with it.","Many alternatives are databases with chat interfaces. A useful test is whether the product ranks one next action and explains the evidence for that ranking, or only shows a list for you to sort yourself. Antaeus ranks actions, exposes the reasoning, and lets you disagree with the recommendation."
-logical_unit,294,1738,kept (no change per map),Does it send emails or make calls for me?,Does it send emails or make calls for me?
-logical_unit,295,1739,applied exactly,"No. It writes the line with you and you send it from wherever you already send mail. It can count what you sent — point it at your calendar and meetings get logged without you typing them twice. It never dials, and it will never take an action toward a buyer on its own.","No. Antaeus drafts outreach and call language, but you send messages through your existing email tools. It can record sent outreach and calendar meetings without duplicate data entry. It does not place calls or contact buyers autonomously."
-logical_unit,296,1742,kept (no change per map),"What does ""ready to hand off"" actually mean?","What does ""ready to hand off"" actually mean?"
-logical_unit,297,1743,applied exactly,"It is one question answered honestly: could a person who starts Monday run this motion without you sitting next to them. Antaeus answers it with a state, not a score — from you are the system , through building and inheritable with you there to answer questions , up to hire-ready , and then hire-ready and repeatable once you have won and lost enough to see the pattern. Each state has conditions you can read, and the app says what it would take to reach the next one.","Ready to hand off means a new hire can execute the sales process without constant founder guidance. Antaeus reports one of five readiness states: Founder-dependent, Partially documented, Usable with founder support, Hire-ready, and Hire-ready and repeatable. Each state has explicit conditions, and Antaeus shows which requirements remain before the workspace reaches the next state."
-logical_unit,298,1746,kept (no change per map),Is it using AI?,Is it using AI?
-logical_unit,299,1747,applied exactly,"Yes, under the hood — to read your workspace, notice what moved, and draft what it hands you. It is not what we are selling. You are not buying a model; you are buying a system that ranks your revenue work and survives leaving your head. If the interesting part of a tool is which model it runs, it usually has nothing else.","Yes. Antaeus uses language models to analyze workspace data, detect changes, and draft text. The product value is the workflow and ranking system, not a particular model. The system documents enough of your sales process that another person can use the workspace without relying on undocumented founder knowledge."
-logical_unit,300,1750,kept (no change per map),What happens to what I put in?,What happens to what I put in?
-logical_unit,301,1751,applied exactly,"It stays yours. Download the whole workspace as one file whenever you want, put a copy back, or delete everything behind a type-the-words confirmation. We do not sell it and we do not train public models on your accounts and deals.","It stays yours. You can export the full workspace as one file, restore a copy, or delete the workspace after a typed confirmation. Antaeus does not sell your workspace data or use your accounts and deals to train public models."
-logical_unit,302,1754,kept (no change per map),What will it cost?,What will it cost?
-logical_unit,303,1755,kept (no change per map),"Nothing while we're in beta, and no card to start. When there is a price it will be posted plainly on this page before it applies to anyone already using it.","Nothing while we're in beta, and no card to start. When there is a price it will be posted plainly on this page before it applies to anyone already using it."
-logical_unit,304,1765,applied exactly,Do the hard part once. It plays back every morning.,Document the sales process once. Get a prioritized briefing every morning.
-logical_unit,305,1766,applied exactly,"One afternoon, and the workspace is awake. Tomorrow it hands you the first move.","Setup takes about one afternoon. The next morning, Antaeus ranks your highest-priority action and shows why."
-logical_unit,306,1769,kept (no change per map),Create workspace,Create workspace
-logical_unit,307,1772,kept (no change per map),Already have one? Sign in,Already have one? Sign in
-logical_unit,308,1782,kept (no change per map),Antaeus,Antaeus
-logical_unit,309,1787,kept (no change per map),The product,The product
-logical_unit,310,1789,kept (no change per map),Take a closer look,Take a closer look
-logical_unit,311,1790,applied exactly,Every room,Every product area
-logical_unit,312,1791,applied exactly,What it sees,Activity monitoring
-logical_unit,313,1792,applied exactly,Pace and your number,Revenue plan and targets
-logical_unit,314,1793,kept (no change per map),How it compares,How it compares
-logical_unit,315,1797,kept (no change per map),Getting started,Getting started
-logical_unit,316,1799,kept (no change per map),Create a workspace,Create a workspace
-logical_unit,317,1800,kept (no change per map),Sign in,Sign in
-logical_unit,318,1801,kept (no change per map),Questions,Questions
-logical_unit,319,1802,kept (no change per map),Why Antaeus,Why Antaeus
-logical_unit,320,1806,kept (no change per map),Your workspace,Your workspace
-logical_unit,321,1808,kept (no change per map),How your data works,How your data works
-logical_unit,322,1809,kept (no change per map),Taking a copy,Taking a copy
-logical_unit,323,1810,applied exactly,Where we're honest,Beta limitations
-logical_unit,324,1811,kept (no change per map),Privacy,Privacy
-logical_unit,325,1815,kept (no change per map),Company,Company
-logical_unit,326,1817,kept (no change per map),Contact,Contact
-logical_unit,327,1818,kept (no change per map),Terms,Terms
-logical_unit,328,1819,kept (no change per map),Privacy policy,Privacy policy
-logical_unit,329,1825,kept (no change per map),ANTAEUS,ANTAEUS
-logical_unit,330,1830,kept (no change per map),Privacy,Privacy
-logical_unit,331,1831,kept (no change per map),Terms,Terms
-logical_unit,332,1832,kept (no change per map),Contact,Contact
-logical_unit,333,1836,applied exactly,"Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are real rooms from the app shown with sample data. Benchmark figures in Pace are typical reads for the deal size selected, not a promise about your motion. Photography via Unsplash.","Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Pace are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash."
-standalone_leaf,,592,applied exactly,You are the system,Founder-dependent
-standalone_leaf,,593,applied exactly,Building,Partially documented
-standalone_leaf,,594,applied exactly,Inheritable,Usable with founder support
-standalone_leaf,,596,applied exactly,Repeatable,Hire-ready and repeatable
-standalone_leaf,,671,applied exactly,champion went quiet,no champion activity
-standalone_leaf,,730,applied exactly,The week to run,Weekly operating plan
-standalone_leaf,,930,applied exactly,3 will slip,3 deals are at risk
-standalone_leaf,,930,applied exactly,this week if nothing changes,this week without a corrective action
-standalone_leaf,,931,applied exactly,quiet 14 days — your worst open deal,no buyer activity for 14 days — highest-risk open deal
-standalone_leaf,,945,applied exactly,The week to run,Weekly operating plan
-standalone_leaf,,1023,applied exactly,after I mark a deal quiet — want me to just take you there?,after I flag a deal with no recent activity — open that account automatically?
-standalone_leaf,,1064,applied exactly,Every deal you have won rode a dated expansion event. None of the cold ones landed.,Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.
-standalone_leaf,,1067,applied exactly,Every deal you have won rode a dated expansion event. None of the cold ones landed.,Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.
-standalone_leaf,,1102,applied exactly,You are the system,Founder-dependent
-standalone_leaf,,1103,applied exactly,Building,Partially documented
-standalone_leaf,,1104,applied exactly,Inheritable,Usable with founder support
-standalone_leaf,,1106,applied exactly,Repeatable,Hire-ready and repeatable
-standalone_leaf,,1191,applied exactly,Two plants announced · no recruiting bench,Two plants announced · limited recruiting capacity
-standalone_leaf,,1192,applied exactly,The ask,Buyer request
-standalone_leaf,,1201,applied exactly,Find the pain,Identify the problem
-standalone_leaf,,1201,applied exactly,Show it is real,Confirm business impact
-standalone_leaf,,1201,applied exactly,Ask for the meeting,Request the meeting
-standalone_leaf,,1270,applied exactly,Your line,Your position
-standalone_leaf,,1430,applied exactly,has not moved since the proposal.,has had no recorded progress since the proposal.
-standalone_leaf,,1431,applied exactly,went quiet.,has had no recent buyer activity.
-standalone_leaf,,1650,applied exactly,A revenue operating system built for the handoff,A revenue operating system for founder-led sales and the first go-to-market hire
-standalone_leaf,,1651,applied exactly,"A record of what happened, for whoever asks",Activity and pipeline records for reporting
-standalone_leaf,,1652,applied exactly,"Fast, free, and only in your head",Flexible manual tracking that depends on what you document
-standalone_leaf,,2125,applied exactly (in JS),The week to run,Weekly operating plan
-js_mirror,183-185,2223,"applied — map-exact split at "" · ""","mid: { a: ""1 in 5 closes"",  as: ""how often deals this size are won — the band is 15 to 25%"",
-           b: ""3.5× in flight"", bs: ""enough going at once that a couple of slips do not sink the quarter"",
-           c: ""90 days"",        cs: ""how long one usually takes to close — the range is 60 to 120 days"" },","mid: { a: ""20% win-rate benchmark"",  as: ""typical range 15–25%"",
-           b: ""3.5× pipeline coverage"", bs: ""enough active pipeline to absorb normal deal slippage"",
-           c: ""90-day sales-cycle benchmark"",        cs: ""typical range 60–120 days"" },"
-js_mirror,183-185,2223,applied,.twoup{display:grid;grid-template-columns:1fr 1fr;,".twoup{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);"
-js_mirror,183-185,2223,applied,@media(max-width:420px){.twoup{grid-template-columns:1fr;gap:26px}},"@media(max-width:420px){.twoup{grid-template-columns:minmax(0,1fr);gap:26px}}"
+kind,id,source_line,status,revised_2026_10_02,original,replacement
+logical_unit,1,546,kept (no change per map),False,ANTAEUS,ANTAEUS
+logical_unit,2,551,kept (no change per map),False,Why Antaeus,Why Antaeus
+logical_unit,3,552,applied exactly,True,The rooms,Product tour
+logical_unit,4,553,kept (no change per map),False,Compare,Compare
+logical_unit,5,554,kept (no change per map),False,Questions,Questions
+logical_unit,6,555,kept (no change per map),False,Sign in,Sign in
+logical_unit,7,563,kept (no change per map),False,Antaeus,Antaeus
+logical_unit,8,565,applied exactly,False,Handoff,Sales handoff
+logical_unit,9,566,applied exactly,True,Rooms,Product tour
+logical_unit,10,567,applied exactly,True,What it sees,Morning briefing
+logical_unit,11,568,kept (no change per map),True,Pace,Pace
+logical_unit,12,569,kept (no change per map),False,Compare,Compare
+logical_unit,13,572,kept (no change per map),False,Explore,Explore
+logical_unit,14,573,kept (no change per map),False,Create workspace,Create workspace
+logical_unit,15,581,kept (no change per map),False,Antaeus,Antaeus
+logical_unit,16,585,applied exactly,False,You built it. They can run it.,Turn the sales process you built into a system your first hire can use.
+logical_unit,17,586,applied exactly,True,Private beta. Set up your workspace in an afternoon. After that it reads your whole way of selling back to you every morning.,"Private beta. Set up your workspace in an afternoon. After that, Antaeus reviews your accounts, deals, and calls throughout the day and shows you each morning what needs attention."
+logical_unit,18,590,kept (no change per map),True,Where your whole motion stands,Where your whole motion stands
+logical_unit,19,599,applied exactly,True,The most valuable move on your board · #1 of 12,Highest-priority action · #1 of 12 ranked actions
+logical_unit,20,600,kept (no change per map),False,Reach out to Chomps.,Reach out to Chomps.
+logical_unit,21,601,applied exactly,True,"They announced two plants this month — a few hundred production hires on a deadline, and no recruiting team to absorb it. Nobody has called them. Reaching out is the part of your motion furthest behind.","Chomps announced two plants this month, which will require several hundred production hires on a deadline, and it appears to have limited recruiting capacity. Nobody has contacted them yet. That news gives the account high heat, and outreach is the part of your sales process furthest behind."
+logical_unit,22,602,kept (no change per map),False,Compose it →,Compose it →
+logical_unit,23,603,applied exactly,True,"· clearly the top one · then: Warby Parker, Sweetgreen","Ranked #1 · stable lead · Next: Warby Parker, Sweetgreen"
+logical_unit,24,605,kept (no change per map),False,"A morning in a sample workspace. The companies are real and public; the people, deals and numbers are invented.","A morning in a sample workspace. The companies are real and public; the people, deals and numbers are invented."
+logical_unit,25,612,applied exactly,True,Free while we're in beta. No card. Bring one afternoon and what's in your head.,Free while we're in beta. No card. Bring one afternoon and the judgment only you have.
+logical_unit,26,613,kept (no change per map),False,Create workspace,Create workspace
+logical_unit,27,626,kept (no change per map),False,Get the highlights.,Get the highlights.
+logical_unit,28,627,kept (no change per map),False,Take the tour,Take the tour
+logical_unit,29,633,applied exactly,True,"Every account you watch, sorted by what just moved.","Every account you track, ranked by recent company news."
+logical_unit,30,634,applied exactly,True,"Act now, reach while they’re warm, emerging, going cold.","Accounts sorted into four groups: act now, reach while they’re warm, emerging, and going cold."
+logical_unit,31,637,kept (no change per map),True,"Act now — hot, and something just moved","Act now — hot, and something just moved"
+logical_unit,32,649,applied exactly,False,"One thing to do first, and why it came up first.","Your highest-priority action, with the reason it ranks first."
+logical_unit,33,650,applied exactly,True,"Not a list of fourteen. The single most valuable one, with its reason shown.","Instead of a long task list, Antaeus ranks one action first and shows the reason it came first."
+logical_unit,34,653,kept (no change per map),False,#1 of 12,#1 of 12
+logical_unit,35,654,kept (no change per map),False,Reach out to Chomps.,Reach out to Chomps.
+logical_unit,36,655,applied exactly,True,"Two plants announced, a few hundred hires, no recruiting bench. Running hot , and outreach is your weakest part.","Two plants announced, several hundred hires needed, and recruiting capacity that appears limited. The account has high heat, and outreach is the part of your sales process furthest behind."
+logical_unit,37,656,kept (no change per map),False,Compose it →,Compose it →
+logical_unit,38,657,applied exactly,False,"· then: Warby Parker, Sweetgreen","Next: Warby Parker, Sweetgreen"
+logical_unit,39,663,applied exactly,True,"The deals that will slip this week, and the smallest fix.","The deals that will slip this week, and the smallest fix for each."
+logical_unit,40,664,applied exactly,True,Where a deal says it is matters less than what it is actually stuck on.,Where a deal sits in the pipeline matters less than what it is stuck on. Antaeus also looks at how long the deal has gone without an update and whether it has a dated next step.
+logical_unit,41,667,kept (no change per map),False,If you do nothing this week,If you do nothing this week
+logical_unit,42,668,applied exactly,True,3 will slip.,3 deals will slip.
+logical_unit,43,679,applied exactly,False,"A console you run the discovery call from, live.",A live discovery-call console.
+logical_unit,44,680,applied exactly,False,They say something. You tap what you heard. It hands you the next line.,Select the buyer response you heard. Antaeus shows the recommended follow-up question.
+logical_unit,45,683,kept (no change per map),True,Pain & consequence · live,Pain & consequence · live
+logical_unit,46,684,kept (no change per map),False,Walk me through what happens the week a new store opens.,Walk me through what happens the week a new store opens.
+logical_unit,47,685,applied exactly,False,Listen for whether this is really theirs to fix — and who flinches when you name the cost.,Listen for whether the buyer owns the problem and who is accountable for its cost.
+logical_unit,48,691,kept (no change per map),True,Tap what you heard to get your next line,Tap what you heard to get your next line
+logical_unit,49,694,kept (no change per map),False,Discovery Studio,Discovery Studio
+logical_unit,50,698,applied exactly,True,A pilot that gives their boss something to act on.,A pilot whose results the buyer's manager can use to decide.
+logical_unit,51,699,applied exactly,True,"Walked through, one step at a time, with the people you need to pull in.","Antaeus walks you through the pilot one step at a time and prompts you to add the roles pilots usually need, such as IT and a day-to-day owner."
+logical_unit,52,702,applied exactly,True,Who is hands-on,Who's hands-on
+logical_unit,53,709,kept (no change per map),False,Someone from IT — nobody named yet. Ask the champion for an intro.,Someone from IT — nobody named yet. Ask the champion for an intro.
+logical_unit,54,712,kept (no change per map),False,5 of 7 using it day to day,5 of 7 using it day to day
+logical_unit,55,718,applied exactly,False,Everything a first hire opens on day one.,What a new hire gets on day one.
+logical_unit,56,719,applied exactly,True,Written like a document a sharp operator left for their replacement.,Written like a document an experienced operator left for the person replacing them.
+logical_unit,57,733,kept (no change per map),False,"Who hits, who misses, and why","Who hits, who misses, and why"
+logical_unit,58,735,kept (no change per map),True,"One thing to notice — every deal you won was mid-market , but your stated target is enterprise.","One thing to notice — every deal you won was mid-market , but your stated target is enterprise."
+logical_unit,59,743,applied exactly,False,"One question, answered honestly: could someone else run this?",Can a new hire execute your sales process without you?
+logical_unit,60,744,applied exactly,True,"Five states, and what it takes to reach the next one.","Five readiness states, and what it takes to reach the next one."
+logical_unit,61,747,kept (no change per map),True,Could a hire run this on Monday?,Could a hire run this on Monday?
+logical_unit,62,749,kept (no change per map),True,"Hire-ready, repeatable","Hire-ready, repeatable"
+logical_unit,63,750,kept (no change per map),False,Hire-ready,Hire-ready
+logical_unit,64,751,applied exactly,True,"Inheritable, with you there",Inheritable with guardrails
+logical_unit,65,752,kept (no change per map),True,Building,Building
+logical_unit,66,753,kept (no change per map),True,You are the system,You are the system
+logical_unit,67,755,kept (no change per map),True,Left “you are the system” behind 3 weeks ago,Left “you are the system” behind 3 weeks ago
+logical_unit,68,915,applied exactly,False,The handoff,Sales handoff
+logical_unit,69,916,applied exactly,True,One motion. Two people who run it.,One sales process. Two people who can run it.
+logical_unit,70,917,applied exactly,True,"Your motion is the whole way you win revenue — who you go after, how you reach them, what you say on the call, how a deal gets to signed. In a founder-led company all of that lives in one head. Antaeus is where it stops doing that. The accounts you watch, where every deal actually stands , the questions that won a second meeting, what the pilot showed — it all piles up as you work, inside the rooms you already work in. Nothing gets filed away for later. So when the first serious hire starts, they open the same workspace you've been living in and read it themselves. You don't sit next to them for a month explaining what you meant.","Your sales process includes who you target, how you reach them, what you ask on calls, and how you move a deal to signature. In a founder-led company, much of that is known only to the founder. Antaeus records it as you work, inside the same product areas you already use: the accounts you track, where every deal actually stands, the discovery questions that led to a second meeting, and pilot results. There is no separate documentation step. When your first go-to-market hire starts, you share the handoff kit with them, and they read that context themselves instead of relying on you to explain it from memory."
+logical_unit,71,925,applied exactly,False,The most valuable move on your board,Highest-priority action
+logical_unit,72,926,kept (no change per map),False,Reach out to Chomps.,Reach out to Chomps.
+logical_unit,73,927,applied exactly,True,"Two plants announced this month, a few hundred production hires, no recruiting bench. The account is running hot , and outreach is the part of your motion furthest behind.","Two plants announced this month, several hundred production hires needed, and recruiting capacity that appears limited. The account has high heat, and outreach is the part of your sales process furthest behind."
+logical_unit,74,928,kept (no change per map),False,Compose it →,Compose it →
+logical_unit,75,936,kept (no change per map),True,If a hire started Monday · 5 of 7 parts ready,If a hire started Monday · 5 of 7 parts ready
+logical_unit,76,948,kept (no change per map),False,"Who hits, who misses, and why","Who hits, who misses, and why"
+logical_unit,77,949,applied exactly,True,Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go ask.,Every deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else's approval.
+logical_unit,78,950,kept (no change per map),True,"One thing to notice — every deal you won was mid-market , but the target you wrote down says enterprise.","One thing to notice — every deal you won was mid-market , but the target you wrote down says enterprise."
+logical_unit,79,957,kept (no change per map),False,What you see every morning,What you see every morning
+logical_unit,80,961,applied exactly,False,What they read on day one,What a new hire sees on day one
+logical_unit,81,973,kept (no change per map),False,Take a closer look.,Take a closer look.
+logical_unit,82,978,kept (no change per map),True,Watching · 28 accounts,Watching · 28 accounts
+logical_unit,83,985,kept (no change per map),True,Four need something today · three going cold,Four need something today · three going cold
+logical_unit,84,1011,kept (no change per map),False,While you were out,While you were out
+logical_unit,85,1012,applied exactly,True,It keeps reading when you stop.,Antaeus keeps checking while you're away.
+logical_unit,86,1027,applied exactly,False,Your work inside your own deals and accounts,Updates from your deals and accounts
+logical_unit,87,1031,kept (no change per map),False,Warby Parker has sat at proposal for three weeks with no next step. Open the deal →,Warby Parker has sat at proposal for three weeks with no next step. Open the deal →
+logical_unit,88,1035,applied exactly,True,Liquid Death has gone quiet — their people team is three deep and mid-launch. Open the account →,Liquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch. Open the account →
+logical_unit,89,1039,applied exactly,True,The Notion pilot is eight days in and two of the four recruiters have not touched it. Open the pilot →,The Notion pilot passed its readout date eight days ago with no result logged. Open the pilot →
+logical_unit,90,1043,applied exactly,True,No discovery calls logged this week — the rhythm is slipping . Pick up a call →,No discovery calls logged in the last 7 days. Plan a call →
+logical_unit,91,1054,kept (no change per map),False,Good morning,Good morning
+logical_unit,92,1055,kept (no change per map),False,7:41 AM · Chicago,7:41 AM · Chicago
+logical_unit,93,1057,kept (no change per map),False,7-day forecast ↗,7-day forecast ↗
+logical_unit,94,1058,kept (no change per map),False,78°,78°
+logical_unit,95,1074,applied exactly,True,"Every half hour the system goes back over your workspace on its own and writes down what it noticed — a deal that has not moved in three weeks , an account you watched that has gone quiet, a pilot where half the people you enrolled never signed in. Not charts. Plain sentences, the way a colleague would say them to you. In the morning you get the short version and the one thing worth doing first , and the reason it came up first is right there next to it.","Every 30 minutes, Antaeus checks for deals that have sat in one stage without a dated next step, tracked accounts with no new company news, pilots past their readout date with no result, and weeks with no calls logged. It writes what it finds as plain sentences, the way a colleague would say them. When you open it, you get the short version and the one action worth doing first, with the reason it came first right next to it."
+logical_unit,96,1079,applied exactly,False,Every 30 minutes the system re-reads your whole workspace on its own,Every 30 minutes Antaeus reviews the latest workspace data
+logical_unit,97,1080,applied exactly,True,One ranked move with the plain reason it came up ahead of the other thirteen,One ranked action with the plain reason it came ahead of the others
+logical_unit,98,1081,applied exactly,True,"22 rooms, one motion the work carries between them — you never restate anything","22 product areas share the same accounts and deals, so you never retype anything"
+logical_unit,99,1091,kept (no change per map),True,A spreadsheet and what you remember,A spreadsheet and what you remember
+logical_unit,100,1092,kept (no change per map),True,You are the system,You are the system
+logical_unit,101,1098,kept (no change per map),False,#1 of 12,#1 of 12
+logical_unit,102,1099,kept (no change per map),False,Reach out to Chomps.,Reach out to Chomps.
+logical_unit,103,1110,applied exactly,False,"The same motion, six weeks in",Six weeks later
+logical_unit,104,1111,applied exactly,True,Someone else could run it,A new hire could run it with you there to answer questions
+logical_unit,105,1125,applied exactly,False,However the week goes,For different kinds of sales days
+logical_unit,106,1126,applied exactly,True,The work changes shape. The system keeps up.,Antaeus ranks your work whether you have one call or three deals at risk.
+logical_unit,107,1127,applied exactly,True,Some mornings you have an hour and one call. Some weeks you are three deals behind and cannot tell which one is worth saving. The rooms hold their shape either way.,"Some mornings you have an hour and one call. Other weeks, three deals are behind and you cannot tell which one to save first. Antaeus ranks them and shows why."
+logical_unit,108,1133,applied exactly,False,Whatever shape your week takes.,For common sales situations.
+logical_unit,109,1139,applied exactly,True,"Monday, and it's all yours. Open one room and read the state of the whole motion in a sentence, then the single thing worth doing before lunch.",Starting the week. Open the Dashboard to see where your sales process stands and the highest-priority action for the day.
+logical_unit,110,1143,applied exactly,False,"A call you're walking into cold. The shape of it, the pushback you're likely to get, and a line ready for each one — read before you dial, not during.","Preparing for a cold call. Review the call structure, likely objections, and recommended responses before you dial."
+logical_unit,111,1147,applied exactly,True,"The deal that went quiet. The system noticed before you did, says how long it's been, and names the smallest thing that would move it.","A deal with no recorded progress. Antaeus flags it, shows how many days since the last update, and names the smallest next action that would move it."
+logical_unit,112,1151,applied exactly,True,"What you learned on the call. Captured while you're still in it, then carried into the deal — so nobody has to ask you what happened later.","What you learned on the call. Add it during the call, and it goes into the deal so the next person sees the same context."
+logical_unit,113,1155,applied exactly,True,"The week you're behind. It says so plainly — how far, which assumption was optimistic, and what it costs if you're wrong about it.","A week behind plan. Antaeus shows how far behind plan you are, which assumption is most optimistic, and how many more messages and calls a day you'd need if it's wrong."
+logical_unit,114,1159,applied exactly,True,"The day someone else takes it. They open the workspace and read it. You are in the room to answer questions, not to be the only copy.",A new hire takes over. They read the handoff kit you share with them; you only need to answer their questions and handle exceptions.
+logical_unit,115,1168,kept (no change per map),False,Reaching out,Reaching out
+logical_unit,116,1169,applied exactly,False,The part most founders make up as they go.,Standardize outreach instead of improvising it.
+logical_unit,117,1170,applied exactly,True,"Outreach that could have gone to anyone gets treated like it went to nobody. Antaeus will not let a line leave without the account, the person, and the thing that just happened to them attached to it. Same on the call: whatever the buyer says, there is a next line ready , and what you learn is captured while you are still in the room.","Antaeus builds every outreach draft from a specific account, contact, and trigger, and you can't generate one without a named account and contact. During a live call, it shows the next recommended question based on the buyer response you select, and it saves what you learn with the deal."
+logical_unit,118,1178,kept (no change per map),False,Outbound,Outbound
+logical_unit,119,1179,kept (no change per map),False,Cold call,Cold call
+logical_unit,120,1180,kept (no change per map),False,LinkedIn,LinkedIn
+logical_unit,121,1181,kept (no change per map),False,Discovery,Discovery
+logical_unit,122,1188,kept (no change per map),False,"Writing to Lena, Head of People at Chomps","Writing to Lena, Head of People at Chomps"
+logical_unit,123,1189,applied exactly,True,"Lena — saw the two plants going up. That is a few hundred production hires on a deadline , and from the outside it looks like the people team absorbing all of it. Usually the screening is what gives first. Worth twenty minutes to compare notes on how you are staffing the openings?","Lena — I saw Chomps announce two new plants. That will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck. Worth twenty minutes next week to compare how you are staffing the openings?"
+logical_unit,124,1193,kept (no change per map),False,Copy the message,Copy the message
+logical_unit,125,1195,applied exactly,True,"Outbound. Pick the account, the person, and what just happened to them. The line comes out naming all three. There is no send path for a message that could have gone to anyone.","Outbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
+logical_unit,126,1199,applied exactly,False,Before you dial · the shape of it,Before you dial · call structure
+logical_unit,127,1204,kept (no change per map),False,They will probably say,They will probably say
+logical_unit,128,1205,kept (no change per map),False,“We are too small for something like this.”,“We are too small for something like this.”
+logical_unit,129,1206,applied exactly,True,Small teams feel a bad hire hardest. Ask what one wrong store manager cost them last year — nobody argues with a number they said out loud.,Small teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.
+logical_unit,130,1207,applied exactly,True,Read before you dial · log what happened after · never during,Review before you dial · log the outcome after · never during the call
+logical_unit,131,1209,applied exactly,False,"Cold call. The shape of the call, and at every step the pushback a buyer actually gives, with a line ready for it. You read it before you dial and log what happened after — never while you're talking.","Cold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+logical_unit,132,1213,applied exactly,False,Gymshark · one move,Gymshark · recommended LinkedIn action
+logical_unit,133,1215,kept (no change per map),False,Ask — only once it is warranted,Ask — only once it is warranted
+logical_unit,134,1216,kept (no change per map),False,"Connect, now she knows your name","Connect, now she knows your name"
+logical_unit,135,1217,kept (no change per map),False,Give her something before you ask,Give her something before you ask
+logical_unit,136,1218,kept (no change per map),False,Say something useful on her post,Say something useful on her post
+logical_unit,137,1219,kept (no change per map),False,Watch what she posts,Watch what she posts
+logical_unit,138,1221,kept (no change per map),False,Poppy accepted last week. Give her something today — do not ask yet.,Poppy accepted last week. Give her something today — do not ask yet.
+logical_unit,139,1223,applied exactly,True,"LinkedIn. One account, one move. Watch what they post, say something useful about it, connect once they know your name, give something before you ask. The inbox is never the opening.","LinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
+logical_unit,140,1227,kept (no change per map),True,Pain & consequence · live,Pain & consequence · live
+logical_unit,141,1228,kept (no change per map),False,Walk me through what happens the week a new store opens.,Walk me through what happens the week a new store opens.
+logical_unit,142,1229,applied exactly,False,Listen for whether this pain is really theirs to fix — and who flinches when you name the cost.,Listen for whether the buyer owns the problem and who is accountable for its cost.
+logical_unit,143,1235,applied exactly,False,They hired around it. Ask what that cost and who signed it off — you have just found your economic buyer.,They added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.
+logical_unit,144,1237,applied exactly,True,"Discovery. A console you run the live call from. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line and jumps you to where the conversation went.",Discovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went.
+logical_unit,145,1243,applied exactly,False,Everything between finding them and signing.,Workflows from prospecting through signature.
+logical_unit,146,1247,applied exactly,False,Describe who you are after,Describe your target companies
+logical_unit,147,1248,kept (no change per map),False,“Fast-casual brands that just announced new market openings”,“Fast-casual brands that just announced new market openings”
+logical_unit,148,1250,applied exactly,True,"Finding them. Describe who you’re after in plain words and keep the search. Add the companies it turns up, and each one answers three questions — are they who we’re targeting, what’s our way in, how will we reach out — before it reaches the accounts you watch.","Prospecting. Describe your target companies in plain language and save the search; Antaeus returns matching companies. Before a company reaches the accounts you track, you answer three questions: are they who we’re targeting, what’s our way in, and how will we reach out?"
+logical_unit,149,1252,applied exactly,False,How is this market cut?,Segment the market by
+logical_unit,150,1255,applied exactly,True,247 of a 300 seat budget spent,247 of 300 account slots used
+logical_unit,151,1256,applied exactly,False,"Carving the market. Cut it by geography, industry, size, named accounts, or a live trigger — and blend them. Every division says why you're the right team to win it.","Market segmentation. Segment by geography, industry, company size, named accounts, recent trigger, or a combination. For each segment, document why your team is positioned to win."
+logical_unit,152,1258,applied exactly,False,Too broad to hunt,Target definition is too broad
+logical_unit,153,1259,kept (no change per map),False,“Companies that are hiring”,“Companies that are hiring”
+logical_unit,154,1260,applied exactly,False,Sharper — growth consumer brands whose expansion news dates the hiring need .,More specific — growth-stage consumer brands whose announced expansion creates a dated hiring need.
+logical_unit,155,1261,applied exactly,True,"Who you sell to. One sharp definition, pushed on until it's a target you can actually hunt. Every other room works against it from then on.",Who you sell to. Refine the definition until it describes a specific target you can search for. Every other product area uses that definition from then on.
+logical_unit,156,1263,applied exactly,True,Who is hands-on,Who's hands-on
+logical_unit,157,1265,kept (no change per map),False,A hiring manager — nobody named yet.,A hiring manager — nobody named yet.
+logical_unit,158,1266,applied exactly,True,"Running the pilot. Walked through step by step: what it has to show, who needs to be hands-on, who's still missing, and a write-up the champion can defend without you.","Running a pilot. Antaeus walks you through the pilot step by step: what it has to show, who needs to be hands-on, who is still missing, and a write-up the champion can defend without you."
+logical_unit,159,1268,kept (no change per map),True,The one thing blocking,The one thing blocking
+logical_unit,160,1271,kept (no change per map),False,Your papers already answer 36 of their 40 questions,Your papers already answer 36 of their 40 questions
+logical_unit,161,1272,applied exactly,True,"The run to a signature. After they say yes, security, legal and finance can still kill it. It leads with the one front actually blocking, their ask against your line, and what you can trade.","Getting to signed. After the buyer says yes, security, legal, and finance can still stop the deal. Antaeus leads with the one issue actually blocking, their ask against your line, and what you can trade."
+logical_unit,162,1274,kept (no change per map),True,The relay,The relay
+logical_unit,163,1276,applied exactly,True,One Chicago operator to another. All he has to do is change a couple of lines and hit send .,Rafael and the Portillo’s team are both Chicago operators. The draft is nearly done; Rafael only needs to change a couple of lines and send it.
+logical_unit,164,1277,applied exactly,True,"Calling in a favor. Your investors, advisors and happy customers, matched to the deal they can actually move. It writes both notes — yours to them, and the one they forward.","Calling in a favor. Antaeus matches your investors, advisors, and customers to the stuck deals they can help move, then writes two notes: your request to them, and the one they forward to the buyer."
+logical_unit,165,1279,applied exactly,True,Written 45 days early,Projected from today's deal data
+logical_unit,166,1280,kept (no change per map),True,Warby Parker dies in 20 days.,Warby Parker dies in 20 days.
+logical_unit,167,1282,applied exactly,True,"The autopsy, early. It writes the story of how the deal dies before it does, names the pattern, and routes you to the room where the fix happens.","Future Autopsy. It writes how the deal is likely to die before it happens, names the most likely cause of loss, and links to the product area where you can fix it."
+logical_unit,168,1284,applied exactly,False,Projected landing,Projected revenue
+logical_unit,169,1285,kept (no change per map),False,$580k against $800k,$580k against $800k
+logical_unit,170,1286,applied exactly,True,One assumption is optimistic — you have never won at 28% .,One assumption is optimistic: 28% is above the ~20% that teams your size usually win.
+logical_unit,171,1287,applied exactly,True,"Your number, backwards. The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.","Pace. Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic."
+logical_unit,172,1293,applied exactly,False,10 frameworks discovery question sets tuned to what you actually sell,10 discovery frameworks tuned to what you sell
+logical_unit,173,1294,applied exactly,False,6 buyer lenses the questions change depending on who is in the room,6 buyer-role views that change the questions by stakeholder
+logical_unit,174,1295,applied exactly,False,"Every branch answered whatever they say back, there is a next line and somewhere to go",Recommended follow-up for each buyer response
+logical_unit,175,1365,kept (no change per map),False,Pace,Pace
+logical_unit,176,1366,applied exactly,True,Do you have enough going to hit the number?,Do you have enough pipeline and activity to hit your revenue target?
+logical_unit,177,1367,applied exactly,True,"Give it your number and Antaeus works backwards to the only thing you control — what you do every working day . Then it does the part most planning tools skip: it tells you whether the plan is realistic for deals your size, names the one assumption that's optimistic , and says what it costs you if that assumption is wrong.","Antaeus works your target back to daily messages and calls, using your deal size, win rate, and conversion rates. It compares those rates with benchmarks for your deal size, names the one that is most optimistic, and shows how many more messages and calls a day you’d need if it’s wrong."
+logical_unit,178,1373,kept (no change per map),False,Show the benchmark for,Show the benchmark for
+logical_unit,179,1375,kept (no change per map),False,Deals around $15k,Deals around $15k
+logical_unit,180,1376,kept (no change per map),False,Deals around $60k,Deals around $60k
+logical_unit,181,1377,kept (no change per map),False,Deals around $150k,Deals around $150k
+logical_unit,182,1378,kept (no change per map),False,Deals above $400k,Deals above $400k
+logical_unit,183,1382,applied exactly,True,1 in 5 closes how often deals this size are won — the band is 15 to 25%,1 in 5 deals won · how often deals this size are won · typically 15–25%
+logical_unit,184,1383,applied exactly,True,3.5× in flight enough going at once that a couple of slips do not sink the quarter,3.5× your target in open deals · enough open deals that losing or delaying a few does not put the quarter below target
+logical_unit,185,1384,applied exactly,True,90 days how long one usually takes to close — the range is 60 to 120 days,90 days to close · how long a deal this size usually takes · typically 60–120 days
+logical_unit,186,1386,applied exactly,True,These are the benchmark reads for that deal size. Antaeus checks your plan against them and says plainly when it's a stretch.,These are benchmarks for that deal size. Antaeus checks your plan against them and flags the assumption that is most above the benchmark.
+logical_unit,187,1395,applied exactly,False,All of it,Product coverage
+logical_unit,188,1396,applied exactly,False,Twenty-two rooms. Here are three.,Twenty-two product areas. Here are three.
+logical_unit,189,1397,applied exactly,False,They are not tabs. Work done in one shows up in the next without you retyping it — the account you added this morning is the account the call is about this afternoon. We are not going to lay the whole thing out on a marketing page. You will see it when you are inside.,"These are connected workflows, not separate tabs. Data entered in one workflow is available in the others, so an account added during prospecting is the same account used in call preparation later that day. This page shows three; the full workspace contains twenty-two."
+logical_unit,190,1403,kept (no change per map),False,Discovery Studio,Discovery Studio
+logical_unit,191,1404,applied exactly,True,"You run the call from it, while you are on the call.","Run the discovery call from it, while you're on the call."
+logical_unit,192,1405,applied exactly,True,"Ten frameworks, six buyer lenses, and a next line ready for whatever they say back. Not notes you write afterwards.","Ten discovery frameworks, six buyer-role views, and a recommended follow-up for whatever the buyer says. Not notes you write afterwards."
+logical_unit,193,1407,kept (no change per map),False,They just said,They just said
+logical_unit,194,1408,kept (no change per map),False,“We just hired two more recruiters.”,“We just hired two more recruiters.”
+logical_unit,195,1409,applied exactly,False,They hired around it. Ask what that cost and who signed it off.,They added recruiters instead of changing the process. Ask what the added headcount cost and who approved it.
+logical_unit,196,1414,kept (no change per map),False,Future Autopsy,Future Autopsy
+logical_unit,197,1415,applied exactly,True,It writes how the deal dies before it does.,"It writes how the deal is likely to die, before it does."
+logical_unit,198,1416,applied exactly,True,"The pattern, the days you have left, and the smallest thing that would change the ending.","The most likely cause of loss, the days you have left, and the smallest action that would change the outcome."
+logical_unit,199,1418,applied exactly,True,45 days early,Projected from today's deal data
+logical_unit,200,1419,kept (no change per map),True,Warby Parker dies in 20 days.,Warby Parker dies in 20 days.
+logical_unit,201,1425,kept (no change per map),False,The Briefing,The Briefing
+logical_unit,202,1426,applied exactly,True,What the system saw while you were out.,What changed while you were away.
+logical_unit,203,1427,applied exactly,True,"Written the way a colleague would say it, every morning, whether or not you opened anything yesterday.","What changed in your deals and accounts, and what moved in your market, written the way a colleague would say it."
+logical_unit,204,1429,kept (no change per map),False,This morning,This morning
+logical_unit,205,1436,applied exactly,False,"The other nineteen do the rest of it — who you go after and how you carve the market , finding real companies and confirming them, the line you send and the call you walk into, the pilot, the run through security and legal to a signature, your number worked back to a daily habit, and the handoff itself.","The other nineteen cover market segmentation, account discovery and qualification, outreach, call preparation, pilots, security and legal, revenue planning, and the handoff to your first hire."
+logical_unit,206,1445,kept (no change per map),False,Getting around,Getting around
+logical_unit,207,1446,applied exactly,False,Touch the ground. The map comes up.,Open the Ground to see the workspace map.
+logical_unit,208,1447,applied exactly,True,"There is no menu bar down the side of the screen. Every room stands on a quiet line at the foot of the page — press it, or press G, and the whole motion rises up as a map with you-are-here lit and the system's suggestion glowing. It's the myth the product is named after: Antaeus was unbeatable while he was touching the earth.","There is no permanent menu down the side of the screen. A thin line at the bottom of every product area opens the workspace map: press it, or press G, and every product area appears in the order of your sales process, with your current location and Antaeus’s suggested next stop highlighted. The line is called the Ground, after the Antaeus myth: Antaeus stayed strong while he touched the ground."
+logical_unit,209,1455,applied exactly,False,The ground · your whole motion,The Ground · workspace map
+logical_unit,210,1467,applied exactly,False,Twenty-two of them. Press the line and they come up.,Twenty-two product areas. Open the Ground to view them.
+logical_unit,211,1470,kept (no change per map),False,The Ground,The Ground
+logical_unit,212,1471,applied exactly,True,"One line, every room. Press it and the map of your whole motion rises from beneath the page, with you-are-here lit and the system's suggestion glowing. Summoned, then gone — it never sits there taking up the screen.","The Ground is the map of all twenty-two product areas, laid out in the order of your sales process. Open it from the bottom of any page or press G to see where you are and Antaeus's suggested next stop. It closes when you're done; it never stays on screen."
+logical_unit,213,1478,kept (no change per map),False,15 / 27 today,15 / 27 today
+logical_unit,214,1480,kept (no change per map),False,messages and calls,messages and calls
+logical_unit,215,1483,applied exactly,True,Gymshark — Poppy replied after 12 quiet days. 28m,Gymshark — Poppy replied 12 days after your last message. 28m
+logical_unit,216,1484,applied exactly,True,Captured your send to Lena at Chomps — counted.,Your email to Lena at Chomps was logged and counted.
+logical_unit,217,1485,applied exactly,False,Calendar — Thursday with Notion confirmed.,Calendar · Thursday meeting with Notion confirmed.
+logical_unit,218,1486,applied exactly,False,Still no dated next step on Warby Parker .,Warby Parker still has no dated next step.
+logical_unit,219,1491,kept (no change per map),False,The Live Edge,The Live Edge
+logical_unit,220,1492,applied exactly,True,"A hairline down the left margin carrying today's count against your daily number, and a running list of what moved — tagged by whether it was you, the system, or the buyer. Switch it off and it folds to the wall in three beats you can see.","A thin live strip down the left edge shows today's count of messages and calls against your daily number, and a list of what just happened, tagged you, the machine, or the buyers. Turn it off and it folds away to a thin line you can click to bring it back; counting continues while it is off."
+logical_unit,221,1501,kept (no change per map),False,Your workspace,Your workspace
+logical_unit,222,1502,applied exactly,False,"It's yours, and you can take it.",You own the workspace data and can export it.
+logical_unit,223,1505,applied exactly,False,"Saved as you work. Your workspace lives in the cloud, not trapped on one laptop. Close the lid mid-sentence and open it somewhere else.",Saved automatically. Your workspace is stored in the cloud and syncs across devices. Close one device mid-edit and continue from another.
+logical_unit,224,1506,applied exactly,True,"Nothing sold, nothing shared. Your accounts, deals and calls are your commercial position. They are not a dataset we resell or train a public model on.","Your data is not sold, shared, or used to train public models. Your accounts, deals, and calls are your commercial position, not a dataset Antaeus resells."
+logical_unit,225,1507,applied exactly,True,"Take a full copy, any time. One button downloads everything in your workspace as a plain file. No ticket, no export queue, no waiting on us.","Export a full copy at any time. One button downloads your accounts, deals, calls, pilots, and plans as one plain file. No support ticket or export queue."
+logical_unit,226,1508,applied exactly,True,"Delete it and mean it. Type the words and it's gone — the accounts, the deals, the pilot results, all of it. Not archived somewhere we can still read.","Delete the workspace. Type the confirmation phrase and Antaeus permanently deletes your accounts, deals, calls, pilots, and handoff kit."
+logical_unit,227,1509,applied exactly,True,Read-only for a hire. Share the workspace with someone who is starting Monday without handing them your logins or the ability to change anything.,"Share the handoff kit with a new hire. Send a read-only link. They can read all seven parts without your login, and you can revoke the link at any time."
+logical_unit,228,1510,applied exactly,True,"An offline copy too. If you want a version that never leaves the machine you're on, the app will hand you one. It's tucked away, because most people never need it.","Create an offline copy. If you need a copy stored only on this device, Antaeus can create one. The option sits under Advanced because most users will not need it."
+logical_unit,229,1609,kept (no change per map),False,Why founders start here.,Why founders start here.
+logical_unit,230,1613,kept (no change per map),False,One afternoon,One afternoon
+logical_unit,231,1614,applied exactly,True,Set it up once. It pays you back every morning.,Set up your workspace once. Get a ranked briefing every morning.
+logical_unit,232,1615,applied exactly,True,"The setup asks for the thinking only you have — who you really sell to, who you're chasing, where each deal is genuinely stuck. Nothing you'd have to look up. Everything a tool can find, it finds.","Setup asks for the judgment only you have: who you actually sell to, the accounts you are pursuing, and where each deal is really stuck. Antaeus looks up public company information itself, so you never type what a tool could have found."
+logical_unit,233,1616,kept (no change per map),False,Create workspace ›,Create workspace ›
+logical_unit,234,1619,kept (no change per map),False,Free in beta,Free in beta
+logical_unit,235,1620,kept (no change per map),False,"No card, no seat count, no call with anyone.","No card, no seat count, no call with anyone."
+logical_unit,236,1621,kept (no change per map),False,"We are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card.","We are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card."
+logical_unit,237,1622,kept (no change per map),False,Create workspace ›,Create workspace ›
+logical_unit,238,1625,applied exactly,False,Yours to take,Exportable
+logical_unit,239,1626,kept (no change per map),False,Download the whole workspace whenever you want.,Download the whole workspace whenever you want.
+logical_unit,240,1627,applied exactly,True,"One button, one file, everything in it. If you leave, you leave with the thing you built — not with a support ticket.","One button exports your accounts, deals, calls, pilots, and plans to a single file. If you leave, you keep a copy without opening a support ticket."
+logical_unit,241,1628,kept (no change per map),False,How your data works ›,How your data works ›
+logical_unit,242,1631,applied exactly,False,Built for the handoff,For the first sales hire
+logical_unit,243,1632,applied exactly,False,The point is the day you stop being the only one who knows.,Designed for the point when the founder is no longer the only person who understands the sales process.
+logical_unit,244,1633,applied exactly,True,Every other tool is built to report on the motion. This one is built so the motion survives leaving your head.,"Most sales tools record activity for reporting. Antaeus also keeps the reasoning, account context, and sales process you record, so a new hire can do the work without asking you."
+logical_unit,245,1634,kept (no change per map),False,Why Antaeus ›,Why Antaeus ›
+logical_unit,246,1643,applied exactly,False,Keep looking. Then come back.,Compare Antaeus with a CRM and a spreadsheet.
+logical_unit,247,1644,applied exactly,False,"Most founders have already tried the other two. Here is the honest difference, without pretending either one is useless.",A CRM and a spreadsheet solve different problems. This comparison shows what each is designed to do.
+logical_unit,248,1654,kept (no change per map),False,What it's for,What it's for
+logical_unit,249,1655,applied exactly,True,"Telling you what to do next, and why that one",Ranking the next sales action and showing why it ranks first
+logical_unit,250,1656,kept (no change per map),False,Storing what you already did,Storing what you already did
+logical_unit,251,1657,applied exactly,False,Whatever you decided it was for,Flexible manual tracking
+logical_unit,252,1659,kept (no change per map),False,Who it's built for,Who it's built for
+logical_unit,253,1660,applied exactly,False,"A founder selling, and the first hire who takes over",Founder-led sales teams preparing for the first go-to-market hire
+logical_unit,254,1661,kept (no change per map),False,A sales team big enough to need reporting,A sales team big enough to need reporting
+logical_unit,255,1662,applied exactly,False,"You, this quarter",An individual founder or small team needing lightweight tracking
+logical_unit,256,1664,kept (no change per map),False,On opening it,On opening it
+logical_unit,257,1665,applied exactly,True,"One ranked thing to do, with its reason shown","Highest-priority action, with the reason it ranks first"
+logical_unit,258,1666,applied exactly,True,"A list of everything, sorted how you last sorted it","A full list, in the order you last sorted it"
+logical_unit,259,1667,applied exactly,True,Whatever you typed last,Whatever you entered last
+logical_unit,260,1669,applied exactly,False,Runs the live call,Provides live call guidance
+logical_unit,261,1670,applied exactly,True,"Yes — question, what to listen for, the next line","Yes — current question, what to listen for, and recommended follow-up"
+logical_unit,262,1671,kept (no change per map),False,No — you log it afterwards,No — you log it afterwards
+logical_unit,263,1672,kept (no change per map),False,No,No
+logical_unit,264,1674,applied exactly,False,Says when the plan isn't real,Flags unrealistic planning assumptions
+logical_unit,265,1675,applied exactly,True,Yes — names the optimistic assumption and its cost,Yes — names the most optimistic assumption and what it would cost
+logical_unit,266,1676,kept (no change per map),True,No — it reports the forecast you entered,No — it reports the forecast you entered
+logical_unit,267,1677,kept (no change per map),False,No,No
+logical_unit,268,1679,applied exactly,False,A hire can inherit it,Supports handoff to a new hire
+logical_unit,269,1680,applied exactly,True,Yes — seven parts written as prose they read on day one,Yes — seven handoff parts a new hire can read on day one
+logical_unit,270,1681,applied exactly,True,"Partly — they inherit the records, not the reasoning","Partly — a new hire gets the records, not the reasoning"
+logical_unit,271,1682,applied exactly,False,No — the reasoning was never written down,No — reasoning remains undocumented unless you write it separately
+logical_unit,272,1684,kept (no change per map),False,Setup cost,Setup cost
+logical_unit,273,1685,kept (no change per map),True,An afternoon of real thinking,An afternoon of real thinking
+logical_unit,274,1686,kept (no change per map),False,"Weeks, and usually someone to configure it","Weeks, and usually someone to configure it"
+logical_unit,275,1687,kept (no change per map),False,Ten minutes,Ten minutes
+logical_unit,276,1689,applied exactly,False,"If you have a twelve-person sales team and a forecasting problem, buy a CRM. This is for the stretch before that, when the motion is still one person's and the first hire starts in six weeks.","If you already have a twelve-person sales team and mainly need forecasting and reporting, use a CRM. Antaeus is designed for founder-led sales before that point, when the process still depends heavily on the founder and the first sales hire is approaching."
+logical_unit,277,1698,applied exactly,True,Where we're honest with you.,What to expect in the beta.
+logical_unit,278,1701,applied exactly,False,"It is beta, and it reads like beta.",The product is still in beta.
+logical_unit,279,1702,applied exactly,True,"Some rooms are deeper than others. When something is thin, the app says so in plain words rather than showing you a confident empty state. You will find rough edges; we would rather you find them than not be told.","Some product areas are more complete than others. When data or functionality is limited, Antaeus says so directly instead of presenting a confident result. Expect unfinished areas while the beta is active."
+logical_unit,280,1705,applied exactly,False,"Models are under the hood, not on the label.",Antaeus uses language models for analysis and drafting.
+logical_unit,281,1706,applied exactly,True,"Antaeus uses language models to read your workspace and draft what it hands you. It is not the pitch. Every line the system writes goes through the same voice rules the rest of the product does, and you can see what it based a read on.","Antaeus uses language models to analyze workspace data and draft text. We do not market Antaeus by which model it uses. Generated text follows the same writing rules as the rest of Antaeus, and the interface shows the source data behind each analysis."
+logical_unit,282,1715,kept (no change per map),False,Questions? Answers.,Questions? Answers.
+logical_unit,283,1718,kept (no change per map),False,Is this a CRM?,Is this a CRM?
+logical_unit,284,1719,applied exactly,True,"No. A CRM stores what already happened so somebody can report on it. Antaeus ranks what should happen next and shows the reason it came up first. It also has none of the things a CRM is really bought for — territories, quotas across a team, admin roles, forecasting rollups. If those are your problem, this is not your tool.","No. A CRM primarily stores activity and pipeline data for reporting. Antaeus ranks next actions and shows the reason behind each ranking. It does not include team territories, quotas across a team, admin roles, or forecast rollups. If those are your primary needs, use a CRM."
+logical_unit,285,1722,kept (no change per map),False,What does setup actually involve?,What does setup actually involve?
+logical_unit,286,1723,applied exactly,True,"An afternoon. It asks for three things only you know: who you really sell to , the companies you're chasing , and where each live deal genuinely stands — who your champion is, who signs, what it's stuck on. Ten live deals is the floor where the picture gets useful; fewer is allowed and the app tells you plainly that it stays thin.","About one afternoon. Setup asks for the judgment only you have: who you actually sell to, the companies you are pursuing, and where each active deal really stands — the champion, who signs, and what it is stuck on. Antaeus is most useful with at least ten active deals; with fewer, setup tells you plainly that the picture will stay thin."
+logical_unit,287,1723,applied exactly,True,"Everything the app can look up — what a company does, how big it is, what just happened to them — it looks up itself. You are never typing something a tool could have found.","Antaeus finds recent public events for each company and can look up industry, size, and location. You enter the private sales context it cannot find."
+logical_unit,288,1726,kept (no change per map),False,Why does it ask for so much up front?,Why does it ask for so much up front?
+logical_unit,289,1727,applied exactly,True,"Because the part that matters cannot be imported. Why a deal is stuck, what made a win winnable, who actually decides — that lives in your head and nowhere else. We could hide that behind a friendly three-field form and give you something shallow, or ask for it once and give you a system that reads your motion back to you every morning afterwards. We chose the second and we say so up front instead of apologising for it.","Because the most important deal context cannot be imported: why a deal is stuck, why a past win worked, and who actually decides. Only you know it. Antaeus asks for that judgment once during setup, then uses it in every account, deal, and action recommendation after. We ask for it up front and say so, instead of hiding it behind a short form and giving you shallow recommendations."
+logical_unit,290,1730,kept (no change per map),False,Do I need a sales team for this to make sense?,Do I need a sales team for this to make sense?
+logical_unit,291,1731,applied exactly,False,"The opposite. It is aimed at the stretch when the founder is still the one selling and the first serious go-to-market hire hasn't started yet or just did. If you already have a sales org, you have different problems and better-suited tools.",No. Antaeus is designed for the period when the founder is still selling and the first serious go-to-market hire has not started yet or has just started. An established sales organization has different needs and better-suited tools.
+logical_unit,292,1734,kept (no change per map),False,How is it different from the tools I already turned down?,How is it different from the tools I already turned down?
+logical_unit,293,1735,applied exactly,True,"Most of them are a prettier database or a chat box bolted to one. The test to apply: open it on a Monday and see whether it tells you the single thing to do first and why that one and not the other thirteen . If it shows you a list and lets you choose, it is a database. Antaeus ranks, shows its reasoning, and lets you disagree with it.","Many alternatives are databases with chat interfaces. A useful test is whether the product ranks one next action and explains why that one comes first, or only shows a list for you to sort yourself. Antaeus ranks actions, shows its reasoning, and lets you disagree with the recommendation."
+logical_unit,294,1738,kept (no change per map),False,Does it send emails or make calls for me?,Does it send emails or make calls for me?
+logical_unit,295,1739,applied exactly,True,"No. It writes the line with you and you send it from wherever you already send mail. It can count what you sent — point it at your calendar and meetings get logged without you typing them twice. It never dials, and it will never take an action toward a buyer on its own.","No. Antaeus drafts outreach and call language, but you send messages through your existing email tools. If you BCC a capture address and connect your calendar link, Antaeus counts sends and meetings with the accounts you track. It does not place calls or contact buyers on its own."
+logical_unit,296,1742,kept (no change per map),False,"What does ""ready to hand off"" actually mean?","What does ""ready to hand off"" actually mean?"
+logical_unit,297,1743,applied exactly,True,"It is one question answered honestly: could a person who starts Monday run this motion without you sitting next to them. Antaeus answers it with a state, not a score — from you are the system , through building and inheritable with you there to answer questions , up to hire-ready , and then hire-ready and repeatable once you have won and lost enough to see the pattern. Each state has conditions you can read, and the app says what it would take to reach the next one.","It means a person who starts Monday could run your sales process without you sitting next to them. Antaeus answers that with a state, not a score: you are the system, then building, then inheritable with guardrails (a hire could run it with you there to answer questions), then hire-ready, and finally hire-ready, repeatable once you have won and lost enough deals to see the pattern. Each state has conditions you can read, and Antaeus shows what it would take to reach the next one."
+logical_unit,298,1746,kept (no change per map),False,Is it using AI?,Is it using AI?
+logical_unit,299,1747,applied exactly,True,"Yes, under the hood — to read your workspace, notice what moved, and draft what it hands you. It is not what we are selling. You are not buying a model; you are buying a system that ranks your revenue work and survives leaving your head. If the interesting part of a tool is which model it runs, it usually has nothing else.","Yes. Antaeus uses language models to analyze workspace data, detect changes, and draft text. You are paying for the ranking and the recorded sales context, not for a particular model."
+logical_unit,300,1750,kept (no change per map),False,What happens to what I put in?,What happens to what I put in?
+logical_unit,301,1751,applied exactly,True,"It stays yours. Download the whole workspace as one file whenever you want, put a copy back, or delete everything behind a type-the-words confirmation. We do not sell it and we do not train public models on your accounts and deals.","It stays yours. You can export your accounts, deals, calls, pilots, and plans as one file, restore a copy, or delete them after a typed confirmation. Antaeus does not sell your workspace data or use your accounts and deals to train public models."
+logical_unit,302,1754,kept (no change per map),False,What will it cost?,What will it cost?
+logical_unit,303,1755,kept (no change per map),False,"Nothing while we're in beta, and no card to start. When there is a price it will be posted plainly on this page before it applies to anyone already using it.","Nothing while we're in beta, and no card to start. When there is a price it will be posted plainly on this page before it applies to anyone already using it."
+logical_unit,304,1765,applied exactly,True,Do the hard part once. It plays back every morning.,Do the hard part once. Get a ranked briefing every morning.
+logical_unit,305,1766,applied exactly,False,"One afternoon, and the workspace is awake. Tomorrow it hands you the first move.","Setup takes about one afternoon. The next morning, Antaeus ranks your highest-priority action and shows why."
+logical_unit,306,1769,kept (no change per map),False,Create workspace,Create workspace
+logical_unit,307,1772,kept (no change per map),False,Already have one? Sign in,Already have one? Sign in
+logical_unit,308,1782,kept (no change per map),False,Antaeus,Antaeus
+logical_unit,309,1787,kept (no change per map),False,The product,The product
+logical_unit,310,1789,kept (no change per map),False,Take a closer look,Take a closer look
+logical_unit,311,1790,applied exactly,False,Every room,Every product area
+logical_unit,312,1791,applied exactly,True,What it sees,Morning briefing
+logical_unit,313,1792,applied exactly,True,Pace and your number,Pace: your revenue plan
+logical_unit,314,1793,kept (no change per map),False,How it compares,How it compares
+logical_unit,315,1797,kept (no change per map),False,Getting started,Getting started
+logical_unit,316,1799,kept (no change per map),False,Create a workspace,Create a workspace
+logical_unit,317,1800,kept (no change per map),False,Sign in,Sign in
+logical_unit,318,1801,kept (no change per map),False,Questions,Questions
+logical_unit,319,1802,kept (no change per map),False,Why Antaeus,Why Antaeus
+logical_unit,320,1806,kept (no change per map),False,Your workspace,Your workspace
+logical_unit,321,1808,kept (no change per map),False,How your data works,How your data works
+logical_unit,322,1809,kept (no change per map),False,Taking a copy,Taking a copy
+logical_unit,323,1810,applied exactly,True,Where we're honest,What to expect in the beta
+logical_unit,324,1811,kept (no change per map),False,Privacy,Privacy
+logical_unit,325,1815,kept (no change per map),False,Company,Company
+logical_unit,326,1817,kept (no change per map),False,Contact,Contact
+logical_unit,327,1818,kept (no change per map),False,Terms,Terms
+logical_unit,328,1819,kept (no change per map),False,Privacy policy,Privacy policy
+logical_unit,329,1825,kept (no change per map),False,ANTAEUS,ANTAEUS
+logical_unit,330,1830,kept (no change per map),False,Privacy,Privacy
+logical_unit,331,1831,kept (no change per map),False,Terms,Terms
+logical_unit,332,1832,kept (no change per map),False,Contact,Contact
+logical_unit,333,1836,applied exactly,True,"Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are real rooms from the app shown with sample data. Benchmark figures in Pace are typical reads for the deal size selected, not a promise about your motion. Photography via Unsplash.","Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are based on real product areas, shown with sample data. Benchmark figures in Pace are typical figures for the selected deal size, not a promise about your results. Photography via Unsplash."
+standalone_leaf,,671,applied (dom),,champion went quiet,no champion update
+standalone_leaf,,730,applied (dom),,The week to run,What the first week looks like
+standalone_leaf,,930,applied (dom),,3 will slip,3 deals will slip
+standalone_leaf,,931,applied (dom),,quiet 14 days — your worst open deal,no champion update in 14 days
+standalone_leaf,,945,applied (dom),,The week to run,What the first week looks like
+standalone_leaf,,1022,applied (dom),,Noticed,Suggestion
+standalone_leaf,,1064,applied (dom),,Every deal you have won rode a dated expansion event. None of the cold ones landed.,Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.
+standalone_leaf,,1067,applied (dom),,Every deal you have won rode a dated expansion event. None of the cold ones landed.,Every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.
+standalone_leaf,,1191,applied (dom),,Two plants announced · no recruiting bench,Two plants · small recruiting team
+standalone_leaf,,1249,applied (dom),,247 found,247 added
+standalone_leaf,,1270,applied (dom),,"12 months of fees, breach capped higher",12 months of fees; higher for breaches
+standalone_leaf,,1281,applied (dom),,Pattern,Likely cause
+standalone_leaf,,1281,applied (dom),,pressure before clarity,pushed too early
+standalone_leaf,,1281,applied (dom),,seen 4×,top risk
+standalone_leaf,,1420,applied (dom),,Pattern,Likely cause
+standalone_leaf,,1420,applied (dom),,pressure before clarity,pushed too early
+standalone_leaf,,1420,applied (dom),,4×,top risk
+standalone_leaf,,1430,applied (dom),,has not moved since the proposal.,stalled after the proposal.
+standalone_leaf,,1431,applied (dom),,went quiet.,— no champion update.
+standalone_leaf,,1650,applied (dom),,A revenue operating system built for the handoff,A revenue operating system for founder-led sales and the first go-to-market hire
+standalone_leaf,,1651,applied (dom),,"A record of what happened, for whoever asks",Activity and pipeline records for reporting
+standalone_leaf,,1652,applied (dom),,"Fast, free, and only in your head",Flexible manual tracking that depends on what you document
+standalone_leaf,,2125,applied (js),,The week to run,What the first week looks like
+standalone_leaf,,2108,applied (js),,Pattern,Likely cause
+standalone_leaf,,2108,applied (js),,pressure before clarity,pushed too early
+standalone_leaf,,2108,applied (js),,seen 4×,top risk
+raw_edit,L1023 Briefing suggestion,,applied,True,You always open <u>the account you flagged</u> after I mark a deal quiet — want me to just take you there?,You opened <u>Deal Workspace</u> six times this week. Add a stalled-deal check to the top of your briefing?
+raw_edit,L980 Signal Console row,,applied,True,<span>New COO in from Chipotle · replied 2h ago</span>,<span>New COO in from Chipotle</span>
+raw_edit,"L1065, L1068 Briefing ticker",,applied,True,keeps appearing next to accounts you already watch.</span>,keeps appearing next to accounts you already track.</span>
+raw_edit,L1216-1217 LinkedIn rungs,,applied,True,"<div class=""sc-rung"" data-a=""4""><i></i>Connect, now she knows your name</div>
+            <div class=""sc-rung sc-rung--here"" data-a=""3""><i></i>Give her something before you ask</div>","<div class=""sc-rung sc-rung--here"" data-a=""4""><i></i>Give her something before you ask</div>
+            <div class=""sc-rung sc-rung--past"" data-a=""3""><i></i>Connect, now she knows your name</div>"
+raw_edit,L1201 Cold Call step row,,applied,True,"<span>Open</span><span class=""on"">Find the pain</span><span>Show it is real</span><span>Ask for the meeting</span><span>Wrap</span>","<span>Open the call</span><span class=""on"">Why it matters to them</span><span>Show them it's worked before</span><span>Ask for the meeting</span><span>Wrap up</span>"
+js_or_attribute,2074 MOMENTS[0].chip,,applied (1),False,"""The morning read""","""Morning briefing"""
+js_or_attribute,2075 MOMENTS[0].cap,,applied (1),True,"<b>The morning read.</b> Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.","<b>Morning briefing.</b> Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first."
+js_or_attribute,2078 MOMENTS[0].scene kicker,,kept (no change),False,>While you were out</p>',>While you were out</p>'
+js_or_attribute,2079 MOMENTS[0].scene row 1 (20d · Warby Parker),,kept (no change),False,"<em class=""sc-day sc-day--red"">20d</em><span><b>Warby Parker</b> has sat at proposal for three weeks with no next step.</span>","<em class=""sc-day sc-day--red"">20d</em><span><b>Warby Parker</b> has sat at proposal for three weeks with no next step.</span>"
+js_or_attribute,2080 MOMENTS[0].scene row 2 badge + name (14d · Liquid Death),,kept (no change),False,"data-a=""3""><em class=""sc-day sc-day--amber"">14d</em><span><b>Liquid Death</b>","data-a=""3""><em class=""sc-day sc-day--amber"">14d</em><span><b>Liquid Death</b>"
+js_or_attribute,2080 MOMENTS[0].scene row 2 text,,applied (1),True,has gone quiet — their people team is three deep and mid-launch.</span>,has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.</span>
+js_or_attribute,2081 MOMENTS[0].scene row 3 (8d · Notion pilot),,applied (1),True,"<em class=""sc-day sc-day--blue"">8d</em><span>The <b>Notion pilot</b> is eight days in and two of four recruiters have not touched it.</span>","<em class=""sc-day sc-day--blue"">8d</em><span>The <b>Notion pilot</b> passed its readout date eight days ago with no result logged.</span>"
+js_or_attribute,2082 MOMENTS[0].scene note,,applied (1),False,And one you did not ask for — <b>every deal you have won rode a dated expansion event</b>. None of the cold ones landed.,And one pattern you did not ask about: <b>every deal you have won followed a dated expansion event</b>. None of the deals without a dated trigger closed.
+js_or_attribute,2085 MOMENTS[1].chip,,applied (1),False,"""A live call""","""Live discovery call"""
+js_or_attribute,2086 MOMENTS[1].cap,,applied (1),True,"<b>A live call.</b> Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.","<b>Live discovery call.</b> Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up."
+js_or_attribute,2089 MOMENTS[1].scene kicker,,kept (no change),True,Pain &amp; consequence · make the cost real,Pain &amp; consequence · make the cost real
+js_or_attribute,2090 MOMENTS[1].scene question,,kept (no change),False,Walk me through what happens the week a new store opens.</h3>',Walk me through what happens the week a new store opens.</h3>'
+js_or_attribute,2091 MOMENTS[1].scene listen-for,,applied (1),False,"Listen for whether this pain is really <b>theirs to fix</b>, or a polite nice-to-have — and who flinches when you name the cost.","Listen for whether <b>the buyer owns the problem</b> or treats it as a nice-to-have, and who is accountable for its cost."
+js_or_attribute,2093 MOMENTS[1].scene response 1,,kept (no change),False,"'<span data-a=""4"">“It is messy but we cope”</span>'","'<span data-a=""4"">“It is messy but we cope”</span>'"
+js_or_attribute,2094 MOMENTS[1].scene response 2 (selected),,kept (no change),False,"'<span class=""on"" data-a=""5"">“We just hired two more recruiters”</span>'","'<span class=""on"" data-a=""5"">“We just hired two more recruiters”</span>'"
+js_or_attribute,2095 MOMENTS[1].scene response 3,,kept (no change),False,"'<span data-a=""6"">“Not a top priority”</span>'","'<span data-a=""6"">“Not a top priority”</span>'"
+js_or_attribute,2097 MOMENTS[1].scene recommended follow-up,,applied (1),False,"They hired around it. <b>Ask what that cost, and who signed it off</b> — you have just found your economic buyer.",They added recruiters instead of changing the underlying process. <b>Ask what the added headcount cost and who approved the expense</b>; that identifies the budget owner.
+js_or_attribute,2100 MOMENTS[2].chip,,applied (1),True,"""A deal going quiet""","""A deal at risk"""
+js_or_attribute,2101 MOMENTS[2].cap,,applied (1),True,"<b>A deal going quiet.</b> Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.","<b>A deal at risk.</b> Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it."
+js_or_attribute,2104 MOMENTS[2].scene kicker,,applied (1),True,>Written 45 days early</p>',>Projected from today’s deal data</p>'
+js_or_attribute,2105 MOMENTS[2].scene headline,,kept (no change),True,"Warby Parker dies in 20 days, and here is how.","Warby Parker dies in 20 days, and here is how."
+js_or_attribute,2106 MOMENTS[2].scene projection,,applied (1),True,"You have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as <b>no decision</b> — the way most of your losses have gone.","You have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as <b>no decision</b>, the way most of your losses have gone."
+js_or_attribute,2108 MOMENTS[2].scene pattern row,,kept (no change),True,"data-a=""5""><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em>","data-a=""5""><b>Pattern</b><span>pressure before clarity</span><em>seen 4×</em>"
+js_or_attribute,2109 MOMENTS[2].scene fix label,,kept (no change),True,<b>The smallest fix</b>,<b>The smallest fix</b>
+js_or_attribute,2109 MOMENTS[2].scene fix value,,applied (1),True,<span>get a second name in the room this week</span>,<span>get a second person from the buyer’s side involved this week</span>
+js_or_attribute,2112 MOMENTS[3].chip,,applied (1),False,"""The handoff""","""Sales handoff"""
+js_or_attribute,2113 MOMENTS[3].cap,,applied (1),True,"<b>The handoff.</b> Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.","<b>Sales handoff.</b> Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own."
+js_or_attribute,2116 MOMENTS[3].scene kicker,,kept (no change),True,"style=""color:var(--forest)"">If a hire started Monday · 5 of 7 parts ready</p>'","style=""color:var(--forest)"">If a hire started Monday · 5 of 7 parts ready</p>'"
+js_or_attribute,2119 MOMENTS[3].scene contents item,,kept (no change),False,"'<span class=""done"">Who hits, who misses</span>'","'<span class=""done"">Who hits, who misses</span>'"
+js_or_attribute,2120 MOMENTS[3].scene contents item,,kept (no change),False,"'<span class=""done"">What actually landed</span>'","'<span class=""done"">What actually landed</span>'"
+js_or_attribute,2121 MOMENTS[3].scene contents item,,kept (no change),False,"'<span class=""done"">The questions that won</span>'","'<span class=""done"">The questions that won</span>'"
+js_or_attribute,2122 MOMENTS[3].scene contents item,,kept (no change),False,"'<span class=""done"">Where deals leak</span>'","'<span class=""done"">Where deals leak</span>'"
+js_or_attribute,2123 MOMENTS[3].scene contents item,,kept (no change),False,"'<span class=""done"">The losses you paid for</span>'","'<span class=""done"">The losses you paid for</span>'"
+js_or_attribute,2124 MOMENTS[3].scene contents item,,kept (no change),False,'<span>Why you win</span>','<span>Why you win</span>'
+js_or_attribute,2125 MOMENTS[3].scene contents item,,kept (no change),True,'<span>The week to run</span>','<span>The week to run</span>'
+js_or_attribute,2128 MOMENTS[3].scene heading,,kept (no change),False,">Who hits, who misses, and why</h3>'",">Who hits, who misses, and why</h3>'"
+js_or_attribute,2129 MOMENTS[3].scene paragraph,,applied (1),True,Every deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.,Every deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.
+js_or_attribute,2130 MOMENTS[3].scene note,,kept (no change),True,"One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>'","One thing to notice — <b>every deal you won was mid-market</b>, but the target you wrote down says enterprise.</p>'"
+js_or_attribute,"2145 chip aria-label (""See "" + r.chip)",,applied (1),False,"""See "" + r.chip","""Show example: "" + r.chip"
+js_or_attribute,1973 highlight dot aria-label,,kept (no change),False,"""Highlight "" + (i + 1) + "" of "" + cards.length","""Highlight "" + (i + 1) + "" of "" + cards.length"
+js_or_attribute,2016 play/pause aria-label,,kept (no change),False,"v ? ""Pause highlights"" : ""Play highlights""","v ? ""Pause highlights"" : ""Play highlights"""
+js_or_attribute,956 aria-label (handoff view switch group),,applied (1),False,"aria-label=""Whose view""","aria-label=""Founder view or new-hire view"""
+js_or_attribute,989 aria-label (product viewer chip group),,applied (1),True,"aria-label=""Open a room""","aria-label=""Product tour examples"""
+js_or_attribute,992 aria-label (viewer close),,kept (no change),False,"aria-label=""Close""","aria-label=""Close"""
+js_or_attribute,997 aria-label (viewer previous),,applied (1),False,"aria-label=""Previous room""","aria-label=""Previous example"""
+js_or_attribute,1001 aria-label (viewer next),,applied (1),False,"aria-label=""Next room""","aria-label=""Next example"""
+js_or_attribute,1136 aria-label (week rail),,applied (1),False,"aria-label=""Through the week""","aria-label=""Common sales situations"""
+js_or_attribute,1177 aria-label (craft tablist),,applied (1),False,"aria-label=""Ways to reach out""","aria-label=""Outreach and discovery workflows"""
+js_or_attribute,1245 aria-label (workflow card rail),,applied (1),False,"aria-label=""More of the work""","aria-label=""Workflows from prospecting through signature"""
+js_or_attribute,1611 aria-label (why-start rail),,kept (no change),False,"aria-label=""Why start here""","aria-label=""Why start here"""
+js_or_attribute,1648 aria-label (comparison table),,applied (1),False,"aria-label=""How the three compare""","aria-label=""Antaeus compared with a CRM and a spreadsheet"""
+js_or_attribute,544 aria-label (global nav),,kept (no change),False,"aria-label=""Global""","aria-label=""Global"""
+js_or_attribute,546 aria-label (brand link),,kept (no change),False,"aria-label=""Antaeus home""","aria-label=""Antaeus home"""
+js_or_attribute,564 aria-label (local nav),,kept (no change),False,"aria-label=""On this page""","aria-label=""On this page"""
+js_or_attribute,630 aria-label (highlights rail),,kept (no change),False,"aria-label=""Highlights""","aria-label=""Highlights"""
+js_or_attribute,761 aria-label (highlight dots tablist),,kept (no change),False,"aria-label=""Highlight""","aria-label=""Highlight"""
+js_or_attribute,762 aria-label (play/pause initial state),,kept (no change),False,"aria-label=""Pause highlights""","aria-label=""Pause highlights"""
+js_or_attribute,"1162, 1289, 1512, 1637 aria-label (rail arrows, previous)",,kept (no change),False,"aria-label=""Previous""","aria-label=""Previous"""
+js_or_attribute,"1162, 1289, 1512, 1637 aria-label (rail arrows, next)",,kept (no change),False,"aria-label=""Next""","aria-label=""Next"""
+js_or_attribute,1504 aria-label (trust rail),,kept (no change),False,"aria-label=""How your data is handled""","aria-label=""How your data is handled"""
+js_or_attribute,1829 aria-label (footer legal nav),,kept (no change),False,"aria-label=""Legal""","aria-label=""Legal"""
+js_or_attribute,1138 img alt,,kept (no change),False,"alt=""A dark office with one desk lit, someone working alone.""","alt=""A dark office with one desk lit, someone working alone."""
+js_or_attribute,1142 img alt,,kept (no change),False,"alt=""A person sitting by a large window, looking at their phone mid-call.""","alt=""A person sitting by a large window, looking at their phone mid-call."""
+js_or_attribute,1146 img alt,,kept (no change),False,"alt=""An office building at night, lit windows with people still inside.""","alt=""An office building at night, lit windows with people still inside."""
+js_or_attribute,1150 img alt,,kept (no change),False,"alt=""Someone writing in a notebook at a desk under a lamp.""","alt=""Someone writing in a notebook at a desk under a lamp."""
+js_or_attribute,1154 img alt,,kept (no change),False,"alt=""A person at a monitor in low light, thinking.""","alt=""A person at a monitor in low light, thinking."""
+js_or_attribute,1158 img alt,,kept (no change),False,"alt=""A quiet modern lobby with tall windows, nobody in it.""","alt=""A quiet modern lobby with tall windows, nobody in it."""
+js_or_attribute,1 <title>,,kept (no change),False,<title>Antaeus</title>,<title>Antaeus</title>
+js_or_attribute,BENCH.smb.a,,applied (1),False,"a: ""1 in 4 closes""","a: ""1 in 4 deals won"""
+js_or_attribute,BENCH.smb.as,,applied (1),False,"as: ""how often deals this size are won — the band is 20 to 30%""","as: ""how often deals this size are won · typically 20–30%"""
+js_or_attribute,BENCH.smb.b,,applied (1),False,"b: ""3× in flight""","b: ""3× your target in open deals"""
+js_or_attribute,BENCH.smb.bs,,applied (1),False,"bs: ""enough going at once that one slipping does not sink the quarter""","bs: ""enough open deals that losing or delaying one does not put the quarter below target"""
+js_or_attribute,BENCH.smb.c,,applied (1),False,"c: ""45 days""","c: ""45 days to close"""
+js_or_attribute,BENCH.smb.cs,,applied (1),False,"cs: ""how long one usually takes to close — the range is 30 to 60 days""","cs: ""how long a deal this size usually takes · typically 30–60 days"""
+js_or_attribute,BENCH.mid.a,,applied (1),False,"a: ""1 in 5 closes""","a: ""1 in 5 deals won"""
+js_or_attribute,BENCH.mid.as,,applied (1),False,"as: ""how often deals this size are won — the band is 15 to 25%""","as: ""how often deals this size are won · typically 15–25%"""
+js_or_attribute,BENCH.mid.b,,applied (1),False,"b: ""3.5× in flight""","b: ""3.5× your target in open deals"""
+js_or_attribute,BENCH.mid.bs,,applied (1),False,"bs: ""enough going at once that a couple of slips do not sink the quarter""","bs: ""enough open deals that losing or delaying a few does not put the quarter below target"""
+js_or_attribute,BENCH.mid.c,,applied (1),False,"c: ""90 days""","c: ""90 days to close"""
+js_or_attribute,BENCH.mid.cs,,applied (1),False,"cs: ""how long one usually takes to close — the range is 60 to 120 days""","cs: ""how long a deal this size usually takes · typically 60–120 days"""
+js_or_attribute,BENCH.ent.a,,applied (1),False,"a: ""1 in 7 closes""","a: ""1 in 7 deals won"""
+js_or_attribute,BENCH.ent.as,,applied (1),False,"as: ""how often deals this size are won — the band is 10 to 18%""","as: ""how often deals this size are won · typically 10–18%"""
+js_or_attribute,BENCH.ent.b,,applied (1),False,"b: ""4.5× in flight""","b: ""4.5× your target in open deals"""
+js_or_attribute,BENCH.ent.bs,,applied (1),False,"bs: ""fewer, larger deals means more cover for each one that stalls""","bs: ""fewer, larger deals, so each stalled deal needs more open deals behind it"""
+js_or_attribute,BENCH.ent.c,,applied (1),False,"c: ""180 days""","c: ""180 days to close"""
+js_or_attribute,BENCH.ent.cs,,applied (1),False,"cs: ""how long one usually takes to close — the range is 120 to 270 days""","cs: ""how long a deal this size usually takes · typically 120–270 days"""
+js_or_attribute,BENCH.str.a,,applied (1),False,"a: ""1 in 8 closes""","a: ""1 in 8 deals won"""
+js_or_attribute,BENCH.str.as,,applied (1),False,"as: ""how often deals this size are won — the band is 8 to 15%""","as: ""how often deals this size are won · typically 8–15%"""
+js_or_attribute,BENCH.str.b,,applied (1),False,"b: ""5× in flight""","b: ""5× your target in open deals"""
+js_or_attribute,BENCH.str.bs,,applied (1),False,"bs: ""at this size a single deal going quiet can be the whole quarter""","bs: ""at this size one deal can be the whole quarter, so a single stalled deal puts it at risk"""
+js_or_attribute,BENCH.str.c,,applied (1),False,"c: ""240 days""","c: ""240 days to close"""
+js_or_attribute,BENCH.str.cs,,applied (1),False,"cs: ""how long one usually takes to close — the range is 180 to 360 days""","cs: ""how long a deal this size usually takes · typically 180–360 days"""

@@ -1,27 +1,129 @@
 [
  {
-  "kind": "attr:aria-label",
-  "line": 989,
-  "term": "room",
-  "context": "Open a room"
+  "kind": "text",
+  "line": 590,
+  "term": "motion",
+  "context": "Where your whole motion stands"
  },
  {
-  "kind": "attr:aria-label",
-  "line": 997,
-  "term": "room",
-  "context": "Previous room"
+  "kind": "text",
+  "line": 592,
+  "term": "you are the system",
+  "context": "You are the system"
  },
  {
-  "kind": "attr:aria-label",
-  "line": 1001,
-  "term": "room",
-  "context": "Next room"
+  "kind": "text",
+  "line": 594,
+  "term": "inheritable",
+  "context": "Inheritable"
+ },
+ {
+  "kind": "text",
+  "line": 634,
+  "term": "warm",
+  "context": "ounts sorted into four groups: act now, reach while they’re warm, emerging, and going cold."
+ },
+ {
+  "kind": "text",
+  "line": 634,
+  "term": "cold",
+  "context": "ups: act now, reach while they’re warm, emerging, and going cold."
+ },
+ {
+  "kind": "text",
+  "line": 637,
+  "term": "hot",
+  "context": "Act now — hot, and something just moved"
+ },
+ {
+  "kind": "text",
+  "line": 637,
+  "term": "moved",
+  "context": "Act now — hot, and something just moved"
+ },
+ {
+  "kind": "text",
+  "line": 663,
+  "term": "slip",
+  "context": "The deals that will slip this week, and the smallest fix for each."
+ },
+ {
+  "kind": "text",
+  "line": 668,
+  "term": "slip",
+  "context": "3 deals will slip."
+ },
+ {
+  "kind": "text",
+  "line": 691,
+  "term": "line",
+  "context": "Tap what you heard to get your next line"
+ },
+ {
+  "kind": "text",
+  "line": 751,
+  "term": "inheritable",
+  "context": "Inheritable with guardrails"
+ },
+ {
+  "kind": "text",
+  "line": 753,
+  "term": "you are the system",
+  "context": "You are the system"
+ },
+ {
+  "kind": "text",
+  "line": 755,
+  "term": "you are the system",
+  "context": "Left “you are the system” behind 3 weeks ago"
+ },
+ {
+  "kind": "text",
+  "line": 917,
+  "term": "move",
+  "context": "get, how you reach them, what you ask on calls, and how you move a deal to signature. In a founder-led company, much of that"
+ },
+ {
+  "kind": "text",
+  "line": 930,
+  "term": "slip",
+  "context": "3 deals will slip"
+ },
+ {
+  "kind": "text",
+  "line": 985,
+  "term": "cold",
+  "context": "Four need something today · three going cold"
+ },
+ {
+  "kind": "text",
+  "line": 1092,
+  "term": "you are the system",
+  "context": "You are the system"
+ },
+ {
+  "kind": "text",
+  "line": 1102,
+  "term": "you are the system",
+  "context": "You are the system"
+ },
+ {
+  "kind": "text",
+  "line": 1104,
+  "term": "inheritable",
+  "context": "Inheritable"
  },
  {
   "kind": "text",
   "line": 1143,
   "term": "cold",
   "context": "Preparing for a cold call."
+ },
+ {
+  "kind": "text",
+  "line": 1147,
+  "term": "move",
+  "context": "last update, and names the smallest next action that would move it."
  },
  {
   "kind": "text",
@@ -37,15 +139,81 @@
  },
  {
   "kind": "text",
+  "line": 1270,
+  "term": "line",
+  "context": "Your line"
+ },
+ {
+  "kind": "text",
+  "line": 1272,
+  "term": "line",
+  "context": "ith the one issue actually blocking, their ask against your line, and what you can trade."
+ },
+ {
+  "kind": "text",
   "line": 1277,
-  "term": "warm",
-  "context": "Warm introduction."
+  "term": "move",
+  "context": "s, advisors, and customers to the stuck deals they can help move, then writes two notes: your request to them, and the one t"
+ },
+ {
+  "kind": "text",
+  "line": 1280,
+  "term": "dies",
+  "context": "Warby Parker dies in 20 days."
+ },
+ {
+  "kind": "text",
+  "line": 1282,
+  "term": "autopsy",
+  "context": "Future Autopsy."
  },
  {
   "kind": "text",
   "line": 1414,
   "term": "autopsy",
   "context": "Future Autopsy"
+ },
+ {
+  "kind": "text",
+  "line": 1419,
+  "term": "dies",
+  "context": "Warby Parker dies in 20 days."
+ },
+ {
+  "kind": "text",
+  "line": 1427,
+  "term": "moved",
+  "context": "What changed in your deals and accounts, and what moved in your market, written the way a colleague would say it."
+ },
+ {
+  "kind": "text",
+  "line": 1448,
+  "term": "line",
+  "context": "A thin line at the bottom of every product area"
+ },
+ {
+  "kind": "text",
+  "line": 1448,
+  "term": "line",
+  "context": "location and Antaeus’s suggested next stop highlighted. The line is called the Ground, after the Antaeus myth: Antaeus staye"
+ },
+ {
+  "kind": "text",
+  "line": 1492,
+  "term": "line",
+  "context": "ine, or the buyers. Turn it off and it folds away to a thin line you can click to bring it back; counting continues while it"
+ },
+ {
+  "kind": "text",
+  "line": 1743,
+  "term": "you are the system",
+  "context": "you are the system"
+ },
+ {
+  "kind": "text",
+  "line": 1743,
+  "term": "inheritable",
+  "context": "inheritable with guardrails"
  },
  {
   "kind": "js",
@@ -55,50 +223,14 @@
  },
  {
   "kind": "js",
-  "line": 2082,
-  "term": "cold",
-  "context": ". None of the cold ones landed."
- },
- {
-  "kind": "js",
-  "line": 2086,
-  "term": "line",
-  "context": "answer you tap what you heard — it hands you the exact next line."
- },
- {
-  "kind": "js",
   "line": 2101,
   "term": "autopsy",
-  "context": "Future Autopsy writes the story of how a deal dies before it does — names"
- },
- {
-  "kind": "js",
-  "line": 2101,
-  "term": "dies",
-  "context": "Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you hav"
- },
- {
-  "kind": "js",
-  "line": 2101,
-  "term": "room",
-  "context": "ttern, counts the days you have left, and routes you to the room where the fix happens."
+  "context": "Future Autopsy writes how a deal is likely to die before it happens: the m"
  },
  {
   "kind": "js",
   "line": 2105,
   "term": "dies",
   "context": "Warby Parker dies in 20 days, and here is how."
- },
- {
-  "kind": "js",
-  "line": 2109,
-  "term": "room",
-  "context": "get a second name in the room this week"
- },
- {
-  "kind": "js",
-  "line": 2113,
-  "term": "room",
-  "context": "ard — and each one carries a thing to notice that no single room could have told you on its own."
  }
 ]

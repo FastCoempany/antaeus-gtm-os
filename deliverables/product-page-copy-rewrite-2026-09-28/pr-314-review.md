@@ -9,7 +9,7 @@
 - data integrity and coverage.
 
 A skeptic then tried to disprove each finding against the actual files. **73 findings, 68 confirmed, 5 refuted.** Findings that overlap between reviewers are merged below. The full list with file and line evidence is in [`pr-314-review-findings.json`](pr-314-review-findings.json).
-**Applied result:** [`README.md`](README.md).
+**Applied result:** [`README.md`](README.md). **Fix status:** see the next section.
 
 ---
 
@@ -24,6 +24,83 @@ It is **not ready to ship as written**, for three reasons:
 3. **It misses about an eighth of the page's visible copy.** That copy is rendered by JavaScript, and some of it switches the old wording back on as soon as a visitor clicks something.
 
 `COPY_STANDARD.md` also disagrees with canon (`CLAUDE.md`) in several places, and canon lists neither file as an authority. Several of the items below change what a room is or what the product says it does, so under canon Part IV §4 they are your call.
+
+---
+
+## Status after the 2026-10-02 fix pass
+
+The founder approved the addendum and asked for these findings to be fixed in the map. Of the 68 confirmed findings, 56 are fixed in the map, 8 are fixed in the map but still need a decision or a product change outside it, and 4 are not map changes. The corrected map is `COPY_INVENTORY_AND_REWRITE_MAP.json` at the repo root; the build and what changed are in the [README](README.md). The sections below this one are the original review, unchanged.
+
+| Finding | Status | What changed |
+|---|---|---|
+| The PR renames all five readiness states, which is a room-mind change canon never approved | fixed in the map | Mocks and the FAQ use the live state names again (You are the system, Building, Inheritable with guardrails, Hire-ready, Hire-ready, repeatable); the readiness leaves are gone. The FAQ glosses "inheritable with guardrails" in plain words. |
+| Future Autopsy (a protected room) is rewritten as 'Deal risk analysis', the exact softening canon forbids | fixed in the map | "Future Autopsy" and "dies in 20 days" are back (#166, #167, #197, #200, JS scene). COPY_STANDARD still lists "autopsy"/"dies" as banned; that file is not edited. |
+| The locked Signal Console attention bands and the heat concept are replaced with generic priority labels | fixed in the map | Band names and "heat" are back (#30, #31, #36, #73, #83). |
+| The page still says its screens are real, but the PR relabels those screens so they no longer match the shipped app | fixed in the map; needs a decision outside it | Mocks match the app again, except the Dashboard "move" kickers (#19, #71), which keep the page wording because canon sides with the page there. Fix: drop "move" from the live Dashboard kicker. |
+| COPY_STANDARD treats 'slip' as a metaphor, but canon §13 uses '3 deals will slip this week' as its example of a plain sentence | fixed in the map | "The deals that will slip this week" and "3 deals will slip." (#39, #42, leaf). |
+| Setup copy turns the operator's judgment work into 'entering information', the data-entry framing §12 forbids | fixed in the map | Setup copy asks for "the judgment only you have" (#25, #232, #286, #289, #304); #273 keeps "An afternoon of real thinking". |
+| COPY_STANDARD bans the words canon uses for its settled voice and pushes demo copy into the machine narration canon forbids | fixed in the map; needs a decision outside it | Mock copy states facts instead of "Antaeus ranks X because" (#21, #36, #73). COPY_STANDARD §9 is not edited. |
+| The Briefing is redefined as workspace-only 'activity monitoring', dropping the World stream that the page's own demo shows | fixed in the map | Nav/footer say "Morning briefing"; #203 names both halves (your deals and accounts, and your market). |
+| The 'line' rule overrides canon's own plain wording ('their ask → your line', 'the one thing blocking') and mislabels the Outbound ask | fixed in the map | "Your line", "The one thing blocking" and "tap what you heard to get your next line" are back; "The ask" leaf removed. |
+| Call in a Favor is rewritten as 'Warm introduction' and 'Referral path', narrowing a ten-situation room to one situation | fixed in the map | "Calling in a favor" and "The relay" are back; #164 covers any stuck deal and both notes. |
+| 'Active pilot participants' mixes up the circle (who's hands-on) with the adoption meter canon keeps separate, and turns the pilot into 'pilot planning' | fixed in the map | "Who's hands-on" (live label); #50 and #158 restored. |
+| The handoff kit's settled 'One thing to notice' label becomes 'Pattern:', and its seven parts are mislabeled as 'readiness areas' | fixed in the map | "One thing to notice" and "5 of 7 parts ready" restored; #56 keeps the written-for-the-replacement idea. |
+| The Live Edge is defined as a 'collapsible activity panel', the opposite of the locked rule that switching it off must read as off | fixed in the map | #220 says off leaves a thin line you can click and counting continues; tags match the shipped ones. |
+| The Ground is described as a map of 22 'product areas', and the myth is mentioned without being explained | fixed in the map | #208/#212 lay the map out in the order of your sales process and explain the myth in one line. |
+| Discovery Studio copy reintroduces 'notes afterward' and a 'call flow', both against the §4.12 mind | fixed in the map | "Not notes you write afterwards"; "offers a jump to where the conversation went". |
+| Prospecting's confirm step (three plain questions the operator answers) becomes something Antaeus records | fixed in the map | #148 keeps the three questions the operator answers. |
+| COPY_STANDARD lists 'evidence' as a preferred noun; §13 says it must never appear bare, and the PR adds seven bare uses | fixed in the map; needs a decision outside it | All seven bare uses are gone. COPY_STANDARD §2 still lists "evidence" as preferred. |
+| The approved copy introduces a bare 'gap' and 'rep', and keeps 'capture' and the idiom 'recruiting bench' | fixed in the map | No bare "gap", "rep" or "recruiting bench"; capture appears only as the feature name "capture address". |
+| The Pace rewrites bring back the funnel jargon §4.18 removed, and settle a room name canon left open | fixed in the map; needs a decision outside it | Pace text is plain again ("1 in 5 deals won", "your target in open deals"); one name, "Pace", in nav, kicker, footer and #171. Whether the room is called Pace or Quota Workback is still the founder's call (canon §4.18). |
+| The 'room' and 'motion' rules diverge from shipped vocabulary; canon needs to settle these words | not a map change | Needs a canon decision on "room" and "motion" as user-facing words. The map keeps "product area" for now. |
+| About 80 JS-rendered strings (product-viewer MOMENTS + Pace BENCH) are outside the map and restore the old wording on interaction | fixed in the map | The addendum is approved and folded into the map as js_and_attribute_units (50 changes, 42 recorded keeps). |
+| Leaf 'The ask' → 'Buyer request' names the wrong person, and the kept 'Their ask' now clashes with 'Your position' | fixed in the map | Leaf removed; "Their ask" / "Your line" stay a pair. |
+| #36 and #73 keep the §6 'Reject' example and the 'recruiting bench' idiom, contradicting #21 and the craft leaf | fixed in the map | One hedge everywhere ("appears to have limited recruiting capacity" / "small recruiting team" in the one-line mock). |
+| Liquid Death is 'no champion activity' in one place and 'no buyer activity' in another, and it is labeled 'highest-risk' against the page's own ranking | fixed in the map | One fact everywhere: no champion update for 14 days; no superlative. |
+| Approved replacements claim more than the page supports, or contradict nearby copy (§21) | fixed in the map | #17, #104, #109, #177, #244, #299 rewritten as recommended. |
+| #70 includes the mandated fix, but it adds claims the source never made and blurs a specific fact | fixed in the map | #70 rewritten; the hire gets the handoff kit you share. |
+| Grammar errors and ungrammatical constructions in approved replacements | fixed in the map | All listed units rewritten. |
+| #90 turns 'Pick up a call' (make a call) into 'Review a call', which makes no sense when no calls are logged | fixed in the map | #90: "No discovery calls logged in the last 7 days. Plan a call →". |
+| Nav labels point to the wrong destinations, and the same features carry 2-4 different names | fixed in the map | "Product tour" for #rooms, "Every product area" for #all-rooms, "Morning briefing", one Pace name, "Future Autopsy", "Running a pilot". |
+| Kept demo labels still use metaphor, vague pronouns, or colliding terms (§13, §14) | fixed in the map; needs a decision outside it | "247 of 300 account slots used", "Likely cause · pushed too early", TOC item "What the first week looks like" (live title). "Compose it →" and the other TOC items stay as the mocks show them. |
+| Kept LinkedIn rungs contradict the approved tabcap sequence and the 'Poppy accepted last week' note | fixed in the map | Rungs reordered to canon (watch → comment → connect → give → ask); Connect is done and Give is current, matching "Poppy accepted last week". |
+| Approved replacements bring back §3 scrutiny terms | fixed in the map | #184, #164, #191, #279 rewritten. |
+| Several rewrites flatten into empty SaaS prose or mechanical §3 substitutions (§23) | fixed in the map | #77, #106, #107, #113, #177, #299 and others rewritten in plain words. |
+| Some replacements drop facts the original carried | fixed in the map | #30, #39, #95, #129, #130, #148, #158, #208, #224 restore the dropped facts. |
+| Personification and a confusing 'flag/flag' sentence survive in the Briefing proposal and the hero (§9) | fixed in the map | The Briefing suggestion is a real proposal ("You opened Deal Workspace six times this week…"), labeled "Suggestion". |
+| 'fourteen-item task list' (#33) conflicts with the '#1 of 12' ranking shown three times | fixed in the map | #33 drops "fourteen"; #19 says "#1 of 12 ranked actions". |
+| Readiness 'areas' vs 'states', and three verbs for tracking accounts | fixed in the map | "handoff parts", "parts ready", and "track" for accounts everywhere except the live "Watching" mock label. |
+| Prose fragments, pronouns without antecedents, and near-duplicate headlines | fixed in the map | #163, #231, #304 and others rewritten. |
+| Comparison rows break voice and parallelism, the 'Beta limitations' label mislabels its section, and 'rep' is introduced | fixed in the map | #249, #258, #259, #266, #277, #323, #284, #226, #228 rewritten. |
+| Renamed readiness states don't exist in the app, and "Partially documented" describes the wrong condition | fixed in the map | Same fix. "Partially documented" is gone everywhere. |
+| "Quiet" was rewritten as "no buyer activity", but nothing in the product measures buyer activity | fixed in the map | "No buyer activity" is gone; copy says no logged update, no recorded progress, or no new company news. |
+| The delete claim (#226, #301) promises more than delete does: share links, observations, and meetings survive | fixed in the map; needs a decision outside it | #226/#301 name only what delete removes. Product gap still open: share links, observations, captured meetings and profile rows survive a delete. |
+| The page promises the hire a seat in the workspace; the only hire-facing feature is a read-only link to a snapshot of the handoff kit | fixed in the map | #70, #114, #227 promise the read-only handoff-kit link, not a workspace seat. |
+| Briefing and hero copy describe a morning review job and pilot-adoption checks that don't exist | fixed in the map | #95 lists the four real 30-minute checks; #17 and #90 no longer describe a morning job or "Review a call". |
+| The reasons given for ranking Chomps first aren't what the ranking engine uses | fixed in the map | Chomps copy states the news, high heat and that outreach is furthest behind; #23 keeps "stable lead". |
+| Outbound doesn't require a recent trigger and doesn't block generic messages | fixed in the map | #117/#125: the draft needs an account and a named contact; no claim of blocking generic messages. |
+| Pace: the benchmark numbers are right, but how the plan check works is misdescribed | fixed in the map | #170, #177, #186, #265 describe the most-optimistic-assumption check. |
+| Future Autopsy: "recurring risk pattern" isn't computed, and "45 days early" is out of date | fixed in the map | "Recurring risk pattern" became "the most likely cause of loss"; "seen 4×" and "Written 45 days early" are gone ("Projected from today's deal data"). |
+| Several label rewrites change what the on-screen element actually is | fixed in the map | #51, #52, #75, #148, #156 and the Cold Call steps (live names) fixed. |
+| The two-up caption says a hire can run the process, but the ladder above it shows the "with you there" state | fixed in the map | #104: "A new hire could run it with you there to answer questions". |
+| #109 promises the full picture in any product area; only the Dashboard shows it | fixed in the map | #109 points to the Dashboard. |
+| Renamed mock labels no longer match what the app shows, even though the footer says the screens are real | fixed in the map; needs a decision outside it | Same as above. |
+| Setup enrichment and auto-capture copy is slightly more precise than the code supports | fixed in the map | #286, #287, #295 match what the code does. |
+| "Exports the entire workspace" leaves out signal history and system-written data | fixed in the map; needs a decision outside it | #225/#240/#301 name what the export contains. Product gap still open: the export leaves out signals, observations and captured meetings. |
+| Kept or unmapped copy still claims features that don't exist (not changed by the map) | fixed in the map | "247 added", "replied 2h ago" removed, "seen 4×" removed, the Noticed line replaced, the Notion pilot line now describes a real check. |
+| Claims checked against the code and found accurate (no change needed) | fixed in the map | No change needed; the #144 "offers a jump" precision note is applied. |
+| About 11% of the page's visible copy is rendered by JavaScript and the map never saw it, so 10 rewritten passages will still show their old wording in the product viewer | fixed in the map | Same fix. |
+| The Pace rewrite is undone the first time a reader uses the deal-size picker, and a literal apply would disable the picker entirely | fixed in the map | Units 183-185 carry replacement_parts per id, and all 24 BENCH strings are map entries that match them. |
+| The standalone rule 'The ask' → 'Buyer request' turns the seller's ask into something the buyer supposedly requested | fixed in the map | Same fix. |
+| The map renames labels that canon locks and the live app shows, so the page's 'real product' screens no longer match the product | fixed in the map | Every relabeled live label is restored on the mocks; the footnote now says the screens are "based on real product areas". |
+| 36 raw nodes are marked as uncovered even though a logical unit contains them, 15 of them inside units being rewritten | fixed in the map | Raw-node coverage recomputed by source span; every raw node now carries an explicit decision. |
+| Nearly half of the rewrites are plain text for units that contain markup, so link, <br> and span boundaries are left to guesswork | fixed in the map | Every markup unit that is rewritten now has replacement_html. |
+| The standalone 'replace anywhere' rule leaves matching, casing and order undefined and contradicts the copy standard | fixed in the map | standalone_leaf_rules defines matching; whole-sentence changes moved to raw_edits. |
+| The validation grep produces mostly noise, leaves out terms the map itself targets, and conflicts with the rule to preserve aria text | not a map change | The validation in this folder runs on extracted visible text, attributes and JS strings with whole-word matching; CODEX_HANDOFF.md itself is not edited. |
+| The navigation rename gives two different destinations the same name, and gives one destination three names | fixed in the map | Same fix. |
+| The 27/100 → 4/100 lint scores can only be rebuilt by reverse-engineering, and they cover only the logical units | not a map change | Lint scores are not recomputed; revised units say so in their revision record. |
+| Smaller inventory problems: what counts as 'visible', section labels, and line numbers | fixed in the map | Units 304-307 and their raw nodes are labeled "closing". |
+| The docs sit at repo root, cite a source file that is not in the repo, and claim authority that canon does not grant | not a map change | The source page is committed here; moving the root docs and their place in canon is a founder decision. |
 
 ---
 

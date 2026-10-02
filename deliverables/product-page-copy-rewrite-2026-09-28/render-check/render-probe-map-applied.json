@@ -1,6 +1,6 @@
 {
- "file": "../final/antaeus-product-page.copy-map-applied.html",
- "label": "strict",
+ "file": "../v2/page.html",
+ "label": "v2",
  "viewports": {
   "desktop": {
    "probe": {
@@ -8,61 +8,11 @@
     "clipped": [
      {
       "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 96,
       "sh": 13,
       "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 96,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 96,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "HIRE-READY AND REPEATABLE",
-      "sw": 148,
-      "cw": 96,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Warby Parker has had no recorded progress since the proposal.",
-      "sw": 367,
-      "cw": 237,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Liquid Death has had no recent buyer activity.",
-      "sw": 264,
-      "cw": 237,
-      "sh": 19,
-      "ch": 19,
       "ov": "hidden",
       "to": "ellipsis"
      }
@@ -87,8 +37,8 @@
      },
      {
       "sel": "a",
-      "text": "Product areas",
-      "w": 80,
+      "text": "Product tour",
+      "w": 72,
       "h": 18,
       "lines": 1,
       "fits": true
@@ -255,32 +205,32 @@
      },
      {
       "sel": "button.chip",
-      "text": "The morning read",
-      "w": 184,
+      "text": "Morning briefing",
+      "w": 178,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A live call",
-      "w": 131,
+      "text": "Live discovery call",
+      "w": 189,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A deal going quiet",
-      "w": 188,
+      "text": "A deal at risk",
+      "w": 154,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "The handoff",
-      "w": 147,
+      "text": "Sales handoff",
+      "w": 159,
       "h": 45,
       "lines": 2,
       "fits": true
@@ -343,8 +293,8 @@
      },
      {
       "sel": "span",
-      "text": "247 found",
-      "w": 79,
+      "text": "247 added",
+      "w": 81,
       "h": 31,
       "lines": 1,
       "fits": true
@@ -510,7 +460,7 @@
      },
      {
       "sel": "h3",
-      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "text": "Every account you track, ranked by recent company news.",
       "lines": 4,
       "w": 211,
       "h": 102
@@ -531,14 +481,14 @@
      },
      {
       "sel": "h3",
-      "text": "Deals at risk this week, with the next corrective action for each.",
+      "text": "The deals that will slip this week, and the smallest fix for each.",
       "lines": 4,
       "w": 211,
       "h": 102
      },
      {
       "sel": "h4.sc-h",
-      "text": "3 deals are at risk.",
+      "text": "3 deals will slip.",
       "lines": 1,
       "w": 302,
       "h": 22
@@ -559,10 +509,10 @@
      },
      {
       "sel": "h3",
-      "text": "A pilot plan the buyer's manager can use to make a decision.",
-      "lines": 4,
+      "text": "A pilot whose results the buyer's manager can use to decide.",
+      "lines": 3,
       "w": 211,
-      "h": 102
+      "h": 77
      },
      {
       "sel": "h3",
@@ -587,7 +537,7 @@
      },
      {
       "sel": "h2#hf-h.h-sec.rv.in.lit",
-      "text": "One sales process, usable by both founder and first hire.",
+      "text": "One sales process. Two people who can run it.",
       "lines": 3,
       "w": 565,
       "h": 183
@@ -615,10 +565,10 @@
      },
      {
       "sel": "h2#br-h.h-sec.rv.in.lit",
-      "text": "Antaeus continues reviewing workspace activity when you're away.",
-      "lines": 4,
+      "text": "Antaeus keeps checking while you're away.",
+      "lines": 3,
       "w": 475,
-      "h": 244
+      "h": 183
      },
      {
       "sel": "h4",
@@ -629,10 +579,10 @@
      },
      {
       "sel": "h2#wk-h.h-sec.rv.in.lit",
-      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
-      "lines": 4,
+      "text": "Antaeus ranks your work whether you have one call or three deals at risk.",
+      "lines": 3,
       "w": 654,
-      "h": 244
+      "h": 183
      },
      {
       "sel": "h3.h-sub.rv.in.lit",
@@ -664,7 +614,7 @@
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
+      "text": "Warby Parker dies in 20 days.",
       "lines": 1,
       "w": 382,
       "h": 19
@@ -678,10 +628,10 @@
      },
      {
       "sel": "h2#pc-h.h-sec.rv.in.lit",
-      "text": "Is your current pipeline and activity enough to hit the revenue target?",
-      "lines": 3,
+      "text": "Do you have enough pipeline and activity to hit your revenue target?",
+      "lines": 4,
       "w": 594,
-      "h": 183
+      "h": 244
      },
      {
       "sel": "h2#ar-h.h-sec.rv.in.lit",
@@ -692,7 +642,7 @@
      },
      {
       "sel": "h3",
-      "text": "Run the discovery call from this workspace.",
+      "text": "Run the discovery call from it, while you're on the call.",
       "lines": 2,
       "w": 321,
       "h": 62
@@ -706,21 +656,21 @@
      },
      {
       "sel": "h3",
-      "text": "Projects deal-loss risk before the deal is lost.",
+      "text": "It writes how the deal is likely to die, before it does.",
       "lines": 2,
       "w": 321,
       "h": 62
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 275,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h3",
-      "text": "Workspace changes detected while you were away.",
+      "text": "What changed while you were away.",
       "lines": 2,
       "w": 321,
       "h": 62
@@ -762,7 +712,7 @@
      },
      {
       "sel": "h3",
-      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "text": "Set up your workspace once. Get a ranked briefing every morning.",
       "lines": 3,
       "w": 268,
       "h": 74
@@ -797,7 +747,7 @@
      },
      {
       "sel": "h2#vl-h.h-sub.rv.in.lit",
-      "text": "Current beta limitations.",
+      "text": "What to expect in the beta.",
       "lines": 2,
       "w": 361,
       "h": 79
@@ -825,10 +775,10 @@
      },
      {
       "sel": "h2#cl-h.h-sec.rv.in.lit",
-      "text": "Document the sales process once. Get a prioritized briefing every morning.",
-      "lines": 4,
+      "text": "Do the hard part once. Get a ranked briefing every morning.",
+      "lines": 3,
       "w": 654,
-      "h": 244
+      "h": 183
      }
     ],
     "sections": [
@@ -842,43 +792,43 @@
      },
      {
       "sel": "header#top.hero",
-      "h": 1144
+      "h": 1194
      },
      {
       "sel": "section#highlights.band.band--tight",
-      "h": 920
+      "h": 912
      },
      {
       "sel": "section#handoff.band.band--white",
-      "h": 1318
+      "h": 1350
      },
      {
       "sel": "section#rooms.band.pv.band--white",
-      "h": 573
+      "h": 559
      },
      {
       "sel": "section#briefing.band.band--sunk",
-      "h": 2465
+      "h": 2443
      },
      {
       "sel": "section#week.band.band--white",
-      "h": 1517
+      "h": 1456
      },
      {
       "sel": "section#craft.band.band--sunk",
-      "h": 2424
+      "h": 2476
      },
      {
       "sel": "section#pace.band.band--white",
-      "h": 1543
+      "h": 1572
      },
      {
       "sel": "section#all-rooms.band.band--sunk",
-      "h": 1262
+      "h": 1242
      },
      {
       "sel": "section#ground.band.band--white",
-      "h": 1247
+      "h": 1279
      },
      {
       "sel": "section#trust.band.band--ink",
@@ -886,11 +836,11 @@
      },
      {
       "sel": "section#why.band.band--white",
-      "h": 960
+      "h": 939
      },
      {
       "sel": "section#compare.band.band--sunk",
-      "h": 1467
+      "h": 1447
      },
      {
       "sel": "section#values.band.band--tight.band--white",
@@ -902,7 +852,7 @@
      },
      {
       "sel": "section.band.close.band--white",
-      "h": 760
+      "h": 699
      },
      {
       "sel": "footer",
@@ -913,38 +863,38 @@
       "h": 19
      }
     ],
-    "docHeight": 20807
+    "docHeight": 20773
    },
    "inter": {
     "viewer": [
      {
       "i": 0,
-      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
-      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "cap": "Morning briefing. Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\n8d\nThe Notion pilot passed its readout date eight days ago with no result logged.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
       "open": true,
       "clipped": [],
       "overflowX": 0
      },
      {
       "i": 1,
-      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
-      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
       "open": true,
       "clipped": [],
       "overflowX": 0
      },
      {
       "i": 2,
-      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
-      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "cap": "A deal at risk. Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it.",
+      "stage": "PROJECTED FROM TODAY’S DEAL DATA\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as no decision, the way most of your losses have gone.\n\nLikely cause\npushed too early\ntop risk\nThe smallest fix\nget a second person from the buyer’s side involved this week",
       "open": true,
       "clipped": [],
       "overflowX": 0
      },
      {
       "i": 3,
-      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
-      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "cap": "Sales handoff. Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
       "open": true,
       "clipped": [],
       "overflowX": 0
@@ -952,94 +902,94 @@
     ],
     "chipLabels": [
      {
-      "text": "The morning read",
-      "aria": "See The morning read"
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
      },
      {
-      "text": "A live call",
-      "aria": "See A live call"
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
      },
      {
-      "text": "A deal going quiet",
-      "aria": "See A deal going quiet"
+      "text": "A deal at risk",
+      "aria": "Show example: A deal at risk"
      },
      {
-      "text": "The handoff",
-      "aria": "See The handoff"
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
      }
     ],
     "tabs": [
      {
       "i": 0,
       "label": "Outbound",
-      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
      },
      {
       "i": 1,
       "label": "Cold call",
-      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen the call\nWhy it matters to them\nShow them it's worked before\nAsk for the meeting\nWrap up\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.\n\nReview before you dial · log the outcome after · never during the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
      },
      {
       "i": 2,
       "label": "LinkedIn",
-      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nGive her something before you ask\nConnect, now she knows your name\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
      },
      {
       "i": 3,
       "label": "Discovery",
-      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went."
      }
     ],
     "pace": [
      {
       "v": "smb",
-      "pace-a": "1 in 4 closes",
-      "pace-as": "how often deals this size are won — the band is 20 to 30%",
-      "pace-b": "3× in flight",
-      "pace-bs": "enough going at once that one slipping does not sink the quarter",
-      "pace-c": "45 days",
-      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+      "pace-a": "1 in 4 deals won",
+      "pace-as": "how often deals this size are won · typically 20–30%",
+      "pace-b": "3× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying one does not put the quarter below target",
+      "pace-c": "45 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 30–60 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      },
      {
       "v": "ent",
-      "pace-a": "1 in 7 closes",
-      "pace-as": "how often deals this size are won — the band is 10 to 18%",
-      "pace-b": "4.5× in flight",
-      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
-      "pace-c": "180 days",
-      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+      "pace-a": "1 in 7 deals won",
+      "pace-as": "how often deals this size are won · typically 10–18%",
+      "pace-b": "4.5× your target in open deals",
+      "pace-bs": "fewer, larger deals, so each stalled deal needs more open deals behind it",
+      "pace-c": "180 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 120–270 days"
      },
      {
       "v": "str",
-      "pace-a": "1 in 8 closes",
-      "pace-as": "how often deals this size are won — the band is 8 to 15%",
-      "pace-b": "5× in flight",
-      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
-      "pace-c": "240 days",
-      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+      "pace-a": "1 in 8 deals won",
+      "pace-as": "how often deals this size are won · typically 8–15%",
+      "pace-b": "5× your target in open deals",
+      "pace-bs": "at this size one deal can be the whole quarter, so a single stalled deal puts it at risk",
+      "pace-c": "240 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 180–360 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      }
     ],
     "swatches": [
-     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
-     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears li",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
     ]
    },
    "errors": [],
@@ -1051,7 +1001,32 @@
     "Public Sans 500",
     "Public Sans 600",
     "Public Sans 700"
-   ]
+   ],
+   "renderedText": {
+    "body": "ANTAEUS\nWhy Antaeus\nProduct tour\nCompare\nQuestions\nSign in\n\nAntaeus\n\nTurn the sales process you built into a system your first hire can use.\n\nPrivate beta. Set up your workspace in an afternoon.\nAfter that, Antaeus reviews your accounts, deals, and calls throughout the day and shows you each morning what needs attention.\n\nWHERE YOUR WHOLE MOTION STANDS\n\nYOU ARE THE SYSTEM\nBUILDING\nINHERITABLE\nHIRE-READY\nREPEATABLE\n\nHIGHEST-PRIORITY ACTION · #1 OF 12 RANKED ACTIONS\n\nReach out to Chomps.\n\nChomps announced two plants this month, which will require several hundred production hires on a deadline, and it appears to have limited recruiting capacity. Nobody has contacted them yet. That news gives the account high heat, and outreach is the part of your sales process furthest behind.\n\nCompose it →\n\nRanked #1  ·  stable lead  ·  Next: Warby Parker, Sweetgreen\n\nA morning in a sample workspace. The companies are real and public; the people, deals and numbers are invented.\n\nFree while we're in beta.\nNo card. Bring one afternoon and the judgment only you have.\n\nCreate workspace\nGet the highlights.\nTake the tour\nEvery account you track, ranked by recent company news.\n\nAccounts sorted into four groups: act now, reach while they’re warm, emerging, and going cold.\n\nACT NOW — HOT, AND SOMETHING JUST MOVED\n\nSweetgreen\nNew COO in from Chipotle\nNotion\nOpened 1,300 roles last year\nWarby Parker\n47 new stores in a year\nChomps\nTwo plants announced\nYour highest-priority action, with the reason it ranks first.\n\nInstead of a long task list, Antaeus ranks one action first and shows the reason it came first.\n\n#1 OF 12\n\nReach out to Chomps.\n\nTwo plants announced, several hundred hires needed, and recruiting capacity that appears limited. The account has high heat, and outreach is the part of your sales process furthest behind.\n\nCompose it →\n\nNext: Warby Parker, Sweetgreen\n\nThe deals that will slip this week, and the smallest fix for each.\n\nWhere a deal sits in the pipeline matters less than what it is stuck on. Antaeus also looks at how long the deal has gone without an update and whether it has a dated next step.\n\nIF YOU DO NOTHING THIS WEEK\n\n3 deals will slip.\nWarby Parker\nno next step at all\n20d\nLiquid Death\nno champion update\n14d\nSweetgreen\nverbal yes · terms open\n4d\nA live discovery-call console.\n\nSelect the buyer response you heard. Antaeus shows the recommended follow-up question.\n\nPAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“We just cope”\n“We hired two more recruiters”\n“Not a priority”\n\nTap what you heard to get your next line\n\nDISCOVERY STUDIO\n\nA pilot whose results the buyer's manager can use to decide.\n\nAntaeus walks you through the pilot one step at a time and prompts you to add the roles pilots usually need, such as IT and a day-to-day owner.\n\nWHO'S HANDS-ON\n\nPR\nDM\nJT\nAO\nKL\n+\n+\n\nSomeone from IT — nobody named yet. Ask the champion for an intro.\n\n5 of 7 using it day to day\n\nWhat a new hire gets on day one.\n\nWritten like a document an experienced operator left for the person replacing them.\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nOne thing to notice — every deal you won was mid-market, but your stated target is enterprise.\n\nCan a new hire execute your sales process without you?\n\nFive readiness states, and what it takes to reach the next one.\n\nCOULD A HIRE RUN THIS ON MONDAY?\n\nHire-ready, repeatable\nHire-ready\nInheritable with guardrails\nBuilding\nYou are the system\n\nLeft “you are the system” behind 3 weeks ago\n\nSALES HANDOFF\n\nOne sales process.\nTwo people who can run it.\n\nYour sales process includes who you target, how you reach them, what you ask on calls, and how you move a deal to signature. In a founder-led company, much of that is known only to the founder. Antaeus records it as you work, inside the same product areas you already use: the accounts you track, where every deal actually stands, the discovery questions that led to a second meeting, and pilot results. There is no separate documentation step. When your first go-to-market hire starts, you share the handoff kit with them, and they read that context themselves instead of relying on you to explain it from memory.\n\nHIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears limited. The account has high heat, and outreach is the part of your sales process furthest behind.\n\nCompose it →\n3 deals will slip\nthis week if nothing changes\nLiquid Death\nno champion update in 14 days\n\nIF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else's approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.\n\nWhat you see\nevery morning\nWhat a new hire sees\non day one\nTake a closer look.\n\nWATCHING · 28 ACCOUNTS\n\nSweetgreen\nNew COO in from Chipotle\nNotion\nOpened 1,300 roles last year\nWarby Parker\n47 new stores, first profitable year\nChomps\nTwo plants announced this month\n\nFour need something today · three going cold\n\nMorning briefing\nLive discovery call\nA deal at risk\nSales handoff\n\nWHILE YOU WERE OUT\n\nAntaeus keeps checking\nwhile you're away.\nBRIEFING\nThursday, 2 July\n7:41 AM · Chicago\nSuggestion\nYou opened Deal Workspace six times this week. Add a stalled-deal check to the top of your briefing?\nYes\nLater\n\nUPDATES from your deals and accounts\n\n20d\n\nWarby Parker has sat at proposal for three weeks with no next step.\nOpen the deal →\n\n14d\n\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\nOpen the account →\n\n8d\n\nThe Notion pilot passed its readout date eight days ago with no result logged.\nOpen the pilot →\n\n0\n\nNo discovery calls logged in the last 7 days.\nPlan a call →\n\nBattlecard for the Chomps walkthrough\nOpen\nObjection handler\nOpen\nGood morning\n\n7:41 AM · Chicago\n\n7-day forecast ↗\n78°\nThe marketTwo competitors shipped an AI screen in the same month.\nChallengeEvery deal you have won followed a dated expansion event. None of the deals without a dated trigger closed. Revisit who you sell to ↗\nBlind spotTorchy’s Tacos keeps appearing next to accounts you already track.\nThe marketTwo competitors shipped an AI screen in the same month.\nChallengeEvery deal you have won followed a dated expansion event. None of the deals without a dated trigger closed. Revisit who you sell to ↗\nBlind spotTorchy’s Tacos keeps appearing next to accounts you already track.\n\nEvery 30 minutes, Antaeus checks for deals that have sat in one stage without a dated next step, tracked accounts with no new company news, pilots past their readout date with no result, and weeks with no calls logged. It writes what it finds as plain sentences, the way a colleague would say them. When you open it, you get the short version and the one action worth doing first, with the reason it came first right next to it.\n\nEvery 30 minutes\nAntaeus reviews the latest workspace data\n\nOne ranked action\nwith the plain reason it came ahead of the others\n\n22 product areas\nshare the same accounts and deals, so you never retype anything\n\nA spreadsheet and what you remember\nYou are the system\n\n#1 OF 12\n\nReach out to Chomps.\n\nYOU ARE THE SYSTEM\nBUILDING\nINHERITABLE\nHIRE-READY\nREPEATABLE\nSix weeks later\nA new hire could run it with you there to answer questions\n\nFOR DIFFERENT KINDS OF SALES DAYS\n\nAntaeus ranks your work whether you have one call or three deals at risk.\n\nSome mornings you have an hour and one call. Other weeks, three deals are behind and you cannot tell which one to save first. Antaeus ranks them and shows why.\n\nFor common sales situations.\n\nStarting the week. Open the Dashboard to see where your sales process stands and the highest-priority action for the day.\n\nPreparing for a cold call. Review the call structure, likely objections, and recommended responses before you dial.\n\nA deal with no recorded progress. Antaeus flags it, shows how many days since the last update, and names the smallest next action that would move it.\n\nWhat you learned on the call. Add it during the call, and it goes into the deal so the next person sees the same context.\n\nA week behind plan. Antaeus shows how far behind plan you are, which assumption is most optimistic, and how many more messages and calls a day you'd need if it's wrong.\n\nA new hire takes over. They read the handoff kit you share with them; you only need to answer their questions and handle exceptions.\n\nREACHING OUT\n\nStandardize outreach instead of improvising it.\n\nAntaeus builds every outreach draft from a specific account, contact, and trigger, and you can't generate one without a named account and contact. During a live call, it shows the next recommended question based on the buyer response you select, and it saves what you learn with the deal.\n\nOutbound\nCold call\nLinkedIn\nDiscovery\n\nWRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact.\n\nWorkflows from prospecting through signature.\n\nDESCRIBE YOUR TARGET COMPANIES\n\n“Fast-casual brands that just announced new market openings”\n\n247 added\n31 confirmed\n→ sent\n\nProspecting. Describe your target companies in plain language and save the search; Antaeus returns matching companies. Before a company reaches the accounts you track, you answer three questions: are they who we’re targeting, what’s our way in, and how will we reach out?\n\nSEGMENT THE MARKET BY\n\nGeography\nVertical\nSize\nA live trigger\n\n247 of 300 account slots used\n\nMarket segmentation. Segment by geography, industry, company size, named accounts, recent trigger, or a combination. For each segment, document why your team is positioned to win.\n\nTARGET DEFINITION IS TOO BROAD\n\n“Companies that are hiring”\n\nMore specific — growth-stage consumer brands whose announced expansion creates a dated hiring need.\n\nWho you sell to. Refine the definition until it describes a specific target you can search for. Every other product area uses that definition from then on.\n\nWHO'S HANDS-ON\n\nSM\nKN\nPA\nBW\n+\n\nA hiring manager — nobody named yet.\n\nRunning a pilot. Antaeus walks you through the pilot step by step: what it has to show, who needs to be hands-on, who is still missing, and a write-up the champion can defend without you.\n\nTHE ONE THING BLOCKING\n\nTheir ask\nunlimited liability\nYour line\n12 months of fees; higher for breaches\n\nYour papers already answer 36 of their 40 questions\n\nGetting to signed. After the buyer says yes, security, legal, and finance can still stop the deal. Antaeus leads with the one issue actually blocking, their ask against your line, and what you can trade.\n\nTHE RELAY\n\nYou\nRafael at Sweetgreen\nPortillo’s\n\nRafael and the Portillo’s team are both Chicago operators. The draft is nearly done; Rafael only needs to change a couple of lines and send it.\n\nCalling in a favor. Antaeus matches your investors, advisors, and customers to the stuck deals they can help move, then writes two notes: your request to them, and the one they forward to the buyer.\n\nPROJECTED FROM TODAY'S DEAL DATA\n\nWarby Parker dies in 20 days.\nLikely cause\npushed too early\ntop risk\n\nFuture Autopsy. It writes how the deal is likely to die before it happens, names the most likely cause of loss, and links to the product area where you can fix it.\n\nPROJECTED REVENUE\n\n$580k against $800k\n\nOne assumption is optimistic: 28% is above the ~20% that teams your size usually win.\n\nPace. Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.\n\n10 discovery frameworks\ntuned to what you sell\n\n6 buyer-role views\nthat change the questions by stakeholder\n\nRecommended follow-up\nfor each buyer response\n\nPACE\n\nDo you have enough pipeline and activity to hit your revenue target?\n\nAntaeus works your target back to daily messages and calls, using your deal size, win rate, and conversion rates. It compares those rates with benchmarks for your deal size, names the one that is most optimistic, and shows how many more messages and calls a day you’d need if it’s wrong.\n\nShow the benchmark for\nDeals around $15k\nDeals around $60k\nDeals around $150k\nDeals above $400k\n\n1 in 5 deals won\nhow often deals this size are won · typically 15–25%\n\n3.5× your target in open deals\nenough open deals that losing or delaying a few does not put the quarter below target\n\n90 days to close\nhow long a deal this size usually takes · typically 60–120 days\n\nThese are benchmarks for that deal size. Antaeus checks your plan against them and flags the assumption that is most above the benchmark.\n\nPRODUCT COVERAGE\n\nTwenty-two product areas.\nHere are three.\n\nThese are connected workflows, not separate tabs. Data entered in one workflow is available in the others, so an account added during prospecting is the same account used in call preparation later that day. This page shows three; the full workspace contains twenty-two.\n\nDISCOVERY STUDIO\n\nRun the discovery call from it, while you're on the call.\n\nTen discovery frameworks, six buyer-role views, and a recommended follow-up for whatever the buyer says. Not notes you write afterwards.\n\nTHEY JUST SAID\n\n“We just hired two more recruiters.”\n\nThey added recruiters instead of changing the process. Ask what the added headcount cost and who approved it.\n\nFUTURE AUTOPSY\n\nIt writes how the deal is likely to die, before it does.\n\nThe most likely cause of loss, the days you have left, and the smallest action that would change the outcome.\n\nPROJECTED FROM TODAY'S DEAL DATA\n\nWarby Parker dies in 20 days.\nLikely cause\npushed too early\ntop risk\n\nTHE BRIEFING\n\nWhat changed while you were away.\n\nWhat changed in your deals and accounts, and what moved in your market, written the way a colleague would say it.\n\nTHIS MORNING\n\n20d\nWarby Parker stalled after the proposal.\n14d\nLiquid Death — no champion update.\n\nThe other nineteen cover market segmentation, account discovery and qualification, outreach, call preparation, pilots, security and legal, revenue planning, and the handoff to your first hire.\n\nGETTING AROUND\n\nOpen the Ground to see the workspace map.\n\nThere is no permanent menu down the side of the screen. A thin line at the bottom of every product area opens the workspace map: press it, or press G, and every product area appears in the order of your sales process, with your current location and Antaeus’s suggested next stop highlighted. The line is called the Ground, after the Antaeus myth: Antaeus stayed strong while he touched the ground.\n\nTHE GROUND · WORKSPACE MAP\n\nYou are here\nSuggested\n\nTwenty-two product areas. Open the Ground to view them.\n\nThe Ground\n\nThe Ground is the map of all twenty-two product areas, laid out in the order of your sales process. Open it from the bottom of any page or press G to see where you are and Antaeus's suggested next stop. It closes when you're done; it never stays on screen.\n\n15/ 27 today\n\nmessages and calls\n\nGymshark — Poppy replied 12 days after your last message. 28m\n\nYour email to Lena at Chomps was logged and counted.\n\nCalendar · Thursday meeting with Notion confirmed.\n\nWarby Parker still has no dated next step.\n\nThe Live Edge\n\nA thin live strip down the left edge shows today's count of messages and calls against your daily number, and a list of what just happened, tagged you, the machine, or the buyers. Turn it off and it folds away to a thin line you can click to bring it back; counting continues while it is off.\n\nYOUR WORKSPACE\n\nYou own the workspace data\nand can export it.\n\nSaved automatically. Your workspace is stored in the cloud and syncs across devices. Close one device mid-edit and continue from another.\n\nYour data is not sold, shared, or used to train public models. Your accounts, deals, and calls are your commercial position, not a dataset Antaeus resells.\n\nExport a full copy at any time. One button downloads your accounts, deals, calls, pilots, and plans as one plain file. No support ticket or export queue.\n\nDelete the workspace. Type the confirmation phrase and Antaeus permanently deletes your accounts, deals, calls, pilots, and handoff kit.\n\nShare the handoff kit with a new hire. Send a read-only link. They can read all seven parts without your login, and you can revoke the link at any time.\n\nCreate an offline copy. If you need a copy stored only on this device, Antaeus can create one. The option sits under Advanced because most users will not need it.\n\nWhy founders start here.\n\nONE AFTERNOON\n\nSet up your workspace once. Get a ranked briefing every morning.\n\nSetup asks for the judgment only you have: who you actually sell to, the accounts you are pursuing, and where each deal is really stuck. Antaeus looks up public company information itself, so you never type what a tool could have found.\n\nCreate workspace\n›\n\nFREE IN BETA\n\nNo card, no seat count, no call with anyone.\n\nWe are building, not launching. While that's true it costs nothing, and we'd rather have your honest reaction than your credit card.\n\nCreate workspace\n›\n\nEXPORTABLE\n\nDownload the whole workspace whenever you want.\n\nOne button exports your accounts, deals, calls, pilots, and plans to a single file. If you leave, you keep a copy without opening a support ticket.\n\nHow your data works\n›\n\nFOR THE FIRST SALES HIRE\n\nDesigned for the point when the founder is no longer the only person who understands the sales process.\n\nMost sales tools record activity for reporting. Antaeus also keeps the reasoning, account context, and sales process you record, so a new hire can do the work without asking you.\n\nWhy Antaeus\n›\nCompare Antaeus with a CRM\nand a spreadsheet.\n\nA CRM and a spreadsheet solve different problems. This comparison shows what each is designed to do.\n\nAntaeus\nA revenue operating system for founder-led sales and the first go-to-market hire\nA CRM\nActivity and pipeline records for reporting\nA spreadsheet\nFlexible manual tracking that depends on what you document\nWhat it's for\nRanking the next sales action and showing why it ranks first\nStoring what you already did\nFlexible manual tracking\nWho it's built for\nFounder-led sales teams preparing for the first go-to-market hire\nA sales team big enough to need reporting\nAn individual founder or small team needing lightweight tracking\nOn opening it\nHighest-priority action, with the reason it ranks first\nA full list, in the order you last sorted it\nWhatever you entered last\nProvides live call guidance\nYes — current question, what to listen for, and recommended follow-up\nNo — you log it afterwards\nNo\nFlags unrealistic planning assumptions\nYes — names the most optimistic assumption and what it would cost\nNo — it reports the forecast you entered\nNo\nSupports handoff to a new hire\nYes — seven handoff parts a new hire can read on day one\nPartly — a new hire gets the records, not the reasoning\nNo — reasoning remains undocumented unless you write it separately\nSetup cost\nAn afternoon of real thinking\nWeeks, and usually someone to configure it\nTen minutes\n\nIf you already have a twelve-person sales team and mainly need forecasting and reporting, use a CRM. Antaeus is designed for founder-led sales before that point, when the process still depends heavily on the founder and the first sales hire is approaching.\n\nWhat to expect in the beta.\nThe product is still in beta.\n\nSome product areas are more complete than others. When data or functionality is limited, Antaeus says so directly instead of presenting a confident result. Expect unfinished areas while the beta is active.\n\nAntaeus uses language models for analysis and drafting.\n\nAntaeus uses language models to analyze workspace data and draft text. We do not market Antaeus by which model it uses. Generated text follows the same writing rules as the rest of Antaeus, and the interface shows the source data behind each analysis.\n\nQuestions? Answers.\nIs this a CRM?\nWhat does setup actually involve?\nWhy does it ask for so much up front?\nDo I need a sales team for this to make sense?\nHow is it different from the tools I already turned down?\nDoes it send emails or make calls for me?\nWhat does \"ready to hand off\" actually mean?\nIs it using AI?\nWhat happens to what I put in?\nWhat will it cost?\nDo the hard part once.\nGet a ranked briefing every morning.\n\nSetup takes about one afternoon. The next morning, Antaeus ranks your highest-priority action and shows why.\n\nCreate workspace\n\nAlready have one? Sign in\n\nAntaeus\n›\nThe product\nThe product\nTake a closer look\nEvery product area\nMorning briefing\nPace: your revenue plan\nHow it compares\nGetting started\nCreate a workspace\nSign in\nQuestions\nWhy Antaeus\nYour workspace\nHow your data works\nTaking a copy\nWhat to expect in the beta\nPrivacy\nCompany\nContact\nTerms\nPrivacy policy\nANTAEUS\nPrivacy\nTerms\nContact\n\nAntaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are based on real product areas, shown with sample data. Benchmark figures in Pace are typical figures for the selected deal size, not a promise about your results. Photography via Unsplash.",
+    "hiddenPanels": [
+     "Highest-priority action Reach out to Chomps. Two plants announced this month, several hundred production hires needed, and recruiting capacity that appears limited. The account has high heat, and outreach is the part of your sales process furthest behind. Compose it → 3 deals will slipthis week if nothing changes Liquid Deathno champion update in 14 days",
+     "If a hire started Monday · 5 of 7 parts ready Who hits, who misses What actually landed The questions that won Where deals leak The losses you paid for Why you win What the first week looks like Who hits, who misses, and why Every deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else's approval. One thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+     "Writing to Lena, Head of People at Chomps Lena — I saw Chomps announce two new plants.That will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.Worth twenty minutes next week to compare how you are staffing the openings? Why nowTwo plants · small recruiting team The ask20 minutes next week Copy the message Outbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact.",
+     "Before you dial · call structure Open the callWhy it matters to themShow them it's worked beforeAsk for the meetingWrap up They will probably say “We are too small for something like this.” Small teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with. Review before you dial · log the outcome after · never during the call Cold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking.",
+     "Gymshark · recommended LinkedIn action Ask — only once it is warranted Give her something before you ask Connect, now she knows your name Say something useful on her post Watch what she posts Poppy accepted last week. Give her something today — do not ask yet. LinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message.",
+     "Pain & consequence · live Walk me through what happens the week a new store opens. Listen for whether the buyer owns the problem and who is accountable for its cost. “It is messy but we cope” “We just hired two more recruiters” “Not a top priority” They added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner. Discovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went.",
+     "Is this a CRM? No. A CRM primarily stores activity and pipeline data for reporting. Antaeus ranks next actions and shows the reason behind each ranking. It does not include team territories, quotas across a team, admin roles, or forecast rollups. If those are your primary needs, use a CRM.",
+     "What does setup actually involve? About one afternoon. Setup asks for the judgment only you have: who you actually sell to, the companies you are pursuing, and where each active deal really stands — the champion, who signs, and what it is stuck on. Antaeus is most useful with at least ten active deals; with fewer, setup tells you plainly that the picture will stay thin.Antaeus finds recent public events for each company and can look up industry, size, and location. You enter the private sales context it cannot find.",
+     "Why does it ask for so much up front? Because the most important deal context cannot be imported: why a deal is stuck, why a past win worked, and who actually decides. Only you know it. Antaeus asks for that judgment once during setup, then uses it in every account, deal, and action recommendation after. We ask for it up front and say so, instead of hiding it behind a short form and giving you shallow recommendations.",
+     "Do I need a sales team for this to make sense? No. Antaeus is designed for the period when the founder is still selling and the first serious go-to-market hire has not started yet or has just started. An established sales organization has different needs and better-suited tools.",
+     "How is it different from the tools I already turned down? Many alternatives are databases with chat interfaces. A useful test is whether the product ranks one next action and explains why that one comes first, or only shows a list for you to sort yourself. Antaeus ranks actions, shows its reasoning, and lets you disagree with the recommendation.",
+     "Does it send emails or make calls for me? No. Antaeus drafts outreach and call language, but you send messages through your existing email tools. If you BCC a capture address and connect your calendar link, Antaeus counts sends and meetings with the accounts you track. It does not place calls or contact buyers on its own.",
+     "What does \"ready to hand off\" actually mean? It means a person who starts Monday could run your sales process without you sitting next to them. Antaeus answers that with a state, not a score: you are the system, then building, then inheritable with guardrails (a hire could run it with you there to answer questions), then hire-ready, and finally hire-ready, repeatable once you have won and lost enough deals to see the pattern. Each state has conditions you can read, and Antaeus shows what it would take to reach the next one.",
+     "Is it using AI? Yes. Antaeus uses language models to analyze workspace data, detect changes, and draft text. You are paying for the ranking and the recorded sales context, not for a particular model.",
+     "What happens to what I put in? It stays yours. You can export your accounts, deals, calls, pilots, and plans as one file, restore a copy, or delete them after a typed confirmation. Antaeus does not sell your workspace data or use your accounts and deals to train public models.",
+     "What will it cost? Nothing while we're in beta, and no card to start. When there is a price it will be posted plainly on this page before it applies to anyone already using it.",
+     "The product Take a closer look Every product area Morning briefing Pace: your revenue plan How it compares",
+     "Getting started Create a workspace Sign in Questions Why Antaeus",
+     "Your workspace How your data works Taking a copy What to expect in the beta Privacy",
+     "Company Contact Terms Privacy policy"
+    ]
+   }
   },
   "tablet": {
    "probe": {
@@ -1059,81 +1034,11 @@
     "clipped": [
      {
       "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 144,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
+      "cw": 68,
       "sh": 13,
       "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "HIRE-READY AND REPEATABLE",
-      "sw": 148,
-      "cw": 144,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
-      "cw": 61,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 61,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 61,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "HIRE-READY AND REPEATABLE",
-      "sw": 148,
-      "cw": 61,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Warby Parker has had no recorded progress since the proposal.",
-      "sw": 367,
-      "cw": 250,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Liquid Death has had no recent buyer activity.",
-      "sw": 264,
-      "cw": 250,
-      "sh": 19,
-      "ch": 19,
       "ov": "hidden",
       "to": "ellipsis"
      }
@@ -1158,8 +1063,8 @@
      },
      {
       "sel": "a",
-      "text": "Product areas",
-      "w": 80,
+      "text": "Product tour",
+      "w": 72,
       "h": 18,
       "lines": 1,
       "fits": true
@@ -1326,32 +1231,32 @@
      },
      {
       "sel": "button.chip",
-      "text": "The morning read",
-      "w": 184,
+      "text": "Morning briefing",
+      "w": 178,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A live call",
-      "w": 131,
+      "text": "Live discovery call",
+      "w": 189,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A deal going quiet",
-      "w": 188,
+      "text": "A deal at risk",
+      "w": 154,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "The handoff",
-      "w": 147,
+      "text": "Sales handoff",
+      "w": 159,
       "h": 45,
       "lines": 2,
       "fits": true
@@ -1414,8 +1319,8 @@
      },
      {
       "sel": "span",
-      "text": "247 found",
-      "w": 79,
+      "text": "247 added",
+      "w": 81,
       "h": 31,
       "lines": 1,
       "fits": true
@@ -1581,7 +1486,7 @@
      },
      {
       "sel": "h3",
-      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "text": "Every account you track, ranked by recent company news.",
       "lines": 4,
       "w": 211,
       "h": 102
@@ -1602,14 +1507,14 @@
      },
      {
       "sel": "h3",
-      "text": "Deals at risk this week, with the next corrective action for each.",
+      "text": "The deals that will slip this week, and the smallest fix for each.",
       "lines": 4,
       "w": 211,
       "h": 102
      },
      {
       "sel": "h4.sc-h",
-      "text": "3 deals are at risk.",
+      "text": "3 deals will slip.",
       "lines": 1,
       "w": 302,
       "h": 22
@@ -1630,10 +1535,10 @@
      },
      {
       "sel": "h3",
-      "text": "A pilot plan the buyer's manager can use to make a decision.",
-      "lines": 4,
+      "text": "A pilot whose results the buyer's manager can use to decide.",
+      "lines": 3,
       "w": 211,
-      "h": 102
+      "h": 77
      },
      {
       "sel": "h3",
@@ -1658,7 +1563,7 @@
      },
      {
       "sel": "h2#hf-h.h-sec.rv.in.lit",
-      "text": "One sales process, usable by both founder and first hire.",
+      "text": "One sales process. Two people who can run it.",
       "lines": 3,
       "w": 438,
       "h": 142
@@ -1686,10 +1591,10 @@
      },
      {
       "sel": "h2#br-h.h-sec.rv.in.lit",
-      "text": "Antaeus continues reviewing workspace activity when you're away.",
-      "lines": 4,
+      "text": "Antaeus keeps checking while you're away.",
+      "lines": 3,
       "w": 369,
-      "h": 189
+      "h": 142
      },
      {
       "sel": "h4",
@@ -1700,10 +1605,10 @@
      },
      {
       "sel": "h2#wk-h.h-sec.rv.in.lit",
-      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
-      "lines": 4,
+      "text": "Antaeus ranks your work whether you have one call or three deals at risk.",
+      "lines": 3,
       "w": 507,
-      "h": 189
+      "h": 142
      },
      {
       "sel": "h3.h-sub.rv.in.lit",
@@ -1735,7 +1640,7 @@
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
+      "text": "Warby Parker dies in 20 days.",
       "lines": 1,
       "w": 382,
       "h": 19
@@ -1749,10 +1654,10 @@
      },
      {
       "sel": "h2#pc-h.h-sec.rv.in.lit",
-      "text": "Is your current pipeline and activity enough to hit the revenue target?",
-      "lines": 3,
+      "text": "Do you have enough pipeline and activity to hit your revenue target?",
+      "lines": 4,
       "w": 461,
-      "h": 142
+      "h": 189
      },
      {
       "sel": "h2#ar-h.h-sec.rv.in.lit",
@@ -1763,7 +1668,7 @@
      },
      {
       "sel": "h3",
-      "text": "Run the discovery call from this workspace.",
+      "text": "Run the discovery call from it, while you're on the call.",
       "lines": 2,
       "w": 333,
       "h": 62
@@ -1777,24 +1682,24 @@
      },
      {
       "sel": "h3",
-      "text": "Projects deal-loss risk before the deal is lost.",
+      "text": "It writes how the deal is likely to die, before it does.",
       "lines": 2,
       "w": 333,
       "h": 62
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 287,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h3",
-      "text": "Workspace changes detected while you were away.",
-      "lines": 2,
+      "text": "What changed while you were away.",
+      "lines": 1,
       "w": 333,
-      "h": 62
+      "h": 31
      },
      {
       "sel": "h2#gd-h.h-sec.rv.in.lit",
@@ -1833,7 +1738,7 @@
      },
      {
       "sel": "h3",
-      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "text": "Set up your workspace once. Get a ranked briefing every morning.",
       "lines": 3,
       "w": 268,
       "h": 74
@@ -1868,7 +1773,7 @@
      },
      {
       "sel": "h2#vl-h.h-sub.rv.in.lit",
-      "text": "Current beta limitations.",
+      "text": "What to expect in the beta.",
       "lines": 2,
       "w": 280,
       "h": 61
@@ -1896,10 +1801,10 @@
      },
      {
       "sel": "h2#cl-h.h-sec.rv.in.lit",
-      "text": "Document the sales process once. Get a prioritized briefing every morning.",
-      "lines": 4,
+      "text": "Do the hard part once. Get a ranked briefing every morning.",
+      "lines": 3,
       "w": 507,
-      "h": 189
+      "h": 142
      }
     ],
     "sections": [
@@ -1913,15 +1818,15 @@
      },
      {
       "sel": "header#top.hero",
-      "h": 951
+      "h": 974
      },
      {
       "sel": "section#highlights.band.band--tight",
-      "h": 846
+      "h": 837
      },
      {
       "sel": "section#handoff.band.band--white",
-      "h": 1087
+      "h": 1093
      },
      {
       "sel": "section#rooms.band.pv.band--white",
@@ -1929,27 +1834,27 @@
      },
      {
       "sel": "section#briefing.band.band--sunk",
-      "h": 2053
+      "h": 2043
      },
      {
       "sel": "section#week.band.band--white",
-      "h": 1306
+      "h": 1259
      },
      {
       "sel": "section#craft.band.band--sunk",
-      "h": 2037
+      "h": 2083
      },
      {
       "sel": "section#pace.band.band--white",
-      "h": 1234
+      "h": 1255
      },
      {
       "sel": "section#all-rooms.band.band--sunk",
-      "h": 1446
+      "h": 1395
      },
      {
       "sel": "section#ground.band.band--white",
-      "h": 960
+      "h": 986
      },
      {
       "sel": "section#trust.band.band--ink",
@@ -1957,11 +1862,11 @@
      },
      {
       "sel": "section#why.band.band--white",
-      "h": 814
+      "h": 793
      },
      {
       "sel": "section#compare.band.band--sunk",
-      "h": 1397
+      "h": 1377
      },
      {
       "sel": "section#values.band.band--tight.band--white",
@@ -1973,7 +1878,7 @@
      },
      {
       "sel": "section.band.close.band--white",
-      "h": 595
+      "h": 548
      },
      {
       "sel": "footer",
@@ -1984,38 +1889,38 @@
       "h": 19
      }
     ],
-    "docHeight": 18091
+    "docHeight": 18005
    },
    "inter": {
     "viewer": [
      {
       "i": 0,
-      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
-      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "cap": "Morning briefing. Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\n8d\nThe Notion pilot passed its readout date eight days ago with no result logged.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 1,
-      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
-      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 2,
-      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
-      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "cap": "A deal at risk. Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it.",
+      "stage": "PROJECTED FROM TODAY’S DEAL DATA\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as no decision, the way most of your losses have gone.\n\nLikely cause\npushed too early\ntop risk\nThe smallest fix\nget a second person from the buyer’s side involved this week",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 3,
-      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
-      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "cap": "Sales handoff. Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
       "open": true,
       "clipped": [],
       "overflowX": 2
@@ -2023,94 +1928,94 @@
     ],
     "chipLabels": [
      {
-      "text": "The morning read",
-      "aria": "See The morning read"
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
      },
      {
-      "text": "A live call",
-      "aria": "See A live call"
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
      },
      {
-      "text": "A deal going quiet",
-      "aria": "See A deal going quiet"
+      "text": "A deal at risk",
+      "aria": "Show example: A deal at risk"
      },
      {
-      "text": "The handoff",
-      "aria": "See The handoff"
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
      }
     ],
     "tabs": [
      {
       "i": 0,
       "label": "Outbound",
-      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
      },
      {
       "i": 1,
       "label": "Cold call",
-      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen the call\nWhy it matters to them\nShow them it's worked before\nAsk for the meeting\nWrap up\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.\n\nReview before you dial · log the outcome after · never during the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
      },
      {
       "i": 2,
       "label": "LinkedIn",
-      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nGive her something before you ask\nConnect, now she knows your name\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
      },
      {
       "i": 3,
       "label": "Discovery",
-      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went."
      }
     ],
     "pace": [
      {
       "v": "smb",
-      "pace-a": "1 in 4 closes",
-      "pace-as": "how often deals this size are won — the band is 20 to 30%",
-      "pace-b": "3× in flight",
-      "pace-bs": "enough going at once that one slipping does not sink the quarter",
-      "pace-c": "45 days",
-      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+      "pace-a": "1 in 4 deals won",
+      "pace-as": "how often deals this size are won · typically 20–30%",
+      "pace-b": "3× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying one does not put the quarter below target",
+      "pace-c": "45 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 30–60 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      },
      {
       "v": "ent",
-      "pace-a": "1 in 7 closes",
-      "pace-as": "how often deals this size are won — the band is 10 to 18%",
-      "pace-b": "4.5× in flight",
-      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
-      "pace-c": "180 days",
-      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+      "pace-a": "1 in 7 deals won",
+      "pace-as": "how often deals this size are won · typically 10–18%",
+      "pace-b": "4.5× your target in open deals",
+      "pace-bs": "fewer, larger deals, so each stalled deal needs more open deals behind it",
+      "pace-c": "180 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 120–270 days"
      },
      {
       "v": "str",
-      "pace-a": "1 in 8 closes",
-      "pace-as": "how often deals this size are won — the band is 8 to 15%",
-      "pace-b": "5× in flight",
-      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
-      "pace-c": "240 days",
-      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+      "pace-a": "1 in 8 deals won",
+      "pace-as": "how often deals this size are won · typically 8–15%",
+      "pace-b": "5× your target in open deals",
+      "pace-bs": "at this size one deal can be the whole quarter, so a single stalled deal puts it at risk",
+      "pace-c": "240 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 180–360 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      }
     ],
     "swatches": [
-     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
-     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears li",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
     ]
    },
    "errors": [],
@@ -2130,18 +2035,8 @@
     "clipped": [
      {
       "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 103,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 103,
       "sh": 13,
       "ch": 13,
@@ -2160,8 +2055,8 @@
      },
      {
       "sel": "span",
-      "text": "no champion activity",
-      "sw": 119,
+      "text": "no champion update",
+      "sw": 117,
       "cw": 76,
       "sh": 19,
       "ch": 19,
@@ -2180,28 +2075,8 @@
      },
      {
       "sel": "span",
-      "text": "this week without a corrective action",
-      "sw": 211,
-      "cw": 181,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "no buyer activity for 14 days — highest-risk open deal",
-      "sw": 305,
-      "cw": 211,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 96,
       "sh": 13,
       "ch": 13,
@@ -2210,29 +2085,9 @@
      },
      {
       "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 96,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 96,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Two plants announced · limited recruiting capacity",
-      "sw": 290,
-      "cw": 236,
+      "text": "12 months of fees; higher for breaches",
+      "sw": 221,
+      "cw": 208,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -2240,28 +2095,8 @@
      },
      {
       "sel": "span",
-      "text": "12 months of fees, breach capped higher",
-      "sw": 233,
-      "cw": 182,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Warby Parker has had no recorded progress since the proposal.",
-      "sw": 367,
-      "cw": 217,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Liquid Death has had no recent buyer activity.",
-      "sw": 264,
+      "text": "Warby Parker stalled after the proposal.",
+      "sw": 232,
       "cw": 217,
       "sh": 19,
       "ch": 19,
@@ -2417,32 +2252,32 @@
      },
      {
       "sel": "button.chip",
-      "text": "The morning read",
-      "w": 184,
+      "text": "Morning briefing",
+      "w": 178,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A live call",
-      "w": 131,
+      "text": "Live discovery call",
+      "w": 189,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A deal going quiet",
-      "w": 188,
+      "text": "A deal at risk",
+      "w": 154,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "The handoff",
-      "w": 147,
+      "text": "Sales handoff",
+      "w": 159,
       "h": 45,
       "lines": 2,
       "fits": true
@@ -2505,8 +2340,8 @@
      },
      {
       "sel": "span",
-      "text": "247 found",
-      "w": 79,
+      "text": "247 added",
+      "w": 81,
       "h": 31,
       "lines": 1,
       "fits": true
@@ -2672,7 +2507,7 @@
      },
      {
       "sel": "h3",
-      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "text": "Every account you track, ranked by recent company news.",
       "lines": 4,
       "w": 211,
       "h": 102
@@ -2693,14 +2528,14 @@
      },
      {
       "sel": "h3",
-      "text": "Deals at risk this week, with the next corrective action for each.",
+      "text": "The deals that will slip this week, and the smallest fix for each.",
       "lines": 4,
       "w": 211,
       "h": 102
      },
      {
       "sel": "h4.sc-h",
-      "text": "3 deals are at risk.",
+      "text": "3 deals will slip.",
       "lines": 1,
       "w": 208,
       "h": 22
@@ -2721,10 +2556,10 @@
      },
      {
       "sel": "h3",
-      "text": "A pilot plan the buyer's manager can use to make a decision.",
-      "lines": 4,
+      "text": "A pilot whose results the buyer's manager can use to decide.",
+      "lines": 3,
       "w": 211,
-      "h": 102
+      "h": 77
      },
      {
       "sel": "h3",
@@ -2749,7 +2584,7 @@
      },
      {
       "sel": "h2#hf-h.h-sec.rv.in.lit",
-      "text": "One sales process, usable by both founder and first hire.",
+      "text": "One sales process. Two people who can run it.",
       "lines": 3,
       "w": 320,
       "h": 104
@@ -2777,10 +2612,10 @@
      },
      {
       "sel": "h2#br-h.h-sec.rv.in.lit",
-      "text": "Antaeus continues reviewing workspace activity when you're away.",
-      "lines": 4,
+      "text": "Antaeus keeps checking while you're away.",
+      "lines": 3,
       "w": 270,
-      "h": 138
+      "h": 104
      },
      {
       "sel": "h4",
@@ -2791,10 +2626,10 @@
      },
      {
       "sel": "h2#wk-h.h-sec.rv.in.lit",
-      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
-      "lines": 5,
+      "text": "Antaeus ranks your work whether you have one call or three deals at risk.",
+      "lines": 4,
       "w": 346,
-      "h": 173
+      "h": 138
      },
      {
       "sel": "h3.h-sub.rv.in.lit",
@@ -2826,10 +2661,10 @@
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 280,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h4.sc-h",
@@ -2840,10 +2675,10 @@
      },
      {
       "sel": "h2#pc-h.h-sec.rv.in.lit",
-      "text": "Is your current pipeline and activity enough to hit the revenue target?",
-      "lines": 3,
+      "text": "Do you have enough pipeline and activity to hit your revenue target?",
+      "lines": 4,
       "w": 337,
-      "h": 104
+      "h": 138
      },
      {
       "sel": "h2#ar-h.h-sec.rv.in.lit",
@@ -2854,7 +2689,7 @@
      },
      {
       "sel": "h3",
-      "text": "Run the discovery call from this workspace.",
+      "text": "Run the discovery call from it, while you're on the call.",
       "lines": 2,
       "w": 300,
       "h": 62
@@ -2868,21 +2703,21 @@
      },
      {
       "sel": "h3",
-      "text": "Projects deal-loss risk before the deal is lost.",
+      "text": "It writes how the deal is likely to die, before it does.",
       "lines": 2,
       "w": 300,
       "h": 62
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 254,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h3",
-      "text": "Workspace changes detected while you were away.",
+      "text": "What changed while you were away.",
       "lines": 2,
       "w": 300,
       "h": 62
@@ -2924,7 +2759,7 @@
      },
      {
       "sel": "h3",
-      "text": "Set it up once. Get a prioritized briefing every morning.",
+      "text": "Set up your workspace once. Get a ranked briefing every morning.",
       "lines": 3,
       "w": 239,
       "h": 74
@@ -2959,7 +2794,7 @@
      },
      {
       "sel": "h2#vl-h.h-sub.rv.in.lit",
-      "text": "Current beta limitations.",
+      "text": "What to expect in the beta.",
       "lines": 2,
       "w": 241,
       "h": 53
@@ -2987,10 +2822,10 @@
      },
      {
       "sel": "h2#cl-h.h-sec.rv.in.lit",
-      "text": "Document the sales process once. Get a prioritized briefing every morning.",
-      "lines": 4,
+      "text": "Do the hard part once. Get a ranked briefing every morning.",
+      "lines": 3,
       "w": 346,
-      "h": 138
+      "h": 104
      }
     ],
     "sections": [
@@ -3004,47 +2839,47 @@
      },
      {
       "sel": "header#top.hero",
-      "h": 929
+      "h": 957
      },
      {
       "sel": "section#highlights.band.band--tight",
-      "h": 911
+      "h": 928
      },
      {
       "sel": "section#handoff.band.band--white",
-      "h": 1177
+      "h": 1207
      },
      {
       "sel": "section#rooms.band.pv.band--white",
-      "h": 638
+      "h": 624
      },
      {
       "sel": "section#briefing.band.band--sunk",
-      "h": 2321
+      "h": 2368
      },
      {
       "sel": "section#week.band.band--white",
-      "h": 1200
+      "h": 1186
      },
      {
       "sel": "section#craft.band.band--sunk",
-      "h": 2145
+      "h": 2171
      },
      {
       "sel": "section#pace.band.band--white",
-      "h": 1258
+      "h": 1261
      },
      {
       "sel": "section#all-rooms.band.band--sunk",
-      "h": 1876
+      "h": 1817
      },
      {
       "sel": "section#ground.band.band--white",
-      "h": 1349
+      "h": 1423
      },
      {
       "sel": "section#trust.band.band--ink",
-      "h": 694
+      "h": 673
      },
      {
       "sel": "section#why.band.band--white",
@@ -3052,7 +2887,7 @@
      },
      {
       "sel": "section#compare.band.band--sunk",
-      "h": 2691
+      "h": 2671
      },
      {
       "sel": "section#values.band.band--tight.band--white",
@@ -3064,49 +2899,49 @@
      },
      {
       "sel": "section.band.close.band--white",
-      "h": 521
+      "h": 486
      },
      {
       "sel": "footer",
-      "h": 569
+      "h": 588
      },
      {
       "sel": "nav",
       "h": 19
      }
     ],
-    "docHeight": 20742
+    "docHeight": 20807
    },
    "inter": {
     "viewer": [
      {
       "i": 0,
-      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
-      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "cap": "Morning briefing. Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\n8d\nThe Notion pilot passed its readout date eight days ago with no result logged.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 1,
-      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
-      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 2,
-      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
-      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "cap": "A deal at risk. Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it.",
+      "stage": "PROJECTED FROM TODAY’S DEAL DATA\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as no decision, the way most of your losses have gone.\n\nLikely cause\npushed too early\ntop risk\nThe smallest fix\nget a second person from the buyer’s side involved this week",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 3,
-      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
-      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "cap": "Sales handoff. Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
       "open": true,
       "clipped": [],
       "overflowX": 2
@@ -3114,94 +2949,94 @@
     ],
     "chipLabels": [
      {
-      "text": "The morning read",
-      "aria": "See The morning read"
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
      },
      {
-      "text": "A live call",
-      "aria": "See A live call"
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
      },
      {
-      "text": "A deal going quiet",
-      "aria": "See A deal going quiet"
+      "text": "A deal at risk",
+      "aria": "Show example: A deal at risk"
      },
      {
-      "text": "The handoff",
-      "aria": "See The handoff"
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
      }
     ],
     "tabs": [
      {
       "i": 0,
       "label": "Outbound",
-      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
      },
      {
       "i": 1,
       "label": "Cold call",
-      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen the call\nWhy it matters to them\nShow them it's worked before\nAsk for the meeting\nWrap up\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.\n\nReview before you dial · log the outcome after · never during the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
      },
      {
       "i": 2,
       "label": "LinkedIn",
-      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nGive her something before you ask\nConnect, now she knows your name\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
      },
      {
       "i": 3,
       "label": "Discovery",
-      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went."
      }
     ],
     "pace": [
      {
       "v": "smb",
-      "pace-a": "1 in 4 closes",
-      "pace-as": "how often deals this size are won — the band is 20 to 30%",
-      "pace-b": "3× in flight",
-      "pace-bs": "enough going at once that one slipping does not sink the quarter",
-      "pace-c": "45 days",
-      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+      "pace-a": "1 in 4 deals won",
+      "pace-as": "how often deals this size are won · typically 20–30%",
+      "pace-b": "3× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying one does not put the quarter below target",
+      "pace-c": "45 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 30–60 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      },
      {
       "v": "ent",
-      "pace-a": "1 in 7 closes",
-      "pace-as": "how often deals this size are won — the band is 10 to 18%",
-      "pace-b": "4.5× in flight",
-      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
-      "pace-c": "180 days",
-      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+      "pace-a": "1 in 7 deals won",
+      "pace-as": "how often deals this size are won · typically 10–18%",
+      "pace-b": "4.5× your target in open deals",
+      "pace-bs": "fewer, larger deals, so each stalled deal needs more open deals behind it",
+      "pace-c": "180 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 120–270 days"
      },
      {
       "v": "str",
-      "pace-a": "1 in 8 closes",
-      "pace-as": "how often deals this size are won — the band is 8 to 15%",
-      "pace-b": "5× in flight",
-      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
-      "pace-c": "240 days",
-      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+      "pace-a": "1 in 8 deals won",
+      "pace-as": "how often deals this size are won · typically 8–15%",
+      "pace-b": "5× your target in open deals",
+      "pace-bs": "at this size one deal can be the whole quarter, so a single stalled deal puts it at risk",
+      "pace-c": "240 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 180–360 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      }
     ],
     "swatches": [
-     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
-     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears li",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
     ]
    },
    "errors": [],
@@ -3221,28 +3056,8 @@
     "clipped": [
      {
       "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
-      "cw": 93,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 93,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 93,
       "sh": 13,
       "ch": 13,
@@ -3261,8 +3076,8 @@
      },
      {
       "sel": "span",
-      "text": "no champion activity",
-      "sw": 119,
+      "text": "no champion update",
+      "sw": 117,
       "cw": 53,
       "sh": 19,
       "ch": 19,
@@ -3281,28 +3096,8 @@
      },
      {
       "sel": "span",
-      "text": "this week without a corrective action",
-      "sw": 211,
-      "cw": 151,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "no buyer activity for 14 days — highest-risk open deal",
-      "sw": 305,
-      "cw": 181,
-      "sh": 19,
-      "ch": 19,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 86,
       "sh": 13,
       "ch": 13,
@@ -3311,29 +3106,9 @@
      },
      {
       "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 86,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 86,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Two plants announced · limited recruiting capacity",
-      "sw": 290,
-      "cw": 206,
+      "text": "12 months of fees; higher for breaches",
+      "sw": 221,
+      "cw": 183,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -3341,9 +3116,9 @@
      },
      {
       "sel": "span",
-      "text": "12 months of fees, breach capped higher",
-      "sw": 233,
-      "cw": 157,
+      "text": "pushed too early",
+      "sw": 96,
+      "cw": 69,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -3351,8 +3126,8 @@
      },
      {
       "sel": "span",
-      "text": "Warby Parker has had no recorded progress since the proposal.",
-      "sw": 367,
+      "text": "Warby Parker stalled after the proposal.",
+      "sw": 232,
       "cw": 187,
       "sh": 19,
       "ch": 19,
@@ -3361,8 +3136,8 @@
      },
      {
       "sel": "span",
-      "text": "Liquid Death has had no recent buyer activity.",
-      "sw": 264,
+      "text": "Liquid Death — no champion update.",
+      "sw": 210,
       "cw": 187,
       "sh": 19,
       "ch": 19,
@@ -3518,32 +3293,32 @@
      },
      {
       "sel": "button.chip",
-      "text": "The morning read",
-      "w": 184,
+      "text": "Morning briefing",
+      "w": 178,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A live call",
-      "w": 131,
+      "text": "Live discovery call",
+      "w": 189,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A deal going quiet",
-      "w": 188,
+      "text": "A deal at risk",
+      "w": 154,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "The handoff",
-      "w": 147,
+      "text": "Sales handoff",
+      "w": 159,
       "h": 45,
       "lines": 2,
       "fits": true
@@ -3606,8 +3381,8 @@
      },
      {
       "sel": "span",
-      "text": "247 found",
-      "w": 79,
+      "text": "247 added",
+      "w": 81,
       "h": 31,
       "lines": 1,
       "fits": true
@@ -3773,7 +3548,7 @@
      },
      {
       "sel": "h3",
-      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "text": "Every account you track, ranked by recent company news.",
       "lines": 4,
       "w": 211,
       "h": 102
@@ -3794,14 +3569,14 @@
      },
      {
       "sel": "h3",
-      "text": "Deals at risk this week, with the next corrective action for each.",
+      "text": "The deals that will slip this week, and the smallest fix for each.",
       "lines": 4,
       "w": 211,
       "h": 102
      },
      {
       "sel": "h4.sc-h",
-      "text": "3 deals are at risk.",
+      "text": "3 deals will slip.",
       "lines": 1,
       "w": 185,
       "h": 22
@@ -3822,10 +3597,10 @@
      },
      {
       "sel": "h3",
-      "text": "A pilot plan the buyer's manager can use to make a decision.",
-      "lines": 4,
+      "text": "A pilot whose results the buyer's manager can use to decide.",
+      "lines": 3,
       "w": 211,
-      "h": 102
+      "h": 77
      },
      {
       "sel": "h3",
@@ -3850,7 +3625,7 @@
      },
      {
       "sel": "h2#hf-h.h-sec.rv.in.lit",
-      "text": "One sales process, usable by both founder and first hire.",
+      "text": "One sales process. Two people who can run it.",
       "lines": 3,
       "w": 316,
       "h": 104
@@ -3878,10 +3653,10 @@
      },
      {
       "sel": "h2#br-h.h-sec.rv.in.lit",
-      "text": "Antaeus continues reviewing workspace activity when you're away.",
-      "lines": 4,
+      "text": "Antaeus keeps checking while you're away.",
+      "lines": 3,
       "w": 270,
-      "h": 138
+      "h": 104
      },
      {
       "sel": "h4",
@@ -3892,10 +3667,10 @@
      },
      {
       "sel": "h2#wk-h.h-sec.rv.in.lit",
-      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
-      "lines": 5,
+      "text": "Antaeus ranks your work whether you have one call or three deals at risk.",
+      "lines": 4,
       "w": 316,
-      "h": 173
+      "h": 138
      },
      {
       "sel": "h3.h-sub.rv.in.lit",
@@ -3927,10 +3702,10 @@
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 254,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h4.sc-h",
@@ -3941,7 +3716,7 @@
      },
      {
       "sel": "h2#pc-h.h-sec.rv.in.lit",
-      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "text": "Do you have enough pipeline and activity to hit your revenue target?",
       "lines": 4,
       "w": 316,
       "h": 138
@@ -3955,7 +3730,7 @@
      },
      {
       "sel": "h3",
-      "text": "Run the discovery call from this workspace.",
+      "text": "Run the discovery call from it, while you're on the call.",
       "lines": 2,
       "w": 270,
       "h": 62
@@ -3969,21 +3744,21 @@
      },
      {
       "sel": "h3",
-      "text": "Projects deal-loss risk before the deal is lost.",
+      "text": "It writes how the deal is likely to die, before it does.",
       "lines": 2,
       "w": 270,
       "h": 62
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 224,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h3",
-      "text": "Workspace changes detected while you were away.",
+      "text": "What changed while you were away.",
       "lines": 2,
       "w": 270,
       "h": 62
@@ -4025,10 +3800,10 @@
      },
      {
       "sel": "h3",
-      "text": "Set it up once. Get a prioritized briefing every morning.",
-      "lines": 3,
+      "text": "Set up your workspace once. Get a ranked briefing every morning.",
+      "lines": 4,
       "w": 216,
-      "h": 74
+      "h": 98
      },
      {
       "sel": "h3",
@@ -4060,7 +3835,7 @@
      },
      {
       "sel": "h2#vl-h.h-sub.rv.in.lit",
-      "text": "Current beta limitations.",
+      "text": "What to expect in the beta.",
       "lines": 2,
       "w": 241,
       "h": 53
@@ -4088,10 +3863,10 @@
      },
      {
       "sel": "h2#cl-h.h-sec.rv.in.lit",
-      "text": "Document the sales process once. Get a prioritized briefing every morning.",
-      "lines": 5,
+      "text": "Do the hard part once. Get a ranked briefing every morning.",
+      "lines": 4,
       "w": 316,
-      "h": 173
+      "h": 138
      }
     ],
     "sections": [
@@ -4105,15 +3880,15 @@
      },
      {
       "sel": "header#top.hero",
-      "h": 1023
+      "h": 1061
      },
      {
       "sel": "section#highlights.band.band--tight",
-      "h": 914
+      "h": 928
      },
      {
       "sel": "section#handoff.band.band--white",
-      "h": 1249
+      "h": 1280
      },
      {
       "sel": "section#rooms.band.pv.band--white",
@@ -4121,39 +3896,39 @@
      },
      {
       "sel": "section#briefing.band.band--sunk",
-      "h": 2397
+      "h": 2436
      },
      {
       "sel": "section#week.band.band--white",
-      "h": 1214
+      "h": 1154
      },
      {
       "sel": "section#craft.band.band--sunk",
-      "h": 2245
+      "h": 2291
      },
      {
       "sel": "section#pace.band.band--white",
-      "h": 1349
+      "h": 1327
      },
      {
       "sel": "section#all-rooms.band.band--sunk",
-      "h": 1932
+      "h": 1887
      },
      {
       "sel": "section#ground.band.band--white",
-      "h": 1394
+      "h": 1468
      },
      {
       "sel": "section#trust.band.band--ink",
-      "h": 700
+      "h": 680
      },
      {
       "sel": "section#why.band.band--white",
-      "h": 779
+      "h": 737
      },
      {
       "sel": "section#compare.band.band--sunk",
-      "h": 2731
+      "h": 2691
      },
      {
       "sel": "section#values.band.band--tight.band--white",
@@ -4165,7 +3940,7 @@
      },
      {
       "sel": "section.band.close.band--white",
-      "h": 556
+      "h": 521
      },
      {
       "sel": "footer",
@@ -4176,38 +3951,38 @@
       "h": 19
      }
     ],
-    "docHeight": 21452
+    "docHeight": 21428
    },
    "inter": {
     "viewer": [
      {
       "i": 0,
-      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
-      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "cap": "Morning briefing. Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\n8d\nThe Notion pilot passed its readout date eight days ago with no result logged.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 1,
-      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
-      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 2,
-      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
-      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "cap": "A deal at risk. Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it.",
+      "stage": "PROJECTED FROM TODAY’S DEAL DATA\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as no decision, the way most of your losses have gone.\n\nLikely cause\npushed too early\ntop risk\nThe smallest fix\nget a second person from the buyer’s side involved this week",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 3,
-      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
-      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "cap": "Sales handoff. Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
       "open": true,
       "clipped": [],
       "overflowX": 2
@@ -4215,94 +3990,94 @@
     ],
     "chipLabels": [
      {
-      "text": "The morning read",
-      "aria": "See The morning read"
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
      },
      {
-      "text": "A live call",
-      "aria": "See A live call"
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
      },
      {
-      "text": "A deal going quiet",
-      "aria": "See A deal going quiet"
+      "text": "A deal at risk",
+      "aria": "Show example: A deal at risk"
      },
      {
-      "text": "The handoff",
-      "aria": "See The handoff"
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
      }
     ],
     "tabs": [
      {
       "i": 0,
       "label": "Outbound",
-      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
      },
      {
       "i": 1,
       "label": "Cold call",
-      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen the call\nWhy it matters to them\nShow them it's worked before\nAsk for the meeting\nWrap up\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.\n\nReview before you dial · log the outcome after · never during the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
      },
      {
       "i": 2,
       "label": "LinkedIn",
-      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nGive her something before you ask\nConnect, now she knows your name\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
      },
      {
       "i": 3,
       "label": "Discovery",
-      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went."
      }
     ],
     "pace": [
      {
       "v": "smb",
-      "pace-a": "1 in 4 closes",
-      "pace-as": "how often deals this size are won — the band is 20 to 30%",
-      "pace-b": "3× in flight",
-      "pace-bs": "enough going at once that one slipping does not sink the quarter",
-      "pace-c": "45 days",
-      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+      "pace-a": "1 in 4 deals won",
+      "pace-as": "how often deals this size are won · typically 20–30%",
+      "pace-b": "3× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying one does not put the quarter below target",
+      "pace-c": "45 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 30–60 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      },
      {
       "v": "ent",
-      "pace-a": "1 in 7 closes",
-      "pace-as": "how often deals this size are won — the band is 10 to 18%",
-      "pace-b": "4.5× in flight",
-      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
-      "pace-c": "180 days",
-      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+      "pace-a": "1 in 7 deals won",
+      "pace-as": "how often deals this size are won · typically 10–18%",
+      "pace-b": "4.5× your target in open deals",
+      "pace-bs": "fewer, larger deals, so each stalled deal needs more open deals behind it",
+      "pace-c": "180 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 120–270 days"
      },
      {
       "v": "str",
-      "pace-a": "1 in 8 closes",
-      "pace-as": "how often deals this size are won — the band is 8 to 15%",
-      "pace-b": "5× in flight",
-      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
-      "pace-c": "240 days",
-      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+      "pace-a": "1 in 8 deals won",
+      "pace-as": "how often deals this size are won · typically 8–15%",
+      "pace-b": "5× your target in open deals",
+      "pace-bs": "at this size one deal can be the whole quarter, so a single stalled deal puts it at risk",
+      "pace-c": "240 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 180–360 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      }
     ],
     "swatches": [
-     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
-     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears li",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
     ]
    },
    "errors": [],
@@ -4322,28 +4097,8 @@
     "clipped": [
      {
       "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
-      "cw": 79,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 79,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 79,
       "sh": 13,
       "ch": 13,
@@ -4362,8 +4117,8 @@
      },
      {
       "sel": "span",
-      "text": "no champion activity",
-      "sw": 119,
+      "text": "no champion update",
+      "sw": 117,
       "cw": 21,
       "sh": 19,
       "ch": 19,
@@ -4382,9 +4137,9 @@
      },
      {
       "sel": "span",
-      "text": "this week without a corrective action",
-      "sw": 211,
-      "cw": 111,
+      "text": "this week if nothing changes",
+      "sw": 165,
+      "cw": 124,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -4392,8 +4147,8 @@
      },
      {
       "sel": "span",
-      "text": "no buyer activity for 14 days — highest-risk open deal",
-      "sw": 305,
+      "text": "no champion update in 14 days",
+      "sw": 176,
       "cw": 141,
       "sh": 19,
       "ch": 19,
@@ -4402,8 +4157,8 @@
      },
      {
       "sel": "span",
-      "text": "FOUNDER-DEPENDENT",
-      "sw": 101,
+      "text": "YOU ARE THE SYSTEM",
+      "sw": 107,
       "cw": 73,
       "sh": 13,
       "ch": 13,
@@ -4412,28 +4167,8 @@
      },
      {
       "sel": "span",
-      "text": "PARTIALLY DOCUMENTED",
-      "sw": 119,
-      "cw": 73,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "USABLE WITH FOUNDER SUPPORT",
-      "sw": 160,
-      "cw": 73,
-      "sh": 13,
-      "ch": 13,
-      "ov": "hidden",
-      "to": "ellipsis"
-     },
-     {
-      "sel": "span",
-      "text": "Two plants announced · limited recruiting capacity",
-      "sw": 290,
+      "text": "Two plants · small recruiting team",
+      "sw": 195,
       "cw": 166,
       "sh": 19,
       "ch": 19,
@@ -4442,9 +4177,9 @@
      },
      {
       "sel": "span",
-      "text": "12 months of fees, breach capped higher",
-      "sw": 233,
-      "cw": 123,
+      "text": "12 months of fees; higher for breaches",
+      "sw": 221,
+      "cw": 149,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -4452,9 +4187,9 @@
      },
      {
       "sel": "span",
-      "text": "pressure before clarity",
-      "sw": 132,
-      "cw": 101,
+      "text": "pushed too early",
+      "sw": 96,
+      "cw": 65,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -4462,9 +4197,9 @@
      },
      {
       "sel": "span",
-      "text": "pressure before clarity",
-      "sw": 132,
-      "cw": 97,
+      "text": "pushed too early",
+      "sw": 96,
+      "cw": 29,
       "sh": 19,
       "ch": 19,
       "ov": "hidden",
@@ -4472,8 +4207,8 @@
      },
      {
       "sel": "span",
-      "text": "Warby Parker has had no recorded progress since the proposal.",
-      "sw": 367,
+      "text": "Warby Parker stalled after the proposal.",
+      "sw": 232,
       "cw": 147,
       "sh": 19,
       "ch": 19,
@@ -4482,8 +4217,8 @@
      },
      {
       "sel": "span",
-      "text": "Liquid Death has had no recent buyer activity.",
-      "sw": 264,
+      "text": "Liquid Death — no champion update.",
+      "sw": 210,
       "cw": 147,
       "sh": 19,
       "ch": 19,
@@ -4639,32 +4374,32 @@
      },
      {
       "sel": "button.chip",
-      "text": "The morning read",
-      "w": 184,
+      "text": "Morning briefing",
+      "w": 178,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A live call",
-      "w": 131,
+      "text": "Live discovery call",
+      "w": 189,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "A deal going quiet",
-      "w": 188,
+      "text": "A deal at risk",
+      "w": 154,
       "h": 45,
       "lines": 2,
       "fits": true
      },
      {
       "sel": "button.chip",
-      "text": "The handoff",
-      "w": 147,
+      "text": "Sales handoff",
+      "w": 159,
       "h": 45,
       "lines": 2,
       "fits": true
@@ -4727,8 +4462,8 @@
      },
      {
       "sel": "span",
-      "text": "247 found",
-      "w": 79,
+      "text": "247 added",
+      "w": 81,
       "h": 31,
       "lines": 1,
       "fits": true
@@ -4894,7 +4629,7 @@
      },
      {
       "sel": "h3",
-      "text": "Every account you follow, ranked by recent activity and company changes.",
+      "text": "Every account you track, ranked by recent company news.",
       "lines": 4,
       "w": 200,
       "h": 102
@@ -4915,14 +4650,14 @@
      },
      {
       "sel": "h3",
-      "text": "Deals at risk this week, with the next corrective action for each.",
+      "text": "The deals that will slip this week, and the smallest fix for each.",
       "lines": 4,
       "w": 200,
       "h": 102
      },
      {
       "sel": "h4.sc-h",
-      "text": "3 deals are at risk.",
+      "text": "3 deals will slip.",
       "lines": 1,
       "w": 154,
       "h": 22
@@ -4943,10 +4678,10 @@
      },
      {
       "sel": "h3",
-      "text": "A pilot plan the buyer's manager can use to make a decision.",
-      "lines": 4,
+      "text": "A pilot whose results the buyer's manager can use to decide.",
+      "lines": 3,
       "w": 200,
-      "h": 102
+      "h": 77
      },
      {
       "sel": "h3",
@@ -4971,10 +4706,10 @@
      },
      {
       "sel": "h2#hf-h.h-sec.rv.in.lit",
-      "text": "One sales process, usable by both founder and first hire.",
-      "lines": 4,
+      "text": "One sales process. Two people who can run it.",
+      "lines": 3,
       "w": 276,
-      "h": 138
+      "h": 104
      },
      {
       "sel": "h3.sc-h",
@@ -4999,10 +4734,10 @@
      },
      {
       "sel": "h2#br-h.h-sec.rv.in.lit",
-      "text": "Antaeus continues reviewing workspace activity when you're away.",
-      "lines": 4,
+      "text": "Antaeus keeps checking while you're away.",
+      "lines": 3,
       "w": 270,
-      "h": 138
+      "h": 104
      },
      {
       "sel": "h4",
@@ -5013,7 +4748,7 @@
      },
      {
       "sel": "h2#wk-h.h-sec.rv.in.lit",
-      "text": "Antaeus supports the same workflow whether you have one call or several deals at risk.",
+      "text": "Antaeus ranks your work whether you have one call or three deals at risk.",
       "lines": 5,
       "w": 276,
       "h": 173
@@ -5048,10 +4783,10 @@
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
-      "lines": 2,
+      "text": "Warby Parker dies in 20 days.",
+      "lines": 1,
       "w": 221,
-      "h": 38
+      "h": 19
      },
      {
       "sel": "h4.sc-h",
@@ -5062,7 +4797,7 @@
      },
      {
       "sel": "h2#pc-h.h-sec.rv.in.lit",
-      "text": "Is your current pipeline and activity enough to hit the revenue target?",
+      "text": "Do you have enough pipeline and activity to hit your revenue target?",
       "lines": 5,
       "w": 276,
       "h": 173
@@ -5076,10 +4811,10 @@
      },
      {
       "sel": "h3",
-      "text": "Run the discovery call from this workspace.",
-      "lines": 2,
+      "text": "Run the discovery call from it, while you're on the call.",
+      "lines": 3,
       "w": 230,
-      "h": 62
+      "h": 94
      },
      {
       "sel": "h4.sc-h",
@@ -5090,24 +4825,24 @@
      },
      {
       "sel": "h3",
-      "text": "Projects deal-loss risk before the deal is lost.",
-      "lines": 2,
+      "text": "It writes how the deal is likely to die, before it does.",
+      "lines": 3,
       "w": 230,
-      "h": 62
+      "h": 94
      },
      {
       "sel": "h4.sc-h",
-      "text": "Warby Parker is projected to be lost within 20 days.",
+      "text": "Warby Parker dies in 20 days.",
       "lines": 2,
       "w": 184,
       "h": 38
      },
      {
       "sel": "h3",
-      "text": "Workspace changes detected while you were away.",
-      "lines": 3,
+      "text": "What changed while you were away.",
+      "lines": 2,
       "w": 230,
-      "h": 94
+      "h": 62
      },
      {
       "sel": "h2#gd-h.h-sec.rv.in.lit",
@@ -5146,10 +4881,10 @@
      },
      {
       "sel": "h3",
-      "text": "Set it up once. Get a prioritized briefing every morning.",
-      "lines": 3,
+      "text": "Set up your workspace once. Get a ranked briefing every morning.",
+      "lines": 5,
       "w": 187,
-      "h": 74
+      "h": 123
      },
      {
       "sel": "h3",
@@ -5181,7 +4916,7 @@
      },
      {
       "sel": "h2#vl-h.h-sub.rv.in.lit",
-      "text": "Current beta limitations.",
+      "text": "What to expect in the beta.",
       "lines": 2,
       "w": 241,
       "h": 53
@@ -5209,7 +4944,7 @@
      },
      {
       "sel": "h2#cl-h.h-sec.rv.in.lit",
-      "text": "Document the sales process once. Get a prioritized briefing every morning.",
+      "text": "Do the hard part once. Get a ranked briefing every morning.",
       "lines": 5,
       "w": 276,
       "h": 173
@@ -5226,23 +4961,23 @@
      },
      {
       "sel": "header#top.hero",
-      "h": 1081
+      "h": 1102
      },
      {
       "sel": "section#highlights.band.band--tight",
-      "h": 969
+      "h": 954
      },
      {
       "sel": "section#handoff.band.band--white",
-      "h": 1335
+      "h": 1352
      },
      {
       "sel": "section#rooms.band.pv.band--white",
-      "h": 652
+      "h": 638
      },
      {
       "sel": "section#briefing.band.band--sunk",
-      "h": 2484
+      "h": 2539
      },
      {
       "sel": "section#week.band.band--white",
@@ -5250,31 +4985,31 @@
      },
      {
       "sel": "section#craft.band.band--sunk",
-      "h": 2322
+      "h": 2416
      },
      {
       "sel": "section#pace.band.band--white",
-      "h": 1427
+      "h": 1388
      },
      {
       "sel": "section#all-rooms.band.band--sunk",
-      "h": 2054
+      "h": 2079
      },
      {
       "sel": "section#ground.band.band--white",
-      "h": 1415
+      "h": 1514
      },
      {
       "sel": "section#trust.band.band--ink",
-      "h": 682
+      "h": 661
      },
      {
       "sel": "section#why.band.band--white",
-      "h": 825
+      "h": 783
      },
      {
       "sel": "section#compare.band.band--sunk",
-      "h": 2855
+      "h": 2815
      },
      {
       "sel": "section#values.band.band--tight.band--white",
@@ -5290,45 +5025,45 @@
      },
      {
       "sel": "footer",
-      "h": 588
+      "h": 606
      },
      {
       "sel": "nav",
       "h": 19
      }
     ],
-    "docHeight": 22356
+    "docHeight": 22515
    },
    "inter": {
     "viewer": [
      {
       "i": 0,
-      "cap": "The morning read. Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",
-      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has gone quiet — their people team is three deep and mid-launch.\n8d\nThe Notion pilot is eight days in and two of four recruiters have not touched it.\n\nAnd one you did not ask for — every deal you have won rode a dated expansion event. None of the cold ones landed.",
+      "cap": "Morning briefing. Every 30 minutes, Antaeus checks your deals, accounts, pilots, and calls and writes what it finds in plain sentences. When you open it, you get the short version and the one action worth doing first, with the reason it came first.",
+      "stage": "WHILE YOU WERE OUT\n\n20d\nWarby Parker has sat at proposal for three weeks with no next step.\n14d\nLiquid Death has had no logged champion activity for 14 days. Its three-person people team is in the middle of a launch.\n8d\nThe Notion pilot passed its readout date eight days ago with no result logged.\n\nAnd one pattern you did not ask about: every deal you have won followed a dated expansion event. None of the deals without a dated trigger closed.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 1,
-      "cap": "A live call. Discovery Studio is a console you run the call from, not notes you write after it. It shows the question, what to listen for, and the moment they answer you tap what you heard — it hands you the exact next line.",
-      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether this pain is really theirs to fix, or a polite nice-to-have — and who flinches when you name the cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey hired around it. Ask what that cost, and who signed it off — you have just found your economic buyer.",
+      "cap": "Live discovery call. Discovery Studio is the console you use during the call, not notes you write afterwards. It shows the current question and what to listen for. Select the buyer response you heard, and Antaeus shows the recommended follow-up.",
+      "stage": "PAIN & CONSEQUENCE · MAKE THE COST REAL\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem or treats it as a nice-to-have, and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 2,
-      "cap": "A deal going quiet. Future Autopsy writes the story of how a deal dies before it does — names the pattern, counts the days you have left, and routes you to the room where the fix happens.",
-      "stage": "WRITTEN 45 DAYS EARLY\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion and no one above him. Marcus goes quiet in week two, nobody signs, and it closes as no decision — the way most of your losses have gone.\n\nPattern\npressure before clarity\nseen 4×\nThe smallest fix\nget a second name in the room this week",
+      "cap": "A deal at risk. Future Autopsy writes how a deal is likely to die before it happens: the most likely cause of loss, the days you have left, and a link to the product area where you can fix it.",
+      "stage": "PROJECTED FROM TODAY’S DEAL DATA\n\nWarby Parker dies in 20 days, and here is how.\n\nYou have one champion, Marcus, and no one above him. If Marcus stops responding in week two, nobody signs, and it closes as no decision, the way most of your losses have gone.\n\nLikely cause\npushed too early\ntop risk\nThe smallest fix\nget a second person from the buyer’s side involved this week",
       "open": true,
       "clipped": [],
       "overflowX": 2
      },
      {
       "i": 3,
-      "cap": "The handoff. Seven parts a first hire reads on day one, written as prose rather than a dashboard — and each one carries a thing to notice that no single room could have told you on its own.",
-      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWeekly operating plan\nWho hits, who misses, and why\n\nEvery deal you closed came through someone who already owned the number. The ones that stalled went in through a team that had to go and ask for it.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
+      "cap": "Sales handoff. Seven parts a new hire reads on day one, written as prose rather than a dashboard. Each part carries one thing to notice that no single product area could have shown on its own.",
+      "stage": "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you win\nWhat the first week looks like\nWho hits, who misses, and why\n\nEvery deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else’s approval.\n\nOne thing to notice — every deal you won was mid-market, but the target you wrote down says enterprise.",
       "open": true,
       "clipped": [],
       "overflowX": 2
@@ -5336,94 +5071,94 @@
     ],
     "chipLabels": [
      {
-      "text": "The morning read",
-      "aria": "See The morning read"
+      "text": "Morning briefing",
+      "aria": "Show example: Morning briefing"
      },
      {
-      "text": "A live call",
-      "aria": "See A live call"
+      "text": "Live discovery call",
+      "aria": "Show example: Live discovery call"
      },
      {
-      "text": "A deal going quiet",
-      "aria": "See A deal going quiet"
+      "text": "A deal at risk",
+      "aria": "Show example: A deal at risk"
      },
      {
-      "text": "The handoff",
-      "aria": "See The handoff"
+      "text": "Sales handoff",
+      "aria": "Show example: Sales handoff"
      }
     ],
     "tabs": [
      {
       "i": 0,
       "label": "Outbound",
-      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat creates several hundred production hires on a deadline, and from the outside it appears the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants announced · limited recruiting capacity\nBuyer request\n20 minutes next week\nCopy the message\n\nOutbound. Select an account, contact, and recent trigger. Antaeus uses all three in the draft and blocks generic messages that could apply to any prospect."
+      "panel": "WRITING TO LENA, HEAD OF PEOPLE AT CHOMPS\n\nLena — I saw Chomps announce two new plants.\n\nThat will require several hundred production hires on a deadline, and from the outside it looks like the people team will absorb most of the load. Screening is often the first bottleneck.\n\nWorth twenty minutes next week to compare how you are staffing the openings?\n\nWhy now\nTwo plants · small recruiting team\nThe ask\n20 minutes next week\nCopy the message\n\nOutbound. Pick an account, a contact, and the trigger type. The draft names all three, and you can't generate one without an account and a named contact."
      },
      {
       "i": 1,
       "label": "Cold call",
-      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen\nIdentify the problem\nConfirm business impact\nRequest the meeting\nWrap\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost last year. Their answer gives you a concrete financial impact to discuss.\n\nReview before you dial · log the outcome after the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
+      "panel": "BEFORE YOU DIAL · CALL STRUCTURE\n\nOpen the call\nWhy it matters to them\nShow them it's worked before\nAsk for the meeting\nWrap up\n\nTHEY WILL PROBABLY SAY\n\n“We are too small for something like this.”\n\nSmall teams feel a bad hire hardest. Ask what one unsuccessful store-manager hire cost them last year. A number the buyer says out loud is hard to argue with.\n\nReview before you dial · log the outcome after · never during the call\n\nCold call. Review the call structure, likely buyer objections, and recommended responses before you dial. Log the outcome after the call, not while speaking."
      },
      {
       "i": 2,
       "label": "LinkedIn",
-      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nConnect, now she knows your name\nGive her something before you ask\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends the next relationship-building action: follow relevant posts, contribute something useful, connect after familiarity exists, and offer value before asking for time. Do not begin with a direct message."
+      "panel": "GYMSHARK · RECOMMENDED LINKEDIN ACTION\n\nAsk — only once it is warranted\nGive her something before you ask\nConnect, now she knows your name\nSay something useful on her post\nWatch what she posts\n\nPoppy accepted last week. Give her something today — do not ask yet.\n\nLinkedIn. For each account, Antaeus recommends one next step: read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message."
      },
      {
       "i": 3,
       "label": "Discovery",
-      "panel": "PROBLEM AND BUSINESS IMPACT · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the call. It shows the current question and what evidence to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and moves to the relevant branch of the call flow."
+      "panel": "PAIN & CONSEQUENCE · LIVE\n\nWalk me through what happens the week a new store opens.\n\nListen for whether the buyer owns the problem and who is accountable for its cost.\n\n“It is messy but we cope”\n“We just hired two more recruiters”\n“Not a top priority”\n\nThey added recruiters instead of changing the underlying process. Ask what the added headcount cost and who approved the expense; that identifies the budget owner.\n\nDiscovery. Use the console during the live call. It shows the current question and what to listen for. Select the buyer response you heard; Antaeus shows the recommended follow-up and offers a jump to where the conversation went."
      }
     ],
     "pace": [
      {
       "v": "smb",
-      "pace-a": "1 in 4 closes",
-      "pace-as": "how often deals this size are won — the band is 20 to 30%",
-      "pace-b": "3× in flight",
-      "pace-bs": "enough going at once that one slipping does not sink the quarter",
-      "pace-c": "45 days",
-      "pace-cs": "how long one usually takes to close — the range is 30 to 60 days"
+      "pace-a": "1 in 4 deals won",
+      "pace-as": "how often deals this size are won · typically 20–30%",
+      "pace-b": "3× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying one does not put the quarter below target",
+      "pace-c": "45 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 30–60 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      },
      {
       "v": "ent",
-      "pace-a": "1 in 7 closes",
-      "pace-as": "how often deals this size are won — the band is 10 to 18%",
-      "pace-b": "4.5× in flight",
-      "pace-bs": "fewer, larger deals means more cover for each one that stalls",
-      "pace-c": "180 days",
-      "pace-cs": "how long one usually takes to close — the range is 120 to 270 days"
+      "pace-a": "1 in 7 deals won",
+      "pace-as": "how often deals this size are won · typically 10–18%",
+      "pace-b": "4.5× your target in open deals",
+      "pace-bs": "fewer, larger deals, so each stalled deal needs more open deals behind it",
+      "pace-c": "180 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 120–270 days"
      },
      {
       "v": "str",
-      "pace-a": "1 in 8 closes",
-      "pace-as": "how often deals this size are won — the band is 8 to 15%",
-      "pace-b": "5× in flight",
-      "pace-bs": "at this size a single deal going quiet can be the whole quarter",
-      "pace-c": "240 days",
-      "pace-cs": "how long one usually takes to close — the range is 180 to 360 days"
+      "pace-a": "1 in 8 deals won",
+      "pace-as": "how often deals this size are won · typically 8–15%",
+      "pace-b": "5× your target in open deals",
+      "pace-bs": "at this size one deal can be the whole quarter, so a single stalled deal puts it at risk",
+      "pace-c": "240 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 180–360 days"
      },
      {
       "v": "mid",
-      "pace-a": "20% win-rate benchmark",
-      "pace-as": "typical range 15–25%",
-      "pace-b": "3.5× pipeline coverage",
-      "pace-bs": "enough active pipeline to absorb normal deal slippage",
-      "pace-c": "90-day sales-cycle benchmark",
-      "pace-cs": "typical range 60–120 days"
+      "pace-a": "1 in 5 deals won",
+      "pace-as": "how often deals this size are won · typically 15–25%",
+      "pace-b": "3.5× your target in open deals",
+      "pace-bs": "enough open deals that losing or delaying a few does not put the quarter below target",
+      "pace-c": "90 days to close",
+      "pace-cs": "how long a deal this size usually takes · typically 60–120 days"
      }
     ],
     "swatches": [
-     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires planned, no apparent recruiting bench. Antaeus ",
-     "IF A HIRE STARTED MONDAY · 5 OF 7 READINESS AREAS COMPLETE\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you pai"
+     "HIGHEST-PRIORITY ACTION\n\nReach out to Chomps.\n\nTwo plants announced this month, several hundred production hires needed, and recruiting capacity that appears li",
+     "IF A HIRE STARTED MONDAY · 5 OF 7 PARTS READY\n\nWho hits, who misses\nWhat actually landed\nThe questions that won\nWhere deals leak\nThe losses you paid for\nWhy you"
     ]
    },
    "errors": [],

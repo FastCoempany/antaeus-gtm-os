@@ -18,7 +18,11 @@
   "recommendation": "Revert the page to the canon state names (the page can add a plain one-line gloss under each, which §13's teach-on-first-use exception allows). If the founder wants the new names, it becomes a §4.17 mind change: get approval, then update canon, VERDICT_LABEL, ClimbDrawer and cockpit together, and drop the 'documented' wording unless a gate actually measures documentation.",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Checked and confirmed. The map rewrites U62/U64/U65/U66/U67/U100/U297, plus leaf nodes N21-25 (L592-596) and N234-238 (L1102-1106), to 'Founder-dependent / Partially documented / Usable with founder support / Hire-ready and repeatable'. Shipped code uses the canon names: VERDICT_LABEL in src/lib/readiness/types.ts:34-40, the LADDER in ClimbDrawer.tsx ('Real activity is on the board, but a hire would still be improvising'), and GATE_LABELS in cockpit.ts:22-28. The page's L592-596 and L1102-1106 copy those gates word for word. COPY_STANDARD §17 (L404-424) asks for the new names, and CODEX_HANDOFF.md:45 lists 'you are the system' and 'inheritable' as validation terms. Commit 3fb1ed7 adds only the 4 COPY_* files, and none of them mentions CLAUDE.md or canon. 'Partially documented' misstates the Building gate, which measures activity, not documentation."
+  "skeptic_reasoning": "Checked and confirmed. The map rewrites U62/U64/U65/U66/U67/U100/U297, plus leaf nodes N21-25 (L592-596) and N234-238 (L1102-1106), to 'Founder-dependent / Partially documented / Usable with founder support / Hire-ready and repeatable'. Shipped code uses the canon names: VERDICT_LABEL in src/lib/readiness/types.ts:34-40, the LADDER in ClimbDrawer.tsx ('Real activity is on the board, but a hire would still be improvising'), and GATE_LABELS in cockpit.ts:22-28. The page's L592-596 and L1102-1106 copy those gates word for word. COPY_STANDARD §17 (L404-424) asks for the new names, and CODEX_HANDOFF.md:45 lists 'you are the system' and 'inheritable' as validation terms. Commit 3fb1ed7 adds only the 4 COPY_* files, and none of them mentions CLAUDE.md or canon. 'Partially documented' misstates the Building gate, which measures activity, not documentation.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Mocks and the FAQ use the live state names again (You are the system, Building, Inheritable with guardrails, Hire-ready, Hire-ready, repeatable); the readiness leaves are gone. The FAQ glosses \"inheritable with guardrails\" in plain words."
+  }
  },
  {
   "dimension": "canon",
@@ -37,7 +41,11 @@
   "recommendation": "Keep the forensic framing: lead with 'Future Autopsy' or the plain 'The autopsy, written early', and say it writes how this deal is likely to die, names the failure pattern, and routes you to the fix. Delete the §4 conditional rule from COPY_STANDARD and take 'autopsy' and 'dies' off the handoff's banned-term list.",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. U167 now leads with 'Deal risk analysis.', and U197 becomes 'Projects deal-loss risk before the deal is lost.', which drops the 'writes how the deal dies' story. COPY_STANDARD.md:96 makes the name conditional on risk-projection copy. CLAUDE.md:304 says 'Never soften into \"risk review.\"' One overstatement: the room label 'Future Autopsy' survives on the all-rooms card (U196, action=keep), so the name itself is not removed, only the card lead and descriptions. The handoff's line 45 lists 'autopsy/dies' as terms to validate, with proper names allowed, not as outright bans. The core violation of the protected room still stands."
+  "skeptic_reasoning": "Confirmed. U167 now leads with 'Deal risk analysis.', and U197 becomes 'Projects deal-loss risk before the deal is lost.', which drops the 'writes how the deal dies' story. COPY_STANDARD.md:96 makes the name conditional on risk-projection copy. CLAUDE.md:304 says 'Never soften into \"risk review.\"' One overstatement: the room label 'Future Autopsy' survives on the all-rooms card (U196, action=keep), so the name itself is not removed, only the card lead and descriptions. The handoff's line 45 lists 'autopsy/dies' as terms to validate, with proper names allowed, not as outright bans. The core violation of the protected room still stands.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Future Autopsy\" and \"dies in 20 days\" are back (#166, #167, #197, #200, JS scene). COPY_STANDARD still lists \"autopsy\"/\"dies\" as banned; that file is not edited."
+  }
  },
  {
   "dimension": "canon",
@@ -56,7 +64,11 @@
   "recommendation": "Keep the four band names as the room's labels and add a plain gloss where needed (e.g. 'Going cold — was active, now quiet'). Keep heat as a named product quantity. Remove hot/warm/cold from COPY_STANDARD §3 for this room, or update canon first if the founder wants the bands renamed.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "The band part is confirmed. src/signal-console/v4/lib/attention.ts BAND_META has now='Act now'/'hot, and something just moved' and cold='Going cold'/'was warm, now quiet'. The source's L637 copies the shipped band exactly, and U31 rewrites it to 'High priority · recent company change'. U30 collapses the four bands into three phrases, and U83 turns 'going cold' into 'no recent activity', which loses 'was warm'. The heat part is overstated: the page never uses the word 'heat' (grep finds only 'running hot' at L655 and L927), so the page has no named heat quantity to lose, only the metaphor. Downgraded from high."
+  "skeptic_reasoning": "The band part is confirmed. src/signal-console/v4/lib/attention.ts BAND_META has now='Act now'/'hot, and something just moved' and cold='Going cold'/'was warm, now quiet'. The source's L637 copies the shipped band exactly, and U31 rewrites it to 'High priority · recent company change'. U30 collapses the four bands into three phrases, and U83 turns 'going cold' into 'no recent activity', which loses 'was warm'. The heat part is overstated: the page never uses the word 'heat' (grep finds only 'running hot' at L655 and L927), so the page has no named heat quantity to lose, only the metaphor. Downgraded from high.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Band names and \"heat\" are back (#30, #31, #36, #73, #83)."
+  }
  },
  {
   "dimension": "canon",
@@ -85,7 +97,11 @@
   "recommendation": "Sort each relabel into one of two buckets. Where the page label is canon-correct and the app is not (the 'move' labels), fix the app. Where the relabel contradicts canon (states, bands, segment names, 'one thing to notice', 'your line', 'the circle', 'the machine'), revert the page to the shipped label. Otherwise soften the footnote so it no longer promises verbatim screens.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Mostly confirmed. U333 still claims 'Screens throughout this page show real product areas with sample data'. The relabels do diverge from shipped strings: 'Pain & consequence' (DiscoveryStudioV4.tsx:81), 'One thing to notice' and 'parts ready' (FoundingGtmV4.tsx:73,150), 'Your line' and 'The one thing blocking' (GettingToSignedV4.tsx:227,236,291), and the readiness gates and bands. Two cited examples are inaccurate. 'the machine' never appears on the page; the original Live Edge copy said 'the system', so the PR's 'Antaeus' does not relabel a shipped tag the page showed. 'The relay' is not a user-facing string in shipped code (CallInAFavorV4.tsx:209 is a JSX comment and :242 is a CSS class). The 'move' point (DashboardV4.tsx:112) is correct. Largely an aggregation of the other findings, so medium rather than high."
+  "skeptic_reasoning": "Mostly confirmed. U333 still claims 'Screens throughout this page show real product areas with sample data'. The relabels do diverge from shipped strings: 'Pain & consequence' (DiscoveryStudioV4.tsx:81), 'One thing to notice' and 'parts ready' (FoundingGtmV4.tsx:73,150), 'Your line' and 'The one thing blocking' (GettingToSignedV4.tsx:227,236,291), and the readiness gates and bands. Two cited examples are inaccurate. 'the machine' never appears on the page; the original Live Edge copy said 'the system', so the PR's 'Antaeus' does not relabel a shipped tag the page showed. 'The relay' is not a user-facing string in shipped code (CallInAFavorV4.tsx:209 is a JSX comment and :242 is a CSS class). The 'move' point (DashboardV4.tsx:112) is correct. Largely an aggregation of the other findings, so medium rather than high.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "Mocks match the app again, except the Dashboard \"move\" kickers (#19, #71), which keep the page wording because canon sides with the page there. Fix: drop \"move\" from the live Dashboard kicker."
+  }
  },
  {
   "dimension": "canon",
@@ -101,7 +117,11 @@
   "recommendation": "Canon wins. Keep '3 deals will slip this week' (a complete sentence with the noun) and remove 'slip' from the §3 scrutiny table.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. CLAUDE.md:1196 uses '3 deals will slip this week' as its plain-fact example. COPY_STANDARD.md:70 lists 'slip', CODEX_HANDOFF.md:45 lists it for validation, and U42 '3 will slip.' becomes '3 deals are at risk.' (U39 is similar). Impact is limited. The kept kicker 'If you do nothing this week' keeps the time frame on U42, and the leaf pair N133/N134 at L930 becomes '3 deals are at risk … this week without a corrective action', which keeps the week. The standard-vs-canon contradiction is real but low impact."
+  "skeptic_reasoning": "Confirmed. CLAUDE.md:1196 uses '3 deals will slip this week' as its plain-fact example. COPY_STANDARD.md:70 lists 'slip', CODEX_HANDOFF.md:45 lists it for validation, and U42 '3 will slip.' becomes '3 deals are at risk.' (U39 is similar). Impact is limited. The kept kicker 'If you do nothing this week' keeps the time frame on U42, and the leaf pair N133/N134 at L930 becomes '3 deals are at risk … this week without a corrective action', which keeps the week. The standard-vs-canon contradiction is real but low impact.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"The deals that will slip this week\" and \"3 deals will slip.\" (#39, #42, leaf)."
+  }
  },
  {
   "dimension": "canon",
@@ -122,7 +142,11 @@
   "recommendation": "Keep the literal clarity, but restore judgment and authorship as the thing being asked for: 'the judgment only you have', 'real thinking', 'do the hard part once'. Keep the no-apology line in the FAQ.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed against the map. U25 becomes 'entering the sales knowledge only you know', U273 'founder input', U232 'information only you know… you only enter context', and U304 'Document the sales process once'. U231 drops 'pays you back', and U289 drops 'instead of apologising for it'. Canon §12 principle 5 says 'authorship, not data entry', and §12 closes with 'never apologize for the work'. The shipped Doorway.tsx uses 'the thinking that lives in your head and nowhere else'. U232 does keep principle 3 (Antaeus looks up public info itself), so the shift is framing rather than substance. Medium holds."
+  "skeptic_reasoning": "Confirmed against the map. U25 becomes 'entering the sales knowledge only you know', U273 'founder input', U232 'information only you know… you only enter context', and U304 'Document the sales process once'. U231 drops 'pays you back', and U289 drops 'instead of apologising for it'. Canon §12 principle 5 says 'authorship, not data entry', and §12 closes with 'never apologize for the work'. The shipped Doorway.tsx uses 'the thinking that lives in your head and nowhere else'. U232 does keep principle 3 (Antaeus looks up public info itself), so the shift is framing rather than substance. Medium holds.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Setup copy asks for \"the judgment only you have\" (#25, #232, #286, #289, #304); #273 keeps \"An afternoon of real thinking\"."
+  }
  },
  {
   "dimension": "canon",
@@ -143,7 +167,11 @@
   "recommendation": "Remove COPY_STANDARD §9 and the 'awake' and 'in your head' rows, or subordinate them to canon §11/§13. In product mockups, state the fact plainly without saying 'Antaeus ranks X because'. If the founder wants a no-personification rule, amend canon §1 and §4.1 first.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. COPY_STANDARD §9 bans sees/notices/knows/wakes/remembers/hands you, and its §3 rows (L76-77) map 'awake' and 'in your head' away. The shipped WelcomeV4.tsx:25 says 'the workspace is awake' (canon §4.1). Inside the dashboard mockup card, U21 becomes 'Antaeus ranks outreach as your least-completed sales activity', and U36/U73 become 'Antaeus ranks Chomps highly because…'. That is the machine narration §13 forbids in UI and mockups. U99 becomes 'Spreadsheet + undocumented founder knowledge', and U202 becomes 'Workspace changes detected while you were away.' Canon outranks the PR's standard."
+  "skeptic_reasoning": "Confirmed. COPY_STANDARD §9 bans sees/notices/knows/wakes/remembers/hands you, and its §3 rows (L76-77) map 'awake' and 'in your head' away. The shipped WelcomeV4.tsx:25 says 'the workspace is awake' (canon §4.1). Inside the dashboard mockup card, U21 becomes 'Antaeus ranks outreach as your least-completed sales activity', and U36/U73 become 'Antaeus ranks Chomps highly because…'. That is the machine narration §13 forbids in UI and mockups. U99 becomes 'Spreadsheet + undocumented founder knowledge', and U202 becomes 'Workspace changes detected while you were away.' Canon outranks the PR's standard.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "Mock copy states facts instead of \"Antaeus ranks X because\" (#21, #36, #73). COPY_STANDARD §9 is not edited."
+  }
  },
  {
   "dimension": "canon",
@@ -163,7 +191,11 @@
   "recommendation": "Name both halves: what changed in your deals and accounts, and what moved in your market. Keep 'the way a colleague would say it'. Choose a nav label that doesn't read as monitoring or a feed (for example 'The morning briefing').",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Partly confirmed. U10/U312 rename the #briefing nav from 'What it sees' to 'Activity monitoring'. That section carries the World-stream ticker (L1063-1068: The market / Challenge / Blind spot). U203 now limits the room to 'account, deal, and pilot changes' and drops 'the way a colleague would say it'. But the original definitional prose (U95, U86, U203) already described only the workspace heartbeat and never mentioned the World stream, so the PR removes no World-stream description. It narrows the U203 card and the nav label. Downgraded to low."
+  "skeptic_reasoning": "Partly confirmed. U10/U312 rename the #briefing nav from 'What it sees' to 'Activity monitoring'. That section carries the World-stream ticker (L1063-1068: The market / Challenge / Blind spot). U203 now limits the room to 'account, deal, and pilot changes' and drops 'the way a colleague would say it'. But the original definitional prose (U95, U86, U203) already described only the workspace heartbeat and never mentioned the World stream, so the PR removes no World-stream description. It narrows the U203 card and the nav label. Downgraded to low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Nav/footer say \"Morning briefing\"; #203 names both halves (your deals and accounts, and your market)."
+  }
  },
  {
   "dimension": "canon",
@@ -181,7 +213,11 @@
   "recommendation": "Carve out canon's own phrases from the 'line' rule. Restore 'Your line' next to 'Their ask' and restore 'The one thing blocking'. Remove the 'The ask'→'Buyer request' leaf mapping, or scope it to the Getting to Signed card only.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. The leaf N356 'Your line'→'Your position' sits next to the kept N354 'Their ask' at L1269-1270. The shipped GettingToSignedV4.tsx:236/264/291 uses 'Your line' and 'their ask → your line', and canon §4.16b lists those phrases as the plain language. U159 'The one thing blocking'→'Current blocker' departs from the shipped string at :227. The worst part is the leaf N277 'The ask'→'Buyer request'. It applies only at L1192, the Outbound draft where 'The ask · 20 minutes next week' is the seller's own request, so the new label inverts the meaning."
+  "skeptic_reasoning": "Confirmed. The leaf N356 'Your line'→'Your position' sits next to the kept N354 'Their ask' at L1269-1270. The shipped GettingToSignedV4.tsx:236/264/291 uses 'Your line' and 'their ask → your line', and canon §4.16b lists those phrases as the plain language. U159 'The one thing blocking'→'Current blocker' departs from the shipped string at :227. The worst part is the leaf N277 'The ask'→'Buyer request'. It applies only at L1192, the Outbound draft where 'The ask · 20 minutes next week' is the seller's own request, so the new label inverts the meaning.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Your line\", \"The one thing blocking\" and \"tap what you heard to get your next line\" are back; \"The ask\" leaf removed."
+  }
  },
  {
   "dimension": "canon",
@@ -197,7 +233,11 @@
   "recommendation": "Lead with 'Call in a Favor' (or 'Calling in a favor'), keep 'The relay' (or 'you → your person → the buyer'), and say it covers any stuck deal, not only introductions.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. U164 'Calling in a favor.'→'Warm introduction.' removes the only on-page use of the room's name and frames it as introductions only. src/call-in-a-favor/lib/moments.ts carries the ten situations (Open the door, Get an exec involved, Nudge a stalled pilot…). U162 'The relay'→'Referral path' reinforces the intro framing. One inaccuracy: 'the relay' is not a shipped user-facing label (CallInAFavorV4.tsx:209 is a comment and :242 a CSS class). It is canon §4.16's name for the core surface, so the narrowing claim still holds."
+  "skeptic_reasoning": "Confirmed. U164 'Calling in a favor.'→'Warm introduction.' removes the only on-page use of the room's name and frames it as introductions only. src/call-in-a-favor/lib/moments.ts carries the ten situations (Open the door, Get an exec involved, Nudge a stalled pilot…). U162 'The relay'→'Referral path' reinforces the intro framing. One inaccuracy: 'the relay' is not a shipped user-facing label (CallInAFavorV4.tsx:209 is a comment and :242 a CSS class). It is canon §4.16's name for the core surface, so the narrowing claim still holds.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Calling in a favor\" and \"The relay\" are back; #164 covers any stuck deal and both notes."
+  }
  },
  {
   "dimension": "canon",
@@ -215,7 +255,11 @@
   "recommendation": "Use 'Who's hands-on', and keep 'using it day to day' as the adoption line. Say the pilot produces a result the buyer's boss can act on. Keep 'a write-up the champion can defend without you'.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed in the source. L702-712 shows a circle of 5 avatars plus 2 '+' gap slots, 'Someone from IT — nobody named yet', and a kept '5 of 7 using it day to day' (U54). Relabeling the circle 'Active pilot participants' (U52/U156) contradicts both the gap slots and the adoption line on the same card. The shipped label is 'The circle — who's hands-on with the pilot' (PilotDeskV4.tsx:260). U50 changes the result into 'A pilot plan'. U158 changes 'Running the pilot' to 'Pilot planning' and 'defend without you' to 'share internally'."
+  "skeptic_reasoning": "Confirmed in the source. L702-712 shows a circle of 5 avatars plus 2 '+' gap slots, 'Someone from IT — nobody named yet', and a kept '5 of 7 using it day to day' (U54). Relabeling the circle 'Active pilot participants' (U52/U156) contradicts both the gap slots and the adoption line on the same card. The shipped label is 'The circle — who's hands-on with the pilot' (PilotDeskV4.tsx:260). U50 changes the result into 'A pilot plan'. U158 changes 'Running the pilot' to 'Pilot planning' and 'defend without you' to 'share internally'.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Who's hands-on\" (live label); #50 and #158 restored."
+  }
  },
  {
   "dimension": "canon",
@@ -234,7 +278,11 @@
   "recommendation": "Restore 'One thing to notice' and '5 of 7 parts ready'. Keep the 'document written for their replacement' idea, stated plainly.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. U58/U78 'One thing to notice —'→'Pattern:', while the Future Autopsy cards keep 'Pattern' (N372 at L1281, N426 at L1420) for the failure pattern, so the two labels now collide. The shipped labels are 'One thing to notice' (FoundingGtmV4.tsx:150) and 'N of 7 parts ready' (:73). U75 '5 of 7 readiness areas complete' mixes the kit's 7 parts with Readiness's 5 parts. U56 and U269 drop the 'document a sharp operator left for their replacement' / 'written as prose' frame that canon §4.19 protects."
+  "skeptic_reasoning": "Confirmed. U58/U78 'One thing to notice —'→'Pattern:', while the Future Autopsy cards keep 'Pattern' (N372 at L1281, N426 at L1420) for the failure pattern, so the two labels now collide. The shipped labels are 'One thing to notice' (FoundingGtmV4.tsx:150) and 'N of 7 parts ready' (:73). U75 '5 of 7 readiness areas complete' mixes the kit's 7 parts with Readiness's 5 parts. U56 and U269 drop the 'document a sharp operator left for their replacement' / 'written as prose' frame that canon §4.19 protects.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"One thing to notice\" and \"5 of 7 parts ready\" restored; #56 keeps the written-for-the-replacement idea."
+  }
  },
  {
   "dimension": "canon",
@@ -249,7 +297,11 @@
   "recommendation": "Define it as a thin live strip on the left edge showing today's count against your daily number and a tagged list of what just happened. Say that turning it off switches it off and leaves a thin line you can click to bring it back, and that counting continues while it is off. Match the shipped tags.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Core confirmed. U220's replacement defines it as 'a collapsible activity panel… Turn it off to collapse the panel', and COPY_STANDARD.md:94 mandates 'the collapsible activity panel' on first mention. The locked Live Edge rule is that off reads 'off, never hidden', and the shipped strings are 'Turn the live edge off — a thin line stays on the wall' / 'The live edge is off' (LiveEdge.tsx:286,337). The 'the machine' tag point is inaccurate. The original page said 'you, the system, or the buyer', so the PR's 'Antaeus' does not replace a 'the machine' label on the page. Single-paragraph impact, so downgraded to low."
+  "skeptic_reasoning": "Core confirmed. U220's replacement defines it as 'a collapsible activity panel… Turn it off to collapse the panel', and COPY_STANDARD.md:94 mandates 'the collapsible activity panel' on first mention. The locked Live Edge rule is that off reads 'off, never hidden', and the shipped strings are 'Turn the live edge off — a thin line stays on the wall' / 'The live edge is off' (LiveEdge.tsx:286,337). The 'the machine' tag point is inaccurate. The original page said 'you, the system, or the buyer', so the PR's 'Antaeus' does not replace a 'the machine' label on the page. Single-paragraph impact, so downgraded to low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#220 says off leaves a thin line you can click and counting continues; tags match the shipped ones."
+  }
  },
  {
   "dimension": "canon",
@@ -267,7 +319,11 @@
   "recommendation": "Say the map lays the rooms out in the order of your sales process, and keep the one-line myth explanation.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. U208 cuts 'Antaeus was unbeatable while he was touching the earth' and leaves 'called the Ground, after the Antaeus myth', which the reader must decode. U209 and U212 recast it as 'workspace map' / 'navigation map for all twenty-two product areas'. The shipped GroundLine.tsx uses 'The ground — your whole motion' and 'The whole workspace, laid out as your motion'. The original page never stated the ordering explicitly either, so the flattening point is mild. Low is right."
+  "skeptic_reasoning": "Confirmed. U208 cuts 'Antaeus was unbeatable while he was touching the earth' and leaves 'called the Ground, after the Antaeus myth', which the reader must decode. U209 and U212 recast it as 'workspace map' / 'navigation map for all twenty-two product areas'. The shipped GroundLine.tsx uses 'The ground — your whole motion' and 'The whole workspace, laid out as your motion'. The original page never stated the ordering explicitly either, so the flattening point is mild. Low is right.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#208/#212 lay the map out in the order of your sales process and explain the myth in one line."
+  }
  },
  {
   "dimension": "canon",
@@ -285,7 +341,11 @@
   "recommendation": "Use 'Not notes you write afterwards' and 'jumps to where the conversation went', and keep the canon segment name.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. U192's replacement says 'Use it during the call, not only for notes afterward', implying a notes use that canon §4.12 rejects ('not a notepad'). U144 says 'moves to the relevant branch of the call flow' where the original said 'jumps you to where the conversation went'. U45/U140 rename the fixed segment 'Pain & consequence' (shipped at DiscoveryStudioV4.tsx:81) to 'Problem and business impact'. Low severity is appropriate."
+  "skeptic_reasoning": "Confirmed. U192's replacement says 'Use it during the call, not only for notes afterward', implying a notes use that canon §4.12 rejects ('not a notepad'). U144 says 'moves to the relevant branch of the call flow' where the original said 'jumps you to where the conversation went'. U45/U140 rename the fixed segment 'Pain & consequence' (shipped at DiscoveryStudioV4.tsx:81) to 'Problem and business impact'. Low severity is appropriate.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Not notes you write afterwards\"; \"offers a jump to where the conversation went\"."
+  }
  },
  {
   "dimension": "canon",
@@ -300,7 +360,11 @@
   "recommendation": "Keep the three questions verbatim and state that you answer them before a company reaches Signal Console.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed, and shipped code backs it up. ProspectingDeskV4.tsx:306-338 renders the three questions as inputs the operator fills in ('Are they who we're targeting?', 'What's our way in to the account?', 'How will we reach out?', 'Still to answer:'). U148's replacement 'Antaeus records whether it fits your target, the likely reason to engage, and the intended outreach channel' misattributes the gate to the system. It also swaps 'way in' (an entry point, e.g. an intro via a shared investor) for 'reason to engage'."
+  "skeptic_reasoning": "Confirmed, and shipped code backs it up. ProspectingDeskV4.tsx:306-338 renders the three questions as inputs the operator fills in ('Are they who we're targeting?', 'What's our way in to the account?', 'How will we reach out?', 'Still to answer:'). U148's replacement 'Antaeus records whether it fits your target, the likely reason to engage, and the intended outreach channel' misattributes the gate to the system. It also swaps 'way in' (an entry point, e.g. an intro via a shared investor) for 'reason to engage'.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#148 keeps the three questions the operator answers."
+  }
  },
  {
   "dimension": "canon",
@@ -321,7 +385,11 @@
   "recommendation": "Say what it is: 'the reason it came first (the signal, the stalled step)', 'what to listen for'. Drop 'evidence' from the §2 preferred list, or add §13's never-bare condition to it.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. A scan of replacements finds 'evidence' in 7 rewritten units (33, 97, 144, 257, 261, 284, 293), and none of the originals contain the word. COPY_STANDARD.md:39 lists 'evidence' as a preferred noun, while CLAUDE.md §13 says never use it bare. Most instances do say what it is evidence for ('behind the ranking'), and canon's example is about pilot evidence, so the practical harm is modest. Downgraded to low."
+  "skeptic_reasoning": "Confirmed. A scan of replacements finds 'evidence' in 7 rewritten units (33, 97, 144, 257, 261, 284, 293), and none of the originals contain the word. COPY_STANDARD.md:39 lists 'evidence' as a preferred noun, while CLAUDE.md §13 says never use it bare. Most instances do say what it is evidence for ('behind the ranking'), and canon's example is about pilot evidence, so the practical harm is modest. Downgraded to low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "All seven bare uses are gone. COPY_STANDARD §2 still lists \"evidence\" as preferred."
+  }
  },
  {
   "dimension": "canon",
@@ -341,7 +409,11 @@
   "recommendation": "Use 'how far behind plan you are', 'team-wide quotas', 'add it during the call' / 'logged and counted', and 'limited recruiting capacity' everywhere.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed by scanning the replacements. U113 has 'activity gap', U284 has 'multi-rep quotas' (canon retired 'rep' on 2026-06-16), U112 and U216 use 'capture/captured' (§13: capture → add), and U36/U73 keep 'no apparent recruiting bench' while leaf N276 maps the same phrase to 'limited recruiting capacity', which is inconsistent. The hard bans (proof, cast, earn, verdict, sanity, vitals, dimension, 'live work') do not appear in any replacement. Low."
+  "skeptic_reasoning": "Confirmed by scanning the replacements. U113 has 'activity gap', U284 has 'multi-rep quotas' (canon retired 'rep' on 2026-06-16), U112 and U216 use 'capture/captured' (§13: capture → add), and U36/U73 keep 'no apparent recruiting bench' while leaf N276 maps the same phrase to 'limited recruiting capacity', which is inconsistent. The hard bans (proof, cast, earn, verdict, sanity, vitals, dimension, 'live work') do not appear in any replacement. Low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "No bare \"gap\", \"rep\" or \"recruiting bench\"; capture appears only as the feature name \"capture address\"."
+  }
  },
  {
   "dimension": "canon",
@@ -363,7 +435,11 @@
   "recommendation": "Restore canon's plain phrases ('how often deals this size are won', 'enough in flight', 'who you sell to'). Pick one name for the section and flag the Quota Workback/Pace naming to the founder rather than settling it in copy.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "The jargon part is confirmed. U184 'in flight' becomes 'pipeline coverage… deal slippage', U183 becomes 'win-rate benchmark', U185 'sales-cycle benchmark', and U155 'Who you sell to' becomes 'Ideal customer profile'. Canon §4.18 and §13 prescribe the plain phrases. Inconsistent naming is also confirmed: the nav U11 and footer U313 say 'Revenue plan', while the kicker U175 'Pace', footer link N632 'Pace', and U333 'Benchmark figures in Pace' keep 'Pace'. The claim that the PR 'settles a room name canon left open' is overstated. Canon's open rename concerns 'Quota Workback', 'Pace' was already the page's own name, and the PR does not settle the Quota Workback question."
+  "skeptic_reasoning": "The jargon part is confirmed. U184 'in flight' becomes 'pipeline coverage… deal slippage', U183 becomes 'win-rate benchmark', U185 'sales-cycle benchmark', and U155 'Who you sell to' becomes 'Ideal customer profile'. Canon §4.18 and §13 prescribe the plain phrases. Inconsistent naming is also confirmed: the nav U11 and footer U313 say 'Revenue plan', while the kicker U175 'Pace', footer link N632 'Pace', and U333 'Benchmark figures in Pace' keep 'Pace'. The claim that the PR 'settles a room name canon left open' is overstated. Canon's open rename concerns 'Quota Workback', 'Pace' was already the page's own name, and the PR does not settle the Quota Workback question.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "Pace text is plain again (\"1 in 5 deals won\", \"your target in open deals\"); one name, \"Pace\", in nav, kicker, footer and #171. Whether the room is called Pace or Quota Workback is still the founder's call (canon §4.18)."
+  }
  },
  {
   "dimension": "canon",
@@ -385,7 +461,11 @@
   "recommendation": "Ask the founder to settle two things in canon: whether 'room' is a user-facing word (if yes, define it once on the page), and whether 'motion' means §2's outbound move or the whole process. Then align the Ground and Climb strings and the page to the answer.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed as a divergence. U3/U9/U188/U311 replace 'rooms' with 'product areas', and U189/U106/U114 introduce 'workflow(s)'. The shipped app uses 'room' in user-facing copy ('What is this room for?' in components/navigation.tsx:152, '…or just start typing a room' in GroundLine, 'What the Briefing room does'). The finding correctly notes that on 'motion' the page is arguably closer to §2 than the app is. Since it mostly asks canon to settle the words, low is right."
+  "skeptic_reasoning": "Confirmed as a divergence. U3/U9/U188/U311 replace 'rooms' with 'product areas', and U189/U106/U114 introduce 'workflow(s)'. The shipped app uses 'room' in user-facing copy ('What is this room for?' in components/navigation.tsx:152, '…or just start typing a room' in GroundLine, 'What the Briefing room does'). The finding correctly notes that on 'motion' the page is arguably closer to §2 than the app is. Since it mostly asks canon to settle the words, low is right.",
+  "fix_status_2026_10_02": {
+   "status": "not a map change",
+   "note": "Needs a canon decision on \"room\" and \"motion\" as user-facing words. The map keeps \"product area\" for now."
+  }
  },
  {
   "dimension": "standard",
@@ -405,7 +485,11 @@
   "recommendation": "Add JS entries to the map and apply the approved wording to them. Examples: chip 'The morning read' → 'Morning briefing'; its cap → 'Every 30 minutes, Antaeus reviews workspace data and records changes in plain sentences. Each morning you get a short summary and the highest-priority action.' Reuse #144 for the 'A live call' cap and #45 for its kicker. Chip 'A deal going quiet' → 'A deal at risk'; cap → 'Future Autopsy projects how a deal is likely to be lost, identifies the recurring risk pattern, shows the days remaining, and links to the product area where you can address it.' Scene h3 → 'Warby Parker is projected to be lost within 20 days.' 'Marcus goes quiet in week two, nobody signs' → 'If Marcus stops responding in week two, nobody signs'. 'The smallest fix · get a second name in the room this week' → 'Smallest corrective action · add a second buyer contact this week'. Reuse #75, #77, #78 and the TOC fixes for 'The handoff'. For BENCH, rewrite all 24 strings as two halves, e.g. a:'25% win rate' / as:'benchmark · typical range 20–30%', b:'3× pipeline coverage' / bs:'enough active pipeline that one lost or delayed deal does not put the quarter below target', c:'45-day sales cycle' / cs:'typical range 30–60 days'. Split the static #183-#185 replacements into the same b/span halves. Change the aria-labels to 'Choose a product example', 'Previous example', and 'Next example'.",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. The map's highest logical-unit line is 1836 and its highest raw-node line is 1839, so nothing in the script range (1845-2266) is mapped. None of 'morning read', 'MOMENTS', 'BENCH', '1 in 4 closes', 'going quiet' or 'aria-label' appears in the map, audit or handoff. MOMENTS (source.html:2073-2133) holds chip labels, captions and scenes with 'goes quiet', 'dies in 20 days', 'routes you to the room', 'get a second name in the room', 'owned the number', 'had to go and ask', 'The week to run' and '5 of 7 parts ready'. The 'every deal you have won rode...' sentence is split by <b> with a lowercase 'every', so the exact-match leaf rule cannot reach it. On change, BENCH (2219-2232) writes the old '1 in N closes' / 'in flight' / 'slipping' / 'going quiet' strings into #pace-a, #pace-as, #pace-b, #pace-bs, #pace-c and #pace-cs. Static #183-#185 merge <b id=pace-a> and <span id=pace-as> into one string, so the first select change reverts or mixes formats. The aria-labels 'Open a room', 'Previous room' and 'Next room' (L989/997/1001) are confirmed. The handoff forbids rewriting beyond the map, so the old wording ships on interaction."
+  "skeptic_reasoning": "Confirmed. The map's highest logical-unit line is 1836 and its highest raw-node line is 1839, so nothing in the script range (1845-2266) is mapped. None of 'morning read', 'MOMENTS', 'BENCH', '1 in 4 closes', 'going quiet' or 'aria-label' appears in the map, audit or handoff. MOMENTS (source.html:2073-2133) holds chip labels, captions and scenes with 'goes quiet', 'dies in 20 days', 'routes you to the room', 'get a second name in the room', 'owned the number', 'had to go and ask', 'The week to run' and '5 of 7 parts ready'. The 'every deal you have won rode...' sentence is split by <b> with a lowercase 'every', so the exact-match leaf rule cannot reach it. On change, BENCH (2219-2232) writes the old '1 in N closes' / 'in flight' / 'slipping' / 'going quiet' strings into #pace-a, #pace-as, #pace-b, #pace-bs, #pace-c and #pace-cs. Static #183-#185 merge <b id=pace-a> and <span id=pace-as> into one string, so the first select change reverts or mixes formats. The aria-labels 'Open a room', 'Previous room' and 'Next room' (L989/997/1001) are confirmed. The handoff forbids rewriting beyond the map, so the old wording ships on interaction.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "The addendum is approved and folded into the map as js_and_attribute_units (50 changes, 42 recorded keeps)."
+  }
  },
  {
   "dimension": "standard",
@@ -421,7 +505,11 @@
   "recommendation": "Change the leaf to \"The ask\" → \"Your request\" (or \"Meeting request\"). Add the leaf \"Their ask\" → \"Buyer's request\" so the contracting card matches #161. Also consider \"12 months of fees, breach capped higher\" → \"Liability cap: 12 months of fees; higher cap for data breaches\".",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. Raw node 277 (L1192, '<b>The ask</b><span>20 minutes next week</span>') is the only occurrence of 'The ask'. It sits under the seller's draft to Lena ('Worth twenty minutes...'), and its standalone_replacement is 'Buyer request', which reverses who is asking. Raw node 354 'Their ask' (L1269) has standalone_replacement null, while 'Your line' becomes 'Your position'. The contracting card therefore reads 'Their ask' next to 'Your position', and #161 says 'the buyer's request'. It is a real meaning error the PR introduced, but it is one demo label, so medium rather than high."
+  "skeptic_reasoning": "Confirmed. Raw node 277 (L1192, '<b>The ask</b><span>20 minutes next week</span>') is the only occurrence of 'The ask'. It sits under the seller's draft to Lena ('Worth twenty minutes...'), and its standalone_replacement is 'Buyer request', which reverses who is asking. Raw node 354 'Their ask' (L1269) has standalone_replacement null, while 'Your line' becomes 'Your position'. The contracting card therefore reads 'Their ask' next to 'Your position', and #161 says 'the buyer's request'. It is a real meaning error the PR introduced, but it is one demo label, so medium rather than high.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Leaf removed; \"Their ask\" / \"Your line\" stay a pair."
+  }
  },
  {
   "dimension": "standard",
@@ -438,7 +526,11 @@
   "recommendation": "#36 and #73 → \"Chomps announced two plants that will need several hundred production hires and appears to have limited recruiting capacity. Antaeus ranks Chomps first because it has a recent hiring trigger and outreach is your least-completed activity.\" Change the leaf to \"Two plants announced · recruiting capacity appears limited\" so the hedge is consistent.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed from the map. #36 and #73 replacements open 'Two plants announced[ this month], several hundred [production] hires planned, no apparent recruiting bench.' That is a comma-stacked, verbless echo of the §6 'Reject' example, and both units still list issues_after ['sales_idiom']. #21 says 'appears to have limited recruiting capacity' and the leaf says 'limited recruiting capacity' without a hedge, so the same fact is worded three ways. 'ranks Chomps highly' sits beside the demo's '#1 of 12'."
+  "skeptic_reasoning": "Confirmed from the map. #36 and #73 replacements open 'Two plants announced[ this month], several hundred [production] hires planned, no apparent recruiting bench.' That is a comma-stacked, verbless echo of the §6 'Reject' example, and both units still list issues_after ['sales_idiom']. #21 says 'appears to have limited recruiting capacity' and the leaf says 'limited recruiting capacity' without a hedge, so the same fact is worded three ways. 'ranks Chomps highly' sits beside the demo's '#1 of 12'.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "One hedge everywhere (\"appears to have limited recruiting capacity\" / \"small recruiting team\" in the one-line mock)."
+  }
  },
  {
   "dimension": "standard",
@@ -473,7 +565,11 @@
   "recommendation": "Use one fact everywhere: \"no champion activity for 14 days\" (or \"buyer\" everywhere). Handoff leaf → \"no champion activity for 14 days\" with no superlative. #88 → \"Liquid Death has had no champion activity for 14 days. Its three-person people team is in the middle of a product launch, which may explain the delay.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed but minor. After the map, Liquid Death reads 'no champion activity' (L671), 'no buyer activity for 14 days — highest-risk open deal' (L931), 'no recent buyer activity for 14 days; its people team is three people and mid-launch' (#88), and 'has had no recent buyer activity' (L1431). Warby Parker is red and first on the at-risk list elsewhere, so 'highest-risk' conflicts, although the source already said 'your worst open deal'. The PR's translation makes that inherited claim more precise, which runs against §21. The redundancy and awkwardness in #88 are real. Low, because the superlative is inherited."
+  "skeptic_reasoning": "Confirmed but minor. After the map, Liquid Death reads 'no champion activity' (L671), 'no buyer activity for 14 days — highest-risk open deal' (L931), 'no recent buyer activity for 14 days; its people team is three people and mid-launch' (#88), and 'has had no recent buyer activity' (L1431). Warby Parker is red and first on the at-risk list elsewhere, so 'highest-risk' conflicts, although the source already said 'your worst open deal'. The PR's translation makes that inherited claim more precise, which runs against §21. The redundancy and awkwardness in #88 are real. Low, because the superlative is inherited.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "One fact everywhere: no champion update for 14 days; no superlative."
+  }
  },
  {
   "dimension": "standard",
@@ -493,7 +589,11 @@
   "recommendation": "#104 → \"A new hire can execute the process with founder support\". #17 → \"...Antaeus reviews your accounts, deals, and calls throughout the day and each morning shows what needs attention.\" #109 → \"Open the dashboard to see where your accounts and deals stand, then the highest-priority action for the day.\" #177 → \"...identifies any assumption outside the benchmark range, and shows how much revenue is at risk if it is wrong.\" #244 → \"Antaeus also keeps the reasoning, account context, and sales process you record, so a new hire can do the work without asking you.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Partly valid. #17 'Each morning, Antaeus reviews...' is a new, mild inconsistency with #95/#96 ('Every 30 minutes'). #104 'A new hire can execute the process' sits beside a state strip whose current state is now labeled 'Usable with founder support', although the source's 'Someone else could run it' had the same meaning. Other items are weak. #109 is taken verbatim from COPY_STANDARD §5's own 'Prefer' example. #244/#299 'documents' is a fair description of recording as you work. #177's 'identifies which assumption' mirrors the source's 'names the one assumption that's optimistic'. Overstated at medium."
+  "skeptic_reasoning": "Partly valid. #17 'Each morning, Antaeus reviews...' is a new, mild inconsistency with #95/#96 ('Every 30 minutes'). #104 'A new hire can execute the process' sits beside a state strip whose current state is now labeled 'Usable with founder support', although the source's 'Someone else could run it' had the same meaning. Other items are weak. #109 is taken verbatim from COPY_STANDARD §5's own 'Prefer' example. #244/#299 'documents' is a fair description of recording as you work. #177's 'identifies which assumption' mirrors the source's 'names the one assumption that's optimistic'. Overstated at medium.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#17, #104, #109, #177, #244, #299 rewritten as recommended."
+  }
  },
  {
   "dimension": "standard",
@@ -508,7 +608,11 @@
   "recommendation": "R → \"Your sales process includes who you target, how you reach them, what you ask on calls, and how you advance a deal to signature. In a founder-led company, much of that knowledge is undocumented. Antaeus records it as you work, inside the same product areas you already use: account priorities, actual deal status, the discovery questions that led to a second meeting, and pilot results. There is no separate documentation step. When your first go-to-market hire starts, they use the same workspace and read that context directly instead of relying on you to explain it from memory.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. #70's replacement adds 'how you qualify opportunities' and 'the reasoning behind decisions', which the source does not contain. It turns the specific 'the questions that won a second meeting' into 'discovery questions that worked' (§20), and drops 'inside the rooms you already work in / Nothing gets filed away for later'. The mandated 'how you advance a deal to signature' fix is present. Severity is low: the added claims match real product features (Deal Workspace qualification, deal judgment), and 'records it as you work' keeps most of the dropped point."
+  "skeptic_reasoning": "Confirmed. #70's replacement adds 'how you qualify opportunities' and 'the reasoning behind decisions', which the source does not contain. It turns the specific 'the questions that won a second meeting' into 'discovery questions that worked' (§20), and drops 'inside the rooms you already work in / Nothing gets filed away for later'. The mandated 'how you advance a deal to signature' fix is present. Severity is low: the added claims match real product features (Deal Workspace qualification, deal judgment), and 'records it as you work' keeps most of the dropped point.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#70 rewritten; the hire gets the handoff kit you share."
+  }
  },
  {
   "dimension": "standard",
@@ -534,7 +638,11 @@
   "recommendation": "#176 → \"Do you have enough pipeline and activity to hit your revenue target?\" #21/#123 → \"...which will require several hundred production hires on a deadline\". #171 → \"checks the plan's assumptions against benchmarks\". #114 → \"you only need to answer their questions and handle exceptions.\" #111 → \"shows how many days since the last buyer activity\". #139 → \"read the contact's posts\". #215 → \"Poppy replied 12 days after your last message · 28m ago\". #67 → \"Left the Founder-dependent state 3 weeks ago\". #197 → \"Future Autopsy projects how and when a deal is likely to be lost.\" #191 → \"Use it during the discovery call itself.\" #69 → \"One sales process that both the founder and the first hire can use.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Some items are real: #176 'Is your current pipeline and activity enough' has a plural compound subject with 'Is'; #114 'answer exceptions and questions' is awkward; #215 'replied after 12 days without a response' is ambiguous; #191 'from this workspace' inside the Discovery Studio card has a wrong referent. Several others are stylistic preference rather than errors: #21/#123 'creating ... hires', #171 'benchmark assumptions', #111, #139 'follow relevant posts', #67, and #69's dropped articles in a headline. Overstated at medium."
+  "skeptic_reasoning": "Some items are real: #176 'Is your current pipeline and activity enough' has a plural compound subject with 'Is'; #114 'answer exceptions and questions' is awkward; #215 'replied after 12 days without a response' is ambiguous; #191 'from this workspace' inside the Discovery Studio card has a wrong referent. Several others are stylistic preference rather than errors: #21/#123 'creating ... hires', #171 'benchmark assumptions', #111, #139 'follow relevant posts', #67, and #69's dropped articles in a headline. Overstated at medium.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "All listed units rewritten."
+  }
  },
  {
   "dimension": "standard",
@@ -566,7 +674,11 @@
   "recommendation": "R → \"No discovery calls logged this week, which is below your planned weekly activity. Schedule a call →\" (or \"Log a call →\").",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. The #90 original is 'No discovery calls logged this week — the rhythm is slipping. Pick up a call →', and the replacement is '... below your planned weekly activity. Review a call →'. With zero calls logged there is nothing to review, so the PR's rewrite breaks the next action (§1)."
+  "skeptic_reasoning": "Confirmed. The #90 original is 'No discovery calls logged this week — the rhythm is slipping. Pick up a call →', and the replacement is '... below your planned weekly activity. Review a call →'. With zero calls logged there is nothing to review, so the PR's rewrite breaks the next action (§1).",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#90: \"No discovery calls logged in the last 7 days. Plan a call →\"."
+  }
  },
  {
   "dimension": "standard",
@@ -592,7 +704,11 @@
   "recommendation": "#3/#9 → \"Product tour\" (or retarget to #all-rooms). #10/#312 → \"Morning briefing\". Use one Pace label everywhere: \"Pace (revenue plan)\" in nav/footer, and \"Pace. Antaeus converts...\" in #171. #167 → \"Future Autopsy (deal risk analysis). Antaeus projects...\". #158 → \"Running a pilot.\" #50 → \"A pilot whose results the buyer's manager can use to decide.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed in part. 'Product areas' (#3/#9) links to #rooms ('Take a closer look', a four-example viewer), while 'Every product area' (#311) links to #all-rooms. Pace carries 'Revenue plan', 'Revenue target plan', 'Revenue plan and targets' and 'Pace'. #50 changes 'a pilot that gives their boss something to act on' into 'a pilot plan', which is a meaning shift. However, 'Product areas', 'Activity monitoring' and 'Revenue plan' are the preferred labels in COPY_STANDARD §12 itself, the duplicate destination labeling existed before ('The rooms' / 'Every room'), and the surveillance reading is subjective. Low."
+  "skeptic_reasoning": "Confirmed in part. 'Product areas' (#3/#9) links to #rooms ('Take a closer look', a four-example viewer), while 'Every product area' (#311) links to #all-rooms. Pace carries 'Revenue plan', 'Revenue target plan', 'Revenue plan and targets' and 'Pace'. #50 changes 'a pilot that gives their boss something to act on' into 'a pilot plan', which is a meaning shift. However, 'Product areas', 'Activity monitoring' and 'Revenue plan' are the preferred labels in COPY_STANDARD §12 itself, the duplicate destination labeling existed before ('The rooms' / 'Every room'), and the surveillance reading is subjective. Low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Product tour\" for #rooms, \"Every product area\" for #all-rooms, \"Morning briefing\", one Pace name, \"Future Autopsy\", \"Running a pilot\"."
+  }
  },
  {
   "dimension": "standard",
@@ -612,7 +728,11 @@
   "recommendation": "TOC → \"Who buys and who doesn't\", \"Outreach that got replies\", \"Questions that led to a second meeting\", \"Where deals stall\", \"Lost deals and why\", \"Why you win\". Pattern → \"urgency pushed before the problem was agreed\" (confirm with founder). \"Compose it →\" → \"Draft the email →\". #54 → \"5 of 7 participants use the product daily\". #150 → \"247 of 300 account slots used\". #160 → \"Your security documents already answer 36 of their 40 questions\". Steps → \"Opening\" / \"Close the call\". Chip → \"Recent trigger\".",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. The TOC raw nodes (L724-729, L939-944) have no replacement except 'The week to run', so one of seven items is rewritten. 'pressure before clarity' (raw 373/427) is kept. 'Compose it →' (#22/#37/#74) and '5 of 7 using it day to day' (#54) are kept, with issues_after ellipsis flags. '247 of a 300 seat budget spent' (#150) collides with 'no seat count' (#235) and with the adjacent '247 found' card. The cold-call steps 'Open'/'Wrap' sit next to rewritten steps. The 'A live trigger' chip (raw 332) is kept while #151 says 'recent trigger'. The new kicker #31 'High priority · recent company change' sits over 'Notion · Opened 1,300 roles last year', an overclaim the PR introduced."
+  "skeptic_reasoning": "Confirmed. The TOC raw nodes (L724-729, L939-944) have no replacement except 'The week to run', so one of seven items is rewritten. 'pressure before clarity' (raw 373/427) is kept. 'Compose it →' (#22/#37/#74) and '5 of 7 using it day to day' (#54) are kept, with issues_after ellipsis flags. '247 of a 300 seat budget spent' (#150) collides with 'no seat count' (#235) and with the adjacent '247 found' card. The cold-call steps 'Open'/'Wrap' sit next to rewritten steps. The 'A live trigger' chip (raw 332) is kept while #151 says 'recent trigger'. The new kicker #31 'High priority · recent company change' sits over 'Notion · Opened 1,300 roles last year', an overclaim the PR introduced.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "\"247 of 300 account slots used\", \"Likely cause · pushed too early\", TOC item \"What the first week looks like\" (live title). \"Compose it →\" and the other TOC items stay as the mocks show them."
+  }
  },
  {
   "dimension": "standard",
@@ -633,7 +753,11 @@
   "recommendation": "Swap rungs 3 and 4, making Connect a completed step and Give the current step. Rung labels → \"Ask for time once she has engaged\" / \"Share something useful before asking\" / \"Connect once she recognizes your name\" / \"Comment usefully on Poppy's post\" / \"Read Poppy's posts\". #138 → \"Poppy accepted your connection request last week. Share something useful today; do not ask for time yet.\" #139 → \"...read the contact's posts, comment usefully on one, send a connection request once they recognize your name, and share something useful before asking for time. Do not open with a direct message.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. In DOM order (L1215-1219, bottom-up) the rungs run Watch → Say something useful → Give (sc-rung--here) → Connect → Ask, while the approved #139 tabcap gives follow → contribute → connect → offer value → ask. The kept #138 says 'Poppy accepted last week' although Connect is shown as not reached. 'she'/'her' appear before Poppy is named. The contradiction existed in the source (the old tabcap had the same order) and is a demo-data issue, so low."
+  "skeptic_reasoning": "Confirmed. In DOM order (L1215-1219, bottom-up) the rungs run Watch → Say something useful → Give (sc-rung--here) → Connect → Ask, while the approved #139 tabcap gives follow → contribute → connect → offer value → ask. The kept #138 says 'Poppy accepted last week' although Connect is shown as not reached. 'she'/'her' appear before Poppy is named. The contradiction existed in the source (the old tabcap had the same order) and is a demo-data issue, so low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Rungs reordered to canon (watch → comment → connect → give → ask); Connect is done and Give is current, matching \"Poppy accepted last week\"."
+  }
  },
  {
   "dimension": "standard",
@@ -651,7 +775,11 @@
   "recommendation": "#184 → \"3.5× pipeline coverage\" / \"enough active pipeline that losing or delaying a few deals does not put the quarter below target\". #164 → \"Introductions. Antaeus matches...\". #191 see grammar finding. #279 → \"Expect unfinished areas while the beta is active.\" Widen the validation regex to catch inflections (slip\\w*, quiet, run\\w*, carr\\w+, owned the number, go ask).",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "#184 'absorb normal deal slippage' is a genuine slip-family proxy (§3), and the unit still flags punctuation_as_logic. The rest is weak. 'Warm introduction' is literal sales usage, which the standard allows. 'Run the discovery call' names what is being run, as §3 asks. 'rough edges' is an idiom rather than the Edge concept. The claim that validation would not catch these is partly wrong: the handoff does not specify whole-word matching, so 'slip' and 'warm' in its term list would match 'slippage' and 'Warm'. It is true that 'run', 'owned the number' and 'had to go ask' are absent from that list."
+  "skeptic_reasoning": "#184 'absorb normal deal slippage' is a genuine slip-family proxy (§3), and the unit still flags punctuation_as_logic. The rest is weak. 'Warm introduction' is literal sales usage, which the standard allows. 'Run the discovery call' names what is being run, as §3 asks. 'rough edges' is an idiom rather than the Edge concept. The claim that validation would not catch these is partly wrong: the handoff does not specify whole-word matching, so 'slip' and 'warm' in its term list would match 'slippage' and 'Warm'. It is true that 'run', 'owned the number' and 'had to go ask' are absent from that list.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#184, #164, #191, #279 rewritten."
+  }
  },
  {
   "dimension": "standard",
@@ -675,7 +803,11 @@
   "recommendation": "#107 → \"Other weeks, three deals are behind and you cannot tell which one to save first. Antaeus ranks them and shows why.\" #106 → \"Antaeus ranks your work whether you have one call or three deals at risk.\" #77 → \"Every deal you closed came through a buyer who controlled the budget. The deals that stalled came through teams that needed someone else's approval.\" 'projected impact' → 'how much revenue is at risk if that assumption is wrong'. #99 → \"A spreadsheet and what you remember\". #299 → \"Yes. Antaeus uses language models to analyze workspace data, detect changes, and draft text. You are paying for the ranking and the recorded sales context, not for a particular model.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed against §3's instruction not to substitute blindly and §23. #77's replacement pastes the §3 table verbatim ('directly accountable for the relevant business metric', 'needed approval from another decision-maker'). 'Relevant business metric' names nothing. #107's 'The same tools and account context remain available in either case' is empty and drops the 'cannot tell which one is worth saving' ranking problem. #106 'supports the same workflow' is filler. 'projected impact' in #113/#177/#265 never says impact on what (§20). 'undocumented founder knowledge' recurs in #99/#244/#299."
+  "skeptic_reasoning": "Confirmed against §3's instruction not to substitute blindly and §23. #77's replacement pastes the §3 table verbatim ('directly accountable for the relevant business metric', 'needed approval from another decision-maker'). 'Relevant business metric' names nothing. #107's 'The same tools and account context remain available in either case' is empty and drops the 'cannot tell which one is worth saving' ranking problem. #106 'supports the same workflow' is filler. 'projected impact' in #113/#177/#265 never says impact on what (§20). 'undocumented founder knowledge' recurs in #99/#244/#299.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#77, #106, #107, #113, #177, #299 and others rewritten in plain words."
+  }
  },
  {
   "dimension": "standard",
@@ -701,7 +833,11 @@
   "recommendation": "#30 → \"...need action now, which have recent engagement, which have new signals, and which have had no recent activity.\" #39 → \"...with the smallest corrective action for each.\" #95 → \"...a deal with no progress for three weeks, an account with no engagement, a pilot where half the enrolled people never signed in. Each morning you get a short summary and the highest-priority action, with the reason it ranks first.\" #148 → \"...save the search; Antaeus returns matching companies. Before a company is added to your tracked accounts, you confirm it fits your target, how you will get in, and how you will reach out.\" #208 → \"...named after the Antaeus myth: Antaeus stayed strong while he touched the ground.\" #224 → \"Your data is not sold, shared, or used to train public models; your accounts, deals, and calls are your commercial position.\" #297 → \"...reports one of five readiness states, not a score: ...\"",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. #30 collapses the four bands (act now / reach while warm / emerging / going cold) into three and loses the recent-engagement band. #39 drops 'smallest'. #95 swaps specific examples for generic categories. #208 says 'after the Antaeus myth' with no explanation. #224 drops 'nothing shared' and says 'not sold' twice, which weakens a trust claim. #297 drops 'a state, not a score' and the condition for 'repeatable'. #255 turns 'You, this quarter' into a founder or small-team audience that overlaps the Antaeus column."
+  "skeptic_reasoning": "Confirmed. #30 collapses the four bands (act now / reach while warm / emerging / going cold) into three and loses the recent-engagement band. #39 drops 'smallest'. #95 swaps specific examples for generic categories. #208 says 'after the Antaeus myth' with no explanation. #224 drops 'nothing shared' and says 'not sold' twice, which weakens a trust claim. #297 drops 'a state, not a score' and the condition for 'repeatable'. #255 turns 'You, this quarter' into a founder or small-team audience that overlaps the Antaeus column.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#30, #39, #95, #129, #130, #148, #158, #208, #224 restore the dropped facts."
+  }
  },
  {
   "dimension": "standard",
@@ -716,7 +852,11 @@
   "recommendation": "Label → \"Suggestion\". Sentence → \"After Antaeus marks a deal as having no recent buyer activity, you usually open the account you flagged next. Open it automatically?\" #17 → \"...and shows what needs attention.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Raw node 171 'Noticed' (L1022) has no replacement. Joining the kept span 'You always open the account you flagged' with the leaf replacement gives 'the account you flagged after I flag a deal with no recent activity', with two 'flag's and first-person 'I'. The claim that §9 lists 'tells you' is a misquote: the list is sees, notices, thinks, knows, wakes, remembers, flinches, hands you, and reads your mind. 'Noticed' is squarely covered."
+  "skeptic_reasoning": "Confirmed. Raw node 171 'Noticed' (L1022) has no replacement. Joining the kept span 'You always open the account you flagged' with the leaf replacement gives 'the account you flagged after I flag a deal with no recent activity', with two 'flag's and first-person 'I'. The claim that §9 lists 'tells you' is a misquote: the list is sees, notices, thinks, knows, wakes, remembers, flinches, hands you, and reads your mind. 'Noticed' is squarely covered.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "The Briefing suggestion is a real proposal (\"You opened Deal Workspace six times this week…\"), labeled \"Suggestion\"."
+  }
  },
  {
   "dimension": "standard",
@@ -734,7 +874,11 @@
   "recommendation": "#33 → \"Instead of a long task list, Antaeus ranks one action first and shows the evidence behind the ranking.\" #19 → \"Highest-priority action · #1 of 12 ranked actions\".",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. #33's replacement 'Not a fourteen-item task list.' (L650) sits directly under the '#1 of 12' demo (L653, and also L599 and L1098). The map removed 'thirteen' from #97/#293 but kept 'fourteen' here. Minor, because 'fourteen' is used rhetorically."
+  "skeptic_reasoning": "Confirmed. #33's replacement 'Not a fourteen-item task list.' (L650) sits directly under the '#1 of 12' demo (L653, and also L599 and L1098). The map removed 'thirteen' from #97/#293 but kept 'fourteen' here. Minor, because 'fourteen' is used rhetorically.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#33 drops \"fourteen\"; #19 says \"#1 of 12 ranked actions\"."
+  }
  },
  {
   "dimension": "standard",
@@ -755,7 +899,11 @@
   "recommendation": "#75 → \"If a hire started Monday · 5 of 7 handoff sections complete\"; #269 → \"Yes — seven handoff sections a new hire can read on day one\"; #270 → \"Partly — a new hire gets the records, not the reasoning\"; #29 → \"Every account you track...\"; ticker → \"...accounts you already track.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. #75 says '5 of 7 readiness areas complete' while #60 says 'Five readiness states'. #269 says 'seven documented areas'. The kept #270 still says 'they inherit' although #268 rewrote 'A hire can inherit it'. Account tracking appears as 'follow' (#29), 'Tracked' (#82, #148) and 'watch' (kept raw 211/218, 'accounts you already watch'). This is cosmetic terminology drift."
+  "skeptic_reasoning": "Confirmed. #75 says '5 of 7 readiness areas complete' while #60 says 'Five readiness states'. #269 says 'seven documented areas'. The kept #270 still says 'they inherit' although #268 rewrote 'A hire can inherit it'. Account tracking appears as 'follow' (#29), 'Tracked' (#82, #148) and 'watch' (kept raw 211/218, 'accounts you already watch'). This is cosmetic terminology drift.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"handoff parts\", \"parts ready\", and \"track\" for accounts everywhere except the live \"Watching\" mock label."
+  }
  },
  {
   "dimension": "standard",
@@ -781,7 +929,11 @@
   "recommendation": "#231 → \"Set up your workspace once. Get a prioritized briefing every morning.\" #304 → \"Do the setup once. Antaeus keeps your sales context current after that.\" #95 → \"...Antaeus ranks the highest-priority action and shows why that action ranks first.\" #129 → \"The buyer's answer gives you...\". #163 → \"Rafael and the Portillo's buyer are both Chicago operators. The draft is nearly complete...\". #281 → \"...We do not market Antaeus by which model it uses.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. #163 keeps the fragment 'One Chicago operator to another.' #286 opens its FAQ answer with 'About one afternoon.' #231 and #304 share an identical second sentence ('Get a prioritized briefing every morning.'), and #304's 'Document the sales process once' conflicts with #70's 'records it as you work'. #280 and #281 both open 'Antaeus uses language models', and #281 adds the meta-line 'Model branding is not part of the product pitch'."
+  "skeptic_reasoning": "Confirmed. #163 keeps the fragment 'One Chicago operator to another.' #286 opens its FAQ answer with 'About one afternoon.' #231 and #304 share an identical second sentence ('Get a prioritized briefing every morning.'), and #304's 'Document the sales process once' conflicts with #70's 'records it as you work'. #280 and #281 both open 'Antaeus uses language models', and #281 adds the meta-line 'Model branding is not part of the product pitch'.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#163, #231, #304 and others rewritten."
+  }
  },
  {
   "dimension": "standard",
@@ -805,7 +957,11 @@
   "recommendation": "#249 → \"Ranking the next sales action and showing why it ranks first\"; #258 → \"A full list, in the order you last sorted it\"; #259 → \"Whatever you entered last\"; #266 → \"No — it reports the forecast you entered\"; #277/#323 → \"What to expect in the beta\"; #284 → \"quotas across a team\"; #226 → \"...instead of archiving it where we could still read it\"; #228 → \"The option sits under Advanced because most users will not need it.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Row 'What it's for' mixes the imperative #249 'Rank...', the kept gerund 'Storing...' and the noun phrase #251. #258 'the user's last sort' and #266 'entered by the user' switch to third person (the #266 source read 'you entered'). #277 'Current beta limitations.' labels a section whose #280/#281 describe AI use. #284 introduces 'multi-rep quotas' although the source was 'quotas across a team' and repo canon retired 'rep'. #226 'for continued access' drops the point that Antaeus can no longer read the data. #228 'The option is secondary' is awkward."
+  "skeptic_reasoning": "Confirmed. Row 'What it's for' mixes the imperative #249 'Rank...', the kept gerund 'Storing...' and the noun phrase #251. #258 'the user's last sort' and #266 'entered by the user' switch to third person (the #266 source read 'you entered'). #277 'Current beta limitations.' labels a section whose #280/#281 describe AI use. #284 introduces 'multi-rep quotas' although the source was 'quotas across a team' and repo canon retired 'rep'. #226 'for continued access' drops the point that Antaeus can no longer read the data. #228 'The option is secondary' is awkward.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#249, #258, #259, #266, #277, #323, #284, #226, #228 rewritten."
+  }
  },
  {
   "dimension": "standard",
@@ -856,7 +1012,11 @@
   "recommendation": "Keep the app's state labels on every product mock and in the FAQ. If plain descriptions are wanted, add them as secondary text next to the real label, e.g. \"Building: at least two parts of your sales process have real activity.\" Do not use \"Partially documented\"; readiness never measures documentation. Renaming the states in the product itself is a canon §4.17 mind change and needs founder approval before the page can claim it. Replace #67 with \"Left 'You are the system' behind\" and drop the \"3 weeks ago\" duration.",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. src/lib/readiness/types.ts:35-40 VERDICT_LABEL is \"You are the system / Building / Inheritable with guardrails / Hire-ready / Hire-ready, repeatable\". src/dashboard/v4/lib/cockpit.ts:22-28 GATE_LABELS is \"You are the system / Building / Inheritable / Hire-ready / Repeatable\", and the hero sc-stand at source.html:592-596 copies it exactly. The map's standalone_leaf_replacements rename all of these (You are the system→Founder-dependent, Building→Partially documented, Inheritable→Usable with founder support, Repeatable→Hire-ready and repeatable). FAQ #297 now names five states the shipped UI never shows. gateBuilding (verdict.ts:178-186) passes when ≥2 dimensions score ≥8. Those dimensions are ICP/outreach/discovery/deals/pilot activity, and the app's gloss is \"Real activity is on the board…\", so \"Partially documented\" misdescribes the gate. The ClimbDrawer done rung renders only \"Left behind\", with no duration. The \"3 weeks ago\" in #67 was already in the original copy, so that sub-point is pre-existing. COPY_STANDARD §17 recommends these labels, but applying them to screens the footer calls real product areas, and to a factual FAQ answer, is the error."
+  "skeptic_reasoning": "Confirmed. src/lib/readiness/types.ts:35-40 VERDICT_LABEL is \"You are the system / Building / Inheritable with guardrails / Hire-ready / Hire-ready, repeatable\". src/dashboard/v4/lib/cockpit.ts:22-28 GATE_LABELS is \"You are the system / Building / Inheritable / Hire-ready / Repeatable\", and the hero sc-stand at source.html:592-596 copies it exactly. The map's standalone_leaf_replacements rename all of these (You are the system→Founder-dependent, Building→Partially documented, Inheritable→Usable with founder support, Repeatable→Hire-ready and repeatable). FAQ #297 now names five states the shipped UI never shows. gateBuilding (verdict.ts:178-186) passes when ≥2 dimensions score ≥8. Those dimensions are ICP/outreach/discovery/deals/pilot activity, and the app's gloss is \"Real activity is on the board…\", so \"Partially documented\" misdescribes the gate. The ClimbDrawer done rung renders only \"Left behind\", with no duration. The \"3 weeks ago\" in #67 was already in the original copy, so that sub-point is pre-existing. COPY_STANDARD §17 recommends these labels, but applying them to screens the footer calls real product areas, and to a factual FAQ answer, is the error.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Same fix. \"Partially documented\" is gone everywhere."
+  }
  },
  {
   "dimension": "claims",
@@ -876,7 +1036,11 @@
   "recommendation": "Say what is logged. For deals: \"no logged update in 14 days\" / \"no recorded progress in 14 days\". For watched accounts: \"no new company news in 14 days\". For the band: \"no new signals this week\". Rewrite #40 to \"Antaeus also looks at how long the deal has gone without an update and whether it has a dated next step.\" Rewrite #29 to \"ranked by recent company news\".",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. COPY_STANDARD §21 (lines 494-496) names this exact anti-pattern. Deal staleness is days since deal.updated_at (recovery.ts stalenessScore; vitals.ts staleDays), which measures seller data entry. The heartbeat signal_decay generator is ≥14 days with no public signal, text \"silent for N days — no fresh signal coverage\" (generators.ts:169, 250). The Signal Console \"Going cold\" band is heat<60 and no signal or account-add in 7 days (attention.ts classifyBand). Heat uses only signals: base 12/18 × confidence bonus × recency (heat.ts:57-66), with no touches or replies. Minor overstatement in the title: the product does record some buyer-side facts (touch outcome 'replied' via profile.hasReplies, calendar meetings), so \"nothing measures buyer activity\" is too broad. None of the surfaces these rewrites describe use that data, though, and \"no buyer activity for 14 days\" and \"tracks … buyer activity\" remain claims the evidence doesn't support."
+  "skeptic_reasoning": "Confirmed. COPY_STANDARD §21 (lines 494-496) names this exact anti-pattern. Deal staleness is days since deal.updated_at (recovery.ts stalenessScore; vitals.ts staleDays), which measures seller data entry. The heartbeat signal_decay generator is ≥14 days with no public signal, text \"silent for N days — no fresh signal coverage\" (generators.ts:169, 250). The Signal Console \"Going cold\" band is heat<60 and no signal or account-add in 7 days (attention.ts classifyBand). Heat uses only signals: base 12/18 × confidence bonus × recency (heat.ts:57-66), with no touches or replies. Minor overstatement in the title: the product does record some buyer-side facts (touch outcome 'replied' via profile.hasReplies, calendar meetings), so \"nothing measures buyer activity\" is too broad. None of the surfaces these rewrites describe use that data, though, and \"no buyer activity for 14 days\" and \"tracks … buyer activity\" remain claims the evidence doesn't support.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"No buyer activity\" is gone; copy says no logged update, no recorded progress, or no new company news."
+  }
  },
  {
   "dimension": "claims",
@@ -892,7 +1056,11 @@
   "recommendation": "Flag this to the founder as a product gap before shipping the copy. Until the delete also revokes share links and clears observations, captured meetings, the profile, and the Briefing, Phase F, and scheduling rows, reword #226 to what actually happens: \"Type the confirmation phrase and Antaeus permanently deletes your accounts, deals, calls, pilots, and handoff kit.\" Remove \"instead of archiving them for continued access\" and \"all of it\".",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. deleteCloudWorkspace (cloud-sync.ts:479-560) deletes exactly 12 tables: icps, deals, proofs, advisor_deployments, signal_console_accounts, sequences, discovery_call_logs, studio_artifacts, pipeline_settings, discovery_frameworks, readiness_snapshots, handoff_artifacts. Signals go too, via ON DELETE CASCADE from signal_console_accounts. Nothing else deletes anything. Observations have no delete policy and are \"NEVER hard-deleted\"; they cascade only when the workspaces row is deleted, and that row is never deleted. founding_gtm_shares stores a snapshot jsonb and is resolved anonymously by resolve_founding_gtm_share while revoked_at is null. Delete never revokes it, so a shared hire link survives \"delete everything\". captured_meetings, outdoors_events and workspace_profile are also outside the scope (cloud-sync.ts:278-281 says outdoors_events is \"Not yet in the delete scope\"). The overclaim existed in the original copy, but the rewrite keeps it, and this is a trust/privacy promise."
+  "skeptic_reasoning": "Confirmed. deleteCloudWorkspace (cloud-sync.ts:479-560) deletes exactly 12 tables: icps, deals, proofs, advisor_deployments, signal_console_accounts, sequences, discovery_call_logs, studio_artifacts, pipeline_settings, discovery_frameworks, readiness_snapshots, handoff_artifacts. Signals go too, via ON DELETE CASCADE from signal_console_accounts. Nothing else deletes anything. Observations have no delete policy and are \"NEVER hard-deleted\"; they cascade only when the workspaces row is deleted, and that row is never deleted. founding_gtm_shares stores a snapshot jsonb and is resolved anonymously by resolve_founding_gtm_share while revoked_at is null. Delete never revokes it, so a shared hire link survives \"delete everything\". captured_meetings, outdoors_events and workspace_profile are also outside the scope (cloud-sync.ts:278-281 says outdoors_events is \"Not yet in the delete scope\"). The overclaim existed in the original copy, but the rewrite keeps it, and this is a trust/privacy promise.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "#226/#301 name only what delete removes. Product gap still open: share links, observations, captured meetings and profile rows survive a delete."
+  }
  },
  {
   "dimension": "claims",
@@ -911,7 +1079,11 @@
   "recommendation": "#227: \"Share the handoff kit with a new hire as a read-only link. They can read all seven parts without your login, and you can revoke the link at any time.\" For #70 and #114, say what the hire actually receives today: the handoff kit plus whatever access you give them. Do not claim shared workspace access until the product supports it.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed on substance. SharePanel.tsx and share.ts describe an \"anonymous URL token, Founding-GTM-only scope\" that snapshots the seven sections into JSONB and serves /founding-gtm/share/<token> \"never touching live workspace tables\". No invite or member-add flow exists: workspaceMembers is only a data-client accessor, and Settings and other surfaces have no invite UI. #227 (\"view the workspace\"), #114 and #70 therefore overclaim. Lowered to medium because the originals made the same claim in nearly the same words (\"Share the workspace…\", \"they open the same workspace…\"), so the map preserves the overclaim rather than introducing it."
+  "skeptic_reasoning": "Confirmed on substance. SharePanel.tsx and share.ts describe an \"anonymous URL token, Founding-GTM-only scope\" that snapshots the seven sections into JSONB and serves /founding-gtm/share/<token> \"never touching live workspace tables\". No invite or member-add flow exists: workspaceMembers is only a data-client accessor, and Settings and other surfaces have no invite UI. #227 (\"view the workspace\"), #114 and #70 therefore overclaim. Lowered to medium because the originals made the same claim in nearly the same words (\"Share the workspace…\", \"they open the same workspace…\"), so the map preserves the overclaim rather than introducing it.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#70, #114, #227 promise the read-only handoff-kit link, not a workspace seat."
+  }
  },
  {
   "dimension": "claims",
@@ -931,7 +1103,11 @@
   "recommendation": "#95: \"Every 30 minutes, Antaeus checks for deals that have sat in one stage without a dated next step, watched accounts with no new company news, pilots past their readout date with no result, and weeks with no calls logged.\" #17 and #203: drop \"each morning\" as the cadence and describe what is there when the user opens it (\"When you open it, Antaeus shows what changed and ranks what needs attention first\"). #90: \"No discovery calls logged in the last 7 days.\" with a CTA like \"Plan a call\". Kept unit #89 (\"two of the four recruiters have not touched it\") also shows an observation the product never writes.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. The heartbeat has exactly four SQL generators (generators.ts): deal_decay (≥7 days at stage, no future next step), signal_decay (≥14 days, no signal), proof_staleness (past readout, no outcome), discovery_rhythm (MIN_CALLS_PER_WEEK = 1 constant). It reads only deals, signal_console_accounts, proofs and discovery_call_logs (index.ts NOUN_TABLES), never sequences. No adoption generator exists in src/lib/observations/generators or supabase/functions. The cron is */30, and the Briefing pipeline runs '0 6 * * 1', so there is no morning job. \"below your planned weekly activity\" is wrong because the floor is a fixed constant. Nuance: onboarding LandingStep labels its hand-back \"The morning · your one move\" and the Dashboard computes the ranking whenever it's opened, so \"each morning\" is loose rather than flatly false. #305 as an underclaim is minor."
+  "skeptic_reasoning": "Confirmed. The heartbeat has exactly four SQL generators (generators.ts): deal_decay (≥7 days at stage, no future next step), signal_decay (≥14 days, no signal), proof_staleness (past readout, no outcome), discovery_rhythm (MIN_CALLS_PER_WEEK = 1 constant). It reads only deals, signal_console_accounts, proofs and discovery_call_logs (index.ts NOUN_TABLES), never sequences. No adoption generator exists in src/lib/observations/generators or supabase/functions. The cron is */30, and the Briefing pipeline runs '0 6 * * 1', so there is no morning job. \"below your planned weekly activity\" is wrong because the floor is a fixed constant. Nuance: onboarding LandingStep labels its hand-back \"The morning · your one move\" and the Dashboard computes the ranking whenever it's opened, so \"each morning\" is loose rather than flatly false. #305 as an underclaim is minor.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#95 lists the four real 30-minute checks; #17 and #90 no longer describe a morning job or \"Review a call\"."
+  }
  },
  {
   "dimension": "claims",
@@ -949,7 +1125,11 @@
   "recommendation": "\"Antaeus ranks Chomps first because recent company news gives the account high heat and your outreach activity is below target.\" In #21, drop \"Your workspace shows no outreach to Chomps\" or mark it as sample data. Keep a confidence phrase in #23, e.g. \"Ranked #1 · stable lead\".",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Partly confirmed. Move cards come from Signal Console hot_accounts. Their rankingSignals are heat/recentCount/highConfidenceCount; health-snapshot emits no cause and no trigger type. Nothing computes per-account outreach, so \"Your workspace shows no outreach to Chomps\" is not something the engine knows (though the original's \"Nobody has called them\" made the same claim). The DashboardV4 conf row does show rankingConfidenceLabel (stable lead/supported/mixed signal), so \"Ranked #1\" drops it. Weaker parts: the readiness snapshot computes weakestDimension as a true minimum (readiness-snapshot-publisher.ts), and the app's own reason text says \"outreach is the weakest dimension\", so \"least-completed\" roughly matches app behavior. Heat is driven by recent signals, so \"because of a recent hiring trigger\" is loose, not wrong. Downgraded to low."
+  "skeptic_reasoning": "Partly confirmed. Move cards come from Signal Console hot_accounts. Their rankingSignals are heat/recentCount/highConfidenceCount; health-snapshot emits no cause and no trigger type. Nothing computes per-account outreach, so \"Your workspace shows no outreach to Chomps\" is not something the engine knows (though the original's \"Nobody has called them\" made the same claim). The DashboardV4 conf row does show rankingConfidenceLabel (stable lead/supported/mixed signal), so \"Ranked #1\" drops it. Weaker parts: the readiness snapshot computes weakestDimension as a true minimum (readiness-snapshot-publisher.ts), and the app's own reason text says \"outreach is the weakest dimension\", so \"least-completed\" roughly matches app behavior. Heat is driven by recent signals, so \"because of a recent hiring trigger\" is loose, not wrong. Downgraded to low.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Chomps copy states the news, high heat and that outreach is furthest behind; #23 keeps \"stable lead\"."
+  }
  },
  {
   "dimension": "claims",
@@ -965,7 +1145,11 @@
   "recommendation": "\"Outbound. Pick an account, a contact, and the trigger type. The draft names all three; you can't generate one without an account and a named contact.\" Remove \"blocks generic messages\" and \"requires … recent trigger\".",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. canGenerate (outbound-studio/state.ts:54-57) checks only non-empty accountName and contactName. EMPTY_RACK.trigger defaults to \"funding\". OutboundStudioV4.tsx:264 itself says \"(no live signal on this account yet — the trigger you picked carries the message)\". Send is copyMessage to the clipboard. No genericity detection exists, so \"blocks generic messages\" is a new, specific false capability claim and \"requires … recent trigger\" overstates what the gate checks."
+  "skeptic_reasoning": "Confirmed. canGenerate (outbound-studio/state.ts:54-57) checks only non-empty accountName and contactName. EMPTY_RACK.trigger defaults to \"funding\". OutboundStudioV4.tsx:264 itself says \"(no live signal on this account yet — the trigger you picked carries the message)\". Send is copyMessage to the clipboard. No genericity detection exists, so \"blocks generic messages\" is a new, specific false capability claim and \"requires … recent trigger\" overstates what the gate checks.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#117/#125: the draft needs an account and a named contact; no claim of blocking generic messages."
+  }
  },
  {
   "dimension": "claims",
@@ -986,7 +1170,11 @@
   "recommendation": "#177: \"Antaeus works your target back to daily messages and calls, using your deal size, win rate, and conversion rates. It compares those rates with benchmarks for your deal size, names the one that is most optimistic, and shows how many more messages and calls a day you'd need if it's wrong.\" #186 and #265: \"flags the assumption that is most above the benchmark\" (not \"outside the range\"). Change #170 to \"One assumption is optimistic: 28% is above the ~20% teams your size usually win.\" Add the JS BENCH strings to the map so the picker text stays consistent.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. ACV_BENCHMARKS.mid matches #183-185 (20/15-25%, 3.5×, 90/60-120). engine.ts computes daily touches from quota→ACV→win→m2o→show→t2m→days; cycle appears only in qualityScore. buildBelievability (pace.ts:177-238) compares win/m2o/t2m with benchmark point values, flags the max ratio when >1.1 (a 24% win rate vs 20% gets flagged inside the 15-25% band), states the cost in messages and calls a day, and never checks cycle or pessimistic inputs. The app's read is \"teams your size usually land near X%\", not the user's own history, so kept #170 is unsupported. The page JS BENCH table (source.html:2219-2231) is absent from the map (\"1 in 4 closes\", \"20 to 30%\" have 0 hits), so changing the picker would restore the old strings."
+  "skeptic_reasoning": "Confirmed. ACV_BENCHMARKS.mid matches #183-185 (20/15-25%, 3.5×, 90/60-120). engine.ts computes daily touches from quota→ACV→win→m2o→show→t2m→days; cycle appears only in qualityScore. buildBelievability (pace.ts:177-238) compares win/m2o/t2m with benchmark point values, flags the max ratio when >1.1 (a 24% win rate vs 20% gets flagged inside the 15-25% band), states the cost in messages and calls a day, and never checks cycle or pessimistic inputs. The app's read is \"teams your size usually land near X%\", not the user's own history, so kept #170 is unsupported. The page JS BENCH table (source.html:2219-2231) is absent from the map (\"1 in 4 closes\", \"20 to 30%\" have 0 hits), so changing the picker would restore the old strings.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#170, #177, #186, #265 describe the most-optimistic-assumption check."
+  }
  },
  {
   "dimension": "claims",
@@ -1007,7 +1195,11 @@
   "recommendation": "#167 and #198: \"names the most likely cause of loss\" instead of \"recurring risk pattern\". Remove or replace \"seen 4×\" and \"4×\". Replace \"Written 45 days early\" with something that matches the per-deal projection, e.g. \"Projected from today's deal data\".",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. FutureAutopsyV4.tsx:226-227 renders \"The pattern\" as doc.causes[0].label, the top per-deal cause, and nothing counts recurrence across deals. The only 'seen' in future-autopsy is a dedupe Set in autopsy-data.ts. projectHorizonDays (autopsy.ts:60-78) is 90−risk clamped 7-90 and capped by close date, so the kept \"Written 45 days early\" / \"45 days early\" reflects the retired flat constant and contradicts \"within 20 days\". Raw node 374 \"seen 4×\" is uncovered in the map (covered_by_logical_unit: null), and the JS scene string at ~source.html:2108 repeats it. \"Recurring\" is new wording the map introduces."
+  "skeptic_reasoning": "Confirmed. FutureAutopsyV4.tsx:226-227 renders \"The pattern\" as doc.causes[0].label, the top per-deal cause, and nothing counts recurrence across deals. The only 'seen' in future-autopsy is a dedupe Set in autopsy-data.ts. projectHorizonDays (autopsy.ts:60-78) is 90−risk clamped 7-90 and capped by close date, so the kept \"Written 45 days early\" / \"45 days early\" reflects the retired flat constant and contradicts \"within 20 days\". Raw node 374 \"seen 4×\" is uncovered in the map (covered_by_logical_unit: null), and the JS scene string at ~source.html:2108 repeats it. \"Recurring\" is new wording the map introduces.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"Recurring risk pattern\" became \"the most likely cause of loss\"; \"seen 4×\" and \"Written 45 days early\" are gone (\"Projected from today's deal data\")."
+  }
  },
  {
   "dimension": "claims",
@@ -1026,7 +1218,11 @@
   "recommendation": "'The ask' → \"Your ask\" (or keep it as is). 'Show it is real' → \"Show it has worked before\". #75 → \"5 of 7 handoff parts ready\". #52/#156 → \"Pilot participants\" or \"Who's hands-on\". #148 → \"how you'll get in to the account\". #51 → \"prompts you to add the roles pilots usually need, such as IT and a day-to-day owner\".",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed each one. 'The ask' appears only at source.html:1192 in the Outbound mock (\"20 minutes next week\"), which is the seller's ask, so \"Buyer request\" inverts it. Cold-call step 'proof' is \"Show them it's worked before\" / \"Trade one real example for one admission\", not \"Confirm business impact\". Founding GTM renders \"N of 7 parts ready\" (seven handoff parts) while Readiness has five dimensions, so \"readiness areas\" conflates them. The Pilot circle holds everyone enrolled, with active as a per-person toggle (\"using it\"/\"not started\"), so \"Active pilot participants\" is wrong. The Prospecting confirm question is \"What's our way in to the account?\" with an intro example, not a \"reason to engage\". The pilot gaps are two fixed prompts (IT, day-to-day driver)."
+  "skeptic_reasoning": "Confirmed each one. 'The ask' appears only at source.html:1192 in the Outbound mock (\"20 minutes next week\"), which is the seller's ask, so \"Buyer request\" inverts it. Cold-call step 'proof' is \"Show them it's worked before\" / \"Trade one real example for one admission\", not \"Confirm business impact\". Founding GTM renders \"N of 7 parts ready\" (seven handoff parts) while Readiness has five dimensions, so \"readiness areas\" conflates them. The Pilot circle holds everyone enrolled, with active as a per-person toggle (\"using it\"/\"not started\"), so \"Active pilot participants\" is wrong. The Prospecting confirm question is \"What's our way in to the account?\" with an intro example, not a \"reason to engage\". The pilot gaps are two fixed prompts (IT, day-to-day driver).",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#51, #52, #75, #148, #156 and the Cold Call steps (live names) fixed."
+  }
  },
  {
   "dimension": "claims",
@@ -1041,7 +1237,11 @@
   "recommendation": "\"A new hire could run it with you there to answer questions\", or move the \"at\" marker to Hire-ready if the caption should stay.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. The two-up ladder at source.html:1104 marks Inheritable with class \"at\", and ClimbDrawer reads Inheritable as \"A hire could run it with you there to answer questions\". \"A new hire can execute the process\" asserts Hire-ready. Low: the original \"Someone else could run it\" was already a mild stretch, and this is a single caption."
+  "skeptic_reasoning": "Confirmed. The two-up ladder at source.html:1104 marks Inheritable with class \"at\", and ClimbDrawer reads Inheritable as \"A hire could run it with you there to answer questions\". \"A new hire can execute the process\" asserts Hire-ready. Low: the original \"Someone else could run it\" was already a mild stretch, and this is a single caption.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#104: \"A new hire could run it with you there to answer questions\"."
+  }
  },
  {
   "dimension": "claims",
@@ -1056,7 +1256,11 @@
   "recommendation": "\"Starting the week. Open the Dashboard to see where your sales process stands and the highest-priority action for the day.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. The whole-motion standing plus the one ranked move render in DashboardV4 (masthead + db4-move). Other rooms carry the Ground's single suggestion and the Live Edge count, not the full state. The original said \"Open one room\", which meant the Dashboard; \"any product area\" is a new overclaim."
+  "skeptic_reasoning": "Confirmed. The whole-motion standing plus the one ranked move render in DashboardV4 (masthead + db4-move). Other rooms carry the Ground's single suggestion and the Live Edge count, not the full state. The original said \"Open one room\", which meant the Dashboard; \"any product area\" is a new overclaim.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#109 points to the Dashboard."
+  }
  },
  {
   "dimension": "claims",
@@ -1079,7 +1283,11 @@
   "recommendation": "On the product mocks (the sc-* scenes), keep the strings the app renders, or rename in the app first. Prose around the mocks can use plain descriptions. Alternatively, soften #333 to say the screens are \"based on real product areas\".",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. DashboardV4.tsx:84 \"Where your whole motion stands\"; :112 \"The most valuable move on your board\"; Signal Console BAND_META now = \"Act now\" / \"hot, and something just moved\"; DiscoveryStudioV4.tsx:81 \"Pain & consequence\"; GettingToSignedV4.tsx:236/291 \"Your line\"; ColdCallStudioV4 STEP_META \"Ask for the meeting\"; FoundingGtmV4.tsx:150 \"One thing to notice\"; founding-gtm types.ts:58 \"What the first week looks like\". The map rewrites all of these mock strings, so they no longer match the product the footer says the screens show. These are fidelity issues, not capability overclaims."
+  "skeptic_reasoning": "Confirmed. DashboardV4.tsx:84 \"Where your whole motion stands\"; :112 \"The most valuable move on your board\"; Signal Console BAND_META now = \"Act now\" / \"hot, and something just moved\"; DiscoveryStudioV4.tsx:81 \"Pain & consequence\"; GettingToSignedV4.tsx:236/291 \"Your line\"; ColdCallStudioV4 STEP_META \"Ask for the meeting\"; FoundingGtmV4.tsx:150 \"One thing to notice\"; founding-gtm types.ts:58 \"What the first week looks like\". The map rewrites all of these mock strings, so they no longer match the product the footer says the screens show. These are fidelity issues, not capability overclaims.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "Same as above."
+  }
  },
  {
   "dimension": "claims",
@@ -1113,7 +1321,11 @@
   "recommendation": "#287: \"Antaeus finds recent public events for each company and can look up industry, size, and location.\" #286: \"…with fewer, setup tells you the picture will stay thin.\" #295: \"If you BCC a capture address and connect your calendar link, Antaeus counts sends and meetings with the accounts you watch.\"",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. seeding-enrichment returns only {name, signal, sourceUrl, heat, fits}, with one recent trigger per account and no description. Size, industry and HQ come from Signal Console's separate enrichment (info.industry/employees/hq). The thin note (\"Under ten, it stays thin\", DealsStep.tsx:166) appears only on the onboarding deals step. inbound-email needs a BCC to log+<token>@ and matches watched accounts, and calendar-sync needs a pasted iCal link, so #295 drops conditions that matter."
+  "skeptic_reasoning": "Confirmed. seeding-enrichment returns only {name, signal, sourceUrl, heat, fits}, with one recent trigger per account and no description. Size, industry and HQ come from Signal Console's separate enrichment (info.industry/employees/hq). The thin note (\"Under ten, it stays thin\", DealsStep.tsx:166) appears only on the onboarding deals step. inbound-email needs a BCC to log+<token>@ and matches watched accounts, and calendar-sync needs a pasted iCal link, so #295 drops conditions that matter.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "#286, #287, #295 match what the code does."
+  }
  },
  {
   "dimension": "claims",
@@ -1130,7 +1342,11 @@
   "recommendation": "Ask the founder to add `signals` (and ideally captured_meetings and observations) to the export. Until then, say \"exports your accounts, deals, calls, pilots, and plans as one file\" rather than \"everything\".",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. exportCloudWorkspace (cloud-sync.ts:356-405) reads 14 tables and omits `signals`. Since Step 5, signals live only in the signals table, not in the account blob (cloud-persistence.ts:270 \"Signals live in the `signals` table (Step 5)\"). Observations, captured_meetings, founding_gtm_shares, Briefing tables, scheduled skills and proposals are also missing, so \"everything\" and \"entire workspace\" overclaim. The claim is pre-existing and the app's Settings copy says the same."
+  "skeptic_reasoning": "Confirmed. exportCloudWorkspace (cloud-sync.ts:356-405) reads 14 tables and omits `signals`. Since Step 5, signals live only in the signals table, not in the account blob (cloud-persistence.ts:270 \"Signals live in the `signals` table (Step 5)\"). Observations, captured_meetings, founding_gtm_shares, Briefing tables, scheduled skills and proposals are also missing, so \"everything\" and \"entire workspace\" overclaim. The claim is pre-existing and the app's Settings copy says the same.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map; needs a decision outside it",
+   "note": "#225/#240/#301 name what the export contains. Product gap still open: the export leaves out signals, observations and captured meetings."
+  }
  },
  {
   "dimension": "claims",
@@ -1148,7 +1364,11 @@
   "recommendation": "Add these to the map as claim fixes: \"247 found\" → \"247 added\" (or drop the count); drop \"· replied 2h ago\"; rewrite the Noticed line to a real Phase F proposal (\"You opened Deal Workspace 6 times this week — surface it at the top of your weekly brief?\"); inventory the JS MOMENTS strings and the Pace BENCH table so the implementation doesn't leave the old claims in place.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Raw nodes 157 (\"replied 2h ago\"), 323 (\"247 found\") and 374 (\"seen 4×\") all have covered_by_logical_unit null and no standalone replacement. ProspectingDeskV4.tsx:36-38 says outright that the desk \"does NOT claim a live web search it doesn't run\", and web_search is used only in seeding-enrichment and outdoors-events-discovery. Signal Console ageLabel is signal age, not replies. Phase F proposal kinds are only skill_default and observation_generator, so the \"open that account automatically\" leaf rewrite describes a proposal that doesn't exist. The JS MOMENTS strings (\"Every half hour…\", \"two of four recruiters\", \"Written 45 days early\", \"seen 4×\") and the BENCH table are not in the map."
+  "skeptic_reasoning": "Confirmed. Raw nodes 157 (\"replied 2h ago\"), 323 (\"247 found\") and 374 (\"seen 4×\") all have covered_by_logical_unit null and no standalone replacement. ProspectingDeskV4.tsx:36-38 says outright that the desk \"does NOT claim a live web search it doesn't run\", and web_search is used only in seeding-enrichment and outdoors-events-discovery. Signal Console ageLabel is signal age, not replies. Phase F proposal kinds are only skill_default and observation_generator, so the \"open that account automatically\" leaf rewrite describes a proposal that doesn't exist. The JS MOMENTS strings (\"Every half hour…\", \"two of four recruiters\", \"Written 45 days early\", \"seen 4×\") and the BENCH table are not in the map.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "\"247 added\", \"replied 2h ago\" removed, \"seen 4×\" removed, the Noticed line replaced, the Notion pilot line now describes a real check."
+  }
  },
  {
   "dimension": "claims",
@@ -1183,7 +1403,11 @@
   "recommendation": "No change needed. The one precision note is #144/#287: \"moves to the relevant branch\" should read \"offers a jump to the relevant branch\", since the jump is a button the seller clicks.",
   "skeptic_refuted": false,
   "skeptic_severity": "n/a",
-  "skeptic_reasoning": "Informational, not a defect. Spot-checks agree. MOTION_ROOMS lists 22 rooms. LiveEdge only mounts at min-width 1240px. FRAMEWORK_IDS has 10 entries and PERSONA_KEYS 6. The cold-call steps are prep then log. The heartbeat is */30. The mid benchmark numbers match. No change needed. The precision note (the jump is a button, not automatic) is reasonable."
+  "skeptic_reasoning": "Informational, not a defect. Spot-checks agree. MOTION_ROOMS lists 22 rooms. LiveEdge only mounts at min-width 1240px. FRAMEWORK_IDS has 10 entries and PERSONA_KEYS 6. The cold-call steps are prep then log. The heartbeat is */30. The mid benchmark numbers match. No change needed. The precision note (the jump is a button, not automatic) is reasonable.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "No change needed; the #144 \"offers a jump\" precision note is applied."
+  }
  },
  {
   "dimension": "integrity",
@@ -1206,7 +1430,11 @@
   "recommendation": "Add every MOMENTS chip, cap and scene string and every BENCH band string to the inventory as their own logical units, keyed to JS line and object path. Give each a keep/rewrite decision that matches its static twin, and state explicitly that editing string literals in the JS data objects is allowed as long as the element ids and control flow stay untouched.",
   "skeptic_refuted": false,
   "skeptic_severity": "high",
-  "skeptic_reasoning": "Confirmed. The map's highest unit line is 1836 and its highest raw line is 1839, so nothing from the script (1845+) is covered. #pv-stage, #pv-cap and #pv-chips are empty in the static HTML (995/1000/989), and open() fills them from MOMENTS (2150-2153). The chip labels are also created only in JS. I measured about 2,392 chars of MOMENTS text (the finding says 2,377), BENCH non-default text is exactly 654, and static raw text totals 24,449, which reproduces the 27,480 total and the 11% share. The pairs check out against the source: 2080 'has gone quiet', 2082 is split by <b> and starts lowercase so the standalone key can't match it, 2091 'theirs to fix', 2097 'They hired around it', 2101 'how a deal dies…routes you to the room', 2105 'dies in 20 days', 2116 '5 of 7 parts ready', 2125 'The week to run', 2129 'owned the number…had to go and ask for it', 2130 'One thing to notice'. COPY_STANDARD §3 lists 'owned the number' and 'had to go ask'. The handoff says not to rewrite beyond the map, so all of this would ship unchanged and drift away from the rewritten static twins."
+  "skeptic_reasoning": "Confirmed. The map's highest unit line is 1836 and its highest raw line is 1839, so nothing from the script (1845+) is covered. #pv-stage, #pv-cap and #pv-chips are empty in the static HTML (995/1000/989), and open() fills them from MOMENTS (2150-2153). The chip labels are also created only in JS. I measured about 2,392 chars of MOMENTS text (the finding says 2,377), BENCH non-default text is exactly 654, and static raw text totals 24,449, which reproduces the 27,480 total and the 11% share. The pairs check out against the source: 2080 'has gone quiet', 2082 is split by <b> and starts lowercase so the standalone key can't match it, 2091 'theirs to fix', 2097 'They hired around it', 2101 'how a deal dies…routes you to the room', 2105 'dies in 20 days', 2116 '5 of 7 parts ready', 2125 'The week to run', 2129 'owned the number…had to go and ask for it', 2130 'One thing to notice'. COPY_STANDARD §3 lists 'owned the number' and 'had to go ask'. The handoff says not to rewrite beyond the map, so all of this would ship unchanged and drift away from the rewritten static twins.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Same fix."
+  }
  },
  {
   "dimension": "integrity",
@@ -1223,7 +1451,11 @@
   "recommendation": "Give units 183-185 a separate value for each id (pace-a, pace-as, …) rather than one joined string. Add all 24 BENCH strings to the map in the same format as the static text, and authorize editing BENCH values while keeping its keys and the id list unchanged.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed in code. Units 183-185 each wrap <b id=pace-X><span id=pace-Xs>, and the map gives each a single flat string. The change handler (2236-2244) writes BENCH values with textContent and returns early when getElementById finds nothing. BENCH.mid matches the original static HTML exactly, so switching the picker to another band and back restores the pre-rewrite copy, and smb/ent/str show old-voice strings ('one slipping', 'a single deal going quiet'). I lowered the severity because the 'disables the picker' path only happens if the implementer breaks the handoff's own rule to preserve IDs. Followed correctly, the rewrite shows on first load and is lost after interaction. That is a real gap, but it is not a breakage."
+  "skeptic_reasoning": "Confirmed in code. Units 183-185 each wrap <b id=pace-X><span id=pace-Xs>, and the map gives each a single flat string. The change handler (2236-2244) writes BENCH values with textContent and returns early when getElementById finds nothing. BENCH.mid matches the original static HTML exactly, so switching the picker to another band and back restores the pre-rewrite copy, and smb/ent/str show old-voice strings ('one slipping', 'a single deal going quiet'). I lowered the severity because the 'disables the picker' path only happens if the implementer breaks the handoff's own rule to preserve IDs. Followed correctly, the rewrite shows on first load and is lost after interaction. That is a real gap, but it is not a breakage.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Units 183-185 carry replacement_parts per id, and all 24 BENCH strings are map entries that match them."
+  }
  },
  {
   "dimension": "integrity",
@@ -1236,7 +1468,11 @@
   "recommendation": "Remove the 'The ask' key or change it to something like 'Your request' / 'What you are asking for'. Decide 'Their ask' and 'Your line' together as one pair.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Confirmed. Line 1188 reads 'Writing to Lena, Head of People at Chomps', and 1192 labels the seller's CTA '<b>The ask</b><span>20 minutes next week</span>'. Raw node 277 carries standalone_replacement 'Buyer request', which reverses who is asking. Raw 354 'Their ask' at 1269 has no replacement, while raw 356 'Your line' becomes 'Your position'. The live OutboundStudioV4.tsx:273 renders t(\"The ask\") for this same CTA field. It is a real change of meaning that breaks the handoff's 'preserve factual claims' rule. I rated it medium because it is a single two-word label in a demo card."
+  "skeptic_reasoning": "Confirmed. Line 1188 reads 'Writing to Lena, Head of People at Chomps', and 1192 labels the seller's CTA '<b>The ask</b><span>20 minutes next week</span>'. Raw node 277 carries standalone_replacement 'Buyer request', which reverses who is asking. Raw 354 'Their ask' at 1269 has no replacement, while raw 356 'Your line' becomes 'Your position'. The live OutboundStudioV4.tsx:273 renders t(\"The ask\") for this same CTA field. It is a real change of meaning that breaks the handoff's 'preserve factual claims' rule. I rated it medium because it is a single two-word label in a demo card.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Same fix."
+  }
  },
  {
   "dimension": "integrity",
@@ -1258,7 +1494,11 @@
   "recommendation": "Either route the state and label renames through the founder and change canon plus the in-app labels at the same time, or keep the page's demo labels identical to the live app and put the literal explanation in the surrounding copy. Drop the 'malformed' framing of 'gets to signed'.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Evidence confirmed. VERDICT_LABEL (types.ts:34-38) still uses 'You are the system / Building / Inheritable with guardrails / Hire-ready / Hire-ready, repeatable'. GettingToSignedV4 uses t(\"Your line\") at 236/291, ColdCallStudioV4:61 uses t(\"Ask for the meeting\"), and landing.ts:212 uses 'The workspace is awake.' Canon §4.16b and §4.17 name these labels. Unit 70 is tagged grammar_error, and unit 333's replacement still says the screens are real product areas. I reduced the severity for two reasons. The PR was uploaded by the repo owner (Antaeus Coe / FastCoempany), so the 'no founder approval' angle is weaker. And the page already differed slightly from the app before the rewrite: 'Inheritable, with you there', and the cold-call steps 'Find the pain' / 'Show it is real' against the live 'Why it matters to them' / 'Show them it's worked before'. The page-vs-app and canon mismatch that the map creates is still real."
+  "skeptic_reasoning": "Evidence confirmed. VERDICT_LABEL (types.ts:34-38) still uses 'You are the system / Building / Inheritable with guardrails / Hire-ready / Hire-ready, repeatable'. GettingToSignedV4 uses t(\"Your line\") at 236/291, ColdCallStudioV4:61 uses t(\"Ask for the meeting\"), and landing.ts:212 uses 'The workspace is awake.' Canon §4.16b and §4.17 name these labels. Unit 70 is tagged grammar_error, and unit 333's replacement still says the screens are real product areas. I reduced the severity for two reasons. The PR was uploaded by the repo owner (Antaeus Coe / FastCoempany), so the 'no founder approval' angle is weaker. And the page already differed slightly from the app before the rewrite: 'Inheritable, with you there', and the cold-call steps 'Find the pain' / 'Show it is real' against the live 'Why it matters to them' / 'Show them it's worked before'. The page-vs-app and canon mismatch that the map creates is still real.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Every relabeled live label is restored on the mocks; the footnote now says the screens are \"based on real product areas\"."
+  }
  },
  {
   "dimension": "integrity",
@@ -1306,7 +1546,11 @@
   "recommendation": "Recompute coverage as containment by source offset span, not direct parent. Record the 119 undecided nodes explicitly as keep (or roll them into units) so the inventory is actually complete.",
   "skeptic_refuted": false,
   "skeptic_severity": "medium",
-  "skeptic_reasoning": "Reproduced. I used the units_src offsets (0 mismatches against source) to find the logical unit each null-covered raw node sits in. Exactly 36 of the 183 null-covered nodes fall inside a unit: 21 in keep units and 15 in rewrite units once the ambiguous 'No' cells are assigned by line. This includes raw 609 'Every room' in unit 311 and raw 632 'Pace' in unit 333. Of the remaining 147, 28 have a standalone_replacement and 119 (1,669 chars) have no decision at all. Examples include 'no next step at all', 'verbal yes · terms open', and the cold-call tap options. So the map is incomplete even for the static text it says it audited."
+  "skeptic_reasoning": "Reproduced. I used the units_src offsets (0 mismatches against source) to find the logical unit each null-covered raw node sits in. Exactly 36 of the 183 null-covered nodes fall inside a unit: 21 in keep units and 15 in rewrite units once the ambiguous 'No' cells are assigned by line. This includes raw 609 'Every room' in unit 311 and raw 632 'Pace' in unit 333. Of the remaining 147, 28 have a standalone_replacement and 119 (1,669 chars) have no decision at all. Examples include 'no next step at all', 'verbal yes · terms open', and the cold-call tap options. So the map is incomplete even for the static text it says it audited.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Raw-node coverage recomputed by source span; every raw node now carries an explicit decision."
+  }
  },
  {
   "dimension": "integrity",
@@ -1331,7 +1575,11 @@
   "recommendation": "For every unit whose inner HTML contains elements, provide replacement_html (or per-child replacements), and at a minimum mark the anchor text boundaries.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "The counts are right: 89 of 193 rewrite units contain child elements (b 62, span 17, br 14, a 7, i 4), the 7 link units are 88/90/311/312/313/323/333, and there is no replacement_html field. I lowered the severity because the handoff does cover this. It says to preserve hrefs and classes and to rebuild link emphasis 'where it still makes semantic sense', and in practice the link boundaries are easy to infer: 'Review a call →', 'Pace' in unit 333, the swatch label in sw__l. Dropping a <br> in a heading is a layout question the handoff already asks to be reported. The real cost is reproducibility, not a wrong result."
+  "skeptic_reasoning": "The counts are right: 89 of 193 rewrite units contain child elements (b 62, span 17, br 14, a 7, i 4), the 7 link units are 88/90/311/312/313/323/333, and there is no replacement_html field. I lowered the severity because the handoff does cover this. It says to preserve hrefs and classes and to rebuild link emphasis 'where it still makes semantic sense', and in practice the link boundaries are easy to infer: 'Review a call →', 'Pace' in unit 333, the swatch label in sw__l. Dropping a <br> in a heading is a layout question the handoff already asks to be reported. The real cost is reproducibility, not a wrong result.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Every markup unit that is rewritten now has replacement_html."
+  }
  },
  {
   "dimension": "integrity",
@@ -1355,7 +1603,11 @@
   "recommendation": "Replace the global rule with a list of targets: raw node id, source offset, expected original, and replacement. Define matching as exact text-node equality, case-sensitive, applied after unit edits. Rewrite the Noticed sentence as one unit.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Part of this is overstated. The handoff says 'exact visible leaf string' and 'not already replaced by a parent logical-unit edit', which strongly suggests exact, case-sensitive text-node equality with unit edits taking precedence. The JSON also names the 28 target raw nodes with ids and lines. Under exact, case-sensitive matching, 'Repeatable' → 'Hire-ready and repeatable' is idempotent, because the lowercase 'repeatable' does not match the key, and the case-insensitive 'Building' hits never apply. What holds up: the leaf edit at 1023 produces 'the account you flagged after I flag a deal with no recent activity', with the 'flagged/flag' collision and the first-person 'I' still there. COPY_STANDARD §3 says not to substitute blindly. 'The week to run' also appears in JS at 2125, and it is unclear whether that counts as visible UI. The 22 keys versus 28 nodes is accurate but not a contradiction. The finding says 5 keys contain 'quiet'; it is 4."
+  "skeptic_reasoning": "Part of this is overstated. The handoff says 'exact visible leaf string' and 'not already replaced by a parent logical-unit edit', which strongly suggests exact, case-sensitive text-node equality with unit edits taking precedence. The JSON also names the 28 target raw nodes with ids and lines. Under exact, case-sensitive matching, 'Repeatable' → 'Hire-ready and repeatable' is idempotent, because the lowercase 'repeatable' does not match the key, and the case-insensitive 'Building' hits never apply. What holds up: the leaf edit at 1023 produces 'the account you flagged after I flag a deal with no recent activity', with the 'flagged/flag' collision and the first-person 'I' still there. COPY_STANDARD §3 says not to substitute blindly. 'The week to run' also appears in JS at 2125, and it is unclear whether that counts as visible UI. The 22 keys versus 28 nodes is accurate but not a contradiction. The finding says 5 keys contain 'quiet'; it is 4.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "standalone_leaf_rules defines matching; whole-sentence changes moved to raw_edits."
+  }
  },
  {
   "dimension": "integrity",
@@ -1368,7 +1620,11 @@
   "recommendation": "Run validation on extracted visible text with whole-word matching, not on raw source. Include aria-label, alt, title and JS-rendered strings. Align the term list with COPY_STANDARD §3/§9, add 'quiet', and put aria-label changes in scope.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "The counts reproduce, case-insensitive: line 111 (45 in CSS), hot 61 (30 in base64 lines), room 48, motion 29 (9 in CSS). The aria-labels 'Open a room', 'Previous room' and 'Next room' exist at 989/997/1001. The list leaves out 'quiet', 'run', 'carry', 'owned the number' and 'had to go ask', even though COPY_STANDARD §3 and §13 target them. Two claims are overstated. The handoff says to check 'rendered copy and source' in non-proper-name contexts, so much of the noise is filtered by judgment. And aria-labels are not blocked, because the handoff allows any remaining hit to be documented as an intentional exception. The real issue is a weak validation step that misses terms the standard itself names. That lowers confidence in the result but does not produce wrong output."
+  "skeptic_reasoning": "The counts reproduce, case-insensitive: line 111 (45 in CSS), hot 61 (30 in base64 lines), room 48, motion 29 (9 in CSS). The aria-labels 'Open a room', 'Previous room' and 'Next room' exist at 989/997/1001. The list leaves out 'quiet', 'run', 'carry', 'owned the number' and 'had to go ask', even though COPY_STANDARD §3 and §13 target them. Two claims are overstated. The handoff says to check 'rendered copy and source' in non-proper-name contexts, so much of the noise is filtered by judgment. And aria-labels are not blocked, because the handoff allows any remaining hit to be documented as an intentional exception. The real issue is a weak validation step that misses terms the standard itself names. That lowers confidence in the result but does not produce wrong output.",
+  "fix_status_2026_10_02": {
+   "status": "not a map change",
+   "note": "The validation in this folder runs on extracted visible text, attributes and JS strings with whole-word matching; CODEX_HANDOFF.md itself is not edited."
+  }
  },
  {
   "dimension": "integrity",
@@ -1391,7 +1647,11 @@
   "recommendation": "Give #rooms a label that describes the demo (e.g. 'Product walkthrough') and keep 'Product areas' for #all-rooms. Choose one name for #pace and use it in nav, footer and kicker.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Units 3 and 9 turn the #rooms links into 'Product areas'. The #rooms section is 'Take a closer look' plus the four-moment viewer. Unit 311 turns the #all-rooms link into 'Every product area', and unit 188 makes that section 'Twenty-two product areas'. #pace gets 'Revenue plan' (unit 11), 'Revenue plan and targets' (unit 313), and keeps 'Pace' as the kicker and fnote link. That breaks the audit's editorial decision 4. I lowered the severity because the #rooms/#all-rooms overlap was already there ('The rooms' / 'Every room') and the map carried it over. The #pace inconsistency is new from the map but minor."
+  "skeptic_reasoning": "Confirmed. Units 3 and 9 turn the #rooms links into 'Product areas'. The #rooms section is 'Take a closer look' plus the four-moment viewer. Unit 311 turns the #all-rooms link into 'Every product area', and unit 188 makes that section 'Twenty-two product areas'. #pace gets 'Revenue plan' (unit 11), 'Revenue plan and targets' (unit 313), and keeps 'Pace' as the kicker and fnote link. That breaks the audit's editorial decision 4. I lowered the severity because the #rooms/#all-rooms overlap was already there ('The rooms' / 'Every room') and the map carried it over. The #pace inconsistency is new from the map but minor.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Same fix."
+  }
  },
  {
   "dimension": "integrity",
@@ -1404,7 +1664,11 @@
   "recommendation": "Write the formula into the audit and ship the script. Score the whole visible surface (static + JS + attributes) after rendering, and have someone other than the tagger check the issue tags.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Reproduced exactly. The character-weighted severity/4 formula gives 23,808/88,868 = 26.79 and 3,823/93,036 = 4.11. Severity equals len(issues) for 330 of 333 units before and all 333 after. Neither the audit nor COPY_STANDARD §24, which is only a checklist, states a formula, and the score covers only logical units. I lowered the severity because the audit itself calls the score 'a deliberately mechanical diagnostic used only to compare the same corpus… should not be read as a replacement for that judgment.' It is a self-reported metric problem, not a defect in the page."
+  "skeptic_reasoning": "Reproduced exactly. The character-weighted severity/4 formula gives 23,808/88,868 = 26.79 and 3,823/93,036 = 4.11. Severity equals len(issues) for 330 of 333 units before and all 333 after. Neither the audit nor COPY_STANDARD §24, which is only a checklist, states a formula, and the score covers only logical units. I lowered the severity because the audit itself calls the score 'a deliberately mechanical diagnostic used only to compare the same corpus… should not be read as a replacement for that judgment.' It is a self-reported metric problem, not a defect in the page.",
+  "fix_status_2026_10_02": {
+   "status": "not a map change",
+   "note": "Lint scores are not recomputed; revised units say so in their revision record."
+  }
  },
  {
   "dimension": "integrity",
@@ -1422,7 +1686,11 @@
   "recommendation": "Give the closing section its own section label, record the text node's own line and offset for each raw node, and say in the scope what the audit excludes.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Units 304-307 sit in the closing section at 1762 and are labeled 'nav'. Raw 633 is recorded at line 1836, but 'Photography via Unsplash.' is at 1840. Raw 124 is recorded at 917, but its text continues after an inline child. There are 26 aria-labels (274 chars), 6 alt texts (340 chars), and a <title>, none of which count toward the 633. These are minor accuracy problems, as rated."
+  "skeptic_reasoning": "Confirmed. Units 304-307 sit in the closing section at 1762 and are labeled 'nav'. Raw 633 is recorded at line 1836, but 'Photography via Unsplash.' is at 1840. Raw 124 is recorded at 917, but its text continues after an inline child. There are 26 aria-labels (274 chars), 6 alt texts (340 chars), and a <title>, none of which count toward the 633. These are minor accuracy problems, as rated.",
+  "fix_status_2026_10_02": {
+   "status": "fixed in the map",
+   "note": "Units 304-307 and their raw nodes are labeled \"closing\"."
+  }
  },
  {
   "dimension": "integrity",
@@ -1435,6 +1703,10 @@
   "recommendation": "Move the docs to dated files under deliverables/audit/ (and deliverables/plans/ for the handoff), commit the source page they are keyed to, and either add the copy standard to the canon authority order with founder approval or make it defer to canon explicitly.",
   "skeptic_refuted": false,
   "skeptic_severity": "low",
-  "skeptic_reasoning": "Confirmed. Commit 3fb1ed7 adds all four files at the repo root, while deliverables/audit/ uses dated names. `git ls-files` has no productpage file, and start.html is a different 541-line page, so 'antaeusproductpage (3).html' is not in the repo. The handoff calls COPY_STANDARD 'authoritative writing rules', which is not part of the canon §2 authority order, and the standard conflicts with canon §4.16b and §4.17. The founder uploaded the PR, which softens the governance angle. This is housekeeping, rated low."
+  "skeptic_reasoning": "Confirmed. Commit 3fb1ed7 adds all four files at the repo root, while deliverables/audit/ uses dated names. `git ls-files` has no productpage file, and start.html is a different 541-line page, so 'antaeusproductpage (3).html' is not in the repo. The handoff calls COPY_STANDARD 'authoritative writing rules', which is not part of the canon §2 authority order, and the standard conflicts with canon §4.16b and §4.17. The founder uploaded the PR, which softens the governance angle. This is housekeeping, rated low.",
+  "fix_status_2026_10_02": {
+   "status": "not a map change",
+   "note": "The source page is committed here; moving the root docs and their place in canon is a founder decision."
+  }
  }
 ]
