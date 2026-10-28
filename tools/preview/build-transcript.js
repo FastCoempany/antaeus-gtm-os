@@ -75,9 +75,6 @@ const ROOMS = [
     ["settings", "Settings", "/settings/", 5, "settings"]
 ];
 
-// Clicks that would change the sample workspace or leave the room.
-const UNSAFE = /\b(delete|remove|clear|reset|erase|log|save|send|sign out|submit|confirm|accept|dismiss|decline|mark|add|create|import|restore|download|export|copy|run|load|attend|watch|count it|turn off|lock|book|schedule|enrich|push|archive|pass|skip|yes|no)\b/i;
-
 const esc = (s) =>
     String(s)
         .replace(/&/g, "&amp;")
@@ -254,28 +251,66 @@ function extractInPage() {
     return out;
 }
 
-function candidatesInPage(UNSAFE_SRC) {
-    const UNSAFE = new RegExp(UNSAFE_SRC, "i");
-    const els = Array.from(
-        document.querySelectorAll(
-            "button, [role=tab], [role=button], summary, [aria-expanded]"
-        )
-    ).filter((el) => {
+// Every control a person could use in the room: real buttons and tabs,
+// and anything else that reacts to a click (cursor: pointer — account
+// chips, rows, cards), plus every dropdown. Links that go to another page
+// are not clicked; their destinations are recorded in the at-rest pass.
+// Each control gets a stable key (tag | label | nth) so a path of clicks
+// can be replayed on a freshly loaded room.
+function controlsInPage(includeChrome) {
+    const label = (el) =>
+        (el.innerText || el.getAttribute("aria-label") || el.getAttribute("title") || el.getAttribute("placeholder") || "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 90);
+    const sized = (el) => {
         const r = el.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) return false;
-        if (el.disabled || el.getAttribute("aria-disabled") === "true") return false;
-        if (el.closest(".gnd, .ledge")) return false;
-        if (el.getAttribute("aria-selected") === "true") return false;
-        if (el.closest("a[href]")) return false;
-        const t = (el.innerText || el.getAttribute("aria-label") || "").replace(/\s+/g, " ").trim();
-        if (!t || t.length > 80) return false;
-        if (UNSAFE.test(t)) return false;
+        return r.width > 0 && r.height > 0;
+    };
+    const shown = (el) => {
+        for (let e = el; e && e !== document.body; e = e.parentElement) {
+            const s = getComputedStyle(e);
+            // opacity 0 is kept: hover-revealed controls are real controls
+            if (s.display === "none" || s.visibility === "hidden") return false;
+        }
         return true;
-    });
-    return els.slice(0, 40).map((el, i) => {
-        el.setAttribute("data-tx-cand", String(i));
-        return (el.innerText || el.getAttribute("aria-label") || "").replace(/\s+/g, " ").trim();
-    });
+    };
+    const SEL =
+        "button, summary, label, [role=button], [role=tab], [role=switch], [role=checkbox], [role=menuitem], [role=option], [aria-expanded], [tabindex], input[type=checkbox], input[type=radio], a:not([href]), a[href^='#'], select";
+    const set = new Set(document.querySelectorAll(SEL));
+    // Click-reactive elements that aren't semantic controls: the topmost
+    // element of each pointer-cursor region.
+    for (const el of document.body.querySelectorAll("*")) {
+        if (set.has(el)) continue;
+        if (getComputedStyle(el).cursor !== "pointer") continue;
+        const par = el.parentElement;
+        if (par && getComputedStyle(par).cursor === "pointer") continue;
+        if (el.closest("a[href]:not([href^='#'])")) continue;
+        set.add(el);
+    }
+    const counts = {};
+    const out = [];
+    for (const el of set) {
+        if (!(el instanceof HTMLElement) || !sized(el) || !shown(el)) continue;
+        if (el.matches("input:not([type=checkbox]):not([type=radio]), textarea")) continue;
+        if (!includeChrome && el.closest(".gnd, .ledge")) continue;
+        // a control nested inside another collected control is reached
+        // through the outer one only when it has no label of its own
+        const lab = label(el);
+        if (!lab && el.tagName !== "SELECT") continue;
+        const base = `${el.tagName.toLowerCase()}|${lab}`;
+        counts[base] = (counts[base] || 0) + 1;
+        const key = `${base}|${counts[base]}`;
+        el.setAttribute("data-tx-key", key);
+        const item = {
+            key,
+            label: lab || "(dropdown)",
+            disabled: !!(el.disabled || el.getAttribute("aria-disabled") === "true")
+        };
+        if (el.tagName === "SELECT") item.options = Array.from(el.options).map((o) => o.value);
+        out.push(item);
+    }
+    return out;
 }
 
 // ── rendering ──────────────────────────────────────────────────────────
@@ -315,16 +350,206 @@ function nav(i) {
     return `<nav><a href="../">Index</a> ${prev} ${next}</nav>`;
 }
 
+// page.goto that survives a navigation still in flight from the last
+// click (the browser aborts one load in favour of the other).
+async function go(pg, url) {
+    for (let n = 0; ; n++) {
+        try {
+            await pg.goto(url);
+            return;
+        } catch (e) {
+            if (n >= 4) throw e;
+            await pg.waitForTimeout(500);
+        }
+    }
+}
+
+// Load a room fresh from the seeded sample, then replay a path of steps.
+// Returns null if a step's control is gone (the path no longer applies).
+async function replay(holder, url, snapshot, steps) {
+    // A brand-new tab every time: nothing a previous action left running
+    // (a redirect loop, a download, a dialog) can leak into this one.
+    if (holder.page) await holder.page.close().catch(() => {});
+    holder.page = await holder.ctx.newPage();
+    holder.page.on("pageerror", (e) => errors.push(e.message));
+    holder.page.on("dialog", (d) => d.dismiss().catch(() => {}));
+    const page = holder.page;
+    await go(page, `${BASE}/__tx_blank`);
+    await page.evaluate((snap) => {
+        localStorage.clear();
+        for (const k of Object.keys(snap)) Storage.prototype.setItem.call(localStorage, k, snap[k]);
+        sessionStorage.setItem("gtmos_env_mode", "demo");
+    }, snapshot);
+    await go(page, url);
+    await page.waitForTimeout(1300);
+    for (const st of steps) {
+        await page.evaluate(controlsInPage, true);
+        const loc = page.locator(`[data-tx-key="${st.key.replace(/"/g, '\\"')}"]`).first();
+        if ((await loc.count()) === 0) return null;
+        await loc.scrollIntoViewIfNeeded({ timeout: 1500 }).catch(() => {});
+        if (st.option !== undefined) {
+            await loc.selectOption(st.option, { timeout: 2500 }).catch(() =>
+                loc.evaluate((el, v) => {
+                    el.value = v;
+                    el.dispatchEvent(new Event("change", { bubbles: true }));
+                }, st.option)
+            );
+        } else if (st.hover) {
+            // Normal hover, then forced, then the raw events a pointer sends.
+            await loc.hover({ timeout: 1500 }).catch(() =>
+                loc.hover({ timeout: 1500, force: true }).catch(() =>
+                    loc.evaluate((el) => {
+                        for (const t of ["pointerover", "pointerenter", "mouseover", "mouseenter"])
+                            el.dispatchEvent(new MouseEvent(t, { bubbles: t.endsWith("over") }));
+                    })
+                )
+            );
+        } else {
+            await loc.click({ timeout: 2000, force: true }).catch(() => loc.evaluate((el) => el.click()));
+        }
+        await page.waitForTimeout(650);
+    }
+    return true;
+}
+
+function describeStep(st) {
+    if (st.option !== undefined) return `choosing “${st.optionText || st.option}” in “${st.label}”`;
+    if (st.hover) return `hovering “${st.label}”`;
+    return `clicking “${st.label}”`;
+}
+
+// Explore one room: the room at rest, then every control (click, hover,
+// every dropdown option), then every control those reveal, three levels
+// deep — each path replayed from the freshly seeded sample.
+async function exploreRoom(holder, i, snapshot, CAP) {
+    const [id, label, href, stage, mapId] = ROOMS[i];
+    const url = `${BASE}${href}${href.includes("?") ? "&" : "?"}demo=1`;
+    const roomPath = new URL(url).pathname;
+    await replay(holder, url, snapshot, []);
+    if (new URL(holder.page.url()).pathname !== new URL(url).pathname) {
+        throw new Error(`${label}: loading the room landed on ${holder.page.url()} instead`);
+    }
+    const rest = await holder.page.evaluate(extractInPage);
+    const rootControls = await holder.page.evaluate(controlsInPage, id === "dashboard");
+    const lineKey = (l) => l.kind + "|" + l.text;
+    const sig = (lines) => lines.map(lineKey).sort().join("\n");
+
+    const states = new Map([[sig(rest), "the room at rest"]]);
+    const reveals = [];
+    const coverage = [];
+    const queue = [];
+    // Each distinct control (and each hover, and each dropdown option) is
+    // used once, from the first screen it appears on — every control is
+    // reached without replaying the same one from every screen.
+    const tried = new Set();
+    const enqueue = (steps, controls, parentLines) => {
+        for (const c of controls) {
+            if (tried.has(c.key)) continue;
+            tried.add(c.key);
+            if (c.options) {
+                for (const o of c.options) queue.push({ steps: [...steps, { key: c.key, label: c.label, option: o }], parentLines });
+            } else {
+                queue.push({ steps: [...steps, { key: c.key, label: c.label, hover: true }], parentLines });
+                if (!c.disabled) queue.push({ steps: [...steps, { key: c.key, label: c.label }], parentLines });
+                else coverage.push({ what: `“${c.label}”`, result: "shown but disabled — cannot be clicked" });
+            }
+        }
+    };
+    enqueue([], rootControls, rest);
+    let done = 0;
+    while (queue.length && done < CAP) {
+        const job = queue.shift();
+        done++;
+        const what = job.steps.map(describeStep).join(", then ");
+        let ok = null;
+        try {
+            ok = await replay(holder, url, snapshot, job.steps);
+        } catch (e) {
+            coverage.push({ what, result: `could not be used (${e.message.split("\n")[0].slice(0, 80)})` });
+            continue;
+        }
+        if (!ok) {
+            coverage.push({ what, result: "control no longer present after the earlier steps" });
+            continue;
+        }
+        const here = new URL(holder.page.url());
+        if (here.pathname !== roomPath) {
+            coverage.push({ what, result: `takes you to ${here.pathname}` });
+            continue;
+        }
+        const now = await holder.page.evaluate(extractInPage);
+        const parentSet = new Set(job.parentLines.map(lineKey));
+        const added = now.filter((l) => !parentSet.has(lineKey(l)));
+        const nowSet = new Set(now.map(lineKey));
+        const removed = job.parentLines.filter((l) => !nowSet.has(lineKey(l)));
+        const s = sig(now);
+        if (!added.length && !removed.length) {
+            coverage.push({ what, result: job.steps[job.steps.length - 1].hover ? "no hover change" : "no visible change" });
+            continue;
+        }
+        if (states.has(s)) {
+            coverage.push({ what, result: `shows the same screen as ${states.get(s)}` });
+            continue;
+        }
+        states.set(s, what);
+        reveals.push({ what, added, removed });
+        coverage.push({ what, result: `${added.length} lines appear, ${removed.length} disappear — see above` });
+        const last = job.steps[job.steps.length - 1];
+        if (job.steps.length < 3 && !last.hover) {
+            const ctrls = await holder.page.evaluate(controlsInPage, id === "dashboard");
+            enqueue(job.steps, ctrls, now);
+        }
+    }
+    const unexplored = queue.length;
+
+    const mapFile = mapId === "discovery-studio" ? DS_MAP : path.join(MAPS, `${mapId}-capability-map-2026-07-07.html`);
+    const body = [
+        nav(i),
+        `<h1>${esc(label)}</h1>`,
+        `<p class="k">Stage: ${esc(STAGES[stage])} · room ${i + 1} of ${ROOMS.length} · address in the app: ${esc(href)}</p>`,
+        `<h2>1. The room at rest</h2>`,
+        `<p>Every word in the room in reading order, top to bottom, including what sits below the fold. Each line says what it is (heading, button, link, field, text), how it is shown (size, typeface, colour, emphasis) and where it sits on a 1440-pixel-wide desktop screen. Orange marks the one main action on a surface; blue is information from the system; green and forest green mean healthy or lasting; amber is caution; red is real risk. Links show where they go.</p>`,
+        renderLines(rest),
+        `<h2>2. Everything the room does when you use it</h2>`,
+        `<p>Each control in the room was used — clicked, hovered, and every dropdown option chosen — starting from the same sample workspace each time. Whatever a control revealed was then used in turn, up to three steps deep. Each entry lists what appeared, and what went away, on screen.</p>`,
+        reveals
+            .map(
+                (r) =>
+                    `<h3>After ${esc(r.what)}</h3>` +
+                    renderLines(r.added) +
+                    (r.removed.length
+                        ? `<p class="cue">No longer shown: ${esc(r.removed.map((l) => l.text).join(" · ").slice(0, 600))}</p>`
+                        : "")
+            )
+            .join("\n"),
+        `<h2>3. Coverage — every control and what it did</h2>`,
+        `<p>${coverage.length} actions tried in this room${unexplored ? `; ${unexplored} deeper actions beyond the cap of ${CAP} were not tried` : ", none left untried"}.</p>`,
+        `<table><tr><th>Action</th><th>Result</th></tr>${coverage
+            .map((c) => `<tr><td>${esc(c.what)}</td><td>${esc(c.result)}</td></tr>`)
+            .join("")}</table>`,
+        `<div class="map"><h2>4. What this room is for and how it works</h2><p>The room's capability map: its purpose, every part and what it does, what flows in from and out to other rooms, and what it must never become.</p>${mapBody(mapFile)}</div>`,
+        nav(i)
+    ].join("\n");
+    fs.mkdirSync(path.join(OUT, id), { recursive: true });
+    fs.writeFileSync(path.join(OUT, id, "index.html"), page(`${label} — Antaeus walkthrough`, body));
+    return { i, id, label, stage, actions: coverage.length, reveals: reveals.length, unexplored };
+}
+
+const errors = [];
+
 // ── main ───────────────────────────────────────────────────────────────
 async function main() {
     if (!fs.existsSync(path.join(DIST, "preview.html"))) {
         throw new Error("dist/ is missing or stale — run `npm run build:cloudflare` first.");
     }
     const server = serve();
+    errors.length = 0;
     const browser = await chromium.launch(
         process.env.TRANSCRIPT_CHROMIUM ? { executablePath: process.env.TRANSCRIPT_CHROMIUM } : {}
     );
-    fs.rmSync(OUT, { recursive: true, force: true });
+    // A partial run (TRANSCRIPT_ONLY) rewrites just its rooms; only a full
+    // run clears the folder.
+    if (!process.env.TRANSCRIPT_ONLY) fs.rmSync(OUT, { recursive: true, force: true });
     fs.mkdirSync(OUT, { recursive: true });
 
     // 1. The gate, exactly as an invitee first sees it (no cookie yet).
@@ -340,7 +565,6 @@ async function main() {
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     await ctx.addCookies([{ name: "antaeus_mode", value: "preview", domain: "127.0.0.1", path: "/" }]);
     const p = await ctx.newPage();
-    const errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
     await p.goto(`${BASE}/demo-seed.html?autoseed=ent&return=${encodeURIComponent("/dashboard/?demo=1")}`);
     await p.waitForURL("**/dashboard/**", { timeout: 20000 });
@@ -359,69 +583,40 @@ async function main() {
     });
     await p.keyboard.press("Escape");
 
-    const index = [];
-    for (let i = 0; i < ROOMS.length; i++) {
-        const [id, label, href, stage, mapId] = ROOMS[i];
-        if (process.env.TRANSCRIPT_ONLY && process.env.TRANSCRIPT_ONLY !== id) continue;
-        process.stdout.write(`${label}… `);
-        const url = `${BASE}${href}${href.includes("?") ? "&" : "?"}demo=1`;
-        await p.goto(url);
-        await p.waitForTimeout(2200);
-        const rest = await p.evaluate(extractInPage);
-        const restSet = new Set(rest.map((l) => l.kind + "|" + l.text));
-
-        // Open each safe control in turn and keep only what's new.
-        const reveals = [];
-        const cands = await p.evaluate(candidatesInPage, UNSAFE.source);
-        if (process.env.TRANSCRIPT_DEBUG) console.log(`\n  candidates: ${cands.join(" | ")}`);
-        for (let c = 0; c < cands.length; c++) {
-            try {
-                await p.goto(url);
-                await p.waitForTimeout(1200);
-                const again = await p.evaluate(candidatesInPage, UNSAFE.source);
-                const at = again.indexOf(cands[c]);
-                if (at < 0) continue;
-                const before = p.url();
-                await p.click(`[data-tx-cand="${at}"]`, { timeout: 2000 });
-                await p.waitForTimeout(700);
-                if (p.url() !== before) {
-                    reveals.push({ control: cands[c], lines: [], note: `takes you to ${new URL(p.url()).pathname}` });
-                    continue;
-                }
-                const after = await p.evaluate(extractInPage);
-                const fresh = after.filter((l) => !restSet.has(l.kind + "|" + l.text));
-                if (fresh.length) reveals.push({ control: cands[c], lines: fresh });
-            } catch (e) {
-                // a control that can't be clicked is skipped
-                if (process.env.TRANSCRIPT_DEBUG) console.log(`  skip “${cands[c]}”: ${e.message.split("\n")[0]}`);
-            }
+    // Snapshot the seeded sample so every click starts from it. Read on a
+    // page without the app's storage layer, so keys keep their real
+    // (namespaced) names and restore exactly.
+    await p.goto(`${BASE}/__tx_blank`);
+    const snapshot = await p.evaluate(() => {
+        const o = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            o[k] = Storage.prototype.getItem.call(localStorage, k);
         }
+        return o;
+    });
+    await ctx.close();
 
-        const mapFile = mapId === "discovery-studio" ? DS_MAP : path.join(MAPS, `${mapId}-capability-map-2026-07-07.html`);
-        const body = [
-            nav(i),
-            `<h1>${esc(label)}</h1>`,
-            `<p class="k">Stage: ${esc(STAGES[stage])} · room ${i + 1} of ${ROOMS.length} · address in the app: ${esc(href)}</p>`,
-            `<h2>1. The room at rest</h2>`,
-            `<p>Every visible word in reading order, top to bottom. Each line says what it is (heading, button, link, field, text), how it is shown (size, typeface, colour, emphasis) and where it sits on a 1440-pixel-wide desktop screen. Orange marks the one main action on a surface; blue is information from the system; green and forest green mean healthy or lasting; amber is caution; red is real risk.</p>`,
-            renderLines(rest),
-            `<h2>2. What opens when you use the controls</h2>`,
-            reveals.length
-                ? reveals
-                      .map(
-                          (r) =>
-                              `<h3>Clicking “${esc(r.control)}”</h3>` +
-                              (r.note ? `<p>${esc(r.note)}</p>` : renderLines(r.lines))
-                      )
-                      .join("\n")
-                : `<p>No extra panels open from this room's controls (or they only change sample data, which this walkthrough leaves alone).</p>`,
-            `<div class="map"><h2>3. What this room is for and how it works</h2><p>The room's capability map: its purpose, every part and what it does, what flows in from and out to other rooms, and what it must never become.</p>${mapBody(mapFile)}</div>`,
-            nav(i)
-        ].join("\n");
-        fs.mkdirSync(path.join(OUT, id), { recursive: true });
-        fs.writeFileSync(path.join(OUT, id, "index.html"), page(`${label} — Antaeus walkthrough`, body));
-        index.push({ id, label, stage, words: rest.length, reveals: reveals.length });
-    }
+    const WORKERS = Number(process.env.TRANSCRIPT_WORKERS || 4);
+    const CAP = Number(process.env.TRANSCRIPT_CAP || 5000);
+    const todo = ROOMS.map((r, i) => i).filter(
+        (i) => !process.env.TRANSCRIPT_ONLY || process.env.TRANSCRIPT_ONLY.split(",").includes(ROOMS[i][0])
+    );
+    const results = [];
+    await Promise.all(
+        Array.from({ length: Math.min(WORKERS, todo.length) }, async () => {
+            const wctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+            await wctx.addCookies([{ name: "antaeus_mode", value: "preview", domain: "127.0.0.1", path: "/" }]);
+            const holder = { ctx: wctx, page: null };
+            while (todo.length) {
+                const i = todo.shift();
+                results.push(await exploreRoom(holder, i, snapshot, CAP));
+                process.stdout.write(`${ROOMS[i][1]}… `);
+            }
+            await wctx.close();
+        })
+    );
+    const index = results.sort((a, b) => a.i - b.i);
 
     // 4. The index: the gate, the map of rooms, onboarding, how to read.
     const onbMap = mapBody(path.join(MAPS, "onboarding-capability-map-2026-07-07.html"));
@@ -432,7 +627,7 @@ async function main() {
         `<h2>How to read this</h2><ol>`,
         `<li>Start with the gate below — the first screen a visitor sees.</li>`,
         `<li>Then go room by room in the order listed. The order follows the sales motion itself, from setting up who you sell to, through finding and working accounts, to advancing deals and handing the motion to a hire.</li>`,
-        `<li>Each room page has three parts: every word on screen with how and where it is shown; what opens when you use its controls; and the room's purpose, parts and connections.</li>`,
+        `<li>Each room page has four parts: every word on screen with how and where it is shown; everything the room does when each control is used; a coverage table listing every action tried and its result; and the room's purpose, parts and connections.</li>`,
         `<li>Each page links to the previous and next room, so you can read the whole app start to finish.</li></ol>`,
         `<p>The live app is at <code>/preview</code> on the same site, desktop browsers only.</p>`,
         `<h2>The gate — the first screen</h2>`,
@@ -442,13 +637,12 @@ async function main() {
         STAGES.map(
             (s, si) =>
                 `<h3>${esc(s)}</h3><ol>` +
-                index
-                    .filter((r) => r.stage === si)
-                    .map((r) => `<li><a href="${r.id}/">${esc(r.label)}</a></li>`)
+                ROOMS.filter((r) => r[3] === si)
+                    .map((r) => `<li><a href="${r[0]}/">${esc(r[1])}</a></li>`)
                     .join("") +
                 `</ol>`
         ).join("\n"),
-        `<p><a href="${index[0].id}/">Start with ${esc(index[0].label)} →</a></p>`,
+        `<p><a href="${ROOMS[0][0]}/">Start with ${esc(ROOMS[0][1])} →</a></p>`,
         `<h2>Moving between rooms — the Ground</h2>`,
         `<p>There is no menu bar. At the foot of every room sits a thin line with a small tab (the Antaeus mark). Clicking it, or pressing G, raises a map of every room laid out as the sales motion, with the current room highlighted and the system's suggested next room outlined in orange. This is what it says:</p>`,
         `<pre>${esc(ground)}</pre>`,
