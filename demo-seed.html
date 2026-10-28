@@ -7,7 +7,20 @@
 <title>Try Antaeus on a sample workspace</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+// Preview lane (worker/index.ts): invitees never see this picker. Force
+// the enterprise book, hide the page, and let the runtime replace() this
+// entry so Back never lands here.
+(function(){try{
+  if(!/(?:^|;\s*)antaeus_mode=preview(?:;|$)/.test(document.cookie||''))return;
+  var q=new URLSearchParams(location.search);
+  if(q.get('autoseed')!=='ent'){location.replace('/demo-seed.html?autoseed=ent&return='+encodeURIComponent('/dashboard/?demo=1'));return;}
+  document.documentElement.className+=' is-preview';
+}catch(e){}})();
+</script>
 <style>
+html.is-preview body > .lane{visibility:hidden;}
+html.is-preview body::after{content:"Opening the workspace\2026";position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:#8a93a8;}
 :root{
   --field:#f6f8fc;--ink:#0e1f40;--ink-2:#44506b;--ink-3:#8a93a8;
   --orange:#e6701e;--blue:#2563eb;--forest:#1b5e3f;--red:#ef4444;
