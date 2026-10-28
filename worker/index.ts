@@ -63,6 +63,46 @@ const PREVIEW_BLOCKED_PREFIXES = [
     "/data-migration"
 ];
 
+const TRANSCRIPT_PREFIX = "/preview/transcript/";
+const TRANSCRIPT_ASSET_DIR = "/preview-transcript/";
+
+async function serveTranscript(
+    url: URL,
+    env: Env,
+    expected: string
+): Promise<Response> {
+    const rest = url.pathname.slice(TRANSCRIPT_PREFIX.length);
+    const slash = rest.indexOf("/");
+    const code = decodeURIComponent(slash === -1 ? rest : rest.slice(0, slash));
+    if (code.trim().toUpperCase() !== expected.toUpperCase()) {
+        return new Response("Not found", { status: 404 });
+    }
+    if (slash === -1) {
+        // Normalize so relative links resolve under the code.
+        return Response.redirect(`${url.origin}${url.pathname}/`, 302);
+    }
+    let inner = rest.slice(slash + 1);
+    // Only room slugs — no traversal, no other files.
+    if (!/^([a-z0-9-]+\/?)?$/.test(inner)) {
+        return new Response("Not found", { status: 404 });
+    }
+    if (inner && !inner.endsWith("/")) inner += "/";
+    // Ask for the directory form (html_handling: auto-trailing-slash
+    // serves its index.html); follow one internal hop if it still redirects,
+    // so the hidden asset path never reaches the visitor.
+    let res = await env.ASSETS.fetch(
+        new Request(`${url.origin}${TRANSCRIPT_ASSET_DIR}${inner}`, { method: "GET" })
+    );
+    if (res.status >= 300 && res.status < 400) {
+        const loc = res.headers.get("Location");
+        if (loc) res = await env.ASSETS.fetch(new Request(new URL(loc, url.origin).toString(), { method: "GET" }));
+    }
+    const headers = new Headers(res.headers);
+    headers.set("X-Robots-Tag", "noindex, nofollow");
+    headers.set("Cache-Control", "private, no-store");
+    return new Response(res.body, { status: res.status, headers });
+}
+
 export function isMobileUserAgent(ua: string | null): boolean {
     if (!ua) return false;
     return /Mobi|Android|iPhone|iPad|iPod|Windows Phone|webOS|BlackBerry|Opera Mini|Silk|Kindle/i.test(
@@ -214,6 +254,13 @@ export default {
         // desktop-only rule and takes the code).
         if (pCode && PREVIEW_PAGE_PATHS.includes(url.pathname)) {
             return env.ASSETS.fetch(request);
+        }
+        // The AI-readable walkthrough: /preview/transcript/<CODE>/<room>/.
+        // The code rides in the path so a plain fetcher (an AI reading a
+        // link) gets in with no cookie and no form, and every relative link
+        // between pages keeps working. Text only — no phone check.
+        if (pCode && url.pathname.startsWith(TRANSCRIPT_PREFIX)) {
+            return serveTranscript(url, env, pCode);
         }
         if (pCode && url.pathname === PREVIEW_UNLOCK_PATH) {
             const code = url.searchParams.get("code") ?? "";
