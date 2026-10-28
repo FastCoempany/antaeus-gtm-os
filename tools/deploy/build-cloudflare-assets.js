@@ -40,6 +40,9 @@ const include = [
   // Demo lane (the `?demo=1` bootstrap path used by Playwright +
   // tools/qa/capture-demo-room.js).
   "demo-seed.html",
+  // The preview lane entry (friends / engineers / investors) — see
+  // worker/index.ts PREVIEW_CODE.
+  "preview.html",
   // Pre-beta gate (PR #65). The Cloudflare Worker rewrites
   // /coming-soon → /coming-soon.html so this file MUST be in dist.
   // Without it, env.ASSETS.fetch 404s and the gate is unreachable.

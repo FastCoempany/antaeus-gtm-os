@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Antaeus preview</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--field:#f6f8fc;--ink:#0e1f40;--ink-2:#44506b;--ink-3:#8a93a8;--orange:#e6701e;--forest:#1b5e3f;--red:#ef4444;--hair:rgba(14,31,64,0.12);
+--serif:'DM Serif Display',Georgia,serif;--sans:'Public Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 24px;
+background:linear-gradient(rgba(14,31,64,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(14,31,64,0.035) 1px,transparent 1px),var(--field);background-size:33px 33px,33px 33px,auto;}
+.lane{max-width:620px;width:100%;}
+.mark{display:flex;align-items:center;gap:10px;margin-bottom:34px;}
+.mark svg{width:30px;height:30px;}
+.mark span{font-family:var(--serif);font-size:1.35rem;}
+.kick{font-family:var(--mono);font-size:0.66rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--ink-3);margin-bottom:14px;}
+h1{font-family:var(--serif);font-size:clamp(2rem,4.4vw,2.8rem);line-height:1.08;margin-bottom:14px;}
+p{font-size:1rem;color:var(--ink-2);line-height:1.65;margin-bottom:10px;}
+form{display:flex;gap:10px;margin:26px 0 10px;}
+input{flex:1;font-family:var(--mono);font-size:1rem;letter-spacing:0.12em;text-transform:uppercase;padding:13px 14px;border:1px solid var(--hair);border-radius:8px;background:#fff;color:var(--ink);}
+input:focus{outline:2px solid var(--orange);outline-offset:1px;}
+button{appearance:none;border:0;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:0.92rem;background:var(--orange);color:#fff;padding:13px 22px;border-radius:8px;}
+.err{font-size:0.88rem;color:var(--red);min-height:1.4em;}
+.small{font-size:0.82rem;color:var(--ink-3);border-top:1px solid var(--hair);padding-top:16px;margin-top:22px;}
+.desk{display:none;}
+body.is-mobile .entry{display:none;}
+body.is-mobile .desk{display:block;}
+</style>
+</head>
+<body>
+<div class="lane">
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
+    <span>antaeus</span>
+  </div>
+
+  <div class="entry">
+    <div class="kick">Private preview &middot; by invitation</div>
+    <h1>You&rsquo;ve been invited to look around.</h1>
+    <p>This opens a full sample workspace &mdash; an enterprise seller at a $100MM company, with real household-name accounts, live deals, a pilot in flight, and every room working on that data. Nothing you do here touches anyone&rsquo;s real data.</p>
+    <p>Type the code you were sent.</p>
+    <form method="GET" action="/_preview/unlock" autocomplete="off">
+      <input name="code" placeholder="Your code" aria-label="Preview code" required>
+      <button type="submit">Open the workspace &rarr;</button>
+    </form>
+    <div class="err" id="err"></div>
+    <p class="small">By opening the preview you agree to keep what you see confidential, as set out in the note you received with your code. Please don&rsquo;t screenshot, record, or share the link or the code.</p>
+  </div>
+
+  <div class="desk">
+    <div class="kick">Desktop only</div>
+    <h1>Open this on a computer.</h1>
+    <p>Antaeus is built for a desktop screen, and the preview only opens there. Send yourself this link and open it on a laptop or desktop browser.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  var touchOnly=window.matchMedia&&window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  var mobileUa=/Mobi|Android|iPhone|iPad|iPod|Windows Phone|webOS|BlackBerry|Opera Mini|Silk|Kindle/i.test(navigator.userAgent||'');
+  if(q.get('error')==='desktop'||touchOnly||mobileUa){document.body.classList.add('is-mobile');}
+  if(q.get('error')==='1'){document.getElementById('err').textContent="That code doesn't open anything. Check it and try again.";}
+  var pre=q.get('code');var inp=document.querySelector('input[name=code]');if(pre&&inp)inp.value=pre;
+})();
+</script>
+<script src="/js/analytics-site-config.js"></script>
+<script src="/js/analytics.js"></script>
+</body>
+</html>
