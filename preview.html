@@ -59,7 +59,16 @@ body.is-mobile .desk{display:block;}
 </div>
 <script>
 (function(){
-  var q=new URLSearchParams(location.search);
+  // Already in → never show the gate again (Back from the app lands here).
+  function inLane(){return /(?:^|;\s*)antaeus_mode=preview(?:;|$)/.test(document.cookie||'');}
+  var q0=new URLSearchParams(location.search);
+  if(inLane()&&!q0.get('error')){location.replace('/dashboard/?demo=1');return;}
+  // Back/forward cache restores the typed code — clear it, and re-check.
+  window.addEventListener('pageshow',function(e){
+    var i=document.querySelector('input[name=code]');if(i&&!q0.get('code'))i.value='';
+    if(inLane()&&!q0.get('error'))location.replace('/dashboard/?demo=1');
+  });
+  var q=q0;
   var touchOnly=window.matchMedia&&window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   var mobileUa=/Mobi|Android|iPhone|iPad|iPod|Windows Phone|webOS|BlackBerry|Opera Mini|Silk|Kindle/i.test(navigator.userAgent||'');
   if(q.get('error')==='desktop'||touchOnly||mobileUa){document.body.classList.add('is-mobile');}
