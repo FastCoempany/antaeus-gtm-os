@@ -150,7 +150,7 @@ function gateInheritable(
         if (weak) {
             blockers.push(
                 t(
-                    "Strengthen {dimension} — every dimension needs to clear the bar.",
+                    "Strengthen {dimension} — every part of your sales motion has to be at least workable before a hire could run it.",
                     { class: "body" }
                 ).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -161,7 +161,7 @@ function gateInheritable(
     if (maxScore < 16) {
         blockers.push(
             t(
-                "Make one dimension a strong suit — work outbound, discovery, or deal motion until something stands out.",
+                "Get one part of your sales motion clearly strong — keep working your outreach, discovery calls, or open deals until one stands out.",
                 { class: "body" }
             )
         );
