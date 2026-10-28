@@ -9,6 +9,7 @@ import {
     loadObservationsForRanking
 } from "@/birdseye/lib/context";
 import { reportError } from "@/lib/observability";
+import { isPreviewLane } from "@/lib/preview-lane";
 import {
     MOTION_ROOMS,
     MOTION_STAGES,
@@ -138,6 +139,7 @@ export function GroundLine(): JSX.Element {
     const sugRoomId = sug ? roomIdForUrl(sug.targetUrl) : null;
     const q = groundQuery.value;
     const visible = new Set(filterMotionRooms(q).map((r) => r.id));
+    const preview = isPreviewLane();
 
     return (
         <div class="gnd">
@@ -220,6 +222,29 @@ export function GroundLine(): JSX.Element {
                                     const isHere = r.id === here;
                                     const isSug = r.id === sugRoomId && !isHere;
                                     const dim = !visible.has(r.id);
+                                    if (preview && r.id === "onboarding") {
+                                        // Preview lane: the workspace is
+                                        // already seeded, so onboarding is
+                                        // shown — and explained — but locked.
+                                        return (
+                                            <span
+                                                class={`gnd-rm is-locked${dim ? " is-dim" : ""}`}
+                                                key={r.id}
+                                                tabIndex={0}
+                                                aria-disabled="true"
+                                                aria-describedby="gnd-onb-why"
+                                            >
+                                                <span class="gnd-rn">{r.label}</span>
+                                                <span class="gnd-rd">{t("not open in the preview")}</span>
+                                                <span class="gnd-lock-why" id="gnd-onb-why" role="tooltip">
+                                                    {t(
+                                                        "Onboarding is how a new seller sets up their workspace. They tell the app who they really sell to, name the accounts they're chasing, and say where each of their live deals actually stands — the judgment no tool can fill in for them. The app fills in the rest, and every room you see here wakes up from that one sitting. This preview starts you after that step, on a workspace that's already set up.",
+                                                        { class: "body" }
+                                                    )}
+                                                </span>
+                                            </span>
+                                        );
+                                    }
                                     return (
                                         <a
                                             class={`gnd-rm${isHere ? " is-here" : ""}${isSug ? " is-next" : ""}${dim ? " is-dim" : ""}`}

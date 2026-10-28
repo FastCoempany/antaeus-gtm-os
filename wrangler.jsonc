@@ -22,6 +22,11 @@
     // the Worker. GATE_CODE rotates the unlock code; leaving it unset
     // falls back to the DEFAULT_GATE_CODE in the Worker.
     "GATE_ENABLED": "true",
-    "GATE_CODE": "741407"
+    "GATE_CODE": "741407",
+    // Preview lane (friends / engineers / investors): opens ONLY the
+    // enterprise demo seed, desktop only, no onboarding. Share
+    // https://antaeus.app/preview + this code. Rotate to revoke every
+    // preview session at once; set to "" to turn the lane off.
+    "PREVIEW_CODE": "LUCA-2026"
   }
 }

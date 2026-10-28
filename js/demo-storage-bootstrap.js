@@ -32,8 +32,30 @@
             var demoParam = String(params.get('demo') || '').toLowerCase();
             if (demoParam === '1' || demoParam === 'true') {
                 safeSetSessionMode('demo');
-            } else if (demoParam === '0' || demoParam === 'false') {
+            } else if ((demoParam === '0' || demoParam === 'false') && !isPreviewLane()) {
                 safeSetSessionMode('prod');
+            }
+        } catch (e) {}
+    }
+
+    // Preview lane (worker/index.ts): the Worker sets a JS-readable
+    // `antaeus_mode=preview` cookie. A preview visitor is ALWAYS in the
+    // demo namespace — in every tab, even without ?demo=1 — and is
+    // bounced off any phone/tablet.
+    function isPreviewLane() {
+        try {
+            return /(?:^|;\s*)antaeus_mode=preview(?:;|$)/.test(document.cookie || '');
+        } catch (e) {
+            return false;
+        }
+    }
+
+    if (isPreviewLane()) {
+        safeSetSessionMode('demo');
+        try {
+            var coarse = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+            if (coarse || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')) {
+                window.location.replace('/preview?error=desktop');
             }
         } catch (e) {}
     }
