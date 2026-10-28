@@ -62,7 +62,7 @@ body.is-mobile .desk{display:block;}
   var q=new URLSearchParams(location.search);
   var touchOnly=window.matchMedia&&window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   var mobileUa=/Mobi|Android|iPhone|iPad|iPod|Windows Phone|webOS|BlackBerry|Opera Mini|Silk|Kindle/i.test(navigator.userAgent||'');
-  if(q.get('error')==='desktop'||touchOnly||mobileUa||window.innerWidth<1024){document.body.classList.add('is-mobile');}
+  if(q.get('error')==='desktop'||touchOnly||mobileUa){document.body.classList.add('is-mobile');}
   if(q.get('error')==='1'){document.getElementById('err').textContent="That code doesn't open anything. Check it and try again.";}
   var pre=q.get('code');var inp=document.querySelector('input[name=code]');if(pre&&inp)inp.value=pre;
 })();

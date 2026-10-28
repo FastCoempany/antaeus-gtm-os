@@ -89,7 +89,7 @@ function makePreviewUnlockResponse(
     if (mobile) {
         return Response.redirect(`${origin}/preview?error=desktop`, 302);
     }
-    if (code.trim() !== expected) {
+    if (code.trim().toUpperCase() !== expected.toUpperCase()) {
         return Response.redirect(`${origin}/preview?error=1`, 302);
     }
     const headers = new Headers();

@@ -58,6 +58,15 @@
                 window.location.replace('/preview?error=desktop');
             }
         } catch (e) {}
+        // Self-heal: if this browser lost the sample (storage cleared,
+        // new browser profile), quietly reload it instead of showing an
+        // empty workspace.
+        try {
+            var onSeedPage = /demo-seed/.test(window.location.pathname || '');
+            if (!onSeedPage && rawGetItem && !rawGetItem.call(window.localStorage, DEMO_PREFIX + 'gtmos_demo_seed_meta')) {
+                window.location.replace('/demo-seed.html?autoseed=ent&return=' + encodeURIComponent('/dashboard/?demo=1'));
+            }
+        } catch (e) {}
     }
 
     function isDemoStorageMode() {
