@@ -10,20 +10,13 @@ import {
 import { DEFAULT_PREFS, type ComputedVitals, type Prefs } from "./vitals";
 
 /**
- * Phase 4 / Room 4 Wave 3 — autopsy generator.
+ * Future Autopsy document generator.
  *
- * Orchestrates the legacy `generateAutopsy(v)` pipeline (lines
- * 1860-1917 of app/future-autopsy/index.html):
- *   1. topCauses(vitals)            — failure patterns from cause engine
- *   2. chapterFor(cause)            — narrative line per cause (CHAPTERS)
- *   3. winConditionsFor(causes)     — mirror win conditions, padded to 5
- *   4. stageLead + cause variation  — lose-side narrative (with tail)
- *   5. stageWinLead                  — win-side narrative (with tail)
- *   6. chooseTasks                   — top countermeasure docket
- *   7. killSwitchFor                 — recommended-kill heuristic
- *
- * Returns the typed AutopsyDoc that Wave 4's PinnedCase + Wave 5's
- * route rack consume.
+ * The stable AutopsyDoc contract is preserved for downstream readers. The
+ * generator ranks observed risk conditions, produces a current assessment,
+ * lists corrected conditions, and recommends actions. It must not present a
+ * modeled horizon as a factual loss date or claim that a recorded condition
+ * caused a future win/loss.
  */
 
 export interface GenerateOptions {
@@ -33,29 +26,20 @@ export interface GenerateOptions {
 
 const STORY_MAX = 700;
 
-function retime(lead: string, horizonDays: number): string {
-    return lead.replace(/^45 days later/, `${horizonDays} days later`);
-}
-
 function clip(s: string, max = STORY_MAX): string {
     return s.length > max ? s.slice(0, max) : s;
 }
 
 /**
- * Project THIS deal's countdown instead of a flat constant
- * (founder-approved 2026-07-10; the 45-day constant was the flagged
- * assumption). The heuristic is deliberately explainable:
+ * Produce a review horizon from the existing explainable heuristic.
  *
- *   - the risk score sets the window: a deal at risk 80 has ~10 days
- *     of rope, a deal at risk 30 has ~60 (clamped 7–90). Staleness,
- *     stage-stuck time, and qualification are already inside the risk
- *     score — no double counting.
- *   - a real close date caps it: the countdown never runs past the
- *     date the deal is supposed to close, and a deal already past its
- *     close date is inside its final week.
+ * - risk score sets the initial review window, clamped to 7–90 days;
+ * - a recorded close date can shorten that window;
+ * - a past close date places the deal inside the final seven-day review band.
  *
- * Still a heuristic, not a model — calibration against real losses is
- * future work once enough outcome history exists.
+ * This remains a heuristic, not a calibrated probability model. The horizon
+ * controls urgency/order in the product; it is not a prediction that the deal
+ * will be lost on that date.
  */
 export function projectHorizonDays(
     vitals: Pick<ComputedVitals, "riskScore" | "closeDate">,
@@ -64,8 +48,6 @@ export function projectHorizonDays(
 ): number {
     const risk = Number(vitals.riskScore);
     if (!Number.isFinite(risk) || risk <= 0) return fallback;
-    // The 7-day floor applies to the risk-derived window only — a real
-    // close date closer than that is the truth and wins.
     let days = Math.max(7, Math.min(90, Math.round(90 - risk)));
     if (vitals.closeDate) {
         const closeMs = Date.parse(vitals.closeDate);
@@ -95,25 +77,26 @@ export function generateAutopsy(
     });
 
     const topCauseId: CauseId | "" = causes[0]?.id ?? "";
-    const loseLead = stageLead(vitals.stageRaw, topCauseId);
-    const winLead = stageWinLead(vitals.stageRaw);
+    const riskLead = stageLead(vitals.stageRaw, topCauseId);
+    const correctedLead = stageWinLead(vitals.stageRaw);
 
-    const loseTail =
+    const riskTail =
         causes.length > 0
-            ? " Key failure pattern: " +
-                  causes
-                      .slice(0, 3)
-                      .map((c) => (c.label ?? c.id).toLowerCase())
-                      .join("; ") +
-                  ". The loss was not dramatic; it was procedural, then inevitable."
+            ? " Recorded risk factors: " +
+              causes
+                  .slice(0, 3)
+                  .map((c) => c.label ?? c.id)
+                  .join(" ") +
+              " These are contributing conditions in the current assessment, not proof that any one condition caused a loss."
             : "";
-    const winTail =
-        " Key win pattern: " +
+
+    const correctedTail =
+        " Corrected conditions: " +
         winConditions
             .slice(0, 3)
             .map((w) => w.story)
             .join(" ") +
-        " You put a real result in the buyer's hands early, so the close became an execution step, not a hope exercise.";
+        " Addressing these conditions reduces the identified risk; it does not guarantee a close.";
 
     return {
         deal: vitals as Vitals,
@@ -123,18 +106,16 @@ export function generateAutopsy(
         winConditions,
         countermeasures,
         killSwitch: killSwitchFor(vitals, prefs),
-        // The authored leads open with "45 days later" — re-time the
-        // prose to this deal's projected countdown so the story and the
-        // number on the face agree.
-        loseStory: clip(retime(loseLead, horizonDays) + loseTail),
-        winStory: clip(retime(winLead, horizonDays) + winTail)
+        // Stable field names retained for compatibility with existing readers.
+        loseStory: clip(riskLead + riskTail),
+        winStory: clip(correctedLead + correctedTail)
     };
 }
 
 /**
- * Recommend abandoning the deal when value is low + thread is critically
- * stale + qualification is weak + risk is high. Faithful port of the
- * legacy `killSwitch(v)` (line 1851-1858).
+ * Recommend considering closure when low value, prolonged inactivity, weak
+ * qualification, and high modeled risk are all present. Stable function name
+ * retained for compatibility with existing callers.
  */
 export function killSwitchFor(
     vitals: ComputedVitals,
@@ -146,14 +127,13 @@ export function killSwitchFor(
         vitals.qualScore <= 6 &&
         vitals.riskScore >= 70;
     if (recommended) {
-        return "Low value + stale + weak qualification + high risk — recommend closing this out.";
+        return "Consider closing this opportunity: low value, prolonged inactivity, weak qualification, and high modeled risk are all present.";
     }
-    return "Not there yet - keep working it, and walk away only if the cuts above go nowhere.";
+    return "Continue working the opportunity for now. Consider closing it only if the recommended corrective actions do not produce buyer engagement or clearer qualification.";
 }
 
 /**
- * Universe ranker — the legacy `autopsyUniverseScore` from
- * `app/future-autopsy/index.html` lines 1959-1966.
+ * Stable ranking score used to order open deals for review.
  */
 export function autopsyUniverseScore(
     vitals: ComputedVitals,
@@ -169,8 +149,8 @@ export function autopsyUniverseScore(
 }
 
 /**
- * Rank the full vitals list and return the top N pinned cases. Closed
- * deals filtered. Stable on ties via input index.
+ * Rank open deals and return the top N for review. Stable on ties via input
+ * index. Closed deals are excluded.
  */
 export function rankAutopsyUniverse(
     vitals: ReadonlyArray<ComputedVitals>,
