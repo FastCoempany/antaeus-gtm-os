@@ -3,32 +3,12 @@ import { t } from "@/lib/voice/t";
 import { signal, type Signal } from "@preact/signals";
 
 /**
- * FirstVisitPrimer — the one-time explainer that surfaces above the
- * topbar when the operator opens the Briefing room for the first time.
- *
- * Per ADR-013 follow-up + canon Part II §6 ("every surface must treat
- * empty / sparse / loading states explicitly"): the Briefing room has
- * good "no patterns yet" empty-state copy, but a first-time visitor on
- * a populated workspace still lands on a wall of synthesized reads
- * with no frame for what they're looking at.
- *
- * This component fills that gap. Three short paragraphs name what the
- * room is + the secondary-surface concepts (Watch list, Where the
- * data disagrees, Consider watching) so the operator's first scan has
- * orientation. Dismissable; the dismissal flag persists in
- * localStorage so it never re-appears on this device.
- *
- * Hook-free per canon Phase 4 / Room 9 — module-level signal carries
- * the visible state.
+ * One-time Briefing explainer. It distinguishes account/deal changes,
+ * market analysis, conflicting evidence, suggested accounts, and saved
+ * monitoring rules without requiring private Antaeus terminology.
  */
 
-// v2 bump: ADR-014 added the Workspace / World framing. Operators who
-// dismissed the v1 primer should see the v2 primer once so they discover
-// the new view toggle.
 const STORAGE_KEY = "gtmos_briefing_primer_seen_v2";
-
-// Module-level signal — null = "not yet checked storage."
-// Renders read storage on first access so test resets work cleanly.
 const dismissedSignal: Signal<boolean | null> = signal(null);
 
 function readSeen(): boolean {
@@ -45,8 +25,7 @@ function writeSeen(): void {
     try {
         window.localStorage.setItem(STORAGE_KEY, "true");
     } catch {
-        // storage disabled — non-blocking. Primer will re-appear next
-        // visit. That's a worse experience but not a bug.
+        // Storage disabled — the primer may reappear on a later visit.
     }
 }
 
@@ -56,15 +35,15 @@ function dismiss(): void {
 }
 
 export function FirstVisitPrimer(): JSX.Element | null {
-    // First read seeds from storage; later reads honor the signal.
     if (dismissedSignal.value === null) {
         dismissedSignal.value = readSeen();
     }
     if (dismissedSignal.value) return null;
+
     return (
-        <aside class="bf-primer" role="note" aria-label={t("What the Briefing room does")}>
+        <aside class="bf-primer" role="note" aria-label={t("What Briefing shows")}>
             <div class="bf-primer__head">
-                <p class="bf-primer__kicker">{t("FIRST TIME HERE")}</p>
+                <p class="bf-primer__kicker">{t("ABOUT BRIEFING")}</p>
                 <button
                     type="button"
                     class="bf-primer__close"
@@ -76,43 +55,26 @@ export function FirstVisitPrimer(): JSX.Element | null {
                 </button>
             </div>
             <h2 class="bf-primer__headline">
-                This room is what the system saw — in your work, and in
-                your market.
+                {t("Briefing summarizes changes in your deals and accounts, along with relevant developments in your market.", { class: "body" })}
             </h2>
             <p class="bf-primer__body">
-                Open it daily. It reads top to bottom the way your morning
-                does: <strong>{t("your work")}</strong> first (what's moving in
-                your own deals, signals, and pilot evidence — refreshed every
-                30 minutes), then <strong>{t("your market")}</strong> (what's
-                moving in the world you sell into — refreshed Monday mornings).
+                {t("Your account and deal activity is refreshed every 30 minutes. Market analysis is refreshed on Monday mornings.", { class: "body" })}
             </p>
             <ul class="bf-primer__list">
                 <li>
-                    <strong>{t("Your work")}</strong> — heartbeat-fresh reads
-                    about your deals going stale, accounts going quiet,
-                    evidence past its readout. Dismiss what doesn't matter;
-                    the rest tells you where to look first.
+                    <strong>{t("Changes in your deals and accounts")}</strong> — {t("material changes in active deals, watched accounts, and pilot evidence. Dismiss items that are not useful.", { class: "body" })}
                 </li>
                 <li>
-                    <strong>{t("Your market · Patterns")}</strong> — synthesized reads
-                    of what's moving in your market. Click any destination
-                    chip to draft a move in the destination room. "Show
-                    the work" expands the audit trail.
+                    <strong>{t("Market patterns")}</strong> — {t("recurring developments across your target market. Open the supporting evidence or continue into the relevant workspace.", { class: "body" })}
                 </li>
                 <li>
-                    <strong>{t("Your market · The data disagrees")}</strong> —
-                    the system challenging an assumption you've stated.
-                    Quiet most weeks. Loud when the evidence stops matching.
+                    <strong>{t("Evidence that conflicts with an assumption")}</strong> — {t("cases where current data does not support an assumption recorded in your workspace.", { class: "body" })}
                 </li>
                 <li>
-                    <strong>{t("Your market · Consider watching")}</strong> — companies
-                    the data kept mentioning alongside the ones you've
-                    named but that aren't on your watchlist yet.
+                    <strong>{t("Accounts to consider")}</strong> — {t("companies that repeatedly appear in relevant evidence but are not currently on your watchlist.", { class: "body" })}
                 </li>
                 <li>
-                    <strong>{t("Watch list")}</strong> —
-                    your standing orders on the watching-for strip. Arm one and the system
-                    tells you when it fires.
+                    <strong>{t("Saved monitoring rules")}</strong> — {t("events you have asked Antaeus to watch for. Matching events appear here when new data meets a rule.", { class: "body" })}
                 </li>
             </ul>
             <button
@@ -120,7 +82,7 @@ export function FirstVisitPrimer(): JSX.Element | null {
                 class="bf-primer__ack"
                 onClick={dismiss}
             >
-                Got it
+                {t("Got it")}
             </button>
         </aside>
     );
