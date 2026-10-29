@@ -1,17 +1,9 @@
 /**
- * Verdict gate evaluator + transition detector.
+ * Readiness gate evaluator + transition detector.
  *
- * The five verdicts are gate-based (canon §4.17) — NOT thresholds on
- * the total score. Each verdict requires a specific combination of
- * dimension scores AND independent evidence (proofs / wins / autopsies
- * / advisors / handoff sections). A workspace can score 80/100 and
- * still be "Building" if it lacks the gating evidence; it can score
- * 65/100 and reach "Inheritable with guardrails" if every dimension
- * crosses 10 + a proof exists.
- *
- * Every gate is checked top-down (highest verdict first). The first
- * gate to pass wins. The drawer's "next" section reads the gate that
- * just below the winner — those are the unmet conditions.
+ * The five stable internal verdict keys are gate-based rather than simple
+ * thresholds on the total score. User-facing copy describes the concrete
+ * evidence or action required for the next readiness state.
  */
 
 import { t } from "@/lib/voice/t";
@@ -27,30 +19,21 @@ import { scoreAllDimensions } from "./dimensions";
 
 interface GateResult {
     readonly passed: boolean;
-    /** Reasons it did NOT pass, in priority order. Empty if `passed`. */
     readonly blockers: ReadonlyArray<string>;
 }
 
-/** Verdict 5 — "Hire-ready, repeatable" gate. */
 function gateHireReadyRepeatable(
     dimensions: ReadonlyArray<DimensionScore>,
     input: ReadinessInput
 ): GateResult {
     const blockers: string[] = [];
 
-    // Phase 2.8 audit — blocker copy rewritten in behavior-shape
-    // operator voice. Was internal math vocab ("X below 14/20" /
-    // "Need 2+ dimensions above 8/20") — Sarah doesn't read 14/20
-    // as a behavior; she reads it as a score she doesn't know how
-    // to move. Now each blocker names the action that would clear
-    // it.
-
     const minScore = Math.min(...dimensions.map((d) => d.score));
     if (minScore < 14) {
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's the weakest part of your motion.", {
+                t("Strengthen {dimension}; it is currently the least-developed part of the sales process.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -59,24 +42,24 @@ function gateHireReadyRepeatable(
 
     if (input.closedWonDeals < 1) {
         blockers.push(
-            t("Close-won a deal so the kit has a real result a buyer's boss can act on.", {
+            t("Record at least one closed-won deal so the handoff includes a completed customer outcome.", {
                 class: "body"
             })
         );
     }
     if (input.futureAutopsiesRun < 1) {
         blockers.push(
-            t("Run a Future Autopsy — even on a still-open deal.", {
+            t("Complete at least one deal-risk review in Future Autopsy.", {
                 class: "body"
             })
         );
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
+        blockers.push(t("Complete a pilot with a result the buyer can evaluate.", { class: "body" }));
     }
     if (input.advisorDeployments < 1) {
         blockers.push(
-            t("Call in a favor — a backchannel ask on a real deal.", {
+            t("Use Call in a Favor on a real deal and record the outcome.", {
                 class: "body"
             })
         );
@@ -90,13 +73,13 @@ function gateHireReadyRepeatable(
             : input.closedWonDeals / input.closedLostDealsAnalyzed;
     if (winLossRatio < 1) {
         blockers.push(
-            t("Bring win/loss balance to 1:1 or better.", { class: "body" })
+            t("Record enough win and loss history to compare successful and unsuccessful deals.", { class: "body" })
         );
     }
 
     if (input.handoffSectionsReady < 5) {
         blockers.push(
-            t("Fill in Founding GTM to 5/7 sections (currently {n}/7).", {
+            t("Complete at least 5 of 7 Founding GTM handoff sections (currently {n}/7).", {
                 class: "body"
             }).replace("{n}", String(input.handoffSectionsReady))
         );
@@ -105,7 +88,6 @@ function gateHireReadyRepeatable(
     return { passed: blockers.length === 0, blockers };
 }
 
-/** Verdict 4 — "Hire-ready" gate. */
 function gateHireReady(
     dimensions: ReadonlyArray<DimensionScore>,
     input: ReadinessInput
@@ -117,7 +99,7 @@ function gateHireReady(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Tighten {dimension} — it's what's holding you here.", {
+                t("Strengthen {dimension}; it is preventing the sales process from being run independently.", {
                     class: "body"
                 }).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -125,19 +107,18 @@ function gateHireReady(
     }
 
     if (input.closedWonDeals < 1) {
-        blockers.push(t("Close-won a deal.", { class: "body" }));
+        blockers.push(t("Record at least one closed-won deal.", { class: "body" }));
     }
     if (input.futureAutopsiesRun < 1) {
-        blockers.push(t("Run a Future Autopsy.", { class: "body" }));
+        blockers.push(t("Complete at least one deal-risk review in Future Autopsy.", { class: "body" }));
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
+        blockers.push(t("Complete a pilot with an evaluable buyer result.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
 }
 
-/** Verdict 3 — "Inheritable with guardrails" gate. */
 function gateInheritable(
     dimensions: ReadonlyArray<DimensionScore>,
     input: ReadinessInput
@@ -150,7 +131,7 @@ function gateInheritable(
         if (weak) {
             blockers.push(
                 t(
-                    "Strengthen {dimension} — every part of your sales motion has to be at least workable before a hire could run it.",
+                    "Strengthen {dimension}. Each part of the sales process needs enough evidence and documentation for another seller to run it with founder support.",
                     { class: "body" }
                 ).replace("{dimension}", weak.label.toLowerCase())
             );
@@ -161,20 +142,19 @@ function gateInheritable(
     if (maxScore < 16) {
         blockers.push(
             t(
-                "Get one part of your sales motion clearly strong — keep working your outreach, discovery calls, or open deals until one stands out.",
+                "Develop at least one part of the sales process to a clearly repeatable state, such as outreach, discovery, or deal management.",
                 { class: "body" }
             )
         );
     }
 
     if (input.castProofs < 1) {
-        blockers.push(t("Run a pilot that gives a buyer's boss a result they can act on.", { class: "body" }));
+        blockers.push(t("Complete a pilot with an evaluable buyer result.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
 }
 
-/** Verdict 2 — "Building" gate. */
 function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     const blockers: string[] = [];
 
@@ -182,7 +162,7 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     if (aboveEight < 2) {
         blockers.push(
             t(
-                "Get two parts of your motion moving — start with who you sell to + the first outreach.",
+                "Develop at least two parts of the sales process. Start with the ICP and initial outreach if both are still incomplete.",
                 { class: "body" }
             )
         );
@@ -191,10 +171,6 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
     return { passed: blockers.length === 0, blockers };
 }
 
-/**
- * Evaluate every gate top-down and return the winning verdict +
- * the blockers from the *next* unreached verdict.
- */
 function pickVerdict(
     dimensions: ReadonlyArray<DimensionScore>,
     input: ReadinessInput
@@ -249,10 +225,6 @@ function nextVerdict(verdict: Verdict): Verdict | null {
     }
 }
 
-/**
- * Top-level entry point — score every dimension, run gates, return the
- * full summary the room renders.
- */
 export function evaluateReadiness(input: ReadinessInput): ReadinessSummary {
     const dimensions = scoreAllDimensions(input);
     const totalScore = dimensions.reduce((sum, d) => sum + d.score, 0);
@@ -268,18 +240,7 @@ export function evaluateReadiness(input: ReadinessInput): ReadinessSummary {
     };
 }
 
-/**
- * Detect a verdict transition between two summaries.
- *
- * Returns null if `from` and `to` resolve to the same verdict.
- * Otherwise returns a `VerdictTransition` with direction = "up" /
- * "down" computed from the rank ordering.
- *
- * The Founding GTM ceremony moment listens specifically for
- * `direction === "up"` AND `to === "inheritable_with_guardrails"`,
- * and only fires once per workspace per upward transition (caller
- * tracks idempotency via persisted history rows).
- */
+/** Detect a transition between stable internal readiness states. */
 export function detectTransition(
     from: Verdict,
     to: Verdict,
