@@ -6,15 +6,11 @@ import {
 } from "../../lib/recovery";
 
 /**
- * Deal Workspace v4 — the toggleable-views presentation model (canon
- * §4.13, Diagnosis Table). Three views (Focus / Timeline / List) all run
- * off ONE shared recovery engine (`rankRecovery`/`assessDeal`, reused
- * unchanged). This module is the read layer that shapes the ranked
- * assessments for each view — it invents no scoring of its own.
+ * Deal Workspace presentation model.
  *
- * The room leads with pressure: which deals will close-lost this week if
- * you do nothing, and the smallest corrective move. Stage is not truth
- * unless a real next step backs it.
+ * Focus, Timeline, and List all use the same risk-ranking engine. This module
+ * only shapes that ranked assessment for display; it does not invent a loss
+ * date or probability.
  */
 
 export type DwView = "focus" | "timeline" | "list";
@@ -27,9 +23,24 @@ export interface LaneMeta {
 }
 
 export const LANE_META: Record<RecoveryLane, LaneMeta> = {
-    critical: { key: "critical", cls: "crit", title: "Slipping now", sub: "act this week or lose them" },
-    "at-risk": { key: "at-risk", cls: "risk", title: "At risk", sub: "one thing overdue" },
-    healthy: { key: "healthy", cls: "hold", title: "Holding", sub: "on track" }
+    critical: {
+        key: "critical",
+        cls: "crit",
+        title: "High risk",
+        sub: "review this week"
+    },
+    "at-risk": {
+        key: "at-risk",
+        cls: "risk",
+        title: "Elevated risk",
+        sub: "review risk factors"
+    },
+    healthy: {
+        key: "healthy",
+        cls: "hold",
+        title: "Lower risk",
+        sub: "no immediate risk action"
+    }
 };
 
 export const LANE_ORDER: ReadonlyArray<RecoveryLane> = ["critical", "at-risk", "healthy"];
@@ -42,7 +53,7 @@ export interface HeroModel {
     readonly pipelineValue: number;
 }
 
-/** The hero read: how many deals slip this week + the $ at risk. */
+/** Number and value of deals currently outside the lower-risk band. */
 export function buildHero(active: ReadonlyArray<Deal>): HeroModel {
     const ranked = rankRecovery(active);
     const atRisk = ranked.filter((a) => a.lane !== "healthy");
@@ -55,7 +66,7 @@ export function buildHero(active: ReadonlyArray<Deal>): HeroModel {
     };
 }
 
-/** Ranked assessments (critical-first) — the shared spine for all views. */
+/** Ranked assessments, highest risk score first. */
 export function rankedAssessments(active: ReadonlyArray<Deal>): ReadonlyArray<RecoveryAssessment> {
     return rankRecovery(active);
 }
@@ -64,28 +75,36 @@ export function rankedAssessments(active: ReadonlyArray<Deal>): ReadonlyArray<Re
 export function laneGroups(
     active: ReadonlyArray<Deal>
 ): Record<RecoveryLane, ReadonlyArray<RecoveryAssessment>> {
-    const out: Record<RecoveryLane, RecoveryAssessment[]> = { critical: [], "at-risk": [], healthy: [] };
+    const out: Record<RecoveryLane, RecoveryAssessment[]> = {
+        critical: [],
+        "at-risk": [],
+        healthy: []
+    };
     for (const a of rankRecovery(active)) out[a.lane].push(a);
     return out;
 }
 
 /**
- * Timeline horizon position (0–100%) — higher recovery score = sooner
- * it slips = further left. Derived from the shared score, no new math.
+ * Visual position on the score-derived risk axis. Higher risk score is shown
+ * further left. Position is not a time-to-loss estimate.
  */
 export function horizonPercent(assessment: RecoveryAssessment): number {
-    // score ~0 (healthy) → far right; high score (critical) → far left.
     const clamped = Math.max(0, Math.min(160, assessment.score));
     return Math.round(4 + (1 - clamped / 160) * 88);
 }
 
-export const TIMELINE_ZONES: ReadonlyArray<{ cls: string; zt: string; zs: string; lane: RecoveryLane }> = [
-    { cls: "z1", zt: "Slips this week", zs: "act now or lose it", lane: "critical" },
-    { cls: "z2", zt: "Slips in ~2 weeks", zs: "one thing overdue", lane: "at-risk" },
-    { cls: "z3", zt: "Holding / on track", zs: "nothing needed today", lane: "healthy" }
+export const TIMELINE_ZONES: ReadonlyArray<{
+    cls: string;
+    zt: string;
+    zs: string;
+    lane: RecoveryLane;
+}> = [
+    { cls: "z1", zt: "High risk", zs: "review this week", lane: "critical" },
+    { cls: "z2", zt: "Elevated risk", zs: "review risk factors", lane: "at-risk" },
+    { cls: "z3", zt: "Lower risk", zs: "no immediate risk action", lane: "healthy" }
 ];
 
-/** The 9 fields the Focus view surfaces — each a gap when unnamed. */
+/** Standard deal fields surfaced in Focus view. */
 export function nineFields(deal: Deal): ReadonlyArray<{ k: string; v: string }> {
     return [
         { k: "Champion", v: deal.champion ?? "" },
