@@ -20,26 +20,18 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./quota-workback-v4.css";
 
 /**
- * QuotaWorkbackV4 (canon §4.18) — pace + fused strands, wired to
- * production. The annual number worked down to the one thing the seller
- * controls: what they do every working day. Two reads over the same
- * math: PLAN (setting the number, works on an empty workspace) and PACE
- * (a returning seller — projected landing vs target, needs-vs-actuals
- * in two fused strands, the believability judgment + pipeline coverage
- * welded into each column). The calc engine, benchmark bands, coverage,
- * and persistence are reused unchanged. §13-clean: messages & calls a
- * day, real opportunities, first meetings — no funnel jargon.
+ * QuotaWorkbackV4 — annual target workback plus current recorded state.
+ * PLAN translates the annual target through the user's assumptions into
+ * monthly and daily requirements. PROJECTION compares the target with
+ * closed-won revenue plus stage-weighted open pipeline. Those are two
+ * different calculations and the UI keeps them distinct.
  */
 const adjustOpen = signal(false);
 const bulkDraft = signal("");
 // Bumped after a bulk log so the memoized actuals re-read.
 const bulkVersion = signal(0);
 
-/**
- * The one-line hand count. Rendered in BOTH pace states — the operator
- * this exists for (did the outreach, logged nothing) starts in the
- * quiet state, and their first count is what turns the pace read on.
- */
+/** One-line manual total for outreach completed today. */
 function BulkCountRow(): JSX.Element {
     return (
         <div class="qw4-bulk">
@@ -66,8 +58,6 @@ export function QuotaWorkbackV4(): JSX.Element {
     const bench = benchmark.value;
     const m = metrics.value;
     const cov = coverage.value;
-    // The activity logs don't change mid-visit — read them once per
-    // mount instead of re-parsing four JSON blobs on every keystroke.
     const actuals = useMemo(() => readActuals(), [bulkVersion.value]);
     const believe = buildBelievability(inp, bench, m);
     const pace = buildPace(inp.quota, actuals, cov);
@@ -93,25 +83,25 @@ export function QuotaWorkbackV4(): JSX.Element {
                 <div class="qw4-top">
                     <span class="qw4-bname">{t("Quota Workback")}</span>
                     <span class="qw4-r">
-                        {paceMode ? t("pace") : t("plan")} · {hasPlan ? `${fmtMoney(inp.quota)} ${t("by year-end")}` : t("set your number")}
+                        {paceMode ? t("projection") : t("plan")} · {hasPlan ? `${fmtMoney(inp.quota)} ${t("annual target")}` : t("set your target")}
                     </span>
                 </div>
 
                 {!hasPlan ? (
                     <div class="qw4-verd">
-                        <div class="qw4-k qw4-k--plan">{t("Start with the number")}</div>
-                        <div class="qw4-h">{t("What do you need to close this year?", { class: "body" })}</div>
+                        <div class="qw4-k qw4-k--plan">{t("Start with the annual target")}</div>
+                        <div class="qw4-h">{t("How much revenue do you need to close this year?", { class: "body" })}</div>
                         <div class="qw4-s">
-                            {t("Give the number and your typical deal, and the room works it down to the one thing you control — what you do every working day.", { class: "body" })}
+                            {t("Enter the annual target and your typical deal size. Antaeus uses your conversion assumptions to estimate the monthly and daily activity required.", { class: "body" })}
                         </div>
                         <div class="qw4-planform">
                             <label class="qw4-pf">
-                                <span>{t("Your number for the year ($)")}</span>
+                                <span>{t("Annual target ($)")}</span>
                                 <input type="number" value={inp.quota || ""} placeholder="1200000"
                                     onInput={(e) => patchInputs({ quota: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                             </label>
                             <label class="qw4-pf">
-                                <span>{t("Your typical deal ($)")}</span>
+                                <span>{t("Typical deal size ($)")}</span>
                                 <input type="number" value={inp.acv || ""} placeholder="50000"
                                     onInput={(e) => patchInputs({ acv: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                             </label>
@@ -121,60 +111,60 @@ export function QuotaWorkbackV4(): JSX.Element {
                     <>
                         <div class="qw4-verd">
                             <div class={`qw4-k${pace.onTarget ? " qw4-k--ok" : ""}`}>
-                                {paceMode ? t("Where today's pace lands you") : t("What your number demands, every day")}
+                                {paceMode ? t("Closed revenue plus weighted pipeline") : t("Activity required by current assumptions")}
                             </div>
                             {paceMode ? (
                                 <div class="qw4-h">
-                                    {t("At the rate you're working, you finish the year around", { class: "body" })}{" "}
+                                    {t("Closed-won revenue plus stage-weighted open pipeline currently totals", { class: "body" })}{" "}
                                     <b class={pace.onTarget ? "qw4-good" : ""}>{fmtMoney(pace.projected)}</b>
                                     {pace.onTarget ? (
-                                        <> — {t("on your number.", { class: "body" })}</>
+                                        <>. {t("That is at or above the annual target.", { class: "body" })}</>
                                     ) : (
                                         <>
-                                            {" — "}{t("about", { class: "body" })} <b>{fmtMoney(pace.short)} {t("short.")}</b>
+                                            {", "}{t("which is about", { class: "body" })} <b>{fmtMoney(pace.short)} {t("below the annual target")}</b>.
                                         </>
                                     )}
                                 </div>
                             ) : (
                                 <div class="qw4-h">
-                                    {fmtMoney(inp.quota)} {t("means about", { class: "body" })} <b>{m.touchesDay} {t("messages & calls a day")}</b>
-                                    {" — "}{t("that's the whole plan, worked backward.", { class: "body" })}
+                                    {t("Under the current assumptions, a", { class: "body" })} {fmtMoney(inp.quota)} {t("annual target requires about", { class: "body" })}{" "}
+                                    <b>{m.touchesDay} {t("messages and calls per working day")}</b>.
                                 </div>
                             )}
                             {paceMode && !pace.onTarget && behindOutreach ? (
                                 <div class="qw4-s">
-                                    {t("Not because the number is wrong. Because you're doing", { class: "body" })}{" "}
-                                    <b>{actuals.outreachPerDay} {t("outreach a day")}</b> {t("and the number needs", { class: "body" })}{" "}
-                                    <b>{m.touchesDay}</b>. {t("Close that gap and the year adds up.", { class: "body" })}
+                                    {t("You are averaging", { class: "body" })}{" "}
+                                    <b>{actuals.outreachPerDay} {t("outreach actions per working day this month")}</b>. {t("The current model requires", { class: "body" })}{" "}
+                                    <b>{m.touchesDay}</b>, {t("a gap of", { class: "body" })} <b>{outreachGap} {t("per day")}</b>.
                                 </div>
                             ) : null}
                             <button type="button" class="qw4-link qw4-adjust" onClick={() => (adjustOpen.value = !adjustOpen.value)}>
-                                {adjustOpen.value ? t("Done adjusting") : t("Change the number or assumptions", { class: "body" })}
+                                {adjustOpen.value ? t("Done adjusting") : t("Change the target or assumptions", { class: "body" })}
                             </button>
                             {adjustOpen.value ? (
                                 <div class="qw4-planform">
                                     <label class="qw4-pf">
-                                        <span>{t("Your number for the year ($)")}</span>
+                                        <span>{t("Annual target ($)")}</span>
                                         <input type="number" value={inp.quota || ""}
                                             onInput={(e) => patchInputs({ quota: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                                     </label>
                                     <label class="qw4-pf">
-                                        <span>{t("Your typical deal ($)")}</span>
+                                        <span>{t("Typical deal size ($)")}</span>
                                         <input type="number" value={inp.acv || ""}
                                             onInput={(e) => patchInputs({ acv: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                                     </label>
                                     <label class="qw4-pf">
-                                        <span>{t("How often you win (%)")}</span>
+                                        <span>{t("Win rate (%)")}</span>
                                         <input type="number" value={inp.win || ""}
                                             onInput={(e) => patchInputs({ win: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                                     </label>
                                     <label class="qw4-pf">
-                                        <span>{t("Meetings that become real opportunities (%)", { class: "body" })}</span>
+                                        <span>{t("First meetings that become qualified opportunities (%)", { class: "body" })}</span>
                                         <input type="number" value={inp.m2o || ""}
                                             onInput={(e) => patchInputs({ m2o: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                                     </label>
                                     <label class="qw4-pf">
-                                        <span>{t("How long a deal takes (days)")}</span>
+                                        <span>{t("Working days per month")}</span>
                                         <input type="number" value={inp.days || ""}
                                             onInput={(e) => patchInputs({ days: Number((e.currentTarget as HTMLInputElement).value) || 0 })} />
                                     </label>
@@ -186,109 +176,108 @@ export function QuotaWorkbackV4(): JSX.Element {
                             <div class="qw4-track">
                                 <div class="qw4-tk">
                                     <span class={`qw4-proj${pace.onTarget ? " qw4-proj--ok" : ""}`} style={`width:${Math.round(pace.pct * 100)}%`}>
-                                        <span class="qw4-lbl">{t("on pace for")} {fmtMoney(pace.projected)}</span>
+                                        <span class="qw4-lbl">{t("closed + weighted pipeline")} {fmtMoney(pace.projected)}</span>
                                     </span>
                                     <span class="qw4-lblt">{fmtMoney(inp.quota)}</span>
                                 </div>
-                                <div class="qw4-tkx"><span>$0</span><span>{t("your target →")}</span></div>
+                                <div class="qw4-tkx"><span>$0</span><span>{t("annual target →")}</span></div>
                             </div>
                         ) : null}
 
                         <div class="qw4-strands">
-                            {/* LEFT: what your number needs + is the plan real */}
                             <div class="qw4-st qw4-st--need">
-                                <div class="qw4-cl">{t("What your number needs")}</div>
-                                <div class="qw4-line"><span class="qw4-ln">{m.touchesDay}</span><span class="qw4-lt">{t("messages & calls")} <b>{t("a day")}</b></span></div>
-                                <div class="qw4-line"><span class="qw4-ln">{meetingsNeedMonth}</span><span class="qw4-lt">{t("first meetings")} <b>{t("a month")}</b></span></div>
-                                <div class="qw4-line"><span class="qw4-ln">{bench.coverage}×</span><span class="qw4-lt">{t("your number")} <b>{t("in open deals")}</b></span></div>
-                                <div class="qw4-line"><span class="qw4-ln">{dealsNeedMonth}</span><span class="qw4-lt">{t("deals closed")} <b>{t("a month")}</b></span></div>
+                                <div class="qw4-cl">{t("Activity and pipeline required by current assumptions")}</div>
+                                <div class="qw4-line"><span class="qw4-ln">{m.touchesDay}</span><span class="qw4-lt">{t("messages & calls")} <b>{t("per working day")}</b></span></div>
+                                <div class="qw4-line"><span class="qw4-ln">{meetingsNeedMonth}</span><span class="qw4-lt">{t("first meetings")} <b>{t("per month")}</b></span></div>
+                                <div class="qw4-line"><span class="qw4-ln">{bench.coverage}×</span><span class="qw4-lt">{t("annual target")} <b>{t("in open pipeline")}</b></span></div>
+                                <div class="qw4-line"><span class="qw4-ln">{dealsNeedMonth}</span><span class="qw4-lt">{t("closed-won deals")} <b>{t("per month")}</b></span></div>
                                 <div class="qw4-judge">
-                                    <div class="qw4-jh">{t("Is the plan real?")}</div>
+                                    <div class="qw4-jh">{t("Assumption check")}</div>
                                     <div class="qw4-jb">{believe.read}</div>
                                     {believe.cost ? <div class="qw4-jc">{believe.cost}</div> : null}
                                     {believe.fix ? (
                                         <button type="button" class="qw4-link" onClick={() => patchInputs({ [believe.fix!.key]: believe.fix!.value } as never)}>
-                                            {t("Set it to")} {believe.fix.value}% {t("and re-run →")}
+                                            {t("Set it to")} {believe.fix.value}% {t("and recalculate →")}
                                         </button>
                                     ) : null}
                                 </div>
                             </div>
 
-                            {/* RIGHT: where you actually are + do you have the pipeline */}
                             <div class="qw4-st qw4-st--real">
-                                <div class="qw4-cl">{paceMode ? t("Where you actually are") : t("As you work, your real pace lands here", { class: "body" })}</div>
+                                <div class="qw4-cl">{paceMode ? t("Current recorded activity and pipeline") : t("Recorded activity will appear here", { class: "body" })}</div>
                                 {paceMode ? (
                                     <>
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindOutreach ? "qw4-bad" : "qw4-good"}`}>{actuals.outreachPerDay}</span>
-                                            <span class="qw4-lt">{t("a day this month")}</span>
-                                            <span class={`qw4-gp ${behindOutreach ? "is-behind" : "is-ok"}`}>{behindOutreach ? `${outreachGap} ${t("short")}` : t("on track")}</span>
+                                            <span class="qw4-lt">{t("outreach per working day this month")}</span>
+                                            <span class={`qw4-gp ${behindOutreach ? "is-behind" : "is-ok"}`}>{behindOutreach ? `${outreachGap} ${t("below requirement")}` : t("meets requirement")}</span>
                                         </div>
                                         <BulkCountRow />
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindMeetings ? "qw4-bad" : "qw4-good"}`}>{actuals.meetingsThisMonth}</span>
-                                            <span class="qw4-lt">{t("meetings booked so far")}</span>
-                                            <span class={`qw4-gp ${behindMeetings ? "is-behind" : "is-ok"}`}>{behindMeetings ? t("behind") : t("on track")}</span>
+                                            <span class="qw4-lt">{t("first meetings recorded this month")}</span>
+                                            <span class={`qw4-gp ${behindMeetings ? "is-behind" : "is-ok"}`}>{behindMeetings ? t("below requirement") : t("meets requirement")}</span>
                                         </div>
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindCoverage ? "qw4-bad" : "qw4-good"}`}>{cov.hasDeals ? `${covRatio.toFixed(1)}×` : "0×"}</span>
-                                            <span class="qw4-lt">{cov.hasDeals ? `${fmtMoney(cov.raw)} ${t("in flight")}` : t("no open deals yet")}</span>
-                                            <span class={`qw4-gp ${behindCoverage ? "is-behind" : "is-ok"}`}>{behindCoverage ? t("light") : t("covered")}</span>
+                                            <span class="qw4-lt">{cov.hasDeals ? `${fmtMoney(cov.raw)} ${t("in open pipeline")}` : t("no open deals recorded")}</span>
+                                            <span class={`qw4-gp ${behindCoverage ? "is-behind" : "is-ok"}`}>{behindCoverage ? t("below benchmark") : t("meets benchmark")}</span>
                                         </div>
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindCloses ? "qw4-bad" : "qw4-good"}`}>{actuals.closedThisMonth}</span>
-                                            <span class="qw4-lt">{t("closed this month")}</span>
-                                            <span class={`qw4-gp ${behindCloses ? "is-behind" : "is-ok"}`}>{behindCloses ? t("behind") : t("on track")}</span>
+                                            <span class="qw4-lt">{t("closed-won deals this month")}</span>
+                                            <span class={`qw4-gp ${behindCloses ? "is-behind" : "is-ok"}`}>{behindCloses ? t("below requirement") : t("meets requirement")}</span>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div class="qw4-quiet">{t("Once you start reaching out and logging deals, this column reads your real pace against the plan — every morning.", { class: "body" })}</div>
+                                        <div class="qw4-quiet">{t("Once outreach and deals are recorded, this column compares those records with the current plan assumptions.", { class: "body" })}</div>
                                         <BulkCountRow />
                                     </>
                                 )}
                                 <div class="qw4-judge">
                                     <div class="qw4-jh">
-                                        {t("Do you have the pipeline?")}
+                                        {t("Pipeline coverage")}
                                         <span class="qw4-rr">{cov.hasDeals ? `${covRatio.toFixed(1)}× / ${bench.coverage}×` : `0 / ${bench.coverage}×`}</span>
                                     </div>
                                     <div class="qw4-mini"><span class="qw4-f" style={`width:${covPct}%`} /><span class="qw4-m" /></div>
                                     <div class="qw4-jb">
                                         {cov.hasDeals ? (
                                             <>
-                                                {t("You have", { class: "body" })} <b>{fmtMoney(cov.raw)}</b> {t("in open deals. Your number wants about", { class: "body" })}{" "}
-                                                <b>{fmtMoney(Math.round(inp.quota * bench.coverage))}</b> {t("in flight to be safe", { class: "body" })}
-                                                {covShort > 0 ? <> — {t("roughly", { class: "body" })} <b>{fmtMoney(covShort)} {t("short")}</b>. {t("The daily number is how you close it.", { class: "body" })}</> : <>. {t("You're covered.", { class: "body" })}</>}
+                                                {t("You have", { class: "body" })} <b>{fmtMoney(cov.raw)}</b> {t("in open pipeline. Using the", { class: "body" })}{" "}
+                                                <b>{bench.coverage}×</b> {t("coverage benchmark for this ACV band, the modeled target is", { class: "body" })}{" "}
+                                                <b>{fmtMoney(Math.round(inp.quota * bench.coverage))}</b>
+                                                {covShort > 0 ? <>. {t("That is roughly", { class: "body" })} <b>{fmtMoney(covShort)} {t("below the modeled coverage target")}</b>.</> : <>. {t("Recorded pipeline is at or above the modeled coverage target.", { class: "body" })}</>}
                                             </>
                                         ) : (
-                                            t("No open deals yet — the daily number above is how the pipeline gets built.", { class: "body" })
+                                            t("No open deals are recorded yet. The activity model above shows the outreach requirement under the current assumptions.", { class: "body" })
                                         )}
                                     </div>
-                                    <a class="qw4-link" href={hrefToDealWorkspace()}>{t("See the open deals in Deal Workspace →", { class: "body" })}</a>
+                                    <a class="qw4-link" href={hrefToDealWorkspace()}>{t("See open deals in Deal Workspace →", { class: "body" })}</a>
                                 </div>
                             </div>
                         </div>
 
                         {paceMode && !pace.onTarget ? (
                             <div class="qw4-back">
-                                <span class="qw4-bt">{t("Back on pace")}</span>
+                                <span class="qw4-bt">{t("Actions to increase coverage")}</span>
                                 <span class="qw4-bb">
                                     {behindOutreach ? (
-                                        <><b>{outreachGap} {t("more outreach a day")}</b>{behindCoverage ? <>, {t("plus close the pipeline gap.", { class: "body" })}</> : "."} </>
+                                        <><b>{outreachGap} {t("additional outreach actions per working day under the current model")}</b>{behindCoverage ? <>, {t("plus additional qualified pipeline to reach the coverage benchmark.", { class: "body" })}</> : "."} </>
                                     ) : behindCoverage ? (
-                                        <><b>{t("Build more pipeline")}</b> — {t("the daily work is there; the top of the funnel is light.", { class: "body" })} </>
+                                        <><b>{t("Add qualified pipeline")}</b> — {t("recorded outreach meets the modeled requirement, but open pipeline is below the coverage benchmark.", { class: "body" })} </>
                                     ) : (
-                                        t("Keep the pace — the math says the year adds up from here.", { class: "body" })
+                                        t("Recorded outreach and pipeline coverage meet the modeled thresholds. Review open-deal progression and close timing next.", { class: "body" })
                                     )}
                                 </span>
                             </div>
                         ) : null}
 
                         <div class="qw4-hand">
-                            <span class="qw4-hl">{t("Close the gap")}</span>
+                            <span class="qw4-hl">{t("Actions to increase coverage")}</span>
                             <a class="qw4-btn" href={hrefToOutboundStudio()}>{t("Run today's outreach →")}</a>
                             <a class="qw4-gh" href={hrefToColdCallStudio()}>{t("Build more pipeline")}</a>
-                            <a class="qw4-gh" href={hrefToDealWorkspace()}>{t("Check the pipeline")}</a>
+                            <a class="qw4-gh" href={hrefToDealWorkspace()}>{t("Check open deals")}</a>
                         </div>
                     </>
                 )}
