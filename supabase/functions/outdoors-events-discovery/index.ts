@@ -1,32 +1,19 @@
 /**
  * Outdoors Events discovery Edge Function (ADR-016 PR 2).
  *
- * Finds offline gatherings relevant to a workspace's product category
- * and auto-populates the outdoors_events table — the Signal Console
- * pattern applied to events. Web-search-grounded LLM discovery: the
- * model issues real web searches, grounds its answer in live results,
- * and returns typed events with relevance tiers + real source URLs.
+ * Finds real, currently scheduled offline events relevant to a workspace's
+ * product category or target buyer roles and stores them in outdoors_events.
+ * The model must ground every returned event in a live source URL.
  *
  * Two invocation modes:
  *   - Cron (no body / {action:"run_all"}): enumerate active workspaces,
  *     run discovery for each. The pg_cron job calls this weekly.
- *   - On-demand ({action:"run_one", workspaceId}): the room's "Run
- *     discovery now" button invokes this for a single workspace.
+ *   - On-demand ({action:"run_one", workspaceId}): run discovery for a
+ *     single workspace.
  *
  * Per run, an outdoors_events_runs ledger row tracks status, cost,
  * search count, and events written. Events upsert on dedupe_key so the
- * same gathering doesn't surface twice across runs.
- *
- * Runtime: Deno (Supabase Edge Functions). Self-contained — types
- * duplicated from src/ on purpose, mirroring the briefing-pipeline +
- * heartbeat pattern.
- *
- * Auth: invoked by pg_cron via net.http_post with the service-role
- * key, or by the client via supabase.functions.invoke() (the user's
- * JWT — RLS lets a workspace member trigger their own run, the
- * function then uses the service role to write the ledger + events).
- *
- * Env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, ANTHROPIC_API_KEY.
+ * same event does not surface twice across runs.
  */
 
 // deno-lint-ignore-file no-explicit-any
@@ -45,10 +32,8 @@ import {
 
 // ─── Cost ceiling ──────────────────────────────────────────────────
 
-// Per-workspace weekly LLM + search ceiling. Throttle drops adjacent +
-// indirect tiers; pause stops the run. Mirrors the Briefing's posture.
 const WEEKLY_CEILING_USD = 2.0;
-const THROTTLE_AT = 1.0; // 100% of a softer working budget
+const THROTTLE_AT = 1.0;
 const PAUSE_AT = WEEKLY_CEILING_USD * 1.5;
 
 // ─── Workspace profile ─────────────────────────────────────────────
@@ -109,16 +94,16 @@ async function weeklySpend(
 
 // ─── Prompt ────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are a research assistant for a B2B go-to-market operator. Your job is to find real, currently-scheduled offline gatherings (conferences, trade shows, summits, mixers, meetups) where the operator's buyers might be — and classify each by how relevant it is to what they sell.
+const SYSTEM_PROMPT = `You are a research assistant for a B2B go-to-market operator. Find real, currently scheduled conferences, trade shows, summits, mixers, meetups, and similar events that are relevant to the operator's product category or target buyer roles.
 
-You MUST use web search to find real events with real, currently-live registration or info pages. Never invent an event, a date, or a URL. If you are not confident an event is real and upcoming, leave it out.
+You MUST use web search to find real events with real, currently live registration or information pages. Never invent an event, date, location, or URL. If you are not confident an event is real and upcoming, leave it out.
 
 Classify each event into exactly one relevance tier:
-- "direct": the gathering is specifically about the operator's product category.
-- "adjacent": the gathering is for the buyer personas the operator sells INTO, even if it isn't about the category itself.
-- "indirect": the operator's ideal buyer might plausibly show up, though the event isn't category- or persona-direct.
+- "direct": the event is focused directly on the operator's product category or market.
+- "adjacent": the event is focused on the buyer roles, functions, or business problems the operator targets, even when the event is not about the operator's category itself.
+- "indirect": the event is broader but related to the operator's market, territory, or buyer context. Include it only when the relationship is specific enough to explain in one sentence.
 
-Voice rules for the relevance_reason field: write one plain sentence a peer would say out loud. No buzzwords (no "synergy", "best-in-class", "game-changing", "supercharge", "world-class"). No manifesto fragments. Just say why this event matters for this seller.
+For relevance_reason, state the concrete relationship between the event and the operator's category or buyer context. Use complete sentences. Do not claim that a buyer will attend unless a source supports that claim. Avoid buzzwords and promotional language.
 
 Return ONLY a JSON array, no prose around it. Each element:
 {
@@ -133,7 +118,7 @@ Return ONLY a JSON array, no prose around it. Each element:
   "relevance_reason": "one plain sentence"
 }
 
-Aim for 6-12 events spread across the three tiers. Prefer events in the next 6 months. Quality over quantity — every event must be real and have a working URL.`;
+Aim for 6-12 events across the applicable tiers. Prefer events in the next 6 months. Every returned event must have a working source URL.`;
 
 function buildUserPrompt(profile: WorkspaceProfile, throttled: boolean): string {
     const category =
@@ -148,11 +133,11 @@ function buildUserPrompt(profile: WorkspaceProfile, throttled: boolean): string 
     lines.push("");
     if (throttled) {
         lines.push(
-            "BUDGET NOTE: keep this lean — focus on DIRECT-tier events only (gatherings specifically about the product category). Skip adjacent and indirect this run."
+            "BUDGET NOTE: focus on direct-tier events only. Skip adjacent and indirect events for this run."
         );
     } else {
         lines.push(
-            "Find gatherings across all three tiers (direct, adjacent, indirect). Use web search to confirm each is real and upcoming."
+            "Find events across the applicable direct, adjacent, and indirect tiers. Use web search to confirm each event is real and upcoming."
         );
     }
     return lines.join("\n");
@@ -173,7 +158,6 @@ async function runForWorkspace(
     sb: SupabaseClient,
     workspaceId: string
 ): Promise<RunResult> {
-    // Cost ceiling check.
     const spent = await weeklySpend(sb, workspaceId);
     if (spent >= PAUSE_AT) {
         return {
@@ -187,7 +171,6 @@ async function runForWorkspace(
     }
     const throttled = spent >= THROTTLE_AT;
 
-    // Open the ledger row.
     let runId: string | null = null;
     try {
         const profile = await readProfile(sb, workspaceId);
@@ -215,7 +198,6 @@ async function runForWorkspace(
         }
         runId = insertRun.data.id as string;
 
-        // Discovery LLM call (web-search-grounded).
         const call = await callWithWebSearch({
             model: "sonnet_4_6",
             system_prompt: SYSTEM_PROMPT,
@@ -262,15 +244,15 @@ async function runForWorkspace(
             error: null
         };
     } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
+        const message = err instanceof Error ? err.message : String(err);
         if (runId) {
             await closeRun(sb, runId, {
                 status: "failed",
                 events_written: 0,
                 total_cost_usd: 0,
                 llm_call_count: 0,
-                error_summary: msg
-            }).catch(() => {});
+                error_summary: message
+            });
         }
         return {
             workspaceId,
@@ -278,7 +260,7 @@ async function runForWorkspace(
             eventsWritten: 0,
             cost: 0,
             searchCount: 0,
-            error: msg
+            error: message
         };
     }
 }
@@ -286,20 +268,11 @@ async function runForWorkspace(
 async function closeRun(
     sb: SupabaseClient,
     runId: string,
-    fields: {
-        status: string;
-        events_written: number;
-        total_cost_usd: number;
-        llm_call_count: number;
-        error_summary: string | null;
-    }
+    patch: Record<string, unknown>
 ): Promise<void> {
     await sb
         .from("outdoors_events_runs")
-        .update({
-            ...fields,
-            completed_at: new Date().toISOString()
-        })
+        .update({ ...patch, finished_at: new Date().toISOString() })
         .eq("id", runId);
 }
 
@@ -310,255 +283,99 @@ async function upsertEvents(
     events: ReadonlyArray<DiscoveredEvent>
 ): Promise<number> {
     if (events.length === 0) return 0;
-    const nowIso = new Date().toISOString();
+    const rows = events.map((event) => ({
+        workspace_id: workspaceId,
+        run_id: runId,
+        name: event.name,
+        kind: event.kind,
+        where_at: event.where_at,
+        start_date: event.start_date,
+        end_date: event.end_date,
+        tags: event.tags,
+        source_url: event.source_url,
+        relevance_tier: event.relevance_tier,
+        relevance_reason: event.relevance_reason,
+        dedupe_key: buildDedupeKey(event),
+        discovered_at: new Date().toISOString()
+    }));
 
-    // Build dedupe keys + dedupe within this batch (the model can
-    // return the same event twice).
-    const byKey = new Map<string, DiscoveredEvent>();
-    for (const e of events) {
-        const key = buildDedupeKey(e.name, e.start_date, e.where_at);
-        if (!byKey.has(key)) byKey.set(key, e);
-    }
-    const keys = Array.from(byKey.keys());
-
-    // Which of these already exist for this workspace? We must NOT
-    // clobber the operator's status on those — a full upsert would
-    // reset an "attending" event back to "watching" on re-discovery.
-    const existing = await sb
+    const { data, error } = await sb
         .from("outdoors_events")
-        .select("dedupe_key")
-        .eq("workspace_id", workspaceId)
-        .in("dedupe_key", keys);
-    if (existing.error) {
-        throw new Error(`dedupe lookup failed: ${existing.error.message}`);
-    }
-    const existingKeys = new Set<string>(
-        (existing.data ?? []).map((r: any) => r.dedupe_key as string)
-    );
-
-    let written = 0;
-
-    // Insert the genuinely-new events (status defaults to "watching").
-    const newRows = keys
-        .filter((k) => !existingKeys.has(k))
-        .map((k) => {
-            const e = byKey.get(k)!;
-            return {
-                workspace_id: workspaceId,
-                created_by: null,
-                name: e.name,
-                kind: e.kind,
-                where_at: e.where_at,
-                start_date: e.start_date,
-                end_date: e.end_date,
-                status: "watching",
-                tags: e.tags,
-                notes: null,
-                source_url: e.source_url,
-                relevance_tier: e.relevance_tier,
-                relevance_reason: e.relevance_reason,
-                discovered_at: nowIso,
-                source_kind: "discovery_run",
-                dedupe_key: k,
-                run_id: runId
-            };
-        });
-    if (newRows.length > 0) {
-        const ins = await sb
-            .from("outdoors_events")
-            .insert(newRows)
-            .select("id");
-        if (ins.error) throw new Error(`insert failed: ${ins.error.message}`);
-        written += Array.isArray(ins.data) ? ins.data.length : 0;
-    }
-
-    // Refresh the discovery columns on events we already know about —
-    // WITHOUT touching status or notes (operator-owned).
-    for (const k of keys) {
-        if (!existingKeys.has(k)) continue;
-        const e = byKey.get(k)!;
-        const upd = await sb
-            .from("outdoors_events")
-            .update({
-                relevance_tier: e.relevance_tier,
-                relevance_reason: e.relevance_reason,
-                source_url: e.source_url,
-                kind: e.kind,
-                where_at: e.where_at,
-                start_date: e.start_date,
-                end_date: e.end_date,
-                discovered_at: nowIso,
-                run_id: runId
-            })
-            .eq("workspace_id", workspaceId)
-            .eq("dedupe_key", k);
-        if (!upd.error) written += 1;
-    }
-
-    return written;
+        .upsert(rows, { onConflict: "workspace_id,dedupe_key" })
+        .select("id");
+    if (error) throw error;
+    return Array.isArray(data) ? data.length : 0;
 }
 
-// ─── Active-workspace enumeration (cron mode) ──────────────────────
+// ─── Request handling ───────────────────────────────────────────────
 
-async function activeWorkspaceIds(sb: SupabaseClient): Promise<string[]> {
-    // A workspace is "active" if it has a commercial profile with a
-    // product category set — no category means discovery has nothing
-    // to anchor on.
-    try {
-        const res = await sb
-            .from("workspace_profile")
-            .select("workspace_id, product_category")
-            .not("product_category", "is", null);
-        if (res.error || !Array.isArray(res.data)) return [];
-        return res.data
-            .filter(
-                (r: any) =>
-                    typeof r.product_category === "string" &&
-                    r.product_category.trim().length > 0
-            )
-            .map((r: any) => r.workspace_id as string);
-    } catch {
-        return [];
-    }
-}
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
+};
 
-// ─── CORS ──────────────────────────────────────────────────────────
-
-// This function is called from the browser via supabase.functions.invoke()
-// (unlike the heartbeat + briefing-pipeline which are cron-invoked
-// server-side). Browser calls trigger a CORS preflight OPTIONS request,
-// so the handler must answer OPTIONS with the right headers AND echo
-// them on every response.
-//
-// We echo the browser's Access-Control-Request-Headers value back in
-// Access-Control-Allow-Headers so any custom header the supabase-js
-// client adds (apikey, authorization, x-client-info, x-antaeus-client,
-// or any future addition) is automatically permitted. Authorization
-// is always listed explicitly because the CORS spec requires it —
-// "*" wildcard never matches Authorization.
-const DEFAULT_ALLOWED_HEADERS =
-    "authorization, content-type, apikey, x-client-info, x-antaeus-client";
-
-function corsHeaders(req: Request): Record<string, string> {
-    const requested = req.headers.get("access-control-request-headers");
-    return {
-        "access-control-allow-origin": "*",
-        "access-control-allow-methods": "POST, OPTIONS",
-        "access-control-allow-headers": requested ?? DEFAULT_ALLOWED_HEADERS,
-        "access-control-max-age": "86400"
-    };
-}
-
-// ─── HTTP handler ──────────────────────────────────────────────────
-
-interface RequestBody {
-    readonly action?: "run_all" | "run_one";
-    readonly workspaceId?: string;
-}
-
-// @ts-ignore - Deno global resolved at deploy time
-Deno.serve(async (req: Request): Promise<Response> => {
-    const cors = corsHeaders(req);
+Deno.serve(async (req: Request) => {
     if (req.method === "OPTIONS") {
-        return new Response("ok", { headers: cors });
-    }
-    if (req.method !== "POST") {
-        return json({ ok: false, error: "Method not allowed" }, 405, cors);
+        return new Response("ok", { headers: corsHeaders });
     }
 
-    // @ts-ignore - Deno.env
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-    // @ts-ignore - Deno.env
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    if (!supabaseUrl || !serviceRoleKey) {
-        return json(
-            { ok: false, error: "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing" },
-            500,
-            cors
+    const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    if (!supabaseUrl || !serviceRole) {
+        return new Response(
+            JSON.stringify({ error: "Server configuration missing" }),
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
     }
-
-    let body: RequestBody = {};
-    try {
-        const text = await req.text();
-        if (text.trim().length > 0) body = JSON.parse(text) as RequestBody;
-    } catch (err) {
-        return json(
-            {
-                ok: false,
-                error: `Invalid JSON body: ${err instanceof Error ? err.message : String(err)}`
-            },
-            400,
-            cors
-        );
-    }
-
-    const sb = createClient(supabaseUrl, serviceRoleKey, {
-        auth: { autoRefreshToken: false, persistSession: false }
+    const sb = createClient(supabaseUrl, serviceRole, {
+        auth: { persistSession: false }
     });
 
-    const action = body.action ?? "run_all";
-
+    let body: any = {};
     try {
-        if (action === "run_one") {
-            const ws = (body.workspaceId ?? "").trim();
-            if (ws.length === 0) {
-                return json(
-                    { ok: false, error: "run_one requires workspaceId" },
-                    400,
-                    cors
-                );
-            }
-            const result = await runForWorkspace(sb, ws);
-            return json(
-                { ok: result.status !== "failed", result },
-                200,
-                cors
+        body = await req.json();
+    } catch {
+        body = {};
+    }
+
+    const action = body?.action === "run_one" ? "run_one" : "run_all";
+
+    if (action === "run_one") {
+        const workspaceId = typeof body?.workspaceId === "string" ? body.workspaceId : "";
+        if (!workspaceId) {
+            return new Response(
+                JSON.stringify({ error: "workspaceId required" }),
+                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
+        const result = await runForWorkspace(sb, workspaceId);
+        return new Response(JSON.stringify(result), {
+            status: result.status === "failed" ? 500 : 200,
+            headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+    }
 
-        // run_all (cron).
-        const ids = await activeWorkspaceIds(sb);
-        const results: RunResult[] = [];
-        for (const id of ids) {
-            results.push(await runForWorkspace(sb, id));
-        }
-        return json(
-            {
-                ok: true,
-                workspaces: ids.length,
-                totals: {
-                    eventsWritten: results.reduce(
-                        (s, r) => s + r.eventsWritten,
-                        0
-                    ),
-                    cost:
-                        Math.round(
-                            results.reduce((s, r) => s + r.cost, 0) * 10_000
-                        ) / 10_000,
-                    failed: results.filter((r) => r.status === "failed").length
-                },
-                results
-            },
-            200,
-            cors
-        );
-    } catch (err) {
-        return json(
-            { ok: false, error: err instanceof Error ? err.message : String(err) },
-            500,
-            cors
+    const { data: workspaces, error: wsError } = await sb
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("status", "active");
+    if (wsError) {
+        return new Response(
+            JSON.stringify({ error: wsError.message }),
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
     }
-});
 
-function json(
-    payload: unknown,
-    status = 200,
-    cors: Record<string, string> = {}
-): Response {
-    return new Response(JSON.stringify(payload), {
-        status,
-        headers: { "content-type": "application/json", ...cors }
+    const ids = Array.from(
+        new Set((workspaces ?? []).map((row: any) => row.workspace_id).filter(Boolean))
+    ) as string[];
+    const results: RunResult[] = [];
+    for (const id of ids) {
+        results.push(await runForWorkspace(sb, id));
+    }
+
+    return new Response(JSON.stringify({ results }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
-}
+});
