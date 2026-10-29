@@ -6,13 +6,9 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./welcome-v4.css";
 
 /**
- * WelcomeV4 (canon §4.1) — the seeding flow's landing, wired to
- * production. The workspace is already deep, so this is never an empty
- * threshold: one commanding statement, the system's one overnight pick
- * (from the same command-intelligence engine the Dashboard uses), the
- * payback made visible as a quiet "what the system saw" read, and a
- * recessive operating line. Day-one and re-entry reuse the exact same
- * shape; only the headline changes. Never gamified, no finish line.
+ * Welcome summarizes the current workspace after onboarding and on later
+ * visits: highest-priority recommended action, recent changes, and basic
+ * workspace totals. The ranking comes from the same engine as Dashboard.
  */
 export function WelcomeV4(): JSX.Element {
     initWelcomeV4();
@@ -22,7 +18,7 @@ export function WelcomeV4(): JSX.Element {
     const rightRead =
         l.lifecycle === "re_entry"
             ? t("welcome back", { class: "body" })
-            : t("the workspace is awake", { class: "body" });
+            : t("workspace setup complete", { class: "body" });
 
     return (
         <div class="wl4">
@@ -41,7 +37,7 @@ export function WelcomeV4(): JSX.Element {
                 {l.move ? (
                     <div class="wl4-move">
                         <div class="wl4-mk">
-                            {t("Start here · the system's pick", { class: "body" })}
+                            {t("Highest-priority action", { class: "body" })}
                         </div>
                         <div class="wl4-mt">{l.move.title}</div>
                         <div class="wl4-mb">{l.move.reason}</div>
@@ -50,21 +46,21 @@ export function WelcomeV4(): JSX.Element {
                                 {l.move.cta}
                             </a>
                             <a class="wl4-ghost" href={l.dashboardHref}>
-                                {t("or see the full Dashboard", { class: "body" })}
+                                {t("See current sales status", { class: "body" })}
                             </a>
                         </div>
                     </div>
                 ) : (
                     <div class="wl4-move wl4-move--calm">
-                        <div class="wl4-mk">{t("Where to start", { class: "body" })}</div>
+                        <div class="wl4-mk">{t("Current sales status", { class: "body" })}</div>
                         <div class="wl4-mt">
-                            {t("Open the Dashboard — it ranks what needs you first.", {
+                            {t("Open the Dashboard to review pipeline, account priorities, activity, and deal risk.", {
                                 class: "body"
                             })}
                         </div>
                         <div class="wl4-go">
                             <a class="wl4-btn" href={l.dashboardHref}>
-                                {t("Open the Dashboard →", { class: "body" })}
+                                {t("Open Dashboard →", { class: "body" })}
                             </a>
                         </div>
                     </div>
@@ -73,11 +69,7 @@ export function WelcomeV4(): JSX.Element {
                 {l.saw.length > 0 ? (
                     <div class="wl4-saw">
                         <div class="wl4-sl">
-                            {l.lifecycle === "re_entry"
-                                ? t("What moved since you left", { class: "body" })
-                                : t("What the system saw while you were away", {
-                                      class: "body"
-                                  })}
+                            {t("Changes since your last visit", { class: "body" })}
                         </div>
                         {l.saw.map((row, i) => (
                             <div class="wl4-row" key={i}>
@@ -90,7 +82,7 @@ export function WelcomeV4(): JSX.Element {
                             </div>
                         ))}
                         <a class="wl4-more" href={l.dashboardHref}>
-                            {t("See all of it on the Dashboard →", { class: "body" })}
+                            {t("Review all current status →", { class: "body" })}
                         </a>
                     </div>
                 ) : null}
@@ -101,30 +93,26 @@ export function WelcomeV4(): JSX.Element {
                     </span>
                     <span class="wl4-sep">·</span>
                     <span class="wl4-st">
-                        <b>{l.operating.deals}</b> {t("live deals", { class: "body" })}
+                        <b>{l.operating.deals}</b> {t("active deals", { class: "body" })}
                     </span>
                     {l.operating.inFlight ? (
                         <>
                             <span class="wl4-sep">·</span>
                             <span class="wl4-st">
-                                <b>{l.operating.inFlight}</b> {t("in flight", { class: "body" })}
+                                <b>{l.operating.inFlight}</b> {t("open pipeline", { class: "body" })}
                             </span>
                         </>
                     ) : null}
                     <span class="wl4-sep">·</span>
                     <span class="wl4-tail">
-                        {t("the workspace is running — this is just the morning door into it.", {
+                        {t("Your accounts, active deals, and pipeline are available on the Dashboard.", {
                             class: "body"
                         })}
                     </span>
                 </div>
             </div>
-            {/* The Ground — the app's one jump summon (2026-07-08):
-                touch the ground line (or press G) and the motion map
-                rises from beneath the room. */}
             <GroundLine />
             <LiveEdge />
-
         </div>
     );
 }
