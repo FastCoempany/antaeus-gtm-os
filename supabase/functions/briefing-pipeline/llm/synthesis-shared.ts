@@ -1,15 +1,13 @@
 /**
- * Deno-side mirror of the Briefing synthesis layer (B.2c).
+ * Deno-side Briefing synthesis helpers.
  *
- * Mirrors src/briefing/lib/synthesis/{voice-rules,types,parse,quality-gate,prompts}.ts
- * verbatim. The src/ files are canonical + vitest-tested; behavior
- * changes caught by vitest must be hand-mirrored here. No runtime
- * sharing across Node + Deno — same split as llm/_shared.ts.
+ * Mirrors the behavior of `src/briefing/lib/synthesis/{voice-rules,types,
+ * parse,quality-gate,prompts}.ts`. Directness does not require false certainty:
+ * facts are categorical; assessments and forecasts are calibrated to evidence.
  */
-
 // deno-lint-ignore-file no-explicit-any
 
-// ─── Voice rules (mirror of voice-rules.ts) ────────────────────
+// ── Voice rules ────────────────────────────────────────────────────────
 
 export const BANNED_VOCABULARY: ReadonlyArray<string> = [
     "leverage", "unlock", "revolutionize", "revolutionary", "supercharge",
@@ -27,7 +25,8 @@ export const BANNED_HEDGE_CONSTRUCTIONS: ReadonlyArray<string> = [
     "there may be reasons to consider",
     "some observers might suggest",
     "it is possible, though not certain, that",
-    "while the evidence is mixed, one interpretation is"
+    "while the evidence is mixed, one interpretation is",
+    "one could argue"
 ];
 
 export const MARKETING_SOUP_PHRASES: ReadonlyArray<string> = [
@@ -36,11 +35,6 @@ export const MARKETING_SOUP_PHRASES: ReadonlyArray<string> = [
     "as a leading", "in the fast-paced world", "now more than ever", "the future of"
 ];
 
-export const HEDGING_ADVERBS: ReadonlyArray<string> = [
-    "may", "could", "might", "possibly", "potentially", "seems", "appears", "suggests"
-];
-
-export const MAX_HEDGING_ADVERBS = 3;
 export const PATTERN_NAME_MAX_WORDS = 12;
 export const ANALYSIS_MIN_WORDS = 60;
 export const ANALYSIS_MAX_WORDS = 240;
@@ -50,43 +44,28 @@ export const MOVES_MAX = 3;
 function escapeRegExp(s: string): string {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-
-export function countWholeWord(text: string, term: string): number {
-    if (text.length === 0 || term.length === 0) return 0;
-    const re = new RegExp(`\\b${escapeRegExp(term)}\\b`, "gi");
-    const matches = text.match(re);
+function countWholeWord(text: string, term: string): number {
+    if (!text || !term) return 0;
+    const matches = text.match(new RegExp(`\\b${escapeRegExp(term)}\\b`, "gi"));
     return matches ? matches.length : 0;
 }
-
-export function findBannedVocabulary(text: string): string[] {
-    const hits: string[] = [];
-    for (const word of BANNED_VOCABULARY) {
-        if (countWholeWord(text, word) > 0) hits.push(word);
-    }
-    return hits;
+function findBannedVocabulary(text: string): string[] {
+    return BANNED_VOCABULARY.filter((w) => countWholeWord(text, w) > 0);
 }
-
-export function findBannedHedgeConstructions(text: string): string[] {
+function findBannedHedgeConstructions(text: string): string[] {
     const lower = text.toLowerCase();
     return BANNED_HEDGE_CONSTRUCTIONS.filter((p) => lower.includes(p));
 }
-
-export function findMarketingSoup(text: string): string[] {
+function findMarketingSoup(text: string): string[] {
     const lower = text.toLowerCase();
     return MARKETING_SOUP_PHRASES.filter((p) => lower.includes(p));
 }
-
-export function countHedgingAdverbs(text: string): number {
-    return HEDGING_ADVERBS.reduce((sum, adv) => sum + countWholeWord(text, adv), 0);
-}
-
-export function wordCount(text: string): number {
+function wordCount(text: string): number {
     const t = text.trim();
-    if (t.length === 0) return 0;
-    return t.split(/\s+/).length;
+    return t ? t.split(/\s+/).length : 0;
 }
 
-// ─── Types (mirror of types.ts) ────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────
 
 export interface EvidenceItem {
     readonly enriched_id: string;
@@ -127,7 +106,6 @@ export interface RecommendedMove {
     readonly rationale: string;
     readonly destination: string;
 }
-
 export interface SixQuestions {
     readonly what_changed: string;
     readonly evidence: string;
@@ -136,7 +114,6 @@ export interface SixQuestions {
     readonly who_needs_to_know: string;
     readonly what_next: string;
 }
-
 export interface DraftPattern {
     readonly name: string;
     readonly trajectory: "rising" | "stable" | "declining" | null;
@@ -148,13 +125,11 @@ export interface DraftPattern {
 }
 
 export type CritiqueSeverity = "minor" | "significant" | "major";
-
 export interface CritiqueIssue {
     readonly quote: string;
     readonly issue: string;
     readonly severity: CritiqueSeverity;
 }
-
 export interface Critique {
     readonly overclaimed_assertions: ReadonlyArray<CritiqueIssue>;
     readonly unsupported_claims: ReadonlyArray<CritiqueIssue>;
@@ -162,91 +137,54 @@ export interface Critique {
     readonly excessive_hedging: ReadonlyArray<string>;
     readonly marketing_soup: ReadonlyArray<string>;
     readonly weak_action: ReadonlyArray<string>;
-    readonly obvious_objections: ReadonlyArray<{
-        readonly objection: string;
-        readonly severity: CritiqueSeverity;
-    }>;
+    readonly obvious_objections: ReadonlyArray<{ readonly objection: string; readonly severity: CritiqueSeverity }>;
     readonly revise_required: boolean;
     readonly overall_assessment: string;
 }
-
 export interface GateCheck {
     readonly name: string;
     readonly pass: boolean;
     readonly detail: string;
 }
-
 export interface GateResult {
     readonly passes: boolean;
     readonly checks: ReadonlyArray<GateCheck>;
     readonly failures: ReadonlyArray<string>;
 }
 
-// ─── Parse (mirror of parse.ts) ────────────────────────────────
-
-export interface DraftParseResult {
-    readonly pattern: DraftPattern | null;
-    readonly error: string | null;
-}
-
-export interface CritiqueParseResult {
-    readonly critique: Critique | null;
-    readonly error: string | null;
-}
-
-const TRAJECTORIES: ReadonlyArray<string> = ["rising", "stable", "declining"];
-const SEVERITIES: ReadonlyArray<string> = ["minor", "significant", "major"];
+// ── Parse ──────────────────────────────────────────────────────────────
 
 function extractJsonObject(raw: string): string | null {
     if (typeof raw !== "string" || raw.trim().length === 0) return null;
     let s = raw.trim();
     const fenceMatch = s.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
-    if (fenceMatch && fenceMatch[1] !== undefined) s = fenceMatch[1].trim();
+    if (fenceMatch?.[1]) s = fenceMatch[1].trim();
     const start = s.indexOf("{");
     const end = s.lastIndexOf("}");
-    if (start === -1 || end === -1 || end <= start) return null;
-    return s.slice(start, end + 1);
+    return start >= 0 && end > start ? s.slice(start, end + 1) : null;
 }
-
 function asString(v: unknown, fallback = ""): string {
     if (typeof v === "string") return v;
     if (v === null || v === undefined) return fallback;
     return String(v);
 }
-
 function asStringArray(v: unknown): string[] {
-    if (!Array.isArray(v)) return [];
-    return v
-        .filter((x): x is string => typeof x === "string")
-        .map((x) => x.trim())
-        .filter((x) => x.length > 0);
+    return Array.isArray(v)
+        ? v.filter((x): x is string => typeof x === "string").map((x) => x.trim()).filter(Boolean)
+        : [];
 }
-
 function asTrajectory(v: unknown): "rising" | "stable" | "declining" | null {
-    if (typeof v === "string" && TRAJECTORIES.includes(v)) {
-        return v as "rising" | "stable" | "declining";
-    }
-    return null;
+    return v === "rising" || v === "stable" || v === "declining" ? v : null;
 }
-
 function asSeverity(v: unknown): CritiqueSeverity {
-    if (typeof v === "string" && SEVERITIES.includes(v)) return v as CritiqueSeverity;
-    return "minor";
+    return v === "significant" || v === "major" ? v : "minor";
 }
-
 function asConfidence(v: unknown): number {
-    let n: number;
-    if (typeof v === "number") n = v;
-    else if (typeof v === "string") {
-        const p = Number.parseFloat(v);
-        n = Number.isFinite(p) ? p : 0.5;
-    } else n = 0.5;
-    if (!Number.isFinite(n)) return 0.5;
-    return Math.min(1, Math.max(0, n));
+    const n = typeof v === "number" ? v : typeof v === "string" ? Number.parseFloat(v) : 0.5;
+    return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0.5;
 }
-
 function asSixQuestions(v: unknown): SixQuestions {
-    const o = v && typeof v === "object" ? (v as Record<string, unknown>) : {};
+    const o = v && typeof v === "object" ? v as Record<string, unknown> : {};
     return {
         what_changed: asString(o["what_changed"]).trim(),
         evidence: asString(o["evidence"]).trim(),
@@ -256,51 +194,65 @@ function asSixQuestions(v: unknown): SixQuestions {
         what_next: asString(o["what_next"]).trim()
     };
 }
-
 function asMoves(v: unknown): RecommendedMove[] {
     if (!Array.isArray(v)) return [];
-    const out: RecommendedMove[] = [];
-    for (const raw of v) {
-        if (!raw || typeof raw !== "object") continue;
+    return v.flatMap((raw) => {
+        if (!raw || typeof raw !== "object") return [];
         const o = raw as Record<string, unknown>;
         const action = asString(o["action"]).trim();
         const destination = asString(o["destination"]).trim();
-        if (action.length === 0 && destination.length === 0) continue;
-        out.push({ action, rationale: asString(o["rationale"]).trim(), destination });
+        if (!action && !destination) return [];
+        return [{ action, rationale: asString(o["rationale"]).trim(), destination }];
+    });
+}
+function asIssues(v: unknown): CritiqueIssue[] {
+    if (!Array.isArray(v)) return [];
+    return v.flatMap((raw) => {
+        if (!raw || typeof raw !== "object") return [];
+        const o = raw as Record<string, unknown>;
+        return [{ quote: asString(o["quote"]).trim(), issue: asString(o["issue"]).trim(), severity: asSeverity(o["severity"]) }];
+    });
+}
+function asObjections(v: unknown): Array<{ objection: string; severity: CritiqueSeverity }> {
+    if (!Array.isArray(v)) return [];
+    return v.flatMap((raw) => {
+        if (!raw || typeof raw !== "object") return [];
+        const o = raw as Record<string, unknown>;
+        const objection = asString(o["objection"]).trim();
+        return objection ? [{ objection, severity: asSeverity(o["severity"]) }] : [];
+    });
+}
+function asBool(v: unknown, fallback = false): boolean {
+    if (typeof v === "boolean") return v;
+    if (typeof v === "string") {
+        if (v.trim().toLowerCase() === "true") return true;
+        if (v.trim().toLowerCase() === "false") return false;
     }
-    return out;
+    return fallback;
 }
 
-export function parseDraftResponse(raw: string): DraftParseResult {
+export function parseDraftResponse(raw: string): { pattern: DraftPattern | null; error: string | null } {
     const jsonText = extractJsonObject(raw);
-    if (jsonText === null) return { pattern: null, error: "no JSON object found in response" };
+    if (!jsonText) return { pattern: null, error: "no JSON object found in response" };
     let parsed: unknown;
-    try {
-        parsed = JSON.parse(jsonText);
-    } catch (err) {
-        return {
-            pattern: null,
-            error: `JSON parse failed: ${err instanceof Error ? err.message : String(err)}`
-        };
+    try { parsed = JSON.parse(jsonText); } catch (err) {
+        return { pattern: null, error: `JSON parse failed: ${err instanceof Error ? err.message : String(err)}` };
     }
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
         return { pattern: null, error: "response root is not a JSON object" };
     }
     const root = parsed as Record<string, unknown>;
-    const candidate =
-        root["draft_pattern"] && typeof root["draft_pattern"] === "object"
-            ? (root["draft_pattern"] as Record<string, unknown>)
-            : root["pattern"] && typeof root["pattern"] === "object"
-            ? (root["pattern"] as Record<string, unknown>)
-            : root["revised_pattern"] && typeof root["revised_pattern"] === "object"
-            ? (root["revised_pattern"] as Record<string, unknown>)
-            : root;
-
+    const candidate = root["draft_pattern"] && typeof root["draft_pattern"] === "object"
+        ? root["draft_pattern"] as Record<string, unknown>
+        : root["pattern"] && typeof root["pattern"] === "object"
+        ? root["pattern"] as Record<string, unknown>
+        : root["revised_pattern"] && typeof root["revised_pattern"] === "object"
+        ? root["revised_pattern"] as Record<string, unknown>
+        : root;
     const name = asString(candidate["name"]).trim();
     const analysis = asString(candidate["analysis"]).trim();
-    if (name.length === 0) return { pattern: null, error: "pattern missing required 'name'" };
-    if (analysis.length === 0) return { pattern: null, error: "pattern missing required 'analysis'" };
-
+    if (!name) return { pattern: null, error: "pattern missing required 'name'" };
+    if (!analysis) return { pattern: null, error: "pattern missing required 'analysis'" };
     return {
         pattern: {
             name,
@@ -315,67 +267,19 @@ export function parseDraftResponse(raw: string): DraftParseResult {
     };
 }
 
-function asIssues(v: unknown): CritiqueIssue[] {
-    if (!Array.isArray(v)) return [];
-    const out: CritiqueIssue[] = [];
-    for (const raw of v) {
-        if (!raw || typeof raw !== "object") continue;
-        const o = raw as Record<string, unknown>;
-        out.push({
-            quote: asString(o["quote"]).trim(),
-            issue: asString(o["issue"]).trim(),
-            severity: asSeverity(o["severity"])
-        });
-    }
-    return out;
-}
-
-function asObjections(
-    v: unknown
-): Array<{ objection: string; severity: CritiqueSeverity }> {
-    if (!Array.isArray(v)) return [];
-    const out: Array<{ objection: string; severity: CritiqueSeverity }> = [];
-    for (const raw of v) {
-        if (!raw || typeof raw !== "object") continue;
-        const o = raw as Record<string, unknown>;
-        const objection = asString(o["objection"]).trim();
-        if (objection.length === 0) continue;
-        out.push({ objection, severity: asSeverity(o["severity"]) });
-    }
-    return out;
-}
-
-function asBool(v: unknown, fallback = false): boolean {
-    if (typeof v === "boolean") return v;
-    if (typeof v === "string") {
-        const n = v.toLowerCase().trim();
-        if (n === "true") return true;
-        if (n === "false") return false;
-    }
-    return fallback;
-}
-
-export function parseCritiqueResponse(raw: string): CritiqueParseResult {
+export function parseCritiqueResponse(raw: string): { critique: Critique | null; error: string | null } {
     const jsonText = extractJsonObject(raw);
-    if (jsonText === null) return { critique: null, error: "no JSON object found in response" };
+    if (!jsonText) return { critique: null, error: "no JSON object found in response" };
     let parsed: unknown;
-    try {
-        parsed = JSON.parse(jsonText);
-    } catch (err) {
-        return {
-            critique: null,
-            error: `JSON parse failed: ${err instanceof Error ? err.message : String(err)}`
-        };
+    try { parsed = JSON.parse(jsonText); } catch (err) {
+        return { critique: null, error: `JSON parse failed: ${err instanceof Error ? err.message : String(err)}` };
     }
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
         return { critique: null, error: "response root is not a JSON object" };
     }
     const root = parsed as Record<string, unknown>;
-    const c =
-        root["critique"] && typeof root["critique"] === "object"
-            ? (root["critique"] as Record<string, unknown>)
-            : root;
-
+    const c = root["critique"] && typeof root["critique"] === "object"
+        ? root["critique"] as Record<string, unknown> : root;
     return {
         critique: {
             overclaimed_assertions: asIssues(c["overclaimed_assertions"]),
@@ -386,158 +290,79 @@ export function parseCritiqueResponse(raw: string): CritiqueParseResult {
             weak_action: asStringArray(c["weak_action"]),
             obvious_objections: asObjections(c["obvious_objections"]),
             revise_required: asBool(root["revise_required"] ?? c["revise_required"]),
-            overall_assessment: asString(
-                root["overall_assessment"] ?? c["overall_assessment"]
-            ).trim()
+            overall_assessment: asString(root["overall_assessment"] ?? c["overall_assessment"]).trim()
         },
         error: null
     };
 }
 
-// ─── Quality gate (mirror of quality-gate.ts) ──────────────────
+// ── Quality gate ───────────────────────────────────────────────────────
 
-export function runQualityGate(
-    pattern: DraftPattern,
-    validItemIds: ReadonlyArray<string>
-): GateResult {
+export function runQualityGate(pattern: DraftPattern, validItemIds: ReadonlyArray<string>): GateResult {
     const checks: GateCheck[] = [];
     const sixQ = pattern.six_questions;
-    const moveText = pattern.recommended_moves
-        .map((m) => `${m.action} ${m.rationale}`)
-        .join(" ");
     const fullText = [
         pattern.name, pattern.analysis, sixQ.what_changed, sixQ.evidence,
         sixQ.confidence_rationale, sixQ.why_it_matters, sixQ.who_needs_to_know,
-        sixQ.what_next, moveText
+        sixQ.what_next,
+        pattern.recommended_moves.map((m) => `${m.action} ${m.rationale}`).join(" ")
     ].join(" \n ");
 
     const banned = findBannedVocabulary(fullText);
-    checks.push({
-        name: "banned_vocabulary",
-        pass: banned.length === 0,
-        detail: banned.length === 0 ? "no banned vocabulary" : `banned vocabulary used: ${banned.join(", ")}`
-    });
+    checks.push({ name: "banned_vocabulary", pass: banned.length === 0, detail: banned.length ? `banned vocabulary used: ${banned.join(", ")}` : "no banned vocabulary" });
 
-    const analysisWords = wordCount(pattern.analysis);
-    const lengthOk = analysisWords >= ANALYSIS_MIN_WORDS && analysisWords <= ANALYSIS_MAX_WORDS;
-    checks.push({
-        name: "analysis_length",
-        pass: lengthOk,
-        detail: `analysis ${analysisWords} words (need ${ANALYSIS_MIN_WORDS}–${ANALYSIS_MAX_WORDS})`
-    });
+    const words = wordCount(pattern.analysis);
+    checks.push({ name: "analysis_length", pass: words >= ANALYSIS_MIN_WORDS && words <= ANALYSIS_MAX_WORDS, detail: `analysis ${words} words (need ${ANALYSIS_MIN_WORDS}–${ANALYSIS_MAX_WORDS})` });
 
     const nameWords = wordCount(pattern.name);
-    checks.push({
-        name: "name_word_count",
-        pass: nameWords > 0 && nameWords <= PATTERN_NAME_MAX_WORDS,
-        detail: `name ${nameWords} words (max ${PATTERN_NAME_MAX_WORDS})`
-    });
-
-    const trimmedName = pattern.name.trim();
-    const nameDeclarative =
-        trimmedName.length > 0 && !trimmedName.includes("?") && trimmedName.endsWith(".");
-    checks.push({
-        name: "name_declarative",
-        pass: nameDeclarative,
-        detail: nameDeclarative
-            ? "name is declarative"
-            : "name must end with a period and contain no question mark"
-    });
+    checks.push({ name: "name_word_count", pass: nameWords > 0 && nameWords <= PATTERN_NAME_MAX_WORDS, detail: `name ${nameWords} words (max ${PATTERN_NAME_MAX_WORDS})` });
+    const n = pattern.name.trim();
+    const declarative = !!n && !n.includes("?") && n.endsWith(".");
+    checks.push({ name: "name_declarative", pass: declarative, detail: declarative ? "name is a declarative sentence" : "name must end with a period and contain no question mark" });
 
     const moveCount = pattern.recommended_moves.length;
-    const movesOk = moveCount >= MOVES_MIN && moveCount <= MOVES_MAX;
-    checks.push({
-        name: "moves_count",
-        pass: movesOk,
-        detail: `${moveCount} moves (need ${MOVES_MIN}–${MOVES_MAX})`
-    });
+    checks.push({ name: "moves_count", pass: moveCount >= MOVES_MIN && moveCount <= MOVES_MAX, detail: `${moveCount} moves (need ${MOVES_MIN}–${MOVES_MAX})` });
+    const routed = moveCount > 0 && pattern.recommended_moves.every((m) => m.destination.trim() && m.action.trim());
+    checks.push({ name: "moves_routed", pass: Boolean(routed), detail: routed ? "all moves have action + destination" : "a move is missing its action or routed destination" });
 
-    const allMovesRouted = pattern.recommended_moves.every(
-        (m) => m.destination.trim().length > 0 && m.action.trim().length > 0
-    );
-    checks.push({
-        name: "moves_routed",
-        pass: moveCount === 0 ? false : allMovesRouted,
-        detail: allMovesRouted
-            ? "all moves have action + destination"
-            : "a move is missing its action or routed destination"
-    });
+    const emptySlots = (Object.keys(sixQ) as Array<keyof SixQuestions>).filter((k) => !sixQ[k].trim());
+    checks.push({ name: "six_questions_complete", pass: emptySlots.length === 0, detail: emptySlots.length ? `empty six-question slots: ${emptySlots.join(", ")}` : "all six question slots populated" });
 
-    const emptySlots = (Object.keys(sixQ) as Array<keyof typeof sixQ>).filter(
-        (k) => sixQ[k].trim().length === 0
-    );
-    checks.push({
-        name: "six_questions_complete",
-        pass: emptySlots.length === 0,
-        detail: emptySlots.length === 0
-            ? "all six question slots populated"
-            : `empty six-question slots: ${emptySlots.join(", ")}`
-    });
-
-    const hedges = countHedgingAdverbs(pattern.analysis);
-    checks.push({
-        name: "hedging_density",
-        pass: hedges <= MAX_HEDGING_ADVERBS,
-        detail: `${hedges} hedging adverbs in analysis (max ${MAX_HEDGING_ADVERBS})`
-    });
-
-    const hedgeConstructions = findBannedHedgeConstructions(fullText);
-    checks.push({
-        name: "banned_hedge_constructions",
-        pass: hedgeConstructions.length === 0,
-        detail: hedgeConstructions.length === 0
-            ? "no banned hedge constructions"
-            : `banned hedge constructions: ${hedgeConstructions.join("; ")}`
-    });
+    const indirect = findBannedHedgeConstructions(fullText);
+    checks.push({ name: "banned_hedge_constructions", pass: indirect.length === 0, detail: indirect.length ? `indirect qualification: ${indirect.join("; ")}` : "no indirect/metadiscursive qualification" });
 
     const soup = findMarketingSoup(fullText);
-    checks.push({
-        name: "marketing_soup",
-        pass: soup.length === 0,
-        detail: soup.length === 0 ? "no marketing-soup phrases" : `marketing-soup phrases: ${soup.join("; ")}`
-    });
+    checks.push({ name: "marketing_soup", pass: soup.length === 0, detail: soup.length ? `marketing-soup phrases: ${soup.join("; ")}` : "no marketing-soup phrases" });
 
     const validSet = new Set(validItemIds);
     const cited = pattern.evidence_item_ids;
     const allCitedValid = cited.length > 0 && cited.every((id) => validSet.has(id));
-    const invalidCited = cited.filter((id) => !validSet.has(id));
-    checks.push({
-        name: "evidence_ids_valid",
-        pass: allCitedValid,
-        detail: allCitedValid
-            ? `all ${cited.length} cited ids belong to the cluster`
-            : cited.length === 0
-            ? "no evidence item ids cited"
-            : `cited ids not in cluster: ${invalidCited.join(", ")}`
-    });
+    const invalid = cited.filter((id) => !validSet.has(id));
+    checks.push({ name: "evidence_ids_valid", pass: allCitedValid, detail: allCitedValid ? `all ${cited.length} cited ids belong to the cluster` : cited.length === 0 ? "no evidence item ids cited" : `cited ids not in cluster: ${invalid.join(", ")}` });
 
-    const confOk =
-        Number.isFinite(pattern.confidence) && pattern.confidence >= 0 && pattern.confidence <= 1;
-    checks.push({
-        name: "confidence_range",
-        pass: confOk,
-        detail: confOk ? `confidence ${pattern.confidence}` : `confidence ${pattern.confidence} outside [0, 1]`
-    });
+    const confidenceOk = Number.isFinite(pattern.confidence) && pattern.confidence >= 0 && pattern.confidence <= 1;
+    checks.push({ name: "confidence_range", pass: confidenceOk, detail: confidenceOk ? `confidence ${pattern.confidence}` : `confidence ${pattern.confidence} outside [0, 1]` });
 
     const failures = checks.filter((c) => !c.pass).map((c) => c.detail);
     return { passes: failures.length === 0, checks, failures };
 }
 
-// ─── Prompts (mirror of prompts.ts) ────────────────────────────
+// ── Prompts ────────────────────────────────────────────────────────────
 
-export const SYNTHESIS_PROMPT_VERSION = "synthesis-1.0";
+export const SYNTHESIS_PROMPT_VERSION = "synthesis-1.1";
 
 const VOICE_REGISTER = `VOICE
 =====
-You are a sharp B2B operator with a decade of go-to-market scars, telling a peer what you see. Declarative over hedged. Specific over general. Evidence-anchored over assertion. Address the reader as "you"; never refer to the system as "we".
+Write as an experienced B2B operator explaining evidence to another operator. Use ordinary business language and complete propositions.
 
-- The Pattern name is the READ, not the event. Declarative, ends with a period, max 12 words, no question marks, no listicle constructions.
-- Analysis: 60–240 words, 2–4 sentences. First sentence is the read. Middle sentences synthesize the evidence. Final sentence is the directional implication.
-- Assert when evidence is multi-source and direction is clear. Hedge only when single-source or reaching beyond the evidence — and name the uncertainty directly ("Single-source; confidence medium until corroborated"). Never protect yourself with throat-clearing.
-- Max 3 hedging adverbs (may/could/might/possibly/potentially/seems/appears/suggests) in the analysis paragraph.
-- Em-dashes earn the punch; fragments are fine when they land. No ellipses.`;
+- Pattern name: one concise declarative sentence, max 12 words, ending with a period. It may state an observed change or an evidence-backed assessment. Do not use a second punch line, slogan, fragment, or imperative.
+- Analysis: 60–240 words. State observed evidence first, then the assessment it supports, then the practical implication. Keep facts, interpretation, and forecast distinguishable.
+- State directly supported facts categorically. Use calibrated language such as "may", "suggests", "appears", or "is consistent with" when moving beyond direct observation. Do not imply that correlation proves causation.
+- Missing data or silence does not prove an internal buyer or market state.
+- Recommended actions must be concrete, routed to a current Antaeus room, and must not promise an outcome.
+- Use normal sentences with subjects and verbs. Do not use aphoristic fragments, synthetic symmetry, personification, rhetorical mini-headlines, or em-dashes as substitutes for logical connective tissue.`;
 
-const BANNED_LINE = `BANNED VOCABULARY (never use these): ${BANNED_VOCABULARY.join(", ")}. Also banned: "it's worth noting that", "it could be argued that", "in today's", "the future of", and similar marketing throat-clearing.`;
+const BANNED_LINE = `BANNED VOCABULARY: ${BANNED_VOCABULARY.join(", ")}. Also avoid indirect framing such as "it's worth noting that", "it could be argued that", "one could argue", marketing throat-clearing, private Antaeus ontology, and slogan-like copy.`;
 
 function renderEvidence(input: SynthesisInput): string[] {
     const lines: string[] = [];
@@ -548,200 +373,103 @@ function renderEvidence(input: SynthesisInput): string[] {
         lines.push(parts.join(""));
         if (e.summary) lines.push(`    summary: ${e.summary}`);
         if (e.what_changed) lines.push(`    what_changed: ${e.what_changed}`);
-        if (e.companies.length > 0) lines.push(`    companies: ${e.companies.join(", ")}`);
+        if (e.companies.length) lines.push(`    companies: ${e.companies.join(", ")}`);
         lines.push(`    relevance: ${e.user_relevance_score.toFixed(2)}`);
     }
     return lines;
 }
-
 function renderContext(input: SynthesisInput): string[] {
-    const lines: string[] = [];
-    lines.push("OPERATOR CONTEXT");
-    lines.push("================");
-    if (input.commercial_profile) {
-        if (input.commercial_profile.product_category) {
-            lines.push(`What you sell: ${input.commercial_profile.product_category}`);
-        }
-        if (input.commercial_profile.value_prop) {
-            lines.push(`Your value proposition: ${input.commercial_profile.value_prop}`);
-        }
-    }
-    if (input.icp) {
-        if (input.icp.icp_summary) lines.push(`Your ICP: ${input.icp.icp_summary}`);
-        if (input.icp.target_industries.length > 0) {
-            lines.push(`Target industries: ${input.icp.target_industries.join(", ")}`);
-        }
-        if (input.icp.decision_maker_titles.length > 0) {
-            lines.push(`Buyers: ${input.icp.decision_maker_titles.join(", ")}`);
-        }
-        if (input.icp.pains.length > 0) lines.push(`Buyer pains: ${input.icp.pains.join("; ")}`);
-    }
+    const lines = ["OPERATOR CONTEXT", "================"];
+    if (input.commercial_profile?.product_category) lines.push(`What you sell: ${input.commercial_profile.product_category}`);
+    if (input.commercial_profile?.value_prop) lines.push(`Your value proposition: ${input.commercial_profile.value_prop}`);
+    if (input.icp?.icp_summary) lines.push(`Your ICP: ${input.icp.icp_summary}`);
+    if (input.icp?.target_industries.length) lines.push(`Target industries: ${input.icp.target_industries.join(", ")}`);
+    if (input.icp?.decision_maker_titles.length) lines.push(`Buyers: ${input.icp.decision_maker_titles.join(", ")}`);
+    if (input.icp?.pains.length) lines.push(`Buyer pains: ${input.icp.pains.join("; ")}`);
     if (!input.commercial_profile && !input.icp) {
-        lines.push(
-            "(The operator hasn't fully declared their commercial profile or ICP. Anchor why_it_matters on the category implication; keep who_needs_to_know to the operator + founding AE.)"
-        );
+        lines.push("(Commercial profile/ICP is incomplete. Keep why_it_matters at category level and state that the operator-specific implication cannot yet be established.)");
     }
     return lines;
 }
 
-export const DRAFT_SYSTEM_PROMPT = `You are the synthesis stage of a B2B competitive-intelligence briefing. You receive one qualified cluster of evidence and produce one Pattern — a synthesized read of what the evidence means for this specific operator. Not a summary of the items; a read a sharp peer would give.
+export const DRAFT_SYSTEM_PROMPT = `You are the synthesis stage of a B2B competitive-intelligence briefing. You receive one qualified cluster of evidence and produce one Pattern: an evidence-backed explanation of what changed, what the evidence supports, and what the operator should verify or do next.
 
-Respond with ONLY valid JSON matching the schema in the user message. No prose preamble, no markdown fences. The first character of your response must be '{' and the last must be '}'.`;
+Do not turn the evidence into a slogan or claim intent/causation that the sources do not establish.
+
+Respond with ONLY valid JSON matching the schema in the user message.`;
 
 export function buildDraftPrompt(input: SynthesisInput): string {
-    const lines: string[] = [];
-    lines.push("CLUSTER UNDER SYNTHESIS");
-    lines.push("=======================");
-    lines.push(`Type: ${input.cluster_type}`);
-    lines.push(`Anchor: ${input.anchor}`);
-    lines.push(`Weighted evidence: ${input.weighted_evidence.toFixed(2)}`);
-    lines.push(`Distinct sources: ${input.distinct_sources}`);
-    lines.push(`Distinct accounts: ${input.distinct_accounts}`);
+    const lines = [
+        "CLUSTER UNDER SYNTHESIS", "=======================",
+        `Type: ${input.cluster_type}`, `Anchor: ${input.anchor}`,
+        `Weighted evidence: ${input.weighted_evidence.toFixed(2)}`,
+        `Distinct sources: ${input.distinct_sources}`,
+        `Distinct accounts: ${input.distinct_accounts}`
+    ];
     if (input.trajectory) lines.push(`Trajectory vs prior run: ${input.trajectory}`);
-    lines.push("");
-    lines.push("EVIDENCE ITEMS");
-    lines.push("==============");
-    lines.push(...renderEvidence(input));
-    lines.push("");
-    lines.push(...renderContext(input));
-    lines.push("");
-    lines.push(VOICE_REGISTER);
-    lines.push("");
-    lines.push(BANNED_LINE);
-    lines.push("");
-    lines.push("TASK");
-    lines.push("====");
-    lines.push(
-        "Synthesize one Pattern from this cluster. Cite only the evidence item ids above. Produce a JSON object matching this schema:"
-    );
-    lines.push("");
-    lines.push("{");
-    lines.push('  "name":        string,   // the READ, declarative, ends with period, ≤12 words');
-    lines.push('  "trajectory":  "rising" | "stable" | "declining" | null,');
-    lines.push('  "analysis":    string,   // 60–240 words, 2–4 sentences');
-    lines.push('  "six_questions": {');
-    lines.push('    "what_changed":         string,  // factual, numbers + dates, no interpretation');
-    lines.push('    "evidence":             string,  // source counts + types + time window');
-    lines.push('    "confidence_rationale": string,  // why this confidence — diversity, corroboration, gaps');
-    lines.push('    "why_it_matters":       string,  // specific to the operator ICP + deals; never generic');
-    lines.push('    "who_needs_to_know":    string,  // named roles/persona, not "stakeholders"');
-    lines.push('    "what_next":            string   // verb-first, concrete, routed destination implied');
-    lines.push("  },");
-    lines.push('  "recommended_moves": [   // 1–3, highest-leverage first, never padded');
-    lines.push('    { "action": string, "rationale": string, "destination": string }');
-    lines.push("  ],");
-    lines.push('  "evidence_item_ids": string[],  // subset of the ids above that support the read');
-    lines.push('  "confidence":        number     // 0.0–1.0');
-    lines.push("}");
-    lines.push("");
-    lines.push(
-        "Routed destinations use the form \"Discovery Studio · Phase 04 · refresh existing\", \"Call Planner · Objection Bank · new\", \"Asset Builder · Battlecard · <competitor> · refresh existing\", or \"Outbound Studio · hook · new\"."
-    );
+    lines.push("", "EVIDENCE ITEMS", "==============", ...renderEvidence(input), "", ...renderContext(input), "", VOICE_REGISTER, "", BANNED_LINE, "", "TASK", "====");
+    lines.push("Synthesize one Pattern from this cluster. Cite only the evidence item ids above. Do not claim causation, internal intent, or future outcomes unless the evidence specifically establishes them. Produce this JSON object:");
+    lines.push(`{
+  "name": string,
+  "trajectory": "rising" | "stable" | "declining" | null,
+  "analysis": string,
+  "six_questions": {
+    "what_changed": string,
+    "evidence": string,
+    "confidence_rationale": string,
+    "why_it_matters": string,
+    "who_needs_to_know": string,
+    "what_next": string
+  },
+  "recommended_moves": [ { "action": string, "rationale": string, "destination": string } ],
+  "evidence_item_ids": string[],
+  "confidence": number
+}`);
+    lines.push("Current routed destination examples: \"Deal Workspace · active deal · review\", \"Discovery Studio · question set · update\", \"Cold Call Studio · objection response · update\", \"Outbound Studio · hook · new\", \"Signal Console · watched account · review\", or \"Getting to Signed · security workstream · review\". Do not route to retired or nonexistent rooms.");
     lines.push("Respond with the JSON object only.");
     return lines.join("\n");
 }
 
-export const CRITIQUE_SYSTEM_PROMPT = `You are the critique stage of a B2B intelligence briefing — a second, independent reader checking a drafted Pattern against its evidence and the house voice. You are skeptical and specific. Your job is to catch overclaims, unsupported assertions, banned vocabulary, excessive hedging, weak actions, and obvious objections the draft missed.
+export const CRITIQUE_SYSTEM_PROMPT = `You are the independent critique stage of a B2B intelligence briefing. Compare the draft with its evidence. Flag overclaims, unsupported intent or causation, invented facts, banned vocabulary, indirect/metadiscursive qualification, vague actions, invalid destinations, and objections the draft failed to consider.
 
-Respond with ONLY valid JSON matching the schema in the user message. First character '{', last character '}'.`;
+Do not penalize calibrated uncertainty merely because it uses words such as may, suggests, or appears.
+
+Respond with ONLY valid JSON matching the schema in the user message.`;
 
 export function buildCritiquePrompt(input: SynthesisInput, draft: DraftPattern): string {
-    const lines: string[] = [];
-    lines.push("EVIDENCE THE DRAFT IS BUILT ON");
-    lines.push("==============================");
-    lines.push(...renderEvidence(input));
-    lines.push("");
-    lines.push("DRAFTED PATTERN");
-    lines.push("===============");
-    lines.push(JSON.stringify(draft, null, 2));
-    lines.push("");
-    lines.push(VOICE_REGISTER);
-    lines.push("");
-    lines.push(BANNED_LINE);
-    lines.push("");
-    lines.push("TASK");
-    lines.push("====");
-    lines.push(
-        "Critique the draft. Be specific: quote the offending text. Check for: claims the evidence doesn't support; assertions of intent that can't be verified; banned vocabulary; more than 3 hedging adverbs in the analysis; marketing soup; weak or vague recommended actions; and obvious objections a sharp reader would raise (e.g. two of the 'three competitors' are actually parent + subsidiary). Produce a JSON object:"
-    );
-    lines.push("");
-    lines.push("{");
-    lines.push('  "overclaimed_assertions": [ { "quote": string, "issue": string, "severity": "minor"|"significant"|"major" } ],');
-    lines.push('  "unsupported_claims":     [ { "quote": string, "issue": string, "severity": ... } ],');
-    lines.push('  "banned_vocabulary_used": string[],');
-    lines.push('  "excessive_hedging":      string[],');
-    lines.push('  "marketing_soup":         string[],');
-    lines.push('  "weak_action":            string[],');
-    lines.push('  "obvious_objections":     [ { "objection": string, "severity": ... } ],');
-    lines.push('  "revise_required":        boolean,');
-    lines.push('  "overall_assessment":     string');
-    lines.push("}");
-    lines.push("");
-    lines.push(
-        "Set revise_required true if any issue is severity significant or major, or if any banned vocabulary / marketing soup is present. Respond with the JSON object only."
-    );
+    const lines = ["EVIDENCE THE DRAFT IS BUILT ON", "==============================", ...renderEvidence(input), "", "DRAFTED PATTERN", "===============", JSON.stringify(draft, null, 2), "", VOICE_REGISTER, "", BANNED_LINE, "", "TASK", "===="];
+    lines.push("Critique the draft. Quote offending text. Check for unsupported claims, intent or causation that cannot be verified, banned vocabulary, indirect qualification, redundant uncertainty language, marketing filler, vague actions, invalid routes, and obvious evidence objections.");
+    lines.push(`{
+  "overclaimed_assertions": [ { "quote": string, "issue": string, "severity": "minor"|"significant"|"major" } ],
+  "unsupported_claims": [ { "quote": string, "issue": string, "severity": "minor"|"significant"|"major" } ],
+  "banned_vocabulary_used": string[],
+  "excessive_hedging": string[],
+  "marketing_soup": string[],
+  "weak_action": string[],
+  "obvious_objections": [ { "objection": string, "severity": "minor"|"significant"|"major" } ],
+  "revise_required": boolean,
+  "overall_assessment": string
+}`);
+    lines.push("Use excessive_hedging only for redundant or evasive qualification that obscures the assessment, not for necessary epistemic calibration. Set revise_required true for significant/major issues or banned/marketing language.");
     return lines.join("\n");
 }
 
-export const REVISE_SYSTEM_PROMPT = `You are the reviser — the original drafter, now applying a critique. Produce the corrected Pattern. Keep everything the critique didn't flag; fix everything it did. Stay in the house voice.
+export const REVISE_SYSTEM_PROMPT = `You are revising a B2B intelligence Pattern against a critique. Preserve supported facts. Correct every overclaim, unsupported causal/intent assertion, vague action, invalid route, or language violation. Keep evidence and interpretation distinguishable.
 
-Respond with ONLY valid JSON matching the Pattern schema. First character '{', last character '}'.`;
+Respond with ONLY valid JSON matching the Pattern schema.`;
 
-export const GATE_REPAIR_SYSTEM_PROMPT = `You are fixing a Pattern that failed mechanical formatting checks. Make the smallest edits that satisfy the listed failures — do not rewrite the read, change the claim, or touch fields the failures don't mention. Stay in the house voice.
+export const GATE_REPAIR_SYSTEM_PROMPT = `You are fixing a Pattern that failed mechanical quality checks. Make the smallest edits necessary to satisfy the listed failures. Do not strengthen claims, invent evidence, or remove accurate uncertainty simply to sound more decisive.
 
-Respond with ONLY the corrected Pattern as JSON (same schema). First character '{', last character '}'.`;
+Respond with ONLY the corrected Pattern as JSON.`;
 
-export function buildGateRepairPrompt(
-    pattern: DraftPattern,
-    failures: ReadonlyArray<string>
-): string {
-    const lines: string[] = [];
-    lines.push("PATTERN THAT FAILED THE QUALITY GATE");
-    lines.push("=====================================");
-    lines.push(JSON.stringify(pattern, null, 2));
-    lines.push("");
-    lines.push("GATE FAILURES TO FIX");
-    lines.push("====================");
-    for (const f of failures) lines.push(`- ${f}`);
-    lines.push("");
-    lines.push(VOICE_REGISTER);
-    lines.push("");
-    lines.push(BANNED_LINE);
-    lines.push("");
-    lines.push("TASK");
-    lines.push("====");
-    lines.push(
-        "Fix exactly the failures listed above with the smallest possible edits. Common fixes: trim the name to ≤12 words while keeping it a declarative read ending in a period; cut recommended_moves to the 3 highest-leverage; remove banned vocabulary or hedge constructions; tighten the analysis to 60–240 words. Keep the claim, the evidence_item_ids, and every field the failures don't mention unchanged. Return the full corrected Pattern as JSON with the same schema."
-    );
+export function buildGateRepairPrompt(pattern: DraftPattern, failures: ReadonlyArray<string>): string {
+    const lines = ["PATTERN THAT FAILED THE QUALITY GATE", "=====================================", JSON.stringify(pattern, null, 2), "", "GATE FAILURES TO FIX", "====================", ...failures.map((f) => `- ${f}`), "", VOICE_REGISTER, "", BANNED_LINE, ""];
+    lines.push("Fix exactly the listed mechanical failures. Keep supported claims, evidence_item_ids, confidence, and unrelated fields unchanged. Do not turn calibrated uncertainty into categorical certainty. Return the full Pattern as JSON.");
     return lines.join("\n");
 }
 
-export function buildRevisePrompt(
-    input: SynthesisInput,
-    draft: DraftPattern,
-    critique: Critique
-): string {
-    const lines: string[] = [];
-    lines.push("EVIDENCE");
-    lines.push("========");
-    lines.push(...renderEvidence(input));
-    lines.push("");
-    lines.push("YOUR ORIGINAL DRAFT");
-    lines.push("===================");
-    lines.push(JSON.stringify(draft, null, 2));
-    lines.push("");
-    lines.push("CRITIQUE TO APPLY");
-    lines.push("=================");
-    lines.push(JSON.stringify(critique, null, 2));
-    lines.push("");
-    lines.push(VOICE_REGISTER);
-    lines.push("");
-    lines.push(BANNED_LINE);
-    lines.push("");
-    lines.push("TASK");
-    lines.push("====");
-    lines.push(
-        "Apply the critique. Correct every flagged issue; sharpen factual claims; remove banned vocabulary and excess hedging. Return the full corrected Pattern as JSON with the same schema as the draft (name, trajectory, analysis, six_questions, recommended_moves, evidence_item_ids, confidence). Respond with the JSON object only."
-    );
+export function buildRevisePrompt(input: SynthesisInput, draft: DraftPattern, critique: Critique): string {
+    const lines = ["EVIDENCE", "========", ...renderEvidence(input), "", "YOUR ORIGINAL DRAFT", "===================", JSON.stringify(draft, null, 2), "", "CRITIQUE TO APPLY", "=================", JSON.stringify(critique, null, 2), "", VOICE_REGISTER, "", BANNED_LINE, ""];
+    lines.push("Apply the critique. Correct every flagged issue while preserving supported evidence. Separate facts from interpretation, remove unsupported causal/intent claims, keep calibrated uncertainty where warranted, and route actions only to current product surfaces. Return the full corrected Pattern as JSON.");
     return lines.join("\n");
 }
