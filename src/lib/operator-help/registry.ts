@@ -1,41 +1,29 @@
 /**
  * Operator help registry (ADR-018, 2026-06-19).
  *
- * Antaeus supports its own operators the way the product itself talks:
- * calm, plainspoken, contextual — never a chirpy chatbot, never a
- * generic help center (canon §1 emotional territory + §4.20 Trust
- * Annex). Help is room-aware: when the operator opens the "?" in the
- * Wayfinder bar, they get three plain sentences about the room they're
- * actually in — what it's for, the one move it wants, and what to do
- * when it looks empty or wrong — plus one honest channel to a human.
- *
- * The copy is sourced from the canon §4 room minds, written in the
- * plain voice of canon §11 (say it like you'd say it out loud). It is
- * content data, not chrome — the Wayfinder wraps the surrounding labels
- * ("Help", "Email us") in t(); these strings are the answer itself.
- *
- * Adding a room: drop an entry keyed by its path. Anything unlisted
- * falls back to GENERIC — the help affordance is never absent, never
- * a dead end.
+ * Help is room-aware and literal. Each entry explains what the room does,
+ * the next useful action, and what to check when the room is empty or the
+ * output looks wrong. Avoid private product metaphors and avoid claiming
+ * that a recommendation proves causality or predicts an outcome.
  */
 
 export interface HelpEntry {
     /** What this room is for — one plain sentence. */
     readonly whatItIsFor: string;
-    /** The one dominant move the room wants right now. */
+    /** The most useful next action in the room. */
     readonly theMoveHere: string;
-    /** What to do when it looks empty, thin, or wrong. */
+    /** What to check when the room is empty, incomplete, or unexpected. */
     readonly ifStuck: string;
 }
 
 /** The fallback when a room has no specific entry yet. */
 export const GENERIC_HELP: HelpEntry = {
     whatItIsFor:
-        "Each room does one job and hands its work to the next. The bar at the top names the room you're in; the highlighted action is the thing to do first.",
+        "Each room handles a specific part of the sales workflow and can pass relevant information to other rooms.",
     theMoveHere:
-        "Look for the single highlighted move — that's what this room wants from you right now. Everything else is quieter on purpose.",
+        "Start with the primary action shown in the room. Supporting actions remain available when you need them.",
     ifStuck:
-        "If a room looks empty, one upstream thing usually isn't in yet. The empty state names what fills it. Nothing here is graded — you can always come back."
+        "If the room is empty or incomplete, check the empty-state message for the upstream data or setup it requires."
 };
 
 /**
@@ -45,179 +33,179 @@ export const GENERIC_HELP: HelpEntry = {
 const REGISTRY: Readonly<Record<string, HelpEntry>> = {
     "/dashboard/": {
         whatItIsFor:
-            "The Dashboard ranks everything under pressure and tells you the one thing to act on first, so you never have to choose between rooms.",
+            "The Dashboard summarizes current activity, deal risk, and recommended actions across the workspace.",
         theMoveHere:
-            "Take the top move it names, or switch between Read, Focus, and Triage to see the same ranking three ways.",
+            "Review the highest-priority item first, or switch views to inspect the same workspace data from a different angle.",
         ifStuck:
-            "If it looks thin, you haven't added enough real accounts or deals yet. Add one and the whole brief sharpens around it."
+            "If the Dashboard is sparse, add or update real accounts, deals, and activity records so it has current information to summarize."
     },
     "/welcome/": {
         whatItIsFor:
-            "Welcome is the on-ramp — it shows what your workspace has so far and the one real move to make next.",
+            "Welcome shows the current setup state of your workspace and the next available setup or workflow action.",
         theMoveHere:
-            "Take the highlighted next move. Each one makes a downstream room more useful than it was.",
+            "Use the highlighted action to continue setup or enter the next relevant room.",
         ifStuck:
-            "Nothing here is graded. Skip anything and come back — the workspace keeps your progress."
+            "You can skip optional setup items and return later. Completed information remains in the workspace."
     },
     "/onboarding/": {
         whatItIsFor:
-            "Onboarding asks six quick questions and seeds your workspace so the Dashboard is already live before you finish.",
+            "Onboarding collects the initial information Antaeus uses to configure the workspace.",
         theMoveHere:
-            "Answer the step in front of you. Only your role and one ICP line are required — the rest is optional.",
+            "Answer the current step. Only the required fields must be completed before you continue.",
         ifStuck:
-            "You can leave any field blank and still finish. Fill the rest later from the rooms themselves."
+            "Leave optional fields blank if you do not know them yet. You can update them later from the relevant rooms."
     },
     "/icp-studio/": {
         whatItIsFor:
-            "ICP Studio sharpens the one definition of who you sell to. Every other room filters against it.",
+            "ICP Studio defines the accounts and buyers you intend to target so other rooms can use the same criteria.",
         theMoveHere:
-            "Write or tighten the ICP statement. Thinner is better — fewer assumptions, fewer personas.",
+            "Review the ICP statement and make the account, buyer, pain, and trigger criteria as specific as the available evidence supports.",
         ifStuck:
-            "A low score means the definition is still too broad. Name the specific owner, the pain, and the trigger that makes them act now."
+            "If the definition remains broad, add the specific buyer role, business problem, and triggering condition you actually intend to pursue."
     },
     "/territory-architect/": {
         whatItIsFor:
-            "Territory Architect turns the ICP into a tiered map of focused buyer groups, with a hard 300-account ceiling that forces real choices.",
+            "Territory Architect organizes target accounts into focused groups and limits the active territory to 300 accounts.",
         theMoveHere:
-            "Name a focus — a group of buyers under the same pressure — and tag accounts into it.",
+            "Define a focused buyer group and assign the accounts that match it.",
         ifStuck:
-            "The cap is the point. If the ceiling feels tight, that's it forcing you to drop the accounts that don't really fit."
+            "If the account limit is reached, remove lower-priority accounts or tighten the criteria for the group."
     },
     "/prospecting-desk/": {
         whatItIsFor:
-            "Sourcing Workbench turns a focus into named, researched prospects you can push forward.",
+            "Prospecting Desk stores target searches, lets you add companies, and requires three qualification checks before an account can be sent to Signal Console.",
         theMoveHere:
-            "Run a query card to find prospects, then research one to qualify it into a real account.",
+            "Save the target criteria, add a relevant company, then complete its qualification checks.",
         ifStuck:
-            "Research that doesn't lead to a push is just collecting. Aim to move a clean prospect forward, not to keep polishing it."
+            "This room does not run a live company search. Use the saved criteria while researching elsewhere, then add the companies you want to evaluate here."
     },
     "/signal-console/": {
         whatItIsFor:
-            "Signal Console tracks the accounts you're watching and the signals stacking up on each, ranked by heat.",
+            "Signal Console tracks watched accounts and ranks recent account signals using the room's priority model.",
         theMoveHere:
-            "Work the hottest account — the bar points at it. Add accounts by hand or enrich them in bulk.",
+            "Review the highest-priority watched account and inspect the signals that produced its current ranking.",
         ifStuck:
-            "No heat yet means no signals. Add a real account and one reason it came up onto your radar."
+            "If no account has current signals, add or update a watched account and verify that its signal sources are available."
     },
     "/outbound-studio/": {
         whatItIsFor:
-            "Outbound Studio builds one outbound line at a time from the account, the buyer, the temperature, and the trigger.",
+            "Outbound Studio drafts one account-specific outreach message using the account, contact, outreach stage, and reason for outreach.",
         theMoveHere:
-            "Fill the switchboard and generate the send line. Copy it, or log the touch so the app remembers it.",
+            "Confirm the account and contact context, review the draft, then copy or log the message you actually use.",
         ifStuck:
-            "If the line feels generic, you're missing a real trigger — name what actually changed for that account."
+            "If the draft is generic, add a specific account signal or a clearly stated trigger before generating it again."
     },
     "/cold-call-studio/": {
         whatItIsFor:
-            "Cold Call Studio walks a live cold call one thread at a time — opener, pressure, evidence, ask — so you narrow instead of explain.",
+            "Cold Call Studio helps you prepare for a cold call, respond to common buyer reactions, and record the outcome afterward.",
         theMoveHere:
-            "Stay in one thread. Pick what the buyer just said and the room hands you the next line.",
+            "Review the call plan before dialing, then use the relevant response prompt if the buyer raises a common objection or pushback.",
         ifStuck:
-            "You don't need the whole script at once. Pull the next thread only when this one resolves."
+            "Use only the prompt that matches what the buyer actually said. You do not need to follow every section in order."
     },
     "/linkedin-playbook/": {
         whatItIsFor:
-            "LinkedIn Playbook uses LinkedIn as air cover, not the opening move — watch, comment, connect, give, then ask.",
+            "LinkedIn Playbook uses LinkedIn as a supporting outreach channel alongside calls and email.",
         theMoveHere:
-            "Take the cue the ladder is on. Earn recognition before you send anything.",
+            "Complete the current LinkedIn action for the account, such as reviewing, commenting, connecting, or sending useful information.",
         ifStuck:
-            "If acceptance or replies are low, you're asking too early. Give a real read first."
+            "If there has been little or no interaction, use a useful non-promotional touch before making a meeting request."
     },
     "/call-planner/": {
         whatItIsFor:
-            "Call Planner shapes the next call before it happens — open, reason now, probe, advance ask — so you arrive with conviction.",
+            "Call Planner organizes the account context, reason for the call, questions, and intended next step before a scheduled conversation.",
         theMoveHere:
-            "Fill the four agenda strips for a real account. The plan should get used in the call, not sit here.",
+            "Complete the planning fields for a real account and use them during the call.",
         ifStuck:
-            "A thin plan usually means a thin reason-now. Name why this conversation has to happen this week."
+            "If the plan is thin, clarify the current business reason for the conversation and the specific next step you want to discuss."
     },
     "/discovery-studio/": {
         whatItIsFor:
-            "Discovery Studio runs a live discovery call — you speak, branch on what the buyer says, recover, and lock the next step.",
+            "Discovery Studio supports a live discovery call with question paths, notes, objection handling, and next-step capture.",
         theMoveHere:
-            "Stay in one segment. Pick the buyer's response and follow the branch; jump only when you need to.",
+            "Use the question path that matches the current part of the conversation and record what the buyer actually says.",
         ifStuck:
-            "If the call goes sideways, open the recover rail — it routes you to the segment where the recovery runs."
+            "If the conversation changes direction, move to the relevant question section or objection prompt rather than forcing the previous path."
     },
     "/deal-workspace/": {
         whatItIsFor:
-            "Deal Workspace is the recovery board — it shows which deals are closest to going stale and the smallest move to fix each.",
+            "Deal Workspace ranks open deals using inactivity, next-step, and close-date risk factors and shows the factors behind each score.",
         theMoveHere:
-            "Start with the deals under NEEDS INTERVENTION. Open one to see its corrective move.",
+            "Review the highest-risk deal, inspect the recorded risk factors, and update the next step or deal information where needed.",
         ifStuck:
-            "An empty board means no live deals yet. They get created from cold calls and discovery, then land here."
+            "An empty workspace means no open deals are currently recorded. Add a deal or create one through an upstream workflow."
     },
     "/future-autopsy/": {
         whatItIsFor:
-            "Future Autopsy pre-mortems a deal before it dies — it names the causal pattern and the route that corrects it.",
+            "Future Autopsy reviews conditions associated with deal-loss risk and generates a pre-mortem scenario from the information currently recorded.",
         theMoveHere:
-            "Pick a pinned case and read the cause. Then run the intervention it points at.",
+            "Select a deal, review the evidence behind the risk assessment, and choose an action that addresses a documented condition.",
         ifStuck:
-            "If nothing's pinned, there are no deals under enough pressure yet — which is a good problem to have."
+            "If no deal is available, add or update open deals first. The room should not infer a cause that is not supported by the recorded evidence."
     },
     "/pilot-desk/": {
         whatItIsFor:
-            "PoC Framework turns one pilot into evidence the buyer's boss can act on — a claim, an owner, a metric, and a kill rule.",
+            "Pilot Desk defines a pilot claim, owner, success measure, and stop condition for a linked deal.",
         theMoveHere:
-            "Forge the four molds for a linked deal. The weakest one is called out for you.",
+            "Complete the four pilot fields and make sure each one can be verified by the buyer and your team.",
         ifStuck:
-            "Interest isn't evidence until it can be carried without you in the room. Start with the claim and who signs off on it."
+            "If the pilot still depends on general interest, define the specific result to measure and who will confirm whether it was achieved."
     },
     "/call-in-a-favor/": {
         whatItIsFor:
-            "Advisor Deploy prepares one backchannel ask before you spend external trust, then tracks it coming back as deal movement.",
+            "Call in a Favor prepares an advisor or relationship-based request for a specific deal and records what happened afterward.",
         theMoveHere:
-            "Pick the deal, the advisor, and the ask moment. The room drafts the exact ask.",
+            "Choose the deal, the person you are asking, and the specific help you need before sending the request.",
         ifStuck:
-            "Every ask should return as a deal update or a clear hold. If it can't, it's not ready to send."
+            "Make the request specific enough that the outcome can be recorded as an introduction, information, a decline, or another concrete result."
     },
     "/getting-to-signed/": {
         whatItIsFor:
-            "Negotiation rehearses the procurement, finance, and terms conversation before it happens, so you walk in with positions, not improvised concessions.",
+            "Getting to Signed helps you prepare for procurement, finance, legal, security, and commercial negotiation before the conversation happens.",
         theMoveHere:
-            "Pick the counterparty and the ask moment. Rehearse the opening line and the response to pushback.",
+            "Choose the current approval or negotiation issue and review the position you intend to take before the next conversation.",
         ifStuck:
-            "Every concession should be a deliberate move. If you're about to give one to 'be reasonable,' that's the one to rehearse first."
+            "If you are considering a concession, state what you would give, what you need in return, and who has authority to approve it."
     },
     "/quota-workback/": {
         whatItIsFor:
-            "Quota Workback turns your quota into weekly execution pressure — how many meetings, motions, and deals you actually need.",
+            "Quota Workback converts an annual revenue target and your conversion assumptions into modeled monthly and daily requirements, then compares the target with recorded closed revenue and open pipeline.",
         theMoveHere:
-            "Put in your quota and average deal size. The room works back to the daily numbers.",
+            "Enter the annual target and typical deal size, then review the assumptions, activity requirements, and pipeline coverage calculation.",
         ifStuck:
-            "If the targets feel off, check the win rate and cycle length — they drive the whole calculation."
+            "If the requirements look unrealistic, review the conversion assumptions, working days, and the benchmark selected for your ACV band."
     },
     "/founding-gtm/": {
         whatItIsFor:
-            "Founding GTM is the kit your first hire opens on day one — the authored read of what works, what wins, and where deals leak.",
+            "Founding GTM summarizes observed patterns across the workspace so a new seller can see what has been tried, what has been associated with wins or losses, and how much evidence supports each section.",
         theMoveHere:
-            "Read the sections that are ready. Each one names something no single room could surface alone.",
+            "Review the sections with enough data and use the cited records before treating any pattern as a repeatable rule.",
         ifStuck:
-            "Sections fill as the rest of the workspace gets real. A thin kit means the upstream rooms need more in them first."
+            "Sections remain limited when the sample is small. Add more real activity and outcomes rather than treating a thin sample as a conclusion."
     },
     "/briefing/": {
         whatItIsFor:
-            "Briefing is your daily check-in for what the system saw — inside your own work, and out in the market you're selling into.",
+            "Briefing summarizes recent workspace and market evidence, with confidence and supporting sources for generated analyses.",
         theMoveHere:
-            "Toggle between Workspace and World. Read what's surfaced; mark what's useful or noise.",
+            "Review the current analyses and open the supporting evidence for any conclusion that affects a decision.",
         ifStuck:
-            "If a read looks wrong, the evidence behind it is one click away. The system is testing its own assumptions, not just yours."
+            "If an analysis looks wrong, inspect its cited evidence, confidence, and source coverage before accepting or dismissing it."
     },
     "/outdoors-events/": {
         whatItIsFor:
-            "Outdoors Events finds the gatherings in your category — conferences, meetups, trade shows — and surfaces them so you don't have to go looking.",
+            "Outdoors Events searches for currently scheduled conferences, trade shows, summits, meetups, and similar events relevant to your category or buyers.",
         theMoveHere:
-            "Run discovery, then mark the events worth your time. The system finds; you decide.",
+            "Run event discovery, review the returned sources, and mark the events that are relevant to your territory or buyer strategy.",
         ifStuck:
-            "If nothing's surfaced, run discovery once. It reads your product category and searches the world for where buyers gather."
+            "If no useful events are returned, review the product category and buyer context used for discovery or add a known event manually."
     },
     "/settings/": {
         whatItIsFor:
-            "Settings keeps your workspace safe — export, import, cloud sync, and account controls. No drama, just utility.",
+            "Settings manages workspace export, restore, cloud-sync status, activity-capture options, preferences, and account controls.",
         theMoveHere:
-            "Export a backup before week one gets messy, or wire cloud sync so the workspace survives this browser.",
+            "Review the current sync status and export a backup when you want a portable copy of the workspace.",
         ifStuck:
-            "Your data lives on this device until you turn on cloud sync. Export gives you a copy you control either way."
+            "Use the status shown in Settings to confirm what is currently synced. Export remains available when you want a separate backup copy."
     }
 };
 
@@ -239,12 +227,7 @@ export function helpForPath(path: string): HelpEntry {
     return best ?? GENERIC_HELP;
 }
 
-/**
- * The honest human channel. A mailto to the support address with a
- * subject naming the room, so a stuck operator reaches a person in one
- * click — never a ticket maze. The address is founder-configurable
- * (ADR-018 §Decision points); the default is the support inbox.
- */
+/** Human support channel used by the room-aware help panel. */
 export const SUPPORT_EMAIL = "support@antaeus.app";
 
 export function supportMailto(roomLabel: string): string {
