@@ -1,26 +1,16 @@
 /**
- * The voice validator — the strict-everywhere gate (01 Part II).
+ * Operator-facing string validator.
  *
- * One function, `validateString(text, context)`, applied to every
- * operator-facing string the product ships. Strings are declared via
- * the t() marker (./t.ts); the repo-walking gate in voice-gate.test.ts
- * runs every declared string through this validator and fails CI on
- * any error-severity violation.
- *
- * Three string classes (01 §2.1) get different granularity:
- *   - label   — banned check, 6-word cap, shape check, completion ban
- *   - body    — banned check, sentence structure, speakability
- *   - authored — body rules + hedging discipline
- *
- * Violations carry severity: "error" fails the gate; "warning" (the
- * Tier-2 rules, e.g. subject continuity) reports without failing,
- * per 01 §2.3.
+ * Direct language is required; false certainty is not. Authored prose may use
+ * calibrated uncertainty terms when they accurately describe an assessment or
+ * forecast. Indirect/metadiscursive qualification remains an error. Stacking
+ * many uncertainty terms in one short string is a readability warning only.
  */
 import { ALL_BANNED_TERMS, BANNED_COMPLETION_LABELS } from "./banned-vocabulary";
 import { isBlessedLabel } from "./blessed-labels";
 import {
-    BANNED_HEDGE_CONSTRUCTIONS,
-    MAX_HEDGE_ADVERBS,
+    BANNED_META_HEDGE_CONSTRUCTIONS,
+    UNCERTAINTY_STACK_REVIEW_THRESHOLD,
 } from "./voice-document";
 import {
     DEFAULT_FAMILY,
@@ -46,15 +36,18 @@ export interface StringValidation {
     readonly violations: ReadonlyArray<StringViolation>;
 }
 
-const HEDGE_ADVERBS = [
+const UNCERTAINTY_TERMS = [
+    "may",
+    "could",
+    "might",
     "possibly",
-    "perhaps",
     "potentially",
+    "appears",
+    "suggests",
+    "seems",
+    "likely",
+    "unlikely",
     "arguably",
-    "somewhat",
-    "fairly",
-    "relatively",
-    "seemingly",
 ];
 
 function wordCount(text: string): number {
@@ -72,10 +65,6 @@ function findBannedTerms(text: string): string[] {
     const lower = text.toLowerCase();
     const hits: string[] = [];
     for (const term of ALL_BANNED_TERMS) {
-        // Whole-word / whole-phrase, case-insensitive. Word boundaries
-        // keep "earn" from matching "learn" and "spine" from "spineless"
-        // (which would still be its own ban if ever used, but boundaries
-        // keep the matcher honest).
         const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const re = new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, "i");
         if (re.test(lower)) hits.push(term);
@@ -86,6 +75,15 @@ function findBannedTerms(text: string): string[] {
 function isCompletionShaped(text: string): boolean {
     const t = text.trim().toLowerCase().replace(/[.!]+$/, "");
     return BANNED_COMPLETION_LABELS.includes(t);
+}
+
+function countUncertaintyTerms(text: string): number {
+    const lower = text.toLowerCase();
+    return UNCERTAINTY_TERMS.reduce(
+        (n, term) =>
+            n + (lower.match(new RegExp(`\\b${term}\\b`, "g"))?.length ?? 0),
+        0,
+    );
 }
 
 export function validateString(
@@ -109,19 +107,17 @@ export function validateString(
         };
     }
 
-    // ── Banned vocabulary — all classes, no exceptions ────────────────
     if (!isBlessedLabel(trimmed)) {
         for (const term of findBannedTerms(trimmed)) {
             violations.push({
                 severity: "error",
                 rule: "banned-vocabulary",
-                detail: `"${term}" is on the banned list (01 §2.2 / lexicon 07 Part III). Write what you mean instead.`,
+                detail: `"${term}" is on the banned list. Write the underlying business meaning instead.`,
             });
         }
     }
 
     if (context.class === "label") {
-        // ── Labels: blessed pass, completion ban, 6-word cap ──────────
         if (isBlessedLabel(trimmed)) {
             return { ok: violations.length === 0, violations };
         }
@@ -129,83 +125,68 @@ export function validateString(
             violations.push({
                 severity: "error",
                 rule: "completion-label",
-                detail: `A bare completion label ("${trimmed}") cannot carry a forward loop. Transform the surface instead (canon Part III §7).`,
+                detail: `A bare completion label ("${trimmed}") cannot carry the next action by itself.`,
             });
         }
         if (wordCount(trimmed) > 6) {
             violations.push({
                 severity: "error",
                 rule: "label-length",
-                detail: `Labels cap at six words; "${trimmed}" is ${wordCount(trimmed)}. Longer strings are body prose the component mislabeled.`,
+                detail: `Labels cap at six words; "${trimmed}" is ${wordCount(trimmed)}. Longer text belongs in body prose.`,
             });
         }
         return { ok: violations.every((v) => v.severity !== "error"), violations };
     }
 
-    // ── Body + authored prose ─────────────────────────────────────────
     const sentences = splitSentences(trimmed);
 
-    // Completion announcement must pair with a forward loop in-string.
     if (sentences.some((s) => isCompletionShaped(s)) && sentences.length < 2) {
         violations.push({
             severity: "error",
             rule: "completion-without-loop",
             detail:
-                "A completion announcement must pair with a forward-loop sentence in the same string (01 §2.3).",
+                "A completion announcement must include the next action or next state in the same string.",
         });
     }
 
-    // Speakability: sentence length against the family threshold.
-    // Warning severity per 01 §2.3 — "a string failing any one
-    // dimension surfaces a warning that names the specific dimension."
     for (const s of sentences) {
         const words = wordCount(s);
         if (words > family.maxSentenceWords) {
             violations.push({
                 severity: "warning",
                 rule: "sentence-length",
-                detail: `A ${words}-word sentence exceeds the ${family.family} threshold of ${family.maxSentenceWords}. Read it out loud; split it.`,
+                detail: `A ${words}-word sentence exceeds the ${family.family} threshold of ${family.maxSentenceWords}. Check whether it can be split without removing necessary logic.`,
             });
         }
     }
 
-    // Subject-continuity ships as a Tier-2 warning (01 §2.3): three or
-    // more very short sentences in series reads as manifesto fragments.
-    if (
-        sentences.length >= 3 &&
-        sentences.every((s) => wordCount(s) <= 6)
-    ) {
+    if (sentences.length >= 3 && sentences.every((s) => wordCount(s) <= 6)) {
         violations.push({
             severity: "warning",
             rule: "manifesto-fragments",
             detail:
-                "Three or more clipped sentences in series read as manifesto fragments (canon §11). Write connected sentences with subjects.",
+                "Three or more clipped sentences in series read as manifesto fragments. Use connected propositions instead.",
         });
     }
 
     if (context.class === "authored") {
-        // Hedging discipline (01 §2.4), reusing the production rules.
         const lower = trimmed.toLowerCase();
-        for (const hedge of BANNED_HEDGE_CONSTRUCTIONS) {
-            if (lower.includes(hedge)) {
+        for (const phrase of BANNED_META_HEDGE_CONSTRUCTIONS) {
+            if (lower.includes(phrase)) {
                 violations.push({
                     severity: "error",
                     rule: "hedge-construction",
-                    detail: `"${hedge}" is a banned hedge (01 §2.4). State the read and how sure the system is.`,
+                    detail: `"${phrase}" is indirect framing. State the evidence and calibrated assessment directly.`,
                 });
             }
         }
-        const hedgeCount = HEDGE_ADVERBS.reduce(
-            (n, adverb) =>
-                n +
-                (lower.match(new RegExp(`\\b${adverb}\\b`, "g"))?.length ?? 0),
-            0,
-        );
-        if (hedgeCount > MAX_HEDGE_ADVERBS) {
+
+        const uncertaintyCount = countUncertaintyTerms(trimmed);
+        if (uncertaintyCount > UNCERTAINTY_STACK_REVIEW_THRESHOLD) {
             violations.push({
-                severity: "error",
-                rule: "hedge-density",
-                detail: `${hedgeCount} hedge adverbs in one string (max ${MAX_HEDGE_ADVERBS}). Commit to the read.`,
+                severity: "warning",
+                rule: "uncertainty-density",
+                detail: `${uncertaintyCount} uncertainty terms appear in one string. Keep them if each marks a distinct inference; otherwise simplify to one calibrated assessment.`,
             });
         }
     }
@@ -213,7 +194,6 @@ export function validateString(
     return { ok: violations.every((v) => v.severity !== "error"), violations };
 }
 
-/** Render violations for CLI / CI output. */
 export function formatStringViolations(
     text: string,
     result: StringValidation,
