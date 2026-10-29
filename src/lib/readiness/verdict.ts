@@ -2,8 +2,8 @@
  * Readiness gate evaluator + transition detector.
  *
  * The five stable internal verdict keys are gate-based rather than simple
- * thresholds on the total score. User-facing copy describes the concrete
- * evidence or action required for the next readiness state.
+ * thresholds on the total score. User-facing blockers must accurately name
+ * the evidence or action required by the underlying gate.
  */
 
 import { t } from "@/lib/voice/t";
@@ -22,6 +22,13 @@ interface GateResult {
     readonly blockers: ReadonlyArray<string>;
 }
 
+function dimensionBlocker(dimension: DimensionScore, fallback: string): string {
+    const next = dimension.gaps[0];
+    return next
+        ? `${dimension.label}: ${next}.`
+        : `${dimension.label}: ${fallback}`;
+}
+
 function gateHireReadyRepeatable(
     dimensions: ReadonlyArray<DimensionScore>,
     input: ReadinessInput
@@ -33,9 +40,12 @@ function gateHireReadyRepeatable(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Strengthen {dimension}; it is currently the least-developed part of the sales process.", {
-                    class: "body"
-                }).replace("{dimension}", weak.label.toLowerCase())
+                dimensionBlocker(
+                    weak,
+                    t("additional evidence is required for the documented-and-repeatable state", {
+                        class: "body"
+                    })
+                )
             );
         }
     }
@@ -73,7 +83,12 @@ function gateHireReadyRepeatable(
             : input.closedWonDeals / input.closedLostDealsAnalyzed;
     if (winLossRatio < 1) {
         blockers.push(
-            t("Record enough win and loss history to compare successful and unsuccessful deals.", { class: "body" })
+            t(
+                "For this readiness state, recorded closed-won deals must be at least as numerous as analyzed closed-lost deals. Current: {won} won / {lost} analyzed lost.",
+                { class: "body" }
+            )
+                .replace("{won}", String(input.closedWonDeals))
+                .replace("{lost}", String(input.closedLostDealsAnalyzed))
         );
     }
 
@@ -99,9 +114,12 @@ function gateHireReady(
         const weak = dimensions.find((d) => d.score < 14);
         if (weak) {
             blockers.push(
-                t("Strengthen {dimension}; it is preventing the sales process from being run independently.", {
-                    class: "body"
-                }).replace("{dimension}", weak.label.toLowerCase())
+                dimensionBlocker(
+                    weak,
+                    t("additional evidence is required before another seller can run this independently", {
+                        class: "body"
+                    })
+                )
             );
         }
     }
@@ -130,20 +148,27 @@ function gateInheritable(
         const weak = dimensions.find((d) => d.score < 10);
         if (weak) {
             blockers.push(
-                t(
-                    "Strengthen {dimension}. Each part of the sales process needs enough evidence and documentation for another seller to run it with founder support.",
-                    { class: "body" }
-                ).replace("{dimension}", weak.label.toLowerCase())
+                dimensionBlocker(
+                    weak,
+                    t("more evidence is required for another seller to run this with founder support", {
+                        class: "body"
+                    })
+                )
             );
         }
     }
 
     const maxScore = Math.max(...dimensions.map((d) => d.score));
     if (maxScore < 16) {
+        const strongest = dimensions.reduce((best, d) =>
+            d.score > best.score ? d : best
+        );
         blockers.push(
-            t(
-                "Develop at least one part of the sales process to a clearly repeatable state, such as outreach, discovery, or deal management.",
-                { class: "body" }
+            dimensionBlocker(
+                strongest,
+                t("at least one part of the sales process needs stronger evidence of repeatability", {
+                    class: "body"
+                })
             )
         );
     }
@@ -160,11 +185,19 @@ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
 
     const aboveEight = dimensions.filter((d) => d.score >= 8).length;
     if (aboveEight < 2) {
+        const nextTwo = [...dimensions]
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 2)
+            .flatMap((d) => d.gaps.slice(0, 1));
         blockers.push(
-            t(
-                "Develop at least two parts of the sales process. Start with the ICP and initial outreach if both are still incomplete.",
-                { class: "body" }
-            )
+            nextTwo.length > 0
+                ? t("Complete two readiness actions: {actions}", { class: "body" }).replace(
+                      "{actions}",
+                      nextTwo.join("; ")
+                  )
+                : t("At least two parts of the sales process need additional recorded evidence.", {
+                      class: "body"
+                  })
         );
     }
 
