@@ -1,15 +1,13 @@
 import type { BriefingPattern } from "./patterns";
 
 /**
- * Demo sample Patterns — the declared-sample content the demo lane
- * shows in the Briefing's World view (real workspaces only ever see
- * live pipeline output; the gate below is the same one the Live Edge
- * demo stream uses).
+ * Demo sample market analyses for the Briefing World view.
  *
- * Luca reseed (2026-07-16, plan: antaeus-demo-seed-luca-plan): the
- * patterns are scenario-aware — the enterprise book and the SMB book
- * each get reads written from their own roster, drawn from the same
- * real public events the Signal Console seed cites.
+ * These examples deliberately model the same language standard required
+ * of live generated Briefing output: state what changed, identify the
+ * evidence, separate interpretation from observation, and recommend a
+ * specific action without using private Antaeus ontology or overstating
+ * causality.
  */
 
 export function isDemoEnv(): boolean {
@@ -31,7 +29,7 @@ function demoMode(): "ent" | "smb" {
             if (meta.mode === "smb") return "smb";
         }
     } catch {
-        // fall through to the enterprise read
+        // Fall through to the enterprise sample.
     }
     return "ent";
 }
@@ -72,20 +70,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
         return [
             pattern(
                 "demo-smb-1",
-                "Expansion news landed on four of your accounts inside three weeks",
-                "Chomps announced a second manufacturing plant, Warby Parker is opening stores at roughly one a week, Sweetgreen keeps entering new markets, and Portillo's Texas run continues. Every one of those announcements dates a hiring need — and your fastest closes this year all rode a dated event.",
+                "Four watched accounts announced expansion activity within three weeks",
+                "Chomps announced a second manufacturing plant, Warby Parker is opening additional stores, Sweetgreen continues entering new markets, and Portillo's expansion in Texas is continuing. Each announcement is a dated event that can be used as a current reason for account research and outreach.",
                 {
-                    what_changed: "Four watched accounts announced expansions with hiring attached.",
-                    evidence: "Company announcements and earnings coverage, all public.",
-                    confidence_rationale: "Primary sources — the announcements themselves.",
-                    why_it_matters: "Expansion news dates the hiring need; the call lands warm the week it prints.",
-                    who_needs_to_know: "Whoever owns outreach on the fast-casual and DTC accounts.",
-                    what_next: "Open with their own announcement — the date does the urgency."
+                    what_changed: "Four watched accounts announced expansions with hiring activity attached.",
+                    evidence: "Company announcements and earnings coverage for the four accounts.",
+                    confidence_rationale: "The analysis is based primarily on company announcements and other direct reporting of the expansion activity.",
+                    why_it_matters: "A dated expansion event provides a current reason to evaluate whether the account has a relevant hiring need.",
+                    who_needs_to_know: "The seller responsible for the fast-casual and direct-to-consumer accounts.",
+                    what_next: "Reference the company's own expansion announcement and connect it to the specific hiring problem your product addresses."
                 },
                 [
                     {
-                        label: "Draft openers for the four accounts",
-                        rationale: "The announcement window fades in weeks.",
+                        label: "Draft outreach for the four expansion accounts",
+                        rationale: "The announcements are current now and will become less timely as they age.",
                         destination: "Outbound Studio · hooks · draft"
                     }
                 ],
@@ -96,20 +94,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
             ),
             pattern(
                 "demo-smb-2",
-                "Discipline-era buyers keep choosing point tools — your Eventbrite loss says quote one funnel first",
-                "Three of your watch accounts are in public cost programs. The Eventbrite loss followed the same shape: a lean buyer with one problem, offered a platform. The one-funnel package closed Calendly and Spindrift; it is the right first quote for every discipline-era account on the book.",
+                "Several watched accounts are publicly focused on cost discipline",
+                "Three watched accounts have public cost-control programs. The recorded Eventbrite loss also involved a buyer with a narrow problem and a broader platform proposal, while Calendly and Spindrift closed with a narrower initial package. The current record supports reviewing whether a narrower first proposal fits similar accounts better.",
                 {
-                    what_changed: "Cost-discipline language is showing up across the watch tier.",
-                    evidence: "Public filings and earnings coverage on three accounts, plus your own loss record.",
-                    confidence_rationale: "The pattern matches a loss you already paid for.",
-                    who_needs_to_know: "Whoever quotes the next lean-team deal.",
-                    why_it_matters: "Platform pricing loses to point tools when the buyer has one problem.",
-                    what_next: "Quote the single busiest funnel first; expand after the number moves."
+                    what_changed: "Cost-discipline language appears across three watched accounts.",
+                    evidence: "Public filings and earnings coverage for three accounts, plus the recorded Eventbrite, Calendly, and Spindrift outcomes.",
+                    confidence_rationale: "The recommendation combines public company evidence with the workspace's own small set of recorded deal outcomes.",
+                    who_needs_to_know: "The seller preparing the next proposal for a cost-focused buyer.",
+                    why_it_matters: "A narrower first proposal may better match a buyer who is focused on one immediate problem, but the recorded sample is still limited.",
+                    what_next: "Review open proposals at cost-focused accounts and decide whether the initial scope should address one specific high-volume workflow."
                 },
                 [
                     {
-                        label: "Re-check open quotes against the one-funnel package",
-                        rationale: "Two live deals are at lean-team accounts.",
+                        label: "Review open proposals at cost-focused accounts",
+                        rationale: "Two active deals are currently associated with cost-focused buyers.",
                         destination: "Deal Workspace · pipeline · review"
                     }
                 ],
@@ -120,20 +118,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
             ),
             pattern(
                 "demo-smb-3",
-                "New operating leadership at three brands in your patch",
-                "Bombas installed a new CEO, Liquid Death added a CFO from big-CPG lineage, and OLIPOP put a Coca-Cola veteran in the president seat. New operating leaders professionalize tooling in their first two quarters — the window is open on all three.",
+                "Three watched consumer brands recently changed operating leadership",
+                "Bombas appointed a new CEO, Liquid Death added a CFO with large-CPG experience, and OLIPOP appointed a Coca-Cola veteran as president. Leadership changes can create a reason to research whether operating priorities or tooling decisions are being revisited; the appointment itself does not prove that a purchase is underway.",
                 {
-                    what_changed: "Three consumer brands changed operating leadership within months.",
-                    evidence: "Public appointment announcements on each.",
-                    confidence_rationale: "Named appointments from primary coverage.",
-                    why_it_matters: "New leaders re-pick the operating stack early.",
-                    who_needs_to_know: "Whoever owns the DTC and beverage accounts.",
-                    what_next: "Reference the new leader's mandate in the opener — not the product."
+                    what_changed: "Three watched consumer brands changed senior operating leadership within recent months.",
+                    evidence: "Public appointment announcements for each company.",
+                    confidence_rationale: "The leadership changes are directly supported by public announcements; the implication for tooling decisions is an assessment, not an observed fact.",
+                    why_it_matters: "A new operating leader may revisit processes and tools, which makes the account worth researching for a current initiative.",
+                    who_needs_to_know: "The seller responsible for the direct-to-consumer and beverage accounts.",
+                    what_next: "Research the new leader's stated priorities before deciding whether the appointment supports outreach."
                 },
                 [
                     {
-                        label: "Draft leadership-window openers",
-                        rationale: "First-two-quarters windows close on their own.",
+                        label: "Research the three leadership changes",
+                        rationale: "The appointments are recent enough to evaluate for current priorities.",
                         destination: "Outbound Studio · hooks · draft"
                     }
                 ],
@@ -144,23 +142,24 @@ export function demoSamplePatterns(): BriefingPattern[] {
             )
         ];
     }
+
     return [
         pattern(
             "demo-ent-1",
-            "Three of your watched accounts are running public hiring pushes right now",
-            "Boeing is rebuilding its production workforce after the strike, Chipotle's burrito-season engine hires ~20,000 every spring, and CoreWeave's datacenter buildout roughly tripled its headcount in a year. Public hiring events are the book's whole engine — each one dates the conversation for you.",
+            "Three watched accounts have public, dated hiring activity",
+            "Boeing is rebuilding its production workforce after the strike, Chipotle has a recurring seasonal hiring program of roughly 20,000 spring hires, and CoreWeave's datacenter expansion has been accompanied by rapid headcount growth. These public events provide current, evidence-based reasons to evaluate whether the accounts have hiring problems relevant to your product.",
             {
-                what_changed: "Three accounts have live, public, dated hiring events.",
-                evidence: "Company announcements, filings, and news coverage on each.",
-                confidence_rationale: "Primary sources — their own announcements.",
-                why_it_matters: "A public hiring push is urgency you don't have to manufacture.",
-                who_needs_to_know: "Whoever owns Boeing, Chipotle, and CoreWeave outreach.",
-                what_next: "Open on their own announcement; bring the seasonal math."
+                what_changed: "Three watched accounts have public, dated hiring events.",
+                evidence: "Company announcements, filings, and news coverage for the three accounts.",
+                confidence_rationale: "The underlying events are supported by public sources, including company announcements.",
+                why_it_matters: "A public hiring event provides a timely reason to research the account and can support relevant outreach when the hiring need matches your ICP.",
+                who_needs_to_know: "The seller responsible for Boeing, Chipotle, and CoreWeave outreach.",
+                what_next: "Reference the account's own announcement and connect it to the relevant hiring-volume problem."
             },
             [
                 {
-                    label: "Draft openers keyed to each hiring event",
-                    rationale: "Announced events fade from the news cycle fast.",
+                    label: "Draft outreach tied to each hiring event",
+                    rationale: "The relevance of a public announcement declines as it becomes older.",
                     destination: "Outbound Studio · hooks · draft"
                 }
             ],
@@ -171,20 +170,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
         ),
         pattern(
             "demo-ent-2",
-            "Your food-service accounts close twice as fast as your airline accounts — the book is tiered the other way",
-            "Chipotle closed in 132 days and Sweetgreen's sister motion runs faster still; the airline deals average past 150 with the signer arriving late. The tiering puts aviation first. The record says the fast-casual lane deserves the first hour of the day.",
+            "Recorded food-service deals have moved faster than recorded airline deals",
+            "The current workspace shows Chipotle closing in 132 days, while the recorded airline deals have taken longer on average and often identify the final approver later in the cycle. The territory tiers currently prioritize aviation. The recorded sample is limited, but it is large enough to justify reviewing whether the current territory priority still matches your own deal history.",
             {
-                what_changed: "The close-rate gap between lanes is now visible in your own record.",
-                evidence: "Your closed-won history against the current tier map.",
-                confidence_rationale: "Your own workspace data, not market chatter.",
-                why_it_matters: "The book's tiering decides where mornings go — and it disagrees with the record.",
-                who_needs_to_know: "Whoever owns the territory carve.",
-                what_next: "Re-tier or defend the airline-first bet deliberately."
+                what_changed: "A cycle-length difference is visible between the recorded food-service and airline deals.",
+                evidence: "Closed-deal history compared with the current territory tiers.",
+                confidence_rationale: "The observation comes from the workspace's own deal history; the sample size is still limited.",
+                why_it_matters: "Territory tiers determine where seller time is concentrated, so a persistent difference in recorded performance should be reviewed.",
+                who_needs_to_know: "The person responsible for territory prioritization.",
+                what_next: "Review the territory tiers and either change the priority or record why aviation should remain first."
             },
             [
                 {
-                    label: "Review the tier map against the close record",
-                    rationale: "A deliberate bet beats an inherited one.",
+                    label: "Review territory tiers against closed-deal performance",
+                    rationale: "The current tiers and recorded outcomes point in different directions.",
                     destination: "Territory Architect · tiers · review"
                 }
             ],
@@ -195,20 +194,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
         ),
         pattern(
             "demo-ent-3",
-            "Automated-hiring rules keep tightening — buyers now cite NYC's audit law in security reviews",
-            "New York's automated employment-decision law made bias audits table stakes, and enterprise security reviews increasingly borrow its language. Boeing's 150-question review already asks for it. The compliance answer is a paper you hold — make it part of the first conversation, not the last.",
+            "Automated-hiring compliance requirements are appearing in enterprise security reviews",
+            "New York's automated-employment law requires bias-audit-related controls, and similar language can appear in enterprise security questionnaires. Boeing's current review includes audit-related questions. The recorded Palantir loss also involved a late security review, which makes early compliance preparation relevant, although that single loss does not establish that security timing alone caused the outcome.",
             {
-                what_changed: "Hiring-AI compliance language is showing up inside security questionnaires.",
-                evidence: "The NYC law is public; your own Boeing review cites audit requirements.",
-                confidence_rationale: "One primary regulation plus a live deal artifact.",
-                why_it_matters: "Deals die in late security reviews — the Palantir loss already proved it.",
-                who_needs_to_know: "Whoever runs the security front on live deals.",
-                what_next: "Open the compliance conversation in week one on every gated deal."
+                what_changed: "Hiring-AI compliance language is present in an active security questionnaire.",
+                evidence: "Public New York regulation plus the recorded Boeing security questionnaire and Palantir deal history.",
+                confidence_rationale: "The regulatory requirement and current questionnaire are directly supported. The effect of security timing on deal outcomes is an assessment based on limited internal history.",
+                why_it_matters: "Known compliance requirements can create review work and delay if they are discovered late in the buying process.",
+                who_needs_to_know: "The person responsible for security review on active deals.",
+                what_next: "Address known automated-hiring compliance requirements early on deals that require security review."
             },
             [
                 {
-                    label: "Check the security front on the live negotiation",
-                    rationale: "The blocking front is the deal's clock.",
+                    label: "Review the current security workstream",
+                    rationale: "An unresolved security issue can delay the expected close date.",
                     destination: "Deal Workspace · pipeline · review"
                 }
             ],
