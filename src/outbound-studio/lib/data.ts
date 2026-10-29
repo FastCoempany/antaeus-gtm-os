@@ -8,13 +8,11 @@ import type {
 } from "./types";
 
 /**
- * Phase 4 / Room 6 Wave 2 — domain data tables.
+ * Outbound Studio domain tables.
  *
- * Faithful TypeScript port of the legacy `TRIGGERS` / `PERSONAS` /
- * `CHANNEL_ORDER` / `ASSET_MATRIX` / `CTA_BY_TEMP` / `ASSET_LABELS` /
- * `CTA_LABELS` (lines 585-682 of `app/outbound-studio/index.html`).
- *
- * No behavioral changes — same lookups produce identical outputs.
+ * Trigger descriptions name the observed event or business condition. They
+ * do not infer buyer intent, urgency, internal pressure, or willingness to
+ * change unless that information is supplied elsewhere as evidence.
  */
 
 // ─── Triggers ─────────────────────────────────────────────────────────
@@ -29,62 +27,62 @@ export interface TriggerSpec {
 export const TRIGGERS: Readonly<Record<TriggerKey, TriggerSpec>> = {
     funding: {
         key: "funding",
-        label: "Funding / Board Mandate",
-        meaning: "Capital deployed under board pressure.",
-        angles: ["ROI acceleration", "Time-to-value"]
+        label: "Funding / Board Initiative",
+        meaning: "The company announced new funding or a board-level initiative.",
+        angles: ["Return on investment", "Time to value"]
     },
     expansion: {
         key: "expansion",
         label: "Expansion / Acquisition",
-        meaning: "Complexity growth, integration needs.",
-        angles: ["Scalability", "Integration"]
+        meaning: "The company announced expansion, an acquisition, or another increase in operating scope.",
+        angles: ["Scale", "Integration"]
     },
     hiring: {
         key: "hiring",
-        label: "Hiring Spike / Reorg",
-        meaning: "Scaling fast, process gaps emerging.",
+        label: "Hiring Increase / Reorganization",
+        meaning: "The company is increasing hiring or reorganizing part of the business.",
         angles: ["Efficiency", "Onboarding"]
     },
     vendor: {
         key: "vendor",
-        label: "Vendor Consolidation",
-        meaning: "Evaluating alternatives, open to change.",
-        angles: ["Consolidation", "TCO"]
+        label: "Vendor Review / Consolidation",
+        meaning: "The company is reviewing vendors or consolidating tools or providers.",
+        angles: ["Consolidation", "Total cost"]
     },
     cost: {
         key: "cost",
         label: "Cost Reduction",
-        meaning: "CFO pressure, receptive to ROI stories.",
+        meaning: "The company has announced or documented a cost-reduction initiative.",
         angles: ["Savings", "Efficiency"]
     },
     product: {
         key: "product",
         label: "New Product Launch",
-        meaning: "New revenue line needs support.",
-        angles: ["Speed", "Market capture"]
+        meaning: "The company launched or announced a new product or revenue line.",
+        angles: ["Launch speed", "Market adoption"]
     },
     churn: {
         key: "churn",
-        label: "Customer Churn",
-        meaning: "Trust damaged, need control.",
+        label: "Customer Churn / Retention",
+        meaning: "Customer churn or retention has become a visible business issue.",
         angles: ["Retention", "Visibility"]
     },
     leadership: {
         key: "leadership",
         label: "Leadership Change",
-        meaning: "New leader, new priorities, 90-day window.",
-        angles: ["Fresh perspective", "Quick wins"]
+        meaning: "A new leader has joined or an executive role has changed.",
+        angles: ["Current priorities", "Early initiatives"]
     },
     tech: {
         key: "tech",
-        label: "Tech Stack Change",
-        meaning: "Migration underway, integration opportunity.",
+        label: "Technology Change",
+        meaning: "The company announced or began a technology migration or platform change.",
         angles: ["Integration", "Migration support"]
     },
     compliance: {
         key: "compliance",
         label: "Compliance / Audit",
-        meaning: "Deadline-driven urgency.",
+        meaning: "The company is addressing a compliance, audit, or regulatory requirement.",
         angles: ["Compliance", "Risk reduction"]
     }
 };
@@ -104,32 +102,32 @@ export const PERSONA_DATA: Readonly<Record<Persona, PersonaSpec>> = {
         label: "C-Suite",
         sentenceRange: [2, 3],
         guidance:
-            "3 sentences max. No attachments. Connect to their strategic priorities. Ask for their perspective, not a meeting."
+            "Keep the message brief. Connect the observed event to a relevant business question and ask for the executive's perspective before asking for a meeting."
     },
     vp: {
         key: "vp",
         label: "VP / Director",
         sentenceRange: [4, 6],
         guidance:
-            "4-6 sentences. Can include a piece of evidence. Reference comparable company. Design assets for forwarding."
+            "Keep the message specific to the account and role. Include supporting evidence only when it is actually available and make any attachment easy to forward."
     },
     ic: {
         key: "ic",
         label: "Manager / IC",
         sentenceRange: [6, 10],
         guidance:
-            "6-10 sentences. Technical detail welcome. Describe specific workflows. They forward to managers."
+            "Use concrete workflow detail when the account context supports it. Avoid claiming a problem the contact has not confirmed."
     },
     procurement: {
         key: "procurement",
         label: "Procurement / Legal",
         sentenceRange: [3, 5],
         guidance:
-            "Process-driven. Documentation over storytelling. Preemptive answers to their checklist."
+            "Use process-specific language and provide documentation that is actually available. Avoid speculative business-value claims."
     }
 };
 
-// ─── Channel order [temp][persona] ───────────────────────────────────
+// ─── Channel order [stage][persona] ───────────────────────────────────
 
 export const CHANNEL_ORDER: Readonly<
     Record<Temperature, Readonly<Record<Persona, ReadonlyArray<Channel>>>>
@@ -166,7 +164,7 @@ export const CHANNEL_ORDER: Readonly<
     }
 };
 
-// ─── Asset matrix [temp][persona] ─────────────────────────────────────
+// ─── Suggested attachment by stage/persona ────────────────────────────
 
 export const ASSET_MATRIX: Readonly<Record<Temperature, Readonly<Record<Persona, Asset>>>> = {
     ice_cold: { csuite: "none", vp: "none", ic: "none", procurement: "none" },
@@ -209,7 +207,7 @@ export const ASSET_LABELS: Readonly<Record<Asset, string>> = {
     onboarding_doc: "Onboarding document"
 };
 
-// ─── CTA by temperature ───────────────────────────────────────────────
+// ─── Call to action by outreach stage ─────────────────────────────────
 
 export const CTA_BY_TEMP: Readonly<
     Record<Temperature, { readonly normal: CtaKey; readonly noask: CtaKey }>
@@ -222,10 +220,10 @@ export const CTA_BY_TEMP: Readonly<
 };
 
 export const CTA_LABELS: Readonly<Record<CtaKey, string>> = {
-    no_ask: "No ask (value only)",
-    micro_ask: "Micro-ask",
-    give_to_get: "Give-to-get",
+    no_ask: "No meeting request",
+    micro_ask: "Request a response",
+    give_to_get: "Offer value before a meeting request",
     meeting_request: "Meeting request",
-    champion_arm: "Champion arming",
-    process_facilitation: "Process facilitation"
+    champion_arm: "Support the internal buyer",
+    process_facilitation: "Advance the approval process"
 };
