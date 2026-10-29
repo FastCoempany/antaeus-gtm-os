@@ -6,19 +6,12 @@ import { EMPTY_COVERAGE } from "../../lib/types";
 import { t } from "@/lib/voice/t";
 
 /**
- * Quota Workback v4 — the pace model (canon §4.18, "pace + fused
- * strands"). Pure reads over the shipped engine + the rooms' own logs:
+ * Quota Workback actuals, assumption comparison, and current revenue projection.
  *
- *  · the ACTUALS strand ("where you actually are") from the outbound /
- *    linkedin / cold-call logs + the deal mirror — all defensive;
- *  · the BELIEVABILITY read ("is the plan real?") — names the ONE
- *    optimistic assumption vs the benchmark and what it costs;
- *  · the PACE projection — closed-won so far + what the current
- *    pipeline is worth at stage odds (never a fabricated trend).
- *
- * The calc engine (computeMetrics/benchmarkFor) and computeCoverage are
- * reused unchanged. §13: no touches/opps/m2o on the face — the surface
- * renders plain words; this module only computes.
+ * The projection is not an extrapolation of today's activity rate. It is the
+ * sum of closed-won revenue this calendar year plus stage-weighted open
+ * pipeline. Activity actuals are shown separately against the plan derived from
+ * quota, ACV, and conversion assumptions.
  */
 
 interface StorageLike {
@@ -57,15 +50,10 @@ function stamp(v: unknown): number | null {
 }
 
 export interface Actuals {
-    /** Outreach (emails + calls + public touches) per working day, this month. */
     readonly outreachPerDay: number;
-    /** First meetings booked this month (cold-call meeting_booked). */
     readonly meetingsThisMonth: number;
-    /** Deals closed-won this month. */
     readonly closedThisMonth: number;
-    /** Closed-won value this calendar year (raw dollars). */
     readonly closedWonYtd: number;
-    /** Any activity at all this month? Drives plan-vs-pace read. */
     readonly hasActivity: boolean;
 }
 
@@ -74,9 +62,6 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     const mStart = monthStart(now);
     const yStart = yearStart(now);
 
-    // outreach this month: outbound touches + linkedin actions + cold
-    // calls, tallied per local day so the hand-counted daily totals
-    // below can merge without double-counting.
     const loggedByDay: Record<string, number> = {};
     const bump = (ts: number): void => {
         const day = localDay(new Date(ts));
@@ -101,10 +86,9 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
             if (x.outcome === "meeting_booked") meetings += 1;
         }
     }
-    // Hand-counted daily totals (the one-line "40 today" log). The
-    // operator types the day's TOTAL, so per day the truth is
-    // max(logged, hand count) — a floor, never an add-on. Days with
-    // only a hand count still count in full.
+
+    // The manual daily count is a total, not an additive event stream. Use the
+    // larger of automatically logged activity and the manual total for each day.
     const bulkByDay = bulkOutreachByDayThisMonth(
         st as Parameters<typeof bulkOutreachByDayThisMonth>[0],
         now
@@ -115,7 +99,6 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
         outreach += Math.max(loggedByDay[day] ?? 0, bulkByDay[day] ?? 0);
     }
 
-    // closes: from the deal mirror
     let closedThisMonth = 0;
     let closedWonYtd = 0;
     const dealsRaw = readJson<unknown>(st, "gtmos_deal_workspaces");
@@ -137,7 +120,6 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
         if (ts != null && ts >= mStart) closedThisMonth += 1;
     }
 
-    // working days elapsed this month (Mon–Fri), at least 1
     let workdays = 0;
     const cursor = new Date(mStart);
     while (cursor.getTime() <= now.getTime()) {
@@ -147,8 +129,6 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     }
     workdays = Math.max(1, workdays);
 
-    // Calendar-captured meetings (the paste-your-link lane) merge as a
-    // floor — a booked meeting that then happened must not count twice.
     const heldFromCalendar = capturedMeetingsThisMonth(
         st as Parameters<typeof capturedMeetingsThisMonth>[0],
         now
@@ -163,25 +143,23 @@ export function readActuals(s?: StorageLike | null, now: Date = new Date()): Act
     };
 }
 
-// ─── Believability — "is the plan real?" ───────────────────────────────
-
 export interface Believability {
-    /** true = the plan matches the benchmark; no stretch to call out. */
     readonly solid: boolean;
     readonly read: string;
     readonly cost: string | null;
-    /** The one optimistic input + the benchmark value to reset it to. */
     readonly fix: { key: "win" | "m2o" | "t2m"; value: number } | null;
 }
 
+/**
+ * Compare the user's three conversion assumptions with the benchmark selected
+ * by typical deal size (ACV band). The result is an assumption comparison, not
+ * a judgment about the seller or team.
+ */
 export function buildBelievability(
     inputs: PlanInputs,
     benchmark: Benchmark,
     metrics: PlanMetrics
 ): Believability {
-    // Relative optimism vs benchmark on the three assumptions a first-
-    // timer actually sets: win rate, meetings→real-opportunities, and
-    // touch→meeting (higher than benchmark = fewer touches assumed).
     const winOver = benchmark.winRate > 0 ? inputs.win / benchmark.winRate : 1;
     const m2oOver = benchmark.m2o > 0 ? inputs.m2o / benchmark.m2o : 1;
     const t2mOver = benchmark.t2m > 0 ? inputs.t2m / benchmark.t2m : 1;
@@ -192,71 +170,76 @@ export function buildBelievability(
         return {
             solid: true,
             read: t(
-                "How often you win, your typical deal, and your cycle all match what teams your size actually see. The plan holds up.",
+                "The win-rate, meeting-to-opportunity, and outreach-to-meeting assumptions are within 10% of the benchmark for this typical deal size.",
                 { class: "body" }
             ),
             cost: null,
             fix: null
         };
     }
+
     if (worst === "t2m") {
         const honest = computeMetrics({ ...inputs, t2m: benchmark.t2m }, EMPTY_COVERAGE);
         const moreADay = Math.max(0, Math.round((honest.touchesDay - metrics.touchesDay) * 2) / 2);
         return {
             solid: false,
-            read: `${t("The one stretch: you're assuming", { class: "body" })} ${inputs.t2m}% ${t("of your messages and calls turn into a first meeting — teams your size usually see about", { class: "body" })} ${benchmark.t2m}%.`,
+            read: `${t("Assumption above benchmark:", { class: "body" })} ${inputs.t2m}% ${t("of messages and calls become a first meeting. The benchmark for this typical deal size is", { class: "body" })} ${benchmark.t2m}%.`,
             cost:
                 moreADay > 0
-                    ? `${t("At", { class: "body" })} ${benchmark.t2m}% ${t("that means about", { class: "body" })} ${moreADay} ${t("more messages & calls a day — plan for it now, not in month three.", { class: "body" })}`
+                    ? `${t("Using the benchmark conversion rate, the model requires about", { class: "body" })} ${moreADay} ${t("additional messages and calls per working day.", { class: "body" })}`
                     : null,
             fix: { key: "t2m", value: benchmark.t2m }
         };
     }
+
     if (worst === "m2o") {
         const honest = computeMetrics({ ...inputs, m2o: benchmark.m2o }, EMPTY_COVERAGE);
         const moreADay = Math.max(0, Math.round((honest.touchesDay - metrics.touchesDay) * 2) / 2);
         return {
             solid: false,
-            read: `${t("The one stretch: you're assuming", { class: "body" })} ${inputs.m2o}% ${t("of first meetings become real opportunities — teams your size usually see", { class: "body" })} ${benchmark.m2o}%.`,
+            read: `${t("Assumption above benchmark:", { class: "body" })} ${inputs.m2o}% ${t("of first meetings become qualified opportunities. The benchmark for this typical deal size is", { class: "body" })} ${benchmark.m2o}%.`,
             cost:
                 moreADay > 0
-                    ? `${t("At", { class: "body" })} ${benchmark.m2o}% ${t("that means about", { class: "body" })} ${moreADay} ${t("more messages & calls a day — plan for it now, not in month three.", { class: "body" })}`
+                    ? `${t("Using the benchmark conversion rate, the model requires about", { class: "body" })} ${moreADay} ${t("additional messages and calls per working day.", { class: "body" })}`
                     : null,
             fix: { key: "m2o", value: benchmark.m2o }
         };
     }
+
     const honestWin = computeMetrics({ ...inputs, win: benchmark.winRate }, EMPTY_COVERAGE);
     const moreADayW = Math.max(0, Math.round((honestWin.touchesDay - metrics.touchesDay) * 2) / 2);
     return {
         solid: false,
-        read: `${t("The one stretch: you're assuming you win", { class: "body" })} ${inputs.win}% ${t("of real opportunities — teams your size usually land near", { class: "body" })} ${benchmark.winRate}%.`,
+        read: `${t("Assumption above benchmark:", { class: "body" })} ${inputs.win}% ${t("of qualified opportunities close won. The benchmark for this typical deal size is", { class: "body" })} ${benchmark.winRate}%.`,
         cost:
             moreADayW > 0
-                ? `${t("At", { class: "body" })} ${benchmark.winRate}% ${t("that means about", { class: "body" })} ${moreADayW} ${t("more messages & calls a day to hit the same number.", { class: "body" })}`
+                ? `${t("Using the benchmark win rate, the model requires about", { class: "body" })} ${moreADayW} ${t("additional messages and calls per working day to support the same quota target.", { class: "body" })}`
                 : null,
         fix: { key: "win", value: benchmark.winRate }
     };
 }
 
-// ─── Pace — where today's rate lands you ───────────────────────────────
-
 export interface Pace {
-    /** Projected year-end landing (raw dollars): closed + pipeline at odds. */
+    /** Closed-won YTD + stage-weighted open pipeline. */
     readonly projected: number;
     readonly short: number;
     readonly onTarget: boolean;
-    /** 0..1 of the target, clamped, for the track bar. */
     readonly pct: number;
 }
 
+/**
+ * Current revenue projection from recorded deal state. This is not an activity
+ * trend projection and does not model future pipeline that has not yet been
+ * created.
+ */
 export function buildPace(
     quota: number,
     actuals: Actuals,
     coverage: CoverageSnapshot
 ): Pace {
-    // Honest projection: what's closed this year + what the open
-    // pipeline is worth at stage odds. No fabricated trend lines.
-    const projected = Math.round(actuals.closedWonYtd + (coverage.hasDeals ? coverage.weighted : 0));
+    const projected = Math.round(
+        actuals.closedWonYtd + (coverage.hasDeals ? coverage.weighted : 0)
+    );
     const short = Math.max(0, quota - projected);
     return {
         projected,
