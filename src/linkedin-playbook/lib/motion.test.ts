@@ -18,28 +18,20 @@ const baseCtx: MotionContext = {
     stats: EMPTY_STATS
 };
 
-describe("deriveMotion — credibility default", () => {
-    it("returns the credibility motion when no signals exist", () => {
+describe("deriveMotion — default", () => {
+    it("returns the default public-interaction recommendation when no account state determines the next action", () => {
         const m = deriveMotion(baseCtx);
         expect(m.key).toBe("credibility");
         expect(m.actionType).toBe("content_engage");
         expect(m.cueIndex).toBe(1);
         expect(m.accountName).toBe("");
-        expect(m.label).toContain("name familiarity");
-    });
-
-    it("uses the latest touch's accountName when no hottest signal account", () => {
-        // This is a subtle case: latestTouch alone routes to add_air_cover
-        // not credibility (per legacy line 109's else-if), so test that
-        // credibility's accountName fallback only fires when neither
-        // latestTouch nor hottest set the route.
-        const m = deriveMotion({ ...baseCtx });
-        expect(m.accountName).toBe("");
+        expect(m.label).toContain("Build familiarity");
+        expect(m.thresholds).toContain("No fixed acceptance or reply benchmark");
     });
 });
 
-describe("deriveMotion — warm_signal_account", () => {
-    it("fires when hottest account exists and has 0 connection_requests", () => {
+describe("deriveMotion — current signal account", () => {
+    it("fires when a prioritized account exists and has no connection request", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -49,11 +41,12 @@ describe("deriveMotion — warm_signal_account", () => {
         expect(m.actionType).toBe("content_engage");
         expect(m.accountName).toBe("Acme");
         expect(m.context).toContain("Acme");
-        expect(m.context).toContain("(heat 80)");
+        expect(m.context).toContain("Priority score 80");
+        expect(m.whyNow).toContain("no LinkedIn connection request is logged");
         expect(m.cueIndex).toBe(1);
     });
 
-    it("bumps cueIndex to 2 once a content_engage exists for the hottest account", () => {
+    it("moves cueIndex to 2 once a content engagement exists for the account", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -68,14 +61,6 @@ describe("deriveMotion — warm_signal_account", () => {
         expect(m.cueIndex).toBe(2);
     });
 
-    it("omits the heat parenthetical when heat is 0", () => {
-        const m = deriveMotion({
-            ...baseCtx,
-            hottestAccount: { name: "Acme", heat: 0 }
-        });
-        expect(m.context).not.toContain("(heat ");
-    });
-
     it("matches account stats case-insensitively", () => {
         const m = deriveMotion({
             ...baseCtx,
@@ -88,13 +73,12 @@ describe("deriveMotion — warm_signal_account", () => {
                 }
             })
         });
-        // Despite "Acme" → key "acme" lookup, content_engage > 0 should bump.
         expect(m.cueIndex).toBe(2);
     });
 });
 
-describe("deriveMotion — convert_connection", () => {
-    it("fires when hottest exists with a connection_request and no DM", () => {
+describe("deriveMotion — connection request logged", () => {
+    it("recommends a DM only when a connection request exists and no DM is logged", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -109,10 +93,11 @@ describe("deriveMotion — convert_connection", () => {
         expect(m.key).toBe("convert_connection");
         expect(m.actionType).toBe("dm");
         expect(m.cueIndex).toBe(3);
-        expect(m.context).toContain("Acme");
+        expect(m.context).toContain("connection request");
+        expect(m.context).toContain("no recorded DM");
     });
 
-    it("does NOT fire when a DM already exists (returns to credibility/default)", () => {
+    it("does not re-enter the DM branch when a DM already exists", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -124,14 +109,12 @@ describe("deriveMotion — convert_connection", () => {
                 }
             })
         });
-        // Neither warm_signal_account nor convert_connection nor add_air_cover
-        // fires; defaults pass through with the credibility motion.
         expect(m.key).toBe("credibility");
     });
 });
 
-describe("deriveMotion — add_air_cover", () => {
-    it("fires when no hottest signal but a latest outbound touch exists", () => {
+describe("deriveMotion — recent outbound touch", () => {
+    it("uses the existing compatibility key when no prioritized account exists and a recent outbound touch does", () => {
         const m = deriveMotion({
             ...baseCtx,
             latestTouch: {
@@ -142,7 +125,7 @@ describe("deriveMotion — add_air_cover", () => {
         expect(m.key).toBe("add_air_cover");
         expect(m.actionType).toBe("content_share");
         expect(m.accountName).toBe("Beta");
-        expect(m.context).toContain("Beta");
+        expect(m.context).toContain("latest recorded outbound touch");
         expect(m.cueIndex).toBe(1);
     });
 
@@ -159,7 +142,7 @@ describe("deriveMotion — add_air_cover", () => {
 });
 
 describe("deriveMotion — branch precedence", () => {
-    it("hottest with no connection_request wins over latest touch", () => {
+    it("prioritized account with no connection request wins over latest outbound touch", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -172,7 +155,7 @@ describe("deriveMotion — branch precedence", () => {
         expect(m.accountName).toBe("Acme");
     });
 
-    it("convert_connection wins over add_air_cover even with both context", () => {
+    it("connection-request branch wins over recent outbound touch", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -192,23 +175,22 @@ describe("deriveMotion — branch precedence", () => {
     });
 });
 
-describe("deriveMotion — recovery line (Program 6 / PR 11)", () => {
-    it("credibility motion carries a recovery-line copy", () => {
+describe("deriveMotion — recovery guidance", () => {
+    it("default guidance allows skipping LinkedIn instead of forcing an interaction", () => {
         const m = deriveMotion(baseCtx);
-        expect(m.recovery).toBeTruthy();
-        expect(m.recovery.toLowerCase()).toContain("narrower");
+        expect(m.recovery).toContain("do not force a comment");
     });
 
-    it("warm_signal_account recovery names the account", () => {
+    it("signal-account recovery names the account and tells the operator to update context", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Cascadia Health", heat: 84 }
         });
         expect(m.recovery).toContain("Cascadia Health");
-        expect(m.recovery.toLowerCase()).toContain("narrow");
+        expect(m.recovery).toContain("update the account context");
     });
 
-    it("convert_connection recovery hands the next touch back to Outbound", () => {
+    it("DM recovery avoids repeated LinkedIn follow-ups without new context", () => {
         const m = deriveMotion({
             ...baseCtx,
             hottestAccount: { name: "Acme", heat: 80 },
@@ -221,10 +203,10 @@ describe("deriveMotion — recovery line (Program 6 / PR 11)", () => {
             })
         });
         expect(m.key).toBe("convert_connection");
-        expect(m.recovery.toLowerCase()).toContain("outbound");
+        expect(m.recovery).toContain("new account context");
     });
 
-    it("add_air_cover recovery names the outbound account", () => {
+    it("recent-outbound recovery names the account and allows skipping LinkedIn", () => {
         const m = deriveMotion({
             ...baseCtx,
             latestTouch: {
@@ -234,5 +216,6 @@ describe("deriveMotion — recovery line (Program 6 / PR 11)", () => {
         });
         expect(m.key).toBe("add_air_cover");
         expect(m.recovery).toContain("Beta Robotics");
+        expect(m.recovery).toContain("skip the channel");
     });
 });
