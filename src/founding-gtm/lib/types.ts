@@ -1,22 +1,20 @@
 /**
- * Founding GTM types — Phase 5.B per canon §4.19.
+ * Founding GTM types — sales handoff documentation generated from the
+ * evidence already present across the workspace.
  *
- * The room is NOT an aggregator. It is the **living onboarding
- * surface** the first hire opens on day one. Authored opinion +
- * cross-room synthesis. Specificity comes from per-section "surprise"
- * callouts that no single room could surface alone.
+ * The room is not a raw aggregator. It synthesizes recorded customer,
+ * outreach, discovery, deal, pilot, win/loss, and quota evidence into the
+ * material another seller would need to understand and run the process.
+ * Internal section ids remain stable for compatibility.
  *
- * Seven authored sections (locked):
- *   1. Who hits, who misses, why
- *   2. The rails that worked
- *   3. The questions that earned the next meeting
- *   4. Where deals are won + where they leak
- *   5. The losses we paid for
- *   6. Why we win
- *   7. What the first week looks like
- *
- * Each renders as its own AuthoredSection with status, body
- * paragraphs, and a single SURPRISE callout (the cross-room read).
+ * Seven sections:
+ *   1. Target customers and disqualification criteria
+ *   2. Outreach patterns associated with responses
+ *   3. Discovery questions used on calls that progressed
+ *   4. Where deals tend to advance or stall
+ *   5. Loss patterns
+ *   6. Win patterns
+ *   7. First-week operating cadence
  */
 
 export type SectionId =
@@ -39,38 +37,36 @@ export const SECTION_IDS: ReadonlyArray<SectionId> = [
 ];
 
 export const SECTION_KICKER: Record<SectionId, string> = {
-    who_hits: "§1 / Who",
-    rails_that_worked: "§2 / Rails",
-    questions_that_earned: "§3 / Questions",
-    won_and_leaked: "§4 / Funnel truth",
-    losses_paid_for: "§5 / Losses",
-    why_we_win: "§6 / Wins",
-    day_one_rhythm: "§7 / Day one"
+    who_hits: "§1 / Target customers",
+    rails_that_worked: "§2 / Outreach",
+    questions_that_earned: "§3 / Discovery",
+    won_and_leaked: "§4 / Deal progression",
+    losses_paid_for: "§5 / Loss patterns",
+    why_we_win: "§6 / Win patterns",
+    day_one_rhythm: "§7 / First week"
 };
 
 export const SECTION_TITLE: Record<SectionId, string> = {
-    who_hits: "Who hits, who misses, why",
-    rails_that_worked: "The outreach that actually landed",
-    questions_that_earned: "The questions that won the next meeting",
-    won_and_leaked: "Where deals are won + where they leak",
-    losses_paid_for: "The losses we paid for",
-    why_we_win: "Why we win",
-    day_one_rhythm: "What the first week looks like"
+    who_hits: "Target customers and disqualification criteria",
+    rails_that_worked: "Outreach patterns associated with responses",
+    questions_that_earned: "Discovery questions used on calls that progressed",
+    won_and_leaked: "Where deals tend to advance or stall",
+    losses_paid_for: "Loss patterns",
+    why_we_win: "Win patterns",
+    day_one_rhythm: "First-week operating cadence"
 };
 
-/** Per-section status. Drives the §1-§7 status badges + total count. */
+/** Per-section status. Drives the section status badges + total count. */
 export type SectionStatus = "ready" | "partial" | "empty";
 
 /**
- * Authored output for one section. Generated fresh on every render
- * from the cross-room readers — no separate persistence per section.
+ * Generated output for one section. Built fresh from cross-room readers;
+ * there is no separate persisted authoring record per section.
  *
- * - `body` is 1-3 short paragraphs of authored prose, never a bullet
- *   aggregation. The section is allowed to feel opinionated.
- * - `evidence` is concrete — actual deal names, actual ICP labels,
- *   actual question text. Not categories.
- * - `surprise` is the cross-room callout per spec (§4.19) — the
- *   read no single room can surface alone.
+ * - `body` is 1-3 short explanatory paragraphs.
+ * - `evidence` names actual deals, ICP labels, questions, or outcomes.
+ * - `surprise` is retained as a stable internal field name but represents
+ *   one cross-room observation that is not visible from a single room.
  */
 export interface AuthoredSection {
     readonly id: SectionId;
@@ -82,23 +78,14 @@ export interface AuthoredSection {
     readonly surprise: SurpriseCallout | null;
 }
 
-/**
- * Cross-room "surprise" callout — the spec-mandated read that earns
- * each section its place in the kit.
- *
- * The callout is intentionally one short headline + one short body.
- * Specific. Not generic.
- */
+/** Cross-room observation supported by evidence from more than one source. */
 export interface SurpriseCallout {
-    /** Headline — the surprise itself (8-15 words). */
     readonly headline: string;
-    /** Body — 1-2 sentences of evidence. */
     readonly body: string;
-    /** Tone affects color: corrective, affirming, neutral. */
     readonly tone: "corrective" | "affirming" | "neutral";
 }
 
-/** Per-section input. The lib readers produce these from cloud-mirrored data. */
+/** Per-section input. Readers produce these shapes from workspace data. */
 export interface SectionsInput {
     readonly icps: ReadonlyArray<IcpRecord>;
     readonly closedWon: ReadonlyArray<DealRecord>;
@@ -109,21 +96,10 @@ export interface SectionsInput {
     readonly coldCalls: ReadonlyArray<ColdCallRecord>;
     readonly callPlanner: ReadonlyArray<CallPlanRecord>;
     readonly autopsies: ReadonlyArray<AutopsyRecord>;
-    // §5 reads per-deal snapshots Future Autopsy writes when the
-    // operator pins a deal (verdict + top cause + kill switch). The
-    // autopsies[] above carries only task completion; this carries the
-    // regenerated diagnosis. Joined to closed-lost deals by dealId.
     readonly autopsySnapshots: ReadonlyArray<AutopsySnapshotRecord>;
     readonly proofs: ReadonlyArray<ProofRecord>;
     readonly advisorDeployments: ReadonlyArray<AdvisorDeploymentRecord>;
     readonly quota: QuotaInputs | null;
-    // §3 reads from three Discovery Studio sources, in priority order:
-    //   - discoveryCalls: per-call records (segments + disposition) —
-    //     the precise source that lets §3 name WHICH threads earn the
-    //     next meeting and WHICH recent calls skipped them.
-    //   - discoveryStats: aggregate totalCalls / advancedCalls — coarse
-    //     fallback when no per-call records exist.
-    //   - discoveryWorked: lifetime worked-set — coarsest fallback.
     readonly discoveryCalls: ReadonlyArray<DiscoveryCallRecord>;
     readonly discoveryStats: DiscoveryStats | null;
     readonly discoveryWorked: ReadonlyArray<string>;
@@ -149,8 +125,6 @@ export interface DiscoveryCallRecord {
     readonly segmentKeysWorked: ReadonlyArray<string>;
     readonly disposition: DiscoveryDisposition;
 }
-
-/** Lightweight typed shapes — only the fields the sections actually consume. */
 
 export interface IcpRecord {
     readonly id: string;
@@ -206,7 +180,6 @@ export interface CallPlanRecord {
     readonly outcome: string;
     readonly nextStep: string;
     readonly createdAtIso: string;
-    /** Which Discovery Studio segments were touched in the resulting call (if any). */
     readonly segmentsWorked: ReadonlyArray<string>;
 }
 
@@ -255,9 +228,8 @@ export interface QuotaInputs {
     readonly meetingsPerWeek?: number;
 }
 
-/** Aggregate Founding GTM health snapshot — published to localStorage. */
 export interface FoundingGtmHealth {
-    readonly sections_ready: number; // 0..7
+    readonly sections_ready: number;
     readonly sections_partial: number;
     readonly captured_at: string;
 }
