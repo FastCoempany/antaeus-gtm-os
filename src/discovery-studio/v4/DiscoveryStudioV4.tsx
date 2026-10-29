@@ -48,21 +48,11 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./discovery-studio-v4.css";
 
 /**
- * DiscoveryStudioV4 (canon §4.12, protected + premium) — the live
- * cockpit, wired to production from the settled 2026-07-07 design and
- * the capability map. One focused column for a seller ON a live call:
- * the segment spine as a horizontal jumpable strip, the LIVE MOMENT
- * dominant (the question · the persona lens · a listen-for line ·
- * tap-what-you-heard → your line + its jump), a slim always-on
- * call-state line (the disposition read, truths captured, champion /
- * signer, next-step), and a contextual bottom drawer surfacing exactly
- * what the moment needs (pushback · if-they-ask · evidence · recover &
- * skip · truth & signals kept deliberately apart · the next-step lock).
- * All 19 primitives reachable; the 3 compression modes are real
- * (Emergency is the rescue state); the handoff is outcome-driven. No
- * clock, no tempo — the room never paces the call. Engines, state, and
- * persistence are the shipped ones unchanged; the persona lens reuses
- * the absorbed Call Planner question bank.
+ * Discovery Studio is the live-call surface for framework questions,
+ * response branches, notes, objections, evidence, captured facts, and a
+ * dated next step. The underlying framework content and routing behavior are
+ * unchanged; this wrapper uses literal call language rather than private
+ * product metaphors.
  */
 
 type DrawerTab = "pushback" | "ask" | "evidence" | "recover" | "know" | "next";
@@ -84,24 +74,24 @@ const SEG_SHORT: ReadonlyArray<string> = [
     t("Evidence"),
     t("Vendor"),
     t("Decision"),
-    t("Next-step lock"),
+    t("Next step"),
     t("Post-call")
 ];
 
 const TRACK_LABEL: Record<CallDisposition, string> = {
-    "in-progress": t("open"),
-    advanced: t("moving"),
-    stalled: t("guarded"),
-    lost: t("cold"),
-    won: t("warm"),
+    "in-progress": t("in progress"),
+    advanced: t("advanced"),
+    stalled: t("stalled"),
+    lost: t("lost"),
+    won: t("won"),
     "no-show": t("no-show")
 };
 
 const DISPOSITIONS: ReadonlyArray<{ id: CallDisposition; label: string }> = [
-    { id: "advanced", label: t("Advanced — next step locked", { class: "body" }) },
-    { id: "stalled", label: t("Stalled — no real next step", { class: "body" }) },
-    { id: "won", label: t("Won the room") },
-    { id: "lost", label: t("Not a fit — closing it out", { class: "body" }) },
+    { id: "advanced", label: t("Advanced — dated next step set", { class: "body" }) },
+    { id: "stalled", label: t("Stalled — no dated next step", { class: "body" }) },
+    { id: "won", label: t("Won") },
+    { id: "lost", label: t("Not a fit — close it out", { class: "body" }) },
     { id: "no-show", label: t("No-show") }
 ];
 
@@ -118,8 +108,6 @@ function pickBranch(node: SegmentNode, i: number, branch: Branch): void {
     expandResponse(i);
     recordBranchInteraction(node.id, i, branch);
     holdFact(node.id, i);
-    // A risk-toned answer is a pushback moment — surface the objection
-    // drawer with a flag, exactly what the moment needs.
     if (branch.cls === "red") {
         drawerTab.value = "pushback";
         drawerFlag.value = "pushback";
@@ -135,11 +123,13 @@ function saveStateName(): void {
     }
     if (which === "champion") champion.value = name;
     else signer.value = name;
-    // Capture it as a learned truth so it survives into the handoff.
     const node = activeNode.value;
     if (node) {
-        recordLearnedFact(node.nodeId, which === "champion" ? -1 : -2,
-            which === "champion" ? `${t("Champion:")} ${name}` : `${t("Signs off:")} ${name}`);
+        recordLearnedFact(
+            node.nodeId,
+            which === "champion" ? -1 : -2,
+            which === "champion" ? `${t("Champion:")} ${name}` : `${t("Approver:")} ${name}`
+        );
     }
     stateEdit.value = null;
     stateEditVal.value = "";
@@ -162,7 +152,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                 <div class="dv4-wrap">
                     <div class="dv4-top"><span class="dv4-bn">{t("Discovery Studio")}</span></div>
                     <div class="dv4-empty">
-                        <h3>{t("Pick the framework for this call.")}</h3>
+                        <h3>{t("Choose a framework for this call.")}</h3>
                         <div class="dv4-fwgrid">
                             {registry.map((f) => (
                                 <button type="button" class="dv4-fwbtn" key={f.id} onClick={() => selectFramework(f.id)}>
@@ -170,11 +160,11 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 </button>
                             ))}
                         </div>
-                        <p>{t("Off the list? Pick the closest fit — the call path and the recover moves hold either way.", { class: "body" })}</p>
+                        <p>{t("If no framework exactly matches, choose the closest fit. The question flow and recovery prompts remain available.", { class: "body" })}</p>
                     </div>
                 </div>
                 <GroundLine />
-            <LiveEdge />
+                <LiveEdge />
             </div>
         );
     }
@@ -189,8 +179,6 @@ export function DiscoveryStudioV4(): JSX.Element {
     const essentials = new Set(essentialNodeSet.value);
     const isPostCall = segIdx === fw.segments.length - 1;
 
-    // Compression: essentials filters the spine; emergency collapses it
-    // to the segment you're in and hoists the recover moves.
     const spineSegs =
         comp === "emergency" && seg
             ? [seg]
@@ -199,7 +187,6 @@ export function DiscoveryStudioV4(): JSX.Element {
               : fw.segments;
     const tab: DrawerTab = comp === "emergency" ? "recover" : drawerTab.value;
 
-    // Pre-flight — ready to walk in? (the absorbed Call Planner check)
     const preflight = [
         Boolean(account.trim()),
         personaLens.value !== null,
@@ -217,7 +204,6 @@ export function DiscoveryStudioV4(): JSX.Element {
     return (
         <div class="dv4">
             <div class="dv4-wrap">
-                {/* top bar */}
                 <div class="dv4-top">
                     <span class="dv4-bn">{t("Discovery Studio")}</span>
                     <select class="dv4-fwsel" value={fw.id} onChange={(e) => selectFramework((e.currentTarget as HTMLSelectElement).value as FrameworkId)}>
@@ -226,31 +212,30 @@ export function DiscoveryStudioV4(): JSX.Element {
                     <span class={`dv4-pre${preflight >= 3 ? " is-ok" : ""}`}>
                         <span class="dv4-pd" />
                         {preflight >= 3
-                            ? t("Ready to walk in")
-                            : `${t("Walk-in check:")} ${preflight}/4 ${t("set")}`}
+                            ? t("Call setup ready")
+                            : `${t("Call setup:")} ${preflight}/4 ${t("items set")}`}
                     </span>
                     <span class="dv4-comp">
                         {(["off", "essentials", "emergency"] as CompressionMode[]).map((m) => (
                             <button type="button" key={m}
                                 class={`${comp === m ? "is-on" : ""}${m === "emergency" ? " is-em" : ""}`}
                                 onClick={() => setCompressionMode(m)}>
-                                {m === "off" ? t("All") : m === "essentials" ? t("Essentials") : t("Emergency")}
+                                {m === "off" ? t("All") : m === "essentials" ? t("Essentials") : t("Recovery")}
                             </button>
                         ))}
                     </span>
                 </div>
 
-                {/* always-on call-state line */}
                 <div class="dv4-state">
-                    <span class="dv4-who">{account || t("(no account focused)")}</span>
+                    <span class="dv4-who">{account || t("(no account selected)")}</span>
                     <span class="dv4-vit">
-                        <span class="dv4-v">{t("reading:")} <b class={`is-${activeTrack.value}`}>{TRACK_LABEL[activeTrack.value]}</b></span>
-                        <span class="dv4-v"><b>{facts.length}</b> {t("truths")}</span>
+                        <span class="dv4-v">{t("status:")} <b class={`is-${activeTrack.value}`}>{TRACK_LABEL[activeTrack.value]}</b></span>
+                        <span class="dv4-v"><b>{facts.length}</b> {t("captured facts")}</span>
                         {stateEdit.value === "champion" ? (
                             <input class="dv4-sin" autofocus value={stateEditVal.value}
                                 onInput={(e) => (stateEditVal.value = (e.currentTarget as HTMLInputElement).value)}
                                 onKeyDown={(e) => { if (e.key === "Enter") saveStateName(); if (e.key === "Escape") (stateEdit.value = null); }}
-                                onBlur={saveStateName} placeholder={t("Champion's name")} />
+                                onBlur={saveStateName} placeholder={t("Champion name")} />
                         ) : (
                             <button type="button" class={`dv4-v is-chip${champion.value ? " is-ok" : ""}`} onClick={() => { stateEdit.value = "champion"; stateEditVal.value = champion.value; }}>
                                 {t("champion")} {champion.value ? "✓" : "—"}
@@ -260,17 +245,16 @@ export function DiscoveryStudioV4(): JSX.Element {
                             <input class="dv4-sin" autofocus value={stateEditVal.value}
                                 onInput={(e) => (stateEditVal.value = (e.currentTarget as HTMLInputElement).value)}
                                 onKeyDown={(e) => { if (e.key === "Enter") saveStateName(); if (e.key === "Escape") (stateEdit.value = null); }}
-                                onBlur={saveStateName} placeholder={t("Who signs off?")} />
+                                onBlur={saveStateName} placeholder={t("Who approves?")} />
                         ) : (
                             <button type="button" class={`dv4-v is-chip${signer.value ? " is-ok" : ""}`} onClick={() => { stateEdit.value = "signer"; stateEditVal.value = signer.value; }}>
-                                {t("signs off")} {signer.value ? "✓" : "—"}
+                                {t("approver")} {signer.value ? "✓" : "—"}
                             </button>
                         )}
-                        <span class="dv4-v"><b>{t("next-step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("locked") : t("not set")}</span></span>
+                        <span class="dv4-v"><b>{t("next step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("complete") : t("incomplete")}</span></span>
                     </span>
                 </div>
 
-                {/* the jumpable spine */}
                 <div class="dv4-spine">
                     {spineSegs.map((s) => {
                         const i = fw.segments.findIndex((x) => x.key === s.key);
@@ -287,7 +271,6 @@ export function DiscoveryStudioV4(): JSX.Element {
                     })}
                 </div>
 
-                {/* THE LIVE MOMENT */}
                 {seg && currentNode && !isPostCall ? (
                     <div class="dv4-moment">
                         <div class="dv4-seglbl">§{segIdx + 1} · {seg.title} · {seg.cue}</div>
@@ -295,22 +278,22 @@ export function DiscoveryStudioV4(): JSX.Element {
                         <div class="dv4-lens">
                             {personaLens.value && lensQuestions ? (
                                 <>
-                                    {t("Tuned for")} <b>{PERSONA_LABELS[personaLens.value]}</b> — “{unquoteQuestion(lensQuestions[lensIdx.value % lensQuestions.length] ?? "")}”
+                                    {t("Question for")} <b>{PERSONA_LABELS[personaLens.value]}</b> — “{unquoteQuestion(lensQuestions[lensIdx.value % lensQuestions.length] ?? "")}”
                                     <button type="button" class="dv4-lensbtn" onClick={() => (lensIdx.value = lensIdx.value + 1)}>{t("another ↻")}</button>
                                 </>
                             ) : (
-                                <>{t("Pick the buyer's lens and the probes retune:", { class: "body" })}</>
+                                <>{t("Select a buyer role to see alternative questions:", { class: "body" })}</>
                             )}
                             <select class="dv4-lenssel" value={personaLens.value ?? ""}
                                 onChange={(e) => { const v = (e.currentTarget as HTMLSelectElement).value; personaLens.value = (v || null) as PersonaKey | null; lensIdx.value = 0; }}>
-                                <option value="">{t("no lens")}</option>
+                                <option value="">{t("no role selected")}</option>
                                 {PERSONA_KEYS.map((p) => <option value={p} key={p}>{PERSONA_LABELS[p]}</option>)}
                             </select>
                         </div>
                         {currentNode.note ? (
                             <div class="dv4-listen"><span class="dv4-ll">{t("Listen for")}</span> {currentNode.note}</div>
                         ) : null}
-                        <div class="dv4-hear">{t("When they answer, tap what you heard", { class: "body" })}</div>
+                        <div class="dv4-hear">{t("Select the buyer response that best matches what you heard.", { class: "body" })}</div>
                         <div class="dv4-says">
                             {branches.map((b, i) => (
                                 <button type="button" key={`${currentNode.id}-${i}`}
@@ -322,7 +305,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                         </div>
                         {pickedBranch ? (
                             <div class="dv4-answer">
-                                <div class="dv4-al">{t("Say this")}</div>
+                                <div class="dv4-al">{t("Suggested response")}</div>
                                 <div class="dv4-at">{pickedBranch.move}</div>
                                 {pickedBranch.actions && pickedBranch.actions.length > 0 ? (
                                     <span class="dv4-aj">
@@ -335,7 +318,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 ) : null}
                             </div>
                         ) : (
-                            <div class="dv4-hint">{t("Tap a response above to get your next line.", { class: "body" })}</div>
+                            <div class="dv4-hint">{t("Select a response above to see the next suggested line.", { class: "body" })}</div>
                         )}
                         {seg.nodes.length > 1 ? (
                             <div class="dv4-nodes">
@@ -353,11 +336,10 @@ export function DiscoveryStudioV4(): JSX.Element {
                     </div>
                 ) : null}
 
-                {/* POST-CALL — outcome-driven routing, never a presumed push */}
                 {isPostCall ? (
                     <div class="dv4-moment dv4-post">
-                        <div class="dv4-seglbl">§10 · {t("Post-call routing · what actually happened decides where this goes", { class: "body" })}</div>
-                        <div class="dv4-q">{t("How did the call actually end?")}</div>
+                        <div class="dv4-seglbl">§10 · {t("Post-call routing")}</div>
+                        <div class="dv4-q">{t("How did the call end?")}</div>
                         <div class="dv4-says">
                             {DISPOSITIONS.map((d) => (
                                 <button type="button" key={d.id}
@@ -370,27 +352,26 @@ export function DiscoveryStudioV4(): JSX.Element {
                         {callDisposition.value !== "in-progress" ? (
                             <div class="dv4-routes">
                                 {callDisposition.value === "advanced" || callDisposition.value === "won" ? (
-                                    <a class="dv4-route is-pri" href={hrefToDealWorkspace(account || undefined)}>{t("Carry it into the deal →")}</a>
+                                    <a class="dv4-route is-pri" href={hrefToDealWorkspace(account || undefined)}>{t("Open in Deal Workspace →")}</a>
                                 ) : callDisposition.value === "stalled" || callDisposition.value === "lost" ? (
-                                    <a class="dv4-route is-pri" href={hrefToFutureAutopsy(account || undefined)}>{t("Pre-mortem it →")}</a>
+                                    <a class="dv4-route is-pri" href={hrefToFutureAutopsy(account || undefined)}>{t("Review loss risk →")}</a>
                                 ) : null}
                                 <a class="dv4-route" href={hrefToDealWorkspace(account || undefined)}>{t("Deal Workspace")}</a>
-                                <span class="dv4-routenote">{facts.length} {t("truths carry over — nothing gets restated.", { class: "body" })}</span>
+                                <span class="dv4-routenote">{facts.length} {t("facts captured during this call", { class: "body" })}</span>
                             </div>
                         ) : null}
                     </div>
                 ) : null}
 
-                {/* THE CONTEXTUAL DRAWER */}
                 <div class="dv4-drawer">
                     <div class="dv4-dtabs">
                         {([
-                            ["pushback", t("They pushed back")],
-                            ["ask", t("If they ask you")],
+                            ["pushback", t("Objections")],
+                            ["ask", t("Buyer questions")],
                             ["evidence", t("Evidence")],
-                            ["recover", t("Recover & skip")],
-                            ["know", t("Truth & signals")],
-                            ["next", t("Next-step")]
+                            ["recover", t("Recovery prompts")],
+                            ["know", t("Facts & signals")],
+                            ["next", t("Next step")]
                         ] as ReadonlyArray<[DrawerTab, string]>).map(([id, label]) => (
                             <button type="button" key={id}
                                 class={`dv4-dt${tab === id ? " is-on" : ""}${id === "recover" ? " is-rec" : ""}`}
@@ -403,7 +384,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                     <div class="dv4-dbody">
                         {tab === "pushback" ? (
                             <div class="dv4-two">
-                                {objectionLibrary.value.length === 0 ? <p class="dv4-none">{t("No pushback lines authored for this framework yet.", { class: "body" })}</p> :
+                                {objectionLibrary.value.length === 0 ? <p class="dv4-none">{t("No objection responses are authored for this framework yet.", { class: "body" })}</p> :
                                     objectionLibrary.value.map((o) => (
                                         <div class="dv4-oi" key={o.trigger}><b>“{o.trigger}”</b> → {o.reply}</div>
                                     ))}
@@ -411,7 +392,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "ask" ? (
                             <div class="dv4-two">
-                                {inboundQuestionHandlers.value.length === 0 ? <p class="dv4-none">{t("No inbound handlers authored for this framework yet.", { class: "body" })}</p> :
+                                {inboundQuestionHandlers.value.length === 0 ? <p class="dv4-none">{t("No buyer-question responses are authored for this framework yet.", { class: "body" })}</p> :
                                     inboundQuestionHandlers.value.map((h) => (
                                         <div class="dv4-oi" key={h.question}><b>“{h.question}”</b> → {h.bridge}</div>
                                     ))}
@@ -419,7 +400,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "evidence" ? (
                             <div>
-                                {supportDossier.value.length === 0 ? <p class="dv4-none">{t("No evidence anchors authored for this framework yet.", { class: "body" })}</p> :
+                                {supportDossier.value.length === 0 ? <p class="dv4-none">{t("No evidence examples are authored for this framework yet.", { class: "body" })}</p> :
                                     supportDossier.value.map((topic) => (
                                         <div key={topic.title}>
                                             <div class="dv4-grp3">{topic.title}</div>
@@ -447,7 +428,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                         ))}
                                     </div>
                                 ))}
-                                <div class="dv4-grp3">{t("If they jump — the skip-ahead moments", { class: "body" })}</div>
+                                <div class="dv4-grp3">{t("Skip-ahead responses")}</div>
                                 <div class="dv4-two">
                                     {skipAheadHandlers.value.map((h) => (
                                         <div class="dv4-oi" key={h.trigger}><b>“{h.trigger}”</b> → {h.reply}</div>
@@ -457,9 +438,9 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "know" ? (
                             <div>
-                                <div class="dv4-grp3">{t("Facts you've captured")} · <b>{facts.length}</b></div>
+                                <div class="dv4-grp3">{t("Captured facts")} · <b>{facts.length}</b></div>
                                 <div class="dv4-facts">
-                                    {facts.length === 0 ? <p class="dv4-none">{t("Nothing captured yet — tap what you hear and the truths land here.", { class: "body" })}</p> :
+                                    {facts.length === 0 ? <p class="dv4-none">{t("No facts are captured yet. Select a buyer response when it records information you want to keep.", { class: "body" })}</p> :
                                         facts.map((f) => {
                                             const status = factStatusFor(f.nodeId, f.branchIndex);
                                             return (
@@ -469,16 +450,16 @@ export function DiscoveryStudioV4(): JSX.Element {
                                                         <span class="dv4-fs is-dep">{t("used")}</span>
                                                     ) : (
                                                         <button type="button" class="dv4-fs" onClick={() => deployFact(f.nodeId, f.branchIndex)}>
-                                                            {t("use it now")}
+                                                            {t("use in this call")}
                                                         </button>
                                                     )}
                                                 </div>
                                             );
                                         })}
                                 </div>
-                                <div class="dv4-grp3">{t("Signals you're reading")}</div>
+                                <div class="dv4-grp3">{t("Recorded response signals")}</div>
                                 <div class="dv4-facts">
-                                    {signalLedger.value.length === 0 ? <p class="dv4-none">{t("No reads yet.")}</p> :
+                                    {signalLedger.value.length === 0 ? <p class="dv4-none">{t("No response signals recorded yet.")}</p> :
                                         signalLedger.value.slice(-6).map((sig) => (
                                             <div class="dv4-fact" key={`${sig.nodeId}-${sig.branchIndex}`}>
                                                 <span class={`dv4-fl tone-${sig.tone}`}>{sig.tone}</span>
@@ -486,12 +467,12 @@ export function DiscoveryStudioV4(): JSX.Element {
                                             </div>
                                         ))}
                                 </div>
-                                <div class="dv4-grp3">{t("Holding vs ready to use", { class: "body" })}</div>
+                                <div class="dv4-grp3">{t("Captured facts available for reuse", { class: "body" })}</div>
                                 <div class="dv4-facts">
-                                    {tiebackLedger.value.length === 0 ? <p class="dv4-none">{t("Nothing held yet.")}</p> :
+                                    {tiebackLedger.value.length === 0 ? <p class="dv4-none">{t("No reusable facts are held yet.")}</p> :
                                         tiebackLedger.value.map((tb) => (
                                             <div class="dv4-fact" key={`${tb.nodeId}-${tb.branchIndex}`}>
-                                                <span class={`dv4-fl${tb.status === "deployed" ? " is-dep" : ""}`}>{tb.status === "deployed" ? t("used") : t("holding")}</span>
+                                                <span class={`dv4-fl${tb.status === "deployed" ? " is-dep" : ""}`}>{tb.status === "deployed" ? t("used") : t("available")}</span>
                                                 <span class="dv4-fv">{tb.fact}</span>
                                             </div>
                                         ))}
@@ -503,13 +484,13 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 <label class="dv4-dc"><span>{t("Date")}</span>
                                     <input type="date" value={lock.date} onInput={(e) => setNextStepField("date", (e.currentTarget as HTMLInputElement).value)} /></label>
                                 <label class="dv4-dc"><span>{t("Owner")}</span>
-                                    <input value={lock.owner} placeholder={t("who holds it")} onInput={(e) => setNextStepField("owner", (e.currentTarget as HTMLInputElement).value)} /></label>
+                                    <input value={lock.owner} placeholder={t("responsible person")} onInput={(e) => setNextStepField("owner", (e.currentTarget as HTMLInputElement).value)} /></label>
                                 <label class="dv4-dc"><span>{t("Purpose")}</span>
                                     <input value={lock.purpose} placeholder={t("e.g. technical scoping")} onInput={(e) => setNextStepField("purpose", (e.currentTarget as HTMLInputElement).value)} /></label>
-                                <label class="dv4-dc"><span>{t("Who's in the room")}</span>
+                                <label class="dv4-dc"><span>{t("Attendees")}</span>
                                     <input value={lock.attendees} onInput={(e) => setNextStepField("attendees", (e.currentTarget as HTMLInputElement).value)} /></label>
                                 <span class={`dv4-lockread${lockSet ? " is-ok" : ""}`}>
-                                    {lockSet ? t("Locked — you can hang up.") : t("A dated next step with a named owner — the one thing you can't hang up without.", { class: "body" })}
+                                    {lockSet ? t("Next step complete.") : t("Add a date, owner, and purpose to complete the next step.", { class: "body" })}
                                 </span>
                             </div>
                         ) : null}
