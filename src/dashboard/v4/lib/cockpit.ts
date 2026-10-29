@@ -3,13 +3,10 @@ import { VERDICT_RANK } from "@/lib/readiness";
 import { t } from "@/lib/voice/t";
 
 /**
- * Dashboard v4 cockpit model (canon §4.2) — the "command + standing
- * cockpit". Pure builders over the readiness summary + the per-room
- * health snapshots. The command board (the one move + skip) is composed
- * directly from the existing commandSummary signal in the surface; this
- * module owns the masthead (the whole-motion standing) + the standing
- * row (each part is a door). Engines reused unchanged — presentation
- * wiring only.
+ * Dashboard status model. Builds the readiness masthead and five status
+ * links from the same underlying readiness and room-health data already
+ * used by the product. User-facing labels describe the actual business
+ * concept rather than a private Antaeus metaphor.
  */
 
 export type GateState = "done" | "on" | "next" | "todo";
@@ -20,23 +17,21 @@ export interface Gate {
 }
 
 const GATE_LABELS: ReadonlyArray<string> = [
-    t("You are the system"),
-    t("Building"),
-    t("Inheritable"),
-    t("Hire-ready"),
-    t("Repeatable")
+    t("Founder-dependent"),
+    t("Partially documented"),
+    t("Runnable with founder support"),
+    t("Runnable independently"),
+    t("Documented and repeatable")
 ];
 
 export interface Masthead {
     readonly verdictLabel: string;
-    /** Grammatical headline split into a plain lead + the emphasized state. */
     readonly headlinePre: string;
     readonly headlineEm: string;
     readonly gates: ReadonlyArray<Gate>;
     readonly nextStage: string;
 }
 
-/** The 5-gate ladder + verdict + the "what gets you to the next stage" line. */
 export function buildMasthead(summary: ReadinessSummary): Masthead {
     const rank = VERDICT_RANK[summary.verdict as Verdict] ?? 1;
     const gates: Gate[] = GATE_LABELS.map((label, i) => {
@@ -45,27 +40,22 @@ export function buildMasthead(summary: ReadinessSummary): Masthead {
             pos < rank ? "done" : pos === rank ? "on" : pos === rank + 1 ? "next" : "todo";
         return { label, state };
     });
-    // gateBlockers are engine strings (already t()-wrapped + §13-scrubbed
-    // at the source in verdict.ts); the fallbacks are local prose.
+
     const nextStage =
         summary.gateBlockers && summary.gateBlockers.length > 0
             ? summary.gateBlockers[0]!
             : summary.nextVerdict
-              ? t("Everything the next stage needs is in place — it'll settle the next time you save a change in any room.", { class: "body" })
-              : t("You're at the top — multiple wins, losses analyzed, and the handoff kit composed.", { class: "body" });
-    // "You're {label}." reads wrong for the base verdict ("You are the
-    // system"), so compose a grammatical headline per verdict.
-    const isBase = summary.verdict === "you_are_the_system";
+              ? t("The evidence required for the next readiness state is present. The assessment will update after the next saved workspace change.", { class: "body" })
+              : t("The sales process, win and loss patterns, and handoff documentation meet the current highest readiness requirements.", { class: "body" });
+
     return {
         verdictLabel: summary.verdictLabel,
-        headlinePre: isBase ? t("Right now,") : t("You're"),
-        headlineEm: isBase ? t("you're the system") : summary.verdictLabel,
+        headlinePre: t("Current readiness:"),
+        headlineEm: summary.verdictLabel,
         gates,
         nextStage
     };
 }
-
-// ─── The standing row — each part is a door ────────────────────────────
 
 export type StandTone = "bad" | "warn" | "" | "good";
 
@@ -110,12 +100,6 @@ function door(path: string): string {
     return `${path}?returnTo=%2Fdashboard%2F&returnLabel=Dashboard&fromMode=room&fromSurface=dashboard`;
 }
 
-// Shapes MATCH the shipped publishers (verified against the health-
-// snapshot / persistence sources — not guessed):
-//   gtmos_deal_workspace_health  → pipeline_value, top_pressure[{accountName,stage,score,cause}]
-//   gtmos_signal_room_health     → topAccountName, topHeat, readyCount
-//   gtmos_quota_targets          → monthly_target, coverage_target
-//   gtmos_founding_gtm_health    → sections_ready
 interface DealHealth {
     readonly pipeline_value?: number;
     readonly top_pressure?: ReadonlyArray<{
@@ -138,7 +122,7 @@ interface FoundingHealth {
     readonly sections_ready?: number;
 }
 
-/** The 5 standing doors, derived defensively from the shipped health snapshots. */
+/** The five status links, derived defensively from shipped health snapshots. */
 export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> {
     const store = getStorage(s);
     const deal = readJson<DealHealth>(store, "gtmos_deal_workspace_health") ?? {};
@@ -147,12 +131,9 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
     const founding = readJson<FoundingHealth>(store, "gtmos_founding_gtm_health") ?? {};
 
     const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : [];
-    const slipN = pressure.length;
+    const riskN = pressure.length;
     const pipeline = typeof deal.pipeline_value === "number" ? deal.pipeline_value : 0;
 
-    // Worst deal = the top-pressure row's real accountName; pull a day
-    // count out of its cause text if one is there (the snapshot carries
-    // no explicit days field).
     const worst = pressure[0];
     const worstName =
         worst && typeof worst.accountName === "string" && worst.accountName.trim()
@@ -163,16 +144,13 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
     const handoffReady =
         typeof founding.sections_ready === "number" ? founding.sections_ready : 0;
 
-    // Pace "behind" is a REAL coverage check: is open pipeline below the
-    // number × the coverage multiple? Only judged when a quota is set;
-    // never claims "on pace" on an empty quota.
     const hasQuota = typeof quota.monthly_target === "number" && quota.monthly_target > 0;
     const coverageNeeded = hasQuota
         ? quota.monthly_target! * (typeof quota.coverage_target === "number" && quota.coverage_target > 0 ? quota.coverage_target : 3)
         : 0;
     const behind = hasQuota && pipeline < coverageNeeded;
 
-    const hotName =
+    const priorityName =
         typeof signal.topAccountName === "string" && signal.topAccountName.trim()
             ? signal.topAccountName.trim()
             : null;
@@ -180,46 +158,46 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
 
     return [
         {
-            key: t("Deals"),
-            value: slipN > 0 ? `${slipN} ${t("will slip")}` : t("Holding"),
+            key: t("Open deal risk"),
+            value: riskN > 0 ? `${riskN} ${t("at elevated risk")}` : t("No elevated risk"),
             sub:
-                slipN > 0 && pipeline > 0
-                    ? `${money(pipeline)} ${t("of pipeline this week")}`
-                    : t("pipeline is steady"),
-            tone: slipN > 0 ? "bad" : "good",
+                pipeline > 0
+                    ? `${t("open pipeline:")} ${money(pipeline)}`
+                    : t("no open pipeline recorded"),
+            tone: riskN > 0 ? "bad" : "good",
             href: door("/deal-workspace/")
         },
         {
-            key: t("Hottest"),
-            value: hotName
-                ? `${hotName}${typeof signal.topHeat === "number" && signal.topHeat > 0 ? ` · ${signal.topHeat}` : ""}`
+            key: t("Account priority"),
+            value: priorityName
+                ? `${priorityName}${typeof signal.topHeat === "number" && signal.topHeat > 0 ? ` · ${signal.topHeat}` : ""}`
                 : t("None yet"),
-            sub: ready > 0 ? `${ready} ${t("accounts ready to reach")}` : t("no hot accounts yet"),
+            sub: ready > 0 ? `${ready} ${t("accounts ready for outreach")}` : t("no high-priority accounts yet"),
             tone: "",
             href: door("/signal-console/")
         },
         {
-            key: t("Pace"),
-            value: !hasQuota ? t("Not set") : behind ? t("Behind") : t("On pace"),
+            key: t("Quota pace"),
+            value: !hasQuota ? t("Not set") : behind ? t("Below required pace") : t("On pace"),
             sub: !hasQuota
-                ? t("set your number")
+                ? t("set your target")
                 : behind
-                  ? t("not enough pipeline yet")
-                  : t("pipeline covers the number"),
+                  ? t("pipeline is below the coverage requirement")
+                  : t("pipeline meets the coverage requirement"),
             tone: !hasQuota ? "warn" : behind ? "warn" : "good",
             href: door("/quota-workback/")
         },
         {
-            key: t("Dying"),
+            key: t("Highest deal risk"),
             value: worstName ? `${worstName}${worstDays ? ` · ${worstDays}d` : ""}` : t("None"),
-            sub: worstName ? t("your worst open deal") : t("nothing critical"),
+            sub: worstName ? t("highest-risk open deal") : t("no critical deal risk detected"),
             tone: worstName ? "bad" : "good",
             href: door("/future-autopsy/")
         },
         {
-            key: t("Handoff"),
+            key: t("Sales handoff"),
             value: `${handoffReady} / 7`,
-            sub: t("a hire could inherit"),
+            sub: t("sections ready for another seller"),
             tone: handoffReady >= 5 ? "good" : "warn",
             href: door("/founding-gtm/")
         }
