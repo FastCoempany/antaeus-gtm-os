@@ -21,16 +21,10 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./getting-to-signed-v4.css";
 
 /**
- * GettingToSignedV4 (canon §4.16b) — the face-off + ledger, wired to
- * production from the settled 2026-07-07 design. The deal isn't won at
- * yes: the room runs the whole procurement gauntlet — the one thing
- * actually blocking as a two-sided face-off up top (their side ⟷ your
- * line, with hold / trade / the line you won't cross), everything else
- * open as a positions ledger (Legal / Security / Finance / Business,
- * each row drilling to its depth — the security coverage map is the
- * deepest). Committee engagement chips + papers-ready strip + the
- * plan-to-signed keep the committee warm. Deal linking + learnings
- * reuse the shipped engine; the fronts model is the additive layer.
+ * Getting to Signed — manage the work between verbal agreement and
+ * countersignature across Legal, Security, Finance, and Business approval.
+ * Stable internal `front` ids and storage fields remain for compatibility;
+ * the user-facing model is a set of negotiation/approval workstreams.
  */
 
 const gts = signal<SignedState>(EMPTY_SIGNED_STATE);
@@ -86,10 +80,26 @@ function patchFront(id: FrontId, part: Partial<SignedState["fronts"][FrontId]>):
 }
 
 const FRONT_META: Record<FrontId, { label: string; dot: string; hint: string }> = {
-    legal: { label: t("Legal"), dot: "#b83232", hint: t("liability, indemnification, redlines — the changes they want to the contract", { class: "body" }) },
-    security: { label: t("Security"), dot: "#7c5cff", hint: t("the questionnaire — mostly answered by papers you already hold", { class: "body" }) },
-    finance: { label: t("Finance"), dot: "#1f9d6b", hint: t("payment terms — every give gets something back", { class: "body" }) },
-    business: { label: t("Business"), dot: "#b5790f", hint: t("keep the committee moving — this front is what actually kills deals", { class: "body" }) }
+    legal: {
+        label: t("Legal"),
+        dot: "#b83232",
+        hint: t("liability, indemnification, and requested contract changes", { class: "body" })
+    },
+    security: {
+        label: t("Security"),
+        dot: "#7c5cff",
+        hint: t("security questionnaire and supporting documents", { class: "body" })
+    },
+    finance: {
+        label: t("Finance"),
+        dot: "#1f9d6b",
+        hint: t("payment terms and commercial concessions", { class: "body" })
+    },
+    business: {
+        label: t("Business approval"),
+        dot: "#b5790f",
+        hint: t("stakeholder engagement and the signature plan", { class: "body" })
+    }
 };
 
 const STATUS_LABEL: Record<FrontStatus, string> = {
@@ -100,36 +110,40 @@ const STATUS_LABEL: Record<FrontStatus, string> = {
     settled: t("settled")
 };
 
-/** Authored playbook per front — the room's grounded coaching (canon §4.16b). */
+/** Practical guidance for each workstream. */
 const PLAYBOOK: Record<FrontId, JSX.Element> = {
     legal: (
         <>
-            <b>{t("Unlimited isn't the norm", { class: "body" })}</b> — {t("a 12-month-fees cap is, with a data breach usually getting its own higher \"super-cap.\" And the cap is linked to their indemnification ask: a broad promise is worthless if the cap is tiny — settle them together, never one at a time.", { class: "body" })}
+            <b>{t("Evaluate the liability cap together with the indemnification request.", { class: "body" })}</b>{" "}
+            {t("A broad indemnification obligation can materially change the value of a liability cap, so review linked contract terms together rather than approving each one independently.", { class: "body" })}
         </>
     ),
     security: (
         <>
-            {t("Don't fill the checklist by hand —", { class: "body" })} <b>{t("most of it is already answered by papers you hold.", { class: "body" })}</b> {t("Send the papers first; only the genuinely open questions need a human.", { class: "body" })}
+            <b>{t("Use existing security documents before answering questions manually.", { class: "body" })}</b>{" "}
+            {t("SOC 2, the subprocessor list, penetration-test material, and the DPA may already answer part of the questionnaire. Route only the remaining technical questions to the appropriate owner.", { class: "body" })}
         </>
     ),
     finance: (
         <>
-            {t("A longer payment term is a give —", { class: "body" })} <b>{t("get something for it.")}</b> {t("Offer three and let them pick: net-60 flat · net-30 for a small cut · a discount for annual up-front. The line: no net-90 on an unpaid balance.", { class: "body" })}
+            <b>{t("Treat a commercial concession as an explicit exchange.", { class: "body" })}</b>{" "}
+            {t("If the customer asks for longer payment terms or a discount, record what you are prepared to offer and what commercial commitment you expect in return.", { class: "body" })}
         </>
     ),
     business: (
         <>
-            {t("This is the front that actually kills deals — not losing the argument, but the committee going quiet.", { class: "body" })} <b>{t("Build the plan-to-signed with your champion", { class: "body" })}</b> {t("— dated steps, named owners — and give the quiet person a real reason to re-engage, never a \"just checking in.\"", { class: "body" })}
+            <b>{t("Keep the approval process active with dated steps and named owners.", { class: "body" })}</b>{" "}
+            {t("Use a shared signature plan with the champion so legal, security, finance, and final approval do not lose ownership or timing after verbal agreement.", { class: "body" })}
         </>
     )
 };
 
 function copyText(text: string, done: string): void {
     if (!navigator.clipboard?.writeText) {
-        toast(t("Copying isn't available here — select the text by hand.", { class: "body" }));
+        toast(t("Copying isn't available here — select the text manually.", { class: "body" }));
         return;
     }
-    navigator.clipboard.writeText(text).then(() => toast(done)).catch(() => toast(t("Couldn't copy — select the text by hand.", { class: "body" })));
+    navigator.clipboard.writeText(text).then(() => toast(done)).catch(() => toast(t("Couldn't copy — select the text manually.", { class: "body" })));
 }
 
 export function GettingToSignedV4(): JSX.Element {
@@ -147,9 +161,6 @@ export function GettingToSignedV4(): JSX.Element {
     ].filter(Boolean) as string[];
     const cov = state.coverage;
     const covOpen = Math.max(0, cov.total - cov.covered);
-    // Every front stays in the ledger — the face-off is the hero view of
-    // the blocking one, but its depth (status, the coverage map, the
-    // plan-to-signed) must never become unreachable while it blocks.
     const ledgerFronts = FRONT_IDS;
 
     return (
@@ -157,7 +168,7 @@ export function GettingToSignedV4(): JSX.Element {
             <div class="gs4-wrap">
                 <div class="gs4-top">
                     <span class="gs4-bname">{t("Getting to Signed")}</span>
-                    <span class="gs4-r">{t("the deal isn't won at yes", { class: "body" })}</span>
+                    <span class="gs4-r">{t("a verbal yes still requires legal, security, finance, and final approval", { class: "body" })}</span>
                 </div>
 
                 <div class="gs4-read">
@@ -171,25 +182,24 @@ export function GettingToSignedV4(): JSX.Element {
                         </select>
                     ) : null}
                     <span class="gs4-to">
-                        {t("to signed by")}{" "}
+                        {t("target signature date")}{" "}
                         <input class="gs4-date" value={state.targetDate} placeholder={t("month-end")}
                             onInput={(e) => patchGts({ targetDate: (e.currentTarget as HTMLInputElement).value })} />
                     </span>
                 </div>
 
-                {/* committee + papers strip */}
                 <div class="gs4-strip">
                     {state.committee.map((m) => {
                         const read = engagementRead(m);
                         return (
                             <span class={`gs4-chip${read.band === "quiet" ? " is-quiet" : ""}`} key={m.id}
-                                title={t("Tap when you've touched them", { class: "body" })}
+                                title={t("Record a new touch with this stakeholder", { class: "body" })}
                                 onClick={() => patchGts({ committee: state.committee.map((x) => x.id === m.id ? { ...x, lastTouch: new Date().toISOString() } : x) })}>
                                 <span class={`gs4-d is-${read.band}`} />
                                 {m.name}
                                 <span class="gs4-rl">
                                     {m.kind === "champion" ? t("champion") : m.kind === "signer" ? t("signs off") : m.role || t("committee")}
-                                    {read.band === "quiet" ? ` · ${t("quiet")} ${read.days}d` : read.band === "new" ? ` · ${t("new")}` : ""}
+                                    {read.band === "quiet" ? ` · ${t("no recent touch for")} ${read.days}d` : read.band === "new" ? ` · ${t("new")}` : ""}
                                 </span>
                                 <button type="button" class="gs4-mx" title={t("Remove")}
                                     onClick={(ev) => { ev.stopPropagation(); patchGts({ committee: state.committee.filter((x) => x.id !== m.id) }); }}>×</button>
@@ -207,11 +217,12 @@ export function GettingToSignedV4(): JSX.Element {
                         <button type="button" disabled={!addMemberName.value.trim()}
                             onClick={() => {
                                 patchGts({ committee: [...state.committee, { id: memberId(), name: addMemberName.value.trim(), role: addMemberRole.value.trim(), kind: addMemberKind.value, lastTouch: null }] });
-                                addMemberName.value = ""; addMemberRole.value = "";
+                                addMemberName.value = "";
+                                addMemberRole.value = "";
                             }}>{t("Add")}</button>
                     </span>
                     <span class="gs4-sp">
-                        {t("Papers ready:")} <b>{paperList.length > 0 ? paperList.join(" · ") : t("none marked yet")}</b>
+                        {t("Security documents available:")} <b>{paperList.length > 0 ? paperList.join(" · ") : t("none marked yet")}</b>
                         {(["soc2", "subprocessors", "pentest", "dpa"] as const).map((k) => (
                             <button type="button" key={k} class={`gs4-pp${papers[k] ? " is-on" : ""}`}
                                 onClick={() => patchGts({ papers: { ...papers, [k]: !papers[k] } })}>
@@ -221,20 +232,19 @@ export function GettingToSignedV4(): JSX.Element {
                     </span>
                 </div>
 
-                {/* the face-off */}
                 {blocking && face ? (
                     <>
-                        <div class="gs4-blockhd">{t("The one thing blocking — settle this and the next front opens", { class: "body" })}</div>
+                        <div class="gs4-blockhd">{t("Current blocking issue", { class: "body" })}</div>
                         <div class="gs4-faceoff">
                             <div class="gs4-side is-them">
-                                <div class="gs4-sl">{t("Their side")} · {FRONT_META[blocking].label}</div>
-                                <input class="gs4-sv" value={face.theirAsk} placeholder={t("What are they holding the contract on?", { class: "body" })}
+                                <div class="gs4-sl">{t("Customer request")} · {FRONT_META[blocking].label}</div>
+                                <input class="gs4-sv" value={face.theirAsk} placeholder={t("What is the customer asking for?", { class: "body" })}
                                     onInput={(e) => patchFront(blocking, { theirAsk: (e.currentTarget as HTMLInputElement).value })} />
                             </div>
-                            <div class="gs4-gap"><span class="gs4-gl">{t("the gap")}</span><span class="gs4-vs">{t("vs")}</span></div>
+                            <div class="gs4-gap"><span class="gs4-gl">{t("gap")}</span><span class="gs4-vs">{t("vs")}</span></div>
                             <div class="gs4-side is-you">
-                                <div class="gs4-sl">{t("Your line")}</div>
-                                <input class="gs4-sv" value={face.yourLine} placeholder={t("Your counter — and the line you won't cross", { class: "body" })}
+                                <div class="gs4-sl">{t("Your proposed position")}</div>
+                                <input class="gs4-sv" value={face.yourLine} placeholder={t("Your proposed response and any non-negotiable limit", { class: "body" })}
                                     onInput={(e) => patchFront(blocking, { yourLine: (e.currentTarget as HTMLInputElement).value })} />
                             </div>
                         </div>
@@ -243,25 +253,24 @@ export function GettingToSignedV4(): JSX.Element {
                             <button type="button" class="gs4-btn"
                                 disabled={!face.theirAsk.trim() || !face.yourLine.trim()}
                                 onClick={() => copyText(
-                                    `${t("On")} ${FRONT_META[blocking].label.toLowerCase()}: ${t("you've asked for")} ${face.theirAsk}. ${t("Our position:")} ${face.yourLine}. ${t("Happy to walk through it — we'd like this signed by", { class: "body" })} ${state.targetDate || t("month-end")}.`,
-                                    t("Counter-position copied — send it, then note what came back.", { class: "body" })
+                                    `${t("On")} ${FRONT_META[blocking].label.toLowerCase()}: ${t("you've asked for")} ${face.theirAsk}. ${t("Our proposed position:")} ${face.yourLine}. ${t("Happy to walk through it — our current target signature date is", { class: "body" })} ${state.targetDate || t("month-end")}.`,
+                                    t("Proposed response copied.", { class: "body" })
                                 )}>
-                                {t("Send the counter-position →")}
+                                {t("Send proposed response →")}
                             </button>
-                            <a class="gs4-link" href={hrefToAdvisorDeploy(deal?.id)}>{t("Loop in someone who's won this fight", { class: "body" })}</a>
-                            <button type="button" class="gs4-link" onClick={() => (openFront.value = openFront.value === blocking ? null : blocking)}>{t("Work this front ▾")}</button>
+                            <a class="gs4-link" href={hrefToAdvisorDeploy(deal?.id)}>{t("Ask someone with relevant experience", { class: "body" })}</a>
+                            <button type="button" class="gs4-link" onClick={() => (openFront.value = openFront.value === blocking ? null : blocking)}>{t("Open this workstream ▾")}</button>
                             <button type="button" class="gs4-link" onClick={() => patchFront(blocking, { status: "settled" })}>{t("Mark it settled")}</button>
                         </div>
                     </>
                 ) : (
                     <div class="gs4-clear">
-                        <h3>{t("Nothing is blocking.")}</h3>
-                        <p>{t("Every front is settled — chase the countersignature, not another concession.", { class: "body" })}</p>
+                        <h3>{t("No workstream is currently marked as blocking.")}</h3>
+                        <p>{t("If Legal, Security, Finance, and Business approval are settled, focus on completing the remaining signature steps.", { class: "body" })}</p>
                     </div>
                 )}
 
-                {/* the positions ledger */}
-                <div class="gs4-lh"><span>{t("Team")}</span><span>{t("All four fronts · their ask → your line", { class: "body" })}</span><span>{t("Status")}</span><span /></div>
+                <div class="gs4-lh"><span>{t("Workstream")}</span><span>{t("All four workstreams · customer request → your proposed position", { class: "body" })}</span><span>{t("Status")}</span><span /></div>
                 {ledgerFronts.map((id) => {
                     const f = state.fronts[id];
                     const open = openFront.value === id;
@@ -273,9 +282,9 @@ export function GettingToSignedV4(): JSX.Element {
                                     <span class="gs4-th">{f.theirAsk || FRONT_META[id].hint}</span>
                                     {f.theirAsk || f.yourLine ? (
                                         <span class="gs4-pos">
-                                            <span class="gs4-them">{f.theirAsk || t("their ask")}</span>
+                                            <span class="gs4-them">{f.theirAsk || t("customer request")}</span>
                                             <span class="gs4-arr">→</span>
-                                            <span class="gs4-you">{f.yourLine || t("your line")}</span>
+                                            <span class="gs4-you">{f.yourLine || t("your proposed position")}</span>
                                         </span>
                                     ) : null}
                                 </span>
@@ -286,9 +295,9 @@ export function GettingToSignedV4(): JSX.Element {
                                 <div class="gs4-dd">
                                     <div class="gs4-pl">{PLAYBOOK[id]}</div>
                                     <div class="gs4-ddgrid">
-                                        <label><span>{t("Their ask")}</span>
+                                        <label><span>{t("Customer request")}</span>
                                             <input value={f.theirAsk} onInput={(e) => patchFront(id, { theirAsk: (e.currentTarget as HTMLInputElement).value })} /></label>
-                                        <label><span>{t("Your line")}</span>
+                                        <label><span>{t("Your proposed position")}</span>
                                             <input value={f.yourLine} onInput={(e) => patchFront(id, { yourLine: (e.currentTarget as HTMLInputElement).value })} /></label>
                                         <label><span>{t("Status")}</span>
                                             <select value={f.status} onChange={(e) => patchFront(id, { status: (e.currentTarget as HTMLSelectElement).value as FrontStatus })}>
@@ -299,11 +308,11 @@ export function GettingToSignedV4(): JSX.Element {
                                     </div>
                                     {id === "security" ? (
                                         <div class="gs4-cov">
-                                            <div class="gs4-ct">{t("Coverage · what your papers already answer", { class: "body" })}</div>
+                                            <div class="gs4-ct">{t("Security coverage · what existing documents already answer", { class: "body" })}</div>
                                             <div class="gs4-covin">
                                                 <label>{t("questions total")} <input type="number" value={cov.total || ""} onInput={(e) => patchGts({ coverage: { ...cov, total: Number((e.currentTarget as HTMLInputElement).value) || 0 } })} /></label>
-                                                <label>{t("your papers answer")} <input type="number" value={cov.covered || ""} onInput={(e) => patchGts({ coverage: { ...cov, covered: Number((e.currentTarget as HTMLInputElement).value) || 0 } })} /></label>
-                                                <label>{t("open with saved answers")} <input type="number" value={cov.saved || ""} onInput={(e) => patchGts({ coverage: { ...cov, saved: Number((e.currentTarget as HTMLInputElement).value) || 0 } })} /></label>
+                                                <label>{t("answered by existing documents")} <input type="number" value={cov.covered || ""} onInput={(e) => patchGts({ coverage: { ...cov, covered: Number((e.currentTarget as HTMLInputElement).value) || 0 } })} /></label>
+                                                <label>{t("open questions with saved answers")} <input type="number" value={cov.saved || ""} onInput={(e) => patchGts({ coverage: { ...cov, saved: Number((e.currentTarget as HTMLInputElement).value) || 0 } })} /></label>
                                             </div>
                                             {cov.total > 0 ? (
                                                 <>
@@ -312,23 +321,23 @@ export function GettingToSignedV4(): JSX.Element {
                                                         {covOpen > 0 ? <span class="gs4-ca" style={`flex:${covOpen}`}>{covOpen} {t("open")}</span> : null}
                                                     </div>
                                                     <div class="gs4-covby">
-                                                        {t("Of the")} {covOpen} {t("left,")} <b>{Math.min(cov.saved, covOpen)}</b> {t("have saved answers you've used before;")} <b>{Math.max(0, covOpen - cov.saved)}</b> {t("need a word from engineering.")}
+                                                        {t("Of the")} {covOpen} {t("open questions,")} <b>{Math.min(cov.saved, covOpen)}</b> {t("have saved answers;")} <b>{Math.max(0, covOpen - cov.saved)}</b> {t("still need input from the appropriate technical owner.")}
                                                     </div>
                                                 </>
                                             ) : (
-                                                <div class="gs4-covby">{t("Put the numbers in and the map shows how little is genuinely open.", { class: "body" })}</div>
+                                                <div class="gs4-covby">{t("Enter the questionnaire counts to see how many questions existing documents already cover.", { class: "body" })}</div>
                                             )}
                                         </div>
                                     ) : null}
                                     {id === "business" ? (
                                         <div class="gs4-plan">
-                                            <div class="gs4-ct">{t("The plan-to-signed — dated steps, named owners, you both hold it", { class: "body" })}</div>
+                                            <div class="gs4-ct">{t("Signature plan · dated steps and named owners", { class: "body" })}</div>
                                             <textarea value={state.planToSigned}
-                                                placeholder={t("e.g. Security papers sent (you, today) · legal call (their counsel + you, Thu) · signature (CFO, the 28th)", { class: "body" })}
+                                                placeholder={t("e.g. Security documents sent (you, today) · legal call (customer counsel + you, Thu) · signature (CFO, the 28th)", { class: "body" })}
                                                 onInput={(e) => patchGts({ planToSigned: (e.currentTarget as HTMLTextAreaElement).value })} />
                                             <button type="button" class="gs4-btn" disabled={!state.planToSigned.trim()}
-                                                onClick={() => copyText(state.planToSigned, t("Plan copied — send it to your champion to co-own.", { class: "body" }))}>
-                                                {t("Send the plan-to-signed →")}
+                                                onClick={() => copyText(state.planToSigned, t("Signature plan copied.", { class: "body" }))}>
+                                                {t("Copy signature plan →")}
                                             </button>
                                         </div>
                                     ) : null}
@@ -338,12 +347,11 @@ export function GettingToSignedV4(): JSX.Element {
                     );
                 })}
 
-                {/* we won't repeat this */}
                 <div class="gs4-learn">
-                    <span class="gs4-ll">{t("We won't repeat this")}</span>
-                    <input value={learnDraft.value} placeholder={t("What did this run to signature teach you?", { class: "body" })}
+                    <span class="gs4-ll">{t("Lessons for future deals")}</span>
+                    <input value={learnDraft.value} placeholder={t("What did this signature process teach you?", { class: "body" })}
                         onInput={(e) => (learnDraft.value = (e.currentTarget as HTMLInputElement).value)}
-                        onKeyDown={(e) => { if (e.key === "Enter" && learnDraft.value.trim()) { appendLearning(learnDraft.value); learnDraft.value = ""; toast(t("Kept — it feeds your loss patterns.", { class: "body" })); } }} />
+                        onKeyDown={(e) => { if (e.key === "Enter" && learnDraft.value.trim()) { appendLearning(learnDraft.value); learnDraft.value = ""; toast(t("Saved to the deal-learning record.", { class: "body" })); } }} />
                 </div>
             </div>
             {toastMsg.value ? <div class="gs4-toast">{toastMsg.value}</div> : null}
