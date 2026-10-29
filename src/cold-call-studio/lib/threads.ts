@@ -1,43 +1,36 @@
 import type { Thread, ThreadId } from "./types";
 
 /**
- * Phase 4 / Room 7 Wave 2 — thread spine.
+ * Cold Call Studio conversation data.
  *
- * Faithful TypeScript port of the legacy `THREADS` array
- * (`app/cold-call-studio/index.html` lines 97-127). Six threads,
- * each with three buyer-response branches. The order is canonical
- * per canon §4.9 (Prep → Opener → Pressure → Proof → Ask → Exit).
- *
- * Reply `next` values target a `ThreadId` (advances the active
- * thread when chosen) or the literal "post" (signals "log the
- * call and choose the next room"). Wave 3 wires the navigation;
- * Wave 4 reads the threads to compose the call log entry.
- *
- * This module is data-only — no signals, no DOM. Helpers are pure.
+ * Internal ThreadId values are retained for compatibility. User-facing
+ * language is grounded in the selected account signal and what the buyer
+ * actually says. No branch invents customer proof, benchmark data, buyer
+ * urgency, or causal impact that the module does not have as input.
  */
 
 export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "prep",
         num: "01",
-        label: "Prep thread",
+        label: "Prepare",
         verb: "hold",
         color: "var(--cc-orange)",
-        title: "Pick one real account before dialing.",
-        copy: "The call cannot carry generic market language.",
-        say: "Before you dial, name the account, the human, and the one pressure that makes this call worth interrupting.",
-        coach: "No account means no call.",
+        title: "Choose the account and reason for the call before dialing.",
+        copy: "Use a specific account event or signal rather than generic market language.",
+        say: "Before you dial, confirm the account, the contact, and the specific event or signal you plan to reference.",
+        coach: "Do not call until you can state why this account is relevant now.",
         replies: [
             {
                 id: "ready",
-                buyer: "Account and pressure are clear.",
-                reply: "Good. Move into the permission opener and keep the first line narrow.",
+                buyer: "The account and reason are clear.",
+                reply: "Proceed to the opener and keep the first line brief.",
                 next: "opener"
             },
             {
                 id: "not-ready",
-                buyer: "Still vague.",
-                reply: "Do not dial yet. Open Signal Console and pick the account with the most concrete pressure.",
+                buyer: "The reason is still vague.",
+                reply: "Review the account in Signal Console and choose a concrete signal or event before dialing.",
                 next: "prep"
             }
         ]
@@ -45,30 +38,30 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "opener",
         num: "02",
-        label: "Opening thread",
+        label: "Open the call",
         verb: "pull",
         color: "var(--cc-blue)",
-        title: "Get permission in the first breath.",
-        copy: "Own the interruption and give the buyer control.",
+        title: "Acknowledge the interruption and ask for a short window.",
+        copy: "Give the buyer a quick way to decide whether to continue.",
         say: "I know I am interrupting. Give me 20 seconds and you can decide if this is worth continuing.",
-        coach: "Do not explain the company yet. The first win is permission.",
+        coach: "Keep the opener short. Explain the reason for the call next.",
         replies: [
             {
                 id: "busy",
                 buyer: "I am busy.",
-                reply: "Fair. The short version: I am calling because [account] appears to be dealing with [pressure]. If I am wrong, I will disappear. If I am right, who owns it?",
+                reply: "Understood. The short version is that I am calling because of [pressure] at [account]. If that is not relevant to you, who owns it?",
                 next: "pressure"
             },
             {
                 id: "who",
                 buyer: "Who is this?",
-                reply: "[Your name] with [company]. I am calling about [pressure] at [account], not to give you a product pitch. Worth 20 seconds?",
+                reply: "[Your name] with [company]. I am calling because of [pressure] at [account]. Can I give you the 20-second version?",
                 next: "pressure"
             },
             {
                 id: "no-sales",
                 buyer: "No sales calls.",
-                reply: "Understood. I will skip the sales part. Is [pressure] already handled internally, or is it still creating noise?",
+                reply: "Understood. I will keep it brief. Is [pressure] something your team is dealing with, or should I close the loop?",
                 next: "pressure"
             }
         ]
@@ -76,30 +69,30 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "pressure",
         num: "03",
-        label: "Pressure thread",
+        label: "Understand the impact",
         verb: "tighten",
         color: "var(--cc-green)",
-        title: "Make the reason concrete.",
-        copy: "The call turns when the buyer hears their world, not your category.",
-        say: "The reason I called is that [pressure] usually shows up as wasted time, unclear ownership, or delayed revenue before it shows up as a tool problem. Which of those is closest?",
-        coach: "Force a concrete lane. Do not ask a big discovery question yet.",
+        title: "Ask where the issue shows up instead of assuming the impact.",
+        copy: "The account signal explains why you called; the buyer tells you whether it matters internally.",
+        say: "The reason I called is [pressure]. I do not know yet whether that is creating a problem for your team. If it is, where does it show up most: time, handoffs, rework, or delayed decisions?",
+        coach: "Let the buyer name the impact. Do not turn the account signal into an assumed pain point.",
         replies: [
             {
                 id: "pain",
                 buyer: "It is definitely costing time.",
-                reply: "That is the useful starting point. Roughly where does that time go: triage, handoffs, rework, or waiting on decisions?",
+                reply: "Where does most of that time go: triage, handoffs, rework, or waiting on decisions?",
                 next: "proof"
             },
             {
                 id: "soft",
                 buyer: "It is not terrible.",
-                reply: "That may be true. Is it harmless, or is it one of those things that stays tolerable until volume changes?",
+                reply: "Understood. What keeps it manageable today, and what would have to change before it became worth revisiting?",
                 next: "proof"
             },
             {
                 id: "none",
                 buyer: "Not a problem.",
-                reply: "Good to know. I will not force it. If that changes after [trigger], I am easy to find. For now I will step back.",
+                reply: "Good to know. I will not force it. If the situation changes later, I can follow up then.",
                 next: "exit"
             }
         ]
@@ -107,30 +100,30 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "proof",
         num: "04",
-        label: "Show-it's-real thread",
+        label: "Understand the current approach",
         verb: "trade",
         color: "var(--cc-orange)",
-        title: "Trade one real example for one admission.",
-        copy: "The example should create permission, not become a deck.",
-        say: "Teams dealing with [pressure] usually hit the same pattern — and either absorb it manually or redesign the workflow. We've seen both. Which is happening there?",
-        coach: "One real example. Then stop.",
+        title: "Find out how the buyer handles the issue today.",
+        copy: "Do not introduce a proof claim until you have real proof that matches the buyer's situation.",
+        say: "How are you handling [pressure] today: manually, through an existing vendor, or another way?",
+        coach: "If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current process.",
         replies: [
             {
                 id: "manual",
-                buyer: "We are absorbing it manually.",
-                reply: "That is exactly where this becomes expensive. If I showed you a way to reduce that manual load without replacing the whole stack, would that be worth a short working session?",
+                buyer: "We are handling it manually.",
+                reply: "What part of that manual work would be most useful to reduce, if any?",
                 next: "ask"
             },
             {
                 id: "vendor",
                 buyer: "We already have a vendor.",
-                reply: "Good. I am not assuming replacement. The question is whether the current vendor removes the manual load or just gives it a place to live.",
+                reply: "Understood. What is working well with the current vendor, and is there anything you still have to handle outside it?",
                 next: "ask"
             },
             {
                 id: "skeptical",
                 buyer: "I do not believe that.",
-                reply: "Fair. I would not either from a cold call. Let me make the claim smaller: can I send the benchmark and you tell me if it maps to your world?",
+                reply: "Fair. I do not want you to take a claim from a cold call on faith. I can send the specific evidence I have, if it is relevant, and you can decide whether it maps to your situation.",
                 next: "exit"
             }
         ]
@@ -138,30 +131,30 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "ask",
         num: "05",
-        label: "Ask thread",
+        label: "Ask for the next conversation",
         verb: "lock",
         color: "var(--cc-green)",
-        title: "Ask for the smallest real next move.",
-        copy: "The ask should match what the call built.",
-        say: "It sounds specific enough to look at together. Would it make sense to spend 20 minutes this week mapping whether the same pattern applies to [account]?",
-        coach: "Ask for time only after pressure and proof are both alive.",
+        title: "Make the meeting request specific to what the buyer said.",
+        copy: "The meeting request should follow from the issue or process the buyer just described.",
+        say: "It sounds specific enough to look at together. Would it make sense to spend 20 minutes this week on how you are handling this at [account] and whether there is anything useful for us to help with?",
+        coach: "Ask for time only after the buyer has confirmed a relevant issue or process to discuss.",
         replies: [
             {
                 id: "yes",
                 buyer: "Yes.",
-                reply: "Good. I will send a calendar hold with a tight agenda: the pressure, where it shows up, and whether there is enough value to keep going.",
+                reply: "Good. I will send a calendar hold with a focused agenda: the issue, where it shows up, and whether there is enough value to keep going.",
                 next: "post"
             },
             {
                 id: "send",
                 buyer: "Send me something.",
-                reply: "I can. I will send one short benchmark, not a brochure. What day should I follow up if it is relevant?",
+                reply: "I can. What information would be most useful, and what day should I follow up after you have had a chance to look at it?",
                 next: "post"
             },
             {
                 id: "not-now",
                 buyer: "Not now.",
-                reply: "Understood. Is this a bad quarter, wrong owner, or just not a priority?",
+                reply: "Understood. Is the timing bad, am I speaking with the wrong person, or is this simply not a priority?",
                 next: "exit"
             }
         ]
@@ -169,24 +162,24 @@ export const THREADS: ReadonlyArray<Thread> = [
     {
         id: "exit",
         num: "06",
-        label: "Exit thread",
+        label: "Close the call",
         verb: "release",
         color: "var(--cc-red)",
-        title: "Leave the room cleanly.",
-        copy: "A clean exit keeps the route alive later.",
-        say: "Makes sense. I will not force it. If [pressure] becomes visible again, I will send one useful note and stay out of your way.",
-        coach: "The exit should preserve credibility, not beg for attention.",
+        title: "End the call clearly and record any follow-up that was requested.",
+        copy: "Do not manufacture a future opportunity when the buyer has said no.",
+        say: "Understood. I will not force it. If the situation changes later, I can follow up then.",
+        coach: "Respect the answer and record only the follow-up the buyer actually agreed to.",
         replies: [
             {
                 id: "callback",
                 buyer: "Try me later.",
-                reply: "I will. What is the right window, and what should I reference so this does not restart cold?",
+                reply: "I will. What is the right time to follow up, and what should I reference so you have the context?",
                 next: "post"
             },
             {
                 id: "referral",
                 buyer: "Talk to someone else.",
-                reply: "Appreciate it. Who is closest to this pressure, and can I mention you pointed me there?",
+                reply: "Appreciate it. Who is closest to this issue, and can I mention that you pointed me to them?",
                 next: "post"
             },
             {
@@ -210,10 +203,7 @@ export function findReply(thread: Thread, replyId: string | null): Thread["repli
     return thread.replies.find((r) => r.id === replyId) ?? null;
 }
 
-/**
- * Resolve `reply.next` to an actual Thread when it points at a
- * ThreadId, or null when it points at "post" or is null.
- */
+/** Resolve reply.next to another thread, or null for post-call routing. */
 export function nextThreadFor(
     reply: Thread["replies"][number] | null
 ): Thread | null {
