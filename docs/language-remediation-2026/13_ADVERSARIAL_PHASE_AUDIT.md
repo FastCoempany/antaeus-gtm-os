@@ -3,17 +3,17 @@
 PR: #324  
 Branch: `language-remediation-v1`
 
-This audit deliberately assumes that prior completion claims may be wrong. Its purpose is to verify the language-remediation work against the actual PR, the source methodology, and the acceptance criteria rather than against prior progress notes.
+This audit assumes prior completion claims may be wrong. It verifies language-remediation work against the actual source model, generator behavior, tests, PR changed files, and acceptance criteria rather than against progress notes.
 
 ## Completion vocabulary
 
-From this point forward, every work item uses three separate states:
+Every work item uses three separate states:
 
-- **Decision complete** — the desired user-facing semantics/copy are defined in the remediation docs.
-- **Source implemented** — the highest correct source of truth is changed in the PR.
-- **Validated** — the changed source has passed relevant tests/typecheck and the regenerated rendered transcript confirms the intended language.
+- **Decision complete** — the desired semantics/copy are defined.
+- **Source implemented** — the highest relevant source of truth is changed in the PR, including any generator/prompt that can recreate the language.
+- **Validated** — relevant tests/typecheck/build pass and the regenerated rendered transcript confirms the intended language.
 
-A work item is **not complete** until all required states are satisfied.
+A work item is not complete until all required states are satisfied.
 
 ---
 
@@ -25,16 +25,67 @@ The analysis transport file used for the original corpus pass is:
 - size: `1,100,002 bytes`
 - SHA-256: `e24b88af10def00e9f9c85b31c5d5f8fb198ca62c77170a47be2778ac9f35cfc`
 
-The text file is a rendered transport of the preview-transcript system. It is authoritative for the baseline language analysis, not for implementation.
-
-The repo-owned reproducibility path remains:
+The text file is authoritative for the baseline language analysis, not implementation. The repo-owned reproducibility path remains:
 
 1. source code;
 2. `npm run build:transcript`;
 3. `npm run copy:inventory`;
-4. rendered-corpus audit.
+4. rendered-corpus audit;
+5. unchanged nine-dimension saturation score.
 
-The checksum above exists so the exact original baseline can be distinguished from later regenerated transcripts.
+---
+
+# Cross-cutting adversarial findings
+
+## 1. Directness had been confused with certainty
+
+The shared voice layer and several Briefing prompts treated uncertainty as a voice defect. Examples included doctrine such as “voice-of-no-confidence,” hard hedge-density failure, and a conflict-analysis instruction equivalent to “no might/could; the data either says it or it does not.”
+
+**Why this failed:** evidence can support a probability, association, or tentative interpretation without supporting a categorical conclusion. Removing uncertainty terms does not make the evidence stronger; it only makes the language sound more certain.
+
+**Course correction implemented:**
+
+- calibrated uncertainty such as `may`, `appears`, `suggests`, and `likely` is allowed when the evidence warrants it;
+- indirect rhetorical throat-clearing remains disallowed;
+- quality gates focus on evidence, confidence, citation validity, unsupported claims, and readability rather than banning uncertainty by count.
+
+Affected source includes the shared voice layer, Briefing synthesis/conflict prompts, quality gate, production Deno mirrors, enrichment prompt, and post-publication critic.
+
+## 2. Copy review exposed model-semantics defects
+
+Several approved rewrite phrases were themselves too strong once the underlying calculation was inspected. The remediation therefore follows the model, not the earlier prose decision.
+
+Examples:
+
+- Deal Workspace does not predict a loss date; it calculates a deterministic risk score from inactivity, next-step, and close-date factors.
+- Quota Workback “pace” is not an extrapolation of daily activity; its displayed projection is closed-won YTD plus stage-weighted open pipeline.
+- Quota benchmarks are selected by ACV band, not “teams your size.”
+- Quota input `days` is working days per month, not sales-cycle length.
+- Prospecting Desk stores target criteria but does not run a live company search.
+- Settings connection verification proves access/row-count reads, not complete synchronization.
+
+**Course correction:** user-facing language now describes the actual calculation or capability instead of preserving an earlier copy choice that did not match source behavior.
+
+## 3. Generators were a larger risk than static labels
+
+Several rooms had relatively clean labels while their generators still recreated the deprecated dialect or invented evidence.
+
+Examples found and corrected:
+
+- Future Autopsy narrative generation used inevitability/causal language.
+- Founding GTM synthesis converted small-sample association into “what wins/closes.”
+- Outbound generated comparable-company proof, payback claims, buyer priorities, and attachments that were not supplied as inputs.
+- Cold Call’s legacy `proof` step asserted “we’ve seen both,” cost escalation, and a benchmark without a proof source.
+- LinkedIn scripts asserted generic operating patterns and fixed channel performance thresholds with no evidence source.
+- Briefing synthesis and critic layers enforced declarative overcertainty.
+
+**Rule going forward:** every user-visible generator, prompt, critic, mirror, and template is part of the language surface. Static TSX replacement alone is insufficient.
+
+## 4. Stable internal keys are not the same as user-facing ontology
+
+Internal enum/field keys such as Outbound `Temperature`, Cold Call thread id `proof`, LinkedIn compatibility keys such as `add_air_cover`, and route/component names may remain when renaming them would create migration risk and they do not teach output language.
+
+The adversarial test is whether the identifier is rendered to the user or instructs a generator to reproduce the retired dialect. If not, compatibility can take precedence.
 
 ---
 
@@ -43,208 +94,253 @@ The checksum above exists so the exact original baseline can be distinguished fr
 ## Phase 1 — corpus + methodology
 
 **Decision status: PASS**  
-**Implementation status: PASS for methodology/tooling source**  
+**Source status: PASS for methodology/tooling**  
 **Validation status: PARTIAL**
 
-What is sound:
+What remains sound:
 
-- The rendered walkthrough is correctly treated as the language-analysis corpus.
-- The repo is correctly treated as the implementation source.
-- Generated transcript output is explicitly prohibited as an implementation target.
-- The original analysis totals are recorded: 5,627 rendered occurrences / 2,780 unique strings.
-- The unchanged nine-dimension rubric and <=20/100 acceptance ceiling are preserved.
+- rendered walkthrough = language-analysis corpus;
+- repo source = implementation target;
+- generated transcript is not edited directly;
+- unchanged nine-dimension rubric and <=20/100 ceiling are preserved;
+- baseline TXT fingerprint is recorded.
 
-Adversarial gaps:
-
-- The exact external TXT snapshot was not fingerprinted in the repo. This audit adds the SHA-256 above.
-- The new inventory builder has not yet been run against the regenerated post-remediation transcript, so reproducibility is designed but not yet demonstrated on the changed branch.
-
-Verdict: methodology is sound; final validation remains pending.
+Remaining gap: the post-remediation transcript has not yet been regenerated and audited.
 
 ## Phase 2 — shared semantic architecture
 
 **Decision status: PASS**  
-**Source implementation status: SUBSTANTIAL / NOT VALIDATED**
+**Source status: SUBSTANTIAL**  
+**Validation status: PENDING**
 
-Present in PR:
+Implemented source now includes:
 
-- Workspace map / former Ground surface
-- room functional descriptions
-- Recent Activity / former Live Edge surface
-- readiness labels/explanations
-- Birdseye recommendation wording
-- account-priority terminology in Signal Console
+- Workspace map / Ground user-facing language;
+- Recent Activity / Live Edge user-facing language;
+- Readiness labels, evidence/gap copy, blockers, and tests;
+- Birdseye explanations;
+- shared operator-help registry;
+- shared voice document and strict string validator;
+- Deno voice mirror.
 
-Adversarial observations:
-
-- Stable internal identifiers such as `GroundLine`, `openGround`, routing params, and model fields may remain when changing them would create needless migration risk. This is consistent with the plan.
-- User-facing language must still be checked in the regenerated transcript; source diffs alone cannot establish completion.
-- `copy:audit` currently scans source comments and implementation identifiers as well as user-facing copy. Tier-2 warnings will therefore contain intentional stable internals and require manual classification.
-
-Verdict: source migration is materially underway but not validated complete.
+Adversarial finding: the shared voice layer itself was a root cause of forced certainty. It has been course-corrected, but regenerated-output validation is still required.
 
 ## Phase 3 — highest-saturation rooms
 
 **Decision status: PASS**  
-**Source implementation status: PARTIAL**
+**Source status: SUBSTANTIAL**  
+**Validation status: PENDING**
 
 Implemented at source:
 
-- Welcome
-- Dashboard
-- ICP Studio
-- Readiness shared surface
-- Future Autopsy primary UI + cause labels
-- parts of Briefing
+- Welcome;
+- Dashboard;
+- ICP Studio;
+- Readiness shared surface;
+- Future Autopsy UI, cause layer, and narrative generator;
+- Briefing primer, samples, rails, enrichment, synthesis, conflict analysis, quality gates, production mirrors, and post-publication critic.
 
-Critical correction discovered:
+Adversarial findings already corrected:
 
-- The prior implementation ledger incorrectly marked `src/future-autopsy/lib/autopsy-data.ts` as migrated. That file is **not present in the PR changed-file list**. The earlier write did not land. Future Autopsy's document/narrative generator therefore remains pending.
-- Briefing has several migrated rails and sample analyses, but the live generation path and all visible section labels have not been proven complete.
+- Future Autopsy generator was once falsely marked complete after a failed write. It was later actually migrated and contract compatibility checked.
+- Briefing’s generator stack explicitly taught overcertainty and fragmentary “sharp operator” prose; that doctrine has been rewritten.
+- Briefing post-publication critic read `label` while generated moves use `action`; this schema mismatch was fixed.
 
-Verdict: Phase 3 is **not source-complete**. Future Autopsy generator and remaining Briefing generator/live copy must be completed and validated.
+Remaining targeted check: verify Future Autopsy’s final UI renders the generator’s specific evidence sentence rather than a generic placeholder.
 
 ## Phase 4 — strategic / diagnostic rooms
 
 **Decision status: PASS**  
-**Source implementation status: PARTIAL**
+**Source status: SUBSTANTIAL**  
+**Validation status: PENDING**
 
-Implemented at source:
+Implemented source includes:
 
-- Territory Architect
-- Signal Console
-- Getting to Signed
-- Pilot Desk
-- Call in a Favor
-- Founding GTM reader/taxonomy
+- Territory Architect;
+- Signal Console;
+- Getting to Signed;
+- Pilot Desk;
+- Call in a Favor;
+- Founding GTM reader/taxonomy and synthesis engine.
 
-Still incomplete:
-
-- Founding GTM synthesis prose remains capable of reproducing causal overstatement unless its generator/readers are changed.
-- The existence of plain labels in a room does not prove every interaction state is clean; the regenerated walkthrough remains the acceptance surface.
-
-Verdict: substantial implementation, not complete.
+Critical adversarial correction: Founding GTM previously converted observed frequencies, keyword overlap, and historical associations into causal rules such as what “wins,” “closes,” or should be taught. The synthesis now reports sample size, observed association, limitations, and a hypothesis/recommendation to test.
 
 ## Phase 5 — execution / utility rooms
 
 **Decision status: PASS**  
-**Source implementation status: NOT STARTED in PR #324 at time of this audit**
+**Primary source status: IMPLEMENTED**  
+**Validation status: PENDING**
 
-The following rooms are not present in the current PR changed-file list:
+### Prospecting Desk
 
-- Prospecting Desk
-- Outdoors Events
-- Outbound Studio
-- Cold Call Studio
-- LinkedIn Playbook
-- Discovery Studio
-- Deal Workspace
-- Quota Workback
-- Settings
+Finding: the old surface implied the room searched for companies; source behavior only stores target criteria and manually added companies.
 
-Any prior language implying these had already been source-migrated was incorrect.
+Correction: Step 1 now saves target criteria and explicitly says the room does not run a live company search. Funnel/shipping/loose metaphors were removed from visible/generated status copy.
 
-Verdict: approved rewrite decisions exist; source implementation remains to do.
+### Outdoors Events
+
+Finding: the old surface used orbit/ring metaphors and implied buyer attendance.
+
+Correction: direct/adjacent/indirect tiers now describe category/buyer-context relevance. The discovery prompt forbids claiming a buyer will attend without source support and requires real current event pages.
+
+### Outbound Studio
+
+Finding: trigger and generator layers invented buyer motives and evidence: board pressure, willingness to change, comparable-company outcomes, payback periods, attachments, and customer proof.
+
+Correction: trigger descriptions now state observable events; generator uses only supplied account/contact/stage/trigger/live-signal/question inputs; tests explicitly reject fabricated proof/outcomes.
+
+### Cold Call Studio
+
+Finding: the legacy `proof` step manufactured proof and benchmark claims without an evidence source.
+
+Correction: internal id retained for compatibility, visible step now asks how the buyer handles the issue today. Verified examples may be used only when real evidence exists. Outcome grouping was also corrected: voicemail/no-answer are not mislabeled “no follow-up.”
+
+### LinkedIn Playbook
+
+Finding: recommendation logic inferred “trust,” “warmth,” and “air cover,” and asserted fixed 35% acceptance / 15% reply thresholds with no source.
+
+Correction: recommendations now depend on recorded facts—current prioritized signal, connection request, DM, recent outbound touch. Fixed thresholds were removed. Scripts/templates no longer assert generic patterns or fabricated benchmarks.
+
+### Discovery Studio
+
+Finding: the framework content was mostly usable, but the shell used private/dramatic ontology: truths, reading, lens, recover & skip, won the room, locked, can hang up.
+
+Correction: wrapper language is now call status, captured facts, buyer role, suggested response, recovery prompts, post-call routing, and next-step completeness. Underlying framework content was deliberately preserved.
+
+### Deal Workspace
+
+Finding: UI and comments said deals “will slip this week,” but the engine computes a risk score rather than a loss-time forecast.
+
+Correction: model, comments, tests, and UI now describe risk factors/bands. Score thresholds are unchanged.
+
+### Quota Workback
+
+Findings:
+
+- year-end “pace” projection is closed-won YTD + stage-weighted pipeline, not activity-rate extrapolation;
+- benchmark selected by ACV band, not team size;
+- `days` input means working days/month, not deal-cycle length;
+- quality labels sounded like holistic readiness despite measuring benchmark alignment.
+
+Corrections: surface and model labels now state the formula, benchmark basis, and input meaning.
+
+### Settings
+
+Findings:
+
+- connection verification was mislabeled “everything’s in sync”;
+- export was called a full workspace copy although selected tables can fail and many workspace-scoped tables are outside the export list;
+- delete was called “everything” although identity records and several workspace-scoped tables are not deleted.
+
+Correction: visible copy now states the current scope precisely.
+
+**Open product-integrity blocker:** `exportCloudWorkspace` and `deleteCloudWorkspace` are not comprehensive relative to the full `DataClient` surface, and export/delete scopes are not identical. Do not mark Settings data controls validated until this is either expanded intentionally or explicitly accepted as a scoped control.
 
 ## Phase 6 — generated language + internal doctrine
 
 **Specification status: PASS**  
-**Source implementation status: PARTIAL / MOSTLY PENDING**
+**Source status: SUBSTANTIAL**  
+**Validation status: PENDING**
 
-What exists:
+Completed adversarial implementation includes:
 
-- generated-language rules
-- epistemic output schema
-- internal-doctrine rewrite rules
-- source-level comment cleanup in some migrated modules
+- shared uncertainty doctrine;
+- Future Autopsy narrative generator;
+- Founding GTM synthesis;
+- Briefing enrichment/synthesis/conflict/critic layers and Deno mirrors;
+- Outbound generator;
+- Cold Call response data;
+- LinkedIn recommendation/scripts/cues;
+- Outdoors discovery prompt.
 
-What remains:
-
-- Future Autopsy narrative generator
-- Founding GTM synthesis engine
-- remaining Briefing live generators/templates
-- repo-wide search of prompts/templates/internal product doctrine outside already changed files
-
-Verdict: specification is complete; implementation is not.
+Remaining requirement: repo-wide residual prompt/template/doctrine sweep, especially outside `src/` and in independently deployed edge functions.
 
 ## Phase 7 — source tracing + implementation
 
-**Status: IN PROGRESS**
+**Status: IN PROGRESS — now validation-led**
 
-Course correction:
+Primary room coverage is broad. Remaining work is no longer “implement Batch 03”; it is:
 
-- Do not use broad progress language such as "the phase is complete" when only the copy decisions are complete.
-- Every source item must be checked against the PR changed-file list.
-- Generator changes require contract compatibility review before being marked source-implemented.
-- Stable internal enum/field names should remain unless the language itself is user-facing or teaches future generators to reproduce the deprecated dialect.
+- residual source/doctrine sweep;
+- targeted semantic blockers;
+- tests/typecheck/CI;
+- linter scope/CI integration;
+- regenerated transcript and unchanged re-score.
 
 ## Phase 8 — copy linter + CI
 
 **Tooling status: PARTIAL**  
 **CI gate status: NOT IMPLEMENTED**
 
-What exists:
+Existing:
 
-- `tools/language-remediation/copy-audit.js`
-- `tools/language-remediation/build-copy-inventory.js`
-- npm scripts `copy:audit` and `copy:inventory`
+- `tools/language-remediation/copy-audit.js`;
+- `tools/language-remediation/build-copy-inventory.js`;
+- npm scripts `copy:audit` and `copy:inventory`.
 
 Adversarial gaps:
 
-1. `copy:audit` is **not wired into CI**.
-2. Current targets are `src/` and `preview-transcript/`; this may miss prompt/template sources outside `src/`.
-3. Tier-1 search is simple substring matching and can flag comments/internal documentation as failures; that is useful for doctrine cleanup but noisy as a user-facing-copy gate.
-4. Tier-2 warnings do not fail CI, so manual review is mandatory.
-5. The checked-in `preview-transcript/` is stale until `build:transcript` is rerun; a copy audit before regeneration is not final evidence.
-6. No current PR status checks have posted for the head commit at the time of this audit.
-
-Required course correction:
-
-- expand/confirm scan roots for all user-visible prompt/template sources;
-- add a CI job after source migration stabilizes;
-- regenerate the transcript before treating audit output as acceptance evidence;
-- preserve a small explicit allowlist for stable internal identifiers only when justified.
+1. `copy:audit` is not yet wired into CI.
+2. Current scan roots must be confirmed/expanded to include user-visible prompt/template sources outside `src/`, including relevant Supabase edge-function source.
+3. Simple substring matching can flag comments/internal identifiers; explicit allowlisting/manual classification is required.
+4. Tier-2 warnings remain manual-review items.
+5. Checked-in rendered transcript is stale until regeneration.
+6. Green ordinary CI alone will not constitute language validation.
 
 ## Phase 9 — regenerated transcript + saturation re-score
 
 **Status: NOT STARTED**
 
-This phase remains the actual acceptance gate. No implementation phase is complete until the rendered product is regenerated and re-scored using the unchanged rubric.
+This remains the final acceptance gate. No source-implemented phase is promoted to validated until the rendered product is regenerated and re-scored using the unchanged rubric.
 
 ---
 
 # Adversarial quality gates for every migrated room
 
-A room can be promoted from `source implemented` to `validated` only when all of the following are true:
+A room can be promoted from `source implemented` to `validated` only when all applicable items are true:
 
-1. Its actual source file(s) are present in the PR.
-2. Standard business/sales concepts are not renamed merely for brand voice.
-3. Functional meaning does not depend on metaphor.
-4. Metadiscursive framing is removed when a direct proposition works.
-5. Aphoristic cadence does not carry explanatory meaning.
-6. Facts, calculations, assessments, forecasts, and recommendations are distinguishable where applicable.
-7. Analytical claims expose supporting evidence.
-8. Correlation is not rewritten as causation.
-9. CTAs predict the resulting action.
-10. Stable internal IDs/enums are not gratuitously migrated.
-11. Relevant tests/typecheck pass.
-12. The regenerated preview transcript reflects the intended language in room-at-rest and interaction states.
-13. No Tier-1 deprecated user-facing language remains.
-14. Tier-2 warnings are manually classified.
+1. Actual source file(s) are present in the PR.
+2. Generator/prompt sources that can recreate the language are also migrated.
+3. Standard business/sales concepts are not renamed merely for brand voice.
+4. Functional meaning does not depend on metaphor.
+5. Metadiscursive framing is removed where a direct proposition works.
+6. Aphoristic cadence does not carry explanatory meaning.
+7. Facts, calculations, assessments, forecasts, and recommendations are distinguishable.
+8. Model labels match what the underlying calculation actually computes.
+9. Analytical claims expose supporting evidence or limitations.
+10. Correlation is not rewritten as causation.
+11. Uncertainty is calibrated rather than prohibited.
+12. CTAs predict the resulting action.
+13. Stable internal IDs/enums are not gratuitously migrated.
+14. Relevant tests/typecheck/build pass.
+15. Production mirrors match browser/tested source where duplication is intentional.
+16. Regenerated preview transcript reflects intended room-at-rest and interaction-state language.
+17. No Tier-1 deprecated user-facing language remains.
+18. Tier-2 warnings are manually classified.
+
+---
+
+# Current validation blockers
+
+1. **Ordinary CI has not yet been verified on the current PR head.**
+2. **Copy audit is not wired into CI.**
+3. **Rendered transcript has not been regenerated.**
+4. **Nine-dimension saturation re-score has not been rerun.**
+5. **Settings export/delete scope is not comprehensive relative to the workspace-scoped data model.**
+6. **Future Autopsy evidence-row rendering needs a final specific-evidence check.**
+7. **Residual prompt/template/doctrine sweep remains.**
 
 ---
 
 # Immediate remediation order after this audit
 
-1. Correct the implementation ledger and PR status language.
-2. Finish Future Autopsy narrative generator at the stable `AutopsyDoc` contract.
-3. Finish Founding GTM synthesis prose.
-4. Finish Briefing live generators/templates and visible labels.
-5. Implement Phase 5 execution/utility rooms.
-6. Run repo-wide internal-doctrine/prompt sweep.
-7. Harden `copy:audit` scope and wire it into CI.
-8. Run tests/typecheck/CI.
-9. Regenerate preview transcript and copy inventory.
-10. Run copy audit and manually review Tier-2 warnings.
-11. Rerun the exact nine-dimension saturation test.
-12. Iterate until <=20/100; keep PR draft until then.
+1. Keep the implementation ledger truthful under the three-state model.
+2. Inspect current PR-head CI, tests, typecheck, and workflow logs.
+3. Fix failures revealed by CI without restoring deprecated language merely to satisfy stale tests.
+4. Run the residual prompt/template/doctrine sweep.
+5. Resolve targeted blockers: Future Autopsy evidence rendering and Settings data-control scope decision.
+6. Expand/confirm `copy:audit` scan roots and wire the gate into CI.
+7. Run `build:transcript`, `copy:inventory`, and `copy:audit`.
+8. Manually classify Tier-2 warnings.
+9. Rerun the exact nine-dimension saturation test.
+10. Iterate until <=20/100; keep PR draft until all acceptance gates pass.
