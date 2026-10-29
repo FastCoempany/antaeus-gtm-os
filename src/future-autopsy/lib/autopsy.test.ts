@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { projectHorizonDays,
+import {
+    projectHorizonDays,
     autopsyUniverseScore,
     generateAutopsy,
     killSwitchFor,
@@ -34,8 +35,6 @@ describe("generateAutopsy", () => {
         });
         const doc = generateAutopsy(v);
         expect(doc.deal.id).toBe("d");
-        // The horizon is projected per deal now (risk-scaled, 7-90) —
-        // not the flat prefs constant.
         expect(doc.horizonDays).toBeGreaterThanOrEqual(7);
         expect(doc.horizonDays).toBeLessThanOrEqual(90);
         expect(doc.horizonDays).toBe(90 - Math.round(v.riskScore));
@@ -48,7 +47,7 @@ describe("generateAutopsy", () => {
         expect(doc.winStory.length).toBeGreaterThan(0);
     });
 
-    it("clips lose/win story to <= 700 chars", () => {
+    it("clips assessment stories to <= 700 chars", () => {
         const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
             now: NOW,
             storage: STORAGE
@@ -58,7 +57,7 @@ describe("generateAutopsy", () => {
         expect(doc.winStory.length).toBeLessThanOrEqual(700);
     });
 
-    it("varies the lose lead by stage + top cause", () => {
+    it("varies the risk assessment by stage + top cause", () => {
         const negVitals = computeVitals(
             deal({ stage: "negotiation", updated_at: daysAgo(20) }),
             { now: NOW, storage: STORAGE }
@@ -69,7 +68,6 @@ describe("generateAutopsy", () => {
         );
         const negDoc = generateAutopsy(negVitals);
         const discDoc = generateAutopsy(discVitals);
-        // The two should pull different stage leads.
         expect(negDoc.loseStory).not.toBe(discDoc.loseStory);
     });
 
@@ -89,25 +87,37 @@ describe("generateAutopsy", () => {
         const doc = generateAutopsy(v, { horizonDays: 90 });
         expect(doc.horizonDays).toBe(90);
     });
+
+    it("keeps the modeled horizon separate from narrative certainty", () => {
+        const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
+            now: NOW,
+            storage: STORAGE
+        });
+        const doc = generateAutopsy(v);
+        expect(doc.horizonDays).toBeGreaterThan(0);
+        expect(doc.loseStory).not.toMatch(/^\d+ days later/i);
+        expect(doc.loseStory).not.toMatch(/inevitable/i);
+        expect(doc.winStory).not.toMatch(/you won because/i);
+    });
 });
 
 describe("killSwitchFor", () => {
-    it("recommends close when low value + critically stale + weak qual + high risk", () => {
+    it("recommends considering close when low value + critically stale + weak qual + high risk", () => {
         const v = computeVitals(
             deal({ value: 10000, updated_at: daysAgo(45) }),
             { now: NOW, storage: STORAGE }
         );
         const result = killSwitchFor(v);
-        expect(result).toMatch(/recommend closing/i);
+        expect(result).toMatch(/consider closing/i);
     });
 
-    it("does not recommend close when value is high", () => {
+    it("continues work when value is high", () => {
         const v = computeVitals(
             deal({ value: 200000, updated_at: daysAgo(45) }),
             { now: NOW, storage: STORAGE }
         );
         const result = killSwitchFor(v);
-        expect(result).toMatch(/not there yet/i);
+        expect(result).toMatch(/continue working/i);
     });
 });
 
@@ -189,28 +199,28 @@ describe("rankAutopsyUniverse", () => {
 });
 
 describe("projectHorizonDays", () => {
-    it("scales the window off the risk score, clamped 7-90", () => {
+    it("scales the review window off the risk score, clamped 7-90", () => {
         expect(projectHorizonDays({ riskScore: 30 })).toBe(60);
         expect(projectHorizonDays({ riskScore: 80 })).toBe(10);
         expect(projectHorizonDays({ riskScore: 95 })).toBe(7);
         expect(projectHorizonDays({ riskScore: 2 })).toBe(88);
     });
 
-    it("a real close date caps the countdown", () => {
+    it("a real close date caps the review window", () => {
         const now = new Date("2026-07-10T12:00:00Z");
         expect(
             projectHorizonDays({ riskScore: 30, closeDate: "2026-07-20" }, 45, now)
         ).toBe(10);
     });
 
-    it("a close date inside the week wins over the 7-day floor", () => {
+    it("a close date inside the week overrides the 7-day risk floor", () => {
         const now = new Date("2026-07-10T12:00:00Z");
         expect(
             projectHorizonDays({ riskScore: 30, closeDate: "2026-07-13" }, 45, now)
         ).toBe(3);
     });
 
-    it("a deal past its close date is inside its final week", () => {
+    it("a deal past its close date is inside the final review week", () => {
         const now = new Date("2026-07-10T12:00:00Z");
         expect(
             projectHorizonDays({ riskScore: 30, closeDate: "2026-07-01" }, 45, now)
@@ -220,15 +230,5 @@ describe("projectHorizonDays", () => {
     it("falls back when the risk score isn't usable", () => {
         expect(projectHorizonDays({ riskScore: 0 })).toBe(DEFAULT_PREFS.autopsyHorizonDays);
         expect(projectHorizonDays({ riskScore: Number.NaN }, 33)).toBe(33);
-    });
-
-    it("re-times the authored story to the projected countdown", () => {
-        const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
-            now: NOW,
-            storage: STORAGE
-        });
-        const doc = generateAutopsy(v);
-        expect(doc.loseStory.startsWith(`${doc.horizonDays} days later`)).toBe(true);
-        expect(doc.loseStory.startsWith("45 days later")).toBe(doc.horizonDays === 45);
     });
 });
