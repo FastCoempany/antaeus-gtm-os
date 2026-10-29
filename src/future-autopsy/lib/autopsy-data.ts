@@ -2,34 +2,36 @@ import type { CauseId, Chapter, CountermeasureTask, WinCondition } from "./types
 import type { ComputedVitals } from "./vitals";
 
 /**
- * Phase 4 / Room 4 Wave 3 — narrative + countermeasure data.
+ * Future Autopsy narrative and corrective-action data.
  *
- * Faithful port of the legacy CHAPTERS / WMAP / WTEXT / TASKS /
- * STAGE_LEADS / CAUSE_LEADS / STAGE_WIN_LEADS objects from
- * `app/future-autopsy/index.html` lines 1728-1815. The narrative copy
- * is part of the room's mind (canon §4.14 — must not be flattened).
+ * Stable cause IDs, win-condition IDs, task IDs, and scoring behavior are
+ * preserved. User-facing language separates observed conditions from risk
+ * assessment and recommendation instead of presenting a predicted loss as
+ * inevitable or claiming that one recorded condition caused an outcome.
  */
 
-// ─── Chapters: cause → narrative line ───────────────────────────────────
+// ─── Chapters: cause → observed condition / assessment ─────────────────
 
 export const CHAPTERS: Readonly<Record<CauseId, string>> = {
-    no_nextstep: "Calendar ambiguity turned every follow-up into a maybe.",
-    stale_thread: "Silence signaled low priority internally.",
-    no_champion: "Without a champion, you got parked in committee.",
-    champion_weak: "Your internal contact could not force the room.",
-    no_eb: "Budget authority stayed invisible until it was too late.",
-    no_process: "Unknown steps multiplied slippage and rework.",
-    impact_not_real: "Without quantified impact, urgency never materialized.",
-    usecase_blurry: "Stakeholders did not align on what success meant.",
+    no_nextstep: "No dated next step is recorded.",
+    stale_thread: "No recent buyer activity is recorded.",
+    no_champion: "No confirmed champion is recorded.",
+    champion_weak:
+        "A champion is named, but their authority or agreed internal actions are not yet clear.",
+    no_eb: "No economic buyer or final budget owner is recorded.",
+    no_process: "Decision steps and owners are not fully recorded.",
+    impact_not_real: "No quantified business impact is recorded.",
+    usecase_blurry: "The primary use case or success scope is not specific enough.",
     competition_unknown:
-        "You fought an invisible opponent and lost narrative control.",
-    stage_stuck: "Elapsed time became a proxy for hidden no.",
+        "The competing alternative or status quo is not recorded.",
+    stage_stuck:
+        "The deal has remained in the current stage longer than the configured threshold.",
     poc_no_criteria:
-        "The pilot produced activity, not a result the buyer's boss could act on.",
+        "Pilot success criteria or readout ownership are not fully defined.",
     single_threaded:
-        "One contact got busy and the entire deal went dark.",
+        "The deal depends on one active contact.",
     next_step_overdue:
-        "The overdue step signaled the deal had already slipped."
+        "The recorded next step is overdue."
 };
 
 export function chapterFor(cause: CauseId): Chapter | null {
@@ -38,7 +40,7 @@ export function chapterFor(cause: CauseId): Chapter | null {
     return { cause, title: cause, story };
 }
 
-// ─── Win conditions: cause → mirror win id + text ───────────────────────
+// ─── Corrected conditions: cause → condition id + text ─────────────────
 
 export const WMAP: Readonly<Record<CauseId, string>> = {
     no_nextstep: "dated_nextstep_set",
@@ -57,37 +59,40 @@ export const WMAP: Readonly<Record<CauseId, string>> = {
 };
 
 export const WTEXT: Readonly<Record<string, string>> = {
-    dated_nextstep_set: "Dated next step is set and accepted by both sides.",
-    eb_engaged: "Economic buyer joined and confirmed budget owner.",
-    process_mapped: "Decision process is mapped with owner and steps.",
-    momentum_restored: "Thread was touched and calendar momentum restored.",
-    champion_confirmed: "Champion role and accountability are explicit.",
-    impact_quantified: "Impact is quantified in business terms.",
-    usecase_clarified: "Use case is clear and scoped.",
+    dated_nextstep_set: "A dated next step is set and accepted by both sides.",
+    eb_engaged: "The economic buyer is identified and the budget path is confirmed.",
+    process_mapped: "The decision process is mapped with named steps and owners.",
+    momentum_restored: "Recent buyer activity and a dated next step are recorded.",
+    champion_confirmed: "Champion role and agreed internal actions are explicit.",
+    impact_quantified: "Business impact is quantified.",
+    usecase_clarified: "The primary use case and scope are explicit.",
     poc_success_criteria_locked:
-        "PoC success criteria and readout owner are defined.",
-    competition_named: "Competitor + status quo + our angle are explicit.",
-    thread_reactivated: "Silence ended with a concrete exchange.",
-    champion_strengthened: "Champion gained authority and internal pull.",
+        "Pilot success criteria and the readout owner are defined.",
+    competition_named: "The competing alternative or status quo is recorded.",
+    thread_reactivated: "Recent buyer activity is recorded.",
+    champion_strengthened:
+        "Champion authority and agreed internal actions are documented.",
     multi_threaded:
-        "Three or more stakeholders are engaged and driving internally.",
+        "Three or more stakeholders have defined roles and recent engagement.",
     nextstep_refreshed:
-        "Overdue next step was resolved with a new commitment."
+        "The overdue next step has been replaced with a new dated commitment."
 };
 
-// ─── Stage / cause story leads ──────────────────────────────────────────
+// ─── Stage / cause assessment leads ─────────────────────────────────────
 
 export const STAGE_LEADS: Readonly<Record<string, string>> = {
     discovery:
-        "45 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing.",
+        "Current risk is elevated when the use case, quantified impact, internal ownership, or next step is incomplete.",
     evaluation:
-        "45 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing.",
-    poc: "45 days later, the PoC ended with activity but no decision because success criteria were never locked. Teams debated interpretation, and without a clear owner, procurement had no reason to accelerate.",
+        "Current risk is elevated when the use case, quantified impact, internal ownership, or next step is incomplete.",
+    poc:
+        "Current risk is elevated when pilot success criteria, result ownership, or the approval path are not fully defined.",
     negotiation:
-        "45 days later, legal and procurement widened the blast radius because the decision path and budget owner were never tightly controlled. Each unanswered dependency created a new delay.",
-    verbal: "45 days later, the verbal commit dissolved because paper process wasn't pre-cleared. Legal found new issues, procurement re-scoped, and the urgency that closed the deal evaporated.",
+        "Current risk is elevated when legal, procurement, budget ownership, or the decision path contain unresolved dependencies.",
+    verbal:
+        "A verbal commitment still carries risk when contract, legal, procurement, or approval steps are not fully cleared.",
     _default:
-        "45 days later, momentum faded because a result worth acting on never landed early enough to force a committed buying process."
+        "Current deal risk is elevated by the recorded conditions below."
 };
 
 export const CAUSE_LEADS: Readonly<
@@ -95,40 +100,43 @@ export const CAUSE_LEADS: Readonly<
 > = {
     no_champion: {
         discovery:
-            "45 days later, you lost because no one inside the building carried your deal forward. Without an internal champion, your emails went from \"interesting\" to \"low priority\" to silence.",
+            "No confirmed champion is recorded. Without an identified internal owner, there is less evidence that someone is advancing the purchase between meetings.",
         negotiation:
-            "45 days later, the deal died in procurement because your champion couldn't defend the business case when pushback came. Without someone with authority fighting for you internally, the committee defaulted to no."
+            "A confirmed champion is not recorded during negotiation. That increases risk because no internal owner is documented for resolving approvals or pushback."
     },
     no_eb: {
         negotiation:
-            "45 days later, legal sent the contract back with questions nobody could answer because the budget owner was never in the room. The person who could say yes never heard the pitch.",
-        poc: "45 days later, the pilot results sat in an email chain because the person who controlled the budget never saw them. Activity without authority is just theater."
+            "No economic buyer is recorded during negotiation, so budget ownership and final approval remain unclear.",
+        poc:
+            "Pilot results do not yet have a recorded economic buyer or budget owner."
     },
     single_threaded: {
         discovery:
-            "45 days later, your one contact went on PTO, got reassigned, or simply got busy. The deal had no backup path through the organization, so it went dark permanently.",
+            "The deal currently depends on one active contact. That increases risk if the contact becomes unavailable or disengages.",
         negotiation:
-            "45 days later, your single contact couldn't push the deal through a multi-stakeholder approval process alone. Every new reviewer was a cold start."
+            "The deal currently depends on one active contact during a multi-stakeholder approval process."
     },
     stale_thread: {
         discovery:
-            "45 days later, the silence that started as \"they're busy\" became permanent. Without regular cadence, your deal lost its slot in their priority stack and never recovered.",
+            "No recent buyer activity is recorded. The longer that inactivity continues, the less current evidence there is that the opportunity remains a priority.",
         _default:
-            "45 days later, the thread went cold because no one on either side forced the next conversation. Silence became the decision."
+            "No recent buyer activity is recorded. Continued inactivity increases loss risk."
     }
 };
 
 export const STAGE_WIN_LEADS: Readonly<Record<string, string>> = {
     discovery:
-        "45 days later, you won because you forced a concrete use case, quantifiable impact, and a real next step cadence before enthusiasm decayed.",
+        "Risk decreases when the use case, quantified impact, internal owner, and dated next step are explicit.",
     evaluation:
-        "45 days later, you won because you forced a concrete use case, quantifiable impact, and a real next step cadence before enthusiasm decayed.",
-    poc: "45 days later, you won because the PoC had explicit success criteria, an owner, and an executive readout that translated evidence into approval momentum.",
+        "Risk decreases when the use case, quantified impact, internal owner, and dated next step are explicit.",
+    poc:
+        "Risk decreases when success criteria, result ownership, executive review, and the next decision are explicit.",
     negotiation:
-        "45 days later, you won because decision process and budget authority were mapped early, reducing legal/procurement drag and preserving end-game momentum.",
-    verbal: "45 days later, you won because the paper process was pre-cleared before verbal commit, compressing legal review to days instead of weeks.",
+        "Risk decreases when decision steps, budget authority, legal and procurement dependencies, and owners are documented.",
+    verbal:
+        "Risk decreases when the remaining contract, legal, procurement, and approval steps are explicit and owned.",
     _default:
-        "45 days later, you won because the pilot showed a real result early and decision risk was surfaced before it became terminal."
+        "Risk decreases as the missing evidence, ownership, and next-step gaps are resolved."
 };
 
 export function stageLead(stageRaw: string, topCauseId: CauseId | ""): string {
@@ -144,11 +152,12 @@ export function stageWinLead(stageRaw: string): string {
     return STAGE_WIN_LEADS[stageRaw] ?? STAGE_WIN_LEADS._default!;
 }
 
-// ─── Win-condition extraction ──────────────────────────────────────────
+// ─── Corrected-condition extraction ────────────────────────────────────
 
 /**
- * Map the top causes onto unique win conditions; pad with generic
- * momentum-restored entries until length ≥ 5 (matches legacy).
+ * Map top causes onto unique corrected conditions; pad with generic
+ * recent-activity/ownership entries until length >= 5. Stable IDs are
+ * retained because downstream readers rely on them.
  */
 export function winConditionsFor(
     causes: ReadonlyArray<{ readonly id: CauseId }>
@@ -161,7 +170,7 @@ export function winConditionsFor(
         wins.push({
             id: wid,
             title: wid,
-            story: WTEXT[wid] ?? "Critical win condition satisfied."
+            story: WTEXT[wid] ?? "The identified risk condition has been addressed."
         });
         seen.add(wid);
     }
@@ -170,13 +179,13 @@ export function winConditionsFor(
         wins.push({
             id,
             title: id,
-            story: "Momentum restored with named owner and date."
+            story: "A named owner, recent activity, and a dated next step are recorded."
         });
     }
     return wins;
 }
 
-// ─── Countermeasure tasks ──────────────────────────────────────────────
+// ─── Corrective-action tasks ───────────────────────────────────────────
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEKDAY_FORMATTER = new Intl.DateTimeFormat("en-US", {
@@ -203,113 +212,113 @@ export function biz(n: number, now: number = Date.now()): string {
 export const TASKS: ReadonlyArray<CountermeasureTask> = [
     {
         taskId: "get_dated_nextstep",
-        label: "Put a date on the next step",
-        why: "No calendar anchor means no deal.",
+        label: "Set a dated next step",
+        why: "A dated next step creates a concrete buyer commitment.",
         evidence: "Calendar invite accepted with date/time.",
         tab: "overview",
         match: ["no_nextstep", "stale_thread", "stage_stuck", "next_step_overdue"],
         script: () =>
-            `Quick pulse — if this is still a priority, can we lock ${biz(1)} or ${biz(2)}?`
+            `If this is still a priority, can we schedule ${biz(1)} or ${biz(2)} for the next step?`
     },
     {
         taskId: "map_decision_process",
-        label: "Map decision process + owner",
-        why: "Unknown process causes slippage.",
+        label: "Map decision process and owner",
+        why: "Named approval steps and owners reduce process uncertainty.",
         evidence: "Named steps and owner in notes.",
         tab: "qualification",
         match: ["no_process", "stage_stuck"],
         script: () =>
-            "Before we invest more cycles: what are the steps from here to approval, and who owns each step?"
+            "What are the steps from here to approval, and who owns each step?"
     },
     {
         taskId: "bring_eb_in",
-        label: "Bring economic buyer into thread",
-        why: "No budget owner means weak control.",
-        evidence: "EB attends call and confirms budget path.",
+        label: "Identify and engage the economic buyer",
+        why: "Budget ownership and final approval are unclear without the economic buyer.",
+        evidence: "Economic buyer attends call and confirms budget path.",
         tab: "qualification",
         match: ["no_eb"],
         script: () =>
-            "To make this real, we need the budget owner involved. Who owns approval, and can we invite them to the next call?"
+            "Who owns final approval and budget, and can we invite them to the next call?"
     },
     {
         taskId: "confirm_champion",
         label: "Confirm champion",
-        why: "No internal driver, no motion.",
+        why: "A confirmed champion provides a documented internal owner for the purchase.",
         evidence: "Champion named with explicit internal actions.",
         tab: "qualification",
         match: ["no_champion", "champion_weak"],
         script: () =>
-            "Who is driving this internally day-to-day, and can we align on their actions before next step?"
+            "Who is driving this internally day to day, and what will they own before the next step?"
     },
     {
         taskId: "quantify_impact",
         label: "Quantify impact",
-        why: "Weak impact kills urgency.",
+        why: "Quantified impact gives the buyer a concrete basis for evaluating the purchase.",
         evidence: "Numeric impact metric documented.",
         tab: "qualification",
         match: ["impact_not_real", "poc_no_criteria"],
         script: () =>
-            "Can we align on one concrete impact metric we will use to judge success?"
+            "Can we agree on one concrete impact metric we will use to judge success?"
     },
     {
         taskId: "clarify_use_case",
         label: "Clarify use case",
-        why: "Blur creates stakeholder drift.",
+        why: "A specific use case keeps stakeholders evaluating the same outcome.",
         evidence: "Use case and scope agreed in writing.",
         tab: "qualification",
         match: ["usecase_blurry"],
         script: () =>
-            "Can we lock the primary use case and scope so teams evaluate the same outcome?"
+            "Can we confirm the primary use case and scope so everyone evaluates the same outcome?"
     },
     {
         taskId: "name_competition",
-        label: "Name competition/status quo",
-        why: "Unknown alternative hides risk.",
+        label: "Record competition or status quo",
+        why: "Knowing the alternative makes competitive and status-quo risk explicit.",
         evidence: "Status quo and competitor documented.",
         tab: "qualification",
         match: ["competition_unknown"],
         script: () =>
-            "Are we replacing a competitor or the status quo? We should name that now."
+            "Are we replacing a competitor or the status quo?"
     },
     {
         taskId: "surface_risks",
-        label: "Surface risks early",
-        why: "Hidden blockers emerge too late.",
+        label: "Record approval risks",
+        why: "Recording blockers early gives the team time to address them.",
         evidence: "Top blockers and mitigation plan logged.",
         tab: "overview",
         match: ["stage_stuck"],
         script: () =>
-            "What could block approval from here so we can de-risk now?"
+            "What could block approval from here, and who owns each issue?"
     },
     {
         taskId: "set_exec_readout",
-        label: "Set executive readout",
-        why: "Late-stage deals need executive compression.",
-        evidence: "Exec readout call booked with clear agenda.",
+        label: "Set executive review",
+        why: "An executive review gives decision owners a defined point to review results and next steps.",
+        evidence: "Executive review call booked with clear agenda.",
         tab: "overview",
         match: ["poc_no_criteria", "stage_stuck"],
         script: () =>
-            "Let's set a 20-minute exec readout to align decision owner, timing, and approval path."
+            "Can we set a 20-minute executive review to align the decision owner, timing, and approval path?"
     },
     {
         taskId: "write_mutual_plan",
         label: "Write mutual action plan",
-        why: "Shared plan reduces ambiguity.",
-        evidence: "Mutual plan doc with owners and dates.",
+        why: "A mutual action plan gives both sides shared owners and dates.",
+        evidence: "Mutual plan document with owners and dates.",
         tab: "overview",
         match: ["no_nextstep", "no_process"],
         script: () =>
-            "I will draft a mutual action plan with owners and dates; can we review it together?"
+            "I will draft a mutual action plan with owners and dates. Can we review it together?"
     },
     {
         taskId: "multi_thread",
         label: "Engage 3+ stakeholders",
-        why: "Single-threaded deals die when your one contact gets busy.",
+        why: "A deal that depends on one contact is more vulnerable if that person disengages.",
         evidence: "3+ contacts with defined roles and recent engagement.",
         tab: "stakeholders",
         match: ["single_threaded", "no_champion", "no_eb"],
         script: () =>
-            "Can you introduce me to the technical evaluator and the person who would sign off on budget?"
+            "Can you introduce me to the technical evaluator and the person who would approve the budget?"
     }
 ];
 
@@ -319,9 +328,9 @@ interface ScoredTask {
 }
 
 /**
- * Pick the top N (default 5) countermeasure tasks for a given vitals
- * + cause set. Scoring logic ports the legacy `chooseTasks` (lines
- * 1832-1849): cause-severity sum + stage-specific boost + value boost.
+ * Pick the top N (default 5) corrective actions for a given vitals
+ * + cause set. Scoring behavior is unchanged: cause-severity sum +
+ * stage-specific boost + value boost.
  */
 export function chooseTasks(
     vitals: ComputedVitals,
