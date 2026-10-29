@@ -17,7 +17,7 @@ describe("FirstVisitPrimer", () => {
         const { container } = render(<FirstVisitPrimer />);
         expect(container.querySelector(".bf-primer")).not.toBeNull();
         expect(container.textContent).toContain(
-            "This room is what the system saw"
+            "Briefing summarizes changes in your deals and accounts"
         );
     });
 
