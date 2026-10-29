@@ -9,12 +9,11 @@ import {
 } from "./types";
 
 /**
- * Phase 4 / Room 14 — quota workback engine.
+ * Quota Workback calculation engine.
  *
- * Faithful TypeScript port of the legacy `calc()` from
- * `app/quota-workback/index.html` lines 498-585. Preserves the
- * benchmark band tiers, the per-rate computation chain, and the
- * 100-point quality score formula verbatim.
+ * The 100-point score measures alignment between the selected ACV-band
+ * benchmarks, the user's conversion/cycle assumptions, and current pipeline
+ * coverage. It is not a holistic judgment of sales quality or readiness.
  *
  * Score build-up:
  *   base 34
@@ -38,9 +37,9 @@ export function benchmarkFor(acv: number): Benchmark {
 }
 
 export function qualityBand(score: number): QualitySignal {
-    if (score >= 82) return { score, label: "Ready now", tone: "good" };
-    if (score >= 68) return { score, label: "Workable", tone: "warn" };
-    return { score, label: "Thin", tone: "bad" };
+    if (score >= 82) return { score, label: "Near benchmark", tone: "good" };
+    if (score >= 68) return { score, label: "Mixed benchmark alignment", tone: "warn" };
+    return { score, label: "Low benchmark alignment", tone: "bad" };
 }
 
 function ceilDiv(a: number, b: number): number {
@@ -111,18 +110,11 @@ export function computeMetrics(
                     ) +
                     Math.max(
                         0,
-                        12 -
-                            Math.min(12, Math.abs(cycle - benchmark.cycle) / 10)
+                        12 - Math.min(12, Math.abs(cycle - benchmark.cycle) / 10)
                     ) +
                     Math.max(
                         0,
-                        12 -
-                            Math.min(
-                                12,
-                                Math.abs(
-                                    (coverage.ratio || 0) - benchmark.coverage
-                                ) * 6
-                            )
+                        12 - Math.min(12, Math.abs((coverage.ratio || 0) - benchmark.coverage) * 6)
                     )
             )
         );
