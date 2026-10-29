@@ -46,16 +46,10 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./settings-v4.css";
 
 /**
- * SettingsV4 (canon §4.20) — the safe deposit, wired to production from
- * the settled 2026-07-07 design. Data safety leads: the plain trust
- * statement ("your workspace is safe — saved to the cloud, not trapped
- * on this laptop"), then YOUR DATA (one durable download · restore ·
- * the device-offline copy demoted to an Advanced disclosure · delete-
- * everything behind a type-to-confirm), then the quiet preferences, then
- * the recessive account row (sign out · re-run onboarding · privacy ·
- * terms). All flows reuse the shipped engine (cloud export/delete,
- * backup, category, density, the suggestions toggle). §4.20: no scope
- * kickers, no database words, no retired nouns.
+ * Settings shows verifiable cloud status, export/restore controls, local
+ * device-backup controls, optional activity capture, preferences, and account
+ * actions. Copy does not equate a successful connection probe with complete
+ * synchronization and does not call partial export/delete scopes "everything."
  */
 
 const deleteConfirm = signal("");
@@ -97,8 +91,8 @@ function connectCalendar(): void {
             calBusy.value = false;
             calMsg.value = r.ok
                 ? r.matched > 0
-                    ? `Connected — found ${r.matched} meeting${r.matched === 1 ? "" : "s"} with accounts you watch.`
-                    : "Connected. No meetings with watched accounts in the current window — they'll count as they land."
+                    ? `Connected. ${r.matched} meeting${r.matched === 1 ? "" : "s"} matched watched accounts in the current window.`
+                    : "Connected. No meetings matched watched accounts in the current window."
                 : r.error;
         });
     });
@@ -108,7 +102,7 @@ function disconnectCalendar(): void {
     void saveCalendarUrl(null).then(() => {
         calBusy.value = false;
         calUrl.value = null;
-        calMsg.value = "Disconnected. Nothing new gets read.";
+        calMsg.value = "Calendar connection removed.";
     });
 }
 
@@ -152,28 +146,29 @@ export function SettingsV4(): JSX.Element {
                     <span class="st4-r">{email ? `${t("signed in")} · ${email}` : t("not signed in")}</span>
                 </div>
 
-                {/* the trust statement */}
                 <section class="st4-trust">
-                    <div class="st4-k"><span class="st4-dot" />{t("Your workspace is safe")}</div>
-                    <h1>{t("Everything you build is saved — not trapped on this laptop.", { class: "body" })}</h1>
+                    <div class="st4-k"><span class="st4-dot" />{t("Workspace data")}</div>
+                    <h1>{t("Review cloud status, exports, restores, and device backups.", { class: "body" })}</h1>
                     <p>
-                        {t("As you work, every room saves to the cloud automatically.", { class: "body" })}{" "}
                         {email ? (
                             <>
-                                {t("You're signed in as")} <b>{email}</b>
-                                {workspaceName ? <> {t("on the")} <b>{workspaceName}</b> {t("workspace")}</> : null}
-                                {t(", so your targeting, deals, calls, and the rest follow you to any device.", { class: "body" })}{" "}
+                                {t("You are signed in as", { class: "body" })} <b>{email}</b>
+                                {workspaceName ? <> {t("on the")} <b>{workspaceName}</b> {t("workspace")}</> : null}.
+                                {" "}{t("The status check below verifies that this session can reach the workspace and read the cloud-backed records included in the check.", { class: "body" })}
                             </>
                         ) : (
-                            <>{t("Sign in and your targeting, deals, calls, and the rest follow you to any device.", { class: "body" })}{" "}</>
+                            t("No signed-in cloud workspace is currently verified. Some workflows may still keep a local device copy.", { class: "body" })
                         )}
-                        {t("You can take a full copy or wipe it whenever you want — it's yours.", { class: "body" })}
                     </p>
                     <div class="st4-meta">
                         {conn.status === "connected" ? (
-                            <>{t("Connected")}{cloudVerifiedAt.value ? <> · <b>{t("everything's in sync")}</b></> : null}</>
+                            <>{t("Cloud connection verified")}{cloudVerifiedAt.value ? <> · <b>{new Date(cloudVerifiedAt.value).toLocaleString()}</b></> : null}</>
                         ) : conn.status === "error" ? (
-                            t("Couldn't reach the cloud just now — your work still saves on this device.", { class: "body" })
+                            t("The cloud status check failed. Review the connection and try again.", { class: "body" })
+                        ) : conn.status === "auth-missing" ? (
+                            t("No authenticated cloud session is available.", { class: "body" })
+                        ) : conn.status === "no-credentials" ? (
+                            t("Cloud configuration is not available in this environment.", { class: "body" })
                         ) : (
                             t("Checking the connection…")
                         )}
@@ -183,25 +178,24 @@ export function SettingsV4(): JSX.Element {
                     </div>
                 </section>
 
-                {/* your data */}
                 <section class="st4-sec">
-                    <div class="st4-sh">{t("Your data")}</div>
-                    <div class="st4-sd">{t("Take a copy of everything, put a copy back, or erase it all. Your call, any time.", { class: "body" })}</div>
+                    <div class="st4-sh">{t("Data controls")}</div>
+                    <div class="st4-sd">{t("Export or restore the cloud data covered by the current Settings workflow, manage the device copy, or delete the core cloud workspace content covered by this control.", { class: "body" })}</div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("Download a copy of everything", { class: "body" })}</div>
-                            <div class="st4-id">{t("A full file of your whole workspace — take it anywhere, keep it as a backup.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Download workspace export", { class: "body" })}</div>
+                            <div class="st4-id">{t("Creates a JSON export of the cloud tables currently included in the Settings export. If a table cannot be read, the export records that error instead of implying the copy is complete.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class="st4-btn" disabled={isExportingCloud.value} onClick={() => void exportCloudData()}>
-                                {isExportingCloud.value ? t("Preparing…") : t("Download my workspace")}
+                                {isExportingCloud.value ? t("Preparing…") : t("Download workspace export")}
                             </button>
                         </div>
                     </div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("Put a copy back")}</div>
-                            <div class="st4-id">{t("Restore your workspace from a file you downloaded before.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Restore from an export", { class: "body" })}</div>
+                            <div class="st4-id">{t("Restores the rows present in a prior Antaeus cloud export. Table-level restore errors are reported if any write fails.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <label class={`st4-btn is-ghost${restoreBusy.value ? " is-busy" : ""}`}>
@@ -211,35 +205,35 @@ export function SettingsV4(): JSX.Element {
                         </div>
                     </div>
                     <details class="st4-adv">
-                        <summary>{t("Bring your deal history", { class: "body" })}</summary>
+                        <summary>{t("Import closed-deal history", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Sold before you had Antaeus? Paste your closed deals from a spreadsheet — one deal per line: account, deal size, won or lost, close date, and (for losses) why. A header row is fine. Your history switches on the reads that otherwise wait for new deals to close: who hits and who misses, the losses you paid for, why you win, and whether your plan is realistic.", { class: "body" })}
+                            {t("Paste historical closed deals from a spreadsheet, one deal per line: account, deal size, outcome, close date, and loss reason where applicable. A header row is allowed. Historical deals can improve ICP, win/loss, and planning analysis before new deals close in Antaeus.", { class: "body" })}
                             <textarea class="st4-paste" rows={5} value={backfillText.value}
                                 placeholder={"account,value,outcome,date,reason\nNorthwind,\"$80,000\",won,2026-03-04,\nApex Mfg,64000,lost,2026-04-18,went with a competitor"}
                                 onInput={(e) => { backfillText.value = (e.currentTarget as HTMLTextAreaElement).value; backfillDone.value = null; }} />
                             {(() => {
                                 const parsed = parseBackfillCsv(backfillText.value);
-                                const won = parsed.deals.filter((d) => d.won).length;
+                                const won = parsed.deals.filter((deal) => deal.won).length;
                                 const lost = parsed.deals.length - won;
                                 return (
                                     <div class="st4-abrow">
                                         <span class="st4-id">
                                             {parsed.deals.length > 0
-                                                ? `${parsed.deals.length} ${t("deals read")} — ${won} ${t("won")}, ${lost} ${t("lost")}${parsed.skipped.length > 0 ? ` · ${parsed.skipped.length} ${t("lines skipped")}` : ""}`
+                                                ? `${parsed.deals.length} ${t("deals read")} · ${won} ${t("won")} · ${lost} ${t("lost")}${parsed.skipped.length > 0 ? ` · ${parsed.skipped.length} ${t("lines skipped")}` : ""}`
                                                 : backfillText.value.trim()
-                                                  ? t("Nothing readable yet — check the columns.", { class: "body" })
+                                                  ? t("No valid deal rows were found. Check the columns and values.", { class: "body" })
                                                   : ""}
                                         </span>
                                         <button type="button" class="st4-btn" disabled={parsed.deals.length === 0 || backfillBusy.value}
                                             onClick={() => {
                                                 backfillBusy.value = true;
-                                                void commitBackfill(parsed.deals).then((r) => {
+                                                void commitBackfill(parsed.deals).then((result) => {
                                                     backfillBusy.value = false;
                                                     backfillText.value = "";
-                                                    backfillDone.value = `${r.written} ${t("deals added to your history")}${r.duplicates > 0 ? ` · ${r.duplicates} ${t("already there, skipped")}` : ""}.`;
+                                                    backfillDone.value = `${result.written} ${t("deals added to history")}${result.duplicates > 0 ? ` · ${result.duplicates} ${t("duplicates skipped")}` : ""}.`;
                                                 });
                                             }}>
-                                            {backfillBusy.value ? t("Adding…") : t("Add them")}
+                                            {backfillBusy.value ? t("Adding…") : t("Add deals")}
                                         </button>
                                     </div>
                                 );
@@ -248,48 +242,47 @@ export function SettingsV4(): JSX.Element {
                         </div>
                     </details>
                     <details class="st4-adv">
-                        <summary>{t("Advanced — this device's offline copy", { class: "body" })}</summary>
+                        <summary>{t("Device copy", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("The app also keeps a working copy on this device for offline use. You can export or clear just this device's copy — it doesn't touch your cloud workspace.", { class: "body" })}
+                            {t("Some workflows keep a local browser copy. Exporting or clearing this device copy does not delete the cloud records covered by the cloud workspace controls above.", { class: "body" })}
                             {b.capturedAt ? <> {t("Last device export:")} {new Date(b.capturedAt).toLocaleDateString()}.</> : null}
                             <div class="st4-abrow">
-                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={exportBackup}>{t("Export this device")}</button>
-                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={() => { if (window.confirm(t("Clear this device's offline copy? Your cloud workspace is untouched.", { class: "body" }))) clearAll(); }}>{t("Clear this device")}</button>
+                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={exportBackup}>{t("Export device copy")}</button>
+                                <button type="button" class="st4-btn is-ghost" disabled={isWorking.value} onClick={() => { if (window.confirm(t("Clear this device copy? Cloud records are not deleted by this action.", { class: "body" }))) clearAll(); }}>{t("Clear device copy")}</button>
                             </div>
                         </div>
                     </details>
                     <div class="st4-danger">
-                        <div class="st4-dt">{t("Delete everything")}</div>
+                        <div class="st4-dt">{t("Delete core workspace data", { class: "body" })}</div>
                         <div class="st4-dd">
-                            {t("Permanently erase your entire workspace — your targeting, deals, calls, pilot evidence, and everything else. Your account stays; the data is gone for good. Download a copy first if you might want it.", { class: "body" })}
+                            {t("This removes rows from the core workspace tables currently included in the delete workflow and clears the local Antaeus cache. It does not delete your account, workspace membership, or every workspace-scoped table. Export first if you may need the covered data later.", { class: "body" })}
                         </div>
                         <div class="st4-conf">
-                            <span class="st4-cl">{t("Type")} <code>delete my workspace</code> {t("to turn the button on:")}</span>
+                            <span class="st4-cl">{t("Type")} <code>delete my workspace</code> {t("to enable the button:")}</span>
                             <input value={deleteConfirm.value} placeholder="delete my workspace"
                                 onInput={(e) => (deleteConfirm.value = (e.currentTarget as HTMLInputElement).value)} />
                             <button type="button" class="st4-btn is-danger" disabled={!confirmOk || isDeletingCloud.value}
                                 onClick={() => { void deleteCloudData(); deleteConfirm.value = ""; }}>
-                                {isDeletingCloud.value ? t("Deleting…") : t("Delete everything")}
+                                {isDeletingCloud.value ? t("Deleting…") : t("Delete core workspace data", { class: "body" })}
                             </button>
                         </div>
                     </div>
                 </section>
 
-                {/* capture — getting the work counted without typing */}
                 <section class="st4-sec">
-                    <div class="st4-sh">{t("Counting your work automatically", { class: "body" })}</div>
-                    <div class="st4-sd">{t("The less you have to log by hand, the truer every read gets. Three ways in — all optional.", { class: "body" })}</div>
+                    <div class="st4-sh">{t("Automatic activity capture", { class: "body" })}</div>
+                    <div class="st4-sd">{t("Optional capture methods can reduce manual logging. Review what each method records before enabling it.", { class: "body" })}</div>
 
                     <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCaptureToken(); }}>
-                        <summary>{t("Email — your BCC address", { class: "body" })}</summary>
+                        <summary>{t("Email BCC capture", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. What gets saved: the subject line, who it went to, and when — never the message itself.", { class: "body" })}
+                            {t("Add your Antaeus capture address to BCC on outreach messages. The capture workflow attempts to match the send to a watched account and log the activity. The current capture flow stores message metadata rather than the message body.", { class: "body" })}
                             {(() => {
                                 const domain = captureDomain();
                                 if (!domain) {
                                     return (
                                         <div class="st4-cap-wait">
-                                            {t("Your address isn't switched on quite yet — the moment it is, it appears right here, ready to copy.", { class: "body" })}
+                                            {t("BCC capture is not configured in this environment yet.", { class: "body" })}
                                         </div>
                                     );
                                 }
@@ -301,7 +294,7 @@ export function SettingsV4(): JSX.Element {
                                                 <code class="st4-cap-addr">{captureAddress(tok, domain)}</code>
                                                 <button type="button" class="st4-btn is-ghost"
                                                     onClick={() => { void navigator.clipboard?.writeText(captureAddress(tok, domain)).catch(() => undefined); }}>
-                                                    {t("Copy it")}
+                                                    {t("Copy address")}
                                                 </button>
                                             </>
                                         ) : (
@@ -309,13 +302,13 @@ export function SettingsV4(): JSX.Element {
                                                 onClick={() => {
                                                     captureBusy.value = true;
                                                     captureErr.value = null;
-                                                    void mintCaptureToken().then((r) => {
+                                                    void mintCaptureToken().then((result) => {
                                                         captureBusy.value = false;
-                                                        captureToken.value = r.token;
-                                                        captureErr.value = r.error;
+                                                        captureToken.value = result.token;
+                                                        captureErr.value = result.error;
                                                     });
                                                 }}>
-                                                {captureBusy.value ? t("Setting up…") : t("Create my address")}
+                                                {captureBusy.value ? t("Setting up…") : t("Create capture address")}
                                             </button>
                                         )}
                                         {captureErr.value ? <span class="st4-id">{captureErr.value}</span> : null}
@@ -323,40 +316,37 @@ export function SettingsV4(): JSX.Element {
                                 );
                             })()}
                             <div class="st4-cap-steps">
-                                <b>{t("Set it up once, per tool:")}</b>
+                                <b>{t("How to use it")}</b>
                                 <ul>
-                                    <li>{t("Gmail: there's no automatic BCC — type (or paste) your address into the BCC line when you send outreach. After two or three sends it autocompletes on the first letter.", { class: "body" })}</li>
-                                    <li>{t("Outlook: same — add it to the BCC line by hand. On desktop, you can pin it: New mail → Options → Bcc shows the field on every message.", { class: "body" })}</li>
-                                    <li>{t("Superhuman, Outreach, Apollo, and most sales tools: Settings has an \"always BCC\" box — paste your address there once and every send counts itself.", { class: "body" })}</li>
+                                    <li>{t("Add the capture address to the BCC field when you send outreach.", { class: "body" })}</li>
+                                    <li>{t("If your email or sales tool supports a persistent BCC setting, you can add the address there instead of entering it on every message.", { class: "body" })}</li>
                                 </ul>
                             </div>
                         </div>
                     </details>
 
                     <details class="st4-adv" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) ensureCalendar(); }}>
-                        <summary>{t("Calendar — paste your link", { class: "body" })}</summary>
+                        <summary>{t("Calendar capture", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("Paste your calendar's private link and meetings with accounts you're watching count themselves — no approvals, no setup on your calendar's side. Only meetings where someone from an account you're watching is invited get saved — the title, the time, and who. Everything else on your calendar is ignored and never stored.", { class: "body" })}
+                            {t("Connect an ICS calendar URL to check for meetings that match watched accounts. The sync reports how many meetings matched in the current window.", { class: "body" })}
                             <div class="st4-cap-steps">
-                                <b>{t("Where the link lives:")}</b>
+                                <b>{t("Calendar URL")}</b>
                                 <ul>
-                                    <li>{t("Google Calendar: calendar.google.com → the gear → Settings → click your calendar on the left → scroll to \"Secret address in iCal format\" → copy.", { class: "body" })}</li>
-                                    <li>{t("Outlook: outlook.com → the gear → Calendar → Shared calendars → publish your calendar → copy the ICS link.", { class: "body" })}</li>
-                                    <li>{t("Apple iCloud: icloud.com/calendar → the share icon next to your calendar → Public Calendar → copy the link.", { class: "body" })}</li>
+                                    <li>{t("Use a calendar subscription URL that you are comfortable connecting to Antaeus. Follow your calendar provider's instructions for generating the appropriate ICS link.", { class: "body" })}</li>
                                 </ul>
                             </div>
                             {calUrl.value ? (
                                 <div class="st4-abrow">
-                                    <span class="st4-ok">{t("Your calendar is connected.")}</span>
+                                    <span class="st4-ok">{t("Calendar URL connected.")}</span>
                                     <button type="button" class="st4-btn is-ghost" disabled={calBusy.value}
-                                        onClick={() => { calBusy.value = true; calMsg.value = null; void syncCalendarNow().then((r) => { calBusy.value = false; calMsg.value = r.ok ? `${t("Checked — ")}${r.matched} ${t("meetings with watched accounts in the current window.", { class: "body" })}` : r.error; }); }}>
-                                        {calBusy.value ? t("Checking…") : t("Check my calendar now", { class: "body" })}
+                                        onClick={() => { calBusy.value = true; calMsg.value = null; void syncCalendarNow().then((result) => { calBusy.value = false; calMsg.value = result.ok ? `${t("Checked:")} ${result.matched} ${t("meetings matched watched accounts in the current window.", { class: "body" })}` : result.error; }); }}>
+                                        {calBusy.value ? t("Checking…") : t("Check calendar now")}
                                     </button>
                                     <button type="button" class="st4-btn is-ghost" disabled={calBusy.value} onClick={disconnectCalendar}>{t("Disconnect")}</button>
                                 </div>
                             ) : (
                                 <div class="st4-abrow">
-                                    <input class="st4-cal-in" placeholder="https://calendar.google.com/calendar/ical/…/basic.ics"
+                                    <input class="st4-cal-in" placeholder="https://…/calendar.ics"
                                         value={calDraft.value}
                                         onInput={(e) => (calDraft.value = (e.currentTarget as HTMLInputElement).value)} />
                                     <button type="button" class="st4-btn" disabled={!calDraft.value.trim() || calBusy.value} onClick={connectCalendar}>
@@ -369,34 +359,32 @@ export function SettingsV4(): JSX.Element {
                     </details>
 
                     <details class="st4-adv">
-                        <summary>{t("Email — the deeper connection (optional, not on yet)", { class: "body" })}</summary>
+                        <summary>{t("Direct inbox connection")}</summary>
                         <div class="st4-ab">
-                            {t("Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet — Google has to security-review Antaeus itself (nothing about you) before your one-click approval can exist. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.", { class: "body" })}
+                            {t("A direct read-only inbox connection is not available in this workflow today. Use BCC capture above when you want email activity captured automatically.", { class: "body" })}
                         </div>
                     </details>
 
                     <details class="st4-adv">
-                        <summary>{t("Calls — run them with your own tools", { class: "body" })}</summary>
+                        <summary>{t("Calls with your existing tools", { class: "body" })}</summary>
                         <div class="st4-ab">
-                            {t("There's no dialer in Antaeus, on purpose — call from whatever you already use: your phone, Zoom, Meet, OpenPhone, Aircall. Here's how the calls still count:", { class: "body" })}
+                            {t("Antaeus does not include a dialer. Use your existing calling tool and record the outcome through the relevant Antaeus workflow.", { class: "body" })}
                             <ul>
-                                <li>{t("Cold calls: open Cold Call Studio before you dial — it hands you the game plan — and tap the outcome the moment you hang up (meeting booked, callback, voicemail…). A booked meeting creates the deal by itself.", { class: "body" })}</li>
-                                <li>{t("Scheduled discovery calls: run the call inside Discovery Studio — it's built to be glanced at while you talk, and what you capture flows straight to the deal.", { class: "body" })}</li>
-                                <li>{t("If your tool records or transcribes (Zoom, Meet, OpenPhone): after the call, skim the recap and put the two things that matter into the room you ran it from — what they admitted, and the dated next step. Two lines is enough; the rooms do the rest.", { class: "body" })}</li>
-                                <li>{t("Direct connections to call tools may come later. The habit above costs about thirty seconds a call and keeps every read honest today.", { class: "body" })}</li>
+                                <li>{t("Cold calls: review the plan in Cold Call Studio before dialing, then record the outcome after the call. A booked meeting creates a deal automatically.", { class: "body" })}</li>
+                                <li>{t("Scheduled discovery calls: use Discovery Studio during the call when you want its questions, notes, and deal fields available.", { class: "body" })}</li>
+                                <li>{t("If your calling tool creates a recording or transcript, review it and add the relevant buyer information and dated next step to the Antaeus workflow you used.", { class: "body" })}</li>
                             </ul>
                         </div>
                     </details>
                 </section>
 
-                {/* preferences */}
                 <section class="st4-sec">
-                    <div class="st4-sh">{t("How the app works for you")}</div>
-                    <div class="st4-sd">{t("Small preferences — change them any time.", { class: "body" })}</div>
+                    <div class="st4-sh">{t("Preferences")}</div>
+                    <div class="st4-sd">{t("Change these preferences at any time.", { class: "body" })}</div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("What you sell")}</div>
-                            <div class="st4-id">{t("Loads the right discovery playbook for your live calls.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Product category")}</div>
+                            <div class="st4-id">{t("Used to select category-specific discovery content and other relevant workspace defaults.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <select class="st4-sel" value={category.value}
@@ -407,8 +395,8 @@ export function SettingsV4(): JSX.Element {
                     </div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("How much the app explains")}</div>
-                            <div class="st4-id"><b>{t("Show me how")}</b> {t("walks you through everything.")} <b>{t("Step back")}</b> {t("trusts you and gets dense.")}</div>
+                            <div class="st4-it">{t("Explanation level")}</div>
+                            <div class="st4-id"><b>{t("Show me how")}</b> {t("includes more explanation.")} <b>{t("Step back")}</b> {t("uses a more compact interface.")}</div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class={`st4-btn${density === "show_me_how" ? "" : " is-ghost"}`} onClick={() => void setDensity("show_me_how")}>{t("Show me how")}</button>
@@ -417,8 +405,8 @@ export function SettingsV4(): JSX.Element {
                     </div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("Show the live edge")}</div>
-                            <div class="st4-id">{t("The left wall carries your day — your count, what just landed, who's gone quiet. Turn it off and a thin line stays; click that line any time to bring it back. Your work is counted either way.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Show recent activity", { class: "body" })}</div>
+                            <div class="st4-id">{t("The recent-activity panel shows today's activity, new events, and accounts with no recent response. Hiding the panel does not stop activity tracking.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class={`st4-btn${liveEdgeOn.value ? "" : " is-ghost"}`} onClick={() => toggleLiveEdge(!liveEdgeOn.value)}>
@@ -428,8 +416,8 @@ export function SettingsV4(): JSX.Element {
                     </div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("Let the system suggest things", { class: "body" })}</div>
-                            <div class="st4-id">{t("It'll flag a pattern now and then. You always accept or dismiss — nothing changes on its own.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Allow recommendations", { class: "body" })}</div>
+                            <div class="st4-id">{t("Antaeus may surface patterns and recommendations. You can accept or dismiss them; no data changes automatically through this setting.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class={`st4-btn${phaseFEnabled.value ? "" : " is-ghost"}`} onClick={() => void togglePhaseF(!phaseFEnabled.value)}>
@@ -438,12 +426,12 @@ export function SettingsV4(): JSX.Element {
                         </div>
                     </div>
                     <details class="st4-adv">
-                        <summary>{t("Try a sample workspace")}</summary>
+                        <summary>{t("Sample workspace")}</summary>
                         <div class="st4-ab">
-                            {t("Load a demo workspace into this browser to explore — it never touches your real data.", { class: "body" })}
+                            {t("Load demo data in this browser to explore the product without using your live workspace records.", { class: "body" })}
                             <div class="st4-abrow">
                                 {d.active ? (
-                                    <button type="button" class="st4-btn is-ghost" onClick={exitDemo}>{t("Exit the sample")}</button>
+                                    <button type="button" class="st4-btn is-ghost" onClick={exitDemo}>{t("Exit sample")}</button>
                                 ) : (
                                     <>
                                         <a class="st4-btn is-ghost" href="/demo-seed.html?autoseed=smb&return=/dashboard/">{t("SMB sample")}</a>
@@ -455,7 +443,6 @@ export function SettingsV4(): JSX.Element {
                     </details>
                 </section>
 
-                {/* account row */}
                 <div class="st4-acct">
                     <span class="st4-who">
                         {email ? <>{t("Signed in as")} <b>{email}</b>{workspaceName ? ` · ${workspaceName}` : ""}</> : t("Not signed in")}
