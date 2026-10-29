@@ -15,7 +15,9 @@
     "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload",
     "voice:check": "vitest run src/lib/voice",
     "ds:check": "vitest run src/lib/voice src/lib/design-system src/icons",
-    "build:transcript": "node tools/preview/build-transcript.js"
+    "build:transcript": "node tools/preview/build-transcript.js",
+    "copy:inventory": "node tools/language-remediation/build-copy-inventory.js",
+    "copy:audit": "node tools/language-remediation/copy-audit.js"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260515.1",
