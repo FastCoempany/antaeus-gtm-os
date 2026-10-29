@@ -9,69 +9,68 @@ import { exportReadinessJson } from "../lib/readiness-export";
 import "./climb-drawer.css";
 
 /**
- * The Climb — the Readiness drawer (canon §4.17), settled 2026-07-07 and
- * wired to production. Verdict-dominant serif state + a plain one-line
- * read; the five levels as a vertical ladder OVER TIME (passed rungs
- * forest/durable, you-are-here highlighted, the next rung is the goal);
- * the plain what-moves-it-next moves; the five parts of the motion as
- * quiet ready/thin chips — never bars, never a "/20", never a naked
- * score. The readiness engine (already §13-scrubbed) is reused
- * unchanged. Overlay off the Dashboard topbar anchor — no route change.
+ * Readiness drawer. Internal component and CSS names remain stable, but
+ * the user-facing surface describes operating independence directly:
+ * what another seller could run today, what still depends on the
+ * founder, and what would improve readiness next.
  */
 
 const LADDER: ReadonlyArray<{ v: Verdict; name: string; read: string }> = [
     {
         v: "you_are_the_system",
-        name: t("You are the system"),
-        read: t("It all lived in your head — nothing to inherit.", { class: "body" })
+        name: t("Founder-dependent"),
+        read: t("The sales process is not yet documented for another seller.", { class: "body" })
     },
     {
         v: "building",
-        name: t("Building"),
-        read: t("Real activity is on the board, but a hire would still be improvising the motion.", { class: "body" })
+        name: t("Partially documented"),
+        read: t("Sales activity is recorded, but another seller would still need to improvise parts of the process.", { class: "body" })
     },
     {
         v: "inheritable_with_guardrails",
-        name: t("Inheritable with guardrails"),
-        read: t("A hire could run it with you there to answer questions.", { class: "body" })
+        name: t("Runnable with founder support"),
+        read: t("Another seller could run the process with you available to answer questions.", { class: "body" })
     },
     {
         v: "hire_ready",
-        name: t("Hire-ready"),
-        read: t("The motion survives you taking two weeks off.", { class: "body" })
+        name: t("Runnable independently"),
+        read: t("Another seller can run the documented process for two weeks without routine help from you.", { class: "body" })
     },
     {
         v: "hire_ready_repeatable",
-        name: t("Hire-ready, repeatable"),
-        read: t("Wins and losses both feed the machine; the handoff kit is written.", { class: "body" })
+        name: t("Documented and repeatable"),
+        read: t("Win and loss patterns are documented, and the sales handoff documentation is complete.", { class: "body" })
     }
 ];
 
 const HERO_READ: Record<Verdict, string> = {
     you_are_the_system: t(
-        "Right now the system only lives in your head. A new hire would have nothing to inherit on day one.",
+        "Another seller would still depend on you to understand and run the sales process.",
         { class: "body" }
     ),
     building: t(
-        "A hire could pick up parts of this, but they'd still be improvising the system on day one.",
+        "Another seller could run parts of the process, but several routine decisions still depend on your judgment.",
         { class: "body" }
     ),
     inheritable_with_guardrails: t(
-        "A hire could run this with you there to answer questions.",
+        "Another seller could run the process with you available to answer questions and resolve gaps.",
         { class: "body" }
     ),
-    hire_ready: t("The motion would survive you taking two weeks off.", { class: "body" }),
+    hire_ready: t(
+        "Another seller can run the documented process independently for routine work.",
+        { class: "body" }
+    ),
     hire_ready_repeatable: t(
-        "Multiple wins on the board, losses worth learning from, and the handoff kit is written. This holds up.",
+        "The sales process, win and loss patterns, and handoff documentation are complete enough to repeat with another seller.",
         { class: "body" }
     )
 };
 
-/** Quiet chip state per part — words, never numbers. */
+/** Quiet chip state per assessed part — words, never surfaced scores. */
 function chipFor(score: number): { cls: string; word: string } {
     if (score >= 14) return { cls: "ok", word: t("solid") };
     if (score >= 8) return { cls: "ok", word: t("workable") };
-    if (score > 0) return { cls: "thin", word: t("thin") };
+    if (score > 0) return { cls: "thin", word: t("limited") };
     return { cls: "thin", word: t("none yet") };
 }
 
@@ -98,7 +97,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
             <div class="clmb-scrim" onClick={props.onClose} aria-hidden="true" />
             <aside class="clmb-panel">
                 <header class="clmb-hero">
-                    <div class="clmb-k">{t("Readiness · could a hire run this yet?", { class: "body" })}</div>
+                    <div class="clmb-k">{t("Readiness · could another seller run this process?", { class: "body" })}</div>
                     <div class="clmb-v">{props.summary.verdictLabel}</div>
                     <div class="clmb-s">{HERO_READ[props.summary.verdict]}</div>
                     <button type="button" class="clmb-x" onClick={props.onClose} aria-label={t("Close")}>
@@ -108,7 +107,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
 
                 <section class="clmb-sec">
                     <div class="clmb-sl">
-                        {t("The climb — where the workspace has been, and where it goes next", { class: "body" })}
+                        {t("Readiness progression", { class: "body" })}
                     </div>
                     <div class="clmb-climb">
                         {LADDER.map((step, i) => {
@@ -121,14 +120,14 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
                                     <div class="clmb-rm">{step.read}</div>
                                     <span class="clmb-rt">
                                         {state === "done"
-                                            ? t("Left behind")
+                                            ? t("Previous state")
                                             : state === "here"
-                                              ? t("You are here")
+                                              ? t("Current state")
                                               : pos === rank + 1
-                                                ? t("Next")
+                                                ? t("Next state")
                                                 : pos === 5
-                                                  ? t("The summit")
-                                                  : t("Later")}
+                                                  ? t("Highest readiness state")
+                                                  : t("Later state")}
                                     </span>
                                 </div>
                             );
@@ -138,7 +137,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
 
                 {nextName && props.summary.gateBlockers.length > 0 ? (
                     <div class="clmb-next">
-                        <div class="clmb-nt">{t("To reach")} {nextName}</div>
+                        <div class="clmb-nt">{t("To become")} {nextName}</div>
                         <ul>
                             {props.summary.gateBlockers.map((b) => (
                                 <li key={b}>{b}</li>
@@ -147,15 +146,15 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
                     </div>
                 ) : nextName ? (
                     <div class="clmb-next">
-                        <div class="clmb-nt">{t("To reach")} {nextName}</div>
+                        <div class="clmb-nt">{t("To become")} {nextName}</div>
                         <ul>
-                            <li>{t("Everything the next level needs is in place — it settles the next time you save a change in any room.", { class: "body" })}</li>
+                            <li>{t("The evidence required for the next state is present. The readiness assessment will update after the next saved workspace change.", { class: "body" })}</li>
                         </ul>
                     </div>
                 ) : null}
 
                 <section class="clmb-sec">
-                    <div class="clmb-sl">{t("What's carrying this right now")}</div>
+                    <div class="clmb-sl">{t("Current readiness by area")}</div>
                     <div class="clmb-holding">
                         {props.summary.dimensions.map((d) => {
                             const chip = chipFor(d.score);
