@@ -7,52 +7,13 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  regenerate-transcript:
-    name: One-time preview transcript regeneration
-    if: github.event_name == 'push' && github.ref_name == 'language-remediation-v1'
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.59.1-noble
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      TRANSCRIPT_WORKERS: "16"
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: language-remediation-v1
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: npm ci --no-audit --no-fund
-      - name: Build current preview assets
-        run: npm run build:cloudflare
-      - name: Regenerate AI-readable preview transcript
-        run: node tools/preview/build-transcript.js
-      - name: Commit regenerated transcript if changed
-        shell: bash
-        run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          if git diff --quiet -- preview-transcript; then
-            echo "Transcript already current."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add preview-transcript
-          git commit -m "Regenerate preview transcript after language remediation"
-          git push origin HEAD:language-remediation-v1
-
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest
@@ -143,3 +104,30 @@ jobs:
         run: |
           test -d dist || (echo "dist/ missing" && exit 1)
           ls -la dist/
+
+  language-audit:
+    name: Rendered language audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - name: Rebuild rendered copy inventory from committed transcript
+        run: npm run copy:inventory
+      - name: Run Tier-1 language regression gate
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run copy:audit 2>&1 | tee artifacts/language-remediation/copy-audit.txt
+      - name: Upload language-validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-validation
+          path: |
+            artifacts/language-remediation/copy-inventory.json
+            artifacts/language-remediation/copy-audit.txt
+          retention-days: 14
