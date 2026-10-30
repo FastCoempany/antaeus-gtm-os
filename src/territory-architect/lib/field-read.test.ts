@@ -87,7 +87,7 @@ describe("computeFieldRead — empty board", () => {
         });
         expect(r.band).toBe("empty");
         expect(r.mainRisk.toLowerCase()).toContain("no territory segments have been created");
-        expect(r.operatorMove.toLowerCase()).toContain("carve one division");
+        expect(r.operatorMove.toLowerCase()).toContain("create one territory segment");
     });
 
     it("returns empty band when focuses exist but no active accounts", () => {

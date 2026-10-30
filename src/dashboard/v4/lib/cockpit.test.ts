@@ -29,7 +29,7 @@ describe("buildMasthead", () => {
         const m = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Building" }));
         expect(m.verdictLabel).toBe("Building");
         expect(m.gates).toHaveLength(5);
-        expect(m.gates[0]!.state).toBe("done"); // You are the system (rank 1 < 2)
+        expect(m.gates[0]!.state).toBe("done"); // Founder-dependent (rank 1 < 2)
         expect(m.gates[1]!.state).toBe("on"); // Building (rank 2)
         expect(m.gates[2]!.state).toBe("next"); // Inheritable (rank 3)
         expect(m.gates[3]!.state).toBe("todo");
@@ -44,9 +44,9 @@ describe("buildMasthead", () => {
 
     it("composes a grammatical headline for every verdict", () => {
         const base = buildMasthead(
-            summaryOf({ verdict: "you_are_the_system", verdictLabel: "You are the system" })
+            summaryOf({ verdict: "you_are_the_system", verdictLabel: "Founder-dependent" })
         );
-        // never the ungrammatical "You're You are the system."
+        // never the ungrammatical "You're Founder-dependent."
         expect(base.headlinePre).toBe("Current readiness:");
         expect(base.headlineEm).toBe("Founder-dependent");
         const building = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Building" }));
