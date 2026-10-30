@@ -42,6 +42,7 @@ jobs:
       - name: Commit regenerated transcript if changed
         shell: bash
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           if git diff --quiet -- preview-transcript; then
             echo "Transcript already current."
             exit 0
