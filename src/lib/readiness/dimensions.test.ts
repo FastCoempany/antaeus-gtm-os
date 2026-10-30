@@ -28,9 +28,7 @@ describe("scoreIcp", () => {
     it("awards 6 the moment an ICP exists", () => {
         const s = scoreIcp(input({ icpCount: 1 }));
         expect(s.score).toBeGreaterThanOrEqual(6);
-        expect(s.evidence.some((e) => e.includes("1 ICP defined"))).toBe(
-            true
-        );
+        expect(s.evidence.some((e) => e.includes("1 ICP defined"))).toBe(true);
     });
 
     it("saturates territory at 30 accounts", () => {
@@ -126,16 +124,16 @@ describe("scoreDeals", () => {
         expect(winsAndLearning.score).toBeGreaterThan(winsOnly.score);
     });
 
-    it("flags missing next-step as a gap", () => {
+    it("flags missing next step as a gap", () => {
         const s = scoreDeals(input({ activeDeals: 4 }));
         expect(
-            s.gaps.some((g) => g.toLowerCase().includes("next-step"))
+            s.gaps.some((g) => /next[ -]?step/i.test(g))
         ).toBe(true);
     });
 });
 
 describe("scoreProof", () => {
-    it("rewards memory artifacts heavily", () => {
+    it("rewards recorded evidence and handoff artifacts heavily", () => {
         const noArtifacts = scoreProof(EMPTY_READINESS_INPUT);
         const withArtifacts = scoreProof(
             input({
@@ -151,9 +149,7 @@ describe("scoreProof", () => {
 
     it("flags handoff gap with prescriptive copy", () => {
         const s = scoreProof(EMPTY_READINESS_INPUT);
-        expect(
-            s.gaps.some((g) => g.includes("Founding GTM"))
-        ).toBe(true);
+        expect(s.gaps.some((g) => g.includes("Founding GTM"))).toBe(true);
     });
 });
 

@@ -12,9 +12,10 @@ function deal(p: Partial<Deal>): Deal {
     } as Deal;
 }
 
-// A deal with no next step + stale → critical; a fresh deal with a dated
-// next step → healthy. (Exact lane math lives in the shared recovery
-// engine; these tests pin the view MODEL, not the engine.)
+// A deal with no next step + prolonged inactivity ranks critical; a fresh deal
+// with a dated next step ranks healthy. Exact score math lives in the shared
+// recovery engine; these tests pin the presentation model, not a time-to-loss
+// prediction.
 const stale = deal({
     id: "stale",
     accountName: "Northwind",
@@ -37,17 +38,16 @@ const healthy = deal({
 });
 
 describe("buildHero", () => {
-    it("counts at-risk deals + their value", () => {
+    it("counts deals outside the lower-risk band and their value", () => {
         const hero = buildHero([stale, healthy]);
         expect(hero.liveCount).toBe(2);
         expect(hero.pipelineValue).toBe(180000);
-        // stale is not healthy → at risk
         expect(hero.atRiskCount).toBeGreaterThanOrEqual(1);
         expect(hero.atRiskValue).toBeGreaterThanOrEqual(120000);
         expect(hero.calm).toBe(false);
     });
 
-    it("reads calm when nothing is at risk", () => {
+    it("reads calm when nothing crosses the at-risk threshold", () => {
         const hero = buildHero([healthy]);
         expect(hero.calm).toBe(true);
         expect(hero.atRiskValue).toBe(0);
@@ -55,11 +55,10 @@ describe("buildHero", () => {
 });
 
 describe("laneGroups + rankedAssessments", () => {
-    it("groups by lane and ranks critical-first", () => {
+    it("groups by lane and ranks the highest score first", () => {
         const groups = laneGroups([stale, healthy]);
         expect(groups.critical.length + groups["at-risk"].length).toBeGreaterThanOrEqual(1);
         const ranked = rankedAssessments([stale, healthy]);
-        // highest-pressure first
         expect(ranked[0]!.deal.id).toBe("stale");
     });
 });
@@ -69,14 +68,14 @@ describe("nineFields", () => {
         const fields = nineFields(stale);
         expect(fields).toHaveLength(8);
         const champion = fields.find((f) => f.k === "Champion");
-        expect(champion?.v).toBe(""); // gap
+        expect(champion?.v).toBe("");
         const nextStep = fields.find((f) => f.k === "Next step");
-        expect(nextStep?.v).toBe(""); // no next step → gap
+        expect(nextStep?.v).toBe("");
     });
 });
 
 describe("horizonPercent", () => {
-    it("places higher-pressure deals further left (sooner)", () => {
+    it("places higher risk scores further left on the visual risk axis", () => {
         const ranked = rankedAssessments([stale, healthy]);
         const staleA = ranked.find((a) => a.deal.id === "stale")!;
         const okA = ranked.find((a) => a.deal.id === "ok")!;

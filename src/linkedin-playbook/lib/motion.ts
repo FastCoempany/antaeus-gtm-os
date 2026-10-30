@@ -8,24 +8,16 @@ import {
 } from "./types";
 
 /**
- * Phase 4 / Room 8 Wave 2 — motion engine.
+ * LinkedIn recommendation engine.
  *
- * Faithful TypeScript port of the legacy `getMotion(c)` function
- * (`app/linkedin-playbook/index.html` line 109). Picks one of four
- * motion patterns based on the inbound cross-room context:
- *
- *   1. credibility           — default; no live signal yet
- *   2. warm_signal_account   — hottest account exists, no connection_request to it
- *   3. convert_connection    — connection_request to hottest account, no DM yet
- *   4. add_air_cover         — no hottest, but a recent outbound touch exists
- *
- * The motion drives: the recommended actionType, the booth-read narrative,
- * and the default cueIndex (which the operator can override by pinning).
- *
- * Pure: takes the context object explicitly so tests can probe every branch.
+ * Existing motion keys are retained for compatibility. User-facing text is
+ * derived from recorded facts: whether an account has a current signal,
+ * whether a LinkedIn engagement/request/DM is logged, and whether a recent
+ * outbound touch exists. No fixed acceptance/reply benchmark is asserted.
  */
 
-const DEFAULT_THRESHOLDS = "35%+ acceptance and 15%+ DM reply after warming.";
+const NO_FIXED_THRESHOLD =
+    "No fixed acceptance or reply benchmark is configured. Review your recorded rates over a meaningful sample.";
 
 function accountCountsFor(
     accountName: string | null | undefined,
@@ -38,90 +30,88 @@ function accountCountsFor(
 }
 
 export function deriveMotion(ctx: MotionContext): Motion {
-    const hottest = ctx.hottestAccount;
+    const highestPriority = ctx.hottestAccount;
     const touch = ctx.latestTouch;
     const stats = ctx.stats;
-    const acct = accountCountsFor(hottest?.name, stats);
+    const acct = accountCountsFor(highestPriority?.name, stats);
 
-    // Default pattern — no live signal context.
     let motion: Motion = {
         key: "credibility",
-        label: "Build name familiarity before you ask for anything.",
+        label: "Build familiarity before making a meeting request.",
         actionType: "content_engage",
         whyNow:
-            "LinkedIn should warm the name and give outbound more credibility instead of replacing every other channel.",
+            "No account-specific LinkedIn action is required by the current data. Start with a relevant public interaction before making a meeting request.",
         oneSession:
-            "Leave two thoughtful comments on one target account and log the touch.",
+            "Review a relevant post from one target account and leave one substantive comment if you have something useful to add.",
         nextMove:
-            "After two meaningful engagements, send one specific connection request.",
-        thresholds: DEFAULT_THRESHOLDS,
-        accountName: hottest?.name ?? touch?.accountName ?? "",
+            "After a useful public interaction is logged, decide whether a connection request is appropriate.",
+        thresholds: NO_FIXED_THRESHOLD,
+        accountName: highestPriority?.name ?? touch?.accountName ?? "",
         context:
-            "No live signal is being worked yet. Use LinkedIn to create air cover.",
+            "No current account signal or LinkedIn request state is determining the next action.",
         cueIndex: 1,
         recovery:
-            "If the comment lands flat, do not double down. Watch one more post and try again with a narrower read."
+            "If you do not have a useful contribution to make, do not force a comment. Wait for a more relevant post or use another outreach channel."
     };
 
-    // Branch 1 — hottest signal account exists, no connection_request to it yet.
-    if (hottest && acct.connection_request === 0) {
-        const heatSuffix = hottest.heat ? ` (heat ${hottest.heat})` : "";
+    // Current signal exists and no connection request is logged.
+    if (highestPriority && acct.connection_request === 0) {
+        const heatSuffix = highestPriority.heat ? ` Priority score ${highestPriority.heat}.` : "";
         motion = {
             ...motion,
             key: "warm_signal_account",
-            label: "Use the public cue before the request.",
-            whyNow: `A real signal exists on ${hottest.name}, but LinkedIn trust is still cold. Make the account recognize your name before you ask for access.`,
+            label: "Use a relevant public interaction before the connection request.",
+            whyNow: `Signal Console has a current signal for ${highestPriority.name}, and no LinkedIn connection request is logged for the account.`,
             oneSession:
-                "Engage with one post, leave one smart comment, then queue a signal-led connection request.",
+                "Review one relevant post from the account or contact. Comment only when you have a specific, useful observation to add.",
             nextMove:
-                "After one or two visible engagements, send one request tied to the active signal.",
-            context: `Signal Console says ${hottest.name} is hot right now${heatSuffix}.`,
+                "After a substantive public interaction, decide whether to send a connection request tied to the relevant topic.",
+            context: `${highestPriority.name} has a current Signal Console priority.${heatSuffix}`,
             cueIndex: (acct.content_engage > 0 ? 2 : 1) as CueIndex,
-            recovery: `If they correct your read on ${hottest.name}, thank them and narrow — the signal interpretation just got sharper.`
+            recovery: `If your interpretation of ${highestPriority.name}'s situation is corrected, update the account context and use the corrected information in later outreach.`
         };
         return motion;
     }
 
-    // Branch 2 — connection_request exists for hottest, no DM yet.
-    if (hottest && acct.connection_request > 0 && acct.dm === 0) {
+    // Connection request exists, but no DM is logged.
+    if (highestPriority && acct.connection_request > 0 && acct.dm === 0) {
         motion = {
             ...motion,
             key: "convert_connection",
-            label: "Convert the accepted route into a conversation.",
+            label: "A connection request is logged; no direct message is logged yet.",
             actionType: "dm",
-            whyNow: `The connection motion has already started on ${hottest.name}. The next useful move is a rapport DM or give-first follow-up.`,
+            whyNow: `A LinkedIn connection request is already logged for ${highestPriority.name}, and no direct message is recorded for the account.`,
             oneSession:
-                "Send one rapport DM or give-first note that references their world, not your product.",
+                "If the connection is accepted and you have something relevant to send, send one concise message tied to the account context.",
             nextMove:
-                "If there is no reply after 3-5 days, send one give-first resource before asking for time.",
-            context: `LinkedIn already has an opening on ${hottest.name}. Use it.`,
+                "If there is no response, do not manufacture another reason to message. Return to the broader outreach plan and wait for new context.",
+            context: `LinkedIn activity for ${highestPriority.name} includes a connection request and no recorded DM.`,
             cueIndex: 3,
             recovery:
-                "If the DM stalls, do not chase. Give-first once, then hand the next touch back to Outbound."
+                "If the direct message gets no response, avoid repeated LinkedIn follow-ups unless new account context gives you a specific reason."
         };
         return motion;
     }
 
-    // Branch 3 — no hottest signal account, but an outbound touch exists.
+    // No higher-priority signal account, but a recent outbound touch exists.
     if (touch && touch.accountName) {
         motion = {
             ...motion,
             key: "add_air_cover",
-            label: "Add LinkedIn air cover to the outbound motion already in flight.",
+            label: "A recent outbound touch exists; consider one relevant LinkedIn action.",
             actionType: "content_share",
-            whyNow: `Outbound is already working ${touch.accountName}. LinkedIn should reinforce that motion so the prospect sees your name in more than one place.`,
+            whyNow: `A recent outbound touch is recorded for ${touch.accountName}. LinkedIn can support that outreach when there is a relevant public interaction available.`,
             oneSession:
-                "Engage with their content or share one relevant insight, then log the action.",
+                "Review the account or contact on LinkedIn. Engage only if there is a relevant post or useful information to share.",
             nextMove:
-                "Return to the next outbound touch after the LinkedIn action is logged.",
+                "After the LinkedIn action is logged, continue the account's broader outreach plan.",
             accountName: touch.accountName,
-            context: `Latest outbound motion exists for ${touch.accountName}.`,
+            context: `The latest recorded outbound touch is for ${touch.accountName}.`,
             cueIndex: 1,
-            recovery: `If the engagement reads as performative, drop it and let Outbound carry ${touch.accountName} without LinkedIn cover this week.`
+            recovery: `If there is no relevant LinkedIn action for ${touch.accountName}, skip the channel and continue the account's other outreach.`
         };
         return motion;
     }
 
-    // No branch fired — fall through with the default credibility motion.
     return motion;
 }

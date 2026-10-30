@@ -29,17 +29,12 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./pilot-desk-v4.css";
 
 /**
- * PilotDeskV4 (canon §4.15) — the guided pilot, wired to production
- * from the settled 2026-07-06 design. A hand-holding pilot GUIDE, not
- * a scorecard: the circle (who's hands-on, right-sized to the deal),
- * the who's-missing prompts on the open field, the collapsible Share
- * kit + Mutual pilot plan, and the five movements shown one at a time
- * — set it up → bring in the people → keep it moving (gated check-in
- * steps) → read the adoption → the write-up the champion carries.
- * Adoption is the success meter, never the outcome number. The shipped
- * spec engine (draft/save/quality/deal-sync) is reused unchanged; the
- * people operation is the additive pilot layer. §13: no proof / cast /
- * mold / forge on the face — plain words only.
+ * Pilot Desk — plan and evaluate a real customer pilot.
+ *
+ * The workflow covers success criteria, participants, engagement,
+ * adoption, results, and the buyer's next decision. Existing data and
+ * persistence behavior are unchanged; only the user-facing language and
+ * internal comments have been translated into standard pilot terms.
  */
 
 const extras = signal<PilotExtras>(EMPTY_EXTRAS);
@@ -61,8 +56,7 @@ function toast(msg: string): void {
     toastTimer = setTimeout(() => (toastMsg.value = null), 2400);
 }
 
-/** The pilot's storage key — the deal id when linked (stable across
- * account-name edits), else the account name. */
+/** The pilot's storage key — linked deal id when available, otherwise account name. */
 function extrasKey(): string {
     const d = draft.value;
     return d.linkedDealId.trim() || d.account;
@@ -82,11 +76,10 @@ export function bootPilotExtras(): void {
                 first = false;
                 return;
             }
-            // Never persist an untouched pilot — typing an account name
-            // character by character must not litter prefix keys.
+            // Never persist an untouched pilot. Typing an account name
+            // character by character must not create partial keys.
             if (key.trim() && !extrasEmpty(e)) saveExtras(key, e);
         });
-        // Deal/account switch reloads that pilot.
         effect(() => {
             const key = extrasKey();
             if (key !== extrasAccount.value) {
@@ -103,8 +96,8 @@ function patchExtras(part: Partial<PilotExtras>): void {
 
 const KIND_LABEL: Record<PersonKind, string> = {
     hands_on: t("hands-on"),
-    champion: t("your champion"),
-    signoff: t("signs off")
+    champion: t("champion"),
+    signoff: t("approves the result")
 };
 
 interface KitItem {
@@ -117,26 +110,89 @@ interface KitItem {
 }
 
 const KIT: ReadonlyArray<KitItem> = [
-    { key: "video", icon: "🎬", name: t("Getting-started video"), sub: t("5 minutes — send it first"), verb: t("Send →"), template: (c) => `Quick one — here's the 5-minute getting-started for the ${c.account} pilot. Watch it before you open the product and the first session makes sense right away.` },
-    { key: "quickstart", icon: "📄", name: t("Quick-start per role"), sub: t("one page each"), verb: t("Send →"), template: (c) => `Attached: a one-page quick-start for your role in the ${c.account} pilot — the three things to do this week, nothing more.` },
-    { key: "case", icon: "🏆", name: t("Case study"), sub: t("a company like theirs that ran this", { class: "body" }), verb: t("Send →"), template: (c) => `A team a lot like ${c.account} ran this same pilot — here's what they saw in the first two weeks, in their own words.` },
-    { key: "whyyou", icon: "💬", name: t("\"Why you're in this pilot\" note", { class: "body" }), sub: t("context per person"), verb: t("Send →"), template: (c) => `You're in the ${c.account} pilot because you're closest to the work it's meant to help with. Your read in week one matters more than anyone's.` },
-    { key: "champion", icon: "🤝", name: t("Champion kit"), sub: t("sell it when you're not there", { class: "body" }), verb: t("Send →"), template: (c) => `${c.champion} — here's the short kit for the moments I'm not in the room: what the pilot has to show, the three lines that answer the usual pushback, and what we agreed the results meeting will cover.` },
-    { key: "kickoff", icon: "📣", name: t("Kickoff announcement"), sub: t("your champion posts it"), verb: t("Copy →"), template: (c) => `Team — we're piloting a new tool for the next two weeks at ${c.account}. It's a real trial, not a demo: use it in your day-to-day and say what's broken. Your honest read decides whether it stays.` },
-    { key: "faq", icon: "❓", name: t("FAQ"), sub: t("answers for the internal skeptic", { class: "body" }), verb: t("Send →"), template: () => `The short FAQ: What happens to our data? Nothing leaves your environment. Does this replace our stack? No — it sits on top. What if it doesn't work? We stop at the date we agreed, no strings.` },
-    { key: "reference", icon: "🔗", name: t("Reference-customer intro"), sub: t("connect a stuck user to a happy one", { class: "body" }), verb: t("Ask →"), template: () => `Would it help to talk to someone who uses this every day at a company like yours? Happy to make the intro — 15 minutes, no salespeople on the call.` },
-    { key: "mutual", icon: "📋", name: t("Mutual pilot plan"), sub: t("you both own it — the goal, the steps, the results meeting", { class: "body" }), verb: t("Build together →"), template: (c) => `OUR PILOT PLAN — ${c.account}\nWhat it has to show: (we write this together)\nWho's hands-on: (their side + ours)\nCheck-ins: (dates we both hold)\nThe results meeting: (date + who's in the room)\nOwned by: ${c.champion} + me — we both sign.` }
+    {
+        key: "video",
+        icon: "🎬",
+        name: t("Getting-started video"),
+        sub: t("5 minutes · send before first use", { class: "body" }),
+        verb: t("Send →"),
+        template: (c) => `Quick one — here's the 5-minute getting-started video for the ${c.account} pilot. Please watch it before the first working session so the time is spent evaluating the product rather than setting it up.`
+    },
+    {
+        key: "quickstart",
+        icon: "📄",
+        name: t("Quick-start by role"),
+        sub: t("one page for each participant", { class: "body" }),
+        verb: t("Send →"),
+        template: (c) => `Attached is a one-page quick-start for your role in the ${c.account} pilot. It covers the three things to do this week.`
+    },
+    {
+        key: "case",
+        icon: "🏆",
+        name: t("Relevant case study"),
+        sub: t("a comparable customer pilot", { class: "body" }),
+        verb: t("Send →"),
+        template: () => `A comparable team ran a similar pilot. Here's what they evaluated and what they reported during the first two weeks.`
+    },
+    {
+        key: "whyyou",
+        icon: "💬",
+        name: t("Participant context note"),
+        sub: t("why this person is included", { class: "body" }),
+        verb: t("Send →"),
+        template: (c) => `You're included in the ${c.account} pilot because you're close to the work the pilot is meant to evaluate. Your feedback during the first week is part of the evaluation.`
+    },
+    {
+        key: "champion",
+        icon: "🤝",
+        name: t("Champion summary"),
+        sub: t("success criteria, responses, and results-meeting context", { class: "body" }),
+        verb: t("Send →"),
+        template: (c) => `${c.champion} — here's the short internal summary for the ${c.account} pilot: what it needs to demonstrate, responses to the common questions, and what we agreed to review in the results meeting.`
+    },
+    {
+        key: "kickoff",
+        icon: "📣",
+        name: t("Kickoff announcement"),
+        sub: t("message for the participant group", { class: "body" }),
+        verb: t("Copy →"),
+        template: (c) => `Team — we're piloting a new tool for the next two weeks at ${c.account}. Please use it in your normal work and record what works and what does not. That feedback will be part of the final evaluation.`
+    },
+    {
+        key: "faq",
+        icon: "❓",
+        name: t("FAQ"),
+        sub: t("answers to common participant questions", { class: "body" }),
+        verb: t("Send →"),
+        template: () => `Short FAQ: What happens to our data? Nothing leaves your environment. Does this replace our stack? No — it sits on top. What if it doesn't work? We stop at the agreed date.`
+    },
+    {
+        key: "reference",
+        icon: "🔗",
+        name: t("Reference-customer introduction"),
+        sub: t("optional conversation with an existing customer", { class: "body" }),
+        verb: t("Ask →"),
+        template: () => `Would it help to speak with a customer that uses this in a similar environment? I can make a 15-minute introduction.`
+    },
+    {
+        key: "mutual",
+        icon: "📋",
+        name: t("Pilot plan"),
+        sub: t("goal, participants, check-ins, results meeting, and owners", { class: "body" }),
+        verb: t("Build together →"),
+        template: (c) => `PILOT PLAN — ${c.account}\nSuccess criteria: (agreed together)\nParticipants: (customer + our team)\nCheck-ins: (agreed dates)\nResults meeting: (date + attendees)\nOwners: ${c.champion} + me`
+    }
 ];
 
 function copyText(text: string, done: string): void {
     if (!navigator.clipboard?.writeText) {
-        toast(t("Copying isn't available here — select the text by hand.", { class: "body" }));
+        toast(t("Copying isn't available here — select the text manually.", { class: "body" }));
         return;
     }
     navigator.clipboard
         .writeText(text)
         .then(() => toast(done))
-        .catch(() => toast(t("Couldn't copy — select the text by hand.", { class: "body" })));
+        .catch(() => toast(t("Couldn't copy — select the text manually.", { class: "body" })));
 }
 
 function addPerson(name: string, role: string, kind: PersonKind): void {
@@ -175,41 +231,37 @@ export function PilotDeskV4(): JSX.Element {
     const adoption = readAdoption(e);
     const target = circleTarget(deal?.value ?? 0);
 
-    // Movement derivation — the guide shows one movement at a time.
     const m1Done = proof !== null && proof.successCriteria.trim().length > 0;
     const m2Done = handsOn.length >= 2 && champion !== null;
     const current: 1 | 2 | 3 | 4 | 5 = !m1Done ? 1 : !m2Done ? 2 : e.stage;
 
-    // Day count from when the spec was FIRST locked (re-saving the spec
-    // must not reset the window clock).
     const startTs = e.startedAt ? Date.parse(e.startedAt) : proof ? Date.parse(proof.updatedAt) : NaN;
     const dayOf = Number.isFinite(startTs)
         ? Math.max(1, Math.ceil((Date.now() - startTs) / 86_400_000))
         : 0;
 
-    // The gated check-in steps (movement 3), generated from circle state.
     const firstInactive = handsOn.find((p) => !p.active) ?? null;
     const activeNames = handsOn.filter((p) => p.active).map((p) => p.name);
     const steps: ReadonlyArray<string> = [
         activeNames.length > 0
-            ? `${t("Message")} ${activeNames.slice(0, 2).join(" + ")} ${t("a quick \"nice work\" — keeps your active users warm", { class: "body" })}`
-            : `${t("Check in with")} ${champion?.name ?? t("your champion")} — ${t("who's actually opened it so far?", { class: "body" })}`,
+            ? `${t("Message")} ${activeNames.slice(0, 2).join(" + ")} ${t("to acknowledge their use and ask whether anything is blocking evaluation.", { class: "body" })}`
+            : `${t("Check in with")} ${champion?.name ?? t("your champion")} ${t("and confirm which participants have started using the product.", { class: "body" })}`,
         firstInactive
-            ? `${t("Get")} ${firstInactive.name} ${t("to their first real action — send the 5-minute start", { class: "body" })}`
-            : t("Everyone enrolled is using it — pull in the next person from their side.", { class: "body" }),
-        `${t("Set the next check-in with")} ${champion?.name ?? t("your champion")}`
+            ? `${t("Help")} ${firstInactive.name} ${t("complete a first meaningful action using the getting-started material.", { class: "body" })}`
+            : t("All enrolled participants are active. Decide whether the evaluation needs another participant.", { class: "body" }),
+        `${t("Schedule the next check-in with")} ${champion?.name ?? t("your champion")}`
     ];
 
     const gaps = [
         {
             id: "it",
-            q: t("Someone from IT"),
-            why: t("Who controls the data the product reads from? The pilot stalls at the first permissions wall without them.", { class: "body" })
+            q: t("IT or data owner"),
+            why: t("Add the person who can resolve data access or permissions if the pilot depends on systems they control.", { class: "body" })
         },
         {
             id: "driver",
-            q: t("A day-to-day driver on their side", { class: "body" }),
-            why: t("Who keeps the pilot alive between your check-ins? Hands-on enough to use it, senior enough to nudge the others.", { class: "body" })
+            q: t("Day-to-day pilot owner", { class: "body" }),
+            why: t("Add the customer-side person responsible for keeping participants engaged between formal check-ins.", { class: "body" })
         }
     ].filter((g) => !e.closedGaps.includes(g.id));
 
@@ -220,7 +272,7 @@ export function PilotDeskV4(): JSX.Element {
             stepsDone: 0
         });
         actionsDraft.value = "";
-        toast(t("Check-in logged — the desk sets up the next one.", { class: "body" }));
+        toast(t("Check-in logged. The next pilot actions are ready to review.", { class: "body" }));
     }
 
     return (
@@ -228,7 +280,7 @@ export function PilotDeskV4(): JSX.Element {
             <div class="pk4-wrap">
                 <div class="pk4-top">
                     <span class="pk4-bname">{t("Pilot Desk")}</span>
-                    <span class="pk4-r">{t("the guided pilot")}</span>
+                    <span class="pk4-r">{t("pilot plan and execution", { class: "body" })}</span>
                 </div>
 
                 <div class="pk4-where">
@@ -244,7 +296,7 @@ export function PilotDeskV4(): JSX.Element {
                                 const picked = deals.find((x) => x.id === id);
                                 patchDraft({ linkedDealId: id, account: picked?.accountName ?? d.account });
                             }}>
-                            <option value="">{t("Tie it to a deal…")}</option>
+                            <option value="">{t("Link to a deal…")}</option>
                             {deals.map((x) => <option value={x.id} key={x.id}>{x.accountName}</option>)}
                         </select>
                     ) : null}
@@ -253,19 +305,18 @@ export function PilotDeskV4(): JSX.Element {
                     ) : null}
                 </div>
 
-                {/* the circle */}
                 {current >= 2 ? (
                     <div class="pk4-band">
                         <div class="pk4-bh">
-                            <span class="pk4-bt">{t("The circle — who's hands-on with the pilot", { class: "body" })}</span>
+                            <span class="pk4-bt">{t("Pilot participants", { class: "body" })}</span>
                             <span class="pk4-br">
-                                {e.circle.length} {t("in")} · {t("aim")} {target.min}–{target.max} {t("for this deal")}{e.circle.length >= target.min ? " ✓" : ""}
+                                {e.circle.length} {t("included")} · {t("recommended range")} {target.min}–{target.max}{e.circle.length >= target.min ? " ✓" : ""}
                             </span>
                         </div>
-                        <div class="pk4-sizenote">{t("A small group is right for this kind of sale, not a crowd — the desk sizes it to your deal.", { class: "body" })}</div>
+                        <div class="pk4-sizenote">{t("Keep the participant group large enough to evaluate the use case, but small enough to manage directly during the pilot.", { class: "body" })}</div>
                         <div class="pk4-faces">
                             {e.circle.map((p) => (
-                                <span class="pk4-face" key={p.id} onClick={() => toggleActive(p.id)} title={p.kind === "hands_on" ? t("Tap when they start using it", { class: "body" }) : ""}>
+                                <span class="pk4-face" key={p.id} onClick={() => toggleActive(p.id)} title={p.kind === "hands_on" ? t("Mark when this participant starts using the product", { class: "body" }) : ""}>
                                     <span class={`pk4-d ${p.kind !== "hands_on" ? "is-na" : p.active ? "is-on" : "is-off"}`} />
                                     {p.name}
                                     <span class="pk4-rl">{p.role ? `${p.role} · ` : ""}{p.kind === "hands_on" ? (p.active ? t("using it") : t("not started")) : KIND_LABEL[p.kind]}</span>
@@ -278,7 +329,7 @@ export function PilotDeskV4(): JSX.Element {
                                 <select value={addKind.value} onChange={(ev) => (addKind.value = (ev.currentTarget as HTMLSelectElement).value as PersonKind)}>
                                     <option value="hands_on">{t("hands-on")}</option>
                                     <option value="champion">{t("champion")}</option>
-                                    <option value="signoff">{t("signs off")}</option>
+                                    <option value="signoff">{t("approves the result")}</option>
                                 </select>
                                 <button type="button" disabled={!addName.value.trim()} onClick={() => { addPerson(addName.value, addRole.value, addKind.value); addName.value = ""; addRole.value = ""; }}>{t("Add")}</button>
                             </span>
@@ -286,36 +337,35 @@ export function PilotDeskV4(): JSX.Element {
                     </div>
                 ) : null}
 
-                {/* who's missing — on the open field */}
                 {current >= 2 && gaps.length > 0 ? (
                     <div class="pk4-gaps">
                         <div class="pk4-gt">
-                            {gaps.length === 1 ? t("One person the pilot still needs — it stalls without them.", { class: "body" }) : t("Two people the pilot still needs — it stalls without them.", { class: "body" })}
+                            {t("Potential participant gaps", { class: "body" })}
                         </div>
                         {gaps.map((g) => (
                             <div class={`pk4-grow${openGap.value === g.id ? " is-open" : ""}`} key={g.id}>
                                 <div class="pk4-gtop">
                                     <span class="pk4-gq">{g.q}</span>
                                     <span class="pk4-gwhy">{g.why}</span>
-                                    <button type="button" class="pk4-gfind" onClick={() => (openGap.value = openGap.value === g.id ? null : g.id)}>{t("Find them →")}</button>
+                                    <button type="button" class="pk4-gfind" onClick={() => (openGap.value = openGap.value === g.id ? null : g.id)}>{t("Add person →")}</button>
                                 </div>
                                 {openGap.value === g.id ? (
                                     <div class="pk4-findbox">
-                                        <div class="pk4-fl">{t("Know who it is? Add them.")}</div>
+                                        <div class="pk4-fl">{t("Add the person if you know who owns this role.", { class: "body" })}</div>
                                         <input value={gapName.value} placeholder={t("Name + role")} onInput={(ev) => (gapName.value = (ev.currentTarget as HTMLInputElement).value)} />
                                         <button type="button" disabled={!gapName.value.trim()}
                                             onClick={() => {
-                                                addPerson(gapName.value, g.id === "it" ? "IT" : t("driver"), "hands_on");
+                                                addPerson(gapName.value, g.id === "it" ? "IT" : t("pilot owner"), "hands_on");
                                                 patchExtras({ closedGaps: [...extras.value.closedGaps, g.id] });
                                                 gapName.value = "";
                                                 openGap.value = null;
                                             }}>{t("Add")}</button>
                                         <button type="button" class="pk4-intro"
                                             onClick={() => copyText(
-                                                `${champion?.name ?? t("Hey")} — ${t("for the pilot to hold up we need", { class: "body" })} ${g.q.toLowerCase()} ${t("in the loop. Who's the right person, and would you intro us?", { class: "body" })}`,
-                                                t("Intro ask copied — send it to your champion.", { class: "body" })
+                                                `${champion?.name ?? t("Hi")} — ${t("for the pilot we still need", { class: "body" })} ${g.q.toLowerCase()} ${t("involved. Who owns this on your side, and would you introduce us?", { class: "body" })}`,
+                                                t("Introduction request copied.", { class: "body" })
                                             )}>
-                                            {t("Don't know them? Ask your champion — copy the intro", { class: "body" })}
+                                            {t("Ask the champion for an introduction", { class: "body" })}
                                         </button>
                                     </div>
                                 ) : null}
@@ -324,15 +374,14 @@ export function PilotDeskV4(): JSX.Element {
                     </div>
                 ) : null}
 
-                {/* share kit */}
                 {current >= 2 ? (
                     <div class="pk4-band pk4-kit">
                         <button type="button" class="pk4-bh pk4-kithead" onClick={() => (kitOpen.value = !kitOpen.value)}>
-                            <span class="pk4-bt">{t("Share kit — what to send the team so they actually use it", { class: "body" })}</span>
-                            <span class="pk4-br is-blue">{KIT.length} {t("things to share")} {kitOpen.value ? "▴" : "▾"}</span>
+                            <span class="pk4-bt">{t("Participant materials", { class: "body" })}</span>
+                            <span class="pk4-br is-blue">{KIT.length} {t("items")} {kitOpen.value ? "▴" : "▾"}</span>
                         </button>
                         {firstInactive ? (
-                            <div class="pk4-knud">{t("Right now:")} <b>{firstInactive.name} {t("hasn't started.")}</b> {t("Send the 5-minute getting-started so your next check-in is about wins, not setup.", { class: "body" })}</div>
+                            <div class="pk4-knud">{t("Current follow-up:")} <b>{firstInactive.name} {t("has not started using the product.")}</b> {t("Send the getting-started material before the next check-in.", { class: "body" })}</div>
                         ) : null}
                         {kitOpen.value ? (
                             <div class="pk4-assets">
@@ -345,7 +394,7 @@ export function PilotDeskV4(): JSX.Element {
                                         </span>
                                         <button type="button" class="pk4-send"
                                             onClick={() => {
-                                                copyText(item.template({ account: d.account || t("the account"), champion: champion?.name ?? t("your champion") }), t("Copied — paste it where the team lives.", { class: "body" }));
+                                                copyText(item.template({ account: d.account || t("the account"), champion: champion?.name ?? t("your champion") }), t("Copied.", { class: "body" }));
                                                 if (!e.shared.includes(item.key)) patchExtras({ shared: [...e.shared, item.key] });
                                             }}>
                                             {e.shared.includes(item.key) ? t("Sent ✓") : item.verb}
@@ -357,33 +406,31 @@ export function PilotDeskV4(): JSX.Element {
                     </div>
                 ) : null}
 
-                {/* the five movements */}
                 <div class="pk4-path">
-                    {/* 1 — set it up */}
                     <div class={`pk4-mv${m1Done ? " is-done" : " is-now"}`}>
                         <span class="pk4-node">{m1Done ? "✓" : "1"}</span>
-                        <div class="pk4-ttl">{t("Set it up")} <span class="pk4-tag">{m1Done ? t("in place") : t("you're here")}</span></div>
+                        <div class="pk4-ttl">{t("Define the pilot")} <span class="pk4-tag">{m1Done ? t("Step complete") : t("current step")}</span></div>
                         {m1Done && proof ? (
-                            <div class="pk4-summ">{d.durationDays}-{t("day window")} · {proof.successCriteria.slice(0, 60)}{proof.readoutOwner ? ` · ${proof.readoutOwner} ${t("signs off")}` : ""}</div>
+                            <div class="pk4-summ">{d.durationDays}-{t("day pilot")} · {proof.successCriteria.slice(0, 60)}{proof.readoutOwner ? ` · ${proof.readoutOwner} ${t("approves the result")}` : ""}</div>
                         ) : (
                             <div class="pk4-panel">
-                                <div class="pk4-ph">{t("Agree what the pilot has to show — before anyone touches the product.", { class: "body" })}</div>
-                                <div class="pk4-pwhy">{t("A pilot without an agreed finish line runs forever and shows nothing. Write the three answers down with your champion", { class: "body" })} — <b>{t("these three answers become the Mutual pilot plan.", { class: "body" })}</b></div>
+                                <div class="pk4-ph">{t("Define the pilot's success criteria before the pilot begins.", { class: "body" })}</div>
+                                <div class="pk4-pwhy">{t("Agree on success criteria, the person who approves the result, and the pilot end date with your champion. These become the pilot plan.", { class: "body" })}</div>
                                 <div class="pk4-form">
-                                    <label><span>{t("What it has to show")}</span>
-                                        <input value={d.successCriteria} placeholder={t("e.g. Cut forecast-error in half on one team", { class: "body" })}
+                                    <label><span>{t("Success criteria")}</span>
+                                        <input value={d.successCriteria} placeholder={t("e.g. Cut forecast error in half on one team", { class: "body" })}
                                             onInput={(ev) => patchDraft({ successCriteria: (ev.currentTarget as HTMLInputElement).value })} /></label>
-                                    <label><span>{t("Who signs off")}</span>
+                                    <label><span>{t("Who approves the result")}</span>
                                         <input value={d.readoutOwner} placeholder={t("e.g. Dana Wu, VP Ops")}
                                             onInput={(ev) => patchDraft({ readoutOwner: (ev.currentTarget as HTMLInputElement).value })} /></label>
-                                    <label><span>{t("When you'll stop")}</span>
-                                        <input value={d.boundaries} placeholder={t("e.g. Day 14, or earlier if nobody's using it", { class: "body" })}
+                                    <label><span>{t("Pilot end condition or date")}</span>
+                                        <input value={d.boundaries} placeholder={t("e.g. Day 14, or earlier if adoption is too low to evaluate", { class: "body" })}
                                             onInput={(ev) => patchDraft({ boundaries: (ev.currentTarget as HTMLInputElement).value })} /></label>
                                     <label><span>{t("Account")}</span>
                                         <input value={d.account} placeholder="e.g. Ramp"
                                             onInput={(ev) => patchDraft({ account: (ev.currentTarget as HTMLInputElement).value })} /></label>
                                     <div class="pk4-window">
-                                        <span>{t("The window")}</span>
+                                        <span>{t("Pilot length")}</span>
                                         <button type="button" class={d.durationDays === 7 ? "is-on" : ""} onClick={() => setDurationDays(7)}>7 {t("days")}</button>
                                         <button type="button" class={d.durationDays === 14 ? "is-on" : ""} onClick={() => setDurationDays(14)}>14 {t("days")}</button>
                                     </div>
@@ -391,48 +438,44 @@ export function PilotDeskV4(): JSX.Element {
                                 <button type="button" class="pk4-btn"
                                     disabled={!d.account.trim() || !d.successCriteria.trim()}
                                     onClick={() => {
-                                        // Cloud write too — a local-only save is
-                                        // clobbered when cloud replaces local on boot.
                                         void saveProof(saveDraft());
                                         if (!extras.value.startedAt) patchExtras({ startedAt: new Date().toISOString() });
-                                        toast(t("Pilot set — now bring in the people.", { class: "body" }));
+                                        toast(t("Pilot setup saved. Add the participant group next.", { class: "body" }));
                                     }}>
-                                    {t("Lock the setup →")}
+                                    {t("Save pilot setup →")}
                                 </button>
                             </div>
                         )}
                     </div>
 
-                    {/* 2 — bring in the people */}
                     <div class={`pk4-mv${m2Done ? " is-done" : m1Done ? " is-now" : ""}`}>
                         <span class="pk4-node">{m2Done ? "✓" : "2"}</span>
-                        <div class="pk4-ttl">{t("Bring in the first people")} <span class="pk4-tag">{m2Done ? t("in place · keep widening ↑") : m1Done ? t("you're here") : t("ahead")}</span></div>
-                        <div class="pk4-summ">{t("Your hands-on users + champion. The circle above is where you keep growing it.", { class: "body" })}</div>
+                        <div class="pk4-ttl">{t("Identify pilot participants")} <span class="pk4-tag">{m2Done ? t("Step complete") : m1Done ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-summ">{t("Add the hands-on users and the champion who will evaluate the pilot.", { class: "body" })}</div>
                         {m1Done && !m2Done ? (
                             <div class="pk4-panel">
-                                <div class="pk4-ph">{t("Get the right hands on it — usually not the buyer.", { class: "body" })}</div>
-                                <div class="pk4-pwhy">{t("You need at least", { class: "body" })} <b>{t("two hands-on users and a champion")}</b> {t("before the pilot is real. Add them in the circle above — the who's-missing prompts point at the two people teams forget.", { class: "body" })}</div>
+                                <div class="pk4-ph">{t("Add the people who will actually use and evaluate the product.", { class: "body" })}</div>
+                                <div class="pk4-pwhy">{t("The current pilot model requires at least two hands-on users and a champion before the next stage can begin.", { class: "body" })}</div>
                             </div>
                         ) : null}
                     </div>
 
-                    {/* 3 — keep it moving */}
                     <div class={`pk4-mv${current > 3 ? " is-done" : current === 3 && m2Done ? " is-now" : ""}`}>
                         <span class="pk4-node">{current > 3 ? "✓" : "3"}</span>
-                        <div class="pk4-ttl">{t("Keep the pilot moving")} <span class="pk4-tag">{current > 3 ? t("moving") : current === 3 && m2Done ? t("you're here") : t("ahead")}</span></div>
-                        <div class="pk4-summ">{t("Hold their hand between check-ins — is the product getting used, and who else can you pull in?", { class: "body" })}</div>
+                        <div class="pk4-ttl">{t("Monitor pilot engagement")} <span class="pk4-tag">{current > 3 ? t("Step complete") : current === 3 && m2Done ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-summ">{t("Track usage between check-ins and add participants when broader evaluation is needed.", { class: "body" })}</div>
                         {current === 3 && m2Done ? (
                             <div class="pk4-panel">
                                 <div class="pk4-ph">
                                     {firstInactive
-                                        ? `${t("Get")} ${firstInactive.name} ${t("using the product before your next check-in.", { class: "body" })}`
-                                        : t("Everyone's in — widen the circle and hold the pace.", { class: "body" })}
+                                        ? `${t("Help")} ${firstInactive.name} ${t("complete a meaningful product action before the next check-in.", { class: "body" })}`
+                                        : t("All enrolled participants are active. Decide whether another participant is needed for a fair evaluation.", { class: "body" })}
                                 </div>
                                 <div class="pk4-adopt">
-                                    <div><div class="pk4-cl">{t("Actually using it")}</div><div class={`pk4-cv${adoption.using < adoption.enrolled ? " is-warn" : " is-good"}`}>{adoption.using} {t("of")} {adoption.enrolled} {t("enrolled")}</div></div>
-                                    <div><div class="pk4-cl">{t("Actions taken")}</div><div class={`pk4-cv${adoption.actionsLast > 0 ? " is-good" : ""}`}>{adoption.actionsLast} {t("last check-in")}</div></div>
+                                    <div><div class="pk4-cl">{t("Participants using it")}</div><div class={`pk4-cv${adoption.using < adoption.enrolled ? " is-warn" : " is-good"}`}>{adoption.using} {t("of")} {adoption.enrolled}</div></div>
+                                    <div><div class="pk4-cl">{t("Actions recorded")}</div><div class={`pk4-cv${adoption.actionsLast > 0 ? " is-good" : ""}`}>{adoption.actionsLast} {t("last check-in")}</div></div>
                                 </div>
-                                <div class="pk4-src">{t("how we know: from your product's usage — or mark it by hand on the circle above", { class: "body" })}</div>
+                                <div class="pk4-src">{t("Usage can come from product telemetry or be marked manually above.", { class: "body" })}</div>
                                 <ul class="pk4-steps">
                                     {steps.map((s, i) => {
                                         const done = i < e.stepsDone;
@@ -441,7 +484,7 @@ export function PilotDeskV4(): JSX.Element {
                                             <li class={`${done ? "is-done" : ""}${locked ? " is-lock" : ""}`} key={s}>
                                                 <button type="button" class="pk4-ck" disabled={locked}
                                                     onClick={() => patchExtras({ stepsDone: done ? i : i + 1 })}>{done ? "✓" : ""}</button>
-                                                <span class="pk4-tt">{s}{locked ? <span class="pk4-lockhint"> — {t("finish the step above first")}</span> : null}</span>
+                                                <span class="pk4-tt">{s}{locked ? <span class="pk4-lockhint"> — {t("complete the step above first")}</span> : null}</span>
                                             </li>
                                         );
                                     })}
@@ -449,63 +492,61 @@ export function PilotDeskV4(): JSX.Element {
                                 <div class="pk4-logrow">
                                     <input value={actionsDraft.value} type="number" placeholder={t("actions this check-in")}
                                         onInput={(ev) => (actionsDraft.value = (ev.currentTarget as HTMLInputElement).value)} />
-                                    <button type="button" class="pk4-btn" onClick={logCheckIn}>{t("Log this check-in →")}</button>
+                                    <button type="button" class="pk4-btn" onClick={logCheckIn}>{t("Log check-in →")}</button>
                                     {e.checkins.length > 0 ? <span class="pk4-ccount">{e.checkins.length} {t("logged")}</span> : null}
                                     {e.checkins.length > 0 ? (
-                                        <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 4 })}>{t("Read the adoption →")}</button>
+                                        <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 4 })}>{t("Review adoption →")}</button>
                                     ) : null}
                                 </div>
                             </div>
                         ) : null}
                     </div>
 
-                    {/* 4 — read the adoption */}
                     <div class={`pk4-mv${current > 4 ? " is-done" : current === 4 ? " is-now" : ""}`}>
                         <span class="pk4-node">{current > 4 ? "✓" : "4"}</span>
-                        <div class="pk4-ttl">{t("Read the adoption")} <span class="pk4-tag">{current > 4 ? t("read") : current === 4 ? t("you're here") : t("ahead")}</span></div>
-                        <div class="pk4-summ">{t("Are enough of the right people actually using the product day-to-day to give it a fair shot?", { class: "body" })}</div>
+                        <div class="pk4-ttl">{t("Review adoption")} <span class="pk4-tag">{current > 4 ? t("Step complete") : current === 4 ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-summ">{t("Confirm that the intended users are using the product often enough to evaluate the pilot fairly.", { class: "body" })}</div>
                         {current === 4 ? (
                             <div class="pk4-panel">
                                 <div class="pk4-ph">
                                     {adoption.band === "ready"
-                                        ? t("Ready — the right people are using it, and it's producing.", { class: "body" })
+                                        ? t("Adoption is sufficient for the current evaluation.", { class: "body" })
                                         : adoption.band === "almost"
-                                          ? t("Almost — usage is real but thin. One more active person changes the read.", { class: "body" })
-                                          : t("Too thin to hand over — the pilot hasn't had a fair shot yet.", { class: "body" })}
+                                          ? t("Adoption is close to the current threshold. One additional active participant would improve the evaluation.", { class: "body" })
+                                          : t("Adoption is currently too limited to evaluate the pilot fairly.", { class: "body" })}
                                 </div>
                                 <div class="pk4-adopt">
-                                    <div><div class="pk4-cl">{t("Actually using it")}</div><div class={`pk4-cv${adoption.band === "ready" ? " is-good" : " is-warn"}`}>{adoption.using} {t("of")} {adoption.enrolled}</div></div>
+                                    <div><div class="pk4-cl">{t("Participants using it")}</div><div class={`pk4-cv${adoption.band === "ready" ? " is-good" : " is-warn"}`}>{adoption.using} {t("of")} {adoption.enrolled}</div></div>
                                     <div><div class="pk4-cl">{t("Check-ins held")}</div><div class="pk4-cv">{e.checkins.length}</div></div>
                                 </div>
-                                <div class="pk4-pwhy">{t("The outcome number can lag the window — adoption is the honest meter. If the right hands are on it and it's getting used, the pilot did its job.", { class: "body" })}</div>
+                                <div class="pk4-pwhy">{t("Use adoption to determine whether enough of the intended participants actually evaluated the product. Pilot business outcomes may require more time than the pilot window itself.", { class: "body" })}</div>
                                 <div class="pk4-logrow">
-                                    <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 3 })}>{t("← Keep it moving")}</button>
-                                    <button type="button" class="pk4-btn" onClick={() => patchExtras({ stage: 5 })}>{t("Write it up →")}</button>
+                                    <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 3 })}>{t("← Monitor engagement")}</button>
+                                    <button type="button" class="pk4-btn" onClick={() => patchExtras({ stage: 5 })}>{t("Summarize results →")}</button>
                                 </div>
                             </div>
                         ) : null}
                     </div>
 
-                    {/* 5 — the write-up */}
                     <div class={`pk4-mv${current === 5 ? " is-now" : ""}`}>
                         <span class="pk4-node">5</span>
-                        <div class="pk4-ttl">{t("Write up what it showed, for your champion to carry", { class: "body" })} <span class="pk4-tag">{current === 5 ? t("you're here") : t("ahead")}</span></div>
-                        <div class="pk4-summ">{t("A short write-up your champion can take to their boss and defend on their own — without you in the room.", { class: "body" })}</div>
+                        <div class="pk4-ttl">{t("Summarize pilot results for the buyer", { class: "body" })} <span class="pk4-tag">{current === 5 ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-summ">{t("Create a concise results summary that your champion can share internally without you present.", { class: "body" })}</div>
                         {current === 5 ? (
                             <div class="pk4-panel">
-                                <div class="pk4-ph">{t("Write it so")} {champion?.name ?? t("your champion")} {t("can defend it alone.", { class: "body" })}</div>
+                                <div class="pk4-ph">{t("Write the summary so")} {champion?.name ?? t("your champion")} {t("can explain the pilot result internally without additional context from you.", { class: "body" })}</div>
                                 <textarea
                                     class="pk4-writeup"
                                     value={e.writeup}
-                                    placeholder={t("What we set out to show · who used it and how much · what it showed · what we'd do next. Four short paragraphs — their boss reads it in two minutes.", { class: "body" })}
+                                    placeholder={t("Success criteria · who participated · adoption · what the pilot demonstrated · recommended next decision.", { class: "body" })}
                                     onInput={(ev) => patchExtras({ writeup: (ev.currentTarget as HTMLTextAreaElement).value })}
                                 />
                                 <div class="pk4-logrow">
                                     <button type="button" class="pk4-btn" disabled={!e.writeup.trim()}
-                                        onClick={() => copyText(e.writeup, t("Copied — send it to your champion before the results meeting.", { class: "body" }))}>
-                                        {t("Copy for the results meeting", { class: "body" })}
+                                        onClick={() => copyText(e.writeup, t("Copied. Send it to the champion before the results meeting.", { class: "body" }))}>
+                                        {t("Copy results summary", { class: "body" })}
                                     </button>
-                                    <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 4 })}>{t("← Back to the read")}</button>
+                                    <button type="button" class="pk4-adv" onClick={() => patchExtras({ stage: 4 })}>{t("← Review adoption")}</button>
                                 </div>
                             </div>
                         ) : null}

@@ -83,7 +83,7 @@ describe("buildDraftPrompt", () => {
     it("handles a null commercial profile + null icp", () => {
         const i = { ...input(), commercial_profile: null, icp: null };
         const p = buildDraftPrompt(i);
-        expect(p).toContain("hasn't fully declared");
+        expect(p).toContain("Commercial profile/ICP is incomplete");
     });
 });
 
@@ -117,6 +117,6 @@ describe("buildRevisePrompt", () => {
 
 describe("SYNTHESIS_PROMPT_VERSION", () => {
     it("is a stable identifier", () => {
-        expect(SYNTHESIS_PROMPT_VERSION).toBe("synthesis-1.0");
+        expect(SYNTHESIS_PROMPT_VERSION).toBe("synthesis-1.1");
     });
 });

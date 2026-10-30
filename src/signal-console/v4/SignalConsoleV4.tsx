@@ -30,12 +30,10 @@ import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 import "./signal-console-v4.css";
 
 /**
- * SignalConsoleV4 — the Attention Router (canon §4.7), wired to
- * production. The whole watched field at once, grouped by where
- * attention should go (act now / reach while warm / emerging / going
- * cold), a shape-of-attention strip, click-to-open-in-place, add-account
- * + enrich in the working header. The heat engine, CRUD, enrichment,
- * execution-context, and handoff are reused unchanged.
+ * Signal Console — watched accounts grouped by current priority using the
+ * existing score and signal-recency model. Internal `heat` fields and band
+ * ids remain stable for compatibility; visible language describes account
+ * priority, supporting signals, and signal age directly.
  */
 
 const composerOpen = signal(false);
@@ -48,15 +46,13 @@ const addSigDraft = signal("");
 function saveWatch(): void {
     const name = cName.value.trim();
     if (!name) return;
-    const notes = cWhy.value.trim() || "Just added — watching for signals";
+    const notes = cWhy.value.trim() || "Just added — monitoring for relevant account signals";
     const account = buildManualAccount({
         name,
         domain: cDomain.value.trim() || undefined,
         industry: cIndustry.value.trim() || undefined,
         notes
     });
-    // Through the cloud orchestrator (local upsert + Supabase write) —
-    // a local-only write is clobbered when cloud replaces local on boot.
     void saveAccount(account);
     cName.value = "";
     cDomain.value = "";
@@ -100,22 +96,20 @@ function Chip({ account, heat, ageLabel, band }: {
         <div
             class={`sc4-chip${open ? " is-open" : ""}${band === "now" ? " sc4-chip--glow" : ""}`}
             onClick={() => {
-                // Clear the add-signal draft when switching chips so
-                // unsaved text never bleeds into the next account.
                 addSigDraft.value = "";
                 selectAccount(open ? null : account.id);
             }}
         >
             <div class="sc4-chead">
-                <span class="sc4-heatbar">
+                <span class="sc4-heatbar" title={t("Account priority score", { class: "body" })}>
                     <i style={`width:${Math.min(100, heat)}%`} />
                 </span>
-                <span class="sc4-cheat">{heat}</span>
+                <span class="sc4-cheat" title={t("Account priority score", { class: "body" })}>{heat}</span>
                 <span class={`sc4-tdot sc4-tdot--${tdot}`} title={exec.temperatureLabel} />
             </div>
             <div class="sc4-cname fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, account.name); }}>{account.name}</div>
             <div class="sc4-csig">
-                {topSig?.headline ?? account.notes ?? t("no signals yet — research to build heat", { class: "body" })}
+                {topSig?.headline ?? account.notes ?? t("No signals yet. Research this account to add current evidence.", { class: "body" })}
             </div>
             <div class={`sc4-cage${replied ? " sc4-cage--live" : ""}`}>
                 {replied ? `● ${t("replied")} · ` : ""}
@@ -138,13 +132,13 @@ function Chip({ account, heat, ageLabel, band }: {
                             ))
                         ) : (
                             <div class="sc4-dsig sc4-dsig--empty">
-                                {t("No signals yet — add one, or run enrich.", { class: "body" })}
+                                {t("No signals yet. Add one manually or refresh account data.", { class: "body" })}
                             </div>
                         )}
                     </div>
                     <div class="sc4-addsig">
                         <input
-                            placeholder={t("Add a signal by hand…", { class: "body" })}
+                            placeholder={t("Add a signal manually…", { class: "body" })}
                             value={addSigDraft.value}
                             onInput={(e) => (addSigDraft.value = (e.currentTarget as HTMLInputElement).value)}
                         />
@@ -195,14 +189,14 @@ export function SignalConsoleV4(): JSX.Element {
                             />
                         </span>
                         <button type="button" class="sc4-enrich" onClick={() => void runEnrichAll()}>
-                            {t("Enrich all ↻")}
+                            {t("Refresh account data ↻")}
                         </button>
                         <button
                             type="button"
                             class="sc4-watchbtn"
                             onClick={() => (composerOpen.value = !composerOpen.value)}
                         >
-                            {t("+ Watch a company")}
+                            {t("+ Add company to watchlist")}
                         </button>
                     </span>
                 </div>
@@ -218,14 +212,14 @@ export function SignalConsoleV4(): JSX.Element {
                                 value={cIndustry.value} onInput={(e) => (cIndustry.value = (e.currentTarget as HTMLInputElement).value)} />
                         </div>
                         <input class="sc4-cinput sc4-cinput--wide"
-                            placeholder={t("Why they're on your radar — the trigger that brought them up", { class: "body" })}
+                            placeholder={t("Why this account is relevant now — current event, change, or trigger", { class: "body" })}
                             value={cWhy.value} onInput={(e) => (cWhy.value = (e.currentTarget as HTMLInputElement).value)} />
                         <div class="sc4-composer__foot">
                             <button type="button" class="sc4-btn sc4-btn--go" onClick={saveWatch}>
-                                {t("Watch this company")}
+                                {t("Add to watchlist")}
                             </button>
                             <span class="sc4-composer__hint">
-                                {t("A new watch lands in Emerging until its signals build heat.", { class: "body" })}
+                                {t("A newly added account appears under New signals until enough evidence exists to change its priority.", { class: "body" })}
                             </span>
                         </div>
                     </div>
@@ -240,22 +234,22 @@ export function SignalConsoleV4(): JSX.Element {
                         ))}
                     </div>
                     <div class="sc4-shape__key">
-                        <span><i class="sc4-kd sc4-kd--now" /><b>{field.shape.now}</b> {t("act now")}</span>
-                        <span><i class="sc4-kd sc4-kd--warm" /><b>{field.shape.warm}</b> {t("reach while warm")}</span>
-                        <span><i class="sc4-kd sc4-kd--emerging" /><b>{field.shape.emerging}</b> {t("emerging")}</span>
-                        <span><i class="sc4-kd sc4-kd--cold" /><b>{field.shape.cold}</b> {t("going cold")}</span>
+                        <span><i class="sc4-kd sc4-kd--now" /><b>{field.shape.now}</b> {t("high priority")}</span>
+                        <span><i class="sc4-kd sc4-kd--warm" /><b>{field.shape.warm}</b> {t("priority declining")}</span>
+                        <span><i class="sc4-kd sc4-kd--emerging" /><b>{field.shape.emerging}</b> {t("new signals")}</span>
+                        <span><i class="sc4-kd sc4-kd--cold" /><b>{field.shape.cold}</b> {t("monitor")}</span>
                     </div>
                 </div>
                 <p class="sc4-sub">
-                    {t("The shape of your attention today. Scan the bands, open any account in place, strike where it's ripe.", { class: "body" })}
+                    {t("Review accounts by current priority. Open an account to see the signals and activity driving its ranking.", { class: "body" })}
                 </p>
                 <p class="sc4-health">
-                    <b>{field.accountsWatched}</b> {t("accounts watched")} · <b>{field.signalsThisWeek}</b> {t("signals this week")} · <b>{field.compounding}</b> {t("compounding")}, <b>{field.stillWeak}</b> {t("still weak")}
+                    <b>{field.accountsWatched}</b> {t("watched accounts")} · <b>{field.signalsThisWeek}</b> {t("new signals this week")} · <b>{field.compounding}</b> {t("accounts with multiple reinforcing signals")} · <b>{field.stillWeak}</b> {t("accounts with low current priority")}
                 </p>
 
                 {field.accountsWatched === 0 ? (
                     <p class="sc4-empty">
-                        {t("No accounts watched yet. Add one with “Watch a company,” or send confirmed accounts over from the Prospecting Desk.", { class: "body" })}
+                        {t("No accounts are on the watchlist yet. Add one here or send confirmed accounts from Prospecting Desk.", { class: "body" })}
                     </p>
                 ) : (
                     field.bands
@@ -282,13 +276,9 @@ export function SignalConsoleV4(): JSX.Element {
                         ))
                 )}
             </div>
-            {/* The Ground — the app's one jump summon (2026-07-08):
-                touch the ground line (or press G) and the motion map
-                rises from beneath the room. */}
             <GroundLine />
             <LiveEdge />
             <FollowPeek />
-
         </div>
     );
 }

@@ -22,7 +22,7 @@ const MINIMAL: EnrichPromptInputs = {
 
 describe("PROMPT_VERSION", () => {
     it("is set", () => {
-        expect(PROMPT_VERSION).toBe("enrich-1.0");
+        expect(PROMPT_VERSION).toBe("enrich-1.1");
     });
 });
 
@@ -39,9 +39,9 @@ describe("buildEnrichPrompt — commercial profile (ADR-007)", () => {
             "Operator's product category (what THEY sell): founder-to-first-operator revenue OS"
         );
         expect(prompt).toContain("Operator's value proposition: make the motion inheritable");
-        expect(prompt).toContain("Relevance is anchored on this category");
+        expect(prompt).toContain("Score user_relevance_score by how much the item touches the operator's category");
         // With a profile set, the empty-context fallback must NOT fire.
-        expect(prompt).not.toContain("Workspace has not yet declared");
+        expect(prompt).not.toContain("Workspace context is incomplete");
     });
 
     it("omits the category line when product_category is null", () => {
@@ -55,18 +55,18 @@ describe("buildEnrichPrompt — commercial profile (ADR-007)", () => {
 
     it("still fires the empty-context fallback when profile is null AND all else empty", () => {
         const prompt = buildEnrichPrompt(MINIMAL);
-        expect(prompt).toContain("Workspace has not yet declared");
+        expect(prompt).toContain("Workspace context is incomplete");
     });
 });
 
 describe("ENRICH_SYSTEM_PROMPT", () => {
     it("instructs the model to respond with only JSON", () => {
         expect(ENRICH_SYSTEM_PROMPT).toContain("ONLY valid JSON");
-        expect(ENRICH_SYSTEM_PROMPT).toContain("must be '{'");
+        expect(ENRICH_SYSTEM_PROMPT).toContain("matching the schema");
     });
 
     it("sets voice constraints", () => {
-        expect(ENRICH_SYSTEM_PROMPT).toContain("factual");
+        expect(ENRICH_SYSTEM_PROMPT).toContain("Preserve what the source actually establishes");
         expect(ENRICH_SYSTEM_PROMPT).toContain("Do not editorialize");
     });
 });
@@ -96,7 +96,7 @@ describe("buildEnrichPrompt — minimal context", () => {
 
     it("includes a graceful 'workspace has not declared context' clause when everything empty", () => {
         const prompt = buildEnrichPrompt(MINIMAL);
-        expect(prompt).toContain("Workspace has not yet declared");
+        expect(prompt).toContain("Workspace context is incomplete");
         expect(prompt).toContain("Score user_relevance_score conservatively");
     });
 
@@ -111,7 +111,7 @@ describe("buildEnrichPrompt — minimal context", () => {
     it("does NOT include the corporate ownership block when map is empty", () => {
         const prompt = buildEnrichPrompt(MINIMAL);
         expect(prompt).not.toContain("CORPORATE OWNERSHIP MAP");
-        expect(prompt).not.toContain("ADDITIONAL RULE");
+        expect(prompt).not.toContain("When the item mentions a company that appears in the ownership map");
     });
 });
 
@@ -164,7 +164,7 @@ describe("buildEnrichPrompt — with workspace context", () => {
 
     it("does NOT include the empty-context fallback when context exists", () => {
         const prompt = buildEnrichPrompt(WITH_CONTEXT);
-        expect(prompt).not.toContain("Workspace has not yet declared");
+        expect(prompt).not.toContain("Workspace context is incomplete");
     });
 });
 
@@ -197,7 +197,7 @@ describe("buildEnrichPrompt — corporate ownership map", () => {
                 }
             ]
         });
-        expect(prompt).toContain("ADDITIONAL RULE");
+        expect(prompt).toContain("When the item mentions a company that appears in the ownership map");
         expect(prompt).toContain("Segment (Twilio-owned)");
     });
 });

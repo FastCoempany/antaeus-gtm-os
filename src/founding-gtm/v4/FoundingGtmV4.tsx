@@ -12,17 +12,10 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./founding-gtm-v4.css";
 
 /**
- * FoundingGtmV4 (canon §4.19) — the open book, wired to production
- * from the settled 2026-07-07 design. A two-pane bound reader: the
- * left plate carries the serif masthead ("If a hire started Monday ·
- * The handoff"), the recessive N-of-7 segment bar, and the seven-part
- * contents with ready/thin/empty dots; the right page renders the open
- * part in full reading serif — the authored prose, a concrete evidence
- * line, and the left-ruled "one thing to notice" callout. Page-through
- * nav; a read-only share as the one move; thin/empty parts shown
- * honestly, never hidden. The seven authoring engines, cross-room
- * reads, section-readiness publisher, ceremony, and share links are
- * the shipped engine unchanged.
+ * Founding GTM — sales handoff documentation generated from the evidence
+ * already recorded across the workspace. The reader is organized into
+ * seven sections another seller would need to understand and run the
+ * process. Internal section ids and persistence stay stable.
  */
 
 const openId = signal<SectionId>(SECTION_IDS[0]!);
@@ -36,8 +29,8 @@ const DOT: Record<AuthoredSection["status"], string> = {
 
 const STATUS_WORD: Record<AuthoredSection["status"], string> = {
     ready: t("ready"),
-    partial: t("still thin"),
-    empty: t("empty")
+    partial: t("partially complete"),
+    empty: t("no evidence yet")
 };
 
 export function FoundingGtmV4(): JSX.Element {
@@ -57,20 +50,19 @@ export function FoundingGtmV4(): JSX.Element {
     return (
         <div class="fg4">
             <div class="fg4-book">
-                {/* the left plate */}
                 <aside class="fg4-plate">
-                    <div class="fg4-k">{t("If a hire started Monday")}</div>
-                    <h1 class="fg4-mast">{t("The handoff")}</h1>
+                    <div class="fg4-k">{t("Sales handoff")}</div>
+                    <h1 class="fg4-mast">{t("Documented sales process")}</h1>
                     <p class="fg4-sub">
-                        {t("The motion, written down — what a sharp operator would leave for their replacement.", { class: "body" })}
-                        {verdict ? <> {t("Readiness today:")} <b>{verdict}</b>.</> : null}
+                        {t("The information another seller needs to understand and run this sales process without having it re-explained.", { class: "body" })}
+                        {verdict ? <> {t("Current readiness:")} <b>{verdict}</b>.</> : null}
                     </p>
 
-                    <div class="fg4-seg" title={`${ready} ${t("of")} 7 ${t("parts ready")}`}>
+                    <div class="fg4-seg" title={`${ready} ${t("of")} 7 ${t("sections ready")}`}>
                         {sections.map((s) => (
                             <span class={`fg4-segb ${DOT[s.status]}`} key={s.id} />
                         ))}
-                        <span class="fg4-segn">{ready} {t("of")} 7 {t("parts ready")}</span>
+                        <span class="fg4-segn">{ready} {t("of")} 7 {t("sections ready")}</span>
                     </div>
 
                     <nav class="fg4-toc">
@@ -88,15 +80,14 @@ export function FoundingGtmV4(): JSX.Element {
                     </nav>
 
                     <button type="button" class="fg4-share" onClick={() => (shareOpen.value = !shareOpen.value)}>
-                        {shareOpen.value ? t("Close sharing") : t("Share with a hire — read-only", { class: "body" })}
+                        {shareOpen.value ? t("Close sharing") : t("Share read-only with a seller", { class: "body" })}
                     </button>
                     {shareOpen.value ? <div class="fg4-sharewrap"><SharePanel /></div> : null}
                 </aside>
 
-                {/* the right page */}
                 <article class="fg4-page">
                     <div class="fg4-ph">
-                        <span class="fg4-pk">{t("Part")} {idx + 1} {t("of")} 7</span>
+                        <span class="fg4-pk">{t("Section")} {idx + 1} {t("of")} 7</span>
                         <h2 class="fg4-pt">{open.title}</h2>
                         {open.status !== "ready" ? (
                             <span class={`fg4-badge ${DOT[open.status]}`}>
@@ -107,23 +98,18 @@ export function FoundingGtmV4(): JSX.Element {
 
                     {open.status === "empty" ? (
                         (() => {
-                            // Starts smart: an empty part renders the authored
-                            // pattern for teams this size, labeled honestly in
-                            // the blue system role. The operator's own record
-                            // takes the page over the moment the section has
-                            // anything real to say (the branch below).
                             const prior = priorForSection(open.id, readAcv());
                             if (!prior) {
                                 return (
                                     <p class="fg4-emptyread">
-                                        {t("Nothing here yet — this part writes itself as the work lands in the rooms that feed it.", { class: "body" })}
+                                        {t("No workspace evidence is available for this section yet. It will update as the relevant sales activity is recorded.", { class: "body" })}
                                     </p>
                                 );
                             }
                             return (
                                 <>
                                     <div class="fg4-notice fg4-notice--prior">
-                                        <span class="fg4-nk">{t("How it usually goes — until your own results replace this", { class: "body" })}</span>
+                                        <span class="fg4-nk">{t("General guidance · replaced when your own evidence is available", { class: "body" })}</span>
                                         <p>{prior.note}</p>
                                     </div>
                                     {prior.body.map((para, i) => (
@@ -139,7 +125,7 @@ export function FoundingGtmV4(): JSX.Element {
                             ))}
                             {open.evidence.length > 0 ? (
                                 <div class="fg4-ev">
-                                    <span class="fg4-evk">{t("On the record")}</span>
+                                    <span class="fg4-evk">{t("Recorded evidence")}</span>
                                     {open.evidence.slice(0, 4).map((ev, i) => (
                                         <span class="fg4-evl" key={`${open.id}-e${i}`}>{ev}</span>
                                     ))}
@@ -147,7 +133,7 @@ export function FoundingGtmV4(): JSX.Element {
                             ) : null}
                             {open.surprise ? (
                                 <div class={`fg4-notice is-${open.surprise.tone}`}>
-                                    <span class="fg4-nk">{t("One thing to notice")}</span>
+                                    <span class="fg4-nk">{t("Key observation")}</span>
                                     <b>{open.surprise.headline}</b>
                                     <p>{open.surprise.body}</p>
                                 </div>
@@ -157,7 +143,7 @@ export function FoundingGtmV4(): JSX.Element {
 
                     <div class="fg4-nav">
                         <button type="button" class="fg4-pg" onClick={() => page(-1)}>‹ {t("back")}</button>
-                        <button type="button" class="fg4-pg" onClick={() => page(1)}>{t("next part")} ›</button>
+                        <button type="button" class="fg4-pg" onClick={() => page(1)}>{t("next section")} ›</button>
                     </div>
                 </article>
             </div>

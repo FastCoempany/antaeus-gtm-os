@@ -10,20 +10,11 @@ import {
 import "./birdseye-float.css";
 
 /**
- * BirdseyeFloat — Phase D's surface (ADR-011, 2026-05-31).
- *
- * Floating element anchored bottom-right of every room. Mounted via
- * RoomChrome alongside PaletteTrigger. Default state is a small eye
- * icon with an optional flag dot when there's a higher-priority
- * NextMove than the room the operator is currently on. Click expands
- * to a ~280px drawer showing one ranked line.
- *
- * Hook-free per the canon Phase 4 / Room 9 note (preact:
- * transform-hook-names plugin chokes on typed hooks). Module-level
- * signals + `effect()` for the prefetch-on-mount side effect.
+ * BirdseyeFloat — a compact current-analysis surface mounted across rooms.
+ * It shows the current highest-priority recommended action and the reason
+ * it is ranked first. The product name can remain; the explanatory copy
+ * should not rely on `system read` or heartbeat metaphors.
  */
-
-// ─── Module-scoped state ──────────────────────────────────────────────
 
 const openSignal: Signal<boolean> = signal(false);
 const moveSignal: Signal<NextMove | null> = signal(null);
@@ -31,8 +22,6 @@ const otherRoomFlagSignal: Signal<boolean> = signal(false);
 const loadingSignal: Signal<boolean> = signal(true);
 const errorSignal: Signal<string | null> = signal(null);
 
-// One-time prefetch on first BirdseyeFloat mount. Guards against
-// duplicate fetches if RoomChrome re-mounts during navigation.
 let prefetched = false;
 
 function currentRoomHref(): string {
@@ -80,16 +69,12 @@ export function closeBirdseye(): void {
     openSignal.value = false;
 }
 
-// Module-scoped effect: kick off the initial fetch once the file is
-// loaded (matches Palette.tsx's hook-free side-effect pattern).
 effect(() => {
     if (prefetched) return;
     if (typeof window === "undefined") return;
     prefetched = true;
     void refresh();
 });
-
-// ─── Render ───────────────────────────────────────────────────────────
 
 export function BirdseyeFloat(): JSX.Element {
     const open = openSignal.value;
@@ -110,16 +95,11 @@ export function BirdseyeFloat(): JSX.Element {
             <button
                 type="button"
                 class={`ant-birdseye__icon${flag ? " has-flag" : ""}${open ? " is-open" : ""}`}
-                aria-label={
-                    open ? "Close the system's read" : "Open the system's read"
-                }
+                aria-label={open ? "Close current analysis" : "Open current analysis"}
                 aria-expanded={open}
                 onClick={() => {
-                    if (openSignal.value) {
-                        closeBirdseye();
-                    } else {
-                        openBirdseye();
-                    }
+                    if (openSignal.value) closeBirdseye();
+                    else openBirdseye();
                 }}
             >
                 <span class="ant-birdseye__eye" aria-hidden="true">
@@ -147,10 +127,10 @@ function BirdseyeDrawer(props: BirdseyeDrawerProps): JSX.Element {
             class="ant-birdseye__drawer"
             role="dialog"
             aria-modal="false"
-            aria-label="The system's current read"
+            aria-label="Current analysis"
         >
             <header class="ant-birdseye__head">
-                <p class="ant-birdseye__kicker">BIRDSEYE</p>
+                <p class="ant-birdseye__kicker">BIRDSEYE · CURRENT ANALYSIS</p>
                 <button
                     type="button"
                     class="ant-birdseye__close"
@@ -165,7 +145,7 @@ function BirdseyeDrawer(props: BirdseyeDrawerProps): JSX.Element {
                     {error}
                 </p>
             ) : loading && !move ? (
-                <p class="ant-birdseye__empty">Looking…</p>
+                <p class="ant-birdseye__empty">Updating analysis…</p>
             ) : move ? (
                 <div class="ant-birdseye__move">
                     <p class="ant-birdseye__label">{move.label}</p>
@@ -176,8 +156,7 @@ function BirdseyeDrawer(props: BirdseyeDrawerProps): JSX.Element {
                 </div>
             ) : (
                 <p class="ant-birdseye__empty">
-                    Nothing pressing right now. Check back after the next
-                    heartbeat tick.
+                    No higher-priority recommended action is available right now. Check again after account, deal, or activity data changes.
                 </p>
             )}
         </div>

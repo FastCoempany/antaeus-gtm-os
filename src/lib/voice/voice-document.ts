@@ -1,124 +1,32 @@
 /**
- * Voice Document — structured form.
+ * Voice Document — executable language rules for system-authored prose.
  *
- * Per ADR-009 (2026-05-31), the Briefing's Voice Document (the .md at
- * `deliverables/specs/briefing/signal_console_voice_document_v0.1.md`)
- * is canon for BOTH Briefing synthesis AND workspace-scope observation
- * generators. The .md stays the human-readable spec; this module is
- * the executable form the code reads.
+ * The product should be direct without pretending uncertainty does not exist.
+ * Facts can be stated categorically. Calculations should be labeled as
+ * calculations. Assessments and forecasts should use calibrated language when
+ * the evidence does not support certainty.
  *
- * Two rule sets merge here:
- *
- *   1. Briefing §5 banned vocabulary — corporate-speak the voice never
- *      uses (leverage / unlock / transform / synergy / etc.)
- *
- *   2. Canon Part III §11 — single-word abstractions that try to do
- *      the work of a sentence (wedge / verdict / the move / decision-
- *      grade / etc.), and the "write sentences out, don't manifesto-
- *      fragment" rule.
- *
- * The merged result is the voice for the entire orchestration layer:
- * Briefing Patterns, workspace observations, future Skills output,
- * any system-authored prose.
- *
- * Generators call `validateObservation(text)` before emitting; the
- * Briefing's synthesis (when it ships in B.X+) calls the same
- * validator on Pattern output. Same gate, same rules.
- *
- * IMPORTANT: a Deno-side duplicate of this module lives at
- * `supabase/functions/heartbeat/voice-document.ts` so the Edge-Function
- * generators can run the same validator without cross-runtime imports.
- * Both files MUST stay in sync. Each file carries a sync-note pointing
- * at the other.
+ * Deno mirror: `supabase/functions/heartbeat/voice-document.ts`.
  */
 
-// ─── Hard ban: Briefing §5.1 corporate-speak ───────────────────────────
-
-/**
- * Words that never appear in system-authored output. Case-insensitive
- * match on whole-word boundaries. "Leverage" as a verb is banned; as
- * a noun ("operational leverage") it's also banned because the line
- * is fuzzy enough that allowing it leaks the corporate register.
- *
- * Common inflections are enumerated explicitly ("leverage" + "leveraged"
- * + "leveraging" + "leverages") because base-form mutation (drop -e
- * before -ing, swap -y for -ies) doesn't compress into the whole-word
- * regex. New entries should follow the same pattern.
- */
 export const BANNED_CORPORATE_VOCAB: ReadonlyArray<string> = [
-    // leverage + inflections
-    "leverage",
-    "leveraged",
-    "leveraging",
-    "leverages",
-    // unlock + inflections
-    "unlock",
-    "unlocked",
-    "unlocking",
-    "unlocks",
-    "revolutionize",
-    "revolutionized",
-    "revolutionizing",
-    "revolutionizes",
-    "revolutionary",
-    // supercharge + inflections
-    "supercharge",
-    "supercharged",
-    "supercharging",
-    "supercharges",
-    "magic",
-    "magical",
-    // transform + inflections
-    "transform",
-    "transformed",
-    "transforming",
-    "transforms",
-    "transformative",
-    "transformational",
-    "game-changing",
-    "game-changer",
-    "paradigm shift",
-    // synergy + plural
-    "synergy",
-    "synergies",
-    "synergistic",
-    "synergistically",
-    "best-in-class",
-    "world-class",
-    "cutting-edge",
-    "next-generation",
-    "next-gen",
-    "robust",
-    // seamless + adverb
-    "seamless",
-    "seamlessly",
-    "holistic",
-    "holistically",
-    "innovative",
-    "innovatively",
-    // empower + inflections
-    "empower",
-    "empowered",
-    "empowering",
-    "empowers",
-    "empowerment",
-    "ecosystem",
-    "ecosystems",
-    // streamline + inflections
-    "streamline",
-    "streamlined",
-    "streamlining",
-    "streamlines",
+    "leverage", "leveraged", "leveraging", "leverages",
+    "unlock", "unlocked", "unlocking", "unlocks",
+    "revolutionize", "revolutionized", "revolutionizing", "revolutionizes", "revolutionary",
+    "supercharge", "supercharged", "supercharging", "supercharges",
+    "magic", "magical",
+    "transform", "transformed", "transforming", "transforms", "transformative", "transformational",
+    "game-changing", "game-changer", "paradigm shift",
+    "synergy", "synergies", "synergistic", "synergistically",
+    "best-in-class", "world-class", "cutting-edge", "next-generation", "next-gen", "robust",
+    "seamless", "seamlessly", "holistic", "holistically", "innovative", "innovatively",
+    "empower", "empowered", "empowering", "empowers", "empowerment",
+    "ecosystem", "ecosystems",
+    "streamline", "streamlined", "streamlining", "streamlines",
     "mission-critical"
 ];
 
-// ─── Hard ban: canon Part III §11 single-noun abstractions ─────────────
-
-/**
- * Single-word abstractions that try to do the work of a sentence.
- * Canon Part III §11 lists these explicitly. Any code or copy that
- * surfaces these to the operator MUST be rewritten as a full sentence.
- */
+/** Product-specific abstractions that conceal the underlying business concept. */
 export const BANNED_PRODUCT_JARGON: ReadonlyArray<string> = [
     "wedge",
     "verdict",
@@ -137,12 +45,16 @@ export const BANNED_PRODUCT_JARGON: ReadonlyArray<string> = [
     "replacement pressure"
 ];
 
-// ─── Hard ban: hedge constructions (Briefing §7.4) ─────────────────────
-
 /**
- * Voice-of-no-confidence constructions. The voice commits to a read;
- * if it's wrong the operator provides feedback. These phrases
- * specifically retreat from a read.
+ * Indirect or metadiscursive uncertainty constructions.
+ *
+ * These remain disallowed because they describe the act of qualifying a claim
+ * instead of stating the evidence and assessment directly. The ban is NOT a
+ * ban on epistemic uncertainty. `may`, `suggests`, `appears`, `likely`, and
+ * similar terms are valid when they accurately describe an inference or
+ * forecast.
+ *
+ * Export name is retained for compatibility with existing imports.
  */
 export const BANNED_HEDGE_CONSTRUCTIONS: ReadonlyArray<string> = [
     "it's worth noting that",
@@ -155,13 +67,9 @@ export const BANNED_HEDGE_CONSTRUCTIONS: ReadonlyArray<string> = [
     "one could argue"
 ];
 
-// ─── Preferred replacements (Briefing §5.3) ────────────────────────────
+/** Alias with the semantics made explicit for new code. */
+export const BANNED_META_HEDGE_CONSTRUCTIONS = BANNED_HEDGE_CONSTRUCTIONS;
 
-/**
- * Suggested substitutions when a banned word is caught. Not enforced
- * — generators should write the right phrase the first time. Present
- * for documentation + a future linter that surfaces suggestions.
- */
 export const PREFERRED_REPLACEMENTS: Readonly<Record<string, string>> = {
     leverage: "use",
     unlock: "enable",
@@ -176,32 +84,24 @@ export const PREFERRED_REPLACEMENTS: Readonly<Record<string, string>> = {
     empower: "enable",
     ecosystem: "set of products",
     streamline: "simplify",
-    "mission-critical": "load-bearing"
+    "mission-critical": "important"
 };
 
-// ─── Structural rules (Briefing §6 + canon §11 plainness target) ───────
+/**
+ * Review threshold for stacked uncertainty terms in a single short passage.
+ * This is a readability signal, not a truthfulness gate. Four calibrated
+ * uncertainty words can still be correct if they refer to four distinct
+ * inferences.
+ */
+export const UNCERTAINTY_STACK_REVIEW_THRESHOLD = 3;
 
-/** Maximum hedging adverbs per observation (Briefing §7.3). */
-export const MAX_HEDGE_ADVERBS = 3;
-
-const HEDGE_ADVERBS: ReadonlyArray<string> = [
-    "may",
-    "could",
-    "might",
-    "possibly",
-    "potentially",
-    "seems",
-    "appears",
-    "suggests"
-];
-
-// ─── Validator ─────────────────────────────────────────────────────────
+/** @deprecated Compatibility alias. Do not use this as a hard validity cap. */
+export const MAX_HEDGE_ADVERBS = UNCERTAINTY_STACK_REVIEW_THRESHOLD;
 
 export type VoiceViolationCode =
     | "banned_corporate_vocab"
     | "banned_product_jargon"
     | "banned_hedge_construction"
-    | "too_many_hedge_adverbs"
     | "empty_text";
 
 export interface VoiceViolation {
@@ -215,17 +115,6 @@ export interface VoiceValidation {
     readonly violations: ReadonlyArray<VoiceViolation>;
 }
 
-/**
- * Case-insensitive whole-word match. Allows hyphenated phrases like
- * "game-changing" by anchoring on word-character boundaries that
- * include hyphens as part of the word.
- *
- * For inflected forms ("leveraged" / "leveraging" / "synergies"),
- * the banned list itself enumerates the inflections — base-form
- * mutation rules (drop -e before -ing, swap -y for -ies) don't
- * compress into a single regex. Adding the explicit forms is more
- * reliable than a fuzzy stem matcher.
- */
 function containsWord(text: string, word: string): boolean {
     const lower = text.toLowerCase();
     const target = word.toLowerCase();
@@ -241,25 +130,12 @@ function escapeRegex(s: string): string {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function countHedgeAdverbs(text: string): number {
-    const lower = text.toLowerCase();
-    let count = 0;
-    for (const adv of HEDGE_ADVERBS) {
-        const re = new RegExp(`\\b${adv}\\b`, "gi");
-        const matches = lower.match(re);
-        if (matches) count += matches.length;
-    }
-    return count;
-}
-
 /**
- * Validate a sentence (or short paragraph) against the voice rules.
- * Returns the full list of violations so generators can log all
- * issues at once, not just the first.
+ * Validate system-authored prose for vocabulary and indirect framing.
  *
- * Generators that legitimately need a banned word can pass a waiver
- * list (e.g., "the product is literally called Synergy"). Empty for
- * all four Phase B generators.
+ * This validator intentionally does not fail prose for using calibrated
+ * uncertainty words. Evidence calibration is a semantic requirement and is
+ * enforced in generator prompts/quality gates where the evidence is available.
  */
 export function validateObservation(
     text: string,
@@ -269,11 +145,10 @@ export function validateObservation(
     const waiverSet = new Set(waivers.map((w) => w.toLowerCase()));
 
     if (!text || !text.trim()) {
-        violations.push({
-            code: "empty_text",
-            message: "Observation text is empty."
-        });
-        return { valid: false, violations };
+        return {
+            valid: false,
+            violations: [{ code: "empty_text", message: "Observation text is empty." }]
+        };
     }
 
     for (const word of BANNED_CORPORATE_VOCAB) {
@@ -281,7 +156,7 @@ export function validateObservation(
         if (containsWord(text, word)) {
             violations.push({
                 code: "banned_corporate_vocab",
-                message: `Banned corporate-speak: "${word}". Rewrite without it.`,
+                message: `Banned corporate-speak: "${word}". Write the business meaning directly.`,
                 offender: word
             });
         }
@@ -292,39 +167,26 @@ export function validateObservation(
         if (containsWord(text, phrase)) {
             violations.push({
                 code: "banned_product_jargon",
-                message: `Banned product jargon: "${phrase}". Canon Part III §11: write the sentence out, don't reach for a single noun.`,
+                message: `Banned product jargon: "${phrase}". State the underlying business concept explicitly.`,
                 offender: phrase
             });
         }
     }
 
     const lower = text.toLowerCase();
-    for (const phrase of BANNED_HEDGE_CONSTRUCTIONS) {
+    for (const phrase of BANNED_META_HEDGE_CONSTRUCTIONS) {
         if (lower.includes(phrase)) {
             violations.push({
                 code: "banned_hedge_construction",
-                message: `Banned hedge construction: "${phrase}". The voice commits to a read.`,
+                message: `Indirect framing: "${phrase}". State the evidence and calibrated assessment directly.`,
                 offender: phrase
             });
         }
     }
 
-    const adverbs = countHedgeAdverbs(text);
-    if (adverbs > MAX_HEDGE_ADVERBS) {
-        violations.push({
-            code: "too_many_hedge_adverbs",
-            message: `Too many hedge adverbs (${adverbs} > ${MAX_HEDGE_ADVERBS}). Briefing §7.3.`
-        });
-    }
-
     return { valid: violations.length === 0, violations };
 }
 
-/**
- * Compact format for log output. Generators that fail validation
- * should log this and EITHER (a) drop the candidate, OR (b) be
- * retired by ID via the `source_generator` column.
- */
 export function formatViolations(v: VoiceValidation): string {
     if (v.valid) return "(passes voice rules)";
     return v.violations.map((x) => `${x.code}: ${x.message}`).join(" | ");

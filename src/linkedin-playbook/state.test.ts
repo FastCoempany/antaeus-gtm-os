@@ -279,7 +279,7 @@ describe("logCue + updateOutcome", () => {
         // → warm_signal_account, cueIndex 1 → Cue 02 "Comment with one
         // operating read".
         expect(entry?.motionKey).toBe("warm_signal_account");
-        expect(entry?.cueLabel).toContain("Comment");
+        expect(entry?.cueLabel).toContain("useful comment");
     });
 
     it("respects a pinned active cue when freezing the entry", () => {

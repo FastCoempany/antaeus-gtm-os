@@ -7,21 +7,9 @@ import type {
 } from "./types";
 
 /**
- * Program 6 / PR 12 — engine that reads the territory back to the operator.
- *
- * Per the picked-winner Variant 02 / Signal Field refinement
- * (deliverables/prototypes/wireframes/antaeus-territory-architect-
- * signal-field-refinement-2026-04-17.html line 453+), the room's
- * top-of-page should not just count rows — it should interpret what
- * the territory is saying. Three lines + a score:
- *
- *   - A score (Runnable / Tight / Loose / Empty)
- *   - What's loose about the territory right now
- *   - What should come in to replace what's drifting off
- *   - The one prescribed next step
- *
- * Pure: takes accounts + focuses + approaches + allocation explicitly
- * so tests can probe every branch.
+ * Territory status summary. The engine still evaluates coverage,
+ * prioritization, active work, and allocation; user-facing language names
+ * those conditions directly instead of describing a metaphorical field.
  */
 
 export type FieldReadBand = "empty" | "loose" | "tight" | "runnable";
@@ -42,21 +30,16 @@ export interface FieldReadInputs {
     readonly allocation: AllocationReadout;
 }
 
-/** Band labels — canon §10 state vocabulary, plain at a glance. */
 const BAND_LABELS: Readonly<Record<FieldReadBand, string>> = {
     runnable: t("Operating"),
-    tight: t("Tight"),
-    loose: t("Loose"),
-    empty: t("Empty")
+    tight: t("Well prioritized"),
+    loose: t("Needs prioritization"),
+    empty: t("No active territory")
 };
 
 export function computeFieldRead(input: FieldReadInputs): FieldRead {
     const { accounts, focuses, approaches, allocation } = input;
 
-    // Active = accounts still in the field (not closed). Drift =
-    // closed-lost rows still occupying the strategic memory but no
-    // longer worth their slot. Paused = still in the field but not
-    // actively worked. The wireframe's "watch ring" maps to paused.
     const active = accounts.filter((a) => a.disposition === "active");
     const paused = accounts.filter((a) => a.disposition === "paused");
     const lost = accounts.filter((a) => a.disposition === "closed-lost");
@@ -136,24 +119,24 @@ interface RiskInputs {
 
 function pickMainRisk(s: RiskInputs): string {
     if (s.focuses.length === 0) {
-        return t("You haven't carved a division yet, so there's nothing to organize the territory around.", { class: "body" });
+        return t("No territory segments have been created yet, so accounts do not have a segment structure to organize coverage.", { class: "body" });
     }
     if (s.focuses.length === 1) {
-        return t("One division covers everything. If that one bet misses, the whole territory misses.", { class: "body" });
+        return t("One segment currently contains the entire territory. Review whether that concentration reflects the accounts you actually want to cover.", { class: "body" });
     }
     if (s.allocation.status === "over") {
-        return `${t("You're over the", { class: "body" })} ${s.allocation.ceiling}${t("-account cap. Retier or close a few to come back inside.", { class: "body" })}`;
+        return `${t("The territory is over the", { class: "body" })} ${s.allocation.ceiling}${t("-account limit. Reassign, pause, or close enough accounts to return below the limit.", { class: "body" })}`;
     }
     if (s.lost.length >= s.active.length && s.lost.length >= 3) {
-        return t("More accounts have been lost than are being worked. A lot of what's on the map isn't going anywhere.", { class: "body" });
+        return t("The territory contains at least as many closed-lost accounts as active accounts. Review which accounts should remain in current coverage.", { class: "body" });
     }
     if (s.paused.length >= 5) {
-        return t("Several paused accounts are just sitting there. Pick one up again, or take it off the map.", { class: "body" });
+        return t("Several accounts are paused. Decide which ones should return to active coverage and which should be removed from the current working set.", { class: "body" });
     }
     if (s.active.length === 0) {
-        return t("No accounts are being worked yet — the map is still theoretical.", { class: "body" });
+        return t("No accounts are currently active. The territory structure exists, but no accounts are being worked.", { class: "body" });
     }
-    return t("The territory is being worked. The thing to watch is accounts quietly going stale.", { class: "body" });
+    return t("The territory is active. Continue reviewing inactive or aging accounts so current coverage remains intentional.", { class: "body" });
 }
 
 interface ReplacementInputs {
@@ -164,12 +147,12 @@ interface ReplacementInputs {
 function pickReplacement(s: ReplacementInputs): string {
     const backfillNeeded = s.lost.length + Math.floor(s.paused.length / 2);
     if (backfillNeeded === 0) {
-        return t("Nothing needs replacing this week. The list is holding.", { class: "body" });
+        return t("No account replacement is currently required by this model.", { class: "body" });
     }
     if (backfillNeeded === 1) {
-        return t("One account should come off the list this week, with a better one added in its place.", { class: "body" });
+        return t("Review one account for removal or replacement in the current working set.", { class: "body" });
     }
-    return `${backfillNeeded} ${t("accounts should come off the list this week, with better ones added in their place.", { class: "body" })}`;
+    return `${t("Review", { class: "body" })} ${backfillNeeded} ${t("accounts for removal or replacement in the current working set.", { class: "body" })}`;
 }
 
 interface OperatorMoveInputs {
@@ -182,19 +165,19 @@ interface OperatorMoveInputs {
 
 function pickOperatorMove(s: OperatorMoveInputs): string {
     if (s.focuses.length === 0) {
-        return t("Carve one division. Name the group of buyers you believe you can win.", { class: "body" });
+        return t("Create one territory segment and define the group of accounts you want to cover.", { class: "body" });
     }
     if (s.approaches.length === 0) {
-        return t("Write down how you'll open the conversation with each division.", { class: "body" });
+        return t("Record a sales approach for each active territory segment.", { class: "body" });
     }
     if (s.allocation.status === "over") {
-        return t("Retier or close enough accounts to get back under the cap.", { class: "body" });
+        return t("Reassign, pause, or close enough accounts to return below the account limit.", { class: "body" });
     }
     if (s.lost.length >= 3) {
-        return t("Take the lost accounts off the map — they shouldn't hold a slot.", { class: "body" });
+        return t("Remove closed-lost accounts from the current working set if they no longer need an active territory slot.", { class: "body" });
     }
     if (s.paused.length >= 3) {
-        return t("Pick one paused account back up, or take it off the map.", { class: "body" });
+        return t("Review paused accounts and either reactivate them or remove them from the current working set.", { class: "body" });
     }
-    return t("Add the next must-win account, or sharpen one of your divisions.", { class: "body" });
+    return t("Add the next priority account or refine an existing segment using current sales evidence.", { class: "body" });
 }

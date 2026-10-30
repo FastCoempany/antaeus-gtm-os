@@ -1,19 +1,17 @@
 import { t } from "@/lib/voice/t";
 
 /**
- * The motion map — the 22 rooms laid out as the operator's actual GTM
- * motion (enter → strategy → find & watch → work the account → advance
- * the deal → diagnose · hand off). This is the Ground's registry
- * (founder-locked 2026-07-08): it supersedes the Ctrl+K palette
- * registry as the jump surface, with the rename/retire sweep applied —
- * no retired Call Planner; Prospecting Desk / Pilot Desk / Getting to
- * Signed / Call in a Favor under their current names.
+ * Workspace-map registry — the rooms laid out in sales-process order
+ * (enter → strategy → find & watch → work the account → advance the
+ * deal → diagnose · hand off). The internal Ground identifiers remain
+ * stable for routing and continuity, but user-facing descriptions use
+ * ordinary functional language rather than private Antaeus vocabulary.
  */
 
 export interface MotionRoom {
     readonly id: string;
     readonly label: string;
-    /** Spoon-fed one-liner (§13) — what the room is, zero decode. */
+    /** Plain functional description of what the room does. */
     readonly desc: string;
     readonly href: string;
     /** Index into MOTION_STAGES. */
@@ -31,28 +29,28 @@ export const MOTION_STAGES: ReadonlyArray<string> = [
 ];
 
 export const MOTION_ROOMS: ReadonlyArray<MotionRoom> = [
-    { id: "welcome", label: t("Welcome"), desc: t("the morning landing"), href: "/welcome/", stage: 0 },
-    { id: "onboarding", label: t("Onboarding"), desc: t("seed the workspace"), href: "/onboarding/", stage: 0 },
-    { id: "dashboard", label: t("Dashboard"), desc: t("the one move, ranked"), href: "/dashboard/", stage: 0, keywords: ["command", "board", "standing"] },
-    { id: "icp-studio", label: t("ICP Studio"), desc: t("who you sell to"), href: "/icp-studio/", stage: 1, keywords: ["target", "persona", "ideal"] },
-    { id: "territory-architect", label: t("Territory Architect"), desc: t("carve the market"), href: "/territory-architect/", stage: 1, keywords: ["tiers", "divisions", "300"] },
-    { id: "prospecting-desk", label: t("Prospecting Desk"), desc: t("find real accounts"), href: "/prospecting-desk/", stage: 1, keywords: ["sourcing", "search", "find", "confirm"] },
-    { id: "signal-console", label: t("Signal Console"), desc: t("watch the heat"), href: "/signal-console/", stage: 2, keywords: ["accounts", "signals", "radar", "hot"] },
-    { id: "briefing", label: t("Briefing"), desc: t("what the system saw"), href: "/briefing/", stage: 2, keywords: ["reads", "news", "world"] },
-    { id: "outdoors-events", label: t("Outdoors Events"), desc: t("where buyers gather"), href: "/outdoors-events/", stage: 2, keywords: ["conference", "events", "travel"] },
-    { id: "outbound-studio", label: t("Outbound Studio"), desc: t("the send line"), href: "/outbound-studio/", stage: 3, keywords: ["email", "outreach", "compose"] },
-    { id: "cold-call-studio", label: t("Cold Call Studio"), desc: t("walk in ready"), href: "/cold-call-studio/", stage: 3, keywords: ["call", "dial", "phone"] },
-    { id: "linkedin-playbook", label: t("LinkedIn Playbook"), desc: t("air cover"), href: "/linkedin-playbook/", stage: 3, keywords: ["social", "connect", "comment"] },
-    { id: "discovery-studio", label: t("Discovery Studio"), desc: t("run the live call"), href: "/discovery-studio/", stage: 3, keywords: ["disco", "meeting", "framework"] },
-    { id: "deal-workspace", label: t("Deal Workspace"), desc: t("what will slip"), href: "/deal-workspace/", stage: 4, keywords: ["deals", "pipeline", "recovery"] },
-    { id: "pilot-desk", label: t("Pilot Desk"), desc: t("run a pilot"), href: "/pilot-desk/", stage: 4, keywords: ["poc", "pilot", "adoption"] },
-    { id: "getting-to-signed", label: t("Getting to Signed"), desc: t("run to signature"), href: "/getting-to-signed/", stage: 4, keywords: ["negotiation", "terms", "legal", "security", "contract"] },
-    { id: "call-in-a-favor", label: t("Call in a Favor"), desc: t("mobilize your people"), href: "/call-in-a-favor/", stage: 4, keywords: ["advisor", "favor", "intro", "network"] },
-    { id: "future-autopsy", label: t("Future Autopsy"), desc: t("why it will die"), href: "/future-autopsy/", stage: 5, keywords: ["premortem", "autopsy", "risk"] },
-    { id: "quota-workback", label: t("Quota Workback"), desc: t("your daily number"), href: "/quota-workback/", stage: 5, keywords: ["quota", "pace", "number", "target"] },
-    { id: "readiness", label: t("Readiness Score"), desc: t("inheritable yet?"), href: "/dashboard/?readiness=1", stage: 5, keywords: ["readiness", "hire", "ready"] },
-    { id: "founding-gtm", label: t("Founding GTM"), desc: t("the handoff kit"), href: "/founding-gtm/", stage: 5, keywords: ["handoff", "kit", "hire", "inherit"] },
-    { id: "settings", label: t("Settings"), desc: t("keep it safe"), href: "/settings/", stage: 5, keywords: ["backup", "export", "account", "delete"] }
+    { id: "welcome", label: t("Welcome"), desc: t("today's recommended starting point", { class: "body" }), href: "/welcome/", stage: 0 },
+    { id: "onboarding", label: t("Onboarding"), desc: t("set up the workspace", { class: "body" }), href: "/onboarding/", stage: 0 },
+    { id: "dashboard", label: t("Dashboard"), desc: t("pipeline, priorities, activity, and deal risk", { class: "body" }), href: "/dashboard/", stage: 0, keywords: ["command", "board", "standing"] },
+    { id: "icp-studio", label: t("ICP Studio"), desc: t("define the companies and buyers you sell to", { class: "body" }), href: "/icp-studio/", stage: 1, keywords: ["target", "persona", "ideal"] },
+    { id: "territory-architect", label: t("Territory Architect"), desc: t("create and prioritize territory segments", { class: "body" }), href: "/territory-architect/", stage: 1, keywords: ["tiers", "segments", "300"] },
+    { id: "prospecting-desk", label: t("Prospecting Desk"), desc: t("find accounts that match your ICP", { class: "body" }), href: "/prospecting-desk/", stage: 1, keywords: ["sourcing", "search", "find", "confirm"] },
+    { id: "signal-console", label: t("Signal Console"), desc: t("monitor account signals and priority", { class: "body" }), href: "/signal-console/", stage: 2, keywords: ["accounts", "signals", "priority"] },
+    { id: "briefing", label: t("Briefing"), desc: t("review changes in your accounts, deals, and market", { class: "body" }), href: "/briefing/", stage: 2, keywords: ["analysis", "news", "world"] },
+    { id: "outdoors-events", label: t("Outdoors Events"), desc: t("find events where target buyers may be present", { class: "body" }), href: "/outdoors-events/", stage: 2, keywords: ["conference", "events", "travel"] },
+    { id: "outbound-studio", label: t("Outbound Studio"), desc: t("create and manage outbound messages", { class: "body" }), href: "/outbound-studio/", stage: 3, keywords: ["email", "outreach", "compose"] },
+    { id: "cold-call-studio", label: t("Cold Call Studio"), desc: t("prepare and run cold calls", { class: "body" }), href: "/cold-call-studio/", stage: 3, keywords: ["call", "dial", "phone"] },
+    { id: "linkedin-playbook", label: t("LinkedIn Playbook"), desc: t("plan LinkedIn outreach", { class: "body" }), href: "/linkedin-playbook/", stage: 3, keywords: ["social", "connect", "comment"] },
+    { id: "discovery-studio", label: t("Discovery Studio"), desc: t("prepare and run discovery", { class: "body" }), href: "/discovery-studio/", stage: 3, keywords: ["disco", "meeting", "framework"] },
+    { id: "deal-workspace", label: t("Deal Workspace"), desc: t("review open deals, next steps, and risk", { class: "body" }), href: "/deal-workspace/", stage: 4, keywords: ["deals", "pipeline", "recovery"] },
+    { id: "pilot-desk", label: t("Pilot Desk"), desc: t("plan and evaluate pilots", { class: "body" }), href: "/pilot-desk/", stage: 4, keywords: ["poc", "pilot", "adoption"] },
+    { id: "getting-to-signed", label: t("Getting to Signed"), desc: t("manage legal, security, finance, and final approval", { class: "body" }), href: "/getting-to-signed/", stage: 4, keywords: ["negotiation", "terms", "legal", "security", "contract"] },
+    { id: "call-in-a-favor", label: t("Call in a Favor"), desc: t("use your network to help move a deal", { class: "body" }), href: "/call-in-a-favor/", stage: 4, keywords: ["advisor", "favor", "intro", "network"] },
+    { id: "future-autopsy", label: t("Future Autopsy"), desc: t("identify deals with high loss risk and why", { class: "body" }), href: "/future-autopsy/", stage: 5, keywords: ["premortem", "autopsy", "risk"] },
+    { id: "quota-workback", label: t("Quota Workback"), desc: t("calculate activity and pipeline required to hit quota", { class: "body" }), href: "/quota-workback/", stage: 5, keywords: ["quota", "pace", "number", "target"] },
+    { id: "readiness", label: t("Readiness Score"), desc: t("can another seller run the sales process?", { class: "body" }), href: "/dashboard/?readiness=1", stage: 5, keywords: ["readiness", "hire", "ready"] },
+    { id: "founding-gtm", label: t("Founding GTM"), desc: t("document the sales process for another seller", { class: "body" }), href: "/founding-gtm/", stage: 5, keywords: ["handoff", "documentation", "hire"] },
+    { id: "settings", label: t("Settings"), desc: t("manage workspace data and account settings", { class: "body" }), href: "/settings/", stage: 5, keywords: ["backup", "export", "account", "delete"] }
 ];
 
 /** The room whose href matches the current pathname (you-are-here). */
@@ -78,7 +76,7 @@ export function filterMotionRooms(query: string): ReadonlyArray<MotionRoom> {
     );
 }
 
-/** Which room a NextMove target URL points into (for the suggested glow). */
+/** Which room a NextMove target URL points into (for the suggested highlight). */
 export function roomIdForUrl(url: string): string | null {
     try {
         const path = url.startsWith("http") ? new URL(url).pathname : url.split("?")[0]!;
@@ -94,9 +92,9 @@ export function groundHref(room: MotionRoom, fromPath: string, fromLabel: string
 }
 
 /**
- * Append the canonical continuity params (CLAUDE.md §2) to any target
- * URL that doesn't already carry them — used for the ranker's suggested
- * move so the glowing room keeps the way back like every other tile.
+ * Append the canonical continuity params to any target URL that does not
+ * already carry them. `fromSurface=ground` remains an internal/stable
+ * telemetry value even though the user-facing surface is Workspace map.
  */
 export function withContinuity(url: string, fromPath: string, fromLabel: string): string {
     const [base, query = ""] = url.split("?");

@@ -10,13 +10,6 @@ function input(over: Partial<ReadinessInput> = {}): ReadinessInput {
     return { ...EMPTY_READINESS_INPUT, ...over };
 }
 
-/**
- * Inputs that just clear the "Inheritable with guardrails" gate.
- * Gate requires: every dimension ≥ 10, at least one ≥ 16, first proof
- * exists. The proof dimension hits 10 only with a mix of artifacts —
- * one cast proof alone is far short, so the fixture needs autopsy +
- * handoff + advisor activity too.
- */
 function inheritableInput(): ReadinessInput {
     return input({
         icpCount: 1,
@@ -39,7 +32,6 @@ function inheritableInput(): ReadinessInput {
     });
 }
 
-/** Inputs that just clear "Hire-ready" — adds wins + more proof. */
 function hireReadyInput(): ReadinessInput {
     return input({
         ...inheritableInput(),
@@ -53,7 +45,6 @@ function hireReadyInput(): ReadinessInput {
     });
 }
 
-/** Inputs that just clear "Hire-ready, repeatable" — adds advisor + 5/7 sections. */
 function repeatableInput(): ReadinessInput {
     return input({
         ...hireReadyInput(),
@@ -84,7 +75,7 @@ describe("evaluateReadiness — gate-based verdicts", () => {
         expect(r.verdict).toBe<Verdict>("building");
     });
 
-    it("rises to 'inheritable_with_guardrails' on the canon gate", () => {
+    it("rises to 'inheritable_with_guardrails' on the stable gate", () => {
         const r = evaluateReadiness(inheritableInput());
         expect(r.verdict).toBe<Verdict>("inheritable_with_guardrails");
         expect(r.dimensions.every((d) => d.score >= 10)).toBe(true);
@@ -100,18 +91,12 @@ describe("evaluateReadiness — gate-based verdicts", () => {
             discoveryAdvancedCalls: 6
         });
         expect(r.verdict).not.toBe<Verdict>("hire_ready");
-        // Phase 2.8 audit — blocker copy rewritten in behavior-shape.
-        // Was "No closed-won deals yet"; now "Close-won a deal" (no
-        // hyphen) phrasing. Match the verb to avoid coupling to exact
-        // wording.
         expect(
-            r.gateBlockers.some((b) =>
-                /close.{0,2}won/i.test(b)
-            )
+            r.gateBlockers.some((b) => /closed[ -]?won/i.test(b))
         ).toBe(true);
     });
 
-    it("rises to 'hire_ready' with the canon gate met", () => {
+    it("rises to 'hire_ready' with the stable gate met", () => {
         const r = evaluateReadiness(hireReadyInput());
         expect(r.verdict).toBe<Verdict>("hire_ready");
     });
@@ -123,7 +108,7 @@ describe("evaluateReadiness — gate-based verdicts", () => {
         expect(r.gateBlockers).toEqual([]);
     });
 
-    it("blocks 'hire_ready_repeatable' on win/loss imbalance", () => {
+    it("blocks 'hire_ready_repeatable' on the actual 1:1 win/loss gate", () => {
         const base = repeatableInput();
         const r = evaluateReadiness({
             ...base,
@@ -132,24 +117,17 @@ describe("evaluateReadiness — gate-based verdicts", () => {
         });
         expect(r.verdict).not.toBe<Verdict>("hire_ready_repeatable");
         expect(
-            r.gateBlockers.some((b) =>
-                /win\/loss|win.loss balance/i.test(b)
+            r.gateBlockers.some(
+                (b) => /at least as numerous/i.test(b) && /1 won \/ 5 analyzed lost/i.test(b)
             )
         ).toBe(true);
     });
 
     it("blockers describe the NEXT unmet gate, not the current one", () => {
         const r = evaluateReadiness(inheritableInput());
-        // Verdict is inheritable; blockers should describe what's
-        // missing for hire_ready (close-won, autopsies, etc.).
-        // Phase 2.8 — blocker copy is behavior-shape ("Close-won a
-        // deal." etc.), no longer the older "No closed-won deals yet"
-        // descriptor. Match via verb pattern.
         expect(r.gateBlockers.length).toBeGreaterThan(0);
         expect(
-            r.gateBlockers.some((b) =>
-                /close.{0,2}won/i.test(b)
-            )
+            r.gateBlockers.some((b) => /closed[ -]?won/i.test(b))
         ).toBe(true);
     });
 

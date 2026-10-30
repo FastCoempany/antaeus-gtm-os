@@ -11,13 +11,9 @@ import {
 import { AddTriggerFlow } from "./AddTriggerFlow";
 
 /**
- * WatchList (B.3b) — the operator's standing orders, inline in the
- * Briefing room beneath the Patterns.
- *
- * Three parts: the fires this week (a trigger the operator armed went
- * off — shown first because it's the live payoff), the armed triggers
- * themselves (with a way to stand each one down), and an in-place flow
- * to arm a new one. Reads the signals bootTriggers() populates.
+ * Saved monitoring rules shown beneath Briefing analyses. A rule defines
+ * an event Antaeus should check for; matching events are listed with the
+ * supporting evidence count and most recent match date.
  */
 
 function FireRow({ fire }: { fire: TriggerFire }): JSX.Element {
@@ -29,7 +25,7 @@ function FireRow({ fire }: { fire: TriggerFire }): JSX.Element {
                     <span class="bf-fire__trig">{fire.trigger_natural_language}</span>
                 )}
                 <span class="bf-fire__when">
-                    {shortFireDate(fire.fired_at)} · {fire.evidence_count} item
+                    {shortFireDate(fire.fired_at)} · {fire.evidence_count} {t("evidence item", { class: "body" })}
                     {fire.evidence_count === 1 ? "" : "s"}
                 </span>
             </p>
@@ -43,8 +39,6 @@ function ArmedRow({ trigger }: { trigger: ArmedTrigger }): JSX.Element {
         if (busy) return;
         setBusy(true);
         await disableArmedTrigger(trigger.id);
-        // On success the row drops out of the list when the signal
-        // refreshes; on failure we just re-enable the button.
         setBusy(false);
     }
     return (
@@ -55,15 +49,15 @@ function ArmedRow({ trigger }: { trigger: ArmedTrigger }): JSX.Element {
                     <span class="bf-armed__type">{triggerTypeLabel(trigger.trigger_type)}</span>
                     {trigger.fire_count > 0 && (
                         <span class="bf-armed__fires">
-                            fired {trigger.fire_count}×
+                            {t("matched")} {trigger.fire_count}×
                             {trigger.last_fired_at
-                                ? ` · last ${shortFireDate(trigger.last_fired_at)}`
+                                ? ` · ${t("last match", { class: "body" })} ${shortFireDate(trigger.last_fired_at)}`
                                 : ""}
                         </span>
                     )}
                     {trigger.fire_count === 0 && (
                         <span class="bf-armed__fires bf-armed__fires--quiet">
-                            no fires yet
+                            {t("no matches yet", { class: "body" })}
                         </span>
                     )}
                 </p>
@@ -74,7 +68,7 @@ function ArmedRow({ trigger }: { trigger: ArmedTrigger }): JSX.Element {
                 disabled={busy}
                 onClick={() => void handleDisable()}
             >
-                {busy ? "…" : "Stand down"}
+                {busy ? "…" : t("Pause rule")}
             </button>
         </li>
     );
@@ -84,8 +78,6 @@ export function WatchList(): JSX.Element | null {
     const [adding, setAdding] = useState(false);
 
     if (!triggersLoaded.value) {
-        // Quiet — the Patterns are the headline; the Watch List loads
-        // underneath without its own spinner.
         return null;
     }
 
@@ -93,16 +85,16 @@ export function WatchList(): JSX.Element | null {
     const armed = armedTriggers.value;
 
     return (
-        <section class="bf-watch" aria-label={t("Watch list")}>
+        <section class="bf-watch" aria-label={t("Saved monitoring rules")}>
             <div class="bf-watch__head">
-                <p class="bf-watch__kicker">{t("Watch list")}</p>
+                <p class="bf-watch__kicker">{t("Saved monitoring rules")}</p>
                 {!adding && (
                     <button
                         type="button"
                         class="bf-btn bf-btn--ghost bf-btn--small"
                         onClick={() => setAdding(true)}
                     >
-                        Add a trigger
+                        {t("Add monitoring rule")}
                     </button>
                 )}
             </div>
@@ -111,7 +103,7 @@ export function WatchList(): JSX.Element | null {
 
             {fires.length > 0 && (
                 <div class="bf-watch__block">
-                    <p class="bf-watch__sub">{t("Fired this week")}</p>
+                    <p class="bf-watch__sub">{t("Matches this week")}</p>
                     <ul class="bf-fires">
                         {fires.map((f) => (
                             <FireRow fire={f} key={f.id} />
@@ -123,20 +115,20 @@ export function WatchList(): JSX.Element | null {
             <div class="bf-watch__block">
                 <p class="bf-watch__sub">
                     {armed.length === 0
-                        ? "No standing orders yet"
-                        : `Armed (${armed.length})`}
+                        ? t("No monitoring rules yet")
+                        : `${t("Active rules")} (${armed.length})`}
                 </p>
                 {armed.length === 0 ? (
                     <p class="bf-watch__empty">
-                        Arm a trigger and the system watches for it every run — a
-                        product launch from a named competitor, two or more of them
-                        moving at once, a partner going quiet. When one fires, it
-                        shows up here.
+                        {t(
+                            "Create a monitoring rule for an event you care about, such as a competitor launch, simultaneous competitor activity, or a partner becoming inactive. Matching events appear here when new data meets the rule.",
+                            { class: "body" }
+                        )}
                     </p>
                 ) : (
                     <ul class="bf-armed-list">
-                        {armed.map((t) => (
-                            <ArmedRow trigger={t} key={t.id} />
+                        {armed.map((trigger) => (
+                            <ArmedRow trigger={trigger} key={trigger.id} />
                         ))}
                     </ul>
                 )}

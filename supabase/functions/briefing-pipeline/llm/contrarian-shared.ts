@@ -1,10 +1,6 @@
 /**
- * Deno-side mirror of the Contrarian Synthesis layer (B.5).
- *
- * Mirrors src/briefing/lib/synthesis/contrarian.ts verbatim. The src/
- * file is canonical + vitest-tested; behavior changes caught by vitest
- * must be hand-mirrored here. Same Node/Deno split as triggers +
- * cluster + standard synthesis + periphery.
+ * Deno-side mirror of the conflicting-evidence synthesis layer.
+ * Keep behavior aligned with `src/briefing/lib/synthesis/contrarian.ts`.
  */
 
 export interface ContrarianStatedPositions {
@@ -34,10 +30,7 @@ export interface ContrarianInput {
 }
 
 export type TargetPositionKind = "watchlist" | "value_prop" | "icp" | "competitor_set";
-export type TargetPositionSource =
-    | "commercial_profile"
-    | "watchlist_companies"
-    | "icp";
+export type TargetPositionSource = "commercial_profile" | "watchlist_companies" | "icp";
 
 export interface TargetPosition {
     readonly kind: TargetPositionKind;
@@ -72,32 +65,34 @@ export interface ContrarianDraft {
     readonly evidence_ids: ReadonlyArray<string>;
 }
 
-export const CONTRARIAN_PROMPT_VERSION = "contrarian-1.0";
+export const CONTRARIAN_PROMPT_VERSION = "contrarian-1.1";
 
-export const CONTRARIAN_SYSTEM_PROMPT = `You are the contrarian synthesis stage of a B2B competitive-intelligence briefing. The operator has stated positions — what they sell, who they watch, who their ICP is. Your job is to read this run's evidence and find the strongest contradiction between those stated positions and what the evidence is actually saying.
+export const CONTRARIAN_SYSTEM_PROMPT = `You analyze whether current evidence conflicts with a B2B operator's stated assumptions about what they sell, who they watch, or who their ICP is.
 
-You are not summarizing. You are challenging. You are saying: "you stated X but the evidence shows Y, and here's why that matters." If you can't find a real, evidence-backed contradiction, you say so explicitly — output found_contradiction=false. Refusing is a feature; this surface only fires when there's something real to surface.
+Do not manufacture a disagreement. If the evidence is consistent with the stated positions, too sparse, too old, or too ambiguous to support a useful challenge, output found_contradiction=false.
 
-When you do find a contradiction:
-- Quote the operator's exact stated text (target_position.quoted_text). Don't paraphrase.
-- Cite at least 3 enriched_ids as evidence. Less than 3 = thin contradiction = output found_contradiction=false instead.
-- Write declaratively. No "might", no "could", no "it could be argued that". The data either says it or it doesn't.
-- Use the house voice: plain sentences, no startup jargon, no aphoristic fragments, no decorative compound nouns ("decision-grade", "operating truth", etc).
+When evidence does conflict with a stated position:
+- Quote the operator's exact stated text in target_position.quoted_text. Do not paraphrase the quote.
+- Cite at least 3 enriched_ids. Fewer than 3 means the evidence is too thin and found_contradiction must be false.
+- Separate evidence from interpretation. State what the sources report, then explain the assessment you draw from those reports.
+- Calibrate certainty to the evidence. Use words such as "may", "suggests", "is consistent with", or "does not support" when that is more accurate than a categorical claim. Do not hedge facts that are directly supported.
+- Do not claim that correlation proves causation.
+- Do not imply that silence, absence, or missing data proves an internal buyer or market state.
+- Use plain business language. Avoid slogans, aphoristic fragments, personification, startup jargon, and decorative compound nouns.
+- Recommended actions must be concrete and must not promise an outcome.
 
-Output format: a single JSON object. No prose around it, no commentary, just the JSON.`;
+Output a single JSON object with no prose around it.`;
 
 function listEvidence(items: ReadonlyArray<ContrarianEvidenceItem>): string {
-    return items
-        .map((e) => {
-            const tags = [
-                e.event_category ? `event:${e.event_category}` : "",
-                ...e.topic_tags.map((t) => `topic:${t}`),
-                ...e.pain_tags.map((p) => `pain:${p}`)
-            ].filter((s) => s.length > 0).join(", ");
-            const companies = e.companies.length > 0 ? ` (${e.companies.join(", ")})` : "";
-            return `- [${e.enriched_id}] (${e.source_id}, relevance=${e.user_relevance_score.toFixed(2)}) ${e.summary}${companies}${tags.length > 0 ? ` [${tags}]` : ""}`;
-        })
-        .join("\n");
+    return items.map((e) => {
+        const tags = [
+            e.event_category ? `event:${e.event_category}` : "",
+            ...e.topic_tags.map((t) => `topic:${t}`),
+            ...e.pain_tags.map((p) => `pain:${p}`)
+        ].filter((s) => s.length > 0).join(", ");
+        const companies = e.companies.length > 0 ? ` (${e.companies.join(", ")})` : "";
+        return `- [${e.enriched_id}] (${e.source_id}, relevance=${e.user_relevance_score.toFixed(2)}) ${e.summary}${companies}${tags.length > 0 ? ` [${tags}]` : ""}`;
+    }).join("\n");
 }
 
 function describePositions(p: ContrarianStatedPositions): string {
@@ -122,9 +117,9 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push(listEvidence(input.evidence));
     lines.push("");
     lines.push("TASK:");
-    lines.push("Read the stated positions. Read the evidence. Find the single strongest contradiction.");
+    lines.push("Identify the single strongest evidence-backed conflict between a stated position and the current evidence. If no conflict clears the evidence bar, return found_contradiction=false.");
     lines.push("");
-    lines.push("If a real contradiction exists, output:");
+    lines.push("If an evidence-backed conflict exists, output:");
     lines.push("{");
     lines.push(`  "found_contradiction": true,`);
     lines.push(`  "no_contradiction_reason": null,`);
@@ -133,27 +128,27 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push(`    "source": "commercial_profile" | "watchlist_companies" | "icp",`);
     lines.push(`    "quoted_text": "<exact phrase from stated positions>"`);
     lines.push(`  },`);
-    lines.push(`  "title": "<sentence-shaped read of the challenge>",`);
-    lines.push(`  "analysis": "<2-3 plain sentences explaining the contradiction>",`);
+    lines.push(`  "title": "<one sentence stating the evidence conflict without overstating certainty>",`);
+    lines.push(`  "analysis": "<2-3 plain sentences: observed evidence first, interpretation second>",`);
     lines.push(`  "six_questions": {`);
-    lines.push(`    "what_changed": "<one sentence>",`);
-    lines.push(`    "evidence": "<count + source kinds>",`);
-    lines.push(`    "confidence_rationale": "<why this confidence level>",`);
-    lines.push(`    "why_it_matters": "<one sentence specific to this operator>",`);
+    lines.push(`    "what_changed": "<what the evidence newly shows>",`);
+    lines.push(`    "evidence": "<count + source kinds + relevant facts>",`);
+    lines.push(`    "confidence_rationale": "<why this confidence level is justified>",`);
+    lines.push(`    "why_it_matters": "<practical implication, not a guaranteed outcome>",`);
     lines.push(`    "who_needs_to_know": "<inside the operator's team>",`);
-    lines.push(`    "what_next": "<one concrete move>"`);
+    lines.push(`    "what_next": "<one concrete verification or operating action>"`);
     lines.push(`  },`);
     lines.push(`  "confidence": <0.0-1.0>,`);
     lines.push(`  "recommended_moves": [`);
-    lines.push(`    { "label": "<verb-led move>", "rationale": "<why>", "destination": "<room · object · action>" }`);
+    lines.push(`    { "label": "<verb-led move>", "rationale": "<why the evidence supports doing it>", "destination": "<room · object · action>" }`);
     lines.push(`  ],`);
-    lines.push(`  "evidence_ids": ["<enriched_id>", ...]  // at least 3`);
+    lines.push(`  "evidence_ids": ["<enriched_id>", ...]`);
     lines.push("}");
     lines.push("");
-    lines.push("If no real contradiction exists (positions and evidence are consistent, or evidence is too thin), output:");
+    lines.push("If no evidence-backed conflict exists, output:");
     lines.push("{");
     lines.push(`  "found_contradiction": false,`);
-    lines.push(`  "no_contradiction_reason": "<one sentence explaining what you looked at and why nothing rose to the bar>",`);
+    lines.push(`  "no_contradiction_reason": "<one sentence explaining what was checked and why the evidence did not justify a conflict>",`);
     lines.push(`  "target_position": null,`);
     lines.push(`  "title": null,`);
     lines.push(`  "analysis": null,`);
@@ -168,16 +163,13 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
 function asString(v: unknown): string | null {
     return typeof v === "string" ? v : null;
 }
-
 function asNumber(v: unknown): number | null {
     return typeof v === "number" && Number.isFinite(v) ? v : null;
 }
-
 function asStringArray(v: unknown): string[] {
     if (!Array.isArray(v)) return [];
     return v.filter((x): x is string => typeof x === "string");
 }
-
 function asTargetPosition(v: unknown): TargetPosition | null {
     if (!v || typeof v !== "object") return null;
     const o = v as Record<string, unknown>;
@@ -187,13 +179,8 @@ function asTargetPosition(v: unknown): TargetPosition | null {
     if (!kind || !source || !quoted_text) return null;
     if (!["watchlist", "value_prop", "icp", "competitor_set"].includes(kind)) return null;
     if (!["commercial_profile", "watchlist_companies", "icp"].includes(source)) return null;
-    return {
-        kind: kind as TargetPositionKind,
-        source: source as TargetPositionSource,
-        quoted_text
-    };
+    return { kind: kind as TargetPositionKind, source: source as TargetPositionSource, quoted_text };
 }
-
 function asSixQuestions(v: unknown): ContrarianSixQuestions | null {
     if (!v || typeof v !== "object") return null;
     const o = v as Record<string, unknown>;
@@ -206,7 +193,6 @@ function asSixQuestions(v: unknown): ContrarianSixQuestions | null {
         what_next: asString(o["what_next"]) ?? ""
     };
 }
-
 function asMoves(v: unknown): ContrarianMove[] {
     if (!Array.isArray(v)) return [];
     const out: ContrarianMove[] = [];
@@ -215,11 +201,7 @@ function asMoves(v: unknown): ContrarianMove[] {
         const o = item as Record<string, unknown>;
         const label = asString(o["label"]);
         if (!label) continue;
-        out.push({
-            label,
-            rationale: asString(o["rationale"]) ?? "",
-            destination: asString(o["destination"]) ?? ""
-        });
+        out.push({ label, rationale: asString(o["rationale"]) ?? "", destination: asString(o["destination"]) ?? "" });
     }
     return out;
 }
@@ -237,11 +219,7 @@ export function parseContrarianResponse(raw: string): ContrarianDraft | null {
     const json = extractJsonBlock(raw);
     if (!json) return null;
     let parsed: unknown;
-    try {
-        parsed = JSON.parse(json);
-    } catch {
-        return null;
-    }
+    try { parsed = JSON.parse(json); } catch { return null; }
     if (!parsed || typeof parsed !== "object") return null;
     const o = parsed as Record<string, unknown>;
     return {
@@ -278,18 +256,7 @@ export interface ContrarianGateResult {
     readonly failures: ReadonlyArray<ContrarianGateFailure>;
 }
 
-const WEAKENING_PATTERNS: ReadonlyArray<RegExp> = [
-    /\bmight\b/i,
-    /\bcould\s+be\s+argued\b/i,
-    /\bit's\s+worth\s+noting\b/i,
-    /\bperhaps\b/i,
-    /\bseems?\s+to\b/i
-];
-
-function isQuoteInPositions(
-    quote: string,
-    positions: ContrarianStatedPositions
-): boolean {
+function isQuoteInPositions(quote: string, positions: ContrarianStatedPositions): boolean {
     const needle = quote.trim().toLowerCase();
     if (needle.length === 0) return false;
     const haystacks: string[] = [];
@@ -301,37 +268,21 @@ function isQuoteInPositions(
     return haystacks.some((h) => h.includes(needle) || needle.includes(h));
 }
 
-export function runContrarianGate(
-    draft: ContrarianDraft,
-    input: ContrarianInput
-): ContrarianGateResult {
-    if (!draft.found_contradiction) {
-        return { passes: true, failures: [] };
-    }
+export function runContrarianGate(draft: ContrarianDraft, input: ContrarianInput): ContrarianGateResult {
+    if (!draft.found_contradiction) return { passes: true, failures: [] };
     const failures: ContrarianGateFailure[] = [];
     if (!draft.target_position) failures.push("missing_target_position");
-    else if (!isQuoteInPositions(draft.target_position.quoted_text, input.stated_positions)) {
-        failures.push("quoted_text_not_in_inputs");
-    }
+    else if (!isQuoteInPositions(draft.target_position.quoted_text, input.stated_positions)) failures.push("quoted_text_not_in_inputs");
     if (!draft.title || draft.title.trim().length === 0) failures.push("missing_title");
     else if (draft.title.length > MAX_TITLE_LEN) failures.push("title_too_long");
     if (!draft.analysis || draft.analysis.trim().length === 0) failures.push("missing_analysis");
     if (!draft.six_questions) failures.push("missing_six_questions");
-    if (draft.confidence === null || draft.confidence < MIN_CONFIDENCE) {
-        failures.push("low_confidence");
-    }
-    if (draft.evidence_ids.length < MIN_EVIDENCE_IDS) {
-        failures.push("thin_evidence");
-    } else {
+    if (draft.confidence === null || draft.confidence < MIN_CONFIDENCE) failures.push("low_confidence");
+    if (draft.evidence_ids.length < MIN_EVIDENCE_IDS) failures.push("thin_evidence");
+    else {
         const ids = new Set(input.evidence.map((e) => e.enriched_id));
         const missing = draft.evidence_ids.filter((id) => !ids.has(id));
         if (missing.length > 0) failures.push("evidence_ids_not_in_run");
-    }
-    if (draft.title && WEAKENING_PATTERNS.some((p) => p.test(draft.title!))) {
-        failures.push("weakening_language");
-    }
-    if (draft.analysis && WEAKENING_PATTERNS.some((p) => p.test(draft.analysis!))) {
-        failures.push("weakening_language");
     }
     return { passes: failures.length === 0, failures };
 }

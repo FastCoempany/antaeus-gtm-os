@@ -1,17 +1,9 @@
 /**
- * Critic prompt + output parser.
+ * Retroactive Briefing Pattern critic.
  *
- * Voice rules embedded inline rather than imported from
- * supabase/functions/briefing-pipeline/llm/synthesis-shared.ts because
- * Edge Functions deploy independently and can't cross-import. The
- * banned-vocabulary + hedging rules are the same shape the synthesis
- * critique pass uses — this critic re-checks the published Pattern
- * (post-gate, post-repair) for any signals the in-flight critique
- * missed.
- *
- * Output is strict JSON. parseCriticOutput accepts a fenced code
- * block or bare JSON; anything malformed returns null and the
- * caller logs + skips.
+ * The critic evaluates whether published language is explicit, evidence-aware,
+ * and operational. It must not reward false certainty or penalize accurate
+ * epistemic calibration merely because a sentence uses `may` or `suggests`.
  */
 
 const BANNED_VOCABULARY: ReadonlyArray<string> = [
@@ -34,22 +26,15 @@ const BANNED_VOCABULARY: ReadonlyArray<string> = [
     "output ingot"
 ];
 
-const HEDGING_ADVERBS: ReadonlyArray<string> = [
-    "perhaps",
-    "possibly",
-    "potentially",
-    "arguably",
-    "presumably",
-    "seemingly"
-];
-
-const BANNED_HEDGES: ReadonlyArray<string> = [
+const BANNED_INDIRECT_FRAMING: ReadonlyArray<string> = [
     "it's worth noting that",
+    "it is worth noting that",
     "it could be argued that",
+    "there may be reasons to consider",
+    "some observers might suggest",
+    "one could argue",
     "in today's",
-    "the future of",
-    "might be the case that",
-    "one could say"
+    "the future of"
 ];
 
 export interface CriticPromptInput {
@@ -65,7 +50,7 @@ export interface CriticPromptInput {
 }
 
 export interface CriticOutput {
-    readonly score: number; // 0-1
+    readonly score: number;
     readonly voice_concerns: ReadonlyArray<string>;
     readonly banned_vocabulary: ReadonlyArray<string>;
     readonly hedging_concerns: ReadonlyArray<string>;
@@ -86,9 +71,7 @@ function formatSixQuestions(sq: Record<string, unknown> | null): string {
     const lines: string[] = [];
     for (const k of keys) {
         const v = sq[k];
-        if (typeof v === "string" && v.trim().length > 0) {
-            lines.push(`- ${k}: ${v.trim()}`);
-        }
+        if (typeof v === "string" && v.trim()) lines.push(`- ${k}: ${v.trim()}`);
     }
     return lines.length === 0 ? "(none)" : lines.join("\n");
 }
@@ -99,34 +82,46 @@ function formatMoves(moves: unknown): string {
     for (const m of moves) {
         if (!m || typeof m !== "object") continue;
         const o = m as Record<string, unknown>;
-        const label = typeof o.label === "string" ? o.label : "";
+        // Current synthesis schema uses `action`; accept legacy `label` for old rows.
+        const action =
+            typeof o.action === "string"
+                ? o.action
+                : typeof o.label === "string"
+                  ? o.label
+                  : "";
         const dest = typeof o.destination === "string" ? o.destination : "";
         const rationale = typeof o.rationale === "string" ? o.rationale : "";
-        const parts = [label, dest ? `→ ${dest}` : "", rationale ? `(${rationale})` : ""]
-            .filter((s) => s.length > 0);
+        const parts = [
+            action,
+            dest ? `→ ${dest}` : "",
+            rationale ? `(${rationale})` : ""
+        ].filter((s) => s.length > 0);
         if (parts.length > 0) lines.push(`- ${parts.join(" ")}`);
     }
     return lines.length === 0 ? "(none)" : lines.join("\n");
 }
 
-const SYSTEM_PROMPT = `You are a retroactive voice critic for a B2B intelligence briefing system. Your job is to read a Pattern the system has already published and score how well it matches the house voice — declarative, specific, evidence-anchored, no marketing throat-clearing, no manifesto-shape single-noun abstractions doing sentence work.
+const SYSTEM_PROMPT = `You are a retroactive language critic for a B2B intelligence briefing. Evaluate whether the published Pattern is explicit, evidence-aware, and operational.
 
-You score voice FIDELITY, not factual accuracy. A factually wrong but voice-clean Pattern still scores high here. A voice-broken Pattern that happens to be true scores low.
+You score LANGUAGE QUALITY, not factual accuracy. However, language quality includes epistemic discipline: facts should sound like facts; assessments should be identifiable as assessments; predictions should not be presented as observed facts; correlation should not be presented as causation.
 
-Banned vocabulary (subtract sharply if any appear): ${BANNED_VOCABULARY.join(", ")}. Also banned: ${BANNED_HEDGES.join("; ")}, and similar marketing throat-clearing.
+Banned private vocabulary: ${BANNED_VOCABULARY.join(", ")}.
+Banned indirect/metadiscursive framing: ${BANNED_INDIRECT_FRAMING.join("; ")}.
 
-Hedging adverbs (max 3 total across the analysis): ${HEDGING_ADVERBS.join(", ")}.
+Do NOT penalize a Pattern merely for using calibrated uncertainty words such as "may", "could", "suggests", "appears", or "likely". Flag uncertainty language only when it is repetitive, evasive, or makes the actual assessment impossible to identify.
 
-Voice strengths to recognize: specific named entities (companies, products, dollar amounts, dates); declarative sentence shape; evidence references with item ids; recommended moves that are concrete actions with destinations, not vague aspirations.
+Penalize unsupported certainty, slogan-like or aphoristic cadence, fragments used instead of explanation, personification, vague actions, and recommendations routed to nonexistent product surfaces.
 
-Output strict JSON. No prose around it. No code fences are required but are tolerated.`;
+Strengths to recognize: specific named entities, dates and numbers; direct complete sentences; clear separation of evidence from interpretation; confidence that matches evidence quality; and concrete recommended actions with valid destinations.
+
+Output strict JSON only.`;
 
 export function buildCriticPrompt(input: CriticPromptInput): {
     readonly system_prompt: string;
     readonly user_prompt: string;
 } {
     const user_prompt = [
-        `Score this Pattern's voice fidelity 0-1.`,
+        `Score this Pattern's language quality from 0 to 1.`,
         ``,
         `Pattern title: "${input.title}"`,
         ``,
@@ -146,14 +141,23 @@ export function buildCriticPrompt(input: CriticPromptInput): {
         `- evidence_count: ${input.evidence_count}`,
         `- source_count: ${input.source_count}`,
         ``,
+        `Check specifically for:`,
+        `- unsupported certainty or causal language`,
+        `- evidence/interpretation being collapsed into one assertion`,
+        `- indirect/metadiscursive qualification`,
+        `- aphoristic or fragmentary explanation`,
+        `- private/product jargon`,
+        `- vague or invalid routed actions`,
+        `- uncertainty language that is redundant rather than necessary`,
+        ``,
         `Return JSON of this exact shape:`,
         `{`,
         `  "score": <number 0-1, two decimals>,`,
         `  "voice_concerns": [<short strings, max 3>],`,
         `  "banned_vocabulary": [<exact banned words/phrases that appeared, or []>],`,
-        `  "hedging_concerns": [<short strings naming hedging issues, or []>],`,
+        `  "hedging_concerns": [<only redundant/evasive uncertainty language, or []>],`,
         `  "strengths": [<short strings naming what's working, max 3>],`,
-        `  "summary": "<one sentence verdict>"`,
+        `  "summary": "<one sentence assessment>"`,
         `}`
     ].join("\n");
     return { system_prompt: SYSTEM_PROMPT, user_prompt };
@@ -172,10 +176,8 @@ function asStringArray(v: unknown): string[] {
 }
 
 function tryExtractJson(text: string): string | null {
-    // Fenced code block first.
     const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (fenced && fenced[1]) return fenced[1].trim();
-    // Otherwise: find the first { and matching last }.
+    if (fenced?.[1]) return fenced[1].trim();
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
     if (start >= 0 && end > start) return text.slice(start, end + 1);

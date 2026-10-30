@@ -23,14 +23,9 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./linkedin-playbook-v4.css";
 
 /**
- * LinkedInPlaybookV4 (canon §4.10) — "the one move", wired to
- * production from the settled 2026-07-06 design. LinkedIn as
- * disciplined air cover: one account at a time (the hottest already
- * lit in Signal Console / Outbound), the 5-cue ladder as a
- * where-you-are spine, the single next public-first move with a
- * ready-to-paste line, and a quiet queue of the other accounts
- * you're warming. The cue ladder, motion engine, scripts, action log,
- * and channel stats are reused unchanged.
+ * LinkedIn Playbook treats LinkedIn as a supporting outreach channel. It
+ * uses recorded LinkedIn actions plus Signal Console/outbound context to
+ * recommend one next action without inferring buyer trust or intent.
  */
 
 const focusOverride = signal<string | null>(null);
@@ -44,33 +39,31 @@ function toast(msg: string): void {
     toastTimer = setTimeout(() => (toastMsg.value = null), 2400);
 }
 
-/** The rungs said plainly (§13) — same ladder, zero decode. */
-const RUNG_LABELS: ReadonlyArray<string> = [
-    t("Find their post"),
+const STEP_LABELS: ReadonlyArray<string> = [
+    t("Review a post"),
     t("Leave a comment"),
-    t("Send the request"),
-    t("Give something useful"),
-    t("Ask for 15 min")
+    t("Send connection request"),
+    t("Send useful information"),
+    t("Ask for 15 minutes")
 ];
 
-/** Per-rung position reads — where you are with this account. */
 const POSITION_READS: ReadonlyArray<string> = [
-    t("They don't know your name yet. Warm it before you ask for anything.", { class: "body" }),
-    t("They've seen you once. One useful comment makes you familiar.", { class: "body" }),
-    t("Your name is warm — the request reads as a continuation, not an interruption.", { class: "body" }),
-    t("You're connected. Send something useful before any ask.", { class: "body" }),
-    t("You've given first. The 15-minute ask is warranted now.", { class: "body" })
+    t("No LinkedIn action in this sequence is logged for the account yet.", { class: "body" }),
+    t("The initial public-review step is logged. The next step is a substantive public comment when one is relevant.", { class: "body" }),
+    t("A public interaction is logged. The next step in this sequence is a connection request tied to real context.", { class: "body" }),
+    t("A connection request is logged. Send useful information only when it addresses a real topic or question.", { class: "body" }),
+    t("The useful-information step is logged. A short meeting request is the final step when there is a specific topic to discuss.", { class: "body" })
 ];
 
 const POSITION_WORD: ReadonlyArray<string> = [
-    t("start"),
-    t("second rung"),
-    t("third rung"),
-    t("fourth rung"),
-    t("last rung")
+    t("step 1"),
+    t("step 2"),
+    t("step 3"),
+    t("step 4"),
+    t("step 5")
 ];
 
-/** Map a logged cueLabel back to its rung (legacy names included). */
+/** Map a logged cueLabel back to its sequence position, including legacy names. */
 const LEGACY_CUE_NAMES: Readonly<Record<string, CueIndex>> = {
     "Give proof before asking": 3,
     "Ask only when earned": 4
@@ -83,13 +76,13 @@ function cueIndexForEntry(entry: ActionEntry): CueIndex | null {
     return legacy ?? null;
 }
 
-interface WarmingAccount {
+interface AccountSequenceState {
     readonly name: string;
     readonly done: ReadonlySet<CueIndex>;
     readonly here: CueIndex;
 }
 
-function warmingFor(list: ReadonlyArray<ActionEntry>): ReadonlyArray<WarmingAccount> {
+function sequenceStateFor(list: ReadonlyArray<ActionEntry>): ReadonlyArray<AccountSequenceState> {
     const byName = new Map<string, { name: string; done: Set<CueIndex> }>();
     for (const entry of list) {
         const name = entry.accountName.trim();
@@ -109,37 +102,35 @@ function warmingFor(list: ReadonlyArray<ActionEntry>): ReadonlyArray<WarmingAcco
 export function LinkedInPlaybookV4(): JSX.Element {
     const log = actions.value;
     const st = stats.value;
-    const hottest = hottestAccount.value;
-    const warming = warmingFor(log);
+    const highestPriority = hottestAccount.value;
+    const accountStates = sequenceStateFor(log);
 
-    // The focused account: an explicit pick wins; else the hottest; else
-    // the first account already being warmed.
     const focusName =
-        focusOverride.value ?? hottest?.name ?? warming[0]?.name ?? null;
-    const focusWarm =
+        focusOverride.value ?? highestPriority?.name ?? accountStates[0]?.name ?? null;
+    const focusState =
         focusName != null
-            ? warming.find((w) => w.name.toLowerCase() === focusName.toLowerCase()) ?? null
+            ? accountStates.find((w) => w.name.toLowerCase() === focusName.toLowerCase()) ?? null
             : null;
-    const here: CueIndex = focusWarm?.here ?? 0;
-    const done = focusWarm?.done ?? new Set<CueIndex>();
+    const here: CueIndex = focusState?.here ?? 0;
+    const done = focusState?.done ?? new Set<CueIndex>();
     const cue = findCue(here);
 
     const motion = deriveMotion({
         icp: bestIcp.value,
         hottestAccount:
             focusName != null
-                ? { name: focusName, heat: focusName.toLowerCase() === hottest?.name.toLowerCase() ? hottest.heat : 0 }
+                ? { name: focusName, heat: focusName.toLowerCase() === highestPriority?.name.toLowerCase() ? highestPriority.heat : 0 }
                 : null,
         latestTouch: latestTouch.value,
         stats: st
     });
     const script = cueScript(cue, motion);
-    const others = warming.filter(
+    const others = accountStates.filter(
         (w) => focusName == null || w.name.toLowerCase() !== focusName.toLowerCase()
     );
-    const heat =
-        focusName != null && focusName.toLowerCase() === hottest?.name.toLowerCase()
-            ? hottest?.heat ?? 0
+    const priorityScore =
+        focusName != null && focusName.toLowerCase() === highestPriority?.name.toLowerCase()
+            ? highestPriority?.heat ?? 0
             : 0;
 
     function markDone(): void {
@@ -150,26 +141,24 @@ export function LinkedInPlaybookV4(): JSX.Element {
         const entry = logCue();
         setActiveCue(null);
         if (entry) {
-            // Cloud write too — a local-only log is clobbered when
-            // cloud replaces local on boot.
             void saveAction(entry);
             if (here === 4) {
-                toast(`${t("Logged on")} ${focusName} — ${t("the ladder's run. The next touch belongs in Outbound.", { class: "body" })}`);
+                toast(`${t("Logged on")} ${focusName}. ${t("The five-step LinkedIn sequence is complete; continue the account plan in the appropriate outreach room.", { class: "body" })}`);
             } else {
-                toast(`${t("Logged on")} ${focusName} — ${t("next:")} ${RUNG_LABELS[here + 1]}.`);
+                toast(`${t("Logged on")} ${focusName}. ${t("Next:")} ${STEP_LABELS[here + 1]}.`);
             }
         }
     }
 
     function copyScript(): void {
         if (!navigator.clipboard?.writeText) {
-            toast(t("Copying isn't available here — select the text by hand.", { class: "body" }));
+            toast(t("Copying is not available here. Select the text manually.", { class: "body" }));
             return;
         }
         navigator.clipboard
             .writeText(script)
             .then(() => toast(t("Copied.")))
-            .catch(() => toast(t("Couldn't copy — select the text by hand.", { class: "body" })));
+            .catch(() => toast(t("Could not copy. Select the text manually.", { class: "body" })));
     }
 
     return (
@@ -177,24 +166,23 @@ export function LinkedInPlaybookV4(): JSX.Element {
             <div class="lp4-wrap">
                 <div class="lp4-top">
                     <span class="lp4-bname">{t("LinkedIn Playbook")}</span>
-                    <span class="lp4-r">{t("air cover · never the opening scene", { class: "body" })}</span>
+                    <span class="lp4-r">{t("supporting outreach · not the primary channel", { class: "body" })}</span>
                 </div>
 
                 <h1 class="lp4-thesis">
-                    {t("LinkedIn warms your name so your calls and emails land.", { class: "body" })}{" "}
-                    <span class="lp4-q">{t("Not where you pitch — where they start to know you.", { class: "body" })}</span>
+                    {t("Use LinkedIn to build familiarity with a contact before or alongside calls and email.", { class: "body" })}
                 </h1>
-                <p class="lp4-sub">{t("One account at a time. Here's your move on the one that's hottest right now.", { class: "body" })}</p>
+                <p class="lp4-sub">{t("Current recommended LinkedIn action for the highest-priority available account.", { class: "body" })}</p>
 
                 {focusName ? (
                     <div class="lp4-move">
                         <div class="lp4-hd">
-                            <span class="lp4-who">{t("Your move on")} <b>{focusName}</b></span>
-                            <a class="lp4-src" href={hrefToSignalConsole(focusName)}>◆ {t("from Signal Console")}</a>
-                            {heat > 0 ? <span class="lp4-heat">{heat > 75 ? t("HOT") : t("WARM")} · {heat}</span> : null}
+                            <span class="lp4-who">{t("Recommended action for")} <b>{focusName}</b></span>
+                            <a class="lp4-src" href={hrefToSignalConsole(focusName)}>◆ {t("Signal Console")}</a>
+                            {priorityScore > 0 ? <span class="lp4-heat">{t("PRIORITY")} · {priorityScore}</span> : null}
                         </div>
                         <div class="lp4-spine">
-                            {RUNG_LABELS.map((label, i) => (
+                            {STEP_LABELS.map((label, i) => (
                                 <div class={`lp4-rung${done.has(i as CueIndex) ? " is-done" : ""}${i === here ? " is-here" : ""}`} key={label}>
                                     <span class="lp4-dot" />
                                     <span class="lp4-rl">{label}</span>
@@ -202,49 +190,51 @@ export function LinkedInPlaybookV4(): JSX.Element {
                             ))}
                         </div>
                         <div class="lp4-pos">
-                            {t("You're at the")} <b>{POSITION_WORD[here]}</b> {t("with")} {focusName} — {POSITION_READS[here]}
+                            <b>{POSITION_WORD[here]}</b> {t("for")} {focusName}: {POSITION_READS[here]}
                         </div>
                         <div class="lp4-act">
                             <div class="lp4-cue">{cue.console}</div>
                             <div class="lp4-why">
-                                {t("Why now:")} <b>{motion.whyNow}</b>
+                                {t("Why this action:")} <b>{motion.whyNow}</b>
                             </div>
                             <div class="lp4-script">
                                 <div class="lp4-sl">
-                                    {here <= 1 ? t("what to comment") : here === 2 ? t("the connection note") : here === 3 ? t("what to send") : t("the ask")}
-                                    <span class="lp4-slq">· {t("say one useful thing, then leave — no pitch", { class: "body" })}</span>
+                                    {here <= 1 ? t("Suggested public response") : here === 2 ? t("Suggested connection note") : here === 3 ? t("Suggested message") : t("Suggested meeting request")}
+                                    <span class="lp4-slq"> · {t("Use only details that are true for this account and contact.", { class: "body" })}</span>
                                 </div>
                                 <div class="lp4-sbody">{script}</div>
                             </div>
                             <div class="lp4-row">
-                                <button type="button" class="lp4-btn is-pri" onClick={markDone}>{t("Mark it done →")}</button>
-                                <button type="button" class="lp4-btn" onClick={copyScript}>{t("Copy the line")}</button>
+                                <button type="button" class="lp4-btn is-pri" onClick={markDone}>{t("Mark action complete →")}</button>
+                                <button type="button" class="lp4-btn" onClick={copyScript}>{t("Copy suggested text")}</button>
                                 <span class="lp4-win">
-                                    {t("One good touch today. That's the whole job.", { class: "body" })} <b>{t("The ask comes later.")}</b>
+                                    {here < 4
+                                        ? t("Complete the relevant step before moving to the next one.", { class: "body" })
+                                        : t("The meeting request should reference a specific prior topic or interaction.", { class: "body" })}
                                 </span>
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div class="lp4-empty">
-                        <h3>{t("No account is warm yet.")}</h3>
-                        <p>{t("Get accounts lit in Signal Console first — this room warms the ones already worth your calls and emails.", { class: "body" })}</p>
+                        <h3>{t("No account is available for a LinkedIn action yet.", { class: "body" })}</h3>
+                        <p>{t("Add or prioritize accounts in Signal Console, or record an outbound touch, then return here for a LinkedIn recommendation.", { class: "body" })}</p>
                         <a class="lp4-btn" href="/signal-console/?returnTo=%2Flinkedin-playbook%2F&returnLabel=LinkedIn+Playbook&fromMode=room&fromSurface=linkedin-playbook">{t("Open Signal Console →")}</a>
                     </div>
                 )}
 
                 {others.length > 0 ? (
                     <div class="lp4-next">
-                        <div class="lp4-nh">{t("Other accounts you're warming")}</div>
+                        <div class="lp4-nh">{t("Other accounts with LinkedIn actions")}</div>
                         {others.slice(0, 6).map((w) => (
                             <button type="button" class="lp4-acct" key={w.name} onClick={() => (focusOverride.value = w.name)}>
                                 <span class="lp4-nm">{w.name}</span>
                                 <span class="lp4-mini">
-                                    {RUNG_LABELS.map((_, i) => (
+                                    {STEP_LABELS.map((_, i) => (
                                         <i class={w.done.has(i as CueIndex) ? "is-d" : i === w.here ? "is-h" : ""} key={i} />
                                     ))}
                                 </span>
-                                <span class="lp4-nx">{RUNG_LABELS[w.here]} →</span>
+                                <span class="lp4-nx">{STEP_LABELS[w.here]} →</span>
                             </button>
                         ))}
                     </div>
@@ -252,10 +242,10 @@ export function LinkedInPlaybookV4(): JSX.Element {
 
                 <div class="lp4-refs">
                     <button type="button" class="lp4-drawer" onClick={() => (templatesOpen.value = !templatesOpen.value)}>
-                        {templatesOpen.value ? "⌵ " : "› "}{t("Message templates (connect · comment · give · ask)", { class: "body" })}
+                        {templatesOpen.value ? "⌵ " : "› "}{t("Message templates (connect · comment · resource · ask)", { class: "body" })}
                     </button>
                     <span class="lp4-score">
-                        {t("So far:")} <b>{st.total}</b> {t("touches")} · <b>{st.accepted}</b> {t("accepted")} · <b>{st.replies}</b> {t("replied")}
+                        {t("Recorded:")} <b>{st.total}</b> {t("actions")} · <b>{st.accepted}</b> {t("connections accepted")} · <b>{st.replies}</b> {t("replies")}
                     </span>
                 </div>
                 {templatesOpen.value ? (

@@ -86,8 +86,8 @@ describe("computeFieldRead — empty board", () => {
             allocation: makeAllocation()
         });
         expect(r.band).toBe("empty");
-        expect(r.mainRisk.toLowerCase()).toContain("haven't carved a division");
-        expect(r.operatorMove.toLowerCase()).toContain("carve one division");
+        expect(r.mainRisk.toLowerCase()).toContain("no territory segments have been created");
+        expect(r.operatorMove.toLowerCase()).toContain("create one territory segment");
     });
 
     it("returns empty band when focuses exist but no active accounts", () => {
@@ -98,7 +98,7 @@ describe("computeFieldRead — empty board", () => {
             allocation: makeAllocation()
         });
         expect(r.band).toBe("empty");
-        expect(r.operatorMove.toLowerCase()).toContain("open the conversation");
+        expect(r.operatorMove.toLowerCase()).toContain("record a sales approach");
     });
 });
 
@@ -110,7 +110,7 @@ describe("computeFieldRead — next-move priority chain", () => {
             approaches: [],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.operatorMove.toLowerCase()).toContain("open the conversation");
+        expect(r.operatorMove.toLowerCase()).toContain("record a sales approach");
     });
 
     it("prescribes retier when over cap", () => {
@@ -126,7 +126,7 @@ describe("computeFieldRead — next-move priority chain", () => {
                 status: "over"
             })
         });
-        expect(r.operatorMove.toLowerCase()).toContain("retier");
+        expect(r.operatorMove.toLowerCase()).toContain("reassign");
     });
 
     it("prescribes removing closed-lost rows when drift is heavy", () => {
@@ -141,7 +141,7 @@ describe("computeFieldRead — next-move priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.operatorMove.toLowerCase()).toContain("lost accounts off the map");
+        expect(r.operatorMove.toLowerCase()).toContain("remove closed-lost accounts");
     });
 });
 
@@ -153,7 +153,7 @@ describe("computeFieldRead — what-is-loose priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 1, remaining: 299 })
         });
-        expect(r.mainRisk.toLowerCase()).toContain("one division covers everything");
+        expect(r.mainRisk.toLowerCase()).toContain("one segment currently contains the entire territory");
     });
 
     it("flags watch-ring (>=5 paused) when no higher risk fires", () => {
@@ -171,7 +171,7 @@ describe("computeFieldRead — what-is-loose priority chain", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
-        expect(r.mainRisk.toLowerCase()).toContain("paused accounts");
+        expect(r.mainRisk.toLowerCase()).toContain("accounts are paused");
     });
 });
 
@@ -183,7 +183,7 @@ describe("computeFieldRead — replacement pressure", () => {
             approaches: [approach("ap-1", "th-1")],
             allocation: makeAllocation({ total: 2, remaining: 298 })
         });
-        expect(r.replacement.toLowerCase()).toContain("nothing needs replacing");
+        expect(r.replacement.toLowerCase()).toContain("no account replacement is currently required");
     });
 
     it("counts closed-lost + half of paused as backfill pressure", () => {

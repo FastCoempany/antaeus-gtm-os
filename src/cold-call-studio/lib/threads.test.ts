@@ -7,8 +7,8 @@ import {
 } from "./threads";
 import type { ThreadId } from "./types";
 
-describe("THREADS spine", () => {
-    it("contains six threads in canonical order", () => {
+describe("THREADS sequence", () => {
+    it("contains six threads in the existing routing order", () => {
         expect(THREADS.map((t) => t.id)).toEqual([
             "prep",
             "opener",
@@ -29,7 +29,7 @@ describe("THREADS spine", () => {
         }
     });
 
-    it("each reply has a buyer, reply, and a valid next target (ThreadId or 'post')", () => {
+    it("each reply has a buyer, reply, and a valid next target", () => {
         const validIds: ReadonlyArray<ThreadId | "post" | null> = [
             "prep",
             "opener",
@@ -60,24 +60,39 @@ describe("THREADS spine", () => {
         ]);
     });
 
-    it("opener thread routes all branches into pressure (per legacy contract)", () => {
+    it("opener routes all branches into impact questions", () => {
         const opener = findThread("opener");
         for (const r of opener.replies) {
             expect(r.next).toBe("pressure");
         }
     });
 
-    it("ask thread `yes` and `send` route to post (call ends in scheduling)", () => {
+    it("ask yes and send branches route to post-call capture", () => {
         const ask = findThread("ask");
         expect(findReply(ask, "yes")?.next).toBe("post");
         expect(findReply(ask, "send")?.next).toBe("post");
         expect(findReply(ask, "not-now")?.next).toBe("exit");
     });
+
+    it("the legacy proof id no longer manufactures proof or benchmark claims", () => {
+        const currentApproach = findThread("proof");
+        const text = [
+            currentApproach.title,
+            currentApproach.copy,
+            currentApproach.say,
+            currentApproach.coach,
+            ...currentApproach.replies.flatMap((r) => [r.buyer, r.reply])
+        ].join(" ").toLowerCase();
+        expect(currentApproach.label).toBe("Understand the current approach");
+        expect(text).not.toContain("we've seen both");
+        expect(text).not.toContain("this becomes expensive");
+        expect(text).not.toContain("send the benchmark");
+    });
 });
 
 describe("findThread", () => {
     it("returns the thread by id", () => {
-        expect(findThread("proof").label).toBe("Show-it's-real thread");
+        expect(findThread("proof").label).toBe("Understand the current approach");
     });
 
     it("falls back to prep when id is unknown", () => {
@@ -114,7 +129,7 @@ describe("nextThreadFor", () => {
         expect(nextThreadFor(null)).toBeNull();
     });
 
-    it("returns null when reply.next is 'post'", () => {
+    it("returns null when reply.next is post", () => {
         const ask = findThread("ask");
         const reply = findReply(ask, "yes");
         expect(nextThreadFor(reply)).toBeNull();

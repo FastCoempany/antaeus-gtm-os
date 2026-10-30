@@ -1,41 +1,29 @@
 import type { Cue, Motion } from "./types";
 
 /**
- * Phase 4 / Room 8 Wave 2 — cue scripts + method-sheet templates.
+ * LinkedIn suggested scripts and reference templates.
  *
- * `cueScript(cue, motion)` is a faithful TypeScript port of the legacy
- * `cueScript(cue, m)` function (`app/linkedin-playbook/index.html` line
- * 111). Returns the suggested live script for the active cue, branching
- * on the cue's actionType and (for DM cues) the cue name; for the
- * content cues, the wording shifts based on whether this is air-cover
- * for an outbound motion or a fresh credibility pass.
- *
- * The 4 method-sheet templates (Connection / Public cue / Give-first /
- * Ask) are also ported verbatim from the legacy HTML lines 79-83. They
- * appear in the secondary reference panel below the booth — operator
- * copies them to clipboard.
- *
- * Both helpers are pure strings; there is no DOM here.
+ * Scripts use placeholders for facts the operator must supply. They do not
+ * invent benchmarks, claim that a pattern is typical, or imply familiarity
+ * that has not been recorded.
  */
 
 export function cueScript(cue: Cue, motion: Motion): string {
     if (cue.action === "connection_request") {
-        return "Hi [Name], your point on [specific pressure] was useful. I work around that pattern and would be glad to stay connected.";
+        return "Hi [Name], I saw your point on [topic]. The part about [specific issue] was useful. I would be glad to stay connected.";
     }
     if (cue.action === "dm") {
         if (cue.name.indexOf("Ask") >= 0) {
-            return "Based on what you shared about [pressure], I think there is a concrete conversation worth having. Would [day] or [day] work for 15 minutes?";
+            return "You mentioned [specific issue]. If it would be useful to compare notes on that, would [day] or [day] work for 15 minutes?";
         }
-        return "[Name], saw this and thought it matched the pattern you mentioned: [benchmark]. No ask - just seemed relevant to what your team is navigating.";
+        return "[Name], you mentioned [specific issue]. This [resource] addresses that question directly, so I thought I would send it in case it is useful. No meeting request attached.";
     }
-    // content_engage / content_share / inmail (fallback) — vary on motion key.
     if (motion.key === "add_air_cover") {
-        return "This is the kind of pressure that usually shows up in the queue before it shows up in the forecast. Curious where it is most visible right now.";
+        return "Saw your point on [topic]. The part about [specific issue] stood out. How are you handling that today?";
     }
-    return "That pressure usually shows up first in response time before it shows up in tooling. Curious where the strain is most visible right now.";
+    return "Your point on [topic] was useful. I was especially interested in [specific issue]. How are you handling that today?";
 }
 
-/** Method-sheet template keys — match the secondary panel order. */
 export type MethodTemplateKey = "connect" | "comment" | "give" | "ask";
 
 export interface MethodTemplate {
@@ -50,29 +38,29 @@ export const METHOD_TEMPLATES: ReadonlyArray<MethodTemplate> = [
     {
         key: "connect",
         kicker: "Connection",
-        heading: "Request only after recognition.",
-        small: "A blank request you send to someone who doesn't know you yet costs you trust on the channel.",
-        body: "Hi [Name], I saw your point on [topic]. The part about [specific strain] stood out. Would be useful to stay connected as this develops."
+        heading: "Reference a real public interaction.",
+        small: "Do not imply familiarity that has not happened.",
+        body: "Hi [Name], I saw your point on [topic]. The part about [specific issue] stood out. I would be glad to stay connected."
     },
     {
         key: "comment",
-        kicker: "Public cue",
-        heading: "Comment with one observation that adds value.",
-        small: "Do not pitch in the comments.",
-        body: "This tends to show up first in [operating pressure] before it shows up in tooling. Curious where the strain is most visible right now."
+        kicker: "Comment",
+        heading: "Add one useful observation or question.",
+        small: "Do not turn the comment into a product pitch.",
+        body: "The point about [specific issue] stood out. I am curious how you are handling [specific question] today."
     },
     {
         key: "give",
-        kicker: "Give-first",
-        heading: "Send proof before asking.",
-        small: "The give must help whether or not they buy.",
-        body: "[Name], saw this and thought it matched the pattern you mentioned: [benchmark/resource]. No ask - just seemed relevant to what your team is navigating."
+        kicker: "Useful information",
+        heading: "Send a relevant resource without a meeting request.",
+        small: "Use a real resource that addresses something the contact actually discussed.",
+        body: "[Name], you mentioned [specific issue]. This [resource] addresses that question directly, so I thought I would send it in case it is useful. No meeting request attached."
     },
     {
         key: "ask",
-        kicker: "Ask",
-        heading: "Ask only when it's warranted.",
-        small: "The calendar request comes after familiarity and the help you've already given.",
-        body: "Based on what you shared about [pressure], I think there is a concrete conversation worth having. Would [day] or [day] work for 15 minutes?"
+        kicker: "Meeting request",
+        heading: "Tie the meeting request to the prior conversation.",
+        small: "Ask only when there is a specific issue worth discussing.",
+        body: "You mentioned [specific issue]. If it would be useful to compare notes on that, would [day] or [day] work for 15 minutes?"
     }
 ];

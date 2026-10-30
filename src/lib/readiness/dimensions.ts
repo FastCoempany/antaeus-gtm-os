@@ -1,20 +1,10 @@
 /**
- * Dimension scorers — five pure functions, each `ReadinessInput → DimensionScore`.
+ * Readiness dimension scorers — five pure functions, each
+ * `ReadinessInput → DimensionScore`.
  *
- * Each scorer returns 0-20 with explicit evidence + gap copy so the
- * drawer can render specific reasons under each dimension. The math
- * is intentionally simple: a small number of named contributions,
- * each capped, summed to 20.
- *
- * The shape of each contribution is the same:
- *   - what raw input matters
- *   - a saturating threshold (when "enough" is reached)
- *   - a scaled contribution to the dimension's total
- *
- * Numbers were picked so that the canon §4.17 verdict gates are
- * achievable through realistic operator behavior — not so easy that
- * the verdict floats up on activity, not so harsh that the verdict
- * stays at "Building" forever.
+ * Each scorer returns the existing 0–20 internal score plus explicit
+ * evidence and next-action copy. The scoring math and thresholds are unchanged;
+ * user-facing text names the actual sales activity or documentation required.
  */
 
 import type { DimensionScore, ReadinessInput } from "./types";
@@ -37,12 +27,7 @@ function clampScore(n: number): number {
 }
 
 /**
- * ICP & targeting — sharpened ICP + a real, populated territory.
- *
- *   ICP exists                +6 (saturated at 1 ICP)
- *   ICP quality score         up to +6 (best ICP qualityScore / 100 * 6)
- *   Territory has accounts    up to +5 (saturates at 30 accounts)
- *   Sourcing pushed prospects up to +3 (saturates at 10 ready prospects)
+ * ICP & targeting — defined ICP, populated territory, and confirmed prospects.
  */
 export function scoreIcp(input: ReadinessInput): DimensionScore {
     const evidence: string[] = [];
@@ -69,7 +54,11 @@ export function scoreIcp(input: ReadinessInput): DimensionScore {
             )
         );
     } else if (icpExists > 0) {
-        gaps.push(t("Sharpen ICP — quality below 75/100", { class: "body" }));
+        gaps.push(
+            t("Complete the missing ICP criteria; current quality is below 75/100", {
+                class: "body"
+            })
+        );
     }
 
     const territory = saturate(input.territoryAccountCount, 30, 5);
@@ -81,19 +70,21 @@ export function scoreIcp(input: ReadinessInput): DimensionScore {
             )
         );
     } else {
-        gaps.push(t("Build out territory to 30+ accounts", { class: "body" }));
+        gaps.push(t("Build the territory to 30+ accounts", { class: "body" }));
     }
 
     const pushed = saturate(input.sourcingProspectsReady, 10, 3);
     if (pushed >= 2) {
         evidence.push(
-            t("{n} prospects ready/pushed", { class: "body" }).replace(
+            t("{n} qualified prospects confirmed", { class: "body" }).replace(
                 "{n}",
                 String(input.sourcingProspectsReady)
             )
         );
     } else {
-        gaps.push(t("Push 10+ qualified prospects through Sourcing", { class: "body" }));
+        gaps.push(
+            t("Confirm 10+ qualified prospects in Prospecting Desk", { class: "body" })
+        );
     }
 
     return {
@@ -105,14 +96,7 @@ export function scoreIcp(input: ReadinessInput): DimensionScore {
     };
 }
 
-/**
- * Outreach — touches across channels + breadth of accounts touched.
- *
- *   Touches logged             up to +6 (saturates at 30)
- *   Cold calls logged          up to +5 (saturates at 15)
- *   LinkedIn cues logged       up to +4 (saturates at 12)
- *   Distinct accounts touched  up to +5 (saturates at 12)
- */
+/** Outreach — recorded activity across channels and distinct accounts. */
 export function scoreOutreach(input: ReadinessInput): DimensionScore {
     const evidence: string[] = [];
     const gaps: string[] = [];
@@ -126,7 +110,7 @@ export function scoreOutreach(input: ReadinessInput): DimensionScore {
             )
         );
     } else {
-        gaps.push(t("Send 30+ outbound touches", { class: "body" }));
+        gaps.push(t("Record 30+ outbound touches", { class: "body" }));
     }
 
     const calls = saturate(input.coldCallsLogged, 15, 5);
@@ -144,25 +128,25 @@ export function scoreOutreach(input: ReadinessInput): DimensionScore {
     const cues = saturate(input.linkedinCues, 12, 4);
     if (cues >= 2) {
         evidence.push(
-            t("{n} LinkedIn cues", { class: "body" }).replace(
+            t("{n} LinkedIn outreach actions logged", { class: "body" }).replace(
                 "{n}",
                 String(input.linkedinCues)
             )
         );
     } else {
-        gaps.push(t("Run 12+ LinkedIn cues", { class: "body" }));
+        gaps.push(t("Log 12+ LinkedIn outreach actions", { class: "body" }));
     }
 
     const breadth = saturate(input.distinctAccountsTouched, 12, 5);
     if (breadth >= 3) {
         evidence.push(
-            t("{n} distinct accounts touched", { class: "body" }).replace(
+            t("{n} distinct accounts contacted", { class: "body" }).replace(
                 "{n}",
                 String(input.distinctAccountsTouched)
             )
         );
     } else {
-        gaps.push(t("Touch 12+ distinct accounts (breadth)", { class: "body" }));
+        gaps.push(t("Contact 12+ distinct accounts", { class: "body" }));
     }
 
     return {
@@ -174,15 +158,7 @@ export function scoreOutreach(input: ReadinessInput): DimensionScore {
     };
 }
 
-/**
- * Discovery — planned calls + advanced outcomes + actual studio sessions.
- *
- *   Call planner sessions      up to +6 (saturates at 8)
- *   Discovery advanced calls   up to +9 (saturates at 6) — the strongest
- *                              signal: an advance means the call moved
- *                              the deal forward, which is the whole point
- *   Discovery Studio sessions  up to +5 (saturates at 5)
- */
+/** Discovery — prepared calls, recorded outcomes, and Discovery Studio use. */
 export function scoreDiscovery(input: ReadinessInput): DimensionScore {
     const evidence: string[] = [];
     const gaps: string[] = [];
@@ -190,31 +166,33 @@ export function scoreDiscovery(input: ReadinessInput): DimensionScore {
     const planned = saturate(input.callPlannerSessions, 8, 6);
     if (planned >= 2) {
         evidence.push(
-            t("{n} call plans built", { class: "body" }).replace(
+            t("{n} call plans recorded", { class: "body" }).replace(
                 "{n}",
                 String(input.callPlannerSessions)
             )
         );
     } else {
-        gaps.push(t("Build 8+ call plans in Call Planner", { class: "body" }));
+        gaps.push(t("Prepare 8+ discovery call plans", { class: "body" }));
     }
 
     const advanced = saturate(input.discoveryAdvancedCalls, 6, 9);
     if (advanced >= 3) {
         evidence.push(
-            t("{n} calls advanced the deal", { class: "body" }).replace(
+            t("{n} discovery calls recorded with outcome 'advanced'", { class: "body" }).replace(
                 "{n}",
                 String(input.discoveryAdvancedCalls)
             )
         );
     } else {
-        gaps.push(t("Advance 6+ calls (outcome = advanced)", { class: "body" }));
+        gaps.push(
+            t("Record 6+ discovery calls with outcome 'advanced'", { class: "body" })
+        );
     }
 
     const studio = saturate(input.discoveryStudioSessions, 5, 5);
     if (studio >= 2) {
         evidence.push(
-            t("{n} discovery sessions", { class: "body" }).replace(
+            t("{n} Discovery Studio sessions", { class: "body" }).replace(
                 "{n}",
                 String(input.discoveryStudioSessions)
             )
@@ -232,16 +210,7 @@ export function scoreDiscovery(input: ReadinessInput): DimensionScore {
     };
 }
 
-/**
- * Deal motion — alive pipeline + serious next-steps + closed wins +
- * losses analyzed (closed-lost without a loss reason is unfinished
- * work, not a learning).
- *
- *   Active deals               up to +6 (saturates at 6)
- *   Deals with named next-step up to +5 (saturates at 5)
- *   Closed-won deals           up to +5 (saturates at 3)
- *   Closed-lost deals analyzed up to +4 (saturates at 3)
- */
+/** Deal management — active pipeline, next steps, wins, and analyzed losses. */
 export function scoreDeals(input: ReadinessInput): DimensionScore {
     const evidence: string[] = [];
     const gaps: string[] = [];
@@ -261,13 +230,13 @@ export function scoreDeals(input: ReadinessInput): DimensionScore {
     const stepped = saturate(input.dealsWithNextStep, 5, 5);
     if (stepped >= 2) {
         evidence.push(
-            t("{n} deals with named next-step", { class: "body" }).replace(
+            t("{n} deals with a recorded next step", { class: "body" }).replace(
                 "{n}",
                 String(input.dealsWithNextStep)
             )
         );
     } else {
-        gaps.push(t("Name a next-step on every active deal", { class: "body" }));
+        gaps.push(t("Record a next step on every active deal", { class: "body" }));
     }
 
     const won = saturate(input.closedWonDeals, 3, 5);
@@ -279,19 +248,19 @@ export function scoreDeals(input: ReadinessInput): DimensionScore {
             )
         );
     } else {
-        gaps.push(t("Close 3+ wins", { class: "body" }));
+        gaps.push(t("Record 3+ closed-won deals", { class: "body" }));
     }
 
     const analyzed = saturate(input.closedLostDealsAnalyzed, 3, 4);
     if (analyzed >= 2) {
         evidence.push(
-            t("{n} losses analyzed (loss reason captured)", { class: "body" }).replace(
+            t("{n} closed-lost deals with a recorded loss reason", { class: "body" }).replace(
                 "{n}",
                 String(input.closedLostDealsAnalyzed)
             )
         );
     } else {
-        gaps.push(t("Capture loss reason on closed-lost deals", { class: "body" }));
+        gaps.push(t("Record a loss reason on closed-lost deals", { class: "body" }));
     }
 
     return {
@@ -304,14 +273,8 @@ export function scoreDeals(input: ReadinessInput): DimensionScore {
 }
 
 /**
- * Proof & memory — the artifacts that make the motion *transferable*.
- * This dimension is what separates "lots of activity" from "real
- * institutional memory a hire could inherit."
- *
- *   Cast proofs (PoC Framework)    up to +5 (saturates at 3)
- *   Future Autopsies run           up to +5 (saturates at 3 deals)
- *   Advisor deployments            up to +4 (saturates at 3)
- *   Handoff sections ready         up to +6 (saturates at 5/7)
+ * Pilot evidence & handoff — artifacts and documented outcomes another seller
+ * can inspect rather than relying on founder memory.
  */
 export function scoreProof(input: ReadinessInput): DimensionScore {
     const evidence: string[] = [];
@@ -320,49 +283,57 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
     const proofs = saturate(input.castProofs, 3, 5);
     if (proofs >= 2) {
         evidence.push(
-            t("{n} pieces of cast evidence", { class: "body" }).replace(
+            t("{n} pilot evidence records", { class: "body" }).replace(
                 "{n}",
                 String(input.castProofs)
             )
         );
     } else {
-        gaps.push(t("Cast 3+ pieces of evidence in PoC Framework", { class: "body" }));
+        gaps.push(t("Record results from 3+ pilots", { class: "body" }));
     }
 
     const autopsies = saturate(input.futureAutopsiesRun, 3, 5);
     if (autopsies >= 2) {
         evidence.push(
-            t("{n} deals with autopsy artifacts", { class: "body" }).replace(
+            t("{n} deal-risk reviews completed", { class: "body" }).replace(
                 "{n}",
                 String(input.futureAutopsiesRun)
             )
         );
     } else {
-        gaps.push(t("Run 3+ Future Autopsies (corrective action logged)", { class: "body" }));
+        gaps.push(
+            t("Complete deal-risk reviews for 3+ deals in Future Autopsy", {
+                class: "body"
+            })
+        );
     }
 
     const advisors = saturate(input.advisorDeployments, 3, 4);
     if (advisors >= 2) {
         evidence.push(
-            t("{n} advisor deployments", { class: "body" }).replace(
+            t("{n} Call in a Favor requests logged", { class: "body" }).replace(
                 "{n}",
                 String(input.advisorDeployments)
             )
         );
     } else {
-        gaps.push(t("Deploy advisors on 3+ deals", { class: "body" }));
+        gaps.push(
+            t("Use Call in a Favor on 3+ deals and record the outcomes", {
+                class: "body"
+            })
+        );
     }
 
     const handoff = saturate(input.handoffSectionsReady, 5, 6);
     if (handoff >= 2) {
         evidence.push(
-            t("{n}/7 handoff sections ready", { class: "body" }).replace(
+            t("{n}/7 sales handoff sections ready", { class: "body" }).replace(
                 "{n}",
                 String(input.handoffSectionsReady)
             )
         );
     } else {
-        gaps.push(t("Compose 5+ Founding GTM sections", { class: "body" }));
+        gaps.push(t("Complete 5+ Founding GTM handoff sections", { class: "body" }));
     }
 
     return {
@@ -374,7 +345,7 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
     };
 }
 
-/** Run all five scorers, in canonical order. */
+/** Run all five scorers in stable internal order. */
 export function scoreAllDimensions(
     input: ReadinessInput
 ): ReadonlyArray<DimensionScore> {

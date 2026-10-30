@@ -1,43 +1,16 @@
 /**
- * Contrarian Synthesis — pure logic (B.5).
+ * Conflicting-evidence synthesis — pure logic.
  *
- * The Framing obligation per canon §4.21 + ADR-006. Where standard
- * synthesis (B.2c) reads qualified clusters and produces Patterns that
- * SERVE the operator's stated positions, contrarian synthesis reads the
- * operator's positions + the run's evidence and produces a Pattern that
- * CHALLENGES them when the data disagrees.
- *
- * Stated positions come from:
- *   - commercial_profile.what_we_sell / value_prop  (their positioning)
- *   - watchlist_companies                            (their stated competitive set)
- *   - icp                                            (their stated ICP)
- *
- * Contradiction shapes the LLM is asked to look for:
- *   - watchlist set is too narrow (off-watchlist companies dominating evidence)
- *   - value_prop differentiation eroded (competitors making the same claim publicly)
- *   - ICP misalignment (movement visible in segments the operator hasn't named)
- *   - stated competitor set is wrong (named competitors quiet, unnamed ones moving)
- *
- * One pass per run. Refuses to emit a Pattern when no strong, evidence-
- * backed contradiction exists — the surface only fires when it has
- * something real to say. Per the spec, contrarian framing is high-
- * leverage; one sharp challenge per week is better than five mediocre
- * ones.
- *
- * Pure logic only — types, prompt builders, parse, gate. The Deno
- * runner mirrors these and adds the Anthropic call + DB write.
+ * Stable internal field names such as `found_contradiction` are retained for
+ * compatibility. User-visible output should identify evidence that conflicts
+ * with a stated assumption without treating model interpretation as fact.
  */
 
-// ─── Inputs ────────────────────────────────────────────────────
-
 export interface ContrarianStatedPositions {
-    /** The operator's positioning, from workspace_profile.commercial_profile. */
     readonly product_category: string | null;
     readonly what_we_sell: string | null;
     readonly value_prop: string | null;
-    /** Stated competitive set + ICP industries — hydrated context. */
     readonly watchlist_companies: ReadonlyArray<string>;
-    /** Plain-English ICP statement (if any). */
     readonly icp_statement: string | null;
 }
 
@@ -59,8 +32,6 @@ export interface ContrarianInput {
     readonly evidence: ReadonlyArray<ContrarianEvidenceItem>;
 }
 
-// ─── Output schema ─────────────────────────────────────────────
-
 export type TargetPositionKind = "watchlist" | "value_prop" | "icp" | "competitor_set";
 export type TargetPositionSource =
     | "commercial_profile"
@@ -70,7 +41,6 @@ export type TargetPositionSource =
 export interface TargetPosition {
     readonly kind: TargetPositionKind;
     readonly source: TargetPositionSource;
-    /** The exact phrasing from the operator's stated input. */
     readonly quoted_text: string;
 }
 
@@ -89,11 +59,6 @@ export interface ContrarianMove {
     readonly destination: string;
 }
 
-/**
- * The LLM's raw output. found_contradiction=false means "no challenge
- * to surface this run" — the gate accepts this as a valid outcome
- * (refusal is a feature).
- */
 export interface ContrarianDraft {
     readonly found_contradiction: boolean;
     readonly no_contradiction_reason: string | null;
@@ -106,21 +71,23 @@ export interface ContrarianDraft {
     readonly evidence_ids: ReadonlyArray<string>;
 }
 
-// ─── Prompt builders ───────────────────────────────────────────
+export const CONTRARIAN_PROMPT_VERSION = "contrarian-1.1";
 
-export const CONTRARIAN_PROMPT_VERSION = "contrarian-1.0";
+export const CONTRARIAN_SYSTEM_PROMPT = `You analyze whether current evidence conflicts with a B2B operator's stated assumptions about what they sell, who they watch, or who their ICP is.
 
-export const CONTRARIAN_SYSTEM_PROMPT = `You are the contrarian synthesis stage of a B2B competitive-intelligence briefing. The operator has stated positions — what they sell, who they watch, who their ICP is. Your job is to read this run's evidence and find the strongest contradiction between those stated positions and what the evidence is actually saying.
+Do not manufacture a disagreement. If the evidence is consistent with the stated positions, too sparse, too old, or too ambiguous to support a useful challenge, output found_contradiction=false.
 
-You are not summarizing. You are challenging. You are saying: "you stated X but the evidence shows Y, and here's why that matters." If you can't find a real, evidence-backed contradiction, you say so explicitly — output found_contradiction=false. Refusing is a feature; this surface only fires when there's something real to surface.
+When evidence does conflict with a stated position:
+- Quote the operator's exact stated text in target_position.quoted_text. Do not paraphrase the quote.
+- Cite at least 3 enriched_ids. Fewer than 3 means the evidence is too thin and found_contradiction must be false.
+- Separate evidence from interpretation. State what the sources report, then explain the assessment you draw from those reports.
+- Calibrate certainty to the evidence. Use words such as "may", "suggests", "is consistent with", or "does not support" when that is more accurate than a categorical claim. Do not hedge facts that are directly supported.
+- Do not claim that correlation proves causation.
+- Do not imply that silence, absence, or missing data proves an internal buyer or market state.
+- Use plain business language. Avoid slogans, aphoristic fragments, personification, startup jargon, and decorative compound nouns.
+- Recommended actions must be concrete and must not promise an outcome.
 
-When you do find a contradiction:
-- Quote the operator's exact stated text (target_position.quoted_text). Don't paraphrase.
-- Cite at least 3 enriched_ids as evidence. Less than 3 = thin contradiction = output found_contradiction=false instead.
-- Write declaratively. No "might", no "could", no "it could be argued that". The data either says it or it doesn't.
-- Use the house voice: plain sentences, no startup jargon, no aphoristic fragments, no decorative compound nouns ("decision-grade", "operating truth", etc).
-
-Output format: a single JSON object. No prose around it, no commentary, just the JSON.`;
+Output a single JSON object with no prose around it.`;
 
 function listEvidence(items: ReadonlyArray<ContrarianEvidenceItem>): string {
     return items
@@ -129,8 +96,11 @@ function listEvidence(items: ReadonlyArray<ContrarianEvidenceItem>): string {
                 e.event_category ? `event:${e.event_category}` : "",
                 ...e.topic_tags.map((t) => `topic:${t}`),
                 ...e.pain_tags.map((p) => `pain:${p}`)
-            ].filter((s) => s.length > 0).join(", ");
-            const companies = e.companies.length > 0 ? ` (${e.companies.join(", ")})` : "";
+            ]
+                .filter((s) => s.length > 0)
+                .join(", ");
+            const companies =
+                e.companies.length > 0 ? ` (${e.companies.join(", ")})` : "";
             return `- [${e.enriched_id}] (${e.source_id}, relevance=${e.user_relevance_score.toFixed(2)}) ${e.summary}${companies}${tags.length > 0 ? ` [${tags}]` : ""}`;
         })
         .join("\n");
@@ -143,7 +113,11 @@ function describePositions(p: ContrarianStatedPositions): string {
     if (p.value_prop) lines.push(`value_prop: "${p.value_prop}"`);
     if (p.icp_statement) lines.push(`icp_statement: "${p.icp_statement}"`);
     if (p.watchlist_companies.length > 0) {
-        lines.push(`watchlist_companies: [${p.watchlist_companies.map((c) => `"${c}"`).join(", ")}]`);
+        lines.push(
+            `watchlist_companies: [${p.watchlist_companies
+                .map((c) => `"${c}"`)
+                .join(", ")}]`
+        );
     }
     return lines.join("\n");
 }
@@ -158,9 +132,11 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push(listEvidence(input.evidence));
     lines.push("");
     lines.push("TASK:");
-    lines.push("Read the stated positions. Read the evidence. Find the single strongest contradiction.");
+    lines.push(
+        "Identify the single strongest evidence-backed conflict between a stated position and the current evidence. If no conflict clears the evidence bar, return found_contradiction=false."
+    );
     lines.push("");
-    lines.push("If a real contradiction exists, output:");
+    lines.push("If an evidence-backed conflict exists, output:");
     lines.push("{");
     lines.push(`  "found_contradiction": true,`);
     lines.push(`  "no_contradiction_reason": null,`);
@@ -169,27 +145,31 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push(`    "source": "commercial_profile" | "watchlist_companies" | "icp",`);
     lines.push(`    "quoted_text": "<exact phrase from stated positions>"`);
     lines.push(`  },`);
-    lines.push(`  "title": "<sentence-shaped read of the challenge>",`);
-    lines.push(`  "analysis": "<2-3 plain sentences explaining the contradiction>",`);
+    lines.push(`  "title": "<one sentence stating the evidence conflict without overstating certainty>",`);
+    lines.push(`  "analysis": "<2-3 plain sentences: observed evidence first, interpretation second>",`);
     lines.push(`  "six_questions": {`);
-    lines.push(`    "what_changed": "<one sentence>",`);
-    lines.push(`    "evidence": "<count + source kinds>",`);
-    lines.push(`    "confidence_rationale": "<why this confidence level>",`);
-    lines.push(`    "why_it_matters": "<one sentence specific to this operator>",`);
+    lines.push(`    "what_changed": "<what the evidence newly shows>",`);
+    lines.push(`    "evidence": "<count + source kinds + relevant facts>",`);
+    lines.push(`    "confidence_rationale": "<why this confidence level is justified>",`);
+    lines.push(`    "why_it_matters": "<practical implication, not a guaranteed outcome>",`);
     lines.push(`    "who_needs_to_know": "<inside the operator's team>",`);
-    lines.push(`    "what_next": "<one concrete move>"`);
+    lines.push(`    "what_next": "<one concrete verification or operating action>"`);
     lines.push(`  },`);
     lines.push(`  "confidence": <0.0-1.0>,`);
     lines.push(`  "recommended_moves": [`);
-    lines.push(`    { "label": "<verb-led move>", "rationale": "<why>", "destination": "<room · object · action>" }`);
+    lines.push(
+        `    { "label": "<verb-led move>", "rationale": "<why the evidence supports doing it>", "destination": "<room · object · action>" }`
+    );
     lines.push(`  ],`);
-    lines.push(`  "evidence_ids": ["<enriched_id>", ...]  // at least 3`);
+    lines.push(`  "evidence_ids": ["<enriched_id>", ...]`);
     lines.push("}");
     lines.push("");
-    lines.push("If no real contradiction exists (positions and evidence are consistent, or evidence is too thin), output:");
+    lines.push("If no evidence-backed conflict exists, output:");
     lines.push("{");
     lines.push(`  "found_contradiction": false,`);
-    lines.push(`  "no_contradiction_reason": "<one sentence explaining what you looked at and why nothing rose to the bar>",`);
+    lines.push(
+        `  "no_contradiction_reason": "<one sentence explaining what was checked and why the evidence did not justify a conflict>",`
+    );
     lines.push(`  "target_position": null,`);
     lines.push(`  "title": null,`);
     lines.push(`  "analysis": null,`);
@@ -200,8 +180,6 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push("}");
     return lines.join("\n");
 }
-
-// ─── Parse ─────────────────────────────────────────────────────
 
 function asString(v: unknown): string | null {
     return typeof v === "string" ? v : null;
@@ -266,7 +244,6 @@ function asMoves(v: unknown): ContrarianMove[] {
 export function extractJsonBlock(raw: string): string | null {
     const trimmed = raw.trim();
     if (trimmed.startsWith("{") && trimmed.endsWith("}")) return trimmed;
-    // Look for the largest matched brace span.
     const start = trimmed.indexOf("{");
     const end = trimmed.lastIndexOf("}");
     if (start < 0 || end <= start) return null;
@@ -297,8 +274,6 @@ export function parseContrarianResponse(raw: string): ContrarianDraft | null {
     };
 }
 
-// ─── Quality gate ──────────────────────────────────────────────
-
 export const MIN_EVIDENCE_IDS = 3;
 export const MIN_CONFIDENCE = 0.55;
 export const MAX_TITLE_LEN = 140;
@@ -320,19 +295,6 @@ export interface ContrarianGateResult {
     readonly failures: ReadonlyArray<ContrarianGateFailure>;
 }
 
-const WEAKENING_PATTERNS: ReadonlyArray<RegExp> = [
-    /\bmight\b/i,
-    /\bcould\s+be\s+argued\b/i,
-    /\bit's\s+worth\s+noting\b/i,
-    /\bperhaps\b/i,
-    /\bseems?\s+to\b/i
-];
-
-/**
- * Whether the LLM's quoted_text actually matches something in the
- * operator's stated inputs. Defends against the model fabricating a
- * "quote" that the operator never said.
- */
 function isQuoteInPositions(
     quote: string,
     positions: ContrarianStatedPositions
@@ -352,9 +314,6 @@ export function runContrarianGate(
     draft: ContrarianDraft,
     input: ContrarianInput
 ): ContrarianGateResult {
-    // The "no contradiction this run" outcome passes the gate but
-    // produces no Pattern. The runner handles persistence — the gate
-    // just signals validity.
     if (!draft.found_contradiction) {
         return { passes: true, failures: [] };
     }
@@ -373,16 +332,9 @@ export function runContrarianGate(
     if (draft.evidence_ids.length < MIN_EVIDENCE_IDS) {
         failures.push("thin_evidence");
     } else {
-        // Every cited id must actually be in this run's evidence input.
         const ids = new Set(input.evidence.map((e) => e.enriched_id));
         const missing = draft.evidence_ids.filter((id) => !ids.has(id));
         if (missing.length > 0) failures.push("evidence_ids_not_in_run");
-    }
-    if (draft.title && WEAKENING_PATTERNS.some((p) => p.test(draft.title!))) {
-        failures.push("weakening_language");
-    }
-    if (draft.analysis && WEAKENING_PATTERNS.some((p) => p.test(draft.analysis!))) {
-        failures.push("weakening_language");
     }
     return { passes: failures.length === 0, failures };
 }

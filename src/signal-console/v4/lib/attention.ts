@@ -2,15 +2,11 @@ import type { Account, Signal } from "../../lib/types";
 import { heat as heatOf, rankByHeat } from "../../lib/heat";
 
 /**
- * Signal Console v4 — the Attention Router (canon §4.7). Groups the
- * watched field by WHERE ATTENTION SHOULD GO, not by a bare heat number:
- * four bands — act now / reach while warm / emerging / going cold —
- * from heat × freshness, so relevance is felt as distance. The heat
- * engine (heat/recency/rankByHeat) is reused unchanged; this module is
- * the band classifier + the shape/posture/health reads over it.
+ * Signal Console account-priority grouping.
  *
- * A protected room (canon §5): signal interpretation, account-to-motion
- * logic, and account-priority meaning must survive — never a badge list.
+ * Stable internal band ids and the existing numeric heat engine remain in
+ * place for compatibility. User-facing labels describe account priority,
+ * signal recency, and the evidence that drives attention.
  */
 
 export type AttentionBand = "now" | "warm" | "emerging" | "cold";
@@ -22,25 +18,32 @@ export interface BandMeta {
 }
 
 export const BAND_META: Record<AttentionBand, BandMeta> = {
-    now: { key: "now", label: "Act now", why: "hot, and something just moved" },
+    now: {
+        key: "now",
+        label: "High priority",
+        why: "high account-priority score with recent activity"
+    },
     warm: {
         key: "warm",
-        label: "Reach while warm",
-        why: "still hot, but the signal is aging — go before it cools"
+        label: "Priority declining",
+        why: "the account still ranks highly, but its most recent signal is becoming older"
     },
     emerging: {
         key: "emerging",
-        label: "Emerging",
-        why: "a fresh trigger, heat still building — get in early"
+        label: "New signals",
+        why: "recent account activity increased this account's priority"
     },
-    cold: { key: "cold", label: "Going cold", why: "was warm, now quiet" }
+    cold: {
+        key: "cold",
+        label: "Monitor",
+        why: "low recent activity or no current high-priority signal"
+    }
 };
 
 export const BAND_ORDER: ReadonlyArray<AttentionBand> = ["now", "warm", "emerging", "cold"];
 
 const DAY = 86_400_000;
 
-/** Days since a date string; null when unparseable. */
 function daysSince(iso: string | undefined, now: number): number | null {
     if (!iso) return null;
     const t = Date.parse(iso);
@@ -48,16 +51,11 @@ function daysSince(iso: string | undefined, now: number): number | null {
     return Math.max(0, (now - t) / DAY);
 }
 
-/** The freshest signal's date. */
 function signalDate(sig: Signal): string | undefined {
     return sig.published_date ?? sig.fetched_at;
 }
 
-/**
- * How many days since the freshest thing on this account — a signal OR
- * the account being added (a brand-new watch is "fresh" so it lands in
- * Emerging, not Going cold, exactly as the mockup promises).
- */
+/** Days since the freshest signal or the account's watch date. */
 export function freshestDays(account: Account, now: number): number | null {
     const candidates: number[] = [];
     for (const s of account.signals) {
@@ -71,13 +69,9 @@ export function freshestDays(account: Account, now: number): number | null {
 }
 
 /**
- * Classify one account into an attention band (heat × freshness).
- *
- * Thresholds (78 act-now / 60 warm) are attention gates, deliberately
- * distinct from the raw heat bands (91 Hot / 75 Active / 50 Watch): a
- * band answers "where should my attention go," which folds recency in,
- * not "how hot is the raw score." A brand-new watch (fresh, low heat)
- * lands in Emerging so it never falls straight to Going cold.
+ * Classify one account using the existing internal score plus signal age.
+ * The stable thresholds remain unchanged; only the customer-facing names
+ * for those groups have been translated.
  */
 export function classifyBand(account: Account, now: number = Date.now()): AttentionBand {
     const h = heatOf(account, now);
@@ -91,6 +85,7 @@ export function classifyBand(account: Account, now: number = Date.now()): Attent
 
 export interface RankedAccount {
     readonly account: Account;
+    /** Stable internal score field; present to the UI as account priority. */
     readonly heat: number;
     readonly ageLabel: string;
 }
@@ -120,7 +115,6 @@ function ageLabel(account: Account, now: number): string {
     return `${Math.round(fd)}d ago`;
 }
 
-/** The whole attention field: bands (ranked within), the shape, posture, health. */
 export function buildAttentionField(
     accounts: ReadonlyArray<Account>,
     now: number = Date.now()
@@ -159,10 +153,10 @@ export function buildAttentionField(
     const needNow = shape.now;
     const posture =
         needNow > 0
-            ? `Motion-ready — ${needNow} ${needNow === 1 ? "needs" : "need"} action now`
+            ? `${needNow} ${needNow === 1 ? "account is" : "accounts are"} currently high priority`
             : shape.warm > 0
-              ? "Warming up — reach the warm accounts before they cool"
-              : "Research-heavy — build signal before you strike";
+              ? "No high-priority accounts right now; review accounts whose signals are becoming older"
+              : "No current high-priority accounts; continue monitoring for new signals";
 
     return {
         bands,

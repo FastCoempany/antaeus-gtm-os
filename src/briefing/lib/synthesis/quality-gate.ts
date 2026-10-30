@@ -1,22 +1,18 @@
 /**
- * Stage 5d Quality Gate (B.2c) — deterministic checks per Voice
- * Document v0.1 §6 + §7.
+ * Briefing synthesis quality gate.
  *
- * A Pattern only surfaces if it passes every gate check. The gate is
- * pure + deterministic: same Pattern in, same verdict out. The walkthrough
- * §2.6 "Stage 5d Quality Gate" table is the reference set of checks.
- *
- * Canonical reference + vitest-tested; Deno mirror in synthesis-shared.ts.
+ * Mechanical checks protect evidence integrity, plain language, routing, and
+ * schema completeness. The gate does not reject a pattern merely because an
+ * assessment uses calibrated uncertainty language; certainty must follow the
+ * evidence, not a word-count rule.
  */
 
 import {
     ANALYSIS_MAX_WORDS,
     ANALYSIS_MIN_WORDS,
-    MAX_HEDGING_ADVERBS,
     MOVES_MAX,
     MOVES_MIN,
     PATTERN_NAME_MAX_WORDS,
-    countHedgingAdverbs,
     findBannedHedgeConstructions,
     findBannedVocabulary,
     findMarketingSoup,
@@ -24,19 +20,11 @@ import {
 } from "./voice-rules";
 import type { DraftPattern, GateCheck, GateResult } from "./types";
 
-/**
- * Run the deterministic gate. `validItemIds` is the set of enriched-item
- * ids that actually belong to the cluster — evidence_item_ids must be a
- * non-empty subset (no fabricated citations).
- */
 export function runQualityGate(
     pattern: DraftPattern,
     validItemIds: ReadonlyArray<string>
 ): GateResult {
     const checks: GateCheck[] = [];
-
-    // Combined body text for vocabulary / hedge / soup scans: name +
-    // analysis + every six-question slot + every move's action/rationale.
     const sixQ = pattern.six_questions;
     const moveText = pattern.recommended_moves
         .map((m) => `${m.action} ${m.rationale}`)
@@ -53,7 +41,6 @@ export function runQualityGate(
         moveText
     ].join(" \n ");
 
-    // 1. Banned vocabulary.
     const banned = findBannedVocabulary(fullText);
     checks.push({
         name: "banned_vocabulary",
@@ -64,7 +51,6 @@ export function runQualityGate(
                 : `banned vocabulary used: ${banned.join(", ")}`
     });
 
-    // 2. Analysis word count 60–240.
     const analysisWords = wordCount(pattern.analysis);
     const lengthOk =
         analysisWords >= ANALYSIS_MIN_WORDS && analysisWords <= ANALYSIS_MAX_WORDS;
@@ -74,7 +60,6 @@ export function runQualityGate(
         detail: `analysis ${analysisWords} words (need ${ANALYSIS_MIN_WORDS}–${ANALYSIS_MAX_WORDS})`
     });
 
-    // 3. Pattern name ≤12 words.
     const nameWords = wordCount(pattern.name);
     checks.push({
         name: "name_word_count",
@@ -82,7 +67,6 @@ export function runQualityGate(
         detail: `name ${nameWords} words (max ${PATTERN_NAME_MAX_WORDS})`
     });
 
-    // 4. Name is declarative — ends with '.', no '?'.
     const trimmedName = pattern.name.trim();
     const nameDeclarative =
         trimmedName.length > 0 &&
@@ -92,11 +76,10 @@ export function runQualityGate(
         name: "name_declarative",
         pass: nameDeclarative,
         detail: nameDeclarative
-            ? "name is declarative"
+            ? "name is a declarative sentence"
             : "name must end with a period and contain no question mark"
     });
 
-    // 5. Recommended moves 1–3.
     const moveCount = pattern.recommended_moves.length;
     const movesOk = moveCount >= MOVES_MIN && moveCount <= MOVES_MAX;
     checks.push({
@@ -105,19 +88,17 @@ export function runQualityGate(
         detail: `${moveCount} moves (need ${MOVES_MIN}–${MOVES_MAX})`
     });
 
-    // 6. Each move has a non-empty destination.
     const allMovesRouted = pattern.recommended_moves.every(
         (m) => m.destination.trim().length > 0 && m.action.trim().length > 0
     );
     checks.push({
         name: "moves_routed",
-        pass: moveCount === 0 ? false : allMovesRouted,
+        pass: moveCount > 0 && allMovesRouted,
         detail: allMovesRouted
             ? "all moves have action + destination"
             : "a move is missing its action or routed destination"
     });
 
-    // 7. Six-question slots all non-empty.
     const emptySlots = (Object.keys(sixQ) as Array<keyof typeof sixQ>).filter(
         (k) => sixQ[k].trim().length === 0
     );
@@ -130,26 +111,16 @@ export function runQualityGate(
                 : `empty six-question slots: ${emptySlots.join(", ")}`
     });
 
-    // 8. Hedging adverbs ≤3 in the analysis paragraph.
-    const hedges = countHedgingAdverbs(pattern.analysis);
-    checks.push({
-        name: "hedging_density",
-        pass: hedges <= MAX_HEDGING_ADVERBS,
-        detail: `${hedges} hedging adverbs in analysis (max ${MAX_HEDGING_ADVERBS})`
-    });
-
-    // 9. Banned hedge constructions absent.
     const hedgeConstructions = findBannedHedgeConstructions(fullText);
     checks.push({
         name: "banned_hedge_constructions",
         pass: hedgeConstructions.length === 0,
         detail:
             hedgeConstructions.length === 0
-                ? "no banned hedge constructions"
-                : `banned hedge constructions: ${hedgeConstructions.join("; ")}`
+                ? "no indirect/metadiscursive qualification"
+                : `indirect qualification: ${hedgeConstructions.join("; ")}`
     });
 
-    // 10. Marketing-soup phrases absent.
     const soup = findMarketingSoup(fullText);
     checks.push({
         name: "marketing_soup",
@@ -160,7 +131,6 @@ export function runQualityGate(
                 : `marketing-soup phrases: ${soup.join("; ")}`
     });
 
-    // 11. Evidence item ids non-empty + subset of the cluster's items.
     const validSet = new Set(validItemIds);
     const cited = pattern.evidence_item_ids;
     const allCitedValid = cited.length > 0 && cited.every((id) => validSet.has(id));
@@ -175,7 +145,6 @@ export function runQualityGate(
             : `cited ids not in cluster: ${invalidCited.join(", ")}`
     });
 
-    // 12. Confidence in [0, 1].
     const confOk =
         Number.isFinite(pattern.confidence) &&
         pattern.confidence >= 0 &&

@@ -30,12 +30,11 @@ describe("buildIcpQuality — empty input", () => {
         const r = buildIcpQuality(empty);
         expect(r.score).toBe(0);
         expect(r.tier).toBe("broad");
-        expect(r.label).toBe("Too broad to trust yet.");
+        expect(r.label).toBe("ICP quality: too broad");
     });
 
     it("emits a 'risk' check for each missing required field", () => {
         const r = buildIcpQuality(empty);
-        // 7 required risk + 1 warn for missing activeAccounts
         const risks = r.checks.filter((c) => c.tone === "risk");
         const warns = r.checks.filter((c) => c.tone === "warn");
         expect(risks).toHaveLength(7);
@@ -43,15 +42,15 @@ describe("buildIcpQuality — empty input", () => {
     });
 });
 
-describe("buildIcpQuality — full sharp input", () => {
-    it("scores >=85 on a sharp ICP (founder, tight geo, 14d proof, 80 accounts)", () => {
+describe("buildIcpQuality — full high-specificity input", () => {
+    it("scores >=85 on a highly specific ICP", () => {
         const r = buildIcpQuality(FULL_INPUT);
         expect(r.score).toBeGreaterThanOrEqual(85);
         expect(r.tier).toBe("sharp");
-        expect(r.label).toBe("Sharp enough to run.");
+        expect(r.label).toBe("ICP quality: highly specific");
     });
 
-    it("emits no 'risk' checks on sharp input", () => {
+    it("emits no 'risk' checks on high-specificity input", () => {
         const r = buildIcpQuality(FULL_INPUT);
         expect(r.checks.filter((c) => c.tone === "risk")).toHaveLength(0);
     });
@@ -59,7 +58,6 @@ describe("buildIcpQuality — full sharp input", () => {
 
 describe("buildIcpQuality — tier thresholds", () => {
     it("tier 'broad' for score < 50", () => {
-        // Only industry + pain (15 + 15 = 30) plus active warn 0
         const input: QualityInput = {
             role: "founder",
             industry: "SaaS",
@@ -77,7 +75,6 @@ describe("buildIcpQuality — tier thresholds", () => {
     });
 
     it("tier 'forming' for 50..69", () => {
-        // industry 15 + size 10 + geo 10 + pain 15 + trigger 15 = 65
         const input: QualityInput = {
             role: "founder",
             industry: "SaaS",
@@ -95,7 +92,6 @@ describe("buildIcpQuality — tier thresholds", () => {
     });
 
     it("tier 'workable' for 70..84", () => {
-        // industry 15 + size 10 + geo 10 + buyer 15 + pain 15 + trigger 15 = 80
         const input: QualityInput = {
             role: "founder",
             industry: "SaaS",
@@ -119,12 +115,10 @@ describe("buildIcpQuality — per-check arithmetic", () => {
             ...FULL_INPUT,
             size: "5,000+ employees"
         });
-        // Expected delta from FULL_INPUT (which has size band good +10):
-        // -3 (10 → 7)
         const baseline = buildIcpQuality(FULL_INPUT);
         expect(r.score).toBe(baseline.score - 3);
         const sizeCheck = r.checks.find((c) =>
-            c.text.includes("enterprise breadth")
+            c.text.includes("enterprise range")
         );
         expect(sizeCheck?.tone).toBe("warn");
     });
@@ -132,7 +126,6 @@ describe("buildIcpQuality — per-check arithmetic", () => {
     it("geo 'Global' yields warn +4", () => {
         const baseline = buildIcpQuality(FULL_INPUT);
         const r = buildIcpQuality({ ...FULL_INPUT, geo: "Global" });
-        // FULL_INPUT geo "US" → good +10; Global → warn +4 = -6
         expect(r.score).toBe(baseline.score - 6);
     });
 
@@ -152,7 +145,7 @@ describe("buildIcpQuality — per-check arithmetic", () => {
         });
         expect(r.score).toBe(baseline.score - 7);
         const buyerCheck = r.checks.find((c) =>
-            c.text.includes("Primary buyer still sounds broad")
+            c.text.includes("primary buyer is still broad") || c.text.includes("primary buyer")
         );
         expect(buyerCheck?.tone).toBe("warn");
     });
@@ -166,16 +159,14 @@ describe("buildIcpQuality — per-check arithmetic", () => {
             ...FULL_INPUT,
             proofWindow: "90 days"
         });
-        // 7 days: good +10 (FULL_INPUT uses 14 days = good +10 too)
         expect(sevenDay.score).toBe(buildIcpQuality(FULL_INPUT).score);
-        // 90 days: good +8 = -2
         expect(ninetyDay.score).toBe(
             buildIcpQuality(FULL_INPUT).score - 2
         );
     });
 
     it("active-accounts < 20 yields warn +4", () => {
-        const baseline = buildIcpQuality(FULL_INPUT); // 80 active = good +10
+        const baseline = buildIcpQuality(FULL_INPUT);
         const r = buildIcpQuality({ ...FULL_INPUT, activeAccounts: 10 });
         expect(r.score).toBe(baseline.score - 6);
     });
@@ -207,7 +198,7 @@ describe("buildIcpQuality — role-aware overage warnings", () => {
             activeAccounts: 150
         });
         const founderWarn = r.checks.find((c) =>
-            c.text.includes("Founder-led motion")
+            c.text.includes("Founder-led sales coverage")
         );
         expect(founderWarn).toBeDefined();
     });
@@ -219,7 +210,7 @@ describe("buildIcpQuality — role-aware overage warnings", () => {
             activeAccounts: 250
         });
         const aeWarn = r.checks.find((c) =>
-            c.text.includes("First AE motion is probably too wide")
+            c.text.includes("first seller")
         );
         expect(aeWarn?.tone).toBe("risk");
     });
@@ -231,7 +222,7 @@ describe("buildIcpQuality — role-aware overage warnings", () => {
             activeAccounts: 100
         });
         expect(
-            founder.checks.find((c) => c.text.includes("Founder-led motion"))
+            founder.checks.find((c) => c.text.includes("Founder-led sales coverage"))
         ).toBeUndefined();
         const ae = buildIcpQuality({
             ...FULL_INPUT,
@@ -239,7 +230,7 @@ describe("buildIcpQuality — role-aware overage warnings", () => {
             activeAccounts: 200
         });
         expect(
-            ae.checks.find((c) => c.text.includes("First AE motion"))
+            ae.checks.find((c) => c.text.includes("first seller"))
         ).toBeUndefined();
     });
 });
