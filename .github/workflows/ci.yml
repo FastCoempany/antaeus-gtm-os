@@ -12,38 +12,13 @@ on:
       - main
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  remediation-sync:
-    name: One-time remediation sync
-    if: github.event_name == 'push' && github.ref_name == 'language-remediation-v1'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: language-remediation-v1
-      - name: Apply targeted language/test synchronization
-        run: node scripts/language-remediation-ci-sync.mjs
-      - name: Commit repairs if needed
-        shell: bash
-        run: |
-          if git diff --quiet; then
-            echo "No synchronization changes required."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src
-          git commit -m "Synchronize remediation copy tests and voice classifications"
-          git push origin HEAD:language-remediation-v1
-
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest
@@ -79,20 +54,6 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 test-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-      - name: Post PR diagnostic on failure
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          {
-            echo '<!-- antaeus-ci-unit-diagnostic -->'
-            echo '### CI unit-test diagnostic'
-            echo '```text'
-            tail -n 220 test-output.txt || true
-            echo '```'
-          } > ci-diagnostic.md
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file ci-diagnostic.md
 
   e2e-test:
     name: E2E smoke tests (Playwright)
@@ -124,20 +85,6 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 e2e-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-      - name: Post PR E2E diagnostic on failure
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          {
-            echo '<!-- antaeus-ci-e2e-diagnostic -->'
-            echo '### CI E2E diagnostic'
-            echo '```text'
-            tail -n 220 e2e-output.txt || true
-            echo '```'
-          } > ci-e2e-diagnostic.md
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file ci-e2e-diagnostic.md
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
