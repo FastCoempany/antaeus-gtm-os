@@ -7,13 +7,39 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  regenerate-transcript:
+    name: One-time preview transcript regeneration
+    if: github.event_name == 'push' && github.ref_name == 'language-remediation-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: language-remediation-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Regenerate AI-readable preview transcript
+        run: node tools/preview/build-transcript.js
+      - name: Commit regenerated transcript if changed
+        shell: bash
+        run: |
+          if git diff --quiet -- preview-transcript; then
+            echo "Transcript already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add preview-transcript
+          git commit -m "Regenerate preview transcript after language remediation"
+          git push origin HEAD:language-remediation-v1
+
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest
