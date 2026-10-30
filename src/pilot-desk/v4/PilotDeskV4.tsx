@@ -132,7 +132,7 @@ const KIT: ReadonlyArray<KitItem> = [
         name: t("Relevant case study"),
         sub: t("a comparable customer pilot", { class: "body" }),
         verb: t("Send →"),
-        template: (c) => `A comparable team ran a similar pilot. Here's what they evaluated and what they reported during the first two weeks.`
+        template: () => `A comparable team ran a similar pilot. Here's what they evaluated and what they reported during the first two weeks.`
     },
     {
         key: "whyyou",
