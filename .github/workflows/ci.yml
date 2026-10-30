@@ -47,7 +47,19 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm ci --no-audit --no-fund
-      - run: npm test
+      - name: Run unit and component tests
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test-output.txt
+      - name: Publish test failure summary
+        if: failure()
+        shell: bash
+        run: |
+          echo '## Unit/component test failure output' >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 220 test-output.txt >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   e2e-test:
     name: E2E smoke tests (Playwright)
@@ -70,7 +82,18 @@ jobs:
           python-version: "3.11"
       - run: npm ci --no-audit --no-fund
       - name: Run E2E smoke tests
-        run: npm run test:e2e
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run test:e2e 2>&1 | tee e2e-output.txt
+      - name: Publish E2E failure summary
+        if: failure()
+        shell: bash
+        run: |
+          echo '## E2E failure output' >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 220 e2e-output.txt >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
