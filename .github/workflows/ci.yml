@@ -52,6 +52,13 @@ jobs:
   e2e-test:
     name: E2E smoke tests (Playwright)
     runs-on: ubuntu-latest
+    # Pin the official Playwright image to the package version in package.json.
+    # The image contains the matching Chromium build, avoiding a second CDN
+    # download during CI while keeping browser/runtime versions deterministic.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -62,10 +69,6 @@ jobs:
         with:
           python-version: "3.11"
       - run: npm ci --no-audit --no-fund
-      # GitHub runners' network allowlists Playwright's Chromium CDN.
-      # --with-deps ensures system libraries required by Chromium are present.
-      - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
       - name: Run E2E smoke tests
         run: npm run test:e2e
       - name: Upload Playwright report on failure
