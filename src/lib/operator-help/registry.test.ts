@@ -9,7 +9,7 @@ import {
 describe("helpForPath", () => {
     it("resolves a known room", () => {
         const h = helpForPath("/deal-workspace/");
-        expect(h.whatItIsFor).toMatch(/recovery board/i);
+        expect(h.whatItIsFor).toMatch(/ranks open deals/i);
         expect(h.theMoveHere.length).toBeGreaterThan(0);
         expect(h.ifStuck.length).toBeGreaterThan(0);
     });
@@ -21,7 +21,7 @@ describe("helpForPath", () => {
 
     it("strips query + hash before matching", () => {
         const h = helpForPath("/dashboard/?mode=focus#top");
-        expect(h.whatItIsFor).toMatch(/ranks everything under pressure/i);
+        expect(h.whatItIsFor).toMatch(/summarizes current activity/i);
     });
 
     it("falls back to GENERIC for an unlisted path", () => {

@@ -409,7 +409,7 @@ export function PilotDeskV4(): JSX.Element {
                 <div class="pk4-path">
                     <div class={`pk4-mv${m1Done ? " is-done" : " is-now"}`}>
                         <span class="pk4-node">{m1Done ? "✓" : "1"}</span>
-                        <div class="pk4-ttl">{t("Define the pilot")} <span class="pk4-tag">{m1Done ? t("complete") : t("current step")}</span></div>
+                        <div class="pk4-ttl">{t("Define the pilot")} <span class="pk4-tag">{m1Done ? t("Step complete") : t("current step")}</span></div>
                         {m1Done && proof ? (
                             <div class="pk4-summ">{d.durationDays}-{t("day pilot")} · {proof.successCriteria.slice(0, 60)}{proof.readoutOwner ? ` · ${proof.readoutOwner} ${t("approves the result")}` : ""}</div>
                         ) : (
@@ -450,7 +450,7 @@ export function PilotDeskV4(): JSX.Element {
 
                     <div class={`pk4-mv${m2Done ? " is-done" : m1Done ? " is-now" : ""}`}>
                         <span class="pk4-node">{m2Done ? "✓" : "2"}</span>
-                        <div class="pk4-ttl">{t("Identify pilot participants")} <span class="pk4-tag">{m2Done ? t("complete") : m1Done ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-ttl">{t("Identify pilot participants")} <span class="pk4-tag">{m2Done ? t("Step complete") : m1Done ? t("current step") : t("next")}</span></div>
                         <div class="pk4-summ">{t("Add the hands-on users and the champion who will evaluate the pilot.", { class: "body" })}</div>
                         {m1Done && !m2Done ? (
                             <div class="pk4-panel">
@@ -462,7 +462,7 @@ export function PilotDeskV4(): JSX.Element {
 
                     <div class={`pk4-mv${current > 3 ? " is-done" : current === 3 && m2Done ? " is-now" : ""}`}>
                         <span class="pk4-node">{current > 3 ? "✓" : "3"}</span>
-                        <div class="pk4-ttl">{t("Monitor pilot engagement")} <span class="pk4-tag">{current > 3 ? t("complete") : current === 3 && m2Done ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-ttl">{t("Monitor pilot engagement")} <span class="pk4-tag">{current > 3 ? t("Step complete") : current === 3 && m2Done ? t("current step") : t("next")}</span></div>
                         <div class="pk4-summ">{t("Track usage between check-ins and add participants when broader evaluation is needed.", { class: "body" })}</div>
                         {current === 3 && m2Done ? (
                             <div class="pk4-panel">
@@ -504,7 +504,7 @@ export function PilotDeskV4(): JSX.Element {
 
                     <div class={`pk4-mv${current > 4 ? " is-done" : current === 4 ? " is-now" : ""}`}>
                         <span class="pk4-node">{current > 4 ? "✓" : "4"}</span>
-                        <div class="pk4-ttl">{t("Review adoption")} <span class="pk4-tag">{current > 4 ? t("complete") : current === 4 ? t("current step") : t("next")}</span></div>
+                        <div class="pk4-ttl">{t("Review adoption")} <span class="pk4-tag">{current > 4 ? t("Step complete") : current === 4 ? t("current step") : t("next")}</span></div>
                         <div class="pk4-summ">{t("Confirm that the intended users are using the product often enough to evaluate the pilot fairly.", { class: "body" })}</div>
                         {current === 4 ? (
                             <div class="pk4-panel">

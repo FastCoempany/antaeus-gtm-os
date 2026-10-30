@@ -89,7 +89,7 @@ export function FutureAutopsyV4(): JSX.Element {
                 <div class="fa4-wrap">
                     <div class="fa4-top"><span class="fa4-bname">{t("Future Autopsy")}</span></div>
                     <div class="fa4-empty">
-                        <h3>{t("No open deals currently require a risk review.")}</h3>
+                        <h3>{t("No open deals currently require a risk review.", { class: "body" })}</h3>
                         <p>{t("When Deal Workspace identifies elevated risk, the deal appears here with the observed risk factors and recommended corrective actions.", { class: "body" })}</p>
                         <a class="fa4-ghost" href="/deal-workspace/?returnTo=%2Ffuture-autopsy%2F&returnLabel=Future+Autopsy&fromMode=room&fromSurface=future-autopsy">{t("Open Deal Workspace →")}</a>
                     </div>

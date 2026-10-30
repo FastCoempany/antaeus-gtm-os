@@ -144,7 +144,7 @@ describe("buildFollowRead", () => {
         expect(read!.move?.href).toContain("/deal-workspace/");
         const dw = read!.stops.find((s) => s.key === "deal-workspace");
         expect(dw?.state).toBe("next");
-        expect(read!.pulling).toContain("Stalled");
+        expect(read!.pulling).toContain("No recorded activity");
     });
 
     it("parses the { deals: [...] } envelope shape too", () => {

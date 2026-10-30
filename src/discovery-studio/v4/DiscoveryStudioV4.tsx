@@ -251,7 +251,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 {t("approver")} {signer.value ? "✓" : "—"}
                             </button>
                         )}
-                        <span class="dv4-v"><b>{t("next step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("complete") : t("incomplete")}</span></span>
+                        <span class="dv4-v"><b>{t("next step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("Step complete") : t("incomplete")}</span></span>
                     </span>
                 </div>
 

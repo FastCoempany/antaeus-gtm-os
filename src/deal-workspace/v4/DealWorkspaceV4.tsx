@@ -165,7 +165,7 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                 </div>
             </div>
             <div class="dw4-queue">
-                <div class="dw4-qh"><span>{t("Other open deals · ranked by risk")}</span><span class="dw4-qn">{rest.length}</span></div>
+                <div class="dw4-qh"><span>{t("Other open deals · ranked by risk", { class: "body" })}</span><span class="dw4-qn">{rest.length}</span></div>
                 {rest.map((a) => (
                     <div class="dw4-qr" key={a.deal.id} style={`--qc:${a.lane === "critical" ? "var(--ds-red,#c0392b)" : a.lane === "at-risk" ? "var(--ds-amber,#b5790f)" : "var(--ds-forest,#1b5e3f)"}`} onClick={() => setFocusedDealId(a.deal.id)}>
                         <div>
@@ -225,7 +225,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                     ))}
                 </>
             ) : (
-                <div class="dw4-calmnote"><b>{t("No deals are currently in the high-risk band.")}</b> {t("Continue reviewing recorded next steps and activity as deals change.", { class: "body" })}</div>
+                <div class="dw4-calmnote"><b>{t("No deals are currently in the high-risk band.", { class: "body" })}</b> {t("Continue reviewing recorded next steps and activity as deals change.", { class: "body" })}</div>
             )}
         </>
     );
@@ -251,7 +251,7 @@ export function DealWorkspaceV4(): JSX.Element {
                 <div class={`dw4-hero${hero.calm ? " dw4-hero--calm" : ""}`}>
                     <h1 class="dw4-h1">
                         {hero.calm ? (
-                            <><b>{t("No elevated-risk deals in the current ranking.")}</b> {t("No active deal currently crosses the at-risk threshold.", { class: "body" })}</>
+                            <><b>{t("No elevated-risk deals in the current ranking.", { class: "body" })}</b> {t("No active deal currently crosses the at-risk threshold.", { class: "body" })}</>
                         ) : (
                             <><b>{hero.atRiskCount === 1 ? t("One deal has") : `${hero.atRiskCount} ${t("deals have")}`}</b> {t("elevated risk based on recorded inactivity, next-step, or close-date factors.", { class: "body" })}</>
                         )}

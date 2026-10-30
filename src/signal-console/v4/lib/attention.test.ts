@@ -75,7 +75,7 @@ describe("buildAttentionField", () => {
         expect(field.shape.now).toBe(1);
         expect(field.shape.emerging).toBe(1);
         expect(field.shape.cold).toBe(1);
-        expect(field.posture).toContain("Motion-ready");
+        expect(field.posture).toContain("high priority");
         expect(field.needNow).toBe(1);
         // bands only surface non-empty in the render, but the field
         // exposes all four counts
@@ -85,6 +85,6 @@ describe("buildAttentionField", () => {
     it("reads research-heavy posture when nothing needs action now", () => {
         const field = buildAttentionField([acct("Quiet", [sig(40)], 400)], NOW);
         expect(field.needNow).toBe(0);
-        expect(field.posture).not.toContain("Motion-ready");
+        expect(field.posture).not.toContain("high priority");
     });
 });

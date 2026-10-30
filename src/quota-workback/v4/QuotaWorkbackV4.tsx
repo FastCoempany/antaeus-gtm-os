@@ -134,7 +134,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                             {paceMode && !pace.onTarget && behindOutreach ? (
                                 <div class="qw4-s">
                                     {t("You are averaging", { class: "body" })}{" "}
-                                    <b>{actuals.outreachPerDay} {t("outreach actions per working day this month")}</b>. {t("The current model requires", { class: "body" })}{" "}
+                                    <b>{actuals.outreachPerDay} {t("outreach actions per working day this month", { class: "body" })}</b>. {t("The current model requires", { class: "body" })}{" "}
                                     <b>{m.touchesDay}</b>, {t("a gap of", { class: "body" })} <b>{outreachGap} {t("per day")}</b>.
                                 </div>
                             ) : null}
@@ -186,7 +186,7 @@ export function QuotaWorkbackV4(): JSX.Element {
 
                         <div class="qw4-strands">
                             <div class="qw4-st qw4-st--need">
-                                <div class="qw4-cl">{t("Activity and pipeline required by current assumptions")}</div>
+                                <div class="qw4-cl">{t("Activity and pipeline required by current assumptions", { class: "body" })}</div>
                                 <div class="qw4-line"><span class="qw4-ln">{m.touchesDay}</span><span class="qw4-lt">{t("messages & calls")} <b>{t("per working day")}</b></span></div>
                                 <div class="qw4-line"><span class="qw4-ln">{meetingsNeedMonth}</span><span class="qw4-lt">{t("first meetings")} <b>{t("per month")}</b></span></div>
                                 <div class="qw4-line"><span class="qw4-ln">{bench.coverage}×</span><span class="qw4-lt">{t("annual target")} <b>{t("in open pipeline")}</b></span></div>
@@ -263,7 +263,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                                 <span class="qw4-bt">{t("Actions to increase coverage")}</span>
                                 <span class="qw4-bb">
                                     {behindOutreach ? (
-                                        <><b>{outreachGap} {t("additional outreach actions per working day under the current model")}</b>{behindCoverage ? <>, {t("plus additional qualified pipeline to reach the coverage benchmark.", { class: "body" })}</> : "."} </>
+                                        <><b>{outreachGap} {t("additional outreach actions per working day under the current model", { class: "body" })}</b>{behindCoverage ? <>, {t("plus additional qualified pipeline to reach the coverage benchmark.", { class: "body" })}</> : "."} </>
                                     ) : behindCoverage ? (
                                         <><b>{t("Add qualified pipeline")}</b> — {t("recorded outreach meets the modeled requirement, but open pipeline is below the coverage benchmark.", { class: "body" })} </>
                                     ) : (

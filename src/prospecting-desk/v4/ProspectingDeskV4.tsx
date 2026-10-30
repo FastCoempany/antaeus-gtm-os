@@ -276,7 +276,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                     <div class="pd4-mname">{selOpen.accountName}</div>
                                     {selOpen.contactName ? <div class="pd4-mc">{selOpen.contactName}{selOpen.contactTitle ? ` · ${selOpen.contactTitle}` : ""}</div> : null}
                                     <div class={`pd4-meta${a.left === 0 ? " is-ok" : ""}`}>
-                                        {t("qualification score")} {q.score} · {a.left === 0 ? t("complete") : `${a.left} ${t("check")}${a.left === 1 ? "" : "s"} ${t("remaining")}`}
+                                        {t("qualification score")} {q.score} · {a.left === 0 ? t("Step complete") : `${a.left} ${t("check")}${a.left === 1 ? "" : "s"} ${t("remaining")}`}
                                     </div>
                                 </div>
                                 <div class="pd4-persona">

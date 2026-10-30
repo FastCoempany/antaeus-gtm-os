@@ -47,8 +47,8 @@ describe("buildMasthead", () => {
             summaryOf({ verdict: "you_are_the_system", verdictLabel: "You are the system" })
         );
         // never the ungrammatical "You're You are the system."
-        expect(base.headlinePre).toBe("Right now,");
-        expect(base.headlineEm).toBe("you're the system");
+        expect(base.headlinePre).toBe("Current readiness:");
+        expect(base.headlineEm).toBe("Founder-dependent");
         const building = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Building" }));
         expect(building.headlinePre).toBe("You're");
         expect(building.headlineEm).toBe("Building");
@@ -81,7 +81,7 @@ describe("buildStanding", () => {
         );
         const items = buildStanding(s);
         expect(items).toHaveLength(5);
-        expect(items[0]!.value).toBe("2 will slip");
+        expect(items[0]!.value).toBe("2 at elevated risk");
         expect(items[0]!.tone).toBe("bad");
         // Hottest reads the real topAccountName field
         expect(items[1]!.value).toContain("Ramp");
@@ -107,14 +107,14 @@ describe("buildStanding", () => {
         );
         const items = buildStanding(s);
         // 100k < 350k needed → Behind
-        expect(items[2]!.value).toBe("Behind");
+        expect(items[2]!.value).toBe("Below required pace");
         expect(items[2]!.tone).toBe("warn");
     });
 
     it("degrades to calm defaults on an empty workspace", () => {
         const items = buildStanding(new FakeStorage());
         expect(items).toHaveLength(5);
-        expect(items[0]!.value).toBe("Holding");
+        expect(items[0]!.value).toBe("No elevated risk");
         expect(items[2]!.value).toBe("Not set");
         expect(items[4]!.value).toBe("0 / 7");
     });

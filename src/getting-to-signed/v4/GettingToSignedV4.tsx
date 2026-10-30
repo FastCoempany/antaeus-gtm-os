@@ -265,7 +265,7 @@ export function GettingToSignedV4(): JSX.Element {
                     </>
                 ) : (
                     <div class="gs4-clear">
-                        <h3>{t("No workstream is currently marked as blocking.")}</h3>
+                        <h3>{t("No workstream is currently marked as blocking.", { class: "body" })}</h3>
                         <p>{t("If Legal, Security, Finance, and Business approval are settled, focus on completing the remaining signature steps.", { class: "body" })}</p>
                     </div>
                 )}
@@ -321,7 +321,7 @@ export function GettingToSignedV4(): JSX.Element {
                                                         {covOpen > 0 ? <span class="gs4-ca" style={`flex:${covOpen}`}>{covOpen} {t("open")}</span> : null}
                                                     </div>
                                                     <div class="gs4-covby">
-                                                        {t("Of the")} {covOpen} {t("open questions,")} <b>{Math.min(cov.saved, covOpen)}</b> {t("have saved answers;")} <b>{Math.max(0, covOpen - cov.saved)}</b> {t("still need input from the appropriate technical owner.")}
+                                                        {t("Of the")} {covOpen} {t("open questions,")} <b>{Math.min(cov.saved, covOpen)}</b> {t("have saved answers;")} <b>{Math.max(0, covOpen - cov.saved)}</b> {t("still need input from the appropriate technical owner.", { class: "body" })}
                                                     </div>
                                                 </>
                                             ) : (

@@ -98,7 +98,7 @@ describe("setCoverage", () => {
             hasDeals: true
         });
         expect(metrics.value.qualityScore).toBeGreaterThanOrEqual(82);
-        expect(quality.value.label).toBe("Ready now");
+        expect(quality.value.label).toBe("Near benchmark");
     });
 });
 
@@ -106,7 +106,7 @@ describe("quality bands", () => {
     beforeEach(() => resetSession());
 
     it("zero score when quota or acv unset", () => {
-        expect(quality.value.label).toBe("Thin");
+        expect(quality.value.label).toBe("Low benchmark alignment");
         expect(quality.value.score).toBe(0);
     });
 });

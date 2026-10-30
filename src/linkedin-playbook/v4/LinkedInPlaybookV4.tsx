@@ -217,7 +217,7 @@ export function LinkedInPlaybookV4(): JSX.Element {
                     </div>
                 ) : (
                     <div class="lp4-empty">
-                        <h3>{t("No account is available for a LinkedIn action yet.")}</h3>
+                        <h3>{t("No account is available for a LinkedIn action yet.", { class: "body" })}</h3>
                         <p>{t("Add or prioritize accounts in Signal Console, or record an outbound touch, then return here for a LinkedIn recommendation.", { class: "body" })}</p>
                         <a class="lp4-btn" href="/signal-console/?returnTo=%2Flinkedin-playbook%2F&returnLabel=LinkedIn+Playbook&fromMode=room&fromSurface=linkedin-playbook">{t("Open Signal Console →")}</a>
                     </div>

@@ -158,11 +158,11 @@ export function IcpStudioV4(): JSX.Element {
                                 {fit.length === 0 ? <div class="icp4-erow"><span class="icp4-dot" /><span>{t("No strong matches yet. Refine the ICP or add accounts.", { class: "body" })}</span></div> : null}
                             </div>
                             <div class="icp4-ecol is-rej">
-                                <p class="icp4-ecoll">{t("Accounts that do not match · and why")}</p>
+                                <p class="icp4-ecoll">{t("Accounts that do not match · and why", { class: "body" })}</p>
                                 {off.slice(0, 2).map((a) => (
                                     <div class="icp4-erow" key={a.id}><span class="icp4-dot" /><span><b>{a.name}</b>{a.industry ? ` — ${a.industry}` : ""}</span></div>
                                 ))}
-                                {off.length > 2 ? <div class="icp4-erow"><span class="icp4-dot" /><span>+ {off.length - 2} {t("more accounts that do not match this ICP")}</span></div> : null}
+                                {off.length > 2 ? <div class="icp4-erow"><span class="icp4-dot" /><span>+ {off.length - 2} {t("more accounts that do not match this ICP", { class: "body" })}</span></div> : null}
                                 {off.length === 0 ? <div class="icp4-erow"><span class="icp4-dot" /><span>{t("No accounts are currently excluded. Review whether the ICP criteria are specific enough to distinguish target accounts.", { class: "body" })}</span></div> : null}
                             </div>
                         </div>
