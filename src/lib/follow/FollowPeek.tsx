@@ -22,6 +22,30 @@ const followUnfolded = signal(false);
 
 let listenersBound = false;
 
+/**
+ * Compatibility boundary for legacy follow-data field names and sentences.
+ * The underlying storage/read contract remains stable, while every rendered
+ * sentence uses the same explicit account-priority and deal-risk vocabulary
+ * as the rooms that own those calculations.
+ */
+function displayText(value: string): string {
+    return value
+        .replace(/\bheat\s+(\d+)/gi, "priority score $1")
+        .replace(/\s*\((hot|warm|cool|cold)\)/gi, "")
+        .replace(/Turn the heat into a first conversation\.?/gi, "Start a first conversation.")
+        .replace(/while the account is warm/gi, "while the account signal is recent")
+        .replace(/Reach out while the signal is fresh — heat fades week by week\.?/gi, "Reach out while the signal is recent; signal age is part of account prioritization.")
+        .replace(/Nothing is decaying today — acting keeps it that way\.?/gi, "No additional deal-risk factors are currently increasing.")
+        .replace(/Act and .*? comes off the slipping list — the close date holds\.?/gi, "Complete the recommended action, then reassess the deal risk and close-date evidence.")
+        .replace(/Act and this deal is back at a healthy pace\.?/gi, "Complete the recommended action, then reassess the deal risk.")
+        .replace(/Terms are live — run it from Getting to Signed\.?/gi, "Contract terms are active. Continue in Getting to Signed.")
+        .replace(/The smallest thing that changes the read\.?/gi, "This action addresses the highest-priority recorded gap.")
+        .replace(/Not watched yet — add the account to start building heat\.?/gi, "Not monitored yet. Add the account to begin tracking signals.")
+        .replace(/Terms are live — the run to signature happens here\.?/gi, "Contract terms are active. Continue the signature process here.")
+        .replace(/Everything logged so far rides along — nothing needs restating\.?/gi, "Recorded context remains available across related workspaces.")
+        .replace(/Nothing pulling right now\.?/gi, "No current prioritization factor is recorded.");
+}
+
 export function openFollow(anchor: HTMLElement, name: string): void {
     try {
         const herePath = typeof location !== "undefined" ? location.pathname : "/";
@@ -101,24 +125,24 @@ export function FollowPeek(): JSX.Element | null {
             <div class="fo-nm">{read.name}</div>
             <div class="fo-row">
                 <span class="fo-k">{t("Current status", { class: "label" })}</span>
-                <span>{read.stands}</span>
+                <span>{displayText(read.stands)}</span>
             </div>
             <div class="fo-row">
                 <span class="fo-k">{t("Why this is prioritized", { class: "label" })}</span>
-                <span>{read.pulling}</span>
+                <span>{displayText(read.pulling)}</span>
             </div>
             <div class="fo-row">
                 <span class="fo-k">{t("What changes if you act", { class: "label" })}</span>
-                <span>{read.changes}</span>
+                <span>{displayText(read.changes)}</span>
             </div>
             <div class="fo-row">
                 <span class="fo-k">{t("Recorded context", { class: "label" })}</span>
-                <span>{read.remembered}</span>
+                <span>{displayText(read.remembered)}</span>
             </div>
             {read.move ? (
                 <a class="fo-move" href={read.move.href}>
-                    {read.move.label}
-                    <span>{read.move.detail}</span>
+                    {displayText(read.move.label)}
+                    <span>{displayText(read.move.detail)}</span>
                 </a>
             ) : null}
             {!unfolded ? (
@@ -152,7 +176,7 @@ export function FollowPeek(): JSX.Element | null {
                                     </a>
                                 ) : null}
                             </div>
-                            <div class="fo-wt">{s.what}</div>
+                            <div class="fo-wt">{displayText(s.what)}</div>
                         </div>
                     ))}
                     <p class="fo-remember">
