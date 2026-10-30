@@ -6,16 +6,22 @@
  *
  * Tier 1 phrases fail CI unless they are explicitly allowlisted.
  * Tier 2 terms are review warnings because some have legitimate internal
- * or ordinary-English uses. The rendered preview transcript is the most
- * important audit surface; src/ is also scanned to catch generators and
- * shared UI before regeneration.
+ * or ordinary-English uses. The rendered preview transcript is the primary
+ * acceptance surface; source roots are also scanned so shared generators,
+ * edge functions, and capability maps cannot silently reintroduce the old
+ * dialect after a clean rendered pass.
  */
 
 const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "../..");
-const TARGETS = [path.join(ROOT, "src"), path.join(ROOT, "preview-transcript")];
+const TARGETS = [
+    path.join(ROOT, "src"),
+    path.join(ROOT, "supabase", "functions"),
+    path.join(ROOT, "deliverables", "room-capability-maps"),
+    path.join(ROOT, "preview-transcript")
+];
 
 const TIER1 = [
     "touch the ground",
@@ -34,7 +40,12 @@ const TIER1 = [
     "all four fronts",
     "face-off",
     "air cover",
-    "the machine"
+    "the machine",
+    "no might",
+    "no could",
+    "declarative over hedged",
+    "fragments are acceptable",
+    "fragments acceptable"
 ];
 
 const TIER2 = [
@@ -144,7 +155,7 @@ printRows("Tier-1 failures", failures, 80);
 printRows("Tier-2 review warnings", warnings, 120);
 
 if (failures.length > 0) {
-    console.error("\ncopy:audit failed: deprecated Tier-1 user-facing language remains.");
+    console.error("\ncopy:audit failed: deprecated Tier-1 language remains in a governed language surface.");
     process.exit(1);
 }
 
