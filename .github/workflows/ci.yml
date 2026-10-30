@@ -19,6 +19,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -60,6 +62,20 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 test-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Post PR diagnostic on failure
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          {
+            echo '<!-- antaeus-ci-unit-diagnostic -->'
+            echo '### CI unit-test diagnostic'
+            echo '```text'
+            tail -n 220 test-output.txt || true
+            echo '```'
+          } > ci-diagnostic.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file ci-diagnostic.md
 
   e2e-test:
     name: E2E smoke tests (Playwright)
@@ -94,6 +110,20 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 e2e-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Post PR E2E diagnostic on failure
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          {
+            echo '<!-- antaeus-ci-e2e-diagnostic -->'
+            echo '### CI E2E diagnostic'
+            echo '```text'
+            tail -n 220 e2e-output.txt || true
+            echo '```'
+          } > ci-e2e-diagnostic.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file ci-e2e-diagnostic.md
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
