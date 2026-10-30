@@ -3,30 +3,16 @@ import { test, expect } from "@playwright/test";
 /**
  * Program 6 / PR 12 — Territory Architect refacing walk.
  *
- * Verifies the Signal Field V02 structural addition:
- *   - 2-col hero grid with ta-hero__lead + ta-field-read aside
- *   - Field Read aside renders score + band + 3 interpretive lines
- *     (What's loose / What to backfill / Next move)
- *   - Field read updates when the operator adds a focus
- *   - Operator move line carries the orange-accent variant
- *   - HeroBand stats (focuses + 4 tiers + accounts) still render
- *
- * Audit reference:
- *   deliverables/audit/antaeus-refacing-vs-shipped-territory-architect-2026-05-18.md
+ * Verifies the structural addition and current explicit territory language.
  */
 
 test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field V02)", () => {
-    test("Hero is a 2-col grid: lead + where-the-territory-stands aside", async ({
-        browser
-    }) => {
+    test("Hero is a 2-col grid: lead + where-the-territory-stands aside", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
             await expect(page.locator(".ta-hero__grid")).toBeAttached();
             await expect(page.locator(".ta-hero__lead")).toBeAttached();
             await expect(page.locator(".ta-field-read")).toBeAttached();
@@ -35,23 +21,15 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Where-the-territory-stands aside surfaces score + band + 3 interpretive lines", async ({
-        browser
-    }) => {
+    test("Where-the-territory-stands aside surfaces score + band + 3 interpretive lines", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
             await expect(page.locator(".ta-field-read__score")).toBeAttached();
             await expect(page.locator(".ta-field-read__band")).toBeAttached();
-
-            const labels = await page
-                .locator(".ta-field-read__line-label")
-                .allTextContents();
+            const labels = await page.locator(".ta-field-read__line-label").allTextContents();
             const lower = labels.map((l) => l.trim().toLowerCase());
             expect(lower).toContain("what's loose right now");
             expect(lower).toContain("what to backfill");
@@ -61,95 +39,58 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("Empty board reads as 'Empty' band with no-focuses risk copy", async ({
-        browser
-    }) => {
+    test("Empty board reports no active territory", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            // Fresh storage — no focuses, no accounts.
             await page.addInitScript(() => {
-                try {
-                    localStorage.clear();
-                } catch {
-                    /* noop */
-                }
+                try { localStorage.clear(); } catch { /* noop */ }
             });
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
             const aside = page.locator(".ta-field-read");
             const cls = await aside.getAttribute("class");
             expect(cls).toContain("ta-field-read--empty");
-
-            const band = await page
-                .locator(".ta-field-read__band")
-                .textContent();
-            expect(band?.trim().toLowerCase()).toContain("empty");
+            const band = await page.locator(".ta-field-read__band").textContent();
+            expect(band?.trim().toLowerCase()).toContain("no active territory");
         } finally {
             await ctx.close();
         }
     });
 
-    test("The territory read updates after a focus is saved", async ({
-        browser
-    }) => {
+    test("The territory read updates after a focus is saved", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
             await page.addInitScript(() => {
-                try {
-                    localStorage.clear();
-                } catch {
-                    /* noop */
-                }
+                try { localStorage.clear(); } catch { /* noop */ }
             });
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
-            // Save one focus via the form.
-            const focusTitle = page
-                .locator(".ta-form--focus .ta-input")
-                .first();
+            const focusTitle = page.locator(".ta-form--focus .ta-input").first();
             await focusTitle.fill("Procurement consolidation Q2");
-            await page
-                .locator(".ta-form--focus .ta-save-btn")
-                .click();
+            await page.locator(".ta-form--focus .ta-save-btn").click();
             await page.waitForTimeout(250);
-
-            // Risk copy should no longer say "no focuses" — the
-            // priority chain advances to single-focus monoculture.
             const risk = await page
                 .locator(".ta-field-read__line")
                 .filter({ hasText: /what's loose right now/i })
                 .locator(".ta-field-read__line-copy")
                 .textContent();
             expect(risk?.toLowerCase()).not.toContain("no focuses");
-            expect(risk?.toLowerCase()).toContain("one division covers everything");
+            expect(risk?.toLowerCase()).toContain("one segment currently contains the entire territory");
         } finally {
             await ctx.close();
         }
     });
 
-    test("Next-move line carries the orange-accent variant", async ({
-        browser
-    }) => {
+    test("Next-move line carries the orange-accent variant", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
             const moveLine = page.locator(".ta-field-read__line--move");
             await expect(moveLine).toBeAttached();
-            // The move-line should NOT be the same node as a plain
-            // .ta-field-read__line; the variant class is required.
             const cls = await moveLine.getAttribute("class");
             expect(cls).toContain("ta-field-read__line--move");
         } finally {
@@ -157,53 +98,34 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
         }
     });
 
-    test("HeroBand stats (focuses + tiers + ceiling) still render", async ({
-        browser
-    }) => {
+    test("HeroBand stats (focuses + tiers + ceiling) still render", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
             const statCount = await page.locator(".ta-hero__stats .ta-stat").count();
-            // 1 focuses stat + 4 tier stats + 1 ceiling stat = 6.
             expect(statCount).toBeGreaterThanOrEqual(6);
         } finally {
             await ctx.close();
         }
     });
 
-    test("Mobile width collapses the 2-col hero to a single column", async ({
-        browser
-    }) => {
-        const ctx = await browser.newContext({
-            viewport: { width: 900, height: 1000 }
-        });
+    test("Mobile width collapses the 2-col hero to a single column", async ({ browser }) => {
+        const ctx = await browser.newContext({ viewport: { width: 900, height: 1000 } });
         const page = await ctx.newPage();
         try {
-            await page.goto("/territory-architect/?ds=0", {
-                waitUntil: "domcontentloaded"
-            });
+            await page.goto("/territory-architect/?ds=0", { waitUntil: "domcontentloaded" });
             await page.waitForTimeout(300);
-
-            const gridCols = await page
-                .locator(".ta-hero__grid")
-                .evaluate((el) => getComputedStyle(el).gridTemplateColumns);
-            const cols = gridCols
-                .split(" ")
-                .filter((c) => c.trim().length > 0);
+            const gridCols = await page.locator(".ta-hero__grid").evaluate((el) => getComputedStyle(el).gridTemplateColumns);
+            const cols = gridCols.split(" ").filter((c) => c.trim().length > 0);
             expect(cols.length).toBeLessThanOrEqual(1);
         } finally {
             await ctx.close();
         }
     });
 
-    test("RoomChrome + back-pill + ⌘K palette still wired (Program 6 / PR 1)", async ({
-        browser
-    }) => {
+    test("RoomChrome + back-pill + ⌘K palette still wired (Program 6 / PR 1)", async ({ browser }) => {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         try {
@@ -214,9 +136,7 @@ test.describe("Program 6 / PR 12 — Territory Architect refacing (Signal Field 
             await page.waitForTimeout(300);
             await expect(page.locator(".ant-room-chrome")).toBeAttached();
             await expect(page.locator(".c-back")).toBeAttached();
-            await expect(
-                page.locator(".ant-room-chrome__palette-hint")
-            ).toBeAttached();
+            await expect(page.locator(".ant-room-chrome__palette-hint")).toBeAttached();
         } finally {
             await ctx.close();
         }
