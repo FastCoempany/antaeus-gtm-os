@@ -18,6 +18,10 @@ jobs:
     name: One-time preview transcript regeneration
     if: github.event_name == 'push' && github.ref_name == 'language-remediation-v1'
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,6 +29,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: npm ci --no-audit --no-fund
+      - name: Build current preview assets
+        run: npm run build:cloudflare
       - name: Regenerate AI-readable preview transcript
         run: node tools/preview/build-transcript.js
       - name: Commit regenerated transcript if changed
