@@ -54,6 +54,13 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 test-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload unit-test output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-output
+          path: test-output.txt
+          retention-days: 7
 
   e2e-test:
     name: E2E smoke tests (Playwright)
@@ -85,6 +92,13 @@ jobs:
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
           tail -n 220 e2e-output.txt >> "$GITHUB_STEP_SUMMARY" || true
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload E2E output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-output
+          path: e2e-output.txt
+          retention-days: 7
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
