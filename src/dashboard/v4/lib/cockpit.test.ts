@@ -5,7 +5,7 @@ import type { ReadinessSummary } from "@/lib/readiness";
 function summaryOf(p: Partial<ReadinessSummary>): ReadinessSummary {
     return {
         verdict: "building",
-        verdictLabel: "Building",
+        verdictLabel: "Partially documented",
         totalScore: 40,
         dimensions: [],
         gateBlockers: [],
@@ -26,12 +26,12 @@ class FakeStorage {
 
 describe("buildMasthead", () => {
     it("marks the gate ladder relative to the current verdict", () => {
-        const m = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Building" }));
-        expect(m.verdictLabel).toBe("Building");
+        const m = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Partially documented" }));
+        expect(m.verdictLabel).toBe("Partially documented");
         expect(m.gates).toHaveLength(5);
-        expect(m.gates[0]!.state).toBe("done"); // Founder-dependent (rank 1 < 2)
-        expect(m.gates[1]!.state).toBe("on"); // Building (rank 2)
-        expect(m.gates[2]!.state).toBe("next"); // Inheritable (rank 3)
+        expect(m.gates[0]!.state).toBe("done");
+        expect(m.gates[1]!.state).toBe("on");
+        expect(m.gates[2]!.state).toBe("next");
         expect(m.gates[3]!.state).toBe("todo");
     });
 
@@ -42,24 +42,23 @@ describe("buildMasthead", () => {
         expect(m.nextStage).toContain("pilot");
     });
 
-    it("composes a grammatical headline for every verdict", () => {
+    it("composes an explicit readiness headline for every verdict", () => {
         const base = buildMasthead(
             summaryOf({ verdict: "you_are_the_system", verdictLabel: "Founder-dependent" })
         );
-        // never the ungrammatical "You're Founder-dependent."
         expect(base.headlinePre).toBe("Current readiness:");
         expect(base.headlineEm).toBe("Founder-dependent");
-        const building = buildMasthead(summaryOf({ verdict: "building", verdictLabel: "Building" }));
-        expect(building.headlinePre).toBe("You're");
-        expect(building.headlineEm).toBe("Building");
+        const building = buildMasthead(
+            summaryOf({ verdict: "building", verdictLabel: "Partially documented" })
+        );
+        expect(building.headlinePre).toBe("Current readiness:");
+        expect(building.headlineEm).toBe("Partially documented");
     });
 });
 
 describe("buildStanding", () => {
     it("derives the five doors from the REAL publisher snapshot shapes", () => {
         const s = new FakeStorage();
-        // shapes match the shipped publishers exactly (deal-workspace/
-        // signal-console/founding-gtm/quota-workback health-snapshots)
         s.setItem(
             "gtmos_deal_workspace_health",
             JSON.stringify({
@@ -83,16 +82,12 @@ describe("buildStanding", () => {
         expect(items).toHaveLength(5);
         expect(items[0]!.value).toBe("2 at elevated risk");
         expect(items[0]!.tone).toBe("bad");
-        // Hottest reads the real topAccountName field
         expect(items[1]!.value).toContain("Ramp");
         expect(items[1]!.sub).toContain("4");
-        // Pace: pipeline 480k < 100k×3.5=350k? no → on pace (good)
         expect(items[2]!.value).toBe("On pace");
         expect(items[2]!.tone).toBe("good");
-        // Dying reads the real accountName + pulls days from the cause
         expect(items[3]!.value).toBe("Datadog · 16d");
         expect(items[3]!.tone).toBe("bad");
-        // Handoff reads the real sections_ready field
         expect(items[4]!.value).toBe("2 / 7");
         expect(items[4]!.tone).toBe("warn");
         for (const it of items) expect(it.href).toContain("returnTo");
@@ -106,7 +101,6 @@ describe("buildStanding", () => {
             JSON.stringify({ monthly_target: 100000, coverage_target: 3.5 })
         );
         const items = buildStanding(s);
-        // 100k < 350k needed → Behind
         expect(items[2]!.value).toBe("Below required pace");
         expect(items[2]!.tone).toBe("warn");
     });
