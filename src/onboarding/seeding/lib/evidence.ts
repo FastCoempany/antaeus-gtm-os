@@ -45,14 +45,14 @@ export const EVIDENCE: Record<SeedingStepId, EvidenceNote> = {
     },
     deals: {
         note: t(
-            "Record what you know about the champion, signer, budget, timeline, and current obstacle. The initial assessment checks stage, champion, signer, and obstacle information to suggest what to verify next.",
+            "For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.",
             { class: "body" }
         ),
         source: null
     },
     quota: {
         note: t(
-            "Your quota and closed-won total set the revenue target and remaining gap used in Quota Workback. Required pipeline depends on the conversion assumptions you enter.",
+            "Your annual target, typical deal size, win rate, and sales cycle are carried into Quota Workback. The open-deal estimate on this step uses a fixed 3.5× coverage assumption; the required pipeline in Quota Workback depends on the conversion assumptions you enter there.",
             { class: "body" }
         ),
         source: null

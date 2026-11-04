@@ -79,8 +79,8 @@ test.describe("Program 6 / PR 14 — PoC Framework refacing (Proof Foundry V03)"
                 .textContent())?.toLowerCase() ?? "";
             // The empty draft has 3 red molds (Claim / Owner / Kill)
             // and 1 hot mold (Metric). The synthesis should name at
-            // least one broken or empty mold.
-            expect(text).toMatch(/broken|empty/);
+            // least one incomplete or missing section.
+            expect(text).toMatch(/missing|incomplete/);
         } finally {
             await ctx.close();
         }

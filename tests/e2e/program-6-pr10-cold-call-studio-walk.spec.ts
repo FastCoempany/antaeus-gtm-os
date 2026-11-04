@@ -73,11 +73,11 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
             await page.waitForTimeout(300);
 
             // With no account selected, the prescription is the
-            // "name the strain" frame regardless of thread.
+            // "select the account" frame regardless of thread.
             const noAccountText = await page
                 .locator(".cc-loom__read-correction-copy")
                 .textContent();
-            expect(noAccountText?.toLowerCase()).toContain("name");
+            expect(noAccountText?.toLowerCase()).toContain("select the account");
 
             // Click the 4th thread (proof) and confirm the
             // prescription text differs from prep/opener.

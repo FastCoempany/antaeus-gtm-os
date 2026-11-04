@@ -171,7 +171,7 @@ function signalSnapshotToMoveCards(
                 // the card to the account instead of the composed title.
                 focusObject: name,
                 badge: "Now",
-                meta: [`account priority ${Math.round(heat)}/99`],
+                meta: [`account priority ${Math.round(heat)} out of 99`],
                 // Sarah's hand-reach intent on a "Outbound to X" card
                 // is to COMPOSE outbound — so the dominant CTA lands
                 // in Outbound Studio with the account already in the

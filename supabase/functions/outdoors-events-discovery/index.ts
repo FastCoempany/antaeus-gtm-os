@@ -427,7 +427,10 @@ Deno.serve(async (req: Request): Promise<Response> => {
         }
         if (body.action === "run_one") {
             const result = await runForWorkspace(sb, workspaceId);
-            return json({ ok: result.status !== "failed", result, error: result.error }, 200, cors);
+            // A paused run did nothing, so it is not "ok" for the caller —
+            // otherwise the button click looks like it silently succeeded.
+            const ranOk = result.status === "completed" || result.status === "throttled";
+            return json({ ok: ranOk, result, error: result.error }, 200, cors);
         }
         const ids = await activeWorkspaceIds(sb);
         const results: RunResult[] = [];

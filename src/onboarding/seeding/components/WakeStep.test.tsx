@@ -22,6 +22,14 @@ describe("Account research interaction", () => {
         expect((screen.getByRole("button", { name: "Continue setup →" }) as HTMLButtonElement).disabled).toBe(false);
         expect(screen.queryByText(/Priority 0/)).toBeNull();
         expect(screen.queryByRole("link", { name: "Review source" })).toBeNull();
+        expect(screen.getByText(/We couldn't research these accounts right now/)).toBeTruthy();
+    });
+    it("retries research for the same list when Try again is clicked", async () => {
+        render(<WakeStep />);
+        const retry = await screen.findByRole("button", { name: "Try again" });
+        expect(mocks.enrich).toHaveBeenCalledTimes(1);
+        retry.click();
+        await waitFor(() => expect(mocks.enrich).toHaveBeenCalledTimes(2));
     });
     it("researches again when the ICP changes for the same account names", async () => {
         startEnrichment();

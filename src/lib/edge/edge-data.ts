@@ -346,7 +346,7 @@ export function ageLabel(ts: number, now: Date = new Date()): string {
 /** The dead-morning honesty line, when nothing landed today. */
 export function quietLine(lastMovement: number | null, now: Date = new Date()): string {
     if (lastMovement == null) {
-        return t("Nothing captured yet — the wire fills as you work.", { class: "body" });
+        return t("No activity recorded yet. Activity appears here as you work.", { class: "body" });
     }
     const when = new Date(lastMovement);
     const sameDay =
@@ -355,7 +355,7 @@ export function quietLine(lastMovement: number | null, now: Date = new Date()): 
         when.getDate() === now.getDate();
     const clock = when.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     if (sameDay) {
-        return `${t("Quiet since", { class: "body" })} ${clock}.`;
+        return `${t("No activity recorded since", { class: "body" })} ${clock}.`;
     }
     const yd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
     const wasYesterday =
@@ -365,7 +365,7 @@ export function quietLine(lastMovement: number | null, now: Date = new Date()): 
     const dayWord = wasYesterday
         ? t("yesterday")
         : ageLabel(lastMovement, now) + ` ${t("ago")}`;
-    return `${t("Nothing yet today — last movement", { class: "body" })} ${dayWord}${t(", at", { class: "body" })} ${clock}.`;
+    return `${t("No activity recorded today yet. The last recorded activity was", { class: "body" })} ${dayWord} ${t("at", { class: "body" })} ${clock}.`;
 }
 
 /** One read for the whole rail (local sources; cloud merges on top). */

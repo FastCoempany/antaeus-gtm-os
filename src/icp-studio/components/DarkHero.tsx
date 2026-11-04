@@ -52,7 +52,7 @@ export function DarkHero(): JSX.Element {
     });
     const worked = totalWorked.value;
     const saved = recentIcps.value.length;
-    const placeholder = statement.text.startsWith("Fill the inputs");
+    const placeholder = statement.text.startsWith("Complete the inputs");
 
     const kicker =
         saved > 0

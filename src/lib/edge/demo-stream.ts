@@ -11,7 +11,8 @@ import type { EdgeEvent } from "./edge-data";
  * "demo"`, same gate as the demo Briefing Patterns) — a real workspace
  * never sees a scripted event. Every scripted event is a kind the real
  * system genuinely produces (a reply landing, a send captured, a
- * calendar confirm, a heartbeat read, a call logged) — the demo never
+ * calendar confirm, a scheduled-check observation (the real signal_decay
+ * 14-day and deal_decay 7-day thresholds), a call logged) — the demo never
  * performs a capability that doesn't exist.
  */
 
@@ -102,7 +103,7 @@ export function demoBaseEvents(now: Date = new Date()): ReadonlyArray<EdgeEvent>
         {
             id: "demo:hb-base",
             who: "machine",
-            text: `${c.hbQuiet} ${t("has no dated next step, according to the scheduled check.", { class: "body" })}`,
+            text: `${t("Scheduled check: no new signals recorded in more than 14 days for", { class: "body" })} ${c.hbQuiet}.`,
             ts: ts(195)
         }
     ];
@@ -161,7 +162,7 @@ export function demoArrivals(): ReadonlyArray<Omit<DemoArrival, "event"> & {
             make: (now) => ({
                 id: "demo:arrive-hb",
                 who: "machine",
-                text: `${cast().arriveHb} ${t("has no recorded buyer reply in the last 6 days, according to the scheduled check.", { class: "body" })}`,
+                text: `${t("Scheduled check:", { class: "body" })} ${cast().arriveHb} ${t("has been at the same deal stage for more than 7 days with no dated next step.", { class: "body" })}`,
                 ts: now.getTime()
             })
         }

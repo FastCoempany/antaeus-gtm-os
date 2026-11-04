@@ -315,7 +315,7 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
         ];
         const r = buildIngotRead(molds);
         expect(r.toLowerCase()).toContain("planning sections are complete");
-        expect(r.toLowerCase()).toContain("recorded");
+        expect(r.toLowerCase()).toContain("verify the criteria with the buyer");
     });
 
     it("synthesizes locked + hot + broken molds into clauses", () => {

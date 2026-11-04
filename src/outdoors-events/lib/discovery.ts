@@ -96,6 +96,14 @@ export interface TriggerResult {
  *
  * `opts.data` is test-only — production callers omit it.
  */
+/** Plain messages for the operator; the raw detail goes to error reporting. */
+export const DISCOVERY_MESSAGES = {
+    noWorkspace: "Sign in to a workspace to search for events.",
+    paused: "This week's search budget is used up. Event search will be available again next week.",
+    failed: "The event search didn't finish. Try again in a few minutes.",
+    unavailable: "Event search isn't available in this copy of the app."
+} as const;
+
 export async function triggerDiscovery(
     opts: { readonly data?: DataClient } = {}
 ): Promise<TriggerResult> {
@@ -104,7 +112,7 @@ export async function triggerDiscovery(
         const data = opts.data ?? createDataClient();
         const workspace = await data.currentWorkspace();
         if (!workspace) {
-            return { ok: false, error: "No active workspace." };
+            return { ok: false, error: DISCOVERY_MESSAGES.noWorkspace };
         }
         const { data: res, error } = await sb.functions.invoke(
             "outdoors-events-discovery",
@@ -113,24 +121,30 @@ export async function triggerDiscovery(
             }
         );
         if (error) {
-            return { ok: false, error: error.message };
+            reportError(error, { op: "outdoors-events.triggerDiscovery.invoke" });
+            return { ok: false, error: DISCOVERY_MESSAGES.failed };
         }
         const ok =
             res && typeof res === "object" && (res as { ok?: unknown }).ok === true;
         if (!ok) {
-            const msg =
+            const status =
                 res && typeof res === "object"
-                    ? ((res as { error?: string }).error ??
-                      "Discovery run didn't complete.")
-                    : "Discovery run didn't complete.";
-            return { ok: false, error: msg };
+                    ? (res as { result?: { status?: unknown } }).result?.status
+                    : undefined;
+            if (status === "paused") return { ok: false, error: DISCOVERY_MESSAGES.paused };
+            return { ok: false, error: DISCOVERY_MESSAGES.failed };
         }
         return { ok: true, error: null };
     } catch (err) {
         reportError(err, { op: "outdoors-events.triggerDiscovery" });
+        // Missing configuration (e.g. a demo or local copy with no database)
+        // and any other thrown error get a plain message, never the raw text.
+        const raw = err instanceof Error ? err.message : String(err);
         return {
             ok: false,
-            error: err instanceof Error ? err.message : String(err)
+            error: /VITE_SUPABASE|Supabase client/i.test(raw)
+                ? DISCOVERY_MESSAGES.unavailable
+                : DISCOVERY_MESSAGES.failed
         };
     }
 }

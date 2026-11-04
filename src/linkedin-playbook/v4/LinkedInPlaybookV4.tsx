@@ -65,8 +65,18 @@ const POSITION_WORD: ReadonlyArray<string> = [
 
 /** Map a logged cueLabel back to its sequence position, including legacy names. */
 const LEGACY_CUE_NAMES: Readonly<Record<string, CueIndex>> = {
+    // Names used before the 2026 plain-language rename. Older logs (and
+    // any saved workspace) still carry them, so they must keep mapping.
+    "Watch public signal": 0,
+    "Watch the public signal": 0,
+    "Comment with one operating read": 1,
+    "Comment with one useful observation": 1,
+    "Connect after recognition": 2,
     "Give proof before asking": 3,
-    "Ask only when earned": 4
+    "Give something useful before asking": 3,
+    "Ask only when earned": 4,
+    "Ask only when it is warranted": 4,
+    "Ask only when it's warranted": 4
 };
 
 function cueIndexForEntry(entry: ActionEntry): CueIndex | null {

@@ -187,10 +187,10 @@ describe("ageLabel + quietLine", () => {
     });
 
     it("the dead-morning line is honest, never fake-busy", () => {
-        expect(quietLine(null, NOW)).toContain("Nothing captured yet");
+        expect(quietLine(null, NOW)).toContain("No activity recorded yet");
         const yesterday = new Date("2026-07-15T16:12:00").getTime();
         const line = quietLine(yesterday, NOW);
-        expect(line).toContain("Nothing yet today");
+        expect(line).toContain("No activity recorded today yet");
         expect(line).toContain("yesterday");
     });
 });

@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
     loadLatestRun,
-    triggerDiscovery
-} from "./discovery";
+    triggerDiscovery, DISCOVERY_MESSAGES } from "./discovery";
 import type { DataClient } from "@/lib/data-client";
 
 vi.mock("@/lib/observability", () => ({
@@ -100,7 +99,7 @@ describe("outdoors-events / discovery client", () => {
         const data = mockDataClient({ workspaceId: null });
         const result = await triggerDiscovery({ data });
         expect(result.ok).toBe(false);
-        expect(result.error).toContain("No active workspace");
+        expect(result.error).toBe(DISCOVERY_MESSAGES.noWorkspace);
         // Should never reach the network when there's no workspace.
         expect(invokeMock).not.toHaveBeenCalled();
     });
@@ -127,17 +126,19 @@ describe("outdoors-events / discovery client", () => {
         });
         const result = await triggerDiscovery({ data });
         expect(result.ok).toBe(false);
-        expect(result.error).toBe("Function not found");
+        expect(result.error).toBe(DISCOVERY_MESSAGES.failed);
+        expect(result.error).not.toContain("Function not found");
     });
 
     it("triggerDiscovery surfaces server-reported failure (ok:false payload)", async () => {
         const data = mockDataClient({ workspaceId: "ws-1" });
         invokeMock.mockResolvedValue({
-            data: { ok: false, error: "Weekly cost ceiling reached" },
+            data: { ok: false, result: { status: "paused" }, error: "Weekly cost ceiling reached ($3.10 >= $3.00)" },
             error: null
         });
         const result = await triggerDiscovery({ data });
         expect(result.ok).toBe(false);
-        expect(result.error).toContain("Weekly cost ceiling reached");
+        expect(result.error).toBe(DISCOVERY_MESSAGES.paused);
+        expect(result.error).not.toContain("$");
     });
 });

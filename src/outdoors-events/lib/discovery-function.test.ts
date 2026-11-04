@@ -155,7 +155,7 @@ describe("Outdoors discovery deployed handler contract", () => {
     });
     it("keeps weekly budget pause behavior", async () => {
         const h = harness({ spend: 3 });
-        expect(await (await h.request()).json()).toMatchObject({ ok: true, result: { status: "paused", eventsWritten: 0 } });
+        expect(await (await h.request()).json()).toMatchObject({ ok: false, result: { status: "paused", eventsWritten: 0 } });
         expect(h.call).not.toHaveBeenCalled();
     });
     it("administrative run_all selects eligible profiles and preserves aggregate response", async () => {

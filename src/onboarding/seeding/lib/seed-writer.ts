@@ -110,7 +110,9 @@ export function writeSeedingDraft(
         heat: a.heat,
         employees: null,
         hq: "",
-        signals: a.signal
+        // Cold rows carry a placeholder ("research unavailable"), not a
+        // real signal — never persist it as one. Mirrors cloud-mirror.ts.
+        signals: a.signal && !a.cold
             ? [
                   {
                       id: uid("sig", now, i),

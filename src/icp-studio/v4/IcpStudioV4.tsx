@@ -65,7 +65,9 @@ export function IcpStudioV4(): JSX.Element {
         trigger: d.trigger,
         proofWindow: d.proofWindow
     });
-    const focus = buildFocus(d.role, totalWorked.value);
+    // The v4 surface has no account-target input; totalWorked is a running
+    // count of accounts worked, not a target, so use the role default.
+    const focus = buildFocus(d.role, null);
     const complete = [industry, d.size, d.geo, buyer, d.pain, d.trigger, d.proofWindow]
         .every((v) => typeof v === "string" && v.trim().length > 0);
     const group = buildBuyingGroup(buyer);

@@ -21,7 +21,7 @@ export function buildRiskReasons(
     profile: SignalProfile
 ): string[] {
     const reasons: string[] = [];
-    if (profile.risk) pushReason(reasons, "risk score " + profile.risk + "/99");
+    if (profile.risk) pushReason(reasons, "risk score " + Math.min(100, profile.risk) + " out of 100");
     if (profile.staleDays) pushReason(reasons, "deal record unchanged for " + profile.staleDays + " days");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
     if (profile.proofThin) pushReason(reasons, "supporting evidence is incomplete");
@@ -33,7 +33,7 @@ export function buildRiskReasons(
     if (profile.threadingRisk) pushReason(reasons, "limited stakeholder coverage");
     if (profile.stageStuck) pushReason(reasons, "stuck at this stage");
     if (profile.dealRoomPressureScore >= 60) pushReason(reasons, "Deal Workspace reports elevated risk");
-    if (profile.readinessDealsWeak) pushReason(reasons, "deals is the weakest dimension");
+    if (profile.readinessDealsWeak) pushReason(reasons, "your open-deal records are below the readiness bar");
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
     if (profile.linkedRoomTop) pushReason(reasons, "prioritized by the source workspace");
     if (profile.hasAutopsy) pushReason(reasons, "a deal-risk review is available");
@@ -54,7 +54,7 @@ export function buildMoveReasons(
 ): string[] {
     const reasons: string[] = [];
     if (profile.causeId) pushReason(reasons, formatCauseLabel(profile.causeId));
-    if (profile.heat) pushReason(reasons, "account priority score " + profile.heat + "/99");
+    if (profile.heat) pushReason(reasons, "account priority score " + profile.heat + " out of 99");
     if (profile.coveragePressure) pushReason(reasons, "pipeline coverage is below target");
     if (profile.highConfidenceCount >= 2) pushReason(reasons, "multiple signals are marked high-confidence");
     if (profile.recentCount >= 2) pushReason(reasons, "multiple recent signals are recorded");
@@ -65,17 +65,17 @@ export function buildMoveReasons(
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
     if (profile.signalRoomMotionReady) pushReason(reasons, "Signal Console has sufficient context for outreach");
     if (profile.signalRoomEvidenceThin) pushReason(reasons, "account signal evidence is incomplete");
-    if (profile.readinessOutreachWeak) pushReason(reasons, "outreach is the weakest dimension");
-    if (profile.readinessDiscoveryWeak) pushReason(reasons, "discovery is the weakest dimension");
+    if (profile.readinessOutreachWeak) pushReason(reasons, "your outreach is below the readiness bar");
+    if (profile.readinessDiscoveryWeak) pushReason(reasons, "your discovery calls are below the readiness bar");
     if (profile.readinessPlaybookWeak && family === "advisor") {
-        pushReason(reasons, "playbook is the weakest dimension");
+        pushReason(reasons, "your pilot evidence is below the readiness bar");
     }
     if (profile.hasReplies) pushReason(reasons, "the prospect replied");
     if (family === "advisor" || profile.hasAdvisor) pushReason(reasons, "an advisor request can be reviewed");
     if (family === "opportunity" || profile.hasSignalConsole) pushReason(reasons, "account signal context is available");
     if (profile.linkedRoomTop) pushReason(reasons, "prioritized by the source workspace");
     if (profile.roomReadiness >= 2) pushReason(reasons, "the source workspace has enough context to proceed");
-    if (!reasons.length && profile.risk) pushReason(reasons, "risk score " + profile.risk + "/99");
+    if (!reasons.length && profile.risk) pushReason(reasons, "risk score " + Math.min(100, profile.risk) + " out of 100");
     if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, "an open deal is recorded");
     if (!reasons.length) pushReason(reasons, "an action is available for review");
     return reasons.slice(0, 4);
@@ -93,19 +93,19 @@ export function buildSystemReasons(profile: SignalProfile): string[] {
         pushReason(reasons, "readiness " + profile.readinessScore + "/100");
     }
     if (profile.readinessWeakestDimension) {
-        pushReason(reasons, profile.readinessWeakestDimension.toLowerCase() + " weakest dimension");
+        pushReason(reasons, profile.readinessWeakestDimension.toLowerCase() + " is the part of readiness furthest behind");
     }
     if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
     if (profile.quotaQualityBand) {
         pushReason(reasons, "plan " + profile.quotaQualityBand.toLowerCase());
     }
-    pushReason(reasons, "local fallback active");
+    pushReason(reasons, "using data saved on this device");
     return reasons.slice(0, 4);
 }
 
 export function buildIcpReasons(profile: SignalProfile): string[] {
     const reasons: string[] = [];
-    if (profile.readinessIcpWeak) pushReason(reasons, "ICP is the weakest dimension");
+    if (profile.readinessIcpWeak) pushReason(reasons, "your targeting is below the readiness bar");
     pushReason(reasons, "no saved ICP yet");
     if (profile.quotaPressureScore >= 60) {
         pushReason(reasons, "targeting criteria are needed to evaluate planned pipeline coverage");

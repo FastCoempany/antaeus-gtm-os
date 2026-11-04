@@ -59,7 +59,9 @@ describe("buildFocus", () => {
     it("uses explicit activeAccounts when > 0", () => {
         const result = buildFocus("founder", 80);
         expect(result).toContain("80 active accounts");
-        expect(result).toContain("ranked top-20");
+        expect(result).toContain("top 20 ranked");
+        expect(buildFocus("founder", 2)).not.toContain("top 20");
+        expect(buildFocus("founder", 2)).toContain("Work 2 active accounts");
     });
 
     it("falls back to founder default with no override", () => {

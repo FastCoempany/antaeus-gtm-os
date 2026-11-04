@@ -61,7 +61,7 @@ export function buildStatement(input: BuildStatementInput): IcpStatement {
  * and any explicit active-accounts override. Legacy lines 1192-1199.
  *
  * - Active accounts > 0 → use it: "Work N active accounts in a 30-day
- *   window. Maintain a ranked top-20 and rotate weekly."
+ *   window. Keep the top 20 ranked and review weekly."
  * - Founder default (no override): 60-120 active accounts.
  * - First AE default: 120-220 active accounts.
  */
@@ -73,7 +73,10 @@ export function buildFocus(
         ? activeAccounts
         : 0;
     if (n > 0) {
-        return `Work ${n} active accounts in a 30-day window using the entered account target. Maintain a ranked top-20 and review it weekly.`;
+        const ranked = Math.min(20, n);
+        return n <= 20
+            ? `Work ${n} active accounts over the next 30 days, using the target you entered. Rank them and review the order weekly.`
+            : `Work ${n} active accounts over the next 30 days, using the target you entered. Keep the top ${ranked} ranked and review the order weekly.`;
     }
     if (role === "founder") {
         return "Founder-led default: focus 60-120 active accounts for the next 30 days. If personalization is heavy, start at 60.";

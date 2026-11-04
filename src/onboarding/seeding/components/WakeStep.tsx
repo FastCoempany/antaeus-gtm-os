@@ -62,6 +62,13 @@ export function startEnrichment(): void {
         });
 }
 
+/** Clear the memo for the current list and research again. */
+export function retryEnrichment(): void {
+    enrichedKey = "";
+    result.value = null;
+    startEnrichment();
+}
+
 /** The enriched accounts, for the seed writer at the landing. */
 export function enrichedAccounts(): EnrichmentResult["accounts"] {
     return result.value?.accounts ?? [];
@@ -125,6 +132,16 @@ export function WakeStep(): JSX.Element {
                             </div>
                         ))}
                     </div>
+                    {r?.unavailable ? (
+                        <div class="sd-notice" role="status">
+                            <p>
+                                {t("We couldn't research these accounts right now. You can continue — the names are saved.", { class: "body" })}
+                            </p>
+                            <button type="button" class="sd-btn sd-btn--sm sd-btn--ghost" onClick={() => retryEnrichment()}>
+                                {t("Try again", { class: "label" })}
+                            </button>
+                        </div>
+                    ) : (
                     <div class="sd-reads">
                         {reads.map((rd) => (
                             <div class={`sd-read${rd.kind === "doesnt-fit" ? " is-warn" : ""}`} key={rd.title}>
@@ -134,6 +151,7 @@ export function WakeStep(): JSX.Element {
                             </div>
                         ))}
                     </div>
+                    )}
                 </div>
             )}
 

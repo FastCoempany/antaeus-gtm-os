@@ -54,12 +54,30 @@ function riskWord(score: number): string {
     return t("Low");
 }
 
+/** Short plain name per risk factor; the evidence sentence sits beside it. */
+const CAUSE_TITLE: Readonly<Record<string, string>> = {
+    no_nextstep: "Next step",
+    next_step_overdue: "Overdue next step",
+    stage_stuck: "Time in stage",
+    no_champion: "Champion",
+    champion_weak: "Champion",
+    no_eb: "Economic buyer",
+    no_process: "Decision process",
+    usecase_blurry: "Use case",
+    impact_not_real: "Business impact",
+    competition_unknown: "Competition",
+    single_threaded: "Stakeholders",
+    stale_thread: "Recent updates",
+    poc_no_criteria: "Pilot criteria",
+    proof_thin: "Pilot results"
+};
+
 function plainTaskWhy(taskId: string, fallback: string): string {
     const reads: Record<string, string> = {
         get_dated_nextstep: "A dated next step creates a specific buyer commitment.",
         map_decision_process: "An explicit decision process clarifies approval steps and ownership.",
-        bring_eb_in: "The economic buyer has not been identified or engaged.",
-        confirm_champion: "No confirmed internal owner is currently driving the purchase.",
+        bring_eb_in: "The record does not yet show a confirmed economic buyer who is engaged in the decision.",
+        confirm_champion: "The record does not yet show a confirmed internal owner driving the purchase.",
         quantify_impact: "Quantified impact gives the buyer a measurable basis for evaluation.",
         clarify_use_case: "A specific use case helps stakeholders evaluate the same outcome.",
         name_competition: "Naming the alternative makes the decision context explicit.",
@@ -166,14 +184,14 @@ export function FutureAutopsyV4(): JSX.Element {
                 </h1>
                 <p class="fa4-sub">
                     <b>{money(current.value)}</b> · {current.stage}
-                    {quiet > 0 ? <> · {t("no recorded buyer activity for")} {quiet} {t("days")}</> : null}
+                    {quiet > 0 ? <> · {t("no deal updates recorded for")} {quiet} {t("days")}</> : null}
                     {" · "}
                     {t("Review the evidence and corrective actions below.", { class: "body" })}
                 </p>
 
                 <div class="fa4-line">
                     <div class={`fa4-track${allDone ? " is-won" : ""}`}>
-                        <span class="fa4-now" style={`left:${nowPct}%`}><i /><em>{t("current")}{quiet > 0 ? ` · ${quiet}d ${t("without recorded buyer activity")}` : ""}</em></span>
+                        <span class="fa4-now" style={`left:${nowPct}%`}><i /><em>{t("current")}{quiet > 0 ? ` · ${quiet}d ${t("since the last deal update")}` : ""}</em></span>
                         <span class="fa4-death"><i /><em>{allDone ? t("actions completed") : `${t("risk review window")} · ${horizon}d`}</em></span>
                     </div>
                 </div>
@@ -181,7 +199,7 @@ export function FutureAutopsyV4(): JSX.Element {
                 <div class="fa4-vitrow">
                     <span class="fa4-v"><span class="fa4-vk">{t("Qualification")}</span><span class={`fa4-vn${current.qualScore < 8 ? " is-risk" : ""}`}>{qualWord(current.qualScore)}</span></span>
                     <span class="fa4-v"><span class="fa4-vk">{t("Stage")}</span><span class="fa4-vn">{current.stage}</span></span>
-                    <span class="fa4-v"><span class="fa4-vk">{t("Last buyer activity")}</span><span class={`fa4-vn${quiet >= 7 ? " is-risk" : quiet >= 3 ? " is-warn" : ""}`}>{quiet} {t("days ago")}</span></span>
+                    <span class="fa4-v"><span class="fa4-vk">{t("Last deal update")}</span><span class={`fa4-vn${quiet >= 7 ? " is-risk" : quiet >= 3 ? " is-warn" : ""}`}>{quiet} {t("days ago")}</span></span>
                     <span class="fa4-v"><span class="fa4-vk">{t("Champion")}</span><span class={`fa4-vn${current.champion ? "" : " is-risk"}`}>{current.champion || t("none recorded")}</span></span>
                     <span class="fa4-v"><span class="fa4-vk">{t("Economic buyer")}</span><span class={`fa4-vn${current.economicBuyer ? "" : " is-risk"}`}>{current.economicBuyer || t("unknown")}</span></span>
                 </div>
@@ -190,9 +208,7 @@ export function FutureAutopsyV4(): JSX.Element {
                     <div class="fa4-ah">{t("Risk factors · evidence", { class: "body" })}</div>
                     {doc.chapters.slice(0, 4).map((ch) => (
                         <div class="fa4-arow" key={ch.cause}>
-                            <span class="fa4-at">
-                                {doc.causes.find((c) => c.id === ch.cause)?.label ?? ch.cause.replace(/_/g, " ")}
-                            </span>
+                            <span class="fa4-at">{CAUSE_TITLE[ch.cause] ?? ch.cause.replace(/_/g, " ")}</span>
                             <span class="fa4-aw">{ch.story}</span>
                         </div>
                     ))}

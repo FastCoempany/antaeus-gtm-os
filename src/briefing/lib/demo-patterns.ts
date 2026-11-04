@@ -170,20 +170,20 @@ export function demoSamplePatterns(): BriefingPattern[] {
         ),
         pattern(
             "demo-ent-2",
-            "Recorded food-service deals have moved faster than recorded airline deals",
-            "The current workspace shows Chipotle closing in 132 days, while the recorded airline deals have taken longer on average and often identify the final approver later in the cycle. The territory tiers currently prioritize aviation. The recorded sample is limited, but it is large enough to justify reviewing whether the current territory priority still matches your own deal history.",
+            "The closed food-service deal moved faster than the open aviation deals",
+            "Chipotle, a food-service deal, closed in 132 days with the person who signs engaged early. No aviation deal has closed yet: United Airlines has been open for 64 days with its VP People not yet engaged, and Delta Air Lines has no identified economic buyer. The territory tiers currently put aviation first. This is a small sample, so treat it as a reason to review the tiers, not as a sign that the priority is definitely wrong.",
             {
-                what_changed: "A cycle-length difference is visible between the recorded food-service and airline deals.",
-                evidence: "Closed-deal history compared with the current territory tiers.",
-                confidence_rationale: "The observation comes from the workspace's own deal history; the sample size is still limited.",
-                why_it_matters: "Territory tiers determine where seller time is concentrated, so a persistent difference in recorded performance should be reviewed.",
+                what_changed: "The one closed food-service deal moved faster than the open aviation deals, which still lack an engaged signer.",
+                evidence: "Closed and open deal history compared with the current territory tiers.",
+                confidence_rationale: "The observation comes from the workspace's own deal history: one closed food-service deal and two open aviation deals. The sample is small.",
+                why_it_matters: "Territory tiers decide where seller time goes, so a difference between priority and results is worth checking as more deals close.",
                 who_needs_to_know: "The person responsible for territory prioritization.",
                 what_next: "Review the territory tiers and either change the priority or record why aviation should remain first."
             },
             [
                 {
                     label: "Review territory tiers against closed-deal performance",
-                    rationale: "The current tiers and recorded outcomes point in different directions.",
+                    rationale: "The current tiers and the deal history so far point in different directions.",
                     destination: "Territory Architect · tiers · review"
                 }
             ],

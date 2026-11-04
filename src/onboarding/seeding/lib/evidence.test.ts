@@ -36,4 +36,17 @@ describe("seeding evidence registry", () => {
             if (!source) expect(note).not.toMatch(/\d+%/);
         }
     });
+
+    it("every note is non-empty and contains no percentage or statistic", () => {
+        for (const step of SEEDING_STEPS) {
+            const { note } = EVIDENCE[step];
+            expect(note.trim().length).toBeGreaterThan(0);
+            expect(note).not.toMatch(/\d+(\.\d+)?\s*%|percent/i);
+        }
+    });
+
+    it("names only inputs the steps actually collect", () => {
+        expect(EVIDENCE.quota.note).not.toMatch(/closed-won/i);
+        expect(EVIDENCE.deals.note).not.toMatch(/budget|timeline/i);
+    });
 });

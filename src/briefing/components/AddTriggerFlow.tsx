@@ -21,6 +21,15 @@ import { armParsedTrigger } from "../state";
  * surfaces the ambiguities and asks for a sharper wording first.
  */
 
+/** Plain names for the five alert types (the enum stays internal). */
+const TRIGGER_TYPE_LABEL: Readonly<Record<string, string>> = {
+    single_event: "One-time event",
+    aggregation: "Repeated events",
+    threshold: "Threshold",
+    adjacency: "Related company",
+    silence: "No activity"
+};
+
 const DISPOSITION_COPY: Record<ParseDisposition, { tone: string; line: string }> = {
     arm_ready: { tone: "ready", line: "Review the monitoring rule below, then enable it." },
     confirm_minor: { tone: "ready", line: "Confirm that this monitoring rule matches your request before enabling it." },
@@ -116,7 +125,7 @@ export function AddTriggerFlow({ onDone }: { onDone: () => void }): JSX.Element 
                 <div class={`bf-parse bf-parse--${dispCopy.tone}`}>
                     <p class="bf-parse__rephrase">"{parse.rephrased_for_confirmation}"</p>
                     <p class="bf-parse__meta">
-                        {parse.trigger_type} · {Math.round(parse.parse_confidence * 100)}% confident
+                        {(parse.trigger_type ? TRIGGER_TYPE_LABEL[parse.trigger_type] : undefined) ?? t("Alert")} · {Math.round(parse.parse_confidence * 100)}% confident
                     </p>
                     <p class="bf-parse__disp">{dispCopy.line}</p>
 

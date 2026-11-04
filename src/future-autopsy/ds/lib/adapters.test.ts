@@ -60,6 +60,6 @@ describe("sentenceTitlesFor", () => {
         expect(titles.underneath.length).toBeGreaterThan(0);
         expect(titles.pattern.length).toBeGreaterThan(0);
         // no-next-step deal → the pattern names the missing dated step
-        expect(titles.pattern.toLowerCase()).toContain("next step");
+        expect(titles.pattern.toLowerCase()).toContain("next-step");
     });
 });

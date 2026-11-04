@@ -291,6 +291,8 @@
 .sd-ac.is-hot .sd-ac__ht { color: var(--ds-orange); }
 .sd-reads { display: flex; flex-direction: column; gap: 10px; }
 .sd-read { background: var(--ds-surface); border: 1px solid var(--ds-hair); border-left: 3px solid var(--ds-blue); border-radius: var(--ds-radius-card); padding: 12px 14px; }
+.sd-notice { padding: 12px 0; color: var(--ds-ink); }
+.sd-notice p { margin: 0 0 10px; }
 .sd-read.is-warn { border-left-color: var(--ds-orange); }
 .sd-read__k { font-family: var(--ds-font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ds-blue); font-weight: 700; margin-bottom: 4px; }
 .sd-read.is-warn .sd-read__k { color: var(--ds-orange); }

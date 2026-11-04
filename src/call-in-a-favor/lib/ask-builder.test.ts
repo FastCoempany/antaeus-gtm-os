@@ -101,7 +101,7 @@ describe("dealPressure", () => {
                     champion: "Lee"
                 })
             )
-        ).toContain("Confirm the requested action");
+        ).toContain("someone the buyer trusts");
     });
 });
 
