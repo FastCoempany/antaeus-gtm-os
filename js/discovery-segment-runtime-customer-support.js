@@ -93,7 +93,7 @@
             "\"Can you just show me the resolution rate?\"",
             "\"I can, but the number that matters is the one off your worst queue. Give me one ticket type that keeps bouncing to humans so it's not a generic demo.\"", [
             jumpNode("Use queue walk", "current-state-truth", "workflow", "blu"),
-            jumpNode("Use proof rescue", "proof-threshold", "early-demo", "pur")
+            jumpNode("Ask what evidence they need", "proof-threshold", "early-demo", "pur")
           ], "The buyer has asked to see the product before describing the workflow.",
             "You still need one concrete queue before showing anything.")
         ]),
@@ -136,8 +136,8 @@
             "\"We're mostly staying informed on what AI support can do right now.\"",
             "\"That's fine. What would have to become true for this to stop being informative and start being a priority?\"", [
             jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
-            jumpNode("Use proof bar", "proof-threshold", "real-proof", "pur")
-          ], "They're scanning what AI support can do, not feeling real queue pressure yet.",
+            jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "pur")
+          ], "They're scanning what AI support can do, not feeling a real backlog problem yet.",
             "You still need the threshold that would turn interest into action."),
           branch("NO REASON", "fl",
             "\"Nothing changed. We're just looking around.\"",
@@ -153,14 +153,14 @@
       segment("current-state-truth", "02", "Current-state truth", "Map the live queue.", true, [
         node("current-state-truth", "workflow", "fu", "Map the queue",
           "\"Walk me through one support contact from the first touch to the point where a human has to rescue it.\"",
-          "Once the opener lands, trace one contact to the supervisor-rescue point.", true, [
+          "Once the opener gets a response, trace one contact to the supervisor-rescue point.", true, [
           branch("WORKFLOW CLEAR", "ok",
             "\"Contact comes in, gets triaged, the bot tries deflection, then tier-1 picks up, and the hard ones escalate to a supervisor.\"",
             "\"Good. Which of those escalations costs you the most — the supervisor rescue, or the CSAT hit when the bot gets it wrong?\"", [
             jumpNode("Name the cost", "pain-and-consequence", "pressure", "grn"),
             jumpNode("Ask what changed", "trigger-and-urgency", "why-now", "blu")
           ], "You can see the path and where a human has to rescue the contact.",
-            "You still need the highest-pressure queue and what it costs."),
+            "You still need the queue under the most strain and what it costs."),
           branch("WORKFLOW BROAD", "ly",
             "\"It's mostly the bot handling the obvious stuff and agents doing the rest.\"",
             "\"What's the expensive part that the bot can't touch and still needs an agent every time?\"", [
@@ -195,7 +195,7 @@
             "You still need the exact contact type the bot can't finish."),
           branch("NO HUMAN EDGE", "fl",
             "\"Honestly, the bot handles most of it fine.\"",
-            "\"Then what made this meeting worth taking? If the bot is fine, the pressure is somewhere else — maybe CSAT, maybe cost.\"", [
+            "\"Then what made this meeting worth taking? If the bot is fine, the problem is somewhere else — maybe CSAT, maybe cost.\"", [
             jumpNode("Test urgency", "trigger-and-urgency", "why-now", "red"),
             jumpNode("Keep the call honest", "trigger-and-urgency", "exploratory", "blu")
           ], "If the bot handles most of it, the handoff edge isn't the live pain.",
@@ -207,14 +207,14 @@
           branch("RECENT EXAMPLE", "ok",
             "\"Last week the bot gave a customer the wrong refund policy and a supervisor had to clean it up.\"",
             "\"That's helpful. How often does that kind of bot miss happen on that queue?\"", [
-            jumpNode("Pressure-test the cost", "pain-and-consequence", "quantify", "grn"),
+            jumpNode("Test the cost", "pain-and-consequence", "quantify", "grn"),
             jumpNode("Map the trigger", "trigger-and-urgency", "why-now", "blu")
           ], "You have a live ticket — a real bot miss a supervisor had to clean up.",
             "You still need how often it happens and what it costs."),
           branch("OLD EXAMPLE", "ly",
             "\"It's happened, but I don't have a recent one in front of me.\"",
             "\"Then ballpark the pattern. What kind of bot miss happens often enough that the team has stopped flagging it?\"", [
-            jumpNode("Pressure-test the cost", "pain-and-consequence", "pressure", "org"),
+            jumpNode("Test the cost", "pain-and-consequence", "pressure", "org"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
           ], "The bot-miss pattern is real, but nothing recent to anchor it.",
             "You still need how often it bounces to a human, or whose pain it is."),
@@ -252,7 +252,7 @@
             "\"That's useful. Then the test is whether there's any real trigger at all. What changed to make this meeting happen?\"", [
             jumpNode("Use trigger opener", "trigger-and-urgency", "why-now", "red"),
             jumpNode("Keep the call honest", "trigger-and-urgency", "exploratory", "blu")
-          ], "Support isn't where the pressure is for them right now.",
+          ], "Support isn't the urgent problem for them right now.",
             "You still need the actual reason the meeting exists.")
         ]),
         node("pain-and-consequence", "quantify", "va", "Quantify the rescue",
@@ -264,7 +264,7 @@
             jumpNode("Find the pain owner", "stakeholder-and-ownership", "pain-owner", "grn"),
             jumpNode("Test urgency", "trigger-and-urgency", "consequence", "blu")
           ], "Supervisor time and a CSAT drop — the rescue now has a number on it.",
-            "You still need the owner and the time pressure."),
+            "You still need the owner and the deadline."),
           branch("COST IS IMPLIED", "ly",
             "\"It mostly just slows the team down.\"",
             "\"Which work stops happening because agents are stuck cleaning up bot misses or rescuing escalations?\"", [
@@ -301,24 +301,24 @@
             "\"Honestly, nothing dramatic would happen.\"",
             "\"Then this may be too early to treat as active pain. What would have to change before the queue mattered?\"", [
             jumpNode("Keep the call exploratory", "trigger-and-urgency", "exploratory", "red"),
-            jumpNode("Use proof question", "proof-threshold", "real-proof", "blu")
+            jumpNode("Ask the evidence question", "proof-threshold", "real-proof", "blu")
           ], "The queue pain isn't strong enough to act on yet.",
             "You still need the threshold for action or an honest downgrade.")
         ])
       ]),
 
       // 04 — Trigger and urgency
-      segment("trigger-and-urgency", "04", "Trigger and urgency", "Find the forcing event.", true, [
+      segment("trigger-and-urgency", "04", "Trigger and urgency", "Find what makes this urgent now.", true, [
         node("trigger-and-urgency", "why-now", "ri", "Ask why now",
           "\"What changed recently that made support worth looking at now instead of later — a launch, a CSAT miss, a headcount freeze?\"",
-          "Separate curiosity from real queue pressure — a launch, a CSAT miss, a freeze.", true, [
+          "Separate curiosity from real urgency in the queue — a launch, a CSAT miss, a freeze.", true, [
           branch("REAL TRIGGER", "ok",
             "\"We froze support headcount but volume keeps climbing, so the queue is underwater.\"",
             "\"What timeline does that create, and what breaks first if nothing changes before then — backlog, CSAT, or burnout?\"", [
             jumpNode("Use consequence timing", "trigger-and-urgency", "consequence", "grn"),
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "buying-owner", "blu")
           ], "A headcount freeze against rising volume is forcing the queue underwater.",
-            "You still need the timeline and who owns that pressure."),
+            "You still need the timeline and who owns the problem."),
           branch("EFFICIENCY PUSH", "ly",
             "\"This sits inside a broader efficiency push right now.\"",
             "\"Understood. What made support specifically worth attention inside that bigger push?\"", [
@@ -330,7 +330,7 @@
             "\"Nothing changed. We're just exploring.\"",
             "\"That's fine. Then what would have to happen — a volume spike, a public CSAT miss — for this to become urgent enough to move?\"", [
             jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
-            jumpNode("Learn the proof bar", "proof-threshold", "real-proof", "blu")
+            jumpNode("Learn what they need to see", "proof-threshold", "real-proof", "blu")
           ], "No volume spike, CSAT miss, or freeze is forcing this yet.",
             "You still need the future trigger or an honest no.")
         ]),
@@ -364,22 +364,22 @@
           "Use this when there's interest in AI support but no real clock on the queue.", false, [
           branch("THRESHOLD NAMED", "ok",
             "\"If we saw it actually resolve refund tickets without a supervisor cleanup, it would get more serious.\"",
-            "\"Good. Then let's shape the proof bar around real resolution on that queue instead of forcing urgency.\"", [
-            jumpNode("Use proof bar", "proof-threshold", "real-proof", "grn"),
+            "\"Good. Then let's build the test around real resolution on that queue instead of forcing urgency.\"", [
+            jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "grn"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "buying-owner", "blu")
           ], "They named the bar — real refund resolution without supervisor cleanup.",
-            "You still need the owner and the proof gate."),
+            "You still need the owner and the evidence check."),
           branch("OWNER MISSING", "ly",
             "\"It'd matter once the VP of Support is actually involved.\"",
             "\"Then the next test is the owner path, not the product. Who should be in the next call?\"", [
             jumpNode("Find the owner", "stakeholder-and-ownership", "wrong-person", "org"),
             jumpNode("Lock the right meeting", "next-step-lock", "exact-shape", "blu")
-          ], "What's missing is the VP of Support, not queue pressure.",
+          ], "What's missing is the VP of Support, not urgency.",
             "You still need the right owner and the reason for their time."),
           branch("STILL AIRY", "fl",
             "\"I'm not sure yet.\"",
             "\"Then let's keep this light and not pretend. What signal — a CSAT miss, a backlog spike — would tell you it's time to re-open this?\"", [
-            jumpNode("Use proof question", "proof-threshold", "real-proof", "red"),
+            jumpNode("Ask the evidence question", "proof-threshold", "real-proof", "red"),
             jumpNode("Route the follow-up honestly", "next-step-lock", "soft-deferral", "blu")
           ], "There's no clock and no clear bar on the queue yet.",
             "You still need either a CSAT-or-backlog signal threshold or a clean pause.")
@@ -419,7 +419,7 @@
           branch("BUYER CLEAR", "ok",
             "\"The VP of Support would sponsor it, but IT, security, and finance all matter.\"",
             "\"Which of those has to feel safe first — usually security on data handling, or finance on whether it offsets BPO spend?\"", [
-            jumpNode("Learn the proof bar", "proof-threshold", "first-gate", "grn"),
+            jumpNode("Learn what they need to see", "proof-threshold", "first-gate", "grn"),
             jumpNode("Map the path", "decision-architecture", "gates", "blu")
           ], "VP of Support sponsors; IT, security, and finance all matter.",
             "You still need the first gate and where it stalls."),
@@ -434,7 +434,7 @@
             "\"IT or security would own most of it anyway, given it touches customer data.\"",
             "\"Understood. Who still has to care about the queue pain enough to justify that security work?\"", [
             jumpNode("Return to pain owner", "stakeholder-and-ownership", "pain-owner", "red"),
-            jumpNode("Learn the proof bar", "proof-threshold", "first-gate", "blu")
+            jumpNode("Learn what they need to see", "proof-threshold", "first-gate", "blu")
           ], "Security and IT ownership is crowding out the business owner.",
             "You still need the support sponsor who makes the security work worth doing.")
         ]),
@@ -445,13 +445,13 @@
             "\"The next call should include the VP of Support or the Head of Support Ops.\"",
             "\"Good. What would make that person say yes to spending the time — a CSAT story, a cost story?\"", [
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "grn"),
-            jumpNode("Learn the proof bar", "proof-threshold", "real-proof", "blu")
+            jumpNode("Learn what they need to see", "proof-threshold", "real-proof", "blu")
           ], "The VP of Support or Head of Support Ops belongs in the next call.",
             "You still need the CSAT or cost story that gets that owner to show up."),
           branch("MAYBE OWNER", "ly",
             "\"I think it'd be someone in support ops.\"",
             "\"That's enough to start. What would matter most to that person if we brought them in — backlog, AHT, or CSAT?\"", [
-            jumpNode("Use proof bar", "proof-threshold", "real-proof", "org"),
+            jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "org"),
             jumpNode("Lock the meeting", "next-step-lock", "exact-shape", "blu")
           ], "There's a likely support-ops owner but no confident name.",
             "You still need the backlog, AHT, or CSAT story for that person."),
@@ -466,38 +466,38 @@
       ]),
 
       // 06 — Proof threshold
-      segment("proof-threshold", "06", "Proof threshold", "Name the proof bar.", false, [
-        node("proof-threshold", "real-proof", "va", "Name the proof bar",
+      segment("proof-threshold", "06", "Evidence threshold", "Agree what they need to see.", false, [
+        node("proof-threshold", "real-proof", "va", "Name what they need to see",
           "\"Before this could move, what would your team need to see to believe it's safe — real resolution on your worst queue, not just deflection?\"",
           "Set the resolution bar before offering a demo, pilot, or pricing.", true, [
-          branch("PROOF NAMED", "ok",
+          branch("EVIDENCE NAMED", "ok",
             "\"We'd need to see it actually close refund tickets correctly without a supervisor stepping in, on real customer data.\"",
-            "\"Good. Which part of that has to be earned first — the correct resolution, or surviving the edge case that usually breaks the bot?\"", [
+            "\"Good. Which part of that has to be shown first — the correct resolution, or surviving the edge case that usually breaks the bot?\"", [
             jumpNode("Find the first gate", "proof-threshold", "first-gate", "grn"),
             jumpNode("Map the path", "decision-architecture", "gates", "blu")
-          ], "The proof burden is now named in resolution terms.",
+          ], "What they need to see is now named in resolution terms.",
             "You still need the first gate and the sign-off owner."),
-          branch("PROOF IS GENERIC", "ly",
+          branch("EVIDENCE IS GENERIC", "ly",
             "\"A demo and some containment numbers would help.\"",
             "\"Happy to. What would that need to prove so it changes the decision instead of just looking good on a dashboard? Containment isn't resolution.\"", [
             jumpNode("Find the first gate", "proof-threshold", "first-gate", "org"),
             jumpNode("Use early-demo rescue", "proof-threshold", "early-demo", "blu")
           ], "They want a demo and containment numbers, but containment isn't resolution.",
             "You still need the real concern behind the dashboard request."),
-          branch("PROOF TOO EARLY", "fl",
-            "\"We're not at proof yet.\"",
-            "\"That's fine. Then let's stay with the queue problem until the proof bar deserves to be real.\"", [
+          branch("EVIDENCE ASK TOO EARLY", "fl",
+            "\"We're not ready to test anything yet.\"",
+            "\"That's fine. Then let's stay with the queue problem until it is clear enough to test anything.\"", [
             jumpNode("Return to pain", "pain-and-consequence", "pressure", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "why-now", "blu")
-          ], "The queue pain isn't strong enough to earn a proof step yet.",
+          ], "The queue pain isn't strong enough to justify a test yet.",
             "You still need stronger pain or urgency.")
         ]),
         node("proof-threshold", "first-gate", "pr", "Find the first gate",
-          "\"Which proof gate comes first here — does it resolve real tickets, does security trust it with customer data, does it offset cost, or does leadership need to buy in?\"",
-          "Use this after they name proof but before you pick the evidence step.", false, [
+          "\"Which evidence check comes first here — does it resolve real tickets, does security trust it with customer data, does it offset cost, or does leadership need to buy in?\"",
+          "Use this after they say what they need to see, before you pick the test.", false, [
           branch("WORKFLOW FIRST", "ok",
             "\"We need to see it resolve real tickets on a live queue first.\"",
-            "\"Great. Which queue should that proof focus on so agents and supervisors trust the result — your worst one?\"", [
+            "\"Great. Which queue should that evidence focus on so agents and supervisors trust the result — your worst one?\"", [
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "grn"),
             jumpNode("Map the incumbent", "current-vendor-and-displacement", "migration", "blu")
           ], "Live-queue resolution is the first gate.",
@@ -510,12 +510,12 @@
           ], "Security has to trust the data handling before anything else.",
             "You still need the exact control question — PII, hallucination, fallback — and its owner."),
           branch("POLITICAL FIRST", "fl",
-            "\"Honestly, leadership needs to believe support matters before any proof step.\"",
-            "\"Then the first proof burden is still queue pain and urgency, not product evidence.\"", [
+            "\"Honestly, leadership needs to believe support matters before any test.\"",
+            "\"Then the first thing they need to see is still queue pain and urgency, not product evidence.\"", [
             jumpNode("Return to pain", "pain-and-consequence", "quantify", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "consequence", "blu")
           ], "Leadership doesn't see support as a priority yet — the gate is political.",
-            "You still need the cost or CSAT case that earns proof time.")
+            "You still need the cost or CSAT case that justifies a test.")
         ]),
         node("proof-threshold", "early-demo", "ri", "If they want a demo early",
           "\"I can show the product. First tell me which edge case the demo needs to survive so I don't show you a clean lane that proves nothing.\"",
@@ -524,7 +524,7 @@
             "\"We'd need to see it survive a refund-policy edge case without giving the customer the wrong answer.\"",
             "\"Good. Then let's anchor the demo to that edge case and to the supervisor who'd judge whether the answer was right.\"", [
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "grn"),
-            jumpNode("Find the proof gate", "proof-threshold", "first-gate", "blu")
+            jumpNode("Find the evidence check", "proof-threshold", "first-gate", "blu")
           ], "The real worry is a refund-policy edge case where a wrong answer is expensive.",
             "You still need the supervisor who'd judge the answer and the exact queue."),
           branch("DEMO AS STALL", "ly",
@@ -539,7 +539,7 @@
             "\"Then we should stay in the queue until the concern is real. Otherwise the next step will be soft.\"", [
             jumpNode("Return to trigger", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
-          ], "There's no edge case for the demo to survive, so no real proof burden.",
+          ], "There's no edge case for the demo to survive, so nothing specific to test.",
             "You still need a reason to show anything.")
         ])
       ]),
@@ -547,13 +547,13 @@
       // 07 — Current vendor and displacement
       segment("current-vendor-and-displacement", "07", "Current vendor and displacement", "Respect the status quo.", false, [
         node("current-vendor-and-displacement", "incumbent", "fu", "Surface the current bot",
-          "\"What are you using today — Zendesk AI, Fin, Einstein, a home-built bot, BPO — and what keeps it winning even with the pressure you named?\"",
+          "\"What are you using today — Zendesk AI, Fin, Einstein, a home-built bot, BPO — and what keeps it winning even with the problems you named?\"",
           "Don't pretend the current bot is weak just because the queue hurts.", false, [
           branch("INCUMBENT DEFENSE", "ok",
             "\"We're on Fin and it deflects a decent chunk, so it's hard to justify a change.\"",
             "\"What upside — real resolution on the queue Fin can't touch — would have to be obvious enough to overcome that?\"", [
             jumpNode("Map migration risk", "current-vendor-and-displacement", "migration", "grn"),
-            jumpNode("Lock the proof bar", "proof-threshold", "first-gate", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "first-gate", "blu")
           ], "Fin deflects enough that changing bots is hard to justify.",
             "You still need the resolution upside that would outweigh switching."),
           branch("PATCHWORK STATUS QUO", "ly",
@@ -565,7 +565,7 @@
             "You still need the queue that keeps proving it is not good enough."),
           branch("NO REAL STATUS QUO", "fl",
             "\"It's mostly agents and heroics, no real AI yet.\"",
-            "\"Then the proof burden is operational. What agent work disappears if the bot actually resolved the routine queues?\"", [
+            "\"Then what they need to see is operational. What agent work disappears if the bot actually resolved the routine queues?\"", [
             jumpNode("Return to pain", "pain-and-consequence", "quantify", "red"),
             jumpNode("Map the decision path", "decision-architecture", "path", "blu")
           ], "It's agents and heroics with no real AI — less to displace than expected.",
@@ -584,7 +584,7 @@
           branch("BUILD IS GOOD ENOUGH", "ly",
             "\"It mostly works. We're just curious what else is possible.\"",
             "\"Then the bar's high. What would resolution or CSAT have to improve enough to justify any change at all?\"", [
-            jumpNode("Return to proof", "proof-threshold", "real-proof", "org"),
+            jumpNode("Return to evidence", "proof-threshold", "real-proof", "org"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
           ], "The internal bot may already be good enough for now.",
             "You still need the threshold that would justify change."),
@@ -601,11 +601,11 @@
           "Use after they admit the current bot still wins on familiarity.", false, [
           branch("MIGRATION RISK CLEAR", "ok",
             "\"Re-pointing the bot and rebuilding intents is real work, but so is the supervisor rescue drag.\"",
-            "\"Then let's shape the next step around the smallest proof — one queue resolved — that could outweigh that switching pain.\"", [
-            jumpNode("Set the proof step", "proof-threshold", "first-gate", "grn"),
+            "\"Then let's shape the next step around the smallest test — one queue resolved — that could outweigh that switching pain.\"", [
+            jumpNode("Set the test", "proof-threshold", "first-gate", "grn"),
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "blu")
           ], "The displacement burden is now explicit.",
-            "You still need the smallest credible proof step."),
+            "You still need the smallest credible test."),
           branch("RIP AND REPLACE OFF TABLE", "ly",
             "\"We're not ripping out Zendesk or our bot.\"",
             "\"That's fine. What one narrow queue would still matter if the AI resolved it alongside what you have?\"", [
@@ -618,7 +618,7 @@
             "\"Then let's be honest about that. What would have to change — backlog, CSAT, cost — before moving became rational?\"", [
             jumpNode("Keep the call exploratory", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
-          ], "The displacement case is not earned yet.",
+          ], "The case for replacing what they have is not made yet.",
             "You still need the threshold that would justify movement.")
         ])
       ]),
@@ -627,7 +627,7 @@
       segment("decision-architecture", "08", "Decision architecture", "Map the gates.", true, [
         node("decision-architecture", "path", "pr", "Map the approval path",
           "\"If this became real, what would the decision path actually look like after this call — sponsor, then security, then finance?\"",
-          "Use this once queue pain, owner, and proof bar start to feel real.", true, [
+          "Use this once queue pain, owner, and what they need to see start to feel real.", true, [
           branch("PATH VISIBLE", "ok",
             "\"The VP of Support sponsors, security reviews the data handling, and finance signs off if it offsets BPO spend.\"",
             "\"Who can stall that even if the VP wants to move — usually security or finance?\"", [
@@ -651,19 +651,19 @@
             "You still need someone who knows the process or the likely sequence.")
         ]),
         node("decision-architecture", "gates", "fu", "Find the first gates",
-          "\"Which two gates matter first if this gets serious — support sponsor sign-off, resolution proof on a real queue, security on customer data, or finance on the BPO offset?\"",
+          "\"Which two gates matter first if this gets serious — support sponsor sign-off, resolution evidence on a real queue, security on customer data, or finance on the BPO offset?\"",
           "Use this to replace a generic approval story with the real first gates.", false, [
           branch("GATES CLEAR", "ok",
             "\"We know the first two gates and who owns them — the VP and security.\"",
             "\"Good. Then the next call should clear the first gate, not impress the whole committee.\"", [
             jumpNode("Lock the exact next review", "next-step-lock", "exact-shape", "grn"),
-            jumpNode("Return to proof", "proof-threshold", "first-gate", "blu")
+            jumpNode("Return to evidence", "proof-threshold", "first-gate", "blu")
           ], "The VP and security are the first two gates, with named owners.",
             "You still need the meeting that clears the first one."),
           branch("SECURITY EARLY", "ly",
             "\"Anything touching customer data brings in security and IT fast.\"",
             "\"What would the support sponsor need to believe before that security time is worth spending?\"", [
-            jumpNode("Return to proof", "proof-threshold", "first-gate", "org"),
+            jumpNode("Return to evidence", "proof-threshold", "first-gate", "org"),
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "blu")
           ], "Customer data pulls security in early.",
             "You still need the queue-pain case that makes the security review worth spending."),
@@ -680,9 +680,9 @@
           "Use this when the path sounds plausible but you sense it's fragile.", false, [
           branch("STALL NAMED", "ok",
             "\"It usually stalls in security review over hallucination risk and data handling.\"",
-            "\"Good. Then the next move has to address that control question head-on instead of hoping it disappears.\"", [
+            "\"Good. Then the next step has to address that control question head-on instead of hoping it disappears.\"", [
             jumpNode("Lock the next review", "next-step-lock", "exact-shape", "grn"),
-            jumpNode("Return to proof", "proof-threshold", "first-gate", "blu")
+            jumpNode("Return to evidence", "proof-threshold", "first-gate", "blu")
           ], "It stalls in security review over hallucination risk and data handling.",
             "You still need the next meeting shaped around that control question."),
           branch("STALL IS OWNER", "ly",
@@ -703,10 +703,10 @@
       ]),
 
       // 09 — Next-step lock
-      segment("next-step-lock", "09", "Next-step lock", "Earn the next step.", true, [
+      segment("next-step-lock", "09", "Next-step lock", "Secure the next step.", true, [
         node("next-step-lock", "real-meeting", "cl", "Lock a real meeting",
           "\"What's the next review worth taking now, and what has to be true for it to count — the VP in the room, a real queue to test against?\"",
-          "Use this when the queue work has earned a specific follow-up.", true, [
+          "Use this when the queue work is ready for a specific follow-up.", true, [
           branch("REAL REVIEW", "ok",
             "\"Let's get the VP of Support and security on a call to scope a pilot on our refund queue.\"",
             "\"Good. What must that session settle — the queue, the resolution bar, the data controls — so it moves the deal instead of just updating it?\"", [
@@ -718,23 +718,23 @@
             "\"Send something over and we'll circle back.\"",
             "\"Happy to send the right thing. What should that summary help your team decide so the next meeting is real?\"", [
             jumpNode("Use soft deferral rescue", "next-step-lock", "soft-deferral", "org"),
-            jumpNode("Clarify the proof bar", "proof-threshold", "real-proof", "blu")
+            jumpNode("Clarify what they need to see", "proof-threshold", "real-proof", "blu")
           ], "A send-and-circle-back is standing in for a real next step.",
             "You still need the decision that summary is supposed to open up."),
           branch("NOT READY", "fl",
             "\"We're not ready for a next meeting yet.\"",
-            "\"Understood. What's still missing — the owner, resolution proof, timing, or security alignment?\"", [
+            "\"Understood. What's still missing — the owner, resolution evidence, timing, or security alignment?\"", [
             jumpNode("Use soft deferral rescue", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Prepare honest handoff", "post-call-routing", "missing-truth", "blu")
-          ], "The queue work hasn't earned a real meeting yet.",
+          ], "The queue work hasn't justified a real meeting yet.",
             "You still need the missing condition in plain language.")
         ]),
         node("next-step-lock", "exact-shape", "fu", "Shape the pilot meeting",
-          "\"Who needs to be there, which queue should the meeting pressure-test, and what decision should come out of it — pilot yes or no?\"",
+          "\"Who needs to be there, which queue should the meeting test, and what decision should come out of it — pilot yes or no?\"",
           "Use this to turn vague follow-up into a real pilot-scoping meeting.", false, [
           branch("MEETING SHAPED", "ok",
             "\"We know the people, the queue, and that the decision is whether to pilot on refunds.\"",
-            "\"Good. Then let's put a date on it while the backlog pressure is still fresh.\"", [
+            "\"Good. Then let's put a date on it while the backlog problem is still fresh.\"", [
             jumpSegment("Go to Post-call routing", "post-call-routing", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ], "People, queue, and the pilot-yes-or-no decision are all set.",
@@ -755,18 +755,18 @@
             "You still need security comfort or sponsor buy-in before a date is responsible.")
         ]),
         node("next-step-lock", "soft-deferral", "ri", "If it stays soft",
-          "\"If we don't calendar the next move now, what exactly needs to become true before this re-opens — a CSAT miss, a launch, a freed-up sponsor?\"",
+          "\"If we don't calendar the next step now, what exactly needs to become true before this re-opens — a CSAT miss, a launch, a freed-up sponsor?\"",
           "Use when they default to a polite follow-up instead of a real next step.", false, [
           branch("CONDITION NAMED", "ok",
             "\"We know what has to become true first — the sponsor freeing up after the launch.\"",
-            "\"Good. Then let's capture that cleanly so the next touch is sharper, not repetitive.\"", [
+            "\"Good. Then let's capture that cleanly so the next touch is more specific, not repetitive.\"", [
             jumpNode("Prepare missing-truth handoff", "post-call-routing", "missing-truth", "grn"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
           ], "The re-open condition is named — the sponsor freeing up after the launch.",
             "You still need who owns that condition."),
           branch("CONDITION IS OWNER", "ly",
             "\"We need the VP of Support in the room first.\"",
-            "\"Then the next move is getting that owner, not more product. Who's missing and what gets them in?\"", [
+            "\"Then the next step is getting that owner, not more product. Who's missing and what gets them in?\"", [
             jumpNode("Return to owner map", "stakeholder-and-ownership", "wrong-person", "org"),
             jumpNode("Prepare handoff", "post-call-routing", "handoff", "blu")
           ], "What's blocking it is the missing VP of Support, not the product.",
@@ -784,36 +784,36 @@
       // 10 — Post-call routing
       segment("post-call-routing", "10", "Post-call routing", "Hand off only what helps.", false, [
         node("post-call-routing", "handoff", "cl", "Write the handoff",
-          "\"If the next room picked this up cold, what would it need to know in the first 30 seconds — the queue, the owner, the proof bar, the security gate?\"",
+          "\"If the next room picked this up cold, what would it need to know in the first 30 seconds — the queue, the owner, what they need to see, the security gate?\"",
           "Reduce the call to the queue, owner, resolution bar, and security gate.", false, [
           branch("HANDOFF CLEAN", "ok",
-            "\"Worst queue is refunds, VP of Support sponsors, proof bar is real resolution without supervisor cleanup, security gates on data handling.\"",
-            "\"Good. Keep only the owner, the queue pressure, the resolution bar, and the next condition.\"", [
+            "\"Worst queue is refunds, VP of Support sponsors, they need to see real resolution without supervisor cleanup, security gates on data handling.\"",
+            "\"Good. Keep only the owner, the queue problem, the resolution standard, and the next condition.\"", [
             jumpNode("Name what is still missing", "post-call-routing", "missing-truth", "grn"),
             jumpNode("Choose the room route", "post-call-routing", "room-route", "blu")
           ], "Worst queue, sponsor, resolution bar, and security gate are all captured.",
             "You still need the one missing truth to chase."),
           branch("HANDOFF NOISY", "ly",
             "\"We have the notes, but they're messy.\"",
-            "\"Then throw away what doesn't change the next move. What's actually usable — the queue, the owner, the gate?\"", [
+            "\"Then throw away what doesn't change the next step. What's actually usable — the queue, the owner, the gate?\"", [
             jumpNode("Name what is still missing", "post-call-routing", "missing-truth", "org"),
             jumpNode("Choose the room route", "post-call-routing", "room-route", "blu")
           ], "There are notes, but the queue, owner, and gate are buried in them.",
             "You still need the distilled truth and the route."),
           branch("NO HANDOFF HABIT", "fl",
             "\"We don't document these calls consistently.\"",
-            "\"Then the first fix is discipline. What must be captured every time before the call disappears — owner, queue, proof bar?\"", [
+            "\"Then the first fix is discipline. What must be captured every time before the call disappears — owner, queue, what they need to see?\"", [
             jumpNode("Name what is still missing", "post-call-routing", "missing-truth", "red"),
             jumpNode("Choose the room route", "post-call-routing", "room-route", "blu")
           ], "Discovery calls aren't captured, so the truth evaporates.",
-            "You still need the minimum capture rule — owner, queue, proof bar.")
+            "You still need the minimum capture rule — owner, queue, what they need to see.")
         ]),
         node("post-call-routing", "missing-truth", "fu", "Name what's still missing",
           "\"What's still missing that the next room has to chase directly — the security answer, the resolution number off the worst queue, the right owner?\"",
           "Make the handoff carry a problem to chase, not just a summary.", false, [
           branch("MISSING TRUTH CLEAR", "ok",
             "\"We know the missing truth — whether security will clear the data handling — and who has to surface it.\"",
-            "\"Good. Then the handoff is sharp enough to move.\"", [
+            "\"Good. Then the handoff is specific enough to move.\"", [
             jumpNode("Choose the room route", "post-call-routing", "room-route", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ], "The chase-down is clear — whether security clears the data handling, and who surfaces it.",
@@ -837,25 +837,25 @@
           "\"Which next room helps most right now — shaping a tighter call, attaching the truth to a live support deal, or naming the failure pattern before it ages out?\"",
           "Route with intent — tighter call, live support deal, or failure pattern.", false, [
           branch("CALL PLANNER", "ok",
-            "\"The next move is a tighter call with the VP and security and a clearer forcing question.\"",
+            "\"The next step is a tighter call with the VP and security and a clearer question that needs an answer.\"",
             "\"Then route this to Call Planner with the owner, the resolution bar, and the security gate.\"", [
             jumpRoom("Open Call Planner", "call-planner", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ], "The next room is conversational and tactical.",
-            "You still need the forcing question."),
+            "You still need the open question."),
           branch("DEAL WORKSPACE", "ly",
             "\"There's already a live pilot or evaluation here.\"",
-            "\"Then attach what's actually happening to the deal now — the queue, the proof bar, the security gate — so it doesn't get separated from the opportunity.\"", [
+            "\"Then attach what's actually happening to the deal now — the queue, what they need to see, the security gate — so it doesn't get separated from the opportunity.\"", [
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
           ], "The truth belongs with a live opportunity.",
             "You still need the most important risk to carry with it."),
           branch("FUTURE AUTOPSY", "fl",
-            "\"This feels like motion without a real owner or trigger.\"",
+            "\"This feels like activity without a real owner or trigger.\"",
             "\"Then route it to Future Autopsy now and name the failure pattern before the deal ages out.\"", [
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
-          ], "The next room may need to correct drift, not advance motion.",
+          ], "The next room may need to fix what has drifted, not push the deal forward.",
             "You still need the failure pattern in plain language.")
         ])
       ])
@@ -877,7 +877,7 @@
         reply:
           "That is the right fear, not a blocker. The useful question is which queue a wrong answer is most expensive in, and what control would make the workflow safe in one narrow lane first.",
         actions: [
-          jumpNode("Set the proof bar", "proof-threshold", "early-demo", "pur"),
+          jumpNode("Agree what they need to see", "proof-threshold", "early-demo", "pur"),
           jumpNode("Name the cost", "pain-and-consequence", "pressure", "org")
         ]
       },
@@ -897,7 +897,7 @@
         reply:
           "The only number that matters is the one off your worst queue. Pick the edge case that bounces to humans most and we will map what real resolution there would take.",
         actions: [
-          jumpNode("Define real proof", "proof-threshold", "real-proof", "blu"),
+          jumpNode("Define real evidence", "proof-threshold", "real-proof", "blu"),
           jumpNode("Open the worst queue", "current-state-truth", "workflow", "org")
         ]
       },

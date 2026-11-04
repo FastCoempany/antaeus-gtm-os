@@ -53,7 +53,7 @@
 
   var supportDossier = [
     { title:"Where it breaks", items:["Whether the pain is research / discovery, synthesis, onboarding, enablement, or adoption measurement", "What gets lost between research → product → engineering → GTM → customer-facing teams", "Manual documentation burden and who carries it"] },
-    { title:"Proof burden", items:["Adoption or activation lift on a feature or workflow the team already cares about", "Documentation or enablement turnaround against their current tribal-knowledge reliance", "Cross-functional visibility proof: does the data actually reach product, CS, and enablement in one place"] },
+    { title:"What they need to see", items:["Adoption or activation lift on a feature or workflow the team already cares about", "Documentation or enablement turnaround against their current tribal-knowledge reliance", "Cross-functional visibility: does the data actually reach product, CS, and enablement in one place"] },
     { title:"Decision path", items:["Head of Product or CPO sponsor who feels the adoption or velocity pressure", "Product ops or enablement lead who owns the documentation and adoption story", "Design research or UXR owner if research synthesis is the primary lane"] }
   ];
   var objectionLibrary = [
@@ -167,7 +167,7 @@
           branch("NO PROCESS","fl","\"We do not even do this very formally yet.\"","\"That is useful. Then where does the lack of process create the most rework or weakest product calls today?\"",[
             jumpNode("Map the workflow break", "current-state-truth", "workflow-break", "red"),
             jumpNode("Open the trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
-          ],"The motion may be immature, not over-tooled.","You still need the highest-cost absence of process.")
+          ],"The process may be immature, not over-tooled.","You still need the highest-cost absence of process.")
         ]),
         node("opening-frame","decision-scope","fu","Start from one live decision","\"Pick one feature, release, onboarding flow, or enablement process that is moving right now. Where is that decision running with less evidence than it needs?\"","Use this when the room is already operational.",false,[
           branch("DECISION READY","ok","\"We have a release decision moving without enough usable evidence.\"","\"Good. What is missing most: user signal, product adoption evidence, internal alignment, or enablement readiness?\"",[
@@ -188,7 +188,7 @@
           ],"The live workflow break is visible.","You still need the source of that burden."),
           branch("ADOPTION BLIND","ly","\"The bigger issue is we do not know if teams actually adopt or use what we ship.\"","\"Then where does that blind spot hurt most: release validation, onboarding, expansion, or enablement?\"",[
             jumpNode("Open adoption blind spot", "pain-and-consequence", "adoption-blind", "org"),
-            jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "live-cycle-proof", "blu")
           ],"Adoption visibility may be the dominant scope.","You still need the decision it blocks."),
           branch("ENABLEMENT DRAG","fl","\"CS and enablement keep rebuilding context after product ships.\"","\"Then what gets lost in the handoff: feature intent, use cases, workflow guidance, or measurement?\"",[
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "red"),
@@ -207,7 +207,7 @@
           branch("LOW MATURITY","fl","\"We do not really have a formal process here yet.\"","\"Then where does that lack of process create the most repeated work right now?\"",[
             jumpNode("Open signal pain", "pain-and-consequence", "signal-gap", "red"),
             jumpNode("Test small-team reality", "trigger-and-urgency", "small-team-check", "blu")
-          ],"The problem may be low process maturity.","You still need the highest-cost repeated motion.")
+          ],"The problem may be low process maturity.","You still need the most expensive repeated work.")
         ])
       ]),
       segment("pain-and-consequence","03","Pain and consequence","Make the signal problem expensive.",true,[
@@ -219,12 +219,12 @@
           branch("NOT SEVERE","fl","\"It is messy, but not always painful.\"","\"Then what has to happen before this becomes worth changing the workflow?\"",[
             jumpNode("Test urgency", "trigger-and-urgency", "small-team-check", "red"),
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "blu")
-          ],"The pain may still be below the action threshold.","You still need the forcing event.")
+          ],"The pain may still be below the action threshold.","You still need the trigger.")
         ]),
         node("pain-and-consequence","enablement-drag","pr","Name the enablement drag","\"Where does context break after product ships: onboarding, internal training, CS handoff, launch readiness, or field guidance?\"","Use this when teams downstream keep rebuilding context.",false,[
-          branch("HANDOFF CLEAR","ok","\"Enablement and CS keep recreating product context because it never arrives cleanly.\"","\"What gets lost most often: workflow guidance, use case context, feature intent, or proof of value?\"",[
+          branch("HANDOFF CLEAR","ok","\"Enablement and CS keep recreating product context because it never arrives cleanly.\"","\"What gets lost most often: workflow guidance, use case context, feature intent, or evidence of value?\"",[
             jumpNode("Find the cross-functional owner", "stakeholder-and-ownership", "cross-functional-owner", "grn"),
-            jumpNode("Open live-cycle proof", "proof-threshold", "live-cycle-proof", "blu")
+            jumpNode("Ask what a live cycle needs to show", "proof-threshold", "live-cycle-proof", "blu")
           ],"The downstream handoff break is visible.","You still need the first missing object."),
           branch("DOCS EXIST","fl","\"The docs exist. People just do not use them.\"","\"Then what would have to change for the workflow to surface the right guidance at the right moment instead of just storing it?\"",[
             jumpNode("Inspect the stack", "current-vendor-and-displacement", "tool-sprawl", "red"),
@@ -233,7 +233,7 @@
         ]),
         node("pain-and-consequence","adoption-blind","fu","Name the adoption blind spot","\"Where does weak adoption visibility hurt most today: feature rollout, onboarding, self-serve growth, or proving whether a product bet actually landed?\"","Use this when the pain is validation after launch.",false,[
           branch("BLIND SPOT CLEAR","ok","\"We cannot tell fast enough whether usage is real or just anecdotal.\"","\"What should that visibility change first: roadmap decisions, enablement action, or customer follow-through?\"",[
-            jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "grn"),
+            jumpNode("Agree what they need to see", "proof-threshold", "live-cycle-proof", "grn"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "product-owner", "blu")
           ],"Adoption visibility is a real scope.","You still need the decision it should change."),
           branch("NOT MAIN ISSUE","fl","\"Adoption is not the main issue. It is more about synthesis and alignment.\"","\"Then stay with that. Where does the team still re-stitch the same truth manually?\"",[
@@ -242,12 +242,12 @@
           ],"Adoption is secondary here.","You still need the actual repeated-work scope.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
-        node("trigger-and-urgency","miss-or-pressure","ri","Find the forcing event","\"What changed that made this worth looking at now: a bad launch, research debt becoming visible, leadership asking for better evidence, enablement drag, or weak adoption after release?\"","Start here when urgency exists but is not yet specific.",true,[
-          branch("PRESSURE CLEAR","ok","\"A launch or decision cycle exposed how limited the evidence and handoff still are.\"","\"Which live decision or release cycle would prove the case fastest if it improved?\"",[
+      segment("trigger-and-urgency","04","Trigger and urgency","Find what makes this urgent now.",true,[
+        node("trigger-and-urgency","miss-or-pressure","ri","Find what makes this urgent now","\"What changed that made this worth looking at now: a bad launch, research debt becoming visible, leadership asking for better evidence, enablement drag, or weak adoption after release?\"","Start here when urgency exists but is not yet specific.",true,[
+          branch("TRIGGER CLEAR","ok","\"A launch or decision cycle exposed how limited the evidence and handoff still are.\"","\"Which live decision or release cycle would prove the case fastest if it improved?\"",[
             jumpNode("Pick the live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Lock the review", "next-step-lock", "decision-review", "blu")
-          ],"The forcing event is explicit.","You still need the cycle it attaches to."),
+          ],"The trigger is explicit.","You still need the cycle it attaches to."),
           branch("LEADERSHIP ASK","ly","\"Leadership just wants cleaner visibility and evidence now.\"","\"What decision are they currently struggling to make with confidence?\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "org"),
             jumpNode("Open the signal gap", "pain-and-consequence", "signal-gap", "blu")
@@ -257,11 +257,11 @@
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
           ],"Interest may still be soft.","You still need the condition that makes it real.")
         ]),
-        node("trigger-and-urgency","small-team-check","fu","Check small-team reality","\"Is the team large enough and the signal problem costly enough that a workflow change matters now, or is this still too small and informal to justify?\"","Use this when maturity or org size may disqualify the motion.",false,[
+        node("trigger-and-urgency","small-team-check","fu","Check small-team reality","\"Is the team large enough and the signal problem costly enough that a workflow change matters now, or is this still too small and informal to justify?\"","Use this when maturity or org size may disqualify the deal.",false,[
           branch("REAL ENOUGH","ok","\"The team is small, but the repeated work and weak decisions are still costly enough.\"","\"Good. Then which live decision or workflow should the next review center on?\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Lock the review", "next-step-lock", "decision-review", "blu")
-          ],"The motion is real enough despite team size.","You still need the review object."),
+          ],"The need is real enough despite team size.","You still need the review object."),
           branch("TOO SMALL","fl","\"Honestly, one PM still does most of this manually.\"","\"Then this may stay light for now. What would have to change before the workflow pain becomes worth solving?\"",[
             jumpNode("Keep it exploratory", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Open Future Autopsy route", "post-call-routing", "autopsy-flag", "blu")
@@ -271,7 +271,7 @@
       segment("stakeholder-and-ownership","05","Stakeholder and ownership","Map who can carry or kill it.",true,[
         node("stakeholder-and-ownership","product-owner","fu","Find the product owner","\"Who feels this pain enough to move it first: PM leadership, product ops, research ops, enablement, CS, or growth?\"","Start here when the workflow is clear but sponsorship is not.",true,[
           branch("OWNER CLEAR","ok","\"Product ops and PM leadership would carry it, but downstream teams also need to buy in.\"","\"Good. Which question matters more first: decision speed, signal trust, or cross-functional adoption?\"",[
-            jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "grn"),
+            jumpNode("Agree what they need to see", "proof-threshold", "live-cycle-proof", "grn"),
             jumpNode("Find the cross-functional owner", "stakeholder-and-ownership", "cross-functional-owner", "blu")
           ],"A sponsor path is visible.","You still need the first gating question."),
           branch("NO OWNER","fl","\"No one fully owns this end to end.\"","\"Then who would have to carry the first review for this not to die after today?\"",[
@@ -281,36 +281,36 @@
         ]),
         node("stakeholder-and-ownership","cross-functional-owner","pr","Find the cross-functional owner","\"What team feels the downstream pain most: enablement, CS, engineering, RevOps, design, or growth?\"","Use this when the problem crosses product and execution teams.",false,[
           branch("DOWNSTREAM CLEAR","ok","\"Enablement and CS feel it because they rebuild context after product decisions are made.\"","\"What would they need to see to believe the workflow is actually improving?\"",[
-            jumpNode("Open live-cycle proof", "proof-threshold", "live-cycle-proof", "grn"),
+            jumpNode("Ask what a live cycle needs to show", "proof-threshold", "live-cycle-proof", "grn"),
             jumpNode("Map the approval path", "decision-architecture", "approval-path", "blu")
-          ],"The downstream owner is visible.","You still need the proof condition that earns trust."),
+          ],"The downstream owner is visible.","You still need the evidence that would win their trust."),
           branch("PRODUCT ONLY","fl","\"This is mainly a product team problem right now.\"","\"Then what makes it expensive enough for leadership to care beyond PM frustration?\"",[
             jumpNode("Return to pain", "pain-and-consequence", "signal-gap", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
           ],"Cross-functional stake may still be weak.","You still need the leadership consequence.")
         ])
       ]),
-      segment("proof-threshold","06","Proof threshold","Define the trust bar.",true,[
-        node("proof-threshold","live-cycle-proof","pur","Set the live-cycle proof bar","\"Before this could move, what would the team have to trust: better decision speed, cleaner synthesis, more usable adoption signal, stronger enablement handoff, or all of the above?\"","Start here when the buyer goes straight to usefulness and proof.",true,[
+      segment("proof-threshold","06","Evidence threshold","Define the trust bar.",true,[
+        node("proof-threshold","live-cycle-proof","pur","Agree the live-cycle evidence","\"Before this could move, what would the team have to trust: better decision speed, cleaner synthesis, more usable adoption signal, stronger enablement handoff, or all of the above?\"","Start here when the buyer goes straight to usefulness and evidence.",true,[
           branch("LIVE DECISION FIRST","ok","\"It has to improve a real decision cycle, not just organize content better.\"","\"Then what is the fairest live decision or release cycle to test that on?\"",[
             jumpNode("Choose the pilot cycle", "proof-threshold", "pilot-cycle", "grn"),
             jumpNode("Open approval path", "decision-architecture", "approval-path", "blu")
-          ],"The proof bar is tied to a live cycle.","You still need the safest live cycle to test against it."),
-          branch("ADOPTION FIRST","ly","\"We need proof that the signal actually changes downstream action.\"","\"Then where should that action show up first: product changes, enablement behavior, or customer-facing execution?\"",[
+          ],"What they need to see is tied to a live cycle.","You still need the safest live cycle to test against it."),
+          branch("ADOPTION FIRST","ly","\"We need evidence that the signal actually changes downstream action.\"","\"Then where should that action show up first: product changes, enablement behavior, or customer-facing execution?\"",[
             jumpNode("Find the downstream owner", "stakeholder-and-ownership", "cross-functional-owner", "org"),
             jumpNode("Choose the pilot cycle", "proof-threshold", "pilot-cycle", "blu")
-          ],"The buyer wants behavioral proof, not just organization.","You still need the first downstream action target."),
+          ],"The buyer wants behavioral evidence, not just organization.","You still need the first downstream action target."),
           branch("SHOW ROI","fl","\"Show me time saved or output gain first.\"","\"Fair. Which workflow would prove ROI fastest without becoming just another content repository?\"",[
             jumpNode("Choose the pilot cycle", "proof-threshold", "pilot-cycle", "red"),
             jumpNode("Return to signal gap", "pain-and-consequence", "signal-gap", "blu")
-          ],"The buyer is forcing business case first.","You still need a safe ROI workflow.")
+          ],"The buyer wants the business case first.","You still need a safe ROI workflow.")
         ]),
         node("proof-threshold","pilot-cycle","pr","Choose the pilot cycle","\"What is the safest meaningful cycle to test first: one release, one onboarding flow, one enablement process, one feedback loop, or one adoption question?\"","Use this when the buyer is open but needs a narrow start.",false,[
           branch("CYCLE CLEAR","ok","\"One release or one onboarding flow would be the cleanest place to start.\"","\"Good. Then who needs to join the review so that cycle becomes real, not theoretical?\"",[
             jumpNode("Lock the review", "next-step-lock", "decision-review", "grn"),
             jumpNode("Map the approval path", "decision-architecture", "approval-path", "blu")
           ],"A pilot cycle is visible.","You still need the review group and date."),
-          branch("NO SAFE PILOT","fl","\"Everything feels too broad or too messy right now.\"","\"Then which workflow is narrow enough to pressure-test without trying to fix the whole operating model at once?\"",[
+          branch("NO SAFE PILOT","fl","\"Everything feels too broad or too messy right now.\"","\"Then which workflow is narrow enough to test without trying to fix the whole operating model at once?\"",[
             jumpNode("Return to workflow break", "current-state-truth", "workflow-break", "red"),
             jumpNode("Return to current stack", "current-vendor-and-displacement", "tool-sprawl", "blu")
           ],"The buyer does not yet see a safe entry point.","You still need a narrower cycle.")
@@ -320,12 +320,12 @@
         node("current-vendor-and-displacement","tool-sprawl","fu","Inspect the current stack","\"What is already in place today: docs, wikis, research repos, analytics, feedback tools, onboarding content, enablement systems, and whatever teams still do around them by hand?\"","Start here when the buyer defends the current tool set.",true,[
           branch("STACK CLEAR","ok","\"The tools are all there, but no single workflow turns them into usable signal at the right moment.\"","\"Which handoff fails first: collecting signal, synthesizing it, publishing it, or getting teams to act on it?\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "grn"),
-            jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "live-cycle-proof", "blu")
           ],"System presence is not equal to signal usability.","You still need the first failing handoff."),
           branch("INCUMBENT GOOD ENOUGH","ly","\"We have an incumbent people actually use and do not want to switch.\"","\"That is fine. Then where does the incumbent still stop short of the outcome you need?\"",[
             jumpNode("Return to signal gap", "pain-and-consequence", "signal-gap", "org"),
             jumpNode("Choose the pilot cycle", "proof-threshold", "pilot-cycle", "blu")
-          ],"The motion may need to work around an incumbent, not replace it.","You still need the workflow gap outside that incumbent."),
+          ],"The product may need to work around an incumbent, not replace it.","You still need the workflow gap outside that incumbent."),
           branch("NOBODY USES IT","fl","\"The bigger issue is that teams do not use what already exists.\"","\"Then what would have to change in the workflow for usage to become natural instead of optional?\"",[
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "red"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "cross-functional-owner", "blu")
@@ -336,9 +336,9 @@
             jumpNode("Return to signal gap", "pain-and-consequence", "signal-gap", "grn"),
             jumpNode("Find the product owner", "stakeholder-and-ownership", "product-owner", "blu")
           ],"The workflow is escaping the official stack.","You still need the truth object that keeps leaking out."),
-          branch("DOCS EXIST, MISSED","ly","\"The artifacts exist, but they do not show up where teams actually decide or act.\"","\"Then what downstream motion should the workflow influence first if it starts working?\"",[
+          branch("DOCS EXIST, MISSED","ly","\"The artifacts exist, but they do not show up where teams actually decide or act.\"","\"Then what downstream work should the workflow influence first if it starts working?\"",[
             jumpNode("Open enablement drag", "pain-and-consequence", "enablement-drag", "org"),
-            jumpNode("Set the proof bar", "proof-threshold", "live-cycle-proof", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "live-cycle-proof", "blu")
           ],"The issue is timing and placement, not just content creation.","You still need the first downstream action."),
           branch("ANALYTICS ONLY","fl","\"We mostly look at analytics and make judgment calls from there.\"","\"Then what decision is still running on too much intuition because the workflow does not pull in the rest of the truth?\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "red"),
@@ -347,7 +347,7 @@
         ])
       ]),
       segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
-        node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first live cycle to approval?\"","Start here when proof is getting concrete.",true,[
+        node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first live cycle to approval?\"","Start here when evidence is getting concrete.",true,[
           branch("PATH CLEAR","ok","\"PM leadership would sponsor, product ops would evaluate, and downstream teams would need to agree on the workflow.\"","\"Good. What does the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the review", "next-step-lock", "decision-review", "grn"),
             jumpNode("Set the pilot cycle", "next-step-lock", "pilot-design", "blu")
@@ -361,7 +361,7 @@
             jumpNode("Find the owner", "stakeholder-and-ownership", "product-owner", "blu")
           ],"The decision path is still murky.","You still need the minimum viable review group.")
         ]),
-        node("decision-architecture","review-ownership","pr","Map who can bless the workflow","\"If a live cycle were reviewed next week, who would have to say yes that the scope and proof bar are real: PM leadership, product ops, research ops, enablement, or downstream teams?\"","Use this when the path exists but the owning review group is fuzzy.",false,[
+        node("decision-architecture","review-ownership","pr","Map who can bless the workflow","\"If a live cycle were reviewed next week, who would have to agree that the scope and the evidence they need are real: PM leadership, product ops, research ops, enablement, or downstream teams?\"","Use this when the path exists but the owning review group is fuzzy.",false,[
           branch("OWNER CLEAR","ok","\"PM leadership and product ops would lead it, but enablement has to trust the downstream fit.\"","\"Good. Then what should that first review actually decide so each group sees its value?\"",[
             jumpNode("Lock the review", "next-step-lock", "decision-review", "grn"),
             jumpNode("Set the pilot cycle", "next-step-lock", "pilot-design", "blu")
@@ -369,7 +369,7 @@
           branch("DATA / IT CHECK","ly","\"Data or IT will want to understand the workflow implications too.\"","\"Then which live cycle is narrow enough to review without triggering broad technical fear?\"",[
             jumpNode("Choose the pilot cycle", "proof-threshold", "pilot-cycle", "org"),
             jumpNode("Find the cross-functional owner", "stakeholder-and-ownership", "cross-functional-owner", "blu")
-          ],"Technical review matters, but scope still controls the motion.","You still need the smallest survivable cycle."),
+          ],"Technical review matters, but scope still controls the deal.","You still need the smallest survivable cycle."),
           branch("NO OWNER YET","fl","\"No one has really claimed that review yet.\"","\"Then who would have to convene it for this not to stay a good idea with no owner?\"",[
             jumpNode("Find the product owner", "stakeholder-and-ownership", "product-owner", "red"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
@@ -381,18 +381,18 @@
           branch("AGREES","ok","\"Yes. That makes sense.\"","\"Good. Which cycle should that review center on, and who needs to be there so it can actually decide something?\"",[
             jumpNode("Set the pilot cycle", "next-step-lock", "pilot-design", "grn"),
             jumpRoom("Carry into Call Planner", "call-planner", "blu")
-          ],"A real review motion is now possible.","You still need the attendee set, cycle, and date."),
-          branch("TOO EARLY","ly","\"That feels a little early.\"","\"That is fair. What is missing before that review would feel earned: cycle scope, proof detail, or sponsor alignment?\"",[
-            jumpNode("Return to proof bar", "proof-threshold", "pilot-cycle", "org"),
+          ],"A real review is now possible.","You still need the attendee set, cycle, and date."),
+          branch("TOO EARLY","ly","\"That feels a little early.\"","\"That is fair. What is missing before that review would feel worth it: cycle scope, evidence detail, or sponsor alignment?\"",[
+            jumpNode("Return to what they need to see", "proof-threshold", "pilot-cycle", "org"),
             jumpNode("Return to owner map", "stakeholder-and-ownership", "product-owner", "blu")
           ],"The buyer is not ready for the review yet.","You still need the missing condition."),
           branch("SEND SOMETHING","fl","\"Just send something first.\"","\"I can. What should it help your team decide so the follow-up becomes a working review instead of polite circulation?\"",[
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
-            jumpNode("Return to proof bar", "proof-threshold", "live-cycle-proof", "blu")
+            jumpNode("Return to what they need to see", "proof-threshold", "live-cycle-proof", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
         node("next-step-lock","soft-deferral","pr","Keep soft deferral honest","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
-          branch("DECISION NAMED","ok","\"It should help us decide whether this cycle is worth pressure-testing with product ops and the PM owner.\"","\"Good. Then let us name the cycle now so the follow-up earns that meeting.\"",[
+          branch("DECISION NAMED","ok","\"It should help us decide whether this cycle is worth testing with product ops and the PM owner.\"","\"Good. Then let us name the cycle now so the follow-up justifies that meeting.\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Lock the review", "next-step-lock", "decision-review", "blu")
           ],"The follow-up has a real decision attached to it.","You still need the cycle it is about."),
@@ -402,7 +402,7 @@
           ],"There is no meeting commitment yet.","You still need the threshold for a real next step.")
         ]),
         node("next-step-lock","pilot-design","fu","Lock the pilot cycle","\"If the review goes well, what is the smallest credible test: one release, one handoff, one research loop, or one adoption workflow?\"","Use this when they are already thinking beyond the first review.",false,[
-          branch("PILOT CLEAR","ok","\"One release or one onboarding cycle would be the right start.\"","\"Good. Then the first review should decide that scope, the proof bar, and the success criteria.\"",[
+          branch("PILOT CLEAR","ok","\"One release or one onboarding cycle would be the right start.\"","\"Good. Then the first review should decide that scope, the evidence needed, and the success criteria.\"",[
             jumpRoom("Take scope into Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Carry the meeting into Call Planner", "call-planner", "blu")
           ],"The pilot can now be shaped concretely.","You still need the meeting date and owner."),
@@ -413,26 +413,26 @@
         ])
       ]),
       segment("post-call-routing","10","Post-call routing","Carry the truth into the next room.",false,[
-        node("post-call-routing","room-route","sl","Carry the cycle truth forward","\"We have the signal gap, the owner map, the proof bar, and the next review condition. Carry only those into the next room.\"","Use this once the live-cycle review motion is grounded.",true,[
-          branch("CYCLE READY","ok","\"Use Deal Workspace to shape the live-cycle review and pilot boundary.\"","\"Then move the cycle, owner map, proof threshold, and review goal into the deal record now.\"",[
+        node("post-call-routing","room-route","sl","Carry the cycle truth forward","\"We have the signal gap, the owner map, what they need to see, and the next review condition. Carry only those into the next room.\"","Use this once the live-cycle review has a clear scope.",true,[
+          branch("CYCLE READY","ok","\"Use Deal Workspace to shape the live-cycle review and pilot boundary.\"","\"Then move the cycle, owner map, evidence threshold, and review goal into the deal record now.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The cycle is concrete enough for the next room.","You still need the date and attendee set if they are not locked."),
           branch("MEETING READY","ly","\"Use Call Planner because the next win is the live-cycle review meeting itself.\"","\"Then carry the cycle, who must join, and what the review has to decide.\"",[
             jumpRoom("Open Call Planner", "call-planner", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
-          ],"The meeting design is the next priority.","You still need the review scope and proof question."),
-          branch("DRIFT RISK","fl","\"Use Future Autopsy if ownership or urgency is still too soft and this may stall.\"","\"Then carry the missing sponsor, proof blocker, and soft next-step condition as drift clues.\"",[
+          ],"The meeting design is the next priority.","You still need the review scope and evidence question."),
+          branch("DRIFT RISK","fl","\"Use Future Autopsy if ownership or urgency is still too soft and this may stall.\"","\"Then carry the missing sponsor, evidence blocker, and soft next-step condition as drift clues.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"There is visible stall risk.","You still need the dominant drift reason.")
         ]),
-        node("post-call-routing","autopsy-flag","pr","Carry the stall clues","\"If this slips, what will probably cause it: weak sponsor, fuzzy cycle scope, no measurable proof, or no cross-functional owner?\"","Use this when the motion is interesting but not yet earned.",false,[
+        node("post-call-routing","autopsy-flag","pr","Carry the stall clues","\"If this slips, what will probably cause it: weak sponsor, fuzzy cycle scope, no measurable evidence, or no cross-functional owner?\"","Use this when the opportunity is interesting but not yet justified.",false,[
           branch("SPONSOR SOFT","ok","\"Sponsor softness is the risk.\"","\"Then flag the missing sponsor and keep the next meeting built around one cycle and one decision.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The likely drift cause is visible.","You still need the sponsor trigger."),
-          branch("SCOPE MISSING","fl","\"We still do not have a clear live cycle in scope.\"","\"Then do not pretend the motion is real yet. Carry that as the primary missing truth.\"",[
+          branch("SCOPE MISSING","fl","\"We still do not have a clear live cycle in scope.\"","\"Then do not pretend the deal is real yet. Carry that as the primary missing truth.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"Cycle scope is still missing.","You still need the first live cycle candidate.")

@@ -55,7 +55,7 @@ const DISCOVERY_FRAMEWORKS = {
                         context: 'Warm / Referred',
                         label: 'Reference the Introduction', 
                         text: '"[Referrer] mentioned you\'re running a pretty sophisticated support operation—something like [X] tickets a month across multiple channels. Before I make assumptions, can you give me the real picture? What does support actually look like day-to-day?"',
-                        subtext: 'Why this works: Leverages social proof from referrer while still being genuinely curious.'
+                        subtext: 'Why this works: Uses the referrer\'s credibility while still being genuinely curious.'
                     },
                     { 
                         id: 'cxai-t1-e4', 
@@ -611,7 +611,7 @@ const DISCOVERY_FRAMEWORKS = {
                     }
                 ],
                 redFlags: [
-                    { signal: 'No timeline, no event, no pressure', why: 'This deal will stall without urgency.', exit: 'Create a forcing function or move to nurture.' },
+                    { signal: 'No timeline, no event, no pressure', why: 'This deal will stall without urgency.', exit: 'Create a real deadline or move to nurture.' },
                     { signal: '"Evaluating for next year\'s budget"', why: 'Very long cycle. Might not be worth heavy investment now.', exit: 'Light touch. Check back Q4 for budget planning.' },
                     { signal: 'Internal project competing for resources', why: 'They might build instead of buy.', exit: 'Understand the internal project timeline and scope.' }
                 ],
@@ -1626,7 +1626,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                     {
                         id: 'ai-t1-r1', flag: 'green', type: 'IDEAL', label: 'Open to Evidence',
                         text: '"That makes sense — can you show us accuracy numbers on a use case like ours?"',
-                        meaning: 'They\'re not dismissing AI — they want proof. This is a buying signal disguised as skepticism.',
+                        meaning: 'They\'re not dismissing AI — they want evidence. This is a buying signal disguised as skepticism.',
                         move: {
                             label: 'Reframe the Risk Equation',
                             text: '"Absolutely. But first, quick reframe: every AI system has an error rate. So does your current process — humans miss things, tire out, get inconsistent. The real question is: can AI get you to a lower error rate, faster, at scale? We can show you our accuracy benchmarks on your actual use case, not synthetic data. And we build in guardrails — confidence scoring, human escalation triggers, audit trails — so you always know when it\'s uncertain."',
@@ -1733,7 +1733,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                         },
                         listenFor: [
                             { signal: '"Can we get that in the contract?"', action: '🟢 Deal progression. Get legal involved.' },
-                            { signal: '"Who else handles it this way?"', action: '🟢 Social proof request. Share reference customers.' },
+                            { signal: '"Who else handles it this way?"', action: '🟢 Reference request. Share reference customers.' },
                             { signal: '"Our legal team should hear this"', action: '🟢 GOLD. Multi-thread into legal. Book the meeting.' }
                         ],
                         transition: '"The companies that struggle with AI aren\'t the ones who worry about liability — they\'re the ones who don\'t build proper oversight into the workflow. Who on your legal team would want to be part of the evaluation?"',
@@ -2008,7 +2008,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                 ],
                 greenFlags: [
                     { signal: '"Level 1 to start, then we\'ll see"', capitalize: 'Adoption path confirmed. Build the pilot.' },
-                    { signal: 'Asking about how other teams adopted', capitalize: 'Social proof seeking — share case studies of graduated adoption' }
+                    { signal: 'Asking about how other teams adopted', capitalize: 'Looking for peers who did it first — share case studies of graduated adoption' }
                 ],
                 transitions: {
                     strong: '"Let\'s pick the use case for your Level 1 pilot — what process would you want AI to assist with first?"',

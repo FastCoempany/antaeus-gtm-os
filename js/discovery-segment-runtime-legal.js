@@ -53,7 +53,7 @@
 
   var supportDossier = [
     { title:"Matter burden", items:["Which matter type carries the most turnaround pressure right now", "Where partner, associate, or paralegal time is being spent on low-judgment work", "Human review requirements — where a person must stay in the loop by policy or preference"] },
-    { title:"Proof burden", items:["Benchmark on a non-sensitive matter against their current output quality", "Evidence of hallucination risk mitigation at a level their risk posture accepts", "Confidentiality, privilege, and data-residency story at their specific scale"] },
+    { title:"What they need to see", items:["Benchmark on a non-sensitive matter against their current output quality", "Evidence of hallucination risk mitigation at a level their risk posture accepts", "Confidentiality, privilege, and data-residency story at their specific scale"] },
     { title:"Decision path", items:["GC or managing partner sponsor who feels the turnaround or cost pressure", "Legal ops or IT evaluator who runs the stack today (iManage, NetDocuments, Clio, Relativity)", "Security and compliance review if the data touches privileged content"] }
   ];
   var objectionLibrary = [
@@ -112,7 +112,7 @@
         label:"Hallucination risk is unacceptable",
         reply:"Agreed. The question is where draft support or review acceleration can move safely under explicit human control.",
         actions:[
-          jumpNode("Set the proof bar", "proof-threshold", "accuracy-bar", "pur"),
+          jumpNode("Agree what they need to see", "proof-threshold", "accuracy-bar", "pur"),
           jumpNode("Map the human loop", "proof-threshold", "human-loop", "blu")
         ]
       },
@@ -173,14 +173,14 @@
           branch("NO CLEAR TARGET","fl","\"Nothing jumps out immediately.\"","\"Then use the last time legal became the bottleneck. What kind of work created the pressure?\"",[
             jumpNode("Find the trigger", "trigger-and-urgency", "gc-pressure", "red"),
             jumpNode("Scope the workflow", "current-state-truth", "workflow-break", "blu")
-          ],"No priority workflow is named yet.","You still need a live legal pressure event.")
+          ],"No priority workflow is named yet.","You still need a recent event where legal was the bottleneck.")
         ])
       ]),
       segment("current-state-truth","02","Current-state truth","Map the actual legal workflow.",true,[
         node("current-state-truth","workflow-break","fu","Scope the workflow break","\"Walk me through the workflow as it runs today. Where does human legal review still become the bottleneck: intake, drafting, redlines, research, approvals, or outside counsel overflow?\"","Start here when the workflow needs to get concrete.",true,[
           branch("BREAK CLEAR","ok","\"The first pass and fallback review still eat too much time.\"","\"What makes that review heavy today: lack of trust, too many exceptions, or no structured playbook?\"",[
             jumpNode("Name the lawyer burden", "pain-and-consequence", "lawyer-time", "grn"),
-            jumpNode("Set the proof bar", "proof-threshold", "accuracy-bar", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "accuracy-bar", "blu")
           ],"The workflow break is now explicit.","You still need the specific source of the burden."),
           branch("OUTSIDE COUNSEL","fl","\"The issue is overflow and outside counsel more than internal workflow.\"","\"What kind of work are you sending out that you wish could stay inside?\"",[
             jumpNode("Open outside counsel cost", "pain-and-consequence", "outside-counsel-cost", "red"),
@@ -194,7 +194,7 @@
           ],"The labor distribution is visible.","You still need the repeatable escalation pattern."),
           branch("GC INVOLVEMENT","fl","\"The GC still gets pulled into too much of it.\"","\"What makes that happen: risk sensitivity, no trust in the workflow, or bad escalation design?\"",[
             jumpNode("Name the trigger", "trigger-and-urgency", "gc-pressure", "org"),
-            jumpNode("Set the control proof", "proof-threshold", "human-loop", "blu")
+            jumpNode("Agree the control evidence", "proof-threshold", "human-loop", "blu")
           ],"Senior legal attention is part of the burden.","You still need the cause of that escalation.")
         ])
       ]),
@@ -207,7 +207,7 @@
           branch("NO BIG ISSUE","fl","\"It is annoying, but not catastrophic.\"","\"Then what has to happen before it becomes big enough to deserve change?\"",[
             jumpNode("Test the trigger", "trigger-and-urgency", "soft-trigger", "red"),
             jumpNode("Return to outside counsel cost", "pain-and-consequence", "outside-counsel-cost", "blu")
-          ],"The pain may still be below the action threshold.","You still need the forcing event.")
+          ],"The pain may still be below the action threshold.","You still need the trigger.")
         ]),
         node("pain-and-consequence","cycle-time","pr","Name the cycle-time drag","\"Where does legal delay become visible to the business or client today: contract turnaround, negotiation back-and-forth, matter intake, or internal approvals?\"","Use this when the pain is responsiveness as much as lawyer time.",false,[
           branch("TURNAROUND CLEAR","ok","\"Commercial contracts and redlines take too long and the business feels it.\"","\"How much of that delay is real legal judgment versus repetitive review or coordination drag?\"",[
@@ -230,19 +230,19 @@
           ],"Spend is not the primary scope.","You still need the internal burden that is.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
+      segment("trigger-and-urgency","04","Trigger and urgency","Find what makes this urgent now.",true,[
         node("trigger-and-urgency","gc-pressure","ri","Identify the General Counsel's current priority","\"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\"","Start here when there is some urgency but it is not yet specific.",true,[
-          branch("PRESSURE CLEAR","ok","\"The GC wants throughput up and spend down without adding headcount.\"","\"Which workflow would prove the case fastest if it moved safely?\"",[
+          branch("TRIGGER CLEAR","ok","\"The GC wants throughput up and spend down without adding headcount.\"","\"Which workflow would prove the case fastest if it moved safely?\"",[
             jumpNode("Choose the workflow", "current-state-truth", "workflow-break", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")
           ],"The executive pressure is now visible.","You still need the workflow that can carry the review."),
-          branch("NO PRESSURE","fl","\"Nothing has really changed yet.\"","\"Then what would have to happen before the GC treated this like a real priority?\"",[
+          branch("NOTHING CHANGED","fl","\"Nothing has really changed yet.\"","\"Then what would have to happen before the GC treated this like a real priority?\"",[
             jumpNode("Keep it exploratory", "trigger-and-urgency", "soft-trigger", "red"),
-            jumpNode("Set the proof bar", "proof-threshold", "pilot-scope", "blu")
-          ],"There may be no forcing event yet.","You still need the condition that would make it real.")
+            jumpNode("Agree what they need to see", "proof-threshold", "pilot-scope", "blu")
+          ],"There may be no trigger yet.","You still need the condition that would make it real.")
         ]),
         node("trigger-and-urgency","soft-trigger","fu","Keep soft urgency honest","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
-          branch("TRIGGER NAMED","ok","\"If we could show a safe workflow with measurable turnaround improvement, it would get attention.\"","\"Good. Then let us define the safest workflow and the proof bar now.\"",[
+          branch("TRIGGER NAMED","ok","\"If we could show a safe workflow with measurable turnaround improvement, it would get attention.\"","\"Good. Then let us define the safest workflow and what they need to see now.\"",[
             jumpNode("Choose the pilot", "proof-threshold", "pilot-scope", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")
           ],"A usable threshold has been named.","You still need the exact workflow and review group."),
@@ -255,7 +255,7 @@
       segment("stakeholder-and-ownership","05","Stakeholder and ownership","Map who can carry or kill it.",true,[
         node("stakeholder-and-ownership","economic-owner","fu","Find the economic owner","\"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\"","Start here when the workflow is clear but sponsorship is not.",true,[
           branch("OWNER CLEAR","ok","\"Legal ops will drive it, but the GC has to believe it is safe.\"","\"Good. Then whose question matters more first: workflow efficiency or risk control?\"",[
-            jumpNode("Set the proof bar", "proof-threshold", "accuracy-bar", "grn"),
+            jumpNode("Agree what they need to see", "proof-threshold", "accuracy-bar", "grn"),
             jumpNode("Map the risk owner", "stakeholder-and-ownership", "risk-owner", "blu")
           ],"A sponsor path is visible.","You still need the first gating question."),
           branch("NO SPONSOR","fl","\"No one fully owns this yet.\"","\"Then who would have to carry the first review for this not to die after today?\"",[
@@ -273,9 +273,9 @@
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "economic-owner", "blu")
           ],"Billable politics may be part of the blocker.","You still need the positive economic case.")
         ]),
-        node("stakeholder-and-ownership","risk-owner","ri","Find the risk owner","\"Who has veto power if trust or confidentiality gets shaky: GC, IT, security, privacy, or practice leadership?\"","Use this when proof and approval are likely to dominate.",false,[
+        node("stakeholder-and-ownership","risk-owner","ri","Find the risk owner","\"Who has veto power if trust or confidentiality gets shaky: GC, IT, security, privacy, or practice leadership?\"","Use this when evidence and approval are likely to dominate.",false,[
           branch("RISK OWNER CLEAR","ok","\"The GC and IT both matter, but confidentiality and human review are the real questions.\"","\"Then let us define the exact control path they would need to see.\"",[
-            jumpNode("Set the control proof", "proof-threshold", "human-loop", "grn"),
+            jumpNode("Agree the control evidence", "proof-threshold", "human-loop", "grn"),
             jumpNode("Open approval path", "decision-architecture", "approval-path", "blu")
           ],"The control owner is visible.","You still need the approval sequence."),
           branch("UNCLEAR RISK OWNER","fl","\"It depends on the workflow and the data involved.\"","\"Then use the first workflow in scope. Who would have to approve that one?\"",[
@@ -284,8 +284,8 @@
           ],"The veto path changes by workflow.","You still need the first scoped approval map.")
         ])
       ]),
-      segment("proof-threshold","06","Proof threshold","Define the trust bar.",true,[
-        node("proof-threshold","accuracy-bar","pur","Set the accuracy bar","\"Before this could move, what would you have to trust: output quality, auditability, human control, data handling, or all of the above?\"","Start here when the buyer goes straight to risk and proof.",true,[
+      segment("proof-threshold","06","Evidence threshold","Define the trust bar.",true,[
+        node("proof-threshold","accuracy-bar","pur","Set the accuracy bar","\"Before this could move, what would you have to trust: output quality, auditability, human control, data handling, or all of the above?\"","Start here when the buyer goes straight to risk and evidence.",true,[
           branch("QUALITY FIRST","ok","\"Accuracy and consistency are first. If those break, nothing else matters.\"","\"Then what is the fairest first workflow to test quality without exposing the highest-risk matters?\"",[
             jumpNode("Choose the pilot", "proof-threshold", "pilot-scope", "grn"),
             jumpNode("Open the review path", "decision-architecture", "approval-path", "blu")
@@ -320,11 +320,11 @@
         node("current-vendor-and-displacement","clm-stack","fu","Inspect the current stack","\"What is already in place today: CLM, DMS, document review, research tools, practice management, or internal workflows that people still work around?\"","Start here when the buyer defends current systems.",true,[
           branch("STACK CLEAR","ok","\"The stack exists, but it still does not remove the repetitive review burden.\"","\"Which part of the stack stops short first: drafting help, redlines, routing, search, or playbook use?\"",[
             jumpNode("Return to workflow break", "current-state-truth", "workflow-break", "grn"),
-            jumpNode("Set the proof bar", "proof-threshold", "accuracy-bar", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "accuracy-bar", "blu")
           ],"System presence is not equal to workflow relief.","You still need the first failing layer in the stack."),
           branch("INTERNAL BUILD","fl","\"We are trying to build around this ourselves.\"","\"What part of the build is actually hardest: workflow design, legal trust, or getting lawyers to use it?\"",[
             jumpNode("Map adoption politics", "stakeholder-and-ownership", "adoption-politics", "red"),
-            jumpNode("Set the proof bar", "proof-threshold", "human-loop", "blu")
+            jumpNode("Agree what they need to see", "proof-threshold", "human-loop", "blu")
           ],"Internal build is a real competing path.","You still need the weakest point in that path.")
         ]),
         node("current-vendor-and-displacement","outside-counsel-status-quo","pr","Inspect outside counsel status quo","\"Where does the current status quo feel safest even if it is expensive: specialist review, overflow, risk sensitivity, or just habit?\"","Use this when the buyer frames outside counsel as necessary.",false,[
@@ -339,7 +339,7 @@
         ])
       ]),
       segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
-        node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first workflow test to approval?\"","Start here when proof is getting concrete.",true,[
+        node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first workflow test to approval?\"","Start here when evidence is getting concrete.",true,[
           branch("PATH CLEAR","ok","\"Legal ops would scope it, the GC would sponsor it, and IT/security would review before anything expanded.\"","\"Good. What would the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the scoped review", "next-step-lock", "scoped-review", "grn"),
             jumpNode("Set the pilot design", "next-step-lock", "pilot-design", "blu")
@@ -352,7 +352,7 @@
         node("decision-architecture","security-privilege","pr","Map confidentiality and privilege review","\"What security, privacy, privilege, or residency questions would need to be answered before legal would let a workflow move forward?\"","Use this when the buyer keeps circling trust and control.",false,[
           branch("CONTROL QUESTIONS CLEAR","ok","\"Privilege, data handling, and human review are the real gates.\"","\"Good. Then the next review has to include whoever can answer those with the GC and legal ops owner present.\"",[
             jumpNode("Lock the review group", "next-step-lock", "scoped-review", "grn"),
-            jumpNode("Set the control proof", "proof-threshold", "human-loop", "blu")
+            jumpNode("Agree the control evidence", "proof-threshold", "human-loop", "blu")
           ],"The real blockers are now named.","You still need the meeting that can answer them."),
           branch("IT FIRST","fl","\"IT and security would slow this down before legal even got comfortable.\"","\"Then which workflow is narrow enough that those teams could evaluate it without broad architectural fear?\"",[
             jumpNode("Choose the narrow pilot", "proof-threshold", "pilot-scope", "red"),
@@ -365,14 +365,14 @@
           branch("AGREES","ok","\"Yes. That makes sense.\"","\"Good. Which workflow should that review center on, and who needs to be in it so the meeting can actually decide something?\"",[
             jumpNode("Set the pilot design", "next-step-lock", "pilot-design", "grn"),
             jumpRoom("Carry into Call Planner", "call-planner", "blu")
-          ],"A real review motion is now possible.","You still need the attendee set, workflow, and date."),
+          ],"A real review is now possible.","You still need the attendee set, workflow, and date."),
           branch("SEND SOMETHING","fl","\"Just send something first.\"","\"I can. What should it help your team decide so the follow-up becomes a working review instead of polite circulation?\"",[
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
-            jumpNode("Return to proof bar", "proof-threshold", "accuracy-bar", "blu")
+            jumpNode("Return to what they need to see", "proof-threshold", "accuracy-bar", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
         node("next-step-lock","soft-deferral","pr","Keep soft deferral honest","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
-          branch("DECISION NAMED","ok","\"It should help us decide whether this workflow is worth pressure-testing with the GC and legal ops.\"","\"Good. Then let us name the workflow now so the follow-up earns that meeting.\"",[
+          branch("DECISION NAMED","ok","\"It should help us decide whether this workflow is worth testing with the GC and legal ops.\"","\"Good. Then let us name the workflow now so the follow-up justifies that meeting.\"",[
             jumpNode("Return to workflow scope", "current-state-truth", "workflow-break", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")
           ],"The follow-up has a real decision attached to it.","You still need the workflow it is about."),
@@ -393,17 +393,17 @@
         ])
       ]),
       segment("post-call-routing","10","Post-call routing","Carry the truth into the next room.",false,[
-        node("post-call-routing","room-route","sl","Carry the workflow forward","\"We have the workflow pressure, the owner map, the proof bar, and the next review condition. Carry only those into the next room.\"","Use this once the legal review motion is grounded.",true,[
-          branch("WORKFLOW READY","ok","\"Use Deal Workspace to shape the scoped review and pilot boundary.\"","\"Then move the workflow, owner map, proof threshold, and review goal into the deal record now.\"",[
+        node("post-call-routing","room-route","sl","Carry the workflow forward","\"We have the workflow problem, the owner map, what they need to see, and the next review condition. Carry only those into the next room.\"","Use this once the legal review has a clear scope.",true,[
+          branch("WORKFLOW READY","ok","\"Use Deal Workspace to shape the scoped review and pilot boundary.\"","\"Then move the workflow, owner map, evidence threshold, and review goal into the deal record now.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"The workflow is concrete enough for the next room.","You still need the date and attendee set if they are not locked."),
-          branch("DRIFT RISK","fl","\"Use Future Autopsy if trust or ownership is still too soft and this is likely to stall.\"","\"Then carry the missing sponsor, proof blocker, and soft next-step condition as drift clues.\"",[
+          branch("DRIFT RISK","fl","\"Use Future Autopsy if trust or ownership is still too soft and this is likely to stall.\"","\"Then carry the missing sponsor, evidence blocker, and soft next-step condition as drift clues.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Call Planner", "call-planner", "blu")
           ],"There is visible stall risk.","You still need the dominant drift reason.")
         ]),
-        node("post-call-routing","call-plan","pr","Carry the meeting plan","\"If the next move is a review, what does that review have to accomplish so this does not turn into another polite legal-tech meeting?\"","Use this when the meeting is the immediate next room.",false,[
+        node("post-call-routing","call-plan","pr","Carry the meeting plan","\"If the next step is a review, what does that review have to accomplish so this does not turn into another polite legal-tech meeting?\"","Use this when the meeting is the immediate next room.",false,[
           branch("REVIEW CLEAR","ok","\"It needs to decide the workflow, the control path, and whether a pilot is worth scoping.\"","\"Good. Those three decisions are the carry-forward truth.\"",[
             jumpRoom("Open Call Planner", "call-planner", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
@@ -411,7 +411,7 @@
           branch("TOO SOFT","fl","\"We are not there yet.\"","\"Then carry the soft spots honestly so the next room does not pretend this is firmer than it is.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
-          ],"The motion is still fragile.","You still need the missing owner or trigger.")
+          ],"The opportunity is still fragile.","You still need the missing owner or trigger.")
         ])
       ])
     ]
