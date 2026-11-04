@@ -33,19 +33,19 @@ export const SEED_PUSHBACKS_CFO: ReadonlyArray<PushbackTemplate> = [
         id: "p_cfo_1",
         trigger: "We need a 20% discount.",
         response:
-            "What commitment would accompany a 20% discount: an earlier signature, a multi-year term, or additional scope? I can assess that exchange against our approved pricing limits."
+            "Never give a discount for nothing — ask what it buys: an earlier signature, a multi-year term, or more scope. A common trade is a smaller discount for a signature this month or a two-year term — confirm with your team that you can offer it. Set your walkaway — the lowest price and terms you won't accept — before the call, not in it."
     },
     {
         id: "p_cfo_2",
         trigger: "Procurement won't approve at this price.",
         response:
-            "Which procurement rule does this price exceed: total contract value, annual spend, or per-seat cost? Let's review whether an approved change in term or scope would meet it."
+            "Ask which procurement rule the price breaks: total contract value, annual spend, or per-seat cost. If it's total value, a common trade is billing annually instead of up front; if it's per-seat, a common trade is right-sizing the seat count. Confirm with your team that you can offer either."
     },
     {
         id: "p_cfo_3",
         trigger: "We need to defer this to next quarter.",
         response:
-            "What is expected to change next quarter: available budget, approval timing, or confidence in the business case? Let's identify that constraint before proposing a schedule or payment option."
+            "Ask what changes next quarter that makes the decision easier. If it's budget timing, a common trade is starting now with a payment schedule that lands in their next budget — confirm with your team that you can offer it. If it's confidence in the business case, a payment change won't fix it; go back to what they still need to see."
     }
 ];
 
@@ -56,19 +56,19 @@ export const SEED_PUSHBACKS_VP_FINANCE: ReadonlyArray<PushbackTemplate> = [
         id: "p_vpf_1",
         trigger: "The unit economics don't work for us at list.",
         response:
-            "What cost per outcome are you comparing against? Let's use your expected volume and verified performance results to compare total cost, benefits, and assumptions."
+            "Move the comparison from headline price to cost per result. Use a template like: if you're [N]× the price but materially more accurate, show the cost per correct result at their volume. Only use accuracy and volume numbers you can back up from their pilot or your verified results."
     },
     {
         id: "p_vpf_2",
         trigger: "We need to see CAC payback under 12 months.",
         response:
-            "Can we review your payback model, including implementation costs, expected benefits, and timing? Which year-one use cases have enough evidence to support a forecast, and what would need to change to reach 12 months?"
+            "Ask to see their payback model, including setup costs and timing. Payback is usually slow while the first use case gets running, so ask which use cases they'll commit to in year one — a second use case is often what pulls payback forward. If 12 months isn't reachable on honest numbers, say so rather than stretching the model."
     },
     {
         id: "p_vpf_3",
         trigger: "What's the gross-margin impact on our P&L?",
         response:
-            "Which costs would change, and how would your finance team classify them? Let's separate potential capacity gains from actual cost reductions before estimating the gross-margin impact."
+            "Ask which costs actually change and how their finance team classifies this spend. Separate freed-up capacity from real cost cuts — finance teams discount capacity gains. If you have a cost-savings model built on their numbers, offer to send it."
     }
 ];
 
@@ -79,19 +79,19 @@ export const SEED_PUSHBACKS_PROCUREMENT: ReadonlyArray<PushbackTemplate> = [
         id: "p_proc_1",
         trigger: "We have a preferred-vendor process.",
         response:
-            "What are the required vendor-approval steps, owners, and expected dates? Which evaluation activities are permitted while those approvals are in progress?"
+            "Ask for the approval steps, owners, and expected dates. Push to keep the evaluation work moving in parallel with the paperwork, not blocked behind it — deals that wait on vendor approval before any work starts often lose a quarter."
     },
     {
         id: "p_proc_2",
         trigger: "We need 3 references and 3 quotes.",
         response:
-            "What criteria must the references and quotes satisfy? I'll confirm which relevant customers have agreed to a reference call and which supporting materials we can provide."
+            "If you have customers who have agreed to take a reference call, offer them; confirm with your team before naming anyone. On the three quotes: don't bid against yourself by dropping price before you've seen a competing number. Ask whether the quotes are about value or a compliance rule, and answer that instead."
     },
     {
         id: "p_proc_3",
         trigger: "Can you match competitor X's pricing?",
         response:
-            "Let's compare scope, expected outcomes, service commitments, and total cost alongside price. Which differences matter to your decision, and what evidence supports each offer?"
+            "Don't trade price for price. Compare what each vendor commits to deliver, who's accountable if it doesn't, and the total cost. If you do move on price, a common trade is a lower price for a longer term or a reference — confirm with your team that you can offer it."
     }
 ];
 
@@ -102,19 +102,19 @@ export const SEED_PUSHBACKS_LEGAL: ReadonlyArray<PushbackTemplate> = [
         id: "p_legal_1",
         trigger: "We need indemnification carve-outs.",
         response:
-            "Which risk do the requested carve-outs address? Let's identify the relevant contract language and have our legal teams review the proposed coverage and exclusions."
+            "Ask what specific risk the carve-out covers. Standard indemnification usually covers IP infringement and gross negligence; if their worry is narrower, a common trade is a specific clause or appendix for that one risk instead of a broad carve-out. Confirm the wording with your legal team."
     },
     {
         id: "p_legal_2",
         trigger: "We can't agree to auto-renewal.",
         response:
-            "What concern does auto-renewal create for your team? I can ask our contracts team to review an opt-in renewal option and the notice period each side would need."
+            "Auto-renewal is rarely worth losing a deal over. A common trade is opt-in renewal with 90-day notice — it protects you from a renewal that quietly lapses and gives them control. Confirm with your contracts team that you can offer it."
     },
     {
         id: "p_legal_3",
         trigger: "Your limitation-of-liability cap is too low.",
         response:
-            "Which potential losses are you trying to cover, and how does the proposed cap fall short? Let's have our legal teams review the current cap, requested exceptions, and any relevant insurance coverage."
+            "Ask which losses they're trying to cover. A cap equal to 12 months of fees is common for SaaS at this deal size. If they need more for a specific risk, a common trade is a separate, higher cap for that risk or an insurance rider instead of raising the whole cap — confirm with your legal team that you can offer it."
     }
 ];
 
@@ -125,19 +125,19 @@ export const SEED_PUSHBACKS_GC: ReadonlyArray<PushbackTemplate> = [
         id: "p_gc_1",
         trigger: "We need exclusive rights in our vertical.",
         response:
-            "What business risk would exclusivity address, and for which market and duration? I'll confirm whether any exclusivity or pricing protection is permitted before proposing terms."
+            "Ask what exclusivity is protecting them from — usually being undercut by a competitor getting a better deal. A common trade is most-favored pricing for the first 12 months instead of exclusivity — confirm with your team that you can offer it. Ask what time horizon they actually need."
     },
     {
         id: "p_gc_2",
         trigger: "Termination-for-convenience must be 30 days.",
         response:
-            "Why is a 30-day termination period necessary? Let's review the implementation commitments and costs, then ask our contracts teams which notice period and fees they can approve."
+            "Ask why they need 30 days. The first months are usually setup work that only pays off later, so a very short exit puts that work at risk. A common trade is accepting 60 days in exchange for a one-time setup fee — confirm with your team that you can offer it."
     },
     {
         id: "p_gc_3",
         trigger: "We need full source-code escrow.",
         response:
-            "Which continuity risk are you addressing with source-code escrow? I'll confirm our escrow and data-export capabilities, then review with you whether either meets your requirements."
+            "Ask what continuity risk escrow is standing in for — usually 'what happens to our data if you go away.' A common trade is a data-export clause: they can pull all their data out in standard formats on notice. Confirm with your team what you can offer — escrow, a data-export clause, or both."
     }
 ];
 
@@ -154,13 +154,13 @@ export const SEED_PUSHBACKS_INFOSEC: ReadonlyArray<PushbackTemplate> = [
         id: "p_is_2",
         trigger: "Customer data has to stay in our region.",
         response:
-            "Which region and data types does the requirement cover? I'll confirm our current storage and processing locations, including subprocessors, before assessing whether we can meet it."
+            "Which region and data types does the requirement cover? I'll confirm our current storage and processing locations, including subprocessors, before assessing whether we can meet it. If you don't host in their region yet, a common trade is a contract clause with a committed date for regional hosting — confirm with your team that you can offer it."
     },
     {
         id: "p_is_3",
         trigger: "We need penetration-test results from the last 12 months.",
         response:
-            "What test scope and remediation evidence do you need? I'll confirm the date and scope of our latest assessment and which report or remediation details our security team can share."
+            "What test scope and remediation evidence do you need? I'll confirm the date and scope of our latest assessment and which report or remediation details our security team can share. Security teams often care more about how findings were fixed than the test itself, so if you have a remediation log, offer it alongside the report."
     }
 ];
 

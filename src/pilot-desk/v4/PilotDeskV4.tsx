@@ -145,10 +145,10 @@ const KIT: ReadonlyArray<KitItem> = [
     {
         key: "champion",
         icon: "🤝",
-        name: t("Champion summary"),
-        sub: t("success criteria, responses, and results-meeting context", { class: "body" }),
+        name: t("Champion kit"),
+        sub: t("for when you're not in the room", { class: "body" }),
         verb: t("Send →"),
-        template: (c) => `${c.champion} — here's the short internal summary for the ${c.account} pilot: what it needs to demonstrate, responses to the common questions, and what we agreed to review in the results meeting.`
+        template: (c) => `${c.champion} — here's a short kit for the ${c.account} pilot, for the conversations I won't be in: what it needs to show, answers to the usual pushback, and what we agreed to review in the results meeting.`
     },
     {
         key: "kickoff",
@@ -248,7 +248,7 @@ export function PilotDeskV4(): JSX.Element {
             : `${t("Check in with")} ${champion?.name ?? t("your champion")} ${t("and confirm which participants have started using the product.", { class: "body" })}`,
         firstInactive
             ? `${t("Help")} ${firstInactive.name} ${t("complete a first meaningful action using the getting-started material.", { class: "body" })}`
-            : t("All enrolled participants are active. Decide whether the evaluation needs another participant.", { class: "body" }),
+            : t("Everyone enrolled is using it. Pull in the next person from their side — another user or the person who signs off.", { class: "body" }),
         `${t("Schedule the next check-in with")} ${champion?.name ?? t("your champion")}`
     ];
 
@@ -256,12 +256,12 @@ export function PilotDeskV4(): JSX.Element {
         {
             id: "it",
             q: t("IT or data owner"),
-            why: t("Add the person who can resolve data access or permissions if the pilot depends on systems they control.", { class: "body" })
+            why: t("Who controls the data the product reads from? Without IT or admin access, the pilot can stall at the first permissions request. Bring them in before that happens, not after.", { class: "body" })
         },
         {
             id: "driver",
             q: t("Day-to-day pilot owner", { class: "body" }),
-            why: t("Add the customer-side person responsible for keeping participants engaged between formal check-ins.", { class: "body" })
+            why: t("Who keeps the pilot going between your check-ins? Pick someone hands-on enough to use it, and senior enough to nudge the others.", { class: "body" })
         }
     ].filter((g) => !e.closedGaps.includes(g.id));
 

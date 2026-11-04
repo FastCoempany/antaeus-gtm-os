@@ -34,7 +34,7 @@ export const MOMENTS: ReadonlyArray<Moment> = [
     {
         id: "poc_stall",
         name: "Follow up on a stalled pilot",
-        short: "Ask whether the pilot has a current next step or a change in timing.",
+        short: "The pilot went quiet. A neutral check from someone they trust often gets a clearer answer than another follow-up from you.",
         ask: "Could you ask whether the pilot at [company] is still moving forward or if timing changed?",
         proof: "Confirm the pilot results and last agreed next step; lack of a reply does not explain the buyer's priorities.",
         advisorLine: "Could you confirm whether the pilot is continuing and who owns the next decision?",
