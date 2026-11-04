@@ -131,7 +131,7 @@ function gateHireReady(
         blockers.push(t("Complete at least one deal-risk review in Future Autopsy.", { class: "body" }));
     }
     if (input.castProofs < 1) {
-        blockers.push(t("Complete a pilot with an evaluable buyer result.", { class: "body" }));
+        blockers.push(t("Run a pilot whose result the buyer's boss could act on without you in the room.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
@@ -174,7 +174,7 @@ function gateInheritable(
     }
 
     if (input.castProofs < 1) {
-        blockers.push(t("Complete a pilot with an evaluable buyer result.", { class: "body" }));
+        blockers.push(t("Run a pilot whose result the buyer's boss could act on without you in the room.", { class: "body" }));
     }
 
     return { passed: blockers.length === 0, blockers };
