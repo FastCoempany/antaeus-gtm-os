@@ -23,6 +23,13 @@ import "./dashboard-v4.css";
  * and status links into the supporting workspaces. Ranking and readiness
  * engines are unchanged; this component presents their outputs plainly.
  */
+/** Plain wording for the ranking-confidence band (the engine keeps its keys). */
+const CONFIDENCE_PLAIN: Readonly<Record<string, string>> = {
+    "stable lead": "clear first choice",
+    supported: "reasonably clear first choice",
+    "mixed signal": "close call with the next item"
+};
+
 export function DashboardV4(): JSX.Element {
     const summary = commandSummary.value;
     const ranked = summary.ranked;
@@ -124,7 +131,7 @@ export function DashboardV4(): JSX.Element {
                             {why ? <div class="db4-why">{why.copy}</div> : null}
                             <div class="db4-conf">
                                 <span class="db4-cd" />
-                                {move.rankingConfidenceLabel}
+                                {CONFIDENCE_PLAIN[move.rankingConfidenceLabel] ?? move.rankingConfidenceLabel}
                                 {total > 1 ? (
                                     <button type="button" class="db4-skip" onClick={skip}>
                                         {t("Show next recommendation", { class: "body" })}

@@ -290,7 +290,7 @@ export function CallInAFavorV4(): JSX.Element {
                         {recent.slice(0, 6).map((dep) => (
                             <div class="cf4-lrow" key={dep.id}>
                                 <span class="cf4-ln">{dep.advisorName.split(" ")[0]}</span>
-                                <span class="cf4-lm">{dep.momentName.toLowerCase()} · {dep.dealName}</span>
+                                <span class="cf4-lm">{(MOMENTS.find((m) => m.id === dep.momentId)?.name ?? dep.momentName).toLowerCase()} · {dep.dealName}</span>
                                 <select value={dep.outcome}
                                     onChange={(e) => { const updated = updateDeploymentOutcome(dep.id, (e.currentTarget as HTMLSelectElement).value as DeploymentOutcome); if (updated) void saveDeployment(updated); toast(t("Request outcome updated on the deal.", { class: "body" })); }}>
                                     {(Object.keys(OUTCOME_LABEL) as DeploymentOutcome[]).map((o) => (

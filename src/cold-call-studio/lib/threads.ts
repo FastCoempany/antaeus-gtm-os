@@ -104,7 +104,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         verb: "trade",
         color: "var(--cc-orange)",
         title: "Find out how the buyer handles the issue today.",
-        copy: "Do not introduce a proof claim until you have real proof that matches the buyer's situation.",
+        copy: "Do not make a claim about results until you have real evidence that matches the buyer's situation.",
         say: "How are you handling [pressure] today: manually, through an existing vendor, or another way?",
         coach: "If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current process.",
         replies: [

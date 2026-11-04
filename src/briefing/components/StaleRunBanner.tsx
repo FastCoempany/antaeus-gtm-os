@@ -48,12 +48,9 @@ export function StaleRunBanner(): JSX.Element | null {
             role="status"
             aria-label={t("This briefing is stale")}
         >
-            <p class="bf-stale-banner__kicker">{t("HEADS UP · STALE READ")}</p>
+            <p class="bf-stale-banner__kicker">{t("MARKET UPDATES ARE OUT OF DATE")}</p>
             <p class="bf-stale-banner__body">
-                The most recent briefing ran {days} days ago. The pipeline
-                is meant to fire weekly. If that wasn't intentional, the
-                heartbeat or the briefing cron may have stalled —
-                check Supabase logs.
+                {t("The market updates were last produced {days} days ago. They normally refresh once a week, so the weekly update may not have run. The updates below may be out of date.", { class: "body" }).replace("{days}", String(days))}
             </p>
         </aside>
     );

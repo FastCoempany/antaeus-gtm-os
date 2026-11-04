@@ -28,7 +28,7 @@ export function PatternList(): JSX.Element {
     return (
         <section class="bf-patterns" aria-label={t("This week's reads")}>
             <p class="bf-patterns__count">
-                {list.length} read{list.length === 1 ? "" : "s"} this week
+                {list.length} market update{list.length === 1 ? "" : "s"} this week
             </p>
             {list.map((p) => (
                 <PatternCard pattern={p} key={p.id} />

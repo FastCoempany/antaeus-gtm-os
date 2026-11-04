@@ -518,7 +518,7 @@ export function BriefingV4(): JSX.Element {
                     <div class="bfv4d-ticker" id="bfv4-ticker">
                         <span class="bfv4d-ticker-l">
                             <span class="bfv4d-ticker-d" />
-                            {t("THE MARKET")}
+                            {t("MARKET UPDATES")}
                         </span>
                         <button type="button" class="bfv4d-tarrow bfv4d-tarrow--l" id="bfv4-tleft" aria-label={t("Scrub the ticker back")}>‹</button>
                         <div class="bfv4d-twin" id="bfv4-twin">

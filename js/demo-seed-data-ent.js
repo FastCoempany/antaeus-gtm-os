@@ -73,7 +73,7 @@ A('sc_e_openai','OpenAI','','AI / Research','Technology','$20B+ run rate','3,000
     'One of the fastest-growing companies on earth; hiring across research, applied, go-to-market, and infrastructure.',
     'They are hiring engineers very fast with a very high bar, so the number of applicants they can screen limits how fast they can hire.',
     'Public reporting',12,0.88,false),
-  S('sig_oa_2','competitive','Talent war with Meta and other labs — retention and recruiting pressure at record intensity',
+  S('sig_oa_2','competitive','High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention',
     'Public 2025 poaching battles put recruiting operations under a spotlight; every candidate touch matters.',
     'When rivals compete for the same people, the company that gets from application to offer fastest usually makes the hire. That is our pitch.',
     'News coverage',20,0.85,false),
