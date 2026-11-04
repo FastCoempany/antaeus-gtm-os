@@ -83,26 +83,26 @@ export function demoBaseEvents(now: Date = new Date()): ReadonlyArray<EdgeEvent>
         {
             id: "demo:reply-big",
             who: "buyer",
-            text: `${c.bigReply} ${t("replied to your outreach after 20 quiet days.", { class: "body" })}`,
+            text: `${c.bigReply} ${t("replied to your outreach after 20 days without a recorded reply.", { class: "body" })}`,
             ts: ts(28),
             big: true
         },
         {
             id: "demo:send-base",
             who: "you",
-            text: `${t("You reached out to", { class: "body" })} ${c.sentTo} ${t("— counted.", { class: "body" })}`,
+            text: `${t("Outreach recorded for", { class: "body" })} ${c.sentTo}.`,
             ts: ts(64)
         },
         {
             id: "demo:cal-base",
             who: "machine",
-            text: `${t("Calendar — Thursday with", { class: "body" })} ${c.calWith} ${t("is confirmed.", { class: "body" })}`,
+            text: `${t("Thursday's meeting with", { class: "body" })} ${c.calWith} ${t("is confirmed.", { class: "body" })}`,
             ts: ts(180)
         },
         {
             id: "demo:hb-base",
             who: "machine",
-            text: `${t("Heartbeat —", { class: "body" })} ${c.hbQuiet} ${t("still has no dated next step.", { class: "body" })}`,
+            text: `${c.hbQuiet} ${t("has no dated next step, according to the scheduled check.", { class: "body" })}`,
             ts: ts(195)
         }
     ];
@@ -124,7 +124,7 @@ export function demoArrivals(): ReadonlyArray<Omit<DemoArrival, "event"> & {
             make: (now) => ({
                 id: "demo:arrive-send",
                 who: "you",
-                text: `${t("Captured your send to", { class: "body" })} ${cast().arriveSend} ${t("— counted.", { class: "body" })}`,
+                text: `${t("Sent email recorded for", { class: "body" })} ${cast().arriveSend}.`,
                 ts: now.getTime()
             })
         },
@@ -152,7 +152,7 @@ export function demoArrivals(): ReadonlyArray<Omit<DemoArrival, "event"> & {
             make: (now) => ({
                 id: "demo:arrive-cal",
                 who: "machine",
-                text: `${t("Calendar — tomorrow with", { class: "body" })} ${cast().arriveCal} ${t("is confirmed.", { class: "body" })}`,
+                text: `${t("Tomorrow's meeting with", { class: "body" })} ${cast().arriveCal} ${t("is confirmed.", { class: "body" })}`,
                 ts: now.getTime()
             })
         },
@@ -161,7 +161,7 @@ export function demoArrivals(): ReadonlyArray<Omit<DemoArrival, "event"> & {
             make: (now) => ({
                 id: "demo:arrive-hb",
                 who: "machine",
-                text: `${t("Heartbeat —", { class: "body" })} ${cast().arriveHb} ${t("has gone quiet for 6 days.", { class: "body" })}`,
+                text: `${cast().arriveHb} ${t("has no recorded buyer reply in the last 6 days, according to the scheduled check.", { class: "body" })}`,
                 ts: now.getTime()
             })
         }

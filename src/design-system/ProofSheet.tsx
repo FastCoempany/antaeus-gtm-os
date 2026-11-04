@@ -584,7 +584,7 @@ export function ProofSheet(): JSX.Element {
                         onDismiss={() => undefined}
                     />
                     <ReadinessReadout
-                        state={t("Inheritable with guardrails")}
+                                        state={t("Runnable with founder support")}
                         read={t(
                             "A hire could run this if you're around for sanity-checks.",
                             { class: "body" }

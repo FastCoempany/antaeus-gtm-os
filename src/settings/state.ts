@@ -233,7 +233,7 @@ export function dismissToast(): void {
 }
 
 /**
- * Pull every row from every workspace-scoped data table and trigger a
+ * Export the supported cloud record groups and trigger a
  * JSON file download. The portable copy the operator can keep before
  * (or independently of) clearing or deleting. Trust Annex action.
  *
@@ -286,7 +286,7 @@ export async function exportCloudData(): Promise<CloudExportSnapshot> {
                 "warn",
                 `Cloud export completed with ${snap.errors.length} table error${
                     snap.errors.length === 1 ? "" : "s"
-                }. ${snap.totalRows} rows captured. See console.`
+                }. ${snap.totalRows} rows captured. Review the errors in the downloaded file.`
             );
             console.warn("[settings] cloud export errors:", snap.errors);
         }
@@ -297,7 +297,7 @@ export async function exportCloudData(): Promise<CloudExportSnapshot> {
 }
 
 /**
- * Permanently delete every row in the workspace's data tables. Trust
+ * Permanently delete the supported cloud record groups. Trust
  * Annex action — the operator opts into a destructive cloud-side wipe.
  *
  * Scope: every noun table (icps, deals, proofs, advisor_deployments,
@@ -329,7 +329,7 @@ export async function deleteCloudData(): Promise<CloudDeleteResult> {
         if (result.errors.length === 0) {
             flashToast(
                 "warn",
-                `Cloud data deleted. ${result.totalDeleted} row${
+                `Included cloud records deleted. ${result.totalDeleted} row${
                     result.totalDeleted === 1 ? "" : "s"
                 } removed across ${
                     Object.keys(result.perTable).length
@@ -405,8 +405,8 @@ export function toggleLiveEdge(next: boolean): void {
     flashToast(
         next ? "good" : "info",
         next
-            ? "The live edge is on — your day comes back to the left wall."
-            : "The live edge is off. The hairline stays on your rooms — click it any time to turn it back on."
+            ? "Recent activity is visible in the left panel."
+            : "Recent activity is hidden. Use the activity control to show it again."
     );
 }
 

@@ -269,7 +269,7 @@ export function ScheduleFloat(): JSX.Element | null {
                 minimized ? "minimized" : "expanded"
             }`}
             role="region"
-            aria-label="Scheduled skills"
+            aria-label="Scheduled actions"
         >
             {minimized
                 ? renderMinimized(prefs)
@@ -287,7 +287,7 @@ function renderExpanded(prefs: FloatPrefs): JSX.Element {
         <>
             <div class="ant-schedule-float__head">
                 <span class="ant-schedule-float__kicker">
-                    SCHEDULED SKILLS
+                    SCHEDULED ACTIONS
                 </span>
                 <div class="ant-schedule-float__head-actions">
                     <button
@@ -324,7 +324,7 @@ function renderExpanded(prefs: FloatPrefs): JSX.Element {
                     aria-label={`Open ${pending.label}`}
                 >
                     <span class="ant-schedule-float__fired-tag">
-                        JUST FIRED
+                        READY TO OPEN
                     </span>
                     <span class="ant-schedule-float__fired-label">
                         {pending.label}
@@ -336,7 +336,7 @@ function renderExpanded(prefs: FloatPrefs): JSX.Element {
             ) : null}
 
             <div class="ant-schedule-float__queue">
-                <div class="ant-schedule-float__queue-head">QUEUED</div>
+                <div class="ant-schedule-float__queue-head">UPCOMING</div>
                 {schedules.length === 0 ? (
                     <p class="ant-schedule-float__empty">
                         Nothing scheduled yet.
@@ -378,14 +378,14 @@ function renderHiddenNub(): JSX.Element {
         <div
             class="ant-schedule-float ant-schedule-float--nub"
             role="region"
-            aria-label="Scheduled skills (hidden)"
+            aria-label="Scheduled actions (hidden)"
         >
             <button
                 type="button"
                 class="ant-schedule-float__nub"
                 onClick={showSurface}
-                aria-label="Show scheduled skills"
-                title="Show scheduled skills"
+                aria-label="Show scheduled actions"
+                title="Show scheduled actions"
             >
                 ⌃
             </button>
@@ -423,8 +423,8 @@ function renderMinimized(prefs: FloatPrefs): JSX.Element {
                 onClick={() => setMode("expanded")}
                 aria-label={
                     pending
-                        ? `Expand schedules · ${pending.label} just fired`
-                        : `Expand schedules · ${count} queued`
+                        ? `Expand schedules · ${pending.label} is ready to open`
+                        : `Expand schedules · ${count} scheduled`
                 }
             >
                 {pending ? (
@@ -440,7 +440,7 @@ function renderMinimized(prefs: FloatPrefs): JSX.Element {
                 )}
                 <span class="ant-schedule-float__pill-label">
                     {pending
-                        ? "Just fired"
+                        ? "Ready to open"
                         : count === 0
                         ? "No schedules"
                         : `${count} scheduled`}
@@ -461,7 +461,7 @@ function renderMinimized(prefs: FloatPrefs): JSX.Element {
                     data-visible="true"
                     role="tooltip"
                 >
-                    Click to expand. Gear to manage.
+                    Expand to view schedules. Use Settings to manage notifications.
                 </span>
             ) : null}
         </div>
@@ -494,13 +494,13 @@ function renderSettingsBody(prefs: FloatPrefs): JSX.Element {
                 onChange={(v) => patchPrefs({ showTooltipHints: v })}
             />
             <ToggleRow
-                label="Surface visible"
+                label="Show schedule panel"
                 checked={prefs.surfaceVisible}
                 onChange={(v) => patchPrefs({ surfaceVisible: v })}
             />
             <div class="ant-schedule-float__snooze">
                 <span class="ant-schedule-float__snooze-label">
-                    Snooze fires
+                    Pause notifications
                 </span>
                 <div class="ant-schedule-float__snooze-buttons">
                     <button

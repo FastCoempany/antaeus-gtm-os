@@ -61,10 +61,10 @@ describe("computeImpact", () => {
             activeDeals: []
         });
         expect(out.cells.map((c) => c.label)).toEqual([
-            "registered carriers",
-            "live deal coverage",
-            "open loops",
-            "success read"
+            "registered advisors",
+            "deals with a matched advisor",
+            "requests awaiting outcome",
+            "requests marked successful"
         ]);
     });
 
@@ -75,8 +75,8 @@ describe("computeImpact", () => {
             activeDeals: []
         });
         const titles = out.rows.map((r) => r.title);
-        expect(titles).toContain("Registry first");
-        const reg = out.rows.find((r) => r.title === "Registry first");
+        expect(titles).toContain("Add an advisor");
+        const reg = out.rows.find((r) => r.title === "Add an advisor");
         expect(reg?.tone).toBe("red");
     });
 
@@ -93,7 +93,7 @@ describe("computeImpact", () => {
         });
         const gap = out.rows.find((r) => r.title === "Coverage gap");
         expect(gap).toBeDefined();
-        expect(gap?.copy).toContain("1 live deal");
+        expect(gap?.copy).toContain("1 active deal");
         expect(gap?.tone).toBe("orange");
     });
 
@@ -107,9 +107,9 @@ describe("computeImpact", () => {
             ],
             activeDeals: []
         });
-        const ft = out.rows.find((r) => r.title === "Follow-through");
+        const ft = out.rows.find((r) => r.title === "Update request outcomes");
         expect(ft).toBeDefined();
-        expect(ft?.copy).toContain("2 advisor loop");
+        expect(ft?.copy).toContain("2 advisor requests");
         expect(ft?.tone).toBe("blue");
     });
 
@@ -119,7 +119,7 @@ describe("computeImpact", () => {
             deployments: [makeDep({ outcome: "successful" })],
             activeDeals: []
         });
-        const c = out.rows.find((r) => r.title === "Compounding");
+        const c = out.rows.find((r) => r.title === "Successful requests");
         expect(c?.tone).toBe("green");
     });
 
@@ -130,7 +130,7 @@ describe("computeImpact", () => {
             activeDeals: [makeDeal({ accountName: "Acme" })]
         });
         const titles = out.rows.map((r) => r.title);
-        expect(titles).toContain("Clean desk");
+        expect(titles).toContain("No pending advisor follow-up");
     });
 
     it("success rate is round-to-int %", () => {

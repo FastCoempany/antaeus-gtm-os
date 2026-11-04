@@ -26,6 +26,19 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npm run typecheck
 
+  functions-typecheck:
+    name: Edge function typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: npm run typecheck:functions
+
   unit-test:
     name: Unit + component tests (Vitest)
     runs-on: ubuntu-latest
@@ -36,6 +49,7 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm ci --no-audit --no-fund
+      - run: npm run copy:test
       - name: Run unit and component tests
         shell: bash
         run: |
@@ -62,9 +76,6 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
       - run: npm ci --no-audit --no-fund
       - name: Run E2E smoke tests
         shell: bash
@@ -108,6 +119,11 @@ jobs:
   language-audit:
     name: Rendered language audit
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -115,7 +131,13 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm ci --no-audit --no-fund
-      - name: Rebuild rendered copy inventory from committed transcript
+      - name: Build the current tester application
+        run: npm run build:cloudflare
+      - name: Regenerate the full demo-seeded tester walkthrough
+        run: npm run build:transcript
+      - name: Verify room and interaction coverage
+        run: npm run copy:validate
+      - name: Rebuild rendered copy inventory
         run: npm run copy:inventory
       - name: Run Tier-1 language regression gate
         shell: bash
@@ -130,4 +152,7 @@ jobs:
           path: |
             artifacts/language-remediation/copy-inventory.json
             artifacts/language-remediation/copy-audit.txt
+            artifacts/language-remediation/copy-audit.json
+            artifacts/language-remediation/rendered-corpus.txt
+            preview-transcript/
           retention-days: 14

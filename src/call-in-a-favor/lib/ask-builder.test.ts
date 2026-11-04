@@ -37,12 +37,12 @@ function makeDeal(p: Partial<AdvisorDeal>): AdvisorDeal {
 
 describe("dealPressure", () => {
     it("returns the no-deal sentence when deal is null", () => {
-        expect(dealPressure(null)).toBe("No live deal linked yet.");
+        expect(dealPressure(null)).toBe("No deal is linked yet.");
     });
 
     it("flags missing nextStepDate", () => {
         expect(dealPressure(makeDeal({ nextStepDate: null }))).toContain(
-            "no dated next step"
+            "No dated next step"
         );
     });
 
@@ -87,7 +87,7 @@ describe("dealPressure", () => {
                     champion: ""
                 })
             )
-        ).toContain("Nobody inside the buyer");
+        ).toContain("No champion is recorded");
     });
 
     it("returns the precise-ask copy when nothing is wrong", () => {
@@ -101,11 +101,19 @@ describe("dealPressure", () => {
                     champion: "Lee"
                 })
             )
-        ).toContain("precise enough");
+        ).toContain("Confirm the requested action");
     });
 });
 
 describe("buildAsk", () => {
+    it("does not turn a selected request type into fabricated pilot evidence or endorsement", () => {
+        for (const id of ["poc_stall", "eb_bridge", "board_decision"] as const) {
+            const out = buildAsk({ deal: makeDeal({}), advisor: makeAdvisor({}), moment: findMoment(id), customAsk: "" });
+            expect(out.ask).not.toMatch(/product proved itself|pilot showed it|well backed|will get a clearer answer/i);
+            expect(out.ask).not.toContain("Where it stands:");
+            expect(out.proof).toMatch(/^Confirm /);
+        }
+    });
     const moment = findMoment("intro");
 
     it("substitutes [company] and [buyer] tokens in the ask line", () => {

@@ -101,12 +101,12 @@ export function familyPriority(family: string): number {
 
 export function roomFamilyLabel(family: string): string {
     if (family === "risk") return "Pipeline";
-    if (family === "advisor") return "Leverage";
-    if (family === "opportunity") return "Motion";
-    if (family === "move") return "Command";
-    if (family === "icp") return "Truth";
+    if (family === "advisor") return "Advisor requests";
+    if (family === "opportunity") return "Account opportunities";
+    if (family === "move") return "Recommended actions";
+    if (family === "icp") return "Customer targeting";
     if (family === "system") return "System";
-    return "Command";
+    return "Recommended actions";
 }
 
 export function amountPressure(amount: number): number {
@@ -189,14 +189,14 @@ export function formatCauseLabel(causeId: string): string {
     const label = tx(causeId).replace(/_/g, " ");
     if (!label) return "";
     if (label === "no nextstep") return "no next step set";
-    if (label === "stale thread") return "thread has gone stale";
+    if (label === "stale thread") return "deal record has not been updated recently";
     if (label === "no champion") return "no champion identified";
-    if (label === "champion weak") return "champion is weak";
+    if (label === "champion weak") return "champion details are incomplete";
     if (label === "no eb") return "no economic buyer identified";
     if (label === "no process") return "decision process is unclear";
-    if (label === "impact not real") return "impact still vague";
-    if (label === "usecase blurry") return "use case is blurry";
-    if (label === "single threaded") return "single-threaded";
+    if (label === "impact not real") return "business impact is not quantified";
+    if (label === "usecase blurry") return "use case is not specific";
+    if (label === "single threaded") return "limited stakeholder coverage";
     if (label === "next step overdue") return "next step is overdue";
     return label;
 }

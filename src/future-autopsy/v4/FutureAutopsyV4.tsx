@@ -187,13 +187,13 @@ export function FutureAutopsyV4(): JSX.Element {
                 </div>
 
                 <div class="fa4-absent">
-                    <div class="fa4-ah">{t("Why risk is high · evidence", { class: "body" })}</div>
+                    <div class="fa4-ah">{t("Risk factors · evidence", { class: "body" })}</div>
                     {doc.chapters.slice(0, 4).map((ch) => (
                         <div class="fa4-arow" key={ch.cause}>
                             <span class="fa4-at">
                                 {doc.causes.find((c) => c.id === ch.cause)?.label ?? ch.cause.replace(/_/g, " ")}
                             </span>
-                            <span class="fa4-aw">{t("This condition is present in the current deal data.", { class: "body" })}</span>
+                            <span class="fa4-aw">{ch.story}</span>
                         </div>
                     ))}
                 </div>

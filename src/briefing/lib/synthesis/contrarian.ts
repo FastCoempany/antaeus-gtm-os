@@ -259,8 +259,9 @@ export function parseContrarianResponse(raw: string): ContrarianDraft | null {
     } catch {
         return null;
     }
-    if (!parsed || typeof parsed !== "object") return null;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
     const o = parsed as Record<string, unknown>;
+    if (typeof o["found_contradiction"] !== "boolean") return null;
     return {
         found_contradiction: o["found_contradiction"] === true,
         no_contradiction_reason: asString(o["no_contradiction_reason"]),
@@ -288,6 +289,9 @@ export type ContrarianGateFailure =
     | "low_confidence"
     | "thin_evidence"
     | "evidence_ids_not_in_run"
+    | "invalid_confidence"
+    | "invalid_recommended_moves"
+    | "missing_refusal_reason"
     | "weakening_language";
 
 export interface ContrarianGateResult {
@@ -296,18 +300,24 @@ export interface ContrarianGateResult {
 }
 
 function isQuoteInPositions(
-    quote: string,
+    target: TargetPosition,
     positions: ContrarianStatedPositions
 ): boolean {
-    const needle = quote.trim().toLowerCase();
+    const needle = target.quoted_text.trim().toLowerCase();
     if (needle.length === 0) return false;
     const haystacks: string[] = [];
-    if (positions.product_category) haystacks.push(positions.product_category.toLowerCase());
-    if (positions.what_we_sell) haystacks.push(positions.what_we_sell.toLowerCase());
-    if (positions.value_prop) haystacks.push(positions.value_prop.toLowerCase());
-    if (positions.icp_statement) haystacks.push(positions.icp_statement.toLowerCase());
-    for (const c of positions.watchlist_companies) haystacks.push(c.toLowerCase());
-    return haystacks.some((h) => h.includes(needle) || needle.includes(h));
+    if (target.source === "commercial_profile") {
+        for (const value of [positions.product_category, positions.what_we_sell, positions.value_prop]) {
+            if (value?.trim()) haystacks.push(value.toLowerCase());
+        }
+    } else if (target.source === "icp") {
+        if (positions.icp_statement?.trim()) haystacks.push(positions.icp_statement.toLowerCase());
+    } else {
+        for (const c of positions.watchlist_companies) {
+            if (c.trim()) haystacks.push(c.toLowerCase());
+        }
+    }
+    return haystacks.some((h) => h.includes(needle));
 }
 
 export function runContrarianGate(
@@ -315,26 +325,36 @@ export function runContrarianGate(
     input: ContrarianInput
 ): ContrarianGateResult {
     if (!draft.found_contradiction) {
-        return { passes: true, failures: [] };
+        const valid = !!draft.no_contradiction_reason?.trim();
+        return { passes: valid, failures: valid ? [] : ["missing_refusal_reason"] };
     }
     const failures: ContrarianGateFailure[] = [];
     if (!draft.target_position) failures.push("missing_target_position");
-    else if (!isQuoteInPositions(draft.target_position.quoted_text, input.stated_positions)) {
+    else if (!isQuoteInPositions(draft.target_position, input.stated_positions)) {
         failures.push("quoted_text_not_in_inputs");
     }
     if (!draft.title || draft.title.trim().length === 0) failures.push("missing_title");
     else if (draft.title.length > MAX_TITLE_LEN) failures.push("title_too_long");
     if (!draft.analysis || draft.analysis.trim().length === 0) failures.push("missing_analysis");
-    if (!draft.six_questions) failures.push("missing_six_questions");
+    if (!draft.six_questions || Object.values(draft.six_questions).some((value) => !value.trim())) {
+        failures.push("missing_six_questions");
+    }
     if (draft.confidence === null || draft.confidence < MIN_CONFIDENCE) {
         failures.push("low_confidence");
     }
-    if (draft.evidence_ids.length < MIN_EVIDENCE_IDS) {
-        failures.push("thin_evidence");
-    } else {
-        const ids = new Set(input.evidence.map((e) => e.enriched_id));
-        const missing = draft.evidence_ids.filter((id) => !ids.has(id));
-        if (missing.length > 0) failures.push("evidence_ids_not_in_run");
+    if (draft.confidence !== null && (!Number.isFinite(draft.confidence) || draft.confidence > 1)) {
+        failures.push("invalid_confidence");
     }
+    if (draft.recommended_moves.length === 0 || draft.recommended_moves.some(
+        (move) => !move.label.trim() || !move.rationale.trim() || !move.destination.trim()
+    )) {
+        failures.push("invalid_recommended_moves");
+    }
+    const cited = new Set(draft.evidence_ids);
+    if (cited.size < MIN_EVIDENCE_IDS) {
+        failures.push("thin_evidence");
+    }
+    const ids = new Set(input.evidence.map((e) => e.enriched_id));
+    if ([...cited].some((id) => !ids.has(id))) failures.push("evidence_ids_not_in_run");
     return { passes: failures.length === 0, failures };
 }

@@ -358,7 +358,7 @@
       ]),
       segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
         node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the evaluation path actually look like from first req review to approval?\"","Start here when the proof bar is getting concrete.",true,[
-          branch("PATH CLEAR","ok","\"Talent leadership would sponsor, recruiting ops would evaluate, and people systems or HR leadership would review.\"","\"Good. What does the first review need to decide so the motion stays real?\"",[
+          branch("PATH CLEAR","ok","\"Talent leadership would sponsor, recruiting ops would evaluate, and people systems or HR leadership would review.\"","\"Good. What does the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the req review", "next-step-lock", "req-review", "grn"),
             jumpNode("Set the pilot req", "next-step-lock", "pilot-design", "blu")
           ],"The approval path is visible.","You still need the first review outcome."),

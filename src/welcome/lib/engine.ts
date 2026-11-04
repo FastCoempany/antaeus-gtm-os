@@ -17,25 +17,25 @@ export function buildMilestones(counts: WorkspaceCounts): ReadonlyArray<Mileston
         {
             key: "icp",
             label: "First ICP saved",
-            copy: "The rest of the app now has a real target to work against.",
+            copy: "Use this ICP to evaluate which accounts to target.",
             done: counts.icps > 0
         },
         {
             key: "signal",
             label: "First live signal or account saved",
-            copy: "Signal Console now has a real account to read against.",
+            copy: "Review the saved account and its available signals in Signal Console.",
             done: counts.accounts > 0 || counts.signals > 0
         },
         {
             key: "deal",
             label: "First real deal created",
-            copy: "The Dashboard, the recovery board, and the pilot framework all have something real to work with now.",
+            copy: "Review this deal in the Dashboard, Deal Workspace, and Pilot Desk.",
             done: counts.deals > 0
         },
         {
             key: "motion",
-            label: "First motion logged",
-            copy: "Calls, touches, and LinkedIn actions are being captured in the app instead of in your head.",
+            label: "First sales activity logged",
+            copy: "Calls, outreach, and LinkedIn activity can now be reviewed in the workspace.",
             done: motionCount > 0
         }
     ];
@@ -61,20 +61,20 @@ export function buildActivationModel(
     let headline: string;
     let body: string;
     if (completed === 0) {
-        headline = "Define one sharp ICP to start.";
+        headline = "Define your first ideal customer profile.";
         body =
-            "Pick one definition of who you sell to, what they're dealing with, and why they have to act now. Everything else in the app — signals, outbound, deals — runs against that definition.";
+            "Describe your target customers, their business problems, and the events that could make a purchase relevant.";
     } else if (completed < milestones.length) {
         headline = next
             ? `Next move: ${next.label.toLowerCase()}.`
-            : "One more anchor and the workspace is fully live.";
+            : "Complete the remaining setup step.";
         body = next
-            ? `Land this and the Dashboard sharpens around it.`
-            : "The remaining work is depth, not setup.";
+            ? `Complete this step to add context to the Dashboard recommendations.`
+            : "Review the saved details and add evidence as you work.";
     } else {
-        headline = "All four anchors are live.";
+        headline = "All four setup milestones are complete.";
         body =
-            "The workspace is operating. Run the daily rhythm from the Dashboard.";
+            "Review your daily priorities in the Dashboard.";
     }
 
     return {
@@ -90,42 +90,42 @@ export function buildActivationModel(
 const ACTION_ICP: Omit<NextAction, "state"> = {
     key: "icp",
     title: "Define your first ICP.",
-    body: "One sharp definition: who you sell to, what they're dealing with, and why they have to act now. The rest of the app runs against that definition.",
+    body: "Describe your target customers, their business problems, and the events that could make a purchase relevant.",
     href: "/icp-studio/",
-    cta: "Sharpen the ICP",
-    meta: ["highest leverage", "first input"],
-    why: "An ICP this clear pays back across every other room.",
-    unlocks: "Sharper signals, cleaner outbound, and a credible Dashboard brief."
+    cta: "Define the ICP",
+    meta: ["targeting criteria", "first input"],
+    why: "A documented ICP helps you compare account fit across the sales process.",
+    unlocks: "Targeting criteria for account research, outreach, and pipeline review."
 };
 const ACTION_SIGNAL: Omit<NextAction, "state"> = {
     key: "signal",
     title: "Add one live account.",
-    body: "One real company gets Signal Console warm. Heat, recent signals, and next-move guidance all start firing once a real account is in there.",
+    body: "Add a company to review its available signals and decide whether outreach is relevant.",
     href: "/signal-console/",
     cta: "Add the account",
     meta: ["real account", "deep research"],
-    why: "Signal Console can't do its job without one real account to read against.",
-    unlocks: "Heat scoring, next-move guidance, and context for sourcing + outbound."
+    why: "Account research needs a named company.",
+    unlocks: "Account priority scoring, suggested actions, and context for prospecting and outreach."
 };
 const ACTION_DEAL: Omit<NextAction, "state"> = {
     key: "deal",
     title: "Add your first live deal.",
-    body: "One real opportunity wakes up the recovery board, PoC planning, and the Dashboard's risk rail.",
+    body: "Record an opportunity so you can review deal risk, plan a pilot, and track next steps.",
     href: "/deal-workspace/",
     cta: "Add the deal",
     meta: ["real pipeline", "dashboard unlock"],
     why: "Without a real deal, the rooms downstream are working on hypothetical pipeline.",
-    unlocks: "Future Autopsy, PoC Framework, Advisor Deploy, and a more honest Dashboard."
+    unlocks: "Deal-risk review in Future Autopsy, pilot planning in Pilot Desk, and advisor requests in Call in a Favor."
 };
 const ACTION_MOTION: Omit<NextAction, "state"> = {
     key: "motion",
-    title: "Log the first motion.",
-    body: "One outbound touch or one real call so the app starts holding the activity in its own memory instead of yours.",
+    title: "Log your first sales activity.",
+    body: "Record an outbound message or call so its outcome is available for later review.",
     href: "/outbound-studio/",
-    cta: "Log a motion",
+    cta: "Log sales activity",
     meta: ["activity trail", "week one"],
-    why: "Week one isn't complete until at least one real motion has run through the app.",
-    unlocks: "Real Readiness evidence and a clearer weekly rhythm."
+    why: "Recorded activity lets you compare actions with their outcomes.",
+    unlocks: "Activity evidence for the Readiness assessment and weekly planning."
 };
 
 /**
@@ -143,18 +143,18 @@ function motionActionFor(accountName: string | null): Omit<NextAction, "state"> 
     return {
         key: "motion",
         title: `Compose outbound to ${name}.`,
-        body: `${name} is already in Signal Console. Turn it into a real first touch — the app drafts the line and starts holding the activity instead of your memory.`,
+        body: `${name} is already in Signal Console. Use its recorded context to draft an initial message, then log the outcome.`,
         href: `/outbound-studio/?account=${encodeURIComponent(name)}`,
         cta: "Compose outbound",
         meta: ["first real touch", "named account"],
-        why: `You named ${name} as your first target — working it is the real first step, not a second data-entry form.`,
-        unlocks: "A drafted outbound line, real Readiness evidence, and a clearer weekly rhythm."
+        why: `You named ${name} as your first target — you can now prepare outreach using its recorded context.`,
+        unlocks: "An outbound draft and a place to record the outcome after sending."
     };
 }
 const ACTION_PLANNER: Omit<NextAction, "state"> = {
     key: "planner",
     title: "Prep the next discovery call.",
-    body: "Turn an active deal into a structured conversation — not a loose note.",
+    body: "Prepare questions and a proposed next step for an active deal.",
     href: "/call-planner/",
     cta: "Plan the call",
     meta: ["call quality", "active deal"],
@@ -168,28 +168,28 @@ const ACTION_QUOTA: Omit<NextAction, "state"> = {
     href: "/quota-workback/",
     cta: "Set the targets",
     meta: ["system math", "benchmarks"],
-    why: "Readiness gets credible when activity is anchored to actual revenue pressure.",
-    unlocks: "Weekly touch targets, coverage math, and a sharper Dashboard."
+    why: "Quota assumptions let you compare planned sales activity with the revenue target.",
+    unlocks: "Weekly outreach targets and pipeline coverage calculations."
 };
 const ACTION_BACKUP: Omit<NextAction, "state"> = {
     key: "backup",
     title: "Export the first backup.",
-    body: "Make the workspace durable outside this browser before week one gets messy.",
+    body: "Save a backup of the workspace data outside this browser.",
     href: "/settings/",
     cta: "Export now",
     meta: ["durability", "trust"],
-    why: "Week one isn't complete until the workspace can survive a refresh and a bad decision.",
-    unlocks: "Safer experimentation and a workspace that feels durable, not lucky."
+    why: "A backup provides a copy you can use if local data is lost.",
+    unlocks: "An exported copy of your workspace data."
 };
 const ACTION_DASHBOARD: Omit<NextAction, "state"> = {
     key: "dashboard",
     title: "Return to the Dashboard.",
-    body: "Run the daily rhythm from the ranked list of what needs you most.",
+    body: "Review the ranked list of recommended actions.",
     href: "/dashboard/",
     cta: "Open the Dashboard",
     meta: ["daily rhythm", "ranked work"],
     why: "The app should now act like a morning briefing for what to work on first.",
-    unlocks: "Faster daily resets and a clearer week-one rhythm."
+    unlocks: "A prioritized starting point for your next work session."
 };
 
 /**

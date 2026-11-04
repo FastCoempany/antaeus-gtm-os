@@ -185,7 +185,7 @@ export function readLocalEvents(
             out.push({
                 id: `touch:${x.id ?? ts}`,
                 who: "you",
-                text: `${t("You reached out to", { class: "body" })} ${name} ${t("— counted.", { class: "body" })}`,
+                text: `${t("Outreach recorded for", { class: "body" })} ${name}.`,
                 ts
             });
         }

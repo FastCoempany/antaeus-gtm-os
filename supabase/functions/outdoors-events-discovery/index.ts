@@ -6,13 +6,13 @@
  * The model must ground every returned event in a live source URL.
  *
  * Two invocation modes:
- *   - Cron (no body / {action:"run_all"}): enumerate active workspaces,
- *     run discovery for each. The pg_cron job calls this weekly.
+ *   - Admin ({action:"run_all"}): enumerate profiles with a product category.
+ *     This is an explicit service-role operation; there is no scheduled cron.
  *   - On-demand ({action:"run_one", workspaceId}): run discovery for a
  *     single workspace.
  *
  * Per run, an outdoors_events_runs ledger row tracks status, cost,
- * search count, and events written. Events upsert on dedupe_key so the
+ * and events written. Events deduplicate by dedupe_key so the
  * same event does not surface twice across runs.
  */
 
@@ -48,23 +48,20 @@ async function readProfile(
     sb: SupabaseClient,
     workspaceId: string
 ): Promise<WorkspaceProfile> {
-    try {
-        const res = await sb
-            .from("workspace_profile")
-            .select("product_category, what_we_sell, value_prop")
-            .eq("workspace_id", workspaceId)
-            .maybeSingle();
-        if (res.error || !res.data) {
-            return { product_category: null, what_we_sell: null, value_prop: null };
-        }
-        return {
-            product_category: res.data.product_category ?? null,
-            what_we_sell: res.data.what_we_sell ?? null,
-            value_prop: res.data.value_prop ?? null
-        };
-    } catch {
+    const res = await sb
+        .from("workspace_profile")
+        .select("product_category, what_we_sell, value_prop")
+        .eq("workspace_id", workspaceId)
+        .maybeSingle();
+    if (res.error) throw new Error(`Workspace profile lookup failed: ${res.error.message}`);
+    if (!res.data) {
         return { product_category: null, what_we_sell: null, value_prop: null };
     }
+    return {
+        product_category: res.data.product_category ?? null,
+        what_we_sell: res.data.what_we_sell ?? null,
+        value_prop: res.data.value_prop ?? null
+    };
 }
 
 // ─── Weekly spend so far (cost ceiling) ────────────────────────────
@@ -73,23 +70,20 @@ async function weeklySpend(
     sb: SupabaseClient,
     workspaceId: string
 ): Promise<number> {
-    try {
-        const weekAgo = new Date(
-            Date.now() - 7 * 24 * 60 * 60 * 1000
-        ).toISOString();
-        const res = await sb
-            .from("outdoors_events_runs")
-            .select("total_cost_usd")
-            .eq("workspace_id", workspaceId)
-            .gte("started_at", weekAgo);
-        if (res.error || !Array.isArray(res.data)) return 0;
-        return res.data.reduce(
-            (sum: number, r: any) => sum + (Number(r.total_cost_usd) || 0),
-            0
-        );
-    } catch {
-        return 0;
-    }
+    const weekAgo = new Date(
+        Date.now() - 7 * 24 * 60 * 60 * 1000
+    ).toISOString();
+    const res = await sb
+        .from("outdoors_events_runs")
+        .select("total_cost_usd")
+        .eq("workspace_id", workspaceId)
+        .gte("started_at", weekAgo);
+    if (res.error) throw new Error(`Cost lookup failed: ${res.error.message}`);
+    if (!Array.isArray(res.data)) throw new Error("Cost lookup returned an invalid result");
+    return res.data.reduce(
+        (sum: number, r: any) => sum + (Number(r.total_cost_usd) || 0),
+        0
+    );
 }
 
 // ─── Prompt ────────────────────────────────────────────────────────
@@ -172,6 +166,10 @@ async function runForWorkspace(
     const throttled = spent >= THROTTLE_AT;
 
     let runId: string | null = null;
+    let cost = 0;
+    let searchCount = 0;
+    let callCount = 0;
+    let written = 0;
     try {
         const profile = await readProfile(sb, workspaceId);
         const insertRun = await sb
@@ -205,6 +203,9 @@ async function runForWorkspace(
             max_tokens: 4096,
             max_searches: throttled ? 3 : 6
         });
+        cost = call.cost_usd;
+        searchCount = call.search_count;
+        callCount = 1;
 
         if (!call.ok) {
             await closeRun(sb, runId, {
@@ -225,7 +226,7 @@ async function runForWorkspace(
         }
 
         const parsed = parseDiscoveredEvents(extractJsonArray(call.text));
-        const written = await upsertEvents(sb, workspaceId, runId, parsed);
+        written = await upsertEvents(sb, workspaceId, runId, parsed, count => { written = count; });
 
         await closeRun(sb, runId, {
             status: throttled ? "throttled" : "completed",
@@ -244,22 +245,26 @@ async function runForWorkspace(
             error: null
         };
     } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
+        let message = err instanceof Error ? err.message : String(err);
         if (runId) {
-            await closeRun(sb, runId, {
-                status: "failed",
-                events_written: 0,
-                total_cost_usd: 0,
-                llm_call_count: 0,
-                error_summary: message
-            });
+            try {
+                await closeRun(sb, runId, {
+                    status: "failed",
+                    events_written: written,
+                    total_cost_usd: cost,
+                    llm_call_count: callCount,
+                    error_summary: message
+                });
+            } catch (ledgerError) {
+                message += `; run ledger update failed: ${ledgerError instanceof Error ? ledgerError.message : String(ledgerError)}`;
+            }
         }
         return {
             workspaceId,
             status: "failed",
-            eventsWritten: 0,
-            cost: 0,
-            searchCount: 0,
+            eventsWritten: written,
+            cost,
+            searchCount,
             error: message
         };
     }
@@ -270,112 +275,174 @@ async function closeRun(
     runId: string,
     patch: Record<string, unknown>
 ): Promise<void> {
-    await sb
+    const { error } = await sb
         .from("outdoors_events_runs")
-        .update({ ...patch, finished_at: new Date().toISOString() })
+        .update({ ...patch, completed_at: new Date().toISOString() })
         .eq("id", runId);
+    if (error) throw new Error(error.message);
 }
 
 async function upsertEvents(
     sb: SupabaseClient,
     workspaceId: string,
     runId: string,
-    events: ReadonlyArray<DiscoveredEvent>
+    events: ReadonlyArray<DiscoveredEvent>,
+    recordWritten: (count: number) => void
 ): Promise<number> {
-    if (events.length === 0) return 0;
-    const rows = events.map((event) => ({
-        workspace_id: workspaceId,
-        run_id: runId,
-        name: event.name,
-        kind: event.kind,
-        where_at: event.where_at,
-        start_date: event.start_date,
-        end_date: event.end_date,
-        tags: event.tags,
-        source_url: event.source_url,
-        relevance_tier: event.relevance_tier,
-        relevance_reason: event.relevance_reason,
-        dedupe_key: buildDedupeKey(event),
-        discovered_at: new Date().toISOString()
-    }));
-
-    const { data, error } = await sb
-        .from("outdoors_events")
-        .upsert(rows, { onConflict: "workspace_id,dedupe_key" })
-        .select("id");
-    if (error) throw error;
-    return Array.isArray(data) ? data.length : 0;
+    const byKey = new Map<string, DiscoveredEvent>();
+    for (const event of events) {
+        const key = buildDedupeKey(event.name, event.start_date, event.where_at);
+        if (!byKey.has(key)) byKey.set(key, event);
+    }
+    let written = 0;
+    const now = new Date().toISOString();
+    for (const [key, event] of byKey) {
+        // Do not use a generic upsert: the database's dedupe index is partial,
+        // and operator-owned fields must survive rediscovery and insert races.
+        const discovery = {
+            relevance_tier: event.relevance_tier,
+            relevance_reason: event.relevance_reason,
+            source_url: event.source_url,
+            kind: event.kind,
+            where_at: event.where_at,
+            start_date: event.start_date,
+            end_date: event.end_date,
+            discovered_at: now,
+            run_id: runId
+        };
+        const refresh = () => sb.from("outdoors_events")
+            .update(discovery)
+            .eq("workspace_id", workspaceId)
+            .eq("dedupe_key", key)
+            .select("id");
+        const updated = await refresh();
+        if (updated.error) throw new Error(`Event refresh failed: ${updated.error.message}`);
+        if (updated.data?.length) {
+            written += updated.data.length;
+            recordWritten(written);
+            continue;
+        }
+        const inserted = await sb.from("outdoors_events").insert({
+            ...discovery,
+            workspace_id: workspaceId,
+            created_by: null,
+            name: event.name,
+            status: "watching",
+            notes: null,
+            tags: event.tags,
+            source_kind: "discovery_run",
+            dedupe_key: key
+        }).select("id");
+        if (inserted.error?.code === "23505") {
+            // A concurrent discovery may have inserted this key after refresh.
+            // Refresh only the discovery fields on the winning row.
+            const raced = await refresh();
+            if (raced.error || !raced.data?.length) {
+                throw new Error(`Event refresh after concurrent insert failed: ${raced.error?.message ?? "row not found"}`);
+            }
+            written += raced.data.length;
+        } else if (inserted.error) {
+            throw new Error(`Event insert failed: ${inserted.error.message}`);
+        } else {
+            written += inserted.data?.length ?? 0;
+        }
+        recordWritten(written);
+    }
+    return written;
 }
 
-// ─── Request handling ───────────────────────────────────────────────
+async function activeWorkspaceIds(sb: SupabaseClient): Promise<string[]> {
+    const { data, error } = await sb.from("workspace_profile")
+        .select("workspace_id, product_category")
+        .not("product_category", "is", null);
+    if (error) throw new Error(`Workspace lookup failed: ${error.message}`);
+    return [...new Set((data ?? [])
+        .filter((row: any) => typeof row.product_category === "string" && row.product_category.trim())
+        .map((row: any) => row.workspace_id as string))];
+}
 
-const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
-};
+function corsHeaders(req: Request): Record<string, string> {
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": req.headers.get("access-control-request-headers") ??
+            "authorization, content-type, apikey, x-client-info, x-antaeus-client",
+        "Access-Control-Max-Age": "86400"
+    };
+}
 
-Deno.serve(async (req: Request) => {
-    if (req.method === "OPTIONS") {
-        return new Response("ok", { headers: corsHeaders });
+function json(payload: unknown, status: number, cors: Record<string, string>): Response {
+    return new Response(JSON.stringify(payload), {
+        status,
+        headers: { ...cors, "Content-Type": "application/json" }
+    });
+}
+
+Deno.serve(async (req: Request): Promise<Response> => {
+    const cors = corsHeaders(req);
+    if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+    if (req.method !== "POST") return json({ ok: false, error: "Method not allowed" }, 405, cors);
+
+    let body: Record<string, unknown>;
+    try {
+        const parsed = await req.json();
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error();
+        body = parsed;
+    } catch {
+        return json({ ok: false, error: "A JSON object with an explicit action is required" }, 400, cors);
+    }
+    if (body.action !== "run_one" && body.action !== "run_all") {
+        return json({ ok: false, error: "action must be run_one or run_all" }, 400, cors);
+    }
+    const workspaceId = typeof body.workspaceId === "string" ? body.workspaceId.trim() : "";
+    if (body.action === "run_one" && !workspaceId) {
+        return json({ ok: false, error: "run_one requires workspaceId" }, 400, cors);
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
     if (!supabaseUrl || !serviceRole) {
-        return new Response(
-            JSON.stringify({ error: "Server configuration missing" }),
-            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return json({ ok: false, error: "Server configuration missing" }, 500, cors);
+    }
+    const token = req.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1] ?? "";
+    if (!token) return json({ ok: false, error: "Authentication required" }, 401, cors);
+    const isAdmin = token === serviceRole;
+    if (body.action === "run_all" && !isAdmin) {
+        return json({ ok: false, error: "run_all requires service-role authorization" }, 403, cors);
     }
     const sb = createClient(supabaseUrl, serviceRole, {
-        auth: { persistSession: false }
+        auth: { autoRefreshToken: false, persistSession: false }
     });
-
-    let body: any = {};
     try {
-        body = await req.json();
-    } catch {
-        body = {};
-    }
-
-    const action = body?.action === "run_one" ? "run_one" : "run_all";
-
-    if (action === "run_one") {
-        const workspaceId = typeof body?.workspaceId === "string" ? body.workspaceId : "";
-        if (!workspaceId) {
-            return new Response(
-                JSON.stringify({ error: "workspaceId required" }),
-                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
+        if (!isAdmin) {
+            // Service-role writes bypass RLS; validate the caller's JWT and
+            // membership before starting a paid run or touching its ledger.
+            const { data: auth, error: authError } = await sb.auth.getUser(token);
+            if (authError || !auth.user) return json({ ok: false, error: "Invalid authentication" }, 401, cors);
+            const membership = await sb.from("workspace_members")
+                .select("workspace_id").eq("workspace_id", workspaceId)
+                .eq("user_id", auth.user.id).maybeSingle();
+            if (membership.error) throw new Error("Could not verify workspace membership");
+            if (!membership.data) return json({ ok: false, error: "Workspace access denied" }, 403, cors);
         }
-        const result = await runForWorkspace(sb, workspaceId);
-        return new Response(JSON.stringify(result), {
-            status: result.status === "failed" ? 500 : 200,
-            headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
+        if (body.action === "run_one") {
+            const result = await runForWorkspace(sb, workspaceId);
+            return json({ ok: result.status !== "failed", result, error: result.error }, 200, cors);
+        }
+        const ids = await activeWorkspaceIds(sb);
+        const results: RunResult[] = [];
+        for (const id of ids) results.push(await runForWorkspace(sb, id));
+        return json({
+            ok: true,
+            workspaces: ids.length,
+            totals: {
+                eventsWritten: results.reduce((sum, r) => sum + r.eventsWritten, 0),
+                cost: Math.round(results.reduce((sum, r) => sum + r.cost, 0) * 10_000) / 10_000,
+                failed: results.filter((r) => r.status === "failed").length
+            },
+            results
+        }, 200, cors);
+    } catch (err) {
+        return json({ ok: false, error: err instanceof Error ? err.message : String(err) }, 500, cors);
     }
-
-    const { data: workspaces, error: wsError } = await sb
-        .from("workspace_members")
-        .select("workspace_id")
-        .eq("status", "active");
-    if (wsError) {
-        return new Response(
-            JSON.stringify({ error: wsError.message }),
-            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-    }
-
-    const ids = Array.from(
-        new Set((workspaces ?? []).map((row: any) => row.workspace_id).filter(Boolean))
-    ) as string[];
-    const results: RunResult[] = [];
-    for (const id of ids) {
-        results.push(await runForWorkspace(sb, id));
-    }
-
-    return new Response(JSON.stringify({ results }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
 });

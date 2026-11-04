@@ -29,13 +29,13 @@ export function getAdvanceAsk(
 
     let note: string;
     if (quality.hasSignal) {
-        note = "The live pressure is already visible. Convert it into an owned move.";
+        note = "Use the account signal to ask about the buyer's priorities, then agree on an action and owner.";
     } else if (draft.customNotes.trim().length >= 20) {
         note =
-            "Manual context is doing the why-now work. Make the ask specific enough to survive the handoff.";
+            "Use your notes to explain why this conversation matters now. Specify the next action and owner.";
     } else {
         note =
-            "If the reason now is still vague, the advance ask will sound vague too.";
+            "Clarify why the conversation matters now before proposing a next step.";
     }
 
     return { ask, note };

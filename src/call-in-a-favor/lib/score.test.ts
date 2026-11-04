@@ -45,7 +45,7 @@ describe("computeSpendRead", () => {
         });
         expect(r.score).toBe(30);
         expect(r.band).toBe("not_ready");
-        expect(r.bandLabel).toBe("Not ready");
+        expect(r.bandLabel).toBe("Context incomplete");
     });
 
     it("adds +15 for deal selected", () => {

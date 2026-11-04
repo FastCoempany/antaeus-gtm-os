@@ -189,7 +189,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                 <div class="ta4-bar">
                     <span class="ta4-bname">{t("Territory Architect")}</span>
                     <span class="ta4-gauge">
-                        <b>{alloc.total}</b> / {alloc.ceiling} {t("accounts assigned to a segment")}
+                        <b>{alloc.total}</b> / {alloc.ceiling} {t("account capacity used")}
                     </span>
                 </div>
 
@@ -216,7 +216,7 @@ export function TerritoryArchitectV4(): JSX.Element {
                         ))}
                         {alloc.remaining > 0 ? (
                             <div class="ta4-aseg is-free" style={`flex:${Math.max(alloc.remaining, 8)}`}>
-                                {alloc.remaining} {t("not yet assigned")}
+                                {alloc.remaining} {t("account slots available")}
                             </div>
                         ) : null}
                     </div>

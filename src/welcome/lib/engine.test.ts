@@ -14,7 +14,7 @@ describe("buildActivationModel", () => {
         // Phase 2.1 audit: empty-state copy now names the unit (ICP)
         // and the verb (define). Was: "Set up one ICP before the
         // system starts briefing you" — "ICP" was internal canon.
-        expect(m.headline).toMatch(/define one sharp icp/i);
+        expect(m.headline).toMatch(/define your first ideal customer profile/i);
         expect(m.nextMilestone?.key).toBe("icp");
     });
 
@@ -33,7 +33,7 @@ describe("buildActivationModel", () => {
         );
         expect(m.completed).toBe(4);
         expect(m.nextMilestone).toBeNull();
-        expect(m.headline).toMatch(/all four anchors are live/i);
+        expect(m.headline).toMatch(/all four setup milestones are complete/i);
     });
 
     it("calls also count toward the motion anchor", () => {
@@ -116,7 +116,7 @@ describe("buildActions — after-access first move", () => {
         const list = buildActions(postOnboarding, null);
         const top = list[0]!;
         expect(top.key).toBe("motion");
-        expect(top.title).toBe("Log the first motion.");
+        expect(top.title).toBe("Log your first sales activity.");
         expect(top.href).toBe("/outbound-studio/");
     });
 

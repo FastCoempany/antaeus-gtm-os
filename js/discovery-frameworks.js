@@ -1718,7 +1718,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                         id: 'ai-t2-e3', context: 'Operational Leader',
                         label: 'Blame Game Concern',
                         text: '"If something goes wrong, my team is on the hook. I can\'t blame the AI."',
-                        subtext: 'Why they ask: Personal career risk. This person needs air cover, not just product features.'
+                        subtext: 'Possible reason for the question: personal career risk. Ask what internal support and evidence this person needs before proposing product features.'
                     }
                 ],
                 responses: [

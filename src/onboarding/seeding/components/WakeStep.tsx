@@ -6,9 +6,8 @@ import { nextStep } from "../state";
 import { enrichAccounts, type EnrichmentResult } from "../lib/enrichment";
 
 /**
- * WakeStep (slice 4) — the dashboard wakes up half-way on the accounts
- * they named. Kicks the enrichment seam (the real backend now; the stub
- * is the fallback) and shows a paced, honest progress meter while the web
+ * Account research step. Calls the research backend and reports unavailable
+ * results explicitly. Shows an estimated progress meter while the web
  * searches run — timed to how many companies it's reading, cycling
  * through their names, snapping to done when the real result lands. If the
  * operator goes back and changes the list, the enrichment re-runs.
@@ -45,7 +44,7 @@ function startMeter(names: ReadonlyArray<string>): void {
 
 export function startEnrichment(): void {
     const names = draft.value.accountNames;
-    const key = names.join("|").toLowerCase();
+    const key = JSON.stringify([names.map(name => name.toLowerCase()), draft.value.icpStatement]);
     // Already running or done for this exact list — leave it.
     if (key === enrichedKey && (loading.value || result.value)) return;
     enrichedKey = key;
@@ -83,12 +82,12 @@ export function WakeStep(): JSX.Element {
     const r = result.value;
     const accounts = r?.accounts ?? [];
     const reads = r?.reads ?? [];
-    const busy = loading.value || accounts.length === 0;
+    const busy = loading.value;
     const pct = Math.round(progress.value);
     return (
         <section class="sd-step">
-            <p class="sd-kicker">{t("Half awake", { class: "body" })}</p>
-            <h1 class="sd-h1">{t("It read your list. Here's what it already sees.", { class: "body" })}</h1>
+            <p class="sd-kicker">{t("Account research", { class: "body" })}</p>
+            <h1 class="sd-h1">{t("Review recent changes at your target accounts.", { class: "body" })}</h1>
 
             {busy ? (
                 <div class="sd-meter">
@@ -102,25 +101,27 @@ export function WakeStep(): JSX.Element {
                                       "{name}",
                                       statusName.value || t("your accounts", { class: "body" })
                                   )
-                                : t("Ranking by what's live…", { class: "body" })}
+                                : t("Assessing recent findings…", { class: "body" })}
                         </span>
                         <span class="sd-meter__pct">{pct}%</span>
                     </div>
                     <p class="sd-meter__note">
-                        {t("Real searches, one company at a time — this takes a few seconds.", { class: "body" })}
+                        {t("Searching for source-backed company updates. The progress percentage is an estimate.", { class: "body" })}
                     </p>
                 </div>
             ) : (
                 <div class="sd-wg">
                     <div class="sd-accts">
-                        <h4>{t("Your list · ranked by what's live", { class: "body" })}</h4>
+                        <h4>{r?.unavailable ? t("Your account list", { class: "body" }) : t("Accounts ranked by recent findings", { class: "body" })}</h4>
+                        {!r?.unavailable && <p>{t("Priority is an assessment of recency and relevance to your ICP, not buying intent.", { class: "body" })}</p>}
                         {accounts.map((a, i) => (
                             <div class={`sd-ac${i === 0 ? " is-hot" : ""}`} key={a.name}>
                                 <div>
                                     <div class="sd-ac__nm">{a.name}</div>
                                     <div class={`sd-ac__sg${a.cold ? " is-cold" : ""}`}>{a.signal}</div>
+                                    {a.sourceUrl && /^https:\/\//i.test(a.sourceUrl) && <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer">{t("Review source", { class: "body" })}</a>}
                                 </div>
-                                <div class="sd-ac__ht">heat {a.heat}</div>
+                                {!r?.unavailable && <div class="sd-ac__ht">{t("Priority", { class: "body" })} {a.heat}/100</div>}
                             </div>
                         ))}
                     </div>
@@ -129,6 +130,7 @@ export function WakeStep(): JSX.Element {
                             <div class={`sd-read${rd.kind === "doesnt-fit" ? " is-warn" : ""}`} key={rd.title}>
                                 <div class="sd-read__k">{rd.title}</div>
                                 <div class="sd-read__t">{rd.body}</div>
+                                {rd.sourceUrl && <a href={rd.sourceUrl} target="_blank" rel="noopener noreferrer">{t("Review source", { class: "body" })}</a>}
                             </div>
                         ))}
                     </div>
@@ -142,7 +144,7 @@ export function WakeStep(): JSX.Element {
                     disabled={busy}
                     onClick={() => nextStep()}
                 >
-                    {t("Make it rise up to meet you every morning →", { class: "body" })}
+                    {t("Continue setup →", { class: "body" })}
                 </button>
             </div>
         </section>

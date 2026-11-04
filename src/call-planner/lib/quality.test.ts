@@ -47,7 +47,7 @@ describe("evaluateQuality — empty draft", () => {
         // Persona is "cxo" by default → met. All other gates miss.
         expect(q.score).toBe(10);
         expect(q.band).toBe("thin");
-        expect(q.bandLabel).toBe("Thin");
+        expect(q.bandLabel).toBe("Incomplete");
         expect(q.gates.find((g) => g.key === "persona")?.met).toBe(true);
         expect(q.gates.find((g) => g.key === "person")?.met).toBe(false);
         expect(q.gates.find((g) => g.key === "context")?.met).toBe(false);
@@ -57,7 +57,7 @@ describe("evaluateQuality — empty draft", () => {
 
     it("nextMove tells the operator to pick a real human first", () => {
         expect(evaluateQuality(inputs()).nextMove).toContain(
-            "Choose the actual human"
+            "Choose the contact"
         );
     });
 });
@@ -281,7 +281,7 @@ describe("evaluateQuality — band thresholds", () => {
 describe("evaluateQuality — nextMove ordering", () => {
     it("missing person beats every other coach line", () => {
         expect(evaluateQuality(inputs()).nextMove).toContain(
-            "actual human"
+            "contact you plan to speak with"
         );
     });
 
@@ -301,7 +301,7 @@ describe("evaluateQuality — nextMove ordering", () => {
                 })
             })
         );
-        expect(q.nextMove).toContain("why-now");
+        expect(q.nextMove).toContain("business reason");
     });
 
     it("missing advancement is suggested when everything else is met", () => {
@@ -315,7 +315,7 @@ describe("evaluateQuality — nextMove ordering", () => {
                 linkedDeal: null
             })
         );
-        expect(q.nextMove).toContain("in-flight deal");
+        expect(q.nextMove).toContain("relevant deal");
     });
 
     it("all gates met → coach line points downstream", () => {

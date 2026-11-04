@@ -180,11 +180,11 @@ export function SettingsV4(): JSX.Element {
 
                 <section class="st4-sec">
                     <div class="st4-sh">{t("Data controls")}</div>
-                    <div class="st4-sd">{t("Export or restore the cloud data covered by the current Settings workflow, manage the device copy, or delete the core cloud workspace content covered by this control.", { class: "body" })}</div>
+                    <div class="st4-sd">{t("Download or restore selected cloud records, manage this browser's copy, or delete the records listed below.", { class: "body" })}</div>
                     <div class="st4-item">
                         <div>
                             <div class="st4-it">{t("Download workspace export", { class: "body" })}</div>
-                            <div class="st4-id">{t("Creates a JSON export of the cloud tables currently included in the Settings export. If a table cannot be read, the export records that error instead of implying the copy is complete.", { class: "body" })}</div>
+                            <div class="st4-id">{t("Downloads the records listed below as JSON. Any read errors are recorded in the file. This is a partial workspace export.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class="st4-btn" disabled={isExportingCloud.value} onClick={() => void exportCloudData()}>
@@ -192,6 +192,14 @@ export function SettingsV4(): JSX.Element {
                             </button>
                         </div>
                     </div>
+                    <details class="st4-adv">
+                        <summary>{t("Which records are included?")}</summary>
+                        <div class="st4-ab">
+                            <p>{t("Export and delete include ICPs, deals, proofs, network requests, watched accounts, sequences, discovery call logs, saved studio content, pipeline settings, discovery frameworks, readiness snapshots and sales handoff documents.", { class: "body" })}</p>
+                            <p>{t("Export also includes events and the workspace's commercial profile. Delete retains those records. Neither control covers all workspace content: contacts, activity history, Briefing items, monitoring rules and other records can remain outside this list.", { class: "body" })}</p>
+                            <p>{t("Each operation processes up to 5,000 records per included category, 100 pipeline settings and one commercial profile. Records beyond these limits are not exported or deleted. Your account, workspace and membership are retained.", { class: "body" })}</p>
+                        </div>
+                    </details>
                     <div class="st4-item">
                         <div>
                             <div class="st4-it">{t("Restore from an export", { class: "body" })}</div>
@@ -255,7 +263,7 @@ export function SettingsV4(): JSX.Element {
                     <div class="st4-danger">
                         <div class="st4-dt">{t("Delete core workspace data", { class: "body" })}</div>
                         <div class="st4-dd">
-                            {t("This removes rows from the core workspace tables currently included in the delete workflow and clears the local Antaeus cache. It does not delete your account, workspace membership, or every workspace-scoped table. Export first if you may need the covered data later.", { class: "body" })}
+                            {t("Deletes the cloud records listed above within the stated limits and clears this browser's Antaeus copy. Other cloud records remain. Download an export first if you may need the included data later.", { class: "body" })}
                         </div>
                         <div class="st4-conf">
                             <span class="st4-cl">{t("Type")} <code>delete my workspace</code> {t("to enable the button:")}</span>

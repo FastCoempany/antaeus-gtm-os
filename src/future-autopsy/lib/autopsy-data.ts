@@ -13,14 +13,14 @@ import type { ComputedVitals } from "./vitals";
 // ─── Chapters: cause → observed condition / assessment ─────────────────
 
 export const CHAPTERS: Readonly<Record<CauseId, string>> = {
-    no_nextstep: "No dated next step is recorded.",
-    stale_thread: "No recent buyer activity is recorded.",
-    no_champion: "No confirmed champion is recorded.",
+    no_nextstep: "Next-step details or date need review.",
+    stale_thread: "The deal record has not been updated recently.",
+    no_champion: "Champion details are missing or brief.",
     champion_weak:
         "A champion is named, but their authority or agreed internal actions are not yet clear.",
-    no_eb: "No economic buyer or final budget owner is recorded.",
+    no_eb: "Economic-buyer or budget-owner details are missing or brief.",
     no_process: "Decision steps and owners are not fully recorded.",
-    impact_not_real: "No quantified business impact is recorded.",
+    impact_not_real: "Business-impact details are missing or brief.",
     usecase_blurry: "The primary use case or success scope is not specific enough.",
     competition_unknown:
         "The competing alternative or status quo is not recorded.",
@@ -29,15 +29,15 @@ export const CHAPTERS: Readonly<Record<CauseId, string>> = {
     poc_no_criteria:
         "Pilot success criteria or readout ownership are not fully defined.",
     single_threaded:
-        "The deal depends on one active contact.",
+        "Recorded stakeholder coverage is below the target of three.",
     next_step_overdue:
         "The recorded next step is overdue."
 };
 
-export function chapterFor(cause: CauseId): Chapter | null {
+export function chapterFor(cause: CauseId, evidence?: string): Chapter | null {
     const story = CHAPTERS[cause];
     if (!story) return null;
-    return { cause, title: cause, story };
+    return { cause, title: cause, story: evidence ?? story };
 }
 
 // ─── Corrected conditions: cause → condition id + text ─────────────────
@@ -100,27 +100,27 @@ export const CAUSE_LEADS: Readonly<
 > = {
     no_champion: {
         discovery:
-            "No confirmed champion is recorded. Without an identified internal owner, there is less evidence that someone is advancing the purchase between meetings.",
+            "Champion details need review. Confirm who owns the purchase internally and what actions they have agreed to take.",
         negotiation:
-            "A confirmed champion is not recorded during negotiation. That increases risk because no internal owner is documented for resolving approvals or pushback."
+            "Champion details need review during negotiation. Confirm the internal owner for resolving approvals or objections."
     },
     no_eb: {
         negotiation:
-            "No economic buyer is recorded during negotiation, so budget ownership and final approval remain unclear.",
+            "Economic-buyer details need review during negotiation. Confirm budget ownership and final approval.",
         poc:
-            "Pilot results do not yet have a recorded economic buyer or budget owner."
+            "Economic-buyer details need review. Confirm who will evaluate the pilot results and approve the budget."
     },
     single_threaded: {
         discovery:
-            "The deal currently depends on one active contact. That increases risk if the contact becomes unavailable or disengages.",
+            "Recorded stakeholder coverage is below the target of three. Confirm the contacts and roles involved in the decision.",
         negotiation:
-            "The deal currently depends on one active contact during a multi-stakeholder approval process."
+            "Recorded stakeholder coverage is below the target of three during negotiation. Confirm the people responsible for remaining approvals."
     },
     stale_thread: {
         discovery:
-            "No recent buyer activity is recorded. The longer that inactivity continues, the less current evidence there is that the opportunity remains a priority.",
+            "The deal record has not been updated recently. Check recent buyer communication before assessing whether the opportunity remains a priority.",
         _default:
-            "No recent buyer activity is recorded. Continued inactivity increases loss risk."
+            "The deal record has not been updated recently. Confirm the current buyer status and next step."
     }
 };
 

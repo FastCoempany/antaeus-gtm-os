@@ -47,7 +47,7 @@ export function countCallsInWindow(
         if (!iso) continue;
         const t = new Date(iso).getTime();
         if (Number.isNaN(t)) continue;
-        if (t >= cutoff) count += 1;
+        if (t >= cutoff && t <= now.getTime()) count += 1;
     }
     return count;
 }
@@ -61,8 +61,8 @@ export function deriveDiscoveryRhythmObservations(
 
     const text =
         recent === 0
-            ? `No discovery calls were logged in the last ${WEEK_WINDOW_DAYS} days. Discovery is the muscle that compounds; a quiet week shows up later as a thin pipeline.`
-            : `Only ${recent} discovery call was logged in the last ${WEEK_WINDOW_DAYS} days. Below the floor for the cadence to compound.`;
+            ? `No discovery calls were logged in the last ${WEEK_WINDOW_DAYS} days. Check whether calls are missing from the log or whether more discovery activity is needed for your pipeline plan.`
+            : `Only ${recent} discovery call was logged in the last ${WEEK_WINDOW_DAYS} days. Review that activity against your pipeline plan.`;
 
     return [
         {

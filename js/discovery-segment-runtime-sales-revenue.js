@@ -112,7 +112,7 @@
         label:"We already have Gong / Clari / Salesforce",
         reply:"That makes sense. I am not asking whether signal exists. I am asking where managers still have to translate it by hand before they trust a number.",
         actions:[
-          jumpNode("Map the manager read", "current-state-truth", "manager-read", "blu"),
+          jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "blu"),
           jumpNode("Name the miss", "pain-and-consequence", "forecast-gap", "org")
         ]
       },
@@ -139,7 +139,7 @@
         label:"Forecast is fine",
         reply:"Good. Then where does leadership still ask for manual inspection before believing the number?",
         actions:[
-          jumpNode("Map the manual read", "current-state-truth", "manager-read", "blu"),
+          jumpNode("Map the manual assessment", "current-state-truth", "manager-read", "blu"),
           jumpNode("Find the trigger", "trigger-and-urgency", "board-pressure", "org")
         ]
       },
@@ -156,18 +156,18 @@
     segments:[
       segment("opening-frame","01","Opening frame","Start on live forecast truth.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most revenue teams already have plenty of activity data. The question is where managers still have to interpret what is real by hand before they trust the forecast. Is that true in your world too?\"","Use this when they will diagnose before seeing product.",true,[
-          branch("CONFIRMS","ok","\"Yes. The signal is there, but trust still depends on the manager reading between the lines.\"","\"Where does that manual read happen most painfully: forecast calls, one-on-ones, or deal reviews?\"",[
-            jumpNode("Map the manager read", "current-state-truth", "manager-read", "blu"),
+          branch("CONFIRMS","ok","\"Yes. The signal is there, but trust still depends on the manager reading between the lines.\"","\"Where does that manual assessment happen most painfully: forecast calls, one-on-ones, or deal reviews?\"",[
+            jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "blu"),
             jumpNode("Use one live deal", "current-state-truth", "deal-review", "grn")
-          ],"Manual interpretation is part of the current motion.","You still need the exact inspection moment and a live example."),
+          ],"Manual interpretation is part of the current process.","You still need the exact inspection moment and a live example."),
           branch("STACK DEFENSE","ly","\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"","\"Good. Then where does the stack still stop short of telling a manager whether a deal is actually safe?\"",[
-            jumpNode("Inspect the deal read", "current-state-truth", "deal-review", "org"),
+            jumpNode("Review the deal assessment", "current-state-truth", "deal-review", "org"),
             jumpNode("Name the miss", "pain-and-consequence", "forecast-gap", "blu")
           ],"The buyer is defending tooling, not denying the problem.","You still need the gap between data presence and trust."),
           branch("PITCH REQUEST","fl","\"Can you just show me what the product does?\"","\"I can. Give me one live deal or commit class the current tooling still gets wrong so the screen maps to a real inspection problem.\"",[
             jumpNode("Use one live deal", "current-state-truth", "deal-review", "blu"),
             jumpNode("Set the proof bar", "proof-threshold", "live-proof", "pur")
-          ],"They are trying to skip diagnosis.","You still need one real pipeline pattern before demo.")
+          ],"The buyer has asked to see the product before describing the workflow.","You still need one real pipeline pattern before demo.")
         ]),
         node("opening-frame","live-deal","fu","Start from one live deal","\"Pick one deal leadership talks about like it is healthy, but a manager still does not fully trust. What is happening there?\"","Use this when the room is operator-heavy and ready to get concrete.",false,[
           branch("LIVE DEAL READY","ok","\"We have one in commit right now that still feels thinner than the stage language says.\"","\"Good. What exactly makes the manager distrust it: next step, champion, proof, timing, or multithreading?\"",[
@@ -175,7 +175,7 @@
             jumpNode("Name the commit risk", "pain-and-consequence", "commit-risk", "blu")
           ],"A live deal is now anchoring the call.","You still need the specific failure pattern inside it."),
           branch("PIPELINE ANSWER","ly","\"It is not one deal. It is the whole pipeline view that feels soft.\"","\"Understood. Where does the softness surface first: manager inspection, forecast category changes, or rep follow-up discipline?\"",[
-            jumpNode("Map the manager read", "current-state-truth", "manager-read", "org"),
+            jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "org"),
             jumpNode("Open forecast pain", "pain-and-consequence", "forecast-gap", "blu")
           ],"The problem may be systemic instead of isolated.","You still need the first visible break in the system."),
           branch("NO EXAMPLE","fl","\"I do not have a live one in mind.\"","\"Then use the last forecast call that got uncomfortable. What made the number hard to believe?\"",[
@@ -184,12 +184,12 @@
           ],"No live example is ready yet.","You still need a real forecast or review incident.")
         ]),
         node("opening-frame","sideways","ri","If the call starts sideways","\"If this is early, that is fine. What made this meeting worth taking now instead of after quarter close?\"","Use this when they are curious but not yet committed.",false,[
-          branch("MISS OR PRESSURE","ok","\"We missed, or leadership does not trust the number enough right now.\"","\"Then let us follow that pressure. Where does trust first break in the current inspection motion?\"",[
+          branch("MISS OR PRESSURE","ok","\"We missed, or leadership does not trust the number enough right now.\"","\"Then let us follow that pressure. Where does trust first break in the current deal-review process?\"",[
             jumpNode("Find the trigger", "trigger-and-urgency", "board-pressure", "grn"),
-            jumpNode("Map the manager read", "current-state-truth", "manager-read", "blu")
+            jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "blu")
           ],"There is a real forcing event.","You still need the operational location of the distrust."),
           branch("SOFT IMPROVEMENT","ly","\"We mostly want to tighten what already exists.\"","\"Tighten where first: forecast calls, deal reviews, rep discipline, or CRM trust?\"",[
-            jumpNode("Map the current motion", "current-state-truth", "rep-behavior", "org"),
+            jumpNode("Map the current process", "current-state-truth", "rep-behavior", "org"),
             jumpNode("Test urgency", "trigger-and-urgency", "soft-trigger", "blu")
           ],"There is directional interest, but the scope is still soft.","You still need the highest-value pressure point."),
           branch("JUST INFORMING","fl","\"Nothing urgent. We are just staying informed.\"","\"That is workable. What would have to happen before revenue leadership treated this like a real priority?\"",[
@@ -199,8 +199,8 @@
         ])
       ]),
       segment("current-state-truth","02","Current-state truth","Map how the number gets trusted.",true,[
-        node("current-state-truth","manager-read","fu","Map the manager read","\"Walk me through how a frontline manager decides whether a deal is real today. What do they actually look at before they trust the commit?\"","Start here when they say trust still depends on human judgment.",true,[
-          branch("MANUAL READ CLEAR","ok","\"Managers look at activity, next steps, and whether the rep sounds grounded, but it still takes a manual read.\"","\"Which part of that manual read breaks first: hidden risk, weak next step, or overconfident rep language?\"",[
+        node("current-state-truth","manager-read","fu","Map the manager assessment","\"Walk me through how a frontline manager decides whether a deal is real today. What do they actually look at before they trust the commit?\"","Start here when they say trust still depends on human judgment.",true,[
+          branch("MANUAL READ CLEAR","ok","\"Managers look at activity, next steps, and whether the rep sounds grounded, but it still takes a manual assessment.\"","\"Which part of that manual assessment breaks first: hidden risk, weak next step, or overconfident rep language?\"",[
             jumpNode("Name the hidden risk", "pain-and-consequence", "forecast-gap", "grn"),
             jumpNode("Inspect one live deal", "current-state-truth", "deal-review", "blu")
           ],"The manual inspection pattern is visible.","You still need the first unreliable signal inside it."),
@@ -213,7 +213,7 @@
             jumpNode("Set the proof bar", "proof-threshold", "live-proof", "blu")
           ],"The inspection system may be informal.","You still need a concrete deal pattern, not general discomfort.")
         ]),
-        node("current-state-truth","deal-review","pr","Inspect one live deal","\"Take one deal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\"","Use this when you need the current motion to get concrete fast.",false,[
+        node("current-state-truth","deal-review","pr","Inspect one live deal","\"Take one deal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\"","Use this when you need the current process to get concrete fast.",false,[
           branch("DEAL THIN","ok","\"They would have to verify the next step, the champion, and whether the timeline is actually real.\"","\"Good. Which of those is most often wrong at commit time?\"",[
             jumpNode("Name the commit risk", "pain-and-consequence", "commit-risk", "grn"),
             jumpNode("Find who feels it", "stakeholder-and-ownership", "manager-owner", "blu")
@@ -221,7 +221,7 @@
           branch("FIELDS LOOK CLEAN","ly","\"Mostly they check whether the stage and fields look clean.\"","\"And when the fields look clean but the deal still dies, what was missing?\"",[
             jumpNode("Surface the blind spot", "pain-and-consequence", "commit-risk", "org"),
             jumpNode("Test the stack gap", "current-vendor-and-displacement", "tool-stack", "blu")
-          ],"The current motion may over-trust CRM hygiene.","You still need the truth debt behind clean fields."),
+          ],"The current process may over-trust CRM hygiene.","You still need the unresolved evidence gaps behind clean fields."),
           branch("NO LIVE DEAL","fl","\"We do not have one I want to unpack on this call.\"","\"Then use the last uncomfortable forecast call. What made a number feel less real once the questions started?\"",[
             jumpNode("Use forecast pain", "pain-and-consequence", "forecast-gap", "red"),
             jumpNode("Use forecast call trigger", "trigger-and-urgency", "inspection-failure", "blu")
@@ -243,7 +243,7 @@
         ])
       ]),
       segment("pain-and-consequence","03","Pain and consequence","Make forecast pain expensive.",true,[
-        node("pain-and-consequence","forecast-gap","ri","Name the forecast miss","\"When the number is wrong, what is the actual damage: missed call, bad board prep, wasted rep time, or hidden risk aging out?\"","Start here when they admit trust is thin.",true,[
+        node("pain-and-consequence","forecast-gap","ri","Name the forecast miss","\"When the number is wrong, what is the actual damage: missed call, bad board prep, wasted rep time, or hidden risk aging out?\"","Start here when they admit confidence in the data is limited.",true,[
           branch("FORECAST DAMAGE CLEAR","ok","\"We waste time debating the number and still miss what is actually slipping.\"","\"Which part hurts most: leadership trust, manager time, or revenue surprise?\"",[
             jumpNode("Quantify the cost", "pain-and-consequence", "rep-drag", "grn"),
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "sponsor", "blu")
@@ -257,7 +257,7 @@
             jumpNode("Find the trigger", "trigger-and-urgency", "soft-trigger", "blu")
           ],"The risk is visible before the miss lands.","You still need the fragility pattern in plain language.")
         ]),
-        node("pain-and-consequence","commit-risk","pr","Surface hidden commit risk","\"Inside a deal that looks healthy on paper, what usually ends up being less real than the stage language suggests?\"","Use this to turn generic forecast pain into deal truth debt.",false,[
+        node("pain-and-consequence","commit-risk","pr","Surface hidden commit risk","\"Inside a deal that looks healthy on paper, what usually ends up being less real than the stage language suggests?\"","Use this to turn generic forecast pain into deal unresolved evidence gaps.",false,[
           branch("NEXT STEP THIN","ok","\"The next step looks real until you ask who accepted it and when.\"","\"How often does that happen late enough to damage the number?\"",[
             jumpNode("Tie it to urgency", "trigger-and-urgency", "inspection-failure", "grn"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")

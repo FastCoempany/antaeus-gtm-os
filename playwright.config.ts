@@ -50,7 +50,7 @@ export default defineConfig({
         //   - shared static (/js, /css, /demo-seed.html, /assets)
         // The npm run test:e2e script runs build:cloudflare before invoking
         // playwright, so dist/ is fresh when this webServer starts.
-        command: "python3 -m http.server 4173 --bind 127.0.0.1 --directory dist",
+        command: "node tools/qa/serve-static.js",
         url: "http://127.0.0.1:4173",
         reuseExistingServer: !process.env.CI,
         timeout: 30_000

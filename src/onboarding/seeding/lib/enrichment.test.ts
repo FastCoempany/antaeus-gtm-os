@@ -2,8 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/observability", () => ({ reportError: vi.fn(), trackEvent: vi.fn() }));
 
-// Force the Edge Function path to fail so enrichAccounts falls back to the
-// stub — the behaviour internal preview relies on when nothing's deployed.
+// A network/backend failure must never be reported as researched company data.
 vi.mock("@/lib/supabase-client", () => ({
     getSupabaseClient: () => {
         throw new Error("no supabase in test");
@@ -12,14 +11,15 @@ vi.mock("@/lib/supabase-client", () => ({
 
 import { enrichAccounts, enrichAccountsStub } from "./enrichment";
 
-describe("enrichAccounts (fallback to stub)", () => {
-    it("returns the stub result when the Edge Function isn't reachable", async () => {
+describe("enrichAccounts unavailable state", () => {
+    it("preserves account names without inventing evidence when the backend is unreachable", async () => {
         const r = await enrichAccounts(["Northwind", "Apex", "Cobalt", "Evermark"], "Heads of RevOps");
         expect(r.accounts.length).toBe(4);
-        // Ranked hottest-first; the last is the honest quiet one.
-        expect(r.accounts[r.accounts.length - 1]!.cold).toBe(true);
-        expect(r.accounts[r.accounts.length - 1]!.signal).toMatch(/quiet/);
-        expect(r.reads.length).toBeGreaterThan(0);
+        expect(r.unavailable).toBe(true);
+        expect(r.accounts.map(a => a.name)).toEqual(["Northwind", "Apex", "Cobalt", "Evermark"]);
+        expect(r.accounts.every(a => a.cold && a.heat === 0 && !a.sourceUrl)).toBe(true);
+        expect(r.accounts.every(a => a.signal === "Account research unavailable")).toBe(true);
+        expect(r.reads[0]?.body).toContain("No company changes were verified");
     });
 
     it("empty input short-circuits", async () => {
@@ -33,5 +33,6 @@ describe("enrichAccountsStub", () => {
         const a = await enrichAccountsStub(["Acme", "Beta", "Gamma"], "icp");
         const b = await enrichAccountsStub(["Acme", "Beta", "Gamma"], "icp");
         expect(a.accounts.map((x) => x.name)).toEqual(b.accounts.map((x) => x.name));
+        expect(a.accounts.every(x => x.signal.startsWith("Demo example:"))).toBe(true);
     });
 });

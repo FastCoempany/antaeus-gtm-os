@@ -20,55 +20,55 @@ export const CAUSES: ReadonlyArray<CauseRule> = [
     {
         id: "no_nextstep",
         severity: 9,
-        text: "No dated next step is recorded.",
+        text: "The next step is missing, briefly described, or undated.",
         when: (v) => v.missing.nextstep || !v.nextStepHasDate
     },
     {
         id: "stale_thread",
         severity: 8,
-        text: "No recent buyer activity is recorded.",
+        text: "The deal record has not been updated recently.",
         when: (v, prefs) => v.staleDays >= prefs.staleWarnDays
     },
     {
         id: "no_champion",
         severity: 8,
-        text: "No confirmed champion is recorded.",
+        text: "Champion details are missing or brief.",
         when: (v) => v.missing.champion
     },
     {
         id: "champion_weak",
         severity: 6,
-        text: "The recorded champion signal is weak or non-committal.",
+        text: "Champion details are brief; confirm their role and agreed actions.",
         when: (v) => v.gates.champion === "weak"
     },
     {
         id: "no_eb",
         severity: 8,
-        text: "No economic buyer is recorded.",
+        text: "Economic-buyer details are missing or brief.",
         when: (v) => v.missing.eb
     },
     {
         id: "no_process",
         severity: 8,
-        text: "The decision process is not mapped.",
+        text: "Decision-process details are missing or brief.",
         when: (v) => v.missing.process
     },
     {
         id: "impact_not_real",
         severity: 7,
-        text: "Business impact is not quantified or remains vague.",
+        text: "Business-impact details are missing or brief.",
         when: (v) => v.missing.impact
     },
     {
         id: "usecase_blurry",
         severity: 7,
-        text: "The use case is not specific enough to evaluate consistently.",
+        text: "Use-case details are missing or brief.",
         when: (v) => v.missing.usecase
     },
     {
         id: "competition_unknown",
         severity: 5,
-        text: "The competitor or status quo is not recorded.",
+        text: "Competitor or status-quo details are missing or brief.",
         when: (v) => v.missing.competition
     },
     {
@@ -80,7 +80,7 @@ export const CAUSES: ReadonlyArray<CauseRule> = [
     {
         id: "poc_no_criteria",
         severity: 8,
-        text: "The pilot does not have complete success criteria and decision ownership.",
+        text: "Pilot impact or decision-process details are missing or brief.",
         when: (v) =>
             /poc/.test(v.stage.toLowerCase()) &&
             (v.missing.impact || v.missing.process)
@@ -88,7 +88,7 @@ export const CAUSES: ReadonlyArray<CauseRule> = [
     {
         id: "single_threaded",
         severity: 7,
-        text: "Fewer than three stakeholders are recorded as engaged on this deal.",
+        text: "The recorded stakeholder-coverage count is below three.",
         when: (v) => v.threading.engaged < 3 && v.value >= 50000
     },
     {
@@ -99,13 +99,31 @@ export const CAUSES: ReadonlyArray<CauseRule> = [
     }
 ] as const;
 
+/** These rules use record completeness and update dates, not verified buyer behavior. */
+function evidenceFor(rule: CauseRule, vitals: ComputedVitals): string {
+    if (rule.id === "stale_thread") {
+        return `The deal record was last updated ${vitals.staleDays} days ago; this is not a measure of buyer activity.`;
+    }
+    if (rule.id === "no_nextstep") {
+        if (!vitals.hasNextStep) return "No next-step description is recorded.";
+        if (!vitals.nextStepHasDate) return "The recorded next step has no date.";
+        return "A dated next step is recorded, but its description is brief. Confirm the action and owner.";
+    }
+    if (rule.id === "no_champion" && vitals.gates.champion === "missing") return "No champion is recorded.";
+    if (rule.id === "no_eb" && vitals.gates.eb === "missing") return "No economic buyer is recorded.";
+    if (rule.id === "single_threaded") {
+        return `The stakeholder-coverage count is ${vitals.threading.engaged}, below the target of three. This count includes named champion and economic-buyer fields.`;
+    }
+    return rule.text;
+}
+
 export function topCauses(
     vitals: ComputedVitals,
     prefs: Prefs = DEFAULT_PREFS,
     limit = 5
 ): ReadonlyArray<Cause> {
     return CAUSES.filter((c) => c.when(vitals, prefs))
-        .map((c) => ({ id: c.id, weight: c.severity, label: c.text }))
+        .map((c) => ({ id: c.id, weight: c.severity, label: evidenceFor(c, vitals) }))
         .sort((a, b) => b.weight - a.weight)
         .slice(0, limit);
 }

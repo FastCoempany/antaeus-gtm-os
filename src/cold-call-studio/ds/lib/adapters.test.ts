@@ -52,7 +52,7 @@ describe("tone maps", () => {
 describe("callRead", () => {
     it("reads low + 'no account' when nothing is selected", () => {
         const r = callRead();
-        expect(r.diagnosis.toLowerCase()).toContain("no account");
+        expect(r.diagnosis.toLowerCase()).toContain("select an account");
         expect(scoreTone(r.score)).toBeDefined();
     });
     it("scores up with a hot account in a late thread", () => {

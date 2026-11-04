@@ -92,7 +92,7 @@
     quickActions:[
       {
         title:"Pick one live decision",
-        copy:"Anchor the call to one release, workflow, or adoption question currently moving with thin evidence.",
+        copy:"Anchor the call to one release, workflow, or adoption question currently moving with limited evidence.",
         action:jumpNode("Open live decision", "current-state-truth", "live-decision", "blu")
       },
       {
@@ -159,7 +159,7 @@
           branch("CONFIRMS","ok","\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"","\"Where does that break first: feedback intake, synthesis, release decisions, adoption visibility, or enablement handoff?\"",[
             jumpNode("Map the live decision", "current-state-truth", "live-decision", "blu"),
             jumpNode("Name the signal gap", "pain-and-consequence", "signal-gap", "grn")
-          ],"Manual signal stitching is part of the current motion.","You still need the exact decision or workflow where it breaks first."),
+          ],"Manual signal stitching is part of the current process.","You still need the exact decision or workflow where it breaks first."),
           branch("TOOL DEFENSE","ly","\"We already have docs, analytics, and research tooling in place.\"","\"Good. Then where do teams still have to translate between those systems by hand before acting?\"",[
             jumpNode("Inspect the current stack", "current-vendor-and-displacement", "tool-sprawl", "org"),
             jumpNode("Open the signal gap", "pain-and-consequence", "signal-gap", "blu")
@@ -169,12 +169,12 @@
             jumpNode("Open the trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
           ],"The motion may be immature, not over-tooled.","You still need the highest-cost absence of process.")
         ]),
-        node("opening-frame","decision-scope","fu","Start from one live decision","\"Pick one feature, release, onboarding flow, or enablement motion that is moving right now. Where is that decision running with thinner signal than it should?\"","Use this when the room is already operational.",false,[
-          branch("DECISION READY","ok","\"We have a release decision moving without enough usable evidence.\"","\"Good. What is missing most: user signal, product adoption read, internal alignment, or enablement readiness?\"",[
+        node("opening-frame","decision-scope","fu","Start from one live decision","\"Pick one feature, release, onboarding flow, or enablement process that is moving right now. Where is that decision running with less evidence than it needs?\"","Use this when the room is already operational.",false,[
+          branch("DECISION READY","ok","\"We have a release decision moving without enough usable evidence.\"","\"Good. What is missing most: user signal, product adoption evidence, internal alignment, or enablement readiness?\"",[
             jumpNode("Open live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Open signal pain", "pain-and-consequence", "signal-gap", "blu")
           ],"A live decision is now anchoring the call.","You still need the specific missing truth inside it."),
-          branch("NO LIVE EXAMPLE","fl","\"I do not have one in mind right now.\"","\"Then use the last time the team had to re-open a decision because the evidence was too thin or too scattered.\"",[
+          branch("NO LIVE EXAMPLE","fl","\"I do not have one in mind right now.\"","\"Then use the last time the team had to re-open a decision because the evidence was insufficient or too scattered.\"",[
             jumpNode("Open signal pain", "pain-and-consequence", "signal-gap", "red"),
             jumpNode("Open the trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
           ],"No live decision is ready yet.","You still need one recent cycle failure.")
@@ -212,7 +212,7 @@
       ]),
       segment("pain-and-consequence","03","Pain and consequence","Make the signal problem expensive.",true,[
         node("pain-and-consequence","signal-gap","ri","Name the signal gap","\"What is the actual damage today: slow product decisions, repeated research, bad release calls, weak adoption visibility, or teams moving with conflicting truth?\"","Start here when the workflow break is visible.",true,[
-          branch("DECISION PAIN CLEAR","ok","\"We move decisions with thin evidence and end up revisiting them later.\"","\"What does that cost most: roadmap churn, engineering waste, weak launches, or leadership trust?\"",[
+          branch("DECISION PAIN CLEAR","ok","\"We move decisions with limited evidence and end up revisiting them later.\"","\"What does that cost most: roadmap churn, engineering waste, weak launches, or leadership trust?\"",[
             jumpNode("Find who feels it", "stakeholder-and-ownership", "product-owner", "grn"),
             jumpNode("Find the trigger", "trigger-and-urgency", "miss-or-pressure", "blu")
           ],"Decision pain is explicit.","You still need the business or execution consequence of it."),
@@ -244,7 +244,7 @@
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
         node("trigger-and-urgency","miss-or-pressure","ri","Find the forcing event","\"What changed that made this worth looking at now: a bad launch, research debt becoming visible, leadership asking for better evidence, enablement drag, or weak adoption after release?\"","Start here when urgency exists but is not yet specific.",true,[
-          branch("PRESSURE CLEAR","ok","\"A launch or decision cycle exposed how thin the evidence and handoff still are.\"","\"Which live decision or release cycle would prove the case fastest if it improved?\"",[
+          branch("PRESSURE CLEAR","ok","\"A launch or decision cycle exposed how limited the evidence and handoff still are.\"","\"Which live decision or release cycle would prove the case fastest if it improved?\"",[
             jumpNode("Pick the live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Lock the review", "next-step-lock", "decision-review", "blu")
           ],"The forcing event is explicit.","You still need the cycle it attaches to."),
@@ -305,7 +305,7 @@
             jumpNode("Return to signal gap", "pain-and-consequence", "signal-gap", "blu")
           ],"The buyer is forcing business case first.","You still need a safe ROI workflow.")
         ]),
-        node("proof-threshold","pilot-cycle","pr","Choose the pilot cycle","\"What is the safest meaningful cycle to test first: one release, one onboarding flow, one enablement motion, one feedback loop, or one adoption question?\"","Use this when the buyer is open but needs a narrow start.",false,[
+        node("proof-threshold","pilot-cycle","pr","Choose the pilot cycle","\"What is the safest meaningful cycle to test first: one release, one onboarding flow, one enablement process, one feedback loop, or one adoption question?\"","Use this when the buyer is open but needs a narrow start.",false,[
           branch("CYCLE CLEAR","ok","\"One release or one onboarding flow would be the cleanest place to start.\"","\"Good. Then who needs to join the review so that cycle becomes real, not theoretical?\"",[
             jumpNode("Lock the review", "next-step-lock", "decision-review", "grn"),
             jumpNode("Map the approval path", "decision-architecture", "approval-path", "blu")
@@ -348,7 +348,7 @@
       ]),
       segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
         node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first live cycle to approval?\"","Start here when proof is getting concrete.",true,[
-          branch("PATH CLEAR","ok","\"PM leadership would sponsor, product ops would evaluate, and downstream teams would need to agree on the workflow.\"","\"Good. What does the first review need to decide so the motion stays real?\"",[
+          branch("PATH CLEAR","ok","\"PM leadership would sponsor, product ops would evaluate, and downstream teams would need to agree on the workflow.\"","\"Good. What does the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the review", "next-step-lock", "decision-review", "grn"),
             jumpNode("Set the pilot cycle", "next-step-lock", "pilot-design", "blu")
           ],"The approval path is visible.","You still need the first review outcome."),

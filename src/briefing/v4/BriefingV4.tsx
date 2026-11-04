@@ -320,7 +320,7 @@ export function BriefingV4(): JSX.Element {
                             <button
                                 type="button"
                                 class={`bfv4d-bell${noticedHidden.value ? " has" : ""}`}
-                                aria-label={t("Show what the system noticed")}
+                                aria-label={t("Show current analysis")}
                                 onClick={() => (noticedHidden.value = !noticedHidden.value)}
                             >
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
@@ -391,12 +391,12 @@ export function BriefingV4(): JSX.Element {
                     </div>
                     <div class="bfv4d-scroll">
                         {readsError.value ? (
-                            <p class="bfv4d-quiet" role="alert">{t("Couldn't load your reads.", { class: "body" })}</p>
+                            <p class="bfv4d-quiet" role="alert">{t("Couldn't load workspace analysis.", { class: "body" })}</p>
                         ) : !readsLoaded.value ? (
                             <p class="bfv4d-quiet">{t("Reading your work…", { class: "body" })}</p>
                         ) : reads.length === 0 ? (
                             <p class="bfv4d-quiet">
-                                {t("Nothing to flag in your work right now. The system checks every half hour — when something starts slipping, it shows up here.", { class: "body" })}
+                                {t("No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.", { class: "body" })}
                             </p>
                         ) : (
                             <>
@@ -408,7 +408,7 @@ export function BriefingV4(): JSX.Element {
                                             <button
                                                 type="button"
                                                 class="bfv4d-read-x"
-                                                aria-label={t("Dismiss this read")}
+                                                aria-label={t("Dismiss this analysis")}
                                                 disabled={dismissingId.value === r.id}
                                                 onClick={() => void dismissRead(r.id)}
                                             >
@@ -528,7 +528,7 @@ export function BriefingV4(): JSX.Element {
                                         <span class="bfv4d-ttag">{item.tag}</span>
                                         <span class="bfv4d-ttxt">{item.text}</span>
                                         <a class="bfv4d-troute" href={item.anchor}>
-                                            {t("Read it", { class: "label" })} ↓
+                                            {t("Open analysis", { class: "label" })} ↓
                                         </a>
                                     </span>
                                 ))}
@@ -540,7 +540,7 @@ export function BriefingV4(): JSX.Element {
 
                 {/* where your world is gathering */}
                 <div class="bfv4d-world">
-                    <span class="bfv4d-world-l">{t("WHERE YOUR WORLD IS GATHERING")}</span>
+                    <span class="bfv4d-world-l">{t("UPCOMING EVENTS FOR YOUR TARGET MARKET")}</span>
                     {worldEvents.value.map((ev) => (
                         <span class="bfv4d-wevent" key={ev.id}>
                             <span class="bfv4d-wedot" />
@@ -561,7 +561,7 @@ export function BriefingV4(): JSX.Element {
                     <StaleRunBanner />
                     <div class="bfv4d-workh bfv4d-deep-h">
                         <span class="bfv4d-workt">{t("Your market, in full")}</span>
-                        <span class="bfv4d-works">{t("every read links to its evidence", { class: "body" })}</span>
+                        <span class="bfv4d-works">{t("every analysis includes supporting evidence", { class: "body" })}</span>
                     </div>
                     <BriefingLead />
                     <div id="bf-patterns"><PatternList /></div>

@@ -55,22 +55,22 @@ describe("getAdvanceAsk — ask copy", () => {
 });
 
 describe("getAdvanceAsk — note copy precedence", () => {
-    it("hasSignal wins → 'live pressure' line", () => {
+    it("hasSignal selects signal-based coaching", () => {
         const out = getAdvanceAsk(
             makeQuality({ hasSignal: true }),
             makeDraft({ customNotes: "long enough custom notes here" }),
             null
         );
-        expect(out.note).toContain("live pressure");
+        expect(out.note).toContain("account signal");
     });
 
-    it("custom notes (≥ 20) wins when no signal → 'manual context' line", () => {
+    it("custom notes (≥ 20) select notes-based coaching without a signal", () => {
         const out = getAdvanceAsk(
             makeQuality({ hasSignal: false }),
             makeDraft({ customNotes: "Twenty-character context here please." }),
             null
         );
-        expect(out.note).toContain("Manual context");
+        expect(out.note).toContain("Use your notes");
     });
 
     it("falls back to vague-warning line when no signal AND notes < 20", () => {
@@ -79,6 +79,6 @@ describe("getAdvanceAsk — note copy precedence", () => {
             makeDraft({ customNotes: "short" }),
             null
         );
-        expect(out.note).toContain("vague");
+        expect(out.note).toContain("Clarify why");
     });
 });

@@ -166,6 +166,6 @@ describe("buildAgendaBrief — advance ask", () => {
         expect(out).toContain("Advance ask:");
         expect(out).toContain("Acme Robotics");
         // hasSignal=true → live-pressure note line
-        expect(out).toContain("live pressure");
+        expect(out).toContain("account signal");
     });
 });

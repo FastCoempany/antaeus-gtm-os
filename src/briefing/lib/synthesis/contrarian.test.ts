@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import * as edgeMirror from "../../../../supabase/functions/briefing-pipeline/llm/contrarian-shared";
 import {
     CONTRARIAN_PROMPT_VERSION,
     CONTRARIAN_SYSTEM_PROMPT,
@@ -276,5 +277,45 @@ describe("runContrarianGate", () => {
         expect(MIN_EVIDENCE_IDS).toBe(3);
         expect(MIN_CONFIDENCE).toBeGreaterThanOrEqual(0.5);
         expect(MIN_CONFIDENCE).toBeLessThan(0.8);
+    });
+});
+
+describe.each([
+    ["browser", { runContrarianGate, parseContrarianResponse }],
+    ["Edge Function mirror", edgeMirror]
+] as const)("%s evidence integrity", (_name, implementation) => {
+    it("requires three distinct, real evidence records", () => {
+        expect(implementation.runContrarianGate(draft({ evidence_ids: ["a", "a", "a"] }), input()).failures).toContain("thin_evidence");
+        expect(implementation.runContrarianGate(draft({ evidence_ids: ["ghost"] }), input()).failures).toContain("evidence_ids_not_in_run");
+    });
+
+    it("rejects invented extensions to real quotes and quotes from the wrong input source", () => {
+        for (const target of [
+            { kind: "watchlist", source: "watchlist_companies", quoted_text: "Deel has no competitors" },
+            { kind: "icp", source: "icp", quoted_text: "Deel" }
+        ] as const) {
+            expect(implementation.runContrarianGate(draft({ target_position: target }), input()).failures).toContain("quoted_text_not_in_inputs");
+        }
+    });
+
+    it("rejects an incomplete explanation, invalid confidence, and unrouted action", () => {
+        const invalid = draft({
+            six_questions: { ...draft().six_questions!, evidence: " " },
+            confidence: 1.5,
+            recommended_moves: [{ label: "Review Atlas", rationale: "Recent expansion", destination: " " }]
+        });
+        expect(implementation.runContrarianGate(invalid, input()).failures).toEqual(expect.arrayContaining([
+            "missing_six_questions", "invalid_confidence", "invalid_recommended_moves"
+        ]));
+    });
+
+    it("does not disguise malformed model output as an intentional refusal", () => {
+        expect(implementation.parseContrarianResponse("{}")).toBeNull();
+        expect(implementation.parseContrarianResponse("[]")).toBeNull();
+        expect(implementation.runContrarianGate(draft({ found_contradiction: false }), input()).failures).toContain("missing_refusal_reason");
+    });
+
+    it("continues to accept supported, calibrated assessments", () => {
+        expect(implementation.runContrarianGate(draft(), input()).passes).toBe(true);
     });
 });

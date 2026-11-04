@@ -11,7 +11,7 @@ import type { ParseDisposition } from "../lib/triggers/types";
 import { armParsedTrigger } from "../state";
 
 /**
- * AddTriggerFlow (B.3b) — the in-place "arm a standing order" flow.
+ * AddTriggerFlow (B.3b) — create and confirm a saved monitoring rule.
  *
  * The operator types a plain-language watch ("tell me when two or more
  * EOR competitors launch a product in 30 days"), the Edge Function's
@@ -22,15 +22,15 @@ import { armParsedTrigger } from "../state";
  */
 
 const DISPOSITION_COPY: Record<ParseDisposition, { tone: string; line: string }> = {
-    arm_ready: { tone: "ready", line: "Clear enough to arm. Confirm the wording below." },
-    confirm_minor: { tone: "ready", line: "Read it back. If that's what you meant, arm it." },
+    arm_ready: { tone: "ready", line: "Review the monitoring rule below, then enable it." },
+    confirm_minor: { tone: "ready", line: "Confirm that this monitoring rule matches your request before enabling it." },
     resolve_first: {
         tone: "fuzzy",
-        line: "A couple of details are fuzzy. You can still arm it, or tighten the wording first."
+        line: "Some details are unclear. You can enable this rule or clarify the wording first."
     },
     clarify_only: {
         tone: "blocked",
-        line: "Too ambiguous to arm. Rework the wording using the questions below."
+        line: "This rule needs clarification before it can be enabled. Use the questions below to revise it."
     }
 };
 
@@ -67,7 +67,7 @@ export function AddTriggerFlow({ onDone }: { onDone: () => void }): JSX.Element 
         if (ok) {
             onDone();
         } else {
-            setError("Couldn't arm that trigger. Try again.");
+            setError("Couldn't enable that monitoring rule. Try again.");
         }
     }
 
@@ -98,7 +98,7 @@ export function AddTriggerFlow({ onDone }: { onDone: () => void }): JSX.Element 
                     disabled={text.trim().length === 0 || parsing || arming}
                     onClick={() => void handleParse()}
                 >
-                    {parsing ? "Reading…" : "Read it"}
+                    {parsing ? "Interpreting request…" : "Review monitoring rule"}
                 </button>
                 <button
                     type="button"
@@ -142,7 +142,7 @@ export function AddTriggerFlow({ onDone }: { onDone: () => void }): JSX.Element 
                             disabled={arming}
                             onClick={() => void handleArm()}
                         >
-                            {arming ? "Arming…" : "Arm this trigger"}
+                            {arming ? "Enabling…" : "Enable monitoring rule"}
                         </button>
                     )}
                 </div>

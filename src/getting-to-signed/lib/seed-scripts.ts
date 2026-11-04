@@ -9,23 +9,21 @@ import type {
  * Seed script content for the Negotiation room — Phase 4 of the
  * 2026-05 navigation-intelligence roadmap.
  *
- * The CFO + Procurement + Legal scripts are carried forward verbatim
- * from the legacy `antaeus_studio_cfo_v2` localStorage shape, retired
- * in the architecture-reset. Per canon §4.16b "Migration content
- * owed" — the procurement + finance scripts were the only substance
- * worth preserving.
+ * The CFO, Procurement and Legal scripts originated in the retired
+ * `antaeus_studio_cfo_v2` localStorage shape. Role and template IDs
+ * remain stable; wording must not invent product capabilities or terms.
  *
  * VP Finance + General Counsel + InfoSec are net-new for Phase 4,
  * inferred from the recurring counterparty shapes in the Discovery
  * Studio framework families (Legal/GovTech segments for GC + Legal;
  * AI-native + Data-Intelligence segments for InfoSec; Sales/Revenue
  * Intelligence + Manufacturing segments for VP Finance). Authored to
- * match the role's actual pressure shape — VP Finance asks about
+ * address the role's responsibilities — VP Finance asks about
  * unit economics, not budget approval; InfoSec asks about SOC 2 +
  * pen-test + data-residency, not procurement rubrics.
  *
- * Operators can edit + extend per-deal; these are templates, not
- * rules.
+ * Operators must confirm capabilities, evidence and authority before
+ * making commitments. Concessions are proposals requiring approval.
  */
 
 // ─── CFO / Finance ───────────────────────────────────────────────────
@@ -35,19 +33,19 @@ export const SEED_PUSHBACKS_CFO: ReadonlyArray<PushbackTemplate> = [
         id: "p_cfo_1",
         trigger: "We need a 20% discount.",
         response:
-            "What's the business case 20% buys us — earlier signature, multi-year, expansion commitment? We can shape the discount around what you're solving."
+            "What commitment would accompany a 20% discount: an earlier signature, a multi-year term, or additional scope? I can assess that exchange against our approved pricing limits."
     },
     {
         id: "p_cfo_2",
         trigger: "Procurement won't approve at this price.",
         response:
-            "Help me understand the procurement rubric. If it's TCV-based we can structure annual; if it's per-seat we can right-size. What rubric are they running?"
+            "Which procurement rule does this price exceed: total contract value, annual spend, or per-seat cost? Let's review whether an approved change in term or scope would meet it."
     },
     {
         id: "p_cfo_3",
         trigger: "We need to defer this to next quarter.",
         response:
-            "What changes between now and then that makes the decision easier? If it's budget timing, we have annual prepay options. If it's confidence, that's a different conversation."
+            "What is expected to change next quarter: available budget, approval timing, or confidence in the business case? Let's identify that constraint before proposing a schedule or payment option."
     }
 ];
 
@@ -58,19 +56,19 @@ export const SEED_PUSHBACKS_VP_FINANCE: ReadonlyArray<PushbackTemplate> = [
         id: "p_vpf_1",
         trigger: "The unit economics don't work for us at list.",
         response:
-            "Let's pressure-test the unit math together — what's the cost-per-outcome you're comparing against? If we're 2× more expensive but 4× more accurate, that's a different ratio than headline price suggests."
+            "What cost per outcome are you comparing against? Let's use your expected volume and verified performance results to compare total cost, benefits, and assumptions."
     },
     {
         id: "p_vpf_2",
         trigger: "We need to see CAC payback under 12 months.",
         response:
-            "Show me the payback model you're running. Most teams in your shape see payback at month 7-9 once the second use case lights up — but the first six months are honest. Which use cases are you committing to in year one?"
+            "Can we review your payback model, including implementation costs, expected benefits, and timing? Which year-one use cases have enough evidence to support a forecast, and what would need to change to reach 12 months?"
     },
     {
         id: "p_vpf_3",
         trigger: "What's the gross-margin impact on our P&L?",
         response:
-            "If this displaces three FTEs at $180K loaded, the GM math swings positive in quarter two. The conversation is whether you're treating this as COGS or OpEx — and that's a CFO call. Want me to send the displacement model?"
+            "Which costs would change, and how would your finance team classify them? Let's separate potential capacity gains from actual cost reductions before estimating the gross-margin impact."
     }
 ];
 
@@ -81,19 +79,19 @@ export const SEED_PUSHBACKS_PROCUREMENT: ReadonlyArray<PushbackTemplate> = [
         id: "p_proc_1",
         trigger: "We have a preferred-vendor process.",
         response:
-            "Understood. What's the typical timeline once a sponsor is identified? We can sequence around your gating — but the work needs to be moving in parallel with the paperwork, not blocked behind it."
+            "What are the required vendor-approval steps, owners, and expected dates? Which evaluation activities are permitted while those approvals are in progress?"
     },
     {
         id: "p_proc_2",
         trigger: "We need 3 references and 3 quotes.",
         response:
-            "Here are 3 references in your shape. On quotes — we don't bid against ourselves. If the question is value, we can show the ROI math. If it's compliance, point me at the rubric."
+            "What criteria must the references and quotes satisfy? I'll confirm which relevant customers have agreed to a reference call and which supporting materials we can provide."
     },
     {
         id: "p_proc_3",
         trigger: "Can you match competitor X's pricing?",
         response:
-            "Pricing-on-pricing isn't the conversation. Outcome-on-outcome is. What did they promise, what did we, who's accountable when it doesn't ship? Let's compare those."
+            "Let's compare scope, expected outcomes, service commitments, and total cost alongside price. Which differences matter to your decision, and what evidence supports each offer?"
     }
 ];
 
@@ -104,19 +102,19 @@ export const SEED_PUSHBACKS_LEGAL: ReadonlyArray<PushbackTemplate> = [
         id: "p_legal_1",
         trigger: "We need indemnification carve-outs.",
         response:
-            "Standard indemnification covers IP and gross negligence. What's the specific risk you're seeing? If it's data residency, that's an MSA appendix. If it's IP, we can be specific."
+            "Which risk do the requested carve-outs address? Let's identify the relevant contract language and have our legal teams review the proposed coverage and exclusions."
     },
     {
         id: "p_legal_2",
         trigger: "We can't agree to auto-renewal.",
         response:
-            "Auto-renewal isn't worth dying on. We can move to opt-in renewal with 90-day notice. The behavior we're trying to prevent is silent churn, which opt-in solves."
+            "What concern does auto-renewal create for your team? I can ask our contracts team to review an opt-in renewal option and the notice period each side would need."
     },
     {
         id: "p_legal_3",
         trigger: "Your limitation-of-liability cap is too low.",
         response:
-            "Our cap matches the 12-month subscription value, which is the industry pattern for SaaS at this ACV. If there's a specific risk vector you're sizing for, let's name it and decide if it belongs in the contract or in an insurance rider."
+            "Which potential losses are you trying to cover, and how does the proposed cap fall short? Let's have our legal teams review the current cap, requested exceptions, and any relevant insurance coverage."
     }
 ];
 
@@ -127,19 +125,19 @@ export const SEED_PUSHBACKS_GC: ReadonlyArray<PushbackTemplate> = [
         id: "p_gc_1",
         trigger: "We need exclusive rights in our vertical.",
         response:
-            "Exclusivity isn't on the table at this stage — but most-favored-nation pricing for the first 12 months is. The behavior you're protecting is being undercut, which MFN solves. What time horizon are you actually trying to fence?"
+            "What business risk would exclusivity address, and for which market and duration? I'll confirm whether any exclusivity or pricing protection is permitted before proposing terms."
     },
     {
         id: "p_gc_2",
         trigger: "Termination-for-convenience must be 30 days.",
         response:
-            "Standard SaaS termination-for-convenience is 90 days. The work we do in months one through three is the integration that makes month four valuable. We can compress to 60 if you accept a one-time setup fee that reflects that work."
+            "Why is a 30-day termination period necessary? Let's review the implementation commitments and costs, then ask our contracts teams which notice period and fees they can approve."
     },
     {
         id: "p_gc_3",
         trigger: "We need full source-code escrow.",
         response:
-            "We don't do source escrow — the product evolves too fast. What we do offer is a documented data-export contract: any data you put in, you can pull out in standard formats with 30 days' notice. That solves the continuity concern source-escrow is usually a proxy for."
+            "Which continuity risk are you addressing with source-code escrow? I'll confirm our escrow and data-export capabilities, then review with you whether either meets your requirements."
     }
 ];
 
@@ -150,19 +148,19 @@ export const SEED_PUSHBACKS_INFOSEC: ReadonlyArray<PushbackTemplate> = [
         id: "p_is_1",
         trigger: "We need SOC 2 Type II before we can sign.",
         response:
-            "We're SOC 2 Type II audited — the report is current and under NDA. I can have it in your hands tomorrow. Walk me through which controls you're going to focus on so we can pre-flag any that need explanation."
+            "Which controls and reporting period must the SOC 2 Type II report cover? I'll confirm our audit status and what documentation our security team is authorized to share before promising a delivery date."
     },
     {
         id: "p_is_2",
         trigger: "Customer data has to stay in our region.",
         response:
-            "Data residency is on the roadmap for EU and APAC; we can commit to a date. For now we operate single-region US. If region commitment is a hard gate, let's talk about a contractual data-residency clause with a date-certain on the regional pod."
+            "Which region and data types does the requirement cover? I'll confirm our current storage and processing locations, including subprocessors, before assessing whether we can meet it."
     },
     {
         id: "p_is_3",
         trigger: "We need penetration-test results from the last 12 months.",
         response:
-            "We run quarterly external pen tests through a named firm — happy to share the most recent report and remediation tracker. The pattern most security teams want is the remediation log, not just the test result. Want both?"
+            "What test scope and remediation evidence do you need? I'll confirm the date and scope of our latest assessment and which report or remediation details our security team can share."
     }
 ];
 
@@ -171,19 +169,19 @@ export const SEED_PUSHBACKS_INFOSEC: ReadonlyArray<PushbackTemplate> = [
 export const SEED_LADDER_DEFAULT: ReadonlyArray<ConcessionStep> = [
     {
         id: "l_1",
-        give: "5% off list",
+        give: "Proposed 5% off list (approval required)",
         ask: "2-year commitment + signature this week",
         cost: "low"
     },
     {
         id: "l_2",
-        give: "10% off list + waive setup fee",
+        give: "Proposed 10% off list + waive setup fee (approval required)",
         ask: "3-year commitment + reference call",
         cost: "mid"
     },
     {
         id: "l_3",
-        give: "15% off list + extended payment terms",
+        give: "Proposed 15% off list + extended payment terms (approval required)",
         ask: "Multi-year + case study + 1 year price-lock",
         cost: "high"
     }
@@ -214,31 +212,30 @@ export function seedPushbacksFor(
 /**
  * Per-ask-moment opening-line suggestion. Authored sentences the
  * operator can carry forward into the actual opening line field.
- * Inferred from Discovery Studio's decision-architecture segments
- * across the nine framework families — these are the recurring
- * opener shapes that hold pressure without leaking confidence.
+ * These questions identify the buyer's constraint without assuming
+ * their motives or implying that an unapproved term is available.
  */
 export const ASK_MOMENT_OPENINGS: Record<AskMoment, string> = {
     pricing_position:
-        "Before we get into line items, let's anchor on the outcome you're buying — that's what determines whether the price is the right one.",
+        "Which outcomes and scope are you evaluating at this price? Let's agree on the comparison before discussing individual line items.",
     discount_request:
-        "I want to understand the case for a discount on its own terms. What business event does it unlock that list price doesn't?",
+        "What constraint would a discount address, and what commitment could accompany it?",
     terms_and_payment:
-        "Payment terms are usually a proxy for a different concern. What's the cash-flow constraint we're actually solving?",
+        "What payment schedule do you need, and which budget or cash-flow requirements does it address?",
     contract_length:
-        "Contract length is a confidence question, not a price question. What would you need to see in the first 90 days to be comfortable signing a longer term?",
+        "What concerns do you have about the contract length? Which results, review points, or commercial terms would help you assess a longer commitment?",
     auto_renewal:
-        "I hear you on auto-renewal — let's separate the behavior we're trying to prevent from the contractual mechanism.",
+        "What renewal process does your team require, including notice, approval, and cancellation dates?",
     indemnification:
-        "Walk me through the specific risk vector. Standard carve-outs cover IP and gross negligence; if you're sizing for something else, name it.",
+        "Which risks and potential losses should the indemnification terms address? Let's identify them for the legal review.",
     security_review:
-        "Tell me which controls you're going to focus on so I can pre-flag anything that needs explanation up front.",
+        "Which security controls and supporting documents does your review require, and who will assess them?",
     rampup_schedule:
-        "The first 90 days set whether the second use case lights up. What's your team's bandwidth to actually deploy versus evaluate?",
+        "What work and team capacity would deployment require in the first 90 days? Let's distinguish evaluation milestones from implementation commitments.",
     expansion_commitment:
-        "If we structure for expansion now, we both win on the second wave. What's the realistic shape of phase two if phase one works?",
+        "If the first phase meets the agreed criteria, what additional scope might you consider, and who would approve it?",
     decision_deadline:
-        "Let's name the decision date out loud. What's blocking that date from being firm?"
+        "What is the target decision date, and which approvals or unresolved questions could change it?"
 };
 
 /**

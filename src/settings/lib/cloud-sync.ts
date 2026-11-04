@@ -178,7 +178,7 @@ export async function loadCloudRowCounts(
     }
 }
 
-// ─── Cloud-export (Trust Annex: "export all my data") ────────────────
+// ─── Partial cloud export (scope is explained in Settings) ──────────
 
 export interface CloudExportTableErr {
     readonly table: string;
@@ -271,8 +271,10 @@ export async function restoreCloudExport(
 }
 
 /**
- * Pull every row from every workspace-scoped table the operator
- * authored content into, plus the commercial-identity surfaces. The
+ * Pull the bounded records from the explicitly listed workspace tables
+ * below, plus the commercial profile. This is not a complete backup:
+ * most tables are limited to 5,000 rows, pipeline settings to 100, and
+ * the commercial profile to one record. The
  * scope mirrors `deleteCloudWorkspace` (so what you can export is
  * what you can delete), with two intentional additions:
  *
@@ -460,10 +462,11 @@ const EMPTY_DELETE_RESULT: CloudDeleteResult = {
 };
 
 /**
- * Wipe every row in the workspace's data tables for the current user.
+ * Delete the fetched rows from the explicitly listed workspace tables.
  * Returns a per-table delete count + any errors.
  *
- * Scope: every "noun" table the operator authors content into.
+ * Scope is partial and bounded by the list limits below. Other tables,
+ * account identity, workspace membership, and Outdoors Events remain.
  * Excludes `workspaces`, `workspace_members`, `profiles` — those are
  * identity surfaces, not workspace content, and deleting them would
  * also delete the user's ability to sign in (per RLS).

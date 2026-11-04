@@ -69,7 +69,7 @@ export function generateAutopsy(
 
     const causes = topCauses(vitals, prefs, 5);
     const chapters = causes
-        .map((c) => chapterFor(c.id))
+        .map((c) => chapterFor(c.id, c.label))
         .filter((c): c is NonNullable<ReturnType<typeof chapterFor>> => c !== null);
     const winConditions = winConditionsFor(causes);
     const countermeasures = chooseTasks(vitals, causes, {
@@ -77,7 +77,9 @@ export function generateAutopsy(
     });
 
     const topCauseId: CauseId | "" = causes[0]?.id ?? "";
-    const riskLead = stageLead(vitals.stageRaw, topCauseId);
+    const riskLead = causes.length > 0
+        ? stageLead(vitals.stageRaw, topCauseId)
+        : "No configured risk-condition rules matched this deal record.";
     const correctedLead = stageWinLead(vitals.stageRaw);
 
     const riskTail =

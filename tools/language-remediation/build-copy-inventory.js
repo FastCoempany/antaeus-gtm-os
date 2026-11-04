@@ -100,22 +100,40 @@ if (!fs.existsSync(TRANSCRIPT)) {
 }
 
 const occurrences = [];
+const supplemental = [];
 const linePattern = /<div class="line"><span class="kind">\[([^\]]+)\]<\/span>\s*([\s\S]*?)\s*<span class="cue">([\s\S]*?)<\/span><\/div>/g;
 
 for (const file of walk(TRANSCRIPT)) {
     const html = fs.readFileSync(file, "utf8");
     const room = path.basename(path.dirname(file));
+    if (path.dirname(file) === TRANSCRIPT) {
+        // The index stores the actual navigation capture and the locked-room
+        // tooltip outside renderLines. Include them in the review corpus while
+        // preserving the original rendered-line metric for comparison.
+        for (const captured of html.matchAll(/<(pre|blockquote)>([\s\S]*?)<\/\1>/g)) {
+            supplemental.push({ room: "navigation", state: "Workspace map / locked onboarding", text: stripTags(captured[2]), source: path.relative(ROOT, file), kind: "navigation-or-tooltip" });
+        }
+    }
     let m;
     while ((m = linePattern.exec(html)) !== null) {
         const text = stripTags(m[2]);
         if (!text) continue;
+        const preceding = html.slice(0, m.index);
+        const state = [...preceding.matchAll(/<h[23]>([\s\S]*?)<\/h[23]>/g)].at(-1)?.[1] || "gate";
+        const context = stripTags(m[3]);
         occurrences.push({
             room,
+            state: stripTags(state),
             elementType: m[1],
             text,
-            renderContext: stripTags(m[3]),
+            renderContext: context,
             source: path.relative(ROOT, file)
         });
+        // Keep supplementary user text separate so existing line-count metrics
+        // remain comparable. Hover text, placeholders and values still require review.
+        for (const extra of context.matchAll(/(?:hover:|placeholder|filled with)\s*“([^”]+)”/g)) {
+            supplemental.push({ room, state: stripTags(state), text: extra[1], source: path.relative(ROOT, file), kind: "hover-or-field-value" });
+        }
     }
 }
 
@@ -129,6 +147,7 @@ for (const row of occurrences) {
             rooms: new Set(),
             elementTypes: new Set(),
             sources: new Set(),
+            states: new Set(),
             issues: classify(row.text)
         };
         byText.set(row.text, rec);
@@ -137,6 +156,7 @@ for (const row of occurrences) {
     rec.rooms.add(row.room);
     rec.elementTypes.add(row.elementType);
     rec.sources.add(row.source);
+    rec.states.add(`${row.room}: ${row.state}`);
 }
 
 const unique = Array.from(byText.values())
@@ -146,6 +166,7 @@ const unique = Array.from(byText.values())
         rooms: Array.from(r.rooms).sort(),
         elementTypes: Array.from(r.elementTypes).sort(),
         sources: Array.from(r.sources).sort(),
+        states: Array.from(r.states).sort(),
         issues: r.issues
     }))
     .sort((a, b) => b.issues.length - a.issues.length || b.occurrenceCount - a.occurrenceCount || a.text.localeCompare(b.text));
@@ -159,12 +180,15 @@ fs.writeFileSync(
             source: "preview-transcript/",
             renderedOccurrences: occurrences.length,
             uniqueRenderedStrings: unique.length,
-            records: unique
+            records: unique,
+            occurrences,
+            supplemental
         },
         null,
         2
     ) + "\n"
 );
+fs.writeFileSync(path.join(OUT_DIR, "rendered-corpus.txt"), occurrences.map(r => `[${r.room} | ${r.state} | ${r.elementType}] ${r.text}`).join("\n") + "\n\nSUPPLEMENTAL HOVER / FIELD TEXT\n" + supplemental.map(r => `[${r.room} | ${r.state}] ${r.text}`).join("\n") + "\n");
 
 console.log(`Rendered occurrences: ${occurrences.length}`);
 console.log(`Unique rendered strings: ${unique.length}`);

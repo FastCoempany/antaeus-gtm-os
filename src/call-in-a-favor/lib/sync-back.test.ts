@@ -166,7 +166,7 @@ describe("syncDeploymentToDeal", () => {
         const arr = JSON.parse(
             s.getItem("gtmos_deal_workspaces") as string
         ) as Array<{ nextStep: string; nextStepDate: string }>;
-        expect(arr[0]?.nextStep).toContain("Send advisor ask");
+        expect(arr[0]?.nextStep).toContain("Send the advisor request");
         expect(arr[0]?.nextStepDate).toBeTruthy();
     });
 
@@ -180,12 +180,12 @@ describe("syncDeploymentToDeal", () => {
         let arr = JSON.parse(
             s.getItem("gtmos_deal_workspaces") as string
         ) as Array<{ nextStep: string }>;
-        expect(arr[0]?.nextStep).toContain("Convert advisor momentum");
+        expect(arr[0]?.nextStep).toContain("Confirm the next stakeholder action");
         syncDeploymentToDeal(makeDep({ outcome: "successful" }), NOW, s);
         arr = JSON.parse(
             s.getItem("gtmos_deal_workspaces") as string
         ) as Array<{ nextStep: string }>;
-        expect(arr[0]?.nextStep).toContain("Convert advisor momentum");
+        expect(arr[0]?.nextStep).toContain("Confirm the next stakeholder action");
     });
 
     it("declined / no_response / hold / reroute set the leverage-path nextStep", () => {
@@ -204,7 +204,7 @@ describe("syncDeploymentToDeal", () => {
             const arr = JSON.parse(
                 s.getItem("gtmos_deal_workspaces") as string
             ) as Array<{ nextStep: string }>;
-            expect(arr[0]?.nextStep).toContain("next leverage path");
+            expect(arr[0]?.nextStep).toContain("Choose another contact or action");
         }
     });
 

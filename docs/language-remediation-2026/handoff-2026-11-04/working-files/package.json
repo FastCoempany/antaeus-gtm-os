@@ -1,0 +1,47 @@
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
+    "test": "vitest run",
+    "pretest": "npm run test:ae",
+    "test:ae": "node tests/ae-underwriting-engine.test.js && node tests/ae-validation.test.js && node tests/ae-golden-cases.js && node tests/ae-invariants.test.js && node tests/ae-landing-sample.test.js",
+    "test:watch": "vitest",
+    "test:e2e": "node tools/qa/run-e2e.js",
+    "test:e2e:headed": "node tools/qa/run-e2e.js --headed",
+    "test:realtime": "npm run build:cloudflare && playwright test --grep @realtime --pass-with-no-tests",
+    "build:cloudflare": "node tools/deploy/build-cloudflare-assets.js",
+    "deploy:cloudflare": "npm run build:cloudflare && npx wrangler versions upload",
+    "voice:check": "vitest run src/lib/voice",
+    "ds:check": "vitest run src/lib/voice src/lib/design-system src/icons",
+    "build:transcript": "node tools/preview/build-transcript.js",
+    "copy:inventory": "node tools/language-remediation/build-copy-inventory.js",
+    "copy:audit": "node tools/language-remediation/copy-audit.js",
+    "copy:test": "node --test tools/language-remediation/*.test.js",
+    "copy:validate": "node tools/language-remediation/validate-transcript.js",
+    "typecheck:functions": "deno check --no-lock supabase/functions/outdoors-events-discovery/index.ts supabase/functions/briefing-pattern-critic/prompt.ts supabase/functions/briefing-pipeline/llm/_shared.ts supabase/functions/briefing-pipeline/llm/contrarian-shared.ts supabase/functions/briefing-pipeline/llm/synthesis-shared.ts supabase/functions/briefing-pipeline/llm/compose-shared.ts supabase/functions/heartbeat/voice-document.ts supabase/functions/heartbeat/generators.ts supabase/functions/seeding-enrichment/index.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260515.1",
+    "@playwright/test": "^1.59.1",
+    "@preact/preset-vite": "^2.10.5",
+    "@testing-library/preact": "^3.2.4",
+    "@types/node": "^25.6.0",
+    "happy-dom": "^20.9.0",
+    "playwright": "^1.59.1",
+    "puppeteer": "^24.42.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
+    "vitest": "^4.1.5",
+    "wrangler": "^4.84.0"
+  },
+  "dependencies": {
+    "@preact/signals": "^2.4.0",
+    "@sentry/browser": "^10.50.0",
+    "@supabase/supabase-js": "^2.50.0",
+    "posthog-js": "^1.371.2",
+    "preact": "^10.29.1"
+  },
+  "antaeusDesignSystem": "1.9.0"
+}

@@ -31,18 +31,18 @@ import { advisorsForDeal } from "./recommend";
  */
 
 const BAND_LABELS: Readonly<Record<SpendBand, string>> = {
-    ask_ready: "Ask-ready",
-    narrow_first: "Narrow first",
-    not_ready: "Not ready"
+    ask_ready: "Context available",
+    narrow_first: "Add context",
+    not_ready: "Context incomplete"
 };
 
 const BAND_COPY: Readonly<Record<SpendBand, string>> = {
     ask_ready:
-        "Specific enough to send, and small enough that it won't cost you trust with the advisor.",
+        "The selected deal, advisor, and recorded fields meet the context threshold. Verify the request before sending; this score does not assess relationship risk.",
     narrow_first:
-        "A path exists. Tighten who it's for before sending.",
+        "Some context is available. Confirm the advisor's relevance, intended recipient, and requested action before sending.",
     not_ready:
-        "Don't ask an advisor for help yet — the deal and the ask still aren't clear enough."
+        "Select a deal and advisor, then confirm the intended recipient and requested action."
 };
 
 export interface SpendReadInput {

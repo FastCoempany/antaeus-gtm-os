@@ -87,8 +87,8 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
 
     const wonKeys = input.closedWon.map(dealKey);
     const lostKeys = input.closedLost.map(dealKey);
-    const wonPatterns = uniq(wonKeys).slice(0, 3);
-    const lostPatterns = uniq(lostKeys).slice(0, 3);
+    const wonPatterns = uniq(wonKeys);
+    const lostPatterns = uniq(lostKeys);
 
     const body: string[] = [
         `The recorded sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}. Closed-won deals contain ${plural(wonPatterns.length, "distinct customer profile", "distinct customer profiles")} based on the ICP, persona, and trigger fields currently recorded.`
@@ -100,8 +100,8 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
     }
 
     const evidence: string[] = [];
-    wonPatterns.forEach((p, i) => evidence.push(`Won ${i + 1} · ${p}`));
-    lostPatterns.forEach((p, i) => evidence.push(`Lost ${i + 1} · ${p}`));
+    wonPatterns.slice(0, 3).forEach((p, i) => evidence.push(`Won ${i + 1} · ${p}`));
+    lostPatterns.slice(0, 3).forEach((p, i) => evidence.push(`Lost ${i + 1} · ${p}`));
 
     const statedIcpNames = input.icps.map((i) => i.name.toLowerCase().trim());
     const actualIcpLabels = input.closedWon
@@ -411,7 +411,7 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         { exited: number; advanced: number; lost: number; won: number }
     >();
     function bumpStage(stage: string, kind: "lost" | "won"): void {
-        const key = (stage || "—").toLowerCase();
+        const key = (stage || "stage before loss not recorded").toLowerCase();
         const cur =
             stageStops.get(key) ??
             { exited: 0, advanced: 0, lost: 0, won: 0 };
@@ -421,7 +421,7 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         stageStops.set(key, cur);
     }
     input.closedLost.forEach((d) =>
-        bumpStage(d.stage === "closed-lost" ? "—" : d.stage, "lost")
+        bumpStage(d.stage === "closed-lost" ? "" : d.stage, "lost")
     );
     input.closedWon.forEach(() => bumpStage("closed-won", "won"));
 
@@ -463,7 +463,7 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
     let leakyStage: string | null = null;
     let leakyLossCount = 0;
     [...stageStops.entries()].forEach(([stage, v]) => {
-        if (v.lost > leakyLossCount && v.lost >= 2) {
+        if (stage !== "stage before loss not recorded" && v.lost > leakyLossCount && v.lost >= 2) {
             leakyStage = stage;
             leakyLossCount = v.lost;
         }
@@ -503,7 +503,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(input.closedLost.length, "loss is", "losses are")} recorded, but no deal-risk review with a completed corrective action is recorded. A new seller would have loss outcomes without a documented review of the associated conditions.`
+                `${plural(input.closedLost.length, "loss is", "losses are")} recorded, but no deal-risk review has a corrected assessment or completed corrective action. Review the recorded conditions before drawing lessons from the outcomes.`
             ],
             [],
             null
@@ -517,7 +517,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     input.autopsySnapshots.forEach((snap) => snapshotById.set(snap.dealId, snap));
 
     const body: string[] = [
-        `${plural(examined.length, "recorded loss has", "recorded losses have")} a deal-risk review with at least one corrective action logged. Use these as documented examples of risk conditions that were present around lost deals, not as proof that those conditions caused the loss.`
+        `${plural(examined.length, "deal-risk review has", "deal-risk reviews have")} a corrected assessment or at least one completed corrective action. These reviews may include open deals. Compare their recorded conditions with actual loss outcomes before drawing conclusions.`
     ];
     const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
@@ -537,7 +537,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     if (sortedCauses.length > 0 && sortedCauses[0]![1] >= 2) {
         const [top, count] = sortedCauses[0]!;
         body.push(
-            `"${top}" is the most frequently recorded top risk condition in this reviewed-loss sample, appearing on ${count} of ${examined.length}. Treat that frequency as a condition to watch for, not as a causal explanation of the losses.`
+            `"${top}" is the most frequently recorded top risk condition in this review sample, appearing on ${count} of ${examined.length}. Treat that frequency as a condition to investigate, not as a causal explanation of losses.`
         );
     }
 
@@ -560,24 +560,23 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     const lostReasons = input.closedLost
         .map((d) => d.lossReason.toLowerCase().trim())
         .filter((r) => r.length > 0);
-    const openMatches: string[] = [];
+    const openMatches = new Set<string>();
     input.openDeals.forEach((d) => {
         const next = d.nextStep.toLowerCase();
         const trigger = d.trigger.toLowerCase();
-        const acct = d.accountName;
         lostReasons.forEach((reason) => {
             const reasonWords = reason.split(/\s+/).filter((w) => w.length > 4);
             if (reasonWords.some((w) => next.includes(w) || trigger.includes(w))) {
-                openMatches.push(`${acct} · keyword overlap with "${trim(reason, 50)}"`);
+                openMatches.add(d.id);
             }
         });
     });
     let surprise: SurpriseCallout | null = null;
-    if (openMatches.length > 0) {
+    if (openMatches.size > 0) {
         surprise = {
             tone: "corrective",
             headline: "Some open-deal text overlaps with recorded loss-reason language.",
-            body: `${plural(openMatches.length, "open deal has", "open deals have")} a keyword overlap between current next-step/trigger text and a historical loss reason. This is a text match for review, not evidence that the same loss pattern is repeating.`
+            body: `${plural(openMatches.size, "open deal has", "open deals have")} a keyword overlap between current next-step/trigger text and a historical loss reason. This is a text match for review, not evidence that the same loss pattern is repeating.`
         };
     } else if (examined.length >= 3) {
         surprise = {
@@ -658,7 +657,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
             headline: "A closed-won ICP label is absent from the current open pipeline.",
             body: `No current open deal is labeled "${missingFromPipeline[0]}," although that label appears in the closed-won sample. Review whether that reflects an intentional territory choice or a prospecting gap.`
         };
-    } else if (missingFromPipeline.length === 0 && input.openDeals.length > 0) {
+    } else if (winningIcps.size > 0 && missingFromPipeline.length === 0 && input.openDeals.length > 0) {
         surprise = {
             tone: "affirming",
             headline: "Current open deals include the ICP labels represented in the closed-won sample.",
@@ -682,10 +681,11 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     const oppsNeeded = Math.ceil(dealsNeeded / winRate);
     const meetingsPerWeek = Math.max(2, Math.round(oppsNeeded / 26));
     const touchesPerDay = input.quota.touchesPerDay ?? Math.max(8, meetingsPerWeek * 6);
+    const targetSource = input.quota.touchesPerDay == null ? "Calculated" : "Recorded";
 
     const body: string[] = [
         `Using the current quota assumptions, the model requires ${dealsNeeded} closed deals and approximately ${oppsNeeded} qualified opportunities. The current planning formula translates that to about ${meetingsPerWeek} discovery meetings per week.`,
-        `The recorded daily outreach target is ${touchesPerDay}. A practical first-week cadence is: Monday review pipeline and deal risk; Tuesday outbound; Wednesday discovery preparation and calls; Thursday follow-up on stalled deals; Friday update next steps and prepare the following week. Treat the cadence as an operating starting point, not as a claim that this schedule causes quota attainment.`
+        `${targetSource} daily outreach target: ${touchesPerDay}. A practical first-week cadence is: Monday review pipeline and deal risk; Tuesday outbound; Wednesday discovery preparation and calls; Thursday follow-up on stalled deals; Friday update next steps and prepare the following week. Adjust this starting schedule using recorded results.`
     ];
 
     const evidence: string[] = [

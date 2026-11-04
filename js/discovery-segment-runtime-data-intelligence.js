@@ -93,11 +93,11 @@
       {
         title:"Classify the dependency",
         copy:"Separate AI retrieval, monitoring/compliance, and market-intelligence use first.",
-        action:jumpNode("Classify the motion", "opening-frame", "motion-type", "blu")
+        action:jumpNode("Classify the workflow", "opening-frame", "motion-type", "blu")
       },
       {
         title:"Use one broken downstream job",
-        copy:"Anchor on the first workflow that gets weaker when the feed goes thin.",
+        copy:"Anchor on the first workflow that gets weaker when the feed has coverage gaps.",
         action:jumpNode("Use one dependency", "current-state-truth", "live-example", "org")
       },
       {
@@ -128,7 +128,7 @@
       {
         id:"we-already-have-feeds",
         label:"We already have feeds",
-        reply:"That helps. I am trying to learn where the current feed still goes thin or noisy enough that downstream systems compensate manually.",
+        reply:"That helps. I am trying to learn where the current feed still has coverage gaps or noisy enough that downstream systems compensate manually.",
         actions:[
           jumpNode("Map the dependency", "current-state-truth", "downstream-use", "blu"),
           jumpNode("Name the downstream cost", "pain-and-consequence", "downstream-cost", "org")
@@ -155,21 +155,21 @@
     ],
     segments:[
       segment("opening-frame","01","Opening frame","Start by classifying the dependency.",true,[
-        node("opening-frame","primary","pr","Primary opener","\"Most teams can get some external data. The real question is where the current feed still goes thin or stale enough that downstream systems lose trust or teams compensate manually. Is that where this lives for you too?\"","Use this when they will diagnose before seeing product.",true,[
-          branch("CONFIRMS","ok","\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gaps.\"","\"Good. Is the live motion here AI retrieval, monitoring and compliance, or market / analyst intelligence?\"",[
-            jumpNode("Classify the motion", "opening-frame", "motion-type", "grn"),
+        node("opening-frame","primary","pr","Primary opener","\"Most teams can get some external data. The real question is where the current feed still has coverage gaps or stale enough that downstream systems lose trust or teams compensate manually. Is that where this lives for you too?\"","Use this when they will diagnose before seeing product.",true,[
+          branch("CONFIRMS","ok","\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gaps.\"","\"Good. Is the current workflow here AI retrieval, monitoring and compliance, or market / analyst intelligence?\"",[
+            jumpNode("Classify the workflow", "opening-frame", "motion-type", "grn"),
             jumpNode("Map the dependency", "current-state-truth", "downstream-use", "blu")
           ],"The current layer is not fully trusted by the consumers.","You still need the primary downstream use case."),
           branch("FEED DEFENSE","ly","\"We already have data vendors and internal pipelines.\"","\"Understood. Then where does the current layer still break: freshness, coverage, structure, or reliability?\"",[
             jumpNode("Map the dependency", "current-state-truth", "downstream-use", "org"),
             jumpNode("Name the downstream cost", "pain-and-consequence", "downstream-cost", "blu")
           ],"The buyer is defending the stack, not denying the gap.","You still need the first broken data property."),
-          branch("PITCH REQUEST","fl","\"Can you just show the API?\"","\"I can. First tell me which downstream job fails first when the current feed gets thin so I do not show the wrong proof path.\"",[
+          branch("PITCH REQUEST","fl","\"Can you just show the API?\"","\"I can. First tell me which downstream job fails first when the current feed has coverage gaps so I do not show the wrong proof path.\"",[
             jumpNode("Use one dependency", "current-state-truth", "live-example", "blu"),
             jumpNode("Set the proof bar", "proof-threshold", "real-proof", "pur")
-          ],"They are trying to skip diagnosis.","You still need the active dependency before demo.")
+          ],"The buyer has asked to see the product before describing the workflow.","You still need the active dependency before demo.")
         ]),
-        node("opening-frame","motion-type","fu","Classify the motion","\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\"","This changes the rest of the call, so it needs to be known early.",false,[
+        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\"","This changes the rest of the call, so it needs to be known early.",false,[
           branch("AI / RETRIEVAL","ok","\"The feed powers models, search, or AI retrieval and the current layer is not strong enough.\"","\"Good. Then what breaks first today: latency, coverage, structure, or reproducibility?\"",[
             jumpNode("Map the dependency", "current-state-truth", "downstream-use", "grn"),
             jumpNode("Set the proof bar", "proof-threshold", "reliability-proof", "blu")
@@ -296,7 +296,7 @@
             jumpNode("Return to downstream cost", "pain-and-consequence", "downstream-cost", "org"),
             jumpNode("Find the owner split", "stakeholder-and-ownership", "owner-split", "blu")
           ],"Urgency may be real but still generic.","You still need the specific forcing event."),
-          branch("NO LIVE EVENT","fl","\"Nothing specific happened. We just know the current layer is not ideal.\"","\"Then what would have to happen before the fuel line itself became a live operating priority?\"",[
+          branch("NO LIVE EVENT","fl","\"Nothing specific happened. We just know the current layer is not ideal.\"","\"Then what would have to happen before the data infrastructure itself became a live operating priority?\"",[
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Set the proof bar", "proof-threshold", "real-proof", "blu")
           ],"There may be no active forcing event.","You still need the future trigger or an honest downgrade.")
@@ -345,7 +345,7 @@
             jumpNode("Shape the next review", "next-step-lock", "live-review", "blu")
           ],"Ownership is fragmented or absent.","You still need the first real economic owner.")
         ]),
-        node("stakeholder-and-ownership","buyer-split","fu","Map the buyer split","\"Is the real buyer here the team that builds the data layer, or the team whose workflow gets weaker when the data is late or thin?\"","Use this when build-side and outcome-side ownership are split.",false,[
+        node("stakeholder-and-ownership","buyer-split","fu","Map the buyer split","\"Is the real buyer here the team that builds the data layer, or the team whose workflow gets weaker when the data is late or incomplete?\"","Use this when build-side and outcome-side ownership are split.",false,[
           branch("INFRA BUYER","ok","\"The infrastructure team really owns the decision.\"","\"Then what downstream outcome would they need to see before they treat a vendor change as worth the risk?\"",[
             jumpNode("Set implementation proof", "proof-threshold", "implementation-proof", "grn"),
             jumpNode("Map the buying path", "decision-architecture", "buying-path", "blu")
@@ -448,7 +448,7 @@
           ],"Habit may be part of the incumbent advantage.","You still need the result strong enough to beat it.")
         ]),
         node("current-vendor-and-displacement","build-bias","fu","Test build-internal bias","\"Which part do you actually want to own long term: the raw ingestion layer, the downstream product, or both?\"","Use this when they have strong build instincts.",false,[
-          branch("OWN THE PRODUCT NOT FEED","ok","\"We care more about the downstream product than owning the fuel line itself.\"","\"Good. Then the test is whether the current fuel line is already good enough or still taxing the product team too much.\"",[
+          branch("OWN THE PRODUCT NOT FEED","ok","\"We care more about the downstream product than owning the data infrastructure itself.\"","\"Good. Then the test is whether the current fuel line is already good enough or still taxing the product team too much.\"",[
             jumpNode("Return to internal alt", "current-state-truth", "internal-alt", "grn"),
             jumpNode("Set implementation proof", "proof-threshold", "implementation-proof", "blu")
           ],"The buyer may not want to own the underlying layer forever.","You still need the build pain worth escaping."),

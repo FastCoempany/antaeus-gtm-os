@@ -81,14 +81,14 @@ describe("filterRooms", () => {
     });
 
     it("matches against family label", () => {
-        const result = filterRooms("threshold");
+        const result = filterRooms("getting started");
         const ids = result.map((r) => r.id);
         expect(ids).toContain("welcome");
         expect(ids).toContain("onboarding");
     });
 
     it("matches against description", () => {
-        const result = filterRooms("ranked pressure");
+        const result = filterRooms("account priorities");
         expect(result.some((r) => r.id === "dashboard")).toBe(true);
     });
 

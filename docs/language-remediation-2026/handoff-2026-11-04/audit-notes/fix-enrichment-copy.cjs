@@ -1,0 +1,1 @@
+const fs=require('fs'); const p='supabase/functions/seeding-enrichment/index.ts'; let s=fs.readFileSync(p,'utf8').replaceAll('quiet — nothing fresh yet', 'No recent source-backed change found'); fs.writeFileSync(p,s);

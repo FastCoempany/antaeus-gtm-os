@@ -226,12 +226,12 @@ function buildSystemObject(
     return finalizeCommandObject(
         {
             id: "system-trust",
-            title: "The dashboard is showing stale data right now.",
+            title: "Some Dashboard inputs could not sync.",
             copy:
-                "Some inputs didn't sync from the cloud and fell back to the copy stored on this device. Don't over-trust the ordering until the sync recovers.",
+                "Some inputs are using the copy stored on this device. The ranking may change when cloud sync resumes.",
             badge: "Risk",
             badgeTone: "state-risk",
-            metricLabel: "System pressure",
+            metricLabel: "Sync status",
             metricValue: "",
             meta: ["local fallback"],
             actions: [
@@ -265,12 +265,12 @@ function buildIcpObject(
     return finalizeCommandObject(
         {
             id: "icp-truth",
-            title: "Save one ICP before the week drifts.",
+            title: "Save an ideal customer profile.",
             copy:
-                "You have signals and deals, but no saved ICP. The rest of the app is having to guess who you're selling to. Save one in ICP Studio and the other rooms tighten up.",
+                "No ICP is saved. Define the customers you intend to target in ICP Studio so you can compare accounts and opportunities with that definition.",
             badge: "Missing ICP",
             badgeTone: "state-ready",
-            metricLabel: "ICP pressure",
+            metricLabel: "Targeting setup",
             metricValue: "",
             meta: ["missing ICP", "targeting layer"],
             actions: [
@@ -421,7 +421,7 @@ export function summarizeCommandContext(
 
 function joinReasons(reasons: ReadonlyArray<string> | undefined): string {
     const list = (Array.isArray(reasons) ? reasons : []).filter(Boolean).slice(0, 2);
-    if (!list.length) return "the command pressure is higher than the surrounding work";
+    if (!list.length) return "its calculated priority score ranks it above the other available actions";
     if (list.length === 1) return list[0]!;
     return list[0] + " and " + list[1];
 }
@@ -473,66 +473,68 @@ function explainTitleForObject(
     if (mode === "queue") {
         if (family === "risk") {
             if (linkedRoomTop) return "Deal Workspace flagged this for intervention.";
-            if (truthDebtCount >= 2) return "Qualification gaps are real here.";
-            if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
-            if (nextStepOverdue || stageStuck) return "Next step is overdue.";
-            return "Worth recovering before chasing new pipeline.";
+            if (truthDebtCount >= 2) return "Review the missing or incomplete qualification details.";
+            if (quotaPressureScore >= 60) return "The quota plan increases this deal's review priority.";
+            if (nextStepOverdue) return "The recorded next step is overdue.";
+            if (stageStuck) return "Review the time spent at this stage.";
+            return "Review this deal's risks before adding more pipeline.";
         }
-        if (family === "advisor") return "An advisor ask would actually move this.";
+        if (family === "advisor") return "Consider whether an advisor can help with the next step.";
         if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-            return "The week's pipeline math needs this move.";
+            return "This action is prioritized against the quota plan.";
         }
         if ((family === "opportunity" || family === "move") && hasReplies) {
-            return "The thread is warm — push the next touch now.";
+            return "A reply is recorded. Review it and plan the follow-up.";
         }
         if (family === "opportunity" && highConfidenceCount >= 2) {
-            return "Multiple high-confidence signals make this real.";
+            return "Multiple signals are marked high-confidence. Review their relevance.";
         }
         if (family === "opportunity" && causeId === "coverage_gap") {
             return "Coverage gap needs more open opportunities.";
         }
         if (family === "opportunity" || family === "move") {
-            return "Highest-leverage next move on the radar.";
+            return "A recommended action based on the recorded account and pipeline context.";
         }
         if (family === "icp" && readinessIcpWeak) {
-            return "ICP sharpness needs another round.";
+            return "The ICP needs more specific targeting criteria.";
         }
-        if (family === "icp") return "ICP shapes how everything below ranks.";
-        if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
-        if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
-        return "Visible so the system stays honest.";
+        if (family === "icp") return "Use the ICP to evaluate account fit.";
+        if (readinessFragility >= 45) return "Review the incomplete readiness criteria.";
+        if (quotaPressureScore >= 60) return "Review recorded activity against the quota plan.";
+        return "Review this workspace setup or data-quality item.";
     }
 
     if (family === "risk") {
-        if (linkedRoomTop) return "Deal Workspace flagged this deal as slipping.";
-        if (truthDebtCount >= 2) return "Qualification gaps are real here.";
-        if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
-        if (nextStepOverdue || stageStuck) return "Next step is overdue and the stage is stuck.";
-        return "Worth recovering before chasing new pipeline.";
+        if (linkedRoomTop) return "Deal Workspace prioritized this deal for review.";
+        if (truthDebtCount >= 2) return "Review the missing or incomplete qualification details.";
+        if (quotaPressureScore >= 60) return "The quota plan increases this deal's review priority.";
+        if (nextStepOverdue) return "The recorded next step is overdue.";
+        if (stageStuck) return "Review the time spent at this stage.";
+        return "Review this deal's risks before adding more pipeline.";
     }
-    if (family === "advisor") return "An advisor ask would actually move this.";
+    if (family === "advisor") return "Consider whether an advisor can help with the next step.";
     if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-        return "The week's pipeline math needs this move.";
+        return "This action is prioritized against the quota plan.";
     }
     if ((family === "opportunity" || family === "move") && hasReplies) {
-        return "The thread is warm — push the next touch now.";
+        return "A reply is recorded. Review it and plan the follow-up.";
     }
     if (family === "opportunity" && highConfidenceCount >= 2) {
-        return "Multiple high-confidence signals make this real.";
+        return "Multiple signals are marked high-confidence. Review their relevance.";
     }
     if (family === "opportunity" && causeId === "coverage_gap") {
         return "Coverage gap needs more open opportunities.";
     }
     if (family === "opportunity" || family === "move") {
-        return "Highest-leverage move available right now.";
+        return "A recommended action based on the recorded account and pipeline context.";
     }
     if (family === "icp" && readinessIcpWeak) {
-        return "ICP sharpness needs another round.";
+        return "The ICP needs more specific targeting criteria.";
     }
-    if (family === "icp") return "ICP shapes how everything below ranks.";
-    if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
-    if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
-    return "Visible so the rest of the system stays honest.";
+    if (family === "icp") return "Use the ICP to evaluate account fit.";
+    if (readinessFragility >= 45) return "Review the incomplete readiness criteria.";
+    if (quotaPressureScore >= 60) return "Review recorded activity against the quota plan.";
+    return "Review this workspace setup or data-quality item.";
 }
 
 export function explainCommandObject(

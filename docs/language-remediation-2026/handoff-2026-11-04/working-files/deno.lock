@@ -1,0 +1,32 @@
+{
+  "version": "5",
+  "redirects": {
+    "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.118.0"
+  },
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.118.0": "56fce2ec273698af8a739c03a005c4b2160e163e5d2c0ede05de7e9bd47e28b8"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@cloudflare/workers-types@^4.20260515.1",
+        "npm:@playwright/test@^1.59.1",
+        "npm:@preact/preset-vite@^2.10.5",
+        "npm:@preact/signals@^2.4.0",
+        "npm:@sentry/browser@^10.50.0",
+        "npm:@supabase/supabase-js@^2.50.0",
+        "npm:@testing-library/preact@^3.2.4",
+        "npm:@types/node@^25.6.0",
+        "npm:happy-dom@^20.9.0",
+        "npm:playwright@^1.59.1",
+        "npm:posthog-js@^1.371.2",
+        "npm:preact@^10.29.1",
+        "npm:puppeteer@^24.42.0",
+        "npm:typescript@^6.0.3",
+        "npm:vite@^8.0.10",
+        "npm:vitest@^4.1.5",
+        "npm:wrangler@^4.84.0"
+      ]
+    }
+  }
+}

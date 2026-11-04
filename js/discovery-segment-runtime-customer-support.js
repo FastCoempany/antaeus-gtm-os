@@ -94,7 +94,7 @@
             "\"I can, but the number that matters is the one off your worst queue. Give me one ticket type that keeps bouncing to humans so it's not a generic demo.\"", [
             jumpNode("Use queue walk", "current-state-truth", "workflow", "blu"),
             jumpNode("Use proof rescue", "proof-threshold", "early-demo", "pur")
-          ], "They are trying to skip diagnosis.",
+          ], "The buyer has asked to see the product before describing the workflow.",
             "You still need one concrete queue before showing anything.")
         ]),
         node("opening-frame", "workflow", "fu", "Walk one contact",
@@ -644,7 +644,7 @@
             "You still need the first two real gates — likely sponsor and security."),
           branch("PATH UNKNOWN", "fl",
             "\"I don't really know how AI in support would get approved yet.\"",
-            "\"That's useful. What usually has to happen internally before something touching customer data gets air cover?\"", [
+            "\"That's useful. What internal reviews and approvals are required for a change involving customer data?\"", [
             jumpNode("Find the stall point", "decision-architecture", "stall", "red"),
             jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
           ], "Nobody's mapped how AI touching customer data gets approved here.",

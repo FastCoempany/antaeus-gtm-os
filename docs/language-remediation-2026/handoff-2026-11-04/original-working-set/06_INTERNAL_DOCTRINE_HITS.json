@@ -1,0 +1,2213 @@
+{
+  "source": "antaeus-preview-walkthrough.txt",
+  "records": [
+    {
+      "source_line": 306,
+      "room": "Welcome",
+      "text": "# The first morning the setup pays back.Threshold (entry) · the seeding flow’s landing · design settled 2026-07-07",
+      "classifications": [
+        "internal_metaphor",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "first morning",
+        "landing",
+        "seeding"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 307,
+      "room": "Welcome",
+      "text": "The threshold the operator hits on entry — the moment the app “rises up to greet” them and hands back the one move. Welcome is where the seeding flow lands: after setup the workspace is already deep (ICP + accounts + ≥10 deals + quota), so this is never an empty on-ramp — it is the first morning the hard work reads itself back.Sourced from: canon §4.1 + the heavy-seeding doctrine (§12) + the seeding flow (§4.3). Settled design: welcome-flow-landing-2026-07-07.html.",
+      "classifications": [
+        "declarative_certainty_review",
+        "internal_metaphor",
+        "metaphor",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "first morning",
+        "heavy-seeding",
+        "landing",
+        "one move",
+        "seeding"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 310,
+      "room": "Welcome",
+      "text": "## What the room is forClose the loop the onboarding doorway opened — “do the hard work once, the system reads your motion back to you every morning” — and make that playback the whole room. One commanding statement, one dominant move (the system’s top pick, read overnight across the entire workspace), and the payback shown as a quiet secondary read. Progress is felt as becoming operational, never gamified, no finish line.2 · What it offers",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion",
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 314,
+      "room": "Welcome",
+      "text": "The commanding statement | One serif line that names the state — day-one landing (“the workspace is awake”) vs re-entry (“what moved since you left”). The only thing that changes between the two lifecycles. |",
+      "classifications": [
+        "metaphor",
+        "personification"
+      ],
+      "matched_terms": [
+        "awake",
+        "landing",
+        "workspace is awake"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 315,
+      "room": "Welcome",
+      "text": "The one dominant move | The system’s single overnight pick + its plain reason + one CTA. The system read the whole workspace while the operator was away; this is the one thing that needs them first. |",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 316,
+      "room": "Welcome",
+      "text": "The “what the system saw” read | 2–4 plain lines — the dividend on the setup work. Never a checklist, never a status dump. What the system noticed on its own. |",
+      "classifications": [
+        "declarative_certainty_review",
+        "metadiscourse",
+        "metaphor",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "dividend",
+        "read",
+        "system saw",
+        "what the system saw"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 317,
+      "room": "Welcome",
+      "text": "The operating line | A recessive read: accounts watched · live deals · in flight. The “morning door” into the workspace — never “all done.” |",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 318,
+      "room": "Welcome",
+      "text": "The calm route to the Dashboard | A quiet, non-competing path to the full command surface for the operator who wants more than the one move. | 3 · The two lifecycles",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 320,
+      "room": "Welcome",
+      "text": "## One layout, two headlinesDay-one landing and re-entry reuse the exact same shape; only the headline changes. This is the whole trick of the room — the payback surface is identical whether it’s the first morning or the hundredth.",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "first morning",
+        "landing"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 321,
+      "room": "Welcome",
+      "text": "Lifecycle | Headline register | What the read says |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 322,
+      "room": "Welcome",
+      "text": "Day-one landing | “The workspace is awake — here’s what you just switched on.” | the first move + what the seeding produced |",
+      "classifications": [
+        "internal_metaphor",
+        "metaphor",
+        "personification"
+      ],
+      "matched_terms": [
+        "awake",
+        "landing",
+        "seeding",
+        "workspace is awake"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 323,
+      "room": "Welcome",
+      "text": "Re-entry | “What moved since you left.” | account/deal movement since last session + the one move | 4 · Flows",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 329,
+      "room": "Welcome",
+      "text": "directional handoff into the room that owns the one move — Signal Console / Deal Workspace / Outbound",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 333,
+      "room": "Welcome",
+      "text": "Welcome as the seeding flow’s landing — never an empty-workspace “create your first…” threshold",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "internal_metaphor",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "landing",
+        "seeding"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 335,
+      "room": "Welcome",
+      "text": "the payback made visible (“what the system saw while you were away”)",
+      "classifications": [
+        "metadiscourse",
+        "personification"
+      ],
+      "matched_terms": [
+        "system saw",
+        "what the system saw"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 341,
+      "room": "Welcome",
+      "text": "REFERENCE · Welcome capability map · compiled from canon §4.1 + shipped src/welcome + reconciled to current doctrine (2026-07-07). Settled design: welcome-flow-landing-2026-07-07.html",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "landing"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 706,
+      "room": "Dashboard",
+      "text": "# The one ranked object under the most pressure — and the one move.Command Chamber (ranking) · settled 2026-07-04",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move",
+        "pressure"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 707,
+      "room": "Dashboard",
+      "text": "Show the operator the single ranked object under the most pressure right now, with one dominant next move, without browsing. The Dashboard is where the operator stops choosing between modules and starts being told which deal, signal, or pilot to act on first — it ranks everything under pressure, explains why a specific object came up first, and offers one compressed act-or-inspect move.Sourced from: canon §4.2 + the command-intelligence engine (Part V · buildCommandObjects / rankCommandObjects / summarizeCommandContext / explainCommandObject). Settled design: dashboard-CHOSEN-complete-2026-07-04.html.",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 710,
+      "room": "Dashboard",
+      "text": "## What the room is forReplace the hallway (equal-weight doors) with a smarter front door: one ranked object, one dominant move, the reasoning shown. Three density modes support different cognitive states; all three keep the ranking. This is the room the whole system’s workspace-health summaries flow into. Supersession (2026-07-08, founder-confirmed): the settled 2026-07-04 \"command + standing cockpit\" folds the three cognitive states into one surface (standing = the Brief read · the one move = Spotlight · skip-the-board = Queue), so there is no explicit mode switcher, and the \"this week's reads\" card is not carried on the Dashboard. Sections 2 + the \"this week's reads\" row below are retained as history.2 · The three density modes",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "front",
+        "one move",
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 714,
+      "room": "Dashboard",
+      "text": "Brief | A 2–5 sentence narrative read + one variable-insight line | wants the morning read in prose, then the one move |",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move",
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 716,
+      "room": "Dashboard",
+      "text": "Queue | A ranked triage list — rank prefix + reason chips per row | wants to work down the pressure list one at a time | 3 · What it offers",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 720,
+      "room": "Dashboard",
+      "text": "The ranked object list | Everything under pressure, ranked — deals, signals, pilots, moves, the ICP itself, system reads. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 721,
+      "room": "Dashboard",
+      "text": "The Brief narrative | A deterministic morning read (buildBriefNarrative) naming the spotlight, the queue composition, the ranking confidence, the runner-up. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 724,
+      "room": "Dashboard",
+      "text": "The ranking inputs (shown, never hidden) | how hot the signals are on an account · how much pressure a deal is under · how stale · dollar value · what changes downstream if you act. |",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 731,
+      "room": "Dashboard",
+      "text": "risk | 5 | deal-room pressure (top_pressure entries) |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 734,
+      "room": "Dashboard",
+      "text": "icp | 2 | fires when accounts/signals/deals exist but no ICP |",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "fires"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 740,
+      "room": "Dashboard",
+      "text": "signal heat from Signal Console (gtmos_signal_room_health)",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 741,
+      "room": "Dashboard",
+      "text": "deal pressure from Deal Workspace (gtmos_deal_workspace_health)Flows out",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 746,
+      "room": "Dashboard",
+      "text": "The whole-motion standing leads the room (the verdict masthead) · one dominant move under it · the standing row where each part is a door (the cockpit; supersedes the Brief/Spotlight/Queue modes, 2026-07-08)",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 937,
+      "room": "Readiness Score",
+      "text": "# Could a real first-hire walk in tomorrow and run the motion?System Ledger (synthesis) · design settled 2026-07-07 (the climb)",
+      "classifications": [
+        "metaphor",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "climb",
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 938,
+      "room": "Readiness Score",
+      "text": "Answer one question — is the system inheritable yet? — and give the operator a verdict, not a number. Readiness is a maturity assessment, not a pressure rail: an integral over time, not a derivative. The Dashboard already answers “what should I act on today?”; Future Autopsy answers “what’s decaying?”; Readiness answers “is the workspace inheritable yet?”Sourced from: canon §4.17 + the readiness engine (verdict.ts · dimensions.ts · dashboard readiness-aggregator). Settled design: readiness-score-climb-2026-07-07.html.",
+      "classifications": [
+        "branded_name",
+        "metaphor",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "Future Autopsy",
+        "climb",
+        "decaying",
+        "inheritable",
+        "pressure"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 945,
+      "room": "Readiness Score",
+      "text": "You are the system | Founder-led, no transferable surface yet | any part at 0 |",
+      "classifications": [
+        "aphorism"
+      ],
+      "matched_terms": [
+        "You are the system"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 946,
+      "room": "Readiness Score",
+      "text": "Building | Activity exists but a hire would still be improvising | ≥2 parts ≥8, none ≥16 |",
+      "classifications": [
+        "ambiguous_state"
+      ],
+      "matched_terms": [
+        "Building"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 947,
+      "room": "Readiness Score",
+      "text": "Inheritable with guardrails | A hire could run it with you there to answer questions | every part ≥10 AND ≥1 part ≥16 AND first pilot evidence exists |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "Inheritable with guardrails",
+        "inheritable"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 948,
+      "room": "Readiness Score",
+      "text": "Hire-ready | The motion would survive a 2-week founder vacation | every part ≥14 AND closed-won exists AND Future Autopsy run AND ≥1 actionable pilot |",
+      "classifications": [
+        "ambiguous_state",
+        "branded_name",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "Future Autopsy",
+        "Hire-ready",
+        "motion"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 949,
+      "room": "Readiness Score",
+      "text": "Hire-ready, repeatable | Multiple wins, losses analyzed, advisors lit, kit composed | all Hire-ready + win/loss ≥1 AND advisors ≥1 AND handoff ≥5/7 ready | 3 · What it offers",
+      "classifications": [
+        "ambiguous_state"
+      ],
+      "matched_terms": [
+        "Hire-ready",
+        "Hire-ready, repeatable"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 953,
+      "room": "Readiness Score",
+      "text": "The verdict | The dominant serif state name + a plain one-line read of what a hire could / couldn’t do today. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 956,
+      "room": "Readiness Score",
+      "text": "The climb (the ladder over time) | The five levels as a vertical ladder — passed levels sit behind in forest green (“left behind 3 weeks ago”), the current level is “you are here,” the next is the goal + “what it takes.” |",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "climb"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 957,
+      "room": "Readiness Score",
+      "text": "The five parts of the motion | Demoted to quiet ready/thin chips (forest = solid, amber = thin) — your targeting · your outreach · your discovery · your open deals · your pilot evidence. Never bars, never scores. |",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion",
+        "thin"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 960,
+      "room": "Readiness Score",
+      "text": "The read-only “share with a hire” | The one durable move — read-mode workspace access for an external email. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 961,
+      "room": "Readiness Score",
+      "text": "Ceremony hooks | Fires the Founding GTM set-piece on a verdict transition UP. | 4 · Flows",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "fires"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 967,
+      "room": "Readiness Score",
+      "text": "Future Autopsy run history",
+      "classifications": [
+        "branded_name",
+        "fragment_review"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 2
+    },
+    {
+      "source_line": 971,
+      "room": "Readiness Score",
+      "text": "a verdict transition UP fires the ceremony moment in Founding GTM",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "fires"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 978,
+      "room": "Readiness Score",
+      "text": "naked “dimension” | name the actual part of the motion (your targeting / outreach / discovery / open deals / pilot evidence) |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 984,
+      "room": "Readiness Score",
+      "text": "The singular question (hire-ready or not)",
+      "classifications": [
+        "ambiguous_state"
+      ],
+      "matched_terms": [
+        "Hire-ready"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 986,
+      "room": "Readiness Score",
+      "text": "The climb — readiness felt as an integral over timeWhat it is NOT",
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "climb"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 989,
+      "room": "Readiness Score",
+      "text": "Not a pressure rail",
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 991,
+      "room": "Readiness Score",
+      "text": "REFERENCE · Readiness Score capability map · compiled from canon §4.17 + shipped src/lib/readiness + reconciled to current doctrine (2026-07-07). Settled design: readiness-score-climb-2026-07-07.html",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "climb"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1189,
+      "room": "ICP Studio",
+      "text": "# The one sharp definition of who you sell to.Decision Bench (strategic shaping) · settled 2026-07-04",
+      "classifications": [
+        "declarative_certainty_review",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "sharp"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1190,
+      "room": "ICP Studio",
+      "text": "Sharpen the one definition of who you sell to so every downstream room can work against a real target. The ICP object is the thing being sharpened — it is the central authored surface, not a form output. Thin means fewer assumptions, fewer personas, fewer use cases. The ICP is the filter that manifests as “ICP Match” scoring on every Account, everywhere.Sourced from: canon §4.4 + the ICP build + 8-check quality engine (shipped src/icp-studio). Settled design: icp-studio-combo-flow-2026-07-04.html.",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "thin"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1193,
+      "room": "ICP Studio",
+      "text": "## What the room is forMake one sharp ICP the filter the whole system runs against. The ICP is a strategic bet the operator authors, not a persona template they fill. Every account, everywhere, carries an ICP-Match score derived from this one definition.2 · What it offers",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "sharp"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1198,
+      "room": "ICP Studio",
+      "text": "The buying-group minimum | The smallest real buying group the motion needs. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1199,
+      "room": "ICP Studio",
+      "text": "The focus recommendation | The system’s read of where to sharpen — narrower beats broader. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 1202,
+      "room": "ICP Studio",
+      "text": "The 8-check quality engine | A 4-tier read on how sharp the ICP is (thinness rewarded, not penalized). | 3 · Flows",
+      "classifications": [
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read",
+        "sharp"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1210,
+      "room": "ICP Studio",
+      "text": "ICP sharpness as a strategic bet",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "sharpness"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1573,
+      "room": "Territory Architect",
+      "text": "# The ICP, carved into a territory you actually own.Decision Bench (strategic shaping) · settled 2026-07-04 (axis-morphing floor)",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "floor"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1574,
+      "room": "Territory Architect",
+      "text": "Turn the ICP into a tiered territory with focuses, approaches, and a hard 300-account ceiling that forces strategic ownership. The territory is a map of focused groups of buyers, not a list. A focus is a named division of the market, carved on whatever axis fits the motion — and the axes blend.Sourced from: canon §4.5 (carve-axis malleability + why-you/why-now charter, 2026-07-03) + shipped src/territory-architect. Settled design: territory-architect-axis-morph-2026-07-04.html.",
+      "classifications": [
+        "metaphor",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "carve",
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1577,
+      "room": "Territory Architect",
+      "text": "## What the room is forCarve the ICP into divisions the seller can actually own. The carve axis is a variable, not a constant — the room stays malleable from a scorch-the-earth pre-seed (one coarse division) to an organized Series B (a geo × vertical grid). The 300-cap + swap make each account consequential; tiers are a resource-allocation commitment, not a ranking.2 · The carve axes",
+      "classifications": [
+        "internal_metaphor",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "carve",
+        "seed"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1585,
+      "room": "Territory Architect",
+      "text": "Trigger / behavior | pressure charters |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1591,
+      "room": "Territory Architect",
+      "text": "Why-now (what pressure is on them) | required for trigger carves · optional-but-encouraged for structural carves |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1596,
+      "room": "Territory Architect",
+      "text": "Sales-cycle calibration | Tunes the territory to the motion’s cycle length. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 1597,
+      "room": "Territory Architect",
+      "text": "The carve axis | geo / vertical / segment / named / trigger — blendable; sets the room’s register. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "carve"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 1613,
+      "room": "Territory Architect",
+      "text": "Axis-malleability (never hardcode one carve)",
+      "classifications": [
+        "declarative_certainty_review",
+        "fragment_review",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "carve"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 1991,
+      "room": "Prospecting Desk",
+      "text": "Find accounts, confirm each one is real and worth it, and send only the confirmed ones to Signal Console. Keep the funnel moving — never a filing cabinet. Antaeus runs its own web research: the operator describes who they want in plain language, and Antaeus reads public news, funding announcements, job posts and company pages, and brings back companies that match — each cited with a link.Sourced from: canon §4.6 (the search mind-correction, 2026-07-03) + shipped src/sourcing-workbench. Settled design: prospecting-desk-funnel-2026-07-04.html (variant F1: Find → Confirm → Send).",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification"
+      ],
+      "matched_terms": [],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 2010,
+      "room": "Prospecting Desk",
+      "text": "Saved searches + auto-watches | run-on-demand searches the operator triggers + watches Antaeus re-runs on its own and alerts on — with a productivity read + a dry-search flag. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 3036,
+      "room": "Signal Console",
+      "text": "The room where the operator tracks the named accounts they’re watching, the signals attached to each, and the next move on each. Accounts come in by hand or from enrichment; signals stack up against them; the operator decides what to act on. Signals are time-limited events — research on a qualified account may justify motion, but research without motion is collection theater.Sourced from: canon §4.7 + the heat engine (shipped src/signal-console) + ADR-006 (substrate role). Settled design: signal-console-attention-router-2026-07-04.html.",
+      "classifications": [
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "heat",
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3039,
+      "room": "Signal Console",
+      "text": "## What the room is forRank the watched field by where attention should go. Account heat feeds Dashboard command ranking. Post-ADR-006 the room is also the data substrate the Briefing reads from — accounts + signals live in the signal_console_accounts + signals Postgres tables this room owns. The Briefing reads; it never writes back.2 · The heat engine",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 3042,
+      "room": "Signal Console",
+      "text": "Heat = signal count × type weight × source credibility × recency decay",
+      "classifications": [
+        "personification",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3049,
+      "room": "Signal Console",
+      "text": "Heat score per account | The computed rank (above) — feeds Dashboard command ranking. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3050,
+      "room": "Signal Console",
+      "text": "The morning brief | The daily read on the watched field. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 3051,
+      "room": "Signal Console",
+      "text": "Research posture | “motion ready” vs “research heavy” — guards against collection theater. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3053,
+      "room": "Signal Console",
+      "text": "The enrich-all flow | Pull enrichment (triggers / firmographics / heat) across the field. |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 3060,
+      "room": "Signal Console",
+      "text": "heat + readiness → Dashboard",
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3061,
+      "room": "Signal Console",
+      "text": "heat + motion state → Handoff Kit",
+      "classifications": [
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "handoff kit",
+        "heat",
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3062,
+      "room": "Signal Console",
+      "text": "accounts + signals → the Briefing (read-only substrate per ADR-006)",
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 3067,
+      "room": "Signal Console",
+      "text": "Account-to-motion logic (research without motion is collection theater)",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 4886,
+      "room": "Briefing",
+      "text": "# What the system saw — inside your work and out in the market.Intelligence Surface (new family, closest neighbor System Ledger) · named premium asset · ADR-006",
+      "classifications": [
+        "metadiscourse",
+        "personification"
+      ],
+      "matched_terms": [
+        "system saw",
+        "what the system saw"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 4887,
+      "room": "Briefing",
+      "text": "The daily check-in for what the system saw — both inside the operator’s own work (the Workspace stream) and in the market the operator is selling into (the World stream). Written like a peer telling them what they see. Not “what to act on next” (the Dashboard’s job) and not “which accounts are on the radar” (Signal Console’s job).Sourced from: canon §4.21 + ADR-006 + ADR-009 + ADR-014 + the 13 promoted specs (deliverables/specs/briefing). Settled design: briefing-vivid-2026-07-04.html.",
+      "classifications": [
+        "metadiscourse",
+        "personification"
+      ],
+      "matched_terms": [
+        "system saw",
+        "what the system saw"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 4890,
+      "room": "Briefing",
+      "text": "## What the room is forBe the daily check-in for what the system saw. The operator’s stated preferences (watchlist, ICP, competitive set) are treated as hypotheses under continuous evaluation, not fixed truths to serve. A responsive product accepts them as given; the Briefing tests them continuously and tells the operator when the evidence isn’t supporting the hypothesis.2 · The two streams",
+      "classifications": [
+        "metadiscourse",
+        "personification"
+      ],
+      "matched_terms": [
+        "system saw",
+        "what the system saw"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 4894,
+      "room": "Briefing",
+      "text": "Workspace | the operator’s own deals / signals / pilots (the ADR-009 ledger) | daily-fresh · SQL heartbeat generators |",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "heartbeat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 4905,
+      "room": "Briefing",
+      "text": "Pattern | a synthesized read: claim + evidence + confidence + audit envelope. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 4918,
+      "room": "Briefing",
+      "text": "## What comes in, what goes outThe Briefing is the intelligence surface that reads from the Signal Console substrate (accounts + signals + heat in Postgres). It never writes to those tables.Flows in",
+      "classifications": [
+        "declarative_certainty_review",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 5175,
+      "room": "Outdoors Events",
+      "text": "workspace_profile.product_category (the seed for the query plan)",
+      "classifications": [
+        "internal_metaphor"
+      ],
+      "matched_terms": [
+        "seed"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 5506,
+      "room": "Outbound Studio",
+      "text": "## What the room is forTurn the operator rack (account · buyer · persona · temperature · trigger · next-question) into the exact spoken/written line — a real, specific outbound move, never template spam. The generator maps 5 temperatures × 4 personas to a send line + a quality read + a motion band.2 · What it offers",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion",
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 5516,
+      "room": "Outbound Studio",
+      "text": "Quality + motion band | ready ≥80 / workable ≥60 / thin — is the line real enough to send. | 3 · Flows",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion",
+        "thin"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 5519,
+      "room": "Outbound Studio",
+      "text": "account + heat from Signal Console",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 5522,
+      "room": "Outbound Studio",
+      "text": "motion truth → Dashboard · LinkedIn Playbook · Readiness · Handoff Kit4 · Guardrails",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 5525,
+      "room": "Outbound Studio",
+      "text": "Motion craft + anti-spam seriousness",
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 6408,
+      "room": "Cold Call Studio",
+      "text": "The plain after-call read | what went well / what to sharpen next time. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 6417,
+      "room": "Cold Call Studio",
+      "text": "## The user is the sellerBanned on the face: thread · loom · pull · pressure · proof · say-next · call memory · “the move.” The user is the seller (or you), never “rep.”6 · Guardrails",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure",
+        "thread"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 6757,
+      "room": "LinkedIn Playbook",
+      "text": "# LinkedIn as disciplined air cover — never the opening scene.Live Instrument (live execution) · settled 2026-07-06 (the one move)",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "air cover",
+        "one move"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 6758,
+      "room": "LinkedIn Playbook",
+      "text": "Use LinkedIn as disciplined air cover — never the opening scene. Public cue first, ask only when trust has compounded. The inbox is not where you start: the five cues run watch public signal → comment with one operating read → connect after recognition → give-first → ask only when it’s warranted.Sourced from: canon §4.10 + the motion engine + 5-cue ladder (shipped src/linkedin-playbook). Settled design: linkedin-playbook-one-move-2026-07-06.html.",
+      "classifications": [
+        "declarative_certainty_review",
+        "metaphor",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "air cover",
+        "motion",
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 6761,
+      "room": "LinkedIn Playbook",
+      "text": "## What the room is forShow the single next public-first move on the hottest account already lit in Signal Console / Outbound — one account at a time. Channel-specific discipline: the ask is the last cue, not the first.2 · The five-cue ladder",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "hottest"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 6766,
+      "room": "LinkedIn Playbook",
+      "text": "2 | Comment | comment with one operating read |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 6776,
+      "room": "LinkedIn Playbook",
+      "text": "Channel memory stats | touches · acceptance · reply rate — the compounding read on the channel. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 6777,
+      "room": "LinkedIn Playbook",
+      "text": "The one ready-to-paste move | The single next public-first move for the hottest account. | 4 · Flows",
+      "classifications": [
+        "declarative_certainty_review",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "hottest"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 6781,
+      "room": "LinkedIn Playbook",
+      "text": "motion truth → Dashboard · Signal Console · Readiness · Handoff5 · Guardrails",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 6785,
+      "room": "LinkedIn Playbook",
+      "text": "The one move at a timeWhat it is NOT",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 10713,
+      "room": "Discovery Studio",
+      "text": "Every segment must carry these 16 fieldssegmentId · segmentLabel · timePosition · objective · sayThisNow · buyerMightSay[] · sayNext[] · listenFor[] · earnedTruth · failureRisk · localRecovery[] · skipAheadHandlers[] · markWorkedTarget · markLearnedTarget · nextSegmentRules — and support 4 display states: active, worked (produced useful truth), thin (not complete enough to trust downstream), flagged (resistance / missing stakeholder / timing / proof gap). (timePosition is now a position label, not a timer — pacing retired.)",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "thin"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 10718,
+      "room": "Discovery Studio",
+      "text": "The active framework retunes the whole question set, the objection library, and the dossier to the buyer's world. No longer a frozen list — generated by makeFramework(seed); a seller off the list gets the closest fit + a way forward, never a dead end.",
+      "classifications": [
+        "declarative_certainty_review",
+        "internal_metaphor"
+      ],
+      "matched_terms": [
+        "seed"
+      ],
+      "severity_0_to_5": 2
+    },
+    {
+      "source_line": 10777,
+      "room": "Discovery Studio",
+      "text": "compressionMode | Time-pressure state that shortens the path — Off / Essentials / Emergency | Live |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 10819,
+      "room": "Discovery Studio",
+      "text": "Emergency — the rescue state: collapses the spine to the segment you're in and hoists the recover moves to the front |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 10825,
+      "room": "Discovery Studio",
+      "text": "The non-negotiable build testsThe seller can: recover from a buyer interruption in one move · switch into compression without losing the next-step path · answer a buyer question without abandoning discovery control · see what-to-say / what-to-listen-for / where-to-go-next without reading paragraphs · resume after being interrupted, challenged, or delayed. And the room always preserves the distinction between earned facts, support proof, and deploy-now language.",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "one move"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 10843,
+      "room": "Discovery Studio",
+      "text": "Flows in | Pre-call context read directly from Signal Console (account + signal) + Deal Workspace (deal state). Replaces the retired gtmos_call_handoff from Call Planner. |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 10847,
+      "room": "Discovery Studio",
+      "text": "→ Future Autopsy | failure-pattern clues · unresolved evidence gaps · stalled-next-step evidence · disqualification / drift indicators |",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 10871,
+      "room": "Discovery Studio",
+      "text": "No decorative timer, no heat meters / abstract chips",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 12751,
+      "room": "Deal Workspace",
+      "text": "Surface the recovery queue — which deals are weakest, why, and what the next corrective move is. The room is an intervention board, not a Kanban. First-fold exposes pressure fast: which deals will close-lost if I do nothing this week, and what’s the smallest corrective move. Stage is not truth unless next-step truth backs it up.Sourced from: canon §4.13 + the recovery-ranking + 9-field health engine (shipped src/deal-workspace). Settled design: deal-workspace-toggleable-views-2026-07-04.html (Focus / Timeline / List).",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 12754,
+      "room": "Deal Workspace",
+      "text": "## What the room is forLead with pressure. The recovery ranking (staleness + next-step pressure + close-date pressure) sorts every deal into a lane and names the smallest corrective move. Stage truth is only truth when a real dated next step backs it.2 · The recovery lanes",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 12756,
+      "room": "Deal Workspace",
+      "text": "## Where the work is decaying",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "decaying"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 12759,
+      "room": "Deal Workspace",
+      "text": "At-risk | decaying — a corrective move is due |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "decaying"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 12770,
+      "room": "Deal Workspace",
+      "text": "The deal-health panel | The per-deal vitals read. |",
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 12772,
+      "room": "Deal Workspace",
+      "text": "The toggleable views | Focus / Timeline / List — different reads on the same pressure. | 5 · Flows",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 12779,
+      "room": "Deal Workspace",
+      "text": "deal pressure into Future Autopsy · Dashboard · Readiness · Handoff Kit",
+      "classifications": [
+        "branded_name",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "Future Autopsy",
+        "handoff kit",
+        "pressure"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 12783,
+      "room": "Deal Workspace",
+      "text": "Deal pressure",
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 13065,
+      "room": "Pilot Desk",
+      "text": "## What the room is forGuide a first-timer through a pilot that gets your hooks in — pull the hands-on users (usually not the buyer or champion), discover hidden stakeholders, multi-thread deeper, and find problems they didn’t know they had. The room is a slow unfolding — one movement at a time, never a wall of fields. It feels customizable; the desk shapes around the deal.2 · The five movements",
+      "classifications": [
+        "declarative_certainty_review",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "thread"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 13072,
+      "room": "Pilot Desk",
+      "text": "4 | Read the adoption | are enough of the right people using the product day-to-day |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13091,
+      "room": "Pilot Desk",
+      "text": "the stop rule into Future Autopsy",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 13097,
+      "room": "Pilot Desk",
+      "text": "proof · cast · mold · forge/foundry · ingot · heat/heat-ledger · kill rule · readout | the pilot · the results · the evidence |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "heat"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13098,
+      "room": "Pilot Desk",
+      "text": "the quality band | Ready / Almost / Too thin to hand over |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "thin"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13653,
+      "room": "Getting to Signed",
+      "text": "# The deal isn’t won when they say yes.Live Instrument (live execution) · renamed from Negotiation 2026-07-07 · settled (face-off + ledger)",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "face-off"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13654,
+      "room": "Getting to Signed",
+      "text": "Get a verbally-agreed deal actually signed — walk the seller through every front between “we want to buy” and a countersigned contract, push back where they should push back, and keep the buying committee engaged so the deal doesn’t die in procurement. The most common way a B2B deal dies is not losing the argument — it’s internal alignment collapse after the verbal yes.Sourced from: canon §4.16b (the run-to-signed reconceive + rename, 2026-07-07) + B2B procurement research (SIG/CAIQ · SOC 2/ISO shortcut · liability caps · MAP). Settled design: getting-to-signed-faceoff-2026-07-07.html.",
+      "classifications": [
+        "metaphor",
+        "personification",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "dies",
+        "front",
+        "run-to-signed"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 13657,
+      "room": "Getting to Signed",
+      "text": "## What the room is forA war room for the run to signed, not a rehearsal booth. It leads with the one thing actually blocking right now (the biggest gap between their ask and your line), shown as a face-off — their side ⟷ the gap ⟷ your line — with the seller’s counter, a trade they can offer, and the line they won’t cross. Everything else open sits below as a positions ledger.2 · The four disciplines",
+      "classifications": [
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "matched_terms": [
+        "face-off",
+        "your line"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 13666,
+      "room": "Getting to Signed",
+      "text": "## One ledger row each; the hottest is the face-offThe room morphs which front is the face-off by what’s actually blocking, not a fixed order.",
+      "classifications": [
+        "metaphor",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "face-off",
+        "front",
+        "hottest"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 13667,
+      "room": "Getting to Signed",
+      "text": "Front | What it covers |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13676,
+      "room": "Getting to Signed",
+      "text": "The committee | champion / economic buyer / new stakeholders, each with an engagement read (warm / quiet N days / new). |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13678,
+      "room": "Getting to Signed",
+      "text": "The face-off | their side · the gap · your line + hold/trade/line + “send the counter-position” + “loop in an advisor who’s won this fight.” |",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "face-off",
+        "your line"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13679,
+      "room": "Getting to Signed",
+      "text": "The positions ledger | per-front row: their ask → your line → status (blocking / clearing / to-do / at-risk); each row drills to its depth in place. |",
+      "classifications": [
+        "metaphor",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front",
+        "your line"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 13681,
+      "room": "Getting to Signed",
+      "text": "The payment-terms trade set | net-60 flat · net-30 for a cut · % off for annual up-front. |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13682,
+      "room": "Getting to Signed",
+      "text": "The plan-to-signed | the mutual dated run to signature, co-owned with the champion. |",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "run to signature"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13688,
+      "room": "Getting to Signed",
+      "text": "an advisor from Call in a Favor (a backchannel warming a front)Flows out",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13689,
+      "room": "Getting to Signed",
+      "text": "front outcomes + the plan-to-signed → Deal Workspace",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13690,
+      "room": "Getting to Signed",
+      "text": "loss-pattern feedback → Future Autopsy (lost in procurement, before terms?)",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 13691,
+      "room": "Getting to Signed",
+      "text": "a stuck front → Call in a Favor (route a backchannel to the frozen front)",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "front"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13702,
+      "room": "Getting to Signed",
+      "text": "The run-to-signed mind (the deal isn’t won at yes)",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "run-to-signed"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 13703,
+      "room": "Getting to Signed",
+      "text": "The face-off on the blocking front (their side ⟷ your line, always the one actually blocking)",
+      "classifications": [
+        "declarative_certainty_review",
+        "metaphor",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "face-off",
+        "front",
+        "your line"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 14222,
+      "room": "Call in a Favor",
+      "text": "# Mobilize the people in your corner to move a stuck deal.Live Instrument (live execution) · renamed from Advisor Deploy 2026-07-06 · settled (the relay)",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "relay"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14226,
+      "room": "Call in a Favor",
+      "text": "## What the room is forKnow who you can call on, match the right person to the right deal, pick the right ask for the deal’s state, write the exact message AND the note they forward to the buyer — don’t spend trust on a vague ask, don’t over-tap the same person, and close every loop. The favor is a relay: you → your person → the buyer.2 · The favor as a hand-off",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "relay"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14244,
+      "room": "Call in a Favor",
+      "text": "The stuck-deal queue | Top rail, most-stuck first + a coverage read (deals with no one who could put in a word → line someone up). |",
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14255,
+      "room": "Call in a Favor",
+      "text": "“spend-read” | “is this ask ready to send?” |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14637,
+      "room": "Future Autopsy",
+      "text": "Future Autopsy · Diagnosis Table · capability map",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 14640,
+      "room": "Future Autopsy",
+      "text": "# Pre-mortem the deal before it dies.Diagnosis Table (intervention) · named premium asset · settled 2026-07-04 (the countdown)",
+      "classifications": [
+        "metaphor",
+        "personification"
+      ],
+      "matched_terms": [
+        "dies"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14641,
+      "room": "Future Autopsy",
+      "text": "Pre-mortem the deal before it dies; show the causal pattern and the corrective route. The deal is pinned as evidence on a forensic light-table. The analysis surfaces the causal pattern (e.g. pressure before clarity), the intervention options, and a command row. The positive example the other Diagnosis Table rooms should borrow from.Sourced from: canon §4.14 + the autopsy generator + deal-health subset (shipped src/future-autopsy). Settled design: future-autopsy-countdown-2026-07-04.html (the decay line).",
+      "classifications": [
+        "metaphor",
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "dies",
+        "pressure"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 14648,
+      "room": "Future Autopsy",
+      "text": "The causal pattern | the named failure shape — e.g. “pressure before clarity” |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14656,
+      "room": "Future Autopsy",
+      "text": "The horizon tag | Days-out until the deal dies if nothing changes. |",
+      "classifications": [
+        "metaphor",
+        "personification"
+      ],
+      "matched_terms": [
+        "dies"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14663,
+      "room": "Future Autopsy",
+      "text": "deals with pressure/stage truth from Deal Workspace",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14678,
+      "room": "Future Autopsy",
+      "text": "REFERENCE · Future Autopsy capability map · compiled from canon §4.14 + shipped src/future-autopsy + reconciled to current doctrine (2026-07-07). Settled design: future-autopsy-countdown-2026-07-04.html",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 14917,
+      "room": "Quota Workback",
+      "text": "Turn a quota target into execution pressure the seller can feel — the annual number worked all the way down to the one thing they control: what they do every working day. Quota math is execution pressure, not isolated planning.Sourced from: canon §4.18 + the calc() + computeCoverage engine (shipped src/quota-workback). Settled design: quota-workback-pace-strands-2026-07-07.html.",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14926,
+      "room": "Quota Workback",
+      "text": "3 | Enough in flight | live pipeline coverage pulled from Deal Workspace — the gap in real dollars | 3 · The two reads",
+      "classifications": [
+        "personification"
+      ],
+      "matched_terms": [],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14929,
+      "room": "Quota Workback",
+      "text": "Read | For | Dominant surface |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14931,
+      "room": "Quota Workback",
+      "text": "Pace | a returning seller | projected year-end landing vs target · what-the-number-needs vs where-you-actually-are · the move back on pace | 4 · What it offers",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "landing"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14936,
+      "room": "Quota Workback",
+      "text": "Typical deal size (ACV → benchmark band) | SMB / Mid-Market / Enterprise / Strategic — sets which benchmark the believability read tests against. |",
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14940,
+      "room": "Quota Workback",
+      "text": "The believability read | “this plan is a stretch — one assumption is optimistic” + what it costs. A plain judgment, never a bare score. |",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 14942,
+      "room": "Quota Workback",
+      "text": "The pace projection | Projected year-end landing vs target + the need-vs-actual scoreboard for a returning seller. | 5 · Flows",
+      "classifications": [
+        "metaphor"
+      ],
+      "matched_terms": [
+        "landing"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14946,
+      "room": "Quota Workback",
+      "text": "logged motion from Outbound / Cold Call (the pace/actuals read)",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "motion",
+        "read"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14950,
+      "room": "Quota Workback",
+      "text": "execution pressure (the daily habit) into Outbound + Cold Call",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14956,
+      "room": "Quota Workback",
+      "text": "“the meeting-creation floor” | name the plain thing |",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "floor"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 14960,
+      "room": "Quota Workback",
+      "text": "Quota as execution pressure the seller can feel",
+      "classifications": [
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "pressure"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 15215,
+      "room": "Founding GTM",
+      "text": "The living onboarding surface the first hire opens on day one — where the founder’s tacit GTM memory becomes a transferable artifact. Not an export; the workspace itself is the durable artifact post cloud-sync. The kit’s job is authored opinion + cross-room synthesis, not aggregation — it renders the founder’s hard-won understanding as prescriptive, surprising, specific content the hire can read top-to-bottom.Sourced from: canon §4.19 + the section authoring engines (src/founding-gtm/lib/sections.ts + cross-room.ts). Settled design: founding-gtm-open-book-2026-07-07.html.",
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 15218,
+      "room": "Founding GTM",
+      "text": "## What the room is forDo what the workspace cannot: render the founder’s GTM understanding as prescriptive, surprising, specific content. Specificity comes from authored opinion (not bullet aggregation) and from cross-room reads no single room could surface alone. This is the culmination — every other room points toward getting the workspace ready to hand off.2 · The seven sections",
+      "classifications": [
+        "personification"
+      ],
+      "matched_terms": [],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 15220,
+      "room": "Founding GTM",
+      "text": "## Each authored, each with a cross-room “one thing to notice”Replacing the legacy six. Each section is authored prose + a concrete evidence line + one cross-room read (the “surprise” primitive in code; renders as a plain “one thing to notice” margin note, never labeled “SURPRISE”).",
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 15232,
+      "room": "Founding GTM",
+      "text": "Seven authored sections | Prose that reads like a document a sharp operator wrote for their replacement — not aggregated bullet lists. |",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "sharp"
+      ],
+      "severity_0_to_5": 3
+    },
+    {
+      "source_line": 15233,
+      "room": "Founding GTM",
+      "text": "Per-section status | ready / partial / empty — shown honestly, thin parts not hidden. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "thin"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 15234,
+      "room": "Founding GTM",
+      "text": "The per-section cross-room read | The “one thing to notice” — the read no single room can surface alone. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 15237,
+      "room": "Founding GTM",
+      "text": "The share-link mechanic | Read-mode workspace access for an external email — the one durable move. |",
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 15238,
+      "room": "Founding GTM",
+      "text": "The ceremony hook | Fires the set-piece on the first upward Readiness transition into Inheritable-with-guardrails. | 4 · The ceremony moment",
+      "classifications": [
+        "metaphor",
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "fires",
+        "inheritable"
+      ],
+      "severity_0_to_5": 4
+    },
+    {
+      "source_line": 15240,
+      "room": "Founding GTM",
+      "text": "## The kit becomes realWhen Readiness transitions UP from Building → Inheritable with guardrails for the first time in a workspace, fire a set-piece (not a toast): an animated reveal — the verdict change, the kit count moving (e.g. 2/7 → 4/7), a serif headline (“the kit just became real”), and a one-time CTA to share the workspace read-mode. Once per workspace per upward transition; downward transitions are silent.5 · Flows",
+      "classifications": [
+        "ambiguous_state",
+        "personification",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "matched_terms": [
+        "Building",
+        "Inheritable with guardrails",
+        "inheritable",
+        "read"
+      ],
+      "severity_0_to_5": 5
+    },
+    {
+      "source_line": 15243,
+      "room": "Founding GTM",
+      "text": "every cloud-synced room — ICP Studio (§1) · Deal Workspace closed deals (§1/4/5/6) · Outbound + LinkedIn + Cold Call (§2) · Discovery segment-jump data (§3) · Call in a Favor (§4) · Future Autopsy (§5) · Quota Workback + Deal pipeline (§7)Flows out",
+      "classifications": [
+        "branded_name"
+      ],
+      "matched_terms": [
+        "Future Autopsy"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 15245,
+      "room": "Founding GTM",
+      "text": "section-readiness count drives the Readiness “Hire-ready, repeatable” gate (≥ 5/7)6 · Guardrails",
+      "classifications": [
+        "ambiguous_state"
+      ],
+      "matched_terms": [
+        "Hire-ready",
+        "Hire-ready, repeatable"
+      ],
+      "severity_0_to_5": 1
+    },
+    {
+      "source_line": 15248,
+      "room": "Founding GTM",
+      "text": "The authored-opinion frame (reads like a document a sharp operator wrote for their replacement)",
+      "classifications": [
+        "private_ontology"
+      ],
+      "matched_terms": [
+        "sharp"
+      ],
+      "severity_0_to_5": 3
+    }
+  ]
+}

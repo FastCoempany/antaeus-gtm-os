@@ -247,7 +247,7 @@ async function signalDecayGenerator(
         );
         if (daysSilent < SILENCE_THRESHOLD_DAYS) continue;
         candidates.push({
-            observationText: `${account} has been silent for ${daysSilent} days — no fresh signal coverage.`,
+            observationText: `No new signals have been recorded for ${account} in ${daysSilent} days.`,
             relatedObjectType: "account",
             relatedObjectId: a.id,
             confidence: "high",
@@ -348,14 +348,14 @@ async function discoveryRhythmGenerator(
         if (!iso) continue;
         const t = new Date(iso).getTime();
         if (Number.isNaN(t)) continue;
-        if (t >= new Date(cutoff).getTime()) count += 1;
+        if (t >= new Date(cutoff).getTime() && t <= now.getTime()) count += 1;
     }
     if (count >= MIN_CALLS_PER_WEEK) return [];
 
     const text =
         count === 0
-            ? `No discovery calls were logged in the last ${WEEK_WINDOW_DAYS} days. Discovery is the muscle that compounds; a quiet week shows up later as a thin pipeline.`
-            : `Only ${count} discovery call was logged in the last ${WEEK_WINDOW_DAYS} days. Below the floor for the cadence to compound.`;
+            ? `No discovery calls were logged in the last ${WEEK_WINDOW_DAYS} days. Check whether calls are missing from the log or whether more discovery activity is needed for your pipeline plan.`
+            : `Only ${count} discovery call was logged in the last ${WEEK_WINDOW_DAYS} days. Review this activity against your pipeline plan.`;
 
     return gateThroughVoice(DISCOVERY_RHYTHM_GENERATOR_ID, [
         {

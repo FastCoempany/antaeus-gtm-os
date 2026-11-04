@@ -46,7 +46,7 @@ describe("buildLiveOutputs", () => {
     it("composes the statement + quality + outputs from a sharp draft", () => {
         const out = buildLiveOutputs(SHARP);
         expect(out.industry).toBe("Software (B2B SaaS)");
-        expect(out.statement).toContain("We win with Software (B2B SaaS)");
+        expect(out.statement).toContain("We target Software (B2B SaaS)");
         expect(out.quality.score).toBeGreaterThanOrEqual(85);
         expect(out.quality.tier).toBe("sharp");
         expect(out.buyingGroup.length).toBeGreaterThan(0);

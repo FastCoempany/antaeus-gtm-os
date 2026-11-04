@@ -17,11 +17,11 @@ import {
 // ─── Statement composer ────────────────────────────────────────────────
 
 const EMPTY_STATEMENT: IcpStatement = {
-    text: "Fill the inputs above to generate a Thin ICP statement.",
+    text: "Complete the inputs above to draft an ideal customer profile.",
     hint: "Tip: choose one owner, one pain, one trigger, one evidence window."
 };
 
-const WIN_HINT = "If you cannot list 50 accounts that match this, thin it again.";
+const WIN_HINT = "Test this targeting hypothesis against potential accounts and recorded deal outcomes.";
 
 export interface BuildStatementInput {
     readonly industry: string;
@@ -50,7 +50,7 @@ export function buildStatement(input: BuildStatementInput): IcpStatement {
     ) {
         return EMPTY_STATEMENT;
     }
-    const text = `We win with ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}, triggered by ${trigger.toLowerCase()}, and we can prove value in ${proofWindow}.`;
+    const text = `We target ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}. The proposed buying trigger is ${trigger.toLowerCase()}, and the planned value-validation period is ${proofWindow}.`;
     return { text, hint: WIN_HINT };
 }
 
@@ -73,7 +73,7 @@ export function buildFocus(
         ? activeAccounts
         : 0;
     if (n > 0) {
-        return `Work ${n} active accounts in a 30-day window (from Engine). Maintain a ranked top-20 and rotate weekly.`;
+        return `Work ${n} active accounts in a 30-day window using the entered account target. Maintain a ranked top-20 and review it weekly.`;
     }
     if (role === "founder") {
         return "Founder-led default: focus 60-120 active accounts for the next 30 days. If personalization is heavy, start at 60.";

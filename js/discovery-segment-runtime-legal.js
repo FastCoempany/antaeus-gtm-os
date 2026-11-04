@@ -159,7 +159,7 @@
           branch("CONFIRMS","ok","\"Yes. The systems exist, but lawyers still end up doing too much by hand.\"","\"Where does that happen most painfully: contract review, research, drafting, matter intake, or outside counsel overflow?\"",[
             jumpNode("Scope the workflow", "current-state-truth", "workflow-break", "blu"),
             jumpNode("Name the burden", "pain-and-consequence", "lawyer-time", "grn")
-          ],"Manual legal burden is part of the current motion.","You still need the exact workflow where it shows up first."),
+          ],"Manual legal burden is part of the current process.","You still need the exact workflow where it shows up first."),
           branch("RISK PUSHBACK","fl","\"Anything AI-related gets hard because hallucination risk is unacceptable.\"","\"That is fair. So where would a human-in-the-loop workflow still be worth testing if the control path were explicit?\"",[
             jumpNode("Set the accuracy bar", "proof-threshold", "accuracy-bar", "pur"),
             jumpNode("Map the human loop", "proof-threshold", "human-loop", "blu")
@@ -231,7 +231,7 @@
         ])
       ]),
       segment("trigger-and-urgency","04","Trigger and urgency","Find the forcing event.",true,[
-        node("trigger-and-urgency","gc-pressure","ri","Find the GC pressure","\"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\"","Start here when there is some urgency but it is not yet specific.",true,[
+        node("trigger-and-urgency","gc-pressure","ri","Identify the General Counsel's current priority","\"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\"","Start here when there is some urgency but it is not yet specific.",true,[
           branch("PRESSURE CLEAR","ok","\"The GC wants throughput up and spend down without adding headcount.\"","\"Which workflow would prove the case fastest if it moved safely?\"",[
             jumpNode("Choose the workflow", "current-state-truth", "workflow-break", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")
@@ -340,7 +340,7 @@
       ]),
       segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
         node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the review path actually look like from first workflow test to approval?\"","Start here when proof is getting concrete.",true,[
-          branch("PATH CLEAR","ok","\"Legal ops would scope it, the GC would sponsor it, and IT/security would review before anything expanded.\"","\"Good. What would the first review need to decide so the motion stays real?\"",[
+          branch("PATH CLEAR","ok","\"Legal ops would scope it, the GC would sponsor it, and IT/security would review before anything expanded.\"","\"Good. What would the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the scoped review", "next-step-lock", "scoped-review", "grn"),
             jumpNode("Set the pilot design", "next-step-lock", "pilot-design", "blu")
           ],"The approval path is visible.","You still need the first review outcome."),

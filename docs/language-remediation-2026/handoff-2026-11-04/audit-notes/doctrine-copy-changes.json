@@ -1,0 +1,1002 @@
+[
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "Intelligence Surface (new family, closest neighbor System Ledger) · named premium asset · ADR-006",
+    "replacement": "Intelligence Surface (new family, closest neighbor readiness and quota synthesis) · named premium asset · ADR-006"
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "3 · The provocative posture",
+    "replacement": "3 · Evidence review beyond stated preferences"
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "The Briefing is provocative, not responsive — it serves stated preferences AND takes on three additional obligations.",
+    "replacement": "The Briefing is responsible for evidence review as well as stated preferences — it serves stated preferences AND takes on three additional obligations."
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "an operator-issued standing order — five types: single_event / aggregation / threshold / adjacency / silence.",
+    "replacement": "an operator-issued saved monitoring rule — five types: single_event / aggregation / threshold / adjacency / silence."
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "banned vocab + 5 exemplars + structural rules + hedging rules — the editorial brain driving every quality gate.",
+    "replacement": "banned vocab + 5 exemplars + structural rules + calibrated-uncertainty rules — the language standard used by quality gates."
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "The provocative obligations (Coverage, Framing, Defensibility)",
+    "replacement": "The evidence-review obligations (Coverage, Framing, Defensibility)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Changes in your work and target market.",
+      "intro": "Briefing summarizes workspace changes and market evidence. Separate observations, calculations, assessments, forecasts, and recommended actions; place evidence and confidence beside conclusions.",
+      "purpose": "Evaluate stated ICP, watchlist, and market assumptions against evidence. Surface relevant accounts, conflicting evidence, and auditable analyses. Calibrated uncertainty is valid when evidence is incomplete; rhetorical certainty is not a quality requirement."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/call-in-a-favor-capability-map-2026-07-07.html",
+    "original": "Call in a Favor · Live Instrument · capability map",
+    "replacement": "Call in a Favor · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/call-in-a-favor-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · renamed from Advisor Deploy 2026-07-06 · settled (the relay)",
+    "replacement": "execution workflow (live execution) · renamed from Advisor Deploy 2026-07-06 · settled (the relay)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/call-in-a-favor-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Request specific help from your network.",
+      "intro": "Call in a Favor links a deal to a person who may help, prepares the request and forwardable note, and records the outcome. Existing relationships do not guarantee influence or buyer cooperation.",
+      "purpose": "Keep the request specific, review recent requests to the same person, and record introductions, information, declines, or other actual outcomes. Preserve deal linkage and both message drafts."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "Cold Call Studio · Live Instrument · capability map",
+    "replacement": "Cold Call Studio · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · settled 2026-07-06 (the game plan · prep-before / log-after)",
+    "replacement": "execution workflow (live execution) · settled 2026-07-06 (the game plan · prep-before / log-after)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "The plain after-call read",
+    "replacement": "The after-call summary"
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "what went well / what to sharpen next time.",
+    "replacement": "what went well / what to improve next time."
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "Handoff Kit",
+    "replacement": "sales handoff documentation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Prepare the call and record the outcome.",
+      "intro": "Cold Call Studio supports preparation before a call and outcome capture afterward. Preserve the six-step call plan and its buyer-response branches.",
+      "purpose": "Ask about the buyer’s current approach rather than asserting unsupported proof. Real customer examples may be used only when supplied. Preserve meeting-booked deal creation and the distinctions between callback, voicemail, no answer, referral, and rejection."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "Dashboard · Command Chamber · capability map",
+    "replacement": "Dashboard · Dashboard ranking system · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "Command Chamber (ranking) · settled 2026-07-04",
+    "replacement": "Dashboard ranking system (ranking) · settled 2026-07-04"
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "wants the morning read in prose, then the one move",
+    "replacement": "wants the morning read in prose, then the recommended action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "how hot the signals are on an account · how much pressure a deal is under · how stale · dollar value · what changes downstream if you act.",
+    "replacement": "signal strength and recency for an account · recorded risk factors for a deal · how stale · dollar value · what changes downstream if you act."
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "deal-room pressure (top_pressure entries)",
+    "replacement": "deal-room risk (top_pressure entries)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "signal heat from ",
+    "replacement": "signal-based account priority from "
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "deal pressure from ",
+    "replacement": "deal risk from "
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "The whole-motion standing leads the room (the verdict masthead) · one dominant move under it · the standing row where each part is a door ",
+    "replacement": "The current readiness state leads the room (the verdict masthead) · one primary recommended action under it · the standing row where each part is a door "
+  },
+  {
+    "file": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Current sales readiness, priorities, and risk.",
+      "intro": "Dashboard combines readiness, ranked account and deal recommendations, and links to supporting workspaces. Show the evidence behind a recommendation and preserve the existing ranking contracts.",
+      "purpose": "Lead with readiness and the ranked action. Explain the input factors and allow the operator to inspect or cycle through recommendations. The historical density modes below are retained as design history; the current component determines the available controls."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "Deal Workspace · Diagnosis Table · capability map",
+    "replacement": "Deal Workspace · deal-risk review · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "Diagnosis Table (intervention) · settled 2026-07-04",
+    "replacement": "deal-risk review (intervention) · settled 2026-07-04"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "will close-lost this week without a move",
+    "replacement": "highest risk band under the recorded-factor model"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "decaying — a corrective move is due",
+    "replacement": "risk factors warrant a corrective action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "deal pressure into ",
+    "replacement": "deal risk into "
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "Handoff Kit",
+    "replacement": "sales handoff documentation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "Deal pressure",
+    "replacement": "Deal risk"
+  },
+  {
+    "file": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Open deals ranked by recorded risk factors.",
+      "intro": "Deal Workspace ranks open deals using inactivity, next-step, and close-date factors. Show the evidence and a corrective action; the score does not predict the date a deal will be lost.",
+      "purpose": "Keep the existing risk thresholds and views. Describe stage, qualification, next step, and close-date evidence explicitly. Missing information increases uncertainty; it does not prove a customer has disengaged."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Founding GTM / Handoff Kit — capability map",
+    "replacement": "Founding GTM / sales handoff documentation — capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Founding GTM · System Ledger · capability map",
+    "replacement": "Founding GTM · readiness and quota synthesis · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "System Ledger (synthesis) · design settled 2026-07-07 (the open book)",
+    "replacement": "readiness and quota synthesis (synthesis) · design settled 2026-07-07 (the open book)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Who hits, who misses, why",
+    "replacement": "Target-account fit and outcomes"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "The outreach that actually landed",
+    "replacement": "Observed outreach patterns"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "The questions that won the next meeting",
+    "replacement": "Questions associated with next meetings"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Where deals are won + where they leak",
+    "replacement": "Deal progression and stall patterns"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "The losses we paid for",
+    "replacement": "Recorded loss patterns"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Why we win",
+    "replacement": "Recorded win patterns"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "ready / partial / empty — shown honestly, thin parts not hidden.",
+    "replacement": "ready / partial / empty — shown honestly, incomplete sections visible."
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "The per-section cross-room read",
+    "replacement": "The per-section cross-workspace assessment"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Fires the set-piece on the first upward Readiness transition into Inheritable-with-guardrails.",
+    "replacement": "Fires the set-piece on the first upward Readiness transition into Runnable with founder support."
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "The kit becomes real",
+    "replacement": "Sales handoff readiness improves"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Building → Inheritable with guardrails",
+    "replacement": "Building → Runnable with founder support"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": " for the first time in a workspace, fire a set-piece (not a toast): an animated reveal — the verdict change, the kit count moving (e.g. 2/7 → 4/7), a serif headline (“the kit just became real”), and a one-time CTA to share the workspace read-mode. Once per workspace per upward transition; downward transitions are silent.",
+    "replacement": " for the first time in a workspace, fire a set-piece (not a toast): an animated reveal — the verdict change, the kit count moving (e.g. 2/7 → 4/7), a serif headline (“Sales handoff documentation is ready to review”), and a one-time CTA to share the workspace read-mode. Once per workspace per upward transition; downward transitions are silent."
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "section-readiness count drives the Readiness “Hire-ready, repeatable” gate (≥ 5/7)",
+    "replacement": "section-readiness count drives the Readiness “Documented and repeatable” gate (≥ 5/7)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Document the sales process for another seller.",
+      "intro": "Founding GTM synthesizes account, outreach, discovery, deal, pilot, and outcome records into sales handoff documentation. Keep samples and evidence beside conclusions.",
+      "purpose": "Report observed patterns, sample sizes, and limitations. Associations do not establish that an outreach message, question, or action caused a win. Recommend what to test next while preserving the seven sections, cross-workspace insights, and sharing workflow."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "Future Autopsy · Diagnosis Table · capability map",
+    "replacement": "Future Autopsy · deal-risk review · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "Diagnosis Table (intervention) · named premium asset · settled 2026-07-04 (the countdown)",
+    "replacement": "deal-risk review (intervention) · named premium asset · settled 2026-07-04 (the countdown)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "The causal pattern",
+    "replacement": "The risk-factor assessment"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "the named failure shape — e.g. “pressure before clarity”",
+    "replacement": "the recorded conditions associated with risk and their supporting evidence"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "how many days out the death is",
+    "replacement": "the heuristic interval for reviewing the deal again"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "Days-out until the deal dies if nothing changes.",
+    "replacement": "Heuristic review interval; it does not predict a loss date."
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "The causal-pattern narrative",
+    "replacement": "The risk-factor narrative"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "The named failure pattern behind the case.",
+    "replacement": "An assessment of the recorded risk factors and their limitations."
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "Never soften into “risk review”",
+    "replacement": "Always connect risk review to specific evidence and corrective action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Review deal-loss risk and corrective actions.",
+      "intro": "Future Autopsy uses recorded deal conditions to assess risk and recommend corrective actions. Its scenario is an assessment, not a recorded loss or a causal explanation of an event that has not happened.",
+      "purpose": "Show the recorded conditions, risk assessment, evidence, corrective actions, and when to consider closing the opportunity. The heuristic review window is not a predicted loss date. Preserve the product name, visual identity, routing, and task state."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "Getting to Signed · Live Instrument · capability map",
+    "replacement": "Getting to Signed · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · renamed from Negotiation 2026-07-07 · settled (face-off + ledger)",
+    "replacement": "execution workflow (live execution) · renamed from Negotiation 2026-07-07 · settled (position comparison + ledger)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "3 · The fronts",
+    "replacement": "3 · The workstreams"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "One ledger row each; the hottest is the face-off",
+    "replacement": "One ledger row each; the hottest is the current blocking issue"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "The room morphs which front is the face-off by what’s actually blocking, not a fixed order.",
+    "replacement": "The room morphs which workstream is the current blocking issue by what’s actually blocking, not a fixed order."
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "Front",
+    "replacement": "Workstream"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "The face-off",
+    "replacement": "The current blocking issue"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "their side · the gap · your line + hold/trade/line + “send the counter-position” + “loop in an advisor who’s won this fight.”",
+    "replacement": "their side · the gap · your proposed position + hold/trade/line + “send the counter-position” + “loop in an advisor who’s won this fight.”"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "per-front row: their ask → your line → status (blocking / clearing / to-do / at-risk); each row drills to its depth in place.",
+    "replacement": "per-workstream row: their ask → your proposed position → status (blocking / clearing / to-do / at-risk); each row drills to its depth in place."
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "net-60 flat · net-30 for a cut · % off for annual up-front.",
+    "replacement": "net-60 flat · net-30 for a cut · % off for annual up-workstream."
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "the mutual dated run to signature, co-owned with the champion.",
+    "replacement": "the mutual dated signature process, co-owned with the champion."
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": " (a backchannel warming a front)",
+    "replacement": " (a backchannel warming a workstream)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "front outcomes + the plan-to-signed → ",
+    "replacement": "workstream outcomes + the plan-to-signed → "
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "a stuck front → ",
+    "replacement": "a stuck workstream → "
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": " (route a backchannel to the frozen front)",
+    "replacement": " (route a backchannel to the frozen workstream)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "The run-to-signed mind (the deal isn’t won at yes)",
+    "replacement": "The signature-process mind (the deal isn’t won at yes)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "The face-off on the blocking front (their side ⟷ your line, always the one actually blocking)",
+    "replacement": "The current blocking issue on the blocking workstream (their side ⟷ your proposed position, always the one actually blocking)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Manage the approval and signature process.",
+      "intro": "Getting to Signed organizes legal, security, finance, and business approval workstreams. Show the customer request, proposed position, gap, owner, and next action.",
+      "purpose": "Prioritize the issue currently blocking approval. Preserve the comparison of customer and seller positions, linked terms, document coverage, and dated mutual plan. Do not make unsupported claims about why deals are generally lost."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html",
+    "original": "ICP Studio · Decision Bench · capability map",
+    "replacement": "ICP Studio · decision-support workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html",
+    "original": "Decision Bench (strategic shaping) · settled 2026-07-04",
+    "replacement": "decision-support workflow (strategic shaping) · settled 2026-07-04"
+  },
+  {
+    "file": "deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html",
+    "original": "Handoff Kit",
+    "replacement": "sales handoff documentation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Define the companies and buyers you sell to.",
+      "intro": "ICP Studio maintains a specific target definition and shows how watched accounts match it. Preserve buyer, problem, trigger, geography, size, and evidence inputs.",
+      "purpose": "Keep the authored ICP central. Explain its specificity using the existing eight checks and account-match evidence. Describe quality as Too broad, Partially defined, Well defined, or Highly specific."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "LinkedIn Playbook · Live Instrument · capability map",
+    "replacement": "LinkedIn Playbook · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · settled 2026-07-06 (the one move)",
+    "replacement": "execution workflow (live execution) · settled 2026-07-06 (the recommended action)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "2 · The five-cue ladder",
+    "replacement": "2 · The five LinkedIn actions"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "comment with one operating read",
+    "replacement": "comment on a specific relevant observation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "connect after recognition",
+    "replacement": "review prior interaction before connecting"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "The five-cue ladder",
+    "replacement": "The five LinkedIn actions"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "touches · acceptance · reply rate — the compounding read on the channel.",
+    "replacement": "touches · acceptance · reply rate — the summary of recorded channel outcomes."
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "The one ready-to-paste move",
+    "replacement": "The recommended LinkedIn action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "The single next public-first move for the hottest account.",
+    "replacement": "The single next public-first move for the highest-priority account."
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "motion truth → ",
+    "replacement": "recorded activity → "
+  },
+  {
+    "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Plan LinkedIn outreach alongside calls and email.",
+      "intro": "LinkedIn Playbook recommends an account-specific action from recorded signals, connection requests, messages, and outbound activity. It does not infer trust from activity counts.",
+      "purpose": "Preserve the five actions and their logging. Recommend the next action from recorded interaction state, and make templates specific to the account. Acceptance and reply statistics describe the sample; they do not establish universal success thresholds."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "Threshold (entry) · the heavy-seeding flow · governed by ADR-019 + canon §12",
+    "replacement": "Threshold (entry) · the comprehensive onboarding flow · governed by ADR-019 + canon §12"
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "The settled seeding flow",
+    "replacement": "The settled onboarding data collection"
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "The seed→alive reveal — the system reads the named accounts back, enriched.",
+    "replacement": "The initial data enrichment reveal — the system reads the named accounts back, enriched."
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "The system reads everything it was given and hands back the one move that needs the operator first → Welcome.",
+    "replacement": "The system reads everything it was given and hands back the recommended action that needs the operator first → Welcome."
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "The system reads everything and hands back the one move.",
+    "replacement": "The system reads everything and hands back the recommended action."
+  },
+  {
+    "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Configure your sales workspace.",
+      "intro": "Onboarding collects the initial target, account, deal, and quota information used by the workspace. Explain required inputs, optional inputs, and which information may be enriched.",
+      "purpose": "Ask for the seller’s judgment where automated enrichment cannot supply it. Describe setup progress and generated assessments explicitly. Preserve required-field validation and the ability to return to unfinished setup."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+    "original": "Outbound Studio · Live Instrument · capability map",
+    "replacement": "Outbound Studio · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · settled 2026-07-04 (conversation-stage spine)",
+    "replacement": "execution workflow (live execution) · settled 2026-07-04 (conversation-stage spine)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+    "original": "motion truth → ",
+    "replacement": "recorded activity → "
+  },
+  {
+    "file": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+    "original": "Handoff Kit",
+    "replacement": "sales handoff documentation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Draft account-specific outbound messages.",
+      "intro": "Outbound Studio generates drafts from supplied account, contact, outreach stage, trigger, and question inputs. Preserve channel routing, logging, and existing completeness scoring.",
+      "purpose": "Generate only from supplied evidence. Do not invent buyer motives, customer proof, payback, attachments, or outcomes. State the reason for outreach and a clear next question; keep the no-ask option and stable internal stage keys."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+    "original": "Outdoors Events · Live Instrument · capability map",
+    "replacement": "Outdoors Events · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · ADR-015 + ADR-016 · settled 2026-07-07 (proximity + the get-there rail)",
+    "replacement": "execution workflow (live execution) · ADR-015 + ADR-016 · settled 2026-07-07 (proximity + the get-there rail)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Events relevant to your target market.",
+      "intro": "Find and review conferences, trade shows, meetups, and other scheduled events relevant to target accounts or buyers. Use source URLs and dates; relevance is not proof that a buyer will attend.",
+      "purpose": "Keep event discovery separate from operator decisions such as watching, attending, skipping, and notes. Preserve source attribution and allow review of the evidence behind category or buyer relevance."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html",
+    "original": "Pilot Desk · Decision Bench · capability map",
+    "replacement": "Pilot Desk · decision-support workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html",
+    "original": "Decision Bench (strategic shaping) · renamed from PoC Framework 2026-07-06 · settled (the guided pilot)",
+    "replacement": "decision-support workflow (strategic shaping) · renamed from PoC Framework 2026-07-06 · settled (the guided pilot)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Plan a pilot and evaluate its results.",
+      "intro": "Pilot Desk records participants, stakeholder roles, success measures, evidence, and the next decision for a linked deal. Preserve its staged workflow and customization.",
+      "purpose": "Help the seller define what the pilot must establish, who evaluates the result, and when the next decision occurs. Measure adoption and results without treating activity alone as buying intent."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html",
+    "original": "Prospecting Desk · Decision Bench · capability map",
+    "replacement": "Prospecting Desk · decision-support workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html",
+    "original": "Decision Bench (strategic shaping) · renamed from Sourcing Workbench 2026-07-03 · settled 2026-07-04",
+    "replacement": "decision-support workflow (strategic shaping) · renamed from Sourcing Workbench 2026-07-03 · settled 2026-07-04"
+  },
+  {
+    "file": "deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Research and qualify target accounts.",
+      "intro": "Prospecting Desk saves target criteria, accepts companies the operator adds, and checks qualification before sending accounts to Signal Console. It does not currently execute a live company search.",
+      "purpose": "Keep target criteria, company research, qualification, and the handoff to Signal Console distinct. Describe saved searches as research criteria unless an implemented search service actually returns cited companies."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "Quota Workback · System Ledger · capability map",
+    "replacement": "Quota Workback · readiness and quota synthesis · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "System Ledger (synthesis) · design settled 2026-07-07 (pace + fused strands)",
+    "replacement": "readiness and quota synthesis (synthesis) · design settled 2026-07-07 (pace + fused strands)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "projected year-end landing vs target · what-the-number-needs vs where-you-actually-are · the move back on pace",
+    "replacement": "closed-won revenue plus stage-weighted open pipeline vs target · what-the-number-needs vs where-you-actually-are · the move back on pace"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "The believability read",
+    "replacement": "Assessment of conversion assumptions"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "The pace projection",
+    "replacement": "Revenue and weighted-pipeline estimate"
+  },
+  {
+    "file": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Calculate the activity and pipeline required for quota.",
+      "intro": "Quota Workback converts the target and conversion assumptions into activity requirements, then compares closed-won revenue and stage-weighted open pipeline with the target.",
+      "purpose": "State the formula and its assumptions. Working days means working days per month. Benchmarks are selected by average contract value band; they are not forecasts for the seller’s team. Preserve calculation inputs and thresholds."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Readiness Score · System Ledger · capability map",
+    "replacement": "Readiness Score · readiness and quota synthesis · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "System Ledger (synthesis) · design settled 2026-07-07 (the climb)",
+    "replacement": "readiness and quota synthesis (synthesis) · design settled 2026-07-07 (the climb)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "You are the system",
+    "replacement": "Founder-dependent"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Inheritable with guardrails",
+    "replacement": "Runnable with founder support"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Hire-ready",
+    "replacement": "Runnable independently"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "The motion would survive a 2-week founder vacation",
+    "replacement": "Another seller can run routine work without the founder for two weeks"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Hire-ready, repeatable",
+    "replacement": "Documented and repeatable"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Multiple wins, losses analyzed, advisors lit, kit composed",
+    "replacement": "Wins and losses recorded, advisors available, and handoff documentation prepared"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "all Hire-ready + win/loss ≥1 AND advisors ≥1 AND handoff ≥5/7 ready",
+    "replacement": "all Runnable independently + win/loss ≥1 AND advisors ≥1 AND handoff ≥5/7 ready"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "The climb (the ladder over time)",
+    "replacement": "Readiness progression"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "The five parts of the motion",
+    "replacement": "The five assessed areas"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Demoted to quiet ready/thin chips (forest = solid, amber = thin) — your targeting · your outreach · your discovery · your open deals · your pilot evidence. Never bars, never scores.",
+    "replacement": "Demoted to quiet readiness labels (forest = solid, amber = limited evidence) — your targeting · your outreach · your discovery · your open deals · your pilot evidence. Never bars, never scores."
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "The singular question (hire-ready or not)",
+    "replacement": "The central question: can another seller run the process?"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "The climb — readiness felt as an integral over time",
+    "replacement": "Readiness progression based on accumulated evidence"
+  },
+  {
+    "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Could another seller run this sales process?",
+      "intro": "Readiness assesses operating independence from the recorded evidence. Present the current state, the evidence required for the next state, and practical actions that address missing information.",
+      "purpose": "Keep the five-part gate model and its internal scoring. Display operating states in ordinary language: Founder-dependent, Partially documented, Runnable with founder support, Runnable independently, and Documented and repeatable. A gate is an assessment of available evidence, not a guarantee of sales performance."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/settings-capability-map-2026-07-07.html",
+    "original": "Settings · Trust Annex · capability map",
+    "replacement": "Settings · workspace settings · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/settings-capability-map-2026-07-07.html",
+    "original": "Trust Annex (utility) · settled 2026-07-07 (the safe deposit)",
+    "replacement": "workspace settings (utility) · settled 2026-07-07 (the safe deposit)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/settings-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Manage workspace data and preferences.",
+      "intro": "Settings explains storage and connection status, export and restore scope, deletion scope, activity capture, preferences, and account controls. State what each operation actually covers.",
+      "purpose": "Keep data controls easy to find and accurately describe their scope. A verified cloud connection is not proof that every record is synchronized. Avoid promises of complete backups or deletion unless the operation covers the entire workspace model."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Signal Console · Live Instrument · capability map",
+    "replacement": "Signal Console · execution workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Live Instrument (live execution) · protected room · settled 2026-07-04 (Attention Router)",
+    "replacement": "execution workflow (live execution) · protected room · settled 2026-07-04 (Attention Router)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "2 · The heat engine",
+    "replacement": "2 · The account-priority engine"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Heat is computed, not stored — the source of truth is the signals + their timestamps.",
+    "replacement": "Priority is computed, not stored — the source of truth is the signals + their timestamps."
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Heat = signal count × type weight × source credibility × recency decay",
+    "replacement": "Priority score = signal count × type weight × source credibility × recency decay"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Heat score per account",
+    "replacement": "Priority score per account"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "The daily read on the watched field.",
+    "replacement": "A daily summary of watched-account signals."
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "heat + motion state → ",
+    "replacement": "heat + activity state → "
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Handoff Kit",
+    "replacement": "sales handoff documentation"
+  },
+  {
+    "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Monitor account signals and priority.",
+      "intro": "Signal Console stores watched accounts and supporting signals, then ranks them using signal type, credibility, and age. Review those inputs before recommending outreach.",
+      "purpose": "Explain account priority using current signals and recorded activity. Preserve the ranking math and data contracts. Research is useful when it supports a specific account decision; do not infer buyer intent or urgency merely from a score."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Territory Architect · Decision Bench · capability map",
+    "replacement": "Territory Architect · decision-support workflow · capability map"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Decision Bench (strategic shaping) · settled 2026-07-04 (axis-morphing floor)",
+    "replacement": "decision-support workflow (strategic shaping) · settled 2026-07-04 (axis-morphing floor)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "2 · The carve axes",
+    "replacement": "2 · The segmentation criteria"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "How a division is cut — blendable",
+    "replacement": "How a segment is cut — blendable"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "However a division is carved, the same machinery sits on top: a tier, a share of the 300-cap, an approach, and a charter. The room ",
+    "replacement": "However a segment is defined, the same machinery sits on top: a tier, a share of the 300-cap, an approach, and a charter. The room "
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Every division states why",
+    "replacement": "Every segment states why"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": " — every division, every axis",
+    "replacement": " — every segment, every axis"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": " for trigger carves · optional-but-encouraged for structural carves",
+    "replacement": " for trigger segments · optional-but-encouraged for structural segments"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Tunes the territory to the motion’s cycle length.",
+    "replacement": "Tunes the territory to the sales-cycle length."
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "The carve axis",
+    "replacement": "The segmentation criterion"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Focuses / divisions",
+    "replacement": "Focuses / segments"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Per-division charter",
+    "replacement": "Per-segment charter"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "How each division gets worked, tracked.",
+    "replacement": "How each segment gets worked, tracked."
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Which accounts belong to which division.",
+    "replacement": "Which accounts belong to which segment."
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "The act of naming a division",
+    "replacement": "The act of naming a segment"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Axis-malleability (never hardcode one carve)",
+    "replacement": "Axis-malleability (never hardcode one segmentation)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "The why-you charter on every division",
+    "replacement": "The why-you charter on every segment"
+  },
+  {
+    "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Define and prioritize territory segments.",
+      "intro": "Territory Architect organizes target accounts into segments with priority tiers, approaches, and a 300-account ceiling. Segments can combine geography, industry, size, named accounts, and observable buying signals.",
+      "purpose": "Define the account group, its priority tier, and why it fits. Require a current reason for signal-based segments. Preserve account allocation, reassignment, and the existing stable focus and axis identifiers."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "Threshold (entry) · the seeding flow’s landing · design settled 2026-07-07",
+    "replacement": "Threshold (entry) · the onboarding data collection’s landing · design settled 2026-07-07"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "The commanding statement",
+    "replacement": "The setup-state heading"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "The one dominant move",
+    "replacement": "The highest-priority recommended action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "The “what the system saw” read",
+    "replacement": "Recent changes"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "A quiet, non-competing path to the full command surface for the operator who wants more than the one move.",
+    "replacement": "A quiet, non-competing path to the full command surface for the operator who wants more than the recommended action."
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "What the read says",
+    "replacement": "What the overview says"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "“The workspace is awake — here’s what you just switched on.”",
+    "replacement": "“Workspace setup is complete.”"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "account/deal movement since last session + the one move",
+    "replacement": "account/deal movement since last session + the recommended action"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "the system’s ranked pick from the ",
+    "replacement": "the ranked recommendation from the "
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "directional handoff into the room that owns the one move — ",
+    "replacement": "directional handoff into the room that owns the recommended action — "
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "Welcome as the seeding flow’s ",
+    "replacement": "Welcome as the onboarding data collection’s "
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "one dominant move (never two competing)",
+    "replacement": "one primary recommended action (never two competing)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "the payback made visible (“what the system saw while you were away”)",
+    "replacement": "the payback made visible (“changes since your last visit”)"
+  },
+  {
+    "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "original": "Active overview and purpose",
+    "replacement": {
+      "heading": "Workspace setup and the next recommended action.",
+      "intro": "Welcome summarizes the configured workspace, the highest-priority recommended action, and recent changes. The recommendation and its evidence come from the Dashboard ranking engine.",
+      "purpose": "After onboarding and on later visits, show the current setup state, the recommended action with supporting evidence, and account/deal totals. Keep one primary action and a secondary route to Dashboard. Do not claim that analysis happened overnight unless that execution is recorded."
+    },
+    "preserved": "HTML structure, CSS, technical identifiers, source references, gate values, negative examples"
+  }
+]

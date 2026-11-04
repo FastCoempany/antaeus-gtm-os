@@ -1,17 +1,8 @@
 import { t } from "@/lib/voice/t";
 import type { SeedingStepId } from "../state";
 
-/**
- * The evidence margin's content (ADR-019). Every ask in the seeding flow
- * carries a recessive, blue (system-intelligence role) "why we ask" note
- * that opens to a real, citable source. The doctrine is Earned Depth
- * (canon Part III §12): we never ask for anything without showing the
- * reason — and the reason is evidence, not assertion.
- *
- * Sources are real and sourced (not blog-grade vibes). Where the only
- * available figures were secondary, the note stays directional rather
- * than citing a number it can't stand behind.
- */
+/** Explains how each onboarding input is used by the application.
+ * Product behavior is the basis for these notes; no external outcome claims. */
 
 export interface EvidenceSource {
     readonly label: string;
@@ -23,72 +14,55 @@ export interface EvidenceNote {
     readonly source: EvidenceSource | null;
 }
 
-const SALESFORCE_ICP: EvidenceSource = {
-    label: "Salesforce · Ideal Customer Profile",
-    url: "https://www.salesforce.com/sales/ideal-customer-profile/"
-};
-const SALESFORCE_STATE_OF_SALES: EvidenceSource = {
-    label: "Salesforce · State of Sales",
-    url: "https://www.salesforce.com/news/stories/sales-research-2023/"
-};
-const GRADIENT_COVERAGE: EvidenceSource = {
-    label: "Pipeline coverage · Gradient Works",
-    url: "https://www.gradient.works/blog/2025-b2b-sales-performance-benchmarks"
-};
-const CLOZD_WIN_LOSS: EvidenceSource = {
-    label: "Clozd · 2025 State of Win-Loss",
-    url: "https://www.clozd.com/guides/win-loss-analysis"
-};
-
 export const EVIDENCE: Record<SeedingStepId, EvidenceNote> = {
     door: {
         note: t(
-            "Everything we ask, we ask for a reason — and we show you the reason, right here, the whole way through. Nothing in this flow is busywork.",
+            "Each step explains how its inputs will be used. Review these notes as you enter your workspace information.",
             { class: "body" }
         ),
         source: null
     },
     icp: {
         note: t(
-            "Teams with one documented, sharp ICP report higher win rates and shorter sales cycles than teams chasing a broad one. Narrow isn't a limit — it's what makes every signal downstream mean something.",
+            "Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.",
             { class: "body" }
         ),
-        source: SALESFORCE_ICP
+        source: null
     },
     accounts: {
         note: t(
-            "Sellers spend under 30% of the week actually selling — a real chunk of the rest is manual account research. Paste the names; the system does that part in a minute, and keeps doing it.",
+            "Account names define which companies to research. The next step looks for recent changes with source links. If research is unavailable, you can continue with your list.",
             { class: "body" }
         ),
-        source: SALESFORCE_STATE_OF_SALES
+        source: null
     },
     wake: {
         note: t(
-            "This is the easy half — it only read your target list. A real motion carries about ten live deals at once. That's where it stops being a list and starts telling you which deal is about to slip.",
+            "Review the reported changes and their sources before acting. Priority reflects an assessment of recency and ICP relevance, not confirmed buying intent.",
             { class: "body" }
         ),
-        source: GRADIENT_COVERAGE
+        source: null
     },
     deals: {
         note: t(
-            "This is the part that makes it not a prettier CRM. No tool can find this for you — it isn't on the internet, it's in your head: who's really championing the deal, where it's stuck, the truth about budget and timing.",
+            "Record what you know about the champion, signer, budget, timeline, and current obstacle. The initial assessment checks stage, champion, signer, and obstacle information to suggest what to verify next.",
             { class: "body" }
         ),
-        source: GRADIENT_COVERAGE
+        source: null
     },
     quota: {
         note: t(
-            "Healthy teams carry three to four times their quota in live pipeline. Put your number in and the system tells you weekly whether you're actually covered, or just hoping.",
+            "Your quota and closed-won total set the revenue target and remaining gap used in Quota Workback. Required pipeline depends on the conversion assumptions you enter.",
             { class: "body" }
         ),
-        source: GRADIENT_COVERAGE
+        source: null
     },
     landing: {
         note: t(
-            "Teams that study their wins and losses win more — 63% see their rate climb, 84% once the habit is two years old. That's the next thing the system will ask you for. Later. You've done enough today.",
+            "Your inputs initialize the workspace. Review the resulting accounts, deals, and recommendations, and update them as you obtain new evidence.",
             { class: "body" }
         ),
-        source: CLOZD_WIN_LOSS
+        source: null
     }
 };
 

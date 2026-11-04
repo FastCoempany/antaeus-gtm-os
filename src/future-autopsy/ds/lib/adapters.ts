@@ -68,22 +68,22 @@ export function sentenceTitlesFor(doc: AutopsyDoc): {
     const symptom = topCause?.label
         ? `${topCause.label}.`
         : v.staleDays >= 14
-          ? `Stage is moving but the deal isn't — ${v.staleDays} days since anything happened.`
-          : "The board looks healthy. Confirm before you forecast on it.";
+          ? `The deal record has not been updated for ${v.staleDays} days. Confirm buyer activity before forecasting.`
+          : "No configured risk condition matched. Confirm the latest buyer activity before forecasting.";
 
     const underneath = !v.economicBuyer
-        ? "There's pilot evidence, but no one with authority owns it."
+        ? "No economic buyer is recorded. Confirm who controls the purchase decision."
         : !v.champion
-          ? "The buyer is identified, but no one inside their company is carrying this forward."
+          ? "An economic buyer is recorded, but no champion is named. Confirm who will coordinate internally."
           : v.qualScore < 10
-            ? "Qualification is thin — the buyer can't take the pilot results to their boss yet."
-            : "Owner and inside carrier are both named. The pilot results can be carried into the room.";
+            ? "Qualification details are incomplete. Review the missing information with the buyer."
+            : "A champion and economic buyer are recorded. Confirm their roles in the next decision.";
 
     const pattern = !v.hasNextStep
-        ? "There's no dated next step — the process is running ahead of any control."
+        ? "The next-step description is missing or brief. Confirm the action, date, and owner."
         : v.staleDays >= 30
-          ? "The thread moved early in the cycle; no one is steering the close path now."
-          : "The thread is alive. Confirm the close path still tracks what's actually happening.";
+          ? "The deal record has not been updated in at least 30 days. Check whether the recorded next step still applies."
+          : "Confirm that the next step and close date still match the buyer's process.";
 
     return { symptom, underneath, pattern };
 }

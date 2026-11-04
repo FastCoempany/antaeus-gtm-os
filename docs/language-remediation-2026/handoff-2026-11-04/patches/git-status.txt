@@ -1,0 +1,177 @@
+ M .github/workflows/ci.yml
+ M deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/README.md
+ M deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/call-in-a-favor-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/settings-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html
+ M deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html
+ M js/demo-seed-data-ent.js
+ M js/discovery-frameworks.js
+ M js/discovery-segment-runtime-ai-native.js
+ M js/discovery-segment-runtime-customer-support.js
+ M js/discovery-segment-runtime-data-intelligence.js
+ M js/discovery-segment-runtime-global-contractor-management.js
+ M js/discovery-segment-runtime-govtech.js
+ M js/discovery-segment-runtime-legal.js
+ M js/discovery-segment-runtime-manufacturing.js
+ M js/discovery-segment-runtime-product-ux.js
+ M js/discovery-segment-runtime-recruiting.js
+ M js/discovery-segment-runtime-sales-revenue.js
+ M js/discovery-segment-runtime.js
+ M package.json
+ M playwright.config.ts
+ M preview-transcript/briefing/index.html
+ M preview-transcript/call-in-a-favor/index.html
+ M preview-transcript/cold-call-studio/index.html
+ M preview-transcript/dashboard/index.html
+ M preview-transcript/deal-workspace/index.html
+ M preview-transcript/discovery-studio/index.html
+ M preview-transcript/founding-gtm/index.html
+ M preview-transcript/future-autopsy/index.html
+ M preview-transcript/getting-to-signed/index.html
+ M preview-transcript/icp-studio/index.html
+ M preview-transcript/index.html
+ M preview-transcript/linkedin-playbook/index.html
+ M preview-transcript/outbound-studio/index.html
+ M preview-transcript/outdoors-events/index.html
+ M preview-transcript/pilot-desk/index.html
+ M preview-transcript/prospecting-desk/index.html
+ M preview-transcript/quota-workback/index.html
+ M preview-transcript/readiness/index.html
+ M preview-transcript/settings/index.html
+ M preview-transcript/signal-console/index.html
+ M preview-transcript/territory-architect/index.html
+ M preview-transcript/welcome/index.html
+ M src/briefing/components/AddTriggerFlow.tsx
+ M src/briefing/lib/compose/lead.test.ts
+ M src/briefing/lib/compose/lead.ts
+ M src/briefing/lib/synthesis/contrarian.test.ts
+ M src/briefing/lib/synthesis/contrarian.ts
+ M src/briefing/v4/BriefingV4.tsx
+ M src/call-in-a-favor/lib/ask-builder.test.ts
+ M src/call-in-a-favor/lib/ask-builder.ts
+ M src/call-in-a-favor/lib/cooldown.test.ts
+ M src/call-in-a-favor/lib/cooldown.ts
+ M src/call-in-a-favor/lib/deploy-cost.test.ts
+ M src/call-in-a-favor/lib/deploy-cost.ts
+ M src/call-in-a-favor/lib/impact.test.ts
+ M src/call-in-a-favor/lib/impact.ts
+ M src/call-in-a-favor/lib/moments.ts
+ M src/call-in-a-favor/lib/score.test.ts
+ M src/call-in-a-favor/lib/score.ts
+ M src/call-in-a-favor/lib/sync-back.test.ts
+ M src/call-in-a-favor/lib/sync-back.ts
+ M src/call-planner/lib/advance.test.ts
+ M src/call-planner/lib/advance.ts
+ M src/call-planner/lib/brief.test.ts
+ M src/call-planner/lib/quality.test.ts
+ M src/call-planner/lib/quality.ts
+ M src/cold-call-studio/ds/lib/adapters.test.ts
+ M src/cold-call-studio/lib/personalize.test.ts
+ M src/cold-call-studio/lib/personalize.ts
+ M src/dashboard/lib/brief-narrative.test.ts
+ M src/dashboard/lib/brief-narrative.ts
+ M src/dashboard/lib/command-intelligence.test.ts
+ M src/dashboard/lib/command-intelligence.ts
+ M src/dashboard/lib/engine-helpers.ts
+ M src/dashboard/lib/scoring.ts
+ M src/dashboard/lib/snapshot-aggregator.ts
+ M src/design-system/ProofSheet.tsx
+ M src/founding-gtm/lib/priors.test.ts
+ M src/founding-gtm/lib/priors.ts
+ M src/founding-gtm/lib/sections.test.ts
+ M src/founding-gtm/lib/sections.ts
+ M src/future-autopsy/ds/lib/adapters.ts
+ M src/future-autopsy/lib/autopsy-data.ts
+ M src/future-autopsy/lib/autopsy.ts
+ M src/future-autopsy/lib/causes.test.ts
+ M src/future-autopsy/lib/causes.ts
+ M src/future-autopsy/v4/FutureAutopsyV4.tsx
+ M src/getting-to-signed/ds/ds-components.test.tsx
+ M src/getting-to-signed/ds/lib/adapters.test.ts
+ M src/getting-to-signed/ds/lib/adapters.ts
+ M src/getting-to-signed/lib/seed-scripts.ts
+ M src/icp-studio/ds/lib/adapters.test.ts
+ M src/icp-studio/lib/builders.test.ts
+ M src/icp-studio/lib/builders.ts
+ M src/lib/edge/demo-stream.ts
+ M src/lib/edge/edge-data.ts
+ M src/lib/follow/follow-data.test.ts
+ M src/lib/follow/follow-data.ts
+ M src/lib/observations/generators/discovery-rhythm.test.ts
+ M src/lib/observations/generators/discovery-rhythm.ts
+ M src/lib/observations/generators/signal-decay.test.ts
+ M src/lib/observations/generators/signal-decay.ts
+ M src/lib/palette/registry.test.ts
+ M src/lib/palette/registry.ts
+ M src/lib/voice/family-temperatures.ts
+ M src/onboarding/seeding/components/WakeStep.tsx
+ M src/onboarding/seeding/lib/diagnose.ts
+ M src/onboarding/seeding/lib/enrichment.test.ts
+ M src/onboarding/seeding/lib/enrichment.ts
+ M src/onboarding/seeding/lib/evidence.test.ts
+ M src/onboarding/seeding/lib/evidence.ts
+ M src/onboarding/seeding/lib/logic.test.ts
+ M src/outbound-studio/components/HandoffStrip.tsx
+ M src/outbound-studio/ds/OutboundStudioDS.tsx
+ M src/outbound-studio/ds/lib/adapters.test.ts
+ M src/outbound-studio/ds/lib/adapters.ts
+ M src/pilot-desk/components/HeatLedger.tsx
+ M src/pilot-desk/lib/quality.test.ts
+ M src/pilot-desk/lib/quality.ts
+ M src/settings/lib/cloud-sync.ts
+ M src/settings/state.ts
+ M src/settings/v4/SettingsV4.tsx
+ M src/skills/ScheduleFloat.test.tsx
+ M src/skills/ScheduleFloat.tsx
+ M src/skills/lib/registry.test.ts
+ M src/skills/recipes/cast-proof-for-hottest-deal.md
+ M src/skills/recipes/compose-this-weeks-outbound.md
+ M src/skills/recipes/triage-week-reads.md
+ M src/territory-architect/v4/TerritoryArchitectV4.tsx
+ M src/welcome/lib/engine.test.ts
+ M src/welcome/lib/engine.ts
+ M supabase/functions/briefing-pipeline/llm/compose-shared.ts
+ M supabase/functions/briefing-pipeline/llm/contrarian-shared.ts
+ M supabase/functions/heartbeat/generators.ts
+ M supabase/functions/outdoors-events-discovery/README.md
+ M supabase/functions/outdoors-events-discovery/index.ts
+ M supabase/functions/seeding-enrichment/README.md
+ M supabase/functions/seeding-enrichment/index.ts
+ M tools/language-remediation/build-copy-inventory.js
+ M tools/language-remediation/copy-audit.js
+ M tools/preview/build-transcript.js
+?? artifacts/language-remediation/copy-audit.json
+?? artifacts/language-remediation/copy-inventory.json
+?? artifacts/language-remediation/rendered-corpus.txt
+?? deno.lock
+?? docs/language-remediation-2026/14_RECOVERED_SATURATION_METHOD.md
+?? docs/language-remediation-2026/15_COMPLETION_BASELINE.md
+?? docs/language-remediation-2026/16_ORIGINAL_MANIFEST_RECONCILIATION.json
+?? docs/language-remediation-2026/16_ORIGINAL_MANIFEST_RECONCILIATION.md
+?? preview-transcript/coverage.json
+?? src/onboarding/seeding/components/WakeStep.test.tsx
+?? src/onboarding/seeding/lib/enrichment-function.test.ts
+?? src/outdoors-events/lib/discovery-function.test.ts
+?? tools/language-remediation/copy-allowlist.json
+?? tools/language-remediation/copy-audit.test.js
+?? tools/language-remediation/validate-transcript.js
+?? tools/qa/run-e2e.js
+?? tools/qa/serve-static.js

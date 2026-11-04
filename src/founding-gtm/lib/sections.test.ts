@@ -347,7 +347,7 @@ describe("authorSection5 — loss patterns", () => {
             input({ closedLost: [deal({ id: "l1", lossReason: "Budget" })] })
         );
         expect(s.status).toBe("partial");
-        expect(s.body.join(" ")).toMatch(/without a documented review/i);
+        expect(s.body.join(" ")).toMatch(/no deal-risk review has a corrected assessment or completed corrective action/i);
     });
 
     it("counts checked Future Autopsy tasks as reviewed records", () => {
@@ -455,7 +455,7 @@ describe("authorSection7 — first-week cadence", () => {
         expect(s.status).toBe("ready");
         expect(s.body[0]).toContain("10 closed deals");
         expect(s.evidence.find((e) => e.includes("Win-rate assumption"))).toBeDefined();
-        expect(s.body.join(" ")).toMatch(/not as a claim that this schedule causes quota attainment/i);
+        expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
 
     it("reports recent activity dropoff as an observation", () => {
@@ -509,5 +509,61 @@ describe("aggregate", () => {
                 { id: "questions_that_earned", kicker: "", title: "", status: "empty", body: [], evidence: [], surprise: null }
             ])
         ).toEqual({ ready: 1, partial: 1, empty: 1 });
+    });
+});
+
+describe("evidence integrity regressions", () => {
+    it("counts every distinct profile while limiting examples to three", () => {
+        const s = authorSection1(input({
+            icps: [icp()],
+            closedWon: ["A", "B", "C", "D"].map((icpLabel) => deal({ id: icpLabel, icpLabel }))
+        }));
+        expect(s.body[0]).toContain("4 distinct customer profiles");
+        expect(s.evidence.filter((row) => row.startsWith("Won "))).toHaveLength(3);
+    });
+
+    it("does not recommend support at an unknown historical stage", () => {
+        const s = authorSection4(input({
+            closedLost: [deal({ id: "l1", stage: "closed-lost" }), deal({ id: "l2", stage: "" })]
+        }));
+        expect(s.evidence).toContain("stage before loss not recorded · 0 won · 2 lost · 0 outside-support requests");
+        expect(s.surprise).toBeNull();
+    });
+
+    it("distinguishes a corrected open-deal risk review from a recorded loss", () => {
+        const s = authorSection5(input({
+            openDeals: [deal({ id: "o1" })],
+            autopsies: [{ dealId: "o1", accountName: "Acme", verdict: "corrected", killSwitchFired: false, tasks: [] }]
+        }));
+        expect(s.status).toBe("ready");
+        expect(s.body[0]).toContain("1 deal-risk review has");
+        expect(s.body[0]).toContain("may include open deals");
+        expect(s.body[0]).not.toMatch(/1 (?:recorded )?loss/);
+    });
+
+    it("counts an open deal once when it matches multiple historical loss reasons", () => {
+        const s = authorSection5(input({
+            closedLost: [deal({ id: "l1", lossReason: "security review" }), deal({ id: "l2", lossReason: "security requirements" })],
+            openDeals: [deal({ id: "o1", nextStep: "Complete security review" })],
+            autopsies: [{ dealId: "l1", accountName: "Acme", verdict: "corrected", killSwitchFired: false, tasks: [] }]
+        }));
+        expect(s.surprise?.body).toContain("1 open deal has a keyword overlap");
+    });
+
+    it("does not affirm ICP alignment when no winning ICP labels are recorded", () => {
+        const s = authorSection6(input({
+            closedWon: [deal({ id: "w1" }), deal({ id: "w2" })],
+            openDeals: [deal({ id: "o1", icpLabel: "enterprise" })]
+        }));
+        expect(s.surprise).toBeNull();
+    });
+
+    it("distinguishes a calculated outreach target from an entered target without changing math", () => {
+        const quota = { quota: 500000, acv: 50000, winRate: 0.25, cycle: 90 };
+        const calculated = authorSection7(input({ quota }));
+        const recorded = authorSection7(input({ quota: { ...quota, touchesPerDay: 20 } }));
+        expect(calculated.body[1]).toContain("Calculated daily outreach target: 12.");
+        expect(recorded.body[1]).toContain("Recorded daily outreach target: 20.");
+        expect(calculated.body[0]).toBe(recorded.body[0]);
     });
 });

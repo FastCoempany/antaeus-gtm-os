@@ -50,14 +50,14 @@ const GATE_DEFINITIONS: ReadonlyArray<
     {
         key: "person",
         label: "Real person selected",
-        copy: "There is a named human or LinkedIn profile behind the plan.",
+        copy: "A contact name is recorded for the planned call.",
         weight: 20,
         met: (i) => i.draft.contactName.trim().length >= 2
     },
     {
         key: "persona",
         label: "Persona is chosen",
-        copy: "The questions are tuned to a concrete buyer lens.",
+        copy: "Questions can be tailored to the buyer's role.",
         weight: 10,
         met: (i) => Boolean(i.draft.persona)
     },
@@ -73,7 +73,7 @@ const GATE_DEFINITIONS: ReadonlyArray<
     {
         key: "why_now",
         label: "Why-now angle exists",
-        copy: "There is either a live signal or enough custom context to justify the meeting.",
+        copy: "An account signal or custom notes provide a starting point for discussing the meeting's purpose.",
         weight: 25,
         met: (i) =>
             (i.matchedAccount?.topSignal ?? null) !== null ||
@@ -82,7 +82,7 @@ const GATE_DEFINITIONS: ReadonlyArray<
     {
         key: "advancement",
         label: "Advancement path is linked",
-        copy: "A deal is attached so the call can move into pipeline truth instead of dying as notes.",
+        copy: "A deal is linked so call outcomes and next steps can be recorded against it.",
         weight: 25,
         met: (i) => i.linkedDeal !== null
     }
@@ -91,7 +91,7 @@ const GATE_DEFINITIONS: ReadonlyArray<
 function bandFor(score: number): { band: QualityBand; bandLabel: string } {
     if (score >= 85) return { band: "credible", bandLabel: "Credible" };
     if (score >= 65) return { band: "workable", bandLabel: "Workable" };
-    return { band: "thin", bandLabel: "Thin" };
+    return { band: "thin", bandLabel: "Incomplete" };
 }
 
 function nextMoveFor(
@@ -105,16 +105,16 @@ function nextMoveFor(
     const whyNow = byKey("why_now");
     const advancement = byKey("advancement");
     if (person && !person.met) {
-        return "Choose the actual human first. A vague target gives you a vague call.";
+        return "Choose the contact you plan to speak with.";
     }
     if (context && !context.met) {
         return "Add the LinkedIn profile or match the account in Signal Console so the agenda has real context.";
     }
     if (whyNow && !whyNow.met) {
-        return "Capture a real why-now angle before the meeting starts.";
+        return "Record a specific business reason for the conversation before the meeting starts.";
     }
     if (advancement && !advancement.met) {
-        return "Link the call to the in-flight deal before you run it.";
+        return "Link the call to the relevant deal before the meeting.";
     }
     void inputs;
     return "You have a credible agenda. Run the call, then move straight into Discovery Studio and Deal Workspace.";

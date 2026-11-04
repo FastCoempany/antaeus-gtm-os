@@ -91,9 +91,9 @@
     skipAheadHandlers:skipAheadHandlers,
     quickActions:[
       {
-        title:"Classify the motion",
+        title:"Classify the workflow",
         copy:"Separate proactive scenario planning from reactive supplier monitoring first.",
-        action:jumpNode("Classify the motion", "opening-frame", "motion-type", "blu")
+        action:jumpNode("Classify the workflow", "opening-frame", "motion-type", "blu")
       },
       {
         title:"Anchor on one disruption",
@@ -112,7 +112,7 @@
         label:"We already monitor suppliers",
         reply:"That helps. I am trying to learn whether you need better monitoring, or whether you still cannot model consequence before a disruption hits.",
         actions:[
-          jumpNode("Classify the motion", "opening-frame", "motion-type", "blu"),
+          jumpNode("Classify the workflow", "opening-frame", "motion-type", "blu"),
           jumpNode("Name the pain", "pain-and-consequence", "operational-consequence", "org")
         ]
       },
@@ -128,9 +128,9 @@
       {
         id:"just-show-platform",
         label:"Just show the platform",
-        reply:"I can. First tell me whether we are solving proactive scenario planning or reactive supplier monitoring so I do not show the wrong operating motion.",
+        reply:"I can. First tell me whether we are solving proactive scenario planning or reactive supplier monitoring so I do not show the wrong workflow.",
         actions:[
-          jumpNode("Classify the motion", "opening-frame", "motion-type", "blu"),
+          jumpNode("Classify the workflow", "opening-frame", "motion-type", "blu"),
           jumpNode("Set the proof bar", "proof-threshold", "real-proof", "pur")
         ]
       },
@@ -154,23 +154,23 @@
       }
     ],
     segments:[
-      segment("opening-frame","01","Opening frame","Start by classifying the motion.",true,[
+      segment("opening-frame","01","Opening frame","Start by classifying the workflow.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most teams can monitor some suppliers. The real question is whether you can see operational consequence early enough to act before a disruption becomes expensive. Is that where this lives for you too?\"","Use this when they will diagnose before seeing product.",true,[
           branch("CONFIRMS","ok","\"Yes. We see pieces of the picture, but the real risk still gets stitched together manually.\"","\"Good. Is the live problem more proactive scenario planning or reactive supplier monitoring?\"",[
-            jumpNode("Classify the motion", "opening-frame", "motion-type", "grn"),
+            jumpNode("Classify the workflow", "opening-frame", "motion-type", "grn"),
             jumpNode("Map the stitching", "current-state-truth", "stitching", "blu")
-          ],"Manual stitching is part of the current motion.","You still need the proactive vs reactive split."),
+          ],"Manual stitching is part of the current process.","You still need the proactive vs reactive split."),
           branch("TOOL DEFENSE","ly","\"We already have ERP views, alerts, and supplier tools.\"","\"Understood. Then where does the picture still break: supplier visibility, consequence modeling, or cross-functional response?\"",[
             jumpNode("Map the stitching", "current-state-truth", "stitching", "org"),
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "blu")
           ],"The buyer is defending the stack, not denying the gap.","You still need the first broken decision layer."),
-          branch("PITCH REQUEST","fl","\"Can you just show me the platform?\"","\"I can. First tell me whether this is about proactive scenario planning or reactive monitoring so I do not show the wrong operating motion.\"",[
-            jumpNode("Classify the motion", "opening-frame", "motion-type", "blu"),
+          branch("PITCH REQUEST","fl","\"Can you just show me the platform?\"","\"I can. First tell me whether this is about proactive scenario planning or reactive monitoring so I do not show the wrong workflow.\"",[
+            jumpNode("Classify the workflow", "opening-frame", "motion-type", "blu"),
             jumpNode("Set the proof bar", "proof-threshold", "real-proof", "pur")
-          ],"They are trying to skip diagnosis.","You still need the active operating motion before demo.")
+          ],"The buyer has asked to see the product before describing the workflow.","You still need the active workflow before demo.")
         ]),
-        node("opening-frame","motion-type","fu","Classify the motion","\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption lands?\"","This has to be known early because the rest of the call changes.",false,[
-          branch("REACTIVE MONITORING","ok","\"We need better supplier visibility and alerting first.\"","\"Good. Then what signal is still late, thin, or too noisy to act on?\"",[
+        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption lands?\"","This has to be known early because the rest of the call changes.",false,[
+          branch("REACTIVE MONITORING","ok","\"We need better supplier visibility and alerting first.\"","\"Good. Then what signal is still late, incomplete, or too noisy to act on?\"",[
             jumpNode("Map the current review", "current-state-truth", "supplier-review", "grn"),
             jumpNode("Name the blind spot", "pain-and-consequence", "network-blindness", "blu")
           ],"This is a reactive monitoring motion.","You still need the operational consequence of bad visibility."),
@@ -213,7 +213,7 @@
             jumpNode("Map the owner split", "stakeholder-and-ownership", "owner-split", "blu")
           ],"The workflow is fragmented by region or team.","You still need one real path to anchor the call.")
         ]),
-        node("current-state-truth","supplier-review","pr","Map the supplier review motion","\"How is supplier health actually reviewed today: alerts, audits, spreadsheets, periodic business reviews, consultants, or manual escalation?\"","Use this when the buyer frames the problem as monitoring or diligence.",false,[
+        node("current-state-truth","supplier-review","pr","Map the supplier review process","\"How is supplier health actually reviewed today: alerts, audits, spreadsheets, periodic business reviews, consultants, or manual escalation?\"","Use this when the buyer frames the problem as monitoring or diligence.",false,[
           branch("POINT TOOLS PLUS MANUAL","ok","\"We have alerts and risk tools, but people still have to translate them into action.\"","\"Which alert or score still fails to tell the team what to do next?\"",[
             jumpNode("Name the blind spot", "pain-and-consequence", "network-blindness", "grn"),
             jumpNode("Set the proof bar", "proof-threshold", "risk-proof", "blu")
@@ -243,7 +243,7 @@
         ])
       ]),
       segment("pain-and-consequence","03","Pain and consequence","Make the consequence expensive.",true,[
-        node("pain-and-consequence","operational-consequence","ri","Name the operational consequence","\"When the current picture is late or thin, what becomes expensive first: line-down risk, missed OTIF, working-capital distortion, revenue loss, compliance exposure, or cyber supplier risk?\"","Start here once the workflow gap is visible.",true,[
+        node("pain-and-consequence","operational-consequence","ri","Name the operational consequence","\"When the current picture is late or incomplete, what becomes expensive first: line-down risk, missed OTIF, working-capital distortion, revenue loss, compliance exposure, or cyber supplier risk?\"","Start here once the workflow gap is visible.",true,[
           branch("CONSEQUENCE CLEAR","ok","\"We react late and the operational consequence becomes visible too late to shape the response well.\"","\"Which consequence hurts most in practice today?\"",[
             jumpNode("Quantify the consequence", "pain-and-consequence", "reactive-firefight", "grn"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "owner-split", "blu")
@@ -417,7 +417,7 @@
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "blu")
           ],"Output usability matters as much as model quality.","You still need the first user and first action.")
         ]),
-        node("proof-threshold","workflow-proof","va","If proof is about operating fit","\"What would tell you the workflow got materially better: faster prioritization, clearer escalation, earlier planning, or fewer manual stitches?\"","Use this when the buyer cares more about operating motion than raw data.",false,[
+        node("proof-threshold","workflow-proof","va","If proof is about operating fit","\"What would tell you the workflow got materially better: faster prioritization, clearer escalation, earlier planning, or fewer manual stitches?\"","Use this when the buyer cares more about workflow than raw data.",false,[
           branch("CLEAR WORKFLOW SHIFT","ok","\"The team should stop stitching the picture together manually every time something moves.\"","\"Good. Then the next review has to show that on one real path, not just promise it.\"",[
             jumpNode("Lock the review", "next-step-lock", "live-review", "grn"),
             jumpNode("Choose the path", "next-step-lock", "scope-path", "blu")

@@ -1,0 +1,2653 @@
+{
+  "purpose": "Close high-severity interaction-state gaps not fully specified in room-at-rest batches.",
+  "records": [
+    {
+      "text": "TOUCH THE GROUND · SEE THE WHOLE MOTION · G — middle of page, center · hover: “Touch the ground",
+      "occurrence_count": 21,
+      "rooms": [
+        "Briefing",
+        "Call in a Favor",
+        "Cold Call Studio",
+        "Dashboard",
+        "Deal Workspace",
+        "Discovery Studio",
+        "Founding GTM",
+        "Future Autopsy",
+        "Getting to Signed",
+        "ICP Studio",
+        "LinkedIn Playbook",
+        "Outbound Studio",
+        "Outdoors Events",
+        "Pilot Desk",
+        "Prospecting Desk",
+        "Quota Workback",
+        "Readiness Score",
+        "Settings",
+        "Signal Console",
+        "Territory Architect",
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "Briefing what the system saw",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metadiscourse",
+        "personification"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Briefing · changes in your accounts, deals, and market"
+    },
+    {
+      "text": "Dashboard the one move, ranked",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Dashboard · pipeline, priorities, activity, and deal risk"
+    },
+    {
+      "text": "THE GROUND — YOUR WHOLE MOTION",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "WORKSPACE MAP"
+    },
+    {
+      "text": "Deal motion — solid",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Deal management · solid"
+    },
+    {
+      "text": "Open the system's read",
+      "occurrence_count": 2,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “Open the system's read”, then clicking “Close the system's read”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metadiscourse",
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Open analysis"
+    },
+    {
+      "text": "$180k · Prospect · quiet 13d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Uber”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$180k · Prospect · no recorded buyer activity for 13 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "$210k · Prospect · quiet 10d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Best Buy”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$210k · Prospect · no recorded buyer activity for 10 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "$260k · Solution Fit · quiet 21d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$260k · Solution Fit · no recorded buyer activity for 21 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "$290k · Discovery · quiet 11d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Marriott International”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$290k · Discovery · no recorded buyer activity for 11 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "$380k · proposal · quiet 16d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “United Airlines”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$380k · Proposal · no recorded buyer activity for 16 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "$400k · Prospect · quiet 8d — here's exactly how it dies, and the cuts that stop it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "$400k · Prospect · no recorded buyer activity for 8 days · review the risk factors and corrective actions."
+    },
+    {
+      "text": "Close the system's read",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “Open the system's read”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metadiscourse",
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Close analysis"
+    },
+    {
+      "text": "SHARP MATCHES — WHERE IT BITES",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "STRONG ICP MATCHES"
+    },
+    {
+      "text": "SIGNAL CONSOLE Signal Console Account heat radar — convert signals to ranked motion.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “⌘K JUMP”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "SIGNAL CONSOLE · Account signals and priority · rank accounts using current evidence."
+    },
+    {
+      "text": "The motion, written down — what a sharp operator would leave for their replacement. Readiness today: Building.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Founding GTM"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "ambiguous_state",
+        "compressed_dash_cadence",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "The sales process documented for another seller. Current readiness: Partially documented."
+    },
+    {
+      "text": "THE ONE THING BLOCKING — SETTLE THIS AND THE NEXT FRONT OPENS",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "declarative_certainty_review",
+        "metadiscursive_framing",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "CURRENT BLOCKING ISSUE"
+    },
+    {
+      "text": "This room is what the system saw — in your work, and in your market.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metadiscourse",
+        "personification"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Briefing summarizes changes in your deals and accounts, along with relevant developments in your market."
+    },
+    {
+      "text": "Watch list — your standing orders on the watching-for strip. Arm one and the system tells you when it fires.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor",
+        "personification"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "Saved monitoring rules let you define events to watch for. Antaeus adds an item here when a rule matches new data."
+    },
+    {
+      "text": "WHAT THE SYSTEM SAW WHILE YOU WERE AWAY",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "metadiscourse",
+        "metadiscursive_framing",
+        "personification"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "CHANGES SINCE YOUR LAST VISIT"
+    },
+    {
+      "text": "You added 17 deals and 29 accounts. Overnight the system read every one — the heat, the silence, the next steps — so you don't walk in cold. This is the dividend the setup promised, starting today.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "idiom",
+        "metaphor",
+        "personification",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "This workspace contains 17 active deals and 29 watched accounts. Antaeus analyzed recent account signals, buyer activity, and recorded next steps to rank the current recommendations."
+    },
+    {
+      "text": "— a fresh trigger, heat still building — get in early",
+      "occurrence_count": 1,
+      "rooms": [
+        "Signal Console"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "ambiguous_state",
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "A recent signal increased this account's priority. Review it before deciding whether to reach out."
+    },
+    {
+      "text": "→ Inspect the deal read",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Review the deal assessment"
+    },
+    {
+      "text": "SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE",
+      "occurrence_count": 26,
+      "rooms": [
+        "Dashboard",
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Best Buy 10 days since last activity $210k”, then clicking “Best Buy”",
+        "After clicking “Boeing Next step due in 3 days $480k”, then clicking “Boeing”",
+        "After clicking “CoreWeave Closing this quarter $220k”, then clicking “CoreWeave”",
+        "After clicking “Databricks on track $310k”, then clicking “Databricks”",
+        "After clicking “Delta Air Lines 9 days since last activity $340k”, then clicking “Delta Air Lines”",
+        "After clicking “FedEx 8 days since last activity $400k”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Best Buy”",
+        "After clicking “List”, then clicking “Boeing”",
+        "After clicking “List”, then clicking “CoreWeave”",
+        "After clicking “List”, then clicking “Databricks”",
+        "After clicking “List”, then clicking “Delta Air Lines”",
+        "After clicking “List”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Marriott International”",
+        "After clicking “List”, then clicking “OpenAI”",
+        "After clicking “List”, then clicking “Starbucks”",
+        "After clicking “List”, then clicking “Uber”",
+        "After clicking “Marriott International 11 days since last activity $290k”, then clicking “Marriott International”",
+        "After clicking “Nordstrom”",
+        "After clicking “OpenAI Next step due in 2 days $350k”, then clicking “OpenAI”",
+        "After clicking “Outbound to Boeing”",
+        "After clicking “Starbucks Closing this quarter $420k”, then clicking “Starbucks”",
+        "After clicking “Timeline”, then clicking “Nordstrom”",
+        "After clicking “Timeline”, then clicking “United Airlines”",
+        "After clicking “Uber 13 days since last activity $180k”, then clicking “Uber”",
+        "After clicking “United Airlines 16 days since last activity $380k”, then clicking “United Airlines”",
+        "After clicking “not now — show me the next”, then clicking “Outbound to OpenAI”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "SEE RELATED ACTIVITY ACROSS THE WORKSPACE"
+    },
+    {
+      "text": "WHAT'S PULLING",
+      "occurrence_count": 26,
+      "rooms": [
+        "Dashboard",
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Best Buy 10 days since last activity $210k”, then clicking “Best Buy”",
+        "After clicking “Boeing Next step due in 3 days $480k”, then clicking “Boeing”",
+        "After clicking “CoreWeave Closing this quarter $220k”, then clicking “CoreWeave”",
+        "After clicking “Databricks on track $310k”, then clicking “Databricks”",
+        "After clicking “Delta Air Lines 9 days since last activity $340k”, then clicking “Delta Air Lines”",
+        "After clicking “FedEx 8 days since last activity $400k”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Best Buy”",
+        "After clicking “List”, then clicking “Boeing”",
+        "After clicking “List”, then clicking “CoreWeave”",
+        "After clicking “List”, then clicking “Databricks”",
+        "After clicking “List”, then clicking “Delta Air Lines”",
+        "After clicking “List”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Marriott International”",
+        "After clicking “List”, then clicking “OpenAI”",
+        "After clicking “List”, then clicking “Starbucks”",
+        "After clicking “List”, then clicking “Uber”",
+        "After clicking “Marriott International 11 days since last activity $290k”, then clicking “Marriott International”",
+        "After clicking “Nordstrom”",
+        "After clicking “OpenAI Next step due in 2 days $350k”, then clicking “OpenAI”",
+        "After clicking “Outbound to Boeing”",
+        "After clicking “Starbucks Closing this quarter $420k”, then clicking “Starbucks”",
+        "After clicking “Timeline”, then clicking “Nordstrom”",
+        "After clicking “Timeline”, then clicking “United Airlines”",
+        "After clicking “Uber 13 days since last activity $180k”, then clicking “Uber”",
+        "After clicking “United Airlines 16 days since last activity $380k”, then clicking “United Airlines”",
+        "After clicking “not now — show me the next”, then clicking “Outbound to OpenAI”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "WHY THIS IS PRIORITIZED"
+    },
+    {
+      "text": "Heartbeat — Nordstrom still has no dated next step.",
+      "occurrence_count": 20,
+      "rooms": [
+        "Briefing",
+        "Call in a Favor",
+        "Cold Call Studio",
+        "Dashboard",
+        "Deal Workspace",
+        "Discovery Studio",
+        "Founding GTM",
+        "Getting to Signed",
+        "ICP Studio",
+        "LinkedIn Playbook",
+        "Outbound Studio",
+        "Outdoors Events",
+        "Pilot Desk",
+        "Prospecting Desk",
+        "Quota Workback",
+        "Readiness Score",
+        "Settings",
+        "Signal Console",
+        "Territory Architect",
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Deal check · Nordstrom still has no dated next step."
+    },
+    {
+      "text": "THE LIVE EDGE",
+      "occurrence_count": 20,
+      "rooms": [
+        "Briefing",
+        "Call in a Favor",
+        "Cold Call Studio",
+        "Dashboard",
+        "Deal Workspace",
+        "Discovery Studio",
+        "Founding GTM",
+        "Getting to Signed",
+        "ICP Studio",
+        "LinkedIn Playbook",
+        "Outbound Studio",
+        "Outdoors Events",
+        "Pilot Desk",
+        "Prospecting Desk",
+        "Quota Workback",
+        "Readiness Score",
+        "Settings",
+        "Signal Console",
+        "Territory Architect",
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "RECENT ACTIVITY"
+    },
+    {
+      "text": "THE MACHINE",
+      "occurrence_count": 20,
+      "rooms": [
+        "Briefing",
+        "Call in a Favor",
+        "Cold Call Studio",
+        "Dashboard",
+        "Deal Workspace",
+        "Discovery Studio",
+        "Founding GTM",
+        "Getting to Signed",
+        "ICP Studio",
+        "LinkedIn Playbook",
+        "Outbound Studio",
+        "Outdoors Events",
+        "Pilot Desk",
+        "Prospecting Desk",
+        "Quota Workback",
+        "Readiness Score",
+        "Settings",
+        "Signal Console",
+        "Territory Architect",
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "AUTOMATED UPDATES"
+    },
+    {
+      "text": "Nothing is decaying today — acting keeps it that way.",
+      "occurrence_count": 18,
+      "rooms": [
+        "Dashboard",
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Boeing Next step due in 3 days $480k”, then clicking “Boeing”",
+        "After clicking “CoreWeave Closing this quarter $220k”, then clicking “CoreWeave”",
+        "After clicking “Databricks on track $310k”, then clicking “Databricks”",
+        "After clicking “Delta Air Lines 9 days since last activity $340k”, then clicking “Delta Air Lines”",
+        "After clicking “FedEx 8 days since last activity $400k”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Boeing”",
+        "After clicking “List”, then clicking “CoreWeave”",
+        "After clicking “List”, then clicking “Databricks”",
+        "After clicking “List”, then clicking “Delta Air Lines”",
+        "After clicking “List”, then clicking “FedEx”",
+        "After clicking “List”, then clicking “Marriott International”",
+        "After clicking “List”, then clicking “OpenAI”",
+        "After clicking “List”, then clicking “Starbucks”",
+        "After clicking “Marriott International 11 days since last activity $290k”, then clicking “Marriott International”",
+        "After clicking “OpenAI Next step due in 2 days $350k”, then clicking “OpenAI”",
+        "After clicking “Outbound to Boeing”",
+        "After clicking “Starbucks Closing this quarter $420k”, then clicking “Starbucks”",
+        "After clicking “not now — show me the next”, then clicking “Outbound to OpenAI”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "No additional deal-risk factors are currently increasing."
+    },
+    {
+      "text": "WHY NOW — WHAT PRESSURE IS LIVE? OPTIONAL",
+      "occurrence_count": 10,
+      "rooms": [
+        "Territory Architect"
+      ],
+      "states": [
+        "After clicking “Carve a segment division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “▣ Vertical Industries”, then clicking “Carve a vertical division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “◈ Named accounts Hand-picked lists”, then clicking “Carve a named accounts division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “◎ Geography Regions & metros”, then clicking “Carve a geography division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “⧉ Blend Stack cuts across axes”, then clicking “Carve a blended division Name it, set a tier, say why you. + Carve division”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "WHY NOW — WHAT CURRENT EVENT OR NEED MAKES THIS TIMELY? OPTIONAL"
+    },
+    {
+      "text": "Carve it",
+      "occurrence_count": 6,
+      "rooms": [
+        "Territory Architect"
+      ],
+      "states": [
+        "After clicking “Carve a segment division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “▣ Vertical Industries”, then clicking “Carve a vertical division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “◈ Named accounts Hand-picked lists”, then clicking “Carve a named accounts division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “◎ Geography Regions & metros”, then clicking “Carve a geography division Name it, set a tier, say why you. + Carve division”",
+        "After clicking “⚡ Trigger Signal-driven”, then clicking “Carve a trigger division Name it, set a tier, say why you and why now. + Carve division”",
+        "After clicking “⧉ Blend Stack cuts across axes”, then clicking “Carve a blended division Name it, set a tier, say why you. + Carve division”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Create segment"
+    },
+    {
+      "text": "Founding GTM the handoff kit",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Founding GTM · sales handoff documentation"
+    },
+    {
+      "text": "LinkedIn Playbook air cover",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "LinkedIn Playbook · LinkedIn outreach"
+    },
+    {
+      "text": "Readiness Score inheritable yet?",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Readiness · can another seller run the process?"
+    },
+    {
+      "text": "Signal Console watch the heat",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Signal Console · account signals and priority"
+    },
+    {
+      "text": "Territory Architect carve the market",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Territory Architect · territory segments"
+    },
+    {
+      "text": "TURN OFF — small, mono, caps, bold · top of page, left · hover: “Turn the live edge off",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard"
+      ],
+      "states": [
+        "After clicking “TURN OFF”",
+        "After clicking “−”, then hovering “No schedules”",
+        "After clicking “⚙”, then clicking “Show in-session notifications”",
+        "After clicking “⚙”, then clicking “Surface visible”, then hovering “⌃”",
+        "After clicking “⚙”, then hovering “Show in-session notifications”",
+        "After hovering “TURN OFF”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "TURN OFF — hover: “Hide recent activity”"
+    },
+    {
+      "text": "Welcome the morning landing",
+      "occurrence_count": 6,
+      "rooms": [
+        "Briefing",
+        "Dashboard",
+        "Deal Workspace",
+        "LinkedIn Playbook",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”",
+        "After clicking “List”, then clicking “Open”",
+        "After clicking “Marriott International Leave a comment →”",
+        "After clicking “Read it ↓”",
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Welcome · recommended starting point"
+    },
+    {
+      "text": "Bring economic buyer into thread",
+      "occurrence_count": 5,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Best Buy”",
+        "After clicking “Marriott International”",
+        "After clicking “Uber”",
+        "After clicking “United Airlines”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Identify and engage the economic buyer"
+    },
+    {
+      "text": "YOUR LINE",
+      "occurrence_count": 5,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “FINANCE payment terms — every give gets something back TO DO open ▾”",
+        "After clicking “LEGAL liability, indemnification, redlines — the changes they want to the contract TO DO o”",
+        "After clicking “SECURITY the questionnaire — mostly answered by papers you already hold TO DO open ▾”",
+        "After clicking “Work this front ▾”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "YOUR PROPOSED POSITION"
+    },
+    {
+      "text": "Lock a real next step today — anything specific moves this forward. The smallest thing that changes the read.",
+      "occurrence_count": 4,
+      "rooms": [
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Nordstrom”",
+        "After clicking “Timeline”, then clicking “Nordstrom”",
+        "After clicking “Timeline”, then clicking “United Airlines”",
+        "After clicking “United Airlines 16 days since last activity $380k”, then clicking “United Airlines”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Set a dated next step with the buyer. The deal-risk assessment will update when the next step is recorded."
+    },
+    {
+      "text": "thin",
+      "occurrence_count": 3,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Best Buy”",
+        "After clicking “Uber”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "insufficient evidence"
+    },
+    {
+      "text": "→ Classify the motion",
+      "occurrence_count": 3,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Data / Intelligence Infrastructure”, then clicking “\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap”",
+        "After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Can you just show me the platform?\"”",
+        "After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Classify the sales process"
+    },
+    {
+      "text": "→ Map the manager read",
+      "occurrence_count": 3,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”",
+        "After clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then clicking “\"We missed, or leadership does not trust the number enough right now.\"”",
+        "After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “\"It is not one deal. It is the whole pipeline view that feels soft.\"”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Map the manager assessment"
+    },
+    {
+      "text": "\"Back to Starbucks\" turnaround is putting labor back into stores — more baristas on the floor, not fewer",
+      "occurrence_count": 2,
+      "rooms": [
+        "Cold Call Studio",
+        "Signal Console"
+      ],
+      "states": [
+        "After choosing “Starbucks” in “Pick an account… Boeing OpenAI Chipotle Starbucks Deel United Airlines CoreWeave Databrick”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "\"Back to Starbucks\" turnaround includes increased store staffing and barista hiring"
+    },
+    {
+      "text": "Classify the motion",
+      "occurrence_count": 2,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Data / Intelligence Infrastructure”",
+        "After clicking “Manufacturing / Supply Chain / Engineering”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Classify the sales process"
+    },
+    {
+      "text": "Inheritable",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Runnable with founder support"
+    },
+    {
+      "text": "Inheritable with guardrails",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Runnable with founder support"
+    },
+    {
+      "text": "Map the manager read",
+      "occurrence_count": 2,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Map the manager read”",
+        "After clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Use one live deal”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Map the manager assessment"
+    },
+    {
+      "text": "Sales-org hiring machine — hundreds of reps hired and ramped every year",
+      "occurrence_count": 2,
+      "rooms": [
+        "Cold Call Studio",
+        "Signal Console"
+      ],
+      "states": [
+        "After choosing “Paycom” in “Pick an account… Boeing OpenAI Chipotle Starbucks Deel United Airlines CoreWeave Databrick”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Large recurring sales hiring volume · hundreds of representatives hired and onboarded each year"
+    },
+    {
+      "text": "Strengthen pilot evidence — every part of your sales motion has to be at least workable before a hire could run it.",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Strengthen pilot evidence. Each part of the sales process needs to be sufficiently documented before another seller can run it."
+    },
+    {
+      "text": "THE CLIMB — WHERE THE WORKSPACE HAS BEEN, AND WHERE IT GOES NEXT",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "READINESS PROGRESSION"
+    },
+    {
+      "text": "THE LIVE EDGE IS OFF — CLICK TO TURN ON",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Settings"
+      ],
+      "states": [
+        "After clicking “On”",
+        "After clicking “TURN OFF”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "RECENT ACTIVITY IS HIDDEN — CLICK TO SHOW"
+    },
+    {
+      "text": "THE SUMMIT",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "HIGHEST READINESS STATE"
+    },
+    {
+      "text": "THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Nordstrom”, then clicking “SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE”",
+        "After clicking “Outbound to Boeing”, then clicking “SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "RELATED ACTIVITY ACROSS THE WORKSPACE"
+    },
+    {
+      "text": "This is the front that actually kills deals — not losing the argument, but the committee going quiet. Build the plan-to-signed with your champion — dated steps, named owners — and give the quiet person a real reason to re-engage, never a \"just checking in.\"",
+      "occurrence_count": 2,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “BUSINESS Hold rollout until next fiscal year Hold rollout until next fiscal year→Seasonal ”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "This workstream is currently blocking progress. Build a dated signature plan with named owners, and give any inactive stakeholder a specific reason to re-engage."
+    },
+    {
+      "text": "To reach Inheritable with guardrails",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "To become runnable with founder support"
+    },
+    {
+      "text": "WHERE YOUR WHOLE MOTION STANDS",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "CURRENT SALES STATUS"
+    },
+    {
+      "text": "WHY NOW — WHAT PRESSURE IS LIVE? REQUIRED",
+      "occurrence_count": 2,
+      "rooms": [
+        "Territory Architect"
+      ],
+      "states": [
+        "After clicking “⚡ Trigger Signal-driven”, then clicking “Carve a trigger division Name it, set a tier, say why you and why now. + Carve division”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "WHY NOW — WHAT CURRENT EVENT OR NEED MAKES THIS TIMELY? REQUIRED"
+    },
+    {
+      "text": "Wins and losses both feed the machine; the handoff kit is written.",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "After clicking “See the whole thing →”",
+        "room_at_rest"
+      ],
+      "classifications": [
+        "personification",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Win and loss patterns are documented, and the sales handoff documentation is complete."
+    },
+    {
+      "text": "You are the system",
+      "occurrence_count": 2,
+      "rooms": [
+        "Dashboard",
+        "Readiness Score"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "aphorism",
+        "fragment_review"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Founder-dependent"
+    },
+    {
+      "text": "You're in Briefing · the system suggests Outbound Studio — Boeing has the highest heat in your watchlist right now.",
+      "occurrence_count": 2,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “Read it ↓”",
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "You're in Briefing · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority watched account."
+    },
+    {
+      "text": "→ Open executive pressure",
+      "occurrence_count": 2,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate mandate from workflow”, then clicking “\"Leadership wants movement, but no one has agreed on the first workflow yet.\"”",
+        "After clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate mandate from workflow”, then clicking “\"Mostly curiosity for now.\"”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Review executive priorities"
+    },
+    {
+      "text": "\"Back to Starbucks\" turnaround is putting labor back into stores — more baristas on the floor, not fewer — Earnings call",
+      "occurrence_count": 1,
+      "rooms": [
+        "Signal Console"
+      ],
+      "states": [
+        "After clicking “37 Starbucks \"Back to Starbucks\" turnaround is putting labor back into stores — more baris”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "\"Back to Starbucks\" turnaround includes increased store staffing and barista hiring · Earnings call"
+    },
+    {
+      "text": "\"Good. What is missing most: user signal, product adoption read, internal alignment, or enablement readiness?\"",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “\"We have a release decision moving without enough usable evidence.\"”"
+      ],
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "0 sharp — act here now",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "0 strong matches · review the ICP or add accounts"
+    },
+    {
+      "text": "15 days later, momentum faded because a result worth acting on never landed early enough to force a committed buying process. Key failure pattern: there was never a dated next step, so momentum decayed.; the thread went stale and urgency died.; no real champion carried this inside.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “United Airlines”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 15 days later. The record shows no dated next step, no confirmed champion, and no recorded result strong enough to support a committed buying process. Treat these as contributing risk factors, not proven causes."
+    },
+    {
+      "text": "17 days later, momentum faded because a result worth acting on never landed early enough to force a committed buying process. Key failure pattern: there was never a dated next step, so momentum decayed.; the thread went stale and urgency died.; no real champion carried this inside.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Best Buy”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 17 days later. The record shows no dated next step, no confirmed champion, and no recorded result strong enough to support a committed buying process. Treat these as contributing risk factors, not proven causes."
+    },
+    {
+      "text": "2 losses the workspace actually examined — the ones where you ran the postmortem and wrote down what not to repeat. These are the lessons the hire should read first.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Founding GTM"
+      ],
+      "states": [
+        "After clicking “5 · The losses we paid for”"
+      ],
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Two recorded losses include completed postmortems. Review the documented loss patterns with a new seller during onboarding."
+    },
+    {
+      "text": "25 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing. Key failure pattern: there was never a dated next step, so momentum decayed.; the thread went stale and urgency died.; no real champion carried this inside.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Marriott International”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 25 days later. The record shows no dated next step, no confirmed champion, and insufficiently specific use-case or impact evidence. These factors are associated with the loss; the record does not establish that any one factor caused it."
+    },
+    {
+      "text": "32 days later, the thread went cold because no one on either side forced the next conversation. Silence became the decision. Key failure pattern: the thread went stale and urgency died.; no real champion carried this inside.; economic buyer never entered the thread.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “‹”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 32 days later. The record shows prolonged inactivity, no confirmed champion, and no identified economic buyer. Treat these as contributing risk factors, not proven causes."
+    },
+    {
+      "text": "7 days later, you lost because use case and impact were never concrete enough to force executive urgency. Stakeholders stayed polite, but no one took ownership of timing. Key failure pattern: there was never a dated next step, so momentum decayed.; the thread went stale and urgency died.; no real champion carried this inside.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 7 days later. The record shows no dated next step, no confirmed champion, and insufficiently specific use-case or impact evidence. These factors are associated with the loss; the record does not establish that any one factor caused it."
+    },
+    {
+      "text": "9 days later, momentum faded because a result worth acting on never landed early enough to force a committed buying process. Key failure pattern: there was never a dated next step, so momentum decayed.; the thread went stale and urgency died.; no real champion carried this inside.. The loss was not dramatic; it was procedural, then inevitable.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "After clicking “Uber”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The deal closed lost 9 days later. The record shows no dated next step, no confirmed champion, and no recorded result strong enough to support a committed buying process. Treat these as contributing risk factors, not proven causes."
+    },
+    {
+      "text": "Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. What gets saved: the subject line, who it went to, and when — never the message itself.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Add your Antaeus address to the BCC line when you send outreach. Antaeus matches the send to a watched account and logs the activity. It stores the subject line, recipient, and send time, but not the message body."
+    },
+    {
+      "text": "AI screen on the barista funnel — keep quality up while the turnaround adds floor labor",
+      "occurrence_count": 1,
+      "rooms": [
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Starbucks Closing this quarter $420k”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "AI screening for high-volume barista hiring while store staffing increases"
+    },
+    {
+      "text": "air cover · never the opening scene",
+      "occurrence_count": 1,
+      "rooms": [
+        "LinkedIn Playbook"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "supporting outreach · not the primary channel"
+    },
+    {
+      "text": "BRIEFING Briefing Weekly read of what's moving — and where your assumptions stop agreeing with the data.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “⌘K JUMP”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "BRIEFING · Weekly analysis of market changes and evidence that conflicts with current assumptions."
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals AT RISK close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals AT RISK open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "BUSINESS APPROVAL · stakeholder engagement and signature plan · AT RISK · open ▾"
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “blocking” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “blocking” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING clos”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals CLEARING close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “clearing” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals CLEARING open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “clearing” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals CLEARING clos”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals SETTLED close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “settled” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals SETTLED open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Mark it settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals TO DO close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “todo” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals TO DO open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “todo” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals TO DO close ▴”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "Capital deployed under board pressure. (no live signal on this account yet — the trigger you picked carries the message)",
+      "occurrence_count": 1,
+      "rooms": [
+        "Outbound Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Selected trigger: Capital deployed under board pressure. No current account signal is available, so the selected trigger is being used as the reason for outreach."
+    },
+    {
+      "text": "Carve your first division.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Territory Architect"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Create your first territory segment."
+    },
+    {
+      "text": "CFO pressure, receptive to ROI stories. (no live signal on this account yet — the trigger you picked carries the message)",
+      "occurrence_count": 1,
+      "rooms": [
+        "Outbound Studio"
+      ],
+      "states": [
+        "After clicking “change ▾”, then choosing “cost” in “Funding / Board Mandate Expansion / Acquisition Hiring Spike / Reorg Vendor Consolidation ”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Selected trigger: CFO focus on ROI. No current account signal is available, so the selected trigger is being used as the reason for outreach."
+    },
+    {
+      "text": "Cut by pressure — who is moving right now, and why.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Territory Architect"
+      ],
+      "states": [
+        "After clicking “⚡ Trigger Signal-driven”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Segment by current buying signals and timing."
+    },
+    {
+      "text": "Deals die in late security reviews — the Palantir loss already proved it.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "A late security review contributed to the recorded Palantir loss."
+    },
+    {
+      "text": "Economic buyer never entered the thread.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "No economic buyer is recorded."
+    },
+    {
+      "text": "Find the GC pressure",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Trigger”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Identify the General Counsel's current priority"
+    },
+    {
+      "text": "Heat 22 · 2 signals · newest: Seasonal ramp — tens of thousands of holiday hires across stores and fulfillment every year",
+      "occurrence_count": 1,
+      "rooms": [
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “Nordstrom”, then clicking “SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Priority score 22 · 2 signals · newest: seasonal hiring ramp across stores and fulfillment"
+    },
+    {
+      "text": "ITS BITE — HOW YOUR 29 WATCHED ACCOUNTS FIT",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "HOW YOUR 29 WATCHED ACCOUNTS MATCH"
+    },
+    {
+      "text": "Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet — Google has to security-review Antaeus itself (nothing about you) before your one-click approval can exist. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "Map the supplier review motion",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”, then clicking “→ Map the stitching”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Map the supplier review process"
+    },
+    {
+      "text": "No internal driver, no motion.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Future Autopsy"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "A confirmed champion gives the deal an internal owner."
+    },
+    {
+      "text": "NO STANDING ORDERS YET",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "NO MONITORING RULES YET"
+    },
+    {
+      "text": "One account at a time. Here's your move on the one that's hottest right now.",
+      "occurrence_count": 1,
+      "rooms": [
+        "LinkedIn Playbook"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Current recommended LinkedIn action for the highest-priority account."
+    },
+    {
+      "text": "Outbound to Chipotle — heat 36 and high-conf cluster",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Outbound to Chipotle · priority score 36 · multiple supporting signals"
+    },
+    {
+      "text": "Outbound to OpenAI — heat 50 and fresh signals",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Outbound to OpenAI · priority score 50 · recent signals"
+    },
+    {
+      "text": "Outbound to Starbucks — heat 37 and fresh signals",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Outbound to Starbucks · priority score 37 · recent signals"
+    },
+    {
+      "text": "Read it",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “Add a trigger”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Open analysis"
+    },
+    {
+      "text": "Read it ↓",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Open analysis ↓"
+    },
+    {
+      "text": "Read the adoption",
+      "occurrence_count": 1,
+      "rooms": [
+        "Pilot Desk"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Review adoption"
+    },
+    {
+      "text": "Sales-org hiring machine — hundreds of reps hired and ramped every year — Industry reporting",
+      "occurrence_count": 1,
+      "rooms": [
+        "Signal Console"
+      ],
+      "states": [
+        "After clicking “14 Paycom Sales-org hiring machine — hundreds of reps hired and ramped every year 1h ago”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Large recurring sales hiring volume · hundreds of representatives hired and onboarded each year · Industry reporting"
+    },
+    {
+      "text": "Share with a hire — read-only",
+      "occurrence_count": 1,
+      "rooms": [
+        "Founding GTM"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Share read-only with a seller"
+    },
+    {
+      "text": "SHARP",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "HIGHLY SPECIFIC"
+    },
+    {
+      "text": "Sharp enough to run.",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "ICP quality: highly specific"
+    },
+    {
+      "text": "Show the live edge",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Show recent activity"
+    },
+    {
+      "text": "SKILL Cast a proof for the hottest deal Open PoC Framework with the top-pressure open deal pre-linked, ready to forge a proof.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “⌘K JUMP”"
+      ],
+      "classifications": [
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "SKILL · Open Pilot Desk for the highest-priority active deal with the deal preselected and ready for pilot planning."
+    },
+    {
+      "text": "Snooze fires",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "After clicking “⚙”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Pause matches"
+    },
+    {
+      "text": "Talent war with Meta and other labs — retention and recruiting pressure at record intensity — News coverage",
+      "occurrence_count": 1,
+      "rooms": [
+        "Signal Console"
+      ],
+      "states": [
+        "After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "High competition for AI talent involving Meta and other labs · News coverage"
+    },
+    {
+      "text": "Terms are live — the run to signature happens here.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Dashboard"
+      ],
+      "states": [
+        "After clicking “Outbound to Boeing”, then clicking “SEE THE WHOLE THREAD — EVERY ROOM THAT HOLDS A PIECE”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Contract terms are active. Continue the signature process in Getting to Signed."
+    },
+    {
+      "text": "The less you have to log by hand, the truer every read gets. Three ways in — all optional.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Automatic activity capture reduces manual logging and improves the accuracy of activity-based analysis. All connection methods are optional."
+    },
+    {
+      "text": "The live edge is off. The hairline stays on your rooms — click it any time to turn it back on.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "After clicking “On”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Recent activity is hidden. Use the activity control to show it again."
+    },
+    {
+      "text": "The live edge is on — your day comes back to the left wall.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "After clicking “On”, then clicking “Off”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Recent activity is visible in the left panel."
+    },
+    {
+      "text": "The thread that shows up on more advancing calls than any other is \"pain-and-consequence\" — pulled on 100% of the calls that won a next meeting. That's the one to teach Monday morning.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Founding GTM"
+      ],
+      "states": [
+        "After clicking “3 · The questions that won the next meeting”"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The 'pain-and-consequence' question pattern appears on every recorded call in this sample that progressed to a next meeting. Teach it as a pattern to test, not as a proven cause of progression."
+    },
+    {
+      "text": "the workspace is awake",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "workspace setup complete"
+    },
+    {
+      "text": "WHAT MAKES IT SHARP — 6 OF 8",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "WHY THIS ICP IS SPECIFIC · 6 OF 8 CRITERIA"
+    },
+    {
+      "text": "WHO'S RUNNING THE MOTION?",
+      "occurrence_count": 1,
+      "rooms": [
+        "ICP Studio"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "WHO IS RUNNING THE SALES PROCESS?"
+    },
+    {
+      "text": "Whoever owns the territory carve.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "The person responsible for territory prioritization."
+    },
+    {
+      "text": "Work this front ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "fragment_review",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Open this workstream ▾"
+    },
+    {
+      "text": "YOU DID THE HARD WORK — HERE'S THE FIRST MORNING IT PAYS BACK",
+      "occurrence_count": 1,
+      "rooms": [
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "SETUP COMPLETE"
+    },
+    {
+      "text": "You're in Dashboard · the system suggests Outbound Studio — Boeing has the highest heat in your watchlist right now.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Dashboard"
+      ],
+      "states": [
+        "After clicking “TOUCH THE GROUND · SEE THE WHOLE MOTION · G”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "You're in Dashboard · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority watched account."
+    },
+    {
+      "text": "You're in Deal Workspace · the system suggests Outbound Studio — Boeing has the highest heat in your watchlist right now.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Deal Workspace"
+      ],
+      "states": [
+        "After clicking “List”, then clicking “Open”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "You're in Deal Workspace · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority watched account."
+    },
+    {
+      "text": "You're in LinkedIn Playbook · the system suggests Outbound Studio — Boeing has the highest heat in your watchlist right now.",
+      "occurrence_count": 1,
+      "rooms": [
+        "LinkedIn Playbook"
+      ],
+      "states": [
+        "After clicking “Marriott International Leave a comment →”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "You're in LinkedIn Playbook · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority watched account."
+    },
+    {
+      "text": "You're in Settings · the system suggests Outbound Studio — Boeing has the highest heat in your watchlist right now.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "After clicking “Email — your BCC address”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "You're in Settings · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority watched account."
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Net-60 flat, or net-30 with 3% off annual prepay",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “FINANCE Net-90 payment terms Net-90 payment terms→Net-60 flat, or net-30 with 3% off annua”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Our papers answer 118 of the 150 today",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “SECURITY Full 150-question security review before any contract redlines move Full 150-ques”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Seasonal math says January start loses the spring class",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “BUSINESS Hold rollout until next fiscal year Hold rollout until next fiscal year→Seasonal ”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — top of page, center · filled with “Cap at 12 months of fees with a separate, higher breach cap",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “LEGAL Uncapped liability on data-related claims Uncapped liability on data-related claims→”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "Your work — heartbeat-fresh reads about your deals going stale, accounts going quiet, evidence past its readout. Dismiss what doesn't matter; the rest tells you where to look first.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Briefing"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "metaphor",
+        "personification"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "Your work shows material changes in active deals, watched accounts, and pilot evidence. Dismiss items that are not useful."
+    },
+    {
+      "text": "→ Map the current motion",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then clicking “\"We mostly want to tighten what already exists.\"”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Map the current process"
+    },
+    {
+      "text": "→ Open backlog pressure",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate mandate from incident”, then clicking “\"Leadership wants the process safer before scale makes it embarrassing.\"”"
+      ],
+      "classifications": [
+        "fragment_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "approved_exact_replacement",
+      "replacement": "→ Review backlog constraints"
+    }
+  ]
+}

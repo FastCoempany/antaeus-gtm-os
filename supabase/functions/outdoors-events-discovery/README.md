@@ -11,9 +11,10 @@ and upserts typed event rows to `outdoors_events`.
 supabase functions deploy outdoors-events-discovery --no-verify-jwt
 ```
 
-`--no-verify-jwt` because the cron path invokes with the service-role
-key and the client path passes the user JWT; the function authenticates
-to the DB with the service role internally.
+The handler validates the caller before using its internal service-role client.
+`run_one` requires a valid user JWT and membership in the requested workspace,
+or the service-role credential. `run_all` requires the service-role credential.
+Empty, malformed, or unrecognized actions never start discovery.
 
 ## Env
 
@@ -32,7 +33,7 @@ On-demand from the room ("Run discovery now"):
 POST { "action": "run_one", "workspaceId": "<uuid>" }
 ```
 
-Admin escape-hatch — every active workspace in one call (manual only;
+Admin operation — each workspace with a nonempty product category (manual only;
 no cron):
 
 ```json
@@ -49,11 +50,19 @@ if a scheduled fire is wanted later, a new migration adds it cleanly.
 
 ## Cost
 
-Per-workspace weekly ceiling of $2.00 (token + web-search). At
-$THROTTLE_AT the run drops to direct-tier-only with fewer searches;
-at 1.5× the ceiling the run pauses and writes a `paused` ledger row.
+Existing budget thresholds are preserved: at $1.00 spent in the last seven
+days, discovery uses direct-tier events and fewer searches. At $3.00
+(1.5 times the $2.00 reference budget), it returns a `paused` result without
+opening a ledger row or making another paid call. A failed spend lookup
+stops the request rather than treating spend as zero.
 Each run's `total_cost_usd` + `llm_call_count` land in
 `outdoors_events_runs` for the room footer.
+Completed and failed runs use the schema's `completed_at` column. Paid-call
+cost and partial write counts are retained when event persistence fails.
+Ledger update failures return an explicit error rather than reporting success.
+
+The on-demand response retains `{ok, result, error}`; administrative responses
+retain `{ok, workspaces, totals, results}`. No schema migration is required.
 
 ## Hallucination guard
 
@@ -66,7 +75,8 @@ re-rolled.
 
 ## Dedupe
 
-Events dedupe on the `(workspace_id, dedupe_key)` unique index.
+Events dedupe on the partial `(workspace_id, dedupe_key)` unique index
+where `dedupe_key` is not null.
 `dedupe_key = slug(name)__year-month__slug(city)`.
 
 `upsertEvents` does an **insert-new / update-discovery-columns split**
@@ -78,3 +88,7 @@ so a re-run never clobbers operator-owned state:
   `where_at`, `discovered_at`, `run_id`). `status` and `notes` are
   left untouched — if the operator moved an event to "attending", a
   re-discovery keeps it there.
+
+Repeated keys within one model response are processed once. A concurrent
+insert conflict refreshes only discovery fields on the winning row;
+operator-authored name, tags, status, and notes remain unchanged.

@@ -396,7 +396,7 @@
           jumpNode("Find the first gates", "decision-architecture", "gates", "org"),
           jumpNode("Return to buying owner", "stakeholder-and-ownership", "buying-owner", "blu")
         ], "They're describing a committee cloud, not named approvers.", "You still need the first two real gates: the Legal classification owner and the Finance exposure owner."),
-        branch("PATH UNKNOWN", "fl", "\"I don't really know how this would get approved yet.\"", "\"That's useful. What usually has to happen internally, Legal comfort on classification, Finance on the tax piece, before a change like this gets air cover?\"", [
+        branch("PATH UNKNOWN", "fl", "\"I don't really know how this would get approved yet.\"", "\"That's useful. Which internal approvals would a change like this require, such as Legal review of classification or Finance review of tax implications?\"", [
           jumpNode("Find the stall point", "decision-architecture", "stall", "red"),
           jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
         ], "How a global-compliance change gets approved here is unmapped.", "You still need the process knower or the likely sequence.")

@@ -218,8 +218,8 @@ describe("computeQuality", () => {
             { id: "d", accountName: "a", stage: "poc", value: 100000 }
         );
         expect(ready.band).toBe("ready");
-        expect(ready.bandLabel).toBe("Cast");
-        expect(ready.title).toMatch(/buyer's boss could act/i);
+        expect(ready.bandLabel).toBe("Mostly complete");
+        expect(ready.title).toMatch(/Confirm the criteria and decision owner/i);
 
         const workable = computeQuality(
             draft({
@@ -235,7 +235,7 @@ describe("computeQuality", () => {
 
         const thin = computeQuality(draft({ account: "a" }), null);
         expect(thin.band).toBe("thin");
-        expect(thin.bandLabel).toBe("Thin");
+        expect(thin.bandLabel).toBe("Incomplete");
         // Use string match — the underlying void character may vary.
         void filled;
     });
@@ -258,11 +258,11 @@ describe("deriveMolds", () => {
         const q = computeQuality(d, null);
         const molds = deriveMolds(d, q);
         expect(molds.map((m) => m.label)).toEqual([
-            "Claim",
-            "Baseline",
+            "Success criterion",
+            "Criteria detail",
             "Owner",
             "Metric",
-            "Kill"
+            "Stop criteria"
         ]);
     });
 
@@ -302,7 +302,7 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
             mold("Kill", "cold")
         ];
         const r = buildIngotRead(molds);
-        expect(r.toLowerCase()).toContain("still empty");
+        expect(r.toLowerCase()).toContain("details are missing");
     });
 
     it("returns ready-to-carry copy when all molds are locked", () => {
@@ -314,8 +314,8 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
             mold("Kill", "cast")
         ];
         const r = buildIngotRead(molds);
-        expect(r.toLowerCase()).toContain("ready");
-        expect(r.toLowerCase()).toContain("locked");
+        expect(r.toLowerCase()).toContain("planning sections are complete");
+        expect(r.toLowerCase()).toContain("recorded");
     });
 
     it("synthesizes locked + hot + broken molds into clauses", () => {
@@ -329,16 +329,16 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
         const r = buildIngotRead(molds);
         // Has a locked clause naming the claim mold.
         expect(r.toLowerCase()).toContain("claim");
-        expect(r.toLowerCase()).toContain("locked");
+        expect(r.toLowerCase()).toContain("recorded");
         // Has a hot clause naming at least one hot mold.
         expect(r.toLowerCase()).toMatch(/baseline|metric/);
-        expect(r.toLowerCase()).toContain("hot");
+        expect(r.toLowerCase()).toContain("partly recorded");
         // Has a broken clause naming the weakest red mold.
-        expect(r.toLowerCase()).toContain("broken");
+        expect(r.toLowerCase()).toContain("missing required details");
     });
 
     it("returns empty-board fallback for an empty mold list", () => {
-        expect(buildIngotRead([])).toMatch(/start the forge/i);
+        expect(buildIngotRead([])).toMatch(/start the pilot plan/i);
     });
 
     it("prefers red over cold for the weakness clause", () => {
@@ -352,6 +352,6 @@ describe("buildIngotRead (Program 6 / PR 14)", () => {
         const r = buildIngotRead(molds);
         // Owner (red) should be named, not Baseline or Kill (cold).
         expect(r.toLowerCase()).toContain("owner");
-        expect(r.toLowerCase()).toContain("broken");
+        expect(r.toLowerCase()).toContain("missing required details");
     });
 });
