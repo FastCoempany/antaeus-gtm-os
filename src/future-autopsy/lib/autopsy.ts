@@ -79,26 +79,23 @@ export function generateAutopsy(
     const topCauseId: CauseId | "" = causes[0]?.id ?? "";
     const riskLead = causes.length > 0
         ? stageLead(vitals.stageRaw, topCauseId)
-        : "No configured risk-condition rules matched this deal record.";
+        : "Nothing in the deal record matches a known risk pattern right now. Keep a dated next step on the calendar so it stays that way.";
     const correctedLead = stageWinLead(vitals.stageRaw);
 
+    // The pattern lead already names the observed condition, the common
+    // pattern, and the corrective timing. The caveat appears once, here.
     const riskTail =
         causes.length > 0
-            ? " Recorded risk factors: " +
-              causes
-                  .slice(0, 3)
-                  .map((c) => c.label ?? c.id)
-                  .join(" ") +
-              " These are contributing conditions in the current assessment, not proof that any one condition caused a loss."
+            ? " These are conditions in the deal record; they don't tell you for certain what would cause a loss."
             : "";
 
     const correctedTail =
-        " Corrected conditions: " +
+        " For this deal, that means: " +
         winConditions
             .slice(0, 3)
             .map((w) => w.story)
             .join(" ") +
-        " Addressing these conditions reduces the identified risk; it does not guarantee a close.";
+        " Fixing these lowers the risk; it doesn't guarantee a close.";
 
     return {
         deal: vitals as Vitals,

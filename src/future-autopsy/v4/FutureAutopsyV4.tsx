@@ -142,10 +142,15 @@ export function FutureAutopsyV4(): JSX.Element {
     const nowPct = Math.min(92, Math.max(4, (quiet / (quiet + total)) * 100));
     const risk = riskWord(current.riskScore);
     const factorSummary = doc.causes.map((c) => c.label).slice(0, 4).join(" ");
+    const horizonLine = t("If nothing changes, {name} is at {risk} risk of slipping inside the next {days} days.", { class: "body" })
+        .replace("{name}", current.name)
+        .replace("{risk}", risk.toLowerCase())
+        .replace("{days}", String(horizon));
 
     const brief = [
         `${current.name} — ${money(current.value)} · ${current.stage}`,
-        `${t("Deal risk:")} ${risk}`,
+        horizonLine,
+        doc.loseStory,
         `${t("Observed risk factors:")} ${factorSummary || t("No additional factors recorded.")}`,
         `${t("Recommended corrective actions:")} ${doc.countermeasures.map((c) => `${dealTasks[c.taskId]?.done ? "✓" : "·"} ${c.label}`).join(" / ")}`,
         `${t("When to consider closing the deal:")} ${doc.killSwitch}`
@@ -179,14 +184,14 @@ export function FutureAutopsyV4(): JSX.Element {
                     {allDone ? (
                         <>{t("Corrective actions completed for")} <b class="fa4-g">{current.name}</b>.</>
                     ) : (
-                        <><b class="fa4-rr">{current.name}</b> {t("has")} {risk.toLowerCase()} {t("deal risk based on the current recorded evidence.", { class: "body" })}</>
+                        <>{t("If nothing changes,")} <b class="fa4-rr">{current.name}</b> {t("is at {risk} risk of slipping inside the next {days} days.", { class: "body" }).replace("{risk}", risk.toLowerCase()).replace("{days}", String(horizon))}</>
                     )}
                 </h1>
                 <p class="fa4-sub">
                     <b>{money(current.value)}</b> · {current.stage}
                     {quiet > 0 ? <> · {t("no deal updates recorded for")} {quiet} {t("days")}</> : null}
                     {" · "}
-                    {t("Review the evidence and corrective actions below.", { class: "body" })}
+                    {t("Here's what usually happens next, and how to turn it around.", { class: "body" })}
                 </p>
 
                 <div class="fa4-line">
@@ -248,9 +253,10 @@ export function FutureAutopsyV4(): JSX.Element {
 
                 <div class="fa4-finding">
                     <div>
-                        <div class="fa4-fc">{t("Risk summary")}</div>
+                        <div class="fa4-fc">{allDone ? t("What turns it around") : t("What usually happens next")}</div>
                         <div class="fa4-pat">{risk} {t("risk")}</div>
-                        <p>{factorSummary || t("No additional risk factors are currently recorded.", { class: "body" })}</p>
+                        <p>{allDone ? doc.winStory : doc.loseStory}</p>
+                        {allDone ? null : <p>{doc.winStory}</p>}
                     </div>
                     <div class="fa4-walk">
                         <div class="fa4-fc is-amber">{t("When to consider closing the deal")}</div>

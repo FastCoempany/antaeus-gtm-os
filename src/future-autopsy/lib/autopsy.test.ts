@@ -82,6 +82,30 @@ describe("generateAutopsy", () => {
         ).toBe(true);
     });
 
+    it("chapters pair the observed condition with the common pattern and corrective advice", () => {
+        const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
+            now: NOW,
+            storage: STORAGE
+        });
+        const doc = generateAutopsy(v);
+        const champ = doc.chapters.find((c) => c.cause === "no_champion");
+        expect(champ).toBeDefined();
+        expect(champ!.story).toMatch(/^No champion is recorded\./);
+        expect(champ!.story).toMatch(/often stall in committee/);
+        expect(champ!.story).toMatch(/before the next step/);
+    });
+
+    it("lose story carries the pattern lead and states the caveat once", () => {
+        const v = computeVitals(deal({ updated_at: daysAgo(20) }), {
+            now: NOW,
+            storage: STORAGE
+        });
+        const doc = generateAutopsy(v);
+        expect(doc.loseStory).toMatch(/often/);
+        expect(doc.loseStory.match(/for certain/g)?.length).toBe(1);
+        expect(doc.winStory).toMatch(/doesn't guarantee a close/);
+    });
+
     it("respects custom horizonDays override", () => {
         const v = computeVitals(deal({}), { now: NOW, storage: STORAGE });
         const doc = generateAutopsy(v, { horizonDays: 90 });

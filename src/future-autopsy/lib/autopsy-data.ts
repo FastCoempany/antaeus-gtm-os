@@ -10,34 +10,51 @@ import type { ComputedVitals } from "./vitals";
  * inevitable or claiming that one recorded condition caused an outcome.
  */
 
-// ─── Chapters: cause → observed condition / assessment ─────────────────
+// ─── Chapters: cause → common pattern + corrective timing ──────────────
+//
+// Each entry states the pattern deals with this condition commonly follow
+// (conditional, general sales knowledge — not a claim about this deal) and
+// what to do about it, and when. `chapterFor` puts the observed condition
+// from the deal record in front of it.
 
 export const CHAPTERS: Readonly<Record<CauseId, string>> = {
-    no_nextstep: "Next-step details or date need review.",
-    stale_thread: "The deal record has not been updated recently.",
-    no_champion: "Champion details are missing or brief.",
+    no_nextstep:
+        "When no date is on the calendar, every follow-up tends to become a maybe. Get a dated next step agreed before you end the next conversation.",
+    stale_thread:
+        "Long silence often means the deal has slipped down the buyer's priority list. Reach out this week with a specific reason to talk, not a check-in.",
+    no_champion:
+        "Deals without someone inside carrying them often stall in committee. Find who will own this internally before the next step.",
     champion_weak:
-        "A champion is named, but their authority or agreed internal actions are not yet clear.",
-    no_eb: "Economic-buyer or budget-owner details are missing or brief.",
-    no_process: "Decision steps and owners are not fully recorded.",
-    impact_not_real: "Business-impact details are missing or brief.",
-    usecase_blurry: "The primary use case or success scope is not specific enough.",
+        "A contact who likes you but can't move the room usually can't get a deal through approval. Confirm what they can actually decide, and who they need on side.",
+    no_eb:
+        "When the budget owner stays out of view, the deal often stalls late, when they finally show up with questions. Get them into a conversation now, not at contract time.",
+    no_process:
+        "Unknown approval steps tend to surface one at a time, each adding delay. Ask for the full path to signature and an owner for each step while you still have attention.",
+    impact_not_real:
+        "Without a number the buyer believes, urgency rarely builds and the deal drifts. Agree on one measurable result before you go further.",
+    usecase_blurry:
+        "When people inside judge success differently, the decision tends to stall in debate. Get one written use case everyone agrees on.",
     competition_unknown:
-        "The competing alternative or status quo is not recorded.",
+        "If you don't know what they'd do instead, you can't shape the comparison, and doing nothing often wins by default. Ask directly what else they're considering.",
     stage_stuck:
-        "The deal has remained in the current stage longer than the configured threshold.",
+        "A deal that sits in one stage for too long is often a quiet no that nobody has said yet. Ask plainly what has to happen to move forward, and by when.",
     poc_no_criteria:
-        "Pilot success criteria or readout ownership are not fully defined.",
+        "A pilot without agreed success criteria often produces activity but no decision. Lock the criteria and who signs off on the result before the pilot starts, not at the end.",
     single_threaded:
-        "Recorded stakeholder coverage is below the target of three.",
+        "When everything runs through one contact, the deal can go dark the day they get busy or move on. Get introduced to at least two more people now.",
     next_step_overdue:
-        "The recorded next step is overdue."
+        "An overdue step left alone often means the deal has already started to slip. Replace it with a new date this week."
 };
 
+/**
+ * Build the chapter for a cause. `evidence` is the observed condition from
+ * the deal record; the chapter's pattern + corrective advice follows it.
+ */
 export function chapterFor(cause: CauseId, evidence?: string): Chapter | null {
-    const story = CHAPTERS[cause];
-    if (!story) return null;
-    return { cause, title: cause, story: evidence ?? story };
+    const pattern = CHAPTERS[cause];
+    if (!pattern) return null;
+    const story = evidence ? `${evidence} ${pattern}` : pattern;
+    return { cause, title: cause, story };
 }
 
 // ─── Corrected conditions: cause → condition id + text ─────────────────
@@ -78,21 +95,24 @@ export const WTEXT: Readonly<Record<string, string>> = {
         "The overdue next step has been replaced with a new dated commitment."
 };
 
-// ─── Stage / cause assessment leads ─────────────────────────────────────
+// ─── Stage / cause pattern leads ────────────────────────────────────────
+//
+// Stated as patterns deals at this stage commonly follow, with the timing
+// advice that reverses them. Not a prediction about this specific deal.
 
 export const STAGE_LEADS: Readonly<Record<string, string>> = {
     discovery:
-        "Current risk is elevated when the use case, quantified impact, internal ownership, or next step is incomplete.",
+        "Deals at this stage often stall when the use case and impact never get concrete enough to create real urgency — people stay polite, but nobody owns the timing. Pin down the use case, a number, and who owns the decision now, before interest fades.",
     evaluation:
-        "Current risk is elevated when the use case, quantified impact, internal ownership, or next step is incomplete.",
+        "Deals in evaluation often stall when the use case and impact never get concrete enough to create real urgency — people stay polite, but nobody owns the timing. Pin down the use case, a number, and who owns the decision now, before interest fades.",
     poc:
-        "Current risk is elevated when pilot success criteria, result ownership, or the approval path are not fully defined.",
+        "Pilots often end with activity but no decision when success criteria were never agreed — each side reads the results differently, and procurement has no reason to move. Agree the criteria and the person who signs off before the pilot runs, not after.",
     negotiation:
-        "Current risk is elevated when legal, procurement, budget ownership, or the decision path contain unresolved dependencies.",
+        "In negotiation, legal and procurement often stretch the timeline when the approval path and budget owner were never mapped — each unanswered question adds another round. Map every remaining approval step and its owner this week.",
     verbal:
-        "A verbal commitment still carries risk when contract, legal, procurement, or approval steps are not fully cleared.",
+        "A verbal yes often comes apart when the paperwork wasn't cleared in advance — legal finds new issues, procurement re-scopes, and the urgency that got you the yes fades. Start legal and procurement now, while the yes is fresh.",
     _default:
-        "Current deal risk is elevated by the recorded conditions below."
+        "Deals often lose momentum when a result worth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon."
 };
 
 export const CAUSE_LEADS: Readonly<
@@ -100,43 +120,43 @@ export const CAUSE_LEADS: Readonly<
 > = {
     no_champion: {
         discovery:
-            "Champion details need review. Confirm who owns the purchase internally and what actions they have agreed to take.",
+            "No champion is recorded. Early deals without someone inside carrying them often fade from \"interesting\" to \"low priority\" to silence. Find who will own this internally before the next step.",
         negotiation:
-            "Champion details need review during negotiation. Confirm the internal owner for resolving approvals or objections."
+            "No champion is recorded. In negotiation, deals without someone inside defending the business case often stall in procurement when pushback comes. Find who will fight for this internally before the next approval round."
     },
     no_eb: {
         negotiation:
-            "Economic-buyer details need review during negotiation. Confirm budget ownership and final approval.",
+            "No economic buyer is recorded. Contracts often come back with questions nobody can answer when the budget owner was never in the room. Get the person who can say yes into a conversation before legal goes further.",
         poc:
-            "Economic-buyer details need review. Confirm who will evaluate the pilot results and approve the budget."
+            "No economic buyer is recorded. Pilot results often sit unread in an email chain when the person who controls the budget never sees them. Book time with the budget owner to review the results before the pilot ends."
     },
     single_threaded: {
         discovery:
-            "Recorded stakeholder coverage is below the target of three. Confirm the contacts and roles involved in the decision.",
+            "Fewer than three stakeholders are recorded. Deals that run through a single person often go dark when that person gets busy, takes leave, or moves roles. Get introduced to more people now, while interest is high.",
         negotiation:
-            "Recorded stakeholder coverage is below the target of three during negotiation. Confirm the people responsible for remaining approvals."
+            "Fewer than three stakeholders are recorded. One contact rarely carries a deal through a multi-person approval alone — every new reviewer becomes a cold start. Meet the remaining approvers before they see the contract."
     },
     stale_thread: {
         discovery:
-            "The deal record has not been updated recently. Check recent buyer communication before assessing whether the opportunity remains a priority.",
+            "The deal hasn't been updated recently. Silence that starts as \"they're busy\" often becomes permanent when there's no regular contact. Reach out this week with a specific reason to talk.",
         _default:
-            "The deal record has not been updated recently. Confirm the current buyer status and next step."
+            "The deal hasn't been updated recently. Deals often go cold when nobody on either side books the next conversation, and silence turns into the decision. Get the next conversation on the calendar this week."
     }
 };
 
 export const STAGE_WIN_LEADS: Readonly<Record<string, string>> = {
     discovery:
-        "Risk decreases when the use case, quantified impact, internal owner, and dated next step are explicit.",
+        "Deals at this stage tend to move when the seller nails down a concrete use case, a number the buyer believes, and a regular next-step rhythm before enthusiasm cools.",
     evaluation:
-        "Risk decreases when the use case, quantified impact, internal owner, and dated next step are explicit.",
+        "Deals in evaluation tend to move when the seller nails down a concrete use case, a number the buyer believes, and a regular next-step rhythm before enthusiasm cools.",
     poc:
-        "Risk decreases when success criteria, result ownership, executive review, and the next decision are explicit.",
+        "Pilots tend to convert when the success criteria, the owner, and an executive review of the results are agreed up front, so the results turn straight into an approval.",
     negotiation:
-        "Risk decreases when decision steps, budget authority, legal and procurement dependencies, and owners are documented.",
+        "Negotiations tend to close faster when the approval path and budget owner are mapped early, which cuts down legal and procurement back-and-forth at the end.",
     verbal:
-        "Risk decreases when the remaining contract, legal, procurement, and approval steps are explicit and owned.",
+        "A verbal yes tends to hold when the paperwork is cleared before the yes, so legal review takes days instead of weeks.",
     _default:
-        "Risk decreases as the missing evidence, ownership, and next-step gaps are resolved."
+        "Deals tend to move when a real result lands early and the risks to the decision are raised before they become deal-breakers."
 };
 
 export function stageLead(stageRaw: string, topCauseId: CauseId | ""): string {
