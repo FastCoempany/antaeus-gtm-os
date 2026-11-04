@@ -24,8 +24,8 @@
 [briefing | 1. The room at rest | text] 0
 [briefing | 1. The room at rest | text] No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.
 [briefing | 1. The room at rest | text] Good afternoon.
-[briefing | 1. The room at rest | text] 3:52 PM · Chicago
-[briefing | 1. The room at rest | text] THE MARKET
+[briefing | 1. The room at rest | text] 4:36 PM · Chicago
+[briefing | 1. The room at rest | text] MARKET UPDATES
 [briefing | 1. The room at rest | text] pattern
 [briefing | 1. The room at rest | text] Three watched accounts have public, dated hiring activity
 [briefing | 1. The room at rest | link] Open analysis ↓
@@ -41,7 +41,7 @@
 [briefing | 1. The room at rest | link] 1 more in Outdoors Events →
 [briefing | 1. The room at rest | text] Your market, in full
 [briefing | 1. The room at rest | text] every analysis includes supporting evidence
-[briefing | 1. The room at rest | text] 3 READS THIS WEEK
+[briefing | 1. The room at rest | text] 3 MARKET UPDATES THIS WEEK
 [briefing | 1. The room at rest | text] RISING
 [briefing | 1. The room at rest | text] Confidence 90%
 [briefing | 1. The room at rest | text] 5 items · 4 sources
@@ -176,11 +176,13 @@
 [briefing | After clicking “⚙” | button] 1H
 [briefing | After clicking “⚙” | button] 4H
 [briefing | After clicking “−” | button] No schedules
-[briefing | After clicking “Got it” | text] 3:53 PM · Chicago
-[briefing | After hovering “‹” | text] 3:53 PM · Chicago
+[briefing | After clicking “−” | text] 4:37 PM · Chicago
+[briefing | After hovering “×” | text] 4:37 PM · Chicago
+[briefing | After clicking “×” | text] 4:37 PM · Chicago
+[briefing | After hovering “‹” | text] 4:37 PM · Chicago
 [briefing | After hovering “‹” | button] ‹
 [briefing | After hovering “‹” | button] ›
-[briefing | After clicking “‹” | text] 3:53 PM · Chicago
+[briefing | After clicking “‹” | text] 4:37 PM · Chicago
 [briefing | After clicking “‹” | text] WORKSPACE MAP
 [briefing | After clicking “‹” | text] Where do you want to go?
 [briefing | After clicking “‹” | text] You're in Briefing · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority account in your watchlist.
@@ -214,8 +216,8 @@
 [briefing | After clicking “‹” | link] Readiness Score can another seller run the sales process?
 [briefing | After clicking “‹” | link] Founding GTM document the sales process for another seller
 [briefing | After clicking “‹” | link] Settings manage workspace data and account settings
-[briefing | After hovering “Open analysis ↓” | text] 3:53 PM · Chicago
-[briefing | After clicking “Open analysis ↓” | text] 3:54 PM · Chicago
+[briefing | After hovering “Open analysis ↓” | text] 4:38 PM · Chicago
+[briefing | After clicking “Open analysis ↓” | text] 4:38 PM · Chicago
 [briefing | After clicking “Open analysis ↓” | text] WORKSPACE MAP
 [briefing | After clicking “Open analysis ↓” | text] Where do you want to go?
 [briefing | After clicking “Open analysis ↓” | text] You're in Briefing · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority account in your watchlist.
@@ -249,28 +251,74 @@
 [briefing | After clicking “Open analysis ↓” | link] Readiness Score can another seller run the sales process?
 [briefing | After clicking “Open analysis ↓” | link] Founding GTM document the sales process for another seller
 [briefing | After clicking “Open analysis ↓” | link] Settings manage workspace data and account settings
-[briefing | After hovering “Open analysis ↓” | text] 3:54 PM · Chicago
-[briefing | After hovering “›” | text] 3:54 PM · Chicago
+[briefing | After hovering “›” | text] 4:38 PM · Chicago
 [briefing | After hovering “›” | button] ‹
 [briefing | After hovering “›” | button] ›
-[briefing | After clicking “SHOW THE WORK” | text] 3:54 PM · Chicago
+[briefing | After clicking “SHOW THE WORK” | text] 4:38 PM · Chicago
 [briefing | After clicking “SHOW THE WORK” | button] HIDE THE WORK
 [briefing | After clicking “SHOW THE WORK” | text] No source record is saved for this read. Reads created from now on will include one.
-[briefing | After clicking “Met” | text] 3:55 PM · Chicago
-[briefing | After clicking “SHOW THE WORK” | text] 3:55 PM · Chicago
+[briefing | After hovering “Used” | text] 4:39 PM · Chicago
+[briefing | After clicking “SHOW THE WORK” | text] 4:39 PM · Chicago
 [briefing | After clicking “SHOW THE WORK” | button] HIDE THE WORK
 [briefing | After clicking “SHOW THE WORK” | text] No source record is saved for this read. Reads created from now on will include one.
-[briefing | After clicking “Add monitoring rule” | text] 3:55 PM · Chicago
+[briefing | After clicking “Add monitoring rule” | text] 4:39 PM · Chicago
 [briefing | After clicking “Add monitoring rule” | text] WHAT SHOULD THE SYSTEM WATCH FOR?
 [briefing | After clicking “Add monitoring rule” | field] WHAT SHOULD THE SYSTEM WATCH FOR?
 [briefing | After clicking “Add monitoring rule” | button] Review monitoring rule
 [briefing | After clicking “Add monitoring rule” | button] Cancel
-[briefing | After clicking “⌘K JUMP”, then hovering “WELCOME Welcome Today's recommended starting point.” | text] 3:55 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “SIGNAL CONSOLE Signal Console Monitor account signals and priority.” | text] 3:56 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.” | text] 3:57 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.” | text] 3:58 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.” | text] 3:58 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 3:59 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “WELCOME Welcome Today's recommended starting point.” | text] 4:39 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.” | text] 4:40 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.” | text] 4:41 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a” | text] 4:42 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.” | text] 4:42 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 4:42 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 4:43 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Review this week's workspace analysis
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -290,8 +338,54 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 3:59 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 3:59 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:43 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 4:43 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Drop into Discovery Studio for the account on your most recent” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Prep for my next call
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -311,8 +405,30 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 3:59 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 4:00 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:43 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] What's at risk this week
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -332,7 +448,54 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:00 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:43 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 4:44 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Plan a pilot for the highest-risk deal
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -352,40 +515,363 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:00 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:01 PM · Chicago
-[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 4:01 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 4:44 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 65°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Thu
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 48°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 40°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 55°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 41°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 57°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 43°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 4:44 PM · Chicago
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 53°Cloudy
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | button] ✕
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Today
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 65°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 50°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Thu
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 42°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Fri
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 47°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 36°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Sat
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 48°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 40°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Sun
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 55°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 41°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Mon
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 57°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 43°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Tue
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 59°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 46°
 [briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] Open current analysis
-[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 4:01 PM · Chicago
-[briefing | After clicking “Open current analysis”, then clicking “×” | text] 4:01 PM · Chicago
-[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 4:01 PM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 4:44 PM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 53°Cloudy
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] ✕
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Today
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 65°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 50°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Thu
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 42°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Fri
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 47°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 36°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Sat
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 48°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 40°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Sun
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 55°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 41°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Mon
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 57°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 43°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Tue
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 59°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 46°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 4:44 PM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 53°Cloudy
+[briefing | After clicking “Open current analysis”, then clicking “×” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then clicking “×” | button] ✕
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Today
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 65°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 50°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Thu
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 42°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Fri
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 47°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 36°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Sat
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 48°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 40°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Sun
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 55°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 41°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Mon
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 57°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 43°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Tue
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 59°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 46°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 4:45 PM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 53°Clear
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] ✕
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Today
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 65°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 50°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Thu
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 42°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Fri
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 47°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 36°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sat
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 48°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 40°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sun
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 55°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 41°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Mon
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 57°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 43°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Tue
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 59°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 46°
 [briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] HIDE
-[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 4:01 PM · Chicago
-[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 4:02 PM · Chicago
-[briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] HIDE
-[briefing | After clicking “⚙”, then hovering “Show schedule panel” | text] 4:02 PM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 4:45 PM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 53°Clear
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] ✕
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Today
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 65°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 50°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Thu
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 42°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Fri
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 47°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 36°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sat
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 48°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 40°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sun
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 55°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 41°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Mon
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 57°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 43°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Tue
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 59°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 46°
 [briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] ⌃
-[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 4:02 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 4:45 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 53°Clear
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] ✕
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Today
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 65°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 50°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Thu
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 42°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Fri
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 47°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 36°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Sat
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 48°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 40°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Sun
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 55°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 41°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Mon
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 57°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 43°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Tue
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 59°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 46°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 4:46 PM · Chicago
+[briefing | After clicking “⚙”, then hovering “1H” | text] 53°Clear
+[briefing | After clicking “⚙”, then hovering “1H” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “1H” | button] ✕
+[briefing | After clicking “⚙”, then hovering “1H” | text] Today
+[briefing | After clicking “⚙”, then hovering “1H” | text] 65°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 50°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Thu
+[briefing | After clicking “⚙”, then hovering “1H” | text] 42°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Fri
+[briefing | After clicking “⚙”, then hovering “1H” | text] 47°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 36°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Sat
+[briefing | After clicking “⚙”, then hovering “1H” | text] 48°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 40°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Sun
+[briefing | After clicking “⚙”, then hovering “1H” | text] 55°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 41°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Mon
+[briefing | After clicking “⚙”, then hovering “1H” | text] 57°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 43°
+[briefing | After clicking “⚙”, then hovering “1H” | text] Tue
+[briefing | After clicking “⚙”, then hovering “1H” | text] 59°
+[briefing | After clicking “⚙”, then hovering “1H” | text] 46°
 [briefing | After clicking “⚙”, then clicking “1H” | text] SNOOZED · 1H LEFT
-[briefing | After clicking “⚙”, then clicking “1H” | text] 4:02 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “1H” | text] 4:46 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “1H” | text] 53°Clear
+[briefing | After clicking “⚙”, then clicking “1H” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “1H” | button] ✕
+[briefing | After clicking “⚙”, then clicking “1H” | text] Today
+[briefing | After clicking “⚙”, then clicking “1H” | text] 65°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 50°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Thu
+[briefing | After clicking “⚙”, then clicking “1H” | text] 42°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Fri
+[briefing | After clicking “⚙”, then clicking “1H” | text] 47°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 36°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Sat
+[briefing | After clicking “⚙”, then clicking “1H” | text] 48°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 40°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Sun
+[briefing | After clicking “⚙”, then clicking “1H” | text] 55°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 41°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Mon
+[briefing | After clicking “⚙”, then clicking “1H” | text] 57°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 43°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Tue
+[briefing | After clicking “⚙”, then clicking “1H” | text] 59°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 46°
 [briefing | After clicking “⚙”, then clicking “4H” | text] SNOOZED · 4H LEFT
-[briefing | After clicking “⚙”, then clicking “4H” | text] 4:02 PM · Chicago
-[briefing | After clicking “−”, then hovering “No schedules” | text] 4:02 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “4H” | text] 4:46 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “4H” | text] 53°Clear
+[briefing | After clicking “⚙”, then clicking “4H” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “4H” | button] ✕
+[briefing | After clicking “⚙”, then clicking “4H” | text] Today
+[briefing | After clicking “⚙”, then clicking “4H” | text] 65°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 50°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Thu
+[briefing | After clicking “⚙”, then clicking “4H” | text] 42°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Fri
+[briefing | After clicking “⚙”, then clicking “4H” | text] 47°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 36°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Sat
+[briefing | After clicking “⚙”, then clicking “4H” | text] 48°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 40°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Sun
+[briefing | After clicking “⚙”, then clicking “4H” | text] 55°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 41°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Mon
+[briefing | After clicking “⚙”, then clicking “4H” | text] 57°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 43°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Tue
+[briefing | After clicking “⚙”, then clicking “4H” | text] 59°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 46°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 4:46 PM · Chicago
+[briefing | After clicking “−”, then hovering “No schedules” | text] 53°Clear
+[briefing | After clicking “−”, then hovering “No schedules” | button] 7-day forecast ↗
+[briefing | After clicking “−”, then hovering “No schedules” | button] ✕
+[briefing | After clicking “−”, then hovering “No schedules” | text] Today
+[briefing | After clicking “−”, then hovering “No schedules” | text] 65°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 50°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Thu
+[briefing | After clicking “−”, then hovering “No schedules” | text] 42°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Fri
+[briefing | After clicking “−”, then hovering “No schedules” | text] 47°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 36°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Sat
+[briefing | After clicking “−”, then hovering “No schedules” | text] 48°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 40°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Sun
+[briefing | After clicking “−”, then hovering “No schedules” | text] 55°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 41°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Mon
+[briefing | After clicking “−”, then hovering “No schedules” | text] 57°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 43°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Tue
+[briefing | After clicking “−”, then hovering “No schedules” | text] 59°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 46°
 [briefing | After clicking “−”, then hovering “No schedules” | button] HIDE
-[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 4:02 PM · Chicago
-[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 4:02 PM · Chicago
-[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 4:03 PM · Chicago
-[briefing | After clicking “Add monitoring rule”, then clicking “Cancel” | text] 4:03 PM · Chicago
-[briefing | After clicking “Add monitoring rule”, then clicking “Cancel” | button] Add monitoring rule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly” | text] 4:03 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily” | text] 4:03 PM · Chicago
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 4:46 PM · Chicago
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 53°Clear
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | button] 7-day forecast ↗
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | button] ✕
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Today
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 65°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 50°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Thu
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 42°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Fri
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 47°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 36°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Sat
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 48°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 40°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Sun
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 55°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 41°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Mon
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 57°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 43°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] Tue
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 59°
+[briefing | After clicking “SHOW THE WORK”, then hovering “HIDE THE WORK” | text] 46°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 4:46 PM · Chicago
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 53°Clear
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | button] 7-day forecast ↗
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | button] ✕
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Today
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 65°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 50°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Thu
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 42°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Fri
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 47°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 36°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Sat
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 48°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 40°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Sun
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 55°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 41°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Mon
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 57°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 43°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] Tue
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 59°
+[briefing | After clicking “SHOW THE WORK”, then clicking “HIDE THE WORK” | text] 46°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 4:46 PM · Chicago
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 53°Clear
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | button] 7-day forecast ↗
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | button] ✕
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Today
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 65°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 50°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Thu
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 42°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Fri
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 47°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 36°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Sat
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 48°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 40°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Sun
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 55°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 41°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Mon
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 57°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 43°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Tue
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 59°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly” | text] 4:46 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly” | text] 53°Clear
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily” | text] 4:47 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily” | text] 53°Clear
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily” | text] 4:47 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily” | text] 53°Clear
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] DAY OF MONTH
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | field] DAY OF MONTH
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] 4:03 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “DAY OF WEEK Mon Tue Wed Thu Fri Sat Sun” | text] 4:04 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Sat” | text] 4:05 PM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule” | text] 4:05 PM · Chicago
-[briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | text] 4:05 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] 4:47 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] 53°Clear
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Wed” | text] 4:48 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Save schedule” | text] 4:49 PM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule” | text] 4:49 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | text] 4:49 PM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | text] 53°Cloudy
 [briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | button] HIDE
 [call-in-a-favor | 1. The room at rest | text] CALL IN A FAVOR
 [call-in-a-favor | 1. The room at rest | text] network-assisted deal support
@@ -426,10 +912,10 @@
 [call-in-a-favor | 1. The room at rest | button] Log request only
 [call-in-a-favor | 1. The room at rest | text] Track the outcome on the Boeing deal: reply, meeting, no response, or decline.
 [call-in-a-favor | 1. The room at rest | text] OPEN REQUESTS · TRACK OUTCOMES
-[call-in-a-favor | 1. The room at rest | text] intro · Chipotle
-[call-in-a-favor | 1. The room at rest | text] eb_bridge · United Airlines
-[call-in-a-favor | 1. The room at rest | text] reference · Starbucks
-[call-in-a-favor | 1. The room at rest | text] procurement · Boeing
+[call-in-a-favor | 1. The room at rest | text] request an introduction · Chipotle
+[call-in-a-favor | 1. The room at rest | text] get an exec involved · United Airlines
+[call-in-a-favor | 1. The room at rest | text] clarify procurement timing · Boeing
+[call-in-a-favor | 1. The room at rest | text] request a customer reference · Starbucks
 [call-in-a-favor | 1. The room at rest | button] OPEN WORKSPACE MAP · G
 [call-in-a-favor | 1. The room at rest | text] RECENT ACTIVITY
 [call-in-a-favor | 1. The room at rest | text] 12
@@ -882,7 +1368,7 @@
 [dashboard | 1. The room at rest | heading 2] Outbound to Boeing
 [dashboard | 1. The room at rest | link] Compose outbound →
 [dashboard | 1. The room at rest | text] At the top because account priority score 62 out of 99 and multiple recent signals are recorded.
-[dashboard | 1. The room at rest | text] stable lead
+[dashboard | 1. The room at rest | text] clear first choice
 [dashboard | 1. The room at rest | button] Show next recommendation
 [dashboard | 1. The room at rest | text] · Next: Outbound to OpenAI · Outbound to Chipotle
 [dashboard | 1. The room at rest | text] CURRENT STATUS BY AREA
@@ -4376,7 +4862,7 @@
 [readiness | 1. The room at rest | heading 2] Outbound to Boeing
 [readiness | 1. The room at rest | link] Compose outbound →
 [readiness | 1. The room at rest | text] At the top because account priority score 62 out of 99 and multiple recent signals are recorded.
-[readiness | 1. The room at rest | text] stable lead
+[readiness | 1. The room at rest | text] clear first choice
 [readiness | 1. The room at rest | button] Show next recommendation
 [readiness | 1. The room at rest | text] · Next: Outbound to OpenAI · Outbound to Chipotle
 [readiness | 1. The room at rest | text] CURRENT STATUS BY AREA
@@ -4666,7 +5152,7 @@
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] SIGNALS
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] ·
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 people — Public reporting
-[signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] Talent war with Meta and other labs — retention and recruiting pressure at record intensity — News coverage
+[signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention — News coverage
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] New Chief People Officer arrived in February 2026 — Arvind KC, ex-Roblox, owning recruiting and onboarding — News coverage
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | text] Dozens of recruiting and people-ops roles open this month as the new people chief builds out the function — Company careers data
 [signal-console | After clicking “50 OpenAI Headcount roughly tripled through 2024–2025 as the company scaled past 3,000 peo” | field] Add a signal manually…
@@ -5145,7 +5631,6 @@ SUPPLEMENTAL HOVER / FIELD TEXT
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”] 9
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”] 9
 [briefing | After clicking “⚙”, then hovering “Show in-session notifications”] Hide recent activity
-[briefing | After clicking “⚙”, then clicking “Show schedule panel”] Hide recent activity
 [briefing | After clicking “⚙”, then clicking “Show schedule panel”] Show scheduled actions
 [briefing | After clicking “−”, then hovering “No schedules”] Hide recent activity
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly”] 1

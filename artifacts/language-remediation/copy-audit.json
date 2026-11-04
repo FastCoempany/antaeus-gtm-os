@@ -1,13 +1,13 @@
 {
   "files": 1218,
-  "renderedOccurrences": 5129,
-  "uniqueRenderedStrings": 2663,
+  "renderedOccurrences": 5615,
+  "uniqueRenderedStrings": 2681,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 507,
+  "tier2ReviewWarnings": 506,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
-      "hits": 40
+      "hits": 39
     },
     "B": {
       "description": "runtime/customer-visible candidate",
@@ -226,7 +226,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "alse), S('sig_oa_2','competitive','Talent war with Meta and other labs — retention and recruiting pressure at record intensity', 'Public 2025 poaching battles put recruiting operations under a spotlight; every candidate touch matters.', 'When rivals compete for the same people,"
+      "context": "oa_2','competitive','High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention', 'Public 2025 poaching battles put recruiting operations under a spotlight; every candidate touch matters.', 'When rivals compete for the same"
     },
     {
       "file": "js/demo-seed-data-ent.js",
@@ -1734,7 +1734,7 @@
     },
     {
       "file": "preview-transcript/briefing/index.html",
-      "line": 411,
+      "line": 896,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "D",
@@ -2026,7 +2026,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "ne\"><span class=\"kind\">[text]</span> Talent war with Meta and other labs — retention and recruiting pressure at record intensity — News coverage <span class=\"cue\">— top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> New Chief People Officer arrived in Feb"
+      "context": "\"kind\">[text]</span> High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention — News coverage <span class=\"cue\">— top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> New Chief People Officer arrive"
     },
     {
       "file": "preview-transcript/signal-console/index.html",
@@ -2363,14 +2363,6 @@
       "tier": 2,
       "category": "F",
       "context": "f (!Number.isFinite(startedAt)) return 0; const ms = now.getTime() - startedAt; return Math.floor(ms / (24 * 60 * 60 * 1000)); } export function isStaleRun( runStartedAtIso: string | null | undefined, now: Date = new Date() ): boolean { if (!runStartedAtIso) retur"
-    },
-    {
-      "file": "src/briefing/components/StaleRunBanner.tsx",
-      "line": 55,
-      "phrase": "heartbeat",
-      "tier": 2,
-      "category": "A",
-      "context": "e pipeline is meant to fire weekly. If that wasn't intentional, the heartbeat or the briefing cron may have stalled — check Supabase logs. </p> </aside> ); }"
     },
     {
       "file": "src/briefing/components/Topbar.tsx",
@@ -5650,7 +5642,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "until you have real proof that matches the buyer's situation.\", say: \"How are you handling [pressure] today: manually, through an existing vendor, or another way?\", coach: \"If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current pr"
+      "context": "il you have real evidence that matches the buyer's situation.\", say: \"How are you handling [pressure] today: manually, through an existing vendor, or another way?\", coach: \"If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current pr"
     },
     {
       "file": "src/cold-call-studio/lib/types.ts",
@@ -17126,8 +17118,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 2169,
+    "previous": 2170,
     "current": 299,
-    "delta": -1870
+    "delta": -1871
   }
 }
