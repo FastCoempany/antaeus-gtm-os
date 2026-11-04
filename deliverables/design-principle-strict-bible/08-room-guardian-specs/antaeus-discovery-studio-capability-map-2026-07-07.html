@@ -52,21 +52,21 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
     </table>
   </div>
 
-  <div class="sec"><div class="sn">2 · The call spine</div><h2>The 10 fixed segments</h2>
-    <div class="sd">A fixed, ordered spine. Each segment is one live call state; the seller opens one at a time. Order is locked, but the seller can jump.</div>
-    <table><tr><th style="width:26px">#</th><th style="width:200px">Segment</th><th>What happens here</th><th style="width:210px">Truth it earns</th></tr>
-      <tr><td class="n">1</td><td><b>Opening frame</b></td><td>Earn the right to run the call. Pre-built from the account's live Signal Console signal → the spoken opener + reason-now.</td><td>the agreed agenda</td></tr>
+  <div class="sec"><div class="sn">2 · The call segments</div><h2>The 10 fixed segments</h2>
+    <div class="sd">A fixed, ordered list of call segments. Each segment is one part of the call; the seller opens one at a time. Order is locked, but the seller can jump.</div>
+    <table><tr><th style="width:26px">#</th><th style="width:200px">Segment</th><th>What happens here</th><th style="width:210px">What you learn</th></tr>
+      <tr><td class="n">1</td><td><b>Opening frame</b></td><td>Get the buyer to agree to the call’s agenda. Pre-built from the account's live Signal Console signal → the spoken opener + reason-now.</td><td>the agreed agenda</td></tr>
       <tr><td class="n">2</td><td><b>Current-state truth</b></td><td>How they actually do it today — the real method, not the tidy version.</td><td>current-state method</td></tr>
       <tr><td class="n">3</td><td><b>Pain &amp; consequence</b></td><td>Make the cost of the status quo concrete — refunds, churn, headcount, risk.</td><td>the pain + its consequence</td></tr>
       <tr><td class="n">4</td><td><b>Trigger &amp; urgency</b></td><td>Why now — what changed, what breaks if nothing happens.</td><td>the trigger event</td></tr>
       <tr><td class="n">5</td><td><b>Stakeholder &amp; ownership</b></td><td>Who owns it, who signs, the whole buying group.</td><td>the stakeholder map</td></tr>
-      <tr><td class="n">6</td><td><b>Evidence threshold</b> <span class="pill retired">Proof threshold</span></td><td>What it would take to convince them it works — the bar to clear. (Reworded from "Proof threshold" per §13.)</td><td>the evidence bar</td></tr>
+      <tr><td class="n">6</td><td><b>Evidence threshold</b> <span class="pill retired">Proof threshold</span></td><td>What it would take to convince them it works — the bar to clear. (Reworded from "Proof threshold" per §13.)</td><td>the evidence they need to see</td></tr>
       <tr><td class="n">7</td><td><b>Current vendor &amp; displacement</b></td><td>What they use now, switching cost, the displacement path.</td><td>incumbent + displacement path</td></tr>
       <tr><td class="n">8</td><td><b>Decision architecture</b></td><td>How they actually decide — budget, process, timeline, sign-off.</td><td>the decision process</td></tr>
       <tr><td class="n">9</td><td><b>Next-step lock</b></td><td>The one thing you can't hang up without: a dated next step with a named owner.</td><td>the locked next step</td></tr>
-      <tr><td class="n">10</td><td><b>Post-call routing</b></td><td>Outcome-driven handoff — the destination is chosen by what actually happened, never a presumed "push to the deal".</td><td>the routed truth</td></tr>
+      <tr><td class="n">10</td><td><b>Post-call routing</b></td><td>Outcome-driven handoff — the destination is chosen by what actually happened, never a presumed "push to the deal".</td><td>the outcome, sent to the right room</td></tr>
     </table>
-    <div class="callout"><div class="ct">Every segment must carry these 16 fields</div><div class="cb"><span class="mono" style="font-family:var(--mono);font-size:11px">segmentId · segmentLabel · timePosition · objective · sayThisNow · buyerMightSay[] · sayNext[] · listenFor[] · earnedTruth · failureRisk · localRecovery[] · skipAheadHandlers[] · markWorkedTarget · markLearnedTarget · nextSegmentRules</span> — and support 4 display states: <b>active</b>, <b>worked</b> (produced useful truth), <b>thin</b> (not complete enough to trust downstream), <b>flagged</b> (resistance / missing stakeholder / timing / proof gap). <i>(timePosition is now a position label, not a timer — pacing retired.)</i></div></div>
+    <div class="callout"><div class="ct">Every segment must carry these 16 fields</div><div class="cb"><span class="mono" style="font-family:var(--mono);font-size:11px">segmentId · segmentLabel · timePosition · objective · sayThisNow · buyerMightSay[] · sayNext[] · listenFor[] · earnedTruth · failureRisk · localRecovery[] · skipAheadHandlers[] · markWorkedTarget · markLearnedTarget · nextSegmentRules</span> — and support 4 display states: <b>active</b> (the segment open right now), <b>worked</b> (the buyer gave you information you can use), <b>thin</b> (some answers, but not enough to rely on in later rooms), and <b>flagged</b> (something needs attention: the buyer pushed back, a key person is missing, the timing is wrong, or you still lack evidence the product works for them). <i>(timePosition is now a position label, not a timer — pacing retired.)</i></div></div>
   </div>
 
   <div class="sec"><div class="sn">3 · The frameworks</div><h2>The 10 discovery frameworks <span style="font-family:var(--sans);font-size:13px;font-weight:400;color:var(--ink-3)">— extensible, generated from seeds</span></h2>
@@ -86,7 +86,7 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
   </div>
 
   <div class="sec"><div class="sn">4 · Runtime primitives</div><h2>The 19 primitives <span style="font-family:var(--sans);font-size:13px;font-weight:400;color:var(--ink-3)">— every visual object must map to one of these</span></h2>
-    <div class="sd"><span class="pill live">Live</span> = the moment · <span class="pill state">State</span> = captured truth/progress · <span class="pill ref">Reference</span> = summonable pack · <span class="pill route">Route</span> = the handoff.</div>
+    <div class="sd"><span class="pill live">Live</span> = the moment · <span class="pill state">State</span> = what you have captured and how far you have got · <span class="pill ref">Reference</span> = summonable pack · <span class="pill route">Route</span> = the handoff.</div>
     <table><tr><th style="width:200px">Primitive</th><th>What it is</th><th style="width:80px">Type</th></tr>
       <tr><td class="mono">frameworkRegistry</td><td>The master list of the 10 frameworks + their category metadata</td><td><span class="pill ref">Ref</span></td></tr>
       <tr><td class="mono">activeFramework</td><td>The framework in force for this live call — retunes questions, objections, dossier</td><td><span class="pill ref">Ref</span></td></tr>
@@ -96,17 +96,17 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
       <tr><td class="mono">skipAheadHandlers</td><td>Recovery routes for demo / pricing / send-info / wrong-person / bad-timing moments</td><td><span class="pill live">Live</span></td></tr>
       <tr><td class="mono">responseSet</td><td>The buyer-response branches available from the active node</td><td><span class="pill live">Live</span></td></tr>
       <tr><td class="mono">expandedResponse</td><td>The one branch opened for detail → the counter-language + next path</td><td><span class="pill live">Live</span></td></tr>
-      <tr><td class="mono">learnedFacts</td><td>The accumulated truth from the live conversation</td><td><span class="pill state">State</span></td></tr>
+      <tr><td class="mono">learnedFacts</td><td>The facts the buyer has confirmed during the call</td><td><span class="pill state">State</span></td></tr>
       <tr><td class="mono">signalLedger</td><td>Live behavioral + verbal signals (real pain vs fake politeness, politics, urgency)</td><td><span class="pill state">State</span></td></tr>
-      <tr><td class="mono">tiebackLedger</td><td>Discovered truths being <b>held</b> vs now <b>ready to deploy</b> (no premature value-spraying)</td><td><span class="pill state">State</span></td></tr>
-      <tr><td class="mono">supportDossier</td><td>The always-reachable proof, deployment + category-intelligence pack</td><td><span class="pill ref">Ref</span></td></tr>
+      <tr><td class="mono">tiebackLedger</td><td>Things you have learned, marked as <b>holding</b> (not yet the right moment) or <b>ready to use</b> on this call (so you don't pitch value before you understand the problem)</td><td><span class="pill state">State</span></td></tr>
+      <tr><td class="mono">supportDossier</td><td>Supporting evidence, rollout details, and notes on the buyer's category, always reachable</td><td><span class="pill ref">Ref</span></td></tr>
       <tr><td class="mono">objectionLibrary</td><td>Global objection handlers reachable from any node</td><td><span class="pill ref">Ref</span></td></tr>
       <tr><td class="mono">inboundQuestionHandlers</td><td>Structured answers for buyer questions asked mid-discovery (price / timeline / competitor / demo)</td><td><span class="pill ref">Ref</span></td></tr>
-      <tr><td class="mono">compressionMode</td><td>Time-limited state that shortens the question path — Off / Essentials / Emergency</td><td><span class="pill live">Live</span></td></tr>
-      <tr><td class="mono">nextStepLock</td><td>The specific next action being earned — dated + owned</td><td><span class="pill state">State</span></td></tr>
+      <tr><td class="mono">compressionMode</td><td>How much of the question path is shown — Off / Essentials / Emergency</td><td><span class="pill live">Live</span></td></tr>
+      <tr><td class="mono">nextStepLock</td><td>The specific next step you are trying to agree with the buyer — with a date and an owner</td><td><span class="pill state">State</span></td></tr>
       <tr><td class="mono">callDisposition</td><td>Meeting booked / referral / nurture / disqualified / hard pass / in-progress</td><td><span class="pill route">Route</span></td></tr>
       <tr><td class="mono">postCallPackage</td><td>The artifacts + follow-up state produced after the call</td><td><span class="pill route">Route</span></td></tr>
-      <tr><td class="mono">handoffPayload</td><td>The structured truth passed into neighboring rooms</td><td><span class="pill route">Route</span></td></tr>
+      <tr><td class="mono">handoffPayload</td><td>The structured information passed into neighboring rooms</td><td><span class="pill route">Route</span></td></tr>
       <tr><td class="mono" style="color:var(--ink-3)">callClock</td><td style="color:var(--ink-3)">The live call timer + urgency state</td><td><span class="pill retired">Retired</span></td></tr>
       <tr><td class="mono" style="color:var(--ink-3)">phaseTempoPlan</td><td style="color:var(--ink-3)">Expected pacing + jump rules by phase</td><td><span class="pill retired">Retired</span></td></tr>
     </table>
@@ -117,23 +117,23 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
     <div class="two">
       <div><table><tr><th>The 7 rails (always reachable)</th></tr>
         <tr><td><b>Framework rail</b> — the current lens, switchable (not a card gallery)</td></tr>
-        <tr><td><b>Segment rail</b> — the live spine; one open at a time, jumpable</td></tr>
+        <tr><td><b>Segment rail</b> — the ordered list of call segments; one open at a time, jumpable</td></tr>
         <tr><td><b>Recover-the-call rail</b> — authored recover guidance + jump-actions to the segment where the recovery runs</td></tr>
-        <tr><td><b>Learned-truth ledger</b> — what's actually been earned, and what's still missing</td></tr>
+        <tr><td><b>What you have learned</b> (learned-truth ledger) — what the buyer has confirmed so far, and what is still missing</td></tr>
         <tr><td><b>Worked memory</b> — which nodes have been worked (N of essential)</td></tr>
         <tr><td><b>Next-step docket</b> — forces the room toward a real dated next move</td></tr>
-        <tr><td><b>Support dossier</b> — proof + objection + inbound-question pack, reachable mid-call</td></tr>
+        <tr><td><b>Support dossier</b> — supporting evidence, answers to likely objections, and answers to questions the buyer may ask, reachable mid-call</td></tr>
       </table></div>
       <div><table><tr><th>The 3 compression modes</th></tr>
         <tr><td><b>Off</b> — shows all nodes</td></tr>
         <tr><td><b>Essentials</b> — shows only the must-hit nodes for the framework</td></tr>
-        <tr><td><b>Emergency</b> — the <b>rescue</b> state: collapses the spine to the segment you're in and hoists the recover moves to the front</td></tr>
+        <tr><td><b>Emergency</b> — for when the call is going badly: the segment list shrinks to only the segment you are in, and the drawer opens on the recovery suggestions</td></tr>
       </table>
       <table style="margin-top:6px"><tr><th>Mandatory control laws</th></tr>
-        <tr><td>Skip-ahead handlers · tie-back discipline (held vs deploy) · objection + inbound-question handling from the live surface · phase progress &amp; resumption · learned-fact capture close to the live node (never a note graveyard)</td></tr>
+        <tr><td>Skip-ahead handlers · tie-back discipline (holding vs ready to use) · objection + inbound-question handling from the live surface · phase progress &amp; resumption · learned-fact capture close to the live node (never a note graveyard)</td></tr>
       </table></div>
     </div>
-    <div class="callout red"><div class="ct">The non-negotiable build tests</div><div class="cb">The seller can: recover from a buyer interruption <b>in one move</b> · switch into compression <b>without losing the next-step path</b> · answer a buyer question <b>without abandoning discovery control</b> · see what-to-say / what-to-listen-for / where-to-go-next <b>without reading paragraphs</b> · <b>resume</b> after being interrupted, challenged, or delayed. And the room always preserves the distinction between <b>earned facts</b>, <b>support proof</b>, and <b>deploy-now language</b>.</div></div>
+    <div class="callout red"><div class="ct">The non-negotiable build tests</div><div class="cb">The seller can: recover from a buyer interruption <b>in one action</b> · switch into compression <b>without losing the next-step path</b> · answer a buyer question <b>without abandoning discovery control</b> · see what-to-say / what-to-listen-for / where-to-go-next <b>without reading paragraphs</b> · <b>resume</b> after being interrupted, challenged, or delayed. And the room always keeps three things separate: <b>facts the buyer confirmed</b>, <b>supporting evidence you hold</b> (case studies, references, data), and <b>what to use now</b> — the point you are ready to say on this call.</div></div>
   </div>
 
   <div class="sec"><div class="sn">6 · Absorbed from Call Planner</div><h2>Three capabilities rolled in (2026-07-06)</h2>
@@ -160,7 +160,7 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
         <li><b>Never flatten</b> the on-call control laws (real compression, skip-ahead, dossier, tie-back)</li>
         <li>The recover rail must carry authored guidance <b>+ its jump-actions</b></li>
         <li>The handoff stays <b>outcome-driven</b></li>
-        <li>Preserve earned-facts vs support-proof vs deploy-now</li>
+        <li>Keep facts the buyer confirmed, supporting evidence you hold, and what to use now as three separate things</li>
       </ul></div>
       <div><ul class="plain">
         <li>Not a <b>framework gallery</b> / methodology viewer</li>
