@@ -435,18 +435,14 @@ function explainLeadCopy(
     // Phase 2.2 audit — retired "It is in the light because…" /
     // "The lead is stable because…" canon-doc voice. Sarah parses
     // those as code comments. Plain operator phrasing now.
+    // `because` is a list of short reasons (noun phrases and clauses), so
+    // introduce it as a list rather than splicing it after "because".
     if (mode === "queue") {
-        if (confidenceLabel === "stable lead")
-            return "Ranked here because " + because + ".";
-        if (confidenceLabel === "supported")
-            return "Ranked here because " + because + ".";
-        return "Visible because " + because + ".";
+        if (confidenceLabel === "stable lead" || confidenceLabel === "supported")
+            return "Ranked here. Reasons: " + because + ".";
+        return "Shown here. Reasons: " + because + ".";
     }
-    if (confidenceLabel === "stable lead")
-        return "At the top because " + because + ".";
-    if (confidenceLabel === "supported")
-        return "At the top because " + because + ".";
-    return "At the top because " + because + ".";
+    return "Ranked first. Reasons: " + because + ".";
 }
 
 function explainTitleForObject(

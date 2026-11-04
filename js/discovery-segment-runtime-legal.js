@@ -241,7 +241,7 @@
             jumpNode("Agree what they need to see", "proof-threshold", "pilot-scope", "blu")
           ],"There may be no trigger yet.","You still need the condition that would make it real.")
         ]),
-        node("trigger-and-urgency","soft-trigger","fu","Keep soft urgency honest","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
+        node("trigger-and-urgency","soft-trigger","fu","Ask whether anything makes this urgent","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
           branch("TRIGGER NAMED","ok","\"If we could show a safe workflow with measurable turnaround improvement, it would get attention.\"","\"Good. Then let us define the safest workflow and what they need to see now.\"",[
             jumpNode("Choose the pilot", "proof-threshold", "pilot-scope", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")
@@ -371,7 +371,7 @@
             jumpNode("Return to what they need to see", "proof-threshold", "accuracy-bar", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
-        node("next-step-lock","soft-deferral","pr","Keep soft deferral honest","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
+        node("next-step-lock","soft-deferral","pr","Ask what they need in order to decide","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
           branch("DECISION NAMED","ok","\"It should help us decide whether this workflow is worth testing with the GC and legal ops.\"","\"Good. Then let us name the workflow now so the follow-up justifies that meeting.\"",[
             jumpNode("Return to workflow scope", "current-state-truth", "workflow-break", "grn"),
             jumpNode("Lock the review", "next-step-lock", "scoped-review", "blu")

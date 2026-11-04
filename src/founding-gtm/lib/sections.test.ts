@@ -240,7 +240,8 @@ describe("authorSection3 — discovery patterns", () => {
             })
         );
         expect(s.body[0]).toContain("100%");
-        expect(s.body[1]).toContain("pain-and-consequence");
+        expect(s.body[1]).toContain("The problem and what it costs");
+        expect(s.body[1]).not.toContain("pain-and-consequence");
         expect(s.body[1]).toMatch(/pattern to test and teach/i);
         expect(s.body[1]).toMatch(/not as proof/i);
     });

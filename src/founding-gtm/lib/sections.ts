@@ -8,6 +8,27 @@ import type {
     SurpriseCallout
 } from "./types";
 import { SECTION_KICKER, SECTION_TITLE } from "./types";
+import { LOSS_LABELS } from "@/deal-workspace/lib/deal-shape";
+
+/** Plain names for Discovery segment keys (keys stay stable in storage). */
+const SEGMENT_NAME: Readonly<Record<string, string>> = {
+    "opening-frame": "Opening",
+    "current-state-truth": "How the work is done today",
+    "pain-and-consequence": "The problem and what it costs",
+    "trigger-and-urgency": "What makes it urgent now",
+    "stakeholder-and-ownership": "Who is involved and who owns it",
+    "proof-threshold": "What the buyer needs to see",
+    "current-vendor-and-displacement": "Current vendor and switching",
+    "decision-architecture": "How the decision gets made",
+    "next-step-lock": "Agreeing the next step",
+    "post-call-routing": "After the call"
+};
+function segmentName(key: string): string {
+    return SEGMENT_NAME[key] ?? key.replace(/-/g, " ");
+}
+function lossLabel(reason: string): string {
+    return (LOSS_LABELS as Record<string, string>)[reason] ?? reason.replace(/_/g, " ");
+}
 
 /**
  * Sales-handoff section authoring.
@@ -279,7 +300,7 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
             const top = advancingSegments[0]!;
             const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
             body.push(
-                `"${top[0]}" appears on ${topShare}% of the recorded calls that advanced, more often than any other recorded discovery segment. Treat it as a pattern to test and teach, not as proof that the segment caused progression.`
+                `"${segmentName(top[0])}" appears on ${topShare}% of the recorded calls that advanced, more often than any other recorded discovery segment. Treat it as a pattern to test and teach, not as proof that the segment caused progression.`
             );
         }
 
@@ -287,7 +308,7 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
             `${advancedCount} of ${totalLogged} calls recorded as advanced · ${advanceRate}%`
         ];
         advancingSegments.slice(0, 5).forEach(([seg, count]) => {
-            evidence.push(`${seg} · present on ${count} advanced calls`);
+            evidence.push(`${segmentName(seg)} · covered on ${count} calls that advanced`);
         });
 
         const recentCalls = [...calls]
@@ -545,9 +566,9 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     examined.slice(0, 5).forEach((a) => {
         const deal = lostById.get(a.dealId);
         const snap = snapshotById.get(a.dealId);
-        const account = deal?.accountName || a.accountName || a.dealId;
+        const account = deal?.accountName || a.accountName || "An unnamed deal";
         const reason = deal?.lossReason
-            ? trim(deal.lossReason, 50)
+            ? trim(lossLabel(deal.lossReason), 50)
             : snap?.topCauseLabel
               ? trim(snap.topCauseLabel, 50)
               : "no reason logged";

@@ -62,7 +62,7 @@ export function dealPressure(deal: AdvisorDeal | null): string {
     if ((stage === "evaluation" || stage === "poc") && !deal.champion) {
         return "No champion is recorded for the buyer's team.";
     }
-    return "The deal has slowed and an introduction from someone the buyer trusts would help it move.";
+    return "An introduction from someone the buyer already trusts could help move this deal forward.";
 }
 
 export interface AskBuildInput {

@@ -122,7 +122,7 @@
           ], "This person sits too far from the queue to trace it.",
             "You need either a recurring complaint pattern or someone closer to the queue.")
         ]),
-        node("opening-frame", "sideways", "ri", "If it starts sideways",
+        node("opening-frame", "sideways", "ri", "If the call starts off-topic",
           "\"If this is early or exploratory, that's fine. What made you take this meeting now instead of later?\"",
           "Use this when the support leader is rushed, skeptical, or staying abstract.", false, [
           branch("REAL REASON", "ok",
@@ -135,15 +135,15 @@
           branch("SOFT REASON", "ly",
             "\"We're mostly staying informed on what AI support can do right now.\"",
             "\"That's fine. What would have to become true for this to stop being informative and start being a priority?\"", [
-            jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+            jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
             jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "pur")
           ], "They're scanning what AI support can do, not feeling a real backlog problem yet.",
             "You still need the threshold that would turn interest into action."),
           branch("NO REASON", "fl",
             "\"Nothing changed. We're just looking around.\"",
             "\"Understood. Then I'll keep this honest and light. What queue would have to break before this became a real priority?\"", [
-            jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
-            jumpNode("Route to next-step honesty", "next-step-lock", "soft-deferral", "blu")
+            jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
+            jumpNode("Ask what would make this a priority", "next-step-lock", "soft-deferral", "blu")
           ], "No queue has broken hard enough to force a decision yet.",
             "You still need the future trigger or a reason not to chase this hard.")
         ])
@@ -329,7 +329,7 @@
           branch("NO TRIGGER", "fl",
             "\"Nothing changed. We're just exploring.\"",
             "\"That's fine. Then what would have to happen — a volume spike, a public CSAT miss — for this to become urgent enough to move?\"", [
-            jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
+            jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
             jumpNode("Learn what they need to see", "proof-threshold", "real-proof", "blu")
           ], "No volume spike, CSAT miss, or freeze is forcing this yet.",
             "You still need the future trigger or an honest no.")
@@ -347,7 +347,7 @@
           branch("ONLY FUTURE RISK", "ly",
             "\"It's more of a risk building quietly as volume grows.\"",
             "\"Quiet risk still matters. What would force it into the open — a launch, an outage, a viral complaint?\"", [
-            jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+            jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
           ], "The queue risk is building quietly with volume, not breaking yet.",
             "You still need the launch or complaint that makes the risk undeniable."),

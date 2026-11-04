@@ -57,7 +57,7 @@
     { title:"Decision path", items:["Head of Product or CPO sponsor who feels the adoption or velocity pressure", "Product ops or enablement lead who owns the documentation and adoption story", "Design research or UXR owner if research synthesis is the primary lane"] }
   ];
   var objectionLibrary = [
-    { trigger:"we already have docs and wikis", reply:"Good. How often do they get used, and how often does the same question get re-asked in Slack anyway? Documentation that exists but is not trusted is not documentation." },
+    { trigger:"we already have docs and wikis", reply:"Good. How often do they get used, and how often does the same question get re-asked in Slack anyway? If people do not trust the documentation, they will not use it." },
     { trigger:"we use Pendo already", reply:"Fair. What does Pendo tell you that actually changes a product decision, and what does it leave you wondering about that you still go ask in other channels?" },
     { trigger:"our PMs do not want more tooling", reply:"Understandable. The question is whether this tooling replaces a burden or adds one. Which part of the PM week is currently lost to work that should not require a person?" },
     { trigger:"show me the ROI", reply:"Happy to. Before I send generic numbers, tell me which feature or workflow is currently under-adopted, because the business case looks different when pointed at a real drag on revenue or retention." }
@@ -391,7 +391,7 @@
             jumpNode("Return to what they need to see", "proof-threshold", "live-cycle-proof", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
-        node("next-step-lock","soft-deferral","pr","Keep soft deferral honest","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
+        node("next-step-lock","soft-deferral","pr","Ask what they need in order to decide","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
           branch("DECISION NAMED","ok","\"It should help us decide whether this cycle is worth testing with product ops and the PM owner.\"","\"Good. Then let us name the cycle now so the follow-up justifies that meeting.\"",[
             jumpNode("Return to live decision", "current-state-truth", "live-decision", "grn"),
             jumpNode("Lock the review", "next-step-lock", "decision-review", "blu")

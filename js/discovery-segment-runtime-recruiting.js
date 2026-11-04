@@ -265,7 +265,7 @@
             jumpNode("Open Future Autopsy route", "post-call-routing", "autopsy-flag", "blu")
           ],"The need may not be real enough yet.","You still need the reactivation condition.")
         ]),
-        node("trigger-and-urgency","soft-trigger","pr","Keep soft urgency honest","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
+        node("trigger-and-urgency","soft-trigger","pr","Ask whether anything makes this urgent","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
           branch("TRIGGER NAMED","ok","\"If we could show a safer, faster hiring flow on one live req, it would get attention.\"","\"Good. Then let us define the req and what they need to see now.\"",[
             jumpNode("Choose the pilot req", "proof-threshold", "pilot-req", "grn"),
             jumpNode("Lock the req review", "next-step-lock", "req-review", "blu")
@@ -397,7 +397,7 @@
             jumpNode("Return to what they need to see", "proof-threshold", "quality-bar", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
-        node("next-step-lock","soft-deferral","pr","Keep soft deferral honest","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
+        node("next-step-lock","soft-deferral","pr","Ask what they need in order to decide","\"If I send material, what should it help the team answer before we meet again?\"","Use this whenever the buyer tries to end with passive follow-up.",false,[
           branch("DECISION NAMED","ok","\"It should help us decide whether this req workflow is worth testing with recruiting ops and a hiring owner.\"","\"Good. Then let us name the req now so the follow-up justifies that meeting.\"",[
             jumpNode("Return to live req", "current-state-truth", "live-req", "grn"),
             jumpNode("Lock the req review", "next-step-lock", "req-review", "blu")

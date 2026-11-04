@@ -49,19 +49,19 @@ export const THREADS: ReadonlyArray<Thread> = [
             {
                 id: "busy",
                 buyer: "I am busy.",
-                reply: "Understood. The short version is that I am calling because of [pressure] at [account]. If that is not relevant to you, who owns it?",
+                reply: "Understood. The short version: I am calling about something I saw at [account]: [pressure]. If that is not relevant to you, who owns it?",
                 next: "pressure"
             },
             {
                 id: "who",
                 buyer: "Who is this?",
-                reply: "[Your name] with [company]. I am calling because of [pressure] at [account]. Can I give you the 20-second version?",
+                reply: "[Your name] with [company]. I am calling about something I saw at [account]: [pressure]. Can I give you the 20-second version?",
                 next: "pressure"
             },
             {
                 id: "no-sales",
                 buyer: "No sales calls.",
-                reply: "Understood. I will keep it brief. Is [pressure] something your team is dealing with, or should I close the loop?",
+                reply: "Understood. I will keep it brief. I saw this at [account]: [pressure]. Is that something your team is dealing with, or should I close the loop?",
                 next: "pressure"
             }
         ]
@@ -74,7 +74,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         color: "var(--cc-green)",
         title: "Ask where the issue shows up instead of assuming the impact.",
         copy: "The account signal explains why you called; the buyer tells you whether it matters internally.",
-        say: "The reason I called is [pressure]. I do not know yet whether that is creating a problem for your team. If it is, where does it show up most: time, handoffs, rework, or delayed decisions?",
+        say: "The reason I called is something I saw at [account]: [pressure]. I do not know yet whether that is creating a problem for your team. If it is, where does it show up most: time, handoffs, rework, or delayed decisions?",
         coach: "Let the buyer name the impact. Do not turn the account signal into an assumed pain point.",
         replies: [
             {
@@ -105,7 +105,7 @@ export const THREADS: ReadonlyArray<Thread> = [
         color: "var(--cc-orange)",
         title: "Find out how the buyer handles the issue today.",
         copy: "Do not make a claim about results until you have real evidence that matches the buyer's situation.",
-        say: "How are you handling [pressure] today: manually, through an existing vendor, or another way?",
+        say: "About what I mentioned earlier: how are you handling that today — manually, through an existing vendor, or another way?",
         coach: "If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current process.",
         replies: [
             {

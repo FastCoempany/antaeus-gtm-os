@@ -226,7 +226,7 @@ export function GettingToSignedV4(): JSX.Element {
                         {(["soc2", "subprocessors", "pentest", "dpa"] as const).map((k) => (
                             <button type="button" key={k} class={`gs4-pp${papers[k] ? " is-on" : ""}`}
                                 onClick={() => patchGts({ papers: { ...papers, [k]: !papers[k] } })}>
-                                {k === "soc2" ? "SOC 2" : k === "subprocessors" ? t("subs") : k === "pentest" ? t("pen-test") : "DPA"}
+                                {k === "soc2" ? "SOC 2" : k === "subprocessors" ? t("subprocessor list") : k === "pentest" ? t("pen-test") : "DPA"}
                             </button>
                         ))}
                     </span>

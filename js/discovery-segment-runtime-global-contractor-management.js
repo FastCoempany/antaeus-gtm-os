@@ -92,12 +92,12 @@
           jumpNode("Map current state", "current-state-truth", "workflow", "blu")
         ], "A real expansion or classification scare put this meeting on the calendar.", "You still need whether it's urgent enough to move now."),
         branch("SOFT REASON", "ly", "\"We're mostly just staying informed on EOR options.\"", "\"That's fine. What would have to become true for global employment to stop being a research topic and become a real priority?\"", [
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
           jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "pur")
         ], "EOR is still a research topic for them, not a live problem.", "You still need the threshold that turns interest into action."),
         branch("NO REASON", "fl", "\"Nothing changed. We're just looking around.\"", "\"Understood. Then I'll keep this honest and light. What would have to break, a misclassification notice, a failed payment, before this became a real priority?\"", [
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
-          jumpNode("Route to next-step honesty", "next-step-lock", "soft-deferral", "blu")
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
+          jumpNode("Ask what would make this a priority", "next-step-lock", "soft-deferral", "blu")
         ], "There's no misclassification notice, audit, or new market forcing the issue yet.", "You still need the future trigger or a reason not to chase this hard.")
       ])
     ]);
@@ -209,7 +209,7 @@
           jumpNode("Return to pain", "pain-and-consequence", "pressure", "blu")
         ], "There's a global-hiring cleanup underway, but classification urgency is soft.", "You still need why compliance specifically rose to the top."),
         branch("NO TRIGGER", "fl", "\"Nothing changed. We're just exploring.\"", "\"That's fine. Then what would have to happen, an audit, a reclassification claim, a new market, for this to become urgent enough to move?\"", [
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
           jumpNode("Learn what they need to see", "proof-threshold", "real-proof", "blu")
         ], "No audit, claim, or new market is forcing the issue right now.", "You still need the future trigger or an honest no.")
       ]),
@@ -219,7 +219,7 @@
           jumpNode("Map the decision path", "decision-architecture", "path", "blu")
         ], "The urgency now has a real miss: delayed expansion or non-compliant hiring.", "You still need who gets blamed and the path to respond."),
         branch("ONLY FUTURE RISK", "ly", "\"It's more of a risk building quietly as we add contractors.\"", "\"Quiet classification risk still grows. What would force it into the open, an audit, a tax notice, or a contractor demanding benefits?\"", [
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
           jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
         ], "The classification risk is accruing quietly on the contractor base, not yet visible.", "You still need the event that makes the exposure undeniable."),
         branch("NO CONSEQUENCE", "fl", "\"Nothing immediate, honestly.\"", "\"Then we should treat this as early and not pretend it's urgent. What would have to change before the compliance exposure became real?\"", [

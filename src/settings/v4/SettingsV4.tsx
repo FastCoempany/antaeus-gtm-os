@@ -195,7 +195,7 @@ export function SettingsV4(): JSX.Element {
                     <details class="st4-adv">
                         <summary>{t("Which records are included?")}</summary>
                         <div class="st4-ab">
-                            <p>{t("Export and delete include ICPs, deals, proofs, network requests, watched accounts, sequences, discovery call logs, saved studio content, pipeline settings, discovery frameworks, readiness snapshots and sales handoff documents.", { class: "body" })}</p>
+                            <p>{t("Export and delete include ICPs, deals, pilot records, advisor requests, watched accounts, sequences, discovery call logs, saved studio content, pipeline settings, discovery frameworks, readiness snapshots and sales handoff documents.", { class: "body" })}</p>
                             <p>{t("Export also includes events and the workspace's commercial profile. Delete retains those records. Neither control covers all workspace content: contacts, activity history, Briefing items, monitoring rules and other records can remain outside this list.", { class: "body" })}</p>
                             <p>{t("Each operation processes up to 5,000 records per included category, 100 pipeline settings and one commercial profile. Records beyond these limits are not exported or deleted. Your account, workspace and membership are retained.", { class: "body" })}</p>
                         </div>

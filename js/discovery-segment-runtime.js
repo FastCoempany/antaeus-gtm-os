@@ -136,12 +136,12 @@
           jumpNode("Map current state", "current-state-truth", "workflow", "blu")
         ],"There is a real reason the meeting happened.","You still need to see whether the reason is urgent enough to move."),
         branch("SOFT REASON","ly","\"We are mostly staying informed right now.\"","\"That is fine. What would have to become true for this to stop being informative and become important?\"",[
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
           jumpNode("Ask what they need to see", "proof-threshold", "real-proof", "pur")
         ],"The call may be early.","You still need the threshold that would turn interest into action."),
         branch("NO REASON","fl","\"Nothing changed. We are just looking around.\"","\"Understood. Then I will keep this honest and light. What branch would have to break before this became real priority?\"",[
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
-          jumpNode("Route to next-step honesty", "next-step-lock", "soft-deferral", "blu")
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
+          jumpNode("Ask what would make this a priority", "next-step-lock", "soft-deferral", "blu")
         ],"There is no active trigger yet.","You still need the future trigger or a reason not to chase this hard.")
       ])
     ]);
@@ -253,7 +253,7 @@
           jumpNode("Return to pain", "pain-and-consequence", "pressure", "blu")
         ],"There is directional interest, but urgency is still soft.","You still need the specific reason this workflow rose to the top."),
         branch("NO TRIGGER","fl","\"Nothing changed. We are just exploring.\"","\"That is fine. Then what would have to happen for this to become important enough to move?\"",[
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "red"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "red"),
           jumpNode("Learn what they need to see", "proof-threshold", "real-proof", "blu")
         ],"There is no active trigger.","You still need the future trigger or an honest no.")
       ]),
@@ -263,7 +263,7 @@
           jumpNode("Map the decision path", "decision-architecture", "path", "blu")
         ],"The urgency now has a visible miss attached to it.","You still need the owner and the path to respond."),
         branch("ONLY FUTURE RISK","ly","\"It is more of a risk building quietly.\"","\"Quiet risk still matters. What would force it into the open?\"",[
-          jumpNode("Use exploratory honesty", "trigger-and-urgency", "exploratory", "org"),
+          jumpNode("Ask plainly whether this is early research", "trigger-and-urgency", "exploratory", "org"),
           jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
         ],"The consequence is still abstract.","You still need the event that makes the risk undeniable."),
         branch("NO CONSEQUENCE","fl","\"Nothing immediate, honestly.\"","\"Then we should treat this as early and avoid pretending it is urgent. What would have to change first?\"",[

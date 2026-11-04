@@ -57,7 +57,7 @@
     { title:"Incumbent landscape", items:["Gong or Clari already generating noise the team does not act on", "Salesforce + Outreach or Salesloft as the system of record", "Manual notes, spreadsheets, or founder-led pipeline review"] }
   ];
   var objectionLibrary = [
-    { trigger:"we already have Gong", reply:"Good. Which deals did Gong save last quarter, and which did it narrate while they died?" },
+    { trigger:"we already have Gong", reply:"Good. Which deals did Gong help you save last quarter, and which did you lose even though every call was recorded?" },
     { trigger:"our reps will never use this", reply:"Understood. Then the first question is whether the rep work it replaces is worse than the rep work it adds. Walk me through what a rep does manually today to get a deal through qualification." },
     { trigger:"show me the revenue lift", reply:"Happy to. Before I send anything, tell me what forecast miss or win-rate drop made this a live conversation — otherwise the numbers will feel generic." },
     { trigger:"we need to loop in RevOps", reply:"Good. What should RevOps walk into this session already knowing so the meeting is about decision, not re-briefing?" }
