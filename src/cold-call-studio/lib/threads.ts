@@ -41,10 +41,10 @@ export const THREADS: ReadonlyArray<Thread> = [
         label: "Open the call",
         verb: "pull",
         color: "var(--cc-blue)",
-        title: "Acknowledge the interruption and ask for a short window.",
-        copy: "Give the buyer a quick way to decide whether to continue.",
+        title: "Ask permission first. The first win is a yes to 20 seconds.",
+        copy: "Own the interruption and let the buyer decide whether you keep talking.",
         say: "I know I am interrupting. Give me 20 seconds and you can decide if this is worth continuing.",
-        coach: "Keep the opener short. Explain the reason for the call next.",
+        coach: "Ask permission first — the first win is a yes to 20 seconds. Do not explain the company yet; give the reason for the call once they say yes.",
         replies: [
             {
                 id: "busy",

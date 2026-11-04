@@ -179,11 +179,11 @@
       ]),
       node("current-state-truth","example","ri","Use one recent example","\"Give me one recent example where the workflow stopped being safe without a person.\"","Use this when the buyer stays abstract.",false,[
         branch("RECENT EXAMPLE","ok","\"Last week we had a case where " + seed.painSurface.toLowerCase() + "\"","\"That is helpful. What part of that example is happening often enough to matter?\"",[
-          jumpNode("Test the cost", "pain-and-consequence", "quantify", "grn"),
+          jumpNode("Challenge the cost estimate", "pain-and-consequence", "quantify", "grn"),
           jumpNode("Map the trigger", "trigger-and-urgency", "why-now", "blu")
         ],"The call now has a live example.","You still need frequency and consequence."),
         branch("OLD EXAMPLE","ly","\"It happened before, but I do not have a recent one on hand.\"","\"Then ballpark the pattern for me. What happens often enough that the team has normalized it?\"",[
-          jumpNode("Test the cost", "pain-and-consequence", "pressure", "org"),
+          jumpNode("Challenge the cost estimate", "pain-and-consequence", "pressure", "org"),
           jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
         ],"The pattern exists, but recency is weak.","You still need frequency or owner pain."),
         branch("NO EXAMPLE","fl","\"I do not really have one.\"","\"That usually means either the workflow is healthy or the wrong person is in the room. Which one is true?\"",[

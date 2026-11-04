@@ -207,14 +207,14 @@
           branch("RECENT EXAMPLE", "ok",
             "\"Last week the bot gave a customer the wrong refund policy and a supervisor had to clean it up.\"",
             "\"That's helpful. How often does that kind of bot miss happen on that queue?\"", [
-            jumpNode("Test the cost", "pain-and-consequence", "quantify", "grn"),
+            jumpNode("Challenge the cost estimate", "pain-and-consequence", "quantify", "grn"),
             jumpNode("Map the trigger", "trigger-and-urgency", "why-now", "blu")
           ], "You have a live ticket — a real bot miss a supervisor had to clean up.",
             "You still need how often it happens and what it costs."),
           branch("OLD EXAMPLE", "ly",
             "\"It's happened, but I don't have a recent one in front of me.\"",
             "\"Then ballpark the pattern. What kind of bot miss happens often enough that the team has stopped flagging it?\"", [
-            jumpNode("Test the cost", "pain-and-consequence", "pressure", "org"),
+            jumpNode("Challenge the cost estimate", "pain-and-consequence", "pressure", "org"),
             jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
           ], "The bot-miss pattern is real, but nothing recent to anchor it.",
             "You still need how often it bounces to a human, or whose pain it is."),

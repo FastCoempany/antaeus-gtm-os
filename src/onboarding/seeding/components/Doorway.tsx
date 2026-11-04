@@ -19,13 +19,13 @@ export function Doorway(): JSX.Element {
             </h1>
             <p class="sd-lede">
                 {t(
-                    "It asks for things only you know: who you sell to, which companies you're going after, and where each of your open deals really stands.",
+                    "It asks for things only you know: who you sell to, which companies you're going after, and where each of your open deals really stands. Most setup screens skip this work. Doing it is what lets the workspace flag deal problems before they surprise you.",
                     { class: "body" }
                 )}
             </p>
             <div class="sd-compact">
                 {t(
-                    "You enter it once. After that, the Dashboard uses it each day to flag deals that are missing key information and to suggest which one to review first. The more accurate your answers, the more useful those suggestions are.",
+                    "You enter it once, and you'll get it back every morning on the Dashboard: which deal is slipping, what it's missing, and which one to work on first. The more honest your answers, the more useful it gets.",
                     { class: "body" }
                 )}
             </div>

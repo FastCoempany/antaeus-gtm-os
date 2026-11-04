@@ -135,11 +135,11 @@
       ]),
       node("current-state-truth", "example", "ri", "Pull one real hire", "\"Give me one recent hire abroad where the classification or local compliance couldn't be handled without legal or finance stepping in.\"", "Force one concrete cross-border hire. Abstractions hide the misclassification risk; a real country surfaces it.", false, [
         branch("RECENT EXAMPLE", "ok", "\"Last month we hired a contractor in Germany and spent two weeks figuring out if they'd be reclassified as an employee.\"", "\"That's helpful. How often does that kind of classification scramble happen, every new country, or only the tricky ones?\"", [
-          jumpNode("Test the cost", "pain-and-consequence", "quantify", "grn"),
+          jumpNode("Challenge the cost estimate", "pain-and-consequence", "quantify", "grn"),
           jumpNode("Map the trigger", "trigger-and-urgency", "why-now", "blu")
         ], "The call now has a live reclassification scare in a real country.", "You still need how often it repeats and what it costs."),
         branch("OLD EXAMPLE", "ly", "\"It's happened before, but I don't have a recent one on hand.\"", "\"Then ballpark the pattern. How many countries are you paying contractors in, and who confirms each one is classified right?\"", [
-          jumpNode("Test the cost", "pain-and-consequence", "pressure", "org"),
+          jumpNode("Challenge the cost estimate", "pain-and-consequence", "pressure", "org"),
           jumpNode("Find the owner", "stakeholder-and-ownership", "pain-owner", "blu")
         ], "The misclassification pattern exists, but they can't point to a recent case.", "You still need the country count or who carries the classification risk."),
         branch("NO EXAMPLE", "fl", "\"I don't really have one.\"", "\"That usually means either the global footprint is small or the wrong person is in the room. Which one is it: how many countries and contractors are we talking about?\"", [

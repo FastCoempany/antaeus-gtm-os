@@ -98,10 +98,10 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
         const body =
             input.icps.length > 0
                 ? [
-                      `You've defined ${plural(input.icps.length, "ICP", "ICPs")}, but only ${plural(totalClosed, "closed deal is", "closed deals are")} recorded. That is not enough outcome history to evaluate whether the stated ICP matches the customers in the closed-deal sample.`
+                      `You've defined ${plural(input.icps.length, "ICP", "ICPs")}, but only ${plural(totalClosed, "closed deal is", "closed deals are")} recorded. That is not enough outcome history to confirm or contradict them yet, so a new hire would inherit a starting guess, not a tested pattern.`
                   ]
                 : [
-                      `${plural(totalClosed, "closed deal is", "closed deals are")} recorded without a named ICP. A new seller would have outcome history but no explicit targeting definition to compare it with.`
+                      `${plural(totalClosed, "closed deal is", "closed deals are")} recorded without a named ICP. You may know who buys, but a new hire would have no explicit targeting definition to work from. Save one in ICP Studio before they start.`
                   ];
         return frame(id, "partial", body, [], null);
     }
@@ -112,11 +112,11 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
     const lostPatterns = uniq(lostKeys);
 
     const body: string[] = [
-        `The recorded sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}. Closed-won deals contain ${plural(wonPatterns.length, "distinct customer profile", "distinct customer profiles")} based on the ICP, persona, and trigger fields currently recorded.`
+        `Across ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, the deals you won fall into ${plural(wonPatterns.length, "distinct customer profile", "distinct customer profiles")} (by ICP, buyer, and trigger). Point the new hire's prospecting at those first.`
     ];
     if (lostPatterns.length > 0) {
         body.push(
-            `Closed-lost deals contain ${plural(lostPatterns.length, "distinct profile", "distinct profiles")}. Treat those profiles as disqualification hypotheses to review, not as proof that the profile caused the loss.`
+            `The deals you lost fall into ${plural(lostPatterns.length, "distinct profile", "distinct profiles")}. Teach the new hire to screen for these at intake and qualify out early when one shows up. The sample is small, so this is a strong warning sign; it does not show that the profile caused the loss.`
         );
     }
 
@@ -141,14 +141,14 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
         const off = Math.round((1 - matchRatio) * 100);
         surprise = {
             tone: "corrective",
-            headline: "The stated ICP does not match most recorded closed-won ICP labels.",
-            body: `${off}% of closed-won deals with an ICP label do not match the names of the current ICPs. Review whether the ICP definition or the historical deal labeling needs to change before using this as a handoff rule.`
+            headline: "Your stated ICP does not match who actually buys.",
+            body: `${off}% of closed-won deals with an ICP label do not match any ICP you've named. Make the ICP more specific (or fix how past deals were labeled) before the new hire starts prospecting against the wrong target.`
         };
     } else if (matchRatio >= 0.8 && actualIcpLabels.length > 0) {
         surprise = {
             tone: "affirming",
-            headline: "The current ICP aligns with most recorded closed-won ICP labels.",
-            body: `${Math.round(matchRatio * 100)}% of closed-won deals with an ICP label match a current ICP name. Preserve that alignment as new outcome data is added.`
+            headline: "Your stated ICP matches who actually buys.",
+            body: `${Math.round(matchRatio * 100)}% of closed-won deals with an ICP label match an ICP you've named. The new hire inherits a clear target. Keep labeling new deals so it stays that way.`
         };
     }
 
@@ -213,7 +213,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
 
     const top = ranked[0]!;
     const body: string[] = [
-        `${top.channel} has the highest observed response rate in the current sample: ${top.replied} response outcomes on ${top.sent} recorded attempts (${Math.round(top.rate * 100)}%). Use that as a starting hypothesis for the next seller, then keep measuring it as volume grows.`
+        `${top.channel} has the best observed response rate so far: ${top.replied} responses on ${top.sent} recorded attempts (${Math.round(top.rate * 100)}%). Start the new hire on that channel and have them test the others against it.`
     ];
 
     const bestLines = input.touches
@@ -222,7 +222,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
         .filter((s) => s.length > 0);
     if (bestLines.length > 0) {
         body.push(
-            `The messages below were used on outreach records that received a reply or booked meeting. The sample shows association with those outcomes; it does not establish that the wording caused them.`
+            `The messages below got a reply or a booked meeting. Have the new hire start from these instead of writing from scratch. The sample is small, so keep measuring; a reply doesn't prove the wording was the reason.`
         );
     }
 
@@ -233,7 +233,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
         );
     });
     bestLines.slice(0, 2).forEach((line) => {
-        evidence.push(`Used on a responding record: "${trim(line, 90)}"`);
+        evidence.push(`Got a response: "${trim(line, 90)}"`);
     });
 
     const triedChannels = new Set(channelCounts.keys());
@@ -243,14 +243,14 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
     if (untried.length > 0 && totalReach >= 10) {
         surprise = {
             tone: "corrective",
-            headline: `There is no recorded test of ${untried.join(" or ")}.`,
-            body: `The current data cannot compare the unused channel${untried.length > 1 ? "s" : ""} with the channels already in use. Run a small measured test before turning the existing channel mix into a handoff rule.`
+            headline: `You haven't tried ${untried.join(" or ")} yet.`,
+            body: `Every recorded attempt used the other channels, so nobody knows yet whether ${untried.join(" or ")} would work. Don't leave the new hire guessing: give them a 10-message test with a stop rule (for example, stop if none of the 10 gets a reply).`
         };
     } else if (untried.length === 0) {
         surprise = {
             tone: "affirming",
-            headline: "Email, LinkedIn, and phone all have recorded activity.",
-            body: `The handoff can compare observed response rates across all three channel families instead of relying on an untested channel assumption.`
+            headline: "You've tested email, LinkedIn, and phone.",
+            body: `All three channels have recorded activity, so the new hire inherits a real comparison of what gets responses instead of a guess.`
         };
     }
 
@@ -294,13 +294,13 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         );
 
         const body: string[] = [
-            `${plural(totalLogged, "discovery call is", "discovery calls are")} logged. ${advancedCount} are recorded with the outcome "advanced," for an observed advance rate of ${advanceRate}%.`
+            `${plural(totalLogged, "discovery call is", "discovery calls are")} logged. ${advancedCount} advanced to a next meeting, an observed advance rate of ${advanceRate}%.`
         ];
         if (advancingSegments.length > 0) {
             const top = advancingSegments[0]!;
             const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
             body.push(
-                `"${segmentName(top[0])}" appears on ${topShare}% of the recorded calls that advanced, more often than any other recorded discovery segment. Treat it as a pattern to test and teach, not as proof that the segment caused progression.`
+                `"${segmentName(top[0])}" comes up on ${topShare}% of the calls that advanced, more than any other part of the call. Teach that question first on Monday. It's a pattern in your calls so far; it does not show that the question caused the advance.`
             );
         }
 
@@ -325,26 +325,26 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         if (droppedSegments.length > 0 && advancedCount > 0) {
             surprise = {
                 tone: "corrective",
-                headline: "Some discovery segments associated with prior advanced calls are absent from the last five calls.",
-                body: `${plural(droppedSegments.length, "segment", "segments")} appeared on earlier advanced calls but not in the five most recent records: ${droppedSegments.slice(0, 3).join(", ")}. Review whether that change is intentional before documenting the current approach for a new seller.`
+                headline: "You've stopped asking questions that used to come up on calls that advanced.",
+                body: `${plural(droppedSegments.length, "part of the call", "parts of the call")} came up on earlier calls that advanced but not in your last five calls: ${droppedSegments.slice(0, 3).map(segmentName).join(", ")}. Unless you dropped them on purpose, bring them back before the new hire learns the thinner version.`
             };
         } else if (advancedCount === 0) {
             surprise = {
                 tone: "corrective",
                 headline: "No logged discovery call currently has an advanced outcome.",
-                body: `${plural(totalLogged, "call is", "calls are")} logged. Review the question flow, qualification, and next-step process before presenting the current discovery pattern as repeatable.`
+                body: `${plural(totalLogged, "call is", "calls are")} logged and none led to a next meeting. Find what the calls keep missing (often who owns the problem, or a dated next step) before the new hire copies the approach.`
             };
         } else if (advanceRate < 33) {
             surprise = {
                 tone: "corrective",
                 headline: "Fewer than one third of logged discovery calls are recorded as advanced.",
-                body: `The current observed advance rate is ${advanceRate}%. Review the calls that advanced and the calls that did not before turning any one question pattern into a handoff rule.`
+                body: `Only ${advanceRate}% of logged calls led to a next meeting. Compare the calls that advanced with the ones that didn't, and tighten the questions and the next-step ask before the new hire learns the loose version.`
             };
         } else if (advanceRate >= 60) {
             surprise = {
                 tone: "affirming",
                 headline: "Most logged discovery calls are recorded as advanced.",
-                body: `The current observed advance rate is ${advanceRate}%. Preserve the question patterns and qualification practices used on those calls, then continue measuring the relationship as the sample grows.`
+                body: `${advanceRate}% of logged calls led to a next meeting. Write down how you run these calls so the new hire can copy them closely.`
             };
         }
 
@@ -359,7 +359,7 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `Discovery planning exists, but no completed discovery calls are recorded yet. A new seller would inherit a planned approach without outcome history.`
+                `Discovery is planned, but no completed discovery calls are logged yet. A new hire would inherit an agenda without outcome history. Log your next few calls so they can see what gets the next meeting.`
             ],
             [],
             null
@@ -368,11 +368,11 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
 
     const advanceRate = Math.round((advancedCalls / totalCalls) * 100);
     const body: string[] = [
-        `${plural(totalCalls, "discovery call is", "discovery calls are")} logged. ${advancedCalls} are recorded as advanced, for an observed advance rate of ${advanceRate}%.`
+        `${plural(totalCalls, "discovery call is", "discovery calls are")} logged. ${advancedCalls} advanced to a next meeting, an observed advance rate of ${advanceRate}%.`
     ];
     if (worked.length > 0) {
         body.push(
-            `${plural(worked.length, "discovery segment is", "discovery segments are")} recorded as part of the current approach. Preserve them as the current playbook while collecting more per-call evidence about which combinations appear on progressed calls.`
+            `You keep coming back to ${plural(worked.length, "part of the discovery call", "parts of the discovery call")}. Teach the new hire those first before they improvise new ones, and log calls one by one so you can see which parts show up on calls that advance.`
         );
     }
 
@@ -386,19 +386,19 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         surprise = {
             tone: "corrective",
             headline: "No logged discovery call currently has an advanced outcome.",
-            body: `${plural(totalCalls, "call is", "calls are")} logged. Review the current discovery approach before treating it as a repeatable handoff pattern.`
+            body: `${plural(totalCalls, "call is", "calls are")} logged and none led to a next meeting. Find what the calls keep missing before the new hire copies the approach.`
         };
     } else if (advanceRate < 33) {
         surprise = {
             tone: "corrective",
             headline: "Fewer than one third of logged discovery calls are recorded as advanced.",
-            body: `The current observed advance rate is ${advanceRate}%. Treat the existing question set as a hypothesis to improve, not as a proven formula.`
+            body: `Only ${advanceRate}% of logged calls led to a next meeting. Tighten the questions and the next-step ask before the new hire learns the loose version.`
         };
     } else if (advanceRate >= 60) {
         surprise = {
             tone: "affirming",
             headline: "Most logged discovery calls are recorded as advanced.",
-            body: `The current observed advance rate is ${advanceRate}%. Preserve the approach as a documented starting point and continue measuring it.`
+            body: `${advanceRate}% of logged calls led to a next meeting. Write down how you run these calls so the new hire can copy them closely.`
         };
     }
 
@@ -420,7 +420,7 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(input.openDeals.length, "open deal is", "open deals are")} recorded with only ${plural(totalClosed, "closed deal", "closed deals")}. There is not enough closed-deal history to describe a stage pattern reliably.`
+                `${plural(input.openDeals.length, "open deal is", "open deals are")} recorded with only ${plural(totalClosed, "closed deal", "closed deals")}. That is not enough closed-deal history to show where deals tend to stall yet.`
             ],
             [],
             null
@@ -462,11 +462,11 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
             : 0;
 
     const body: string[] = [
-        `The recorded closed-deal sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, an observed win rate of ${winRate}%. Review the stages attached to lost deals as places to investigate; the stage record alone does not establish why the deals were lost.`
+        `The recorded closed-deal sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, an observed win rate of ${winRate}%. Look at which stage the lost deals stopped at: that's where the new hire's first 30 days of diagnosis should focus. The stage shows where deals stopped; it does not establish why they were lost.`
     ];
     if (input.advisorDeployments.length > 0) {
         body.push(
-            `${plural(input.advisorDeployments.length, "Call in a Favor request is", "Call in a Favor requests are")} recorded. Compare their stage distribution with deal outcomes before turning outside support into a stage-specific rule.`
+            `${plural(input.advisorDeployments.length, "Call in a Favor request is", "Call in a Favor requests are")} recorded. Tell the new hire which stages that help made a difference at, and which stages you've been pushing through alone.`
         );
     }
 
@@ -493,14 +493,14 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
     if (leakyStage && (advisorByStage.get(leakyStage) ?? 0) === 0) {
         surprise = {
             tone: "corrective",
-            headline: "The stage associated with the most recorded losses has no outside-support requests logged.",
-            body: `${leakyLossCount} recorded losses share the stage "${leakyStage}," and no Call in a Favor request is associated with that stage in the current sample. Test whether outside support helps there before making it a required play.`
+            headline: "The stage where you lose the most deals has no outside help logged.",
+            body: `${leakyLossCount} losses stopped at "${leakyStage}," and none had a Call in a Favor request. Have the new hire test whether outside support helps there: when a deal reaches ${leakyStage}, ask an investor, advisor, or happy customer to put in a word within 48 hours.`
         };
     } else if (input.advisorDeployments.length === 0 && totalClosed >= 3) {
         surprise = {
             tone: "corrective",
-            headline: "No outside-support requests are recorded across the closed-deal sample.",
-            body: `${input.closedWon.length} wins and ${input.closedLost.length} losses are recorded without a Call in a Favor request. A new seller should know that this channel is currently untested rather than assume it is ineffective.`
+            headline: "You haven't asked your network for help on any deal yet.",
+            body: `${input.closedWon.length} wins and ${input.closedLost.length} losses are recorded without a Call in a Favor request. Your investors, advisors, and happy customers are an untested way to move stuck deals. Give the new hire a list of who to ask on day one.`
         };
     }
 
@@ -524,7 +524,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(input.closedLost.length, "loss is", "losses are")} recorded, but no deal-risk review has a corrected assessment or completed corrective action. Review the recorded conditions before drawing lessons from the outcomes.`
+                `${plural(input.closedLost.length, "loss is", "losses are")} recorded, but no deal-risk review has a corrected assessment or completed corrective action. Run a review in Future Autopsy on the most recent loss and write down what not to repeat; that is the lesson a new hire needs most.`
             ],
             [],
             null
@@ -538,12 +538,12 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     input.autopsySnapshots.forEach((snap) => snapshotById.set(snap.dealId, snap));
 
     const body: string[] = [
-        `${plural(examined.length, "deal-risk review has", "deal-risk reviews have")} a corrected assessment or at least one completed corrective action. These reviews may include open deals. Compare their recorded conditions with actual loss outcomes before drawing conclusions.`
+        `${plural(examined.length, "deal-risk review has", "deal-risk reviews have")} a corrected assessment or at least one completed corrective action: the cases where you wrote down what not to repeat. Have the new hire read these first. These reviews may include open deals, not just losses.`
     ];
     const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
         body.push(
-            `${plural(killCount, "review met", "reviews met")} the configured criteria for considering closure. Preserve the criteria and the final decision separately so a new seller can see both the model output and what actually happened.`
+            `${plural(killCount, "review met", "reviews met")} your criteria for walking away from the deal. Teach the new hire to spot that point and walk away instead of spending more time on a deal that can't be saved.`
         );
     }
 
@@ -558,7 +558,7 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     if (sortedCauses.length > 0 && sortedCauses[0]![1] >= 2) {
         const [top, count] = sortedCauses[0]!;
         body.push(
-            `"${top}" is the most frequently recorded top risk condition in this review sample, appearing on ${count} of ${examined.length}. Treat that frequency as a condition to investigate, not as a causal explanation of losses.`
+            `"${top}" is the most common top risk in these reviews, on ${count} of ${examined.length}. Have the new hire check for it early on every deal. It's a small sample, so treat it as a warning sign, not the known cause of the losses.`
         );
     }
 
@@ -596,14 +596,14 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     if (openMatches.size > 0) {
         surprise = {
             tone: "corrective",
-            headline: "Some open-deal text overlaps with recorded loss-reason language.",
-            body: `${plural(openMatches.size, "open deal has", "open deals have")} a keyword overlap between current next-step/trigger text and a historical loss reason. This is a text match for review, not evidence that the same loss pattern is repeating.`
+            headline: "Some open deals look like deals you've lost before.",
+            body: `${plural(openMatches.size, "open deal has", "open deals have")} a keyword overlap between its next step or trigger and a past loss reason. Check those deals this week, before the new hire inherits them. It is a word match, not evidence that the same loss is repeating, so confirm the risk is real.`
         };
     } else if (examined.length >= 3) {
         surprise = {
             tone: "affirming",
-            headline: "No simple keyword overlap was found between current open deals and recorded loss reasons.",
-            body: `The current text check found no shared loss-reason keyword in open-deal next steps or triggers. That does not establish that the underlying risks are absent; continue using the deal-risk review.`
+            headline: "No open deal looks like a past loss.",
+            body: `None of your open deals' next steps or triggers share words with a past loss reason. Keep running deal-risk reviews; a word check won't catch everything.`
         };
     }
 
@@ -623,7 +623,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `One closed-won deal is recorded. ${w.accountName || "The deal"} is a useful example, but one outcome is not enough to infer a repeatable win pattern.`
+                `One closed-won deal is recorded. ${w.accountName || "The deal"} is a useful story, but one outcome is not enough to infer a repeatable win pattern. The new hire needs a few more wins before "why we win" can be trusted.`
             ],
             [`${w.accountName} · ${dealKey(w)}`],
             null
@@ -640,16 +640,16 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
     const topTrigger = [...triggerCounts.entries()].sort((a, b) => b[1] - a[1])[0];
 
     const body: string[] = [
-        `${plural(input.closedWon.length, "closed-won deal is", "closed-won deals are")} recorded. The handoff below describes recurring traits within those wins; it does not claim those traits caused the outcomes.`
+        `${plural(input.closedWon.length, "closed-won deal is", "closed-won deals are")} recorded. Below is what they have in common; the new hire should look for the same things when choosing accounts. This describes traits the wins share; it does not claim those traits caused the outcomes.`
     ];
     if (topPersona && topPersona[1] >= 2) {
         body.push(
-            `"${topPersona[0]}" is the most frequently recorded persona among the wins, appearing on ${topPersona[1]} of ${input.closedWon.length}. Use that frequency as a prospecting hypothesis to keep testing.`
+            `"${topPersona[0]}" is the buyer on ${topPersona[1]} of ${input.closedWon.length} wins. Have the new hire go to that role first.`
         );
     }
     if (topTrigger && topTrigger[1] >= 2) {
         body.push(
-            `"${topTrigger[0]}" is the most frequently recorded trigger among the wins, appearing on ${topTrigger[1]} of ${input.closedWon.length}. It is a recurring context in the current sample, not proof of buyer readiness by itself.`
+            `"${topTrigger[0]}" was happening at ${topTrigger[1]} of ${input.closedWon.length} won accounts. Have the new hire watch for it and reach out soon after it shows up.`
         );
     }
 
@@ -675,14 +675,14 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
     if (missingFromPipeline.length > 0 && input.openDeals.length > 0) {
         surprise = {
             tone: "corrective",
-            headline: "A closed-won ICP label is absent from the current open pipeline.",
-            body: `No current open deal is labeled "${missingFromPipeline[0]}," although that label appears in the closed-won sample. Review whether that reflects an intentional territory choice or a prospecting gap.`
+            headline: "The kind of customer you win is missing from your open pipeline.",
+            body: `No current open deal is labeled "${missingFromPipeline[0]}," even though that kind of customer shows up in your wins. Unless you stepped away from it on purpose, point the new hire's prospecting there.`
         };
     } else if (winningIcps.size > 0 && missingFromPipeline.length === 0 && input.openDeals.length > 0) {
         surprise = {
             tone: "affirming",
-            headline: "Current open deals include the ICP labels represented in the closed-won sample.",
-            body: `Every ICP label represented in the recorded wins also appears in the current open pipeline. Continue measuring outcomes before treating that alignment as evidence of higher win probability.`
+            headline: "Your open pipeline matches the customers you've won.",
+            body: `Every ICP in your wins also shows up in your open deals. Keep the new hire prospecting toward the customers that have already bought.`
         };
     }
 
@@ -705,8 +705,8 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     const targetSource = input.quota.touchesPerDay == null ? "Calculated" : "Recorded";
 
     const body: string[] = [
-        `Using the current quota assumptions, the model requires ${dealsNeeded} closed deals and approximately ${oppsNeeded} qualified opportunities. The current planning formula translates that to about ${meetingsPerWeek} discovery meetings per week.`,
-        `${targetSource} daily outreach target: ${touchesPerDay}. A practical first-week cadence is: Monday review pipeline and deal risk; Tuesday outbound; Wednesday discovery preparation and calls; Thursday follow-up on stalled deals; Friday update next steps and prepare the following week. Adjust this starting schedule using recorded results.`
+        `To hit the number at the current assumptions, you need ${dealsNeeded} closed deals, which means about ${oppsNeeded} qualified opportunities, or about ${meetingsPerWeek} discovery meetings a week, every week.`,
+        `${targetSource} daily outreach target: ${touchesPerDay}. The new hire's week: Monday, review the top three deal risks on the Dashboard; Tuesday, outbound; Wednesday, discovery prep and calls; Thursday, follow up on stalled deals; Friday, update next steps and set up the next week. Adjust this starting schedule using recorded results.`
     ];
 
     const evidence: string[] = [
@@ -732,8 +732,8 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     if (olderTouches.length >= 8 && recentTouches.length === 0 && input.touches.length > 0) {
         surprise = {
             tone: "corrective",
-            headline: "Recent outbound activity is lower than the earlier recorded period.",
-            body: `${olderTouches.length} outbound touches are recorded from 15–60 days ago and none in the last 14 days. Document whether that change is intentional before presenting the current cadence to a new seller.`
+            headline: "Recent outbound activity is lower than before: outreach was steady, then stopped.",
+            body: `${olderTouches.length} outbound touches are recorded from 15–60 days ago and none in the last 14 days. Tell the new hire why it stopped (and whether it was on purpose) so they don't assume the cadence is optional.`
         };
     } else if (
         recentTouches.length === 0 &&
@@ -742,8 +742,8 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     ) {
         surprise = {
             tone: "corrective",
-            headline: `The plan calls for ${touchesPerDay} outreach actions per day, but no recent activity is recorded.`,
-            body: `Treat the daily target as a planning assumption until actual activity is logged and compared with meetings and pipeline created.`
+            headline: `The plan calls for ${touchesPerDay} outreach actions a day, but none are logged recently.`,
+            body: `The plan is only on paper until it happens daily. Log one full week of real outreach before handing the plan to a new hire, so they inherit a real week, not a target.`
         };
     }
 

@@ -108,8 +108,8 @@ describe("authorSection1 — target customers", () => {
                 closedLost: [deal({ id: "l1", icpLabel: "agency" })]
             })
         );
-        expect(s.body.join(" ")).toMatch(/disqualification hypotheses/i);
-        expect(s.body.join(" ")).toMatch(/not as proof/i);
+        expect(s.body.join(" ")).toMatch(/screen for these at intake/i);
+        expect(s.body.join(" ")).toMatch(/does not show that the profile caused/i);
     });
 });
 
@@ -164,7 +164,7 @@ describe("authorSection2 — outreach patterns", () => {
         expect(s.status).toBe("ready");
         expect(s.evidence[0]).toContain("email");
         expect(s.body.join(" ")).toMatch(/observed response rate/i);
-        expect(s.body.join(" ")).toMatch(/starting hypothesis/i);
+        expect(s.body.join(" ")).toMatch(/start the new hire on that channel/i);
     });
 
     it("treats unused channels as untested rather than ineffective", () => {
@@ -180,7 +180,7 @@ describe("authorSection2 — outreach patterns", () => {
         });
         const s = authorSection2(input({ touches }));
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline).toMatch(/no recorded test/i);
+        expect(s.surprise?.headline).toMatch(/haven.t tried/i);
     });
 });
 
@@ -242,8 +242,8 @@ describe("authorSection3 — discovery patterns", () => {
         expect(s.body[0]).toContain("100%");
         expect(s.body[1]).toContain("The problem and what it costs");
         expect(s.body[1]).not.toContain("pain-and-consequence");
-        expect(s.body[1]).toMatch(/pattern to test and teach/i);
-        expect(s.body[1]).toMatch(/not as proof/i);
+        expect(s.body[1]).toMatch(/teach that question first/i);
+        expect(s.body[1]).toMatch(/does not show/i);
     });
 
     it("describes missing recent segments as a change to review", () => {
@@ -270,8 +270,8 @@ describe("authorSection3 — discovery patterns", () => {
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline).toMatch(/absent from the last five calls/i);
-        expect(s.surprise?.body).toContain("trigger-and-urgency");
+        expect(s.surprise?.headline).toMatch(/stopped asking/i);
+        expect(s.surprise?.body).toContain("What makes it urgent now");
     });
 
     it("uses per-call data before aggregate fallback", () => {
@@ -391,7 +391,7 @@ describe("authorSection5 — loss patterns", () => {
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline).toMatch(/text overlaps/i);
+        expect(s.surprise?.headline).toMatch(/look like deals you.ve lost/i);
         expect(s.surprise?.body).toMatch(/not evidence/i);
     });
 });
@@ -431,7 +431,7 @@ describe("authorSection6 — win patterns", () => {
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline).toMatch(/absent from the current open pipeline/i);
+        expect(s.surprise?.headline).toMatch(/missing from your open pipeline/i);
     });
 });
 

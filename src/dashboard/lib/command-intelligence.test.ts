@@ -186,7 +186,7 @@ describe("explainCommandObject", () => {
         const aged = explainCommandObject({ ...base, nextStepOverdue: false, stageStuck: true }, mode);
         expect(overdue.title).toContain("next step is overdue");
         expect(overdue.title).not.toContain("stage");
-        expect(aged.title).toContain("time spent at this stage");
+        expect(aged.title).toContain("too long at this stage");
         expect(aged.title).not.toContain("overdue");
     });
 

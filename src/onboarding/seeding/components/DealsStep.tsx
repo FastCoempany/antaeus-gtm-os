@@ -64,7 +64,7 @@ export function DealsStep(): JSX.Element {
         <section class="sd-step">
             <p class="sd-kicker">{t("Your open deals", { class: "label" })}</p>
             <h1 class="sd-h1">
-                {t("Tell us where each open deal really stands. Only you know this.", { class: "body" })}
+                {t("Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.", { class: "body" })}
             </h1>
             <div class="sd-cols">
                 <div class="sd-entry">

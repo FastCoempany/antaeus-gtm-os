@@ -265,9 +265,9 @@ function buildIcpObject(
     return finalizeCommandObject(
         {
             id: "icp-truth",
-            title: "Save an ideal customer profile.",
+            title: "Save an ideal customer profile this week.",
             copy:
-                "No ICP is saved. Define the customers you intend to target in ICP Studio so you can compare accounts and opportunities with that definition.",
+                "You have signals and deals, but no saved ICP, so the other rooms can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.",
             badge: "Missing ICP",
             badgeTone: "state-ready",
             metricLabel: "Targeting setup",
@@ -469,68 +469,68 @@ function explainTitleForObject(
     if (mode === "queue") {
         if (family === "risk") {
             if (linkedRoomTop) return "Deal Workspace flagged this for intervention.";
-            if (truthDebtCount >= 2) return "Review the missing or incomplete qualification details.";
-            if (quotaPressureScore >= 60) return "The quota plan increases this deal's review priority.";
+            if (truthDebtCount >= 2) return "Fill in the missing qualification details before the next call.";
+            if (quotaPressureScore >= 60) return "Your quota plan needs this deal — fix its weak spots this week.";
             if (nextStepOverdue) return "The recorded next step is overdue.";
-            if (stageStuck) return "Review the time spent at this stage.";
-            return "Review this deal's risks before adding more pipeline.";
+            if (stageStuck) return "It has sat too long at this stage — set a dated next step.";
+            return "Recover this deal before chasing new pipeline.";
         }
-        if (family === "advisor") return "Consider whether an advisor can help with the next step.";
+        if (family === "advisor") return "An advisor intro could get this deal moving — ask this week.";
         if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-            return "This action is prioritized against the quota plan.";
+            return "Your quota plan needs this done this week.";
         }
         if ((family === "opportunity" || family === "move") && hasReplies) {
-            return "A reply is recorded. Review it and plan the follow-up.";
+            return "They replied — send the follow-up today while it's fresh.";
         }
         if (family === "opportunity" && highConfidenceCount >= 2) {
-            return "Multiple signals are marked high-confidence. Review their relevance.";
+            return "Several strong signals on this account — reach out while they're recent.";
         }
         if (family === "opportunity" && causeId === "coverage_gap") {
             return "Coverage gap needs more open opportunities.";
         }
         if (family === "opportunity" || family === "move") {
-            return "A recommended action based on the recorded account and pipeline context.";
+            return "The most useful next step on your list right now.";
         }
         if (family === "icp" && readinessIcpWeak) {
-            return "The ICP needs more specific targeting criteria.";
+            return "Tighten the ICP — it's too broad to target well.";
         }
-        if (family === "icp") return "Use the ICP to evaluate account fit.";
-        if (readinessFragility >= 45) return "Review the incomplete readiness criteria.";
-        if (quotaPressureScore >= 60) return "Review recorded activity against the quota plan.";
-        return "Review this workspace setup or data-quality item.";
+        if (family === "icp") return "Your ICP decides how every account below gets ranked.";
+        if (readinessFragility >= 45) return "Fill in the weakest part of your setup so a new hire could use it.";
+        if (quotaPressureScore >= 60) return "Your plan is ahead of the work logged — log or do more outreach.";
+        return "Fix this so the rest of the ranking stays accurate.";
     }
 
     if (family === "risk") {
         if (linkedRoomTop) return "Deal Workspace prioritized this deal for review.";
-        if (truthDebtCount >= 2) return "Review the missing or incomplete qualification details.";
-        if (quotaPressureScore >= 60) return "The quota plan increases this deal's review priority.";
+        if (truthDebtCount >= 2) return "Fill in the missing qualification details before the next call.";
+        if (quotaPressureScore >= 60) return "Your quota plan needs this deal — fix its weak spots this week.";
         if (nextStepOverdue) return "The recorded next step is overdue.";
-        if (stageStuck) return "Review the time spent at this stage.";
-        return "Review this deal's risks before adding more pipeline.";
+        if (stageStuck) return "It has sat too long at this stage — set a dated next step.";
+        return "Recover this deal before chasing new pipeline.";
     }
-    if (family === "advisor") return "Consider whether an advisor can help with the next step.";
+    if (family === "advisor") return "An advisor intro could get this deal moving — ask this week.";
     if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-        return "This action is prioritized against the quota plan.";
+        return "Your quota plan needs this done this week.";
     }
     if ((family === "opportunity" || family === "move") && hasReplies) {
-        return "A reply is recorded. Review it and plan the follow-up.";
+        return "They replied — send the follow-up today while it's fresh.";
     }
     if (family === "opportunity" && highConfidenceCount >= 2) {
-        return "Multiple signals are marked high-confidence. Review their relevance.";
+        return "Several strong signals on this account — reach out while they're recent.";
     }
     if (family === "opportunity" && causeId === "coverage_gap") {
         return "Coverage gap needs more open opportunities.";
     }
     if (family === "opportunity" || family === "move") {
-        return "A recommended action based on the recorded account and pipeline context.";
+        return "The most useful next step on your list right now.";
     }
     if (family === "icp" && readinessIcpWeak) {
-        return "The ICP needs more specific targeting criteria.";
+        return "Tighten the ICP — it's too broad to target well.";
     }
-    if (family === "icp") return "Use the ICP to evaluate account fit.";
-    if (readinessFragility >= 45) return "Review the incomplete readiness criteria.";
-    if (quotaPressureScore >= 60) return "Review recorded activity against the quota plan.";
-    return "Review this workspace setup or data-quality item.";
+    if (family === "icp") return "Your ICP decides how every account below gets ranked.";
+    if (readinessFragility >= 45) return "Fill in the weakest part of your setup so a new hire could use it.";
+    if (quotaPressureScore >= 60) return "Your plan is ahead of the work logged — log or do more outreach.";
+    return "Fix this so the rest of the ranking stays accurate.";
 }
 
 export function explainCommandObject(

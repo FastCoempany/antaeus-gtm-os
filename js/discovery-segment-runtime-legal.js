@@ -173,7 +173,7 @@
           branch("NO CLEAR TARGET","fl","\"Nothing jumps out immediately.\"","\"Then use the last time legal became the bottleneck. What kind of work created the pressure?\"",[
             jumpNode("Find the trigger", "trigger-and-urgency", "gc-pressure", "red"),
             jumpNode("Scope the workflow", "current-state-truth", "workflow-break", "blu")
-          ],"No priority workflow is named yet.","You still need a recent event where legal was the bottleneck.")
+          ],"No priority workflow is named yet.","You still need a recent event that put pressure on legal.")
         ])
       ]),
       segment("current-state-truth","02","Current-state truth","Map the actual legal workflow.",true,[
