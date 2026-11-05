@@ -27,7 +27,7 @@ export function ShowYourWorkButton({ patternId }: { patternId: string }): JSX.El
             aria-expanded={isOpen}
             onClick={() => void toggleEnvelope(patternId)}
         >
-            {isOpen ? "Hide the work" : "Show the work"}
+            {isOpen ? "Hide sources and reasoning" : "Show sources and reasoning"}
         </button>
     );
 }

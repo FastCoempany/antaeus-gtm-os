@@ -697,7 +697,10 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     if (!input.quota) return frame(id, "empty", [], [], null);
 
     const acv = input.quota.acv > 0 ? input.quota.acv : 50000;
-    const winRate = input.quota.winRate > 0 ? input.quota.winRate : 0.2;
+    // Quota Workback stores win rate as a whole-number percent (22 = 22%);
+    // older rows may hold a fraction (0.22). Normalize to a fraction.
+    const rawWin = input.quota.winRate;
+    const winRate = rawWin > 1 ? rawWin / 100 : rawWin > 0 ? rawWin : 0.2;
     const dealsNeeded = Math.ceil(input.quota.quota / acv);
     const oppsNeeded = Math.ceil(dealsNeeded / winRate);
     const meetingsPerWeek = Math.max(2, Math.round(oppsNeeded / 26));

@@ -22,9 +22,9 @@ import type { PatternMark } from "../lib/marks-client";
  */
 
 const BUTTON_LABELS: Record<PatternMark, string> = {
-    used: "Used",
-    met: "Met",
-    noise: "Noise"
+    used: "I acted on this",
+    met: "I already knew this",
+    noise: "Not useful"
 };
 
 const BUTTON_HINTS: Record<PatternMark, string> = {

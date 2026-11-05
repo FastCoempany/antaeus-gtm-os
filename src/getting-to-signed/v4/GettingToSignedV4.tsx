@@ -104,10 +104,10 @@ const FRONT_META: Record<FrontId, { label: string; dot: string; hint: string }> 
 
 const STATUS_LABEL: Record<FrontStatus, string> = {
     blocking: t("blocking"),
-    clearing: t("clearing"),
+    clearing: t("in progress"),
     todo: t("to do"),
     at_risk: t("at risk"),
-    settled: t("settled")
+    settled: t("resolved")
 };
 
 /** Practical guidance for each workstream. */

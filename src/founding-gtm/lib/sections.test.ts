@@ -459,6 +459,18 @@ describe("authorSection7 — first-week cadence", () => {
         expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
 
+    it("reads a whole-number percent win rate the way Quota Workback stores it", () => {
+        const s = authorSection7(
+            input({
+                quota: { quota: 500000, acv: 50000, winRate: 25, cycle: 90, touchesPerDay: 20 },
+                openDeals: [deal({ id: "o1" })]
+            })
+        );
+        expect(s.evidence).toContain("Win-rate assumption: 25%");
+        // 10 deals at a 25% win rate = 40 qualified opportunities, not 1.
+        expect(s.body[0]).toContain("about 40 qualified opportunities");
+    });
+
     it("reports recent activity dropoff as an observation", () => {
         const olderIso = new Date(Date.now() - 30 * 86400000).toISOString();
         const s = authorSection7(
