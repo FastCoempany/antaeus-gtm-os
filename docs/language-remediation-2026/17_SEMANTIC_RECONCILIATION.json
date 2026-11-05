@@ -1613,7 +1613,7 @@
    "kind": "string",
    "text": "BEHIND",
    "status": "NO LONGER APPLICABLE",
-   "reason": "Not rendered on the default surface; source occurrence is non-rendered: ['src/components/contract.ts', 'src/quota-workback/main.tsx', 'src/quota-workback/v4/QuotaWorkbackV4.tsx']."
+   "reason": "Not rendered on the default surface; source occurrence is non-rendered: ['src/getting-to-signed/lib/seed-scripts.ts', 'src/components/contract.ts', 'src/quota-workback/main.tsx']."
   },
   {
    "id": "10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json:81",
@@ -3757,7 +3757,7 @@
    "kind": "term",
    "text": "Future Autopsy",
    "status": "IMPLEMENTED DIFFERENTLY ACCEPTABLY",
-   "reason": "The term still renders 13 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
+   "reason": "The term still renders 10 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
   },
   {
    "id": "05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json:deprecated_terms:31",
@@ -3877,7 +3877,7 @@
    "kind": "term",
    "text": "front",
    "status": "IMPLEMENTED DIFFERENTLY ACCEPTABLY",
-   "reason": "The term still renders 2 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
+   "reason": "The term still renders 5 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
   },
   {
    "id": "05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json:deprecated_terms:46",
@@ -3965,7 +3965,7 @@
    "kind": "term",
    "text": "read",
    "status": "IMPLEMENTED DIFFERENTLY ACCEPTABLY",
-   "reason": "The term still renders 10 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
+   "reason": "The term still renders 11 time(s); each remaining use was reviewed in the final Tier-2 pass and is ordinary English, a real object name, or a placeholder token."
   },
   {
    "id": "05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json:deprecated_terms:57",
