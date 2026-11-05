@@ -157,6 +157,13 @@ function saveStateName(): void {
     stateEditVal.value = "";
 }
 
+/** Plain words for a buyer answer's tone (the branch keeps its short code). */
+const TONE_LABEL: Readonly<Record<string, string>> = {
+    ok: t("Good sign"),
+    ly: t("Unclear"),
+    fl: t("Warning sign")
+};
+
 export function DiscoveryStudioV4(): JSX.Element {
     const fw = currentFw.value;
     const registry = frameworkRegistry.value;
@@ -209,12 +216,14 @@ export function DiscoveryStudioV4(): JSX.Element {
               : fw.segments;
     const tab: DrawerTab = comp === "emergency" ? "recover" : drawerTab.value;
 
-    const preflight = [
-        Boolean(account.trim()),
-        personaLens.value !== null,
-        facts.length > 0 || segIdx > 0,
-        Boolean(lock.purpose || segIdx < 8)
-    ].filter(Boolean).length;
+    const preflightItems: Array<[boolean, string]> = [
+        [Boolean(account.trim()), t("account")],
+        [personaLens.value !== null, t("buyer role")],
+        [facts.length > 0, t("first answer recorded")],
+        [Boolean(lock.purpose), t("next-step purpose")]
+    ];
+    const preflight = preflightItems.filter(([ok]) => ok).length;
+    const preflightMissing = preflightItems.filter(([ok]) => !ok).map(([, label]) => label).join(", ");
 
     const lensQuestions = personaLens.value ? QUESTION_BANK[personaLens.value] : null;
 
@@ -234,8 +243,8 @@ export function DiscoveryStudioV4(): JSX.Element {
                     <span class={`dv4-pre${preflight >= 3 ? " is-ok" : ""}`}>
                         <span class="dv4-pd" />
                         {preflight >= 3
-                            ? t("Call setup ready")
-                            : `${t("Call setup:")} ${preflight}/4 ${t("items set")}`}
+                            ? t("Ready for the call")
+                            : `${t("Before the call:")} ${preflight} ${t("of 4 set — still missing:")} ${preflightMissing}`}
                     </span>
                     <span class="dv4-comp">
                         {(["off", "essentials", "emergency"] as CompressionMode[]).map((m) => (
@@ -249,10 +258,10 @@ export function DiscoveryStudioV4(): JSX.Element {
                 </div>
 
                 <div class="dv4-state">
-                    <span class="dv4-who">{account || t("(no account selected)")}</span>
+                    <span class="dv4-who">{account || t("No account selected")}</span>
                     <span class="dv4-vit">
-                        <span class="dv4-v">{t("status:")} <b class={`is-${activeTrack.value}`}>{TRACK_LABEL[activeTrack.value]}</b></span>
-                        <span class="dv4-v"><b>{facts.length}</b> {t("captured facts")}</span>
+                        <span class="dv4-v">{t("Call status:")} <b class={`is-${activeTrack.value}`}>{TRACK_LABEL[activeTrack.value]}</b></span>
+                        <span class="dv4-v"><b>{facts.length}</b> {t("facts recorded")}</span>
                         {stateEdit.value === "champion" ? (
                             <input class="dv4-sin" autofocus value={stateEditVal.value}
                                 onInput={(e) => (stateEditVal.value = (e.currentTarget as HTMLInputElement).value)}
@@ -260,7 +269,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 onBlur={saveStateName} placeholder={t("Champion name")} />
                         ) : (
                             <button type="button" class={`dv4-v is-chip${champion.value ? " is-ok" : ""}`} onClick={() => { stateEdit.value = "champion"; stateEditVal.value = champion.value; }}>
-                                {t("champion")} {champion.value ? "✓" : "—"}
+                                {t("Champion:")} {champion.value ? champion.value : t("not named yet")}
                             </button>
                         )}
                         {stateEdit.value === "signer" ? (
@@ -270,10 +279,10 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 onBlur={saveStateName} placeholder={t("Who approves?")} />
                         ) : (
                             <button type="button" class={`dv4-v is-chip${signer.value ? " is-ok" : ""}`} onClick={() => { stateEdit.value = "signer"; stateEditVal.value = signer.value; }}>
-                                {t("approver")} {signer.value ? "✓" : "—"}
+                                {t("Approver:")} {signer.value ? signer.value : t("not named yet")}
                             </button>
                         )}
-                        <span class="dv4-v"><b>{t("next step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("Step complete") : t("incomplete")}</span></span>
+                        <span class="dv4-v"><b>{t("Next step:")}</b> <span class={lockSet ? "is-set" : "is-no"}>{lockSet ? t("date, owner, and purpose set", { class: "body" }) : t("not set yet")}</span></span>
                     </span>
                 </div>
 
@@ -379,7 +388,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                     <a class="dv4-route is-pri" href={hrefToFutureAutopsy(account || undefined)}>{t("Review loss risk →")}</a>
                                 ) : null}
                                 <a class="dv4-route" href={hrefToDealWorkspace(account || undefined)}>{t("Deal Workspace")}</a>
-                                <span class="dv4-routenote">{facts.length} {t("facts captured during this call", { class: "body" })}</span>
+                                <span class="dv4-routenote">{facts.length} {t("facts recorded during this call", { class: "body" })}</span>
                             </div>
                         ) : null}
                     </div>
@@ -406,7 +415,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                     <div class="dv4-dbody">
                         {tab === "pushback" ? (
                             <div class="dv4-two">
-                                {objectionLibrary.value.length === 0 ? <p class="dv4-none">{t("No objection responses are authored for this framework yet.", { class: "body" })}</p> :
+                                {objectionLibrary.value.length === 0 ? <p class="dv4-none">{t("This framework doesn't have objection answers written yet.", { class: "body" })}</p> :
                                     objectionLibrary.value.map((o) => (
                                         <div class="dv4-oi" key={o.trigger}><b>“{o.trigger}”</b> → {o.reply}</div>
                                     ))}
@@ -414,7 +423,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "ask" ? (
                             <div class="dv4-two">
-                                {inboundQuestionHandlers.value.length === 0 ? <p class="dv4-none">{t("No buyer-question responses are authored for this framework yet.", { class: "body" })}</p> :
+                                {inboundQuestionHandlers.value.length === 0 ? <p class="dv4-none">{t("This framework doesn't have answers to buyer questions written yet.", { class: "body" })}</p> :
                                     inboundQuestionHandlers.value.map((h) => (
                                         <div class="dv4-oi" key={h.question}><b>“{h.question}”</b> → {h.bridge}</div>
                                     ))}
@@ -422,7 +431,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "evidence" ? (
                             <div>
-                                {supportDossier.value.length === 0 ? <p class="dv4-none">{t("No evidence examples are authored for this framework yet.", { class: "body" })}</p> :
+                                {supportDossier.value.length === 0 ? <p class="dv4-none">{t("This framework doesn't have evidence examples written yet.", { class: "body" })}</p> :
                                     supportDossier.value.map((topic) => (
                                         <div key={topic.title}>
                                             <div class="dv4-grp3">{topic.title}</div>
@@ -450,7 +459,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                         ))}
                                     </div>
                                 ))}
-                                <div class="dv4-grp3">{t("Skip-ahead responses")}</div>
+                                <div class="dv4-grp3">{t("If they want to skip ahead")}</div>
                                 <div class="dv4-two">
                                     {skipAheadHandlers.value.map((h) => (
                                         <div class="dv4-oi" key={h.trigger}><b>“{h.trigger}”</b> → {h.reply}</div>
@@ -460,9 +469,9 @@ export function DiscoveryStudioV4(): JSX.Element {
                         ) : null}
                         {tab === "know" ? (
                             <div>
-                                <div class="dv4-grp3">{t("Captured facts")} · <b>{facts.length}</b></div>
+                                <div class="dv4-grp3">{t("Facts from this call")} · <b>{facts.length}</b></div>
                                 <div class="dv4-facts">
-                                    {facts.length === 0 ? <p class="dv4-none">{t("No facts are captured yet. Select a buyer response when it records information you want to keep.", { class: "body" })}</p> :
+                                    {facts.length === 0 ? <p class="dv4-none">{t("No facts recorded yet. When you select a buyer response, what it tells you is saved here.", { class: "body" })}</p> :
                                         facts.map((f) => {
                                             const status = factStatusFor(f.nodeId, f.branchIndex);
                                             return (
@@ -472,26 +481,26 @@ export function DiscoveryStudioV4(): JSX.Element {
                                                         <span class="dv4-fs is-dep">{t("used")}</span>
                                                     ) : (
                                                         <button type="button" class="dv4-fs" onClick={() => deployFact(f.nodeId, f.branchIndex)}>
-                                                            {t("use in this call")}
+                                                            {t("bring it up now")}
                                                         </button>
                                                     )}
                                                 </div>
                                             );
                                         })}
                                 </div>
-                                <div class="dv4-grp3">{t("Recorded response signals")}</div>
+                                <div class="dv4-grp3">{t("What their answers suggested")}</div>
                                 <div class="dv4-facts">
-                                    {signalLedger.value.length === 0 ? <p class="dv4-none">{t("No response signals recorded yet.")}</p> :
+                                    {signalLedger.value.length === 0 ? <p class="dv4-none">{t("Nothing recorded from their answers yet.", { class: "body" })}</p> :
                                         signalLedger.value.slice(-6).map((sig) => (
                                             <div class="dv4-fact" key={`${sig.nodeId}-${sig.branchIndex}`}>
-                                                <span class={`dv4-fl tone-${sig.tone}`}>{sig.tone}</span>
+                                                <span class={`dv4-fl tone-${sig.tone}`}>{TONE_LABEL[sig.tone] ?? t("Noted")}</span>
                                                 <span class="dv4-fv">{t("at")} {sig.nodeId.split("--").pop()?.replace(/-/g, " ")}</span>
                                             </div>
                                         ))}
                                 </div>
-                                <div class="dv4-grp3">{t("Captured facts available for reuse", { class: "body" })}</div>
+                                <div class="dv4-grp3">{t("Facts you can bring back up later in the call", { class: "body" })}</div>
                                 <div class="dv4-facts">
-                                    {tiebackLedger.value.length === 0 ? <p class="dv4-none">{t("No reusable facts are held yet.")}</p> :
+                                    {tiebackLedger.value.length === 0 ? <p class="dv4-none">{t("No facts saved to bring back up yet.", { class: "body" })}</p> :
                                         tiebackLedger.value.map((tb) => (
                                             <div class="dv4-fact" key={`${tb.nodeId}-${tb.branchIndex}`}>
                                                 <span class={`dv4-fl${tb.status === "deployed" ? " is-dep" : ""}`}>{tb.status === "deployed" ? t("used") : t("available")}</span>
