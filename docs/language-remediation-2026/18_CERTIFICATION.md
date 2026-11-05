@@ -136,14 +136,44 @@ status came from a literal-string check, not from missing work.
   longer say PROOF or PRESSURE.
 - **Demo books:** both rewritten in plain language.
 
-## 6. Open items for the owner
+## 6. Owner-directed additions (2026-11-05)
+
+- **Call Planner retired.**
+  - `/call-planner/` and `/app/discovery-agenda/` redirect to Discovery Studio, keeping the query and hash.
+  - The room's UI is removed. Its persona question banks moved into Discovery Studio.
+  - The palette, help and every cross-room handoff point at Discovery Studio, and old saved data still loads.
+  - No rendered text mentions Call Planner.
+- **Numbers agree between rooms.** Each value below is now computed by the room that owns it, with stored snapshots used only as fallbacks.
+
+  | Value | Computed by |
+  |---|---|
+  | Account priority | Signal Console's heat engine, everywhere |
+  | Handoff sections ready | Founding GTM |
+  | Deals at elevated risk | Deal Workspace |
+  | Pipeline coverage | Quota Workback |
+  | Daily outreach target | Quota Workback |
+  | Founding GTM's first-week plan (deals, opportunities, meetings) | Quota Workback |
+  | LinkedIn step versus its reason | LinkedIn Playbook |
+  | Advisor-request counts | Founding GTM, with the total and the stage rows describing the same set |
+  | Signal Console counters | Signal Console, with each label saying what it counts |
+
+  An independent reviewer confirmed that the remaining cross-room values match in the regenerated walkthrough.
+- **Discovery segment names are plain:** Opening, How they work today, The problem and its cost, Why now, Who's involved, What they need to see, Current vendor, How they'll decide, Next step, After the call. Keys are unchanged.
+  - A second pass rewrote about 1,600 jump labels and node badges and about 865 lines of question and answer text.
+  - Rescue, gate and bar metaphors are gone.
+  - Two cockpit logic bugs are fixed: the call checklist now marks an item done only when it is done, and signal tones are shown in words.
+  - Canon §4.12 is updated.
+- **Prospecting Desk runs its own cited web search.** See `deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html` and `supabase/functions/prospecting-research/README.md`.
+  - **Finding companies:** you describe who you're after and get up to 8 companies. Each comes with why it fits, a dated buying signal, who to contact, an opening line and source links.
+  - **Researching companies you name:** each gets a cited brief, with suggested qualification answers that apply only when you click them.
+  - **Saved searches** can be re-checked for new matches.
+  - **Source checks:** only sources that the web search actually returned are kept, and anything uncited is dropped.
+  - **Cost:** there is a weekly cost ceiling per workspace, and every run is logged.
+  - **Demo:** the demo shows labeled sample results built from the seed data.
+
+## 7. Open items for the owner
 
 1. **Briefing voice — decided 2026-11-05.** The owner confirmed keeping the completion pass's Briefing changes: the hedge-word limit is a review flag, not a hard reject; calibrated uncertainty words are allowed; the "assert when multi-source" and "you, never we" prompt rules stay removed.
-2. **Prospecting Desk canon.** `CLAUDE.md` §4.6 says the room runs its own cited web search; the shipped room does
-   not. The map now matches the room. The canon needs your decision.
-3. **Call Planner.** About 70 Discovery jump labels still read "Open Call Planner" or "Carry into Call Planner". The
-   canon retired that room, but its route still works.
-4. **Cross-room numbers.** Priority scores and handoff section counts disagree between rooms (LinkedIn against the
-   Dashboard, Founding GTM against the Dashboard). This is a data-consistency issue found during scoring.
-5. **Discovery segment headers.** The fixed segment names, such as "Next-step lock", are canon names. Renaming them is a
-   mind change.
+2. **Quota planning rounding.** Quota Workback rounds required deals up per month, so a $2M target at $250k per deal plans 12 deals a year instead of 8. Founding GTM now matches Quota exactly. The engine's rounding is legacy behavior and was left unchanged.
+3. **Live search verification.** The Prospecting Desk search is fully tested against the documented response format but has not yet made a live call. It goes live after the merge deploys the function. It needs the existing `ANTHROPIC_API_KEY` Supabase secret, and the new `prospecting_research_runs` table is created by the migration workflow.
+
