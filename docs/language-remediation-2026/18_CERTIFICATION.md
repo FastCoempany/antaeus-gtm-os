@@ -138,9 +138,7 @@ status came from a literal-string check, not from missing work.
 
 ## 6. Open items for the owner
 
-1. **Briefing voice.** The completion pass removed the three-hedge-word cap and the "assert when multi-source" rule,
-   and allowed a market update to be an event summary. These were treated as the approved Briefing calibration and
-   left unchanged. Confirm, or ask for them back.
+1. **Briefing voice — decided 2026-11-05.** The owner confirmed keeping the completion pass's Briefing changes: the hedge-word limit is a review flag, not a hard reject; calibrated uncertainty words are allowed; the "assert when multi-source" and "you, never we" prompt rules stay removed.
 2. **Prospecting Desk canon.** `CLAUDE.md` §4.6 says the room runs its own cited web search; the shipped room does
    not. The map now matches the room. The canon needs your decision.
 3. **Call Planner.** About 70 Discovery jump labels still read "Open Call Planner" or "Carry into Call Planner". The
