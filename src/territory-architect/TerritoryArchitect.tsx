@@ -748,7 +748,7 @@ function HandoffStrip(): JSX.Element {
     return (
         <section class="ta-handoff-strip" aria-label={t("Carry the territory forward")}>
             <p class="ta-handoff-strip__kicker">{t("CARRY THE TERRITORY FORWARD")}</p>
-            <nav class="ta-handoffs" aria-label={t("Cross-room handoff")}>
+            <nav class="ta-handoffs" aria-label={t("Continue on another page")}>
                 <a
                     class="ta-handoff ta-handoff--primary"
                     href={hrefToSourcingWorkbench(focus)}

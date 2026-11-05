@@ -40,7 +40,7 @@ export function AccountGridDS(): JSX.Element {
                 </h2>
                 <p class="scd-empty__body">
                     {t(
-                        "A customer mentioned them. An exec posted something. You saw them in a competitor's case study. The room starts ranking accounts by signal strength the moment one is in.",
+                        "A customer mentioned them. An exec posted something. You saw them in a competitor's case study. Signal Console starts ranking accounts by signal strength the moment one is in.",
                         { class: "body" }
                     )}
                 </p>

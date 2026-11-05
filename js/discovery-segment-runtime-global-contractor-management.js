@@ -499,7 +499,7 @@
         branch("MISSING TRUTH CLEAR", "ok", "\"We know the open question, whether those contractors survive an audit, and who from Legal has to confirm it.\"", "\"Good. Then the handoff is specific enough to move.\"", [
           jumpNode("Choose where this goes after the call", "post-call-routing", "room-route", "grn"),
           action("Set the next meeting", "segment:next-step-lock", "blu")
-        ], "The open question is clear: whether the contractors would pass an audit, and who in Legal confirms it.", "You still need the correct room and owner."),
+        ], "The open question is clear: whether the contractors would pass an audit, and who in Legal confirms it.", "You still need to pick where this goes next and who owns it."),
         branch("MISSING OWNER", "ly", "\"We know the classification risk, but not who in Legal can confirm it.\"", "\"Then the next step must start by getting the right Legal or Compliance owner involved.\"", [
           action("Set the next meeting", "segment:next-step-lock", "org"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")

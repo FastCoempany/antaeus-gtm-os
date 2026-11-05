@@ -53,7 +53,7 @@ export function SystemHealth(): JSX.Element {
     if (compounding.length === 0) {
         compounding.push(
             t(
-                "The room is asking the right questions about the plan. The plan itself still needs harder evidence before you should bet the quarter on it.",
+                "Quota Workback is asking the right questions about the plan. The plan itself still needs harder evidence before you should bet the quarter on it.",
                 { class: "body" }
             )
         );

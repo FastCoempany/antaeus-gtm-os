@@ -115,7 +115,7 @@ export function ReadinessPanel(props: ReadinessPanelProps): JSX.Element | null {
                         {summary.gateBlockers.length === 0 ? (
                             <p class="dbt-readiness__none">
                                 {t(
-                                    "Everything the next gate needs is in place. This will refresh the next time you save a change in any room.",
+                                    "Everything the next gate needs is in place. This will refresh the next time you save a change anywhere in the app.",
                                     { class: "body" }
                                 )}
                             </p>

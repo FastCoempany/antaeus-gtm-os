@@ -29,7 +29,7 @@ export interface WordmarkProps {
 }
 
 export function Wordmark(props: WordmarkProps): JSX.Element {
-    const kicker = props.kicker ?? "OPERATING ROOM";
+    const kicker = props.kicker ?? "WORKSPACE";
     const home = props.homeHref ?? "/";
     const workspace = (props.workspace ?? "").trim();
 

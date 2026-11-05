@@ -56,7 +56,7 @@ export function toPulling(): PullingData | undefined {
         href: buildFoundingGtmHref("/dashboard/"),
         reasons: [
             `${counts.ready} of 7 sections ready to hand off`,
-            "The kit is read-mode — updates come from the rooms"
+            "The kit is read-mode — updates come from the rest of the app"
         ]
     };
 }

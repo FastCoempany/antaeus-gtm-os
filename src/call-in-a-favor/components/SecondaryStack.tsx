@@ -334,7 +334,7 @@ export function SecondaryStack(): JSX.Element {
                     ))}
                 </div>
                 <p class="ad-handoff__kicker">{t("CARRY THE ASK FORWARD")}</p>
-                <nav class="ad-handoff" aria-label={t("Cross-room handoff")}>
+                <nav class="ad-handoff" aria-label={t("Continue on another page")}>
                     <a
                         class="ad-btn ad-btn--blue"
                         href={hrefToDealWorkspace(

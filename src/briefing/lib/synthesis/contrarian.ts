@@ -158,7 +158,7 @@ export function buildContrarianPrompt(input: ContrarianInput): string {
     lines.push(`  "confidence": <0.0-1.0>,`);
     lines.push(`  "recommended_moves": [`);
     lines.push(
-        `    { "label": "<verb-led move>", "rationale": "<why the evidence supports doing it>", "destination": "<room · object · action>" }`
+        `    { "label": "<verb-led move>", "rationale": "<why the evidence supports doing it>", "destination": "<product area · object · action>" }`
     );
     lines.push(`  ],`);
     lines.push(`  "evidence_ids": ["<enriched_id>", ...]`);

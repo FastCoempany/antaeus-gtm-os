@@ -92,7 +92,7 @@ function sendProspect(p: Prospect): void {
     setProspectStage(p.id, "pushed");
     persistProspect(p.id);
     if (selectedId.value === p.id) selectedId.value = null;
-    toast(`${p.accountName} ${t("was queued for Signal Console and will appear when that room next loads.", { class: "body" })}`);
+    toast(`${p.accountName} ${t("was queued for Signal Console and will appear the next time Signal Console opens.", { class: "body" })}`);
 }
 
 function setAside(p: Prospect): void {

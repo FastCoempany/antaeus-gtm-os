@@ -49,18 +49,18 @@ export function HandoffStrip(): JSX.Element {
                 <h2 class="dw-handoff__title">
                     {focal
                         ? `Push ${focal.accountName} into intervention.`
-                        : t("Pick an intervention room.")}
+                        : t("Pick where the deal goes next.")}
                 </h2>
                 <p class="dw-handoff__sub">
                     {focal
                         ? t("Carries the focal deal into the destination.", { class: "body" })
                         : t(
-                              "Pin a deal above first to carry it through, or jump to a room and pick from there.",
+                              "Pin a deal above first so it opens with you, or open one of these pages and pick a deal there.",
                               { class: "body" }
                           )}
                 </p>
             </header>
-            <nav class="dw-handoff__row" aria-label={t("Cross-room handoff")}>
+            <nav class="dw-handoff__row" aria-label={t("Continue on another page")}>
                 <a
                     class="dw-handoff__cta dw-handoff__cta--primary"
                     href={hrefToFutureAutopsy(focusName)}

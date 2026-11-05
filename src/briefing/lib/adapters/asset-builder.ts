@@ -18,6 +18,6 @@ import { uninitializedContract } from "./shell-helpers";
  */
 export function getAssetBuilderState(): AssetBuilderState {
     return uninitializedContract<AssetBuilderStateBody>(
-        "Asset Builder adapter shell — B.0c. Room not in canon §4 yet; contract reserved for future use."
+        "Asset Builder adapter shell — B.0c. Asset Builder is not built yet; contract reserved for future use."
     );
 }

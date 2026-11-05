@@ -155,7 +155,7 @@ export function LinkedInPlaybookV4(): JSX.Element {
         if (entry) {
             void saveAction(entry);
             if (here === 4) {
-                toast(`${t("Logged on")} ${focusName}. ${t("The five-step LinkedIn sequence is complete; continue the account plan in the appropriate outreach room.", { class: "body" })}`);
+                toast(`${t("Logged on")} ${focusName}. ${t("The five-step LinkedIn sequence is complete; continue the account plan in Outbound Studio or Cold Call Studio.", { class: "body" })}`);
             } else {
                 toast(`${t("Logged on")} ${focusName}. ${t("Next:")} ${STEP_LABELS[here + 1]}.`);
             }

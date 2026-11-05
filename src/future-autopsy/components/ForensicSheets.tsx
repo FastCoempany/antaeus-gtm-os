@@ -124,7 +124,7 @@ function sentenceTitlesFor(doc: AutopsyDoc): {
         ? "The buyer is identified, but no one inside their company is carrying this forward."
         : v.qualScore < 10
         ? "Qualification is thin — the buyer can't take the pilot results to their boss yet."
-        : "Owner and inside carrier are both named. The pilot results can be carried into the room.";
+        : "Owner and inside carrier are both named. The pilot results can be carried into the buyer's decision meeting.";
 
     const motion = !v.hasNextStep
         ? "There's no dated next step — the process is running ahead of any control."

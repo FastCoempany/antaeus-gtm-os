@@ -32,7 +32,7 @@ export function HandoffStrip(): JSX.Element {
                 <h2 class="qw-section__title">{t("Where the plan lives next.")}</h2>
                 <p class="qw-section__sub">
                     {t(
-                        "The weekly pressure number has to land in the rooms that actually create pipeline.",
+                        "The weekly number has to reach the pages where you actually create pipeline.",
                         { class: "body" }
                     )}
                 </p>
