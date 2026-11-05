@@ -24,7 +24,7 @@
 [briefing | 1. The room at rest | text] 0
 [briefing | 1. The room at rest | text] No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.
 [briefing | 1. The room at rest | text] Good morning.
-[briefing | 1. The room at rest | text] 11:06 AM · Chicago
+[briefing | 1. The room at rest | text] 11:41 AM · Chicago
 [briefing | 1. The room at rest | text] MARKET UPDATES
 [briefing | 1. The room at rest | text] pattern
 [briefing | 1. The room at rest | text] Three watched accounts have public, dated hiring activity
@@ -174,14 +174,14 @@
 [briefing | After clicking “⚙” | button] OFF
 [briefing | After clicking “⚙” | button] 1H
 [briefing | After clicking “⚙” | button] 4H
-[briefing | After hovering “−” | text] 11:07 AM · Chicago
 [briefing | After clicking “−” | button] No schedules
-[briefing | After clicking “−” | text] 11:07 AM · Chicago
-[briefing | After clicking “×” | text] 11:07 AM · Chicago
-[briefing | After hovering “‹” | text] 11:07 AM · Chicago
+[briefing | After clicking “−” | text] 11:42 AM · Chicago
+[briefing | After hovering “×” | text] 11:42 AM · Chicago
+[briefing | After clicking “×” | text] 11:42 AM · Chicago
+[briefing | After hovering “‹” | text] 11:42 AM · Chicago
 [briefing | After hovering “‹” | button] ‹
 [briefing | After hovering “‹” | button] ›
-[briefing | After clicking “‹” | text] 11:07 AM · Chicago
+[briefing | After clicking “‹” | text] 11:42 AM · Chicago
 [briefing | After clicking “‹” | text] WORKSPACE MAP
 [briefing | After clicking “‹” | text] Where do you want to go?
 [briefing | After clicking “‹” | text] You're in Briefing · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority account in your watchlist.
@@ -215,7 +215,7 @@
 [briefing | After clicking “‹” | link] Readiness Score can another seller run the sales process?
 [briefing | After clicking “‹” | link] Founding GTM document the sales process for another seller
 [briefing | After clicking “‹” | link] Settings manage workspace data and account settings
-[briefing | After clicking “Open analysis ↓” | text] 11:08 AM · Chicago
+[briefing | After clicking “Open analysis ↓” | text] 11:43 AM · Chicago
 [briefing | After clicking “Open analysis ↓” | text] WORKSPACE MAP
 [briefing | After clicking “Open analysis ↓” | text] Where do you want to go?
 [briefing | After clicking “Open analysis ↓” | text] You're in Briefing · Recommended next workspace: Outbound Studio · Boeing is currently the highest-priority account in your watchlist.
@@ -249,28 +249,51 @@
 [briefing | After clicking “Open analysis ↓” | link] Readiness Score can another seller run the sales process?
 [briefing | After clicking “Open analysis ↓” | link] Founding GTM document the sales process for another seller
 [briefing | After clicking “Open analysis ↓” | link] Settings manage workspace data and account settings
-[briefing | After hovering “Open analysis ↓” | text] 11:08 AM · Chicago
-[briefing | After hovering “›” | text] 11:08 AM · Chicago
+[briefing | After hovering “Open analysis ↓” | text] 11:43 AM · Chicago
+[briefing | After hovering “›” | text] 11:43 AM · Chicago
 [briefing | After hovering “›” | button] ‹
 [briefing | After hovering “›” | button] ›
-[briefing | After clicking “SHOW SOURCES AND REASONING” | text] 11:08 AM · Chicago
+[briefing | After clicking “SHOW SOURCES AND REASONING” | text] 11:43 AM · Chicago
 [briefing | After clicking “SHOW SOURCES AND REASONING” | button] HIDE SOURCES AND REASONING
 [briefing | After clicking “SHOW SOURCES AND REASONING” | text] No source record is saved for this read. Reads created from now on will include one.
-[briefing | After hovering “SHOW SOURCES AND REASONING” | text] 11:09 AM · Chicago
-[briefing | After clicking “SHOW SOURCES AND REASONING” | text] 11:09 AM · Chicago
+[briefing | After hovering “I acted on this” | text] 11:44 AM · Chicago
+[briefing | After clicking “SHOW SOURCES AND REASONING” | text] 11:44 AM · Chicago
 [briefing | After clicking “SHOW SOURCES AND REASONING” | button] HIDE SOURCES AND REASONING
 [briefing | After clicking “SHOW SOURCES AND REASONING” | text] No source record is saved for this read. Reads created from now on will include one.
-[briefing | After clicking “Add monitoring rule” | text] 11:09 AM · Chicago
+[briefing | After clicking “Add monitoring rule” | text] 11:44 AM · Chicago
 [briefing | After clicking “Add monitoring rule” | text] WHAT SHOULD THE SYSTEM WATCH FOR?
 [briefing | After clicking “Add monitoring rule” | field] WHAT SHOULD THE SYSTEM WATCH FOR?
 [briefing | After clicking “Add monitoring rule” | button] Review monitoring rule
 [briefing | After clicking “Add monitoring rule” | button] Cancel
-[briefing | After clicking “⌘K JUMP”, then hovering “WELCOME Welcome Today's recommended starting point.” | text] 11:09 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.” | text] 11:10 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.” | text] 11:11 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a” | text] 11:12 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.” | text] 11:12 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “⏰” | text] 11:13 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “WELCOME Welcome Today's recommended starting point.” | text] 11:44 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.” | text] 11:45 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.” | text] 11:46 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.” | text] 11:47 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.” | text] 11:47 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 11:47 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Review this week's workspace analysis
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -290,7 +313,54 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:13 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:47 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 11:48 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Prep for my next call
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -310,8 +380,54 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:13 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 11:13 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:48 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 11:48 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] What's at risk this week
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -331,8 +447,30 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:13 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ” | text] 11:14 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:48 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] SCHEDULE SKILL
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | heading 2] Plan a pilot for the highest-risk deal
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] CADENCE
@@ -352,35 +490,407 @@
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] :
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Cancel
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] Save schedule
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:14 AM · Chicago
-[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 11:14 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 11:49 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Today
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 11:49 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 51°Cloudy
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | button] 7-day forecast ↗
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | button] ✕
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Today
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 52°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 44°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Fri
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 47°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 37°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Sat
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 50°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 36°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Sun
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 59°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 42°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Mon
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 63°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 49°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Tue
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 61°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] Wed
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 53°
+[briefing | After clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ” | text] 46°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 11:49 AM · Chicago
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 51°Cloudy
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | button] ✕
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Today
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 52°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 44°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Fri
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 47°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 37°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Sat
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 50°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 36°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Sun
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 59°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 42°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Mon
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 63°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 49°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Tue
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 61°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] Wed
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 53°
+[briefing | After clicking “Open current analysis”, then hovering “Close current analysis” | text] 46°
 [briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] Open current analysis
-[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 11:14 AM · Chicago
-[briefing | After clicking “Open current analysis”, then clicking “×” | text] 11:14 AM · Chicago
-[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 11:15 AM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 11:49 AM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 51°Cloudy
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | button] ✕
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Today
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 52°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 44°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Fri
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 47°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 37°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Sat
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 50°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 36°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Sun
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 59°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 42°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Mon
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 63°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 49°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Tue
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 61°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] Wed
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 53°
+[briefing | After clicking “Open current analysis”, then clicking “Close current analysis” | text] 46°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 11:49 AM · Chicago
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 51°Cloudy
+[briefing | After clicking “Open current analysis”, then clicking “×” | button] 7-day forecast ↗
+[briefing | After clicking “Open current analysis”, then clicking “×” | button] ✕
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Today
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 52°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 44°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Fri
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 47°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 37°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Sat
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 50°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 36°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Sun
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 59°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 42°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Mon
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 63°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 49°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Tue
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 61°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] Wed
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 53°
+[briefing | After clicking “Open current analysis”, then clicking “×” | text] 46°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 11:49 AM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] ✕
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Today
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 52°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 44°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Fri
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 47°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 37°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sat
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 50°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 36°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sun
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 59°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 42°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Mon
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 63°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 49°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Tue
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 61°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Wed
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 53°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 46°
 [briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] HIDE
-[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 11:15 AM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 11:49 AM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | button] ✕
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Today
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 52°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 44°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Fri
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 47°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 37°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sat
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 50°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 36°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Sun
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 59°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 42°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Mon
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 63°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 49°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Tue
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 61°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] Wed
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 53°
+[briefing | After clicking “⚙”, then hovering “Show in-session notifications” | text] 46°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 11:50 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | button] ✕
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Today
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 52°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 44°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Fri
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 47°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 37°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Sat
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 50°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 36°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Sun
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 59°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 42°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Mon
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 63°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 49°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Tue
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 61°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] Wed
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 53°
+[briefing | After clicking “⚙”, then clicking “Show in-session notifications” | text] 46°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 11:50 AM · Chicago
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | button] ✕
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Today
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 52°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 44°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Fri
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 47°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 37°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Sat
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 50°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 36°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Sun
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 59°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 42°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Mon
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 63°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 49°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Tue
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 61°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] Wed
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 53°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | text] 46°
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints” | button] HIDE
 [briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] ⌃
-[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 11:15 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 11:50 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | button] ✕
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Today
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 52°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 44°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Fri
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 47°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 37°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Sat
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 50°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 36°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Sun
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 59°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 42°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Mon
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 63°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 49°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Tue
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 61°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] Wed
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 53°
+[briefing | After clicking “⚙”, then clicking “Show schedule panel” | text] 46°
 [briefing | After clicking “⚙”, then clicking “1H” | text] SNOOZED · 1H LEFT
-[briefing | After clicking “⚙”, then clicking “1H” | text] 11:16 AM · Chicago
-[briefing | After clicking “⚙”, then hovering “4H” | text] 11:16 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “1H” | text] 11:50 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “1H” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then clicking “1H” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “1H” | button] ✕
+[briefing | After clicking “⚙”, then clicking “1H” | text] Today
+[briefing | After clicking “⚙”, then clicking “1H” | text] 52°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 44°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Fri
+[briefing | After clicking “⚙”, then clicking “1H” | text] 47°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 37°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Sat
+[briefing | After clicking “⚙”, then clicking “1H” | text] 50°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 36°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Sun
+[briefing | After clicking “⚙”, then clicking “1H” | text] 59°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 42°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Mon
+[briefing | After clicking “⚙”, then clicking “1H” | text] 63°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 49°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Tue
+[briefing | After clicking “⚙”, then clicking “1H” | text] 61°
+[briefing | After clicking “⚙”, then clicking “1H” | text] Wed
+[briefing | After clicking “⚙”, then clicking “1H” | text] 53°
+[briefing | After clicking “⚙”, then clicking “1H” | text] 46°
 [briefing | After clicking “⚙”, then clicking “4H” | text] SNOOZED · 4H LEFT
-[briefing | After clicking “⚙”, then clicking “4H” | text] 11:16 AM · Chicago
-[briefing | After clicking “−”, then hovering “No schedules” | text] 11:16 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “4H” | text] 11:51 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “4H” | text] 51°Cloudy
+[briefing | After clicking “⚙”, then clicking “4H” | button] 7-day forecast ↗
+[briefing | After clicking “⚙”, then clicking “4H” | button] ✕
+[briefing | After clicking “⚙”, then clicking “4H” | text] Today
+[briefing | After clicking “⚙”, then clicking “4H” | text] 52°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 44°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Fri
+[briefing | After clicking “⚙”, then clicking “4H” | text] 47°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 37°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Sat
+[briefing | After clicking “⚙”, then clicking “4H” | text] 50°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 36°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Sun
+[briefing | After clicking “⚙”, then clicking “4H” | text] 59°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 42°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Mon
+[briefing | After clicking “⚙”, then clicking “4H” | text] 63°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 49°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Tue
+[briefing | After clicking “⚙”, then clicking “4H” | text] 61°
+[briefing | After clicking “⚙”, then clicking “4H” | text] Wed
+[briefing | After clicking “⚙”, then clicking “4H” | text] 53°
+[briefing | After clicking “⚙”, then clicking “4H” | text] 46°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 11:51 AM · Chicago
+[briefing | After clicking “−”, then hovering “No schedules” | text] 51°Cloudy
+[briefing | After clicking “−”, then hovering “No schedules” | button] 7-day forecast ↗
+[briefing | After clicking “−”, then hovering “No schedules” | button] ✕
+[briefing | After clicking “−”, then hovering “No schedules” | text] Today
+[briefing | After clicking “−”, then hovering “No schedules” | text] 52°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 44°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Fri
+[briefing | After clicking “−”, then hovering “No schedules” | text] 47°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 37°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Sat
+[briefing | After clicking “−”, then hovering “No schedules” | text] 50°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 36°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Sun
+[briefing | After clicking “−”, then hovering “No schedules” | text] 59°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 42°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Mon
+[briefing | After clicking “−”, then hovering “No schedules” | text] 63°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 49°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Tue
+[briefing | After clicking “−”, then hovering “No schedules” | text] 61°
+[briefing | After clicking “−”, then hovering “No schedules” | text] Wed
+[briefing | After clicking “−”, then hovering “No schedules” | text] 53°
+[briefing | After clicking “−”, then hovering “No schedules” | text] 46°
 [briefing | After clicking “−”, then hovering “No schedules” | button] HIDE
-[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 11:16 AM · Chicago
-[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 11:16 AM · Chicago
-[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 11:16 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly” | text] 11:16 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily” | text] 11:17 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily” | text] 11:17 AM · Chicago
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 11:51 AM · Chicago
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 51°Cloudy
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | button] 7-day forecast ↗
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | button] ✕
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Today
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 52°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 44°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Fri
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 47°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 37°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Sat
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 50°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 36°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Sun
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 59°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 42°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Mon
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 63°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 49°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Tue
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 61°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] Wed
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 53°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING” | text] 46°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 11:51 AM · Chicago
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 51°Cloudy
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | button] 7-day forecast ↗
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | button] ✕
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Today
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 52°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 44°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Fri
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 47°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 37°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Sat
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 50°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 36°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Sun
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 59°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 42°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Mon
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 63°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 49°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Tue
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 61°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] Wed
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 53°
+[briefing | After clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING” | text] 46°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 11:51 AM · Chicago
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 51°Cloudy
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | button] 7-day forecast ↗
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | button] ✕
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Today
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 52°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 44°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Fri
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 47°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 37°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Sat
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 50°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 36°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Sun
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 59°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 42°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Mon
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 63°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 49°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Tue
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 61°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] Wed
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 53°
+[briefing | After clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?” | text] 46°
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly” | text] 11:51 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily” | text] 11:51 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly” | text] 11:52 AM · Chicago
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] DAY OF MONTH
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | field] DAY OF MONTH
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] 11:17 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed” | text] 11:18 AM · Chicago
-[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule” | text] 11:18 AM · Chicago
-[briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | text] 11:19 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly” | text] 11:52 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu” | text] 11:53 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule” | text] 11:53 AM · Chicago
+[briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then hovering “✕” | text] 11:54 AM · Chicago
+[briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | text] 11:54 AM · Chicago
 [briefing | After clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃” | button] HIDE
 [call-in-a-favor | 1. The room at rest | text] CALL IN A FAVOR
 [call-in-a-favor | 1. The room at rest | text] network-assisted deal support
@@ -421,9 +931,9 @@
 [call-in-a-favor | 1. The room at rest | button] Log request only
 [call-in-a-favor | 1. The room at rest | text] Track the outcome on the Boeing deal: reply, meeting, no response, or decline.
 [call-in-a-favor | 1. The room at rest | text] OPEN REQUESTS · TRACK OUTCOMES
+[call-in-a-favor | 1. The room at rest | text] request an introduction · Chipotle
 [call-in-a-favor | 1. The room at rest | text] get an exec involved · United Airlines
 [call-in-a-favor | 1. The room at rest | text] request a customer reference · Starbucks
-[call-in-a-favor | 1. The room at rest | text] request an introduction · Chipotle
 [call-in-a-favor | 1. The room at rest | text] clarify procurement timing · Boeing
 [call-in-a-favor | 1. The room at rest | button] OPEN WORKSPACE MAP · G
 [call-in-a-favor | 1. The room at rest | text] RECENT ACTIVITY
@@ -936,7 +1446,6 @@
 [dashboard | After clicking “OPEN WORKSPACE MAP · G” | link] Founding GTM document the sales process for another seller
 [dashboard | After clicking “OPEN WORKSPACE MAP · G” | link] Settings manage workspace data and account settings
 [dashboard | After hovering “HIDE” | button] HIDE
-[dashboard | After clicking “HIDE” | button] HIDE
 [dashboard | After clicking “HIDE” | button] RECENT ACTIVITY IS HIDDEN — CLICK TO SHOW
 [dashboard | After clicking “Outbound to Boeing” | text] Boeing
 [dashboard | After clicking “Outbound to Boeing” | text] CURRENT STATUS
@@ -2185,7 +2694,7 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “cxo” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] C-Suite Executive
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “cxo” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “vp” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Before the call: 1 of 4 set — still missing: account, first answer recorded, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “vp” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ Walk me through how your team handles [process] today. ”
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “vp” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ Walk me through how your team handles this work today. ”
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “vp” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] VP / Director
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “vp” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “ops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Before the call: 1 of 4 set — still missing: account, first answer recorded, next-step purpose
@@ -2193,11 +2702,11 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “ops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Operations Leader
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “ops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “it” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Before the call: 1 of 4 set — still missing: account, first answer recorded, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “it” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ What does your current architecture look like for [area]? ”
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “it” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ What systems does this work run on today, and how are they connected? ”
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “it” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] IT / Engineering Leader
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “it” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “finance” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Before the call: 1 of 4 set — still missing: account, first answer recorded, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “finance” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ How are you currently tracking the ROI on your [area] investments? ”
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “finance” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Question for — “ How do you currently measure the return on what you spend in this area? ”
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “finance” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Finance Leader
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “finance” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “revops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] Before the call: 1 of 4 set — still missing: account, first answer recorded, next-step purpose
@@ -2205,13 +2714,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “revops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | text] RevOps Leader
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “revops” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader” | button] another ↻
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | text] "Where does that happen most painfully: contract review, research, drafting, matter intake, or outside counsel overflow?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | button] → Ask where legal review slows the work
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."” | button] → Ask how much lawyer time this takes
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | text] "That is fair. So where would a human-in-the-loop workflow still be worth testing if it were clear where a person reviews the output?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."” | button] → Agree how accurate it has to be
@@ -2275,13 +2784,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Next step” | field] ATTENDEES
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Next step” | text] Add a date, owner, and purpose to complete the next step.
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | text] 1 facts recorded
+[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | text] 1 fact recorded
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | text] "Where does that manual work hurt most: sourcing, screening, scheduling, interviews, or closing?"
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | button] → Walk through one open role
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"Yes. The systems are there, but the team still spends too much time triaging and coordina” | button] → Ask where hiring slows down
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | text] 1 facts recorded
+[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | text] 1 fact recorded
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | text] "Agreed. So where would workflow support still help without touching the final judgment call?"
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."” | button] → Agree which decisions stay with a person
@@ -2291,19 +2800,19 @@
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req” | button] "Screening and scheduling are eating too much recruiter time on one of our priority roles."
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req” | button] "I do not have one specific req in mind."
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | text] 1 facts recorded
+[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | text] 1 fact recorded
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | text] "Where does that break first: feedback intake, synthesis, release decisions, adoption visibility, or enablement handoff?"
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | button] → Walk through one decision in progress
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"Yes. The tools exist, but insight still gets scattered and re-synthesized manually."” | button] → Ask what scattered feedback is costing them
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | text] 1 facts recorded
+[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | text] 1 fact recorded
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | text] "Good. Then where do teams still have to translate between those systems by hand before acting?"
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | button] → Ask what tools they use today
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We already have docs, analytics, and research tooling in place."” | button] → Ask what customer feedback they miss
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | text] 1 facts recorded
+[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | text] 1 fact recorded
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | text] "That is useful. Then where does the lack of process create the most rework or weakest product calls today?"
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."” | button] → Ask where the work breaks down
@@ -2313,19 +2822,19 @@
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision” | button] "We have a release decision moving without enough usable evidence."
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision” | button] "I do not have one in mind right now."
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | text] "Where do people step in most: policy interpretation, exception handling, or proving the decision later?"
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | button] → Walk through one case that needs a person's judgment
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Yes. The queue moves, but the hard cases still need a person to step in."” | button] → Ask what goes wrong when people take over
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | text] "That makes sense. Which part of manual review is truly necessary, and which part is just repetitive work we tolerate because the controls are weak?"
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | button] → Agree what they need to see
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Manual review is there because the stakes are too high."” | button] → Ask about inconsistent decisions
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | text] "I can. Pick one type of case the current process still struggles to defend so what I show you matches something real."
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"” | button] → Ask about a risky case
@@ -2336,19 +2845,19 @@
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident” | button] "Leadership wants the process safer before scale makes it embarrassing."
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident” | button] "It is more modernization talk than a live trigger."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | text] "That's the part worth mapping. Walk me through what happens to one of those tickets from the moment it lands."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | button] → Walk through one support contact
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o” | button] → Ask where it hurts most today
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | text] "Standard is fine. Walk me through where the bot stops and an agent has to take over the ticket."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | button] → Walk through the queue
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"We have a pretty standard support stack — Zendesk, a bot on top."” | button] → Ask for a recent ticket
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | text] "I can, but the number that matters is the one off your worst queue. Give me one ticket type that keeps bouncing to humans so it's not a generic demo."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"” | button] → Walk through the queue
@@ -2364,19 +2873,19 @@
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic” | button] "We're mostly staying informed on what AI support can do right now."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic” | button] "Nothing changed. We're just looking around."
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | text] "Where does that manual checking hurt most: forecast calls, one-on-ones, or deal reviews?"
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | button] → Ask how a manager judges a deal today
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Yes. The signal is there, but trust still depends on the manager reading between the line” | button] → Walk through one deal in the forecast
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | text] "Good. Then where do those tools still fall short of telling a manager whether a deal is actually safe?"
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | button] → Walk through one deal in the forecast
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."” | button] → Ask what a wrong forecast costs
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | text] "I can. Give me one live deal or type of committed deal the current tools still get wrong, so what I show you matches a real deal-review problem."
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"Can you just show me what the product does?"” | button] → Walk through one deal in the forecast
@@ -2387,19 +2896,19 @@
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal” | button] "It is not one deal. It is the whole pipeline view that feels unreliable."
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal” | button] "I do not have a live one in mind."
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | text] "Good. Is the bigger problem planning for disruptions ahead of time, or reacting to supplier problems as they happen?"
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | button] → Ask which problem is most urgent
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand."” | button] → Ask what they piece together by hand
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | text] "Understood. Then where does the picture still break down: seeing supplier problems, working out what they would cost, or getting teams to respond together?"
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | button] → Ask what they piece together by hand
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."” | button] → Ask what a late warning costs them
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | text] "I can. First tell me whether this is about planning for disruptions ahead of time or reacting to supplier problems as they happen, so I do not show the wrong workflow."
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"Can you just show me the platform?"” | button] → Ask which problem is most urgent
@@ -2410,37 +2919,37 @@
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent” | button] "We need to understand consequence and plan around disruptions before they happen."
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent” | button] "Honestly, it is both."
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | text] 1 facts recorded
+[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | text] 1 fact recorded
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | text] "Good. Is the current workflow here AI retrieval, monitoring and compliance, or market / analyst intelligence?"
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | button] → Ask which problem is most urgent
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap” | button] → Ask what depends on this data today
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | text] 1 facts recorded
+[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | text] 1 fact recorded
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | text] "Understood. Then where does the current layer still break: freshness, coverage, structure, or reliability?"
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | button] → Ask what depends on this data today
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"We already have data vendors and internal pipelines."” | button] → Ask what breaks when the data is late
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | text] 1 facts recorded
+[discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | text] 1 fact recorded
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | text] "I can. First tell me which downstream job fails first when the current feed has coverage gaps so I do not show the wrong kind of evidence."
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | button] → Ask for one recent time bad data hurt a team
 [discovery-studio | After clicking “Data / Intelligence Infrastructure”, then clicking “"Can you just show the API?"” | button] → Agree what they need to see
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | text] "Where do people step in first today: accuracy, control, governance, or adoption?"
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | button] → Ask where trust in the output breaks
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Yes. There is interest, but people still have to step in on the risky parts."” | button] → Ask what checking the AI's work costs them
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | text] "Understood. What made those pilots stop short of becoming a trusted workflow?"
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | button] → Ask what AI pilots and tools they already have
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"We have a lot of pilots and experiments already."” | button] → Ask what checking the AI's work costs them
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | text] "I can. First pick one workflow where trust still breaks and a human has to take the work back so what I show you matches something real."
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"” | button] → Ask where trust in the output breaks
@@ -2451,13 +2960,13 @@
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need” | button] "The pressure is real, but governance will block anything too broad."
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need” | button] "Mostly curiosity for now."
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | text] 1 facts recorded
+[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | text] 1 fact recorded
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | text] "That's the part worth fixing. Walk me through what happens the moment you decide to hire someone in a new country."
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | button] → Ask them to walk through how it works today
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"Yeah, every new country is a fire drill for legal and finance."” | button] → Ask where it hurts most today
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | text] 1 facts recorded
+[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | text] 1 fact recorded
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | text] "Standard is fine. Walk me through where someone still has to make a classification call or chase local compliance by hand."
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."” | button] → Walk through the workflow
@@ -2553,13 +3062,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask what would make the next step worth it” | button] Book a review meeting on one workflow
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask what would make the next step worth it” | button] Ask what they need in order to decide
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | text] "What makes that review heavy today: lack of trust, too many exceptions, or no structured playbook?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | button] → Ask how much lawyer time this takes
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The first pass and fallback review still eat too much time."” | button] → Agree what they need to see
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | text] "What kind of work are you sending out that you wish could stay inside?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “"The issue is overflow and outside counsel more than internal workflow."” | button] → Ask about outside counsel cost
@@ -2569,13 +3078,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Ask who does the review work today” | button] "Associates and legal ops carry most of it, but senior review still gets pulled in too often."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Ask who does the review work today” | button] "The GC still gets pulled into too much of it."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | text] "What does that crowd out: strategic work, client service, or overall throughput?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | button] → Ask who feels this problem most
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"Senior legal time is going to work that should be handled lower in the stack or faster."” | button] → Ask what made this urgent
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | text] "Then what has to happen before it becomes big enough to deserve change?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “"It is annoying, but not catastrophic."” | button] → Ask whether the reason is urgent
@@ -2589,13 +3098,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Ask what outside counsel costs them” | button] "We send too much repetitive work out because the internal team cannot absorb it cleanly."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Ask what outside counsel costs them” | button] "Outside counsel is not the main issue here."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | text] "Which workflow would prove the case fastest if it moved safely?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | button] → Pick the workflow to talk through
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"The GC wants throughput up and spend down without adding headcount."” | button] → Book the next review meeting
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | text] "Then what would have to happen before the GC treated this like a real priority?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “"Nothing has really changed yet."” | button] → Ask what would make this urgent
@@ -2605,13 +3114,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “Ask whether anything makes this urgent” | button] "If we could show a safe workflow with measurable turnaround improvement, it would get attention."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “Ask whether anything makes this urgent” | button] "We would need the GC or a partner to really care first."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | text] "Good. Then whose question matters more first: workflow efficiency or risk control?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | button] → Agree what they need to see
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"Legal ops will drive it, but the GC has to believe it is safe."” | button] → Ask who can block this on risk
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | text] "Then who would have to carry the first review to keep this moving after today?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “"No one fully owns this yet."” | button] → Book the next review meeting
@@ -2625,13 +3134,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Ask who can block this on risk” | button] "The GC and IT both matter, but confidentiality and human review are the real questions."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Ask who can block this on risk” | button] "It depends on the workflow and the data involved."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | text] "Then what is the fairest first workflow to test quality without exposing the highest-risk matters?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | button] → Pick the workflow to test first
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Accuracy and consistency are first. If those break, nothing else matters."” | button] → Ask how the review works
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | text] "Fair. Which workflow would prove ROI fastest without making the trust question impossible?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “"Show me ROI first."” | button] → Pick the workflow to test first
@@ -2645,13 +3154,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Pick the workflow to test first” | button] "Commercial paper or NDAs would be the cleanest place to start."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Pick the workflow to test first” | button] "Everything here feels too sensitive."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | text] "Which part of the stack stops short first: drafting help, redlines, routing, search, or playbook use?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | button] → Go back to where the work breaks down
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"The stack exists, but it still does not remove the repetitive review burden."” | button] → Agree what they need to see
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | text] "What part of the build is actually hardest: workflow design, legal trust, or getting lawyers to use it?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “"We are trying to build around this ourselves."” | button] → Find out who would resist using it, and why
@@ -2661,13 +3170,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Ask what they send to outside counsel today” | button] "It is expensive, but we trust the outside lawyers more on certain work."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Ask what they send to outside counsel today” | button] "Mostly it would free up time so the team can handle more work."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | text] "Good. What would the first review need to decide so the process can continue?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | button] → Book a review meeting on one workflow
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an” | button] → Agree what a small pilot would include
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | text] "That is fine. Then the next step should probably be the people who can map it together around one workflow."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “"Honestly, we have not mapped that yet."” | button] → Book the next review meeting
@@ -2677,13 +3186,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Ask about confidentiality and privilege review” | button] "Privilege, data handling, and human review are the real hurdles."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Ask about confidentiality and privilege review” | button] "IT and security would slow this down before legal even got comfortable."
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | text] "Good. Which workflow should that review center on, and who needs to be in it so the meeting can actually decide something?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | button] → Agree what a small pilot would include
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Yes. That makes sense."” | button] → Add the meeting to the deal
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | text] "I can. What should it help your team decide so the follow-up becomes a working review instead of polite circulation?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “"Just send something first."” | button] → Ask what would make the next step worth it
@@ -2715,7 +3224,7 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “10 After the call”, then clicking “No-show” | text] Call status: no-show
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “10 After the call”, then clicking “No-show” | link] Deal Workspace
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “10 After the call”, then clicking “No-show” | text] 0 facts recorded during this call
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “cxo” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader”, then clicking “another ↻” | text] Question for — “ How are you thinking about the build vs. buy decision for [area]? ”
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then choosing “cxo” in “no role selected C-Suite Executive VP / Director Operations Leader IT / Engineering Leader”, then clicking “another ↻” | text] Question for — “ How are you thinking about building this yourselves versus buying a tool? ”
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."”, then clicking “→ Ask how much lawyer time this takes” | text] 3 · The problem and its cost — Find out what slow or manual legal work costs them.
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."”, then clicking “→ Ask how much lawyer time this takes” | text] "What is the actual damage today: expensive lawyer time burned on low-value work, slower turnaround to the business, or too much repetitive review for the same output?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Yes. The systems exist, but lawyers still end up doing too much by hand."”, then clicking “→ Ask how much lawyer time this takes” | text] WHEN TO ASK Start here once you can see how much work is done by hand.
@@ -2735,13 +3244,13 @@
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."”, then clicking “→ Agree how accurate it has to be” | button] Ask where a person must review the output
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “"Anything AI-related gets hard because hallucination risk is unacceptable."”, then clicking “→ Agree how accurate it has to be” | button] Pick the workflow to test first
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | text] "What part of that workflow still burns the most expensive time: first pass, fallback review, turnaround, or approvals?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | button] → Ask where the work breaks down
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Commercial contracts and redlines are the obvious one."” | button] → Ask where legal delays show up for the business
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | text] 1 facts recorded
+[discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | text] 1 fact recorded
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | text] "Then use the last time legal became the bottleneck. What kind of work created the pressure?"
 [discovery-studio | After clicking “Legal / Legal Ops / Law Workflow”, then clicking “Start from one workflow”, then clicking “"Nothing jumps out immediately."” | button] → Ask what made this urgent
@@ -2774,13 +3283,13 @@
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."”, then clicking “→ Agree which decisions stay with a person” | button] Agree which decisions stay with a person
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “"You cannot automate hiring judgment."”, then clicking “→ Agree which decisions stay with a person” | button] Pick one role to test first
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | text] 1 facts recorded
+[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | text] 1 fact recorded
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | text] "Good. Which part hurts more first: candidate quality, recruiter bandwidth, or hiring-manager frustration?"
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | button] → Ask about one open role
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"Screening and scheduling are eating too much recruiter time on one of our priority roles.” | button] → Ask about hiring funnel problems
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | text] 1 facts recorded
+[discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | text] 1 fact recorded
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | text] "Then use the last hiring cycle that felt inefficient. Where did the funnel break down?"
 [discovery-studio | After clicking “Recruiting / Talent / HR / People Workflow”, then clicking “Start from one req”, then clicking “"I do not have one specific req in mind."” | button] → Ask where the funnel breaks
@@ -2822,13 +3331,13 @@
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."”, then clicking “→ Ask what made this urgent” | button] Find what makes this urgent now
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “"We do not even do this very formally yet."”, then clicking “→ Ask what made this urgent” | button] Check whether the team is big enough to need this
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | text] 1 facts recorded
+[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | text] 1 fact recorded
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | text] "Good. What is missing most: user signal, product adoption evidence, internal alignment, or enablement readiness?"
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | button] → Ask about one live decision
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"We have a release decision moving without enough usable evidence."” | button] → Ask what scattered feedback is costing them
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | text] 1 facts recorded
+[discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | text] 1 fact recorded
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | text] "Then think of the last time the team had to re-open a decision because the evidence was too weak or too scattered. What happened?"
 [discovery-studio | After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “"I do not have one in mind right now."” | button] → Ask what scattered feedback is costing them
@@ -2868,19 +3377,19 @@
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"”, then clicking “→ Pick one type of case to test first” | button] Agree what record of each decision they need to see
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “"Can you just show the product first?"”, then clicking “→ Pick one type of case to test first” | button] Pick one type of case to test first
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | text] "Then which real case best represents that incident, so we stay concrete?"
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | button] → Ask about a risky case
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"A real incident or audit request exposed the weakness."” | button] → Ask about the audit trigger
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | text] "Where does leadership distrust the workflow most today: consistency, backlog, or explainability?"
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | button] → Ask about inconsistent decisions
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"Leadership wants the process safer before scale makes it embarrassing."” | button] → Ask when the backlog becomes unacceptable
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | text] 1 facts recorded
+[discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | text] 1 fact recorded
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | text] "Then what would have to happen before this becomes a real review and not a policy discussion?"
 [discovery-studio | After clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “"It is more modernization talk than a live trigger."” | button] → Ask what would make the next step worth it
@@ -2924,37 +3433,37 @@
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"”, then clicking “→ Ask what evidence they need” | button] Ask which approval comes first
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “"Can you just show me the resolution rate?"”, then clicking “→ Ask what evidence they need” | button] If they want a demo early
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | text] "Good. Which step in that chain burns the most agent time or drops CSAT the hardest?"
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | button] → Ask what the problem costs them
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent” | button] → Ask whether the reason is urgent
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | text] "That's fine. Pick the one queue leadership would care most about if CSAT tanked on it tomorrow."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | button] → Ask for a recent ticket
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"It depends on the channel and the queue."” | button] → Ask who feels this problem most
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | text] "No problem. What's the most common complaint you hear from agents or customers when support breaks down?"
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | button] → Ask about the pain
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “"I'm not close enough to the queue to map it that tightly."” | button] → Ask who owns it
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | text] "Good. Then let's follow that backlog instead of talking in generalities."
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | button] → Ask whether the reason is urgent
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Volume spiked after our last launch and the queue backlog got ugly."” | button] → Ask them to walk through how it works today
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | text] "That's fine. What would have to become true for this to stop being informative and start being a priority?"
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | button] → Ask plainly whether this is early research
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"We're mostly staying informed on what AI support can do right now."” | button] → Ask what they need to see
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | text] 1 facts recorded
+[discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | text] 1 fact recorded
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | text] "Understood. Then I'll keep this honest and light. What queue would have to break before this became a real priority?"
 [discovery-studio | After clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “If the call starts off-topic”, then clicking “"Nothing changed. We're just looking around."” | button] → Ask plainly whether this is early research
@@ -2990,19 +3499,19 @@
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."”, then clicking “→ Ask what a wrong forecast costs” | button] Ask what makes a committed deal less real
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “"We already have the stack. Salesforce, Gong, dashboards, all of it."”, then clicking “→ Ask what a wrong forecast costs” | button] Find where sellers lose time
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | text] "Good. What exactly makes the manager distrust it: next step, champion, evidence, timing, or multithreading?"
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | button] → Walk through one deal in the forecast
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"We have one in commit right now that still feels weaker than its stage suggests."” | button] → Ask what makes a committed deal less real
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | text] "Understood. Where do the weak spots show up first: manager inspection, forecast category changes, or rep follow-up discipline?"
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | button] → Ask how a manager judges a deal today
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"It is not one deal. It is the whole pipeline view that feels unreliable."” | button] → Ask about forecast misses
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | text] 1 facts recorded
+[discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | text] 1 fact recorded
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | text] "Then use the last forecast call that got uncomfortable. What made the number hard to believe?"
 [discovery-studio | After clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “"I do not have a live one in mind."” | button] → Ask what a wrong forecast costs
@@ -3034,19 +3543,19 @@
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."”, then clicking “→ Ask what a late warning costs them” | button] Ask what they can't see in their supply chain
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “"We already have ERP views, alerts, and supplier tools."”, then clicking “→ Ask what a late warning costs them” | button] Ask what scrambling after a disruption costs
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | text] "Good. Then what signal is still late, incomplete, or too noisy to act on?"
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | button] → Ask how they review suppliers today
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need better supplier visibility and alerting first."” | button] → Ask what they can't see in their supply chain
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | text] "Good. What decision still gets made too late today because the organization cannot model impact early enough?"
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | button] → Ask for one recent disruption
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"We need to understand consequence and plan around disruptions before they happen."” | button] → Ask what a late warning costs them
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | text] 1 facts recorded
+[discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | text] 1 fact recorded
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | text] "That is normal. Which one creates the first expensive miss today: weak visibility or weak consequence planning?"
 [discovery-studio | After clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “"Honestly, it is both."” | button] → Ask for one recent disruption
@@ -3117,19 +3626,19 @@
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"”, then clicking “→ Pick one small workflow to test first” | button] Agree what record of human oversight they need to see
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “"Can you just show me what it does?"”, then clicking “→ Pick one small workflow to test first” | button] Pick one small workflow to test first
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | text] "Then which workflow would embarrass the organization first if trust never improves?"
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | button] → Ask where trust in the output breaks
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Leadership wants movement, but no one has agreed on the first workflow yet."” | button] → Ask what made this urgent now
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | text] "Good. Which narrow workflow could actually pass a governance review first?"
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | button] → Pick one small workflow to test first
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"The pressure is real, but governance will block anything too broad."” | button] → Ask who has to approve the controls
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | text] 1 facts recorded
+[discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | text] 1 fact recorded
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | text] "Then what would have to happen before this stops being an AI experiment for show and becomes a real priority?"
 [discovery-studio | After clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “"Mostly curiosity for now."” | button] → Ask what made this urgent now
@@ -3153,19 +3662,19 @@
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."”, then clicking “→ Ask for a recent example” | button] Find where people step in
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “"We've got a pretty standard global hiring setup."”, then clicking “→ Ask for a recent example” | button] Ask for one recent hire abroad
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | text] 1 facts recorded
+[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | text] 1 fact recorded
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | text] "Good. Where in that does someone make a judgment call that, if wrong, creates real exposure: classification, payment, or local taxes?"
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | button] → Ask what the problem costs them
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"We decide contractor or EOR, set up the agreement, then finance figures out how to pay th” | button] → Ask whether the reason is urgent
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | text] 1 facts recorded
+[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | text] 1 fact recorded
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | text] "That's fine. Pick the one country or worker type your team would panic most about if it got audited tomorrow."
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | button] → Ask for a recent example
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"It depends on the country and whether it's a contractor or full employee."” | button] → Ask who feels this problem most
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | text] Before the call: 1 of 4 set — still missing: account, buyer role, next-step purpose
-[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | text] 1 facts recorded
+[discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | text] 1 fact recorded
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | text] SUGGESTED RESPONSE
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | text] "No problem. What's the first complaint you hear when a global hire goes wrong?"
 [discovery-studio | After clicking “Global Contractor Management / EOR / Global Employment”, then clicking “Walk through hiring and paying one person”, then clicking “"I'm not close enough to the day-to-day compliance to map it that tightly."” | button] → Ask about the pain
@@ -5133,6 +5642,7 @@ SUPPLEMENTAL HOVER / FIELD TEXT
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”] 9
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”] 9
 [briefing | After clicking “⚙”, then hovering “Show in-session notifications”] Hide recent activity
+[briefing | After clicking “⚙”, then hovering “Show tooltip hints”] Hide recent activity
 [briefing | After clicking “⚙”, then clicking “Show schedule panel”] Show scheduled actions
 [briefing | After clicking “−”, then hovering “No schedules”] Hide recent activity
 [briefing | After clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly”] 1
@@ -5149,7 +5659,6 @@ SUPPLEMENTAL HOVER / FIELD TEXT
 [dashboard | 1. The room at rest] Open workspace map (G)
 [dashboard | After clicking “OPEN WORKSPACE MAP · G”] …or start typing a workspace
 [dashboard | After hovering “HIDE”] Hide recent activity
-[dashboard | After clicking “HIDE”] Hide recent activity
 [deal-workspace | 1. The room at rest] Open workspace map (G)
 [deal-workspace | After clicking “Set a dated next step with the buyer.”] Nordstrom
 [deal-workspace | After clicking “Set a dated next step with the buyer.”] 260000

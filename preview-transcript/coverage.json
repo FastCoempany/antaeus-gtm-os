@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T17:37:19.806Z",
+  "generatedAt": "2026-11-05T18:12:20.691Z",
   "partial": false,
   "expectedRooms": [
     "welcome",
@@ -93,7 +93,7 @@
         },
         {
           "what": "clicking “HIDE”",
-          "result": "2 lines appear, 0 disappear — see above"
+          "result": "1 lines appear, 0 disappear — see above"
         },
         {
           "what": "hovering “RECENT ACTIVITY IS HIDDEN — CLICK TO SHOW”",
@@ -780,15 +780,15 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “79a90643-33e5-4298-9c07-1136bd8c300c” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “829a9fc4-f760-4f89-b1f2-fed7a0e79260” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “d0a9d06e-2455-43c9-ac4c-ae685d49bf57” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “5042795c-b4d6-4541-b5d9-e6253998c54e” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “5ca3d1a3-5727-46a3-93b9-d8dfbfa8cc27” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “343fb103-ec63-440b-b9e0-a2e6928c02bf” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
@@ -1139,8 +1139,8 @@
       "id": "briefing",
       "label": "Briefing",
       "stage": 2,
-      "actions": 190,
-      "reveals": 47,
+      "actions": 194,
+      "reveals": 50,
       "restLines": 121,
       "unexplored": 0,
       "failedActions": [],
@@ -1179,7 +1179,7 @@
         },
         {
           "what": "hovering “−”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "no hover change"
         },
         {
           "what": "clicking “−”",
@@ -1187,7 +1187,7 @@
         },
         {
           "what": "hovering “×”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “×”",
@@ -1195,7 +1195,7 @@
         },
         {
           "what": "hovering “Got it”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "shows the same screen as hovering “×”"
         },
         {
           "what": "clicking “Got it”",
@@ -1211,7 +1211,7 @@
         },
         {
           "what": "hovering “Open analysis ↓”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "shows the same screen as hovering “×”"
         },
         {
           "what": "clicking “Open analysis ↓”",
@@ -1219,7 +1219,7 @@
         },
         {
           "what": "hovering “Open analysis ↓”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "shows the same screen as hovering “×”"
         },
         {
           "what": "clicking “Open analysis ↓”",
@@ -1227,7 +1227,7 @@
         },
         {
           "what": "hovering “Open analysis ↓”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "shows the same screen as hovering “×”"
         },
         {
           "what": "clicking “Open analysis ↓”",
@@ -1235,7 +1235,7 @@
         },
         {
           "what": "hovering “Open analysis ↓”",
-          "result": "shows the same screen as hovering “−”"
+          "result": "shows the same screen as hovering “×”"
         },
         {
           "what": "clicking “Open analysis ↓”",
@@ -1299,39 +1299,7 @@
         },
         {
           "what": "hovering “SHOW SOURCES AND REASONING”",
-          "result": "1 lines appear, 1 disappear — see above"
-        },
-        {
-          "what": "clicking “SHOW SOURCES AND REASONING”",
-          "result": "3 lines appear, 1 disappear — see above"
-        },
-        {
-          "what": "hovering “I acted on this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "clicking “I acted on this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "hovering “I already knew this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "clicking “I already knew this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "hovering “Not useful”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "clicking “Not useful”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
-        },
-        {
-          "what": "hovering “SHOW SOURCES AND REASONING”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “Open analysis ↓”"
         },
         {
           "what": "clicking “SHOW SOURCES AND REASONING”",
@@ -1339,31 +1307,63 @@
         },
         {
           "what": "hovering “I acted on this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “I acted on this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "hovering “I already knew this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "clicking “I already knew this”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "hovering “Not useful”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "clicking “Not useful”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "hovering “SHOW SOURCES AND REASONING”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "clicking “SHOW SOURCES AND REASONING”",
+          "result": "3 lines appear, 1 disappear — see above"
+        },
+        {
+          "what": "hovering “I acted on this”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "clicking “I acted on this”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "hovering “I already knew this”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "clicking “I already knew this”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "hovering “Not useful”",
+          "result": "shows the same screen as hovering “I acted on this”"
+        },
+        {
+          "what": "clicking “Not useful”",
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "hovering “Add monitoring rule”",
-          "result": "shows the same screen as hovering “SHOW SOURCES AND REASONING”"
+          "result": "shows the same screen as hovering “I acted on this”"
         },
         {
           "what": "clicking “Add monitoring rule”",
@@ -1383,7 +1383,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “WELCOME Welcome Today's recommended starting point.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”",
@@ -1391,7 +1391,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”",
@@ -1399,7 +1399,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SIGNAL CONSOLE Signal Console Monitor account signals and priority.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SIGNAL CONSOLE Signal Console Monitor account signals and priority.”",
@@ -1407,7 +1407,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.”",
@@ -1415,7 +1415,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.”",
@@ -1423,7 +1423,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.”",
@@ -1431,31 +1431,31 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific qu”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific qu”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.”",
@@ -1463,7 +1463,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “ICP STUDIO ICP Studio Define the companies and buyers you sell to.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “ICP STUDIO ICP Studio Define the companies and buyers you sell to.”",
@@ -1471,7 +1471,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.”",
@@ -1479,7 +1479,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify account”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify account”",
@@ -1487,7 +1487,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.”",
@@ -1495,7 +1495,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.”",
@@ -1503,7 +1503,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”",
@@ -1511,7 +1511,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”",
@@ -1519,7 +1519,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”",
@@ -1527,7 +1527,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “BRIEFING Briefing Review account and market changes, evidence, and recommendations.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.”",
@@ -1535,7 +1535,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.”",
@@ -1543,7 +1543,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
@@ -1551,7 +1551,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
@@ -1559,15 +1559,15 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "20 lines appear, 40 disappear — see above"
+          "result": "43 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
@@ -1575,7 +1575,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
@@ -1583,23 +1583,23 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "20 lines appear, 40 disappear — see above"
+          "result": "43 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
-          "result": "1 lines appear, 40 disappear — see above"
+          "result": "24 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
@@ -1607,15 +1607,15 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "20 lines appear, 40 disappear — see above"
+          "result": "43 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
@@ -1623,7 +1623,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
@@ -1631,43 +1631,43 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "20 lines appear, 40 disappear — see above"
+          "result": "43 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”"
         },
         {
           "what": "clicking “Open current analysis”, then hovering “Close current analysis”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “Open current analysis”, then clicking “Close current analysis”",
-          "result": "2 lines appear, 6 disappear — see above"
+          "result": "25 lines appear, 6 disappear — see above"
         },
         {
           "what": "clicking “Open current analysis”, then hovering “×”",
@@ -1675,11 +1675,11 @@
         },
         {
           "what": "clicking “Open current analysis”, then clicking “×”",
-          "result": "1 lines appear, 10 disappear — see above"
+          "result": "24 lines appear, 10 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then hovering “Show in-session notifications”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "25 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then clicking “Show in-session notifications”",
@@ -1687,71 +1687,71 @@
         },
         {
           "what": "clicking “⚙”, then hovering “Show in-session notifications”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then clicking “Show in-session notifications”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then hovering “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "25 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then clicking “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show tooltip hints”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show schedule panel”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show tooltip hints”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show schedule panel”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show tooltip hints”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show schedule panel”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show schedule panel”",
-          "result": "2 lines appear, 17 disappear — see above"
+          "result": "25 lines appear, 17 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then hovering “OFF”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show tooltip hints”"
         },
         {
           "what": "clicking “⚙”, then clicking “OFF”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show tooltip hints”"
         },
         {
           "what": "clicking “⚙”, then hovering “1H”",
-          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “1H”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "25 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⚙”, then hovering “4H”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “4H”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "25 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “−”, then hovering “No schedules”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "25 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “−”, then clicking “No schedules”",
@@ -1759,15 +1759,15 @@
         },
         {
           "what": "clicking “SHOW SOURCES AND REASONING”, then hovering “HIDE SOURCES AND REASONING”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “SHOW SOURCES AND REASONING”, then clicking “HIDE SOURCES AND REASONING”",
-          "result": "1 lines appear, 3 disappear — see above"
+          "result": "24 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Add monitoring rule”, then hovering “WHAT SHOULD THE SYSTEM WATCH FOR?”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "24 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “Add monitoring rule”, then clicking “WHAT SHOULD THE SYSTEM WATCH FOR?”",
@@ -1795,7 +1795,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily”",
@@ -1803,15 +1803,15 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Monthly”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly”",
@@ -1819,83 +1819,99 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “DAY OF WEEK Mon Tue Wed Thu Fri Sat Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “DAY OF WEEK Mon Tue Wed Thu Fri Sat Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Mon”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Mon”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Tue”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Tue”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Wed”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Thu”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Fri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Fri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Sat”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Sat”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “TIME (CENTRAL · CT) :”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “TIME (CENTRAL · CT) :”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Save schedule”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule”",
           "result": "1 lines appear, 20 disappear — see above"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “7-day forecast ↗”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “7-day forecast ↗”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “✕”",
+          "result": "1 lines appear, 1 disappear — see above"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “✕”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “✕”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃”",
@@ -5887,27 +5903,27 @@
           "result": "no visible change"
         },
         {
-          "what": "choosing “071d8700-9866-4d89-9505-d2ae0e9d4142” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “3beb70a3-61a2-44d0-bad1-6ac77bafe43e” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “d538d8bb-5711-4402-9ee8-50d6a61f678a” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “c02c8a67-3356-42da-9502-014e3047a8c1” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “7500767e-0bd6-4350-a751-697dd463666e” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “54aa82a3-340c-4e1b-ba61-b20ae3c4d962” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “8ed51ada-acda-4eb7-b3da-7a976d36a580” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “3a6e1bac-1430-4586-89c3-a531e0cd2b03” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “33f32ce6-4d2d-4c6d-af96-37781cc27c55” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “27aabf23-c219-4da7-a401-b20efc5e98b9” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “8dbbd885-8f83-472c-b35b-4adba69d87b3” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “6556f565-3846-4613-82bb-79500c6771ba” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {

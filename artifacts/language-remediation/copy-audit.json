@@ -1,7 +1,7 @@
 {
   "files": 1205,
-  "renderedOccurrences": 5117,
-  "uniqueRenderedStrings": 2624,
+  "renderedOccurrences": 5626,
+  "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
   "tier2ReviewWarnings": 482,
   "categories": {
@@ -1614,7 +1614,7 @@
     },
     {
       "file": "preview-transcript/briefing/index.html",
-      "line": 405,
+      "line": 915,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "D",
