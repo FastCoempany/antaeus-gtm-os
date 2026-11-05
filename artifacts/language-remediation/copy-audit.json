@@ -1,7 +1,7 @@
 {
   "files": 1218,
-  "renderedOccurrences": 5663,
-  "uniqueRenderedStrings": 2666,
+  "renderedOccurrences": 5115,
+  "uniqueRenderedStrings": 2651,
   "tier1Failures": 0,
   "tier2ReviewWarnings": 513,
   "categories": {
@@ -1742,7 +1742,7 @@
     },
     {
       "file": "preview-transcript/briefing/index.html",
-      "line": 482,
+      "line": 449,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "D",
@@ -1750,7 +1750,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 336,
+      "line": 312,
       "phrase": "thread",
       "tier": 2,
       "category": "E",
@@ -1758,7 +1758,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 336,
+      "line": 312,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -1766,7 +1766,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1697,
+      "line": 1695,
       "phrase": "heat",
       "tier": 2,
       "category": "D",
@@ -1774,7 +1774,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 512,
+      "line": 510,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1782,7 +1782,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 512,
+      "line": 510,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1790,7 +1790,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 520,
+      "line": 518,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1798,7 +1798,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 611,
+      "line": 609,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1806,7 +1806,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 619,
+      "line": 617,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1814,7 +1814,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 840,
+      "line": 838,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1822,7 +1822,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 913,
+      "line": 911,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1830,7 +1830,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 980,
+      "line": 978,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1838,7 +1838,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 980,
+      "line": 978,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1846,7 +1846,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 994,
+      "line": 992,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1854,7 +1854,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 998,
+      "line": 996,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1862,7 +1862,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1110,
+      "line": 1108,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1870,7 +1870,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1509,
+      "line": 1507,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1878,7 +1878,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1561,
+      "line": 1559,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1886,7 +1886,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1561,
+      "line": 1559,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1894,7 +1894,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1564,
+      "line": 1562,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1902,7 +1902,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1597,
+      "line": 1595,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1910,7 +1910,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1276,
+      "line": 1274,
       "phrase": "front",
       "tier": 2,
       "category": "A",
@@ -1918,7 +1918,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1339,
+      "line": 1337,
       "phrase": "front",
       "tier": 2,
       "category": "A",
@@ -1958,7 +1958,7 @@
     },
     {
       "file": "preview-transcript/getting-to-signed/index.html",
-      "line": 243,
+      "line": 203,
       "phrase": "hottest",
       "tier": 2,
       "category": "D",
@@ -1990,7 +1990,7 @@
     },
     {
       "file": "preview-transcript/linkedin-playbook/index.html",
-      "line": 161,
+      "line": 153,
       "phrase": "motion",
       "tier": 2,
       "category": "D",
@@ -2006,15 +2006,15 @@
     },
     {
       "file": "preview-transcript/outdoors-events/index.html",
-      "line": 77,
+      "line": 73,
       "phrase": "floor",
       "tier": 2,
       "category": "A",
-      "context": "13 – Apr 15 · UNLEASH America 2027 · Las Vegas, NV · Enterprise HR-tech buying committees walk the floor here. · No activity recorded today yet. The last recorded activity was yesterday at 11:46 PM.</p> <h3>After clicking “×”</h3><div class=\"line\"><span class=\"kind\">[text]</span> No"
+      "context": "13 – Apr 15 · UNLEASH America 2027 · Las Vegas, NV · Enterprise HR-tech buying committees walk the floor here.</p> <h3>After clicking “×”</h3><p class=\"cue\">No longer shown: ADJACENT TO YOUR BUYER CONTEXT · events focused on the roles, functions, or problems you sell into · Jan 10 –"
     },
     {
       "file": "preview-transcript/pilot-desk/index.html",
-      "line": 128,
+      "line": 110,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -2022,7 +2022,7 @@
     },
     {
       "file": "preview-transcript/pilot-desk/index.html",
-      "line": 128,
+      "line": 110,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -2030,7 +2030,7 @@
     },
     {
       "file": "preview-transcript/quota-workback/index.html",
-      "line": 115,
+      "line": 112,
       "phrase": "floor",
       "tier": 2,
       "category": "E",
@@ -2038,7 +2038,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 490,
+      "line": 454,
       "phrase": "heat",
       "tier": 2,
       "category": "D",
@@ -2046,7 +2046,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 491,
+      "line": 455,
       "phrase": "going cold",
       "tier": 2,
       "category": "D",
@@ -2054,7 +2054,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 154,
+      "line": 153,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -2062,7 +2062,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 491,
+      "line": 455,
       "phrase": "decay",
       "tier": 2,
       "category": "D",
@@ -2070,7 +2070,7 @@
     },
     {
       "file": "preview-transcript/territory-architect/index.html",
-      "line": 161,
+      "line": 142,
       "phrase": "carve",
       "tier": 2,
       "category": "D",
@@ -2078,7 +2078,7 @@
     },
     {
       "file": "preview-transcript/territory-architect/index.html",
-      "line": 161,
+      "line": 142,
       "phrase": "floor",
       "tier": 2,
       "category": "D",
