@@ -1,17 +1,19 @@
 diff --git a/antaeusproductpage-3.source.html b/antaeus-product-page.copy-map-applied.html
-index f32f5fc..0d1a01b 100644
+index f32f5fc..d64cb24 100644
 --- a/antaeusproductpage-3.source.html
 +++ b/antaeus-product-page.copy-map-applied.html
 @@ -552 +552 @@ section[id],header[id]{scroll-margin-top:92px}
 -      <a href="#rooms">The rooms</a>
 +      <a href="#rooms">Product tour</a>
-@@ -565,3 +565,3 @@ section[id],header[id]{scroll-margin-top:92px}
+@@ -565,4 +565,4 @@ section[id],header[id]{scroll-margin-top:92px}
 -      <a href="#handoff">Handoff</a>
 -      <a href="#rooms">Rooms</a>
 -      <a href="#briefing">What it sees</a>
+-      <a href="#pace">Pace</a>
 +      <a href="#handoff">Sales handoff</a>
 +      <a href="#rooms">Product tour</a>
 +      <a href="#briefing">Morning briefing</a>
++      <a href="#pace">Quota Workback</a>
 @@ -585,2 +585,2 @@ section[id],header[id]{scroll-margin-top:92px}
 -    <h1 class="h-hero rv in" data-d="1">You built it.<br />They can run it.</h1>
 -    <p class="when rv in" data-d="2">Private beta. Set up your workspace in an afternoon.<br />After that it reads your whole way of selling back to you every morning.</p>
@@ -322,7 +324,7 @@ index f32f5fc..0d1a01b 100644
 -  <p class="sc-note" data-a="4">One assumption is optimistic — <b>you have never won at 28%</b>.</p>
 -</div></figure><p><b>Your number, backwards.</b> The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.</p></article>
 +  <p class="sc-note" data-a="4">One assumption is optimistic: <b>28% is above the ~20% that teams your size usually win</b>.</p>
-+</div></figure><p><b>Pace.</b> Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.</p></article>
++</div></figure><p><b>Quota Workback.</b> Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.</p></article>
 @@ -1293,3 +1293,3 @@ section[id],header[id]{scroll-margin-top:92px}
 -      <p class="spec rv"><b>10 frameworks</b><span>discovery question sets tuned to what you actually sell</span></p>
 -      <p class="spec spec--sys rv" data-d="1"><b>6 buyer lenses</b><span>the questions change depending on who is in the room</span></p>
@@ -330,8 +332,10 @@ index f32f5fc..0d1a01b 100644
 +      <p class="spec rv"><b>10 discovery frameworks</b> <span>tuned to what you sell</span></p>
 +      <p class="spec spec--sys rv" data-d="1"><b>6 buyer-role views</b> <span>that change the questions by stakeholder</span></p>
 +      <p class="spec rv" data-d="2"><b>Recommended follow-up</b> <span>for each buyer response</span></p>
-@@ -1366 +1366 @@ section[id],header[id]{scroll-margin-top:92px}
+@@ -1365,2 +1365,2 @@ section[id],header[id]{scroll-margin-top:92px}
+-    <p class="kick rv">Pace</p>
 -    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:20ch">Do you have enough<br />going to hit the number?</h2>
++    <p class="kick rv">Quota Workback</p>
 +    <h2 class="h-sec rv" data-d="1" id="pc-h" style="margin-top:14px;max-width:20ch">Do you have enough pipeline and activity to hit your revenue target?</h2>
 @@ -1368 +1368 @@ section[id],header[id]{scroll-margin-top:92px}
 -      Give it your number and Antaeus works backwards to the only thing you control — <b>what you do every working day</b>. Then it does the part most planning tools skip: it tells you whether the plan is realistic for deals your size, <b>names the one assumption that's optimistic</b>, and says what it costs you if that assumption is wrong.
@@ -556,7 +560,7 @@ index f32f5fc..0d1a01b 100644
 -          <li><a href="#pace">Pace and your number</a></li>
 +          <li><a href="#all-rooms">Every product area</a></li>
 +          <li><a href="#briefing">Morning briefing</a></li>
-+          <li><a href="#pace">Pace: your revenue plan</a></li>
++          <li><a href="#pace">Quota Workback: your revenue plan</a></li>
 @@ -1810 +1810 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
 -          <li><a href="#values">Where we're honest</a></li>
 +          <li><a href="#values">What to expect in the beta</a></li>
@@ -564,7 +568,7 @@ index f32f5fc..0d1a01b 100644
 -      Screens throughout this page are real rooms from the app shown with sample data.
 -      Benchmark figures in <a href="#pace" style="color:inherit;text-decoration:underline">Pace</a> are typical reads for the deal size selected, not a promise about your motion.
 +      Screens throughout this page are based on real product areas, shown with sample data.
-+      Benchmark figures in <a href="#pace" style="color:inherit;text-decoration:underline">Pace</a> are typical figures for the selected deal size, not a promise about your results.
++      Benchmark figures in <a href="#pace" style="color:inherit;text-decoration:underline">Quota Workback</a> are typical figures for the selected deal size, not a promise about your results.
 @@ -2074,2 +2074,2 @@ footer{background:var(--sunk);border-top:1px solid var(--hair);
 -    { chip: "The morning read",
 -      cap: "<b>The morning read.</b> Every half hour the system goes back over your workspace on its own and writes down what it noticed, in plain sentences. You get the short version and the one thing worth doing first.",

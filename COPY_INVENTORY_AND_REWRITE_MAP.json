@@ -186,7 +186,7 @@
       "original": "Pace",
       "issues": [],
       "severity_before": 0,
-      "replacement": "Pace",
+      "replacement": "Quota Workback",
       "action": "keep",
       "issues_after": [],
       "severity_after": 0,
@@ -198,7 +198,7 @@
           "nav-and-feature-naming-drift",
           "nav-destination-collision"
         ],
-        "reason": "nav label: one name for Pace everywhere (kicker #175 and the footnote already say Pace)"
+        "reason": "nav label: one name for Quota Workback everywhere (founder 2026-11-05: Quota Workback is the name)"
       }
     },
     {
@@ -3410,11 +3410,11 @@
       "original": "Your number, backwards. The annual figure worked down to what you do daily — plus whether the plan is even real, and which assumption in it is the optimistic one.",
       "issues": [],
       "severity_before": 0,
-      "replacement": "Pace. Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.",
+      "replacement": "Quota Workback. Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.",
       "action": "rewrite",
       "issues_after": [],
       "severity_after": 0,
-      "replacement_html": "<b>Pace.</b> Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.",
+      "replacement_html": "<b>Quota Workback.</b> Antaeus works the annual target back to what you need to do each day, checks the plan’s assumptions against benchmarks, and names the one that is most optimistic.",
       "revision_2026_10_02": {
         "previous_action": "rewrite",
         "previous_replacement": "Revenue target plan. Antaeus converts the annual target into required daily activity, checks the plan against benchmark assumptions, and identifies the assumption creating the largest risk.",
@@ -3487,7 +3487,7 @@
       "original": "Pace",
       "issues": [],
       "severity_before": 0,
-      "replacement": "Pace",
+      "replacement": "Quota Workback",
       "action": "keep",
       "issues_after": [],
       "severity_after": 0
@@ -6103,11 +6103,11 @@
       "original": "Pace and your number",
       "issues": [],
       "severity_before": 0,
-      "replacement": "Pace: your revenue plan",
+      "replacement": "Quota Workback: your revenue plan",
       "action": "rewrite",
       "issues_after": [],
       "severity_after": 0,
-      "replacement_html": "<a href=\"#pace\">Pace: your revenue plan</a>",
+      "replacement_html": "<a href=\"#pace\">Quota Workback: your revenue plan</a>",
       "revision_2026_10_02": {
         "previous_action": "rewrite",
         "previous_replacement": "Revenue plan and targets",
@@ -6413,11 +6413,11 @@
         "private_ontology"
       ],
       "severity_before": 1,
-      "replacement": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are based on real product areas, shown with sample data. Benchmark figures in Pace are typical figures for the selected deal size, not a promise about your results. Photography via Unsplash.",
+      "replacement": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are based on real product areas, shown with sample data. Benchmark figures in Quota Workback are typical figures for the selected deal size, not a promise about your results. Photography via Unsplash.",
       "action": "rewrite",
       "issues_after": [],
       "severity_after": 0,
-      "replacement_html": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap.\n      Screens throughout this page are based on real product areas, shown with sample data.\n      Benchmark figures in <a href=\"#pace\" style=\"color:inherit;text-decoration:underline\">Pace</a> are typical figures for the selected deal size, not a promise about your results.\n      Photography via Unsplash.",
+      "replacement_html": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap.\n      Screens throughout this page are based on real product areas, shown with sample data.\n      Benchmark figures in <a href=\"#pace\" style=\"color:inherit;text-decoration:underline\">Quota Workback</a> are typical figures for the selected deal size, not a promise about your results.\n      Photography via Unsplash.",
       "revision_2026_10_02": {
         "previous_action": "rewrite",
         "previous_replacement": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Pace are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash.",
