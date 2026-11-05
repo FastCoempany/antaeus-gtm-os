@@ -2655,6 +2655,11 @@ export type Database = {
         Args: { p_workspace_id?: string }
         Returns: Json
       }
+      // HAND-AUTHORED PENDING REGEN — migration 20261105130000.
+      delete_workspace_data: {
+        Args: { ws: string }
+        Returns: Json
+      }
       dismiss_observation: {
         Args: { obs_id: string; reason?: string }
         Returns: undefined
