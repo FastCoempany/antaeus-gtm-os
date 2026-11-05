@@ -1,9 +1,9 @@
 {
-  "files": 1218,
-  "renderedOccurrences": 5115,
+  "files": 1203,
+  "renderedOccurrences": 5142,
   "uniqueRenderedStrings": 2651,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 513,
+  "tier2ReviewWarnings": 500,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
@@ -11,7 +11,7 @@
     },
     "B": {
       "description": "runtime/customer-visible candidate",
-      "hits": 417
+      "hits": 403
     },
     "C": {
       "description": "prompt/template",
@@ -19,15 +19,15 @@
     },
     "D": {
       "description": "active doctrine",
-      "hits": 53
+      "hits": 54
     },
     "E": {
       "description": "tests/comments/deprecated examples",
-      "hits": 1006
+      "hits": 961
     },
     "F": {
       "description": "internal identifier",
-      "hits": 624
+      "hits": 610
     },
     "G": {
       "description": "reviewed ordinary usage",
@@ -474,7 +474,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "curiosity?\\\"\", actions:[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"blu\")] }, { id:\"send-security-docs\", label:\"Send the security docs\", reply:\"I can. What s"
+      "context": "curiosity?\\\"\", actions:[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"blu\")] }, { id:\"send-security-docs\", label:\"Send the security docs\", reply:\"I ca"
     },
     {
       "file": "js/discovery-segment-runtime-ai-native.js",
@@ -506,7 +506,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "operating priority?\\\"\",[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"Interest exists without a trigger.\",\"You still need the reactivation condition.\")"
+      "context": "operating priority?\\\"\",[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"Interest exists without a trigger.\",\"You still need the reactivation condition"
     },
     {
       "file": "js/discovery-segment-runtime-ai-native.js",
@@ -514,7 +514,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "rrow-use-case\", \"red\"), jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"blu\")],\"The proposed scope is still too broad.\",\"You still need one primary workflow.\") ]) ]), segment(\"pain-and-consequence\",\"03\",\"Pain and consequence\",\"M"
+      "context": "rrow-use-case\", \"red\"), jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"blu\")],\"The proposed scope is still too broad.\",\"You still need one primary workflow.\") ]) ]), segment(\"pain-and-consequence\",\"03\",\"The problem and its cost"
     },
     {
       "file": "js/discovery-segment-runtime-ai-native.js",
@@ -530,7 +530,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "operating workflow?\\\"\",[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"The value may still be soft.\",\"You still need the event that makes it real.\") ]"
+      "context": "operating workflow?\\\"\",[jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"red\"), jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"The value may still be soft.\",\"You still need the event that makes it real.\")"
     },
     {
       "file": "js/discovery-segment-runtime-ai-native.js",
@@ -538,7 +538,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "nd urgency\",\"Find what makes this urgent now.\",true,[ node(\"trigger-and-urgency\",\"executive-pressure\",\"ri\",\"Find what makes this urgent now\",\"\\\"What made this active now: executive AI pressure, scaling limits, missed productivity goals, governance scrutiny, or a pilot that stalle"
+      "context": "at changed that makes this worth solving now.\",true,[ node(\"trigger-and-urgency\",\"executive-pressure\",\"ri\",\"Find what makes this urgent now\",\"\\\"What made this active now: executive AI pressure, scaling limits, missed productivity goals, governance scrutiny, or a pilot that stalle"
     },
     {
       "file": "js/discovery-segment-runtime-ai-native.js",
@@ -578,7 +578,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "soft-deferral\", \"red\"), jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"blu\")],\"No approval sequence has been confirmed.\",\"You still need the reactivation condition.\") ]) ]), segment(\"next-step-lock\",\"09\",\"Next-step lock\",\"Secur"
+      "context": "soft-deferral\", \"red\"), jumpNode(\"Ask what made this urgent now\", \"trigger-and-urgency\", \"executive-pressure\", \"blu\")],\"No approval sequence has been confirmed.\",\"You still need the reactivation condition.\") ]) ]), segment(\"next-step-lock\",\"09\",\"Next step\",\"Leave with"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -602,7 +602,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "rs when support breaks down?\\\"\", [ jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Use owner rescue\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ], \"This person sits too far from the queue to trace it.\","
+      "context": "when support breaks down?\\\"\", [ jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Ask who owns it\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ], \"This person sits too far from the queue to trace it.\","
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -618,7 +618,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "t-state-truth\", \"example\", \"org\"), jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"blu\") ], \"There's a handoff, but the trigger for it is still blurry.\", \"You still need the exact contact type the bot can't finish.\"), branch(\"N"
+      "context": "tate-truth\", \"example\", \"org\"), jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"blu\") ], \"There's a handoff, but the trigger for it is still blurry.\", \"You still need the exact contact type the bot can't finish.\"), branch(\"N"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -634,7 +634,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": ", \"Pain and consequence\", \"Make the pain expensive.\", true, [ node(\"pain-and-consequence\", \"pressure\", \"ri\", \"Name the queue pain\", \"\\\"Where does support hurt most right now — containment that doesn't hold, CSAT after a bad bot interaction, supervisor rescue, or queue b"
+      "context": "hat the problem costs them in time, money, or risk.\", true, [ node(\"pain-and-consequence\", \"pressure\", \"ri\", \"Name the queue pain\", \"\\\"Where does support hurt most right now — containment that doesn't hold, CSAT after a bad bot interaction, supervisor rescue, or queue b"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -706,7 +706,7 @@
       "phrase": "pulling",
       "tier": 2,
       "category": "B",
-      "context": "side yet.\\\"\", \"\\\"Then we shouldn't fake a next step. What would we need to know before pulling more people in?\\\"\", [ jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"red\"), jumpNode(\"Clarify the trigger\", \"trigger-and-urgency"
+      "context": "side yet.\\\"\", \"\\\"Then we shouldn't fake a next step. What would we need to know before pulling more people in?\\\"\", [ jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"red\"), jumpNode(\"Clarify the trigger\", \"trigger-an"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -714,7 +714,7 @@
       "phrase": "pulling",
       "tier": 2,
       "category": "B",
-      "context": "it works well enough for now.\\\"\", \"\\\"Which part feels good enough, and which part keeps pulling your senior agents back in?\\\"\", [ jumpNode(\"Use internal build follow-up\", \"current-vendor-and-displacement\", \"build\", \"org\"), jumpNode(\"Return to pain\", \""
+      "context": "it works well enough for now.\\\"\", \"\\\"Which part feels good enough, and which part keeps pulling your senior agents back in?\\\"\", [ jumpNode(\"Ask about the internal build\", \"current-vendor-and-displacement\", \"build\", \"org\"), jumpNode(\"Return to pain\", \""
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -722,7 +722,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "t really say yet.\\\"\", \"\\\"Then let's stay honest and write down exactly what's still too thin before we pretend there's momentum.\\\"\", [ jumpNode(\"Prepare missing-truth handoff\", \"post-call-routing\", \"missing-truth\", \"red\"), jumpRoom(\"Open Call Plann"
+      "context": "t really say yet.\\\"\", \"\\\"Then let's stay honest and write down exactly what's still too thin before we pretend there's momentum.\\\"\", [ jumpNode(\"Record what is still unknown\", \"post-call-routing\", \"missing-truth\", \"red\"), jumpRoom(\"Add the meeting"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -746,7 +746,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "\"red\"), jumpRoom(\"Open Call Planner\", \"call-planner\", \"blu\") ], \"Too much is thin to advance — this needs a corrective room.\", \"You still need the most useful first correction.\") ]), node(\"post-call-routing\", \"room-route\", \"pr\", \"Rou"
+      "context": "action(\"Set the next meeting\", \"segment:next-step-lock\", \"blu\") ], \"Too much is thin to advance — this needs a corrective room.\", \"You still need the most useful first correction.\") ]), node(\"post-call-routing\", \"room-route\", \"pr\", \"Cho"
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -778,7 +778,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "B",
-      "context": "ow.\",\"You still need the active dependency before demo.\") ]), node(\"opening-frame\",\"motion-type\",\"fu\",\"Classify the workflow\",\"\\\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\\\"\",\"This changes the r"
+      "context": "ow.\",\"You still need the active dependency before demo.\") ]), node(\"opening-frame\",\"motion-type\",\"fu\",\"Classify the workflow\",\"\\\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\\\"\",\"Find this out earl"
     },
     {
       "file": "js/discovery-segment-runtime-data-intelligence.js",
@@ -794,7 +794,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "isible but ownerless.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the trust or dependency drift now and correct it before the downstream system pays"
+      "context": ", but nobody owns it.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the trust or dependency drift now and correct it before the downstream system pays"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -818,7 +818,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "n a global hire goes sideways?\\\"\", [ jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Use owner rescue\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ], \"This person sits too far from the classification and payroll detai"
+      "context": "global hire goes sideways?\\\"\", [ jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Ask who owns it\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ], \"This person sits too far from the classification and payroll detail"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -834,7 +834,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "ent-state-truth\", \"example\", \"org\"), jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"blu\") ], \"There's a legal rescue path, but the type of compliance risk is still blurry.\", \"You still need the specific risk: classification, PE exposure, or IP.\"),"
+      "context": "-state-truth\", \"example\", \"org\"), jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"blu\") ], \"There's a legal rescue path, but the type of compliance risk is still blurry.\", \"You still need the specific risk: classification, PE exposure, or IP.\"),"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -850,7 +850,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "3\", \"Pain and consequence\", \"Make the pain expensive.\", true, [ node(\"pain-and-consequence\", \"pressure\", \"ri\", \"Name the exposure\", \"\\\"Where does the current setup hurt most right now: misclassification risk, compliance cost, slow time-to-hire, or unreliable contractor payments?\\\"\""
+      "context": "what the problem costs them in time, money, or risk.\", true, [ node(\"pain-and-consequence\", \"pressure\", \"ri\", \"Name the exposure\", \"\\\"Where does the current setup hurt most right now: misclassification risk, compliance cost, slow time-to-hire, or unreliable contractor payments?\\\"\""
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -914,7 +914,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "by whom?\", actions: [ jumpNode(\"Quantify current risk\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"blu\") ] } ] }); })();"
+      "context": "by whom?\", actions: [ jumpNode(\"Quantify current risk\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"blu\") ] } ] }); })();"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -930,7 +930,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "\", \"\\\"I can't really say yet.\\\"\", \"\\\"Then let's stay honest and write down exactly what's still too thin, the countries, the owner, the exposure, before we pretend there's momentum.\\\"\", [ jumpNode(\"Prepare missing-truth handoff\", \"post-call-routing\", \"missing-truth\", \"red\")"
+      "context": "\", \"\\\"I can't really say yet.\\\"\", \"\\\"Then let's stay honest and write down exactly what's still too thin, the countries, the owner, the exposure, before we pretend there's momentum.\\\"\", [ jumpNode(\"Record what is still unknown\", \"post-call-routing\", \"missing-truth\", \"red\"),"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -938,7 +938,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "anner\", \"blu\") ], \"There's no named condition that would reopen this.\", \"You still need the thin part, countries, owner, or exposure, in plain language.\") ]) ]); } function post() { return segment(\"post-call-routing\", \"10\", \"Post-call routing\", \"Hand off on"
+      "context": "space\", \"blu\") ], \"There's no named condition that would reopen this.\", \"You still need the thin part, countries, owner, or exposure, in plain language.\") ]) ]); } function post() { return segment(\"post-call-routing\", \"10\", \"After the call\", \"Record what yo"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -962,7 +962,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "jumpRoom(\"Open Call Planner\", \"call-planner\", \"blu\") ], \"The compliance picture is too thin to pretend it's clean.\", \"You still need the most useful first correction.\") ]), node(\"post-call-routing\", \"room-route\", \"pr\", \"Choose the next room\", \"\\\"Which next ro"
+      "context": "(\"Set the next meeting\", \"segment:next-step-lock\", \"blu\") ], \"The compliance picture is too thin to pretend it's clean.\", \"You still need the most useful first correction.\") ]), node(\"post-call-routing\", \"room-route\", \"pr\", \"Choose where this goes next\", \"\\\"Which"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -994,7 +994,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": ".\\\"\",\"\\\"What does that create downstream: missed SLAs, escalations, operator burnout, or leadership pressure?\\\"\",[jumpNode(\"Open the trigger\", \"trigger-and-urgency\", \"backlog-pressure\", \"grn\"), jumpNode(\"Find the ops owner\", \"stakeholder-and-ownership\", \"ops-owner\", \"blu\")],\"Queue pain i"
+      "context": ".\\\"\",\"\\\"What does that create downstream: missed SLAs, escalations, operator burnout, or leadership pressure?\\\"\",[jumpNode(\"Ask about the trigger\", \"trigger-and-urgency\", \"backlog-pressure\", \"grn\"), jumpNode(\"Find the ops owner\", \"stakeholder-and-ownership\", \"ops-owner\", \"blu\")],\"Queue p"
     },
     {
       "file": "js/discovery-segment-runtime-govtech.js",
@@ -1002,7 +1002,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "r burnout, or leadership pressure?\\\"\",[jumpNode(\"Open the trigger\", \"trigger-and-urgency\", \"backlog-pressure\", \"grn\"), jumpNode(\"Find the ops owner\", \"stakeholder-and-ownership\", \"ops-owner\", \"blu\")],\"Queue pain is explicit.\",\"You still need the consequence leadership actually cares abou"
+      "context": "nout, or leadership pressure?\\\"\",[jumpNode(\"Ask about the trigger\", \"trigger-and-urgency\", \"backlog-pressure\", \"grn\"), jumpNode(\"Find the ops owner\", \"stakeholder-and-ownership\", \"ops-owner\", \"blu\")],\"Queue pain is explicit.\",\"You still need the consequence leadership actually cares abou"
     },
     {
       "file": "js/discovery-segment-runtime-govtech.js",
@@ -1010,7 +1010,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "olerated?\\\"\",[jumpNode(\"Ask when the backlog becomes unacceptable\", \"trigger-and-urgency\", \"backlog-pressure\", \"red\"), jumpNode(\"Keep the next step honest\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"The pain may still be below the action threshold.\",\"You still need the condition that w"
+      "context": "olerated?\\\"\",[jumpNode(\"Ask when the backlog becomes unacceptable\", \"trigger-and-urgency\", \"backlog-pressure\", \"red\"), jumpNode(\"Test whether the next step is real\", \"next-step-lock\", \"soft-deferral\", \"blu\")],\"The pain may still be below the action threshold.\",\"You still need the conditi"
     },
     {
       "file": "js/discovery-segment-runtime-govtech.js",
@@ -1034,7 +1034,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "al\", \"red\"), jumpNode(\"Open Future Autopsy\", \"post-call-routing\", \"autopsy-route\", \"blu\")],\"Backlog pressure may still be emerging.\",\"You still need the reactivation trigger.\") ]) ]), segment(\"stakeholder-and-ownership\",\"05\",\"Stakeholder and ownership\",\"Map the real o"
+      "context": "al\", \"red\"), jumpNode(\"Open Future Autopsy\", \"post-call-routing\", \"autopsy-route\", \"blu\")],\"Backlog pressure may still be emerging.\",\"You still need the reactivation trigger.\") ]) ]), segment(\"stakeholder-and-ownership\",\"05\",\"Who's involved\",\"Find out who owns the pro"
     },
     {
       "file": "js/discovery-segment-runtime-legal.js",
@@ -1074,7 +1074,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "k\", \"blu\") ],\"No priority workflow is named yet.\",\"You still need a recent event that put pressure on legal.\") ]) ]), segment(\"current-state-truth\",\"02\",\"Current-state truth\",\"Map the actual legal workflow.\",true,[ node(\"current-state-truth\",\"workflo"
+      "context": "k\", \"blu\") ],\"No priority workflow is named yet.\",\"You still need a recent event that put pressure on legal.\") ]) ]), segment(\"current-state-truth\",\"02\",\"How they work today\",\"Ask them to walk you through how a contract or matter moves today.\",true,["
     },
     {
       "file": "js/discovery-segment-runtime-legal.js",
@@ -1098,7 +1098,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "igger and urgency\",\"Find what makes this urgent now.\",true,[ node(\"trigger-and-urgency\",\"gc-pressure\",\"ri\",\"Identify the General Counsel's current priority\",\"\\\"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or exe"
+      "context": "out what changed that makes this worth solving now.\",true,[ node(\"trigger-and-urgency\",\"gc-pressure\",\"ri\",\"Identify the General Counsel's current priority\",\"\\\"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or exe"
     },
     {
       "file": "js/discovery-segment-runtime-legal.js",
@@ -1138,7 +1138,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "jumpNode(\"Lock the pilot review\", \"next-step-lock\", \"pilot-design\", \"blu\") ],\"Capacity pressure is the main issue.\",\"You still need the operating change that would reduce overflow.\") ]) ]), segment(\"decision-architecture\",\"08\",\"Decision architecture\",\"Map"
+      "context": "jumpNode(\"Lock the pilot review\", \"next-step-lock\", \"pilot-design\", \"blu\") ],\"Capacity pressure is the main issue.\",\"You still need the operating change that would reduce overflow.\") ]) ]), segment(\"decision-architecture\",\"08\",\"How they'll decide\",\"Find o"
     },
     {
       "file": "js/discovery-segment-runtime-manufacturing.js",
@@ -1170,7 +1170,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "B",
-      "context": "reactive supplier monitoring?\\\"\",[ jumpNode(\"Classify the workflow\", \"opening-frame\", \"motion-type\", \"grn\"), jumpNode(\"Map the stitching\", \"current-state-truth\", \"stitching\", \"blu\") ],\"Manual stitching is part of the current process.\",\"You still need"
+      "context": "reactive supplier monitoring?\\\"\",[ jumpNode(\"Classify the workflow\", \"opening-frame\", \"motion-type\", \"grn\"), jumpNode(\"Map the manual workarounds\", \"current-state-truth\", \"stitching\", \"blu\") ],\"Manual stitching is part of the current process.\",\"You st"
     },
     {
       "file": "js/discovery-segment-runtime-manufacturing.js",
@@ -1186,7 +1186,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "B",
-      "context": "flow.\",\"You still need the active workflow before demo.\") ]), node(\"opening-frame\",\"motion-type\",\"fu\",\"Classify the workflow\",\"\\\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption hits?\\\"\",\"This has to be known"
+      "context": "flow.\",\"You still need the active workflow before demo.\") ]), node(\"opening-frame\",\"motion-type\",\"fu\",\"Classify the workflow\",\"\\\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption hits?\\\"\",\"Find this out early,"
     },
     {
       "file": "js/discovery-segment-runtime-manufacturing.js",
@@ -1226,7 +1226,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "isible but ownerless.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the next disruption teaches the lesson the hard"
+      "context": ", but nobody owns it.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the next disruption teaches the lesson the hard"
     },
     {
       "file": "js/discovery-segment-runtime-product-ux.js",
@@ -1242,7 +1242,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "\"workflow-break\", \"red\"), jumpNode(\"Open the trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"The process may be immature, not over-tooled.\",\"You still need the highest-cost absence of process.\") ]), node(\"opening-frame\",\"decision-scop"
+      "context": "kflow-break\", \"red\"), jumpNode(\"Ask about the trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"The process may be immature, not over-tooled.\",\"You still need the highest-cost absence of process.\") ]), node(\"opening-frame\",\"decision-scop"
     },
     {
       "file": "js/discovery-segment-runtime-product-ux.js",
@@ -1250,7 +1250,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "ce\", \"signal-gap\", \"red\"), jumpNode(\"Open the trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"No live decision is ready yet.\",\"You still need one recent cycle failure.\") ]) ]), segment(\"current-state-truth\",\"02\",\"Current-state trut"
+      "context": "\"signal-gap\", \"red\"), jumpNode(\"Ask about the trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"No live decision is ready yet.\",\"You still need one recent cycle failure.\") ]) ]), segment(\"current-state-truth\",\"02\",\"How they work toda"
     },
     {
       "file": "js/discovery-segment-runtime-product-ux.js",
@@ -1274,7 +1274,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "and urgency\",\"Find what makes this urgent now.\",true,[ node(\"trigger-and-urgency\",\"miss-or-pressure\",\"ri\",\"Find what makes this urgent now\",\"\\\"What changed that made this worth looking at now: a bad launch, research debt becoming visible, leadership asking for better evidence, e"
+      "context": "what changed that makes this worth solving now.\",true,[ node(\"trigger-and-urgency\",\"miss-or-pressure\",\"ri\",\"Find what makes this urgent now\",\"\\\"What changed that made this worth looking at now: a bad launch, research debt becoming visible, leadership asking for better evidence, e"
     },
     {
       "file": "js/discovery-segment-runtime-product-ux.js",
@@ -1282,7 +1282,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "e\", \"signal-gap\", \"red\"), jumpNode(\"Return to trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"Cross-functional stake may still be weak.\",\"You still need the leadership consequence.\") ]) ]), segment(\"proof-threshold\",\"06\",\"Evidence"
+      "context": "e\", \"signal-gap\", \"red\"), jumpNode(\"Return to trigger\", \"trigger-and-urgency\", \"miss-or-pressure\", \"blu\") ],\"Cross-functional stake may still be weak.\",\"You still need the leadership consequence.\") ]) ]), segment(\"proof-threshold\",\"06\",\"What they"
     },
     {
       "file": "js/discovery-segment-runtime-product-ux.js",
@@ -1298,7 +1298,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "n a hiring freeze\", reply:\"Then the question is whether there is still enough active hiring pressure to justify workflow change now.\", actions:[ jumpNode(\"Test urgency\", \"trigger-and-urgency\", \"freeze-check\", \"red\"), jumpNode(\"Keep the next step honest"
+      "context": "n a hiring freeze\", reply:\"Then the question is whether there is still enough active hiring pressure to justify workflow change now.\", actions:[ jumpNode(\"Test urgency\", \"trigger-and-urgency\", \"freeze-check\", \"red\"), jumpNode(\"Test whether the next ste"
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1306,7 +1306,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "\"funnel-break\", \"red\"), jumpNode(\"Open the trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"No live req is ready yet.\",\"You still need one recent hiring incident.\") ]) ]), segment(\"current-state-truth\",\"02\",\"Current-state truth\","
+      "context": "nel-break\", \"red\"), jumpNode(\"Ask about the trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"No live req is ready yet.\",\"You still need one recent hiring incident.\") ]) ]), segment(\"current-state-truth\",\"02\",\"How they work today\","
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1314,7 +1314,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "candidate-drop\", \"red\"), jumpNode(\"Find the trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"Late-stage drag may be the real issue.\",\"You still need the main cause of it.\") ]) ]), segment(\"pain-and-consequence\",\"03\",\"Pain and cons"
+      "context": "candidate-drop\", \"red\"), jumpNode(\"Find the trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"Late-stage drag may be the real issue.\",\"You still need the main cause of it.\") ]) ]), segment(\"pain-and-consequence\",\"03\",\"The problem a"
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1330,7 +1330,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "nd urgency\",\"Find what makes this urgent now.\",true,[ node(\"trigger-and-urgency\",\"headcount-pressure\",\"ri\",\"Find the hiring pressure\",\"\\\"What changed that made this worth looking at now: more req volume, executive headcount goals, recruiter capacity strain, quality concerns, or r"
+      "context": "at changed that makes this worth solving now.\",true,[ node(\"trigger-and-urgency\",\"headcount-pressure\",\"ri\",\"Find the hiring pressure\",\"\\\"What changed that made this worth looking at now: more req volume, executive headcount goals, recruiter capacity strain, quality concerns, or r"
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1338,7 +1338,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "s urgent now.\",true,[ node(\"trigger-and-urgency\",\"headcount-pressure\",\"ri\",\"Find the hiring pressure\",\"\\\"What changed that made this worth looking at now: more req volume, executive headcount goals, recruiter capacity strain, quality concerns, or rising agency spend?\\\"\",\"Start he"
+      "context": "solving now.\",true,[ node(\"trigger-and-urgency\",\"headcount-pressure\",\"ri\",\"Find the hiring pressure\",\"\\\"What changed that made this worth looking at now: more req volume, executive headcount goals, recruiter capacity strain, quality concerns, or rising agency spend?\\\"\",\"Start he"
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1354,7 +1354,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "\"funnel-break\", \"red\"), jumpNode(\"Return to trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"Manager stake may be weak.\",\"You still need the leadership consequence.\") ]) ]), segment(\"proof-threshold\",\"06\",\"Evidence threshold\",\"Def"
+      "context": "\"funnel-break\", \"red\"), jumpNode(\"Return to trigger\", \"trigger-and-urgency\", \"headcount-pressure\", \"blu\") ],\"Manager stake may be weak.\",\"You still need the leadership consequence.\") ]) ]), segment(\"proof-threshold\",\"06\",\"What they need to see\",\""
     },
     {
       "file": "js/discovery-segment-runtime-recruiting.js",
@@ -1370,7 +1370,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "ruth\", \"manager-read\", \"blu\"), jumpNode(\"Find the trigger\", \"trigger-and-urgency\", \"board-pressure\", \"org\") ] }, { id:\"send-the-deck\", label:\"Send the deck\", reply:\"Happy to. What should it help your team decide so this does not die a"
+      "context": "ruth\", \"manager-read\", \"blu\"), jumpNode(\"Find the trigger\", \"trigger-and-urgency\", \"board-pressure\", \"org\") ] }, { id:\"send-the-deck\", label:\"Send the deck\", reply:\"Happy to. What should it help your team decide so this does not end a"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1394,7 +1394,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "\"Trigger and urgency\",\"Find why this matters now.\",true,[ node(\"trigger-and-urgency\",\"board-pressure\",\"ri\",\"Ask what changed for leadership\",\"\\\"What changed recently that made leadership care about forecast truth harder than before?\\\"\",\"Use this when they mention misses, scrutiny"
+      "context": "t what changed that makes this worth solving now.\",true,[ node(\"trigger-and-urgency\",\"board-pressure\",\"ri\",\"Ask what changed for leadership\",\"\\\"What changed recently that made leadership care about forecast accuracy harder than before?\\\"\",\"Use this when they mention misses, scrut"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1402,7 +1402,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "out forecast truth harder than before?\\\"\",\"Use this when they mention misses, scrutiny, or planning pressure.\",true,[ branch(\"MISS OR BOARD EVENT\",\"ok\",\"\\\"We missed, or leadership lost confidence in the number.\\\"\",\"\\\"What happens before the next board or QBR if nothing changes?"
+      "context": "forecast accuracy harder than before?\\\"\",\"Use this when they mention misses, scrutiny, or planning pressure.\",true,[ branch(\"MISS OR BOARD EVENT\",\"ok\",\"\\\"We missed, or leadership lost confidence in the number.\\\"\",\"\\\"What happens before the next board or QBR if nothing changes?"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1410,7 +1410,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "]), node(\"trigger-and-urgency\",\"soft-trigger\",\"fu\",\"Keep a soft trigger honest\",\"\\\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\\\"\",\"Use this when they feel press"
+      "context": ", node(\"trigger-and-urgency\",\"soft-trigger\",\"fu\",\"Test a weak reason for urgency\",\"\\\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\\\"\",\"Use this when they feel press"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1426,7 +1426,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "sor\", \"red\"), jumpNode(\"Ask what changed for leadership\", \"trigger-and-urgency\", \"board-pressure\", \"blu\") ],\"The pain is diffused.\",\"You still need the first accountable leader.\") ]) ]), segment(\"proof-threshold\",\"06\",\"Evidence threshold\",\"Find w"
+      "context": "sor\", \"red\"), jumpNode(\"Ask what changed for leadership\", \"trigger-and-urgency\", \"board-pressure\", \"blu\") ],\"The pain is diffused.\",\"You still need the first accountable leader.\") ]) ]), segment(\"proof-threshold\",\"06\",\"What they need to see\",\"Agr"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1450,7 +1450,7 @@
       "phrase": "decay",
       "tier": 2,
       "category": "B",
-      "context": "ence\", \"proof-threshold\", \"dashboard-proof\", \"blu\") ],\"The hidden risk may be recency and decay.\",\"You still need the signal that should have caught it.\") ]), node(\"pain-and-consequence\",\"rep-drag\",\"fu\",\"Find the rep drag\",\"\\\"How much rep time still goes into"
+      "context": "ence\", \"proof-threshold\", \"dashboard-proof\", \"blu\") ],\"The hidden risk may be recency and decay.\",\"You still need the signal that should have caught it.\") ]), node(\"pain-and-consequence\",\"rep-drag\",\"fu\",\"Find where sellers lose time\",\"\\\"How much rep time stil"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1474,7 +1474,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "and rep time.\\\"\",\"\\\"How much selling time or inspection time disappears because the signal is still thin?\\\"\",[ jumpNode(\"Quantify rep drag\", \"pain-and-consequence\", \"rep-drag\", \"org\"), jumpNode(\"Check the behavior evidence\", \"proof-threshold\", \"behavior-shift\""
+      "context": "and rep time.\\\"\",\"\\\"How much selling time or inspection time disappears because the signal is still thin?\\\"\",[ jumpNode(\"Put a number on lost seller time\", \"pain-and-consequence\", \"rep-drag\", \"org\"), jumpNode(\"Check the behavior evidence\", \"proof-threshold\", \""
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1514,7 +1514,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "isible but ownerless.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the deal ages.\\\"\",[ jumpRoom(\"Open"
+      "context": ", but nobody owns it.\",\"You still need the best route to the right person.\"), branch(\"TOO THIN\",\"fl\",\"\\\"Too much is still vague.\\\"\",\"\\\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the deal ages.\\\"\",[ jumpRoom(\"Open"
     },
     {
       "file": "js/discovery-segment-runtime-sales-revenue.js",
@@ -1554,7 +1554,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "first when the workflow breaks?\\\"\",[ jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Use owner rescue\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ],\"This may be the wrong altitude for workflow detail.\",\"You need eith"
+      "context": "st when the workflow breaks?\\\"\",[ jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"red\"), jumpNode(\"Ask who owns it\", \"stakeholder-and-ownership\", \"wrong-person\", \"blu\") ],\"This may be the wrong altitude for workflow detail.\",\"You need eithe"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1570,7 +1570,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "ent-state-truth\", \"example\", \"org\"), jumpNode(\"Use pain opener\", \"pain-and-consequence\", \"pressure\", \"blu\") ],\"There is a rescue path, but it is still blurry.\",\"You still need the specific type of mess.\"), branch(\"NO HUMAN EDGE\",\"fl\",\"\\\"Honestly, the workflow is"
+      "context": "-state-truth\", \"example\", \"org\"), jumpNode(\"Ask about the pain\", \"pain-and-consequence\", \"pressure\", \"blu\") ],\"There is a rescue path, but it is still blurry.\",\"You still need the specific type of mess.\"), branch(\"NO HUMAN EDGE\",\"fl\",\"\\\"Honestly, the workflow is"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1586,7 +1586,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "e\",\"03\",\"Pain and consequence\",\"Make the pain expensive.\",true,[ node(\"pain-and-consequence\",\"pressure\",\"ri\",\"Name the pain\",\"\\\"Where does the current setup hurt most right now: \" + seed.painAxes + \"?\\\"\",\"Get the pain pattern into plain language first.\",true,[ branch(\"PAIN"
+      "context": "out what the problem costs them in time, money, or risk.\",true,[ node(\"pain-and-consequence\",\"pressure\",\"ri\",\"Name the pain\",\"\\\"Where does the current setup hurt most right now: \" + seed.painAxes + \"?\\\"\",\"Get the pain pattern into plain language first.\",true,[ branch(\"PAIN"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1706,7 +1706,7 @@
       "phrase": "pulling",
       "tier": 2,
       "category": "B",
-      "context": "s, but it works well enough for now.\\\"\",\"\\\"Which part feels good enough, and which part still keeps pulling smart people back in?\\\"\",[ jumpNode(\"Use internal build follow-up\", \"current-vendor-and-displacement\", \"build\", \"org\"), jumpNode(\"Return to pain\", \"pain-and-co"
+      "context": "s, but it works well enough for now.\\\"\",\"\\\"Which part feels good enough, and which part still keeps pulling smart people back in?\\\"\",[ jumpNode(\"Ask about the internal build\", \"current-vendor-and-displacement\", \"build\", \"org\"), jumpNode(\"Return to pain\", \"pain-and-co"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1714,7 +1714,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": ",\"\\\"I cannot really say yet.\\\"\",\"\\\"Then let us stay honest and write down exactly what is still too thin before we pretend there is momentum.\\\"\",[ jumpNode(\"Prepare missing-truth handoff\", \"post-call-routing\", \"missing-truth\", \"red\"), jumpRoom(\"Open Call Planner\","
+      "context": ",\"\\\"I cannot really say yet.\\\"\",\"\\\"Then let us stay honest and write down exactly what is still too thin before we pretend there is momentum.\\\"\",[ jumpNode(\"Record what is still unknown\", \"post-call-routing\", \"missing-truth\", \"red\"), jumpRoom(\"Add the meeting to t"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1742,7 +1742,7 @@
     },
     {
       "file": "preview-transcript/briefing/index.html",
-      "line": 449,
+      "line": 409,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "D",
@@ -1750,7 +1750,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 312,
+      "line": 311,
       "phrase": "thread",
       "tier": 2,
       "category": "E",
@@ -1758,7 +1758,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 312,
+      "line": 311,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -1766,7 +1766,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1695,
+      "line": 1693,
       "phrase": "heat",
       "tier": 2,
       "category": "D",
@@ -1786,7 +1786,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> LISTEN FOR Start"
+      "context": "changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> WHEN TO ASK Star"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1794,7 +1794,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "t]</span> \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> LISTEN"
+      "context": "t]</span> \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> WHEN T"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1826,7 +1826,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "t]</span> \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> LISTEN"
+      "context": "t]</span> \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> WHEN T"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1834,7 +1834,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "lass=\"cue\">No longer shown: \"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" · LISTEN FOR Start here when there is some urgency but it is not yet specific. · \"The GC wants"
+      "context": "lass=\"cue\">No longer shown: \"What changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" · WHEN TO ASK Start here when there is some urgency but it is not yet specific. · \"The GC wants"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1842,7 +1842,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" · LISTEN FOR Start here when there is some urgency but it is not yet specific. · \"The GC wants throughput up and spend down with"
+      "context": "changed that made this worth looking at now: visible delay, spend pressure, diligence load, hiring pressure, or executive expectation to modernize legal ops?\" · WHEN TO ASK Start here when there is some urgency but it is not yet specific. · \"The GC wants throughput up and spend down wit"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1850,7 +1850,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "er shown: \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" · LISTEN FOR Start here when the workflow is clear but sponsorship is not. · \"Legal ops will drive it, but the GC has"
+      "context": "er shown: \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" · WHEN TO ASK Start here when the workflow is clear but sponsorship is not. · \"Legal ops will drive it, but the GC has"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1858,7 +1858,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "er shown: \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" · LISTEN FOR Start here when the workflow is clear but sponsorship is not. · \"Legal ops will drive it, but the GC has"
+      "context": "er shown: \"Who actually feels the pain enough to move this: GC, legal ops, practice leadership, CFO pressure on outside counsel, or the business teams waiting on legal?\" · WHEN TO ASK Start here when the workflow is clear but sponsorship is not. · \"Legal ops will drive it, but the GC has"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1874,27 +1874,27 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "ive Buyer Discovery Framework”, then clicking “Separate mandate from workflow”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”</h3><div class=\"line\"><span class=\"kind\">[text]</span> Call setup: 2/4 items set <span class=\"cue\">— small, mono, amber te"
+      "context": "overy Framework”, then clicking “Separate a mandate from a real workflow need”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”</h3><div class=\"line\"><span class=\"kind\">[text]</span> Call setup: 2/4 items set <span class=\"cue\">— small, mono, amber te"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1559,
+      "line": 1557,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "ive Buyer Discovery Framework”, then clicking “Separate mandate from workflow”, then hovering “\"The pressure is real, but governance will block anything too broad.\"”</td><td>no hover change</td></tr><tr><td>clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate mandate f"
+      "context": "overy Framework”, then clicking “Separate a mandate from a real workflow need”, then hovering “\"The pressure is real, but governance will block anything too broad.\"”</td><td>no hover change</td></tr><tr><td>clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1559,
+      "line": 1557,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
-      "context": "ive Buyer Discovery Framework”, then clicking “Separate mandate from workflow”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”</td><td>6 lines appear, 3 disappear — see above</td></tr><tr><td>clicking “AI-Native Buyer Discovery Framework”, then clic"
+      "context": "overy Framework”, then clicking “Separate a mandate from a real workflow need”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”</td><td>6 lines appear, 3 disappear — see above</td></tr><tr><td>clicking “AI-Native Buyer Discovery Framework”, then clic"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1562,
+      "line": 1560,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1902,7 +1902,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1595,
+      "line": 1593,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1922,7 +1922,7 @@
       "phrase": "front",
       "tier": 2,
       "category": "A",
-      "context": "eal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> LISTEN FOR Use this when you need the current proce"
+      "context": "eal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> WHEN TO ASK Use this when you need the current proc"
     },
     {
       "file": "preview-transcript/future-autopsy/index.html",
@@ -2166,27 +2166,11 @@
     },
     {
       "file": "src/birdseye/lib/context.ts",
-      "line": 121,
+      "line": 1,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "o.account_name : null; if (!id || !account_name) continue; const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0;"
-    },
-    {
-      "file": "src/birdseye/lib/context.ts",
-      "line": 122,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": ": null; if (!id || !account_name) continue; const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; out.push({ id"
-    },
-    {
-      "file": "src/birdseye/lib/context.ts",
-      "line": 122,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "if (!id || !account_name) continue; const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; out.push({ id, account_name, heat })"
+      "context": "import { heatFromStoredRow } from \"@/signal-console/lib/heat\"; import { listObservations } from \"@/lib/observations/reader\"; import type { DealForRanking, HotAccount } from \"./ranker\"; /** * Birdseye context loaders — Phase D inputs. *"
     },
     {
       "file": "src/birdseye/lib/context.ts",
@@ -2194,31 +2178,31 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "nue; const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat"
+      "context": "account_name) continue; // Same account-priority number Signal Console shows. const heat = heatFromStoredRow(o); out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud"
     },
     {
       "file": "src/birdseye/lib/context.ts",
-      "line": 127,
+      "line": 124,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "== \"number\" ? o._heat : 0; out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async funct"
+      "context": "gnal Console shows. const heat = heatFromStoredRow(o); out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async funct"
     },
     {
       "file": "src/birdseye/lib/context.ts",
-      "line": 129,
+      "line": 126,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": ": 0; out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async function loadObservationsForRanking() { t"
+      "context": "heatFromStoredRow(o); out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async function loadObservationsForRanking() { t"
     },
     {
       "file": "src/birdseye/lib/context.ts",
-      "line": 129,
+      "line": 126,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": ": 0; out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async function loadObservationsForRanking() { try {"
+      "context": "StoredRow(o); out.push({ id, account_name, heat }); } out.sort((a, b) => b.heat - a.heat); return out.slice(0, limit); } // ─── Observations (cloud read) ──────────────────────────────────────── export async function loadObservationsForRanking() { try {"
     },
     {
       "file": "src/birdseye/lib/ranker.test.ts",
@@ -2997,742 +2981,6 @@
       "context": "} {deal.accountName}</span> </div> <div class=\"cf4-relay\"> <div class=\"cf4-leg\"> <div class=\"cf4-lh\">{t(\"Message to your contact\", { class: \"body\" })}</div>"
     },
     {
-      "file": "src/call-planner/CallPlanner.tsx",
-      "line": 13,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "— Program 6 / PR 8 refacing. * * Per canon §4.11 (Live Instrument family) + the picked-winner * Pressure Script Variant 01 wireframe * (`deliverables/prototypes/wireframes/antaeus-call-planner-triptych- * 2026-04-09.html`, board labelled \"Variant 01 / Pressure Script\"). * * Layou"
-    },
-    {
-      "file": "src/call-planner/CallPlanner.tsx",
-      "line": 15,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "totypes/wireframes/antaeus-call-planner-triptych- * 2026-04-09.html`, board labelled \"Variant 01 / Pressure Script\"). * * Layout: * * ┌────────────────────────────────────────────────────────────────┐ * │ RoomChrome (wordmark + back-pill + ⌘K palette) │ * ├──"
-    },
-    {
-      "file": "src/call-planner/CallPlanner.tsx",
-      "line": 42,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "utcome capture writing * gtmos_discovery_stats. The visual restructure (2-col board) closes * the Pressure Script V01 layout drift; the scripted-quote treatment * + credibility chip close the cue-shape + dossier drift. */ export function CallPlanner(): JSX.Element { return ("
-    },
-    {
-      "file": "src/call-planner/components/AgendaSpine.tsx",
-      "line": 40,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "B",
-      "context": "is workflow today and where the handoff is breaking.\"; const whyNowTitle = top ? \"Live pressure is already visible.\" : d.customNotes.trim().length >= 20 ? \"Manual context is carrying the why-now.\" : \"The why-now is still thin.\"; const whyNowCo"
-    },
-    {
-      "file": "src/call-planner/components/AgendaSpine.tsx",
-      "line": 53,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "ustify the meeting.\" : \"The call will stay soft until the reason now is concrete.\"; // Pressure Script V01 — scripted-quote lines per strip. The // operator should be able to say each <em> line out loud and // have it land. Authored sentences, not directorial comment"
-    },
-    {
-      "file": "src/call-planner/components/AgendaSpine.tsx",
-      "line": 43,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "ength >= 20 ? \"Manual context is carrying the why-now.\" : \"The why-now is still thin.\"; const whyNowCopy = top ? top : d.customNotes.trim().length >= 20 ? d.customNotes.trim() : \"Use Signal Console or manual notes to justify"
-    },
-    {
-      "file": "src/call-planner/components/Handoff.tsx",
-      "line": 97,
-      "phrase": "thread",
-      "tier": 2,
-      "category": "E",
-      "context": "| \"\" ); } function openDealWorkspace(): void { // Same persist-then-route. Thread ?deal=<id> so Deal Workspace // jumps to the linked deal directly. const result = persistAgendaState(null); void saveAgendaSnapshotToCloud(result.snapshot)"
-    },
-    {
-      "file": "src/call-planner/components/Handoff.tsx",
-      "line": 122,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "ble\" ? \"Plan is workable. Tighten the gaps before you dial.\" : \"Plan is thin. Walk through the gates before sending the calendar invite.\"; void dealOptions; return ( <section class=\"cp-handoff\" aria-label={t(\"Cross-"
-    },
-    {
-      "file": "src/call-planner/components/Witness.tsx",
-      "line": 24,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "./lib/types\"; import { evaluateQuality } from \"../lib/quality\"; /** * Witness — Program 6 / PR 8 (Pressure Script V01 refacing). * * The witness column IS the planner's form. Inputs flow through * patchDraft + the dedicated setters so the agenda spine + quality * recompute live as"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 31,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "he * work. */ export function CallPlannerDS(): JSX.Element { const d = draft.value; const pulling = toPulling(); const contact = d.contactName.trim(); return ( <div class=\"cpd\"> <WayfinderBar room={t(\"CALL PLANNER\")}"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 39,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "{t(\"CALL PLANNER\")} tail={contact.length > 0 ? contact : undefined} pulling={ pulling ? { verb: pulling.verb, object: pulling.object,"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 40,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "tail={contact.length > 0 ? contact : undefined} pulling={ pulling ? { verb: pulling.verb, object: pulling.object, href: pulling.hre"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 42,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "lling={ pulling ? { verb: pulling.verb, object: pulling.object, href: pulling.href, why:"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 43,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "? { verb: pulling.verb, object: pulling.object, href: pulling.href, why: pulling.reasons.length > 0 ? ("
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 44,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "ing.verb, object: pulling.object, href: pulling.href, why: pulling.reasons.length > 0 ? ( <ul class=\"cpd-why\">"
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 46,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "href: pulling.href, why: pulling.reasons.length > 0 ? ( <ul class=\"cpd-why\"> {pulling.reasons.map((r) => ("
-    },
-    {
-      "file": "src/call-planner/ds/CallPlannerDS.tsx",
-      "line": 48,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "F",
-      "context": "<ul class=\"cpd-why\"> {pulling.reasons.map((r) => ( <li key={r}>{r}</li> ))} </ul>"
-    },
-    {
-      "file": "src/call-planner/ds/ds-components.test.tsx",
-      "line": 53,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "([ { id: \"a1\", name: \"Acme Industries\", heat: 90, topSignal: { headline: \"New CFO hired\", publishedDate: \"\" } } ]); setContactName(\"Acme Industries\"); const { getByText } ="
-    },
-    {
-      "file": "src/call-planner/ds/ds-components.test.tsx",
-      "line": 72,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "E",
-      "context": "shell expect(container.querySelector(\".cp-board\")).toBeNull(); }); it(\"surfaces the pulling cell once a contact is named\", () => { __setDealOptionsForTests([]); setContactName(\"Sarah Chen\"); const { container, getByText } = render(<CallPlannerDS /"
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.test.ts",
-      "line": 34,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "([ { id: \"a1\", name: \"Acme Industries\", heat: 90, topSignal: { headline: \"New CFO hired\", publishedDate: \"\" } } ]); __setDealOptionsForTests([ { id: \"d1\", accountName:"
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.test.ts",
-      "line": 66,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "([ { id: \"a1\", name: \"Acme Industries\", heat: 90, topSignal: { headline: \"New CFO hired\", publishedDate: \"\" } } ]); setContactName(\"Acme Industries\"); expect(agendaStops()."
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.test.ts",
-      "line": 19,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "dible\")).toBe(\"green\"); expect(bandTone(\"workable\")).toBe(\"blue\"); expect(bandTone(\"thin\")).toBe(\"red\"); }); }); describe(\"agendaQuality\", () => { it(\"is thin with an empty draft\", () => { const q = agendaQuality(); expect(q.band).toBe(\"thin\")"
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.test.ts",
-      "line": 24,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "expect(bandTone(\"thin\")).toBe(\"red\"); }); }); describe(\"agendaQuality\", () => { it(\"is thin with an empty draft\", () => { const q = agendaQuality(); expect(q.band).toBe(\"thin\"); expect(q.gates.length).toBe(5); }); it(\"climbs as the witness"
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.test.ts",
-      "line": 26,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "thin with an empty draft\", () => { const q = agendaQuality(); expect(q.band).toBe(\"thin\"); expect(q.gates.length).toBe(5); }); it(\"climbs as the witness fills in\", () => { __setAccountOptionsForTests([ { id: \"a1\","
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.ts",
-      "line": 79,
-      "phrase": "pulling",
-      "tier": 2,
-      "category": "E",
-      "context": "ng; readonly href: string; readonly reasons: ReadonlyArray<string>; } /** * The Wayfinder pulling cell: the plan exists to die in the call (get * used), so once a contact is named the one next move is to run discovery * with the plan loaded. Absent until the witness names a"
-    },
-    {
-      "file": "src/call-planner/ds/lib/adapters.ts",
-      "line": 20,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "F",
-      "context": "nst BAND_TONE: Record<QualityBand, AccentRole> = { credible: \"green\", workable: \"blue\", thin: \"red\" }; export function bandTone(band: QualityBand): AccentRole { return BAND_TONE[band]; } /** The live agenda quality, from the current draft + matched account/deal. */ e"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 30,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "t(loadAccountOptions(b)).toHaveLength(0); }); it(\"projects valid accounts with id + name + heat + topSignal\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [ {"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 39,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"1\", name: \"Acme\", heat: 80, signals: [ { headline: \"Acme raised Series B\", published_d"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 53,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "expect(out).toHaveLength(1); expect(out[0]?.name).toBe(\"Acme\"); expect(out[0]?.heat).toBe(80); expect(out[0]?.topSignal?.headline).toBe(\"Acme raised Series B\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 57,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "Signal?.headline).toBe(\"Acme raised Series B\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [{ id: \"1\", name: \"X\", _heat: 70 }] })"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 63,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "ccounts: [{ id: \"1\", name: \"X\", _heat: 70 }] }) ); expect(loadAccountOptions(s)[0]?.heat).toBe(70); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\","
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 66,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "); expect(loadAccountOptions(s)[0]?.heat).toBe(70); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: ["
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 72,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "JSON.stringify({ accounts: [ { id: \"1\", name: \"Cold\", heat: 0, _heat: 80 }, { id: \"2\", name: \"Warm\", heat: 50 } ] }) ); const out = loadAccountOptions(s); const cold"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 73,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"1\", name: \"Cold\", heat: 0, _heat: 80 }, { id: \"2\", name: \"Warm\", heat: 50 } ] }) ); const out = loadAccountOptions(s); const cold = out.find((a) => a.name === \"Cold\"); expect(cold?.heat).to"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 79,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "oadAccountOptions(s); const cold = out.find((a) => a.name === \"Cold\"); expect(cold?.heat).toBe(0); }); it(\"topSignal is null when signals[] is missing or empty\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\","
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 88,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "JSON.stringify({ accounts: [ { id: \"1\", name: \"NoSignals\", heat: 50 }, { id: \"2\", name: \"EmptyArr\", heat: 50, signals: [] } ] }) ); const out = loadAccountOptions(s); expe"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 89,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"1\", name: \"NoSignals\", heat: 50 }, { id: \"2\", name: \"EmptyArr\", heat: 50, signals: [] } ] }) ); const out = loadAccountOptions(s); expect(out[0]?.topSignal).toBeNull(); expect(out[1]?.topS"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 104,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "JSON.stringify({ accounts: [ { id: \"\", name: \"NoId\", heat: 99 }, { id: \"good\", name: \"\", heat: 80 }, { id: \"ok\", name: \"Acme\", heat: 50 }, null, \"string-row\""
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 105,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"\", name: \"NoId\", heat: 99 }, { id: \"good\", name: \"\", heat: 80 }, { id: \"ok\", name: \"Acme\", heat: 50 }, null, \"string-row\" ] }) ); exp"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.test.ts",
-      "line": 106,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"good\", name: \"\", heat: 80 }, { id: \"ok\", name: \"Acme\", heat: 50 }, null, \"string-row\" ] }) ); expect(loadAccountOptions(s).map((a) => a.name)).toEqual([\"Ac"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 8,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "c_v4` (Phase 4 / Room 3's Signal Console * mirror), projects each row to MatchedAccount {id, name, heat, * topSignal}. Heat read with a `_heat` legacy fallback using the * `\"heat\" in o` presence check from PR #22's Codex P2 fix so an * explicit `heat: 0` always wins over a stale"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 9,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "3's Signal Console * mirror), projects each row to MatchedAccount {id, name, heat, * topSignal}. Heat read with a `_heat` legacy fallback using the * `\"heat\" in o` presence check from PR #22's Codex P2 fix so an * explicit `heat: 0` always wins over a stale legacy value. * * D"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 10,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "chedAccount {id, name, heat, * topSignal}. Heat read with a `_heat` legacy fallback using the * `\"heat\" in o` presence check from PR #22's Codex P2 fix so an * explicit `heat: 0` always wins over a stale legacy value. * * Defensive: malformed JSON / missing keys / hostile types"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 11,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "cy fallback using the * `\"heat\" in o` presence check from PR #22's Codex P2 fix so an * explicit `heat: 0` always wins over a stale legacy value. * * Defensive: malformed JSON / missing keys / hostile types → empty * fallback, errors via reportError per CLAUDE.md Part II.5 §2."
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 74,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "const name = asString(o[\"name\"]); if (!id || !name) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); out.push({ id, name, heat,"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 75,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "tring(o[\"name\"]); if (!id || !name) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); out.push({ id, name, heat, topSignal: topSignalSumm"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 75,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "if (!id || !name) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); out.push({ id, name, heat, topSignal: topSignalSummary(o) });"
-    },
-    {
-      "file": "src/call-planner/lib/account-loader.ts",
-      "line": 79,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "umber(o[\"_heat\"]); out.push({ id, name, heat, topSignal: topSignalSummary(o) }); } return out; } catch (err) { reportError(err, { op: \"call-planner.loadAccountOptions\""
-    },
-    {
-      "file": "src/call-planner/lib/advance.test.ts",
-      "line": 9,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "gendaQuality>): AgendaQuality { return { score: p.score ?? 50, band: p.band ?? \"thin\", bandLabel: p.bandLabel ?? \"Thin\", gates: p.gates ?? [], nextMove: p.nextMove ?? \"\", hasSignal: p.hasSignal ?? false }; } function makeDraft("
-    },
-    {
-      "file": "src/call-planner/lib/advance.test.ts",
-      "line": 10,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "{ score: p.score ?? 50, band: p.band ?? \"thin\", bandLabel: p.bandLabel ?? \"Thin\", gates: p.gates ?? [], nextMove: p.nextMove ?? \"\", hasSignal: p.hasSignal ?? false }; } function makeDraft(p: Partial<Draft> = {}): Draft { retur"
-    },
-    {
-      "file": "src/call-planner/lib/brief.test.ts",
-      "line": 18,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "count { return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme Robotics\", heat: p.heat ?? 60, topSignal: \"topSignal\" in p ? (p.topSignal ?? null) : { headline: \"Series B announced\", publishedDate: \"2026-04-"
-    },
-    {
-      "file": "src/call-planner/lib/brief.test.ts",
-      "line": 18,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme Robotics\", heat: p.heat ?? 60, topSignal: \"topSignal\" in p ? (p.topSignal ?? null) : { headline: \"Series B announced\", publishedDate: \"2026-04-25\" }"
-    },
-    {
-      "file": "src/call-planner/lib/brief.test.ts",
-      "line": 168,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "n(\"Advance ask:\"); expect(out).toContain(\"Acme Robotics\"); // hasSignal=true → live-pressure note line expect(out).toContain(\"account signal\"); }); });"
-    },
-    {
-      "file": "src/call-planner/lib/persistence.ts",
-      "line": 210,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "F",
-      "context": "st r = parsed as Record<string, unknown>; return { totalCalls: Math.max(0, Math.floor(asNumber(r[\"totalCalls\"]))), advancedCalls: Math.max( 0, Math.floor(asNumber(r[\"advancedCalls\"])) ) }; } catch"
-    },
-    {
-      "file": "src/call-planner/lib/persistence.ts",
-      "line": 213,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "F",
-      "context": "er(r[\"totalCalls\"]))), advancedCalls: Math.max( 0, Math.floor(asNumber(r[\"advancedCalls\"])) ) }; } catch (err) { reportError(err, { op: \"call-planner.loadDiscoveryStats\" }); return EMPTY_STATS; } }"
-    },
-    {
-      "file": "src/call-planner/lib/planner-bridge.test.ts",
-      "line": 166,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "expect(insert.summary).toBe(\"Unknown · Jane · vp · workable\"); }); it(\"falls back band to thin when blank\", () => { const insert = snapshotToInsert({ ...FULL, band: \"\" }); expect(insert.summary).toBe(\"Acme · Jane · vp · thin\"); }); });"
-    },
-    {
-      "file": "src/call-planner/lib/planner-bridge.test.ts",
-      "line": 168,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "= snapshotToInsert({ ...FULL, band: \"\" }); expect(insert.summary).toBe(\"Acme · Jane · vp · thin\"); }); });"
-    },
-    {
-      "file": "src/call-planner/lib/planner-bridge.ts",
-      "line": 141,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "napshot.persona}` : snapshot.persona; return `${company} · ${personaPart} · ${snapshot.band || \"thin\"}`.slice(0, 200); } export function snapshotToInsert( snapshot: AgendaSnapshot ): InsertRow<\"discovery_call_logs\"> { return { log_type: LOG_TYPE_DISCOVERY_AGENDA,"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 18,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "MatchedAccount { return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme\", heat: p.heat ?? 60, topSignal: \"topSignal\" in p ? (p.topSignal ?? null) : { headline: \"Series B announced\", publishedDate: \"2026-04-"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 18,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "ccount { return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme\", heat: p.heat ?? 60, topSignal: \"topSignal\" in p ? (p.topSignal ?? null) : { headline: \"Series B announced\", publishedDate: \"2026-04-25\" }"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 157,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": ".find((g) => g.key === \"advancement\")?.met).toBe(true); }); it(\"All five gates met without heat bonus → 100\", () => { const q = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\", cust"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 164,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "context line over 20 chars long\" }), matchedAccount: makeAccount({ heat: 60, topSignal: null }), linkedDeal: makeDeal() }) ); expect(q.score).toBe(100); expect(q.band).toBe(\"credible\"); expec"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 174,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "\"credible\"); expect(q.bandLabel).toBe(\"Credible\"); }); }); describe(\"evaluateQuality — heat bonus + clamp\", () => { it(\"Heat ≥ 85 adds the +5 bonus on top\", () => { const q = evaluateQuality( inputs({ draft: makeDraft({"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 175,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "el).toBe(\"Credible\"); }); }); describe(\"evaluateQuality — heat bonus + clamp\", () => { it(\"Heat ≥ 85 adds the +5 bonus on top\", () => { const q = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\","
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 183,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "count exists but no top signal so why_now needs notes matchedAccount: makeAccount({ heat: 90, topSignal: null }), linkedDeal: makeDeal() }) ); // 20+10+20+25+25 = 100, +5 bonus → still capped at 100 expect(q.score).t"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 191,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "+20+25+25 = 100, +5 bonus → still capped at 100 expect(q.score).toBe(100); }); it(\"Heat < 85 does NOT add the bonus\", () => { const q = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\","
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 198,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "linkedinUrl: \"https://x\" }), matchedAccount: makeAccount({ heat: 84, topSignal: null }), linkedDeal: makeDeal() }) ); // person 20 + persona 10 + context 20 + advancement 25 = 75 (no why_now)"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 213,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "linkedinUrl: \"https://x\" }), matchedAccount: makeAccount({ heat: 99 }), linkedDeal: makeDeal() }) ); // 20+10+20+25+25 = 100, +5 → clamp 100 expect(q.score).toBe(100); }); }); describe(\""
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 229,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "customNotes: \"Manual context that is at least 20 chars.\" }); // 20+10+20+25 = 75 + heat-bonus 5 = 80 → workable // we need exactly 85 vs 84 — easier to test by inspection across gate combos. const workable = evaluateQuality( inputs({"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 234,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "inputs({ draft: draftBase, matchedAccount: makeAccount({ heat: 90 }) }) ); // person 20 + persona 10 + context 20 + why_now 25 + bonus 5 = 80 expect(workable.score).toBe(80); expect(workable.band)."
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 244,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "inputs({ draft: draftBase, matchedAccount: makeAccount({ heat: 90 }), linkedDeal: makeDeal() }) ); // 80 + advancement 25 = 105 → clamp 100 → credible expect(credible.score).toBe(100);"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 49,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "default → met. All other gates miss. expect(q.score).toBe(10); expect(q.band).toBe(\"thin\"); expect(q.bandLabel).toBe(\"Incomplete\"); expect(q.gates.find((g) => g.key === \"persona\")?.met).toBe(true); expect(q.gates.find((g) => g.key === \"person\")"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 253,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "dible.score).toBe(100); expect(credible.band).toBe(\"credible\"); }); it(\"score 64 → thin, 65 → workable (boundary)\", () => { const thin = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\","
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 254,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "oBe(\"credible\"); }); it(\"score 64 → thin, 65 → workable (boundary)\", () => { const thin = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\", customNotes: \"Twenty-character context lin"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 262,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "}) }) ); // person 20 + persona 10 + why_now 25 = 55 → thin expect(thin.score).toBe(55); expect(thin.band).toBe(\"thin\"); const workable = evaluateQuality( inputs({ draft: makeDraft({"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 263,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "}) ); // person 20 + persona 10 + why_now 25 = 55 → thin expect(thin.score).toBe(55); expect(thin.band).toBe(\"thin\"); const workable = evaluateQuality( inputs({ draft: makeDraft({ con"
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 264,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "person 20 + persona 10 + why_now 25 = 55 → thin expect(thin.score).toBe(55); expect(thin.band).toBe(\"thin\"); const workable = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\","
-    },
-    {
-      "file": "src/call-planner/lib/quality.test.ts",
-      "line": 264,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "na 10 + why_now 25 = 55 → thin expect(thin.score).toBe(55); expect(thin.band).toBe(\"thin\"); const workable = evaluateQuality( inputs({ draft: makeDraft({ contactName: \"Sarah\", linkedinUrl: \"h"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 24,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "linked (deal attached) weight 25 * * Sum is 0-100. A +5 bonus applies if the matched account's heat * is ≥ 85 (live signal makes the call genuinely time-sensitive). * Score is clamped 0-100. Bands: * - credible ≥ 85 * - workable ≥ 65 * - thin < 65 * * The `nextMov"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 132,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "puts) })); let score = gates.reduce((sum, g) => sum + (g.met ? g.weight : 0), 0); const heat = inputs.matchedAccount?.heat ?? 0; if (heat >= 85) score = Math.min(100, score + 5); const { band, bandLabel } = bandFor(score); const hasSignal = (inputs.matchedAcco"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 132,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "gates.reduce((sum, g) => sum + (g.met ? g.weight : 0), 0); const heat = inputs.matchedAccount?.heat ?? 0; if (heat >= 85) score = Math.min(100, score + 5); const { band, bandLabel } = bandFor(score); const hasSignal = (inputs.matchedAccount?.topSignal ?? null) !== nu"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 133,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "g) => sum + (g.met ? g.weight : 0), 0); const heat = inputs.matchedAccount?.heat ?? 0; if (heat >= 85) score = Math.min(100, score + 5); const { band, bandLabel } = bandFor(score); const hasSignal = (inputs.matchedAccount?.topSignal ?? null) !== null; return {"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 29,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "E",
-      "context": "time-sensitive). * Score is clamped 0-100. Bands: * - credible ≥ 85 * - workable ≥ 65 * - thin < 65 * * The `nextMove` string is a single coach line picked by the first * unmet gate (per legacy line 706-711); when all gates are met it * names the credible-path advance"
-    },
-    {
-      "file": "src/call-planner/lib/quality.ts",
-      "line": 94,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "le\" }; if (score >= 65) return { band: \"workable\", bandLabel: \"Workable\" }; return { band: \"thin\", bandLabel: \"Incomplete\" }; } function nextMoveFor( gates: ReadonlyArray<QualityGate>, inputs: QualityInputs ): string { const byKey = (k: QualityGate[\"key\"]): Quali"
-    },
-    {
-      "file": "src/call-planner/lib/types.ts",
-      "line": 70,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "s. */ export interface MatchedAccount { readonly id: string; readonly name: string; /** Heat score 0-99; ≥85 grants a +5 quality bonus per legacy. */ readonly heat: number; /** Top signal (signals[0]) — drives the opener + reason-now copy. */ readonly topSigna"
-    },
-    {
-      "file": "src/call-planner/lib/types.ts",
-      "line": 71,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "ly name: string; /** Heat score 0-99; ≥85 grants a +5 quality bonus per legacy. */ readonly heat: number; /** Top signal (signals[0]) — drives the opener + reason-now copy. */ readonly topSignal: SignalSummary | null; } /** Subset of a Deal Workspace deal this room r"
-    },
-    {
-      "file": "src/call-planner/lib/types.ts",
-      "line": 98,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "F",
-      "context": "weight: number; readonly met: boolean; } export type QualityBand = \"credible\" | \"workable\" | \"thin\"; /** Aggregated agenda quality projection. */ export interface AgendaQuality { readonly score: number; readonly band: QualityBand; readonly bandLabel: string; re"
-    },
-    {
-      "file": "src/call-planner/state.test.ts",
-      "line": 48,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "}; return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme Robotics\", heat: p.heat ?? 60, topSignal }; } function makeDeal(p: Partial<LinkedDeal>): LinkedDeal { return { id: p.id ?? \"deal-1\", accountName: p.accountName ??"
-    },
-    {
-      "file": "src/call-planner/state.test.ts",
-      "line": 48,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "return { id: p.id ?? \"acct-1\", name: p.name ?? \"Acme Robotics\", heat: p.heat ?? 60, topSignal }; } function makeDeal(p: Partial<LinkedDeal>): LinkedDeal { return { id: p.id ?? \"deal-1\", accountName: p.accountName ?? \"Acme R"
-    },
-    {
-      "file": "src/call-planner/state.test.ts",
-      "line": 253,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "ontactName \"Sarah at Acme\" includes \"Acme\"). setAccountOptions([makeAccount({ name: \"Acme\", heat: 60 })]); setDealOptions([ makeDeal({ id: \"d-acme\", accountName: \"Acme Robotics\", value: 50000,"
-    },
-    {
-      "file": "src/call-planner/state.test.ts",
-      "line": 76,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "Draft merges partial updates\", () => { patchDraft({ contactName: \"Sarah\", customNotes: \"Hot pressure\" }); expect(draft.value.contactName).toBe(\"Sarah\"); expect(draft.value.customNotes).toBe(\"Hot pressure\"); expect(draft.value.persona).toBe(\"cxo\"); // uncha"
-    },
-    {
-      "file": "src/call-planner/state.test.ts",
-      "line": 78,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "E",
-      "context": "expect(draft.value.contactName).toBe(\"Sarah\"); expect(draft.value.customNotes).toBe(\"Hot pressure\"); expect(draft.value.persona).toBe(\"cxo\"); // unchanged }); it(\"setContactName / setPersona / setCustomNotes / setLinkedinUrl / setLinkedDealId\", () => {"
-    },
-    {
       "file": "src/cloud-seed/CloudSeedPage.tsx",
       "line": 16,
       "phrase": "heartbeat",
@@ -3930,7 +3178,7 @@
       "phrase": "thread",
       "tier": 2,
       "category": "E",
-      "context": "recent 8 calls (newest first) from `callLog`. * Each row carries: created date, account + contact, thread title + * buyer response, outcome. Wave 5 wires the cross-room handoff strip * (Open Call Planner / Open Deal Workspace) below the grid. */ function fmtDate(iso: string): stri"
+      "context": "recent 8 calls (newest first) from `callLog`. * Each row carries: created date, account + contact, thread title + * buyer response, outcome. Wave 5 wires the cross-room handoff strip * (Prepare the discovery call / Open the deal) below the grid. */ function fmtDate(iso: string): s"
     },
     {
       "file": "src/cold-call-studio/components/CallMemory.tsx",
@@ -4778,43 +4026,59 @@
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "xpect(loadAccountOptions(s)).toHaveLength(0); }); it(\"projects valid accounts and ranks by heat desc\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [ {"
+      "context": "tions(s)).toHaveLength(0); }); it(\"projects valid accounts and ranks by the Signal Console heat\", () => { const s = new MemStorage(); const fresh = new Date().toISOString(); // Stored `heat` numbers deliberately disagree with the signals — //"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 45,
+      "line": 39,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "{ id: \"1\", name: \"Beta\", heat: 50, signals: [ { headline: \"Hiring spike at Beta\" } ] }, {"
+      "context": "const s = new MemStorage(); const fresh = new Date().toISOString(); // Stored `heat` numbers deliberately disagree with the signals — // the loader must show the number Signal Console computes. s.seed( \"gtmos_sc_v4\", JSON.s"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 53,
+      "line": 48,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "{ id: \"2\", name: \"Acme\", heat: 80, signals: [ { headline: \"Acme raised Series B\" } ] }, { id:"
+      "context": "{ id: \"1\", name: \"Beta\", heat: 95, signals: [ { id: \"b1\", headline: \"Hiring spike at Beta\", published_date: fresh } ]"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 58,
+      "line": 56,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "B\" } ] }, { id: \"3\", name: \"Gamma\", heat: 0 } ] }) ); const out = loadAccountOptions(s); expect(out.map((a) => a.name)).toEqual([\"Acme\", \"Beta\", \"Gamma\"]); expe"
+      "context": "{ id: \"2\", name: \"Acme\", heat: 10, signals: [ { id: \"a1\", headline: \"Acme raised Series B\", published_date: fresh, ai: true }, {"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 64,
+      "line": 62,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "; expect(out.map((a) => a.name)).toEqual([\"Acme\", \"Beta\", \"Gamma\"]); expect(out[0]?.heat).toBe(80); expect(out[0]?.topSignal).toContain(\"Series B\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s = new MemStorage("
+      "context": "sh } ] }, { id: \"3\", name: \"Gamma\", heat: 0 } ] }) ); const out = loadAccountOptions(s); expect(out.map((a) => a.name)).toEqual([\"Acme\", \"Beta\", \"Gamma\"]); // 1"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 68,
+      "line": 69,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "eta\", \"Gamma\"]); // 18 (AI signal) + 12 (manual signal), both fresh. expect(out[0]?.heat).toBe(30); expect(out[1]?.heat).toBe(12); expect(out[0]?.topSignal).toContain(\"Series B\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", ()"
+    },
+    {
+      "file": "src/cold-call-studio/lib/account-loader.test.ts",
+      "line": 70,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "al) + 12 (manual signal), both fresh. expect(out[0]?.heat).toBe(30); expect(out[1]?.heat).toBe(12); expect(out[0]?.topSignal).toContain(\"Series B\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s = new MemStorage("
+    },
+    {
+      "file": "src/cold-call-studio/lib/account-loader.test.ts",
+      "line": 74,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4822,7 +4086,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 79,
+      "line": 85,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4830,7 +4094,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 82,
+      "line": 88,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4838,7 +4102,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 83,
+      "line": 89,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4846,7 +4110,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 85,
+      "line": 91,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4854,7 +4118,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 91,
+      "line": 97,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4862,7 +4126,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 92,
+      "line": 98,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4870,7 +4134,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 98,
+      "line": 104,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4878,7 +4142,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 109,
+      "line": 115,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4886,7 +4150,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 110,
+      "line": 116,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4894,7 +4158,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 111,
+      "line": 117,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4902,7 +4166,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 127,
+      "line": 133,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4910,7 +4174,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.test.ts",
-      "line": 128,
+      "line": 134,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4918,7 +4182,15 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 15,
+      "line": 2,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "{ reportError } from \"@/lib/observability\"; import { heatFromStoredRow } from \"@/signal-console/lib/heat\"; import type { AccountSummary } from \"./types\"; /** * Phase 4 / Room 7 Wave 5 — account loader. * * Reads accounts from Phase 4 / Room 3's `gtmos_sc_v4` (Signal Console) * m"
+    },
+    {
+      "file": "src/cold-call-studio/lib/account-loader.ts",
+      "line": 16,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4926,63 +4198,31 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 71,
+      "line": 68,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "const name = asString(o[\"name\"]); if (!id || !name) continue; // Heat may be stored as `heat` (Phase 4 / Room 3) or `_heat` // (legacy Signal Console). Prefer `heat` whenever it is *present* // (including an explicit zero) so"
+      "context": "priority number Signal Console shows: computed // from the account's signals; a stored `heat` / `_heat` is only // used for legacy rows that carry no signals array. const heat = heatFromStoredRow(o); const topSignal = topSignalHeadline("
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 71,
+      "line": 70,
       "phrase": "heat",
       "tier": 2,
-      "category": "E",
-      "context": "asString(o[\"name\"]); if (!id || !name) continue; // Heat may be stored as `heat` (Phase 4 / Room 3) or `_heat` // (legacy Signal Console). Prefer `heat` whenever it is *present* // (including an explicit zero) so the new payload always"
+      "category": "F",
+      "context": "`_heat` is only // used for legacy rows that carry no signals array. const heat = heatFromStoredRow(o); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal }); } // Rank by heat desc; stable tie"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
       "line": 72,
       "phrase": "heat",
       "tier": 2,
-      "category": "E",
-      "context": "y be stored as `heat` (Phase 4 / Room 3) or `_heat` // (legacy Signal Console). Prefer `heat` whenever it is *present* // (including an explicit zero) so the new payload always wins // over a stale legacy `_heat` in mixed-payload rows."
-    },
-    {
-      "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 75,
-      "phrase": "heat",
-      "tier": 2,
       "category": "F",
-      "context": "oad always wins // over a stale legacy `_heat` in mixed-payload rows. const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal })"
+      "context": "mStoredRow(o); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal }); } // Rank by heat desc; stable ties leave order as-stored. return out .slice() .sort((a, b) => b.heat - a.heat);"
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 76,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "// over a stale legacy `_heat` in mixed-payload rows. const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal }); } // R"
-    },
-    {
-      "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 76,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "y `_heat` in mixed-payload rows. const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal }); } // Rank by heat desc; stable"
-    },
-    {
-      "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 78,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "r(o[\"_heat\"]); const topSignal = topSignalHeadline(o); out.push({ id, name, heat, topSignal }); } // Rank by heat desc; stable ties leave order as-stored. return out .slice() .sort((a, b) => b.heat - a.heat);"
-    },
-    {
-      "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 80,
+      "line": 74,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -4990,7 +4230,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 83,
+      "line": 77,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -4998,7 +4238,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 83,
+      "line": 77,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -5006,7 +4246,7 @@
     },
     {
       "file": "src/cold-call-studio/lib/account-loader.ts",
-      "line": 16,
+      "line": 17,
       "phrase": "hottest",
       "tier": 2,
       "category": "E",
@@ -5058,7 +4298,7 @@
       "phrase": "thread",
       "tier": 2,
       "category": "E",
-      "context": "\"/pilot-desk/\", focusObject: \"Acme\", roomLabel: \"PoC\", extra: { thread: \"ask\", blank: \"\" } }); expect(url).toContain(\"thread=ask\"); expect(url).not.toContain(\"blank=\"); }); }); describe(\"hrefToSignalConsole / hrefToCallPl"
+      "context": "\"/pilot-desk/\", focusObject: \"Acme\", roomLabel: \"PoC\", extra: { thread: \"ask\", blank: \"\" } }); expect(url).toContain(\"thread=ask\"); expect(url).not.toContain(\"blank=\"); }); }); describe(\"hrefToSignalConsole / hrefToDiscov"
     },
     {
       "file": "src/cold-call-studio/lib/handoff.test.ts",
@@ -5066,7 +4306,7 @@
       "phrase": "thread",
       "tier": 2,
       "category": "E",
-      "context": ": \"PoC\", extra: { thread: \"ask\", blank: \"\" } }); expect(url).toContain(\"thread=ask\"); expect(url).not.toContain(\"blank=\"); }); }); describe(\"hrefToSignalConsole / hrefToCallPlanner / hrefToDealWorkspace\", () => { it(\"send to the right path w"
+      "context": ": \"PoC\", extra: { thread: \"ask\", blank: \"\" } }); expect(url).toContain(\"thread=ask\"); expect(url).not.toContain(\"blank=\"); }); }); describe(\"hrefToSignalConsole / hrefToDiscoveryStudio / hrefToDealWorkspace\", () => { it(\"send to the right pa"
     },
     {
       "file": "src/cold-call-studio/lib/handoff.ts",
@@ -6702,7 +5942,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.test.ts",
-      "line": 177,
+      "line": 188,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6710,7 +5950,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.test.ts",
-      "line": 184,
+      "line": 195,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6718,7 +5958,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.test.ts",
-      "line": 188,
+      "line": 199,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6726,7 +5966,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.test.ts",
-      "line": 189,
+      "line": 200,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6734,7 +5974,15 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 20,
+      "line": 2,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "{ ReadinessInput } from \"@/lib/readiness\"; import { heatFromStoredRow } from \"@/signal-console/lib/heat\"; import { computeHandoffSectionsReady } from \"@/founding-gtm/lib/sections-ready\"; import { EMPTY_READINESS_INPUT } from \"@/lib/readiness\"; /** * Readiness input aggregator. *"
+    },
+    {
+      "file": "src/dashboard/lib/readiness-aggregator.ts",
+      "line": 22,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6742,47 +5990,31 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 124,
+      "line": 128,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "accounts.forEach((raw) => { const o = asObject(raw); if (!o) return; const heat = \"heat\" in o ? asNumber(o.heat) : asNumber(o[\"_heat\"]); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function"
+      "context": "if (!o) return; // Same account-priority number Signal Console shows. const heat = heatFromStoredRow(o); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storage"
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 124,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "s.forEach((raw) => { const o = asObject(raw); if (!o) return; const heat = \"heat\" in o ? asNumber(o.heat) : asNumber(o[\"_heat\"]); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOut"
-    },
-    {
-      "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 124,
+      "line": 129,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "const o = asObject(raw); if (!o) return; const heat = \"heat\" in o ? asNumber(o.heat) : asNumber(o[\"_heat\"]); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storag"
+      "context": "ccount-priority number Signal Console shows. const heat = heatFromStoredRow(o); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storage: StorageLike ): { touchCount: number; di"
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 125,
+      "line": 130,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "!o) return; const heat = \"heat\" in o ? asNumber(o.heat) : asNumber(o[\"_heat\"]); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storage: StorageLike ): { touchCount: number; di"
+      "context": "hows. const heat = heatFromStoredRow(o); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storage: StorageLike ): { touchCount: number; distinctAccounts: number } { const ro"
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 126,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "in o ? asNumber(o.heat) : asNumber(o[\"_heat\"]); if (heat >= 50) withHeat += 1; if (heat >= 75) hot += 1; }); return { withHeat, hot }; } function readOutboundTouches( storage: StorageLike ): { touchCount: number; distinctAccounts: number } { const ro"
-    },
-    {
-      "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 207,
+      "line": 223,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -6790,7 +6022,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 214,
+      "line": 230,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -6798,7 +6030,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 214,
+      "line": 230,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -6806,7 +6038,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 215,
+      "line": 231,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -6814,7 +6046,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 217,
+      "line": 233,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -6822,7 +6054,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 218,
+      "line": 234,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -6830,7 +6062,7 @@
     },
     {
       "file": "src/dashboard/lib/readiness-aggregator.ts",
-      "line": 219,
+      "line": 235,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -7006,7 +6238,7 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 144,
+      "line": 145,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -7014,7 +6246,7 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 161,
+      "line": 162,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -7022,7 +6254,7 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 161,
+      "line": 162,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -7030,7 +6262,7 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 174,
+      "line": 175,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -7038,7 +6270,7 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 181,
+      "line": 182,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -7046,11 +6278,19 @@
     },
     {
       "file": "src/dashboard/lib/snapshot-aggregator.ts",
-      "line": 195,
+      "line": 196,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
       "context": "ole\" } ], rankingSignals: { heat, recentCount, highConfidenceCount, ...(cause ? { causeId: cause } : {}) } }; re"
+    },
+    {
+      "file": "src/dashboard/lib/snapshot-aggregator.ts",
+      "line": 211,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "nst deal = parseJson(storage.getItem(KEY_DEAL_HEALTH)); // Live from the watched accounts (same heat as Signal Console); // the published snapshot is only a fallback. const signal = readLiveSignalRoomHealth(storage) ?? parseJson(storage.getItem(KEY_SIGNAL_HEALTH)); co"
     },
     {
       "file": "src/dashboard/lib/types.ts",
@@ -7333,24 +6573,40 @@
       "context": "t(\"workable\") }; if (score > 0) return { cls: \"thin\", word: t(\"limited\") }; return { cls: \"thin\", word: t(\"none yet\") }; } export interface ClimbDrawerProps { readonly summary: ReadinessSummary; readonly onClose: () => void; } export function ClimbDrawer(props: Cli"
     },
     {
-      "file": "src/dashboard/v4/lib/cockpit.ts",
-      "line": 133,
-      "phrase": "pressure",
+      "file": "src/dashboard/v4/lib/cockpit.test.ts",
+      "line": 7,
+      "phrase": "heat",
       "tier": 2,
-      "category": "F",
-      "context": "const founding = readJson<FoundingHealth>(store, \"gtmos_founding_gtm_health\") ?? {}; const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : []; const riskN = pressure.length; const pipeline = typeof deal.pipeline_value === \"number\" ? deal.pipeline_value"
+      "category": "E",
+      "context": "/cross-room\"; import { authorAllSections, countReady } from \"@/founding-gtm/lib/sections\"; import { heat as computeHeat } from \"@/signal-console/lib/heat\"; import { loadAccounts } from \"@/signal-console/lib/persistence\"; import { buildHero } from \"@/deal-workspace/v4/lib/views\"; impo"
+    },
+    {
+      "file": "src/dashboard/v4/lib/cockpit.test.ts",
+      "line": 7,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "ady } from \"@/founding-gtm/lib/sections\"; import { heat as computeHeat } from \"@/signal-console/lib/heat\"; import { loadAccounts } from \"@/signal-console/lib/persistence\"; import { buildHero } from \"@/deal-workspace/v4/lib/views\"; import { legacyDealToDeal } from \"@/deal-workspace/li"
     },
     {
       "file": "src/dashboard/v4/lib/cockpit.ts",
-      "line": 134,
+      "line": 173,
       "phrase": "pressure",
       "tier": 2,
       "category": "F",
-      "context": "const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : []; const riskN = pressure.length; const pipeline = typeof deal.pipeline_value === \"number\" ? deal.pipeline_value : 0; const worst = pressure[0]; const worstName = worst && typeof worst"
+      "context": "const founding = readJson<FoundingHealth>(store, \"gtmos_founding_gtm_health\") ?? {}; const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : []; // Count of deals outside the lower-risk band — the number Deal // Workspace shows (\"N deals have elevated ris"
     },
     {
       "file": "src/dashboard/v4/lib/cockpit.ts",
-      "line": 137,
+      "line": 180,
+      "phrase": "pressure",
+      "tier": 2,
+      "category": "F",
+      "context": "unt === \"number\" ? (deal.critical_count ?? 0) + (deal.at_risk_count ?? 0) : pressure.length; const pipeline = typeof deal.pipeline_value === \"number\" ? deal.pipeline_value : 0; const worst = pressure[0]; const worstName = worst && typeof worst"
+    },
+    {
+      "file": "src/dashboard/v4/lib/cockpit.ts",
+      "line": 183,
       "phrase": "pressure",
       "tier": 2,
       "category": "F",
@@ -7830,7 +7086,7 @@
     },
     {
       "file": "src/discovery-studio/ds/components/HandoffStripDS.tsx",
-      "line": 16,
+      "line": 13,
       "phrase": "thread",
       "tier": 2,
       "category": "E",
@@ -7862,7 +7118,7 @@
     },
     {
       "file": "src/discovery-studio/state.test.ts",
-      "line": 391,
+      "line": 392,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -7870,7 +7126,7 @@
     },
     {
       "file": "src/discovery-studio/state.test.ts",
-      "line": 397,
+      "line": 398,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -8158,7 +7414,7 @@
     },
     {
       "file": "src/future-autopsy/lib/action-plan.ts",
-      "line": 102,
+      "line": 103,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -9238,7 +8494,7 @@
     },
     {
       "file": "src/lib/data-migration.ts",
-      "line": 668,
+      "line": 670,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "E",
@@ -9246,7 +8502,7 @@
     },
     {
       "file": "src/lib/data-migration.ts",
-      "line": 692,
+      "line": 694,
       "phrase": "standing orders",
       "tier": 2,
       "category": "E",
@@ -9326,7 +8582,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.test.ts",
-      "line": 49,
+      "line": 52,
       "phrase": "floor",
       "tier": 2,
       "category": "E",
@@ -9334,15 +8590,15 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 5,
+      "line": 6,
       "phrase": "live edge",
       "tier": 1,
       "category": "E",
-      "context": "e/t\"; import { localDay, readBulkCounts } from \"@/quota-workback/v4/lib/bulk-outreach\"; /** * The Live Edge — data layer (founder-locked 2026-07-16). * * Pure, storage-injectable readers that project the left wall's three * layers from data the system ALREADY collects. The doctrine"
+      "context": "utreach\"; import { readDailyOutreachRequirement } from \"@/quota-workback/lib/coverage\"; /** * The Live Edge — data layer (founder-locked 2026-07-16). * * Pure, storage-injectable readers that project the left wall's three * layers from data the system ALREADY collects. The doctrine"
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 168,
+      "line": 179,
       "phrase": "the machine",
       "tier": 1,
       "category": "E",
@@ -9350,7 +8606,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 177,
+      "line": 188,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9358,7 +8614,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 184,
+      "line": 195,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9366,7 +8622,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 194,
+      "line": 205,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9374,7 +8630,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 208,
+      "line": 219,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9382,7 +8638,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 231,
+      "line": 242,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9390,7 +8646,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 325,
+      "line": 336,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9398,7 +8654,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 337,
+      "line": 348,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9406,7 +8662,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 339,
+      "line": 350,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9414,7 +8670,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 341,
+      "line": 352,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -9422,7 +8678,7 @@
     },
     {
       "file": "src/lib/edge/edge-data.ts",
-      "line": 283,
+      "line": 294,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "E",
@@ -9538,15 +8794,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "import type { Account, Signal } from \"@/signal-console/lib/types\"; import { heat as computeHeat, heatBand } from \"@/signal-console/lib/heat\"; import { STAGE_LABELS, STAGE_ORDER, type Deal, type StageId } from \"@/deal-workspace/lib/deal-shape\"; import { assessD"
-    },
-    {
-      "file": "src/lib/follow/follow-data.ts",
-      "line": 2,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "m \"@/signal-console/lib/types\"; import { heat as computeHeat, heatBand } from \"@/signal-console/lib/heat\"; import { STAGE_LABELS, STAGE_ORDER, type Deal, type StageId } from \"@/deal-workspace/lib/deal-shape\"; import { assessDeal, type RecoveryAssessment } from \"@/deal-workspace/lib/r"
+      "context": "rom \"@/signal-console/lib/types\"; import { heatBand, heatFromStoredRow } from \"@/signal-console/lib/heat\"; import { STAGE_LABELS, STAGE_ORDER, type Deal, type StageId } from \"@/deal-workspace/lib/deal-shape\"; import { assessDeal, type RecoveryAssessment } from \"@/deal-workspace/lib/r"
     },
     {
       "file": "src/lib/follow/follow-data.ts",
@@ -9558,7 +8806,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 121,
+      "line": 122,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -9566,7 +8814,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 277,
+      "line": 278,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -9574,7 +8822,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 355,
+      "line": 356,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -9582,7 +8830,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 347,
+      "line": 348,
       "phrase": "thread",
       "tier": 2,
       "category": "E",
@@ -9614,7 +8862,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 279,
+      "line": 280,
       "phrase": "pulling",
       "tier": 2,
       "category": "E",
@@ -9622,7 +8870,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 280,
+      "line": 281,
       "phrase": "pulling",
       "tier": 2,
       "category": "F",
@@ -9630,7 +8878,7 @@
     },
     {
       "file": "src/lib/follow/follow-data.ts",
-      "line": 429,
+      "line": 430,
       "phrase": "pulling",
       "tier": 2,
       "category": "F",
@@ -10070,15 +9318,7 @@
     },
     {
       "file": "src/lib/operator-help/registry.ts",
-      "line": 120,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "lds for a real account and use them during the call.\", ifStuck: \"If the plan is thin, clarify the current business reason for the conversation and the specific next step you want to discuss.\" }, \"/discovery-studio/\": { whatItIsFor: \"Dis"
-    },
-    {
-      "file": "src/lib/operator-help/registry.ts",
-      "line": 184,
+      "line": 176,
       "phrase": "thin",
       "tier": 2,
       "category": "B",
@@ -10766,51 +10006,27 @@
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 73,
+      "line": 7,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "expect(loadHottestAccount(null)).toBeNull(); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [ { id: \"1\", na"
+      "context": "import { loadBestIcp, loadHottestAccount, loadLatestTouch } from \"./context\"; import { heat as computeHeat } from \"@/signal-console/lib/heat\"; import { loadAccounts } from \"@/signal-console/lib/persistence\"; class MemStorage { private store = new Map<string, string>"
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 79,
+      "line": 7,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "JSON.stringify({ accounts: [ { id: \"1\", name: \"Acme\", heat: 70 }, { id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect"
+      "context": ", loadLatestTouch } from \"./context\"; import { heat as computeHeat } from \"@/signal-console/lib/heat\"; import { loadAccounts } from \"@/signal-console/lib/persistence\"; class MemStorage { private store = new Map<string, string>(); getItem(k: string): string | null {"
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 80,
+      "line": 98,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "{ id: \"1\", name: \"Acme\", heat: 70 }, { id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect(loadHottestAccount(s)?.name).toBe(\"Beta\"); });"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 81,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "{ id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect(loadHottestAccount(s)?.name).toBe(\"Beta\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", ("
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 88,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "pect(loadHottestAccount(s)?.name).toBe(\"Beta\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [{ id: \"1\", name: \"Legac"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 96,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "\", name: \"LegacyOnly\", _heat: 80 }] }) ); expect(loadHottestAccount(s)?.heat).toBe(80); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { // Same Codex P2 fix shape Phase 4 / Room 7's account-loader uses. const"
+      "context": "test = loadHottestAccount(s); expect(hottest?.name).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage();"
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
@@ -10818,7 +10034,23 @@
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "); expect(loadHottestAccount(s)?.heat).toBe(80); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { // Same Codex P2 fix shape Phase 4 / Room 7's account-loader uses. const s = new MemStorage(); s.seed( \"gtmo"
+      "context": "e).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.strin"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 102,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "eing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [ { id: \"1\", na"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 108,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "JSON.stringify({ accounts: [ { id: \"1\", name: \"Acme\", heat: 70 }, { id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect"
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
@@ -10826,71 +10058,103 @@
       "phrase": "heat",
       "tier": 2,
       "category": "E",
+      "context": "{ id: \"1\", name: \"Acme\", heat: 70 }, { id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect(loadHottestAccount(s)?.name).toBe(\"Beta\"); });"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 110,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "{ id: \"2\", name: \"Beta\", heat: 90 }, { id: \"3\", name: \"Gamma\", heat: 50 } ] }) ); expect(loadHottestAccount(s)?.name).toBe(\"Beta\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", ("
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 117,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "pect(loadHottestAccount(s)?.name).toBe(\"Beta\"); }); it(\"falls back to legacy `_heat` when `heat` is absent\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON.stringify({ accounts: [{ id: \"1\", name: \"Legac"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 125,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "\", name: \"LegacyOnly\", _heat: 80 }] }) ); expect(loadHottestAccount(s)?.heat).toBe(80); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { // Same Codex P2 fix shape Phase 4 / Room 7's account-loader uses. const"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 128,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "); expect(loadHottestAccount(s)?.heat).toBe(80); }); it(\"respects an explicit `heat: 0` over a stale `_heat`\", () => { // Same Codex P2 fix shape Phase 4 / Room 7's account-loader uses. const s = new MemStorage(); s.seed( \"gtmo"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 138,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
       "context": "id: \"1\", name: \"ColdAccount\", heat: 0, _heat: 80 }, { id: \"2\", name: \"WarmAccount\", heat: 50 } ] }) ); exp"
     },
     {
       "file": "src/linkedin-playbook/lib/context.test.ts",
-      "line": 112,
+      "line": 141,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
       "context": "_heat: 80 }, { id: \"2\", name: \"WarmAccount\", heat: 50 } ] }) ); expect(loadHottestAccount(s)?.name).toBe(\"WarmAccount\"); }); it(\"returns null when no rows are usable\", () => {"
     },
     {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 96,
+      "phrase": "hottest",
+      "tier": 2,
+      "category": "E",
+      "context": "); const boeing = loadAccounts(s).find((a) => a.name === \"Boeing\")!; const hottest = loadHottestAccount(s); expect(hottest?.name).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); });"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 97,
+      "phrase": "hottest",
+      "tier": 2,
+      "category": "E",
+      "context": "s).find((a) => a.name === \"Boeing\")!; const hottest = loadHottestAccount(s); expect(hottest?.name).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\","
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 98,
+      "phrase": "hottest",
+      "tier": 2,
+      "category": "E",
+      "context": "const hottest = loadHottestAccount(s); expect(hottest?.name).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage();"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.test.ts",
+      "line": 99,
+      "phrase": "hottest",
+      "tier": 2,
+      "category": "E",
+      "context": "test?.name).toBe(\"Boeing\"); expect(hottest?.heat).toBe(computeHeat(boeing)); expect(hottest?.heat).toBe(30); }); it(\"picks the account with the highest heat\", () => { const s = new MemStorage(); s.seed( \"gtmos_sc_v4\", JSON"
+    },
+    {
       "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 88,
+      "line": 1,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "import { heatFromStoredRow } from \"@/signal-console/lib/heat\"; import { reportError } from \"@/lib/observability\"; import type { BestIcp, HottestAccount, LatestTouch } from \"./types\"; /** * Phase 4 / Room 8 Wave 5 — inbound con"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.ts",
+      "line": 91,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "} } /** * Read the hottest Signal Console account from * `gtmos_sc_v4.accounts[]`, ranked by heat (preferring the new `heat` * field over legacy `_heat` when both exist — same presence-check rule * Phase 4 / Room 7's account-loader uses post-Codex P2 fix). */ export functio"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 88,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "ottest Signal Console account from * `gtmos_sc_v4.accounts[]`, ranked by heat (preferring the new `heat` * field over legacy `_heat` when both exist — same presence-check rule * Phase 4 / Room 7's account-loader uses post-Codex P2 fix). */ export function loadHottestAccount("
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 112,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "e; const name = asString(o[\"name\"]); if (!name) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { be"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 113,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "e = asString(o[\"name\"]); if (!name) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { best = { name, heat };"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 114,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "e) continue; const heat = \"heat\" in o ? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { best = { name, heat }; } } return best;"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 116,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "? asNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playboo"
-    },
-    {
-      "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 116,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "sNumber(o[\"heat\"]) : asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playbook.loadHottes"
+      "context": "priority Signal * Console computes from the account's signals (`heatFromStoredRow`). * A stored `heat` / `_heat` is used only for legacy rows with no * signals array, so this room never shows a different number than * Signal Console and the Dashboard for the same account. */ ex"
     },
     {
       "file": "src/linkedin-playbook/lib/context.ts",
@@ -10898,15 +10162,39 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": ": asNumber(o[\"_heat\"]); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playbook.loadHottestAccount\" }); return nu"
+      "context": "puted from the // account's signals the same way Signal Console does. const heat = heatFromStoredRow(o); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) {"
     },
     {
       "file": "src/linkedin-playbook/lib/context.ts",
-      "line": 87,
+      "line": 118,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "me way Signal Console does. const heat = heatFromStoredRow(o); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playboo"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.ts",
+      "line": 118,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "l Console does. const heat = heatFromStoredRow(o); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playbook.loadHottes"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.ts",
+      "line": 119,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "= heatFromStoredRow(o); if (!best || heat > best.heat) { best = { name, heat }; } } return best; } catch (err) { reportError(err, { op: \"linkedin-playbook.loadHottestAccount\" }); return nu"
+    },
+    {
+      "file": "src/linkedin-playbook/lib/context.ts",
+      "line": 88,
       "phrase": "hottest",
       "tier": 2,
       "category": "E",
-      "context": "tError(err, { op: \"linkedin-playbook.loadBestIcp\" }); return null; } } /** * Read the hottest Signal Console account from * `gtmos_sc_v4.accounts[]`, ranked by heat (preferring the new `heat` * field over legacy `_heat` when both exist — same presence-check rule * Phase"
+      "context": "tError(err, { op: \"linkedin-playbook.loadBestIcp\" }); return null; } } /** * Read the hottest Signal Console account from * `gtmos_sc_v4.accounts[]`, ranked by the account priority Signal * Console computes from the account's signals (`heatFromStoredRow`). * A stored `h"
     },
     {
       "file": "src/linkedin-playbook/lib/cues.test.ts",
@@ -11714,7 +11002,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "{!r?.unavailable && <div class=\"sd-ac__ht\">{t(\"Priority\", { class: \"body\" })} {a.heat}/100</div>} </div> ))} </div> {r?.unavailable ? ( <div class=\"s"
+      "context": ".unavailable && <div class=\"sd-ac__ht\">{t(\"Estimated priority\", { class: \"body\" })} {Math.min(99, a.heat)} {t(\"out of 99\", { class: \"body\" })}</div>} </div> ))} </div> {r?.unavailable ? ("
     },
     {
       "file": "src/onboarding/seeding/lib/cloud-mirror.test.ts",
@@ -12350,23 +11638,39 @@
     },
     {
       "file": "src/outbound-studio/lib/account-loader.ts",
-      "line": 49,
+      "line": 2,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "const name = asString(o.name); if (!id || !name) return null; const heat = asNumber(o.heat); const band = asString(o.band); // Freshest signal headline — the \"why now\" the message // leads with (canon §4."
+      "context": "ror } from \"@/lib/observability\"; import { heatBand, heatFromStoredRow } from \"@/signal-console/lib/heat\"; import type { AccountOption } from \"./types\"; /** * Phase 4 / Room 6 Wave 5 — account loader. * * Reads accounts from Phase 4 / Room 3's `gtmos_sc_v4` (Signal Console) * mi"
     },
     {
       "file": "src/outbound-studio/lib/account-loader.ts",
-      "line": 49,
+      "line": 46,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "ing(o.name); if (!id || !name) return null; const heat = asNumber(o.heat); const band = asString(o.band); // Freshest signal headline — the \"why now\" the message // leads with (canon §4.8: no send path wi"
+      "context": "// Same account-priority number + band Signal Console shows. const heat = heatFromStoredRow(o); const band = heat ? heatBand(heat) : undefined; // Freshest signal headline — the \"why now\" the message //"
     },
     {
       "file": "src/outbound-studio/lib/account-loader.ts",
-      "line": 59,
+      "line": 47,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "gnal Console shows. const heat = heatFromStoredRow(o); const band = heat ? heatBand(heat) : undefined; // Freshest signal headline — the \"why now\" the message // leads with (canon §4.8: no send path without a named"
+    },
+    {
+      "file": "src/outbound-studio/lib/account-loader.ts",
+      "line": 47,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "ws. const heat = heatFromStoredRow(o); const band = heat ? heatBand(heat) : undefined; // Freshest signal headline — the \"why now\" the message // leads with (canon §4.8: no send path without a named // st"
+    },
+    {
+      "file": "src/outbound-studio/lib/account-loader.ts",
+      "line": 56,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -12374,7 +11678,7 @@
     },
     {
       "file": "src/outbound-studio/lib/account-loader.ts",
-      "line": 59,
+      "line": 56,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -13173,6 +12477,14 @@
       "context": "prospect.notes.trim().length > 0) { score += 4; gaps.push(\"Research notes are still thin.\"); } else { gaps.push(\"No research notes yet.\"); } score = Math.max(0, Math.min(100, score)); let band: ProspectQuality[\"band\"]; if (score >= 80) ba"
     },
     {
+      "file": "src/prospecting-desk/lib/research-parse.ts",
+      "line": 107,
+      "phrase": "floor",
+      "tier": 2,
+      "category": "F",
+      "context": "tNewCount\"]; if (typeof n === \"number\" && Number.isFinite(n) && n >= 0) out.lastNewCount = Math.floor(n); return out; }"
+    },
+    {
       "file": "src/prospecting-desk/state.test.ts",
       "line": 169,
       "phrase": "thin",
@@ -13557,6 +12869,14 @@
       "context": "ng; readonly href: string; readonly reasons: ReadonlyArray<string>; } /** * The Wayfinder pulling cell: the workback turns a quota into weekly * pressure; the one next move is to go run the outbound that pressure * demands. Absent until the operator sets a quota. */ export"
     },
     {
+      "file": "src/quota-workback/lib/coverage.ts",
+      "line": 181,
+      "phrase": "live edge",
+      "tier": 1,
+      "category": "E",
+      "context": "the Quota room shows. Null when no annual * target is on record. Rooms that show a daily goal (the live edge) * use this instead of the `gtmos_quota_targets.touches_day` snapshot, * which can be stale (seeded, or written before an assumption changed). */ export function readDailyOutre"
+    },
+    {
       "file": "src/quota-workback/lib/handoff.test.ts",
       "line": 28,
       "phrase": "pressure",
@@ -13674,7 +12994,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "NSHIP_LABEL, RELATIONSHIP_TYPES } from \"../lib/types\"; import { heatMetrics, recency } from \"../lib/heat\"; import { hrefToDealWorkspace, hrefToDiscoveryAgenda, hrefToOutbound } from \"../lib/handoff\"; import { getAccountExecutionContext } from \"../lib/execution-context\"; i"
+      "context": "NSHIP_LABEL, RELATIONSHIP_TYPES } from \"../lib/types\"; import { heatMetrics, recency } from \"../lib/heat\"; import { hrefToDealWorkspace, hrefToDiscoveryStudio, hrefToOutbound } from \"../lib/handoff\"; import { getAccountExecutionContext } from \"../lib/execution-context\"; i"
     },
     {
       "file": "src/signal-console/components/AccountCard.tsx",
@@ -14546,7 +13866,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "import type { Account, HeatBand } from \"./types\"; import { heat as heatScore, heatMetrics, rankByHeat } from \"./heat\"; import { reportError } from \"@/lib/observability\"; /** * Phase 4 / Room 3 Wave 4 — Signal Console health snapshot. * * P"
+      "context": "import type { Account, HeatBand } from \"./types\"; import { heat as heatScore, heatMetrics, rankByHeat } from \"./heat\"; import { reportError } from \"@/lib/observability\"; import { loadAccounts } from \"./persistence\"; /** * Phase 4 / Room 3 Wa"
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
@@ -14554,11 +13874,11 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "{ Account, HeatBand } from \"./types\"; import { heat as heatScore, heatMetrics, rankByHeat } from \"./heat\"; import { reportError } from \"@/lib/observability\"; /** * Phase 4 / Room 3 Wave 4 — Signal Console health snapshot. * * Published to localStorage under `gtmos_signal_room_hea"
+      "context": "{ Account, HeatBand } from \"./types\"; import { heat as heatScore, heatMetrics, rankByHeat } from \"./heat\"; import { reportError } from \"@/lib/observability\"; import { loadAccounts } from \"./persistence\"; /** * Phase 4 / Room 3 Wave 4 — Signal Console health snapshot. * * Publishe"
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
-      "line": 26,
+      "line": 27,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14566,7 +13886,7 @@
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
-      "line": 38,
+      "line": 39,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14574,7 +13894,7 @@
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
-      "line": 66,
+      "line": 67,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14582,7 +13902,7 @@
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
-      "line": 66,
+      "line": 67,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14590,7 +13910,7 @@
     },
     {
       "file": "src/signal-console/lib/health-snapshot.ts",
-      "line": 81,
+      "line": 82,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14602,19 +13922,19 @@
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "import { describe, expect, it } from \"vitest\"; import { heat, heatBand, heatCls, heatMetrics, rankByHeat, recency } from \"./heat\"; import type { Account, Signal } from \"./types\"; const NOW = new Date(\"2026-04-26T00:00:0"
+      "context": "import { describe, expect, it } from \"vitest\"; import { heat, heatBand, heatCls, heatFromStoredRow, heatMetrics, rankByHeat, recency } from \"./heat\"; import type { Account, Signal } from \"./types\"; const NOW = new D"
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 9,
+      "line": 10,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "mport { heat, heatBand, heatCls, heatMetrics, rankByHeat, recency } from \"./heat\"; import type { Account, Signal } from \"./types\"; const NOW = new Date(\"2026-04-26T00:00:00Z\").getTime(); function sig(partial: Partial<Signal>): Signal { return { i"
+      "context": "eatBand, heatCls, heatFromStoredRow, heatMetrics, rankByHeat, recency } from \"./heat\"; import type { Account, Signal } from \"./types\"; const NOW = new Date(\"2026-04-26T00:00:00Z\").getTime(); function sig(partial: Partial<Signal>): Signal { return { i"
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 58,
+      "line": 59,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14622,7 +13942,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 60,
+      "line": 61,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14630,7 +13950,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 66,
+      "line": 67,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14638,7 +13958,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 72,
+      "line": 73,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14646,7 +13966,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 78,
+      "line": 79,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14654,7 +13974,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 84,
+      "line": 85,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14662,7 +13982,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 97,
+      "line": 98,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14670,7 +13990,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 110,
+      "line": 111,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14678,7 +13998,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 148,
+      "line": 149,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14686,7 +14006,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 163,
+      "line": 164,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14694,7 +14014,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 170,
+      "line": 171,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14702,7 +14022,55 @@
     },
     {
       "file": "src/signal-console/lib/heat.test.ts",
-      "line": 81,
+      "line": 189,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "number for every room\", () => { it(\"computes from the row's signals and ignores a stale stored heat\", () => { const row = { id: \"a\", name: \"Boeing\", _heat: 93, heat: 93, signals: [ { id: \"s1\", pu"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 194,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "const row = { id: \"a\", name: \"Boeing\", _heat: 93, heat: 93, signals: [ { id: \"s1\", published_date: daysAgo(2), ai: true }, { id: \"s2\", published_date: daysAgo(40), confidence: 0.95 }"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 200,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": ", published_date: daysAgo(40), confidence: 0.95 } ] }; const expected = heat( acct([ sig({ id: \"s1\", published_date: daysAgo(2), ai: true }), sig({ id: \"s2\", published_date: daysAgo(40), confidence: 0.95 })"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 217,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "empty signals array scores 0 even with a stored number\", () => { expect(heatFromStoredRow({ heat: 80, signals: [] }, NOW)).toBe(0); }); it(\"falls back to the stored number only for legacy rows with no signals array\", () => { expect(heatFromStoredRow({ _heat:"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 222,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "expect(heatFromStoredRow({ _heat: 70 }, NOW)).toBe(70); expect(heatFromStoredRow({ heat: 0, _heat: 80 }, NOW)).toBe(0); expect(heatFromStoredRow({ heat: 140 }, NOW)).toBe(99); expect(heatFromStoredRow(null, NOW)).toBe(0); }); });"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 223,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "expect(heatFromStoredRow({ heat: 0, _heat: 80 }, NOW)).toBe(0); expect(heatFromStoredRow({ heat: 140 }, NOW)).toBe(99); expect(heatFromStoredRow(null, NOW)).toBe(0); }); });"
+    },
+    {
+      "file": "src/signal-console/lib/heat.test.ts",
+      "line": 82,
       "phrase": "decay",
       "tier": 2,
       "category": "E",
@@ -14794,11 +14162,75 @@
       "phrase": "heat",
       "tier": 2,
       "category": "E",
-      "context": "+ conf) * recency(s, now); } return Math.min(99, Math.max(0, Math.round(score))); } /** * Heat band — same 4-state vocabulary the legacy room exposes. Keep * the cutoffs verbatim; downstream rooms (Dashboard) bind to these * labels. */ export function heatBand(score: num"
+      "context": "s, now); } return Math.min(99, Math.max(0, Math.round(score))); } /** * Account priority (heat) for a RAW stored `gtmos_sc_v4.accounts[]` * row, as read by rooms other than Signal Console. * * Signal Console never trusts a stored `heat` / `_heat` number — it * computes"
     },
     {
       "file": "src/signal-console/lib/heat.ts",
-      "line": 81,
+      "line": 72,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "[]` * row, as read by rooms other than Signal Console. * * Signal Console never trusts a stored `heat` / `_heat` number — it * computes heat from the account's signals (see `heat()` above). Other * rooms used to read the stored number instead, so a seeded or stale * `_heat` (e."
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 73,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "Signal Console. * * Signal Console never trusts a stored `heat` / `_heat` number — it * computes heat from the account's signals (see `heat()` above). Other * rooms used to read the stored number instead, so a seeded or stale * `_heat` (e.g. the demo seed's 93) disagreed with th"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 73,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "ever trusts a stored `heat` / `_heat` number — it * computes heat from the account's signals (see `heat()` above). Other * rooms used to read the stored number instead, so a seeded or stale * `_heat` (e.g. the demo seed's 93) disagreed with the 62 Signal * Console and the Dashboa"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 84,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "rsistence parser). Only a * legacy row with no `signals` array at all falls back to the stored * `heat` (preferred) or `_heat` field, clamped to 0-99. */ export function heatFromStoredRow(raw: unknown, now: number = Date.now()): number { if (!raw || typeof raw !== \"object\" ||"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 98,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "((s as Record<string, unknown>).id as string).length > 0 ); return heat({ id: \"\", name: \"\", signals } as unknown as Account, now); } const stored = \"heat\" in o ? o.heat : o._heat; const n = typeof stored === \"number\" ? stored : Number(stor"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 100,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "B",
+      "context": "return heat({ id: \"\", name: \"\", signals } as unknown as Account, now); } const stored = \"heat\" in o ? o.heat : o._heat; const n = typeof stored === \"number\" ? stored : Number(stored); if (!Number.isFinite(n)) return 0; return Math.min(99, Math.max(0, Math.round"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 100,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "{ id: \"\", name: \"\", signals } as unknown as Account, now); } const stored = \"heat\" in o ? o.heat : o._heat; const n = typeof stored === \"number\" ? stored : Number(stored); if (!Number.isFinite(n)) return 0; return Math.min(99, Math.max(0, Math.round(n))); } /**"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 107,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "E",
+      "context": "if (!Number.isFinite(n)) return 0; return Math.min(99, Math.max(0, Math.round(n))); } /** * Heat band — same 4-state vocabulary the legacy room exposes. Keep * the cutoffs verbatim; downstream rooms (Dashboard) bind to these * labels. */ export function heatBand(score: num"
+    },
+    {
+      "file": "src/signal-console/lib/heat.ts",
+      "line": 119,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14806,7 +14238,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.ts",
-      "line": 101,
+      "line": 139,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14814,7 +14246,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.ts",
-      "line": 103,
+      "line": 141,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -14822,7 +14254,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.ts",
-      "line": 115,
+      "line": 153,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -14830,7 +14262,7 @@
     },
     {
       "file": "src/signal-console/lib/heat.ts",
-      "line": 122,
+      "line": 160,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -15302,7 +14734,15 @@
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 75,
+      "line": 19,
+      "phrase": "heat",
+      "tier": 2,
+      "category": "F",
+      "context": "patcher composes them with the recipe. */ import { heatFromStoredRow } from \"@/signal-console/lib/heat\"; import { listObservations } from \"@/lib/observations/reader\"; import type { SourceKey } from \"./types\"; interface StorageLike { getItem(key: string): string | null; } /**"
+    },
+    {
+      "file": "src/skills/lib/sources.ts",
+      "line": 76,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
@@ -15310,35 +14750,11 @@
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 81,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "E",
-      "context": "o.name === \"string\" ? o.name : null; if (!name) continue; // Prefer the canonical `heat` field; fall back to legacy `_heat`. const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"numb"
-    },
-    {
-      "file": "src/skills/lib/sources.ts",
-      "line": 82,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": "continue; // Prefer the canonical `heat` field; fall back to legacy `_heat`. const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0;"
-    },
-    {
-      "file": "src/skills/lib/sources.ts",
-      "line": 83,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "B",
-      "context": "/ Prefer the canonical `heat` field; fall back to legacy `_heat`. const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; if (best ==="
-    },
-    {
-      "file": "src/skills/lib/sources.ts",
       "line": 83,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "`heat` field; fall back to legacy `_heat`. const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; if (best === null || heat > best.hea"
+      "context": "if (!name) continue; // Same account-priority number Signal Console shows. const heat = heatFromStoredRow(o); if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } :"
     },
     {
       "file": "src/skills/lib/sources.ts",
@@ -15346,35 +14762,27 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "at`. const heat = \"heat\" in o && typeof o.heat === \"number\" ? o.heat : typeof o._heat === \"number\" ? o._heat : 0; if (best === null || heat > best.heat) { best = { name, heat }"
+      "context": "umber Signal Console shows. const heat = heatFromStoredRow(o); if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────"
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 88,
+      "line": 84,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "._heat === \"number\" ? o._heat : 0; if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────"
+      "context": "Console shows. const heat = heatFromStoredRow(o); if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────────────────"
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 88,
+      "line": 85,
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "number\" ? o._heat : 0; if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────────────────"
+      "context": "= heatFromStoredRow(o); if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────────────────────────────────────────── export"
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 89,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "F",
-      "context": ": 0; if (best === null || heat > best.heat) { best = { name, heat }; } } return best ? { kind: \"value\", value: best.name } : { kind: \"none\" }; } // ─── top-pressure-open-deal ──────────────────────────────────────────── export"
-    },
-    {
-      "file": "src/skills/lib/sources.ts",
-      "line": 66,
+      "line": 67,
       "phrase": "hottest",
       "tier": 2,
       "category": "E",
@@ -15390,7 +14798,7 @@
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 95,
+      "line": 91,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -15398,7 +14806,7 @@
     },
     {
       "file": "src/skills/lib/sources.ts",
-      "line": 124,
+      "line": 120,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -15483,6 +14891,14 @@
       "tier": 2,
       "category": "D",
       "context": "l, account] action: kind: compose-context-and-route target: /outbound-studio/ sources: source=hottest-signal-console-account|paramName=account|required=true --- # Compose this week's outbound Selects the account with the highest priority score in Signal Console and opens Outboun"
+    },
+    {
+      "file": "src/skills/recipes/prep-next-call.md",
+      "line": 9,
+      "phrase": "hottest",
+      "tier": 2,
+      "category": "D",
+      "context": "p, agenda] action: kind: compose-context-and-route target: /discovery-studio/ sources: source=hottest-signal-console-account|paramName=account|required=true --- # Prep for my next call Finds the highest-priority account in Signal Console and opens Discovery Studio with that acco"
     },
     {
       "file": "src/territory-architect/TerritoryArchitect.tsx",
@@ -17037,6 +16453,14 @@
       "context": "pients, accounts); const recipient = mail.recipients[0]!; // Unmatched mail still counts as motion — the touch lands under the // recipient's domain so the tally is honest; the operator can tie // it to an account later by watching that company. const accountName ="
     },
     {
+      "file": "supabase/functions/prospecting-research/_shared.ts",
+      "line": 99,
+      "phrase": "dividend",
+      "tier": 2,
+      "category": "E",
+      "context": "command intelligence\", \"field read\", \"operator move\", \"main risk\", \"earned\", \"earns\", \"spine\", \"dividend\", \"pays back\" ]; function escapeRe(s: string): string { return s.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\"); } const BANNED_RE = new RegExp( `(^|[^a-z0-9-])(${BANNED_TERMS.m"
+    },
+    {
       "file": "supabase/functions/seeding-enrichment/README.md",
       "line": 6,
       "phrase": "heat",
@@ -17182,8 +16606,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 2170,
-    "current": 306,
-    "delta": -1864
+    "previous": 2179,
+    "current": 312,
+    "delta": -1867
   }
 }
