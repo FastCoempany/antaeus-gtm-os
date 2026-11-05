@@ -7,11 +7,8 @@ import {
     stats,
     inboundFocus,
     prospectDraft,
-    queryCardDraft,
     patchProspectDraft,
-    patchQueryCardDraft,
     saveProspectFromDraft,
-    saveQueryCardFromDraft,
     patchProspect,
     setProspectStage
 } from "../state";
@@ -19,17 +16,23 @@ import type { Prospect } from "../lib/types";
 import { getProspectQuality } from "../lib/quality";
 import { computeLoomRead } from "../lib/loom-read";
 import { hrefToSignalConsole, hrefToOutboundStudio } from "../lib/handoff";
-import { saveProspect, saveQueryCard } from "../lib/cloud-persistence";
+import { saveProspect } from "../lib/cloud-persistence";
 import { enqueueInboundAccount } from "@/signal-console/lib/inbound-queue";
 import { GroundLine } from "@/lib/ground/GroundLine";
+import { ResearchFind } from "./ResearchFind";
+import { ResearchDetail, SuggestedAnswer } from "./ResearchDetail";
+import { findBusy, runFind } from "./research-state";
+import { formatDate } from "./research-format";
 import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./prospecting-desk-v4.css";
 
 /**
- * Prospecting Desk stores target-account criteria, lets the seller add
- * companies found through their research, and requires three qualification
- * checks before an account can be sent to Signal Console. It does not claim
- * to run a live company search.
+ * Prospecting Desk (canon §4.6): the seller describes who they are after
+ * and Antaeus runs its own cited web search (the prospecting-research Edge
+ * Function), or researches companies the seller names. Results land in
+ * "Just added" only when the seller adds them, and nothing reaches Signal
+ * Console until the three qualification questions are answered by the
+ * seller — research drafts are suggestions, never automatic answers.
  */
 
 const selectedId = signal<string | null>(null);
@@ -99,12 +102,6 @@ function setAside(p: Prospect): void {
     toast(`${p.accountName} ${t("was set aside from the current target list.", { class: "body" })}`);
 }
 
-function saveSearch(): void {
-    const saved = saveQueryCardFromDraft();
-    if (saved) void saveQueryCard(saved);
-    if (saved) toast(t("Target criteria saved. Add relevant companies below.", { class: "body" }));
-}
-
 function addCompany(): void {
     const saved = saveProspectFromDraft();
     if (saved) {
@@ -123,7 +120,6 @@ export function ProspectingDeskV4(): JSX.Element {
     const sent = all.filter((p) => p.stage === "pushed");
     const read = computeLoomRead({ prospects: all, stats: s });
     const cards = queryCards.value;
-    const qd = queryCardDraft.value;
     const pd = prospectDraft.value;
     const focus = inboundFocus.value;
 
@@ -141,13 +137,13 @@ export function ProspectingDeskV4(): JSX.Element {
                 <div class="pd4-bar">
                     <span class="pd4-bname">{t("Prospecting Desk")}</span>
                     <span class="pd4-tstat">
-                        <b>{ready.length}</b> {t("confirmed")} · <b>{added.length}</b> {t("awaiting qualification")}
+                        <b>{ready.length}</b> {t("confirmed")} · <b>{added.length}</b> {t("just added")}
                     </span>
                 </div>
 
-                <h1 class="pd4-lead">{t("Save target criteria, qualify accounts, then send confirmed accounts to Signal Console.", { class: "body" })}</h1>
+                <h1 class="pd4-lead">{t("Find companies that match who you sell to, check each one, then send the confirmed accounts to Signal Console.", { class: "body" })}</h1>
                 <div class="pd4-leadsub">
-                    {t("Companies remain in Prospecting Desk until their qualification checks are complete or you set them aside.", { class: "body" })}
+                    {t("Antaeus searches the web for matching companies and links each one to where it was found. Companies stay here until you answer the three qualification questions or set them aside.", { class: "body" })}
                     {focus ? <> {t("Current focus:")} <b>{focus}</b>.</> : null}
                 </div>
 
@@ -157,29 +153,13 @@ export function ProspectingDeskV4(): JSX.Element {
                     <span class="pd4-mv"><b>{t("Next")}</b>{read.operatorMove}</span>
                 </div>
 
-                {/* ── 1 · TARGET CRITERIA ─────────────────────────── */}
-                <div class="pd4-stage"><span class="pd4-num">1</span><span class="pd4-st">{t("Target criteria")}</span><span class="pd4-sd">{t("Save the account criteria you are researching, then add relevant companies.", { class: "body" })}</span><span class="pd4-line" /></div>
-                <div class="pd4-describe">
-                    <div class="pd4-dl">{t("Describe the target accounts")}</div>
-                    <div class="pd4-drow">
-                        <input
-                            value={qd.query}
-                            placeholder={t("e.g. Series-B fintech companies that just raised · companies with a new RevOps leader", { class: "body" })}
-                            onInput={(e) => patchQueryCardDraft({ query: (e.currentTarget as HTMLInputElement).value })}
-                            onKeyDown={(e) => { if (e.key === "Enter") saveSearch(); }}
-                        />
-                        <button type="button" class="pd4-go" disabled={!qd.query.trim()} onClick={saveSearch}>
-                            {t("Save criteria")}
-                        </button>
-                    </div>
-                    <div class="pd4-hint">
-                        {t("Saved criteria remain available here. This room does not run a live company search; add the relevant companies you find through your research.", { class: "body" })}
-                    </div>
-                </div>
+                {/* ── 1 · FIND ───────────────────────────────────── */}
+                <div class="pd4-stage"><span class="pd4-num">1</span><span class="pd4-st">{t("Find companies")}</span><span class="pd4-sd">{t("Search the web from a description, or research companies you already have in mind.", { class: "body" })}</span><span class="pd4-line" /></div>
+                <ResearchFind focus={focus} onToast={toast} onOpen={(id) => (selectedId.value = id)} />
 
                 {cards.length > 0 ? (
                     <div class="pd4-grp">
-                        <div class="pd4-grptt">{t("Saved target criteria")} <span class="pd4-n">· {cards.length}</span></div>
+                        <div class="pd4-grptt">{t("Saved searches")} <span class="pd4-n">· {cards.length}</span></div>
                         {cards.slice(0, 6).map((c) => {
                             const fromThis = all.filter((p) => p.sourceQueryId === c.id).length;
                             return (
@@ -188,11 +168,22 @@ export function ProspectingDeskV4(): JSX.Element {
                                     <div class="pd4-sbody">
                                         <div class="pd4-q">{c.query}</div>
                                         {c.intent ? <div class="pd4-h">{c.intent}</div> : null}
+                                        {c.lastCheckedAt ? (
+                                            <div class="pd4-h">{t("Last checked")} {formatDate(c.lastCheckedAt)} · {c.lastNewCount ?? 0} {t("new then")}</div>
+                                        ) : null}
                                     </div>
                                     <span class="pd4-sn">{fromThis > 0 ? <><b>{fromThis}</b> {t("companies added")}</> : t("no companies added yet")}</span>
                                     <button
                                         type="button"
                                         class="pd4-run"
+                                        disabled={findBusy.value}
+                                        onClick={() => void runFind(focus, c)}
+                                    >
+                                        {t("Check for new matches")}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="pd4-run pd4-run--ghost"
                                         onClick={() => {
                                             patchProspectDraft({ sourceQueryId: c.id });
                                             addOpen.value = true;
@@ -208,7 +199,7 @@ export function ProspectingDeskV4(): JSX.Element {
 
                 <div class={`pd4-add${addOpen.value ? " is-open" : ""}`}>
                     <button type="button" class="pd4-addhead" onClick={() => (addOpen.value = !addOpen.value)}>
-                        {addOpen.value ? t("Close") : t("+ Add a company", { class: "body" })}
+                        {addOpen.value ? t("Close") : t("+ Add a company by hand", { class: "body" })}
                     </button>
                     {addOpen.value ? (
                         <div class="pd4-addgrid">
@@ -228,7 +219,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                     onInput={(e) => patchProspectDraft({ contactTitle: (e.currentTarget as HTMLInputElement).value })} />
                             </label>
                             <label class="pd4-fld">
-                                <span>{t("Related target criteria")}</span>
+                                <span>{t("From saved search")}</span>
                                 <select value={pd.sourceQueryId}
                                     onChange={(e) => patchProspectDraft({ sourceQueryId: (e.currentTarget as HTMLSelectElement).value })}>
                                     <option value="">{t("Added independently")}</option>
@@ -245,15 +236,15 @@ export function ProspectingDeskV4(): JSX.Element {
                 </div>
 
                 {/* ── 2 · QUALIFY ─────────────────────────────────── */}
-                <div class="pd4-stage"><span class="pd4-num">2</span><span class="pd4-st">{t("Qualify")}</span><span class="pd4-sd">{t("Answer three qualification questions before an account can be sent to Signal Console.", { class: "body" })}</span><span class="pd4-line" /></div>
+                <div class="pd4-stage"><span class="pd4-num">2</span><span class="pd4-st">{t("Qualify")}</span><span class="pd4-sd">{t("Answer three qualification questions before an account can be sent to Signal Console. Research can suggest answers, but you decide what goes in.", { class: "body" })}</span><span class="pd4-line" /></div>
                 <div class="pd4-research">
                     <div class="pd4-rail pd4-rail--l">
                         <div class="pd4-rh">
-                            <div class="pd4-rk">{t("Awaiting qualification")} <span class="pd4-rn">{added.length}</span></div>
-                            <div class="pd4-rs">{t("Open an account to complete its qualification checks.", { class: "body" })}</div>
+                            <div class="pd4-rk">{t("Just added")} <span class="pd4-rn">{added.length}</span></div>
+                            <div class="pd4-rs">{t("Open an account to answer its three qualification questions.", { class: "body" })}</div>
                         </div>
                         {added.length === 0 ? (
-                            <div class="pd4-emptyr">{t("No accounts are awaiting qualification. Add a company above.", { class: "body" })}</div>
+                            <div class="pd4-emptyr">{t("Nothing added yet. Search the web above, or add a company by hand.", { class: "body" })}</div>
                         ) : (
                             added.slice(0, 30).map((p) => {
                                 const pq = getProspectQuality(p);
@@ -261,7 +252,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                     <button type="button" class={`pd4-rr${selOpen?.id === p.id ? " is-active" : ""}`} key={p.id} onClick={() => (selectedId.value = p.id)}>
                                         <div class="pd4-ra">{p.accountName} <span class="pd4-rsc">{pq.score}</span></div>
                                         {p.contactName ? <div class="pd4-rc">{p.contactName}{p.contactTitle ? ` · ${p.contactTitle}` : ""}</div> : null}
-                                        <div class="pd4-rnote">{answered(p).left === 0 ? t("qualification complete") : `${answered(p).left} ${t("checks remaining")}`}</div>
+                                        <div class="pd4-rnote">{answered(p).left === 0 ? t("qualification complete") : `${answered(p).left} ${t("checks remaining")}`}{p.webResearch ? ` · ${p.webResearch.sample ? t("sample research") : t("researched")}` : ""}</div>
                                     </button>
                                 );
                             })
@@ -279,9 +270,12 @@ export function ProspectingDeskV4(): JSX.Element {
                                         {t("qualification score")} {q.score} · {a.left === 0 ? t("Step complete") : `${a.left} ${t("check")}${a.left === 1 ? "" : "s"} ${t("remaining")}`}
                                     </div>
                                 </div>
+                                {selOpen.webResearch ? <ResearchDetail r={selOpen.webResearch} /> : null}
                                 <div class="pd4-persona">
                                     <span class="pd4-ptag">{t("Target contact")}{focus ? ` · ${focus}` : ""}</span>
-                                    {t("Prefer the person who owns the problem or the decision related to it.", { class: "body" })}
+                                    {selOpen.webResearch?.whoToTarget
+                                        ? <>{t("Research suggests starting with the")} <b>{selOpen.webResearch.whoToTarget.role}</b>{selOpen.webResearch.whoToTarget.why ? ` — ${selOpen.webResearch.whoToTarget.why}` : "."}</>
+                                        : t("Prefer the person who owns the problem or the decision related to it.", { class: "body" })}
                                 </div>
                                 <div class="pd4-qs">
                                     <div class={`pd4-qq ${a.q1 ? "is-done" : "is-todo"}`}>
@@ -292,6 +286,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                                 placeholder={t("e.g. Yes — the RevOps leader owns the forecast rebuild and the company just raised", { class: "body" })}
                                                 onInput={(e) => patchQuestion(selOpen, { notes: (e.currentTarget as HTMLInputElement).value })}
                                                 onChange={() => persistProspect(selOpen.id)} />
+                                            <SuggestedAnswer text={selOpen.webResearch?.suggested?.targetFit ?? ""} current={selOpen.notes}
+                                                onUse={(text) => { patchQuestion(selOpen, { notes: text }); persistProspect(selOpen.id); }} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q2 ? "is-done" : "is-todo"}`}>
@@ -302,6 +298,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                                 placeholder={t("e.g. A shared investor sits on the board and may be able to make an introduction", { class: "body" })}
                                                 onInput={(e) => patchQuestion(selOpen, { entryPoint: (e.currentTarget as HTMLInputElement).value })}
                                                 onChange={() => persistProspect(selOpen.id)} />
+                                            <SuggestedAnswer text={selOpen.webResearch?.suggested?.wayIn ?? ""} current={selOpen.entryPoint}
+                                                onUse={(text) => { patchQuestion(selOpen, { entryPoint: text }); persistProspect(selOpen.id); }} />
                                         </div>
                                     </div>
                                     <div class={`pd4-qq ${a.q3 ? "is-done" : "is-todo"}`}>
@@ -312,6 +310,8 @@ export function ProspectingDeskV4(): JSX.Element {
                                                 placeholder={t("e.g. Reference the funding event, then ask the shared investor for an introduction", { class: "body" })}
                                                 onInput={(e) => patchQuestion(selOpen, { approach: (e.currentTarget as HTMLInputElement).value })}
                                                 onChange={() => persistProspect(selOpen.id)} />
+                                            <SuggestedAnswer text={selOpen.webResearch?.suggested?.outreach ?? ""} current={selOpen.approach}
+                                                onUse={(text) => { patchQuestion(selOpen, { approach: text }); persistProspect(selOpen.id); }} />
                                         </div>
                                     </div>
                                 </div>
@@ -333,7 +333,7 @@ export function ProspectingDeskV4(): JSX.Element {
                         ) : (
                             <div class="pd4-midempty">
                                 <div class="pd4-me">{t("No account selected.")}</div>
-                                <div class="pd4-mes">{t("Open an account awaiting qualification, or add a company above.", { class: "body" })}</div>
+                                <div class="pd4-mes">{t("Open an account from Just added, or search the web above.", { class: "body" })}</div>
                             </div>
                         )}
                     </div>

@@ -659,6 +659,8 @@ function toAccessorName(table: TableName): string {
         // table union — the migration never reads from it.
         outdoors_events: "outdoorsEvents",
         outdoors_events_runs: "outdoorsEventsRuns",
+        // Prospecting Desk research ledger — written server-side only.
+        prospecting_research_runs: "prospectingResearchRuns",
         captured_meetings: "capturedMeetings",
         proposed_modifications: "proposedModifications",
         workspace_skill_overrides: "workspaceSkillOverrides",

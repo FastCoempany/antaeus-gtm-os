@@ -1,4 +1,5 @@
 import { reportError } from "@/lib/observability";
+import { parseProspectResearch, parseQueryCardCheck } from "./research-parse";
 import {
     PLATFORMS,
     PROSPECT_STAGES,
@@ -173,7 +174,8 @@ function parseQueryCard(raw: unknown): QueryCard | null {
         updatedAt:
             asString(r["updatedAt"]) ||
             asString(r["createdAt"]) ||
-            new Date().toISOString()
+            new Date().toISOString(),
+        ...parseQueryCardCheck(r)
     };
 }
 
@@ -191,6 +193,7 @@ function parseProspect(raw: unknown): Prospect | null {
     // that when the new field is missing.
     const sourceQueryId =
         asString(r["sourceQueryId"]) || asString(r["sourceQueryCardId"]);
+    const webResearch = parseProspectResearch(r["webResearch"]);
     return {
         id,
         accountName,
@@ -207,7 +210,8 @@ function parseProspect(raw: unknown): Prospect | null {
         updatedAt:
             asString(r["updatedAt"]) ||
             asString(r["createdAt"]) ||
-            new Date().toISOString()
+            new Date().toISOString(),
+        ...(webResearch ? { webResearch } : {})
     };
 }
 

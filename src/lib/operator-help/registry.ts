@@ -73,11 +73,11 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
     },
     "/prospecting-desk/": {
         whatItIsFor:
-            "Prospecting Desk stores target searches, lets you add companies, and requires three qualification checks before an account can be sent to Signal Console.",
+            "Prospecting Desk searches the web for companies that match who you sell to, links each one to where it was found, and requires three qualification checks before an account can be sent to Signal Console.",
         theMoveHere:
-            "Save the target criteria, add a relevant company, then complete its qualification checks.",
+            "Describe the companies you're after and search the web, add the ones that fit, then answer their three qualification questions.",
         ifStuck:
-            "This room does not run a live company search. Use the saved criteria while researching elsewhere, then add the companies you want to evaluate here."
+            "If the search returns nothing, name an industry, a company size, or a recent event such as a funding round or a new executive. You can also research specific companies by name or add a company by hand."
     },
     "/signal-console/": {
         whatItIsFor:

@@ -2323,6 +2323,65 @@ export type Database = {
           },
         ]
       }
+      prospecting_research_runs: {
+        Row: {
+          action: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          error_summary: string | null
+          id: string
+          inputs: Json | null
+          llm_call_count: number
+          results_count: number
+          search_count: number
+          started_at: string
+          status: string
+          total_cost_usd: number
+          workspace_id: string
+        }
+        Insert: {
+          action: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_summary?: string | null
+          id?: string
+          inputs?: Json | null
+          llm_call_count?: number
+          results_count?: number
+          search_count?: number
+          started_at?: string
+          status?: string
+          total_cost_usd?: number
+          workspace_id?: string
+        }
+        Update: {
+          action?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_summary?: string | null
+          id?: string
+          inputs?: Json | null
+          llm_call_count?: number
+          results_count?: number
+          search_count?: number
+          started_at?: string
+          status?: string
+          total_cost_usd?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospecting_research_runs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_skill_overrides: {
         // ADR-017 Phase F PR 4 Lane 1.
         Row: {

@@ -20,7 +20,7 @@
     "copy:audit": "node tools/language-remediation/copy-audit.js",
     "copy:test": "node --test tools/language-remediation/*.test.js",
     "copy:validate": "node tools/language-remediation/validate-transcript.js",
-    "typecheck:functions": "deno check --no-lock supabase/functions/outdoors-events-discovery/index.ts supabase/functions/briefing-pattern-critic/prompt.ts supabase/functions/briefing-pipeline/llm/_shared.ts supabase/functions/briefing-pipeline/llm/contrarian-shared.ts supabase/functions/briefing-pipeline/llm/synthesis-shared.ts supabase/functions/briefing-pipeline/llm/compose-shared.ts supabase/functions/heartbeat/voice-document.ts supabase/functions/heartbeat/generators.ts supabase/functions/seeding-enrichment/index.ts"
+    "typecheck:functions": "deno check --no-lock supabase/functions/outdoors-events-discovery/index.ts supabase/functions/briefing-pattern-critic/prompt.ts supabase/functions/briefing-pipeline/llm/_shared.ts supabase/functions/briefing-pipeline/llm/contrarian-shared.ts supabase/functions/briefing-pipeline/llm/synthesis-shared.ts supabase/functions/briefing-pipeline/llm/compose-shared.ts supabase/functions/heartbeat/voice-document.ts supabase/functions/heartbeat/generators.ts supabase/functions/seeding-enrichment/index.ts supabase/functions/prospecting-research/index.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260515.1",
