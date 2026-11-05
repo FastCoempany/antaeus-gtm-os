@@ -20,6 +20,7 @@ import {
     clearAll,
     dismissToast,
     exportCloudData,
+    exportFormat,
     deleteCloudData,
     togglePhaseF,
     toggleAutoRerun,
@@ -31,6 +32,11 @@ import { liveEdgeOn } from "@/lib/edge/edge-prefs";
 import { autoRerunEnabled } from "@/prospecting-desk/lib/auto-rerun";
 import { densityState } from "@/lib/density";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "../lib/types";
+import { sectionOrder, WORKSPACE_TABLES } from "../lib/workspace-tables";
+import {
+    EXPORT_FORMATS,
+    type WorkspaceExportFormat
+} from "../lib/workspace-export-formats";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import { reportError } from "@/lib/observability";
 import { parseBackfillCsv, commitBackfill } from "../lib/backfill";
@@ -51,7 +57,9 @@ import "./settings-v4.css";
  * Settings shows verifiable cloud status, export/restore controls, local
  * device-backup controls, optional activity capture, preferences, and account
  * actions. Copy does not equate a successful connection probe with complete
- * synchronization and does not call partial export/delete scopes "everything."
+ * synchronization. "Download my workspace" and "Delete everything" cover
+ * every workspace table in lib/workspace-tables.ts; the list shown under
+ * "What's included?" is generated from that same registry.
  */
 
 const deleteConfirm = signal("");
@@ -182,30 +190,54 @@ export function SettingsV4(): JSX.Element {
 
                 <section class="st4-sec">
                     <div class="st4-sh">{t("Data controls")}</div>
-                    <div class="st4-sd">{t("Download or restore selected cloud records, manage this browser's copy, or delete the records listed below.", { class: "body" })}</div>
+                    <div class="st4-sd">{t("Download a full copy of this workspace, put a copy back, or delete everything in it.", { class: "body" })}</div>
                     <div class="st4-item">
                         <div>
-                            <div class="st4-it">{t("Download workspace export", { class: "body" })}</div>
-                            <div class="st4-id">{t("Downloads the records listed below as JSON. Any read errors are recorded in the file. This is a partial workspace export.", { class: "body" })}</div>
+                            <div class="st4-it">{t("Download my workspace")}</div>
+                            <div class="st4-id">{t("Downloads every record in this workspace, grouped by part of the app. If any part can't be read, the file says which.", { class: "body" })}</div>
+                            <label class="st4-fmt">
+                                <span class="st4-cl">{t("File type")}</span>
+                                <select class="st4-sel" value={exportFormat.value}
+                                    onChange={(e) => (exportFormat.value = (e.currentTarget as HTMLSelectElement).value as WorkspaceExportFormat)}>
+                                    {EXPORT_FORMATS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+                                </select>
+                            </label>
+                            <div class="st4-id">
+                                {exportFormat.value === "spreadsheets"
+                                    ? t("A .zip with a contents sheet and one spreadsheet per part, in a folder for each part of the app. Good for reading or sharing. To put the workspace back later, download the JSON file instead.", { class: "body" })
+                                    : t("One file with every part of the app in its own section. This is the file Restore puts back.", { class: "body" })}
+                            </div>
                         </div>
                         <div class="st4-ia">
                             <button type="button" class="st4-btn" disabled={isExportingCloud.value} onClick={() => void exportCloudData()}>
-                                {isExportingCloud.value ? t("Preparing…") : t("Download workspace export")}
+                                {isExportingCloud.value ? t("Preparing…") : t("Download my workspace")}
                             </button>
                         </div>
                     </div>
                     <details class="st4-adv">
-                        <summary>{t("Which records are included?")}</summary>
+                        <summary>{t("What's included?")}</summary>
                         <div class="st4-ab">
-                            <p>{t("Export and delete include ICPs, deals, pilot records, advisor requests, watched accounts, sequences, discovery call logs, saved studio content, pipeline settings, discovery frameworks, readiness snapshots and sales handoff documents.", { class: "body" })}</p>
-                            <p>{t("Export also includes events and the workspace's commercial profile. Delete retains those records. Neither control covers all workspace content: contacts, activity history, Briefing items, monitoring rules and other records can remain outside this list.", { class: "body" })}</p>
-                            <p>{t("Each operation processes up to 5,000 records per included category, 100 pipeline settings and one commercial profile. Records beyond these limits are not exported or deleted. Your account, workspace and membership are retained.", { class: "body" })}</p>
+                            <p>{t("The download and Delete everything cover the same list — every part of the workspace, with no record limit:", { class: "body" })}</p>
+                            <ul class="st4-incl">
+                                {sectionOrder().map((name) => {
+                                    const parts = WORKSPACE_TABLES.filter((tb) => tb.section === name)
+                                        .map((tb) => tb.label.charAt(0).toLowerCase() + tb.label.slice(1))
+                                        .filter((label) => label !== name.toLowerCase());
+                                    return (
+                                        <li key={name}>
+                                            <b>{name}</b>
+                                            {parts.length > 0 ? <>{" — "}{parts.join(", ")}</> : null}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <p>{t("Your own profile is downloaded but not deleted. Your sign-in, the workspace itself and who's a member stay as they are, so you can keep signing in. Anything saved only in this browser is under Device copy.", { class: "body" })}</p>
                         </div>
                     </details>
                     <div class="st4-item">
                         <div>
                             <div class="st4-it">{t("Restore from an export", { class: "body" })}</div>
-                            <div class="st4-id">{t("Restores the rows present in a prior Antaeus cloud export. Table-level restore errors are reported if any write fails.", { class: "body" })}</div>
+                            <div class="st4-id">{t("Puts back what's in a JSON file from Download my workspace. Things the system records on its own, like observations and search history, rebuild themselves and aren't put back.", { class: "body" })}</div>
                         </div>
                         <div class="st4-ia">
                             <label class={`st4-btn is-ghost${restoreBusy.value ? " is-busy" : ""}`}>
@@ -263,9 +295,9 @@ export function SettingsV4(): JSX.Element {
                         </div>
                     </details>
                     <div class="st4-danger">
-                        <div class="st4-dt">{t("Delete core workspace data", { class: "body" })}</div>
+                        <div class="st4-dt">{t("Delete everything")}</div>
                         <div class="st4-dd">
-                            {t("Deletes the cloud records listed above within the stated limits and clears this browser's Antaeus copy. Other cloud records remain. Download an export first if you may need the included data later.", { class: "body" })}
+                            {t("Permanently deletes every record in this workspace — everything on the list above — and clears this browser's copy. This can't be undone. Your sign-in and the workspace stay, so you can start fresh. Download a copy first if you might need it.", { class: "body" })}
                         </div>
                         <div class="st4-conf">
                             <span class="st4-cl">{t("Type")} <code>delete my workspace</code> {t("to enable the button:")}</span>
@@ -273,7 +305,7 @@ export function SettingsV4(): JSX.Element {
                                 onInput={(e) => (deleteConfirm.value = (e.currentTarget as HTMLInputElement).value)} />
                             <button type="button" class="st4-btn is-danger" disabled={!confirmOk || isDeletingCloud.value}
                                 onClick={() => { void deleteCloudData(); deleteConfirm.value = ""; }}>
-                                {isDeletingCloud.value ? t("Deleting…") : t("Delete core workspace data", { class: "body" })}
+                                {isDeletingCloud.value ? t("Deleting…") : t("Delete everything")}
                             </button>
                         </div>
                     </div>
