@@ -35,26 +35,26 @@ export const PERSONA_LABELS: Readonly<Record<PersonaKey, string>> = {
 export const QUESTION_BANK: Readonly<Record<PersonaKey, ReadonlyArray<string>>> = {
     cxo: [
         '"From where you sit, what\'s the biggest operational bottleneck right now?"',
-        '"How are you thinking about the build vs. buy decision for [area]?"',
+        '"How are you thinking about building this yourselves versus buying a tool?"',
         '"What would need to be true for this to become a priority this quarter?"'
     ],
     vp: [
-        '"Walk me through how your team handles [process] today."',
+        '"Walk me through how your team handles this work today."',
         '"Where are you losing the most time or quality in that workflow?"',
         '"If you could fix one thing about your current stack, what would it be?"'
     ],
     ops: [
         '"What does a typical day look like for your team?"',
-        '"How much manual work is involved in [process]?"',
+        '"How much of this work is still done by hand?"',
         '"What have you tried before to fix this?"'
     ],
     it: [
-        '"What does your current architecture look like for [area]?"',
+        '"What systems does this work run on today, and how are they connected?"',
         '"What are the integration requirements that would make or break this?"',
         '"How does your team evaluate new tools from a security standpoint?"'
     ],
     finance: [
-        '"How are you currently tracking the ROI on your [area] investments?"',
+        '"How do you currently measure the return on what you spend in this area?"',
         '"What does the approval process look like for a purchase at this level?"',
         '"What would make this a clear yes from a financial perspective?"'
     ],

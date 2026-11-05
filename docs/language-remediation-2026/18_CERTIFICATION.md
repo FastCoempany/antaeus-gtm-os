@@ -14,32 +14,23 @@ examples for every score. Slice scores were combined weighted by slice size.
 
 | Dimension | Baseline | Target | Discovery | Group 2 | Group 3 | **Final** | Met |
 |---|---:|---:|---:|---:|---:|---:|:--:|
-| Semantic compression | 9.4 | ≤2.5 | 2.3 | 2.0 | 1.8 | **2.04** | yes |
-| Private / branded ontology | 9.9 | ≤1.5 | 1.3 | 1.3 | 1.2 | **1.27** | yes |
-| Metaphorical abstraction | 9.8 | ≤2.0 | 2.2 | 1.2 | 1.1 | **1.53** | yes |
-| Declarative certainty | 9.3 | ≤3.0 | 1.4 | 1.7 | 1.8 | **1.62** | yes |
-| Aphoristic cadence | 9.2 | ≤1.5 | 1.6 | 1.4 | 1.0 | **1.34** | yes |
-| High-context dependence | 9.4 | ≤2.0 | 2.2 | 2.1 | 1.9 | **2.07** | **no (0.07 over)** |
-| Paratactic compression | 9.1 | ≤2.0 | 1.8 | 2.0 | 1.8 | **1.86** | yes |
-| Personification | 9.3 | ≤1.5 | 1.2 | 0.8 | 0.8 | **0.94** | yes |
-| Elliptical syntax | 8.7 | ≤2.5 | 2.3 | 2.0 | 2.0 | **2.11** | yes |
-| **Total (sum/9×10)** | **93** | **≤20, prefer 15–20** | 18 | 16 | 15 | **16** | **yes** |
+| Semantic compression | 9.4 | ≤2.5 | 2.0 | 2.0 | 1.8 | **1.94** | yes |
+| Private / branded ontology | 9.9 | ≤1.5 | 1.0 | 1.2 | 1.2 | **1.13** | yes |
+| Metaphorical abstraction | 9.8 | ≤2.0 | 1.3 | 1.2 | 1.1 | **1.20** | yes |
+| Declarative certainty | 9.3 | ≤3.0 | 1.5 | 2.0 | 1.8 | **1.76** | yes |
+| Aphoristic cadence | 9.2 | ≤1.5 | 1.2 | 1.0 | 1.0 | **1.07** | yes |
+| High-context dependence | 9.4 | ≤2.0 | 2.0 | 1.8 | 1.9 | **1.90** | yes |
+| Paratactic compression | 9.1 | ≤2.0 | 1.7 | 2.0 | 1.8 | **1.83** | yes |
+| Personification | 9.3 | ≤1.5 | 1.0 | 0.8 | 0.8 | **0.87** | yes |
+| Elliptical syntax | 8.7 | ≤2.5 | 1.9 | 2.2 | 2.0 | **2.03** | yes |
+| **Total (sum/9×10)** | **93** | **≤20, prefer 15–20** | 15 | 16 | 15 | **15** | **yes** |
 
-Group 2 = Cold Call, Signal Console, Getting to Signed, Territory, LinkedIn, Prospecting Desk, Founding GTM, Quota
-Workback, Readiness, Outdoors Events, capability maps. Group 3 = Deal Workspace, Briefing, Call in a Favor, Future
-Autopsy, Dashboard, Outbound, Settings, Pilot Desk, ICP Studio, Welcome, navigation.
+Final scores (2026-11-05):
+- **Discovery** was re-scored after both owner-directed Discovery passes.
+- **Group 2** was re-scored after the Prospecting Desk search and the numbers fixes.
+- **Group 3** was re-scored after the judgment restorations.
 
-Groups 2 and 3 were re-scored after the judgment restorations (section 3). The Discovery slice was scored once; its
-later changes were limited to jump-label wording. The re-score brief told reviewers that conditional sales advice
-("deals like this often stall — do X now") is the intended voice and is not declarative certainty, as the rubric
-already says.
-
-**What keeps high-context dependence above target:**
-- Numbers that disagree between rooms. LinkedIn shows an account at priority 93 while the Dashboard shows 62.
-  Founding GTM shows 7 of 7 sections ready while the Dashboard shows 0 of 7.
-- Short labels with no scale, such as "qualification score 42".
-
-These are data-consistency issues more than wording, and are listed in section 6 for follow-up.
+All nine dimensions now meet their targets.
 
 Representative remaining issues are in the reviewers' residual lists, worst first. They include:
 - Discovery segment headers such as "§9 · NEXT-STEP LOCK · LEAVE WITH A REAL REVIEW."

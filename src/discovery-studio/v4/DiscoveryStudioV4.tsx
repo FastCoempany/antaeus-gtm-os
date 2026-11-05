@@ -261,7 +261,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                     <span class="dv4-who">{account || t("No account selected")}</span>
                     <span class="dv4-vit">
                         <span class="dv4-v">{t("Call status:")} <b class={`is-${activeTrack.value}`}>{TRACK_LABEL[activeTrack.value]}</b></span>
-                        <span class="dv4-v"><b>{facts.length}</b> {t("facts recorded")}</span>
+                        <span class="dv4-v"><b>{facts.length}</b> {facts.length === 1 ? t("fact recorded") : t("facts recorded")}</span>
                         {stateEdit.value === "champion" ? (
                             <input class="dv4-sin" autofocus value={stateEditVal.value}
                                 onInput={(e) => (stateEditVal.value = (e.currentTarget as HTMLInputElement).value)}
@@ -388,7 +388,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                     <a class="dv4-route is-pri" href={hrefToFutureAutopsy(account || undefined)}>{t("Review loss risk →")}</a>
                                 ) : null}
                                 <a class="dv4-route" href={hrefToDealWorkspace(account || undefined)}>{t("Deal Workspace")}</a>
-                                <span class="dv4-routenote">{facts.length} {t("facts recorded during this call", { class: "body" })}</span>
+                                <span class="dv4-routenote">{facts.length} {facts.length === 1 ? t("fact recorded during this call", { class: "body" }) : t("facts recorded during this call", { class: "body" })}</span>
                             </div>
                         ) : null}
                     </div>
