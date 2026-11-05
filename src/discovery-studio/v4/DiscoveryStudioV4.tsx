@@ -41,8 +41,13 @@ import {
     type FrameworkId
 } from "../state";
 import { hrefToDealWorkspace, hrefToFutureAutopsy } from "../lib/handoff";
-import { QUESTION_BANK, unquoteQuestion } from "@/call-planner/lib/personas";
-import { PERSONA_KEYS, PERSONA_LABELS, type PersonaKey } from "@/call-planner/lib/types";
+import {
+    PERSONA_KEYS,
+    PERSONA_LABELS,
+    QUESTION_BANK,
+    unquoteQuestion,
+    type PersonaKey
+} from "../lib/personas";
 import { GroundLine } from "@/lib/ground/GroundLine";
 import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./discovery-studio-v4.css";
@@ -67,15 +72,15 @@ const stateEditVal = signal("");
 
 const SEG_SHORT: ReadonlyArray<string> = [
     t("Opening"),
-    t("Current state"),
-    t("Pain & consequence"),
-    t("Trigger"),
-    t("Stakeholders"),
-    t("Evidence"),
-    t("Vendor"),
-    t("Decision"),
+    t("How they work"),
+    t("Problem & cost"),
+    t("Why now"),
+    t("Who's involved"),
+    t("What they need"),
+    t("Current vendor"),
+    t("How they'll decide"),
     t("Next step"),
-    t("Post-call")
+    t("After the call")
 ];
 
 const TRACK_LABEL: Record<CallDisposition, string> = {
@@ -112,6 +117,23 @@ function pickBranch(node: SegmentNode, i: number, branch: Branch): void {
         drawerTab.value = "pushback";
         drawerFlag.value = "pushback";
     }
+}
+
+/**
+ * Follow a suggested-response jump. In-room targets ("node:" / "segment:")
+ * open the segment; "room:" targets navigate to that room with the
+ * focused account carried in the continuity params.
+ */
+function followAction(target: string, account: string): void {
+    if (target === "room:deal-workspace") {
+        window.location.assign(hrefToDealWorkspace(account || undefined));
+        return;
+    }
+    if (target === "room:future-autopsy") {
+        window.location.assign(hrefToFutureAutopsy(account || undefined));
+        return;
+    }
+    jumpToInterruptTarget(target);
 }
 
 function saveStateName(): void {
@@ -273,7 +295,7 @@ export function DiscoveryStudioV4(): JSX.Element {
 
                 {seg && currentNode && !isPostCall ? (
                     <div class="dv4-moment">
-                        <div class="dv4-seglbl">§{segIdx + 1} · {seg.title} · {seg.cue}</div>
+                        <div class="dv4-seglbl">{segIdx + 1} · {seg.title} — {seg.cue}</div>
                         <div class="dv4-q">{currentNode.text}</div>
                         <div class="dv4-lens">
                             {personaLens.value && lensQuestions ? (
@@ -291,7 +313,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                             </select>
                         </div>
                         {currentNode.note ? (
-                            <div class="dv4-listen"><span class="dv4-ll">{t("Listen for")}</span> {currentNode.note}</div>
+                            <div class="dv4-listen"><span class="dv4-ll">{t("When to ask")}</span> {currentNode.note}</div>
                         ) : null}
                         <div class="dv4-hear">{t("Select the buyer response that best matches what you heard.", { class: "body" })}</div>
                         <div class="dv4-says">
@@ -310,7 +332,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                 {pickedBranch.actions && pickedBranch.actions.length > 0 ? (
                                     <span class="dv4-aj">
                                         {pickedBranch.actions.map((a) => (
-                                            <button type="button" key={a.target} onClick={() => jumpToInterruptTarget(a.target)}>
+                                            <button type="button" key={a.target} onClick={() => followAction(a.target, account)}>
                                                 → {a.label}
                                             </button>
                                         ))}
@@ -338,7 +360,7 @@ export function DiscoveryStudioV4(): JSX.Element {
 
                 {isPostCall ? (
                     <div class="dv4-moment dv4-post">
-                        <div class="dv4-seglbl">§10 · {t("Post-call routing")}</div>
+                        <div class="dv4-seglbl">10 · {t("After the call")}</div>
                         <div class="dv4-q">{t("How did the call end?")}</div>
                         <div class="dv4-says">
                             {DISPOSITIONS.map((d) => (
@@ -422,7 +444,7 @@ export function DiscoveryStudioV4(): JSX.Element {
                                         <div class="dv4-rt">{it.label}</div>
                                         <div class="dv4-rd">{it.recover}</div>
                                         {it.actions.map((a) => (
-                                            <button type="button" class="dv4-rj" key={a.target} onClick={() => jumpToInterruptTarget(a.target)}>
+                                            <button type="button" class="dv4-rj" key={a.target} onClick={() => followAction(a.target, account)}>
                                                 → {a.label}
                                             </button>
                                         ))}

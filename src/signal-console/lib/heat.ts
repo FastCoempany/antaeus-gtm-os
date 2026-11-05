@@ -66,6 +66,44 @@ export function heat(account: Account, now: number = Date.now()): number {
 }
 
 /**
+ * Account priority (heat) for a RAW stored `gtmos_sc_v4.accounts[]`
+ * row, as read by rooms other than Signal Console.
+ *
+ * Signal Console never trusts a stored `heat` / `_heat` number — it
+ * computes heat from the account's signals (see `heat()` above). Other
+ * rooms used to read the stored number instead, so a seeded or stale
+ * `_heat` (e.g. the demo seed's 93) disagreed with the 62 Signal
+ * Console and the Dashboard show for the same account. Every cross-room
+ * reader goes through this function so there is ONE number on ONE
+ * 0-99 scale.
+ *
+ * Rule: when the row carries a `signals` array, the score is computed
+ * from it exactly as Signal Console does (signals without an id are
+ * ignored, matching Signal Console's persistence parser). Only a
+ * legacy row with no `signals` array at all falls back to the stored
+ * `heat` (preferred) or `_heat` field, clamped to 0-99.
+ */
+export function heatFromStoredRow(raw: unknown, now: number = Date.now()): number {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return 0;
+    const o = raw as Record<string, unknown>;
+    if (Array.isArray(o.signals)) {
+        const signals = o.signals.filter(
+            (s): s is Signal =>
+                !!s &&
+                typeof s === "object" &&
+                !Array.isArray(s) &&
+                typeof (s as Record<string, unknown>).id === "string" &&
+                ((s as Record<string, unknown>).id as string).length > 0
+        );
+        return heat({ id: "", name: "", signals } as unknown as Account, now);
+    }
+    const stored = "heat" in o ? o.heat : o._heat;
+    const n = typeof stored === "number" ? stored : Number(stored);
+    if (!Number.isFinite(n)) return 0;
+    return Math.min(99, Math.max(0, Math.round(n)));
+}
+
+/**
  * Heat band — same 4-state vocabulary the legacy room exposes. Keep
  * the cutoffs verbatim; downstream rooms (Dashboard) bind to these
  * labels.

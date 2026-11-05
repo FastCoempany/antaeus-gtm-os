@@ -157,12 +157,14 @@ describe("buildActions URL safety", () => {
         // engine intentionally uses /app/icp-studio/ for the same
         // reason. The other actions point at rooms already merged
         // (signal-console / deal-workspace / outbound-studio /
-        // call-planner / dashboard) so they use the new-stack paths.
+        // discovery-studio / dashboard) so they use the new-stack paths.
+        // The planner action lands in Discovery Studio now that Call
+        // Planner is retired (canon §4.11).
         const list = buildActions(counts({ icps: 1, accounts: 1, deals: 1 }));
         const dashboard = list.find((a) => a.key === "dashboard");
         if (dashboard) expect(dashboard.href).toBe("/dashboard/");
         const planner = list.find((a) => a.key === "planner");
-        if (planner) expect(planner.href).toBe("/call-planner/");
+        if (planner) expect(planner.href).toBe("/discovery-studio/");
     });
 });
 

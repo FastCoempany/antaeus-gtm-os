@@ -106,7 +106,8 @@ describe("briefing-drafts", () => {
 
     it("roomLabelForPath: maps known rooms", () => {
         expect(roomLabelForPath("/discovery-studio/")).toBe("Discovery Studio");
-        expect(roomLabelForPath("/call-planner/")).toBe("Call Planner");
+        // Retired room: its path redirects to Discovery Studio.
+        expect(roomLabelForPath("/call-planner/")).toBe("Discovery Studio");
         expect(roomLabelForPath("/outbound-studio/")).toBe("Outbound Studio");
         expect(roomLabelForPath("/deal-workspace/")).toBe("Deal Workspace");
     });

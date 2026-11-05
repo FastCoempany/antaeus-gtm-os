@@ -34,7 +34,7 @@ const DISCOVERY_DISPOSITIONS: ReadonlySet<DiscoveryDisposition> = new Set<Discov
  *   gtmos_outbound_touches    — touches (channel + persona + outcome)
  *   gtmos_linkedin_log        — cues (cueIndex + actionType + outcome)
  *   gtmos_cold_call_log       — cold calls (outcome + account)
- *   gtmos_discovery_agenda    — call planner sessions
+ *   gtmos_discovery_agenda    — agendas from the retired Call Planner (read-only legacy data)
  *   gtmos_autopsy_log_v1      — autopsy task logs (per dealId)
  *   gtmos_poc_data            — proofs
  *   gtmos_advisor_deployments — advisor deployments (tier + moment + outcome)

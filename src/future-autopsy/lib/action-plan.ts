@@ -1,6 +1,5 @@
 import type { ActionPlan, ActionRoute, AutopsyDoc, CauseId } from "./types";
 import {
-    hrefToCallPlanner,
     hrefToDealWorkspace,
     hrefToDiscoveryStudio,
     hrefToNegotiation,
@@ -18,8 +17,10 @@ import {
  *
  * Routing rules (preserved from legacy):
  *   - Champion / EB issues   → Discovery Studio (qualify the room)
- *   - Process / late-stage   → Call Planner (set up the EB call)
- *   - PoC issues             → PoC Framework
+ *   - Process / late-stage   → Discovery Studio (prepare the call
+ *                              with the economic buyer; Call Planner
+ *                              was retired into it 2026-07-06)
+ *   - PoC issues             → Pilot Desk
  *   - Stuck / stale / no-NS  → Deal Workspace (write a real next step)
  *   - default                → Deal Workspace
  */
@@ -58,8 +59,8 @@ function buildRoute(
             };
         case "call":
             return {
-                label: "Prep the next call",
-                href: hrefToCallPlanner(accountName),
+                label: "Prepare the next call",
+                href: hrefToDiscoveryStudio(accountName),
                 roomLabel: "Discovery Studio",
                 tone,
                 reason
@@ -130,7 +131,8 @@ export function buildActionPlan(doc: AutopsyDoc): ActionPlan {
             : "Tighten qualification before the next move.";
 
     // Tertiary: PoC Framework if we haven't already routed there +
-    // there's any proof concern; otherwise Call Planner as a backstop.
+    // there's any proof concern; otherwise preparing the next call in
+    // Discovery Studio as a backstop.
     const hasPoCConcern = doc.causes.some(
         (c) => c.id === "poc_no_criteria" || stageRaw === "poc"
     );

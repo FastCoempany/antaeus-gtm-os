@@ -111,14 +111,6 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         ifStuck:
             "If there has been little or no interaction, use a useful non-promotional touch before making a meeting request."
     },
-    "/call-planner/": {
-        whatItIsFor:
-            "Call Planner organizes the account context, reason for the call, questions, and intended next step before a scheduled conversation.",
-        theMoveHere:
-            "Complete the planning fields for a real account and use them during the call.",
-        ifStuck:
-            "If the plan is thin, clarify the current business reason for the conversation and the specific next step you want to discuss."
-    },
     "/discovery-studio/": {
         whatItIsFor:
             "Discovery Studio supports a live discovery call with question paths, notes, objection handling, and next-step capture.",

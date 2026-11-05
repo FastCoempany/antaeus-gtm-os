@@ -128,7 +128,7 @@ export function WakeStep(): JSX.Element {
                                     <div class={`sd-ac__sg${a.cold ? " is-cold" : ""}`}>{a.signal}</div>
                                     {a.sourceUrl && /^https:\/\//i.test(a.sourceUrl) && <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer">{t("Review source", { class: "body" })}</a>}
                                 </div>
-                                {!r?.unavailable && <div class="sd-ac__ht">{t("Priority", { class: "body" })} {a.heat}/100</div>}
+                                {!r?.unavailable && <div class="sd-ac__ht">{t("Estimated priority", { class: "body" })} {Math.min(99, a.heat)} {t("out of 99", { class: "body" })}</div>}
                             </div>
                         ))}
                     </div>

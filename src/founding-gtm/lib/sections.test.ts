@@ -240,7 +240,7 @@ describe("authorSection3 — discovery patterns", () => {
             })
         );
         expect(s.body[0]).toContain("100%");
-        expect(s.body[1]).toContain("The problem and what it costs");
+        expect(s.body[1]).toContain("The problem and its cost");
         expect(s.body[1]).not.toContain("pain-and-consequence");
         expect(s.body[1]).toMatch(/teach that question first/i);
         expect(s.body[1]).toMatch(/does not show/i);
@@ -271,7 +271,7 @@ describe("authorSection3 — discovery patterns", () => {
         );
         expect(s.surprise?.tone).toBe("corrective");
         expect(s.surprise?.headline).toMatch(/stopped asking/i);
-        expect(s.surprise?.body).toContain("What makes it urgent now");
+        expect(s.surprise?.body).toContain("Why now");
     });
 
     it("uses per-call data before aggregate fallback", () => {

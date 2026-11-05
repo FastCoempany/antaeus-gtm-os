@@ -162,7 +162,7 @@ describe("NextStepDocketDS", () => {
 });
 
 describe("HandoffStripDS", () => {
-    it("renders the three routes; the primary pushes to the deal", () => {
+    it("renders the two routes; the primary pushes to the deal", () => {
         focusedAccount.value = "Northwind";
         const { container } = render(<HandoffStripDS />);
         expect(container.querySelector(".ds-handoff")).not.toBeNull();
@@ -172,6 +172,7 @@ describe("HandoffStripDS", () => {
         expect(primary).not.toBeNull();
         expect(primary.getAttribute("href")).toContain("/deal-workspace/");
         expect(container.querySelector('[data-handoff="future-autopsy"]')).not.toBeNull();
-        expect(container.querySelector('[data-handoff="call-planner"]')).not.toBeNull();
+        // Call Planner was retired into Discovery Studio — no self-route.
+        expect(container.querySelector('[data-handoff="call-planner"]')).toBeNull();
     });
 });

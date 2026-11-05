@@ -16,6 +16,7 @@
  * dispatcher composes them with the recipe.
  */
 
+import { heatFromStoredRow } from "@/signal-console/lib/heat";
 import { listObservations } from "@/lib/observations/reader";
 import type { SourceKey } from "./types";
 
@@ -78,13 +79,8 @@ export function resolveHottestSignalConsoleAccount(
         if (!o) continue;
         const name = typeof o.name === "string" ? o.name : null;
         if (!name) continue;
-        // Prefer the canonical `heat` field; fall back to legacy `_heat`.
-        const heat =
-            "heat" in o && typeof o.heat === "number"
-                ? o.heat
-                : typeof o._heat === "number"
-                  ? o._heat
-                  : 0;
+        // Same account-priority number Signal Console shows.
+        const heat = heatFromStoredRow(o);
         if (best === null || heat > best.heat) {
             best = { name, heat };
         }
@@ -137,6 +133,10 @@ export function resolveTopPressureOpenDeal(
 
 // ─── latest-call-planner-agenda ────────────────────────────────────────
 
+// Reads the agenda the retired Call Planner room saved (canon §4.11).
+// Nothing writes this key any more; the source stays so existing data
+// and any recipe that still names it resolve. The bundled
+// prep-next-call recipe now starts from Signal Console instead.
 export function resolveLatestCallPlannerAgenda(
     opts: ResolveOptions = {}
 ): SourceResult {

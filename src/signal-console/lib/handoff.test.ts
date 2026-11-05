@@ -3,7 +3,7 @@ import {
     buildSignalRoomHref,
     hrefToColdCall,
     hrefToDealWorkspace,
-    hrefToDiscoveryAgenda,
+    hrefToDiscoveryStudio,
     hrefToOutbound
 } from "./handoff";
 
@@ -42,9 +42,9 @@ describe("buildSignalRoomHref", () => {
 
     it("merges in extra params when provided", () => {
         const url = buildSignalRoomHref({
-            href: "/call-planner/",
+            href: "/discovery-studio/",
             focusObject: "Acme",
-            roomLabel: "Call Planner",
+            roomLabel: "Discovery Studio",
             extra: { account: "Acme", custom: "value" }
         });
         const p = params(url);
@@ -67,8 +67,11 @@ describe("convenience builders", () => {
         expect(params(url).get("focusRoom")).toBe("Deal Workspace");
     });
 
-    it("hrefToDiscoveryAgenda + hrefToColdCall pass account through", () => {
-        expect(params(hrefToDiscoveryAgenda("Acme")).get("account")).toBe("Acme");
+    it("hrefToDiscoveryStudio + hrefToColdCall pass account through", () => {
+        const disco = hrefToDiscoveryStudio("Acme");
+        expect(disco.startsWith("/discovery-studio/?")).toBe(true);
+        expect(params(disco).get("account")).toBe("Acme");
+        expect(params(disco).get("focusRoom")).toBe("Discovery Studio");
         expect(params(hrefToColdCall("Acme")).get("account")).toBe("Acme");
     });
 });

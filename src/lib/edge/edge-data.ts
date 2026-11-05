@@ -1,5 +1,6 @@
 import { t } from "@/lib/voice/t";
 import { localDay, readBulkCounts } from "@/quota-workback/v4/lib/bulk-outreach";
+import { readDailyOutreachRequirement } from "@/quota-workback/lib/coverage";
 
 /**
  * The Live Edge — data layer (founder-locked 2026-07-16).
@@ -159,6 +160,16 @@ export function readTodayCount(s?: StorageLike | null, now: Date = new Date()): 
 /** The Quota room's daily habit — null when no plan is on record. */
 export function readDailyGoal(s?: StorageLike | null): number | null {
     const st = store(s);
+    // Computed live with the Quota Workback engine so the goal matches
+    // the "messages & calls per working day" the Quota room shows. The
+    // `touches_day` snapshot is only a fallback (it can be stale — e.g.
+    // a seeded value, or one written before an assumption changed).
+    try {
+        const live = readDailyOutreachRequirement(st);
+        if (live !== null) return live;
+    } catch {
+        // fall back to the published snapshot
+    }
     const targets = readJson<Record<string, unknown>>(st, "gtmos_quota_targets");
     const n = Number(targets?.["touches_day"]);
     return Number.isFinite(n) && n > 0 ? Math.round(n) : null;

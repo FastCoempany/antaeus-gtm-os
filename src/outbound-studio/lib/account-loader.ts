@@ -1,4 +1,5 @@
 import { reportError } from "@/lib/observability";
+import { heatBand, heatFromStoredRow } from "@/signal-console/lib/heat";
 import type { AccountOption } from "./types";
 
 /**
@@ -22,11 +23,6 @@ function asString(v: unknown): string {
     return typeof v === "string" ? v : "";
 }
 
-function asNumber(v: unknown): number {
-    if (typeof v === "number" && Number.isFinite(v)) return v;
-    return 0;
-}
-
 export function loadAccountOptions(
     storage: Pick<Storage, "getItem"> | null = typeof localStorage !== "undefined"
         ? localStorage
@@ -46,8 +42,9 @@ export function loadAccountOptions(
                 const id = asString(o.id);
                 const name = asString(o.name);
                 if (!id || !name) return null;
-                const heat = asNumber(o.heat);
-                const band = asString(o.band);
+                // Same account-priority number + band Signal Console shows.
+                const heat = heatFromStoredRow(o);
+                const band = heat ? heatBand(heat) : undefined;
                 // Freshest signal headline — the "why now" the message
                 // leads with (canon §4.8: no send path without a named
                 // strain).

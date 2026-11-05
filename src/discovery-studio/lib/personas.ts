@@ -1,19 +1,36 @@
-import type { PersonaKey } from "./types";
-
 /**
- * Phase 4 / Room 9 Wave 2 — persona question banks.
+ * Persona-tuned discovery questions.
  *
- * Faithful TypeScript port of the legacy `questionBank` from
- * `app/discovery-agenda/index.html` lines 631-661. Each persona has 3
- * probe questions tuned to that buyer lens; the agenda spine renders
- * exactly these in the Probe strip.
+ * Absorbed from the retired Call Planner room (canon §4.11 → §4.12,
+ * 2026-07-06): six buyer lenses × three discovery questions each. The
+ * live cockpit layers these on top of the framework-organized question
+ * set as a persona lens.
  *
- * The questions retain their literal wrapping double-quotes from the
- * legacy (the planner UI strips them via /^"|"$/g when rendering the
- * numbered probe list — see `getAgendaBriefText` in brief.ts).
+ * The questions keep their literal wrapping double-quotes from the
+ * original question bank; render them through `unquoteQuestion`.
  *
  * Pure data + lookup helpers. No signals, no DOM.
  */
+
+export type PersonaKey = "cxo" | "vp" | "ops" | "it" | "finance" | "revops";
+
+export const PERSONA_KEYS: ReadonlyArray<PersonaKey> = [
+    "cxo",
+    "vp",
+    "ops",
+    "it",
+    "finance",
+    "revops"
+];
+
+export const PERSONA_LABELS: Readonly<Record<PersonaKey, string>> = {
+    cxo: "C-Suite Executive",
+    vp: "VP / Director",
+    ops: "Operations Leader",
+    it: "IT / Engineering Leader",
+    finance: "Finance Leader",
+    revops: "RevOps Leader"
+};
 
 export const QUESTION_BANK: Readonly<Record<PersonaKey, ReadonlyArray<string>>> = {
     cxo: [

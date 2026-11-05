@@ -1,6 +1,11 @@
 import type { ReadinessSummary, Verdict } from "@/lib/readiness";
 import { VERDICT_RANK } from "@/lib/readiness";
 import { t } from "@/lib/voice/t";
+import { computeHandoffSectionsReady } from "@/founding-gtm/lib/sections-ready";
+import { readLiveSignalRoomHealth } from "@/signal-console/lib/health-snapshot";
+import { readCoverageStanding } from "@/quota-workback/lib/coverage";
+import { legacyDealToDeal } from "@/deal-workspace/lib/deal-bridge";
+import { dealsToHealthSummary } from "@/deal-workspace/lib/health-snapshot";
 
 /**
  * Dashboard status model. Builds the readiness masthead and five status
@@ -91,7 +96,7 @@ function readJson<T>(store: StorageLike | null, key: string): T | null {
 }
 
 function money(n: number): string {
-    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}m`;
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`;
     if (n >= 1_000) return `$${Math.round(n / 1_000)}k`;
     return `$${Math.round(n)}`;
 }
@@ -102,6 +107,8 @@ function door(path: string): string {
 
 interface DealHealth {
     readonly pipeline_value?: number;
+    readonly critical_count?: number;
+    readonly at_risk_count?: number;
     readonly top_pressure?: ReadonlyArray<{
         readonly accountName?: string;
         readonly stage?: string;
@@ -122,16 +129,55 @@ interface FoundingHealth {
     readonly sections_ready?: number;
 }
 
+/**
+ * Deal Workspace's health summary computed live from the deal mirror
+ * (`gtmos_deal_workspaces`) with Deal Workspace's own summarizer, so
+ * "elevated risk" and open pipeline match that room. Null when no deals
+ * can be read (the caller then falls back to the published snapshot).
+ */
+function readLiveDealHealth(store: StorageLike | null): DealHealth | null {
+    if (!store) return null;
+    try {
+        const raw = store.getItem("gtmos_deal_workspaces");
+        if (!raw) return null;
+        const parsed: unknown = JSON.parse(raw);
+        const rows = Array.isArray(parsed)
+            ? parsed
+            : parsed && typeof parsed === "object" && Array.isArray((parsed as Record<string, unknown>).deals)
+              ? ((parsed as Record<string, unknown>).deals as unknown[])
+              : null;
+        if (!rows || rows.length === 0) return null;
+        const deals = rows.map((item, idx) => legacyDealToDeal(item, `legacy_${idx}`));
+        return dealsToHealthSummary(deals);
+    } catch {
+        return null;
+    }
+}
+
 /** The five status links, derived defensively from shipped health snapshots. */
 export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> {
     const store = getStorage(s);
-    const deal = readJson<DealHealth>(store, "gtmos_deal_workspace_health") ?? {};
-    const signal = readJson<SignalHealth>(store, "gtmos_signal_room_health") ?? {};
+    // Deal risk, account priority and coverage are computed live from the
+    // same sources and functions the owning rooms use (Deal Workspace,
+    // Signal Console, Quota Workback), so the numbers here always match
+    // those rooms. Published snapshots are only fallbacks.
+    const deal = (readLiveDealHealth(store) ??
+        readJson<DealHealth>(store, "gtmos_deal_workspace_health") ??
+        {}) as DealHealth;
+    const signal = ((store ? readLiveSignalRoomHealth(store) : null) ??
+        readJson<SignalHealth>(store, "gtmos_signal_room_health") ??
+        {}) as SignalHealth;
     const quota = readJson<QuotaTargets>(store, "gtmos_quota_targets") ?? {};
     const founding = readJson<FoundingHealth>(store, "gtmos_founding_gtm_health") ?? {};
 
     const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : [];
-    const riskN = pressure.length;
+    // Count of deals outside the lower-risk band — the number Deal
+    // Workspace shows ("N deals have elevated risk"). `top_pressure` is
+    // only the top five ranked deals, so its length is not a count.
+    const riskN =
+        typeof deal.critical_count === "number" || typeof deal.at_risk_count === "number"
+            ? (deal.critical_count ?? 0) + (deal.at_risk_count ?? 0)
+            : pressure.length;
     const pipeline = typeof deal.pipeline_value === "number" ? deal.pipeline_value : 0;
 
     const worst = pressure[0];
@@ -141,14 +187,39 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
             : null;
     const worstDays = worst?.cause?.match(/(\d+)\s*d(?:ays?)?\b/i)?.[1] ?? null;
 
+    // Computed live with the same function the Founding GTM room uses,
+    // so the two rooms always show the same "N / 7". The published
+    // snapshot is only a fallback for a storage we can't read sections
+    // from (it is written only after Founding GTM has been opened).
+    let liveHandoff: number | null = null;
+    if (store) {
+        try {
+            liveHandoff = computeHandoffSectionsReady({ storage: store }).ready;
+        } catch {
+            liveHandoff = null;
+        }
+    }
     const handoffReady =
-        typeof founding.sections_ready === "number" ? founding.sections_ready : 0;
+        liveHandoff !== null
+            ? liveHandoff
+            : typeof founding.sections_ready === "number"
+              ? founding.sections_ready
+              : 0;
 
-    const hasQuota = typeof quota.monthly_target === "number" && quota.monthly_target > 0;
-    const coverageNeeded = hasQuota
-        ? quota.monthly_target! * (typeof quota.coverage_target === "number" && quota.coverage_target > 0 ? quota.coverage_target : 3)
-        : 0;
-    const behind = hasQuota && pipeline < coverageNeeded;
+    // Same coverage read as the Quota Workback room (stage-weighted open
+    // pipeline vs annual target × the ACV-band benchmark).
+    const coverage = readCoverageStanding(store);
+    const hasQuota =
+        coverage.hasQuota ||
+        (typeof quota.monthly_target === "number" && quota.monthly_target > 0);
+    const behind = coverage.hasQuota
+        ? coverage.behind
+        : hasQuota &&
+          pipeline <
+              quota.monthly_target! *
+                  (typeof quota.coverage_target === "number" && quota.coverage_target > 0
+                      ? quota.coverage_target
+                      : 3);
 
     const priorityName =
         typeof signal.topAccountName === "string" && signal.topAccountName.trim()
@@ -177,13 +248,19 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem> 
             href: door("/signal-console/")
         },
         {
-            key: t("Quota pace"),
-            value: !hasQuota ? t("Not set") : behind ? t("Below required pace") : t("On pace"),
+            key: t("Pipeline coverage"),
+            value: !hasQuota
+                ? t("Not set")
+                : coverage.hasQuota
+                  ? `${coverage.ratio.toFixed(1)}× / ${coverage.targetMultiple}×`
+                  : behind
+                    ? t("Below benchmark")
+                    : t("Meets benchmark"),
             sub: !hasQuota
                 ? t("set your target")
                 : behind
-                  ? t("pipeline is below the coverage requirement")
-                  : t("pipeline meets the coverage requirement"),
+                  ? t("weighted pipeline is below benchmark")
+                  : t("weighted pipeline meets benchmark"),
             tone: !hasQuota ? "warn" : behind ? "warn" : "good",
             href: door("/quota-workback/")
         },

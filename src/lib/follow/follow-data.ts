@@ -1,5 +1,5 @@
 import type { Account, Signal } from "@/signal-console/lib/types";
-import { heat as computeHeat, heatBand } from "@/signal-console/lib/heat";
+import { heatBand, heatFromStoredRow } from "@/signal-console/lib/heat";
 import { STAGE_LABELS, STAGE_ORDER, type Deal, type StageId } from "@/deal-workspace/lib/deal-shape";
 import { assessDeal, type RecoveryAssessment } from "@/deal-workspace/lib/recovery";
 
@@ -114,7 +114,8 @@ function readAccount(
             name: accName,
             signals
         } as Account;
-        const h = computeHeat(account);
+        // Same account-priority number Signal Console shows.
+        const h = heatFromStoredRow(o);
         const top = signals.length > 0 ? asObject(signals[0]) : null;
         return {
             account,

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
     buildDealWorkspaceHref,
     hrefToAdvisorDeploy,
-    hrefToCallPlanner,
+    hrefToDiscoveryStudio,
     hrefToFutureAutopsy,
     hrefToNegotiation,
     hrefToPocFramework
@@ -72,9 +72,9 @@ describe("convenience builders", () => {
         expect(u.searchParams.get("focusObject")).toBe("Meridian");
     });
 
-    it("hrefToCallPlanner threads ?account= for Call Planner inbound", () => {
-        const u = new URL(hrefToCallPlanner("Meridian"), "http://x");
-        expect(u.pathname).toBe("/call-planner/");
+    it("hrefToDiscoveryStudio threads ?account= for the Discovery Studio inbound", () => {
+        const u = new URL(hrefToDiscoveryStudio("Meridian"), "http://x");
+        expect(u.pathname).toBe("/discovery-studio/");
         expect(u.searchParams.get("focusObject")).toBe("Meridian");
         expect(u.searchParams.get("account")).toBe("Meridian");
     });
@@ -83,7 +83,7 @@ describe("convenience builders", () => {
         expect(new URL(hrefToFutureAutopsy(), "http://x").searchParams.get("focusObject")).toBeNull();
         expect(new URL(hrefToPocFramework(), "http://x").searchParams.get("focusObject")).toBeNull();
         expect(new URL(hrefToAdvisorDeploy(), "http://x").searchParams.get("focusObject")).toBeNull();
-        expect(new URL(hrefToCallPlanner(), "http://x").searchParams.get("focusObject")).toBeNull();
+        expect(new URL(hrefToDiscoveryStudio(), "http://x").searchParams.get("focusObject")).toBeNull();
     });
 
     it("hrefToNegotiation threads ?deal= and focusObject for the negotiation room", () => {

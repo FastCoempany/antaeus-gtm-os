@@ -166,13 +166,13 @@ export function scoreDiscovery(input: ReadinessInput): DimensionScore {
     const planned = saturate(input.callPlannerSessions, 8, 6);
     if (planned >= 2) {
         evidence.push(
-            t("{n} call plans recorded", { class: "body" }).replace(
+            t("{n} discovery calls prepared", { class: "body" }).replace(
                 "{n}",
                 String(input.callPlannerSessions)
             )
         );
     } else {
-        gaps.push(t("Prepare 8+ discovery call plans", { class: "body" }));
+        gaps.push(t("Prepare 8+ discovery calls in Discovery Studio", { class: "body" }));
     }
 
     const advanced = saturate(input.discoveryAdvancedCalls, 6, 9);

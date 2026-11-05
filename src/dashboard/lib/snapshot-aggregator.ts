@@ -9,6 +9,7 @@ import {
     hrefToOutboundForAccount,
     hrefToSignalForAccount
 } from "./handoff";
+import { readLiveSignalRoomHealth } from "@/signal-console/lib/health-snapshot";
 
 /**
  * Wave 5 — workspace-health snapshot aggregator.
@@ -207,7 +208,9 @@ function signalSnapshotToMoveCards(
 
 function readHealthSummaries(storage: StorageLike): HealthSummaries {
     const deal = parseJson(storage.getItem(KEY_DEAL_HEALTH));
-    const signal = parseJson(storage.getItem(KEY_SIGNAL_HEALTH));
+    // Live from the watched accounts (same heat as Signal Console);
+    // the published snapshot is only a fallback.
+    const signal = readLiveSignalRoomHealth(storage) ?? parseJson(storage.getItem(KEY_SIGNAL_HEALTH));
     const readiness = parseJson(storage.getItem(KEY_READINESS_SNAPSHOT));
     const quota = parseJson(storage.getItem(KEY_QUOTA_TARGETS));
     return {
@@ -240,7 +243,11 @@ export function aggregateEngineInput(
 
     const dealHealth = (parseJson(storage.getItem(KEY_DEAL_HEALTH)) ??
         {}) as DealHealthSnapshot;
-    const signalHealth = (parseJson(storage.getItem(KEY_SIGNAL_HEALTH)) ??
+    // Computed live from the watched accounts so the ranking uses the
+    // same account-priority number Signal Console shows; the published
+    // snapshot is a fallback when no accounts can be read.
+    const signalHealth = (readLiveSignalRoomHealth(storage) ??
+        parseJson(storage.getItem(KEY_SIGNAL_HEALTH)) ??
         {}) as SignalRoomSnapshot;
 
     const riskCards = dealSnapshotToRiskCards(dealHealth);

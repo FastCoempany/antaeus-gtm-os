@@ -37,7 +37,7 @@ function obj(over: Partial<CommandObject> = {}): CommandObject {
         meta: [],
         actions: [
             { label: "Open the deal", href: "/deal-workspace/", variant: "primary" },
-            { label: "Plan the call", href: "/call-planner/", variant: "secondary" },
+            { label: "Prepare the next call", href: "/discovery-studio/", variant: "secondary" },
             { label: "Cast a proof", href: "/pilot-desk/", variant: "secondary" }
         ],
         sheetKey: "",

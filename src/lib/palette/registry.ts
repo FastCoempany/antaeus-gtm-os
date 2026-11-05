@@ -123,22 +123,15 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         description: "Plan LinkedIn outreach alongside calls and email."
     },
     {
-        id: "call-planner",
-        kicker: "CALL PLANNER",
-        label: "Call Planner",
-        href: "/call-planner/",
-        family: "live-instrument",
-        keywords: ["agenda", "advance-ask", "prep", "probes"],
-        description: "Prepare the agenda, questions, and intended next step for a call."
-    },
-    {
         id: "discovery-studio",
         kicker: "DISCOVERY STUDIO",
         label: "Discovery Studio",
         href: "/discovery-studio/",
         family: "live-instrument",
-        keywords: ["framework", "segment", "buyer", "branch"],
-        description: "Run discovery with buyer-specific questions and next-step capture."
+        // "agenda" / "prep" / "call planner" keep the retired Call
+        // Planner findable — its prep work lives here now (canon §4.11).
+        keywords: ["framework", "segment", "buyer", "branch", "agenda", "prep", "call planner"],
+        description: "Prepare and run a discovery call, with buyer-specific questions and next-step capture."
     },
     {
         id: "advisor-deploy",

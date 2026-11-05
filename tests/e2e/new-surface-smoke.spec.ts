@@ -31,7 +31,6 @@ const NEW_SURFACE_ROOMS: ReadonlyArray<{ slug: string; param: string }> = [
     { slug: "outbound-studio", param: "ds=1" },
     { slug: "cold-call-studio", param: "ds=1" },
     { slug: "linkedin-playbook", param: "ds=1" },
-    { slug: "call-planner", param: "ds=1" },
     { slug: "call-in-a-favor", param: "ds=1" },
     { slug: "icp-studio", param: "ds=1" },
     { slug: "territory-architect", param: "ds=1" },

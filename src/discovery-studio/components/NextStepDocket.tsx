@@ -24,10 +24,10 @@ export function NextStepDocket(): JSX.Element {
     return (
         <section
             class={`ds-next-step-docket is-${status}`}
-            aria-label={t("Next-step docket")}
+            aria-label={t("Next step")}
         >
             <header class="ds-next-step-docket__header">
-                Next-step lock
+                Next step
                 <span class={`ds-next-step-docket__status is-${status}`}>
                     {status}
                 </span>

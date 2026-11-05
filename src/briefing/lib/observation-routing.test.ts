@@ -69,11 +69,13 @@ describe("buildObservationHref", () => {
         expect(url.pathname).toBe("/pilot-desk/");
     });
 
-    it("routes calls to Call Planner", () => {
+    it("routes calls to Discovery Studio (Call Planner is retired)", () => {
         const r = buildObservationHref(
             mkObs({ relatedObjectType: "call", relatedObjectId: "c_001" })
         );
-        expect(r!.roomLabel).toBe("Call Planner");
+        expect(r!.roomLabel).toBe("Discovery Studio");
+        const url = new URL(r!.href, "https://antaeus.app");
+        expect(url.pathname).toBe("/discovery-studio/");
     });
 
     it("routes advisors to Advisor Deploy", () => {

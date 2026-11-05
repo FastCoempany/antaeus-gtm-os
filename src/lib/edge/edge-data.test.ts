@@ -14,6 +14,9 @@ import {
     type EdgeEvent
 } from "./edge-data";
 import { EDGE_PREFS_KEY, readEdgeOn } from "./edge-prefs";
+import { loadInputs } from "@/quota-workback/lib/persistence";
+import { benchmarkFor, computeMetrics } from "@/quota-workback/lib/engine";
+import { computeCoverage } from "@/quota-workback/lib/coverage";
 
 function memStorage(seed: Record<string, unknown> = {}): {
     getItem(key: string): string | null;
@@ -63,6 +66,22 @@ describe("readDailyGoal", () => {
     it("reads the Quota room's daily habit", () => {
         const s = memStorage({ gtmos_quota_targets: { touches_day: 88.6 } });
         expect(readDailyGoal(s)).toBe(89);
+    });
+    it("matches the Quota room's live requirement, not a stale touches_day snapshot", () => {
+        const s = memStorage({
+            gtmos_quota_targets: { touches_day: 19 },
+            gtmos_outbound_seed: {
+                annual_quota: 2_000_000,
+                avg_deal_size: 280_000,
+                win_rate: 22,
+                touch_to_meeting: 2,
+                show_rate: 80
+            }
+        });
+        const inputs = loadInputs(s);
+        const quotaRoom = computeMetrics(inputs, computeCoverage(inputs.quota, s, benchmarkFor(inputs.acv).coverage)).touchesDay;
+        expect(readDailyGoal(s)).toBe(quotaRoom);
+        expect(readDailyGoal(s)).not.toBe(19);
     });
     it("null when no plan is on record", () => {
         expect(readDailyGoal(memStorage())).toBeNull();

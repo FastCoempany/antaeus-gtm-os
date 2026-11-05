@@ -155,11 +155,11 @@ const ACTION_PLANNER: Omit<NextAction, "state"> = {
     key: "planner",
     title: "Prep the next discovery call.",
     body: "Prepare questions and a proposed next step for an active deal.",
-    href: "/call-planner/",
-    cta: "Plan the call",
+    href: "/discovery-studio/",
+    cta: "Prepare the discovery call",
     meta: ["call quality", "active deal"],
     why: "You have enough deal context to make the next call a deliberate one.",
-    unlocks: "A stronger agenda and a clean handoff into Discovery Studio."
+    unlocks: "Questions picked for the buyer, a pre-call check, and the next step recorded on the deal."
 };
 const ACTION_QUOTA: Omit<NextAction, "state"> = {
     key: "quota",

@@ -51,11 +51,11 @@ console.info(
     `[discovery-studio] Loaded ${loaded} framework(s) from window.DISCOVERY_SEGMENT_RUNTIME`
 );
 
-// Phase 2.5 — read inbound cross-room handoff. Call Planner /
-// Dashboard / Cold Call pass `?focusObject=<account>` (or `?account=`)
+// Phase 2.5 — read inbound cross-room handoff. Signal Console /
+// Deal Workspace / Dashboard / Cold Call pass `?focusObject=<account>` (or `?account=`)
 // telling Discovery which account this call is with. Surfaces in the
 // kicker tail + propagates through outbound handoffs so Deal
-// Workspace / Future Autopsy / Call Planner land focused.
+// Workspace / Future Autopsy land focused.
 const ctx = readContinuity();
 const inboundParams =
     typeof window !== "undefined"

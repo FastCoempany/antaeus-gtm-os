@@ -40,7 +40,8 @@ describe("parseDestination", () => {
         // Last segment is obj_001 (id-shaped), so action parse on it
         // fails; the spec writes id BEFORE the action verb. Verify both
         // shapes round-trip cleanly.
-        expect(t!.room).toBe("call-planner");
+        // Call Planner is retired; its tokens route to Discovery Studio.
+        expect(t!.room).toBe("discovery-studio");
     });
 
     it("parses 'Call Planner · Objection Bank · obj_001 · refresh existing'", () => {
@@ -48,7 +49,7 @@ describe("parseDestination", () => {
             "Call Planner · Objection Bank · obj_001 · refresh existing"
         );
         expect(t).not.toBeNull();
-        expect(t!.room).toBe("call-planner");
+        expect(t!.room).toBe("discovery-studio");
         expect(t!.section).toBe("Objection Bank");
         expect(t!.action).toBe("refresh");
         expect(t!.targetId).toBe("obj_001");
@@ -156,7 +157,6 @@ describe("briefingDestinationHref", () => {
 describe("DESTINATION_ROOM_LABEL", () => {
     it("covers every room", () => {
         expect(DESTINATION_ROOM_LABEL["discovery-studio"]).toBe("Discovery Studio");
-        expect(DESTINATION_ROOM_LABEL["call-planner"]).toBe("Call Planner");
         expect(DESTINATION_ROOM_LABEL["outbound-studio"]).toBe("Outbound Studio");
         expect(DESTINATION_ROOM_LABEL["deal-workspace"]).toBe("Deal Workspace");
         expect(DESTINATION_ROOM_LABEL["asset-builder"]).toBe("Asset Builder");

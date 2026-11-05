@@ -13,14 +13,14 @@ import { LOSS_LABELS } from "@/deal-workspace/lib/deal-shape";
 /** Plain names for Discovery segment keys (keys stay stable in storage). */
 const SEGMENT_NAME: Readonly<Record<string, string>> = {
     "opening-frame": "Opening",
-    "current-state-truth": "How the work is done today",
-    "pain-and-consequence": "The problem and what it costs",
-    "trigger-and-urgency": "What makes it urgent now",
-    "stakeholder-and-ownership": "Who is involved and who owns it",
-    "proof-threshold": "What the buyer needs to see",
-    "current-vendor-and-displacement": "Current vendor and switching",
-    "decision-architecture": "How the decision gets made",
-    "next-step-lock": "Agreeing the next step",
+    "current-state-truth": "How they work today",
+    "pain-and-consequence": "The problem and its cost",
+    "trigger-and-urgency": "Why now",
+    "stakeholder-and-ownership": "Who's involved",
+    "proof-threshold": "What they need to see",
+    "current-vendor-and-displacement": "Current vendor",
+    "decision-architecture": "How they'll decide",
+    "next-step-lock": "Next step",
     "post-call-routing": "After the call"
 };
 function segmentName(key: string): string {

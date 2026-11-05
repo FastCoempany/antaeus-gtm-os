@@ -220,7 +220,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                                         </div>
                                         <div class="qw4-line">
                                             <span class={`qw4-ln ${behindCoverage ? "qw4-bad" : "qw4-good"}`}>{cov.hasDeals ? `${covRatio.toFixed(1)}×` : "0×"}</span>
-                                            <span class="qw4-lt">{cov.hasDeals ? `${fmtMoney(cov.raw)} ${t("in open pipeline")}` : t("no open deals recorded")}</span>
+                                            <span class="qw4-lt">{cov.hasDeals ? `${fmtMoney(cov.weighted)} ${t("stage-weighted open pipeline")} (${fmtMoney(cov.raw)} ${t("unweighted")})` : t("no open deals recorded")}</span>
                                             <span class={`qw4-gp ${behindCoverage ? "is-behind" : "is-ok"}`}>{behindCoverage ? t("below benchmark") : t("meets benchmark")}</span>
                                         </div>
                                         <div class="qw4-line">
@@ -244,7 +244,8 @@ export function QuotaWorkbackV4(): JSX.Element {
                                     <div class="qw4-jb">
                                         {cov.hasDeals ? (
                                             <>
-                                                {t("You have", { class: "body" })} <b>{fmtMoney(cov.raw)}</b> {t("in open pipeline. Using the", { class: "body" })}{" "}
+                                                {t("You have", { class: "body" })} <b>{fmtMoney(cov.raw)}</b> {t("in open pipeline, or", { class: "body" })}{" "}
+                                                <b>{fmtMoney(cov.weighted)}</b> {t("after weighting each deal by its stage. Using the", { class: "body" })}{" "}
                                                 <b>{bench.coverage}×</b> {t("coverage benchmark for this ACV band, the modeled target is", { class: "body" })}{" "}
                                                 <b>{fmtMoney(Math.round(inp.quota * bench.coverage))}</b>
                                                 {covShort > 0 ? <>. {t("That is roughly", { class: "body" })} <b>{fmtMoney(covShort)} {t("below the modeled coverage target")}</b>.</> : <>. {t("Recorded pipeline is at or above the modeled coverage target.", { class: "body" })}</>}

@@ -1,3 +1,4 @@
+import { heatFromStoredRow } from "@/signal-console/lib/heat";
 import { reportError } from "@/lib/observability";
 import type {
     BestIcp,
@@ -85,9 +86,11 @@ export function loadBestIcp(
 
 /**
  * Read the hottest Signal Console account from
- * `gtmos_sc_v4.accounts[]`, ranked by heat (preferring the new `heat`
- * field over legacy `_heat` when both exist — same presence-check rule
- * Phase 4 / Room 7's account-loader uses post-Codex P2 fix).
+ * `gtmos_sc_v4.accounts[]`, ranked by the account priority Signal
+ * Console computes from the account's signals (`heatFromStoredRow`).
+ * A stored `heat` / `_heat` is used only for legacy rows with no
+ * signals array, so this room never shows a different number than
+ * Signal Console and the Dashboard for the same account.
  */
 export function loadHottestAccount(
     storage?: StorageReader | null
@@ -109,10 +112,9 @@ export function loadHottestAccount(
             if (!o) continue;
             const name = asString(o["name"]);
             if (!name) continue;
-            const heat =
-                "heat" in o
-                    ? asNumber(o["heat"])
-                    : asNumber(o["_heat"]);
+            // One account-priority number app-wide: computed from the
+            // account's signals the same way Signal Console does.
+            const heat = heatFromStoredRow(o);
             if (!best || heat > best.heat) {
                 best = { name, heat };
             }
