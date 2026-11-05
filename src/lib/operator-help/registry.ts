@@ -19,11 +19,11 @@ export interface HelpEntry {
 /** The fallback when a room has no specific entry yet. */
 export const GENERIC_HELP: HelpEntry = {
     whatItIsFor:
-        "Each room handles a specific part of the sales workflow and can pass relevant information to other rooms.",
+        "Each page handles a specific part of the sales workflow and can pass relevant information to the others.",
     theMoveHere:
-        "Start with the primary action shown in the room. Supporting actions remain available when you need them.",
+        "Start with the primary action shown on the page. Supporting actions remain available when you need them.",
     ifStuck:
-        "If the room is empty or incomplete, check the empty-state message for the upstream data or setup it requires."
+        "If the page is empty or incomplete, check the empty-state message for the upstream data or setup it requires."
 };
 
 /**
@@ -43,7 +43,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         whatItIsFor:
             "Welcome shows the current setup state of your workspace and the next available setup or workflow action.",
         theMoveHere:
-            "Use the highlighted action to continue setup or enter the next relevant room.",
+            "Use the highlighted action to continue setup or open the next relevant page.",
         ifStuck:
             "You can skip optional setup items and return later. Completed information remains in the workspace."
     },
@@ -53,11 +53,11 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         theMoveHere:
             "Answer the current step. Only the required fields must be completed before you continue.",
         ifStuck:
-            "Leave optional fields blank if you do not know them yet. You can update them later from the relevant rooms."
+            "Leave optional fields blank if you do not know them yet. You can update them later from the relevant pages."
     },
     "/icp-studio/": {
         whatItIsFor:
-            "ICP Studio defines the accounts and buyers you intend to target so other rooms can use the same criteria.",
+            "ICP Studio defines the accounts and buyers you intend to target so the rest of the app can use the same criteria.",
         theMoveHere:
             "Review the ICP statement and make the account, buyer, pain, and trigger criteria as specific as the available evidence supports.",
         ifStuck:
@@ -81,7 +81,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
     },
     "/signal-console/": {
         whatItIsFor:
-            "Signal Console tracks watched accounts and ranks recent account signals using the room's priority model.",
+            "Signal Console tracks watched accounts and ranks recent account signals using Signal Console's priority model.",
         theMoveHere:
             "Review the highest-priority watched account and inspect the signals that produced its current ranking.",
         ifStuck:
@@ -133,7 +133,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         theMoveHere:
             "Select a deal, review the evidence behind the risk assessment, and choose an action that addresses a documented condition.",
         ifStuck:
-            "If no deal is available, add or update open deals first. The room should not infer a cause that is not supported by the recorded evidence."
+            "If no deal is available, add or update open deals first. Future Autopsy will not infer a cause that is not supported by the recorded evidence."
     },
     "/pilot-desk/": {
         whatItIsFor:
@@ -226,7 +226,7 @@ export function supportMailto(roomLabel: string): string {
     const label = roomLabel.trim() || "Antaeus";
     const subject = encodeURIComponent(`Help with ${label}`);
     const body = encodeURIComponent(
-        `What I was trying to do:\n\n\nWhat happened instead:\n\n\n(Room: ${label})`
+        `What I was trying to do:\n\n\nWhat happened instead:\n\n\n(Page: ${label})`
     );
     return `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
 }

@@ -41,7 +41,7 @@ export function SwitchLaws(): JSX.Element {
                     Every route keeps a recovery cable on the same board.
                 </p>
                 <p class="ob-law__copy">
-                    Objection handling stays here, not in another room
+                    Objection handling stays here, not on another page
                     or panel.
                 </p>
             </article>

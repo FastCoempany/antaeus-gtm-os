@@ -132,7 +132,7 @@ export function DiscoveryStudio(): JSX.Element {
                     <p class="ds-board__rail-kicker">FRAMEWORKS</p>
                     <FrameworkRail />
                     <p class="ds-board__rail-note">
-                        Switch the lens only when the room actually changes.
+                        Switch the lens only when the conversation actually changes.
                     </p>
                 </aside>
                 <section class="ds-board__main">

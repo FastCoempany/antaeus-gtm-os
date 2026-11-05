@@ -43,7 +43,7 @@ export function SliceRail({ objects, mode }: Props): JSX.Element {
                 </header>
                 <p class="db-rail__empty">
                     {t(
-                        "No ranked items yet. The other rooms haven't sent anything for the dashboard to rank — the list lights up the moment one of them does.",
+                        "No ranked items yet. Nothing has been added elsewhere in the app for the dashboard to rank — the list fills in as soon as you add an account, a deal, or an outreach message.",
                         { class: "body" }
                     )}
                 </p>

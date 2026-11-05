@@ -30,7 +30,7 @@ export function HandoffStrip(): JSX.Element {
     const focus = account.length > 0 ? account : "";
 
     return (
-        <nav class="ob-handoff" aria-label={t("Cross-room routes")}>
+        <nav class="ob-handoff" aria-label={t("Continue on another page")}>
             <span class="ob-handoff__kicker">{t("CARRY THE WORK FORWARD")}</span>
             <div class="ob-handoff__list">
                 <a

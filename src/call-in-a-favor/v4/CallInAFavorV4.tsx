@@ -177,7 +177,7 @@ export function CallInAFavorV4(): JSX.Element {
                 {ranked.length === 0 ? (
                     <div class="cf4-empty">
                         <h3>{t("No open deals currently need outside help.", { class: "body" })}</h3>
-                        <p>{t("When a deal has a missing or overdue next step, this room can recommend a relevant contact and a specific request.", { class: "body" })}</p>
+                        <p>{t("When a deal has a missing or overdue next step, Call in a Favor can recommend a relevant contact and a specific request.", { class: "body" })}</p>
                     </div>
                 ) : (
                     <div class="cf4-rail">

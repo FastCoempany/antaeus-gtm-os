@@ -25,7 +25,7 @@ export const CHAPTERS: Readonly<Record<CauseId, string>> = {
     no_champion:
         "Deals without someone inside carrying them often stall in committee. Find who will own this internally before the next step.",
     champion_weak:
-        "A contact who likes you but can't move the room usually can't get a deal through approval. Confirm what they can actually decide, and who they need on side.",
+        "A contact who likes you but can't win over the rest of the buying group usually can't get a deal through approval. Confirm what they can actually decide, and who they need on side.",
     no_eb:
         "When the budget owner stays out of view, the deal often stalls late, when they finally show up with questions. Get them into a conversation now, not at contract time.",
     no_process:

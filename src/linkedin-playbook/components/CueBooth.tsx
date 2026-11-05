@@ -174,7 +174,7 @@ export function CueBooth(): JSX.Element {
                         <p class="lp-read__rule-kicker">{t("Channel standard")}</p>
                         <strong>{motion.thresholds}</strong>
                     </div>
-                    <nav class="lp-read__cta" aria-label={t("Cross-room handoff")}>
+                    <nav class="lp-read__cta" aria-label={t("Continue on another page")}>
                         <a
                             class="lp-handoff lp-handoff--ghost"
                             href={hrefToSignalConsole(motion.accountName)}

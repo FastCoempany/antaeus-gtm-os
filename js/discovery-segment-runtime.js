@@ -529,7 +529,7 @@
         branch("HANDOFF CLEAN","ok","\"" + seed.handoff + "\"","\"Good. Keep only the owner, the problem, what they need to see, and the next condition.\"",[
           jumpNode("Note what you still need to find out", "post-call-routing", "missing-truth", "grn"),
           jumpNode("Choose where this goes after the call", "post-call-routing", "room-route", "blu")
-        ],"The next room can start from signal instead of notes.","You still need the one open question to chase."),
+        ],"The next step can start from what you learned instead of from notes.","You still need the one open question to chase."),
         branch("HANDOFF NOISY","ly","\"We have the notes, but they are messy.\"","\"Then throw away what does not change the next step. What is actually usable?\"",[
           jumpNode("Note what you still need to find out", "post-call-routing", "missing-truth", "org"),
           jumpNode("Choose where this goes after the call", "post-call-routing", "room-route", "blu")
@@ -543,17 +543,17 @@
         branch("MISSING TRUTH CLEAR","ok","\"We know the open question and who has to surface it next.\"","\"Good. Then the handoff is specific enough to move.\"",[
           jumpNode("Choose where this goes after the call", "post-call-routing", "room-route", "grn"),
           action("Set the next meeting", "segment:next-step-lock", "blu")
-        ],"The next room now has a real chase-down target.","You still need the correct room and owner."),
-        branch("MISSING OWNER","ly","\"We know the open question, but not who can answer it.\"","\"Then the next room must start by getting the right person into the frame.\"",[
+        ],"The next step now has a specific question to chase.","You still need to pick where this goes next and who owns it."),
+        branch("MISSING OWNER","ly","\"We know the open question, but not who can answer it.\"","\"Then the next step must start by getting the right person involved.\"",[
           action("Set the next meeting", "segment:next-step-lock", "org"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
         ],"The open question is visible but the owner is not.","You still need the route that best finds that owner."),
-        branch("EVERYTHING THIN","fl","\"We still don't know too much.\"","\"Then the next room should be the one most likely to recover the call instead of pretending this is cleaner than it is.\"",[
+        branch("EVERYTHING THIN","fl","\"We still don't know too much.\"","\"Then the next step should be the one most likely to recover the call instead of pretending this is cleaner than it is.\"",[
           jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
           action("Set the next meeting", "segment:next-step-lock", "blu")
-        ],"The handoff may need a corrective room, not a continuation room.","You still need the most useful first correction.")
+        ],"The next step may need to fix the deal, not just continue it.","You still need the most useful first correction.")
       ]),
-      node("post-call-routing","room-route","pr","Choose where this goes after the call","\"Which next room gives the team the strongest immediate leverage: shaping the next call, attaching what you learned to a live deal, or naming the failure pattern?\"","Use this to route with intent.",false,[
+      node("post-call-routing","room-route","pr","Choose where this goes after the call","\"Which next step gives the team the most immediate help: shaping the next call, attaching what you learned to a live deal, or naming the failure pattern?\"","Use this to route with intent.",false,[
         branch("NEXT MEETING","ok","\"The next step is a tighter conversation with a clearer question that needs an answer.\"","\"Then set the next meeting and bring the owner, what they need to see, and what is still unknown.\"",[
           action("Set the next meeting", "segment:next-step-lock", "grn"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")

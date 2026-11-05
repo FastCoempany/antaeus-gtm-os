@@ -137,7 +137,7 @@ export function AnalyticsPanel(): JSX.Element {
                         ? `Take ${recent[0].industry} downstream — territory, prospects, live signals, or outbound.`
                         : "Save your first ICP above to start handing it off."}
                 </p>
-                <nav class="icp-handoffs" aria-label={t("Cross-room handoff")}>
+                <nav class="icp-handoffs" aria-label={t("Continue on another page")}>
                     <a
                         class="icp-handoff icp-handoff--primary"
                         href={hrefToTerritoryArchitect(

@@ -359,7 +359,7 @@ Write as an experienced B2B operator explaining evidence to another operator. Us
 - Analysis: 60–240 words. State observed evidence first, then the assessment it supports, then the practical implication. Keep facts, interpretation, and forecast distinguishable.
 - State directly supported facts categorically. Use calibrated language such as "may", "suggests", "appears", or "is consistent with" when moving beyond direct observation. Do not imply that correlation proves causation.
 - Missing data or silence does not prove an internal buyer or market state.
-- Recommended actions must be concrete, routed to a current Antaeus room, and must not promise an outcome.
+- Recommended actions must be concrete, routed to a current Antaeus product area by its name, and must not promise an outcome.
 - Use normal sentences with subjects and verbs. Do not use aphoristic fragments, synthetic symmetry, personification, rhetorical mini-headlines, or em-dashes as substitutes for logical connective tissue.`;
 
 const BANNED_LINE = `BANNED VOCABULARY: ${BANNED_VOCABULARY.join(", ")}. Also avoid indirect framing such as "it's worth noting that", "it could be argued that", "one could argue", marketing throat-clearing, private Antaeus ontology, and slogan-like copy.`;
@@ -425,7 +425,7 @@ export function buildDraftPrompt(input: SynthesisInput): string {
   "evidence_item_ids": string[],
   "confidence": number
 }`);
-    lines.push("Current routed destination examples: \"Deal Workspace · active deal · review\", \"Discovery Studio · question set · update\", \"Cold Call Studio · objection response · update\", \"Outbound Studio · hook · new\", \"Signal Console · watched account · review\", or \"Getting to Signed · security workstream · review\". Do not route to retired or nonexistent rooms.");
+    lines.push("Current routed destination examples: \"Deal Workspace · active deal · review\", \"Discovery Studio · question set · update\", \"Cold Call Studio · objection response · update\", \"Outbound Studio · hook · new\", \"Signal Console · watched account · review\", or \"Getting to Signed · security workstream · review\". Do not route to retired or nonexistent product areas.");
     lines.push("Respond with the JSON object only.");
     return lines.join("\n");
 }

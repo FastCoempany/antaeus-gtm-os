@@ -135,7 +135,7 @@ export function RunDocket(): JSX.Element {
                     "B2B companies needing more pipeline."
                 </p>
                 <p class="icp-docket__block-copy">
-                    The room should visibly punish this kind of language. A sentence anyone could write is a sentence the rest of the app can't target against.
+                    ICP Studio flags this kind of language on purpose. A sentence anyone could write is a sentence the rest of the app can't target against.
                 </p>
             </article>
 

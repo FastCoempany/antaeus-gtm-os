@@ -48,9 +48,9 @@ export function AccountGrid(): JSX.Element {
                     </h2>
                     <p class="sc-empty__body">
                         {focus
-                            ? `Anything you've been watching that matches the ICP. Once one account is in, the room starts ranking accounts by how hot their signals are.`
+                            ? `Anything you've been watching that matches the ICP. Once one account is in, Signal Console starts ranking accounts by how hot their signals are.`
                             : t(
-                                  "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. The room starts ranking accounts by signal strength the moment one account is in.",
+                                  "A customer mentioned them. An exec from the company posted something. You saw them in a competitor's case study. Signal Console starts ranking accounts by signal strength the moment one account is in.",
                                   { class: "body" }
                               )}
                     </p>

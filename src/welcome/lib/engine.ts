@@ -114,7 +114,7 @@ const ACTION_DEAL: Omit<NextAction, "state"> = {
     href: "/deal-workspace/",
     cta: "Add the deal",
     meta: ["real pipeline", "dashboard unlock"],
-    why: "Without a real deal, the rooms downstream are working on hypothetical pipeline.",
+    why: "Without a real deal, the rest of the app is working on hypothetical pipeline.",
     unlocks: "Deal-risk review in Future Autopsy, pilot planning in Pilot Desk, and advisor requests in Call in a Favor."
 };
 const ACTION_MOTION: Omit<NextAction, "state"> = {

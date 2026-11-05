@@ -817,7 +817,7 @@
             jumpNode("Choose where this goes after the call", "post-call-routing", "room-route", "grn"),
             action("Set the next meeting", "segment:next-step-lock", "blu")
           ], "The open question is clear — whether security approves the data handling, and who finds out.",
-            "You still need the right room and owner."),
+            "You still need to pick where this goes next and who owns it."),
           branch("MISSING OWNER", "ly",
             "\"We know what's missing, but not who can answer it.\"",
             "\"Then the next step has to start by getting the right person — probably security or the VP — involved.\"", [

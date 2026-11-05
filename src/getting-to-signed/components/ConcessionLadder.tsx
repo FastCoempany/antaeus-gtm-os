@@ -51,9 +51,9 @@ export function ConcessionLadder(): JSX.Element {
                 ))}
             </ol>
             <p class="ng-ladder__note">
-                Seed ladder from the legacy CFO Negotiation room. Carry
-                forward, edit per deal, never improvise the order in the
-                room.
+                Seed ladder carried over from the earlier CFO Negotiation
+                version. Carry forward, edit per deal, never improvise the
+                order during the conversation.
             </p>
         </section>
     );

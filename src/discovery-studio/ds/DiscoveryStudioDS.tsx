@@ -135,7 +135,7 @@ export function DiscoveryStudioDS(): JSX.Element {
                         <Kicker>{t("FRAMEWORKS")}</Kicker>
                         <FrameworkRail />
                         <p class="dsd-board__rail-note">
-                            {t("Switch the lens only when the room actually changes.", { class: "body" })}
+                            {t("Switch the lens only when the conversation actually changes.", { class: "body" })}
                         </p>
                     </aside>
                     <section class="dsd-board__main">

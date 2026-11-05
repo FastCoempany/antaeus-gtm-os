@@ -551,7 +551,7 @@ export function ProofSheet(): JSX.Element {
                     />
                 </Section>
 
-                <Section code={t("SYSTEM")} title={t("The cross-room cards")}>
+                <Section code={t("SYSTEM")} title={t("Cards that link to other pages")}>
                     <PatternCard
                         claim={t(
                             "Two of your watched accounts went quiet the same week their category got funded — that pattern usually means a competitor is in the building.",
@@ -606,7 +606,7 @@ export function ProofSheet(): JSX.Element {
                 <HandoffStrip
                     label={t("Carry the work forward")}
                     kicker={t("CARRY THE WORK FORWARD")}
-                    title={t("A room ends without ending the work.", { class: "body" })}
+                    title={t("A page ends without ending the work.", { class: "body" })}
                     sub={t("One primary route in orange; the rest secondary. Each threads the continuity params so context travels.", { class: "body" })}
                     routes={[
                         { label: t("Pre-mortem this deal"), href: "/future-autopsy/", primary: true },
@@ -647,7 +647,7 @@ export function ProofSheet(): JSX.Element {
                 <Heading level="title">{t("Delete this workspace?")}</Heading>
                 <p style="font:15px/1.6 'Public Sans',sans-serif;color:rgba(10,28,64,0.66)">
                     {t(
-                        "This removes every room's local data. The cloud workspace stays.",
+                        "This removes the local data saved on this device. The cloud workspace stays.",
                         { class: "body" }
                     )}
                 </p>

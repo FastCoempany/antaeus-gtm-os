@@ -77,7 +77,7 @@ export function TargetFolio(): JSX.Element {
                 </div>
                 <p class="dw-target-folio__copy">
                     {t(
-                        "The live case the room should sharpen first. If it can't survive pressure, the rest of the board becomes decorative.",
+                        "The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.",
                         { class: "body" }
                     )}
                 </p>

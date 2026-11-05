@@ -168,7 +168,7 @@ export function InterventionRail(): JSX.Element {
                 <RailRow
                     state={t("Keep honest")}
                     copy={t(
-                        "The reserve shows up here as signals, not as full deal cards — so the room doesn't repeat itself.",
+                        "The reserve shows up here as signals, not as full deal cards — so this page doesn't repeat itself.",
                         { class: "body" }
                     )}
                     items={groups.keepHonest}
