@@ -2732,8 +2732,8 @@
       "original": "Pace",
       "issues": [],
       "severity_before": 0,
-      "replacement": "Pace",
-      "action": "keep",
+      "replacement": "Quota Workback",
+      "action": "rewrite",
       "issues_after": [],
       "severity_after": 0
     },
@@ -5164,7 +5164,7 @@
         "private_ontology"
       ],
       "severity_before": 1,
-      "replacement": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Pace are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash.",
+      "replacement": "Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Quota Workback are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash.",
       "action": "rewrite",
       "issues_after": [],
       "severity_after": 0

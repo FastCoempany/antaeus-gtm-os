@@ -17,7 +17,7 @@ The earlier **89/100** was a qualitative page-level saturation judgment. The lin
 
 ## Editorial decisions
 
-1. Keep a small set of actual feature names: **The Briefing, Pace, The Ground, The Live Edge, Discovery Studio, Future Autopsy**. Their surrounding descriptions become literal on first mention.
+1. Keep a small set of actual feature names: **The Briefing, Quota Workback, The Ground, The Live Edge, Discovery Studio, Future Autopsy**. Their surrounding descriptions become literal on first mention. (2026-11-05, founder-settled: the revenue-plan area is named **Quota Workback**; the earlier working name "Pace" is retired as a name. "Before" entries below quote the original page and keep "Pace".)
 2. Remove generic private vocabulary as the default grammar: **motion, room, move, moved, shape, line, hot/cold, slip, die, in your head**.
 3. Rename readiness states to observable conditions: **Founder-dependent → Partially documented → Usable with founder support → Hire-ready → Hire-ready and repeatable**.
 4. Navigation names destinations rather than metaphors: **Product areas, Sales handoff, Activity monitoring, Revenue plan, Beta limitations**.
@@ -1207,7 +1207,7 @@ The source line is included so implementation can be checked against the current
 
 **Issues:** private_ontology  
 **Before:** Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page are real rooms from the app shown with sample data. Benchmark figures in Pace are typical reads for the deal size selected, not a promise about your motion. Photography via Unsplash.  
-**After:** Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Pace are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash.
+**After:** Antaeus is in private beta; what you see here is the product as it stands today, not a roadmap. Screens throughout this page show real product areas with sample data. Benchmark figures in Quota Workback are typical ranges for the selected deal size, not a promise about your results. Photography via Unsplash.
 
 ## Standalone leaf-string changes
 

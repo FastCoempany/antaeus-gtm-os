@@ -105,7 +105,7 @@ describe("buildStanding", () => {
         for (const it of items) expect(it.href).toContain("returnTo");
     });
 
-    it("marks Pace behind when pipeline is below coverage", () => {
+    it("marks Quota Workback pipeline coverage behind when pipeline is below coverage", () => {
         const s = new FakeStorage();
         s.setItem("gtmos_deal_workspace_health", JSON.stringify({ pipeline_value: 100000 }));
         s.setItem(
