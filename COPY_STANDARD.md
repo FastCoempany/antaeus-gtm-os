@@ -89,7 +89,7 @@ Antaeus can have distinctive feature names. A proper name does not give the surr
 Allowed examples:
 
 - **The Briefing** — followed by a literal description of the morning summary.
-- **Pace** — followed by a literal description of revenue-target planning and benchmark checking.
+- **Quota Workback** — followed by a literal description of revenue-target planning and benchmark checking. (Founder-settled 2026-11-05: this is the area's name; "Pace" is not used as a name for it.)
 - **The Ground** — followed immediately by “the workspace navigation map” or equivalent on first mention.
 - **The Live Edge** — followed immediately by “the collapsible activity panel” or equivalent on first mention.
 - **Discovery Studio** — followed by a literal description of live discovery-call guidance.
