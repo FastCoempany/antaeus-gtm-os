@@ -112,6 +112,10 @@ export const ACV_BENCHMARKS: Readonly<Record<AcvBand, Benchmark>> = {
 export interface PlanMetrics {
     readonly monthlyTarget: number;
     readonly weeklyRevenue: number;
+    /** Whole deals the annual target needs (target ÷ deal size, rounded up once). */
+    readonly dealsYear: number;
+    readonly oppsYear: number;
+    readonly meetingsYear: number;
     readonly dealsMonth: number;
     readonly dealsQuarter: number;
     readonly oppsMonth: number;

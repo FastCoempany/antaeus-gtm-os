@@ -459,8 +459,8 @@ describe("authorSection7 — first-week cadence", () => {
             })
         );
         expect(s.status).toBe("ready");
-        // $6M a year = $500k a month = 10 deals of $50k a month.
-        expect(s.body[0]).toContain("10 closed-won deals a month");
+        // $6M a year at $50k deals = exactly 120 deals a year (30 a quarter).
+        expect(s.body[0]).toContain("120 closed-won deals a year (about 30 a quarter)");
         expect(s.evidence.find((e) => e.includes("Win-rate assumption"))).toBeDefined();
         expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
@@ -473,8 +473,8 @@ describe("authorSection7 — first-week cadence", () => {
             })
         );
         expect(s.evidence).toContain("Win-rate assumption: 25%");
-        // 10 deals a month at a 25% win rate = 40 qualified opportunities, not 1.
-        expect(s.body[0]).toContain("about 40 qualified opportunities");
+        // 120 deals a year at a 25% win rate = 480 qualified opportunities, not 1.
+        expect(s.body[0]).toContain("about 480 qualified opportunities a year");
     });
 
     it("reports recent activity dropoff as an observation", () => {
@@ -625,9 +625,10 @@ describe("evidence integrity regressions", () => {
         const s = authorSection7(loadSectionsInput({ storage }));
         expect(readDailyOutreachRequirement(storage)).toBe(quotaRoom.touchesDay);
         expect(s.body[1]).toContain(`Daily outreach target from Quota Workback: ${quotaRoom.touchesDay} messages and calls per working day.`);
-        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsMonth} first meetings a month (about ${quotaRoom.meetingsWeek} a week)`);
-        expect(s.body[0]).toContain(`about ${quotaRoom.oppsMonth} qualified`);
-        expect(s.evidence).toContain(`Closed-won deals needed per month: ${quotaRoom.dealsMonth}`);
+        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsYear} first meetings a year (about ${quotaRoom.meetingsWeek} a week)`);
+        expect(s.body[0]).toContain("8 closed-won deals a year (about 2 a quarter)");
+        expect(s.body[0]).toContain(`about ${quotaRoom.oppsYear} qualified`);
+        expect(s.evidence).toContain(`Closed-won deals needed per year: ${quotaRoom.dealsYear}`);
         // The demo numbers the walkthrough showed disagreeing (12/day vs 48/day).
         expect(quotaRoom.touchesDay).toBe(48);
         expect(quotaRoom.meetingsMonth).toBe(15);

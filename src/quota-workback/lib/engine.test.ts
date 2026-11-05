@@ -47,6 +47,24 @@ describe("qualityBand", () => {
 });
 
 describe("computeMetrics", () => {
+    it("plans the exact number of deals the year needs (no per-month round-up)", () => {
+        const m = computeMetrics(
+            { ...DEFAULT_INPUTS, quota: 2_000_000, acv: 250_000 },
+            EMPTY_COVERAGE
+        );
+        expect(m.dealsYear).toBe(8);
+        expect(m.dealsQuarter).toBe(2);
+        expect(m.dealsMonth).toBe(0.7);
+    });
+
+    it("rounds a partial deal up once, at the year", () => {
+        const m = computeMetrics(
+            { ...DEFAULT_INPUTS, quota: 2_000_000, acv: 300_000 },
+            EMPTY_COVERAGE
+        );
+        expect(m.dealsYear).toBe(7);
+    });
+
     it("zero quota gives zero downstream", () => {
         const m = computeMetrics(DEFAULT_INPUTS, EMPTY_COVERAGE);
         expect(m.monthlyTarget).toBe(0);
@@ -72,6 +90,7 @@ describe("computeMetrics", () => {
             { ...EMPTY_COVERAGE, ratio: 3.5, hasDeals: true }
         );
         expect(m.monthlyTarget).toBe(100_000);
+        expect(m.dealsYear).toBe(24);
         expect(m.dealsMonth).toBe(2);
         expect(m.oppsMonth).toBeGreaterThanOrEqual(10);
         expect(m.meetingsMonth).toBeGreaterThanOrEqual(28);
