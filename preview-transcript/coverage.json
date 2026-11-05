@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T16:41:14.090Z",
+  "generatedAt": "2026-11-05T17:37:19.806Z",
   "partial": false,
   "expectedRooms": [
     "welcome",
@@ -780,15 +780,15 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “5991a56f-6111-4cc6-a335-f2b0d601182d” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “79a90643-33e5-4298-9c07-1136bd8c300c” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “f6d8ecfb-aa53-443b-a27e-3f5bf248134f” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “d0a9d06e-2455-43c9-ac4c-ae685d49bf57” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “+ Add a company”, then choosing “a298a627-7e55-4528-8726-b94008a0f5ed” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
+          "what": "clicking “+ Add a company”, then choosing “5ca3d1a3-5727-46a3-93b9-d8dfbfa8cc27” in “Added independently VP Talent Acquisition; Director Recruiting Operations / Airl VP Talent”",
           "result": "no visible change"
         },
         {
@@ -822,7 +822,7 @@
       "id": "signal-console",
       "label": "Signal Console",
       "stage": 2,
-      "actions": 78,
+      "actions": 76,
       "reveals": 31,
       "restLines": 116,
       "unexplored": 0,
@@ -957,27 +957,27 @@
           "result": "11 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “16 ADP Steady internal hiring at one of the largest HR employers — plus a partner channel ”",
+          "what": "hovering “16 ADP Steady internal hiring at one of the largest HR employers, and a possible partner f”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “16 ADP Steady internal hiring at one of the largest HR employers — plus a partner channel ”",
+          "what": "clicking “16 ADP Steady internal hiring at one of the largest HR employers, and a possible partner f”",
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “16 Randstad World's largest staffing firm — screening volume IS the product, and AI screen”",
+          "what": "hovering “16 Randstad World's largest staffing firm — screening candidates is the core of its busine”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “16 Randstad World's largest staffing firm — screening volume IS the product, and AI screen”",
+          "what": "clicking “16 Randstad World's largest staffing firm — screening candidates is the core of its busine”",
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago”",
+          "what": "hovering “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago”",
+          "what": "clicking “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago”",
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
@@ -997,11 +997,11 @@
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago”",
+          "what": "hovering “16 JetBlue Smaller talent-acquisition team than the major airlines, so screening automatio”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago”",
+          "what": "clicking “16 JetBlue Smaller talent-acquisition team than the major airlines, so screening automatio”",
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
@@ -1021,11 +1021,11 @@
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago”",
+          "what": "hovering “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago”",
+          "what": "clicking “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago”",
           "result": "10 lines appear, 0 disappear — see above"
         },
         {
@@ -1101,19 +1101,11 @@
           "result": "2 lines appear, 21 disappear — see above"
         },
         {
-          "what": "clicking “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago”, then hovering “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago SIGNALS · ”",
+          "what": "clicking “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago”, then hovering “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago SIGNALS · Stor”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago”, then clicking “16 Ulta Beauty Store-count growth keeps a standing hiring engine running 1h ago SIGNALS · ”",
-          "result": "no visible change"
-        },
-        {
-          "what": "clicking “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago”, then hovering “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago SIGNALS”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago”, then clicking “16 JetBlue Leaner TA team than the majors — automation carries further here 1h ago SIGNALS”",
+          "what": "clicking “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago”, then clicking “16 Ulta Beauty Store-count growth means steady, ongoing store hiring 1h ago SIGNALS · Stor”",
           "result": "no visible change"
         },
         {
@@ -1125,11 +1117,11 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago”, then hovering “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago SIGNALS · Famously”",
+          "what": "clicking “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago”, then hovering “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago SIG”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago”, then clicking “14 Airbnb Famously selective hiring — small volumes, extreme bar 1h ago SIGNALS · Famously”",
+          "what": "clicking “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago”, then clicking “14 Airbnb Known for selective hiring — small hiring volumes and a very high bar 1h ago SIG”",
           "result": "no visible change"
         },
         {
@@ -1148,7 +1140,7 @@
       "label": "Briefing",
       "stage": 2,
       "actions": 190,
-      "reveals": 49,
+      "reveals": 47,
       "restLines": 121,
       "unexplored": 0,
       "failedActions": [],
@@ -1451,19 +1443,19 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.”"
-        },
-        {
-          "what": "clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
+          "what": "clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
+        },
+        {
           "what": "clicking “⌘K JUMP”, then clicking “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.”",
@@ -1471,7 +1463,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “ICP STUDIO ICP Studio Define the companies and buyers you sell to.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “ICP STUDIO ICP Studio Define the companies and buyers you sell to.”",
@@ -1479,7 +1471,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.”",
@@ -1487,7 +1479,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify account”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify account”",
@@ -1495,7 +1487,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.”",
@@ -1503,7 +1495,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.”",
@@ -1511,7 +1503,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”",
@@ -1519,7 +1511,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”",
@@ -1527,7 +1519,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.”",
@@ -1535,7 +1527,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “BRIEFING Briefing Review account and market changes, evidence, and recommendations.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “BRIEFING Briefing Review account and market changes, evidence, and recommendations.”",
@@ -1543,7 +1535,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SETTINGS Settings Backup, restore, demo mode, category, cloud sync.”",
@@ -1551,7 +1543,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
@@ -1559,7 +1551,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective a”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Review this week's workspace analysis Open the Dashboard to review current sales pri”",
@@ -1567,7 +1559,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
@@ -1575,7 +1567,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
@@ -1583,7 +1575,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”",
@@ -1591,7 +1583,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
@@ -1599,7 +1591,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
@@ -1607,7 +1599,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled o”",
@@ -1615,7 +1607,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
@@ -1623,7 +1615,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
@@ -1631,43 +1623,43 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Sign”"
-        },
-        {
-          "what": "clicking “⌘K JUMP”, then clicking “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
-          "result": "takes you to /pilot-desk/"
-        },
-        {
-          "what": "clicking “⌘K JUMP”, then hovering “⏰”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
+          "what": "clicking “⌘K JUMP”, then clicking “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”",
+          "result": "takes you to /pilot-desk/"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then hovering “⏰”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
+        },
+        {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
           "result": "20 lines appear, 40 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account ”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then hovering “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “⏰”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then hovering “SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open ”"
         },
         {
           "what": "clicking “Open current analysis”, then hovering “Close current analysis”",
@@ -1691,7 +1683,7 @@
         },
         {
           "what": "clicking “⚙”, then clicking “Show in-session notifications”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show in-session notifications”",
@@ -1703,11 +1695,11 @@
         },
         {
           "what": "clicking “⚙”, then hovering “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show tooltip hints”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show tooltip hints”",
@@ -1719,11 +1711,11 @@
         },
         {
           "what": "clicking “⚙”, then hovering “Show schedule panel”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “Show schedule panel”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then hovering “Show schedule panel”",
@@ -1735,11 +1727,11 @@
         },
         {
           "what": "clicking “⚙”, then hovering “OFF”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then clicking “OFF”",
-          "result": "shows the same screen as clicking “⚙”, then clicking “Show in-session notifications”"
+          "result": "shows the same screen as clicking “⚙”, then hovering “Show in-session notifications”"
         },
         {
           "what": "clicking “⚙”, then hovering “1H”",
@@ -1803,7 +1795,7 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “CADENCE Daily Weekly Monthly”"
+          "result": "1 lines appear, 1 disappear — see above"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Daily”",
@@ -1811,15 +1803,15 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”",
-          "result": "1 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Weekly”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Monthly”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Monthly”",
@@ -1827,79 +1819,79 @@
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “DAY OF WEEK Mon Tue Wed Thu Fri Sat Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “DAY OF WEEK Mon Tue Wed Thu Fri Sat Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Mon”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Mon”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Tue”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Tue”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Wed”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Daily”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
-        },
-        {
-          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Thu”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Weekly”"
-        },
-        {
-          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Thu”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+        },
+        {
+          "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”",
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
+        },
+        {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Fri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Fri”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Sat”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Sat”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Sun”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “TIME (CENTRAL · CT) :”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “TIME (CENTRAL · CT) :”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then hovering “Save schedule”",
-          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Thu”"
+          "result": "shows the same screen as clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Wed”"
         },
         {
           "what": "clicking “⌘K JUMP”, then clicking “⏰”, then clicking “Save schedule”",
@@ -1911,7 +1903,7 @@
         },
         {
           "what": "clicking “⚙”, then clicking “Show schedule panel”, then clicking “⌃”",
-          "result": "2 lines appear, 1 disappear — see above"
+          "result": "shows the same screen as clicking “⚙”, then clicking “Show schedule panel”, then hovering “⌃”"
         }
       ]
     },
@@ -2606,51 +2598,51 @@
           "result": "1 lines appear, 0 disappear — see above"
         },
         {
-          "what": "hovering “OpenAI Send connection request →”",
+          "what": "hovering “OpenAI Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “OpenAI Send connection request →”",
-          "result": "7 lines appear, 8 disappear — see above"
+          "what": "clicking “OpenAI Review a post →”",
+          "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "hovering “Databricks Leave a comment →”",
+          "what": "hovering “Databricks Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Databricks Leave a comment →”",
-          "result": "7 lines appear, 8 disappear — see above"
+          "what": "clicking “Databricks Review a post →”",
+          "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "hovering “Starbucks Leave a comment →”",
+          "what": "hovering “Starbucks Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Starbucks Leave a comment →”",
-          "result": "7 lines appear, 8 disappear — see above"
+          "what": "clicking “Starbucks Review a post →”",
+          "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "hovering “United Airlines Leave a comment →”",
+          "what": "hovering “United Airlines Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “United Airlines Leave a comment →”",
-          "result": "7 lines appear, 8 disappear — see above"
+          "what": "clicking “United Airlines Review a post →”",
+          "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "hovering “Nike Leave a comment →”",
+          "what": "hovering “Nike Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Nike Leave a comment →”",
-          "result": "7 lines appear, 8 disappear — see above"
+          "what": "clicking “Nike Review a post →”",
+          "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "hovering “Marriott International Leave a comment →”",
+          "what": "hovering “Marriott International Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Marriott International Leave a comment →”",
+          "what": "clicking “Marriott International Review a post →”",
           "result": "33 lines appear, 0 disappear — see above"
         },
         {
@@ -2659,14 +2651,14 @@
         },
         {
           "what": "clicking “› Message templates (connect · comment · resource · ask)”",
-          "result": "8 lines appear, 1 disappear — see above"
+          "result": "9 lines appear, 1 disappear — see above"
         },
         {
-          "what": "clicking “OpenAI Send connection request →”, then hovering “Boeing Send useful information →”",
+          "what": "clicking “OpenAI Review a post →”, then hovering “Boeing Review a post →”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “OpenAI Send connection request →”, then clicking “Boeing Send useful information →”",
+          "what": "clicking “OpenAI Review a post →”, then clicking “Boeing Review a post →”",
           "result": "shows the same screen as the room at rest"
         },
         {
@@ -2684,8 +2676,8 @@
       "id": "discovery-studio",
       "label": "Discovery Studio",
       "stage": 3,
-      "actions": 407,
-      "reveals": 177,
+      "actions": 397,
+      "reveals": 172,
       "restLines": 32,
       "unexplored": 0,
       "failedActions": [],
@@ -2835,19 +2827,19 @@
           "result": "24 lines appear, 14 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “champion —”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “Champion: not named yet”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “champion —”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Champion: not named yet”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “approver —”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “Approver: not named yet”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “approver —”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Approver: not named yet”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
@@ -2864,7 +2856,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “3 Problem & cost”",
@@ -2872,7 +2864,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "result": "8 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “4 Why now”",
@@ -2880,7 +2872,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “5 Who's involved”",
@@ -2888,7 +2880,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "result": "8 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “6 What they need”",
@@ -2896,7 +2888,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "result": "8 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “7 Current vendor”",
@@ -2904,7 +2896,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “8 How they'll decide”",
@@ -2912,7 +2904,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then hovering “9 Next step”",
@@ -3095,11 +3087,11 @@
           "result": "4 lines appear, 5 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then hovering “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then hovering “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
@@ -3119,11 +3111,11 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then hovering “Separate a mandate from a one-off incident”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then hovering “Ask whether this is a mandate or one incident”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”",
           "result": "5 lines appear, 5 disappear — see above"
         },
         {
@@ -3151,19 +3143,19 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then hovering “Start with deflection vs. resolution”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then hovering “Start with what the bot can't resolve”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Start with deflection vs. resolution”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Start with what the bot can't resolve”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then hovering “Walk one contact”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then hovering “Walk through one support contact”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”",
           "result": "5 lines appear, 5 disappear — see above"
         },
         {
@@ -3207,19 +3199,11 @@
           "result": "5 lines appear, 5 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then hovering “If the call starts sideways”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then hovering “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”",
-          "result": "5 lines appear, 5 disappear — see above"
-        },
-        {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then hovering “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
@@ -3239,11 +3223,11 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then hovering “Classify the workflow”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then hovering “Ask which problem is most urgent”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”",
           "result": "5 lines appear, 5 disappear — see above"
         },
         {
@@ -3271,11 +3255,11 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then hovering “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then hovering “\"Yes. There is interest, but people still have to step in on the risky parts.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but people still have to step in on the risky parts.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
@@ -3295,11 +3279,11 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then hovering “Separate a mandate from a real workflow need”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then hovering “Ask whether this is a mandate or a real need”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”",
           "result": "5 lines appear, 5 disappear — see above"
         },
         {
@@ -3340,78 +3324,78 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Agree what they need to see”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Map where people review the output”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask where a person must review the output”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Map where people review the output”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask where a person must review the output”",
+          "result": "8 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Inspect the current stack”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask what tools they use today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Inspect the current stack”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask what tools they use today”",
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Scope the workflow”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask where legal review slows the work”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Scope the workflow”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask where legal review slows the work”",
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Map adoption politics”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Find out who would resist using it, and why”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Map adoption politics”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Find out who would resist using it, and why”",
+          "result": "33 lines appear, 0 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Choose a safe pilot”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Pick a low-risk workflow to test first”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Choose a safe pilot”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Pick a low-risk workflow to test first”",
+          "result": "shows the same screen as clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Find out who would resist using it, and why”"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Separate pain from politics”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask who feels the cost, not just who has an opinion”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Separate pain from politics”",
-          "result": "8 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask who feels the cost, not just who has an opinion”",
+          "result": "7 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Name the outside counsel cost”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask what outside counsel costs them”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Name the outside counsel cost”",
-          "result": "9 lines appear, 8 disappear — see above"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask what outside counsel costs them”",
+          "result": "8 lines appear, 7 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Pick the workflow”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Pick the workflow to talk through”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Pick the workflow”",
-          "result": "shows the same screen as clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Scope the workflow”"
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Pick the workflow to talk through”",
+          "result": "shows the same screen as clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask where legal review slows the work”"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Test whether the next step is real”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then hovering “→ Ask what would make the next step worth it”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Test whether the next step is real”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “Recovery”, then clicking “→ Ask what would make the next step worth it”",
           "result": "8 lines appear, 7 disappear — see above"
         },
         {
@@ -3420,7 +3404,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “\"The first pass and fallback review still eat too much time.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then hovering “\"The issue is overflow and outside counsel more than internal workflow.\"”",
@@ -3428,22 +3412,22 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “\"The issue is overflow and outside counsel more than internal workflow.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then hovering “Scope the workflow break”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then hovering “Ask where legal review slows the work”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Scope the workflow break”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Ask where legal review slows the work”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then hovering “Map the review owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then hovering “Ask who does the review work today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Map the review owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “2 How they work”, then clicking “Ask who does the review work today”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3452,7 +3436,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “\"Senior legal time is going to work that should be handled lower in the stack or faster.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “\"It is annoying, but not catastrophic.\"”",
@@ -3460,30 +3444,30 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “\"It is annoying, but not catastrophic.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Name the lawyer workload”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Ask how much lawyer time this takes”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Name the lawyer workload”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Ask how much lawyer time this takes”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Name the time lost to slow cycles”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Ask where legal delays show up for the business”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Name the time lost to slow cycles”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Ask where legal delays show up for the business”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Name outside counsel cost”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then hovering “Ask what outside counsel costs them”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Name outside counsel cost”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “3 Problem & cost”, then clicking “Ask what outside counsel costs them”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3492,7 +3476,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “\"The GC wants throughput up and spend down without adding headcount.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then hovering “\"Nothing has really changed yet.\"”",
@@ -3500,14 +3484,14 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “\"Nothing has really changed yet.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then hovering “Identify the General Counsel's current priority”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then hovering “Ask what the General Counsel cares about now”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “Identify the General Counsel's current priority”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “4 Why now”, then clicking “Ask what the General Counsel cares about now”",
           "result": "no visible change"
         },
         {
@@ -3524,7 +3508,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “\"Legal ops will drive it, but the GC has to believe it is safe.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “\"No one fully owns this yet.\"”",
@@ -3532,30 +3516,30 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “\"No one fully owns this yet.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Find the economic owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Ask who feels the cost enough to act”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Find the economic owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Ask who feels the cost enough to act”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Map the adoption politics”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Find out who would resist using it, and why”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Map the adoption politics”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Find out who would resist using it, and why”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Find the risk owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then hovering “Ask who can block this on risk”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Find the risk owner”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “5 Who's involved”, then clicking “Ask who can block this on risk”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3564,7 +3548,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “\"Accuracy and consistency are first. If those break, nothing else matters.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “\"Show me ROI first.\"”",
@@ -3572,30 +3556,30 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “\"Show me ROI first.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Set the accuracy bar”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Agree how accurate it has to be”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Set the accuracy bar”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Agree how accurate it has to be”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Map where people review the output”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Ask where a person must review the output”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Map where people review the output”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Ask where a person must review the output”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Choose the pilot scope”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then hovering “Pick the workflow to test first”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Choose the pilot scope”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “6 What they need”, then clicking “Pick the workflow to test first”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3604,7 +3588,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “\"The stack exists, but it still does not remove the repetitive review burden.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then hovering “\"We are trying to build around this ourselves.\"”",
@@ -3612,22 +3596,22 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “\"We are trying to build around this ourselves.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then hovering “Inspect the current stack”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then hovering “Ask what tools they use today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Inspect the current stack”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Ask what tools they use today”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then hovering “Inspect outside counsel status quo”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then hovering “Ask what they send to outside counsel today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Inspect outside counsel status quo”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “7 Current vendor”, then clicking “Ask what they send to outside counsel today”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3636,7 +3620,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “\"Legal ops would scope it, the GC would sponsor it, and IT/security would review before an”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then hovering “\"Honestly, we have not mapped that yet.\"”",
@@ -3644,22 +3628,22 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “\"Honestly, we have not mapped that yet.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then hovering “Map the approval path”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then hovering “Ask who approves this, in what order”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Map the approval path”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Ask who approves this, in what order”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then hovering “Map confidentiality and privilege review”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then hovering “Ask about confidentiality and privilege review”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Map confidentiality and privilege review”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “8 How they'll decide”, then clicking “Ask about confidentiality and privilege review”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3668,7 +3652,7 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “\"Yes. That makes sense.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then hovering “\"Just send something first.\"”",
@@ -3676,14 +3660,14 @@
         },
         {
           "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “\"Just send something first.\"”",
-          "result": "5 lines appear, 2 disappear — see above"
+          "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then hovering “Lock the scoped review”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then hovering “Book a review meeting on one workflow”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “Lock the scoped review”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “Book a review meeting on one workflow”",
           "result": "no visible change"
         },
         {
@@ -3695,11 +3679,11 @@
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then hovering “Lock the pilot design”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then hovering “Agree what a small pilot would include”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “Lock the pilot design”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “9 Next step”, then clicking “Agree what a small pilot would include”",
           "result": "4 lines appear, 4 disappear — see above"
         },
         {
@@ -3751,19 +3735,19 @@
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Yes. The systems exist, but lawyers still end up doing too much by hand.\"”, then hovering “→ Name the workload”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Yes. The systems exist, but lawyers still end up doing too much by hand.\"”, then hovering “→ Ask how much lawyer time this takes”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Yes. The systems exist, but lawyers still end up doing too much by hand.\"”, then clicking “→ Name the workload”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Yes. The systems exist, but lawyers still end up doing too much by hand.\"”, then clicking “→ Ask how much lawyer time this takes”",
           "result": "9 lines appear, 11 disappear — see above"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Anything AI-related gets hard because hallucination risk is unacceptable.\"”, then hovering “→ Set the accuracy bar”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Anything AI-related gets hard because hallucination risk is unacceptable.\"”, then hovering “→ Agree how accurate it has to be”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Anything AI-related gets hard because hallucination risk is unacceptable.\"”, then clicking “→ Set the accuracy bar”",
+          "what": "clicking “Legal / Legal Ops / Law Workflow”, then clicking “\"Anything AI-related gets hard because hallucination risk is unacceptable.\"”, then clicking “→ Agree how accurate it has to be”",
           "result": "9 lines appear, 11 disappear — see above"
         },
         {
@@ -3815,27 +3799,27 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then hovering “→ Map the live req”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then hovering “→ Walk through one open role”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then clicking “→ Map the live req”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then clicking “→ Walk through one open role”",
           "result": "8 lines appear, 11 disappear — see above"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then hovering “→ Name the bottleneck”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then hovering “→ Ask where hiring slows down”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then clicking “→ Name the bottleneck”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"Yes. The systems are there, but the team still spends too much time triaging and coordina”, then clicking “→ Ask where hiring slows down”",
           "result": "10 lines appear, 11 disappear — see above"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"You cannot automate hiring judgment.\"”, then hovering “→ Agree where human judgment stays”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"You cannot automate hiring judgment.\"”, then hovering “→ Agree which decisions stay with a person”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"You cannot automate hiring judgment.\"”, then clicking “→ Agree where human judgment stays”",
+          "what": "clicking “Recruiting / Talent / HR / People Workflow”, then clicking “\"You cannot automate hiring judgment.\"”, then clicking “→ Agree which decisions stay with a person”",
           "result": "9 lines appear, 11 disappear — see above"
         },
         {
@@ -3855,43 +3839,43 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then hovering “→ Map the live decision”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then hovering “→ Walk through one decision in progress”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Map the live decision”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Walk through one decision in progress”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then hovering “→ Name the signal gap”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then hovering “→ Ask what scattered feedback is costing them”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Name the signal gap”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Ask what scattered feedback is costing them”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We already have docs, analytics, and research tooling in place.\"”, then hovering “→ Ask what signals they miss”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We already have docs, analytics, and research tooling in place.\"”, then hovering “→ Ask what customer feedback they miss”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We already have docs, analytics, and research tooling in place.\"”, then clicking “→ Ask what signals they miss”",
-          "result": "shows the same screen as clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Name the signal gap”"
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We already have docs, analytics, and research tooling in place.\"”, then clicking “→ Ask what customer feedback they miss”",
+          "result": "shows the same screen as clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"Yes. The tools exist, but insight still gets scattered and re-synthesized manually.\"”, then clicking “→ Ask what scattered feedback is costing them”"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then hovering “→ Map the workflow break”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then hovering “→ Ask where the work breaks down”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then clicking “→ Map the workflow break”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then clicking “→ Ask where the work breaks down”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then hovering “→ Ask about the trigger”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then hovering “→ Ask what made this urgent”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then clicking “→ Ask about the trigger”",
+          "what": "clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “\"We do not even do this very formally yet.\"”, then clicking “→ Ask what made this urgent”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
@@ -3911,19 +3895,19 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”, then hovering “→ Map the risky case”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”, then hovering “→ Walk through one case that needs a person's judgment”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”, then clicking “→ Map the risky case”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”, then clicking “→ Walk through one case that needs a person's judgment”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”, then hovering “→ Ask about queue problems”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”, then hovering “→ Ask what goes wrong when people take over”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”, then clicking “→ Ask about queue problems”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”, then clicking “→ Ask what goes wrong when people take over”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
@@ -3940,54 +3924,54 @@
         },
         {
           "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Can you just show the product first?\"”, then clicking “→ Ask about a risky case”",
-          "result": "shows the same screen as clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a human rescue path.\"”, then clicking “→ Map the risky case”"
+          "result": "shows the same screen as clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Yes. The queue moves, but the hard cases still need a person to step in.\"”, then clicking “→ Walk through one case that needs a person's judgment”"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Can you just show the product first?\"”, then hovering “→ Choose pilot case”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Can you just show the product first?\"”, then hovering “→ Pick one type of case to test first”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Can you just show the product first?\"”, then clicking “→ Choose pilot case”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “\"Can you just show the product first?\"”, then clicking “→ Pick one type of case to test first”",
           "result": "8 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then hovering “\"A real incident or audit request exposed the weakness.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then hovering “\"A real incident or audit request exposed the weakness.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then clicking “\"A real incident or audit request exposed the weakness.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “\"A real incident or audit request exposed the weakness.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then hovering “\"Leadership wants the process safer before scale makes it embarrassing.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then hovering “\"Leadership wants the process safer before scale makes it embarrassing.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then clicking “\"Leadership wants the process safer before scale makes it embarrassing.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “\"Leadership wants the process safer before scale makes it embarrassing.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then hovering “\"It is more modernization talk than a live trigger.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then hovering “\"It is more modernization talk than a live trigger.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Separate a mandate from a one-off incident”, then clicking “\"It is more modernization talk than a live trigger.\"”",
+          "what": "clicking “GovTech / Compliance / Public-Sector Operations / Trust and Safety”, then clicking “Ask whether this is a mandate or one incident”, then clicking “\"It is more modernization talk than a live trigger.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then hovering “→ Map the queue”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then hovering “→ Walk through one support contact”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Map the queue”",
-          "result": "10 lines appear, 13 disappear — see above"
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Walk through one support contact”",
+          "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then hovering “→ Surface the pain”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then hovering “→ Ask where it hurts most today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Surface the pain”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Ask where it hurts most today”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
@@ -3996,7 +3980,7 @@
         },
         {
           "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"We have a pretty standard support stack — Zendesk, a bot on top.\"”, then clicking “→ Walk through the queue”",
-          "result": "shows the same screen as clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Map the queue”"
+          "result": "shows the same screen as clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Yeah, the easy stuff is handled. It's the refunds and policy edge cases that still land o”, then clicking “→ Walk through one support contact”"
         },
         {
           "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"We have a pretty standard support stack — Zendesk, a bot on top.\"”, then hovering “→ Ask for a recent ticket”",
@@ -4004,7 +3988,7 @@
         },
         {
           "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"We have a pretty standard support stack — Zendesk, a bot on top.\"”, then clicking “→ Ask for a recent ticket”",
-          "result": "10 lines appear, 13 disappear — see above"
+          "result": "9 lines appear, 12 disappear — see above"
         },
         {
           "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “\"Can you just show me the resolution rate?\"”, then hovering “→ Ask what evidence they need”",
@@ -4015,27 +3999,27 @@
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then hovering “\"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then hovering “\"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then clicking “\"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “\"It hits triage, the bot tries to deflect it, and if it can't, it routes to a tier-1 agent”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then hovering “\"It depends on the channel and the queue.\"”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then hovering “\"It depends on the channel and the queue.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then clicking “\"It depends on the channel and the queue.\"”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “\"It depends on the channel and the queue.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then hovering “\"I'm not close enough to the queue to map it that tightly.\"”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then hovering “\"I'm not close enough to the queue to map it that tightly.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk one contact”, then clicking “\"I'm not close enough to the queue to map it that tightly.\"”",
+          "what": "clicking “CX AI — Customer Experience, Support & Frontline”, then clicking “Walk through one support contact”, then clicking “\"I'm not close enough to the queue to map it that tightly.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
@@ -4063,51 +4047,43 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then hovering “→ Map the manager assessment”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then hovering “→ Ask how a manager judges a deal today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Map the manager assessment”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Ask how a manager judges a deal today”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then hovering “→ Use one live deal”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then hovering “→ Walk through one deal in the forecast”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Use one live deal”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Walk through one deal in the forecast”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then hovering “→ Review the deal assessment”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then hovering “→ Ask what a wrong forecast costs”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then clicking “→ Review the deal assessment”",
-          "result": "shows the same screen as clicking “Sales / Revenue Intelligence”, then clicking “\"Yes. The signal is there, but trust still depends on the manager reading between the line”, then clicking “→ Use one live deal”"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then hovering “→ Name the miss”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then clicking “→ Name the miss”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “\"We already have the stack. Salesforce, Gong, dashboards, all of it.\"”, then clicking “→ Ask what a wrong forecast costs”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then hovering “\"We have one in commit right now that still feels thinner than the stage language says.\"”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then hovering “\"We have one in commit right now that still feels weaker than its stage suggests.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “\"We have one in commit right now that still feels thinner than the stage language says.\"”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “\"We have one in commit right now that still feels weaker than its stage suggests.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then hovering “\"It is not one deal. It is the whole pipeline view that feels soft.\"”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then hovering “\"It is not one deal. It is the whole pipeline view that feels unreliable.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “\"It is not one deal. It is the whole pipeline view that feels soft.\"”",
+          "what": "clicking “Sales / Revenue Intelligence”, then clicking “Start from one live deal”, then clicking “\"It is not one deal. It is the whole pipeline view that feels unreliable.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
@@ -4119,163 +4095,139 @@
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then hovering “\"We missed, or leadership does not trust the number enough right now.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”, then hovering “→ Ask which problem is most urgent”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then clicking “\"We missed, or leadership does not trust the number enough right now.\"”",
-          "result": "6 lines appear, 3 disappear — see above"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then hovering “\"We mostly want to tighten what already exists.\"”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then clicking “\"We mostly want to tighten what already exists.\"”",
-          "result": "6 lines appear, 3 disappear — see above"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then hovering “\"Nothing urgent. We are just staying informed.\"”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “Sales / Revenue Intelligence”, then clicking “If the call starts sideways”, then clicking “\"Nothing urgent. We are just staying informed.\"”",
-          "result": "6 lines appear, 3 disappear — see above"
-        },
-        {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”, then hovering “→ Classify the workflow”",
-          "result": "no hover change"
-        },
-        {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”, then clicking “→ Classify the workflow”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”, then clicking “→ Ask which problem is most urgent”",
           "result": "6 lines appear, 9 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”, then hovering “→ Map the manual workarounds”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”, then hovering “→ Ask what they piece together by hand”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets stitched together manuall”, then clicking “→ Map the manual workarounds”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"Yes. We see pieces of the picture, but the real risk still gets pieced together by hand.\"”, then clicking “→ Ask what they piece together by hand”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"We already have ERP views, alerts, and supplier tools.\"”, then hovering “→ Name the consequence”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"We already have ERP views, alerts, and supplier tools.\"”, then hovering “→ Ask what a late warning costs them”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"We already have ERP views, alerts, and supplier tools.\"”, then clicking “→ Name the consequence”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “\"We already have ERP views, alerts, and supplier tools.\"”, then clicking “→ Ask what a late warning costs them”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then hovering “\"We need better supplier visibility and alerting first.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then hovering “\"We need better supplier visibility and alerting first.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then clicking “\"We need better supplier visibility and alerting first.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “\"We need better supplier visibility and alerting first.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then hovering “\"We need to understand consequence and plan around disruptions before they happen.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then hovering “\"We need to understand consequence and plan around disruptions before they happen.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then clicking “\"We need to understand consequence and plan around disruptions before they happen.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “\"We need to understand consequence and plan around disruptions before they happen.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then hovering “\"Honestly, it is both.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then hovering “\"Honestly, it is both.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Classify the workflow”, then clicking “\"Honestly, it is both.\"”",
+          "what": "clicking “Manufacturing / Supply Chain / Engineering”, then clicking “Ask which problem is most urgent”, then clicking “\"Honestly, it is both.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap”, then hovering “→ Map the dependency”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap”, then hovering “→ Ask what depends on this data today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap”, then clicking “→ Map the dependency”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gap”, then clicking “→ Ask what depends on this data today”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"We already have data vendors and internal pipelines.\"”, then hovering “→ Name the downstream cost”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"We already have data vendors and internal pipelines.\"”, then hovering “→ Ask what breaks when the data is late”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"We already have data vendors and internal pipelines.\"”, then clicking “→ Name the downstream cost”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"We already have data vendors and internal pipelines.\"”, then clicking “→ Ask what breaks when the data is late”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Can you just show the API?\"”, then hovering “→ Use one dependency”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Can you just show the API?\"”, then hovering “→ Ask for one recent time bad data hurt a team”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Can you just show the API?\"”, then clicking “→ Use one dependency”",
+          "what": "clicking “Data / Intelligence Infrastructure”, then clicking “\"Can you just show the API?\"”, then clicking “→ Ask for one recent time bad data hurt a team”",
           "result": "10 lines appear, 13 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”, then hovering “→ Ask where trust in the output breaks”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but people still have to step in on the risky parts.\"”, then hovering “→ Ask where trust in the output breaks”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”, then clicking “→ Ask where trust in the output breaks”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but people still have to step in on the risky parts.\"”, then clicking “→ Ask where trust in the output breaks”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”, then hovering “→ Ask what checking the AI costs”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but people still have to step in on the risky parts.\"”, then hovering “→ Ask what checking the AI's work costs them”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but humans still have to rescue the risky parts.\"”, then clicking “→ Ask what checking the AI costs”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Yes. There is interest, but people still have to step in on the risky parts.\"”, then clicking “→ Ask what checking the AI's work costs them”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"We have a lot of pilots and experiments already.\"”, then hovering “→ Inspect the pilot stack”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"We have a lot of pilots and experiments already.\"”, then hovering “→ Ask what AI pilots and tools they already have”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"We have a lot of pilots and experiments already.\"”, then clicking “→ Inspect the pilot stack”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"We have a lot of pilots and experiments already.\"”, then clicking “→ Ask what AI pilots and tools they already have”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Can you just show me what it does?\"”, then hovering “→ Choose narrow use case”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Can you just show me what it does?\"”, then hovering “→ Pick one small workflow to test first”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Can you just show me what it does?\"”, then clicking “→ Choose narrow use case”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “\"Can you just show me what it does?\"”, then clicking “→ Pick one small workflow to test first”",
           "result": "8 lines appear, 12 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then hovering “\"Leadership wants movement, but no one has agreed on the first workflow yet.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then hovering “\"Leadership wants movement, but no one has agreed on the first workflow yet.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then clicking “\"Leadership wants movement, but no one has agreed on the first workflow yet.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “\"Leadership wants movement, but no one has agreed on the first workflow yet.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then hovering “\"The pressure is real, but governance will block anything too broad.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then hovering “\"The pressure is real, but governance will block anything too broad.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “\"The pressure is real, but governance will block anything too broad.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then hovering “\"Mostly curiosity for now.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then hovering “\"Mostly curiosity for now.\"”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Separate a mandate from a real workflow need”, then clicking “\"Mostly curiosity for now.\"”",
+          "what": "clicking “AI-Native Buyer Discovery Framework”, then clicking “Ask whether this is a mandate or a real need”, then clicking “\"Mostly curiosity for now.\"”",
           "result": "6 lines appear, 3 disappear — see above"
         },
         {
-          "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then hovering “→ Map the workflow”",
+          "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then hovering “→ Ask them to walk through how it works today”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then clicking “→ Map the workflow”",
+          "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then clicking “→ Ask them to walk through how it works today”",
           "result": "9 lines appear, 12 disappear — see above"
         },
         {
@@ -4284,7 +4236,7 @@
         },
         {
           "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"We've got a pretty standard global hiring setup.\"”, then clicking “→ Walk through the workflow”",
-          "result": "shows the same screen as clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then clicking “→ Map the workflow”"
+          "result": "shows the same screen as clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"Yeah, every new country is a fire drill for legal and finance.\"”, then clicking “→ Ask them to walk through how it works today”"
         },
         {
           "what": "clicking “Global Contractor Management / EOR / Global Employment”, then clicking “\"We've got a pretty standard global hiring setup.\"”, then hovering “→ Ask for a recent example”",
@@ -5534,11 +5486,11 @@
           "result": "no hover change"
         },
         {
-          "what": "hovering “Open this workstream ▾”",
+          "what": "hovering “Show details ▾”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”",
+          "what": "clicking “Show details ▾”",
           "result": "8 lines appear, 1 disappear — see above"
         },
         {
@@ -5583,7 +5535,7 @@
         },
         {
           "what": "clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK open ▾”",
-          "result": "shows the same screen as clicking “Open this workstream ▾”"
+          "result": "shows the same screen as clicking “Show details ▾”"
         },
         {
           "what": "choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then hovering “×”",
@@ -5682,59 +5634,59 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK close ▴”",
+          "what": "clicking “Show details ▾”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK close ▴”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK close ▴”",
+          "what": "clicking “Show details ▾”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK close ▴”",
           "result": "shows the same screen as the room at rest"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then hovering “CUSTOMER REQUEST”",
+          "what": "clicking “Show details ▾”, then hovering “CUSTOMER REQUEST”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then clicking “CUSTOMER REQUEST”",
+          "what": "clicking “Show details ▾”, then clicking “CUSTOMER REQUEST”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then hovering “YOUR PROPOSED POSITION”",
+          "what": "clicking “Show details ▾”, then hovering “YOUR PROPOSED POSITION”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then clicking “YOUR PROPOSED POSITION”",
+          "what": "clicking “Show details ▾”, then clicking “YOUR PROPOSED POSITION”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then hovering “STATUS blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then hovering “STATUS blocking in progress to do at risk resolved”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then clicking “STATUS blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then clicking “STATUS blocking in progress to do at risk resolved”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”",
           "result": "1 lines appear, 1 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”",
           "result": "3 lines appear, 2 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”",
           "result": "3 lines appear, 2 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “at_risk” in “blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then choosing “at_risk” in “blocking in progress to do at risk resolved”",
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”",
+          "what": "clicking “Show details ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”",
           "result": "3 lines appear, 2 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then hovering “Copy signature plan →”",
+          "what": "clicking “Show details ▾”, then hovering “Copy signature plan →”",
           "result": "no hover change"
         },
         {
@@ -5743,7 +5695,7 @@
         },
         {
           "what": "clicking “Mark it settled”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan RESOLVED open ▾”",
-          "result": "shows the same screen as clicking “Open this workstream ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”"
+          "result": "shows the same screen as clicking “Show details ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”"
         },
         {
           "what": "clicking “LEGAL liability, indemnification, and requested contract changes TO DO open ▾”, then hovering “LEGAL liability, indemnification, and requested contract changes TO DO close ▴”",
@@ -5802,35 +5754,35 @@
           "result": "no visible change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan BLOCKING close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan BLOCKING close ▴”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan BLOCKING close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “blocking” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan BLOCKING close ▴”",
           "result": "1 lines appear, 8 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan IN PROGRESS close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan IN PROGRESS close ▴”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan IN PROGRESS close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “clearing” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan IN PROGRESS close ▴”",
           "result": "1 lines appear, 9 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan TO DO close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan TO DO close ▴”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan TO DO close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “todo” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan TO DO close ▴”",
           "result": "1 lines appear, 9 disappear — see above"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan RESOLVED close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”, then hovering “BUSINESS APPROVAL stakeholder engagement and the signature plan RESOLVED close ▴”",
           "result": "no hover change"
         },
         {
-          "what": "clicking “Open this workstream ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan RESOLVED close ▴”",
+          "what": "clicking “Show details ▾”, then choosing “settled” in “blocking in progress to do at risk resolved”, then clicking “BUSINESS APPROVAL stakeholder engagement and the signature plan RESOLVED close ▴”",
           "result": "shows the same screen as clicking “Mark it settled”"
         }
       ]
@@ -5935,27 +5887,27 @@
           "result": "no visible change"
         },
         {
-          "what": "choosing “1566cb07-1636-4111-a67c-5a9cf945a489” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “071d8700-9866-4d89-9505-d2ae0e9d4142” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “7f35b092-5496-4959-b9b5-2be3aad146ef” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “d538d8bb-5711-4402-9ee8-50d6a61f678a” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “e63881ec-b09c-4893-86bd-fb6cb51bf78b” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “7500767e-0bd6-4350-a751-697dd463666e” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “3c86aafd-bf35-46aa-bba4-cb6a428104a1” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “8ed51ada-acda-4eb7-b3da-7a976d36a580” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “1da335e4-d952-4a1a-a79f-c8a0955d7fbc” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “33f32ce6-4d2d-4c6d-af96-37781cc27c55” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
-          "what": "choosing “cfdcd8e5-49be-468a-85e1-6fef435efe5e” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
+          "what": "choosing “8dbbd885-8f83-472c-b35b-4adba69d87b3” in “Choose a contact… Priya Raghavan — Board Partner, Halcyon Ridge Ventures (Series C lead) T”",
           "result": "no visible change"
         },
         {
