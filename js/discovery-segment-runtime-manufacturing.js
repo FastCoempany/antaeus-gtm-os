@@ -52,13 +52,13 @@
   var base = runtime.frameworks.manufacturing;
 
   var supportDossier = [
-    { title:"Operational consequence", items:["Line-down risk or missed OTIF on the supplier under discussion", "Working-capital distortion when the disruption was last absorbed manually", "Executive visibility: whether the resilience story reaches the board or dies in a spreadsheet"] },
+    { title:"Operational consequence", items:["Line-down risk or missed OTIF on the supplier under discussion", "Working-capital distortion when the disruption was last absorbed manually", "Executive visibility: whether the resilience story reaches the board or stays stuck in a spreadsheet"] },
     { title:"What they need to see", items:["Accuracy of the supplier or N-tier map against what their ERP knows", "Credibility of one scenario they already simulated internally", "Freshness of monitoring signal on a supplier they care about right now"] },
     { title:"Decision path", items:["Supply chain risk or resilience owner who feels the disruption cost", "Procurement or sourcing lead who owns the supplier relationship", "Operations / manufacturing executive who absorbs the downstream pain"] }
   ];
   var objectionLibrary = [
     { trigger:"we already monitor suppliers", reply:"Good. Which supplier surprised you most in the last 18 months, and what was the monitoring layer doing the week before it did?" },
-    { trigger:"we have an ERP for this", reply:"ERPs tell you what you bought. The question is whether they tell you which supplier is about to fail you. Walk me through how a real disruption becomes visible today." },
+    { trigger:"we have an ERP for this", reply:"Your ERP shows what you bought. It usually does not warn you which supplier is about to miss a delivery. Walk me through how a real disruption becomes visible today." },
     { trigger:"just send a dashboard", reply:"Happy to. First tell me which decision the dashboard is supposed to inform — resilience, diligence, sourcing, or executive narrative — because the dashboards for each are different." },
     { trigger:"data is too messy for this to work", reply:"Fair. Then the first question is not about our product. It is whether the supplier data is good enough for anyone — internal or external — to run a risk system on. What state is it in?" }
   ];
@@ -121,7 +121,7 @@
         label:"Everything already sits in ERP",
         reply:"ERP gives record. It usually does not give the visibility a decision actually needs across risk, consequence, and response timing. Where does the picture still need manual stitching?",
         actions:[
-          jumpNode("Map the current stitching", "current-state-truth", "stitching", "blu"),
+          jumpNode("Map the manual workarounds", "current-state-truth", "stitching", "blu"),
           jumpNode("Find the blind spot", "pain-and-consequence", "network-blindness", "org")
         ]
       },
@@ -154,14 +154,14 @@
       }
     ],
     segments:[
-      segment("opening-frame","01","Opening frame","Start by classifying the workflow.",true,[
+      segment("opening-frame","01","Opening","Find out which workflow this is about and who runs it.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most teams can monitor some suppliers. The real question is whether you can see operational consequence early enough to act before a disruption becomes expensive. Is that where this lives for you too?\"","Use this when they will diagnose before seeing product.",true,[
           branch("CONFIRMS","ok","\"Yes. We see pieces of the picture, but the real risk still gets stitched together manually.\"","\"Good. Is the live problem more proactive scenario planning or reactive supplier monitoring?\"",[
             jumpNode("Classify the workflow", "opening-frame", "motion-type", "grn"),
-            jumpNode("Map the stitching", "current-state-truth", "stitching", "blu")
+            jumpNode("Map the manual workarounds", "current-state-truth", "stitching", "blu")
           ],"Manual stitching is part of the current process.","You still need the proactive vs reactive split."),
           branch("TOOL DEFENSE","ly","\"We already have ERP views, alerts, and supplier tools.\"","\"Understood. Then where does the picture still break: supplier visibility, consequence modeling, or cross-functional response?\"",[
-            jumpNode("Map the stitching", "current-state-truth", "stitching", "org"),
+            jumpNode("Map the manual workarounds", "current-state-truth", "stitching", "org"),
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "blu")
           ],"The buyer is defending the stack, not denying the gap.","You still need the first broken decision layer."),
           branch("PITCH REQUEST","fl","\"Can you just show me the platform?\"","\"I can. First tell me whether this is about proactive scenario planning or reactive monitoring so I do not show the wrong workflow.\"",[
@@ -169,7 +169,7 @@
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "pur")
           ],"The buyer has asked to see the product before describing the workflow.","You still need the active workflow before demo.")
         ]),
-        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption hits?\"","This has to be known early because the rest of the call changes.",false,[
+        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is more urgent today: spotting supplier risk earlier, or modeling consequence before the disruption hits?\"","Find this out early, because the rest of the call depends on it.",false,[
           branch("REACTIVE MONITORING","ok","\"We need better supplier visibility and alerting first.\"","\"Good. Then what signal is still late, incomplete, or too noisy to act on?\"",[
             jumpNode("Map the current review", "current-state-truth", "supplier-review", "grn"),
             jumpNode("Name the blind spot", "pain-and-consequence", "network-blindness", "blu")
@@ -180,7 +180,7 @@
           ],"This is a proactive planning use case.","You still need the live planning failure."),
           branch("BOTH","fl","\"Honestly, it is both.\"","\"That is normal. Which one creates the first expensive miss today: weak visibility or weak consequence planning?\"",[
             jumpNode("Use one disruption", "current-state-truth", "live-example", "red"),
-            jumpNode("Map the stitching", "current-state-truth", "stitching", "blu")
+            jumpNode("Map the manual workarounds", "current-state-truth", "stitching", "blu")
           ],"The need spans both categories.","You still need the first visible failure.")
         ]),
         node("opening-frame","sideways","ri","If the call starts sideways","\"If this is still early, that is fine. What made this worth looking at now instead of after the next sourcing cycle or disruption?\"","Use this when they are curious but not yet committed.",false,[
@@ -198,8 +198,8 @@
           ],"The call may be exploratory only.","You still need the threshold that would make this move.")
         ])
       ]),
-      segment("current-state-truth","02","Current-state truth","Map how the risk picture gets made.",true,[
-        node("current-state-truth","stitching","fu","Map the current stitching","\"Walk me through how the team pieces together supplier risk or disruption consequence today. What systems, spreadsheets, and people still have to be stitched together before anyone trusts the picture?\"","Start here when they admit the workflow is fragmented.",true,[
+      segment("current-state-truth","02","How they work today","Ask how they find out about supply or quality risk today.",true,[
+        node("current-state-truth","stitching","fu","Map the manual workarounds","\"Walk me through how the team pieces together supplier risk or disruption consequence today. What systems, spreadsheets, and people still have to be stitched together before anyone trusts the picture?\"","Start here when they admit the workflow is fragmented.",true,[
           branch("STITCHING CLEAR","ok","\"It is ERP, supplier data, email, and spreadsheets, then someone assembles the picture manually.\"","\"Which part breaks first: data freshness, network visibility, or consequence modeling?\"",[
             jumpNode("Name the blind spot", "pain-and-consequence", "network-blindness", "grn"),
             jumpNode("Use one disruption", "current-state-truth", "live-example", "blu")
@@ -231,7 +231,7 @@
           branch("LIVE EVENT READY","ok","\"We had a recent supplier or program event where the team reacted later than it should have.\"","\"What did the team not know early enough: the supplier risk, the operational consequence, or the response path?\"",[
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "grn"),
             jumpNode("Test the trigger", "trigger-and-urgency", "recent-event", "blu")
-          ],"The call now has a real event to work from.","You still need the specific missing truth inside it."),
+          ],"The call now has a real event to work from.","You still need the specific open question inside it."),
           branch("HYPOTHETICAL ONLY","ly","\"Nothing dramatic, but we can imagine where this would hurt.\"","\"Fine. Then which modeled downside worries the team most: line-down risk, missed OTIF, cost shock, or supplier failure?\"",[
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "org"),
             jumpNode("Agree what they need to see", "proof-threshold", "scenario-proof", "blu")
@@ -242,7 +242,7 @@
           ],"The call is still too abstract.","You still need one real decision moment.")
         ])
       ]),
-      segment("pain-and-consequence","03","Pain and consequence","Make the consequence expensive.",true,[
+      segment("pain-and-consequence","03","The problem and its cost","Find out what a missed risk costs them in downtime, scrap, or late orders.",true,[
         node("pain-and-consequence","operational-consequence","ri","Name the operational consequence","\"When the current picture is late or incomplete, what becomes expensive first: line-down risk, missed OTIF, working-capital distortion, revenue loss, compliance exposure, or cyber supplier risk?\"","Start here once the workflow gap is visible.",true,[
           branch("CONSEQUENCE CLEAR","ok","\"We react late and the operational consequence becomes visible too late to shape the response well.\"","\"Which consequence hurts most in practice today?\"",[
             jumpNode("Quantify the consequence", "pain-and-consequence", "reactive-firefight", "grn"),
@@ -253,25 +253,25 @@
             jumpNode("Find the owner", "stakeholder-and-ownership", "owner-split", "blu")
           ],"The cost may still be framed too softly.","You still need the business downside beneath the process pain."),
           branch("NOTHING DRAMATIC","fl","\"Nothing catastrophic. It is just more reactive than we want.\"","\"Reactive to what exactly, and what does that reactivity cost the business when it repeats?\"",[
-            jumpNode("Find the firefight", "pain-and-consequence", "reactive-firefight", "red"),
+            jumpNode("Find the firefighting", "pain-and-consequence", "reactive-firefight", "red"),
             jumpNode("Test urgency", "trigger-and-urgency", "soft-trigger", "blu")
           ],"The pain is being minimized.","You still need the repeated downside, not just the posture.")
         ]),
-        node("pain-and-consequence","network-blindness","pr","Find the network blind spot","\"What part of the supplier or program network stays least visible today: N-tier mapping, supplier health, consequence path, or response ownership?\"","Use this when the problem sounds like missing visibility.",false,[
+        node("pain-and-consequence","network-blindness","pr","Find what they can't see in the supplier network","\"What part of the supplier or program network stays least visible today: N-tier mapping, supplier health, consequence path, or response ownership?\"","Use this when the problem sounds like missing visibility.",false,[
           branch("N-TIER GAP","ok","\"We do not see deep enough into the network to know where risk is building up.\"","\"When that gap matters, what downstream decision gets weaker first?\"",[
             jumpNode("Name the consequence", "pain-and-consequence", "operational-consequence", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "risk-proof", "blu")
-          ],"Network depth is part of the missing truth.","You still need the decision that suffers first."),
+          ],"Network depth is part of the open question.","You still need the decision that suffers first."),
           branch("FRESHNESS GAP","ly","\"We eventually know enough, but not early enough to act well.\"","\"What does that delay actually cost: slower response, wrong sourcing move, or poor planning?\"",[
             jumpNode("Quantify the consequence", "pain-and-consequence", "reactive-firefight", "org"),
             jumpNode("Agree what they need to see", "proof-threshold", "risk-proof", "blu")
-          ],"The problem may be timing more than coverage.","You still need the downside of late truth."),
+          ],"The problem may be timing more than coverage.","You still need the downside of late information."),
           branch("OWNERSHIP GAP","fl","\"The data exists, but no one owns the response clearly.\"","\"Then where does the response stall first when the signal comes in?\"",[
             jumpNode("Find the owner", "stakeholder-and-ownership", "owner-split", "red"),
             jumpNode("Use one disruption", "current-state-truth", "live-example", "blu")
           ],"The blind spot may be response ownership, not data.","You still need the stalled response path.")
         ]),
-        node("pain-and-consequence","reactive-firefight","fu","Quantify the reactive firefight","\"When the team has to scramble, what does it actually spend: time, premium freight, working capital, lost output, or leadership attention?\"","Use this when they name consequence but not scale.",false,[
+        node("pain-and-consequence","reactive-firefight","fu","Put a number on the firefighting","\"When the team has to scramble, what does it actually spend: time, premium freight, working capital, lost output, or leadership attention?\"","Use this when they name consequence but not scale.",false,[
           branch("COST IS REAL","ok","\"The scramble burns real money, attention, and operational confidence.\"","\"Who feels that pain first: plant operations, procurement, finance, or leadership?\"",[
             jumpNode("Find the owner", "stakeholder-and-ownership", "owner-split", "grn"),
             jumpNode("Test urgency", "trigger-and-urgency", "recent-event", "blu")
@@ -286,7 +286,7 @@
           ],"Stress is hiding a business consequence.","You still need the target that gets hit.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find why this matters now.",true,[
+      segment("trigger-and-urgency","04","Why now","Find out what changed that makes this worth solving now.",true,[
         node("trigger-and-urgency","recent-event","ri","Use the recent disruption or mandate","\"What changed recently that made this worth attention now instead of next quarter: disruption, geopolitical risk, cyber incident, ESG mandate, sourcing failure, or executive pressure?\"","Start here when there is active momentum.",true,[
           branch("CLEAR TRIGGER","ok","\"A real event or mandate forced this out of the background.\"","\"What deadline or operational moment makes that urgent right now?\"",[
             jumpNode("Find the owner", "stakeholder-and-ownership", "owner-split", "grn"),
@@ -315,7 +315,7 @@
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
           ],"Nothing here is urgent enough to push yet.","You still need the watchpoint or an explicit no.")
         ]),
-        node("trigger-and-urgency","exploratory","fu","Keep an exploratory call honest","\"If this is still early, what would have to happen before the organization treated supplier risk or resilience modeling as a real operating priority?\"","Use this when urgency is not active.",false,[
+        node("trigger-and-urgency","exploratory","fu","Handle an early-research call","\"If this is still early, what would have to happen before the organization treated supplier risk or resilience modeling as a real operating priority?\"","Use this when urgency is not active.",false,[
           branch("TRIGGER NAMED","ok","\"A disruption, board question, cyber event, or sourcing miss would make it active immediately.\"","\"Good. Then the right next step is to anchor on the earliest warning sign before that happens.\"",[
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "grn"),
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
@@ -324,13 +324,13 @@
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "org"),
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "blu")
           ],"The call should stay light and honest.","You still need the reason to re-open later."),
-          branch("WRONG PERSON","fl","\"Leadership would have to answer that.\"","\"Then the fastest truth is getting that owner into the next conversation instead of guessing here.\"",[
+          branch("WRONG PERSON","fl","\"Leadership would have to answer that.\"","\"Then the fastest answer is getting that owner into the next conversation instead of guessing here.\"",[
             jumpNode("Find the owner", "stakeholder-and-ownership", "wrong-owner", "red"),
             jumpNode("Shape the next review", "next-step-lock", "live-review", "blu")
           ],"The trigger owner is not in the room.","You still need the right leadership seat.")
         ])
       ]),
-      segment("stakeholder-and-ownership","05","Stakeholder and ownership","Find who can move this.",true,[
+      segment("stakeholder-and-ownership","05","Who's involved","Find out who owns the problem and who approves spend on it.",true,[
         node("stakeholder-and-ownership","owner-split","pr","Map the owner split","\"Who feels the problem first today: supply chain ops, procurement, manufacturing, a resilience office, finance, or program leadership?\"","Start here once consequence and trigger are visible.",true,[
           branch("OPS LEADS","ok","\"Operations or supply chain owns the downside because continuity is the main issue.\"","\"Good. What would they need to believe before changing the current planning or review cadence?\"",[
             jumpNode("Agree the scenario evidence", "proof-threshold", "scenario-proof", "grn"),
@@ -374,7 +374,7 @@
           ],"The org map is still fuzzy.","You still need the accountability line.")
         ])
       ]),
-      segment("proof-threshold","06","Evidence threshold","Find what would make them believe.",true,[
+      segment("proof-threshold","06","What they need to see","Agree on the test that would show it works on their data.",true,[
         node("proof-threshold","real-proof","pr","Name what they really need to see","\"What would make this feel real to your team: live supplier-risk visibility, credible scenario modeling, a cleaner response process, or all three?\"","Start here when the buyer says they need evidence.",true,[
           branch("RISK VISIBILITY","ok","\"We need fresher, more trustworthy supplier signal on our own network.\"","\"Good. Then the next review should prove that on live suppliers, not in generic dashboards.\"",[
             jumpNode("Agree the risk evidence", "proof-threshold", "risk-proof", "grn"),
@@ -426,30 +426,30 @@
             jumpNode("Agree the risk evidence", "proof-threshold", "risk-proof", "org"),
             jumpNode("Agree the scenario evidence", "proof-threshold", "scenario-proof", "blu")
           ],"There are multiple kinds of evidence.","You still need the primary kill switch."),
-          branch("NO EVIDENCE BAR","fl","\"We would know it when we see it.\"","\"That usually kills momentum. What has to be true in the next review for this to justify another one?\"",[
+          branch("NO EVIDENCE BAR","fl","\"We would know it when we see it.\"","\"That usually stalls the deal. What has to be true in the next review for this to justify another one?\"",[
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "red"),
             jumpNode("Lock a real next step", "next-step-lock", "live-review", "blu")
           ],"The evidence threshold is dangerously vague.","You still need an explicit advancement rule.")
         ])
       ]),
-      segment("current-vendor-and-displacement","07","Current vendor and displacement","Test why the current stack still wins.",false,[
+      segment("current-vendor-and-displacement","07","Current vendor","Find out why their current tools are still in place.",false,[
         node("current-vendor-and-displacement","tool-stack","ri","Map the current stack","\"What is doing the work today: ERP, supplier risk tools, spreadsheets, PLM, consultants, alerts, or manual escalation?\"","Start here once they say they already have tooling.",true,[
           branch("STACK MIX CLEAR","ok","\"It is a mix of systems plus people translating the picture manually.\"","\"Which part gives the team the false sense that the risk picture is handled when it actually is not?\"",[
             jumpNode("Return to blind spot", "pain-and-consequence", "network-blindness", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "blu")
           ],"The incumbent stack is visible as a patchwork, not a unified operating layer.","You still need the false-confidence layer."),
           branch("POINT TOOL DEFENSE","ly","\"We already have a supplier intelligence or alerting layer.\"","\"What still forces the team to leave that tool and build the real answer elsewhere?\"",[
-            jumpNode("Map the stitching", "current-state-truth", "stitching", "org"),
+            jumpNode("Map the manual workarounds", "current-state-truth", "stitching", "org"),
             jumpNode("Return to consequence", "pain-and-consequence", "operational-consequence", "blu")
           ],"The current tool may only solve part of the problem.","You still need the manual escape hatch."),
           branch("SPREADSHEET CULTURE","fl","\"Spreadsheets still run most of it.\"","\"Then where do spreadsheets fail first: freshness, scale, consequence modeling, or cross-team response?\"",[
-            jumpNode("Return to stitching", "current-state-truth", "stitching", "red"),
+            jumpNode("Return to the manual workarounds", "current-state-truth", "stitching", "red"),
             jumpNode("Return to blind spot", "pain-and-consequence", "network-blindness", "blu")
           ],"The incumbent may be spreadsheet-centric.","You still need the first decision that suffers from it.")
         ]),
         node("current-vendor-and-displacement","internal-motion","fu","If they built the process themselves","\"What does the current internal process do well today, and where does it still fail to make the organization earlier or safer?\"","Use this when they have a homegrown workflow.",false,[
           branch("INTERNAL WORKFLOW PARTIAL","ok","\"It covers pieces of the response, but we still stitch the hard parts manually.\"","\"Then we are not replacing recordkeeping. We are replacing the manual operating layer still wrapped around it.\"",[
-            jumpNode("Return to stitching", "current-state-truth", "stitching", "grn"),
+            jumpNode("Return to the manual workarounds", "current-state-truth", "stitching", "grn"),
             jumpNode("Agree the workflow evidence", "proof-threshold", "workflow-proof", "blu")
           ],"The internal process covers only part of the job.","You still need the missing operating layer."),
           branch("POLITICAL RISK","ly","\"There is sunk cost in how we do this today.\"","\"Understood. What outcome would be strong enough to justify changing that cadence anyway?\"",[
@@ -476,7 +476,7 @@
           ],"The blocker may be weak urgency rather than true switching cost.","You still need the real source of inertia.")
         ])
       ]),
-      segment("decision-architecture","08","Decision architecture","Map how this actually moves.",false,[
+      segment("decision-architecture","08","How they'll decide","Find out who signs off and in what order.",false,[
         node("decision-architecture","buying-path","pr","Map the buying path","\"If this became real, who would sponsor, who would evaluate, and who could slow or stop it?\"","Start here once sponsor and evidence are partly visible.",true,[
           branch("PATH CLEAR","ok","\"Supply chain or operations would sponsor, procurement would shape it, and IT or finance would come in later.\"","\"Good. What would procurement or operations have to prove before this becomes real?\"",[
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "grn"),
@@ -520,7 +520,7 @@
           ],"Later-stage governance is premature.","You still need the first serious internal review.")
         ])
       ]),
-      segment("next-step-lock","09","Next-step lock","Leave with a real review.",true,[
+      segment("next-step-lock","09","Next step","Leave with a dated review meeting and a named owner.",true,[
         node("next-step-lock","live-review","pr","Lock the resilience review","\"The next best step sounds like a live review with operations, procurement, and one real supplier or disruption path. Does that fit how your team would validate this?\"","Start here whenever evidence points to a live review.",true,[
           branch("YES LOCK IT","ok","\"Yes. That is the right shape.\"","\"Good. Which supplier, program, or disruption path should we test so the review is worth their time?\"",[
             jumpNode("Choose the path", "next-step-lock", "scope-path", "grn"),
@@ -538,11 +538,11 @@
         node("next-step-lock","scope-path","fu","Choose the path","\"What should anchor the review: one supplier set, one disruption scenario, one plant or program path, or one procurement diligence workflow?\"","Use this to stop the next step from becoming generic.",false,[
           branch("SUPPLIER SET","ok","\"Use the supplier set or risk cluster the team already debates.\"","\"Perfect. That makes the review real immediately.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Go to After the call", "segment:post-call-routing", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
           branch("PLANT OR PROGRAM","ly","\"Start with one plant, program, or sourcing path before going broader.\"","\"That is a strong first scope. Who owns that path enough to make the session honest?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "org"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A narrower proving path may be safer.","You still need the right owner and the date."),
           branch("NO PATH YET","fl","\"We do not know which path to use yet.\"","\"Then the next step is not locked. Who can pick that path before the meeting goes on calendar?\"",[
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "red"),
@@ -551,14 +551,14 @@
         ]),
         node("next-step-lock","attendee-shape","ri","Shape the attendee list","\"Who has to be in that next review for the outcome to matter: operations, procurement, resilience, finance, or someone else?\"","Use this to keep the meeting from getting decorative.",false,[
           branch("RIGHT PEOPLE NAMED","ok","\"Operations and procurement need to be there. Others can come later if the review hits.\"","\"Good. Then this is close to lockable.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "grn"),
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "grn"),
             jumpNode("Write the handoff", "post-call-routing", "handoff", "blu")
           ],"The review has the right seats.","You still need the date and owner."),
           branch("EXEC NEEDED NOW","ly","\"Leadership or finance should be there from the start.\"","\"Fine. Then the agenda has to stay tight and focused on evidence so the session is worth senior time.\"",[
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "org"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"The meeting is executive-weighted.","You still need the evidence question to justify it."),
-          branch("ATTENDEES UNCLEAR","fl","\"We can figure that out later.\"","\"That usually kills momentum. Who owns deciding the attendee list before the follow-up goes out?\"",[
+          branch("ATTENDEES UNCLEAR","fl","\"We can figure that out later.\"","\"That usually stalls the deal. Who owns deciding the attendee list before the follow-up goes out?\"",[
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "blu")
           ],"The meeting is not really locked yet.","You still need the owner of the invite list.")
@@ -566,59 +566,59 @@
         node("next-step-lock","soft-deferral","va","If the next step stays soft","\"What has to become true before the next conversation is worth real calendar time?\"","Use this when they want to stay polite but noncommittal.",false,[
           branch("ADVANCEMENT CONDITION","ok","\"If we can test one live path with the right people, the next session is worth scheduling.\"","\"That is enough. Let us route that exact condition forward.\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A real advancement condition is now named.","You still need to carry it forward cleanly."),
           branch("SEND MATERIAL","ly","\"Send material and we will see.\"","\"I will, but I want to attach it to the one decision you still need to make, not a generic deck. What is that decision?\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "org"),
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "blu")
           ],"The buyer is deferring without a clear gate.","You still need the decision the material should support."),
           branch("NO REAL NEXT","fl","\"Nothing specific. We just need to think.\"","\"Then I would rather leave with the honest blocker than pretend we have a next step. What is still missing?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"Momentum is still too soft to trust.","You still need the missing truth in plain language.")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"Momentum is still too soft to trust.","You still need the open question in plain language.")
         ])
       ]),
-      segment("post-call-routing","10","Post-call routing","Hand off only what helps.",false,[
-        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to strip the call down to usable supply-chain truth.",false,[
+      segment("post-call-routing","10","After the call","Record what you learned and decide where it goes next.",false,[
+        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to boil the call down to the supply-chain facts you can use.",false,[
           branch("HANDOFF CLEAN","ok","\"Carry the live path, owner split, what they need to see, and next review condition.\"","\"Good. Keep only what changes the next step.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "grn"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"The handoff can now start from signal instead of notes.","You still need the one missing truth to chase."),
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "grn"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"The handoff can now start from signal instead of notes.","You still need the one open question to chase."),
           branch("HANDOFF TOO VERBAL","ly","\"We have a lot of detail, but not a clean signal yet.\"","\"Then throw away anything that does not change the next review question. What is actually usable?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "org"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "org"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The raw detail exists, but the usable signal is still diluted.","You still need the core problem and where it goes next."),
           branch("NO HANDOFF HABIT","fl","\"We do not really capture this cleanly today.\"","\"Then the minimum capture rule is simple: owner, problem, what they need to see, next condition.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The handoff discipline itself is weak.","You still need the one capture rule that sticks.")
         ]),
-        node("post-call-routing","missing-truth","fu","Name the missing truth","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
-          branch("MISSING TRUTH CLEAR","ok","\"We still need the live path, the right owner seat, or the evidence benchmark.\"","\"Good. Then route the call to the room most likely to surface that fast.\"",[
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
-          ],"The missing truth is clearly named.","You still need the room best suited to chase it."),
+        node("post-call-routing","missing-truth","fu","Name what is still unknown","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
+          branch("MISSING TRUTH CLEAR","ok","\"We still need the live path, the right owner seat, or the evidence benchmark.\"","\"Good. Then send what you learned to the place most likely to answer that quickly.\"",[
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "grn"),
+            action("Set the next meeting", "segment:next-step-lock", "blu")
+          ],"The open question is clearly named.","You still need to decide where to follow up on it."),
           branch("MISSING OWNER","ly","\"We know the gap, but not who can answer it.\"","\"Then the next room should start with the owner map, not another product conversation.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "org"),
+            action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
-          ],"The truth gap is visible but ownerless.","You still need the best route to the right person."),
+          ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
           branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the next disruption teaches the lesson the hard way.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")
         ]),
-        node("post-call-routing","room-route","pr","Choose the next room","\"Which next room gives the strongest immediate leverage: shape the next review, attach truth to the live path, or name the failure pattern before it repeats?\"","Use this to route with intent instead of habit.",false,[
-          branch("CALL PLANNER","ok","\"The next step is a tighter resilience review with a clearer question to answer.\"","\"Then route this to Call Planner with the live path, owner map, and what they need to see.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "grn"),
+        node("post-call-routing","room-route","pr","Choose where this goes next","\"Which next room gives the strongest immediate leverage: shape the next review, attach what you learned to the live path, or name the failure pattern before it repeats?\"","Use this to route with intent instead of habit.",false,[
+          branch("NEXT MEETING","ok","\"The next step is a tighter resilience review with a clearer question to answer.\"","\"Then set the next meeting and bring the live path, owner map, and what they need to see.\"",[
+            action("Set the next meeting", "segment:next-step-lock", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the open question in plain language."),
           branch("DEAL WORKSPACE","ly","\"There is already a live supplier, program, or sourcing path here.\"","\"Then attach the what is actually happening to that path immediately before the story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
-          ],"The truth belongs with a live operating object.","You still need the top risk to carry with it."),
+          ],"These facts belong on a live deal.","You still need the top risk to carry with it."),
           branch("FUTURE AUTOPSY","fl","\"This still feels like reactive drift or activity without an owner.\"","\"Then route it to Future Autopsy now and name the failure pattern before the next disruption hides it again.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The next room may need to fix what has drifted, not push the deal forward.","You still need the failure pattern in plain language.")
         ])
       ])

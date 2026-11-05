@@ -64,7 +64,7 @@
   ];
   var inboundQuestionHandlers = [
     { question:"How is this different from Gong or Clari?", bridge:"Depends on what you are still doing manually despite having them. What does a manager still rescue on Mondays that the tool does not catch?" },
-    { question:"Does this replace Salesforce?", bridge:"No. The question is whether the CRM keeps lying to you — whether stage fidelity, next-step truth, and forecast credibility survive the current process." },
+    { question:"Does this replace Salesforce?", bridge:"No. The question is whether the CRM keeps lying to you — whether stage fidelity, next steps, and forecast credibility survive the current process." },
     { question:"Can you integrate with our stack?", bridge:"Almost certainly. More useful question: which piece of the stack would you consolidate or retire if this actually worked?" }
   ];
   var skipAheadHandlers = [
@@ -93,12 +93,12 @@
       {
         title:"Inspect one live commit",
         copy:"Use a live deal set instead of a dashboard summary.",
-        action:jumpNode("Open deal review", "current-state-truth", "deal-review", "blu")
+        action:jumpNode("Ask about deal reviews", "current-state-truth", "deal-review", "blu")
       },
       {
         title:"Name the forecast miss",
-        copy:"Get to the gap between commit language and live deal truth.",
-        action:jumpNode("Open forecast pain", "pain-and-consequence", "forecast-gap", "org")
+        copy:"Get to the gap between commit language and what is actually happening in live deals.",
+        action:jumpNode("Ask about forecast misses", "pain-and-consequence", "forecast-gap", "org")
       },
       {
         title:"Lock the inspection review",
@@ -146,15 +146,15 @@
       {
         id:"send-the-deck",
         label:"Send the deck",
-        reply:"Happy to. What should it help your team decide so this does not die as a polite follow-up after the forecast call?",
+        reply:"Happy to. What should it help your team decide so this does not end as a polite follow-up after the forecast call?",
         actions:[
-          jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
+          jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "red"),
           jumpNode("Clarify what they need to see", "proof-threshold", "live-proof", "blu")
         ]
       }
     ],
     segments:[
-      segment("opening-frame","01","Opening frame","Start on live forecast truth.",true,[
+      segment("opening-frame","01","Opening","Ask how much they trust this quarter's forecast and why.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most revenue teams already have plenty of activity data. The question is where managers still have to interpret what is real by hand before they trust the forecast. Is that true in your world too?\"","Use this when they will diagnose before seeing product.",true,[
           branch("CONFIRMS","ok","\"Yes. The signal is there, but trust still depends on the manager reading between the lines.\"","\"Where does that manual assessment happen most painfully: forecast calls, one-on-ones, or deal reviews?\"",[
             jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "blu"),
@@ -169,14 +169,14 @@
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "pur")
           ],"The buyer has asked to see the product before describing the workflow.","You still need one real pipeline pattern before demo.")
         ]),
-        node("opening-frame","live-deal","fu","Start from one live deal","\"Pick one deal leadership talks about like it is healthy, but a manager still does not fully trust. What is happening there?\"","Use this when the room is operator-heavy and ready to get concrete.",false,[
+        node("opening-frame","live-deal","fu","Start from one live deal","\"Pick one deal leadership talks about like it is healthy, but a manager still does not fully trust. What is happening there?\"","Use this when the people on the call run the work day to day and are ready to get concrete.",false,[
           branch("LIVE DEAL READY","ok","\"We have one in commit right now that still feels thinner than the stage language says.\"","\"Good. What exactly makes the manager distrust it: next step, champion, evidence, timing, or multithreading?\"",[
             jumpNode("Inspect the deal", "current-state-truth", "deal-review", "grn"),
             jumpNode("Name the commit risk", "pain-and-consequence", "commit-risk", "blu")
           ],"A live deal is now anchoring the call.","You still need the specific failure pattern inside it."),
           branch("PIPELINE ANSWER","ly","\"It is not one deal. It is the whole pipeline view that feels soft.\"","\"Understood. Where does the softness surface first: manager inspection, forecast category changes, or rep follow-up discipline?\"",[
             jumpNode("Map the manager assessment", "current-state-truth", "manager-read", "org"),
-            jumpNode("Open forecast pain", "pain-and-consequence", "forecast-gap", "blu")
+            jumpNode("Ask about forecast misses", "pain-and-consequence", "forecast-gap", "blu")
           ],"The problem may be systemic instead of isolated.","You still need the first visible break in the system."),
           branch("NO EXAMPLE","fl","\"I do not have a live one in mind.\"","\"Then use the last forecast call that got uncomfortable. What made the number hard to believe?\"",[
             jumpNode("Use the forecast miss", "pain-and-consequence", "forecast-gap", "red"),
@@ -198,7 +198,7 @@
           ],"The call may be exploratory only.","You still need the threshold that would make this real.")
         ])
       ]),
-      segment("current-state-truth","02","Current-state truth","Map how the number gets trusted.",true,[
+      segment("current-state-truth","02","How they work today","Ask how the forecast gets built and checked today.",true,[
         node("current-state-truth","manager-read","fu","Map the manager assessment","\"Walk me through how a frontline manager decides whether a deal is real today. What do they actually look at before they trust the commit?\"","Start here when they say trust still depends on human judgment.",true,[
           branch("MANUAL READ CLEAR","ok","\"Managers look at activity, next steps, and whether the rep sounds grounded, but it still takes a manual assessment.\"","\"Which part of that manual assessment breaks first: hidden risk, weak next step, or overconfident rep language?\"",[
             jumpNode("Name the hidden risk", "pain-and-consequence", "forecast-gap", "grn"),
@@ -218,7 +218,7 @@
             jumpNode("Name the commit risk", "pain-and-consequence", "commit-risk", "grn"),
             jumpNode("Find who feels it", "stakeholder-and-ownership", "manager-owner", "blu")
           ],"A live inspection checklist is now visible.","You still need the most expensive failure inside that checklist."),
-          branch("FIELDS LOOK CLEAN","ly","\"Mostly they check whether the stage and fields look clean.\"","\"And when the fields look clean but the deal still dies, what was missing?\"",[
+          branch("FIELDS LOOK CLEAN","ly","\"Mostly they check whether the stage and fields look clean.\"","\"And when the fields look clean but the deal is still lost, what was missing?\"",[
             jumpNode("Surface the blind spot", "pain-and-consequence", "commit-risk", "org"),
             jumpNode("Test the stack gap", "current-vendor-and-displacement", "tool-stack", "blu")
           ],"The current process may over-trust CRM hygiene.","You still need the unresolved evidence gaps behind clean fields."),
@@ -233,7 +233,7 @@
             jumpNode("Map the owner", "stakeholder-and-ownership", "manager-owner", "blu")
           ],"There is a clear rep-behavior gap.","You still need the evidence that behavior change matters enough to buy."),
           branch("MANAGER EFFICIENCY","ly","\"This is really more about manager efficiency.\"","\"Efficiency is fine, but where does inefficient inspection turn into forecast risk or rep drag?\"",[
-            jumpNode("Name the rep drag", "pain-and-consequence", "rep-drag", "org"),
+            jumpNode("Name where sellers lose time", "pain-and-consequence", "rep-drag", "org"),
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "sponsor", "blu")
           ],"The buyer is framing this as efficiency only.","You still need the revenue consequence, not just time saved."),
           branch("VISIBILITY ONLY","fl","\"Rep behavior is mostly fine. The issue is visibility.\"","\"Visibility into what exactly: risk, evidence, timing, or ownership?\"",[
@@ -242,14 +242,14 @@
           ],"The gap may be more observational than behavioral.","You still need the missing visibility object.")
         ])
       ]),
-      segment("pain-and-consequence","03","Pain and consequence","Make forecast pain expensive.",true,[
+      segment("pain-and-consequence","03","The problem and its cost","Find out what a wrong forecast costs them.",true,[
         node("pain-and-consequence","forecast-gap","ri","Name the forecast miss","\"When the number is wrong, what is the actual damage: missed call, bad board prep, wasted rep time, or hidden risk aging out?\"","Start here when they admit confidence in the data is limited.",true,[
           branch("FORECAST DAMAGE CLEAR","ok","\"We waste time debating the number and still miss what is actually slipping.\"","\"Which part hurts most: leadership trust, manager time, or revenue surprise?\"",[
             jumpNode("Quantify the cost", "pain-and-consequence", "rep-drag", "grn"),
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "sponsor", "blu")
           ],"Forecast pain is now explicit.","You still need its dominant cost and owner."),
           branch("TEAM TIME COST","ly","\"It mostly burns manager and rep time.\"","\"How much selling time or inspection time disappears because the signal is still thin?\"",[
-            jumpNode("Quantify rep drag", "pain-and-consequence", "rep-drag", "org"),
+            jumpNode("Put a number on lost seller time", "pain-and-consequence", "rep-drag", "org"),
             jumpNode("Check the behavior evidence", "proof-threshold", "behavior-shift", "blu")
           ],"The pain may start as time loss before it shows up as forecast miss.","You still need the magnitude of that drag."),
           branch("NOT MISSED YET","fl","\"We have not really missed yet. It just feels fragile.\"","\"Fragile how? Where do you still need a heroic manager read before backing the number?\"",[
@@ -271,7 +271,7 @@
             jumpNode("Agree the dashboard evidence", "proof-threshold", "dashboard-proof", "blu")
           ],"The hidden risk may be recency and decay.","You still need the signal that should have caught it.")
         ]),
-        node("pain-and-consequence","rep-drag","fu","Find the rep drag","\"How much rep time still goes into feeding CRM, recapping deals, or defending the pipeline instead of selling?\"","Use this when the buyer keeps framing everything as ops efficiency.",false,[
+        node("pain-and-consequence","rep-drag","fu","Find where sellers lose time","\"How much rep time still goes into feeding CRM, recapping deals, or defending the pipeline instead of selling?\"","Use this when the buyer keeps framing everything as ops efficiency.",false,[
           branch("REP DRAG REAL","ok","\"Reps still spend too much time updating, recapping, and chasing clean pipeline language.\"","\"If that went away, what would improve first: pipeline quality, manager trust, or selling time?\"",[
             jumpNode("Agree the behavior evidence", "proof-threshold", "behavior-shift", "grn"),
             jumpNode("Find the manager owner", "stakeholder-and-ownership", "manager-owner", "blu")
@@ -286,8 +286,8 @@
           ],"Trust is the real scope, not calendar load.","You still need the moment trust breaks.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find why this matters now.",true,[
-        node("trigger-and-urgency","board-pressure","ri","Ask what changed for leadership","\"What changed recently that made leadership care about forecast truth harder than before?\"","Use this when they mention misses, scrutiny, or planning pressure.",true,[
+      segment("trigger-and-urgency","04","Why now","Find out what changed that makes this worth solving now.",true,[
+        node("trigger-and-urgency","board-pressure","ri","Ask what changed for leadership","\"What changed recently that made leadership care about forecast accuracy harder than before?\"","Use this when they mention misses, scrutiny, or planning pressure.",true,[
           branch("MISS OR BOARD EVENT","ok","\"We missed, or leadership lost confidence in the number.\"","\"What happens before the next board or QBR if nothing changes?\"",[
             jumpNode("Use forecast call trigger", "trigger-and-urgency", "inspection-failure", "grn"),
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "sponsor", "blu")
@@ -301,11 +301,11 @@
             jumpNode("Check what they need to see", "proof-threshold", "live-proof", "blu")
           ],"There may be no active trigger.","You still need the future trigger or an honest downgrade.")
         ]),
-        node("trigger-and-urgency","inspection-failure","pr","Use the uncomfortable forecast call","\"Think about the last forecast or inspection call that got uncomfortable. What made the room doubt the number?\"","Use this when they cannot name urgency cleanly.",false,[
-          branch("CALL GOT SHAKY","ok","\"The questions got deeper than the rep story could support.\"","\"That is the exact moment I care about. What was missing in the deal truth?\"",[
+        node("trigger-and-urgency","inspection-failure","pr","Use a recent bad forecast call","\"Think about the last forecast or inspection call that got uncomfortable. What made people doubt the number?\"","Use this when they cannot name urgency cleanly.",false,[
+          branch("CALL GOT SHAKY","ok","\"The questions got deeper than the rep story could support.\"","\"That is the exact moment I care about. What was missing in the deal facts?\"",[
             jumpNode("Return to commit risk", "pain-and-consequence", "commit-risk", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "blu")
-          ],"You now have a real failure moment.","You still need the missing truth category inside it."),
+          ],"You now have a real failure moment.","You still need the open question inside it."),
           branch("NUMBER MOVED LATE","ly","\"The number changed late because the risk showed up too late.\"","\"What should have surfaced that risk earlier?\"",[
             jumpNode("Inspect the stack", "current-vendor-and-displacement", "tool-stack", "org"),
             jumpNode("Agree the dashboard evidence", "proof-threshold", "dashboard-proof", "blu")
@@ -315,7 +315,7 @@
             jumpNode("Use softer trigger", "trigger-and-urgency", "soft-trigger", "blu")
           ],"Urgency is pattern-based, not event-based.","You still need one repeated failure pattern.")
         ]),
-        node("trigger-and-urgency","soft-trigger","fu","Keep a soft trigger honest","\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\"","Use this when they feel pressure but cannot name the trigger cleanly.",false,[
+        node("trigger-and-urgency","soft-trigger","fu","Test a weak reason for urgency","\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\"","Use this when they feel pressure but cannot name the trigger cleanly.",false,[
           branch("TRIGGER SHOWS UP","ok","\"Another miss, ugly forecast call, or leadership challenge would make it active immediately.\"","\"Good. Then let us use that threshold to keep the next step honest instead of pretending it is already urgent.\"",[
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "blu")
@@ -325,7 +325,7 @@
             jumpNode("Keep it exploratory", "trigger-and-urgency", "exploratory", "blu")
           ],"The urgency is still vague.","You still need one concrete inspection moment.")
         ]),
-        node("trigger-and-urgency","exploratory","fu","Keep an exploratory call honest","\"If this is still early, what would have to happen for you to treat forecast signal as a live priority instead of an interesting idea?\"","Use this when the urgency is not active.",false,[
+        node("trigger-and-urgency","exploratory","fu","Handle an early-research call","\"If this is still early, what would have to happen for you to treat forecast signal as a live priority instead of an interesting idea?\"","Use this when the urgency is not active.",false,[
           branch("TRIGGER NAMED","ok","\"A miss, a board challenge, or scaling pain would make it active immediately.\"","\"Good. Then the right next step is to anchor on the earliest warning sign before that happens.\"",[
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "grn"),
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
@@ -334,13 +334,13 @@
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "org"),
             jumpNode("Name what they need to see", "proof-threshold", "live-proof", "blu")
           ],"The call should stay light and honest.","You still need the reason to re-open later."),
-          branch("WRONG PERSON","fl","\"Leadership would have to answer that.\"","\"Then the fastest truth is getting that person into the next conversation instead of guessing here.\"",[
+          branch("WRONG PERSON","fl","\"Leadership would have to answer that.\"","\"Then the fastest answer is getting that person into the next conversation instead of guessing here.\"",[
             jumpNode("Find the sponsor", "stakeholder-and-ownership", "sponsor", "red"),
             jumpNode("Shape the attendee list", "next-step-lock", "live-review", "blu")
           ],"The trigger owner is not in the room.","You still need the right leadership seat.")
         ])
       ]),
-      segment("stakeholder-and-ownership","05","Stakeholder and ownership","Find who can move this.",true,[
+      segment("stakeholder-and-ownership","05","Who's involved","Find out who owns the problem and who approves spend on it.",true,[
         node("stakeholder-and-ownership","sponsor","pr","Find the sponsor","\"Who feels the forecast-trust problem badly enough that they would sponsor change instead of admiring the idea?\"","Use this once pain and urgency are visible.",true,[
           branch("CRO OR VP SALES","ok","\"Sales leadership owns the problem because forecast accuracy rolls up to them.\"","\"What would they need to believe before backing this in public?\"",[
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "grn"),
@@ -369,7 +369,7 @@
             jumpNode("Shape the next review", "next-step-lock", "live-review", "blu")
           ],"Influence is spread across the org.","You still need the veto holder.")
         ]),
-        node("stakeholder-and-ownership","manager-owner","ri","Find the frontline owner","\"Who actually pays for weak pipeline truth first: frontline managers, second-line leaders, or the CRO?\"","Use this when the buyer keeps describing manager pain.",false,[
+        node("stakeholder-and-ownership","manager-owner","ri","Find the frontline owner","\"Who actually pays for weak pipeline accuracy first: frontline managers, second-line leaders, or the CRO?\"","Use this when the buyer keeps describing manager pain.",false,[
           branch("MANAGERS PAY FIRST","ok","\"Frontline managers spend too much time inspecting and rescuing weak deals.\"","\"What would have to change for them to feel the workflow got materially better?\"",[
             jumpNode("Agree the behavior evidence", "proof-threshold", "behavior-shift", "grn"),
             jumpNode("Use the live review", "next-step-lock", "live-review", "blu")
@@ -384,7 +384,7 @@
           ],"The pain is diffused.","You still need the first accountable leader.")
         ])
       ]),
-      segment("proof-threshold","06","Evidence threshold","Find what would make them believe.",true,[
+      segment("proof-threshold","06","What they need to see","Agree on the test that would show it works on their pipeline.",true,[
         node("proof-threshold","live-proof","pr","Name what they really need to see","\"What would make this feel real to your team: one live deal read, a manager-behavior shift, better forecast confidence, or all three?\"","Start here when the buyer says they need evidence.",true,[
           branch("LIVE DEAL READ","ok","\"Show me this on one real deal or commit set and I will know if it matters.\"","\"Good. Then the next review should be built around a live deal set, not a generic demo.\"",[
             jumpNode("Lock the live review", "next-step-lock", "live-review", "grn"),
@@ -424,13 +424,13 @@
           ],"The ask is about guidance, not visuals.","You still need the manager decision the system must improve."),
           branch("JUST SHOW SOMETHING","fl","\"I just want to see it.\"","\"Fair. I still need the live inspection question first so the demo has something real to show.\"",[
             jumpNode("Return to the live test", "proof-threshold", "live-proof", "red"),
-            jumpNode("Open the live deal", "current-state-truth", "deal-review", "blu")
+            jumpNode("Ask about one live deal", "current-state-truth", "deal-review", "blu")
           ],"Curiosity is outrunning diagnosis.","You still need the call anchored to a real evidence question.")
         ])
       ]),
-      segment("current-vendor-and-displacement","07","Current vendor and displacement","Test why the stack still wins.",false,[
+      segment("current-vendor-and-displacement","07","Current vendor","Find out why their current tools are still in place.",false,[
         node("current-vendor-and-displacement","tool-stack","ri","Map the stack mix","\"What is doing the work today: Salesforce, call recording, spreadsheet overlays, manager inspection habits, or something internal?\"","Start here once they say they already have tools.",true,[
-          branch("STACK MIX CLEAR","ok","\"It is a stack of systems plus manager interpretation and some spreadsheet rescue.\"","\"Which piece gives the team the false sense that pipeline truth is handled when it actually is not?\"",[
+          branch("STACK MIX CLEAR","ok","\"It is a stack of systems plus manager interpretation and some spreadsheet rescue.\"","\"Which piece gives the team the false sense that pipeline accuracy is handled when it actually is not?\"",[
             jumpNode("Return to hidden risk", "pain-and-consequence", "forecast-gap", "grn"),
             jumpNode("Agree the dashboard evidence", "proof-threshold", "dashboard-proof", "blu")
           ],"The incumbent stack is now visible as a mix, not a product.","You still need the false-confidence layer."),
@@ -439,7 +439,7 @@
             jumpNode("Return to commit risk", "pain-and-consequence", "commit-risk", "blu")
           ],"The incumbent works partially, not fully.","You still need the remaining manual override."),
           branch("FRAGMENTED STACK","fl","\"Different teams use different things.\"","\"Then the displacement case may be workflow simplification first. Where does that mess cost the most today?\"",[
-            jumpNode("Return to rep drag", "pain-and-consequence", "rep-drag", "red"),
+            jumpNode("Return to lost seller time", "pain-and-consequence", "rep-drag", "red"),
             jumpNode("Find the buyer", "stakeholder-and-ownership", "revops-owner", "blu")
           ],"The current stack may itself be fragmented.","You still need the most expensive fragment.")
         ]),
@@ -458,7 +458,7 @@
           ],"The incumbent may still be winning.","You still need the live scope or an honest no.")
         ]),
         node("current-vendor-and-displacement","switch-risk","va","Test switching risk","\"What would make changing this stack feel dangerous: rep adoption, forecast disruption, RevOps load, or leadership trust?\"","Use this to expose the real displacement blocker.",false,[
-          branch("ADOPTION RISK","ok","\"If reps or managers do not use it, it dies fast.\"","\"Then the next review has to prove workflow fit, not just signal quality.\"",[
+          branch("ADOPTION RISK","ok","\"If reps or managers do not use it, it gets dropped fast.\"","\"Then the next review has to prove workflow fit, not just signal quality.\"",[
             jumpNode("Agree the behavior evidence", "proof-threshold", "behavior-shift", "grn"),
             jumpNode("Lock the live review", "next-step-lock", "live-review", "blu")
           ],"Adoption risk is central to the decision.","You still need the behavior that proves fit."),
@@ -472,7 +472,7 @@
           ],"The blocker may be weak urgency, not technical risk.","You still need the real source of inertia.")
         ])
       ]),
-      segment("decision-architecture","08","Decision architecture","Map how this actually moves.",false,[
+      segment("decision-architecture","08","How they'll decide","Find out who signs off and in what order.",false,[
         node("decision-architecture","buying-path","pr","Map the buying path","\"If this became real, who would sponsor, who would evaluate, and who could slow or stop it?\"","Start here once sponsor and evidence are partly visible.",true,[
           branch("PATH CLEAR","ok","\"Sales leadership would sponsor, RevOps would evaluate, and IT or finance would weigh in later.\"","\"Good. What would RevOps have to prove before sales leadership makes this public?\"",[
             jumpNode("Return to evidence", "proof-threshold", "live-proof", "grn"),
@@ -502,91 +502,91 @@
           ],"Attention risk is the real danger.","You still need a next step that people will actually put on the calendar.")
         ])
       ]),
-      segment("next-step-lock","09","Next-step lock","Leave with a real review.",true,[
+      segment("next-step-lock","09","Next step","Leave with a dated review meeting and a named owner.",true,[
         node("next-step-lock","live-review","pr","Lock the live inspection review","\"The next best step sounds like a live inspection review with RevOps, the manager, and one real deal set. Does that fit how your team would validate this?\"","Start here whenever evidence points to a live workflow review.",true,[
           branch("YES LOCK IT","ok","\"Yes. That is the right shape.\"","\"Good. Which deals or commit category should we inspect so the review is worth their time?\"",[
             jumpNode("Choose the deal set", "next-step-lock", "deal-set", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"The next review format is agreed.","You still need the exact deal set and seats."),
           branch("NEEDS NARROWER START","ly","\"Close, but start with RevOps only or one manager first.\"","\"That works. Which narrower format still gives us a real inspection problem instead of a generic walkthrough?\"",[
             jumpNode("Choose the deal set", "next-step-lock", "deal-set", "org"),
             jumpNode("Return to manager owner", "stakeholder-and-ownership", "manager-owner", "blu")
           ],"The review shape needs tuning, not replacement.","You still need the narrowest real proving ground."),
           branch("TOO EARLY","fl","\"That feels like too much for where we are.\"","\"Understood. Then what would make the next step real enough to keep momentum without pretending we are further along than we are?\"",[
-            jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
+            jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Return to evidence", "proof-threshold", "live-proof", "blu")
           ],"The buyer is not ready for a full review yet.","You still need a lighter but real progression step.")
         ]),
         node("next-step-lock","deal-set","fu","Choose the deal set","\"Which deals should be in the review: current commits, late-stage slips, or one live inspection set your managers already debate?\"","Use this to stop the next step from becoming generic.",false,[
           branch("COMMIT SET","ok","\"Use the current commit set or the deals leadership keeps questioning.\"","\"Perfect. That makes the review real immediately.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Go to After the call", "segment:post-call-routing", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
           branch("ONE MANAGER SET","ly","\"Start with one manager's inspection set before going broader.\"","\"That is a strong first scope. Which manager has enough pain to make the session honest?\"",[
             jumpNode("Return to manager owner", "stakeholder-and-ownership", "manager-owner", "org"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A narrower proving set may be safer.","You still need the right manager and the date."),
           branch("NO SET YET","fl","\"We do not know which deals to use yet.\"","\"Then the next step is not locked. Who can pick that set before the meeting goes on calendar?\"",[
-            jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
+            jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Return to sponsor", "stakeholder-and-ownership", "sponsor", "blu")
           ],"The next review is still underspecified.","You still need the owner of the deal set.")
         ]),
         node("next-step-lock","soft-deferral","ri","If the next step stays soft","\"What has to become true before the next conversation is worth real calendar time?\"","Use this when they want to stay polite but noncommittal.",false,[
           branch("ADVANCEMENT CONDITION","ok","\"If we can show this on a live deal set with the right people, then the next session is worth scheduling.\"","\"That is enough. Let us route that exact condition forward.\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A real advancement condition is now named.","You still need to carry it forward cleanly."),
           branch("SEND MATERIAL","ly","\"Send material and we will see.\"","\"I will, but I want to attach it to the one decision you still need to make, not a generic deck. What is that decision?\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "org"),
             jumpNode("Return to evidence", "proof-threshold", "live-proof", "blu")
           ],"The buyer is deferring without a clear gate.","You still need the decision the material should support."),
           branch("NO REAL NEXT","fl","\"Nothing specific. We just need to think.\"","\"Then I would rather leave with the honest blocker than pretend we have a next step. What is still missing?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"Momentum is still too soft to trust.","You still need the missing truth in plain language.")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"Momentum is still too soft to trust.","You still need the open question in plain language.")
         ])
       ]),
-      segment("post-call-routing","10","Post-call routing","Hand off only what helps.",false,[
-        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to strip the call down to usable sales truth.",false,[
+      segment("post-call-routing","10","After the call","Record what you learned and decide where it goes next.",false,[
+        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to boil the call down to the sales facts you can use.",false,[
           branch("HANDOFF CLEAN","ok","\"Carry the live inspection problem, the sponsor path, what they need to see, and the next review condition.\"","\"Good. Keep only what changes the next step.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "grn"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"The handoff can now start from signal instead of notes.","You still need the one missing truth to chase."),
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "grn"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"The handoff can now start from signal instead of notes.","You still need the one open question to chase."),
           branch("HANDOFF TOO VERBAL","ly","\"We have a lot of notes, but not a clean story yet.\"","\"Then throw away anything that does not change the next review question. What is actually usable?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "org"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "org"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The raw detail exists, but the usable signal is still diluted.","You still need the core problem and where it goes next."),
           branch("NO HANDOFF HABIT","fl","\"We do not really capture this cleanly today.\"","\"Then the minimum capture rule is simple: owner, problem, what they need to see, next condition.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The handoff discipline itself is weak.","You still need the one capture rule that sticks.")
         ]),
-        node("post-call-routing","missing-truth","fu","Name the missing truth","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
-          branch("MISSING TRUTH CLEAR","ok","\"We still need the real deal set, the sponsor seat, or the evidence benchmark.\"","\"Good. Then route the call to the room most likely to surface that fast.\"",[
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
-          ],"The missing truth is clearly named.","You still need the room best suited to chase it."),
+        node("post-call-routing","missing-truth","fu","Name what is still unknown","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
+          branch("MISSING TRUTH CLEAR","ok","\"We still need the real deal set, the sponsor seat, or the evidence benchmark.\"","\"Good. Then send what you learned to the place most likely to answer that quickly.\"",[
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "grn"),
+            action("Set the next meeting", "segment:next-step-lock", "blu")
+          ],"The open question is clearly named.","You still need to decide where to follow up on it."),
           branch("MISSING OWNER","ly","\"We know the gap, but not who can answer it.\"","\"Then the next room should start with the owner map, not another product conversation.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "org"),
+            action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
-          ],"The truth gap is visible but ownerless.","You still need the best route to the right person."),
+          ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
           branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Name the drift now and correct it before the deal ages.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")
         ]),
-        node("post-call-routing","room-route","pr","Choose the next room","\"Which next room gives the strongest immediate leverage: shape the next review, attach truth to the deal, or name the failure pattern before it ages?\"","Use this to route with intent instead of habit.",false,[
-          branch("CALL PLANNER","ok","\"The next step is a tighter inspection conversation with a clearer question that needs an answer.\"","\"Then route this to Call Planner with the deal set, sponsor path, and what they need to see.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "grn"),
+        node("post-call-routing","room-route","pr","Choose where this goes next","\"Which next room gives the strongest immediate leverage: shape the next review, attach what you learned to the deal, or name the failure pattern before it ages?\"","Use this to route with intent instead of habit.",false,[
+          branch("NEXT MEETING","ok","\"The next step is a tighter inspection conversation with a clearer question that needs an answer.\"","\"Then set the next meeting and bring the deal set, sponsor path, and what they need to see.\"",[
+            action("Set the next meeting", "segment:next-step-lock", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the open question in plain language."),
           branch("DEAL WORKSPACE","ly","\"There is already a live opportunity path here.\"","\"Then attach the what is actually happening to the live deal immediately before the forecast story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
-          ],"The truth belongs with a live pipeline object.","You still need the top risk to carry with it."),
+          ],"These facts belong on a live deal.","You still need the top risk to carry with it."),
           branch("FUTURE AUTOPSY","fl","\"This still feels like activity that is drifting without an owner.\"","\"Then route it to Future Autopsy now and name the failure pattern before the next forecast call hides it.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The next room may need to fix what has drifted, not push the deal forward.","You still need the failure pattern in plain language.")
         ])
       ])

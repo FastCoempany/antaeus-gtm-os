@@ -53,18 +53,18 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
   </div>
 
   <div class="sec"><div class="sn">2 · The call segments</div><h2>The 10 fixed segments</h2>
-    <div class="sd">A fixed, ordered list of call segments. Each segment is one part of the call; the seller opens one at a time. Order is locked, but the seller can jump.</div>
+    <div class="sd">A fixed, ordered list of call segments. Each segment is one part of the call; the seller opens one at a time. Order is locked, but the seller can jump. Segment titles renamed to plain language 2026-11-05 (owner-directed); the segment keys shown beside each title are unchanged.</div>
     <table><tr><th style="width:26px">#</th><th style="width:200px">Segment</th><th>What happens here</th><th style="width:210px">What you learn</th></tr>
-      <tr><td class="n">1</td><td><b>Opening frame</b></td><td>Get the buyer to agree to the call’s agenda. Pre-built from the account's live Signal Console signal → the spoken opener + reason-now.</td><td>the agreed agenda</td></tr>
-      <tr><td class="n">2</td><td><b>Current-state truth</b></td><td>How they actually do it today — the real method, not the tidy version.</td><td>current-state method</td></tr>
-      <tr><td class="n">3</td><td><b>Pain &amp; consequence</b></td><td>Make the cost of the status quo concrete — refunds, churn, headcount, risk.</td><td>the pain + its consequence</td></tr>
-      <tr><td class="n">4</td><td><b>Trigger &amp; urgency</b></td><td>Why now — what changed, what breaks if nothing happens.</td><td>the trigger event</td></tr>
-      <tr><td class="n">5</td><td><b>Stakeholder &amp; ownership</b></td><td>Who owns it, who signs, the whole buying group.</td><td>the stakeholder map</td></tr>
-      <tr><td class="n">6</td><td><b>Evidence threshold</b> <span class="pill retired">Proof threshold</span></td><td>What it would take to convince them it works — the bar to clear. (Reworded from "Proof threshold" per §13.)</td><td>the evidence they need to see</td></tr>
-      <tr><td class="n">7</td><td><b>Current vendor &amp; displacement</b></td><td>What they use now, switching cost, the displacement path.</td><td>incumbent + displacement path</td></tr>
-      <tr><td class="n">8</td><td><b>Decision architecture</b></td><td>How they actually decide — budget, process, timeline, sign-off.</td><td>the decision process</td></tr>
-      <tr><td class="n">9</td><td><b>Next-step lock</b></td><td>The one thing you can't hang up without: a dated next step with a named owner.</td><td>the locked next step</td></tr>
-      <tr><td class="n">10</td><td><b>Post-call routing</b></td><td>Outcome-driven handoff — the destination is chosen by what actually happened, never a presumed "push to the deal".</td><td>the outcome, sent to the right room</td></tr>
+      <tr><td class="n">1</td><td><b>Opening</b> <span class="mono">opening-frame</span></td><td>Get the buyer to agree to the call’s agenda. Pre-built from the account's live Signal Console signal → the spoken opener + reason-now.</td><td>the agreed agenda</td></tr>
+      <tr><td class="n">2</td><td><b>How they work today</b> <span class="mono">current-state-truth</span></td><td>How they actually do it today — the real method, not the tidy version.</td><td>current-state method</td></tr>
+      <tr><td class="n">3</td><td><b>The problem and its cost</b> <span class="mono">pain-and-consequence</span></td><td>Make the cost of the status quo concrete — refunds, churn, headcount, risk.</td><td>the pain + its consequence</td></tr>
+      <tr><td class="n">4</td><td><b>Why now</b> <span class="mono">trigger-and-urgency</span></td><td>Why now — what changed, what breaks if nothing happens.</td><td>the trigger event</td></tr>
+      <tr><td class="n">5</td><td><b>Who&rsquo;s involved</b> <span class="mono">stakeholder-and-ownership</span></td><td>Who owns it, who signs, the whole buying group.</td><td>the stakeholder map</td></tr>
+      <tr><td class="n">6</td><td><b>What they need to see</b> <span class="mono">proof-threshold</span> <span class="pill retired">Evidence threshold</span></td><td>What it would take to convince them it works — the bar to clear. (Reworded from "Proof threshold" per §13.)</td><td>the evidence they need to see</td></tr>
+      <tr><td class="n">7</td><td><b>Current vendor</b> <span class="mono">current-vendor-and-displacement</span></td><td>What they use now, switching cost, the displacement path.</td><td>incumbent + displacement path</td></tr>
+      <tr><td class="n">8</td><td><b>How they&rsquo;ll decide</b> <span class="mono">decision-architecture</span></td><td>How they actually decide — budget, process, timeline, sign-off.</td><td>the decision process</td></tr>
+      <tr><td class="n">9</td><td><b>Next step</b> <span class="mono">next-step-lock</span></td><td>The one thing you can't hang up without: a dated next step with a named owner.</td><td>the locked next step</td></tr>
+      <tr><td class="n">10</td><td><b>After the call</b> <span class="mono">post-call-routing</span></td><td>Outcome-driven handoff — the destination is chosen by what actually happened, never a presumed "push to the deal".</td><td>the outcome, sent to the right room</td></tr>
     </table>
     <div class="callout"><div class="ct">Every segment must carry these 16 fields</div><div class="cb"><span class="mono" style="font-family:var(--mono);font-size:11px">segmentId · segmentLabel · timePosition · objective · sayThisNow · buyerMightSay[] · sayNext[] · listenFor[] · earnedTruth · failureRisk · localRecovery[] · skipAheadHandlers[] · markWorkedTarget · markLearnedTarget · nextSegmentRules</span> — and support 4 display states: <b>active</b> (the segment open right now), <b>worked</b> (the buyer gave you information you can use), <b>thin</b> (some answers, but not enough to rely on in later rooms), and <b>flagged</b> (something needs attention: the buyer pushed back, a key person is missing, the timing is wrong, or you still lack evidence the product works for them). <i>(timePosition is now a position label, not a timer — pacing retired.)</i></div></div>
   </div>
@@ -150,7 +150,7 @@ ul.plain{margin:0 0 16px;padding-left:18px;font-size:13px;color:var(--ink-2);lin
       <tr><td><b>→ Deal Workspace</b></td><td>active framework · learned facts · stakeholder map · current-state method · trigger event · evidence threshold · blockers · next-step lock</td></tr>
       <tr><td><b>→ Future Autopsy</b></td><td>recorded risk factors · unresolved evidence gaps · stalled-next-step evidence · disqualification reasons and missing next-step evidence</td></tr>
     </table>
-    <div class="sd">The handoff is <b>outcome-driven</b> — Post-call routing chooses the destination by what actually happened. The room never presumes a "push to the deal."</div>
+    <div class="sd">The handoff is <b>outcome-driven</b> — the After the call segment chooses the destination by what actually happened. The room never presumes a "push to the deal."</div>
   </div>
 
   <div class="sec"><div class="sn">8 · Guardrails</div><h2>Must never be flattened · what it is NOT</h2>

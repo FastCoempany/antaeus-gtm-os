@@ -93,12 +93,12 @@
       {
         title:"Pick one live req",
         copy:"Anchor the conversation to a role where the funnel still needs human rescue.",
-        action:jumpNode("Open live req", "current-state-truth", "live-req", "blu")
+        action:jumpNode("Ask about one open role", "current-state-truth", "live-req", "blu")
       },
       {
         title:"Name the bottleneck",
         copy:"Make the pain specific: sourcing, screening, scheduling, interview quality, or closing.",
-        action:jumpNode("Open funnel pain", "pain-and-consequence", "funnel-break", "org")
+        action:jumpNode("Ask about hiring funnel problems", "pain-and-consequence", "funnel-break", "org")
       },
       {
         title:"Lock the req review",
@@ -112,7 +112,7 @@
         label:"You cannot automate hiring judgment",
         reply:"Agreed. The first question is where coordination, screening, or workflow structure can improve without replacing the final human decision.",
         actions:[
-          jumpNode("Set the judgment boundary", "proof-threshold", "judgment-boundary", "pur"),
+          jumpNode("Agree where human judgment stays", "proof-threshold", "judgment-boundary", "pur"),
           jumpNode("Choose a safe req", "proof-threshold", "pilot-req", "blu")
         ]
       },
@@ -131,7 +131,7 @@
         reply:"Then the question is whether there is still enough active hiring pressure to justify workflow change now.",
         actions:[
           jumpNode("Test urgency", "trigger-and-urgency", "freeze-check", "red"),
-          jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
+          jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "blu")
         ]
       },
       {
@@ -149,56 +149,56 @@
         reply:"I can. First tell me which req or workflow the material should help you decide on so the follow-up becomes a real review.",
         actions:[
           jumpNode("Pick one live req", "current-state-truth", "live-req", "blu"),
-          jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red")
+          jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "red")
         ]
       }
     ],
     segments:[
-      segment("opening-frame","01","Opening frame","Start on recruiter rescue work.",true,[
+      segment("opening-frame","01","Opening","Ask where recruiters still do manual work to keep hiring moving.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most TA teams already have an ATS and basic tooling. The question is where recruiters or coordinators still have to rescue the expensive parts of the funnel by hand. Is that true in your world too?\"","Use this when they will diagnose before seeing product.",true,[
           branch("CONFIRMS","ok","\"Yes. The systems are there, but the team still spends too much time triaging and coordinating.\"","\"Where does that rescue happen most painfully: sourcing, screening, scheduling, interviews, or closing?\"",[
             jumpNode("Map the live req", "current-state-truth", "live-req", "blu"),
             jumpNode("Name the bottleneck", "pain-and-consequence", "funnel-break", "grn")
           ],"Human rescue is part of the funnel today.","You still need the exact workflow step where it shows up first."),
           branch("JUDGMENT PUSHBACK","fl","\"You cannot automate hiring judgment.\"","\"Agreed. So where would workflow support still help without touching the final judgment call?\"",[
-            jumpNode("Set the judgment boundary", "proof-threshold", "judgment-boundary", "pur"),
+            jumpNode("Agree where human judgment stays", "proof-threshold", "judgment-boundary", "pur"),
             jumpNode("Map the live req", "current-state-truth", "live-req", "blu")
           ],"Judgment is the first objection, not the only objection.","You still need the safe part of the workflow.")
         ]),
-        node("opening-frame","req-scope","fu","Start from one req","\"Pick one open role that still feels heavier than it should. Where is that req slowing down or demanding too much recruiter intervention?\"","Use this when the room is already operational.",false,[
+        node("opening-frame","req-scope","fu","Start from one req","\"Pick one open role that still feels heavier than it should. Where is that req slowing down or demanding too much recruiter intervention?\"","Use this when the buyer already runs the workflow day to day.",false,[
           branch("REQ READY","ok","\"Screening and scheduling are eating too much recruiter time on one of our priority roles.\"","\"Good. Which part hurts more first: candidate quality, recruiter bandwidth, or hiring-manager frustration?\"",[
-            jumpNode("Open live req", "current-state-truth", "live-req", "grn"),
-            jumpNode("Open funnel pain", "pain-and-consequence", "funnel-break", "blu")
+            jumpNode("Ask about one open role", "current-state-truth", "live-req", "grn"),
+            jumpNode("Ask about hiring funnel problems", "pain-and-consequence", "funnel-break", "blu")
           ],"A real req is now anchoring the call.","You still need the specific failure pattern inside it."),
           branch("NO LIVE EXAMPLE","fl","\"I do not have one specific req in mind.\"","\"Then use the last hiring cycle that felt inefficient. Where did the funnel break down?\"",[
-            jumpNode("Open the funnel break", "pain-and-consequence", "funnel-break", "red"),
-            jumpNode("Open the trigger", "trigger-and-urgency", "headcount-pressure", "blu")
+            jumpNode("Ask where the funnel breaks", "pain-and-consequence", "funnel-break", "red"),
+            jumpNode("Ask about the trigger", "trigger-and-urgency", "headcount-pressure", "blu")
           ],"No live req is ready yet.","You still need one recent hiring incident.")
         ])
       ]),
-      segment("current-state-truth","02","Current-state truth","Map the live funnel.",true,[
-        node("current-state-truth","live-req","fu","Map one live req","\"Walk me through one open req. Where does the team still spend the most human time today: sourcing, screening, scheduling, calibration, or close coordination?\"","Start here when the room is willing to get concrete.",true,[
+      segment("current-state-truth","02","How they work today","Ask them to walk you through how a candidate moves from applied to hired.",true,[
+        node("current-state-truth","live-req","fu","Map one live req","\"Walk me through one open req. Where does the team still spend the most human time today: sourcing, screening, scheduling, calibration, or close coordination?\"","Start here when the buyer is willing to get concrete.",true,[
           branch("WORKFLOW CLEAR","ok","\"Screening and back-and-forth coordination still eat the most time.\"","\"What makes that heavy today: volume, poor signals, slow manager response, or inconsistent evaluation?\"",[
             jumpNode("Name the funnel break", "pain-and-consequence", "funnel-break", "grn"),
             jumpNode("Find who feels it", "stakeholder-and-ownership", "recruiting-ops", "blu")
           ],"The live funnel break is visible.","You still need the source of that burden."),
           branch("MANAGER DELAY","fl","\"Hiring managers are the real delay more than recruiters.\"","\"Then what work keeps bouncing back onto recruiting because the manager side is too slow or unclear?\"",[
-            jumpNode("Name the manager drag", "pain-and-consequence", "manager-drag", "red"),
+            jumpNode("Name the time managers lose", "pain-and-consequence", "manager-drag", "red"),
             jumpNode("Find the hiring owner", "stakeholder-and-ownership", "hiring-manager", "blu")
           ],"Manager behavior may be the real bottleneck.","You still need the exact handoff that breaks.")
         ]),
         node("current-state-truth","funnel-shape","pr","Map the funnel shape","\"Is the bigger pain at the top of funnel, middle of funnel, or close: getting candidates in, evaluating them well, or getting them to accept?\"","Use this when they speak in generalities.",false,[
           branch("TOP OF FUNNEL","ok","\"Getting the right candidates in is still the hardest part.\"","\"Good. Is that a sourcing problem, a triage problem, or a role-calibration problem?\"",[
-            jumpNode("Open funnel pain", "pain-and-consequence", "funnel-break", "grn"),
+            jumpNode("Ask about hiring funnel problems", "pain-and-consequence", "funnel-break", "grn"),
             jumpNode("Inspect current stack", "current-vendor-and-displacement", "ats-stack", "blu")
           ],"Top-of-funnel pain is explicit.","You still need the first step that fails inside it."),
           branch("LATE STAGE","fl","\"We lose time later with slow closes and candidate drop-off.\"","\"What causes that most: compensation, process lag, weak conviction, or candidate experience?\"",[
-            jumpNode("Open candidate loss pain", "pain-and-consequence", "candidate-drop", "red"),
+            jumpNode("Ask about lost candidates", "pain-and-consequence", "candidate-drop", "red"),
             jumpNode("Find the trigger", "trigger-and-urgency", "headcount-pressure", "blu")
           ],"Late-stage drag may be the real issue.","You still need the main cause of it.")
         ])
       ]),
-      segment("pain-and-consequence","03","Pain and consequence","Make hiring friction expensive.",true,[
+      segment("pain-and-consequence","03","The problem and its cost","Find out what slow or manual hiring costs them.",true,[
         node("pain-and-consequence","funnel-break","ri","Name the funnel break","\"What is the actual damage today: recruiter bandwidth burned, slower time-to-fill, candidate loss, or hiring managers losing trust in the process?\"","Start here when the workflow break is visible.",true,[
           branch("BANDWIDTH CLEAR","ok","\"Recruiters spend too much time triaging and coordinating instead of actually recruiting.\"","\"What does that crowd out first: speed, candidate quality, or stakeholder trust?\"",[
             jumpNode("Find who feels it", "stakeholder-and-ownership", "recruiting-ops", "grn"),
@@ -206,10 +206,10 @@
           ],"Recruiter bandwidth loss is explicit.","You still need the business consequence of it."),
           branch("NOT BIG ENOUGH","fl","\"It is annoying, but not severe.\"","\"Then what would have to happen before it becomes worth changing the workflow?\"",[
             jumpNode("Test urgency", "trigger-and-urgency", "soft-trigger", "red"),
-            jumpNode("Open candidate loss", "pain-and-consequence", "candidate-drop", "blu")
+            jumpNode("Ask about lost candidates", "pain-and-consequence", "candidate-drop", "blu")
           ],"Pain may still be below the threshold.","You still need the trigger.")
         ]),
-        node("pain-and-consequence","manager-drag","pr","Name the manager drag","\"What is the actual damage when managers are the bottleneck: slower feedback, weaker calibration, candidates cooling off, or recruiters doing follow-up they should not own?\"","Use this when the friction sits more with hiring teams than TA.",false,[
+        node("pain-and-consequence","manager-drag","pr","Name the time managers lose","\"What is the actual damage when managers are the bottleneck: slower feedback, weaker calibration, candidates cooling off, or recruiters doing follow-up they should not own?\"","Use this when the friction sits more with hiring teams than TA.",false,[
           branch("DRAG CLEAR","ok","\"Managers are slow to respond and it creates avoidable recruiter rework.\"","\"What should improve first if that changes: cycle speed, quality, or candidate experience?\"",[
             jumpNode("Find the manager owner", "stakeholder-and-ownership", "hiring-manager", "grn"),
             jumpNode("Set the quality bar", "proof-threshold", "quality-bar", "blu")
@@ -240,19 +240,19 @@
           ],"Candidate loss is not the dominant scope.","You still need the earlier funnel bottleneck.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find what makes this urgent now.",true,[
+      segment("trigger-and-urgency","04","Why now","Find out what changed that makes this worth solving now.",true,[
         node("trigger-and-urgency","headcount-pressure","ri","Find the hiring pressure","\"What changed that made this worth looking at now: more req volume, executive headcount goals, recruiter capacity strain, quality concerns, or rising agency spend?\"","Start here when urgency exists but is not yet specific.",true,[
           branch("TRIGGER CLEAR","ok","\"Volume and speed targets moved up, and the current team cannot keep pace.\"","\"Which req class or funnel step would prove the case fastest if it improved?\"",[
             jumpNode("Pick the live req", "current-state-truth", "live-req", "grn"),
             jumpNode("Lock the req review", "next-step-lock", "req-review", "blu")
           ],"The trigger is explicit.","You still need the req or workflow it attaches to."),
           branch("AGENCY COST","ly","\"We are spending too much on agencies because the internal team cannot absorb the load.\"","\"What part of the funnel would need to improve first to reduce that dependence?\"",[
-            jumpNode("Open candidate loss", "pain-and-consequence", "candidate-drop", "org"),
+            jumpNode("Ask about lost candidates", "pain-and-consequence", "candidate-drop", "org"),
             jumpNode("Inspect the status quo", "current-vendor-and-displacement", "agency-status-quo", "blu")
           ],"Agency pressure is part of the trigger.","You still need the internal workflow gap behind it."),
           branch("FREEZE RISK","fl","\"Hiring is active, but things could change fast.\"","\"Then what would have to stay true for this to still be worth a real workflow review?\"",[
-            jumpNode("Run the freeze check", "trigger-and-urgency", "freeze-check", "red"),
-            jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "blu")
+            jumpNode("Check for a hiring freeze", "trigger-and-urgency", "freeze-check", "red"),
+            jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "blu")
           ],"Urgency may be unstable.","You still need the condition that keeps it real.")
         ]),
         node("trigger-and-urgency","freeze-check","fu","Check freeze or low-volume risk","\"Is there enough live hiring volume and enough pain right now to justify change, or would this die if hiring slows further?\"","Use this whenever the need may be too soft or volume too low.",false,[
@@ -262,7 +262,7 @@
           ],"The project is still active despite risk.","You still need the scoped review object."),
           branch("TOO SOFT","fl","\"Honestly, this probably becomes secondary if volume drops any further.\"","\"Then let us keep this honest. What would have to happen before it becomes a real priority again?\"",[
             jumpNode("Keep it exploratory", "next-step-lock", "soft-deferral", "red"),
-            jumpNode("Open Future Autopsy route", "post-call-routing", "autopsy-flag", "blu")
+            jumpNode("Open Future Autopsy", "post-call-routing", "autopsy-flag", "blu")
           ],"The need may not be real enough yet.","You still need the reactivation condition.")
         ]),
         node("trigger-and-urgency","soft-trigger","pr","Ask whether anything makes this urgent","\"If this is still early, what would need to happen before this becomes a funded workflow review instead of general curiosity?\"","Use this when the buyer is interested but not yet committed.",false,[
@@ -276,20 +276,20 @@
           ],"No real sponsor is active yet.","You still need the person and problem pairing.")
         ])
       ]),
-      segment("stakeholder-and-ownership","05","Stakeholder and ownership","Map who can carry or kill it.",true,[
+      segment("stakeholder-and-ownership","05","Who's involved","Find out who would push for this and who could stop it.",true,[
         node("stakeholder-and-ownership","recruiting-ops","fu","Find the recruiting owner","\"Who feels this pain enough to move it first: talent leadership, recruiting ops, frontline recruiters, or finance looking at hiring efficiency?\"","Start here when the workflow is clear but sponsorship is not.",true,[
           branch("OWNER CLEAR","ok","\"Recruiting ops and talent leadership would drive it, but hiring managers have to buy into it.\"","\"Good. Which question matters more first: recruiter relief, quality control, or hiring-manager trust?\"",[
             jumpNode("Agree what they need to see", "proof-threshold", "quality-bar", "grn"),
             jumpNode("Map the manager owner", "stakeholder-and-ownership", "hiring-manager", "blu")
           ],"The sponsor path is visible.","You still need the first gating question."),
-          branch("NO OWNER","fl","\"No one fully owns this yet.\"","\"Then who would have to carry the first req review for this not to die after today?\"",[
+          branch("NO OWNER","fl","\"No one fully owns this yet.\"","\"Then who would have to carry the first req review to keep this moving after today?\"",[
             jumpNode("Lock the req review", "next-step-lock", "req-review", "red"),
             jumpNode("Return to trigger", "trigger-and-urgency", "freeze-check", "blu")
           ],"Ownership is not yet assigned.","You still need a named person for the next meeting.")
         ]),
         node("stakeholder-and-ownership","hiring-manager","pr","Find the hiring-manager stake","\"What part of this pain falls on hiring managers most: slow feedback loops, weak candidate quality, poor calibration, or too much process overhead?\"","Use this when the problem crosses TA and hiring teams.",false,[
           branch("MANAGER PAIN CLEAR","ok","\"Managers do not trust the funnel and hate slow cycles.\"","\"What would they need to see to believe the process is actually improving?\"",[
-            jumpNode("Open quality bar", "proof-threshold", "quality-bar", "grn"),
+            jumpNode("Ask what quality they need", "proof-threshold", "quality-bar", "grn"),
             jumpNode("Map the approval path", "decision-architecture", "approval-path", "blu")
           ],"The manager stake is visible.","You still need the evidence that would win their trust."),
           branch("RECRUITER ONLY","fl","\"This is really more of a recruiter problem.\"","\"Then what makes it expensive enough for leadership to care, not just recruiters to complain?\"",[
@@ -298,14 +298,14 @@
           ],"Manager stake may be weak.","You still need the leadership consequence.")
         ])
       ]),
-      segment("proof-threshold","06","Evidence threshold","Define the trust bar.",true,[
+      segment("proof-threshold","06","What they need to see","Agree on what they would need to see to trust it with candidates.",true,[
         node("proof-threshold","quality-bar","pur","Set the quality bar","\"Before this could move, what would the team have to trust: better candidate quality, faster screening, fairer evaluation, cleaner calibration, or all of the above?\"","Start here when the buyer goes straight to quality and trust.",true,[
           branch("QUALITY FIRST","ok","\"Candidate quality and calibration matter most. Speed alone would not be enough.\"","\"Then what is the fairest live req to test quality without creating hiring risk?\"",[
             jumpNode("Choose the pilot req", "proof-threshold", "pilot-req", "grn"),
-            jumpNode("Open approval path", "decision-architecture", "approval-path", "blu")
+            jumpNode("Ask about the approval path", "decision-architecture", "approval-path", "blu")
           ],"The quality bar is explicit.","You still need the safest live req to test against it."),
           branch("FAIRNESS FIRST","ly","\"Bias, fairness, and compliance come first for us.\"","\"Then where would a human-in-the-loop boundary need to sit for this to be acceptable?\"",[
-            jumpNode("Open judgment boundary", "proof-threshold", "judgment-boundary", "org"),
+            jumpNode("Ask where human judgment must stay", "proof-threshold", "judgment-boundary", "org"),
             jumpNode("Map the approval path", "decision-architecture", "risk-review", "blu")
           ],"Compliance and fairness outrank speed.","You still need the control boundary."),
           branch("ROI FIRST","fl","\"Show me time saved first.\"","\"Fair. Which req or funnel step would prove ROI fastest without lowering quality?\"",[
@@ -313,7 +313,7 @@
             jumpNode("Return to bottleneck", "pain-and-consequence", "funnel-break", "blu")
           ],"The buyer wants the business case first.","You still need a safe ROI req.")
         ]),
-        node("proof-threshold","judgment-boundary","pr","Set the judgment boundary","\"Where must the human stay fully in control for this to be acceptable: screening decision, interview evaluation, final decision, or every sensitive role?\"","Use this when they worry about automating hiring judgment.",false,[
+        node("proof-threshold","judgment-boundary","pr","Agree where human judgment stays","\"Where must the human stay fully in control for this to be acceptable: screening decision, interview evaluation, final decision, or every sensitive role?\"","Use this when they worry about automating hiring judgment.",false,[
           branch("BOUNDARY CLEAR","ok","\"Humans stay on the final decision, but workflow support earlier is acceptable.\"","\"Good. Which req lets us test that boundary safely?\"",[
             jumpNode("Choose the pilot req", "proof-threshold", "pilot-req", "grn"),
             jumpNode("Lock the req review", "next-step-lock", "req-review", "blu")
@@ -334,7 +334,7 @@
           ],"The buyer does not yet see a safe entry point.","You still need a narrower req or workflow slice.")
         ])
       ]),
-      segment("current-vendor-and-displacement","07","Current vendor and displacement","Map the status quo to replace.",true,[
+      segment("current-vendor-and-displacement","07","Current vendor","Find out what they use today and why it has lasted.",true,[
         node("current-vendor-and-displacement","ats-stack","fu","Inspect the current stack","\"What is already in place today: ATS, sourcing tools, scheduling, assessments, CRM, HRIS, and recruiter workflows around them?\"","Start here when the buyer defends the existing stack.",true,[
           branch("STACK CLEAR","ok","\"The stack is there, but recruiters still carry too much of the workflow by hand.\"","\"Which layer stops short first: sourcing signal, screening quality, scheduling, or manager follow-through?\"",[
             jumpNode("Return to live req", "current-state-truth", "live-req", "grn"),
@@ -356,7 +356,7 @@
           ],"Agencies are not the main blocker.","You still need the real incumbent behavior.")
         ])
       ]),
-      segment("decision-architecture","08","Decision architecture","Map the approval path.",true,[
+      segment("decision-architecture","08","How they'll decide","Find out who signs off and in what order.",true,[
         node("decision-architecture","approval-path","fu","Map the approval path","\"If this became real, what would the evaluation path actually look like from first req review to approval?\"","Start here when what they need to see is getting concrete.",true,[
           branch("PATH CLEAR","ok","\"Talent leadership would sponsor, recruiting ops would evaluate, and people systems or HR leadership would review.\"","\"Good. What does the first review need to decide so the process can continue?\"",[
             jumpNode("Lock the req review", "next-step-lock", "req-review", "grn"),
@@ -364,7 +364,7 @@
           ],"The approval path is visible.","You still need the first review outcome."),
           branch("RISK REVIEW","ly","\"Legal or HR compliance would want to review anything that touches evaluation.\"","\"Then which req or workflow is narrow enough to evaluate without triggering broad policy fear?\"",[
             jumpNode("Choose the pilot req", "proof-threshold", "pilot-req", "org"),
-            jumpNode("Open risk review", "decision-architecture", "risk-review", "blu")
+            jumpNode("Ask about the risk review", "decision-architecture", "risk-review", "blu")
           ],"Risk review may dominate the path.","You still need a scope that can survive it."),
           branch("MURKY PATH","fl","\"We have not mapped that yet.\"","\"That is fine. Then the next step should be the people who can map it together around one real req.\"",[
             jumpNode("Lock the req review", "next-step-lock", "req-review", "red"),
@@ -382,18 +382,18 @@
           ],"The gating questions are not yet mapped.","You still need the people who can define them.")
         ])
       ]),
-      segment("next-step-lock","09","Next-step lock","Leave with a real req review.",true,[
+      segment("next-step-lock","09","Next step","Leave with a dated review of one open role and a named owner.",true,[
         node("next-step-lock","req-review","gr","Lock the req review","\"The next step should probably be a working review with recruiting ops, one hiring owner, and one live req in scope. Does that sound right?\"","Start here when the req and owner are named.",true,[
           branch("AGREES","ok","\"Yes. That makes sense.\"","\"Good. Which req should that review center on, and who needs to be there so the meeting can actually decide something?\"",[
             jumpNode("Set the pilot req", "next-step-lock", "pilot-design", "grn"),
-            jumpRoom("Carry into Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A real req review is now possible.","You still need the attendee set, req, and date."),
           branch("TOO EARLY","ly","\"That feels a little early.\"","\"That is fair. What is missing before that review would feel worth it: req scope, evidence detail, or sponsor alignment?\"",[
             jumpNode("Return to what they need to see", "proof-threshold", "pilot-req", "org"),
             jumpNode("Return to owner map", "stakeholder-and-ownership", "recruiting-ops", "blu")
           ],"The buyer is not ready for the review yet.","You still need the missing condition."),
           branch("SEND SOMETHING","fl","\"Just send something first.\"","\"I can. What should it help your team decide so the follow-up becomes a working review instead of polite circulation?\"",[
-            jumpNode("Keep the next step honest", "next-step-lock", "soft-deferral", "red"),
+            jumpNode("Test whether the next step is real", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Return to what they need to see", "proof-threshold", "quality-bar", "blu")
           ],"They are trying to defer with no meeting.","You still need the decision the follow-up is supposed to support.")
         ]),
@@ -410,7 +410,7 @@
         node("next-step-lock","pilot-design","fu","Lock the pilot req","\"If the review goes well, what is the smallest credible test: one req type, one team, and one clear standard for quality and speed?\"","Use this when they are already thinking beyond the first review.",false,[
           branch("PILOT CLEAR","ok","\"One priority req class with recruiting ops and one hiring team would be the right start.\"","\"Good. Then the first review should decide that scope, the control boundary, and the success criteria.\"",[
             jumpRoom("Take scope into Deal Workspace", "deal-workspace", "grn"),
-            jumpRoom("Carry the meeting into Call Planner", "call-planner", "blu")
+            action("Go to After the call", "segment:post-call-routing", "blu")
           ],"The pilot can now be shaped concretely.","You still need the meeting date and owner."),
           branch("NOT READY","fl","\"We are not ready to talk pilot shape yet.\"","\"Then the first review should stay diagnostic. What would make that review feel worth taking?\"",[
             jumpNode("Return to trigger", "trigger-and-urgency", "headcount-pressure", "red"),
@@ -418,27 +418,27 @@
           ],"The buyer is not yet ready for pilot language.","You still need the condition that would justify it.")
         ])
       ]),
-      segment("post-call-routing","10","Post-call routing","Carry the truth into the next room.",false,[
-        node("post-call-routing","room-route","sl","Carry the req truth forward","\"We have the funnel bottleneck, the owner map, what they need to see, and the next review condition. Carry only those into the next room.\"","Use this once the req review has a clear scope.",true,[
+      segment("post-call-routing","10","After the call","Record what you learned and decide where it goes next.",false,[
+        node("post-call-routing","room-route","sl","Record what you learned about the role","\"We have the funnel bottleneck, the owner map, what they need to see, and the next review condition. Carry only those into the next room.\"","Use this once the req review has a clear scope.",true,[
           branch("REQ READY","ok","\"Use Deal Workspace to shape the req review and pilot boundary.\"","\"Then move the req, owner map, evidence threshold, and review goal into the deal record now.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The req is concrete enough for the next room.","You still need the date and attendee set if they are not locked."),
-          branch("MEETING READY","ly","\"Use Call Planner because the next win is the req review meeting itself.\"","\"Then carry the req, who must join, and what the review has to decide.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "org"),
+          branch("MEETING READY","ly","\"The next step is the review meeting for that open role.\"","\"Then carry the req, who must join, and what the review has to decide.\"",[
+            action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The meeting design is the next priority.","You still need the review scope and evidence question."),
           branch("DRIFT RISK","fl","\"Use Future Autopsy if ownership or urgency is still too soft and this may stall.\"","\"Then carry the missing sponsor, evidence blocker, and soft next-step condition as drift clues.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"There is visible stall risk.","You still need the dominant drift reason.")
         ]),
-        node("post-call-routing","autopsy-flag","pr","Carry the stall clues","\"If this slips, what will probably cause it: low hiring volume, weak sponsor, quality anxiety, or no clear req in scope?\"","Use this when the opportunity is interesting but not yet justified.",false,[
+        node("post-call-routing","autopsy-flag","pr","Record what could stall it","\"If this slips, what will probably cause it: low hiring volume, weak sponsor, quality anxiety, or no clear req in scope?\"","Use this when the opportunity is interesting but not yet justified.",false,[
           branch("SPONSOR SOFT","ok","\"Sponsor softness is the risk.\"","\"Then flag the missing sponsor and keep the next meeting built around one req and one decision.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The likely drift cause is visible.","You still need the sponsor trigger."),
-          branch("SCOPE MISSING","fl","\"We still do not have a clear req in scope.\"","\"Then do not pretend the deal is real yet. Carry that as the primary missing truth.\"",[
+          branch("SCOPE MISSING","fl","\"We still do not have a clear req in scope.\"","\"Then do not pretend the deal is real yet. Carry that as the main open question.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"Req scope is still missing.","You still need the first req candidate.")

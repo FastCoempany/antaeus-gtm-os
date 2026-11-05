@@ -154,7 +154,7 @@
       }
     ],
     segments:[
-      segment("opening-frame","01","Opening frame","Start by classifying the dependency.",true,[
+      segment("opening-frame","01","Opening","Find out what the data feeds and how much depends on it.",true,[
         node("opening-frame","primary","pr","Primary opener","\"Most teams can get some external data. The real question is where the current feed still has coverage gaps or stale enough that downstream systems lose trust or teams compensate manually. Is that where this lives for you too?\"","Use this when they will diagnose before seeing product.",true,[
           branch("CONFIRMS","ok","\"Yes. We have feeds, but the downstream teams still patch around freshness or coverage gaps.\"","\"Good. Is the current workflow here AI retrieval, monitoring and compliance, or market / analyst intelligence?\"",[
             jumpNode("Classify the workflow", "opening-frame", "motion-type", "grn"),
@@ -169,7 +169,7 @@
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "pur")
           ],"The buyer has asked to see the product before describing the workflow.","You still need the active dependency before demo.")
         ]),
-        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\"","This changes the rest of the call, so it needs to be known early.",false,[
+        node("opening-frame","motion-type","fu","Classify the workflow","\"Which side is most urgent today: AI or retrieval quality, monitoring and compliance, or market / analyst intelligence?\"","Find this out early, because the rest of the call depends on it.",false,[
           branch("AI / RETRIEVAL","ok","\"The feed powers models, search, or AI retrieval and the current layer is not strong enough.\"","\"Good. Then what breaks first today: latency, coverage, structure, or reproducibility?\"",[
             jumpNode("Map the dependency", "current-state-truth", "downstream-use", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "reliability-proof", "blu")
@@ -198,7 +198,7 @@
           ],"The call may be exploratory only.","You still need the threshold that would make this move.")
         ])
       ]),
-      segment("current-state-truth","02","Current-state truth","Map the dependency and the workaround.",true,[
+      segment("current-state-truth","02","How they work today","Ask where the data comes from today and what they do when it is wrong.",true,[
         node("current-state-truth","downstream-use","fu","Map the downstream use","\"What does this feed power today: AI retrieval, monitoring, risk, compliance, market intelligence, supplier intelligence, or something else?\"","Start here once the category is roughly clear.",true,[
           branch("USE CLEAR","ok","\"We know the exact downstream system or team that depends on it.\"","\"Good. What breaks first when the feed is late, thin, or noisy in that workflow?\"",[
             jumpNode("Name the downstream cost", "pain-and-consequence", "downstream-cost", "grn"),
@@ -242,7 +242,7 @@
           ],"The call is still too abstract.","You still need one real consuming workflow incident.")
         ])
       ]),
-      segment("pain-and-consequence","03","Pain and consequence","Make the data gap expensive.",true,[
+      segment("pain-and-consequence","03","The problem and its cost","Find out what bad or missing data costs them.",true,[
         node("pain-and-consequence","downstream-cost","ri","Name the downstream cost","\"When the external signal is late or weak, what breaks first: model quality, monitoring relevance, analyst time, compliance confidence, or response speed?\"","Start here once the dependency is visible.",true,[
           branch("DOWNSTREAM COST CLEAR","ok","\"The weak feed directly weakens the downstream system people actually care about.\"","\"Which part hurts most in practice today: trust, speed, coverage, or false confidence?\"",[
             jumpNode("Quantify the data pain", "pain-and-consequence", "data-pain", "grn"),
@@ -271,7 +271,7 @@
             jumpNode("Agree the reliability evidence", "proof-threshold", "reliability-proof", "blu")
           ],"Trust risk is the dominant pain.","You still need the exact trust dimension.")
         ]),
-        node("pain-and-consequence","analyst-burden","fu","Name the human compensation burden","\"What do analysts, product teams, or operators still have to do manually because the current layer is not strong enough?\"","Use this when humans are filling the gap.",false,[
+        node("pain-and-consequence","analyst-burden","fu","Name the manual work that covers for bad data","\"What do analysts, product teams, or operators still have to do manually because the current layer is not strong enough?\"","Use this when humans are filling the gap.",false,[
           branch("MANUAL VALIDATION","ok","\"People still validate, chase, or reconcile signal by hand before using it.\"","\"If that stopped, what would improve first: speed, coverage, trust, or cost?\"",[
             jumpNode("Quantify the data pain", "pain-and-consequence", "data-pain", "grn"),
             jumpNode("Agree the workflow evidence", "proof-threshold", "implementation-proof", "blu")
@@ -286,7 +286,7 @@
           ],"The pain is in system output, not manual labor.","You still need the specific degraded output.")
         ])
       ]),
-      segment("trigger-and-urgency","04","Trigger and urgency","Find why this matters now.",true,[
+      segment("trigger-and-urgency","04","Why now","Find out what changed that makes this worth solving now.",true,[
         node("trigger-and-urgency","new-use-case","ri","Use the new dependency or requirement","\"What changed recently that made the current data layer feel too weak now instead of later: a new AI product, compliance need, model dependency, or monitoring use case?\"","Start here when there is active momentum.",true,[
           branch("CLEAR TRIGGER","ok","\"A new use case or requirement made the current layer impossible to ignore.\"","\"What deadline or operating moment makes that urgent right now?\"",[
             jumpNode("Find the owner split", "stakeholder-and-ownership", "owner-split", "grn"),
@@ -315,7 +315,7 @@
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
           ],"Nothing here is urgent enough to push yet.","You still need the watchpoint or an explicit no.")
         ]),
-        node("trigger-and-urgency","exploratory","fu","Keep an exploratory call honest","\"If this is still early, what would have to happen before the external data layer itself became a real priority instead of a technical curiosity?\"","Use this when urgency is not active.",false,[
+        node("trigger-and-urgency","exploratory","fu","Handle an early-research call","\"If this is still early, what would have to happen before the external data layer itself became a real priority instead of a technical curiosity?\"","Use this when urgency is not active.",false,[
           branch("TRIGGER NAMED","ok","\"A launch, model dependency, compliance need, or monitoring failure would make it active quickly.\"","\"Good. Then the right next step is to anchor on the earliest warning sign before that happens.\"",[
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "grn"),
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "blu")
@@ -324,13 +324,13 @@
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "org"),
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "blu")
           ],"The call should stay light and honest.","You still need the reason to re-open later."),
-          branch("WRONG PERSON","fl","\"Leadership or product would have to answer that.\"","\"Then the fastest truth is getting that owner into the next conversation instead of guessing here.\"",[
+          branch("WRONG PERSON","fl","\"Leadership or product would have to answer that.\"","\"Then the fastest answer is getting that owner into the next conversation instead of guessing here.\"",[
             jumpNode("Find the owner split", "stakeholder-and-ownership", "wrong-owner", "red"),
             jumpNode("Shape the next review", "next-step-lock", "live-review", "blu")
           ],"The trigger owner is not in the room.","You still need the right leadership seat.")
         ])
       ]),
-      segment("stakeholder-and-ownership","05","Stakeholder and ownership","Find who can move this.",true,[
+      segment("stakeholder-and-ownership","05","Who's involved","Find out who owns the data and who approves spend on it.",true,[
         node("stakeholder-and-ownership","owner-split","pr","Map the owner split","\"Who feels the weak external signal first today: product, data engineering, AI platform, risk, compliance, or the business team consuming it?\"","Start here once consequence and trigger are visible.",true,[
           branch("PLATFORM LEADS","ok","\"Platform or data engineering feels the burden because the feed is part of critical infrastructure.\"","\"Good. What would they need to believe before changing the current layer?\"",[
             jumpNode("Agree the reliability evidence", "proof-threshold", "reliability-proof", "grn"),
@@ -365,7 +365,7 @@
             jumpNode("Agree what they need to see", "proof-threshold", "real-proof", "blu")
           ],"The missing seat is visible.","You still need the reason they would attend."),
           branch("ENGINEER FIRST","ly","\"An engineer or platform lead probably needs to go first.\"","\"Fine. Then the next review should test one live dependency before we widen it.\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "org"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "org"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
           ],"A smaller technical proving scope may come first.","You still need the exact dependency path."),
           branch("NO IDEA","fl","\"I am not sure who that should be.\"","\"Then the fastest question is simple: who gets blamed first when the current layer is wrong late?\"",[
@@ -374,7 +374,7 @@
           ],"The org map is still fuzzy.","You still need the accountability line.")
         ])
       ]),
-      segment("proof-threshold","06","Evidence threshold","Find what would make them believe.",true,[
+      segment("proof-threshold","06","What they need to see","Agree on the test that would show the data is good enough.",true,[
         node("proof-threshold","real-proof","pr","Name what they really need to see","\"What would make this feel real to your team: stronger freshness and coverage, better downstream output, faster implementation, or cleaner governance?\"","Start here when the buyer says they need evidence.",true,[
           branch("DOWNSTREAM OUTPUT","ok","\"We need to see the downstream system actually get better, not just hear about the feed.\"","\"Good. Then the next review should be built around one live dependency, not a generic API tour.\"",[
             jumpNode("Agree the reliability evidence", "proof-threshold", "reliability-proof", "grn"),
@@ -392,7 +392,7 @@
         node("proof-threshold","reliability-proof","fu","If evidence is about data quality","\"What would make the current layer feel trustworthy enough: latency, coverage, precision, recall, source diversity, entity resolution, or reproducibility?\"","Use this when the buyer's main concern is raw feed trust.",false,[
           branch("ONE QUALITY DIMENSION","ok","\"One or two specific quality dimensions drive the whole decision.\"","\"Good. Then the next review should prove those on a live dependency path.\"",[
             jumpNode("Lock the review", "next-step-lock", "live-review", "grn"),
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "blu")
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "blu")
           ],"What they need to see is now measurable.","You still need the benchmark path."),
           branch("QUALITY MIX","ly","\"It is a blend of freshness, coverage, and trust.\"","\"Which one kills the downstream workflow fastest if it stays weak?\"",[
             jumpNode("Return to downstream cost", "pain-and-consequence", "downstream-cost", "org"),
@@ -405,7 +405,7 @@
         ]),
         node("proof-threshold","implementation-proof","ri","If evidence is about implementation speed","\"What would make this feel worth the switch operationally: faster integration, less maintenance, wider coverage, or fewer manual patches downstream?\"","Use this when they care about build-vs-buy more than raw feed quality.",false,[
           branch("MAINTENANCE RELIEF","ok","\"We need to stop spending engineering or analyst time maintaining the current layer.\"","\"Good. Then the next review should show the exact dependency where maintenance relief matters first.\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "grn"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "grn"),
             jumpNode("Lock the review", "next-step-lock", "live-review", "blu")
           ],"Implementation relief is part of the value case.","You still need the dependency path that proves it."),
           branch("WIDER COVERAGE","ly","\"Coverage or source breadth is the main reason to move.\"","\"Which downstream workflow suffers first when coverage stays too narrow?\"",[
@@ -432,7 +432,7 @@
           ],"Governance is not the first proving scope.","You still need the live dependency path.")
         ])
       ]),
-      segment("current-vendor-and-displacement","07","Current vendor and displacement","Test why the current layer still wins.",false,[
+      segment("current-vendor-and-displacement","07","Current vendor","Find out why their current data source is still in place.",false,[
         node("current-vendor-and-displacement","current-stack","ri","Map the current stack","\"What is doing the job today: internal crawler, search stack, scraping vendors, legacy feeds, analyst labor, or some mix of all of them?\"","Start here once they say they already have a data layer.",true,[
           branch("STACK MIX CLEAR","ok","\"It is a mix of systems and people, and no one fully trusts it end to end.\"","\"Which part gives the team the false sense that the problem is solved when it actually is not?\"",[
             jumpNode("Return to downstream cost", "pain-and-consequence", "downstream-cost", "grn"),
@@ -449,11 +449,11 @@
         ]),
         node("current-vendor-and-displacement","build-bias","fu","Test build-internal bias","\"Which part do you actually want to own long term: the raw ingestion layer, the downstream product, or both?\"","Use this when they have strong build instincts.",false,[
           branch("OWN THE PRODUCT NOT FEED","ok","\"We care more about the downstream product than owning the data infrastructure itself.\"","\"Good. Then the test is whether the current fuel line is already good enough or still taxing the product team too much.\"",[
-            jumpNode("Return to internal alt", "current-state-truth", "internal-alt", "grn"),
+            jumpNode("Return to the internal alternative", "current-state-truth", "internal-alt", "grn"),
             jumpNode("Agree the implementation evidence", "proof-threshold", "implementation-proof", "blu")
           ],"The buyer may not want to own the underlying layer forever.","You still need the build pain worth escaping."),
           branch("OWN THE PIPELINE","ly","\"We prefer to own the ingestion and retrieval stack ourselves.\"","\"Then what part still feels too expensive, brittle, or slow to keep owning?\"",[
-            jumpNode("Return to internal alt", "current-state-truth", "internal-alt", "org"),
+            jumpNode("Return to the internal alternative", "current-state-truth", "internal-alt", "org"),
             jumpNode("Name the data pain", "pain-and-consequence", "data-pain", "blu")
           ],"Build bias is real and must be challenged economically.","You still need the part they do not actually want to own."),
           branch("NO STRONG BIAS","fl","\"We are open either way if the evidence is strong.\"","\"Good. Then keep the conversation on the live dependency and what they need to see, not ideology.\"",[
@@ -463,7 +463,7 @@
         ]),
         node("current-vendor-and-displacement","switch-risk","va","Test switching risk","\"What makes changing the layer feel dangerous: integration work, rights and governance, model reliability, or the risk of breaking downstream systems?\"","Use this to expose the real blocker.",false,[
           branch("DOWNSTREAM BREAKAGE RISK","ok","\"We cannot risk weakening the downstream system while we change the feed layer.\"","\"Then the next review has to prove one narrow dependency path without disturbing the rest.\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "grn"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "grn"),
             jumpNode("Agree the implementation evidence", "proof-threshold", "implementation-proof", "blu")
           ],"Change risk is tied to downstream continuity.","You still need the smallest safe proving scope."),
           branch("RIGHTS OR GOVERNANCE RISK","ly","\"Rights, governance, or reproducibility could slow this down.\"","\"Then what has to be true in the next review so that risk feels manageable?\"",[
@@ -476,7 +476,7 @@
           ],"The blocker may be weak urgency rather than true switching cost.","You still need the real source of inertia.")
         ])
       ]),
-      segment("decision-architecture","08","Decision architecture","Map how this actually moves.",false,[
+      segment("decision-architecture","08","How they'll decide","Find out who signs off and in what order.",false,[
         node("decision-architecture","buying-path","pr","Map the buying path","\"If this became real, who would sponsor, who would evaluate, and who could slow or stop it?\"","Start here once sponsor and evidence are partly visible.",true,[
           branch("PATH CLEAR","ok","\"Platform or product would sponsor, engineering would evaluate, and security or risk would review where needed.\"","\"Good. What would the evaluator have to prove before the sponsor treats this as safe enough to move?\"",[
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "grn"),
@@ -493,7 +493,7 @@
         ]),
         node("decision-architecture","stall-map","fu","Name the stall point","\"Where do projects like this usually slow down internally: engineering backlog, governance review, rights questions, or weak business urgency?\"","Use this when the path exists but feels fragile.",false,[
           branch("ENGINEERING GATE","ok","\"Engineering time and technical skepticism are the first gate.\"","\"Then the next review has to prove one live dependency path that is worth the engineering overhead.\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "grn"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "grn"),
             jumpNode("Agree the implementation evidence", "proof-threshold", "implementation-proof", "blu")
           ],"Engineering prioritization is the real gate.","You still need the path that justifies it."),
           branch("GOVERNANCE GATE","ly","\"Security, rights, or compliance will slow it if the trust model is fuzzy.\"","\"Then the next review has to prove not just utility, but whether the layer is safe enough for the actual use case.\"",[
@@ -511,7 +511,7 @@
             jumpNode("Agree the governance evidence", "proof-threshold", "governance-proof", "blu")
           ],"The governance gate is visible.","You still need the use case that will test it."),
           branch("SHARED GATE","ly","\"It is spread across multiple teams.\"","\"Then the next review has to stay narrow enough that all of them can evaluate one concrete dependency path.\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "org"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "org"),
             jumpNode("Shape the attendees", "next-step-lock", "attendee-shape", "blu")
           ],"Multiple teams own the trust gate.","You still need a narrow enough proving path."),
           branch("NOT SURE YET","fl","\"We have not thought that far ahead.\"","\"That is fine. Then the immediate job is simpler: get one serious review with the right technical and business owner.\"",[
@@ -520,14 +520,14 @@
           ],"Later-stage governance is premature.","You still need the first serious internal review.")
         ])
       ]),
-      segment("next-step-lock","09","Next-step lock","Leave with a real review.",true,[
+      segment("next-step-lock","09","Next step","Leave with a dated review meeting and a named owner.",true,[
         node("next-step-lock","live-review","pr","Lock the dependency review","\"The next best step sounds like a live review with the platform owner and the consuming team around one real dependency path. Does that fit how your team would validate this?\"","Start here whenever evidence points to a live review.",true,[
           branch("YES LOCK IT","ok","\"Yes. That is the right shape.\"","\"Good. Which dependency path should we test so the review is worth their time?\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "grn"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "grn"),
             jumpNode("Shape the attendees", "next-step-lock", "attendee-shape", "blu")
           ],"The next review format is agreed.","You still need the exact path and seats."),
           branch("NEEDS NARROWER START","ly","\"Close, but start with one team or one dependency first.\"","\"That works. Which narrower path still gives us a real proving ground instead of a generic walkthrough?\"",[
-            jumpNode("Choose the proving path", "next-step-lock", "scope-path", "org"),
+            jumpNode("Choose the test case", "next-step-lock", "scope-path", "org"),
             jumpNode("Shape the attendees", "next-step-lock", "attendee-shape", "blu")
           ],"The review shape needs tuning, not replacement.","You still need the narrowest real proving ground."),
           branch("TOO EARLY","fl","\"That feels like too much for where we are.\"","\"Understood. Then what would make the next step real enough to keep momentum without pretending we are further along than we are?\"",[
@@ -535,14 +535,14 @@
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "blu")
           ],"The buyer is not ready for a full review yet.","You still need a lighter but real progression step.")
         ]),
-        node("next-step-lock","scope-path","fu","Choose the proving path","\"What should anchor the review: one model input path, one monitoring workflow, one analyst workflow, or one compliance dependency?\"","Use this to stop the next step from becoming generic.",false,[
+        node("next-step-lock","scope-path","fu","Choose the test case","\"What should anchor the review: one model input path, one monitoring workflow, one analyst workflow, or one compliance dependency?\"","Use this to stop the next step from becoming generic.",false,[
           branch("DEPENDENCY PATH CHOSEN","ok","\"We know the exact dependency path to test.\"","\"Perfect. That makes the review real immediately.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Go to After the call", "segment:post-call-routing", "blu")
           ],"The proving ground is concrete.","You still need the exact attendees and calendar hold."),
           branch("ONE TEAM FIRST","ly","\"Start with one team or one model before going broader.\"","\"That is a strong first scope. Which owner has enough pain to make that session honest?\"",[
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "org"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A narrower proving path may be safer.","You still need the right owner and date."),
           branch("NO PATH YET","fl","\"We do not know which dependency to use yet.\"","\"Then the next step is not locked. Who can pick that path before the meeting goes on calendar?\"",[
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "red"),
@@ -551,14 +551,14 @@
         ]),
         node("next-step-lock","attendee-shape","ri","Shape the attendee list","\"Who has to be in that next review for the outcome to matter: platform, product, risk, compliance, or the consuming team?\"","Use this to keep the meeting from getting decorative.",false,[
           branch("RIGHT PEOPLE NAMED","ok","\"Platform and the consuming team need to be there. Others can come later if the review hits.\"","\"Good. Then this is close to lockable.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "grn"),
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "grn"),
             jumpNode("Write the handoff", "post-call-routing", "handoff", "blu")
           ],"The review has the right seats.","You still need the date and owner."),
           branch("GOVERNANCE NEEDED NOW","ly","\"Security, compliance, or legal should be there from the start.\"","\"Fine. Then the agenda has to stay tight and focused on evidence so the session is worth senior time.\"",[
             jumpNode("Return to governance evidence", "proof-threshold", "governance-proof", "org"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"The meeting is governance-weighted.","You still need the evidence question to justify it."),
-          branch("ATTENDEES UNCLEAR","fl","\"We can figure that out later.\"","\"That usually kills momentum. Who owns deciding the attendee list before the follow-up goes out?\"",[
+          branch("ATTENDEES UNCLEAR","fl","\"We can figure that out later.\"","\"That usually stalls the deal. Who owns deciding the attendee list before the follow-up goes out?\"",[
             jumpNode("Use soft next step", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Return to owner split", "stakeholder-and-ownership", "owner-split", "blu")
           ],"The meeting is not really locked yet.","You still need the owner of the invite list.")
@@ -566,59 +566,59 @@
         node("next-step-lock","soft-deferral","va","If the next step stays soft","\"What has to become true before the next conversation is worth real calendar time?\"","Use this when they want to stay polite but noncommittal.",false,[
           branch("ADVANCEMENT CONDITION","ok","\"If we can prove this on one live dependency path with the right people, the next session is worth scheduling.\"","\"That is enough. Let us route that exact condition forward.\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
           ],"A real advancement condition is now named.","You still need to carry it forward cleanly."),
           branch("SEND MATERIAL","ly","\"Send material and we will see.\"","\"I will, but I want to attach it to the one decision you still need to make, not a generic deck. What is that decision?\"",[
             jumpNode("Write the handoff", "post-call-routing", "handoff", "org"),
             jumpNode("Return to real evidence", "proof-threshold", "real-proof", "blu")
           ],"The buyer is deferring without a clear gate.","You still need the decision the material should support."),
           branch("NO REAL NEXT","fl","\"Nothing specific. We just need to think.\"","\"Then I would rather leave with the honest blocker than pretend we have a next step. What is still missing?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"Momentum is still too soft to trust.","You still need the missing truth in plain language.")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"Momentum is still too soft to trust.","You still need the open question in plain language.")
         ])
       ]),
-      segment("post-call-routing","10","Post-call routing","Hand off only what helps.",false,[
-        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to strip the call down to usable data-layer truth.",false,[
+      segment("post-call-routing","10","After the call","Record what you learned and decide where it goes next.",false,[
+        node("post-call-routing","handoff","cl","Write the handoff","\"If the next room picked this up cold, what would it need to know in the first 30 seconds?\"","Use this to boil the call down to the data-layer facts you can use.",false,[
           branch("HANDOFF CLEAN","ok","\"Carry the live dependency, owner split, what they need to see, and next review condition.\"","\"Good. Keep only what changes the next step.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "grn"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
-          ],"The handoff can now start from signal instead of notes.","You still need the one missing truth to chase."),
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "grn"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
+          ],"The handoff can now start from signal instead of notes.","You still need the one open question to chase."),
           branch("HANDOFF TOO VERBAL","ly","\"We have a lot of detail, but not a clean signal yet.\"","\"Then throw away anything that does not change the next review question. What is actually usable?\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "org"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "org"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The raw detail exists, but the usable signal is still diluted.","You still need the core problem and where it goes next."),
           branch("NO HANDOFF HABIT","fl","\"We do not really capture this cleanly today.\"","\"Then the minimum capture rule is simple: owner, dependency, what they need to see, next condition.\"",[
-            jumpNode("Name the missing truth", "post-call-routing", "missing-truth", "red"),
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "blu")
+            jumpNode("Name what is still unknown", "post-call-routing", "missing-truth", "red"),
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "blu")
           ],"The handoff discipline itself is weak.","You still need the one capture rule that sticks.")
         ]),
-        node("post-call-routing","missing-truth","fu","Name the missing truth","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
-          branch("MISSING TRUTH CLEAR","ok","\"We still need the exact dependency path, the right owner seat, or the evidence benchmark.\"","\"Good. Then route the call to the room most likely to surface that fast.\"",[
-            jumpNode("Choose the next room", "post-call-routing", "room-route", "grn"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
-          ],"The missing truth is clearly named.","You still need the room best suited to chase it."),
+        node("post-call-routing","missing-truth","fu","Name what is still unknown","\"What is still missing that the next room has to chase directly before this becomes real?\"","Use this so the handoff carries a chase-down target.",false,[
+          branch("MISSING TRUTH CLEAR","ok","\"We still need the exact dependency path, the right owner seat, or the evidence benchmark.\"","\"Good. Then send what you learned to the place most likely to answer that quickly.\"",[
+            jumpNode("Choose where this goes next", "post-call-routing", "room-route", "grn"),
+            action("Set the next meeting", "segment:next-step-lock", "blu")
+          ],"The open question is clearly named.","You still need to decide where to follow up on it."),
           branch("MISSING OWNER","ly","\"We know the gap, but not who can answer it.\"","\"Then the next room should start with the owner map, not another product conversation.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "org"),
+            action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
-          ],"The truth gap is visible but ownerless.","You still need the best route to the right person."),
+          ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
           branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Name the trust or dependency drift now and correct it before the downstream system pays for it.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")
         ]),
-        node("post-call-routing","room-route","pr","Choose the next room","\"Which next room gives the strongest immediate leverage: shape the next review, attach truth to the live dependency, or name the failure pattern before it repeats?\"","Use this to route with intent instead of habit.",false,[
-          branch("CALL PLANNER","ok","\"The next step is a tighter dependency review with a clearer question to answer.\"","\"Then route this to Call Planner with the dependency path, owner map, and what they need to see.\"",[
-            jumpRoom("Open Call Planner", "call-planner", "grn"),
+        node("post-call-routing","room-route","pr","Choose where this goes next","\"Which next room gives the strongest immediate leverage: shape the next review, attach what you learned to the live dependency, or name the failure pattern before it repeats?\"","Use this to route with intent instead of habit.",false,[
+          branch("NEXT MEETING","ok","\"The next step is a tighter dependency review with a clearer question to answer.\"","\"Then set the next meeting and bring the dependency path, owner map, and what they need to see.\"",[
+            action("Set the next meeting", "segment:next-step-lock", "grn"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The next room is conversational and tactical.","You still need the open question in plain language."),
           branch("DEAL WORKSPACE","ly","\"There is already a live product, risk, or monitoring path here.\"","\"Then attach the what is actually happening to that path immediately before the story drifts again.\"",[
             jumpRoom("Open Deal Workspace", "deal-workspace", "org"),
             jumpRoom("Open Future Autopsy", "future-autopsy", "blu")
-          ],"The truth belongs with a live dependency path.","You still need the top risk to carry with it."),
+          ],"These facts belong with the specific data dependency you discussed.","You still need the top risk to carry with it."),
           branch("FUTURE AUTOPSY","fl","\"This still feels like trust drift or activity without an owner.\"","\"Then route it to Future Autopsy now and name the failure pattern before the downstream cost grows.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
-            jumpRoom("Open Call Planner", "call-planner", "blu")
+            action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The next room may need to fix what has drifted, not push the deal forward.","You still need the failure pattern in plain language.")
         ])
       ])
