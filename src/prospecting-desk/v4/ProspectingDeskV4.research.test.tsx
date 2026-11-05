@@ -89,3 +89,43 @@ describe("Prospecting Desk — search the web, then add to Just added", () => {
         await waitFor(() => expect(container.textContent).toMatch(/Last checked .+ new then/));
     });
 });
+
+describe("Prospecting Desk — demo simulates the weekly automatic re-check", () => {
+    it("adds one sample company per due saved search, marks it, and leaves fresh searches alone", async () => {
+        const { setQueryCards, queryCards } = await import("../state");
+        const { simulateDemoRerun } = await import("./research-state");
+        const { autoRerunEnabled } = await import("../lib/auto-rerun");
+        autoRerunEnabled.value = null;
+        const now = Date.parse("2026-11-05T12:00:00Z");
+        const base = { platform: "linkedin" as const, intent: "", notes: "", targetIcp: "", createdAt: "2026-10-01T00:00:00Z", updatedAt: "2026-10-01T00:00:00Z" };
+        setQueryCards([
+            { ...base, id: "q-due", query: "Airlines hiring pilots" },
+            { ...base, id: "q-fresh", query: "Retail chains hiring", lastCheckedAt: "2026-11-04T12:00:00Z" }
+        ]);
+        const added = await simulateDemoRerun({ force: true, now });
+        expect(added).toBe(1);
+        const p = prospects.value.find((x) => x.sourceQueryId === "q-due")!;
+        expect(p.stage).toBe("captured");
+        expect(p.webResearch?.auto).toBe(true);
+        expect(p.webResearch?.sample).toBe(true);
+        const due = queryCards.value.find((c) => c.id === "q-due")!;
+        expect(due.lastCheckedBy).toBe("auto");
+        expect(due.lastNewCount).toBe(1);
+        expect(queryCards.value.find((c) => c.id === "q-fresh")!.lastCheckedBy).toBeUndefined();
+
+        const { container } = render(<ProspectingDeskV4 />);
+        expect(container.textContent).toContain("Checked automatically");
+        expect(container.textContent).toContain("found by the weekly check");
+        expect(container.textContent).toContain("Turn off weekly checks");
+    });
+
+    it("does nothing when the demo switch is off", async () => {
+        const { setQueryCards } = await import("../state");
+        const { simulateDemoRerun } = await import("./research-state");
+        const { autoRerunEnabled } = await import("../lib/auto-rerun");
+        autoRerunEnabled.value = false;
+        setQueryCards([{ id: "q", platform: "linkedin", query: "Airlines hiring pilots", intent: "", notes: "", targetIcp: "", createdAt: "x", updatedAt: "x" }]);
+        expect(await simulateDemoRerun({ force: true })).toBe(0);
+        expect(prospects.value).toHaveLength(0);
+    });
+});

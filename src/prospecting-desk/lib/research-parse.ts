@@ -92,15 +92,18 @@ export function parseProspectResearch(v: unknown): ProspectResearch | undefined 
         fitMatches: asStringList(o["fitMatches"], 4),
         fitUnknowns: asStringList(o["fitUnknowns"], 4),
         suggested: parseSuggested(o["suggested"]),
-        sample: o["sample"] === true
+        sample: o["sample"] === true,
+        ...(o["auto"] === true ? { auto: true } : {})
     };
 }
 
 /** Optional saved-search check fields; absent on older rows. */
 export function parseQueryCardCheck(
     o: Record<string, unknown>
-): { lastCheckedAt?: string; lastNewCount?: number } {
-    const out: { lastCheckedAt?: string; lastNewCount?: number } = {};
+): { lastCheckedAt?: string; lastNewCount?: number; lastCheckedBy?: "auto" | "you" } {
+    const out: { lastCheckedAt?: string; lastNewCount?: number; lastCheckedBy?: "auto" | "you" } = {};
+    const by = o["lastCheckedBy"];
+    if (by === "auto" || by === "you") out.lastCheckedBy = by;
     const at = asString(o["lastCheckedAt"]);
     if (at) out.lastCheckedAt = at;
     const n = o["lastNewCount"];

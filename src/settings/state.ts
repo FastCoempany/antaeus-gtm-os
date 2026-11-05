@@ -102,6 +102,7 @@ export function refreshAll(): void {
     backup.value = readBackup();
     void refreshPhaseFToggle();
     void refreshDensity();
+    void loadAutoRerun();
 }
 
 export function setCategory(next: ProductCategory): void {
@@ -364,6 +365,21 @@ export async function deleteCloudData(): Promise<CloudDeleteResult> {
 // ── Phase F toggle actions ────────────────────────────────────
 
 import { loadPhaseFToggle, savePhaseFToggle } from "./lib/phase-f-toggle";
+import { loadAutoRerun, saveAutoRerun } from "@/prospecting-desk/lib/auto-rerun";
+
+export async function toggleAutoRerun(next: boolean): Promise<void> {
+    const result = await saveAutoRerun(next);
+    if (!result.ok) {
+        flashToast("bad", result.error ?? "Couldn't save that just now. Try again in a moment.");
+        return;
+    }
+    flashToast(
+        next ? "good" : "info",
+        next
+            ? "Saved searches will be checked again every week."
+            : "Weekly automatic checks of saved searches are off."
+    );
+}
 
 export async function refreshPhaseFToggle(): Promise<void> {
     const state = await loadPhaseFToggle();
@@ -387,8 +403,8 @@ export async function togglePhaseF(next: boolean): Promise<void> {
         flashToast(
             next ? "good" : "info",
             next
-                ? "Phase F proposals turned on."
-                : "Phase F proposals turned off."
+                ? "Recommendations turned on."
+                : "Recommendations turned off."
         );
     } finally {
         phaseFSaving.value = false;

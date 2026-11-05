@@ -44,6 +44,7 @@
 .pd4-grptt { font-family: var(--ds-mono, monospace); font-size: 9.5px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ds-ink-2, rgba(10,28,64,.62)); padding: 0 2px 8px; border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); }
 .pd4-grptt .pd4-n { color: var(--ds-ink-3, rgba(10,28,64,.4)); }
 .pd4-srow { display: flex; align-items: center; gap: 14px; padding: 12px 2px; border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); }
+.pd4-auto { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 6px 2px 10px; border-bottom: 1px solid var(--ds-hair, rgba(10,28,64,.09)); }
 .pd4-sdot { flex: 0 0 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--ds-blue, #2563eb); box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
 .pd4-sbody { flex: 1 1 auto; min-width: 0; }
 .pd4-q { font-weight: 700; font-size: 13.5px; letter-spacing: -0.01em; }

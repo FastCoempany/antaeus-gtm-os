@@ -22,11 +22,13 @@ import {
     exportCloudData,
     deleteCloudData,
     togglePhaseF,
+    toggleAutoRerun,
     toggleLiveEdge,
     refreshCloudStatus,
     setDensity
 } from "../state";
 import { liveEdgeOn } from "@/lib/edge/edge-prefs";
+import { autoRerunEnabled } from "@/prospecting-desk/lib/auto-rerun";
 import { densityState } from "@/lib/density";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "../lib/types";
 import { getSupabaseClient } from "@/lib/supabase-client";
@@ -430,6 +432,17 @@ export function SettingsV4(): JSX.Element {
                         <div class="st4-ia">
                             <button type="button" class={`st4-btn${phaseFEnabled.value ? "" : " is-ghost"}`} onClick={() => void togglePhaseF(!phaseFEnabled.value)}>
                                 {phaseFEnabled.value ? t("On") : t("Off")}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="st4-item">
+                        <div>
+                            <div class="st4-it">{t("Re-check saved searches automatically", { class: "body" })}</div>
+                            <div class="st4-id">{t("Once a week, Antaeus runs your Prospecting Desk saved searches again and adds new companies to Just added. Each check is a paid web search and counts toward the weekly research limit. Off by default.", { class: "body" })}</div>
+                        </div>
+                        <div class="st4-ia">
+                            <button type="button" class={`st4-btn${autoRerunEnabled.value ? "" : " is-ghost"}`} onClick={() => void toggleAutoRerun(!autoRerunEnabled.value)}>
+                                {autoRerunEnabled.value ? t("On") : t("Off")}
                             </button>
                         </div>
                     </div>

@@ -2224,6 +2224,7 @@ export type Database = {
           onboarding_answers: Json
           onboarding_completed: boolean
           phase_f_proposals_enabled: boolean | null
+          prospecting_auto_rerun_enabled: boolean
           product_category: string | null
           updated_at: string
           value_prop: string | null
@@ -2237,6 +2238,7 @@ export type Database = {
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null
+          prospecting_auto_rerun_enabled?: boolean
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null
@@ -2250,6 +2252,7 @@ export type Database = {
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null
+          prospecting_auto_rerun_enabled?: boolean
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null

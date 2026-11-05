@@ -22,6 +22,7 @@ import { GroundLine } from "@/lib/ground/GroundLine";
 import { ResearchFind } from "./ResearchFind";
 import { ResearchDetail, SuggestedAnswer } from "./ResearchDetail";
 import { findBusy, runFind } from "./research-state";
+import { autoRerunEnabled, saveAutoRerun } from "../lib/auto-rerun";
 import { formatDate } from "./research-format";
 import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./prospecting-desk-v4.css";
@@ -160,6 +161,31 @@ export function ProspectingDeskV4(): JSX.Element {
                 {cards.length > 0 ? (
                     <div class="pd4-grp">
                         <div class="pd4-grptt">{t("Saved searches")} <span class="pd4-n">· {cards.length}</span></div>
+                        {autoRerunEnabled.value !== null ? (
+                            <div class="pd4-auto">
+                                <span class="pd4-h">
+                                    {autoRerunEnabled.value
+                                        ? t("Antaeus checks these again every week and adds new matches to Just added.", { class: "body" })
+                                        : t("Weekly automatic checks are off. Use Check for new matches to run a search again.", { class: "body" })}
+                                </span>
+                                <button
+                                    type="button"
+                                    class="pd4-run pd4-run--ghost"
+                                    aria-pressed={autoRerunEnabled.value}
+                                    onClick={() => {
+                                        const next = !autoRerunEnabled.value;
+                                        void saveAutoRerun(next).then((r) => {
+                                            if (!r.ok && r.error) toast(r.error);
+                                            else toast(next
+                                                ? t("Weekly automatic checks are on.")
+                                                : t("Weekly automatic checks are off."));
+                                        });
+                                    }}
+                                >
+                                    {autoRerunEnabled.value ? t("Turn off weekly checks") : t("Turn on weekly checks")}
+                                </button>
+                            </div>
+                        ) : null}
                         {cards.slice(0, 6).map((c) => {
                             const fromThis = all.filter((p) => p.sourceQueryId === c.id).length;
                             return (
@@ -169,7 +195,9 @@ export function ProspectingDeskV4(): JSX.Element {
                                         <div class="pd4-q">{c.query}</div>
                                         {c.intent ? <div class="pd4-h">{c.intent}</div> : null}
                                         {c.lastCheckedAt ? (
-                                            <div class="pd4-h">{t("Last checked")} {formatDate(c.lastCheckedAt)} · {c.lastNewCount ?? 0} {t("new then")}</div>
+                                            <div class="pd4-h">
+                                                {c.lastCheckedBy === "auto" ? t("Checked automatically") : t("Last checked")} {formatDate(c.lastCheckedAt)} · {c.lastNewCount ?? 0} {t("new then")}
+                                            </div>
                                         ) : null}
                                     </div>
                                     <span class="pd4-sn">{fromThis > 0 ? <><b>{fromThis}</b> {t("companies added")}</> : t("no companies added yet")}</span>
@@ -252,7 +280,7 @@ export function ProspectingDeskV4(): JSX.Element {
                                     <button type="button" class={`pd4-rr${selOpen?.id === p.id ? " is-active" : ""}`} key={p.id} onClick={() => (selectedId.value = p.id)}>
                                         <div class="pd4-ra">{p.accountName} <span class="pd4-rsc">{pq.score}</span></div>
                                         {p.contactName ? <div class="pd4-rc">{p.contactName}{p.contactTitle ? ` · ${p.contactTitle}` : ""}</div> : null}
-                                        <div class="pd4-rnote">{answered(p).left === 0 ? t("qualification complete") : `${answered(p).left} ${t("checks remaining")}`}{p.webResearch ? ` · ${p.webResearch.sample ? t("sample research") : t("researched")}` : ""}</div>
+                                        <div class="pd4-rnote">{answered(p).left === 0 ? t("qualification complete") : `${answered(p).left} ${t("checks remaining")}`}{p.webResearch ? ` · ${p.webResearch.sample ? t("sample research") : t("researched")}` : ""}{p.webResearch?.auto ? ` · ${t("found by the weekly check")}` : ""}</div>
                                     </button>
                                 );
                             })

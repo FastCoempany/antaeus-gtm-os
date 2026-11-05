@@ -19,6 +19,8 @@ import {
 import { loadProspects, loadQueryCards } from "./lib/persistence";
 import { readInboundAccount } from "./lib/handoff";
 import { bootCloudPersistence } from "./lib/cloud-persistence";
+import { loadAutoRerun } from "./lib/auto-rerun";
+import { simulateDemoRerun } from "./v4/research-state";
 import { prefillDescriptionOnce } from "./v4/research-state";
 
 /**
@@ -142,4 +144,8 @@ void (async (): Promise<void> => {
             err instanceof Error ? err.message : String(err)
         );
     }
+    // The weekly automatic re-check switch, and (demo only) the simulated
+    // re-check of due saved searches against the demo's sample companies.
+    await loadAutoRerun();
+    if (useV4) await simulateDemoRerun();
 })();
