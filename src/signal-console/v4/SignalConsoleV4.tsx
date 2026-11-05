@@ -236,7 +236,7 @@ export function SignalConsoleV4(): JSX.Element {
                     <div class="sc4-shape__key">
                         <span><i class="sc4-kd sc4-kd--now" /><b>{field.shape.now}</b> {t("high priority")}</span>
                         <span><i class="sc4-kd sc4-kd--warm" /><b>{field.shape.warm}</b> {t("priority declining")}</span>
-                        <span><i class="sc4-kd sc4-kd--emerging" /><b>{field.shape.emerging}</b> {t("new signals")}</span>
+                        <span><i class="sc4-kd sc4-kd--emerging" /><b>{field.shape.emerging}</b> {t("new signal or newly watched")}</span>
                         <span><i class="sc4-kd sc4-kd--cold" /><b>{field.shape.cold}</b> {t("monitor")}</span>
                     </div>
                 </div>
@@ -244,7 +244,10 @@ export function SignalConsoleV4(): JSX.Element {
                     {t("Review accounts by current priority. Open an account to see the signals and activity driving its ranking.", { class: "body" })}
                 </p>
                 <p class="sc4-health">
-                    <b>{field.accountsWatched}</b> {t("watched accounts")} · <b>{field.signalsThisWeek}</b> {t("new signals this week")} · <b>{field.compounding}</b> {t("accounts with multiple reinforcing signals")} · <b>{field.stillWeak}</b> {t("accounts with low current priority")}
+                    {/* Each count says what it counts: signals (not accounts) dated this
+                        week, and accounts by priority score. "60 or more" is the same set
+                        as the high-priority + priority-declining groups above. */}
+                    <b>{field.accountsWatched}</b> {field.accountsWatched === 1 ? t("watched account") : t("watched accounts")} · <b>{field.signalsThisWeek}</b> {field.signalsThisWeek === 1 ? t("signal from the last 7 days") : t("signals from the last 7 days")} · <b>{field.compounding}</b> {field.compounding === 1 ? t("account with priority 60 or more") : t("accounts with priority 60 or more")} · <b>{field.stillWeak}</b> {field.stillWeak === 1 ? t("account with priority below 40") : t("accounts with priority below 40")}
                 </p>
 
                 {field.accountsWatched === 0 ? (

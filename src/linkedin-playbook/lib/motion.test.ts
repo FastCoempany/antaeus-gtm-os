@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deriveMotion } from "./motion";
+import { deriveMotion, statsWithLoggedSteps } from "./motion";
 import {
     EMPTY_STATS,
     type AccountCounts,
@@ -217,5 +217,42 @@ describe("deriveMotion — recovery guidance", () => {
         expect(m.key).toBe("add_air_cover");
         expect(m.recovery).toContain("Beta Robotics");
         expect(m.recovery).toContain("skip the channel");
+    });
+});
+
+describe("statsWithLoggedSteps — the reason agrees with the logged step", () => {
+    it("does not say 'no connection request is logged' when the rail shows the connection-request step as logged", () => {
+        // Boeing in the enterprise demo: steps 1-3 logged by step name, but
+        // the rows carry action types that do not match their step.
+        const raw = statsWith({ boeing: { content_engage: 1, connection_request: 0, dm: 1 } });
+        const aligned = statsWithLoggedSteps(raw, "Boeing", new Set([0, 1, 2] as const));
+        const m = deriveMotion({ ...baseCtx, hottestAccount: { name: "Boeing", heat: 62 }, stats: aligned });
+        expect(m.key).toBe("convert_connection");
+        expect(m.whyNow).toContain("A LinkedIn connection request is already logged for Boeing");
+        expect(m.whyNow).not.toContain("no LinkedIn connection request is logged");
+    });
+
+    it("still recommends the connection request when that step is not logged yet", () => {
+        const aligned = statsWithLoggedSteps(EMPTY_STATS, "OpenAI", new Set([0, 1] as const));
+        const m = deriveMotion({ ...baseCtx, hottestAccount: { name: "OpenAI", heat: 50 }, stats: aligned });
+        expect(m.key).toBe("warm_signal_account");
+        expect(m.whyNow).toContain("no LinkedIn connection request is logged");
+    });
+
+    it("leaves the counts alone when no step is logged for the account", () => {
+        const raw = statsWith({ acme: { content_engage: 3, connection_request: 2, dm: 1 } });
+        expect(statsWithLoggedSteps(raw, "Acme", new Set())).toBe(raw);
+    });
+
+    it("after the useful-information step, the reason names the meeting request, not 'no action required'", () => {
+        const aligned = statsWithLoggedSteps(EMPTY_STATS, "Boeing", new Set([0, 1, 2, 3] as const));
+        const m = deriveMotion({ ...baseCtx, hottestAccount: { name: "Boeing", heat: 62 }, stats: aligned });
+        expect(m.cueIndex).toBe(4);
+        expect(m.whyNow).toContain("a direct message are already logged for Boeing");
+    });
+
+    it("states the scale of the priority score", () => {
+        const m = deriveMotion({ ...baseCtx, hottestAccount: { name: "Acme", heat: 62 } });
+        expect(m.context).toContain("Priority score 62 out of 99.");
     });
 });

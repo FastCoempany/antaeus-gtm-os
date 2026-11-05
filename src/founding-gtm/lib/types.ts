@@ -17,6 +17,8 @@
  *   7. First-week operating cadence
  */
 
+import type { PlanInputs } from "@/quota-workback/lib/types";
+
 export type SectionId =
     | "who_hits"
     | "rails_that_worked"
@@ -226,6 +228,14 @@ export interface QuotaInputs {
     readonly cycle: number;
     readonly touchesPerDay?: number;
     readonly meetingsPerWeek?: number;
+    /**
+     * The full Quota Workback plan inputs, read with Quota Workback's own
+     * loader. Section 7 runs Quota Workback's engine over these so the
+     * handoff states the same daily outreach, meetings, opportunities, and
+     * deals the Quota room shows. Absent in older callers; Section 7 then
+     * fills the missing assumptions with Quota Workback's defaults.
+     */
+    readonly plan?: PlanInputs;
 }
 
 export interface FoundingGtmHealth {

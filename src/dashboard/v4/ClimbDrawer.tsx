@@ -6,6 +6,7 @@ import { t } from "@/lib/voice/t";
 import { commandMode, commandSummary } from "../state";
 import { exportCommandCenterJson } from "../lib/command-export";
 import { exportReadinessJson } from "../lib/readiness-export";
+import { chipFor } from "./lib/area-chip";
 import "./climb-drawer.css";
 
 /**
@@ -66,13 +67,6 @@ const HERO_READ: Record<Verdict, string> = {
     )
 };
 
-/** Quiet chip state per assessed part — words, never surfaced scores. */
-function chipFor(score: number): { cls: string; word: string } {
-    if (score >= 14) return { cls: "ok", word: t("solid") };
-    if (score >= 8) return { cls: "ok", word: t("workable") };
-    if (score > 0) return { cls: "thin", word: t("limited") };
-    return { cls: "thin", word: t("none yet") };
-}
 
 export interface ClimbDrawerProps {
     readonly summary: ReadinessSummary;
@@ -157,7 +151,7 @@ export function ClimbDrawer(props: ClimbDrawerProps): JSX.Element {
                     <div class="clmb-sl">{t("Current readiness by area")}</div>
                     <div class="clmb-holding">
                         {props.summary.dimensions.map((d) => {
-                            const chip = chipFor(d.score);
+                            const chip = chipFor(d);
                             return (
                                 <span class={`clmb-hp is-${chip.cls}`} key={d.id}>
                                     {d.label} — {chip.word}

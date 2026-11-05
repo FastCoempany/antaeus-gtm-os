@@ -273,6 +273,13 @@ export function scoreDeals(input: ReadinessInput): DimensionScore {
 }
 
 /**
+ * The pilot gap on the combined pilots/reviews/handoff area. Exported so
+ * the Readiness panel can say "few pilot results" next to an area that
+ * still scores well on reviews and handoff sections.
+ */
+export const PILOT_RESULTS_GAP = t("Record results from 3+ pilots", { class: "body" });
+
+/**
  * Pilot evidence & handoff — artifacts and documented outcomes another seller
  * can inspect rather than relying on founder memory.
  */
@@ -289,7 +296,7 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
             )
         );
     } else {
-        gaps.push(t("Record results from 3+ pilots", { class: "body" }));
+        gaps.push(PILOT_RESULTS_GAP);
     }
 
     const autopsies = saturate(input.futureAutopsiesRun, 3, 5);

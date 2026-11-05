@@ -15,6 +15,7 @@ import type {
     SectionsInput,
     TouchRecord
 } from "./types";
+import { loadInputs as loadQuotaPlanInputs } from "@/quota-workback/lib/persistence";
 
 const DISCOVERY_DISPOSITIONS: ReadonlySet<DiscoveryDisposition> = new Set<DiscoveryDisposition>([
     "advanced",
@@ -481,7 +482,13 @@ function readQuota(storage: StorageLike): QuotaInputs | null {
         winRate: asNumber(o.winRate ?? o.win),
         cycle: asNumber(o.cycle),
         touchesPerDay: asNumber(o.touchesPerDay) || undefined,
-        meetingsPerWeek: asNumber(o.meetingsPerWeek) || undefined
+        meetingsPerWeek: asNumber(o.meetingsPerWeek) || undefined,
+        // Read with Quota Workback's own loader so Section 7 uses exactly
+        // the assumptions (and defaults) the Quota room uses.
+        plan: loadQuotaPlanInputs({
+            getItem: (k: string) => storage.getItem(k),
+            setItem: () => {}
+        })
     };
 }
 

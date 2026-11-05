@@ -95,7 +95,7 @@ export const SAMPLE_COMPANIES: ReadonlyArray<SampleCompanySeed> = [
     {
         book: "ent", name: "Randstad", domain: "randstad.com", industry: "Global Staffing", employees: "40,000+",
         why: "If Luca works at staffing-firm scale, this is the largest possible account. Expect a long sales cycle for a very large deal.",
-        signals: [{ headline: "World's largest staffing firm — screening volume IS the product, and AI screening is the industry's live debate", detail: "Randstad places hundreds of thousands of workers; every placement is a screen.", source: "Industry reporting", agoDays: 24, confidence: 0.75, ai: true }],
+        signals: [{ headline: "World's largest staffing firm — screening candidates is the core of its business, and AI screening is an active debate in the industry", detail: "Randstad places hundreds of thousands of workers; every placement is a screen.", source: "Industry reporting", agoDays: 24, confidence: 0.75, ai: true }],
         personaTitle: ENT_RECRUITING_OPS, personaNote: ENT_RECRUITING_OPS_NOTE, approach: ENT_APPROACH_EXPERT
     },
     {

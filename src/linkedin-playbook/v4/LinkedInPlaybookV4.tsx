@@ -13,7 +13,7 @@ import {
     logCue
 } from "../state";
 import { CUES, findCue } from "../lib/cues";
-import { deriveMotion } from "../lib/motion";
+import { deriveMotion, statsWithLoggedSteps } from "../lib/motion";
 import { cueScript, METHOD_TEMPLATES } from "../lib/scripts";
 import { hrefToSignalConsole } from "../lib/handoff";
 import { saveAction } from "../lib/cloud-persistence";
@@ -132,7 +132,9 @@ export function LinkedInPlaybookV4(): JSX.Element {
                 ? { name: focusName, heat: focusName.toLowerCase() === highestPriority?.name.toLowerCase() ? highestPriority.heat : 0 }
                 : null,
         latestTouch: latestTouch.value,
-        stats: st
+        // Count the steps the rail shows as logged, so "Why this action"
+        // describes the same state as the step line above it.
+        stats: statsWithLoggedSteps(st, focusName, done)
     });
     const script = cueScript(cue, motion);
     const others = accountStates.filter(
@@ -189,7 +191,7 @@ export function LinkedInPlaybookV4(): JSX.Element {
                         <div class="lp4-hd">
                             <span class="lp4-who">{t("Recommended action for")} <b>{focusName}</b></span>
                             <a class="lp4-src" href={hrefToSignalConsole(focusName)}>◆ {t("Signal Console")}</a>
-                            {priorityScore > 0 ? <span class="lp4-heat">{t("PRIORITY")} · {priorityScore}</span> : null}
+                            {priorityScore > 0 ? <span class="lp4-heat">{t("Priority")} {priorityScore} {t("out of 99")}</span> : null}
                         </div>
                         <div class="lp4-spine">
                             {STEP_LABELS.map((label, i) => (

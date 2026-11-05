@@ -11,6 +11,11 @@ import {
     countReady
 } from "./sections";
 import type { DealRecord, IcpRecord, SectionsInput } from "./types";
+import { loadSectionsInput } from "./cross-room";
+import { computeMetrics as computeQuotaMetrics } from "@/quota-workback/lib/engine";
+import { loadInputs as loadQuotaInputs } from "@/quota-workback/lib/persistence";
+import { readDailyOutreachRequirement } from "@/quota-workback/lib/coverage";
+import { EMPTY_COVERAGE } from "@/quota-workback/lib/types";
 
 const empty: SectionsInput = {
     icps: [],
@@ -162,7 +167,7 @@ describe("authorSection2 — outreach patterns", () => {
         ];
         const s = authorSection2(input({ touches }));
         expect(s.status).toBe("ready");
-        expect(s.evidence[0]).toContain("email");
+        expect(s.evidence[0]).toBe("Email: 10 responses from 10 attempts (100%)");
         expect(s.body.join(" ")).toMatch(/observed response rate/i);
         expect(s.body.join(" ")).toMatch(/start the new hire on that channel/i);
     });
@@ -444,7 +449,7 @@ describe("authorSection7 — first-week cadence", () => {
         const s = authorSection7(
             input({
                 quota: {
-                    quota: 500000,
+                    quota: 6000000,
                     acv: 50000,
                     winRate: 0.25,
                     cycle: 90,
@@ -454,7 +459,8 @@ describe("authorSection7 — first-week cadence", () => {
             })
         );
         expect(s.status).toBe("ready");
-        expect(s.body[0]).toContain("10 closed deals");
+        // $6M a year = $500k a month = 10 deals of $50k a month.
+        expect(s.body[0]).toContain("10 closed-won deals a month");
         expect(s.evidence.find((e) => e.includes("Win-rate assumption"))).toBeDefined();
         expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
@@ -462,12 +468,12 @@ describe("authorSection7 — first-week cadence", () => {
     it("reads a whole-number percent win rate the way Quota Workback stores it", () => {
         const s = authorSection7(
             input({
-                quota: { quota: 500000, acv: 50000, winRate: 25, cycle: 90, touchesPerDay: 20 },
+                quota: { quota: 6000000, acv: 50000, winRate: 25, cycle: 90, touchesPerDay: 20 },
                 openDeals: [deal({ id: "o1" })]
             })
         );
         expect(s.evidence).toContain("Win-rate assumption: 25%");
-        // 10 deals at a 25% win rate = 40 qualified opportunities, not 1.
+        // 10 deals a month at a 25% win rate = 40 qualified opportunities, not 1.
         expect(s.body[0]).toContain("about 40 qualified opportunities");
     });
 
@@ -532,14 +538,45 @@ describe("evidence integrity regressions", () => {
             closedWon: ["A", "B", "C", "D"].map((icpLabel) => deal({ id: icpLabel, icpLabel }))
         }));
         expect(s.body[0]).toContain("4 distinct customer profiles");
-        expect(s.evidence.filter((row) => row.startsWith("Won "))).toHaveLength(3);
+        expect(s.evidence.filter((row) => row.startsWith("1 win · ICP: "))).toHaveLength(3);
+    });
+
+    it("labels profile rows with how many deals share each profile, so they add up to the summary", () => {
+        const s = authorSection1(input({
+            icps: [icp()],
+            closedWon: [deal({ id: "w1" }), deal({ id: "w2" }), deal({ id: "w3" })],
+            closedLost: [deal({ id: "l1" }), deal({ id: "l2" })]
+        }));
+        expect(s.body[0]).toContain("Across 3 wins and 2 losses");
+        expect(s.evidence).toEqual([
+            "3 wins with no ICP, buyer, or trigger recorded",
+            "2 losses with no ICP, buyer, or trigger recorded"
+        ]);
+        expect(s.body.join(" ")).toContain("treat this as an early warning sign");
     });
 
     it("does not recommend support at an unknown historical stage", () => {
         const s = authorSection4(input({
             closedLost: [deal({ id: "l1", stage: "closed-lost" }), deal({ id: "l2", stage: "" })]
         }));
-        expect(s.evidence).toContain("stage before loss not recorded · 0 won · 2 lost · 0 outside-support requests");
+        expect(s.evidence).toContain("stage before loss not recorded · 0 won · 2 lost · 0 Call in a Favor requests");
+        expect(s.surprise).toBeNull();
+    });
+
+    it("says how many Call in a Favor requests are on closed vs open deals, matching the stage rows", () => {
+        const dep = (accountName: string) => ({ id: accountName, accountName, tier: "t1", moment: "intro", outcome: "pending" });
+        const s = authorSection4(input({
+            closedWon: [deal({ id: "w1", accountName: "Chipotle", stage: "closed-won" }), deal({ id: "w2", accountName: "Deel", stage: "closed-won" })],
+            closedLost: [deal({ id: "l1", accountName: "Lost Co", stage: "closed-lost" })],
+            openDeals: [deal({ id: "o1", accountName: "Boeing" }), deal({ id: "o2", accountName: "OpenAI" })],
+            advisorDeployments: [dep("Chipotle"), dep("Boeing"), dep("OpenAI"), dep("OpenAI")]
+        }));
+        expect(s.body[1]).toContain("4 Call in a Favor requests are recorded: 1 on closed deals (counted in the stage rows below), 3 on open deals.");
+        const rowTotal = s.evidence
+            .map((row) => Number(/· (\d+) Call in a Favor request/.exec(row)?.[1] ?? 0))
+            .reduce((a, b) => a + b, 0);
+        expect(rowTotal).toBe(1);
+        expect(s.evidence).toContain("closed-won · 2 won · 0 lost · 1 Call in a Favor request");
         expect(s.surprise).toBeNull();
     });
 
@@ -571,12 +608,31 @@ describe("evidence integrity regressions", () => {
         expect(s.surprise).toBeNull();
     });
 
-    it("distinguishes a calculated outreach target from an entered target without changing math", () => {
-        const quota = { quota: 500000, acv: 50000, winRate: 0.25, cycle: 90 };
-        const calculated = authorSection7(input({ quota }));
-        const recorded = authorSection7(input({ quota: { ...quota, touchesPerDay: 20 } }));
-        expect(calculated.body[1]).toContain("Calculated daily outreach target: 12.");
-        expect(recorded.body[1]).toContain("Recorded daily outreach target: 20.");
-        expect(calculated.body[0]).toBe(recorded.body[0]);
+    it("states the same daily outreach, meetings, opportunities and deals as Quota Workback", () => {
+        // The enterprise demo plan: $2M target, $250k deals, 22% win rate.
+        const store = new Map<string, string>([
+            ["gtmos_qw_inputs", JSON.stringify({ quota: 2000000, acv: 250000, win: 22, m2o: 35, t2m: 2, show: 80, days: 20, tpa: 8, cycle: 180 })]
+        ]);
+        const storage = {
+            getItem: (k: string) => store.get(k) ?? null,
+            setItem: (k: string, v: string) => void store.set(k, v),
+            removeItem: (k: string) => void store.delete(k),
+            key: (i: number) => [...store.keys()][i] ?? null,
+            get length() { return store.size; }
+        };
+        const plan = loadQuotaInputs(storage);
+        const quotaRoom = computeQuotaMetrics(plan, EMPTY_COVERAGE);
+        const s = authorSection7(loadSectionsInput({ storage }));
+        expect(readDailyOutreachRequirement(storage)).toBe(quotaRoom.touchesDay);
+        expect(s.body[1]).toContain(`Daily outreach target from Quota Workback: ${quotaRoom.touchesDay} messages and calls per working day.`);
+        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsMonth} first meetings a month (about ${quotaRoom.meetingsWeek} a week)`);
+        expect(s.body[0]).toContain(`about ${quotaRoom.oppsMonth} qualified`);
+        expect(s.evidence).toContain(`Closed-won deals needed per month: ${quotaRoom.dealsMonth}`);
+        // The demo numbers the walkthrough showed disagreeing (12/day vs 48/day).
+        expect(quotaRoom.touchesDay).toBe(48);
+        expect(quotaRoom.meetingsMonth).toBe(15);
+        // An entered touches-per-day value is not used by the Quota room, so it is not used here either.
+        const withEntered = authorSection7(input({ quota: { quota: 2000000, acv: 250000, winRate: 22, cycle: 180, touchesPerDay: 12, plan } }));
+        expect(withEntered.body[1]).toContain("48 messages and calls per working day");
     });
 });

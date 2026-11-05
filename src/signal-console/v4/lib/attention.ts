@@ -30,8 +30,12 @@ export const BAND_META: Record<AttentionBand, BandMeta> = {
     },
     emerging: {
         key: "emerging",
-        label: "New signals",
-        why: "recent account activity increased this account's priority"
+        // Counts accounts with a signal in the last 7 days OR added to the
+        // watchlist in the last 7 days (see classifyBand), so the label says
+        // both; it used to read "New signals" and showed 28 next to "1 new
+        // signal this week" when most accounts had just been added.
+        label: "New signal or newly watched",
+        why: "a signal in the last 7 days, or added to the watchlist in the last 7 days; priority score below 60"
     },
     cold: {
         key: "cold",

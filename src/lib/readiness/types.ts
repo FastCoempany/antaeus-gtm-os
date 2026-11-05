@@ -55,7 +55,10 @@ export const DIMENSION_LABEL: Record<DimensionId, string> = {
     outreach: t("Outreach"),
     discovery: t("Discovery"),
     deals: t("Deal management"),
-    proof: t("Pilot evidence")
+    // Scores pilot results, deal-risk reviews, Call in a Favor requests and
+    // handoff sections together, so the label names all four (it used to
+    // say only "Pilot evidence" and read "solid" with no pilot recorded).
+    proof: t("Pilots, reviews and handoff records")
 };
 
 /**

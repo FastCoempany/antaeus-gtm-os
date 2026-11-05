@@ -170,7 +170,7 @@ export function buildBelievability(
         return {
             solid: true,
             read: t(
-                "None of your win-rate, meeting-to-opportunity, or outreach-to-meeting assumptions is more than 10% above the benchmark for this deal size. The plan holds up.",
+                "None of your win-rate, meeting-to-opportunity, or outreach-to-meeting assumptions is more than 10% above the benchmark for this deal size, so the plan's assumptions look realistic.",
                 { class: "body" }
             ),
             cost: null,

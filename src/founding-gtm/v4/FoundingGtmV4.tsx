@@ -56,6 +56,9 @@ export function FoundingGtmV4(): JSX.Element {
                     <p class="fg4-sub">
                         {t("The information another seller needs to understand and run this sales process without having it re-explained.", { class: "body" })}
                         {verdict ? <> {t("Current readiness:")} <b>{verdict}</b>.</> : null}
+                        {verdict ? (
+                            <> {t("Readiness is based on recorded sales results, such as completed pilots and closed deals, as well as these sections. The Readiness panel on the Dashboard lists what is still required.", { class: "body" })}</>
+                        ) : null}
                     </p>
 
                     <div class="fg4-seg" title={`${ready} ${t("of")} 7 ${t("sections ready")}`}>

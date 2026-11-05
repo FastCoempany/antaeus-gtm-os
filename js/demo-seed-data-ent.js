@@ -175,7 +175,7 @@ A('sc_e_workday','Workday','WDAY','HR Technology','Technology','$8B','18,000+','
     'An HR-tech company reorganizing its own workforce around AI is a good candidate to buy AI tools for its own hiring.',
     'News coverage',45,0.85,false)]),
 A('sc_e_adp','ADP','ADP','HR Technology','Technology','$20.6B','60,000+','Roseland, NJ','adp.com',52,[
-  S('sig_ad_1','expansion','Steady internal hiring at one of the largest HR employers — plus a partner channel Luca could ride',
+  S('sig_ad_1','expansion','Steady internal hiring at one of the largest HR employers, and a possible partner for reselling Luca',
     'ADP hires at scale for its own operations and sells into every HR department in America.',
     'They could be both a customer and a reseller partner. Start with their internal recruiting team.',
     'Public filings',28,0.72,true)]),
@@ -190,7 +190,7 @@ A('sc_e_paycom','Paycom','PAYC','HR Technology','Technology','$1.9B','7,000+','O
     'They hire many salespeople and many do not last, so better screening directly affects their revenue.',
     'Industry reporting',30,0.7,true)]),
 A('sc_e_randstad','Randstad','RAND.AS','Global Staffing','Services','$26B','40,000+','Diemen, Netherlands','randstad.com',71,[
-  S('sig_rs_1','ai_transformation','World\'s largest staffing firm — screening volume IS the product, and AI screening is the industry\'s live debate',
+  S('sig_rs_1','ai_transformation','World\'s largest staffing firm — screening candidates is the core of its business, and AI screening is an active debate in the industry',
     'Randstad places hundreds of thousands of workers; every placement is a screen.',
     'If Luca works at staffing-firm scale, this is the largest possible account. Expect a long sales cycle for a very large deal.',
     'Industry reporting',24,0.75,true)]),
@@ -218,7 +218,7 @@ A('sc_e_bestbuy','Best Buy','BBY','Retail','Consumer','$42B','85,000','Richfield
     'Leadership changes often lead to reviews of department tools within two quarters.',
     'Company newsroom',10,0.85,false)]),
 A('sc_e_ulta','Ulta Beauty','ULTA','Retail','Consumer','$11.3B','55,000','Bolingbrook, IL','ulta.com',54,[
-  S('sig_ul_1','expansion','Store-count growth keeps a standing hiring engine running',
+  S('sig_ul_1','expansion','Store-count growth means steady, ongoing store hiring',
     'New stores and services expansion staff up continuously.',
     'Store hiring where the customer experience depends on who they hire, at retail pay levels.',
     'Public filings',28,0.72,true)]),
@@ -233,12 +233,12 @@ A('sc_e_southwest','Southwest Airlines','LUV','Aviation','Transportation','$27.5
     'When hiring slows, each hire matters more, so screening quality matters more. Same product, different pitch.',
     'Earnings call',22,0.75,true)]),
 A('sc_e_jetblue','JetBlue','JBLU','Aviation','Transportation','$9.3B','22,000','Long Island City, NY','jetblue.com',46,[
-  S('sig_jb_1','pain_point','Leaner TA team than the majors — automation carries further here',
+  S('sig_jb_1','pain_point','Smaller talent-acquisition team than the major airlines, so screening automation could save proportionally more recruiter time',
     'A smaller airline runs the same regulated hiring processes with a fraction of the recruiting staff.',
     'With a small team, one platform seat covers work they cannot hire people to do.',
     'Industry reporting',28,0.68,true)]),
 A('sc_e_airbnb','Airbnb','ABNB','Marketplace / Technology','Technology','$11.1B','7,000','San Francisco, CA','airbnb.com',44,[
-  S('sig_ab_1','pain_point','Famously selective hiring — small volumes, extreme bar',
+  S('sig_ab_1','pain_point','Known for selective hiring — small hiring volumes and a very high bar',
     'Airbnb hires few and screens hard.',
     'They hire few people with a high bar, which tests our screening quality. A win here would make a strong reference customer.',
     'Public statements',30,0.65,true)]),
@@ -601,16 +601,16 @@ E.shared={
   {id:'cc_e7',accountName:'Ulta Beauty',contactName:'',contactTitle:'',outcome:'voicemail',duration:40,notes:'',createdAt:d(6)},
   {id:'cc_e8',accountName:'Southwest Airlines',contactName:'',contactTitle:'',outcome:'no_answer',duration:15,notes:'',createdAt:d(3)}]},
  linkedinLog:{actions:[
-  {id:'li_e1',cueLabel:'Review a relevant public post',actionType:'connection',type:'connection',action:'connection',accountName:'Boeing',outcome:'accepted',createdAt:d(30)},
+  {id:'li_e1',cueLabel:'Send a connection request',actionType:'connection_request',type:'connection_request',action:'connection_request',accountName:'Boeing',outcome:'accepted',createdAt:d(30)},
   {id:'li_e2',cueLabel:'Leave a useful comment',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Boeing',outcome:null,createdAt:d(24)},
-  {id:'li_e3',cueLabel:'Send a connection request',actionType:'dm',type:'dm',action:'dm',accountName:'Boeing',outcome:'replied',createdAt:d(20)},
-  {id:'li_e4',cueLabel:'Review a relevant public post',actionType:'connection',type:'connection',action:'connection',accountName:'OpenAI',outcome:'accepted',createdAt:d(18)},
+  {id:'li_e3',cueLabel:'Send useful information',actionType:'dm',type:'dm',action:'dm',accountName:'Boeing',outcome:'replied',createdAt:d(20)},
+  {id:'li_e4',cueLabel:'Send a connection request',actionType:'connection_request',type:'connection_request',action:'connection_request',accountName:'OpenAI',outcome:'accepted',createdAt:d(18)},
   {id:'li_e5',cueLabel:'Leave a useful comment',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'OpenAI',outcome:null,createdAt:d(13)},
-  {id:'li_e6',cueLabel:'Review a relevant public post',actionType:'connection',type:'connection',action:'connection',accountName:'Databricks',outcome:'pending',createdAt:d(7)},
-  {id:'li_e7',cueLabel:'Review a relevant public post',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Starbucks',outcome:null,createdAt:d(10)},
-  {id:'li_e8',cueLabel:'Review a relevant public post',actionType:'dm',type:'dm',action:'dm',accountName:'United Airlines',outcome:'no_response',createdAt:d(15)},
-  {id:'li_e9',cueLabel:'Review a relevant public post',actionType:'connection',type:'connection',action:'connection',accountName:'Nike',outcome:'accepted',createdAt:d(9)},
-  {id:'li_e10',cueLabel:'Review a relevant public post',actionType:'connection',type:'connection',action:'connection',accountName:'Marriott International',outcome:'pending',createdAt:d(4)}]},
+  {id:'li_e6',cueLabel:'Send a connection request',actionType:'connection_request',type:'connection_request',action:'connection_request',accountName:'Databricks',outcome:'pending',createdAt:d(7)},
+  {id:'li_e7',cueLabel:'Leave a useful comment',actionType:'content_engage',type:'content_engage',action:'content_engage',accountName:'Starbucks',outcome:null,createdAt:d(10)},
+  {id:'li_e8',cueLabel:'Send useful information',actionType:'dm',type:'dm',action:'dm',accountName:'United Airlines',outcome:'no_response',createdAt:d(15)},
+  {id:'li_e9',cueLabel:'Send a connection request',actionType:'connection_request',type:'connection_request',action:'connection_request',accountName:'Nike',outcome:'accepted',createdAt:d(9)},
+  {id:'li_e10',cueLabel:'Send a connection request',actionType:'connection_request',type:'connection_request',action:'connection_request',accountName:'Marriott International',outcome:'pending',createdAt:d(4)}]},
  angles:[
   {company:'Boeing',trigger:'expansion',persona:'VP Talent Acquisition',email:'Open on the production rebuild: every factory hire is now a quality decision, and the screening layer is where quality starts.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(25)},
   {company:'Starbucks',trigger:'expansion',persona:'VP Talent Acquisition',email:'The Green Apron investment puts more people on the floor — screening decides whether they are the right ones. Chipotle results attached.',temperature:'warm',channel:'email',ctaType:'soft_ask',savedAt:d(17)},
@@ -668,7 +668,7 @@ E.pilotDesk={'boeing':{startedAt:d(52),circle:[
 
 E.gts={'deal_e_boeing':{
   fronts:{
-   security:{theirAsk:'Full 150-question security review before any contract redlines move',yourLine:'Our existing documents answer 118 of the 150 today — SOC 2 Type II, pen-test, subprocessor list, DPA. The working session closes 22 more.',status:'blocking'},
+   security:{theirAsk:'Full 150-question security review before any contract redlines move',yourLine:'Our existing documents answer 118 of the 150 today — SOC 2 Type II, pen-test, subprocessor list, DPA. A working session with their security team would answer 22 of the 32 still open.',status:'blocking'},
    legal:{theirAsk:'Uncapped liability on data-related claims',yourLine:'Cap at 12 months of fees with a separate, higher breach cap — the structure their other vendors already accept.',status:'clearing'},
    finance:{theirAsk:'Net-90 payment terms',yourLine:'Net-60 flat, or net-30 with 3% off annual prepay — their treasury team often takes the prepay discount.',status:'todo'},
    business:{theirAsk:'Hold rollout until next fiscal year',yourLine:'Starting in January would miss spring hiring. The signing plan keeps the move from pilot to rollout inside this year.',status:'clearing'}},
@@ -687,9 +687,9 @@ E.customPushbacks=[
  {id:'cpb_e2',buyer:'"Legal will never approve AI screening — bias risk."',reply:'That is exactly why the audit trail matters: every screen is explainable and logged, which is more than the judgment calls your store managers make today. Our compliance documents answer it in writing.'}];
 
 E.outdoorsEvents=[
- {id:'oe_e1',name:'RecFest USA',kind:'conference',where_at:'Nashville, TN',start_date:'2026-09-23',end_date:'2026-09-24',status:'planning',tags:'talent acquisition',notes:'The main event for recruiting leaders — about half of our champions attend.',source_url:'https://recfest.com/usa/',relevance_tier:'direct',relevance_reason:'The biggest US gathering of the exact people Luca sells to.',discovered_at:d(30),source_kind:'discovery_run',dedupe_key:'recfest-usa__2026-09__nashville'},
+ {id:'oe_e1',name:'RecFest USA',kind:'conference',where_at:'Nashville, TN',start_date:'2026-09-23',end_date:'2026-09-24',status:'planning',tags:'talent acquisition',notes:'The main event for recruiting leaders — about half of our champions attend.',source_url:'https://recfest.com/usa/',relevance_tier:'direct',relevance_reason:'A major US conference for recruiting and talent-acquisition leaders, the people Luca sells to.',discovered_at:d(30),source_kind:'discovery_run',dedupe_key:'recfest-usa__2026-09__nashville'},
  {id:'oe_e2',name:'Transform 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-12',end_date:'2027-04-14',status:'watching',tags:'people leadership',notes:'',source_url:'https://transform.us/conference/',relevance_tier:'direct',relevance_reason:'People-leadership buyers and the HR-tech vendor field in one room.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'transform__2027-04__las-vegas'},
- {id:'oe_e3',name:'UNLEASH America 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-13',end_date:'2027-04-15',status:'watching',tags:'HR technology',notes:'',source_url:'https://www.unleash.ai/unleashamerica/',relevance_tier:'direct',relevance_reason:'Enterprise HR-tech buying committees walk the floor here.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'unleash-america__2027-04__las-vegas'},
+ {id:'oe_e3',name:'UNLEASH America 2027',kind:'conference',where_at:'Las Vegas, NV',start_date:'2027-04-13',end_date:'2027-04-15',status:'watching',tags:'HR technology',notes:'',source_url:'https://www.unleash.ai/unleashamerica/',relevance_tier:'direct',relevance_reason:'Enterprise HR-technology buyers attend this conference.',discovered_at:d(28),source_kind:'discovery_run',dedupe_key:'unleash-america__2027-04__las-vegas'},
  {id:'oe_e4',name:'NRF Big Show 2027',kind:'trade show',where_at:'New York, NY',start_date:'2027-01-10',end_date:'2027-01-12',status:'watching',tags:'retail',notes:'Relevant to our retail accounts — seasonal hiring is a regular topic here.',source_url:'https://nrfbigshow.nrf.com/',relevance_tier:'adjacent',relevance_reason:'Our retail accounts attend; hiring is a standing agenda item.',discovered_at:d(25),source_kind:'discovery_run',dedupe_key:'nrf-big-show__2027-01__new-york'},
  {id:'oe_e5',name:'SaaStr Annual',kind:'conference',where_at:'SF Bay Area, CA',start_date:'2027-05-11',end_date:'2027-05-13',status:'watching',tags:'software',notes:'',source_url:'https://www.saastrannual2026.com/',relevance_tier:'indirect',relevance_reason:'Founders and HR leaders from our AI-native accounts often attend.',discovered_at:d(22),source_kind:'discovery_run',dedupe_key:'saastr-annual__2027-05__sf'}];
 

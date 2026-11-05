@@ -241,7 +241,7 @@ export function GettingToSignedV4(): JSX.Element {
                                 <input class="gs4-sv" value={face.theirAsk} placeholder={t("What is the customer asking for?", { class: "body" })}
                                     onInput={(e) => patchFront(blocking, { theirAsk: (e.currentTarget as HTMLInputElement).value })} />
                             </div>
-                            <div class="gs4-gap"><span class="gs4-gl">{t("gap")}</span><span class="gs4-vs">{t("vs")}</span></div>
+                            <div class="gs4-gap"><span class="gs4-gl">{t("not yet agreed")}</span><span class="gs4-vs">{t("vs")}</span></div>
                             <div class="gs4-side is-you">
                                 <div class="gs4-sl">{t("Your proposed position")}</div>
                                 <input class="gs4-sv" value={face.yourLine} placeholder={t("Your proposed response and any non-negotiable limit", { class: "body" })}
@@ -259,7 +259,7 @@ export function GettingToSignedV4(): JSX.Element {
                                 {t("Send proposed response →")}
                             </button>
                             <a class="gs4-link" href={hrefToAdvisorDeploy(deal?.id)}>{t("Ask someone with relevant experience", { class: "body" })}</a>
-                            <button type="button" class="gs4-link" onClick={() => (openFront.value = openFront.value === blocking ? null : blocking)}>{t("Open this workstream ▾")}</button>
+                            <button type="button" class="gs4-link" onClick={() => (openFront.value = openFront.value === blocking ? null : blocking)}>{t("Show details ▾")}</button>
                             <button type="button" class="gs4-link" onClick={() => patchFront(blocking, { status: "settled" })}>{t("Mark it settled")}</button>
                         </div>
                     </>

@@ -9,6 +9,12 @@ import type {
 } from "./types";
 import { SECTION_KICKER, SECTION_TITLE } from "./types";
 import { LOSS_LABELS } from "@/deal-workspace/lib/deal-shape";
+import {
+    benchmarkFor as quotaBenchmarkFor,
+    computeMetrics as computeQuotaMetrics
+} from "@/quota-workback/lib/engine";
+import { DEFAULT_INPUTS as DEFAULT_QUOTA_INPUTS, EMPTY_COVERAGE } from "@/quota-workback/lib/types";
+import type { PlanInputs } from "@/quota-workback/lib/types";
 
 /** Plain names for Discovery segment keys (keys stay stable in storage). */
 const SEGMENT_NAME: Readonly<Record<string, string>> = {
@@ -67,6 +73,54 @@ function dealKey(d: DealRecord): string {
     return [icp || "—", persona || "—", trigger || "—"].join(" · ");
 }
 
+/** Plain channel names for outreach rows ("phone" → "Phone"). */
+function channelName(ch: string): string {
+    const known: Record<string, string> = { email: "Email", linkedin: "LinkedIn", phone: "Phone" };
+    if (ch === "—") return "Channel not recorded";
+    return known[ch.toLowerCase()] ?? ch.charAt(0).toUpperCase() + ch.slice(1);
+}
+
+/**
+ * A deal's recorded profile in plain words: "ICP: SMB, buyer: VP Sales,
+ * trigger not recorded", or "no ICP, buyer, or trigger recorded" when all
+ * three are blank. Replaces the bare "— · — · —" rows, which read like
+ * conflicting deal counts.
+ */
+function profileText(d: DealRecord): string {
+    const icp = d.icpLabel.trim();
+    const persona = d.persona.trim();
+    const trigger = d.trigger.trim();
+    if (!icp && !persona && !trigger) return "no ICP, buyer, or trigger recorded";
+    return [
+        icp ? `ICP: ${icp}` : "ICP not recorded",
+        persona ? `buyer: ${persona}` : "buyer not recorded",
+        trigger ? `trigger: ${trigger}` : "trigger not recorded"
+    ].join(", ");
+}
+
+/**
+ * Evidence rows for Section 1: one row per distinct profile, saying how
+ * many deals share it ("3 wins with no ICP, buyer, or trigger recorded").
+ */
+function profileRows(
+    deals: ReadonlyArray<DealRecord>,
+    one: string,
+    many: string,
+    limit: number
+): string[] {
+    const groups = new Map<string, { count: number; text: string }>();
+    deals.forEach((d) => {
+        const key = dealKey(d);
+        const g = groups.get(key) ?? { count: 0, text: profileText(d) };
+        g.count += 1;
+        groups.set(key, g);
+    });
+    return [...groups.values()].slice(0, limit).map((g) => {
+        const noun = plural(g.count, one, many);
+        return g.text.startsWith("no ") ? `${noun} with ${g.text}` : `${noun} · ${g.text}`;
+    });
+}
+
 function uniq<T>(arr: ReadonlyArray<T>): ReadonlyArray<T> {
     const seen = new Set<string>();
     const out: T[] = [];
@@ -116,13 +170,15 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
     ];
     if (lostPatterns.length > 0) {
         body.push(
-            `The deals you lost fall into ${plural(lostPatterns.length, "distinct profile", "distinct profiles")}. Teach the new hire to screen for these at intake and qualify out early when one shows up. The sample is small, so this is a strong warning sign; it does not show that the profile caused the loss.`
+            `The deals you lost fall into ${plural(lostPatterns.length, "distinct profile", "distinct profiles")}. Teach the new hire to screen for these at intake and qualify out early when one shows up. The sample is small, so treat this as an early warning sign; it does not show that the profile caused the loss.`
         );
     }
 
     const evidence: string[] = [];
-    wonPatterns.slice(0, 3).forEach((p, i) => evidence.push(`Won ${i + 1} · ${p}`));
-    lostPatterns.slice(0, 3).forEach((p, i) => evidence.push(`Lost ${i + 1} · ${p}`));
+    // One row per distinct profile, each saying how many deals share it,
+    // so the rows add up to the win/loss counts in the summary above.
+    evidence.push(...profileRows(input.closedWon, "win", "wins", 3));
+    evidence.push(...profileRows(input.closedLost, "loss", "losses", 3));
 
     const statedIcpNames = input.icps.map((i) => i.name.toLowerCase().trim());
     const actualIcpLabels = input.closedWon
@@ -213,7 +269,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
 
     const top = ranked[0]!;
     const body: string[] = [
-        `${top.channel} has the best observed response rate so far: ${top.replied} responses on ${top.sent} recorded attempts (${Math.round(top.rate * 100)}%). Start the new hire on that channel and have them test the others against it.`
+        `${channelName(top.channel)} has the best observed response rate so far: ${top.replied} responses on ${top.sent} recorded attempts (${Math.round(top.rate * 100)}%). Start the new hire on that channel and have them test the others against it.`
     ];
 
     const bestLines = input.touches
@@ -229,7 +285,7 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
     const evidence: string[] = [];
     ranked.slice(0, 3).forEach((r) => {
         evidence.push(
-            `${r.channel} · ${r.replied}/${r.sent} response outcomes · ${Math.round(r.rate * 100)}%`
+            `${channelName(r.channel)}: ${plural(r.replied, "response", "responses")} from ${plural(r.sent, "attempt", "attempts")} (${Math.round(r.rate * 100)}%)`
         );
     });
     bestLines.slice(0, 2).forEach((line) => {
@@ -446,15 +502,30 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
     );
     input.closedWon.forEach(() => bumpStage("closed-won", "won"));
 
+    // Count each Call in a Favor request against the same stage key the
+    // closed-deal rows use, and tally the ones on open (or unmatched)
+    // deals separately, so the body's total and the rows describe the
+    // same set of requests.
     const advisorByStage = new Map<string, number>();
+    let advisorOnOpen = 0;
+    let advisorUnmatched = 0;
+    const sameAccount = (name: string) => (d: DealRecord) =>
+        d.accountName.toLowerCase() === name.toLowerCase();
     input.advisorDeployments.forEach((dep) => {
-        const deal = [...input.openDeals, ...input.closedWon, ...input.closedLost].find(
-            (d) => d.accountName.toLowerCase() === dep.accountName.toLowerCase()
-        );
-        if (!deal) return;
-        const k = deal.stage.toLowerCase();
-        advisorByStage.set(k, (advisorByStage.get(k) ?? 0) + 1);
+        const won = input.closedWon.find(sameAccount(dep.accountName));
+        const lost = won ? undefined : input.closedLost.find(sameAccount(dep.accountName));
+        let k: string | null = null;
+        if (won) k = "closed-won";
+        else if (lost) k = ((lost.stage === "closed-lost" ? "" : lost.stage) || "stage before loss not recorded").toLowerCase();
+        if (k) {
+            advisorByStage.set(k, (advisorByStage.get(k) ?? 0) + 1);
+        } else if (input.openDeals.some(sameAccount(dep.accountName))) {
+            advisorOnOpen += 1;
+        } else {
+            advisorUnmatched += 1;
+        }
     });
+    const advisorOnClosed = input.advisorDeployments.length - advisorOnOpen - advisorUnmatched;
 
     const winRate =
         totalClosed > 0
@@ -465,8 +536,13 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         `The recorded closed-deal sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, an observed win rate of ${winRate}%. Look at which stage the lost deals stopped at: that's where the new hire's first 30 days of diagnosis should focus. The stage shows where deals stopped; it does not establish why they were lost.`
     ];
     if (input.advisorDeployments.length > 0) {
+        const where = [
+            `${advisorOnClosed} on closed deals (counted in the stage rows below)`,
+            `${advisorOnOpen} on open deals`
+        ];
+        if (advisorUnmatched > 0) where.push(`${advisorUnmatched} not matched to a recorded deal`);
         body.push(
-            `${plural(input.advisorDeployments.length, "Call in a Favor request is", "Call in a Favor requests are")} recorded. Tell the new hire which stages that help made a difference at, and which stages you've been pushing through alone.`
+            `${plural(input.advisorDeployments.length, "Call in a Favor request is", "Call in a Favor requests are")} recorded: ${where.join(", ")}. Tell the new hire which stages that help made a difference at, and which stages you've been pushing through alone.`
         );
     }
 
@@ -477,7 +553,7 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         .forEach(([stage, v]) => {
             const advisorCount = advisorByStage.get(stage) ?? 0;
             evidence.push(
-                `${stage} · ${v.won} won · ${v.lost} lost · ${advisorCount} outside-support requests`
+                `${stage} · ${v.won} won · ${v.lost} lost · ${plural(advisorCount, "Call in a Favor request", "Call in a Favor requests")}`
             );
         });
 
@@ -625,7 +701,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
             [
                 `One closed-won deal is recorded. ${w.accountName || "The deal"} is a useful story, but one outcome is not enough to infer a repeatable win pattern. The new hire needs a few more wins before "why we win" can be trusted.`
             ],
-            [`${w.accountName} · ${dealKey(w)}`],
+            [`${w.accountName || "(unnamed)"}: ${profileText(w)}`],
             null
         );
     }
@@ -655,7 +731,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
 
     const evidence: string[] = [];
     input.closedWon.slice(0, 5).forEach((d) => {
-        evidence.push(`${d.accountName || "(unnamed)"} · ${dealKey(d)}`);
+        evidence.push(`${d.accountName || "(unnamed)"}: ${profileText(d)}`);
     });
 
     const winningIcps = new Set(
@@ -696,29 +772,27 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
 
     if (!input.quota) return frame(id, "empty", [], [], null);
 
-    const acv = input.quota.acv > 0 ? input.quota.acv : 50000;
-    // Quota Workback stores win rate as a whole-number percent (22 = 22%);
-    // older rows may hold a fraction (0.22). Normalize to a fraction.
-    const rawWin = input.quota.winRate;
-    const winRate = rawWin > 1 ? rawWin / 100 : rawWin > 0 ? rawWin : 0.2;
-    const dealsNeeded = Math.ceil(input.quota.quota / acv);
-    const oppsNeeded = Math.ceil(dealsNeeded / winRate);
-    const meetingsPerWeek = Math.max(2, Math.round(oppsNeeded / 26));
-    const touchesPerDay = input.quota.touchesPerDay ?? Math.max(8, meetingsPerWeek * 6);
-    const targetSource = input.quota.touchesPerDay == null ? "Calculated" : "Recorded";
+    // Run Quota Workback's own engine over the same plan inputs the Quota
+    // room uses, so this section states the same daily outreach, first
+    // meetings, opportunities, and deals. (It used to compute its own
+    // annual fallback — e.g. "12 a day" and "2 meetings a week" while the
+    // Quota room said 48 a day and 15 first meetings a month.)
+    const plan = quotaPlanFor(input.quota);
+    const metrics = computeQuotaMetrics(plan, EMPTY_COVERAGE);
+    const touchesPerDay = metrics.touchesDay;
 
     const body: string[] = [
-        `To hit the number at the current assumptions, you need ${dealsNeeded} closed deals, which means about ${oppsNeeded} qualified opportunities, or about ${meetingsPerWeek} discovery meetings a week, every week.`,
-        `${targetSource} daily outreach target: ${touchesPerDay}. The new hire's week: Monday, review the top three deal risks on the Dashboard; Tuesday, outbound; Wednesday, discovery prep and calls; Thursday, follow up on stalled deals; Friday, update next steps and set up the next week. Adjust this starting schedule using recorded results.`
+        `To hit the number at the current Quota Workback assumptions, you need ${plural(metrics.dealsMonth, "closed-won deal", "closed-won deals")} a month, which means about ${plural(metrics.oppsMonth, "qualified opportunity", "qualified opportunities")} and about ${metrics.meetingsMonth} first meetings a month (about ${metrics.meetingsWeek} a week).`,
+        `Daily outreach target from Quota Workback: ${touchesPerDay} messages and calls per working day. The new hire's week: Monday, review the top three deal risks on the Dashboard; Tuesday, outbound; Wednesday, discovery prep and calls; Thursday, follow up on stalled deals; Friday, update next steps and set up the next week. Adjust this starting schedule using recorded results.`
     ];
 
     const evidence: string[] = [
-        `Annual quota: $${input.quota.quota.toLocaleString()}`,
-        `Average ACV: $${acv.toLocaleString()}`,
-        `Win-rate assumption: ${Math.round(winRate * 100)}%`,
-        `Deals required by model: ${dealsNeeded}`,
-        `Touches per day: ${touchesPerDay}`,
-        `Meetings per week: ${meetingsPerWeek}`
+        `Annual quota: $${plan.quota.toLocaleString()}`,
+        `Average ACV: $${plan.acv.toLocaleString()}`,
+        `Win-rate assumption: ${Math.round(plan.win)}%`,
+        `Closed-won deals needed per month: ${metrics.dealsMonth}`,
+        `Messages and calls per working day: ${touchesPerDay}`,
+        `First meetings per month: ${metrics.meetingsMonth}`
     ];
 
     const recentTouches = input.touches.filter((t) => {
@@ -752,6 +826,28 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
 
     const status = input.openDeals.length > 0 ? "ready" : "partial";
     return frame(id, status, body, evidence, surprise);
+}
+
+/**
+ * Quota Workback plan inputs for Section 7. Prefers the inputs read with
+ * Quota Workback's own loader; otherwise fills the assumptions this bag
+ * lacks with Quota Workback's defaults (including the benchmark
+ * outreach-to-meeting rate for the deal size), as its loader does.
+ */
+function quotaPlanFor(q: NonNullable<SectionsInput["quota"]>): PlanInputs {
+    if (q.plan) return q.plan;
+    const acv = q.acv > 0 ? q.acv : DEFAULT_QUOTA_INPUTS.acv;
+    // Quota Workback stores the win rate as a whole-number percent (22);
+    // older rows may hold a fraction (0.22).
+    const win = q.winRate > 1 ? q.winRate : q.winRate > 0 ? q.winRate * 100 : DEFAULT_QUOTA_INPUTS.win;
+    return {
+        ...DEFAULT_QUOTA_INPUTS,
+        quota: q.quota,
+        acv,
+        win,
+        t2m: quotaBenchmarkFor(acv).t2m,
+        cycle: q.cycle > 0 ? q.cycle : DEFAULT_QUOTA_INPUTS.cycle
+    };
 }
 
 function daysAgo(iso: string): number {
