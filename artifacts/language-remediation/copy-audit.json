@@ -1,17 +1,17 @@
 {
   "files": 1218,
-  "renderedOccurrences": 5615,
-  "uniqueRenderedStrings": 2681,
+  "renderedOccurrences": 5663,
+  "uniqueRenderedStrings": 2666,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 506,
+  "tier2ReviewWarnings": 513,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
-      "hits": 39
+      "hits": 42
     },
     "B": {
       "description": "runtime/customer-visible candidate",
-      "hits": 413
+      "hits": 417
     },
     "C": {
       "description": "prompt/template",
@@ -23,7 +23,7 @@
     },
     "E": {
       "description": "tests/comments/deprecated examples",
-      "hits": 1005
+      "hits": 1006
     },
     "F": {
       "description": "internal identifier",
@@ -626,7 +626,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "team has stopped flagging it?\\\"\", [ jumpNode(\"Test the cost\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ], \"The bot-miss pattern is real, but nothing recent to anchor it.\","
+      "context": "ped flagging it?\\\"\", [ jumpNode(\"Challenge the cost estimate\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ], \"The bot-miss pattern is real, but nothing recent to anchor it.\","
     },
     {
       "file": "js/discovery-segment-runtime-customer-support.js",
@@ -754,7 +754,7 @@
       "phrase": "front",
       "tier": 2,
       "category": "B",
-      "context": "branch(\"OLD EXAMPLE\", \"ly\", \"\\\"It's happened, but I don't have a recent one in front of me.\\\"\", \"\\\"Then ballpark the pattern. What kind of bot miss happens often enough that the team has stopped flagging it?\\\"\", [ jumpNode(\"Test the cost\","
+      "context": "branch(\"OLD EXAMPLE\", \"ly\", \"\\\"It's happened, but I don't have a recent one in front of me.\\\"\", \"\\\"Then ballpark the pattern. What kind of bot miss happens often enough that the team has stopped flagging it?\\\"\", [ jumpNode(\"Challenge the co"
     },
     {
       "file": "js/discovery-segment-runtime-data-intelligence.js",
@@ -842,7 +842,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "ms each one is classified right?\\\"\", [ jumpNode(\"Test the cost\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ], \"The misclassification pattern exists, but they can't point to a recent"
+      "context": "classified right?\\\"\", [ jumpNode(\"Challenge the cost estimate\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ], \"The misclassification pattern exists, but they can't point to a recent"
     },
     {
       "file": "js/discovery-segment-runtime-global-contractor-management.js",
@@ -1067,6 +1067,14 @@
       "tier": 2,
       "category": "B",
       "context": "work created the pressure?\\\"\",[ jumpNode(\"Find the trigger\", \"trigger-and-urgency\", \"gc-pressure\", \"red\"), jumpNode(\"Scope the workflow\", \"current-state-truth\", \"workflow-break\", \"blu\") ],\"No priority workflow is named yet.\",\"You still need a recent even"
+    },
+    {
+      "file": "js/discovery-segment-runtime-legal.js",
+      "line": 176,
+      "phrase": "pressure",
+      "tier": 2,
+      "category": "B",
+      "context": "k\", \"blu\") ],\"No priority workflow is named yet.\",\"You still need a recent event that put pressure on legal.\") ]) ]), segment(\"current-state-truth\",\"02\",\"Current-state truth\",\"Map the actual legal workflow.\",true,[ node(\"current-state-truth\",\"workflo"
     },
     {
       "file": "js/discovery-segment-runtime-legal.js",
@@ -1570,7 +1578,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "that the team has normalized it?\\\"\",[ jumpNode(\"Test the cost\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ],\"The pattern exists, but recency is weak.\",\"You still need frequency or"
+      "context": "has normalized it?\\\"\",[ jumpNode(\"Challenge the cost estimate\", \"pain-and-consequence\", \"pressure\", \"org\"), jumpNode(\"Find the owner\", \"stakeholder-and-ownership\", \"pain-owner\", \"blu\") ],\"The pattern exists, but recency is weak.\",\"You still need frequency or"
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -1734,7 +1742,7 @@
     },
     {
       "file": "preview-transcript/briefing/index.html",
-      "line": 896,
+      "line": 482,
       "phrase": "heartbeat",
       "tier": 2,
       "category": "D",
@@ -1742,7 +1750,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 341,
+      "line": 336,
       "phrase": "thread",
       "tier": 2,
       "category": "E",
@@ -1750,7 +1758,7 @@
     },
     {
       "file": "preview-transcript/cold-call-studio/index.html",
-      "line": 341,
+      "line": 336,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
@@ -1758,7 +1766,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1695,
+      "line": 1697,
       "phrase": "heat",
       "tier": 2,
       "category": "D",
@@ -1766,7 +1774,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 510,
+      "line": 512,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1774,7 +1782,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 510,
+      "line": 512,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1782,7 +1790,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 518,
+      "line": 520,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1790,7 +1798,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 609,
+      "line": 611,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1798,7 +1806,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 617,
+      "line": 619,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1806,7 +1814,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 838,
+      "line": 840,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1814,7 +1822,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 911,
+      "line": 913,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1822,7 +1830,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 978,
+      "line": 980,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1830,7 +1838,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 978,
+      "line": 980,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1838,7 +1846,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 992,
+      "line": 994,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1846,7 +1854,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 996,
+      "line": 998,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1854,7 +1862,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1108,
+      "line": 1110,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1862,7 +1870,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1507,
+      "line": 1509,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1870,7 +1878,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1559,
+      "line": 1561,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1878,7 +1886,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1559,
+      "line": 1561,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -1886,7 +1894,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1562,
+      "line": 1564,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1894,7 +1902,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1595,
+      "line": 1597,
       "phrase": "thin",
       "tier": 2,
       "category": "D",
@@ -1902,7 +1910,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1274,
+      "line": 1276,
       "phrase": "front",
       "tier": 2,
       "category": "A",
@@ -1910,7 +1918,7 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1337,
+      "line": 1339,
       "phrase": "front",
       "tier": 2,
       "category": "A",
@@ -1918,15 +1926,39 @@
     },
     {
       "file": "preview-transcript/future-autopsy/index.html",
-      "line": 204,
+      "line": 180,
       "phrase": "decay",
       "tier": 2,
       "category": "D",
       "context": "subset (shipped src/future-autopsy). Settled design: future-autopsy-countdown-2026-07-04.html (the decay line).</div></div> <div class=\"sec\"><div class=\"sn\">1 · Purpose</div><h2>What the room is for</h2><div class=\"sd\">Show the recorded conditions, risk assessment, evidence, correc"
     },
     {
+      "file": "preview-transcript/future-autopsy/index.html",
+      "line": 108,
+      "phrase": "front",
+      "tier": 2,
+      "category": "A",
+      "context": "orth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon. These are conditions in the deal record; they don't tell you for certain what would cause a loss. <span class=\"cue\">— middle of page, center</span></di"
+    },
+    {
+      "file": "preview-transcript/future-autopsy/index.html",
+      "line": 124,
+      "phrase": "front",
+      "tier": 2,
+      "category": "A",
+      "context": "orth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon. These are conditions in the deal record; they don't tell you for certain what would cause a loss. <span class=\"cue\">— middle of page, center</span></di"
+    },
+    {
+      "file": "preview-transcript/future-autopsy/index.html",
+      "line": 140,
+      "phrase": "front",
+      "tier": 2,
+      "category": "A",
+      "context": "orth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon. These are conditions in the deal record; they don't tell you for certain what would cause a loss. <span class=\"cue\">— middle of page, center</span></di"
+    },
+    {
       "file": "preview-transcript/getting-to-signed/index.html",
-      "line": 203,
+      "line": 243,
       "phrase": "hottest",
       "tier": 2,
       "category": "D",
@@ -1958,7 +1990,7 @@
     },
     {
       "file": "preview-transcript/linkedin-playbook/index.html",
-      "line": 153,
+      "line": 161,
       "phrase": "motion",
       "tier": 2,
       "category": "D",
@@ -1974,15 +2006,15 @@
     },
     {
       "file": "preview-transcript/outdoors-events/index.html",
-      "line": 73,
+      "line": 77,
       "phrase": "floor",
       "tier": 2,
       "category": "A",
-      "context": "13 – Apr 15 · UNLEASH America 2027 · Las Vegas, NV · Enterprise HR-tech buying committees walk the floor here.</p> <h3>After clicking “×”</h3><p class=\"cue\">No longer shown: ADJACENT TO YOUR BUYER CONTEXT · events focused on the roles, functions, or problems you sell into · Jan 10 –"
+      "context": "13 – Apr 15 · UNLEASH America 2027 · Las Vegas, NV · Enterprise HR-tech buying committees walk the floor here. · No activity recorded today yet. The last recorded activity was yesterday at 11:46 PM.</p> <h3>After clicking “×”</h3><div class=\"line\"><span class=\"kind\">[text]</span> No"
     },
     {
       "file": "preview-transcript/pilot-desk/index.html",
-      "line": 110,
+      "line": 128,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -1990,7 +2022,7 @@
     },
     {
       "file": "preview-transcript/pilot-desk/index.html",
-      "line": 110,
+      "line": 128,
       "phrase": "heat",
       "tier": 2,
       "category": "E",
@@ -1998,7 +2030,7 @@
     },
     {
       "file": "preview-transcript/quota-workback/index.html",
-      "line": 112,
+      "line": 115,
       "phrase": "floor",
       "tier": 2,
       "category": "E",
@@ -2006,7 +2038,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 454,
+      "line": 490,
       "phrase": "heat",
       "tier": 2,
       "category": "D",
@@ -2014,7 +2046,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 455,
+      "line": 491,
       "phrase": "going cold",
       "tier": 2,
       "category": "D",
@@ -2022,7 +2054,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 153,
+      "line": 154,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
@@ -2030,7 +2062,7 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 455,
+      "line": 491,
       "phrase": "decay",
       "tier": 2,
       "category": "D",
@@ -2038,7 +2070,7 @@
     },
     {
       "file": "preview-transcript/territory-architect/index.html",
-      "line": 142,
+      "line": 161,
       "phrase": "carve",
       "tier": 2,
       "category": "D",
@@ -2046,7 +2078,7 @@
     },
     {
       "file": "preview-transcript/territory-architect/index.html",
-      "line": 142,
+      "line": 161,
       "phrase": "floor",
       "tier": 2,
       "category": "D",
@@ -5578,7 +5610,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "I am busy.\", reply: \"Understood. The short version is that I am calling because of [pressure] at [account]. If that is not relevant to you, who owns it?\", next: \"pressure\" }, { id: \"who\", buyer: \"Who"
+      "context": "reply: \"Understood. The short version: I am calling about something I saw at [account]: [pressure]. If that is not relevant to you, who owns it?\", next: \"pressure\" }, { id: \"who\", buyer: \"Who is this?\","
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5586,7 +5618,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "e of [pressure] at [account]. If that is not relevant to you, who owns it?\", next: \"pressure\" }, { id: \"who\", buyer: \"Who is this?\", reply: \"[Your name] with [company]. I am calling because of [pressu"
+      "context": "saw at [account]: [pressure]. If that is not relevant to you, who owns it?\", next: \"pressure\" }, { id: \"who\", buyer: \"Who is this?\", reply: \"[Your name] with [company]. I am calling about something I"
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5594,7 +5626,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "buyer: \"Who is this?\", reply: \"[Your name] with [company]. I am calling because of [pressure] at [account]. Can I give you the 20-second version?\", next: \"pressure\" }, { id: \"no-sales\", buyer: \"No sal"
+      "context": "reply: \"[Your name] with [company]. I am calling about something I saw at [account]: [pressure]. Can I give you the 20-second version?\", next: \"pressure\" }, { id: \"no-sales\", buyer: \"No sales calls.\","
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5602,7 +5634,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "because of [pressure] at [account]. Can I give you the 20-second version?\", next: \"pressure\" }, { id: \"no-sales\", buyer: \"No sales calls.\", reply: \"Understood. I will keep it brief. Is [pressure] som"
+      "context": "hing I saw at [account]: [pressure]. Can I give you the 20-second version?\", next: \"pressure\" }, { id: \"no-sales\", buyer: \"No sales calls.\", reply: \"Understood. I will keep it brief. I saw this at [ac"
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5610,7 +5642,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "buyer: \"No sales calls.\", reply: \"Understood. I will keep it brief. Is [pressure] something your team is dealing with, or should I close the loop?\", next: \"pressure\" } ] }, { id: \"pressure\", num: \"03\""
+      "context": "sales calls.\", reply: \"Understood. I will keep it brief. I saw this at [account]: [pressure]. Is that something your team is dealing with, or should I close the loop?\", next: \"pressure\" } ] }, { id: \"pressure\","
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5618,7 +5650,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "pressure] something your team is dealing with, or should I close the loop?\", next: \"pressure\" } ] }, { id: \"pressure\", num: \"03\", label: \"Understand the impact\", verb: \"tighten\", color: \"var(--cc-green)\","
+      "context": ". Is that something your team is dealing with, or should I close the loop?\", next: \"pressure\" } ] }, { id: \"pressure\", num: \"03\", label: \"Understand the impact\", verb: \"tighten\", color: \"var(--cc-green)\","
     },
     {
       "file": "src/cold-call-studio/lib/threads.ts",
@@ -5634,15 +5666,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "called; the buyer tells you whether it matters internally.\", say: \"The reason I called is [pressure]. I do not know yet whether that is creating a problem for your team. If it is, where does it show up most: time, handoffs, rework, or delayed decisions?\", coach: \"Let the"
-    },
-    {
-      "file": "src/cold-call-studio/lib/threads.ts",
-      "line": 108,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "B",
-      "context": "il you have real evidence that matches the buyer's situation.\", say: \"How are you handling [pressure] today: manually, through an existing vendor, or another way?\", coach: \"If you have a relevant verified example, use it briefly. Otherwise stay with the buyer's current pr"
+      "context": "hether it matters internally.\", say: \"The reason I called is something I saw at [account]: [pressure]. I do not know yet whether that is creating a problem for your team. If it is, where does it show up most: time, handoffs, rework, or delayed decisions?\", coach: \"Let the"
     },
     {
       "file": "src/cold-call-studio/lib/types.ts",
@@ -8141,6 +8165,30 @@
       "context": "negotiation / verbal-yes stages route to // the Negotiation desk per canon §4.16b — the deal's pressure shifts // from qualification to terms once we're past evaluation. let primaryTarget: \"deal\" | \"call\" | \"poc\" | \"discovery\" | \"negotiation\" = \"deal\"; let primar"
     },
     {
+      "file": "src/future-autopsy/lib/autopsy-data.ts",
+      "line": 18,
+      "phrase": "front",
+      "tier": 2,
+      "category": "E",
+      "context": "what to do about it, and when. `chapterFor` puts the observed condition // from the deal record in front of it. export const CHAPTERS: Readonly<Record<CauseId, string>> = { no_nextstep: \"When no date is on the calendar, every follow-up tends to become a maybe. Get a date"
+    },
+    {
+      "file": "src/future-autopsy/lib/autopsy-data.ts",
+      "line": 115,
+      "phrase": "front",
+      "tier": 2,
+      "category": "B",
+      "context": "orth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon.\" }; export const CAUSE_LEADS: Readonly< Record<string, Readonly<Record<string, string>>> > = { no_champion: { discovery: \""
+    },
+    {
+      "file": "src/future-autopsy/lib/autopsy-data.ts",
+      "line": 153,
+      "phrase": "front",
+      "tier": 2,
+      "category": "B",
+      "context": "convert when the success criteria, the owner, and an executive review of the results are agreed up front, so the results turn straight into an approval.\", negotiation: \"Negotiations tend to close faster when the approval path and budget owner are mapped early, which cuts"
+    },
+    {
       "file": "src/future-autopsy/lib/autopsy-snapshot.ts",
       "line": 19,
       "phrase": "thin",
@@ -8150,7 +8198,7 @@
     },
     {
       "file": "src/future-autopsy/lib/autopsy.test.ts",
-      "line": 216,
+      "line": 240,
       "phrase": "floor",
       "tier": 2,
       "category": "E",
@@ -8330,7 +8378,7 @@
       "phrase": "carve",
       "tier": 2,
       "category": "B",
-      "context": "rray<PushbackTemplate> = [ { id: \"p_legal_1\", trigger: \"We need indemnification carve-outs.\", response: \"Which risk do the requested carve-outs address? Let's identify the relevant contract language and have our legal teams review the proposed c"
+      "context": "rray<PushbackTemplate> = [ { id: \"p_legal_1\", trigger: \"We need indemnification carve-outs.\", response: \"Ask what specific risk the carve-out covers. Standard indemnification usually covers IP infringement and gross negligence; if their worry is"
     },
     {
       "file": "src/getting-to-signed/lib/seed-scripts.ts",
@@ -8338,7 +8386,23 @@
       "phrase": "carve",
       "tier": 2,
       "category": "B",
-      "context": ": \"We need indemnification carve-outs.\", response: \"Which risk do the requested carve-outs address? Let's identify the relevant contract language and have our legal teams review the proposed coverage and exclusions.\" }, { id: \"p_legal_2\", tr"
+      "context": "r: \"We need indemnification carve-outs.\", response: \"Ask what specific risk the carve-out covers. Standard indemnification usually covers IP infringement and gross negligence; if their worry is narrower, a common trade is a specific clause or appendix for that one"
+    },
+    {
+      "file": "src/getting-to-signed/lib/seed-scripts.ts",
+      "line": 105,
+      "phrase": "carve",
+      "tier": 2,
+      "category": "B",
+      "context": "y is narrower, a common trade is a specific clause or appendix for that one risk instead of a broad carve-out. Confirm the wording with your legal team.\" }, { id: \"p_legal_2\", trigger: \"We can't agree to auto-renewal.\", response: \"Auto-renew"
+    },
+    {
+      "file": "src/getting-to-signed/lib/seed-scripts.ts",
+      "line": 42,
+      "phrase": "front",
+      "tier": 2,
+      "category": "B",
+      "context": "nual spend, or per-seat cost. If it's total value, a common trade is billing annually instead of up front; if it's per-seat, a common trade is right-sizing the seat count. Confirm with your team that you can offer either.\" }, { id: \"p_cfo_3\", trigger: \"We need"
     },
     {
       "file": "src/getting-to-signed/lib/types.ts",
@@ -17119,7 +17183,7 @@
   ],
   "changedRiskAgainstMain": {
     "previous": 2170,
-    "current": 299,
-    "delta": -1871
+    "current": 306,
+    "delta": -1864
   }
 }
