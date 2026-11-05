@@ -42,7 +42,7 @@ const STAGES: ReadonlyArray<StageDef> = [
     {
         key: "readout",
         label: "Readout",
-        headline: "Carry the evidence into the decision room."
+        headline: "Carry the evidence into the decision meeting."
     }
 ];
 

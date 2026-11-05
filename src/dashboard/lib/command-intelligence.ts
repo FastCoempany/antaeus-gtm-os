@@ -267,7 +267,7 @@ function buildIcpObject(
             id: "icp-truth",
             title: "Save an ideal customer profile this week.",
             copy:
-                "You have signals and deals, but no saved ICP, so the other rooms can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.",
+                "You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.",
             badge: "Missing ICP",
             badgeTone: "state-ready",
             metricLabel: "Targeting setup",

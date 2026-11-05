@@ -69,7 +69,9 @@ export function QuotaWorkbackV4(): JSX.Element {
     const covShort = Math.max(0, Math.round(cov.needed));
 
     const meetingsNeedMonth = m.meetingsMonth;
-    const dealsNeedMonth = Math.max(1, Math.round(m.dealsMonth));
+    // Exact: the year needs m.dealsYear whole deals; the month share can be
+    // a fraction (8 a year is 0.7 a month), so no rounding up to 1 here.
+    const dealsNeedMonth = m.dealsMonth;
 
     const behindOutreach = actuals.outreachPerDay < m.touchesDay;
     const behindMeetings = actuals.meetingsThisMonth < meetingsNeedMonth;
@@ -190,7 +192,7 @@ export function QuotaWorkbackV4(): JSX.Element {
                                 <div class="qw4-line"><span class="qw4-ln">{m.touchesDay}</span><span class="qw4-lt">{t("messages & calls")} <b>{t("per working day")}</b></span></div>
                                 <div class="qw4-line"><span class="qw4-ln">{meetingsNeedMonth}</span><span class="qw4-lt">{t("first meetings")} <b>{t("per month")}</b></span></div>
                                 <div class="qw4-line"><span class="qw4-ln">{bench.coverage}×</span><span class="qw4-lt">{t("annual target")} <b>{t("in open pipeline")}</b></span></div>
-                                <div class="qw4-line"><span class="qw4-ln">{dealsNeedMonth}</span><span class="qw4-lt">{t("closed-won deals")} <b>{t("per month")}</b></span></div>
+                                <div class="qw4-line"><span class="qw4-ln">{m.dealsYear}</span><span class="qw4-lt">{t("closed-won deals")} <b>{t("per year")}</b> · {m.dealsQuarter} {t("a quarter")}</span></div>
                                 <div class="qw4-judge">
                                     <div class="qw4-jh">{t("Assumption check")}</div>
                                     <div class="qw4-jb">{believe.read}</div>

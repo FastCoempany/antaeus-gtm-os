@@ -89,7 +89,7 @@ export function FoundingGtmDS(): JSX.Element {
                         </div>
                         <p class="fgd-summary__read">
                             {t(
-                                "What your first hire reads on day one. Each section is authored from the rooms — not aggregated.",
+                                "What your first hire reads on day one. Each section is written from the work across the app — not just collected.",
                                 { class: "body" }
                             )}
                         </p>
@@ -122,7 +122,7 @@ export function FoundingGtmDS(): JSX.Element {
                         label={t("Carry the kit forward")}
                         kicker={t("CARRY THE KIT FORWARD")}
                         title={t("Run the daily rhythm. Sharpen the math.", { class: "body" })}
-                        sub={t("The kit is read-mode here — real updates come from the rooms that feed it.", { class: "body" })}
+                        sub={t("The kit is read-mode here — real updates come from the work you record elsewhere in the app.", { class: "body" })}
                         routes={[
                             { label: t("Open the Dashboard"), href: buildFoundingGtmHref("/dashboard/"), primary: true },
                             { label: t("Refine the quota math"), href: buildFoundingGtmHref("/quota-workback/") },

@@ -200,7 +200,7 @@ function CloudSyncCard(): JSX.Element {
 
     const helpCopy: Record<typeof conn.status, string> = {
         connected:
-            "Each room saves to the cloud as you work. The breakdown below shows what's stored cross-device — your durable workspace.",
+            "Everything you do in the app saves to the cloud as you work. The breakdown below shows what's stored cross-device — your durable workspace.",
         "no-credentials":
             "Cloud sync isn't configured for this build. The app will run from local storage only.",
         "auth-missing":
@@ -493,7 +493,7 @@ function PhaseFCard(): JSX.Element {
             </header>
             <p class="st-card__desc">
                 The system will sometimes notice a pattern in how you work —
-                a skill you keep running with the same setup, a room you
+                a skill you keep running with the same setup, a page you
                 open before any other most weeks — and suggest a small
                 change. You always accept or dismiss. Nothing changes
                 without you.

@@ -459,8 +459,8 @@ describe("authorSection7 — first-week cadence", () => {
             })
         );
         expect(s.status).toBe("ready");
-        // $6M a year = $500k a month = 10 deals of $50k a month.
-        expect(s.body[0]).toContain("10 closed-won deals a month");
+        // $6M a year at $50k deals = exactly 120 deals a year (30 a quarter).
+        expect(s.body[0]).toContain("120 closed-won deals a year (about 30 a quarter)");
         expect(s.evidence.find((e) => e.includes("Win-rate assumption"))).toBeDefined();
         expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
@@ -473,8 +473,8 @@ describe("authorSection7 — first-week cadence", () => {
             })
         );
         expect(s.evidence).toContain("Win-rate assumption: 25%");
-        // 10 deals a month at a 25% win rate = 40 qualified opportunities, not 1.
-        expect(s.body[0]).toContain("about 40 qualified opportunities");
+        // 120 deals a year at a 25% win rate = 480 qualified opportunities, not 1.
+        expect(s.body[0]).toContain("about 480 qualified opportunities a year");
     });
 
     it("reports recent activity dropoff as an observation", () => {
@@ -625,14 +625,17 @@ describe("evidence integrity regressions", () => {
         const s = authorSection7(loadSectionsInput({ storage }));
         expect(readDailyOutreachRequirement(storage)).toBe(quotaRoom.touchesDay);
         expect(s.body[1]).toContain(`Daily outreach target from Quota Workback: ${quotaRoom.touchesDay} messages and calls per working day.`);
-        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsMonth} first meetings a month (about ${quotaRoom.meetingsWeek} a week)`);
-        expect(s.body[0]).toContain(`about ${quotaRoom.oppsMonth} qualified`);
-        expect(s.evidence).toContain(`Closed-won deals needed per month: ${quotaRoom.dealsMonth}`);
-        // The demo numbers the walkthrough showed disagreeing (12/day vs 48/day).
-        expect(quotaRoom.touchesDay).toBe(48);
-        expect(quotaRoom.meetingsMonth).toBe(15);
+        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsYear} first meetings a year (about ${quotaRoom.meetingsWeek} a week)`);
+        expect(s.body[0]).toContain("8 closed-won deals a year (about 2 a quarter)");
+        expect(s.body[0]).toContain(`about ${quotaRoom.oppsYear} qualified`);
+        expect(s.evidence).toContain(`Closed-won deals needed per year: ${quotaRoom.dealsYear}`);
+        // Both rooms state the same plan. 28 a day and 8.8 first meetings a month
+        // since the plan stopped rounding 0.7 deals a month up to 1 (it read 48 / 15).
+        expect(quotaRoom.dealsYear).toBe(8);
+        expect(quotaRoom.touchesDay).toBe(28);
+        expect(quotaRoom.meetingsMonth).toBe(8.8);
         // An entered touches-per-day value is not used by the Quota room, so it is not used here either.
         const withEntered = authorSection7(input({ quota: { quota: 2000000, acv: 250000, winRate: 22, cycle: 180, touchesPerDay: 12, plan } }));
-        expect(withEntered.body[1]).toContain("48 messages and calls per working day");
+        expect(withEntered.body[1]).toContain("28 messages and calls per working day");
     });
 });

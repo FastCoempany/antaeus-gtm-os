@@ -43,7 +43,7 @@ export function HandoffStrip(): JSX.Element {
                 </h2>
                 <p class="ds-handoff__sub">{lockStatus}</p>
             </header>
-            <nav class="ds-handoff__row" aria-label={t("Cross-room handoff")}>
+            <nav class="ds-handoff__row" aria-label={t("Continue on another page")}>
                 <a
                     class="ds-handoff__cta ds-handoff__cta--primary"
                     href={hrefToDealWorkspace(account)}

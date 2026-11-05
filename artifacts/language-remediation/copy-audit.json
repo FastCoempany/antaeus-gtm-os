@@ -3,7 +3,7 @@
   "renderedOccurrences": 5626,
   "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 482,
+  "tier2ReviewWarnings": 480,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
@@ -11,7 +11,7 @@
     },
     "B": {
       "description": "runtime/customer-visible candidate",
-      "hits": 387
+      "hits": 385
     },
     "C": {
       "description": "prompt/template",
@@ -1602,7 +1602,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "owner is not.\",\"You still need the route that best finds that owner.\"), branch(\"EVERYTHING THIN\",\"fl\",\"\\\"We still don't know too much.\\\"\",\"\\\"Then the next room should be the one most likely to recover the call instead of pretending this is cleaner than it is.\\\"\",["
+      "context": "owner is not.\",\"You still need the route that best finds that owner.\"), branch(\"EVERYTHING THIN\",\"fl\",\"\\\"We still don't know too much.\\\"\",\"\\\"Then the next step should be the one most likely to recover the call instead of pretending this is cleaner than it is.\\\"\",["
     },
     {
       "file": "js/discovery-segment-runtime.js",
@@ -3042,7 +3042,7 @@
       "phrase": "thread",
       "tier": 2,
       "category": "A",
-      "context": "<h2 class=\"cc-memory__title\"> Log the outcome before the thread goes cold. </h2> </div> <nav class=\"cc-memory__handoff\" aria-label={t(\"Cross-room handoff\")}> <a"
+      "context": "<h2 class=\"cc-memory__title\"> Log the outcome before the thread goes cold. </h2> </div> <nav class=\"cc-memory__handoff\" aria-label={t(\"Continue on another page\")}> <a"
     },
     {
       "file": "src/cold-call-studio/components/CallMemory.tsx",
@@ -3314,7 +3314,7 @@
       "phrase": "thread",
       "tier": 2,
       "category": "B",
-      "context": "c-capture__next\"> {next ? `Next thread: ${next.title}` : \"Log the call and choose the next room.\"} </p> {next ? ("
+      "context": "c-capture__next\"> {next ? `Next thread: ${next.title}` : \"Log the call and choose where to go next.\"} </p> {next ? ("
     },
     {
       "file": "src/cold-call-studio/components/TalkLoom.tsx",
@@ -6590,14 +6590,6 @@
     },
     {
       "file": "src/deal-workspace/components/TargetFolio.tsx",
-      "line": 80,
-      "phrase": "sharpen",
-      "tier": 2,
-      "category": "B",
-      "context": "target-folio__copy\"> {t( \"The live case the room should sharpen first. If it can't survive pressure, the rest of the board becomes decorative.\", { class: \"body\" } )} </p>"
-    },
-    {
-      "file": "src/deal-workspace/components/TargetFolio.tsx",
       "line": 54,
       "phrase": "pressure",
       "tier": 2,
@@ -6610,7 +6602,7 @@
       "phrase": "pressure",
       "tier": 2,
       "category": "B",
-      "context": "{t( \"The live case the room should sharpen first. If it can't survive pressure, the rest of the board becomes decorative.\", { class: \"body\" } )} </p> </div> <ul class=\"dw-si"
+      "context": "{t( \"The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.\", { class: \"body\" } )} </p> </div> <ul class=\"dw-signal-g"
     },
     {
       "file": "src/deal-workspace/components/TargetFolio.tsx",
@@ -7002,7 +6994,7 @@
       "phrase": "sharpen",
       "tier": 2,
       "category": "A",
-      "context": "ARD\")}</p> <h2 class=\"fg-handoff__title\"> Run the daily rhythm. Sharpen the math. </h2> <p class=\"fg-handoff__sub\"> The kit is read-mode here. Real updates come from the rooms tha"
+      "context": "ARD\")}</p> <h2 class=\"fg-handoff__title\"> Run the daily rhythm. Sharpen the math. </h2> <p class=\"fg-handoff__sub\"> The kit is read-mode here. Real updates come from the work you"
     },
     {
       "file": "src/founding-gtm/ds/FoundingGtmDS.tsx",
@@ -7010,7 +7002,7 @@
       "phrase": "sharpen",
       "tier": 2,
       "category": "B",
-      "context": "kicker={t(\"CARRY THE KIT FORWARD\")} title={t(\"Run the daily rhythm. Sharpen the math.\", { class: \"body\" })} sub={t(\"The kit is read-mode here — real updates come from the rooms that feed it.\", { class: \"body\" })}"
+      "context": "kicker={t(\"CARRY THE KIT FORWARD\")} title={t(\"Run the daily rhythm. Sharpen the math.\", { class: \"body\" })} sub={t(\"The kit is read-mode here — real updates come from the work you record elsewhere in the app.\", { class: \"body\" })}"
     },
     {
       "file": "src/founding-gtm/ds/FoundingGtmDS.tsx",
@@ -7154,7 +7146,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "F",
-      "context": "ner and inside carrier are both named. The pilot results can be carried into the room.\"; const motion = !v.hasNextStep ? \"There's no dated next step — the process is running ahead of any control.\" : v.staleDays >= 30 ? \"The thread moved early in the cycle;"
+      "context": "er are both named. The pilot results can be carried into the buyer's decision meeting.\"; const motion = !v.hasNextStep ? \"There's no dated next step — the process is running ahead of any control.\" : v.staleDays >= 30 ? \"The thread moved early in the cycle;"
     },
     {
       "file": "src/future-autopsy/components/ForensicSheets.tsx",
@@ -7186,7 +7178,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "ide their company is carrying this forward.\" : v.qualScore < 10 ? \"Qualification is thin — the buyer can't take the pilot results to their boss yet.\" : \"Owner and inside carrier are both named. The pilot results can be carried into the room.\"; const motio"
+      "context": "ide their company is carrying this forward.\" : v.qualScore < 10 ? \"Qualification is thin — the buyer can't take the pilot results to their boss yet.\" : \"Owner and inside carrier are both named. The pilot results can be carried into the buyer's decision meeting"
     },
     {
       "file": "src/future-autopsy/ds/FutureAutopsyDS.tsx",
@@ -7722,7 +7714,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "A",
-      "context": "rong things. </h1> <p class=\"icp-hero__note\"> A thin ICP — one industry, one buyer, one pain — is what every downstream room targets against. </p> {!placeholder ? ("
+      "context": "rong things. </h1> <p class=\"icp-hero__note\"> A thin ICP — one industry, one buyer, one pain — is what every other part of the app targets against. </p> {!placeholder ? ("
     },
     {
       "file": "src/icp-studio/components/RunDocket.tsx",
@@ -9402,7 +9394,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "F",
-      "context": "<p class=\"lp-read__rule-kicker\">{t(\"Channel standard\")}</p> <strong>{motion.thresholds}</strong> </div> <nav class=\"lp-read__cta\" aria-label={t(\"Cross-room handoff\")}> <a"
+      "context": "<p class=\"lp-read__rule-kicker\">{t(\"Channel standard\")}</p> <strong>{motion.thresholds}</strong> </div> <nav class=\"lp-read__cta\" aria-label={t(\"Continue on another page\")}> <a"
     },
     {
       "file": "src/linkedin-playbook/components/CueBooth.tsx",
@@ -10738,7 +10730,7 @@
       "phrase": "sharp",
       "tier": 2,
       "category": "B",
-      "context": "rn ( <StepShell kicker={t(\"STEP 5 OF 7 — ICP\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition every other room in the app runs aga"
+      "context": "rn ( <StepShell kicker={t(\"STEP 5 OF 7 — ICP\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.\", {"
     },
     {
       "file": "src/onboarding/components/Steps.tsx",
@@ -10746,7 +10738,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "P\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition every other room in the app runs against.\", { class: \"body\" })} onNext={() => nextStep"
+      "context": "P\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.\", { class: \"body\" })} onNext={() => nextStep()}"
     },
     {
       "file": "src/onboarding/ds/OnboardingDS.tsx",
@@ -10762,7 +10754,7 @@
       "phrase": "sharp",
       "tier": 2,
       "category": "B",
-      "context": "( <DsStepShell kicker={t(\"STEP 5 OF 7 — ICP\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas — that's the definition every other room runs against.\", { class: \"body\" })}"
+      "context": "( <DsStepShell kicker={t(\"STEP 5 OF 7 — ICP\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas — that's the definition the rest of the app works from.\", { class: \"body\" })}"
     },
     {
       "file": "src/onboarding/ds/components/StepsDS.tsx",
@@ -10778,7 +10770,7 @@
       "phrase": "thin",
       "tier": 2,
       "category": "B",
-      "context": "P\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas — that's the definition every other room runs against.\", { class: \"body\" })} onNext={() => nextStep()} onBack={() ="
+      "context": "P\")} title={t(\"Write one sharp ICP.\")} subtitle={t(\"One sentence is enough. Thin means fewer assumptions, fewer personas — that's the definition the rest of the app works from.\", { class: \"body\" })} onNext={() => nextStep()} onBack={()"
     },
     {
       "file": "src/onboarding/ds/ds-components.test.tsx",
@@ -12422,14 +12414,6 @@
     },
     {
       "file": "src/quota-workback/components/HandoffStrip.tsx",
-      "line": 35,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "B",
-      "context": "<p class=\"qw-section__sub\"> {t( \"The weekly pressure number has to land in the rooms that actually create pipeline.\", { class: \"body\" } )} </p> </header>"
-    },
-    {
-      "file": "src/quota-workback/components/HandoffStrip.tsx",
       "line": 61,
       "phrase": "pressure",
       "tier": 2,
@@ -13042,7 +13026,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "B",
-      "context": "75+ Active </span>{\" \"} {t(\"— motion-ready, the room treats these as primary work\", { class: \"body\" })} </li> <li> <span class=\"sc-heat-banner__chip sc-"
+      "context": "75+ Active </span>{\" \"} {t(\"— motion-ready, Signal Console treats these as primary work\", { class: \"body\" })} </li> <li> <span class=\"sc-heat-banner__ch"
     },
     {
       "file": "src/signal-console/components/HeatBandBanner.tsx",
@@ -13154,7 +13138,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "ody\" })} </li> <li> <span class=\"sc-heat-banner__chip sc-heat-banner__chip--active\"> 75+ Active </span>{\" \"} {t(\"— motion-ready, the room treats"
+      "context": "ody\" })} </li> <li> <span class=\"sc-heat-banner__chip sc-heat-banner__chip--active\"> 75+ Active </span>{\" \"} {t(\"— motion-ready, Signal Console"
     },
     {
       "file": "src/signal-console/components/HeatBandBanner.tsx",
@@ -13162,7 +13146,7 @@
       "phrase": "heat",
       "tier": 2,
       "category": "F",
-      "context": "</li> <li> <span class=\"sc-heat-banner__chip sc-heat-banner__chip--active\"> 75+ Active </span>{\" \"} {t(\"— motion-ready, the room treats these as primary wor"
+      "context": "</li> <li> <span class=\"sc-heat-banner__chip sc-heat-banner__chip--active\"> 75+ Active </span>{\" \"} {t(\"— motion-ready, Signal Console treats these as prima"
     },
     {
       "file": "src/signal-console/components/HeatBandBanner.tsx",
@@ -16526,8 +16510,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 2179,
-    "current": 294,
-    "delta": -1885
+    "previous": 160,
+    "current": 158,
+    "delta": -2
   }
 }

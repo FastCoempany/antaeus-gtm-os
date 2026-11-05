@@ -76,19 +76,30 @@ export function computeMetrics(
     const tpa = Math.max(0, inputs.tpa);
     const cycle = Math.max(0, inputs.cycle);
 
+    // Work the plan at the annual level and round only once, where a whole
+    // thing is needed: you close whole deals and run whole meetings, but the
+    // year — not each month — is what has to add up. Rounding every month up
+    // used to turn a $2M target at $250k deals into 12 deals a year (1 a
+    // month) instead of the 8 the target actually needs.
     const monthly = quota > 0 ? Math.round(quota / 12) : 0;
-    const dealsNeeded = acv > 0 ? Math.ceil(monthly / acv) : 0;
-    const oppsNeeded = win > 0 ? Math.ceil(dealsNeeded / win) : 0;
-    const meetingsSched = m2o > 0 ? Math.ceil(oppsNeeded / m2o) : 0;
-    const meetingsHeld = show > 0 ? Math.ceil(meetingsSched / show) : 0;
-    const totalTouches = t2m > 0 ? Math.ceil(meetingsHeld / t2m) : 0;
-    const activeAccounts = tpa > 0 ? Math.ceil(totalTouches / tpa) : 0;
-    const touchesDay = days > 0 ? Math.ceil(totalTouches / days) : 0;
-    const touchesWeek = ceilDiv(totalTouches, 4);
-    const meetingsWeek = round1(meetingsSched / 4);
-    const meetingPushesWeek = ceilDiv(meetingsSched, 4);
-    const oppsQuarter = oppsNeeded * 3;
-    const dealsQuarter = dealsNeeded * 3;
+    const wholeUp = (n: number): number => (n > 0 ? Math.ceil(n - 1e-9) : 0);
+    const dealsYear = acv > 0 && quota > 0 ? wholeUp(quota / acv) : 0;
+    const oppsYear = win > 0 ? wholeUp(dealsYear / win) : 0;
+    const meetingsYear = m2o > 0 ? wholeUp(oppsYear / m2o) : 0;
+    const meetingsHeldYear = show > 0 ? wholeUp(meetingsYear / show) : 0;
+    const touchesYear = t2m > 0 ? wholeUp(meetingsHeldYear / t2m) : 0;
+
+    const dealsNeeded = round1(dealsYear / 12);
+    const oppsNeeded = round1(oppsYear / 12);
+    const meetingsSched = round1(meetingsYear / 12);
+    const totalTouches = wholeUp(touchesYear / 12);
+    const activeAccounts = tpa > 0 ? wholeUp(totalTouches / tpa) : 0;
+    const touchesDay = days > 0 ? wholeUp(touchesYear / 12 / days) : 0;
+    const touchesWeek = wholeUp(touchesYear / 48);
+    const meetingsWeek = round1(meetingsYear / 48);
+    const meetingPushesWeek = wholeUp(meetingsYear / 48);
+    const oppsQuarter = round1(oppsYear / 4);
+    const dealsQuarter = round1(dealsYear / 4);
     const weeklyRevenue = ceilDiv(monthly, 4);
     const pipelineNeeded = win > 0 ? Math.round(monthly / win) : 0;
     const accountPressure = days > 0 ? round1(activeAccounts / days) : 0;
@@ -122,6 +133,9 @@ export function computeMetrics(
 
     return {
         monthlyTarget: monthly,
+        dealsYear,
+        oppsYear,
+        meetingsYear,
         weeklyRevenue,
         dealsMonth: dealsNeeded,
         dealsQuarter,

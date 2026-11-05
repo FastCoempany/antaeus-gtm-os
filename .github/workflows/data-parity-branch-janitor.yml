@@ -54,7 +54,7 @@ jobs:
       - name: Install Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 3.0.0
 
       - name: List + filter branches
         id: candidates
@@ -64,7 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           ALL_BRANCHES=$(supabase --experimental branches list \
-            --project-ref "$PROJECT_REF" -o json)
+            --remote="$PROJECT_REF" -o json)
           # Filter to branches named `pr-<num>-run-<id>`. Everything else is
           # left alone (main, preview, any founder-created branches).
           echo "$ALL_BRANCHES" | python3 -c "
@@ -163,7 +163,7 @@ jobs:
                   subprocess.run(
                       [
                           "supabase", "--experimental", "branches", "delete",
-                          name, "--project-ref", PROJECT_REF, "-y"
+                          name, f"--remote={PROJECT_REF}", "-y"
                       ],
                       check=False
                   )

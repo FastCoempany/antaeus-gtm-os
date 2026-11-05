@@ -36,6 +36,8 @@ import {
 } from "../lib/research-context";
 import { saveProspect, saveQueryCard } from "../lib/cloud-persistence";
 import { normalizeNameKey } from "./name-key";
+import { isDemoModeActive } from "@/lib/data-client-demo-local";
+import { autoRerunEnabled, isDueForRecheck, loadAutoRerun } from "../lib/auto-rerun";
 
 export interface FindRun {
     readonly result: FindResult;
@@ -99,6 +101,7 @@ export async function runFind(
                 ...card,
                 lastCheckedAt: result.ranAt,
                 lastNewCount: result.companies.length,
+                lastCheckedBy: "you",
                 updatedAt: result.ranAt
             };
             setQueryCards(queryCards.value.map((c) => (c.id === card.id ? updated : c)));
@@ -220,8 +223,59 @@ export function addResearchedCompany(c: ResearchedCompany, now: number = Date.no
     return addProspect(newProspect(c.name, researchFromBrief(c, sample, now), "", now));
 }
 
+// ─── Demo: simulate the weekly automatic re-check ───────────────────
+//
+// In the demo the re-check runs in the browser against the demo's sample
+// companies (no web search, nothing billed): up to two saved searches that
+// are due each add one new company to "Just added", marked as found by the
+// weekly re-check. Real workspaces are re-checked by the daily schedule.
+
+export const DEMO_RERUN_MAX_SEARCHES = 2;
+export const DEMO_RERUN_PER_SEARCH = 1;
+
+let demoRerunRan = false;
+
+export async function simulateDemoRerun(
+    opts: { readonly now?: number; readonly force?: boolean } = {}
+): Promise<number> {
+    if (!opts.force && (demoRerunRan || !isDemoModeActive())) return 0;
+    demoRerunRan = true;
+    const enabled = autoRerunEnabled.value ?? (await loadAutoRerun({ demo: true }));
+    if (!enabled) return 0;
+    const now = opts.now ?? Date.now();
+    const due = queryCards.value
+        .filter((c) => c.query.trim().length >= 3 && isDueForRecheck(c.lastCheckedAt, now))
+        .slice(0, DEMO_RERUN_MAX_SEARCHES);
+    let added = 0;
+    for (const card of due) {
+        const result = await callFind(
+            { description: card.query, exclude: workspaceNames() },
+            { sampleMode: true, now }
+        );
+        const picks = result.ok ? result.companies.slice(0, DEMO_RERUN_PER_SEARCH) : [];
+        let n = 0;
+        for (const c of picks) {
+            const research = { ...researchFromFound(c, true, now), auto: true };
+            if (addProspect(newProspect(c.name, research, card.id, now))) n += 1;
+        }
+        added += n;
+        const iso = new Date(now).toISOString();
+        const updated: QueryCard = {
+            ...card,
+            lastCheckedAt: iso,
+            lastNewCount: n,
+            lastCheckedBy: "auto",
+            updatedAt: iso
+        };
+        setQueryCards(queryCards.value.map((c) => (c.id === card.id ? updated : c)));
+        void saveQueryCard(updated);
+    }
+    return added;
+}
+
 /** Test-only. */
 export function __resetResearchStateForTests(): void {
+    demoRerunRan = false;
     findBusy.value = false;
     findRun.value = null;
     researchText.value = "";

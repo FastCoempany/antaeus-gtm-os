@@ -30,8 +30,8 @@ export function Topbar(): JSX.Element {
         : t("QUOTA WORKBACK");
 
     // Annualized rollups used for the sub-note context lines.
-    const dealsYear = m.dealsMonth * 12;
-    const oppsYear = m.oppsMonth * 12;
+    const dealsYear = m.dealsYear;
+    const oppsYear = m.oppsYear;
 
     return (
         <header class="qw-topbar" aria-label={t("Quota Workback header")}>

@@ -137,7 +137,8 @@ export function queryCardToInsert(
             notes: card.notes,
             targetIcp: card.targetIcp,
             ...(card.lastCheckedAt ? { lastCheckedAt: card.lastCheckedAt } : {}),
-            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {})
+            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {}),
+            ...(card.lastCheckedBy ? { lastCheckedBy: card.lastCheckedBy } : {})
         } as unknown as Json
     };
 }
@@ -154,7 +155,8 @@ export function queryCardToUpdate(
             notes: card.notes,
             targetIcp: card.targetIcp,
             ...(card.lastCheckedAt ? { lastCheckedAt: card.lastCheckedAt } : {}),
-            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {})
+            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {}),
+            ...(card.lastCheckedBy ? { lastCheckedBy: card.lastCheckedBy } : {})
         } as unknown as Json
     };
 }

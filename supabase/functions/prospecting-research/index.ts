@@ -12,6 +12,12 @@
  *               qualification questions (the room never treats them as
  *               answered until the seller confirms them).
  *
+ *   - rerun_saved: (service role only, called by the daily cron) re-checks
+ *               each opted-in workspace's saved searches that are a week
+ *               old and adds new matches to "Just added". Off unless the
+ *               PROSPECTING_AUTO_RERUN secret is "on" AND the workspace
+ *               turned on "Re-check saved searches automatically".
+ *
  * Request:
  *   POST { action: "find", workspaceId, description, icp?, focus?, exclude?: string[] }
  *   POST { action: "research", workspaceId, companies: string[], description?, icp?, focus? }
@@ -33,6 +39,12 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2";
 import { callWithWebSearch } from "./anthropic.ts";
 import {
+    AUTO_RERUN_MAX_CARDS_PER_WORKSPACE,
+    AUTO_RERUN_MAX_RESULTS,
+    autoRerunServerEnabled,
+    foundCompanyToProspectData,
+    savedSearchIsDue,
+    type FoundCompany,
     budgetStateFor,
     buildAllowedUrlSet,
     buildFindPrompt,
@@ -55,6 +67,12 @@ import {
 } from "./_shared.ts";
 
 type Action = "find" | "research";
+
+interface RunOptions {
+    readonly maxResults?: number;
+    /** True for the automatic weekly re-check (recorded on the ledger row). */
+    readonly auto?: boolean;
+}
 
 interface RunOutcome {
     readonly ok: boolean;
@@ -95,7 +113,8 @@ async function runResearch(
     action: Action,
     ctx: SellerContext,
     exclude: ReadonlyArray<string>,
-    companiesAsked: ReadonlyArray<string>
+    companiesAsked: ReadonlyArray<string>,
+    opts: RunOptions = {}
 ): Promise<RunOutcome> {
     const spent = await weeklySpend(sb, workspaceId);
     const state = budgetStateFor(spent);
@@ -122,7 +141,8 @@ async function runResearch(
                 focus: ctx.focus,
                 companies: companiesAsked,
                 exclude_count: exclude.length,
-                throttled
+                throttled,
+                ...(opts.auto ? { auto: true } : {})
             }
         })
         .select("id")
@@ -140,7 +160,8 @@ async function runResearch(
     let searchCount = 0;
     let callCount = 0;
     try {
-        const limit = throttled ? 4 : MAX_FIND_RESULTS;
+        const cap = Math.min(MAX_FIND_RESULTS, opts.maxResults ?? MAX_FIND_RESULTS);
+        const limit = throttled ? Math.min(4, cap) : cap;
         const call = await callWithWebSearch({
             model: "sonnet_4_6",
             system_prompt: action === "find" ? FIND_SYSTEM_PROMPT : RESEARCH_SYSTEM_PROMPT,
@@ -201,6 +222,114 @@ async function runResearch(
     }
 }
 
+interface RerunReport {
+    readonly workspaces: number;
+    readonly searches_checked: number;
+    readonly companies_added: number;
+    readonly paused_workspaces: number;
+    readonly errors: string[];
+}
+
+/** Re-check every opted-in workspace's saved searches that are due. */
+async function rerunSavedSearches(sb: SupabaseClient, nowMs: number): Promise<RerunReport> {
+    const errors: string[] = [];
+    let searchesChecked = 0;
+    let companiesAdded = 0;
+    let paused = 0;
+    const profiles = await sb
+        .from("workspace_profile")
+        .select("workspace_id")
+        .eq("prospecting_auto_rerun_enabled", true);
+    if (profiles.error) throw new Error(`Opt-in lookup failed: ${profiles.error.message}`);
+    const workspaceIds = (profiles.data ?? [])
+        .map((r: any) => r.workspace_id)
+        .filter((id: unknown): id is string => typeof id === "string");
+
+    for (const ws of workspaceIds) {
+        try {
+            const rows = await sb
+                .from("studio_artifacts")
+                .select("id,user_id,data")
+                .eq("workspace_id", ws)
+                .eq("studio", "sourcing");
+            if (rows.error) throw new Error(rows.error.message);
+            const all = (rows.data ?? []) as Array<{ id: string; user_id: string; data: any }>;
+            const names: string[] = [];
+            for (const r of all) {
+                if (r.data?.kind === "sourcing.prospect" && typeof r.data.accountName === "string") {
+                    names.push(r.data.accountName);
+                }
+            }
+            const sc = await sb.from("signal_console_accounts").select("account_name").eq("workspace_id", ws);
+            if (!sc.error) {
+                for (const a of sc.data ?? []) if (typeof a.account_name === "string") names.push(a.account_name);
+            }
+            const due = all
+                .filter((r) => r.data?.kind === "sourcing.queryCard" && savedSearchIsDue(r.data, nowMs))
+                .sort((a, b) => String(a.data.lastCheckedAt ?? "").localeCompare(String(b.data.lastCheckedAt ?? "")))
+                .slice(0, AUTO_RERUN_MAX_CARDS_PER_WORKSPACE);
+
+            for (const card of due) {
+                const ctx: SellerContext = {
+                    description: cleanText(card.data.query, MAX_DESCRIPTION_CHARS),
+                    icp: "",
+                    focus: cleanText(card.data.targetIcp, MAX_CONTEXT_CHARS)
+                };
+                const exclude = cleanNameList(names, MAX_EXCLUDE);
+                const outcome = await runResearch(sb, ws, null, "find", ctx, exclude, [], {
+                    maxResults: AUTO_RERUN_MAX_RESULTS,
+                    auto: true
+                });
+                if (outcome.status === "paused") {
+                    paused += 1;
+                    break;
+                }
+                if (!outcome.ok) {
+                    errors.push(`${ws}: ${outcome.error ?? "search failed"}`);
+                    continue;
+                }
+                searchesChecked += 1;
+                const nowIso = new Date(nowMs).toISOString();
+                const found = outcome.companies as ReadonlyArray<FoundCompany>;
+                if (found.length > 0) {
+                    const insert = await sb.from("studio_artifacts").insert(
+                        found.map((c) => ({
+                            workspace_id: ws,
+                            user_id: card.user_id,
+                            studio: "sourcing",
+                            artifact_type: "prospect",
+                            title: c.name,
+                            data: foundCompanyToProspectData(c, card.id, nowIso)
+                        }))
+                    );
+                    if (insert.error) {
+                        errors.push(`${ws}: could not add results (${insert.error.message})`);
+                        continue;
+                    }
+                    companiesAdded += found.length;
+                    for (const c of found) names.push(c.name);
+                }
+                const upd = await sb
+                    .from("studio_artifacts")
+                    .update({
+                        data: { ...card.data, lastCheckedAt: nowIso, lastNewCount: found.length, lastCheckedBy: "auto" }
+                    })
+                    .eq("id", card.id);
+                if (upd.error) errors.push(`${ws}: could not update saved search (${upd.error.message})`);
+            }
+        } catch (err) {
+            errors.push(`${ws}: ${err instanceof Error ? err.message : String(err)}`);
+        }
+    }
+    return {
+        workspaces: workspaceIds.length,
+        searches_checked: searchesChecked,
+        companies_added: companiesAdded,
+        paused_workspaces: paused,
+        errors
+    };
+}
+
 function corsHeaders(req: Request): Record<string, string> {
     return {
         "Access-Control-Allow-Origin": "*",
@@ -232,8 +361,25 @@ Deno.serve(async (req: Request): Promise<Response> => {
         return json({ ok: false, error: "A JSON object with an explicit action is required" }, 400, cors);
     }
     const action = body.action;
+    if (action === "rerun_saved") {
+        const url = Deno.env.get("SUPABASE_URL") ?? "";
+        const role = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+        if (!url || !role) return json({ ok: false, error: "Server configuration missing" }, 500, cors);
+        const bearer = req.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1] ?? "";
+        if (bearer !== role) return json({ ok: false, error: "rerun_saved requires the service role" }, 401, cors);
+        if (!autoRerunServerEnabled(Deno.env.get("PROSPECTING_AUTO_RERUN"))) {
+            return json({ ok: true, action, skipped: "Automatic re-checks are switched off on the server" }, 200, cors);
+        }
+        const admin = createClient(url, role, { auth: { autoRefreshToken: false, persistSession: false } });
+        try {
+            const report = await rerunSavedSearches(admin, Date.now());
+            return json({ ok: true, action, ...report }, 200, cors);
+        } catch (err) {
+            return json({ ok: false, action, error: err instanceof Error ? err.message : String(err) }, 500, cors);
+        }
+    }
     if (action !== "find" && action !== "research") {
-        return json({ ok: false, error: "action must be find or research" }, 400, cors);
+        return json({ ok: false, error: "action must be find, research or rerun_saved" }, 400, cors);
     }
     const workspaceId = typeof body.workspaceId === "string" ? body.workspaceId.trim() : "";
     if (!workspaceId) return json({ ok: false, error: "workspaceId is required" }, 400, cors);

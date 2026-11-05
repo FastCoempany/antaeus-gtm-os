@@ -149,8 +149,8 @@ export function WayfinderBar(props: {
                     type="button"
                     class="ds-wayfinder__help"
                     aria-expanded={whyOpen ? false : wayfinderHelpOpen.value}
-                    aria-label={t("What is this room for?")}
-                    title={t("What is this room for?")}
+                    aria-label={t("What is this page for?")}
+                    title={t("What is this page for?")}
                     onClick={() => {
                         wayfinderHelpOpen.value = !wayfinderHelpOpen.value;
                     }}
@@ -194,9 +194,9 @@ export function WayfinderBar(props: {
 function WayfinderHelpPanel(props: { readonly room: string }): JSX.Element {
     const help = helpForPath(currentPathname());
     return (
-        <div class="ds-wayfinder__help-panel" role="region" aria-label={t("Room help")}>
+        <div class="ds-wayfinder__help-panel" role="region" aria-label={t("Page help")}>
             <dl class="ds-wayfinder__help-list">
-                <dt>{t("What this room is for")}</dt>
+                <dt>{t("What this page is for")}</dt>
                 <dd>{help.whatItIsFor}</dd>
                 <dt>{t("What to do here")}</dt>
                 <dd>{help.theMoveHere}</dd>

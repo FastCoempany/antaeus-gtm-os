@@ -35,8 +35,11 @@ function harness(options: {
     callOk?: boolean;
     output?: unknown;
     resultUrls?: string[];
+    extraTables?: Record<string, Row[]>;
+    autoRerunFlag?: string;
 } = {}) {
     const tables: Record<string, Row[]> = {
+        ...(options.extraTables ?? {}),
         prospecting_research_runs: [],
         workspace_members: options.member === false ? [] : [{ workspace_id: WS, user_id: "user-a" }]
     };
@@ -53,7 +56,7 @@ function harness(options: {
                 gte() { return query; },
                 maybeSingle() { single = true; return query; },
                 single() { single = true; return query; },
-                insert(value: Row) { kind = "insert"; payload = value; return query; },
+                insert(value: Row | Row[]) { kind = "insert"; payload = value as Row; return query; },
                 update(value: Row) { kind = "update"; payload = value; return query; },
                 then(done: (value: unknown) => unknown) {
                     const rows = tables[table]!;
@@ -63,7 +66,8 @@ function harness(options: {
                         data = [{ total_cost_usd: options.spend ?? 0 }];
                         if (options.failSpend) error = { message: "cost unavailable" };
                     } else if (kind === "insert") {
-                        data = [{ ...payload, id: `run-${rows.length}` }];
+                        const items = Array.isArray(payload) ? (payload as Row[]) : [payload];
+                        data = items.map((item, i) => ({ ...item, id: `${table === "prospecting_research_runs" ? "run" : "row"}-${rows.length + i}` }));
                         rows.push(...data);
                     } else if (kind === "update") {
                         if (options.failLedger) error = { message: "ledger unavailable" };
@@ -97,7 +101,12 @@ function harness(options: {
             throw new Error(`Unexpected dependency ${name}`);
         },
         Deno: {
-            env: { get: (key: string) => (key === "SUPABASE_URL" ? "https://example.supabase.co" : "service-key") },
+            env: {
+                get: (key: string) =>
+                    key === "SUPABASE_URL" ? "https://example.supabase.co"
+                    : key === "PROSPECTING_AUTO_RERUN" ? options.autoRerunFlag
+                    : "service-key"
+            },
             serve: (fn: typeof handle) => { handle = fn; }
         }
     });
@@ -310,5 +319,86 @@ describe("prospecting-research shared helpers", () => {
         expect(shared.budgetStateFor(shared.WARN_AT_USD)).toBe("warn");
         expect(shared.budgetStateFor(shared.THROTTLE_AT_USD)).toBe("throttled");
         expect(shared.budgetStateFor(shared.PAUSE_AT_USD)).toBe("paused");
+    });
+});
+
+describe("prospecting-research handler — automatic weekly re-checks (rerun_saved)", () => {
+    const NOW = Date.now();
+    const oldCheck = new Date(NOW - 9 * 24 * 60 * 60 * 1000).toISOString();
+    const freshCheck = new Date(NOW - 2 * 24 * 60 * 60 * 1000).toISOString();
+    const tablesFor = (optedIn: boolean): Record<string, Row[]> => ({
+        workspace_profile: [{ workspace_id: WS, prospecting_auto_rerun_enabled: optedIn }],
+        studio_artifacts: [
+            { id: "card-due", workspace_id: WS, user_id: "user-a", studio: "sourcing",
+              data: { kind: "sourcing.queryCard", query: "Payroll software companies that just raised", lastCheckedAt: oldCheck } },
+            { id: "card-fresh", workspace_id: WS, user_id: "user-a", studio: "sourcing",
+              data: { kind: "sourcing.queryCard", query: "Fintech companies hiring sales", lastCheckedAt: freshCheck } },
+            { id: "p-1", workspace_id: WS, user_id: "user-a", studio: "sourcing",
+              data: { kind: "sourcing.prospect", accountName: "Already Here Co" } }
+        ],
+        signal_console_accounts: [{ workspace_id: WS, account_name: "Watched Co" }]
+    });
+    const RERUN = { action: "rerun_saved" };
+
+    it("refuses anything but the service role", async () => {
+        const h = harness({ autoRerunFlag: "on", extraTables: tablesFor(true) });
+        expect((await h.request(RERUN, "user-token")).status).toBe(401);
+        expect(h.call).not.toHaveBeenCalled();
+    });
+
+    it("spends nothing while the server switch is off", async () => {
+        const h = harness({ extraTables: tablesFor(true) });
+        const res = await h.request(RERUN, "service-key");
+        const body = await res.json();
+        expect(res.status).toBe(200);
+        expect(body.skipped).toBeTruthy();
+        expect(h.call).not.toHaveBeenCalled();
+    });
+
+    it("spends nothing for a workspace that has not turned it on", async () => {
+        const h = harness({ autoRerunFlag: "on", extraTables: tablesFor(false) });
+        const body = await (await h.request(RERUN, "service-key")).json();
+        expect(body.workspaces).toBe(0);
+        expect(h.call).not.toHaveBeenCalled();
+    });
+
+    it("re-checks only due saved searches and adds new matches as captured accounts", async () => {
+        const h = harness({ autoRerunFlag: "on", extraTables: tablesFor(true) });
+        const body = await (await h.request(RERUN, "service-key")).json();
+        expect(body.searches_checked).toBe(1);
+        expect(body.companies_added).toBe(1);
+        expect(h.call).toHaveBeenCalledTimes(1);
+        const prompt = String(h.call.mock.calls[0]![0].user_prompt);
+        expect(prompt).toContain("Already Here Co");
+        expect(prompt).toContain("Watched Co");
+        const added = h.tables.studio_artifacts!.find((r) => (r.data as Row)?.accountName === "Acme, Inc.");
+        expect(added).toBeDefined();
+        expect(added!.workspace_id).toBe(WS);
+        expect(added!.user_id).toBe("user-a");
+        const data = added!.data as Row;
+        expect(data.stage).toBe("captured");
+        expect(data.autoFound).toBe(true);
+        expect(data.sourceQueryId).toBe("card-due");
+        const due = h.tables.studio_artifacts!.find((r) => r.id === "card-due")!.data as Row;
+        expect(due.lastCheckedBy).toBe("auto");
+        expect(due.lastNewCount).toBe(1);
+        const fresh = h.tables.studio_artifacts!.find((r) => r.id === "card-fresh")!.data as Row;
+        expect(fresh.lastCheckedAt).toBe(freshCheck);
+        expect(h.tables.prospecting_research_runs![0]!.inputs).toMatchObject({ auto: true });
+    });
+});
+
+describe("auto re-check helpers", () => {
+    it("treats an unset or non-'on' server switch as off", () => {
+        expect(shared.autoRerunServerEnabled(undefined)).toBe(false);
+        expect(shared.autoRerunServerEnabled("true")).toBe(false);
+        expect(shared.autoRerunServerEnabled(" ON ")).toBe(true);
+    });
+    it("marks never-checked and week-old searches due", () => {
+        const now = Date.parse("2026-11-05T12:00:00Z");
+        expect(shared.savedSearchIsDue({ query: "fintech companies" }, now)).toBe(true);
+        expect(shared.savedSearchIsDue({ query: "fintech companies", lastCheckedAt: "2026-10-28T12:00:00Z" }, now)).toBe(true);
+        expect(shared.savedSearchIsDue({ query: "fintech companies", lastCheckedAt: "2026-11-01T12:00:00Z" }, now)).toBe(false);
+        expect(shared.savedSearchIsDue({ query: "" }, now)).toBe(false);
     });
 });

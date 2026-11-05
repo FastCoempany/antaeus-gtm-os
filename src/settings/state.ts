@@ -28,8 +28,13 @@ import {
     type CloudDeleteResult,
     type CloudExportSnapshot,
     type CloudRowCounts,
+    isCloudExportFile,
     restoreCloudExport
 } from "./lib/cloud-sync";
+import {
+    buildExportFile,
+    type WorkspaceExportFormat
+} from "./lib/workspace-export-formats";
 
 export type ToastTone = "good" | "warn" | "bad" | "info";
 
@@ -62,6 +67,7 @@ export const isDeletingCloud: Signal<boolean> = signal(false);
 export const lastCloudDelete: Signal<CloudDeleteResult | null> = signal(null);
 export const isExportingCloud: Signal<boolean> = signal(false);
 export const lastCloudExport: Signal<CloudExportSnapshot | null> = signal(null);
+export const exportFormat: Signal<WorkspaceExportFormat> = signal("json");
 
 // ── Phase F (ADR-017) — proposals toggle ──────────────────────
 export const phaseFEnabled: Signal<boolean> = signal(true);
@@ -102,6 +108,7 @@ export function refreshAll(): void {
     backup.value = readBackup();
     void refreshPhaseFToggle();
     void refreshDensity();
+    void loadAutoRerun();
 }
 
 export function setCategory(next: ProductCategory): void {
@@ -153,22 +160,19 @@ export async function importBackupFromFile(file: File): Promise<void> {
         const parsed = JSON.parse(text) as unknown;
         // A cloud export ("Download my workspace") restores through the
         // cloud — upserted row by row, idempotent — not localStorage.
-        if (
-            parsed &&
-            typeof parsed === "object" &&
-            (parsed as { source?: unknown }).source === "antaeus-cloud-export-v1" &&
-            typeof (parsed as { tables?: unknown }).tables === "object"
-        ) {
+        if (isCloudExportFile(parsed)) {
             const result = await restoreCloudExport(
                 () => createDataClient(),
-                parsed as { tables: Readonly<Record<string, ReadonlyArray<unknown>>> }
+                parsed
             );
             if (result.restoredRows > 0) {
+                const trouble =
+                    result.errors.length > 0
+                        ? ` ${result.errors.length} part${result.errors.length === 1 ? "" : "s"} couldn't be put back.`
+                        : "";
                 flashToast(
                     "good",
-                    `Workspace restored — ${result.restoredRows} rows back in place${
-                        result.errors.length > 0 ? `, ${result.errors.length} tables had trouble` : ""
-                    }.`
+                    `Workspace restored — ${result.restoredRows} records back in place.${trouble}`
                 );
             } else {
                 flashToast(
@@ -233,62 +237,59 @@ export function dismissToast(): void {
 }
 
 /**
- * Export the supported cloud record groups and trigger a
- * JSON file download. The portable copy the operator can keep before
- * (or independently of) clearing or deleting. Trust Annex action.
+ * Download my workspace. Reads every workspace table (see
+ * lib/workspace-tables.ts), organizes it by part of the app, and
+ * downloads it in the chosen format: one restorable JSON file, or a
+ * .zip of spreadsheets with a contents sheet.
  *
- * Pairs with `exportBackup()` (which dumps the localStorage cache
- * only) — this dumps the durable Supabase rows, which are the actual
- * source of truth post-Phase-4.5 retrofit.
- *
- * Defensive throughout: a single failing table doesn't abort the
- * export; the file lands with that table empty + an error noted.
+ * Defensive throughout: a part that can't be read lands empty with its
+ * error noted in the file, and the rest of the download still happens.
  */
-export async function exportCloudData(): Promise<CloudExportSnapshot> {
+export async function exportCloudData(
+    format: WorkspaceExportFormat = exportFormat.value
+): Promise<CloudExportSnapshot> {
     isExportingCloud.value = true;
     try {
         const snap = await exportCloudWorkspace(createDataClient);
         lastCloudExport.value = snap;
 
-        // Trigger the file download. If we're outside a DOM context
-        // (tests, SSR) skip the download but keep the snapshot signal
-        // populated so callers / tests can inspect it.
+        // Outside a DOM (tests, SSR) skip the download but keep the
+        // snapshot signal populated so callers can inspect it.
         if (typeof document !== "undefined") {
             try {
-                const blob = new Blob([JSON.stringify(snap, null, 2)], {
-                    type: "application/json"
+                const file = buildExportFile(snap, format);
+                const blob = new Blob([file.body as BlobPart], {
+                    type: file.mimeType
                 });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = `antaeus-cloud-export-${snap.capturedAt.replace(
-                    /[:.]/g,
-                    "-"
-                )}.json`;
+                a.download = file.filename;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
             } catch (err) {
-                console.error("[settings] cloud export download failed", err);
+                console.error("[settings] workspace download failed", err);
             }
         }
 
+        const parts = snap.manifest.length;
         if (snap.errors.length === 0) {
             flashToast(
                 "good",
-                `Cloud export ready. ${snap.totalRows} row${
+                `Workspace downloaded — ${snap.totalRows} record${
                     snap.totalRows === 1 ? "" : "s"
-                } across ${Object.keys(snap.tables).length} tables.`
+                } across ${parts} parts of the app.`
             );
         } else {
             flashToast(
                 "warn",
-                `Cloud export completed with ${snap.errors.length} table error${
+                `Workspace downloaded, but ${snap.errors.length} part${
                     snap.errors.length === 1 ? "" : "s"
-                }. ${snap.totalRows} rows captured. Review the errors in the downloaded file.`
+                } couldn't be read. ${snap.totalRows} records are in the file, and it lists what's missing.`
             );
-            console.warn("[settings] cloud export errors:", snap.errors);
+            console.warn("[settings] workspace download errors:", snap.errors);
         }
         return snap;
     } finally {
@@ -297,15 +298,10 @@ export async function exportCloudData(): Promise<CloudExportSnapshot> {
 }
 
 /**
- * Permanently delete the supported cloud record groups. Trust
- * Annex action — the operator opts into a destructive cloud-side wipe.
- *
- * Scope: every noun table (icps, deals, proofs, advisor_deployments,
- * signal_console_accounts, sequences, discovery_call_logs,
- * studio_artifacts, pipeline_settings, discovery_frameworks,
- * readiness_snapshots, handoff_artifacts). Does NOT delete the
- * workspaces row, workspace_members, or the user's profile — those
- * are identity surfaces.
+ * Delete everything. Removes every record in this workspace — the same
+ * parts the download covers (lib/workspace-tables.ts) — through the
+ * delete_workspace_data RPC. Keeps the workspaces row, its membership,
+ * and the user's own profile so the operator can keep signing in.
  *
  * After cloud wipe, also clears the local `gtmos_*` cache + refreshes
  * the cloud-counts readout so the operator sees the result.
@@ -320,27 +316,33 @@ export async function deleteCloudData(): Promise<CloudDeleteResult> {
         lastCloudDelete.value = result;
 
         // Mirror to local: wipe gtmos_* so the room doesn't keep
-        // showing stale state. Refresh derived signals + cloud counts.
-        clearWorkspace();
-        backup.value = readBackup();
-        category.value = loadCategory();
-        demo.value = loadDemoState();
+        // showing stale state. Skipped when the cloud delete never
+        // started, so a failed sign-in doesn't cost the device copy.
+        if (!result.cancelled) {
+            clearWorkspace();
+            backup.value = readBackup();
+            category.value = loadCategory();
+            demo.value = loadDemoState();
+        }
 
-        if (result.errors.length === 0) {
+        if (result.cancelled) {
+            flashToast(
+                "bad",
+                `Nothing was deleted from the cloud. ${result.errors[0] ?? ""}`.trim()
+            );
+        } else if (result.errors.length === 0) {
             flashToast(
                 "warn",
-                `Included cloud records deleted. ${result.totalDeleted} row${
+                `Everything deleted — ${result.totalDeleted} record${
                     result.totalDeleted === 1 ? "" : "s"
-                } removed across ${
-                    Object.keys(result.perTable).length
-                } tables.`
+                } removed, and this browser's copy cleared.`
             );
         } else {
             flashToast(
                 "bad",
-                `Cloud delete completed with ${result.errors.length} error${
+                `${result.totalDeleted} records deleted, but ${result.errors.length} part${
                     result.errors.length === 1 ? "" : "s"
-                }. ${result.totalDeleted} rows removed. See console.`
+                } couldn't be emptied. Try again in a minute.`
             );
             console.warn("[settings] cloud delete errors:", result.errors);
         }
@@ -364,6 +366,21 @@ export async function deleteCloudData(): Promise<CloudDeleteResult> {
 // ── Phase F toggle actions ────────────────────────────────────
 
 import { loadPhaseFToggle, savePhaseFToggle } from "./lib/phase-f-toggle";
+import { loadAutoRerun, saveAutoRerun } from "@/prospecting-desk/lib/auto-rerun";
+
+export async function toggleAutoRerun(next: boolean): Promise<void> {
+    const result = await saveAutoRerun(next);
+    if (!result.ok) {
+        flashToast("bad", result.error ?? "Couldn't save that just now. Try again in a moment.");
+        return;
+    }
+    flashToast(
+        next ? "good" : "info",
+        next
+            ? "Saved searches will be checked again every week."
+            : "Weekly automatic checks of saved searches are off."
+    );
+}
 
 export async function refreshPhaseFToggle(): Promise<void> {
     const state = await loadPhaseFToggle();
@@ -387,8 +404,8 @@ export async function togglePhaseF(next: boolean): Promise<void> {
         flashToast(
             next ? "good" : "info",
             next
-                ? "Phase F proposals turned on."
-                : "Phase F proposals turned off."
+                ? "Recommendations turned on."
+                : "Recommendations turned off."
         );
     } finally {
         phaseFSaving.value = false;
@@ -461,6 +478,7 @@ export function __resetForTests(): void {
     lastCloudDelete.value = null;
     isExportingCloud.value = false;
     lastCloudExport.value = null;
+    exportFormat.value = "json";
     phaseFEnabled.value = true;
     phaseFLoaded.value = false;
     phaseFSaving.value = false;

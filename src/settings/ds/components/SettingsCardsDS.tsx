@@ -89,7 +89,7 @@ function CloudSyncCard(): JSX.Element {
 
     const helpCopy: Record<typeof conn.status, string> = {
         connected: t(
-            "Each room saves to the cloud as you work. The breakdown is what's stored cross-device — your durable workspace.",
+            "Everything you do in the app saves to the cloud as you work. The breakdown is what's stored cross-device — your durable workspace.",
             { class: "body" }
         ),
         "no-credentials": t(

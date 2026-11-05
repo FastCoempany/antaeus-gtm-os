@@ -85,7 +85,7 @@ function PaletteHintButton(): JSX.Element {
         <button
             type="button"
             class="ant-room-chrome__palette-hint"
-            aria-label={t("Jump to a room (press cmd+K)")}
+            aria-label={t("Jump to a page (press cmd+K)")}
             onClick={() => {
                 // Lazy import to avoid the palette UI being on the
                 // critical render path before it's needed.

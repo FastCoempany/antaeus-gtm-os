@@ -182,7 +182,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
                         {props.summary.gateBlockers.length === 0 ? (
                             <p class="db-readiness-drawer__no-blockers">
                                 {t(
-                                    "Everything the next gate needs is in place. This will refresh the next time you save a change in any room.",
+                                    "Everything the next gate needs is in place. This will refresh the next time you save a change anywhere in the app.",
                                     { class: "body" }
                                 )}
                             </p>

@@ -782,7 +782,7 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     const touchesPerDay = metrics.touchesDay;
 
     const body: string[] = [
-        `To hit the number at the current Quota Workback assumptions, you need ${plural(metrics.dealsMonth, "closed-won deal", "closed-won deals")} a month, which means about ${plural(metrics.oppsMonth, "qualified opportunity", "qualified opportunities")} and about ${metrics.meetingsMonth} first meetings a month (about ${metrics.meetingsWeek} a week).`,
+        `To hit the number at the current Quota Workback assumptions, you need ${plural(metrics.dealsYear, "closed-won deal", "closed-won deals")} a year (about ${metrics.dealsQuarter} a quarter), which means about ${plural(metrics.oppsYear, "qualified opportunity", "qualified opportunities")} a year and about ${metrics.meetingsYear} first meetings a year (about ${metrics.meetingsWeek} a week).`,
         `Daily outreach target from Quota Workback: ${touchesPerDay} messages and calls per working day. The new hire's week: Monday, review the top three deal risks on the Dashboard; Tuesday, outbound; Wednesday, discovery prep and calls; Thursday, follow up on stalled deals; Friday, update next steps and set up the next week. Adjust this starting schedule using recorded results.`
     ];
 
@@ -790,7 +790,7 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
         `Annual quota: $${plan.quota.toLocaleString()}`,
         `Average ACV: $${plan.acv.toLocaleString()}`,
         `Win-rate assumption: ${Math.round(plan.win)}%`,
-        `Closed-won deals needed per month: ${metrics.dealsMonth}`,
+        `Closed-won deals needed per year: ${metrics.dealsYear}`,
         `Messages and calls per working day: ${touchesPerDay}`,
         `First meetings per month: ${metrics.meetingsMonth}`
     ];

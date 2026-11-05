@@ -117,7 +117,7 @@
             bestFor: 'You want the first rep to inherit context, pilot results, signals, and risk instead of disconnected anecdotes.',
             sessionOutcome: 'a stronger sense of what the handoff kit must contain and which upstream modules need to feed it',
             modules: [
-                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'assemble the handoff kit from what the other rooms already record' },
+                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'assemble the handoff kit from what the rest of the app already records' },
                 { href: '/app/readiness/', label: 'Readiness', reason: 'check whether your sales process is ready to transfer cleanly' },
                 { href: '/app/dashboard/', label: 'Dashboard', reason: 'keep the sales process running after the handoff document exists' }
             ],

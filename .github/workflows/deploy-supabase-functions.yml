@@ -101,7 +101,7 @@ jobs:
         if: steps.decide.outputs.should_deploy == 'true'
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 3.0.0
 
       - name: Deploy ${{ matrix.function }}
         if: steps.decide.outputs.should_deploy == 'true'
@@ -112,7 +112,7 @@ jobs:
           supabase functions deploy "${{ matrix.function }}" \
             --no-verify-jwt \
             --yes \
-            --project-ref "$PROJECT_REF"
+            --remote="$PROJECT_REF"
           echo "::endgroup::"
           echo "Deployed ${{ matrix.function }} to project $PROJECT_REF."
 

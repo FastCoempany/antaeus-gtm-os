@@ -578,3 +578,78 @@ export function buildResearchPrompt(
     lines.push(`Research these companies: ${companies.join("; ")}`);
     return lines.join("\n");
 }
+
+// ─── Automatic weekly re-checks of saved searches ──────────────────────
+//
+// The cron calls { action: "rerun_saved" } with the service-role key.
+// Nothing spends unless BOTH switches are on:
+//   1. the server switch: secret PROSPECTING_AUTO_RERUN = "on"
+//      (unset while building, so no paid calls);
+//   2. the workspace switch: workspace_profile.prospecting_auto_rerun_enabled
+//      (Settings → "Re-check saved searches automatically", default off).
+// Each re-check still goes through the weekly cost ceiling.
+
+export const AUTO_RERUN_INTERVAL_DAYS = 7;
+export const AUTO_RERUN_MAX_CARDS_PER_WORKSPACE = 3;
+export const AUTO_RERUN_MAX_RESULTS = 5;
+
+export function autoRerunServerEnabled(flag: string | undefined | null): boolean {
+    return typeof flag === "string" && flag.trim().toLowerCase() === "on";
+}
+
+/** A saved search is due when it was never checked or was last checked ≥ 7 days ago. */
+export function savedSearchIsDue(
+    data: Record<string, unknown>,
+    nowMs: number,
+    intervalDays: number = AUTO_RERUN_INTERVAL_DAYS
+): boolean {
+    if (typeof data.query !== "string" || data.query.trim().length < 3) return false;
+    const at = typeof data.lastCheckedAt === "string" ? Date.parse(data.lastCheckedAt) : NaN;
+    if (!Number.isFinite(at)) return true;
+    return nowMs - at >= intervalDays * 24 * 60 * 60 * 1000;
+}
+
+/**
+ * The studio_artifacts `data` for a company the weekly re-check found.
+ * Same shape the Prospecting Desk writes when a seller adds a search
+ * result (state "captured", nothing answered), plus autoFound so the
+ * room can say it came from the automatic re-check.
+ */
+export function foundCompanyToProspectData(
+    c: FoundCompany,
+    savedSearchId: string,
+    nowIso: string
+): Record<string, unknown> {
+    const signals = c.signal
+        ? [{ what: c.signal.what, date: c.signal.date, sourceUrl: c.signal.source_url, sourceName: null }]
+        : [];
+    return {
+        kind: "sourcing.prospect",
+        accountName: c.name,
+        contactName: "",
+        contactTitle: c.who_to_target?.role ?? "",
+        sourceQueryId: savedSearchId,
+        leverage: signals.length > 0 ? "market-signal" : "cold",
+        stage: "captured",
+        entryPoint: "",
+        approach: "",
+        notes: "",
+        autoFound: true,
+        webResearch: {
+            kind: "find",
+            researchedAt: nowIso,
+            summary: c.why_fit,
+            domain: c.domain,
+            signals,
+            sources: c.sources,
+            whoToTarget: c.who_to_target,
+            openingAngle: c.opening_angle,
+            confidence: c.confidence,
+            fitMatches: [],
+            fitUnknowns: [],
+            suggested: null,
+            sample: false,
+            auto: true
+        }
+    };
+}

@@ -36,7 +36,7 @@ export function CallMemory(): JSX.Element {
                         Log the outcome before the thread goes cold.
                     </h2>
                 </div>
-                <nav class="cc-memory__handoff" aria-label={t("Cross-room handoff")}>
+                <nav class="cc-memory__handoff" aria-label={t("Continue on another page")}>
                     <a
                         class="cc-handoff cc-handoff--ghost"
                         href={hrefToDiscoveryStudio(account)}

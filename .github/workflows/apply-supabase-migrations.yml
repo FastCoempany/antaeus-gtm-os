@@ -59,7 +59,7 @@ jobs:
           echo "run=true" >> $GITHUB_OUTPUT
 
   apply:
-    name: supabase db push --linked
+    name: supabase db push --remote
     needs: gate
     if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 3.0.0
 
       - name: Link project
         run: |
@@ -83,14 +83,14 @@ jobs:
 
       - name: Push migrations
         run: |
-          echo "::group::supabase db push --linked"
+          echo "::group::supabase db push --remote"
           # --yes auto-confirms the diff prompt that would otherwise hang
           # in non-TTY runners. --include-all surfaces the full list so
           # the log records which migrations were applied vs. skipped.
-          supabase db push --linked --yes --include-all
+          supabase db push --remote --yes --include-all
           echo "::endgroup::"
 
       - name: List applied migrations
         run: |
           echo "Current migration state on main project:"
-          supabase migration list --linked || true
+          supabase migration list --remote || true

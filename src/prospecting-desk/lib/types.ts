@@ -87,6 +87,8 @@ export interface QueryCard {
     readonly lastCheckedAt?: string;
     /** How many new companies that check returned. */
     readonly lastNewCount?: number;
+    /** "auto" when the weekly automatic re-check ran it, not the seller. */
+    readonly lastCheckedBy?: "auto" | "you";
 }
 
 export interface QueryCardDraft {
@@ -172,6 +174,8 @@ export interface ProspectResearch {
     readonly suggested: SuggestedAnswers | null;
     /** True when this came from the demo's sample data, not a live search. */
     readonly sample: boolean;
+    /** True when the weekly automatic re-check of a saved search found it. */
+    readonly auto?: boolean;
 }
 
 export interface ProspectDraft {

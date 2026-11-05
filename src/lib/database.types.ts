@@ -2224,6 +2224,7 @@ export type Database = {
           onboarding_answers: Json
           onboarding_completed: boolean
           phase_f_proposals_enabled: boolean | null
+          prospecting_auto_rerun_enabled: boolean
           product_category: string | null
           updated_at: string
           value_prop: string | null
@@ -2237,6 +2238,7 @@ export type Database = {
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null
+          prospecting_auto_rerun_enabled?: boolean
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null
@@ -2250,6 +2252,7 @@ export type Database = {
           onboarding_answers?: Json
           onboarding_completed?: boolean
           phase_f_proposals_enabled?: boolean | null
+          prospecting_auto_rerun_enabled?: boolean
           product_category?: string | null
           updated_at?: string
           value_prop?: string | null
@@ -2653,6 +2656,11 @@ export type Database = {
       current_user_default_workspace_id: { Args: never; Returns: string }
       deal_workspace_health_snapshot: {
         Args: { p_workspace_id?: string }
+        Returns: Json
+      }
+      // HAND-AUTHORED PENDING REGEN — migration 20261105130000.
+      delete_workspace_data: {
+        Args: { ws: string }
         Returns: Json
       }
       dismiss_observation: {
