@@ -71,63 +71,63 @@ export function priorForSection(
               : band === "enterprise"
                 ? "enterprise"
                 : "strategic";
-    const note = `This is how it usually goes for teams selling ${size} deals to ${bandName} buyers. As your own deals and calls land, this page rewrites itself around what actually happens for you.`;
+    const note = `Planning guidance for ${size} deals in the ${bandName} ACV band. Numbers use the configured Quota Workback benchmarks, not measured results from your workspace. Recorded outcomes from your own deals and calls replace this guidance as they become available.`;
 
     switch (id) {
         case "who_hits":
             return {
                 note,
                 body: [
-                    `None of your own deals have closed yet, so here's the pattern that holds for teams selling ${size} deals: the wins come from accounts that match the stated target tightly — right size, right owner of the problem, and something observable that just happened (a raise, a new leader, a hiring push). The misses cluster in the "adjacent" accounts — close enough to take the meeting, not close enough to buy.`,
-                    `Expect roughly ${b.winRate}% of real opportunities to close (${b.winRange} is the honest range), over about ${b.cycle} days each. When a deal of yours closes — either way — this page starts telling you where YOUR pattern differs from that, which is the part worth money.`
+                    `Define the target company size, buyer role, business problem, and observable reasons for outreach. Record disqualification criteria as well. Compare those assumptions with closed-deal outcomes before treating a customer profile as a reliable predictor.`,
+                    `The configured planning defaults for this deal-size band are a ${b.winRate}% win rate (${b.winRange} range) and a ${b.cycle}-day sales cycle. Use these as initial assumptions, then replace them with your measured conversion and timing data.`
                 ]
             };
         case "rails_that_worked":
             return {
                 note,
                 body: [
-                    `No outreach logged yet. What lands for teams like yours: a short first message tied to something that just happened at the account, written to the person who owns the problem — not the person who fills in the CRM. Generic templates to bought lists convert near zero and burn the address doing it.`,
-                    `The honest math at this deal size: about ${b.t2m} in every 100 targeted messages and calls turn into a first meeting. That's why the daily number in your plan looks the way it does — and why every message should carry the reason-right-now, not the pitch.`
+                    `Start with an account-specific message that names an observed change and asks a relevant business question. Record the channel, message, and outcome so another seller can compare approaches.`,
+                    `The configured planning default is ${b.t2m} first meetings per 100 outreach attempts. That is an assumption for activity planning, not a measured result or a promise about your next campaign.`
                 ]
             };
         case "questions_that_earned":
             return {
                 note,
                 body: [
-                    `No calls logged yet. The questions that win second meetings are the ones that get the buyer saying something they haven't said out loud: what actually breaks today, what it costs when it does, and who signs when the fix is real. The call that stays on features gets a polite "send materials" and goes quiet.`,
-                    `The one teams your size skip most — and pay for later — is the who-signs question. Ask it early, plainly, every time. When your own calls start landing here, this page shows which questions YOUR advanced calls actually asked.`
+                    `Prepare questions about the current workflow, the business impact of the problem, and the people responsible for a purchase decision. Confirm what the buyer has actually said before recording an assessment.`,
+                    `Before ending the call, agree on the next action, owner, and date. Record the questions used and the call outcome; this section can then compare which topics appeared on calls that progressed.`
                 ]
             };
         case "won_and_leaked":
             return {
                 note,
                 body: [
-                    `The stage map for ${size} deals is consistent: they're won or lost at discovery, and they die after the verbal yes. About ${b.m2o}% of first meetings become real opportunities; the rest leak at two places — no dated next step after the first meeting, and the run from "we want this" to a signed contract, where security, legal, and finance can stall a deal nobody is arguing against.`,
-                    `Keep ${b.coverage}× your number in open deals and both leaks stay survivable. Once your own deals move through stages, this page shows where YOUR pipeline actually thins.`
+                    `The configured meeting-to-opportunity assumption is ${b.m2o}%. Track actual stage changes, next steps, and approval dependencies to identify where your opportunities progress or stop.`,
+                    `Quota Workback uses ${b.coverage}× pipeline coverage as the starting requirement for this band. Coverage alone does not establish deal quality or predict attainment; review qualification and buyer commitments alongside the total.`
                 ]
             };
         case "losses_paid_for":
             return {
                 note,
                 body: [
-                    `You haven't lost a deal yet — you will, and knowing the usual shape ahead of time softens the cost. The most common loss at this deal size isn't a competitor: it's no decision. The buyer agreed there was a problem, never felt enough pressure to fix it this quarter, and went quiet.`,
-                    `The second most common: the single-threaded deal. One contact carried everything, that contact got busy or left, and the deal went dark. When a real loss lands here, write down what you won't repeat — that sentence is what this section exists for.`
+                    `Record the buyer's stated reason when a deal is lost. Separate that reason from your interpretation and from missing information. Review timing, approval, alternatives, and stakeholder involvement without assuming any one factor caused the outcome.`,
+                    `Use Future Autopsy to inspect current risk conditions and log corrective actions. Compare those reviews with later outcomes before turning a recurring condition into a rule for another seller.`
                 ]
             };
         case "why_we_win":
             return {
                 note,
                 body: [
-                    `You'll write this section with wins; until then, here's what it usually says for teams selling ${size} deals: they win on speed to something the buyer can defend internally — a pilot whose result the buyer's boss can act on without you in the room, and a champion who owns the number the product moves.`,
-                    `They don't win on feature depth, and they rarely win on price. When your first wins land, the shared traits show up here — and that page, printed, is what your first hire runs on.`
+                    `For each closed-won deal, record the customer profile, buyer role, purchase context, and the buyer's stated reasons for choosing you. Include the evidence they used to evaluate the decision.`,
+                    `As wins accumulate, compare recurring traits with losses and open deals. A recurring trait is a hypothesis to test; a small sample cannot establish that a particular message, feature, or price caused the win.`
                 ]
             };
         case "day_one_rhythm":
             return {
                 note,
                 body: [
-                    `Until your own numbers set the cadence, run the default week: mornings start in the Dashboard's ranked list — take the one move it hands you before opening anything else. Two outreach blocks a day, tied to real signals. Discovery calls midweek, prepped from the account's live signal.`,
-                    `Friday, close the loops: log what happened, date every next step, and let the system read the week back to you Monday. Set your number in the quota room and this page rewrites itself around your real math.`
+                    `Start each day by reviewing the Dashboard's recommended action and supporting evidence. Schedule focused outreach and discovery preparation around account context and agreed buyer dates.`,
+                    `At the end of the week, record outcomes, update next steps, and compare activity with the quota plan. Set your target and conversion assumptions in Quota Workback to calculate the activity requirement.`
                 ]
             };
         default:

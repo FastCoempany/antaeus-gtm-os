@@ -118,7 +118,9 @@ export function clearAllBriefingDrafts(): void {
  */
 export function roomLabelForPath(path: string): string {
     if (path.startsWith("/discovery-studio")) return "Discovery Studio";
-    if (path.startsWith("/call-planner")) return "Call Planner";
+    // Call Planner was retired into Discovery Studio (canon §4.11);
+    // /call-planner/ redirects there, so older breadcrumbs read as such.
+    if (path.startsWith("/call-planner")) return "Discovery Studio";
     if (path.startsWith("/outbound-studio")) return "Outbound Studio";
     if (path.startsWith("/deal-workspace")) return "Deal Workspace";
     if (path.startsWith("/founding-gtm")) return "Founding GTM";

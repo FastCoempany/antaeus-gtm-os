@@ -79,27 +79,31 @@ function deal(p: Partial<SeedDeal>): SeedDeal {
 }
 
 describe("diagnoseDeal", () => {
-    it("flags late-stage with no economic buyer as at risk (red)", () => {
+    it("flags late-stage with no recorded signer as at risk (red)", () => {
         const d = diagnoseDeal(deal({ stage: "proposal", whoSigns: "" }));
         expect(d.tone).toBe("red");
         expect(d.label).toMatch(/risk/i);
+        expect(d.read).toMatch(/no signer recorded/i);
+        expect(d.read).not.toMatch(/economic buyer/i);
     });
     it("flags late-stage gone silent as at risk", () => {
         const d = diagnoseDeal(deal({ stage: "negotiation", whoSigns: "CFO", stuck: "silent 18 days" }));
         expect(d.tone).toBe("red");
     });
-    it("flags single-threaded late as fragile (amber)", () => {
+    it("flags a late-stage deal with a single contact (amber)", () => {
         const d = diagnoseDeal(deal({ stage: "negotiation", stuck: "single-threaded, one contact" }));
         expect(d.tone).toBe("amber");
-        expect(d.label).toMatch(/fragile/i);
+        expect(d.label).toMatch(/single contact/i);
+        expect(d.read).toMatch(/could delay approval/i);
     });
     it("flags no champion (amber)", () => {
         const d = diagnoseDeal(deal({ stage: "discovery", champion: "" }));
         expect(d.tone).toBe("amber");
     });
-    it("a well-qualified live deal reads green", () => {
+    it("recorded contacts without other flags read green without proving overall deal health", () => {
         const d = diagnoseDeal(deal({ stage: "discovery", champion: "Champ", whoSigns: "CFO", stuck: "scheduling next call" }));
         expect(d.tone).toBe("green");
+        expect(d.read).toMatch(/does not establish overall deal health/i);
     });
     it("names a 'not sure yet' stage honestly (amber, stage unclear)", () => {
         const d = diagnoseDeal(deal({ stage: "unsure" }));

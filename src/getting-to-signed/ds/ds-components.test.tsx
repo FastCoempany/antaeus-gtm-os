@@ -44,16 +44,16 @@ describe("RehearsalObject", () => {
         expect(container.querySelector(".ds-handoff")).not.toBeNull();
     });
 
-    it("reads improvising with an empty draft and rehearsed once the positions are decided", () => {
+    it("shows missing preparation for an empty draft and review readiness once positions are recorded", () => {
         const first = render(<RehearsalObject />);
-        expect(first.getByText("Improvising")).not.toBeNull();
+        expect(first.getByText("Walkaway missing")).not.toBeNull();
         cleanup();
 
         setWalkawayPosition("No below 15% off.");
         setStartingPosition("List price, full terms.");
         setOpeningLine("Thanks for making time today.");
         const second = render(<RehearsalObject />);
-        expect(second.getByText("Rehearsed")).not.toBeNull();
+        expect(second.getByText("Ready for review")).not.toBeNull();
         // the opening line surfaces as the actual first words
         expect(second.container.querySelector(".ngd-opening__line")).not.toBeNull();
     });

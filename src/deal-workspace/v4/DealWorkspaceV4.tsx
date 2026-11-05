@@ -39,24 +39,18 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import { FollowPeek, openFollow } from "@/lib/follow/FollowPeek";
 
 /**
- * DealWorkspaceV4 — the Diagnosis Table (canon §4.13), wired to
- * production. Three toggleable views (Focus / Timeline / List) off ONE
- * shared recovery engine; leads with pressure (which deals slip this
- * week + the smallest corrective move); the 9-field health drawer + the
- * loss-reason capture are the reused, signal-driven DS components. The
- * recovery engine, deal state, editor, and CSV export are reused
- * unchanged — presentation only.
+ * Deal Workspace — ranked deal-risk review across Focus, Timeline, and List.
+ * The room exposes the observed factors driving the ranking and the next action;
+ * it does not present the score as a predicted loss date.
  */
 
 const dwView = signal<DwView>("focus");
-// Deal.value is raw dollars everywhere in the codebase — use the
-// shipped fmtMoney (÷1000 → "$84k"), never a naive "+k".
 const money = fmtMoney;
 
 const FILTERS: ReadonlyArray<{ key: DealFilter; label: string }> = [
     { key: "all", label: t("All") },
     { key: "at-risk", label: t("At risk") },
-    { key: "stalled", label: t("Gone quiet") },
+    { key: "stalled", label: t("No recent activity") },
     { key: "this-quarter", label: t("This quarter") }
 ];
 
@@ -80,7 +74,6 @@ function ActionButton({ a }: { a: RecoveryAssessment }): JSX.Element {
     );
 }
 
-// ── LIST view ──────────────────────────────────────────────────────────
 function ListView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.Element {
     const groups = LANE_ORDER.map((lane) => ({
         meta: LANE_META[lane],
@@ -107,7 +100,7 @@ function ListView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.
                             </div>
                             <div class="dw4-why">
                                 {a.causes.length > 0 ? <span class="dw4-c">{a.causes.join(" · ")}</span> : null}
-                                {a.lane === "healthy" ? t("On track — let it run, don't let it drift.", { class: "body" }) : a.nextMove}
+                                {a.lane === "healthy" ? t("No immediate risk action is required. Review the next step when the deal changes.", { class: "body" }) : a.nextMove}
                             </div>
                             <div class="dw4-act">
                                 <ActionButton a={a} />
@@ -123,10 +116,9 @@ function ListView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.
     );
 }
 
-// ── FOCUS view ─────────────────────────────────────────────────────────
 function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.Element {
     if (items.length === 0) {
-        return <div class="dw4-calmnote"><b>{t("Nothing live.")}</b> {t("Add a deal, or wait for one from a cold call.", { class: "body" })}</div>;
+        return <div class="dw4-calmnote"><b>{t("No open deals yet.")}</b> {t("Add a deal, or wait for one from a cold call.", { class: "body" })}</div>;
     }
     const focal = items.find((a) => a.deal.id === focusedDealId.value) ?? items[0]!;
     const cls = LANE_META[focal.lane].cls;
@@ -139,14 +131,14 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                 <div class="dw4-fhd">
                     <div class="dw4-fl">
                         <span class="dw4-d" />
-                        {focal.lane === "healthy" ? t("On track") : t("Slipping now")}
-                        {focal.deal.value >= 100 ? t(" · your biggest deal") : ""}
+                        {focal.lane === "healthy" ? t("Lower risk") : t("Highest-risk deal")}
+                        {focal.deal.value >= 100 ? t(" · largest value") : ""}
                     </div>
                     <div class="dw4-nm"><span class="fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, focal.deal.accountName); }}>{focal.deal.accountName}</span> <span class="dw4-fv">{money(focal.deal.value)}</span></div>
                     <div class="dw4-fstg">{focal.deal.stage}</div>
                 </div>
                 <div class="dw4-diag">
-                    <div class="dw4-diagc">{focal.lane === "healthy" ? t("Where it stands") : t("Why it's slipping")}</div>
+                    <div class="dw4-diagc">{focal.lane === "healthy" ? t("Current status") : t("Why risk is high")}</div>
                     <div class="dw4-diagt">
                         {focal.causes.length > 0 ? `${focal.causes.join(" · ")}. ` : ""}
                         {focal.nextMove}
@@ -155,7 +147,7 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                 <div class="dw4-actbar">
                     <ActionButton a={focal} />
                     <button type="button" class="dw4-gh" onClick={() => openDealEditor(focal.deal)}>{t("Open full deal")}</button>
-                    <a class="dw4-gh" href={hrefToFutureAutopsy(focal.deal.accountName)}>{t("Pre-mortem")}</a>
+                    <a class="dw4-gh" href={hrefToFutureAutopsy(focal.deal.accountName)}>{t("Review loss risk")}</a>
                 </div>
                 <div class="dw4-health">
                     <div class="dw4-hh">
@@ -173,12 +165,12 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
                 </div>
             </div>
             <div class="dw4-queue">
-                <div class="dw4-qh"><span>{t("The rest, ranked")}</span><span class="dw4-qn">{rest.length}</span></div>
+                <div class="dw4-qh"><span>{t("Other open deals · ranked by risk", { class: "body" })}</span><span class="dw4-qn">{rest.length}</span></div>
                 {rest.map((a) => (
                     <div class="dw4-qr" key={a.deal.id} style={`--qc:${a.lane === "critical" ? "var(--ds-red,#c0392b)" : a.lane === "at-risk" ? "var(--ds-amber,#b5790f)" : "var(--ds-forest,#1b5e3f)"}`} onClick={() => setFocusedDealId(a.deal.id)}>
                         <div>
                             <div class="dw4-qa fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</div>
-                            <div class="dw4-qwhy">{a.causes[0] ?? t("on track")}</div>
+                            <div class="dw4-qwhy">{a.causes[0] ?? t("lower risk")}</div>
                         </div>
                         <span class="dw4-qv">{money(a.deal.value)}</span>
                     </div>
@@ -188,7 +180,6 @@ function FocusView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX
     );
 }
 
-// ── TIMELINE view ──────────────────────────────────────────────────────
 function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): JSX.Element {
     const red = items.filter((a) => a.lane === "critical");
     return (
@@ -203,7 +194,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                     ))}
                 </div>
                 <div class="dw4-track">
-                    <div class="dw4-v1" /><div class="dw4-v2" /><div class="dw4-now" /><div class="dw4-nowl">{t("now")}</div>
+                    <div class="dw4-v1" /><div class="dw4-v2" /><div class="dw4-now" /><div class="dw4-nowl">{t("risk")}</div>
                     {items.map((a, i) => {
                         const x = horizonPercent(a);
                         const y = 14 + (i % 3) * 64;
@@ -212,7 +203,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                             <div class="dw4-pill" key={a.deal.id} style={`left:${x}%;top:${y}px;--pc:${pc}`} onClick={() => setFocusedDealId(a.deal.id)}>
                                 <span class="dw4-pa fo-obj" onClick={(e) => { e.stopPropagation(); openFollow(e.currentTarget as HTMLElement, a.deal.accountName); }}>{a.deal.accountName}</span>
                                 <span class="dw4-pv">{money(a.deal.value)}</span>
-                                <span class="dw4-pwhy">{a.causes[0] ?? (a.lane === "healthy" ? t("on track") : t("watch"))}</span>
+                                <span class="dw4-pwhy">{a.causes[0] ?? (a.lane === "healthy" ? t("lower risk") : t("review"))}</span>
                             </div>
                         );
                     })}
@@ -220,7 +211,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
             </div>
             {red.length > 0 ? (
                 <>
-                    <div class="dw4-acthd">{t("Act this week — the red zone", { class: "body" })}</div>
+                    <div class="dw4-acthd">{t("High-risk deals to review this week", { class: "body" })}</div>
                     {red.map((a) => (
                         <div class="dw4-arow" key={a.deal.id}>
                             <div class="dw4-tick" style="background:var(--ds-red,#c0392b)" />
@@ -234,7 +225,7 @@ function TimelineView({ items }: { items: ReadonlyArray<RecoveryAssessment> }): 
                     ))}
                 </>
             ) : (
-                <div class="dw4-calmnote"><b>{t("Red zone clear.")}</b> {t("Nothing slips this week — the pressure has moved to the right.", { class: "body" })}</div>
+                <div class="dw4-calmnote"><b>{t("No deals are currently in the high-risk band.", { class: "body" })}</b> {t("Continue reviewing recorded next steps and activity as deals change.", { class: "body" })}</div>
             )}
         </>
     );
@@ -260,9 +251,9 @@ export function DealWorkspaceV4(): JSX.Element {
                 <div class={`dw4-hero${hero.calm ? " dw4-hero--calm" : ""}`}>
                     <h1 class="dw4-h1">
                         {hero.calm ? (
-                            <><b>{t("Nothing slipping.")}</b> {t("Every live deal has a next step.", { class: "body" })}</>
+                            <><b>{t("No elevated-risk deals in the current ranking.", { class: "body" })}</b> {t("No active deal currently crosses the at-risk threshold.", { class: "body" })}</>
                         ) : (
-                            <><b>{hero.atRiskCount === 1 ? t("One deal") : `${hero.atRiskCount} ${t("deals")}`}</b> {t("will slip this week if you do nothing.", { class: "body" })}</>
+                            <><b>{hero.atRiskCount === 1 ? t("One deal has") : `${hero.atRiskCount} ${t("deals have")}`}</b> {t("elevated risk based on recorded inactivity, next-step, or close-date factors.", { class: "body" })}</>
                         )}
                     </h1>
                     <div class="dw4-hr">
@@ -309,9 +300,9 @@ export function DealWorkspaceV4(): JSX.Element {
                 </div>
 
                 <div class="dw4-handoff">
-                    <div class="dw4-hoh">{t("Take a deal somewhere it gets resolved", { class: "body" })}</div>
+                    <div class="dw4-hoh">{t("Continue working this deal", { class: "body" })}</div>
                     <div class="dw4-hrow">
-                        <a class="dw4-hbtn" href={hrefToFutureAutopsy()}>{t("Pre-mortem a deal")}</a>
+                        <a class="dw4-hbtn" href={hrefToFutureAutopsy()}>{t("Review deal risk")}</a>
                         <a class="dw4-hbtn" href={hrefToPocFramework()}>{t("Run a pilot")}</a>
                         <a class="dw4-hbtn" href={hrefToAdvisorDeploy()}>{t("Call in a favor")}</a>
                         <a class="dw4-hbtn" href={discoveryHref("")}>{t("Prep the next call")}</a>
@@ -322,14 +313,9 @@ export function DealWorkspaceV4(): JSX.Element {
 
             <DealDrawer />
             <LossReasonModalDS />
-            {/* The Ground — the app's one jump summon (2026-07-08):
-                touch the ground line (or press G) and the motion map
-                rises from beneath the room. */}
             <GroundLine />
             <LiveEdge />
-            {/* Follow the Object — any name is a door (2026-07-13). */}
             <FollowPeek />
-
         </div>
     );
 }

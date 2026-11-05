@@ -36,11 +36,11 @@ export function IcpStep(): JSX.Element {
 
     return (
         <section class="sd-step">
-            <p class="sd-kicker">{t("The lens · who you sell to", { class: "body" })}</p>
-            <h1 class="sd-h1">{t("Let's get sharp about who you sell to.", { class: "body" })}</h1>
+            <p class="sd-kicker">{t("Who you sell to", { class: "label" })}</p>
+            <h1 class="sd-h1">{t("Describe the customers you sell to.", { class: "body" })}</h1>
             <p class="sd-lede">
                 {t(
-                    "Three quick choices. Each one's a real call — and the system assembles them into a target it can actually hunt against. None of the chips fit? Write your own.",
+                    "Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.",
                     { class: "body" }
                 )}
             </p>
@@ -111,7 +111,7 @@ export function IcpStep(): JSX.Element {
                         <div class="sd-sharp__l">{t("Your ICP — in your words", { class: "body" })}</div>
                         <div class="sd-sharp__t">
                             {draft.value.icpStatement}{" "}
-                            <em>{t("Now the signals mean something.", { class: "body" })}</em>
+                            <em>{t("Account research will be checked against this.", { class: "body" })}</em>
                         </div>
                     </div>
                 ) : null}
@@ -120,7 +120,7 @@ export function IcpStep(): JSX.Element {
             {done ? (
                 <div class="sd-foot">
                     <button type="button" class="sd-btn" onClick={() => nextStep()}>
-                        {t("That's us →", { class: "body" })}
+                        {t("Looks right →", { class: "body" })}
                     </button>
                 </div>
             ) : null}

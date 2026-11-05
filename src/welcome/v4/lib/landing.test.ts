@@ -83,7 +83,7 @@ describe("buildLanding", () => {
         seedWithDealPressure(s);
         const first = buildLanding({ storage: s });
         expect(first.lifecycle).toBe("day_one");
-        expect(first.kicker).toContain("hard work");
+        expect(first.kicker).toContain("Setup complete");
         markWelcomeSeen(s);
         expect(hasSeenWelcome(s)).toBe(true);
         const second = buildLanding({ storage: s });

@@ -75,7 +75,7 @@ describe("buildAttentionField", () => {
         expect(field.shape.now).toBe(1);
         expect(field.shape.emerging).toBe(1);
         expect(field.shape.cold).toBe(1);
-        expect(field.posture).toContain("Motion-ready");
+        expect(field.posture).toContain("high priority");
         expect(field.needNow).toBe(1);
         // bands only surface non-empty in the render, but the field
         // exposes all four counts
@@ -85,6 +85,31 @@ describe("buildAttentionField", () => {
     it("reads research-heavy posture when nothing needs action now", () => {
         const field = buildAttentionField([acct("Quiet", [sig(40)], 400)], NOW);
         expect(field.needNow).toBe(0);
-        expect(field.posture).not.toContain("Motion-ready");
+        expect(field.posture).not.toContain("high priority");
+    });
+});
+
+describe("buildAttentionField — counts agree with each other", () => {
+    it("the 'priority 60 or more' count equals the high-priority + priority-declining groups", () => {
+        const field = buildAttentionField(
+            [
+                acct("Hot", [sig(0), sig(0), sig(1), sig(1), sig(2)]),
+                acct("Aging", [sig(5), sig(6), sig(7), sig(8)]),
+                acct("Just added", [], 0),
+                acct("Quiet", [sig(40)], 400)
+            ],
+            NOW
+        );
+        expect(field.compounding).toBe(field.shape.now + field.shape.warm);
+        expect(field.shape.now + field.shape.warm + field.shape.emerging + field.shape.cold).toBe(field.accountsWatched);
+    });
+
+    it("labels the recent group as new signals OR newly watched, since a just-added account with no signals lands there", () => {
+        const field = buildAttentionField([acct("Just added", [], 0)], NOW);
+        expect(field.shape.emerging).toBe(1);
+        expect(field.signalsThisWeek).toBe(0);
+        const band = field.bands.find((b) => b.key === "emerging")!;
+        expect(band.label).toBe("New signal or newly watched");
+        expect(band.why).toContain("added to the watchlist in the last 7 days");
     });
 });

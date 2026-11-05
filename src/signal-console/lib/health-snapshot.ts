@@ -1,6 +1,7 @@
 import type { Account, HeatBand } from "./types";
 import { heat as heatScore, heatMetrics, rankByHeat } from "./heat";
 import { reportError } from "@/lib/observability";
+import { loadAccounts } from "./persistence";
 
 /**
  * Phase 4 / Room 3 Wave 4 — Signal Console health snapshot.
@@ -99,5 +100,35 @@ export function publishHealthSnapshot(
         storage.setItem(HEALTH_SNAPSHOT_KEY, JSON.stringify(snapshot));
     } catch (err) {
         reportError(err, { op: "signal-console.publishHealthSnapshot" });
+    }
+}
+
+/**
+ * The Signal Console health summary computed LIVE from the watched
+ * accounts in `gtmos_sc_v4`, for rooms that summarize it (Dashboard
+ * ranking + status links). The published `gtmos_signal_room_health`
+ * snapshot can lag (it is rewritten only when Signal Console boots or
+ * changes, and Onboarding writes its own estimate), so it is used only
+ * when no watched accounts can be read. This keeps "account priority"
+ * one number on the Dashboard, in Signal Console, and everywhere else.
+ */
+export function readLiveSignalRoomHealth(
+    storage: Pick<Storage, "getItem"> | null = typeof localStorage !== "undefined"
+        ? localStorage
+        : null,
+    now: number = Date.now()
+): SignalRoomHealthSnapshot | Record<string, unknown> | null {
+    if (!storage) return null;
+    const accounts = loadAccounts(storage);
+    if (accounts.length > 0) return buildSignalRoomHealthSnapshot(accounts, now);
+    try {
+        const raw = storage.getItem(HEALTH_SNAPSHOT_KEY);
+        if (!raw) return null;
+        const parsed: unknown = JSON.parse(raw);
+        return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+            ? (parsed as Record<string, unknown>)
+            : null;
+    } catch {
+        return null;
     }
 }

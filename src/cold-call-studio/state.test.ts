@@ -215,7 +215,7 @@ describe("companyName + logCall", () => {
         expect(entry).not.toBeNull();
         expect(entry?.outcome).toBe("meeting_booked");
         expect(entry?.threadId).toBe("opener");
-        expect(entry?.threadTitle).toBe("Get permission in the first breath.");
+        expect(entry?.threadTitle).toBe("Ask permission first. The first win is a yes to 20 seconds.");
         expect(entry?.buyerResponse).toBe("I am busy.");
         expect(entry?.recommendedResponse).toContain("Acme");
         expect(entry?.recommendedResponse).toContain("Funding raise");

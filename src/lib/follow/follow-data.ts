@@ -1,5 +1,5 @@
 import type { Account, Signal } from "@/signal-console/lib/types";
-import { heat as computeHeat, heatBand } from "@/signal-console/lib/heat";
+import { heatBand, heatFromStoredRow } from "@/signal-console/lib/heat";
 import { STAGE_LABELS, STAGE_ORDER, type Deal, type StageId } from "@/deal-workspace/lib/deal-shape";
 import { assessDeal, type RecoveryAssessment } from "@/deal-workspace/lib/recovery";
 
@@ -114,7 +114,8 @@ function readAccount(
             name: accName,
             signals
         } as Account;
-        const h = computeHeat(account);
+        // Same account-priority number Signal Console shows.
+        const h = heatFromStoredRow(o);
         const top = signals.length > 0 ? asObject(signals[0]) : null;
         return {
             account,
@@ -274,7 +275,7 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
                   ? ` · next step ${deal.nextStepDate}`
                   : " · no dated next step"
           }`
-        : `Watched in Signal Console · heat ${acct!.heat} (${acct!.band})`;
+        : `Watched in Signal Console · account priority score ${acct!.heat}/99`;
 
     // What's pulling.
     const pulling =
@@ -282,7 +283,7 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
             ? assessment.causes.slice(0, 2).join(" · ")
             : acct?.topSignal
               ? `Newest signal: ${acct.topSignal}`
-              : "Nothing pulling right now.";
+              : "No risk condition or account signal is available to explain a priority.";
 
     // The one move + where it runs.
     const atTerms = deal ? deal.stage === "negotiation" || deal.stage === "verbal" : false;
@@ -307,16 +308,16 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
         ? {
               label: assessment.nextMove,
               detail: atTerms
-                  ? "Terms are live — run it from Getting to Signed."
-                  : "The smallest thing that changes the read.",
+                  ? "Review the negotiation and next steps in Getting to Signed."
+                  : "Review the recorded conditions and update the next step.",
               href: moveHref
           }
         : acct
           ? {
-                label: "Turn the heat into a first conversation.",
+                label: "Prepare an account-specific outbound message.",
                 detail: acct.topSignal
-                    ? `Open with what just happened: ${acct.topSignal}`
-                    : "Compose the first message while the account is warm.",
+                    ? `Check this signal's relevance before using it: ${acct.topSignal}`
+                    : "Add a relevant business reason before sending the message.",
                 href: href("/outbound-studio/", { account: clean })
             }
           : null;
@@ -324,25 +325,25 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
     // What changes downstream.
     const changes = assessment
         ? assessment.lane === "critical"
-            ? `Act and ${clean} comes off the slipping list — the close date holds.`
+            ? `Review the risks with ${clean}'s buying team before relying on the close date.`
             : assessment.lane === "at-risk"
-              ? "Act and this deal is back at a healthy pace."
-              : "Nothing is decaying today — acting keeps it that way."
-        : "Reach out while the signal is fresh — heat fades week by week.";
+              ? "Updating the missing or overdue items can reduce the recorded risk; confirm progress with the buyer."
+              : "Keep the next step current so the risk assessment reflects the latest deal information."
+        : "Outbound Studio opens a draft for this account. Review it before sending; a reply is not guaranteed.";
 
     // What the system remembers.
     const rememberedParts: string[] = [];
     if (deal?.champion) rememberedParts.push(`Champion ${deal.champion}`);
-    if (deal?.economicBuyer) rememberedParts.push(`${deal.economicBuyer} signs off`);
+    if (deal?.economicBuyer) rememberedParts.push(`Economic buyer: ${deal.economicBuyer}`);
     if (touches.count > 0)
         rememberedParts.push(`${touches.count} ${touches.count === 1 ? "touch" : "touches"} logged`);
     if (acct && acct.signalCount > 0)
         rememberedParts.push(`${acct.signalCount} ${acct.signalCount === 1 ? "signal" : "signals"} on file`);
-    if (advisors.length > 0) rememberedParts.push(`${advisors[0]} carries weight here`);
+    if (advisors.length > 0) rememberedParts.push(`Advisor with a listed company match: ${advisors[0]}`);
     const remembered =
         rememberedParts.length > 0
             ? rememberedParts.join(" · ")
-            : "Everything logged so far rides along — nothing needs restating.";
+            : "No champion, economic buyer, outreach, signals, or matching advisor is recorded.";
 
     // The thread stops.
     const pastDiscovery = deal ? STAGE_ORDER[deal.stage] > STAGE_ORDER.discovery : false;
@@ -352,10 +353,10 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
             label: "Signal Console",
             path: "/signal-console/",
             what: acct
-                ? `Heat ${acct.heat} · ${acct.signalCount} ${acct.signalCount === 1 ? "signal" : "signals"}${
+                ? `Account priority ${acct.heat}/99 · ${acct.signalCount} ${acct.signalCount === 1 ? "signal" : "signals"}${
                       acct.topSignal ? ` · newest: ${acct.topSignal}` : ""
                   }`
-                : "Not watched yet — add the account to start building heat."
+                : "Add the account to monitor its signals."
         },
         {
             key: "outbound-studio",
@@ -376,9 +377,11 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
             label: "Discovery Studio",
             path: "/discovery-studio/",
             what:
-                touches.meetingBooked || pastDiscovery
-                    ? "A meeting happened — prep and run the next call from here."
-                    : "No discovery call on file yet."
+                touches.meetingBooked
+                    ? "A meeting booking is recorded. Prepare the call and record its outcome here."
+                    : pastDiscovery
+                      ? "The deal is past discovery. Review prior call outcomes or prepare another call here."
+                      : "Prepare a discovery call and record its outcome here."
         },
         {
             key: "deal-workspace",
@@ -388,14 +391,14 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
                 ? `${money(deal.value)} · ${STAGE_LABELS[deal.stage]} · ${
                       deal.nextStep ? deal.nextStep : "no next step set"
                   }`
-                : "No live deal yet — a booked meeting creates one."
+                : "No deal is recorded. Create one when you have a qualified opportunity."
         },
         {
             key: "getting-to-signed",
             label: "Getting to Signed",
             path: "/getting-to-signed/",
             what: atTerms
-                ? "Terms are live — the run to signature happens here."
+                ? "Prepare the negotiation and record the agreed terms here."
                 : deal
                   ? "Not at terms yet."
                   : "Comes into play once a deal reaches terms.",
@@ -407,8 +410,8 @@ export function buildFollowRead(name: string, opts: FollowOptions = {}): FollowR
             path: "/call-in-a-favor/",
             what:
                 advisors.length > 0
-                    ? `${advisors[0]} carries weight here — a favor is available.`
-                    : "No one lined up who carries weight here yet."
+                    ? `${advisors[0]} lists this company. Confirm the relationship and availability before requesting help.`
+                    : "No advisor with a matching company is recorded."
         }
     ];
 

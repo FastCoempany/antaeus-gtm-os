@@ -1,0 +1,169 @@
+0|Welcome|CHANGED|0.43|workspace setup and the next recommended action.
+1|Welcome|CHANGED|0.80|welcome summarizes the configured workspace, the highest-priority recommended action, and recent changes. the recommendation and its evidence come from the dashboard ranking engine.
+2|Welcome|CHANGED|0.94|after onboarding and on later visits, show the current setup state, the recommended action with supporting evidence, and account/deal totals. keep one primary action and a secondary route to dashboard. do not claim that analysis happened overnight unless that execution is recorded.
+3|Welcome|CHANGED|1.00|the setup-state heading a prominent heading names setup completion or welcomes a returning user. supporting information reflects the available account and deal evidence.
+4|Welcome|CHANGED|1.00|the highest-priority recommended action the highest-ranked current recommendation, its evidence, and one action link. do not imply an overnight execution that was not recorded.
+5|Welcome|CHANGED|1.00|recent changes two to four concise lines describing recent account and deal changes, with their supporting inputs.
+6|Welcome|CHANGED|1.00|the operating line a secondary summary of watched accounts, active deals, and open pipeline.
+7|Welcome|CHANGED|0.90|the calm route to the dashboard a quiet, non-competing path to the full command surface for the operator who wants more than the recommended action.
+8|Welcome|CHANGED|0.88|after setup and re-entry reuse the exact same shape ; only the headline changes. both lifecycle states use the same overview layout.
+9|Welcome|CHANGED|1.00|lifecycle headline register what the overview says
+10|Welcome|CHANGED|1.00|after setup "workspace setup is complete." the recommended action and available setup data
+11|Welcome|CHANGED|0.93|re-entry "changes since your last visit." account/deal movement since last session + the recommended action
+12|Welcome|CHANGED|1.00|directional handoff into the room that owns the recommended action — signal console / deal workspace / outbound
+13|Welcome|CHANGED|1.00|welcome as the onboarding data collection's landing — never an empty-workspace "create your first…" threshold
+14|Welcome|CHANGED|1.00|the setup results made visible ("changes since your last visit")
+15|Welcome|CHANGED|0.17|welcome as the onboarding data collection's landing — never an empty-workspace "create your first…" threshold
+16|Dashboard|CHANGED|0.64|current sales readiness, priorities, and risk.
+17|Dashboard|CHANGED|0.72|dashboard combines readiness, ranked account and deal recommendations, and links to supporting workspaces. show the evidence behind a recommendation and preserve the existing ranking contracts.
+18|Dashboard|CHANGED|0.97|lead with readiness and the ranked action. explain the input factors and allow the operator to inspect or cycle through recommendations. the historical density modes below are retained as design history; the current component determines the available controls.
+19|Dashboard|CHANGED|1.00|brief a 2–5 sentence narrative read + one variable-insight line wants the morning read in prose, then the recommended action
+20|Dashboard|CHANGED|0.89|queue a ranked triage list — rank prefix + reason chips per row wants to review ranked priorities one at a time
+21|Dashboard|CHANGED|1.00|the ranked object list ranked deals, account signals, pilots, icp gaps, and generated assessments.
+22|Dashboard|CHANGED|1.00|the recommendation summary a deterministic summary (buildbriefnarrative) naming the highest-ranked object, other ranked objects, confidence, and the next recommendation.
+23|Dashboard|CHANGED|1.00|the ranking inputs (shown, never hidden) signal strength and recency for an account · recorded risk factors for a deal · how stale · dollar value · what changes downstream if you act.
+24|Dashboard|CHANGED|1.00|risk 5 deal-room risk (top_pressure entries)
+25|Dashboard|CHANGED|1.00|icp 2 applies when accounts, signals, or deals exist without an icp
+26|Dashboard|CHANGED|1.00|signal-based account priority from signal console ( gtmos_signal_room_health )
+27|Dashboard|CHANGED|0.75|deal risk from deal workspace ( gtmos_deal_workspace_health )
+28|Dashboard|CHANGED|1.00|the current readiness state leads the room (the verdict masthead) · one primary recommended action under it · the standing row where each part is a door (the cockpit; supersedes the brief/spotlight/queue modes, 2026-07-08)
+29|Readiness Score|CHANGED|0.59|could another seller run this sales process?
+30|Readiness Score|CHANGED|0.73|readiness assesses operating independence from the recorded evidence. present the current state, the evidence required for the next state, and practical actions that address missing information.
+31|Readiness Score|CHANGED|1.00|founder-dependent founder-led, no transferable surface yet any part at 0
+32|Readiness Score|CHANGED|1.00|partially documented activity exists but a hire would still be improvising ≥2 parts ≥8, none ≥16
+33|Readiness Score|CHANGED|1.00|runnable with founder support a hire could run it with you there to answer questions every part ≥10 and ≥1 part ≥16 and first pilot evidence exists
+34|Readiness Score|CHANGED|1.00|runnable independently another seller can run routine work without the founder for two weeks every part ≥14 and closed-won exists and future autopsy run and ≥1 actionable pilot
+35|Readiness Score|CHANGED|0.89|documented and repeatable wins and losses recorded, advisors available, and handoff documentation prepared all runnable independently + win/loss ≥1 and advisors ≥1 and handoff ≥5/7 ready
+36|Readiness Score|CHANGED|1.00|the verdict the dominant serif state name + a concise assessment of which work another seller could perform today.
+37|Readiness Score|CHANGED|1.00|readiness progression the five levels as a vertical ladder — passed levels sit behind in forest green ("left behind 3 weeks ago"), the current level is "you are here," the next is the goal + "what it takes."
+38|Readiness Score|CHANGED|1.00|the five assessed areas demoted to quiet readiness labels (forest = solid, amber = limited evidence) — your targeting · your outreach · your discovery · your open deals · your pilot evidence. never bars, never scores.
+39|Readiness Score|CHANGED|1.00|the read-only "share with a hire" the persistent sharing control — read-mode workspace access for an external email.
+40|Readiness Score|CHANGED|0.91|ceremony hooks triggers the founding gtm visual transition on an upward readiness-state transition.
+41|Readiness Score|SAME|1.00|future autopsy run history
+42|Readiness Score|CHANGED|1.00|a verdict transition up triggers the visual transition in founding gtm
+43|Readiness Score|SAME|1.00|naked "dimension" name the actual part of the motion (your targeting / outreach / discovery / open deals / pilot evidence)
+44|Readiness Score|CHANGED|1.00|the central question: can another seller run the process?
+45|Readiness Score|CHANGED|0.75|readiness progression based on accumulated evidence
+46|Readiness Score|CHANGED|1.00|not a ranking of today's urgent actions
+47|Readiness Score|SAME|0.11|section-readiness count from founding gtm (drives the repeatable gate)
+48|ICP Studio|CHANGED|0.54|define the companies and buyers you sell to.
+49|ICP Studio|CHANGED|0.71|icp studio maintains a specific target definition and shows how watched accounts match it. preserve buyer, problem, trigger, geography, size, and evidence inputs.
+50|ICP Studio|CHANGED|0.88|keep the authored icp central. explain its specificity using the existing eight checks and account-match evidence. describe quality as too broad, partially defined, well defined, or highly specific.
+51|ICP Studio|CHANGED|1.00|the buying-group minimum the buyer roles needed for the documented sales process.
+52|ICP Studio|CHANGED|1.00|the icp specificity recommendation a recommendation for making the icp more specific, with the missing inputs identified.
+53|ICP Studio|CHANGED|0.93|the 8-check quality engine four specificity levels derived from eight checks; focused buyer and use-case criteria are preferred.
+54|ICP Studio|CHANGED|1.00|icp specificity as a deliberate targeting decision
+55|Territory Architect|CHANGED|0.47|define and prioritize territory segments.
+56|Territory Architect|CHANGED|0.67|territory architect organizes target accounts into segments with priority tiers, approaches, and a 300-account ceiling. segments can combine geography, industry, size, named accounts, and observable buying signals.
+57|Territory Architect|CHANGED|0.93|define the account group, its priority tier, and why it fits. require a current reason for signal-based segments. preserve account allocation, reassignment, and the existing stable focus and axis identifiers.
+58|Territory Architect|CHANGED|1.00|trigger / behavior documented buying signals
+59|Territory Architect|CHANGED|1.00|why-now (the current event or business need) required for trigger segments · optional-but-encouraged for structural segments
+60|Territory Architect|CHANGED|1.00|sales-cycle calibration tunes the territory to the sales-cycle length.
+61|Territory Architect|CHANGED|1.00|the segmentation criterion geo / vertical / segment / named / trigger — blendable; sets the room's register.
+62|Territory Architect|CHANGED|1.00|axis-malleability (never hardcode one segmentation)
+63|Prospecting Desk|CHANGED|0.75|prospecting desk saves target criteria, accepts companies the operator adds, and checks qualification before sending accounts to signal console. it does not currently execute a live company search.
+64|Prospecting Desk|CHANGED|1.00|saved research criteria and watch preferences saved research criteria and watch preferences. the current workflow does not run live company searches or automatically discover new companies.
+65|Signal Console|CHANGED|0.68|signal console stores watched accounts and supporting signals, then ranks them using signal type, credibility, and age. review those inputs before recommending outreach.
+66|Signal Console|CHANGED|0.92|explain account priority using current signals and recorded activity. preserve the ranking math and data contracts. research is useful when it supports a specific account decision; do not infer buyer intent or urgency merely from a score.
+67|Signal Console|CHANGED|1.00|priority score = signal count × type weight × source credibility × recency decay
+68|Signal Console|CHANGED|1.00|priority score per account the computed rank (above) — feeds dashboard command ranking.
+69|Signal Console|CHANGED|1.00|the morning brief a daily summary of watched-account signals.
+70|Signal Console|CHANGED|1.00|research posture distinguish accounts with enough context for outreach from accounts that still need research.
+71|Signal Console|CHANGED|1.00|the enrich-all flow refresh signals, firmographics, and account-priority inputs for watched accounts.
+72|Signal Console|CHANGED|1.00|account priority + available evidence → dashboard
+73|Signal Console|CHANGED|1.00|account priority + activity state → sales handoff documentation
+74|Signal Console|CHANGED|1.00|accounts + signals → the briefing (read-only data source per adr-006)
+75|Signal Console|CHANGED|1.00|connect account research to a concrete outreach or monitoring decision
+76|Briefing|CHANGED|0.45|changes in your work and target market.
+77|Briefing|CHANGED|0.70|briefing summarizes workspace changes and market evidence. separate observations, calculations, assessments, forecasts, and recommended actions; place evidence and confidence beside conclusions.
+78|Briefing|CHANGED|0.91|evaluate stated icp, watchlist, and market assumptions against evidence. surface relevant accounts, conflicting evidence, and auditable analyses. calibrated uncertainty is valid when evidence is incomplete; rhetorical certainty is not a quality requirement.
+79|Briefing|SAME|1.00|workspace the operator's own deals / signals / pilots (the adr-009 ledger) daily-fresh · sql heartbeat generators
+80|Briefing|CHANGED|1.00|pattern an assessment with evidence, confidence, and an audit record.
+81|Briefing|CHANGED|0.78|the briefing is the intelligence surface that reads from the signal console data source (accounts + signals + priority scores in postgres). it never writes to those tables.
+82|Outdoors Events|SAME|1.00|workspace_profile.product_category (the seed for the query plan)
+83|Outbound Studio|CHANGED|0.89|generate only from supplied evidence. do not invent buyer motives, customer proof, payback, attachments, or outcomes. state the reason for outreach and a clear next question; keep the no-ask option and stable internal stage keys.
+84|Outbound Studio|CHANGED|0.92|message completeness existing completeness thresholds: ready ≥80, workable ≥60, otherwise needs more detail. review factual support before sending.
+85|Outbound Studio|CHANGED|1.00|account + priority score from signal console
+86|Outbound Studio|CHANGED|0.78|recorded activity → dashboard · linkedin playbook · readiness · sales handoff documentation
+87|Outbound Studio|CHANGED|1.00|specific, evidence-based messages and responsible outreach
+88|Cold Call Studio|CHANGED|1.00|the after-call summary what went well / what to improve next time.
+89|Cold Call Studio|CHANGED|0.89|the after-call summary what went well / what to improve next time.
+90|LinkedIn Playbook|CHANGED|0.53|plan linkedin outreach alongside calls and email.
+91|LinkedIn Playbook|CHANGED|0.73|linkedin playbook recommends an account-specific action from recorded signals, connection requests, messages, and outbound activity. it does not infer trust from activity counts.
+92|LinkedIn Playbook|CHANGED|0.81|preserve the five actions and their logging. recommend the next action from recorded interaction state, and make templates specific to the account. acceptance and reply statistics describe the sample; they do not establish universal success thresholds.
+93|LinkedIn Playbook|CHANGED|1.00|2 comment comment on a specific relevant observation
+94|LinkedIn Playbook|CHANGED|1.00|channel memory stats touches · acceptance · reply rate — the summary of recorded channel outcomes.
+95|LinkedIn Playbook|CHANGED|0.92|the recommended linkedin action the single next public-first move for the highest-priority account.
+96|LinkedIn Playbook|CHANGED|0.75|recorded activity → dashboard · signal console · readiness · handoff
+97|LinkedIn Playbook|CHANGED|0.60|one recommended linkedin action at a time
+98|Discovery Studio|SAME|0.06|pacing no clock, no tempo, no presumed flow (founder 2026-06-16) — a discovery call is human-driven and unpredictable. de-paced ≠ not-live.
+99|Discovery Studio|SAME|1.00|the active framework retunes the whole question set, the objection library, and the dossier to the buyer's world. no longer a frozen list — generated by makeframework(seed) ; a seller off the list gets the closest fit + a way forward, never a dead end.
+100|Discovery Studio|CHANGED|1.00|compressionmode time-limited state that shortens the question path — off / essentials / emergency live
+101|Discovery Studio|SAME|1.00|emergency — the rescue state: collapses the spine to the segment you're in and hoists the recover moves to the front
+102|Discovery Studio|CHANGED|0.19|core promise support the next useful question, follow-up branch, agreed next step, and transfer of confirmed deal details
+103|Discovery Studio|SAME|1.00|flows in pre-call context read directly from signal console (account + signal) + deal workspace (deal state). replaces the retired gtmos_call_handoff from call planner.
+104|Discovery Studio|CHANGED|1.00|→ future autopsy recorded risk factors · unresolved evidence gaps · stalled-next-step evidence · disqualification reasons and missing next-step evidence
+105|Discovery Studio|SAME|1.00|no decorative timer , no heat meters / abstract chips
+106|Deal Workspace|CHANGED|0.64|deal workspace ranks open deals using inactivity, next-step, and close-date factors. show the evidence and a corrective action; the score does not predict the date a deal will be lost.
+107|Deal Workspace|CHANGED|0.87|keep the existing risk thresholds and views. describe stage, qualification, next step, and close-date evidence explicitly. missing information increases uncertainty; it does not prove a customer has disengaged.
+108|Deal Workspace|CHANGED|1.00|where deals need attention
+109|Deal Workspace|CHANGED|1.00|at-risk risk factors warrant a corrective action
+110|Deal Workspace|CHANGED|1.00|the deal-health panel the assessment of recorded deal-health factors.
+111|Deal Workspace|CHANGED|0.91|the toggleable views focus / timeline / list — different views of the same deal-risk factors.
+112|Deal Workspace|CHANGED|1.00|deal risk into future autopsy · dashboard · readiness · sales handoff documentation
+113|Deal Workspace|CHANGED|1.00|deal risk
+114|Pilot Desk|CHANGED|0.92|help the seller define what the pilot must establish, who evaluates the result, and when the next decision occurs. measure adoption and results without treating activity alone as buying intent.
+115|Pilot Desk|CHANGED|1.00|4 review adoption are enough of the right people using the product day-to-day
+116|Pilot Desk|SAME|1.00|the stop rule into future autopsy
+117|Pilot Desk|SAME|1.00|proof · cast · mold · forge/foundry · ingot · heat/heat-ledger · kill rule · readout the pilot · the results · the evidence
+118|Pilot Desk|CHANGED|1.00|the quality band ready / almost ready / more detail required
+119|Getting to Signed|CHANGED|0.42|manage the approval and signature process.
+120|Getting to Signed|CHANGED|0.67|getting to signed organizes legal, security, finance, and business approval workstreams. show the customer request, proposed position, gap, owner, and next action.
+121|Getting to Signed|CHANGED|0.92|prioritize the issue currently blocking approval. preserve the comparison of customer and seller positions, linked terms, document coverage, and dated mutual plan. do not make unsupported claims about why deals are generally lost.
+122|Getting to Signed|CHANGED|0.68|select the current blocking workstream from recorded status, rather than a fixed category order.
+123|Getting to Signed|CHANGED|1.00|workstream what it covers
+124|Getting to Signed|CHANGED|1.00|the committee champion / economic buyer / new stakeholders, each with recorded engagement status and elapsed time since the last touch.
+125|Getting to Signed|CHANGED|1.00|the current blocking issue their side · the gap · your proposed position + limits and proposed exchanges + "send the counter-position" + "ask an advisor with relevant experience."
+126|Getting to Signed|CHANGED|1.00|the positions ledger per-workstream row: their ask → your proposed position → status (blocking / clearing / to-do / at-risk); each row drills to its depth in place.
+127|Getting to Signed|CHANGED|1.00|the payment-terms trade set net-60 flat · net-30 for a cut · % off for annual upfront payment.
+128|Getting to Signed|CHANGED|1.00|the plan-to-signed the mutual dated signature process, co-owned with the champion.
+129|Getting to Signed|CHANGED|0.78|an advisor from call in a favor (a network request relevant to a blocked approval)
+130|Getting to Signed|CHANGED|1.00|workstream outcomes + the plan-to-signed → deal workspace
+131|Getting to Signed|SAME|1.00|loss-pattern feedback → future autopsy (lost in procurement, before terms?)
+132|Getting to Signed|CHANGED|1.00|a stuck workstream → call in a favor (request relevant help for the blocked approval)
+133|Getting to Signed|CHANGED|1.00|the signature-process model (the deal isn't won at yes)
+134|Getting to Signed|CHANGED|1.00|the current blocking issue on the blocking workstream (their side ⟷ your proposed position, always the one actually blocking)
+135|Call in a Favor|CHANGED|0.44|request specific help from your network.
+136|Call in a Favor|CHANGED|0.87|keep the request specific, review recent requests to the same person, and record introductions, information, declines, or other actual outcomes. preserve deal linkage and both message drafts.
+137|Call in a Favor|CHANGED|1.00|deals needing outside help top rail, ranked by need, with a count of deals that lack a potential helper.
+138|Call in a Favor|SAME|1.00|"spend-read" "is this ask ready to send?"
+139|Future Autopsy|SAME|0.17|capability / surface what it does
+140|Future Autopsy|CHANGED|0.40|review deal-loss risk and corrective actions.
+141|Future Autopsy|CHANGED|0.67|future autopsy uses recorded deal conditions to assess risk and recommend corrective actions. its scenario is an assessment, not a recorded loss or a causal explanation of an event that has not happened.
+142|Future Autopsy|CHANGED|1.00|the risk-factor assessment the recorded conditions associated with risk and their supporting evidence
+143|Future Autopsy|CHANGED|1.00|the horizon tag heuristic review interval; it does not predict a loss date.
+144|Future Autopsy|CHANGED|1.00|recorded deal stage and risk factors from deal workspace
+145|Future Autopsy|SAME|0.06|the command row run selected · urgent autopsy deal · copy brief
+146|Quota Workback|CHANGED|0.65|quota workback converts the target and conversion assumptions into activity requirements, then compares closed-won revenue and stage-weighted open pipeline with the target.
+147|Quota Workback|CHANGED|0.87|3 required pipeline coverage live pipeline coverage pulled from deal workspace — the gap in real dollars
+148|Quota Workback|SAME|1.00|read for dominant surface
+149|Quota Workback|CHANGED|0.95|pace a returning seller closed-won revenue plus stage-weighted open pipeline vs target · what-the-number-needs vs where-you-actually-are · the move back on pace
+150|Quota Workback|CHANGED|1.00|typical deal size (acv → benchmark band) smb / mid-market / enterprise / strategic — sets which benchmark the conversion-assumption assessment compares against.
+151|Quota Workback|CHANGED|1.00|assessment of conversion assumptions "this plan is a stretch — one assumption is optimistic" + what it costs. a plain judgment, never a bare score.
+152|Quota Workback|CHANGED|0.93|revenue and weighted-pipeline estimate modeled revenue and weighted-pipeline amount vs target + the need-vs-actual scoreboard for a returning seller.
+153|Quota Workback|CHANGED|1.00|recorded outreach and call activity from outbound / cold call (the pace/actuals read)
+154|Quota Workback|CHANGED|1.00|modeled daily activity requirements into outbound + cold call
+155|Quota Workback|SAME|1.00|"the meeting-creation floor" name the plain thing
+156|Quota Workback|CHANGED|1.00|quota translated into explicit activity and pipeline requirements
+157|Founding GTM|CHANGED|0.74|founding gtm synthesizes account, outreach, discovery, deal, pilot, and outcome records into sales handoff documentation. keep samples and evidence beside conclusions.
+158|Founding GTM|CHANGED|0.93|report observed patterns, sample sizes, and limitations. associations do not establish that an outreach message, question, or action caused a win. recommend what to test next while preserving the seven sections, cross-workspace insights, and sharing workflow.
+159|Founding GTM|CHANGED|0.96|replacing the legacy six. each section is authored prose + a concrete evidence line + one cross-workspace assessment (the "surprise" primitive in code; renders as a plain "one thing to notice" margin note, never labeled "surprise").
+160|Founding GTM|CHANGED|1.00|seven authored sections evidence-based prose that explains observed patterns and their limitations to another seller.
+161|Founding GTM|CHANGED|1.00|per-section status ready / partial / empty, with incomplete sections and evidence limits visible.
+162|Founding GTM|CHANGED|1.00|the per-section cross-workspace assessment the "one thing to notice" — an assessment combining evidence from multiple workspaces.
+163|Founding GTM|CHANGED|1.00|the share-link mechanic read-mode workspace access for an external email — the persistent sharing control.
+164|Founding GTM|CHANGED|0.93|the ceremony hook triggers the existing visual transition on the first upward readiness transition into runnable with founder support.
+165|Founding GTM|CHANGED|0.93|when readiness transitions up from partially documented → runnable with founder support for the first time in a workspace, show the existing visual transition (not a toast): an animated reveal — the verdict change, the kit count moving (e.g. 2/7 → 4/7), a serif headline ("sales handoff documentation is ready to review"), and a one-time cta to share the workspace read-mode. once per workspace per upward transition; downward transitions are silent.
+166|Founding GTM|SAME|0.92|every cloud-synced room — icp studio (§1) · deal workspace closed deals (§1/4/5/6) · outbound + linkedin + cold call (§2) · discovery segment-jump data (§3) · call in a favor (§4) · future autopsy (§5) · quota workback + deal pipeline (§7)
+167|Founding GTM|CHANGED|0.90|section-readiness count drives the readiness "documented and repeatable" gate (≥ 5/7)
+168|Founding GTM|CHANGED|1.00|specific operator recommendations supported by recorded evidence

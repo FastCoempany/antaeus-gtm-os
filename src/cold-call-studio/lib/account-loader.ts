@@ -1,4 +1,5 @@
 import { reportError } from "@/lib/observability";
+import { heatFromStoredRow } from "@/signal-console/lib/heat";
 import type { AccountSummary } from "./types";
 
 /**
@@ -33,11 +34,6 @@ function asString(v: unknown): string {
     return typeof v === "string" ? v : "";
 }
 
-function asNumber(v: unknown): number {
-    if (typeof v === "number" && Number.isFinite(v)) return v;
-    return 0;
-}
-
 function topSignalHeadline(account: Record<string, unknown>): string {
     const signals = account["signals"];
     if (!Array.isArray(signals) || signals.length === 0) return "";
@@ -68,12 +64,10 @@ export function loadAccountOptions(
             const id = asString(o["id"]);
             const name = asString(o["name"]);
             if (!id || !name) continue;
-            // Heat may be stored as `heat` (Phase 4 / Room 3) or `_heat`
-            // (legacy Signal Console). Prefer `heat` whenever it is *present*
-            // (including an explicit zero) so the new payload always wins
-            // over a stale legacy `_heat` in mixed-payload rows.
-            const heat =
-                "heat" in o ? asNumber(o["heat"]) : asNumber(o["_heat"]);
+            // Same account-priority number Signal Console shows: computed
+            // from the account's signals; a stored `heat` / `_heat` is only
+            // used for legacy rows that carry no signals array.
+            const heat = heatFromStoredRow(o);
             const topSignal = topSignalHeadline(o);
             out.push({ id, name, heat, topSignal });
         }

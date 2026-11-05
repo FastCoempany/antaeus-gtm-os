@@ -6,7 +6,7 @@ import { RELATIONSHIP_LABEL, RELATIONSHIP_TYPES } from "../lib/types";
 import { heatMetrics, recency } from "../lib/heat";
 import {
     hrefToDealWorkspace,
-    hrefToDiscoveryAgenda,
+    hrefToDiscoveryStudio,
     hrefToOutbound
 } from "../lib/handoff";
 import { getAccountExecutionContext } from "../lib/execution-context";
@@ -173,9 +173,9 @@ export function AccountCard({ account, now }: Props): JSX.Element {
                     )}
                     <a
                         class="sc-card__cta sc-card__cta--ghost"
-                        href={hrefToDiscoveryAgenda(account.name)}
+                        href={hrefToDiscoveryStudio(account.name)}
                     >
-                        {t("Plan call")}
+                        {t("Prepare discovery call")}
                     </a>
                 </div>
             </footer>

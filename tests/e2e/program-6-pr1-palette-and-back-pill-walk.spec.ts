@@ -73,11 +73,6 @@ const SAMPLE_ROOMS_FOR_BACKBUTTON: ReadonlyArray<{
         returnLabel: "Back to Territory Architect"
     },
     {
-        path: "/call-planner/",
-        returnTo: "/dashboard/",
-        returnLabel: "Back to Dashboard"
-    },
-    {
         path: "/quota-workback/",
         returnTo: "/dashboard/",
         returnLabel: "Back to Dashboard"

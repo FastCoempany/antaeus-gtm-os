@@ -49,9 +49,10 @@ export function buildFutureAutopsyRoomHref({
 
 /**
  * Convenience builders for the four primary destinations the room
- * routes to (Deal Workspace, Call Planner, PoC Framework, Discovery
- * Studio). Per canon §4.14 flows-out: Deal Workspace, Call Planner,
- * Discovery Studio, PoC Framework.
+ * routes to (Deal Workspace, Pilot Desk, Discovery Studio, Getting to
+ * Signed). Per canon §4.14 flows-out: Deal Workspace, Discovery Studio,
+ * Pilot Desk. (Call Planner was retired into Discovery Studio
+ * 2026-07-06, canon §4.11.)
  */
 
 export function hrefToDealWorkspace(accountName: string, dealId?: string): string {
@@ -60,15 +61,6 @@ export function hrefToDealWorkspace(accountName: string, dealId?: string): strin
         focusObject: accountName,
         roomLabel: "Deal Workspace",
         ...(dealId ? { extra: { deal: dealId } } : {})
-    });
-}
-
-export function hrefToCallPlanner(accountName: string): string {
-    return buildFutureAutopsyRoomHref({
-        href: "/call-planner/",
-        focusObject: accountName,
-        roomLabel: "Call Planner",
-        extra: { account: accountName }
     });
 }
 

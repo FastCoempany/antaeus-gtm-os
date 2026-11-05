@@ -280,7 +280,7 @@ test.describe("Program 6 / PR 4 — Discovery Studio refacing (Ledger Spine Cano
 
             // With continuity params, the back-pill renders.
             await page.goto(
-                "/discovery-studio/?ds=0&returnTo=%2Fcall-planner%2F&returnLabel=Back+to+Call+Planner",
+                "/discovery-studio/?ds=0&returnTo=%2Fdeal-workspace%2F&returnLabel=Back+to+Deal+Workspace",
                 { waitUntil: "domcontentloaded" }
             );
             await page.waitForTimeout(400);

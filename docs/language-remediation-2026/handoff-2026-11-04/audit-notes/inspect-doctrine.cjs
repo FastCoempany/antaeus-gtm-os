@@ -1,0 +1,2 @@
+const fs=require('fs');const p=__dirname+'/antaeus/deliverables/room-capability-maps';
+for(const f of fs.readdirSync(p).filter(x=>x.endsWith('.html'))){let s=fs.readFileSync(p+'/'+f,'utf8').split('</style>')[1].replace(/<table data-copy-context="deprecated-example">[\s\S]*?<\/table>/g,'');let hits=[...s.matchAll(/>([^<>]*(?:\b(?:motion|heat|sharp|sharpen|climb|summit|awake|machine|carve|dying|dies|inheritable|relay|pressure|thin|dividend)\b)[^<>]*)</gi)].map(x=>x[1]);if(hits.length)console.log(f+'\n'+hits.join('\n'));}

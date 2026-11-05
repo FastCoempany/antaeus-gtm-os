@@ -35,16 +35,9 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./outbound-studio-v4.css";
 
 /**
- * OutboundStudioV4 (canon §4.8) — "where you are with them", wired to
- * production from the CHOSEN 2026-07-04 mockup. One real message, never
- * a blast: the who-line names the person, the 5-stage conversation
- * spine IS the temperature rack in plain words, the message is the
- * shipped generator's output, and the rail carries the why-now (the
- * account's live Signal Console headline), a per-stage coaching tip,
- * how-to-send, and the per-account sent log. The generator, rack
- * state, touch/angle persistence, and handoffs are reused unchanged —
- * plus one bug fix: the send line now leads with the account's REAL
- * signal headline instead of its company name.
+ * Outbound Studio drafts one account-specific message from the account,
+ * contact, outreach stage, selected trigger, and any available Signal
+ * Console evidence. The generator does not invent proof or buyer intent.
  */
 
 const editOpen = signal(false);
@@ -57,55 +50,55 @@ function toast(msg: string): void {
     toastTimer = setTimeout(() => (toastMsg.value = null), 2200);
 }
 
-/** The 5 temperatures said plainly — where you are with them (§13). */
+/** Existing internal stage keys rendered in ordinary sales language. */
 const STAGE_LABELS: Record<Temperature, string> = {
-    ice_cold: t("First time reaching out", { class: "body" }),
+    ice_cold: t("First outreach"),
     cool: t("Following up"),
-    warm: t("They replied"),
-    hot: t("Back and forth"),
-    closing: t("About to close")
+    warm: t("Contact replied"),
+    hot: t("Active conversation"),
+    closing: t("Approval / contract")
 };
 
 const STAGE_TIPS: Record<Temperature, { hd: string; tip: string }> = {
     ice_cold: {
-        hd: t("On a first message"),
-        tip: t("Lead with what's happening at their company, not what you sell. One clear ask, easy to say yes to.", { class: "body" })
+        hd: t("First outreach"),
+        tip: t("Lead with the account-specific event or signal. Ask one clear question instead of assuming the buyer has a problem.", { class: "body" })
     },
     cool: {
-        hd: t("Following up"),
-        tip: t("Shorter than the first one. Add one new thing, and give them an easy out — \"or I'll just send it.\"", { class: "body" })
+        hd: t("Follow-up"),
+        tip: t("Keep the follow-up shorter than the first message, add one new piece of information, and make the response easy.", { class: "body" })
     },
     warm: {
-        hd: t("They replied"),
-        tip: t("Move fast — they're warm. Give them the exact thing they asked about, then offer two concrete times.", { class: "body" })
+        hd: t("After a reply"),
+        tip: t("Address what the contact actually asked or said. Offer a concrete next step without adding assumptions that were not discussed.", { class: "body" })
     },
     hot: {
-        hd: t("In a back-and-forth"),
-        tip: t("Keep the momentum. Confirm the next step, make the meeting worth more, and open the door to the rest of their team.", { class: "body" })
+        hd: t("Active conversation"),
+        tip: t("Confirm the open question or next step and keep the message focused on what has already been discussed.", { class: "body" })
     },
     closing: {
-        hd: t("About to close"),
-        tip: t("Name the deadline. Ask what they need to say yes and make it effortless to remove.", { class: "body" })
+        hd: t("Approval / contract"),
+        tip: t("Ask which approval or contract item is still open and route the right documentation or person to it.", { class: "body" })
     }
 };
 
 const BAND_LABEL: Record<string, string> = {
-    ready: t("Ready to send"),
-    workable: t("Workable"),
-    thin: t("Thin")
+    ready: t("Full account context"),
+    workable: t("Partial account context"),
+    thin: t("Missing account context")
 };
 
 const PERSONAS: ReadonlyArray<Persona> = ["csuite", "vp", "ic", "procurement"];
 
 function copyMessage(content: string): void {
     if (!navigator.clipboard?.writeText) {
-        toast(t("Copying isn't available here — select the text by hand.", { class: "body" }));
+        toast(t("Copying is not available here. Select the text manually.", { class: "body" }));
         return;
     }
     navigator.clipboard
         .writeText(content)
         .then(() => toast(t("Message copied.")))
-        .catch(() => toast(t("Couldn't copy — select the text by hand.", { class: "body" })));
+        .catch(() => toast(t("Could not copy. Select the text manually.", { class: "body" })));
 }
 
 export function OutboundStudioV4(): JSX.Element {
@@ -126,14 +119,13 @@ export function OutboundStudioV4(): JSX.Element {
             <div class="ob4-wrap">
                 <div class="ob4-top">
                     <span class="ob4-bname">{t("Outbound Studio")}</span>
-                    <span class="ob4-r">{t("one real message · not a blast", { class: "body" })}</span>
+                    <span class="ob4-r">{t("one account-specific message", { class: "body" })}</span>
                 </div>
 
-                {/* who line */}
                 <div class="ob4-who">
-                    {t("Writing to")} <b>{r.contactName.trim() || t("(name the person)")}</b>
+                    {t("Drafting for")} <b>{r.contactName.trim() || t("(add contact)")}</b>
                     {", "}{t("a")} <b>{PERSONA_LABELS[r.persona]}</b> {t("at")}{" "}
-                    <b>{r.accountName.trim() || t("(name the account)")}</b>
+                    <b>{r.accountName.trim() || t("(add account)")}</b>
                     <button type="button" class="ob4-ed" onClick={() => (editOpen.value = !editOpen.value)}>
                         {editOpen.value ? t("done ▴") : t("change ▾")}
                     </button>
@@ -151,12 +143,12 @@ export function OutboundStudioV4(): JSX.Element {
                             </datalist>
                         </label>
                         <label class="ob4-fld">
-                            <span>{t("The person")}</span>
+                            <span>{t("Contact")}</span>
                             <input value={r.contactName} placeholder="e.g. Sarah Chen"
                                 onInput={(e) => patchRack({ contactName: (e.currentTarget as HTMLInputElement).value })} />
                         </label>
                         <div class="ob4-fld">
-                            <span>{t("Their seat")}</span>
+                            <span>{t("Role")}</span>
                             <div class="ob4-pbtns">
                                 {PERSONAS.map((p) => (
                                     <button type="button" key={p}
@@ -168,7 +160,7 @@ export function OutboundStudioV4(): JSX.Element {
                             </div>
                         </div>
                         <label class="ob4-fld">
-                            <span>{t("What's happening there (the trigger)", { class: "body" })}</span>
+                            <span>{t("Reason for outreach")}</span>
                             <select value={r.trigger}
                                 onChange={(e) => patchRack({ trigger: (e.currentTarget as HTMLSelectElement).value as TriggerKey })}>
                                 {TRIGGER_KEYS.map((k) => (
@@ -177,15 +169,14 @@ export function OutboundStudioV4(): JSX.Element {
                             </select>
                         </label>
                         <label class="ob4-fld ob4-fld--wide">
-                            <span>{t("A question they asked (optional)", { class: "body" })}</span>
+                            <span>{t("Buyer question (optional)", { class: "body" })}</span>
                             <input value={r.nextQuestion ?? ""} placeholder={t("e.g. How fast can we be live?", { class: "body" })}
                                 onInput={(e) => patchRack({ nextQuestion: (e.currentTarget as HTMLInputElement).value })} />
                         </label>
                     </div>
                 ) : null}
 
-                {/* the 5-stage conversation spine (= temperature, plainly) */}
-                <div class="ob4-spinel">{t("Where are you with them?")}</div>
+                <div class="ob4-spinel">{t("Current outreach stage")}</div>
                 <div class="ob4-spine">
                     {TEMPERATURES.map((temp, i) => (
                         <button type="button" key={temp}
@@ -200,7 +191,7 @@ export function OutboundStudioV4(): JSX.Element {
                 <div class="ob4-body">
                     <div>
                         <div class="ob4-msghd">
-                            <span class="ob4-mh">{t("The message")} · {STAGE_LABELS[r.temperature].toLowerCase()}</span>
+                            <span class="ob4-mh">{STAGE_LABELS[r.temperature]} {t("message")}</span>
                             {ok ? (
                                 <span class={`ob4-ready is-${out.motionBand}`}>
                                     <span class="ob4-rdot" />{BAND_LABEL[out.motionBand]}
@@ -211,38 +202,36 @@ export function OutboundStudioV4(): JSX.Element {
                             <div class="ob4-msg">{out.content}</div>
                         ) : (
                             <div class="ob4-msg ob4-msg--empty">
-                                {t("Name the account and the person above, and the message writes itself here — built from what's actually happening at their company.", { class: "body" })}
+                                {t("Enter the account and contact above. Antaeus drafts a message using the selected outreach stage, relevant account context, and any available signal.", { class: "body" })}
                             </div>
                         )}
                         <div class="ob4-acts">
                             <button type="button" class="ob4-send" disabled={!ok} onClick={() => copyMessage(out.content)}>
-                                {t("Copy the message")}
+                                {t("Copy message")}
                             </button>
                             <button type="button" class="ob4-g" disabled={!ok}
                                 onClick={() => {
                                     const logged = logTouchFromRack();
-                                    // Cloud write too — a local-only log is
-                                    // clobbered when cloud replaces local on boot.
                                     if (logged) {
                                         void saveTouch(logged);
                                         toast(`${t("Logged as sent to")} ${r.accountName.trim()}.`);
                                     }
                                 }}>
-                                {t("Mark it sent")}
+                                {t("Mark sent")}
                             </button>
-                            <button type="button" class={`ob4-g${r.noAsk ? " is-on" : ""}`} onClick={() => { toggleNoAsk(); toast(rack.value.noAsk ? t("Dropped the ask — value only.", { class: "body" }) : t("Ask added back.")); }}>
-                                {t("Give value only")}
+                            <button type="button" class={`ob4-g${r.noAsk ? " is-on" : ""}`} onClick={() => { toggleNoAsk(); toast(rack.value.noAsk ? t("Meeting request removed.") : t("Meeting request restored.")); }}>
+                                {r.noAsk ? t("Restore meeting request") : t("Remove meeting request")}
                             </button>
                             <button type="button" class="ob4-save" disabled={!ok}
                                 onClick={() => {
                                     const res = saveAngleFromRack();
                                     if (res.saved) {
                                         void saveAngle(res.angle);
-                                        toast(t("Saved to reuse."));
+                                        toast(t("Outreach approach saved."));
                                     }
-                                    else if (res.reason === "duplicate") toast(t("Already saved this one."));
+                                    else if (res.reason === "duplicate") toast(t("This approach is already saved."));
                                 }}>
-                                ★ {t("Save this one")}
+                                ★ {t("Save approach")}
                             </button>
                         </div>
                     </div>
@@ -250,33 +239,33 @@ export function OutboundStudioV4(): JSX.Element {
                     <div class="ob4-rail">
                         <div class="ob4-why">
                             <div class="ob4-wl">
-                                {t("Why now — what's happening", { class: "body" })}
+                                {t("Reason for outreach")}
                                 {matched ? (
                                     <a class="ob4-src" href={hrefToSignalConsole(matched.name)}>◆ {t("Signal Console")}</a>
                                 ) : null}
                             </div>
                             <div class="ob4-wt">
                                 {matched?.topSignal ? (
-                                    <>{matched.name} — <b>{matched.topSignal}</b></>
+                                    <>{matched.name}: <b>{matched.topSignal}</b></>
                                 ) : (
                                     <>
-                                        {trigger.meaning}{" "}
-                                        <span class="ob4-wq">{t("(no live signal on this account yet — the trigger you picked carries the message)", { class: "body" })}</span>
+                                        <b>{t("Selected trigger:")}</b> {trigger.meaning}{" "}
+                                        <span class="ob4-wq">{t("No current account signal is available, so the selected trigger is being used as the reason for outreach.", { class: "body" })}</span>
                                     </>
                                 )}
                             </div>
                         </div>
                         <div class="ob4-tip"><b>{tip.hd}</b>{tip.tip}</div>
                         <div class="ob4-how">
-                            <div class="ob4-hr"><span class="ob4-hk">{t("Send by")}</span><span class="ob4-hv">{CHANNEL_LABELS[out.channel]}</span></div>
-                            <div class="ob4-hr"><span class="ob4-hk">{t("Attach")}</span><span class="ob4-hv">{out.assetLabel}</span></div>
-                            <div class="ob4-hr"><span class="ob4-hk">{t("The ask")}</span><span class="ob4-hv">{r.noAsk ? t("nothing — just value") : CTA_LABELS[out.ctaKey]}</span></div>
+                            <div class="ob4-hr"><span class="ob4-hk">{t("Suggested channel")}</span><span class="ob4-hv">{CHANNEL_LABELS[out.channel]}</span></div>
+                            <div class="ob4-hr"><span class="ob4-hk">{t("Suggested material")}</span><span class="ob4-hv">{out.assetLabel}</span></div>
+                            <div class="ob4-hr"><span class="ob4-hk">{t("Call to action")}</span><span class="ob4-hv">{CTA_LABELS[out.ctaKey]}</span></div>
                         </div>
                         {r.accountName.trim() ? (
                             <div class="ob4-sent">
-                                <div class="ob4-sh">{t("Sent to")} {r.accountName.trim()}</div>
+                                <div class="ob4-sh">{t("Outreach log")} · {r.accountName.trim()}</div>
                                 {touches.length === 0 ? (
-                                    <div class="ob4-none">{t("Nothing sent yet — this is the first touch.", { class: "body" })}</div>
+                                    <div class="ob4-none">{t("No outreach is logged for this account yet.", { class: "body" })}</div>
                                 ) : (
                                     touches.slice(0, 6).map((touch) => (
                                         <div class="ob4-sr" key={touch.id}>

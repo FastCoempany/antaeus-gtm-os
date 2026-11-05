@@ -1,5 +1,6 @@
 import { t } from "@/lib/voice/t";
 import { localDay, readBulkCounts } from "@/quota-workback/v4/lib/bulk-outreach";
+import { readDailyOutreachRequirement } from "@/quota-workback/lib/coverage";
 
 /**
  * The Live Edge — data layer (founder-locked 2026-07-16).
@@ -159,6 +160,16 @@ export function readTodayCount(s?: StorageLike | null, now: Date = new Date()): 
 /** The Quota room's daily habit — null when no plan is on record. */
 export function readDailyGoal(s?: StorageLike | null): number | null {
     const st = store(s);
+    // Computed live with the Quota Workback engine so the goal matches
+    // the "messages & calls per working day" the Quota room shows. The
+    // `touches_day` snapshot is only a fallback (it can be stale — e.g.
+    // a seeded value, or one written before an assumption changed).
+    try {
+        const live = readDailyOutreachRequirement(st);
+        if (live !== null) return live;
+    } catch {
+        // fall back to the published snapshot
+    }
     const targets = readJson<Record<string, unknown>>(st, "gtmos_quota_targets");
     const n = Number(targets?.["touches_day"]);
     return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
@@ -185,7 +196,7 @@ export function readLocalEvents(
             out.push({
                 id: `touch:${x.id ?? ts}`,
                 who: "you",
-                text: `${t("You reached out to", { class: "body" })} ${name} ${t("— counted.", { class: "body" })}`,
+                text: `${t("Outreach recorded for", { class: "body" })} ${name}.`,
                 ts
             });
         }
@@ -346,7 +357,7 @@ export function ageLabel(ts: number, now: Date = new Date()): string {
 /** The dead-morning honesty line, when nothing landed today. */
 export function quietLine(lastMovement: number | null, now: Date = new Date()): string {
     if (lastMovement == null) {
-        return t("Nothing captured yet — the wire fills as you work.", { class: "body" });
+        return t("No activity recorded yet. Activity appears here as you work.", { class: "body" });
     }
     const when = new Date(lastMovement);
     const sameDay =
@@ -355,7 +366,7 @@ export function quietLine(lastMovement: number | null, now: Date = new Date()): 
         when.getDate() === now.getDate();
     const clock = when.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     if (sameDay) {
-        return `${t("Quiet since", { class: "body" })} ${clock}.`;
+        return `${t("No activity recorded since", { class: "body" })} ${clock}.`;
     }
     const yd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
     const wasYesterday =
@@ -365,7 +376,7 @@ export function quietLine(lastMovement: number | null, now: Date = new Date()): 
     const dayWord = wasYesterday
         ? t("yesterday")
         : ageLabel(lastMovement, now) + ` ${t("ago")}`;
-    return `${t("Nothing yet today — last movement", { class: "body" })} ${dayWord}${t(", at", { class: "body" })} ${clock}.`;
+    return `${t("No activity recorded today yet. The last recorded activity was", { class: "body" })} ${dayWord} ${t("at", { class: "body" })} ${clock}.`;
 }
 
 /** One read for the whole rail (local sources; cloud merges on top). */

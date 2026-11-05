@@ -1,0 +1,28 @@
+Take over the existing Antaeus final completion and certification task. First review the previous agent's work, then continue from its saved state. Do not start over, blindly accept its claims, discard its edits, or merge the PR.
+
+Work in:
+C:\Users\tanya\Documents\Codex\2026-10-30\you-are-taking-over-the-final\work\antaeus
+
+Read the handoff here first:
+C:\Users\tanya\Documents\Codex\2026-10-30\you-are-taking-over-the-final\outputs\claude-handoff\00_START_HERE.md
+
+Then read every handoff instruction/evidence file it lists, all 17 original working-set inputs, all docs/language-remediation-2026 files, the complete main-to-working-state diff, the separate completion-pass diff, and all new untracked source/tests/tooling. Inspect actual current source and tests rather than trusting audit summaries.
+
+Repo: FastCoempany/antaeus-gtm-os
+Branch: language-remediation-v1
+PR: #324
+Starting HEAD: f01d44ed3a98aa8927e23c308659d3030c8cacad
+
+IMPORTANT: Codex's completion work is LOCAL, UNCOMMITTED, and UNPUSHED. It is already present in this worktree. Do not apply the recovery patch to it again. The ZIP is a backup and portable handoff, not a reason to create a fresh implementation. Preserve existing work while reviewing it adversarially.
+
+My governing rule: "Antaeus may have a point of view. It may not require translation."
+
+Preserve approved behavioral evolution: readiness recommendation/blocker improvements, calibrated Future Autopsy generation, LinkedIn recommendations, Outbound generation and nextQuestion +6 completeness scoring, Briefing reasoning/calibration and uncertainty quality gates. Fix accidental functional/schema/contract/data-integrity defects. Do not revert approved evolution merely because it exceeds copy-only scope.
+
+The work is not ready for merge yet. The handoff identifies incomplete manifest reconciliation, generator/demo/source fixes, stale test expectations, corpus regeneration, qualitative saturation scoring, semantic-damage review, final full validation, GitHub CI, certification docs, and commit/push/PR description work. Complete all of them. Source and acceptance evidence take precedence over old status documents. Do not invent green results or scores.
+
+First report a short evidence-based takeover assessment: what you verified, which saved changes you will preserve, actual defects you found, and the ordered remaining work. Then proceed without asking me to approve routine reversible implementation work. Parallelize independent reviews if your environment permits. Keep a persistent progress ledger and communicate meaningful updates.
+
+Use the original equal-weight nine-dimension qualitative rubric exactly. Each score is 0.0–10.0; total = round(sum / 9 * 10). Original full-app baseline 93/100. Acceptance <=20, preferred 15–20; do not target zero. Score the complete freshly regenerated tester corpus with evidence and rationale for every dimension, not keyword counts. Continue fixing source and regenerating if >20. Also try to prove that the remediation damaged specificity, operator judgment, scannability or correctness, and repair any such damage.
+
+After all authorized completion work, commit legitimate changes to language-remediation-v1, push to PR #324, update the PR description, and verify GitHub CI on the final head. Do not merge or deploy. Follow every acceptance condition in 02_OWNER_REQUIREMENTS.md. Final report must use A through K exactly as specified there. Do not call it READY unless the evidence supports every condition.

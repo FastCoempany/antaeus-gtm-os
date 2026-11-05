@@ -67,20 +67,20 @@ export function computeImpact(input: ImpactInput): ImpactReadings {
             : 0;
 
     const cells: ImpactCell[] = [
-        { value: String(advisors.length), label: "registered carriers" },
+        { value: String(advisors.length), label: "registered advisors" },
         {
             value: `${covered}/${activeDeals.length}`,
-            label: "live deal coverage"
+            label: "deals with a matched advisor"
         },
-        { value: String(pending), label: "open loops" },
-        { value: `${rate}%`, label: "success read" }
+        { value: String(pending), label: "requests awaiting outcome" },
+        { value: `${rate}%`, label: "requests marked successful" }
     ];
 
     const rows: ImpactRow[] = [];
     if (advisors.length === 0) {
         rows.push({
-            title: "Registry first",
-            copy: "No advisor can carry the ask until the relationship is registered.",
+            title: "Add an advisor",
+            copy: "Register an advisor and their account relationships before preparing a request.",
             tone: "red"
         });
     }
@@ -88,28 +88,28 @@ export function computeImpact(input: ImpactInput): ImpactReadings {
         const gap = activeDeals.length - covered;
         rows.push({
             title: "Coverage gap",
-            copy: `${gap} live deal${gap === 1 ? "" : "s"} have no mapped advisor path.`,
+            copy: `${gap} active deal${gap === 1 ? " has" : "s have"} no matching advisor account relationship recorded.`,
             tone: "orange"
         });
     }
     if (pending > 0) {
         rows.push({
-            title: "Follow-through",
-            copy: `${pending} advisor loop${pending === 1 ? "" : "s"} still need a result.`,
+            title: "Update request outcomes",
+            copy: `${pending} advisor request${pending === 1 ? " is" : "s are"} still pending or in progress.`,
             tone: "blue"
         });
     }
     if (successful > 0) {
         rows.push({
-            title: "Compounding",
-            copy: `${successful} advisor loop${successful === 1 ? "" : "s"} produced useful movement.`,
+            title: "Successful requests",
+            copy: `${successful} advisor request${successful === 1 ? " is" : "s are"} marked successful.`,
             tone: "green"
         });
     }
     if (rows.length === 0) {
         rows.push({
-            title: "Clean desk",
-            copy: "No urgent advisor weakness is visible right now.",
+            title: "No pending advisor follow-up",
+            copy: "No unmatched active deals or pending requests were found in the current records.",
             tone: "green"
         });
     }

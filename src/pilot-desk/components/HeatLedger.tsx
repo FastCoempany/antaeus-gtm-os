@@ -48,7 +48,7 @@ function HeatRow({ label, reading }: RowProps): JSX.Element {
             <span class="poc-heat__value">
                 {reading.value}{" "}
                 <span class={`poc-heat__band poc-heat__band--${reading.label}`}>
-                    {reading.label}
+                    {{ cast: "Mostly complete", hot: "Partly complete", warming: "Started", cold: "Incomplete" }[reading.label]}
                 </span>
             </span>
         </li>

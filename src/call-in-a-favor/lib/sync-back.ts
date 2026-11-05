@@ -79,21 +79,21 @@ function nextStepFor(
         return {
             nextStep:
                 currentNextStep ||
-                "Send advisor ask and book the follow-up thread",
+                "Send the advisor request and schedule follow-up",
             nextStepDate: currentNextStepDate || addDaysIso(now, 3)
         };
     }
     if (outcome === "engaged" || outcome === "successful") {
         return {
             nextStep:
-                "Convert advisor momentum into the next stakeholder step",
+                "Confirm the next stakeholder action following the advisor request",
             nextStepDate: addDaysIso(now, outcome === "successful" ? 2 : 3)
         };
     }
     // declined / no_response / hold / reroute
     return {
         nextStep:
-            "Choose the next leverage path without waiting on this advisor thread",
+            "Choose another contact or action after reviewing the advisor request outcome",
         nextStepDate: addDaysIso(now, 4)
     };
 }

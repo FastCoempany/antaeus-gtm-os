@@ -91,7 +91,7 @@ describe("getCooldownStatus", () => {
         ];
         const result = getCooldownStatus(adv, deps, now);
         expect(result.ok).toBe(false);
-        expect(result.label).toMatch(/^Cooling \d+d$/);
+        expect(result.label).toMatch(/^Wait \d+d before another request$/);
         expect(result.daysRemaining).toBe(25);
     });
 

@@ -8,32 +8,41 @@ import type {
     SurpriseCallout
 } from "./types";
 import { SECTION_KICKER, SECTION_TITLE } from "./types";
+import { LOSS_LABELS } from "@/deal-workspace/lib/deal-shape";
+import {
+    benchmarkFor as quotaBenchmarkFor,
+    computeMetrics as computeQuotaMetrics
+} from "@/quota-workback/lib/engine";
+import { DEFAULT_INPUTS as DEFAULT_QUOTA_INPUTS, EMPTY_COVERAGE } from "@/quota-workback/lib/types";
+import type { PlanInputs } from "@/quota-workback/lib/types";
+
+/** Plain names for Discovery segment keys (keys stay stable in storage). */
+const SEGMENT_NAME: Readonly<Record<string, string>> = {
+    "opening-frame": "Opening",
+    "current-state-truth": "How they work today",
+    "pain-and-consequence": "The problem and its cost",
+    "trigger-and-urgency": "Why now",
+    "stakeholder-and-ownership": "Who's involved",
+    "proof-threshold": "What they need to see",
+    "current-vendor-and-displacement": "Current vendor",
+    "decision-architecture": "How they'll decide",
+    "next-step-lock": "Next step",
+    "post-call-routing": "After the call"
+};
+function segmentName(key: string): string {
+    return SEGMENT_NAME[key] ?? key.replace(/-/g, " ");
+}
+function lossLabel(reason: string): string {
+    return (LOSS_LABELS as Record<string, string>)[reason] ?? reason.replace(/_/g, " ");
+}
 
 /**
- * Section authoring engines — Phase 5.B Wave 3.
+ * Sales-handoff section authoring.
  *
- * Per canon §4.19, each section produces:
- *   - 1-3 paragraphs of authored prose (NOT bullet aggregation)
- *   - concrete evidence (deal names, ICP labels, segment text)
- *   - one SURPRISE callout: the cross-room read no single room
- *     can surface alone
- *   - a status (ready / partial / empty) drawn from the underlying
- *     evidence
- *
- * The status logic is deliberately strict: a section is "ready"
- * only when there's enough underlying evidence that the authored
- * paragraph reads as truth, not as a placeholder. "Partial" means
- * there's signal but the section would mislead a hire if read as
- * complete. "Empty" means the workspace hasn't generated the
- * inputs yet.
- *
- * Total section-readiness count drives:
- *   - the topbar maturity band (N/7)
- *   - the readiness gate (Hire-ready, repeatable requires ≥5/7)
- *   - the ceremony moment trigger (set-piece on Building →
- *     Inheritable, only fires once per workspace)
+ * The underlying counts, readiness rules, and joins are unchanged. Generated
+ * prose reports what is present in the recorded sample and avoids claiming
+ * that a correlated behavior caused a win, loss, reply, or next meeting.
  */
-
 function frame(
     id: SectionId,
     status: AuthoredSection["status"],
@@ -64,6 +73,54 @@ function dealKey(d: DealRecord): string {
     return [icp || "—", persona || "—", trigger || "—"].join(" · ");
 }
 
+/** Plain channel names for outreach rows ("phone" → "Phone"). */
+function channelName(ch: string): string {
+    const known: Record<string, string> = { email: "Email", linkedin: "LinkedIn", phone: "Phone" };
+    if (ch === "—") return "Channel not recorded";
+    return known[ch.toLowerCase()] ?? ch.charAt(0).toUpperCase() + ch.slice(1);
+}
+
+/**
+ * A deal's recorded profile in plain words: "ICP: SMB, buyer: VP Sales,
+ * trigger not recorded", or "no ICP, buyer, or trigger recorded" when all
+ * three are blank. Replaces the bare "— · — · —" rows, which read like
+ * conflicting deal counts.
+ */
+function profileText(d: DealRecord): string {
+    const icp = d.icpLabel.trim();
+    const persona = d.persona.trim();
+    const trigger = d.trigger.trim();
+    if (!icp && !persona && !trigger) return "no ICP, buyer, or trigger recorded";
+    return [
+        icp ? `ICP: ${icp}` : "ICP not recorded",
+        persona ? `buyer: ${persona}` : "buyer not recorded",
+        trigger ? `trigger: ${trigger}` : "trigger not recorded"
+    ].join(", ");
+}
+
+/**
+ * Evidence rows for Section 1: one row per distinct profile, saying how
+ * many deals share it ("3 wins with no ICP, buyer, or trigger recorded").
+ */
+function profileRows(
+    deals: ReadonlyArray<DealRecord>,
+    one: string,
+    many: string,
+    limit: number
+): string[] {
+    const groups = new Map<string, { count: number; text: string }>();
+    deals.forEach((d) => {
+        const key = dealKey(d);
+        const g = groups.get(key) ?? { count: 0, text: profileText(d) };
+        g.count += 1;
+        groups.set(key, g);
+    });
+    return [...groups.values()].slice(0, limit).map((g) => {
+        const noun = plural(g.count, one, many);
+        return g.text.startsWith("no ") ? `${noun} with ${g.text}` : `${noun} · ${g.text}`;
+    });
+}
+
 function uniq<T>(arr: ReadonlyArray<T>): ReadonlyArray<T> {
     const seen = new Set<string>();
     const out: T[] = [];
@@ -81,60 +138,48 @@ function plural(n: number, one: string, many: string): string {
     return n === 1 ? `${n} ${one}` : `${n} ${many}`;
 }
 
-// ─── §1 Who hits, who misses, why ─────────────────────────────────────
+// ─── 1 · Target customers and disqualification criteria ───────────────
 
 export function authorSection1(input: SectionsInput): AuthoredSection {
     const id: SectionId = "who_hits";
     const totalClosed = input.closedWon.length + input.closedLost.length;
 
     if (input.icps.length === 0 && totalClosed === 0) {
-        return frame(
-            id,
-            "empty",
-            [],
-            [],
-            null
-        );
+        return frame(id, "empty", [], [], null);
     }
 
     if (input.icps.length === 0 || totalClosed < 2) {
         const body =
             input.icps.length > 0
                 ? [
-                      `You've named ${plural(input.icps.length, "ICP", "ICPs")} but the workspace hasn't closed enough deals yet to confirm or contradict them. The first hire would inherit a hypothesis, not a pattern.`
+                      `You've defined ${plural(input.icps.length, "ICP", "ICPs")}, but only ${plural(totalClosed, "closed deal is", "closed deals are")} recorded. That is not enough outcome history to confirm or contradict them yet, so a new hire would inherit a starting guess, not a tested pattern.`
                   ]
                 : [
-                      `You've closed ${plural(totalClosed, "deal", "deals")} without a named ICP. The workspace is going on instinct — repeatable for you, not transferable to a hire.`
+                      `${plural(totalClosed, "closed deal is", "closed deals are")} recorded without a named ICP. You may know who buys, but a new hire would have no explicit targeting definition to work from. Save one in ICP Studio before they start.`
                   ];
         return frame(id, "partial", body, [], null);
     }
 
-    // Ready path — we have ICPs AND ≥2 closed deals.
     const wonKeys = input.closedWon.map(dealKey);
     const lostKeys = input.closedLost.map(dealKey);
+    const wonPatterns = uniq(wonKeys);
+    const lostPatterns = uniq(lostKeys);
 
-    const wonPatterns = uniq(wonKeys).slice(0, 3);
-    const lostPatterns = uniq(lostKeys).slice(0, 3);
-
-    const body: string[] = [];
-    body.push(
-        `Out of ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, the pattern that closes is concrete — ${plural(wonPatterns.length, "shape", "shapes")} of customer.`
-    );
+    const body: string[] = [
+        `Across ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, the deals you won fall into ${plural(wonPatterns.length, "distinct customer profile", "distinct customer profiles")} (by ICP, buyer, and trigger). Point the new hire's prospecting at those first.`
+    ];
     if (lostPatterns.length > 0) {
         body.push(
-            `The losses are not random either — ${plural(lostPatterns.length, "shape", "shapes")} of customer never gets to yes here. A hire should know to disqualify these on intake.`
+            `The deals you lost fall into ${plural(lostPatterns.length, "distinct profile", "distinct profiles")}. Teach the new hire to screen for these at intake and qualify out early when one shows up. The sample is small, so treat this as an early warning sign; it does not show that the profile caused the loss.`
         );
     }
 
     const evidence: string[] = [];
-    wonPatterns.forEach((p, i) => {
-        evidence.push(`Won ${i + 1} · ${p}`);
-    });
-    lostPatterns.forEach((p, i) => {
-        evidence.push(`Lost ${i + 1} · ${p}`);
-    });
+    // One row per distinct profile, each saying how many deals share it,
+    // so the rows add up to the win/loss counts in the summary above.
+    evidence.push(...profileRows(input.closedWon, "win", "wins", 3));
+    evidence.push(...profileRows(input.closedLost, "loss", "losses", 3));
 
-    // SURPRISE: stated ICP vs actual close pattern mismatch.
     const statedIcpNames = input.icps.map((i) => i.name.toLowerCase().trim());
     const actualIcpLabels = input.closedWon
         .map((d) => d.icpLabel.toLowerCase().trim())
@@ -145,40 +190,35 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
         )
     );
     const matchRatio =
-        actualIcpLabels.length === 0
-            ? 1
-            : matched.length / actualIcpLabels.length;
+        actualIcpLabels.length === 0 ? 1 : matched.length / actualIcpLabels.length;
 
     let surprise: SurpriseCallout | null = null;
     if (statedIcpNames.length > 0 && actualIcpLabels.length > 0 && matchRatio < 0.5) {
         const off = Math.round((1 - matchRatio) * 100);
         surprise = {
             tone: "corrective",
-            headline: "Your stated ICP doesn't match who actually closes.",
-            body: `${off}% of closed-won deals don't match any of your named ICPs. The buyer you say you're going after and the buyer who actually buys are two different shapes. Worth sharpening before the new hire inherits the wrong target.`
+            headline: "Your stated ICP does not match who actually buys.",
+            body: `${off}% of closed-won deals with an ICP label do not match any ICP you've named. Make the ICP more specific (or fix how past deals were labeled) before the new hire starts prospecting against the wrong target.`
         };
-    } else if (matchRatio >= 0.8) {
+    } else if (matchRatio >= 0.8 && actualIcpLabels.length > 0) {
         surprise = {
             tone: "affirming",
-            headline: "Your stated ICP is also your actual ICP.",
-            body: `Closed-won deals match the ICPs you've named. The hire inherits a clear target — keep it that way.`
+            headline: "Your stated ICP matches who actually buys.",
+            body: `${Math.round(matchRatio * 100)}% of closed-won deals with an ICP label match an ICP you've named. The new hire inherits a clear target. Keep labeling new deals so it stays that way.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §2 The rails that worked ─────────────────────────────────────────
+// ─── 2 · Outreach patterns associated with responses ──────────────────
 
 export function authorSection2(input: SectionsInput): AuthoredSection {
     const id: SectionId = "rails_that_worked";
     const totalReach = input.touches.length + input.cues.length + input.coldCalls.length;
 
-    if (totalReach === 0) {
-        return frame(id, "empty", [], [], null);
-    }
+    if (totalReach === 0) return frame(id, "empty", [], [], null);
 
-    // Tally by channel.
     const channelCounts = new Map<string, { sent: number; replied: number }>();
     function bumpChannel(ch: string, replied: boolean): void {
         const key = ch || "—";
@@ -191,13 +231,20 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
         bumpChannel(t.channel, t.outcome === "replied" || t.outcome === "meeting_booked")
     );
     input.cues.forEach((c) =>
-        bumpChannel("linkedin", c.outcome === "replied" || c.outcome === "meeting_booked" || c.outcome === "accepted")
+        bumpChannel(
+            "linkedin",
+            c.outcome === "replied" ||
+                c.outcome === "meeting_booked" ||
+                c.outcome === "accepted"
+        )
     );
     input.coldCalls.forEach((c) =>
-        bumpChannel("phone", c.outcome === "meeting_booked" || c.outcome === "callback_scheduled")
+        bumpChannel(
+            "phone",
+            c.outcome === "meeting_booked" || c.outcome === "callback_scheduled"
+        )
     );
 
-    // Best channel ranked by reply rate (min 3 sends to qualify).
     const ranked = [...channelCounts.entries()]
         .filter(([, v]) => v.sent >= 3)
         .map(([ch, v]) => ({
@@ -213,45 +260,38 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(totalReach, "touch", "touches")} sent across channels — not enough volume yet to know which rail moves people. A hire would be guessing too.`
+                `${plural(totalReach, "outreach activity is", "outreach activities are")} recorded. There is not yet enough channel volume for a useful comparison of observed response rates.`
             ],
             [],
             null
         );
     }
 
-    const top = ranked[0];
-    const body: string[] = [];
-    body.push(
-        `${top.channel} is the channel that earns replies here. ${top.replied} replies on ${top.sent} sends — a ${Math.round(top.rate * 100)}% rate. The hire should start there and prove every other channel.`
-    );
+    const top = ranked[0]!;
+    const body: string[] = [
+        `${channelName(top.channel)} has the best observed response rate so far: ${top.replied} responses on ${top.sent} recorded attempts (${Math.round(top.rate * 100)}%). Start the new hire on that channel and have them test the others against it.`
+    ];
 
-    // Best send-line (longest non-empty + replied outcome).
     const bestLines = input.touches
-        .filter(
-            (t) =>
-                t.outcome === "replied" ||
-                t.outcome === "meeting_booked"
-        )
+        .filter((t) => t.outcome === "replied" || t.outcome === "meeting_booked")
         .map((t) => t.sendLine.trim())
         .filter((s) => s.length > 0);
     if (bestLines.length > 0) {
         body.push(
-            `The lines that worked share a tone — short, specific, named. Not generic.`
+            `The messages below got a reply or a booked meeting. Have the new hire start from these instead of writing from scratch. The sample is small, so keep measuring; a reply doesn't prove the wording was the reason.`
         );
     }
 
     const evidence: string[] = [];
     ranked.slice(0, 3).forEach((r) => {
         evidence.push(
-            `${r.channel} · ${r.replied}/${r.sent} replied · ${Math.round(r.rate * 100)}%`
+            `${channelName(r.channel)}: ${plural(r.replied, "response", "responses")} from ${plural(r.sent, "attempt", "attempts")} (${Math.round(r.rate * 100)}%)`
         );
     });
     bestLines.slice(0, 2).forEach((line) => {
-        evidence.push(`Worked: "${trim(line, 90)}"`);
+        evidence.push(`Got a response: "${trim(line, 90)}"`);
     });
 
-    // SURPRISE: rails not yet tried.
     const triedChannels = new Set(channelCounts.keys());
     const expected = ["email", "linkedin", "phone"];
     const untried = expected.filter((c) => !triedChannels.has(c));
@@ -259,21 +299,21 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
     if (untried.length > 0 && totalReach >= 10) {
         surprise = {
             tone: "corrective",
-            headline: `You've never tried ${untried.join(" or ")} — the rail might already exist.`,
-            body: `Every account in your workspace has been touched on a single channel family. The hire shouldn't have to guess if the unused channels would work — give them a 10-touch pilot and a kill rule.`
+            headline: `You haven't tried ${untried.join(" or ")} yet.`,
+            body: `Every recorded attempt used the other channels, so nobody knows yet whether ${untried.join(" or ")} would work. Don't leave the new hire guessing: give them a 10-message test with a stop rule (for example, stop if none of the 10 gets a reply).`
         };
     } else if (untried.length === 0) {
         surprise = {
             tone: "affirming",
-            headline: "You've stress-tested every channel.",
-            body: `Email, LinkedIn, and phone all have enough sends to compare. The hire inherits a real channel mix, not a hunch.`
+            headline: "You've tested email, LinkedIn, and phone.",
+            body: `All three channels have recorded activity, so the new hire inherits a real comparison of what gets responses instead of a guess.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §3 The questions that won the next meeting ────────────────────
+// ─── 3 · Discovery patterns associated with progression ───────────────
 
 export function authorSection3(input: SectionsInput): AuthoredSection {
     const id: SectionId = "questions_that_earned";
@@ -281,8 +321,6 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
     const stats = input.discoveryStats;
     const worked = input.discoveryWorked;
 
-    // No discovery activity anywhere (no logged calls, no worked threads,
-    // no planned agenda, no stats).
     if (
         calls.length === 0 &&
         !stats &&
@@ -292,16 +330,12 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         return frame(id, "empty", [], [], null);
     }
 
-    // Precise path: per-call records exist (Discovery Studio's per-call
-    // log). We can name which threads earn advances and which recent
-    // calls skipped them — the full §4.19 intent.
     if (calls.length > 0) {
         const advancedCalls = calls.filter((c) => c.disposition === "advanced");
         const totalLogged = calls.length;
         const advancedCount = advancedCalls.length;
         const advanceRate = Math.round((advancedCount / totalLogged) * 100);
 
-        // Count how often each segment shows up on advancing calls.
         const advancingSegmentCounts = new Map<string, number>();
         advancedCalls.forEach((c) =>
             c.segmentKeysWorked.forEach((seg) => {
@@ -315,29 +349,24 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
             (a, b) => b[1] - a[1]
         );
 
-        const body: string[] = [];
-        body.push(
-            `${plural(totalLogged, "discovery call", "discovery calls")} logged, ${advancedCount} of which won the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
-        );
+        const body: string[] = [
+            `${plural(totalLogged, "discovery call is", "discovery calls are")} logged. ${advancedCount} advanced to a next meeting, an observed advance rate of ${advanceRate}%.`
+        ];
         if (advancingSegments.length > 0) {
             const top = advancingSegments[0]!;
             const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
             body.push(
-                `The thread that shows up on more advancing calls than any other is "${top[0]}" — pulled on ${topShare}% of the calls that won a next meeting. That's the one to teach Monday morning.`
+                `"${segmentName(top[0])}" comes up on ${topShare}% of the calls that advanced, more than any other part of the call. Teach that question first on Monday. It's a pattern in your calls so far; it does not show that the question caused the advance.`
             );
         }
 
-        const evidence: string[] = [];
-        evidence.push(
-            `${advancedCount} of ${totalLogged} calls advanced · ${advanceRate}%`
-        );
+        const evidence: string[] = [
+            `${advancedCount} of ${totalLogged} calls recorded as advanced · ${advanceRate}%`
+        ];
         advancingSegments.slice(0, 5).forEach(([seg, count]) => {
-            evidence.push(`${seg} · ${count} advancing calls`);
+            evidence.push(`${segmentName(seg)} · covered on ${count} calls that advanced`);
         });
 
-        // SURPRISE: segments that USED to earn advances but the most-recent
-        // calls SKIPPED — the canon §4.19 "questions the operator stopped
-        // asking" callout.
         const recentCalls = [...calls]
             .sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso))
             .slice(0, 5);
@@ -352,44 +381,41 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
         if (droppedSegments.length > 0 && advancedCount > 0) {
             surprise = {
                 tone: "corrective",
-                headline: `You've stopped asking the questions that used to advance deals.`,
-                body: `${plural(droppedSegments.length, "thread", "threads")} won advances on prior calls but didn't appear in any of your last 5 calls: ${droppedSegments.slice(0, 3).join(", ")}. Worth re-introducing before the hire absorbs the new pattern.`
+                headline: "You've stopped asking questions that used to come up on calls that advanced.",
+                body: `${plural(droppedSegments.length, "part of the call", "parts of the call")} came up on earlier calls that advanced but not in your last five calls: ${droppedSegments.slice(0, 3).map(segmentName).join(", ")}. Unless you dropped them on purpose, bring them back before the new hire learns the thinner version.`
             };
         } else if (advancedCount === 0) {
             surprise = {
                 tone: "corrective",
-                headline: `Discovery is happening, but it isn't moving deals.`,
-                body: `${plural(totalLogged, "call", "calls")} logged and not one won a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+                headline: "No logged discovery call currently has an advanced outcome.",
+                body: `${plural(totalLogged, "call is", "calls are")} logged and none led to a next meeting. Find what the calls keep missing (often who owns the problem, or a dated next step) before the new hire copies the approach.`
             };
         } else if (advanceRate < 33) {
             surprise = {
                 tone: "corrective",
-                headline: `Most discovery calls aren't advancing.`,
-                body: `Only ${advanceRate}% of logged calls earn the next meeting. The threads that move a deal aren't being pulled consistently — worth tightening before the hire learns the loose version.`
+                headline: "Fewer than one third of logged discovery calls are recorded as advanced.",
+                body: `Only ${advanceRate}% of logged calls led to a next meeting. Compare the calls that advanced with the ones that didn't, and tighten the questions and the next-step ask before the new hire learns the loose version.`
             };
         } else if (advanceRate >= 60) {
             surprise = {
                 tone: "affirming",
-                headline: `Your discovery calls advance more often than not.`,
-                body: `A ${advanceRate}% advance rate is a real pattern. Whatever threads you're pulling, the hire should copy them exactly.`
+                headline: "Most logged discovery calls are recorded as advanced.",
+                body: `${advanceRate}% of logged calls led to a next meeting. Write down how you run these calls so the new hire can copy them closely.`
             };
         }
 
         return frame(id, "ready", body, evidence, surprise);
     }
 
-    // Aggregate fallback path: no per-call records, but the room has
-    // stats / worked-set data. Coarser, but still honest.
     const totalCalls = stats?.totalCalls ?? 0;
     const advancedCalls = stats?.advancedCalls ?? 0;
 
-    // An agenda is planned but no completed discovery calls are logged yet.
     if (totalCalls === 0) {
         return frame(
             id,
             "partial",
             [
-                `Discovery is being planned but no completed calls are logged yet. The hire would inherit an agenda, not a track record of what actually earns the next meeting.`
+                `Discovery is planned, but no completed discovery calls are logged yet. A new hire would inherit an agenda without outcome history. Log your next few calls so they can see what gets the next meeting.`
             ],
             [],
             null
@@ -397,50 +423,45 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
     }
 
     const advanceRate = Math.round((advancedCalls / totalCalls) * 100);
-
-    const body: string[] = [];
-    body.push(
-        `${plural(totalCalls, "discovery call", "discovery calls")} logged, ${advancedCalls} of which won the next meeting — a ${advanceRate}% advance rate. The hire's job is to hold or beat that line.`
-    );
+    const body: string[] = [
+        `${plural(totalCalls, "discovery call is", "discovery calls are")} logged. ${advancedCalls} advanced to a next meeting, an observed advance rate of ${advanceRate}%.`
+    ];
     if (worked.length > 0) {
         body.push(
-            `Across those calls you keep pulling ${plural(worked.length, "discovery thread", "discovery threads")}. The hire should learn the ones you lean on before improvising new ones.`
+            `You keep coming back to ${plural(worked.length, "part of the discovery call", "parts of the discovery call")}. Teach the new hire those first before they improvise new ones, and log calls one by one so you can see which parts show up on calls that advance.`
         );
     }
 
-    const evidence: string[] = [];
-    evidence.push(
-        `${advancedCalls} of ${totalCalls} calls advanced · ${advanceRate}%`
-    );
-    worked.slice(0, 6).forEach((seg) => {
-        evidence.push(`Thread worked · ${seg}`);
-    });
+    const evidence: string[] = [
+        `${advancedCalls} of ${totalCalls} calls recorded as advanced · ${advanceRate}%`
+    ];
+    worked.slice(0, 6).forEach((seg) => evidence.push(`Recorded segment · ${seg}`));
 
     let surprise: SurpriseCallout | null = null;
     if (advancedCalls === 0) {
         surprise = {
             tone: "corrective",
-            headline: `Discovery is happening, but it isn't moving deals.`,
-            body: `${plural(totalCalls, "call", "calls")} logged and not one has won a next meeting. Worth figuring out which thread the calls keep missing before the hire arrives.`
+            headline: "No logged discovery call currently has an advanced outcome.",
+            body: `${plural(totalCalls, "call is", "calls are")} logged and none led to a next meeting. Find what the calls keep missing before the new hire copies the approach.`
         };
     } else if (advanceRate < 33) {
         surprise = {
             tone: "corrective",
-            headline: `Most discovery calls aren't advancing.`,
-            body: `Only ${advanceRate}% of logged calls earn the next meeting. The threads that move a deal aren't being pulled consistently — worth tightening before the hire learns the loose version.`
+            headline: "Fewer than one third of logged discovery calls are recorded as advanced.",
+            body: `Only ${advanceRate}% of logged calls led to a next meeting. Tighten the questions and the next-step ask before the new hire learns the loose version.`
         };
     } else if (advanceRate >= 60) {
         surprise = {
             tone: "affirming",
-            headline: `Your discovery calls advance more often than not.`,
-            body: `A ${advanceRate}% advance rate is a real pattern. Whatever threads you're pulling, the hire should copy them exactly.`
+            headline: "Most logged discovery calls are recorded as advanced.",
+            body: `${advanceRate}% of logged calls led to a next meeting. Write down how you run these calls so the new hire can copy them closely.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §4 Where deals are won + where they leak ─────────────────────────
+// ─── 4 · Where deals tend to advance or stall ─────────────────────────
 
 export function authorSection4(input: SectionsInput): AuthoredSection {
     const id: SectionId = "won_and_leaked";
@@ -455,20 +476,19 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(input.openDeals.length, "open deal", "open deals")} with ${plural(totalClosed, "close", "closes")}. Need more closes to draw a real funnel — currently the workspace is teaching the funnel, not reading it.`
+                `${plural(input.openDeals.length, "open deal is", "open deals are")} recorded with only ${plural(totalClosed, "closed deal", "closed deals")}. That is not enough closed-deal history to show where deals tend to stall yet.`
             ],
             [],
             null
         );
     }
 
-    // Reverse-engineer a stage map from the deals we have.
     const stageStops = new Map<
         string,
         { exited: number; advanced: number; lost: number; won: number }
     >();
     function bumpStage(stage: string, kind: "lost" | "won"): void {
-        const key = (stage || "—").toLowerCase();
+        const key = (stage || "stage before loss not recorded").toLowerCase();
         const cur =
             stageStops.get(key) ??
             { exited: 0, advanced: 0, lost: 0, won: 0 };
@@ -478,34 +498,51 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         stageStops.set(key, cur);
     }
     input.closedLost.forEach((d) =>
-        bumpStage(d.stage === "closed-lost" ? "—" : d.stage, "lost")
+        bumpStage(d.stage === "closed-lost" ? "" : d.stage, "lost")
     );
     input.closedWon.forEach(() => bumpStage("closed-won", "won"));
 
+    // Count each Call in a Favor request against the same stage key the
+    // closed-deal rows use, and tally the ones on open (or unmatched)
+    // deals separately, so the body's total and the rows describe the
+    // same set of requests.
     const advisorByStage = new Map<string, number>();
+    let advisorOnOpen = 0;
+    let advisorUnmatched = 0;
+    const sameAccount = (name: string) => (d: DealRecord) =>
+        d.accountName.toLowerCase() === name.toLowerCase();
     input.advisorDeployments.forEach((dep) => {
-        // We don't have stage on the deployment record itself — so we
-        // look at the deal it's attached to.
-        const deal = [...input.openDeals, ...input.closedWon, ...input.closedLost].find(
-            (d) => d.accountName.toLowerCase() === dep.accountName.toLowerCase()
-        );
-        if (!deal) return;
-        const k = deal.stage.toLowerCase();
-        advisorByStage.set(k, (advisorByStage.get(k) ?? 0) + 1);
+        const won = input.closedWon.find(sameAccount(dep.accountName));
+        const lost = won ? undefined : input.closedLost.find(sameAccount(dep.accountName));
+        let k: string | null = null;
+        if (won) k = "closed-won";
+        else if (lost) k = ((lost.stage === "closed-lost" ? "" : lost.stage) || "stage before loss not recorded").toLowerCase();
+        if (k) {
+            advisorByStage.set(k, (advisorByStage.get(k) ?? 0) + 1);
+        } else if (input.openDeals.some(sameAccount(dep.accountName))) {
+            advisorOnOpen += 1;
+        } else {
+            advisorUnmatched += 1;
+        }
     });
+    const advisorOnClosed = input.advisorDeployments.length - advisorOnOpen - advisorUnmatched;
 
     const winRate =
         totalClosed > 0
             ? Math.round((input.closedWon.length / totalClosed) * 100)
             : 0;
 
-    const body: string[] = [];
-    body.push(
-        `Win rate is ${winRate}% across ${plural(totalClosed, "close", "closes")}. The losses cluster by stage — that's where the leak is, and that's where a hire's first 30-day diagnosis should focus.`
-    );
+    const body: string[] = [
+        `The recorded closed-deal sample contains ${plural(input.closedWon.length, "win", "wins")} and ${plural(input.closedLost.length, "loss", "losses")}, an observed win rate of ${winRate}%. Look at which stage the lost deals stopped at: that's where the new hire's first 30 days of diagnosis should focus. The stage shows where deals stopped; it does not establish why they were lost.`
+    ];
     if (input.advisorDeployments.length > 0) {
+        const where = [
+            `${advisorOnClosed} on closed deals (counted in the stage rows below)`,
+            `${advisorOnOpen} on open deals`
+        ];
+        if (advisorUnmatched > 0) where.push(`${advisorUnmatched} not matched to a recorded deal`);
         body.push(
-            `Advisor leverage has been deployed ${plural(input.advisorDeployments.length, "time", "times")}. The hire should know which stage benefits most — and which stage you've been trying to brute-force without backup.`
+            `${plural(input.advisorDeployments.length, "Call in a Favor request is", "Call in a Favor requests are")} recorded: ${where.join(", ")}. Tell the new hire which stages that help made a difference at, and which stages you've been pushing through alone.`
         );
     }
 
@@ -516,15 +553,14 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
         .forEach(([stage, v]) => {
             const advisorCount = advisorByStage.get(stage) ?? 0;
             evidence.push(
-                `${stage} · ${v.won} won · ${v.lost} lost · ${advisorCount} advisor moves`
+                `${stage} · ${v.won} won · ${v.lost} lost · ${plural(advisorCount, "Call in a Favor request", "Call in a Favor requests")}`
             );
         });
 
-    // SURPRISE: leaky stage callout with advisor coverage gap.
     let leakyStage: string | null = null;
     let leakyLossCount = 0;
     [...stageStops.entries()].forEach(([stage, v]) => {
-        if (v.lost > leakyLossCount && v.lost >= 2) {
+        if (stage !== "stage before loss not recorded" && v.lost > leakyLossCount && v.lost >= 2) {
             leakyStage = stage;
             leakyLossCount = v.lost;
         }
@@ -533,31 +569,24 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
     if (leakyStage && (advisorByStage.get(leakyStage) ?? 0) === 0) {
         surprise = {
             tone: "corrective",
-            headline: `The stage that loses most has zero advisor coverage.`,
-            body: `${leakyLossCount} losses in "${leakyStage}" — not one of them got an advisor deployed before close. The hire should treat this stage as the rule: anyone reaching ${leakyStage} gets a backchannel touch within 48 hours.`
+            headline: "The stage where you lose the most deals has no outside help logged.",
+            body: `${leakyLossCount} losses stopped at "${leakyStage}," and none had a Call in a Favor request. Have the new hire test whether outside support helps there: when a deal reaches ${leakyStage}, ask an investor, advisor, or happy customer to put in a word within 48 hours.`
         };
     } else if (input.advisorDeployments.length === 0 && totalClosed >= 3) {
         surprise = {
             tone: "corrective",
-            headline: `You've never spent advisor leverage. That's free pipeline left on the table.`,
-            body: `${input.closedWon.length} wins and ${input.closedLost.length} losses without a single advisor touch logged. The hire shouldn't inherit the same blindspot — give them a rolodex on day one.`
+            headline: "You haven't asked your network for help on any deal yet.",
+            body: `${input.closedWon.length} wins and ${input.closedLost.length} losses are recorded without a Call in a Favor request. Your investors, advisors, and happy customers are an untested way to move stuck deals. Give the new hire a list of who to ask on day one.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §5 The losses we paid for ────────────────────────────────────────
+// ─── 5 · Loss patterns ─────────────────────────────────────────────────
 
 export function authorSection5(input: SectionsInput): AuthoredSection {
     const id: SectionId = "losses_paid_for";
-    // Future Autopsy persists task completion, not a verdict — the room
-    // regenerates verdict / kill-switch / cause at render time from the
-    // deal, and none of that is durable. So §5 leans on what IS durable:
-    // the loss + its reason (from closed-lost deals) and the commitments
-    // the operator wrote down (checked autopsy tasks). A loss counts as
-    // "examined" when its autopsy carries ≥1 checked task — or, for legacy
-    // data, an explicit "corrected" verdict.
     const examined = input.autopsies.filter(
         (a) => a.verdict === "corrected" || a.tasks.some((t) => t.checked)
     );
@@ -571,41 +600,29 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
             id,
             "partial",
             [
-                `${plural(input.closedLost.length, "loss", "losses")} on record, but none have been through a forensic step. Losses without a postmortem become folklore — the hire would inherit the folklore, not the lesson.`
+                `${plural(input.closedLost.length, "loss is", "losses are")} recorded, but no deal-risk review has a corrected assessment or completed corrective action. Run a review in Future Autopsy on the most recent loss and write down what not to repeat; that is the lesson a new hire needs most.`
             ],
             [],
             null
         );
     }
 
-    // Resolve each examined autopsy to its lost deal (the autopsy log is
-    // keyed by deal id) so we can show the real account + loss reason.
     const lostById = new Map<string, DealRecord>();
     input.closedLost.forEach((d) => lostById.set(d.id, d));
 
-    // Per-deal autopsy snapshots (verdict + top cause + walk-away point).
-    // Future Autopsy regenerates these at render time when the operator
-    // pins a deal; the snapshot key is the durable record. Joined by
-    // dealId so §5 can show what the autopsy actually said.
     const snapshotById = new Map<string, AutopsySnapshotRecord>();
-    input.autopsySnapshots.forEach((snap) =>
-        snapshotById.set(snap.dealId, snap)
-    );
+    input.autopsySnapshots.forEach((snap) => snapshotById.set(snap.dealId, snap));
 
-    const body: string[] = [];
-    body.push(
-        `${plural(examined.length, "loss", "losses")} the workspace actually examined — the ones where you ran the postmortem and wrote down what not to repeat. These are the lessons the hire should read first.`
-    );
+    const body: string[] = [
+        `${plural(examined.length, "deal-risk review has", "deal-risk reviews have")} a corrected assessment or at least one completed corrective action: the cases where you wrote down what not to repeat. Have the new hire read these first. These reviews may include open deals, not just losses.`
+    ];
     const killCount = examined.filter((a) => a.killSwitchFired).length;
     if (killCount > 0) {
         body.push(
-            `${plural(killCount, "deal", "deals")} also hit the moment where the right move was to walk — the moment something irrecoverable showed up and the right move was to walk. The hire needs the same instinct.`
+            `${plural(killCount, "review met", "reviews met")} your criteria for walking away from the deal. Teach the new hire to spot that point and walk away instead of spending more time on a deal that can't be saved.`
         );
     }
 
-    // If snapshots are present, also surface the most common top-cause
-    // across examined deals — that's the lesson the hire should expect
-    // to inherit.
     const causeCounts = new Map<string, number>();
     examined.forEach((a) => {
         const label = snapshotById.get(a.dealId)?.topCauseLabel;
@@ -613,13 +630,11 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
             causeCounts.set(label, (causeCounts.get(label) ?? 0) + 1);
         }
     });
-    const sortedCauses = [...causeCounts.entries()].sort(
-        (a, b) => b[1] - a[1]
-    );
+    const sortedCauses = [...causeCounts.entries()].sort((a, b) => b[1] - a[1]);
     if (sortedCauses.length > 0 && sortedCauses[0]![1] >= 2) {
         const [top, count] = sortedCauses[0]!;
         body.push(
-            `The cause that comes up most often across examined losses is "${top}" — it shows up on ${count} of ${examined.length}. The hire should expect this one before they ever see it.`
+            `"${top}" is the most common top risk in these reviews, on ${count} of ${examined.length}. Have the new hire check for it early on every deal. It's a small sample, so treat it as a warning sign, not the known cause of the losses.`
         );
     }
 
@@ -627,118 +642,98 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
     examined.slice(0, 5).forEach((a) => {
         const deal = lostById.get(a.dealId);
         const snap = snapshotById.get(a.dealId);
-        const account = deal?.accountName || a.accountName || a.dealId;
+        const account = deal?.accountName || a.accountName || "An unnamed deal";
         const reason = deal?.lossReason
-            ? trim(deal.lossReason, 50)
+            ? trim(lossLabel(deal.lossReason), 50)
             : snap?.topCauseLabel
               ? trim(snap.topCauseLabel, 50)
               : "no reason logged";
         const doneCount = a.tasks.filter((t) => t.checked).length;
         evidence.push(
-            `${account} · ${reason} · ${plural(doneCount, "commitment", "commitments")}`
+            `${account} · ${reason} · ${plural(doneCount, "corrective action", "corrective actions")}`
         );
     });
 
-    // SURPRISE: cross-reference loss reasons with current open deals.
     const lostReasons = input.closedLost
         .map((d) => d.lossReason.toLowerCase().trim())
         .filter((r) => r.length > 0);
-    const openMatches: string[] = [];
+    const openMatches = new Set<string>();
     input.openDeals.forEach((d) => {
         const next = d.nextStep.toLowerCase();
         const trigger = d.trigger.toLowerCase();
-        const acct = d.accountName;
         lostReasons.forEach((reason) => {
             const reasonWords = reason.split(/\s+/).filter((w) => w.length > 4);
-            if (
-                reasonWords.some(
-                    (w) => next.includes(w) || trigger.includes(w)
-                )
-            ) {
-                openMatches.push(`${acct} · matches "${trim(reason, 50)}"`);
+            if (reasonWords.some((w) => next.includes(w) || trigger.includes(w))) {
+                openMatches.add(d.id);
             }
         });
     });
     let surprise: SurpriseCallout | null = null;
-    if (openMatches.length > 0) {
+    if (openMatches.size > 0) {
         surprise = {
             tone: "corrective",
-            headline: `Open deals are showing the symptoms of past losses.`,
-            body: `${plural(openMatches.length, "open deal matches", "open deals match")} a closed-loss reason word-for-word. The same trap is still in front of you. Worth surfacing before the hire walks them straight into it.`
+            headline: "Some open deals look like deals you've lost before.",
+            body: `${plural(openMatches.size, "open deal has", "open deals have")} a keyword overlap between its next step or trigger and a past loss reason. Check those deals this week, before the new hire inherits them. It is a word match, not evidence that the same loss is repeating, so confirm the risk is real.`
         };
     } else if (examined.length >= 3) {
         surprise = {
             tone: "affirming",
-            headline: "Your losses are documented and disjoint from current pipeline.",
-            body: `Past losses don't pattern-match anything currently open. The forensic discipline is paying off.`
+            headline: "No open deal looks like a past loss.",
+            body: `None of your open deals' next steps or triggers share words with a past loss reason. Keep running deal-risk reviews; a word check won't catch everything.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §6 Why we win ────────────────────────────────────────────────────
+// ─── 6 · Win patterns ──────────────────────────────────────────────────
 
 export function authorSection6(input: SectionsInput): AuthoredSection {
     const id: SectionId = "why_we_win";
 
-    if (input.closedWon.length === 0) {
-        return frame(id, "empty", [], [], null);
-    }
+    if (input.closedWon.length === 0) return frame(id, "empty", [], [], null);
 
     if (input.closedWon.length === 1) {
-        const w = input.closedWon[0];
+        const w = input.closedWon[0]!;
         return frame(
             id,
             "partial",
             [
-                `One win is an anecdote. ${w.accountName || "The deal"} closed — that's a story, not a pattern. The hire needs more wins before "why we win" can be more than a single trace.`
+                `One closed-won deal is recorded. ${w.accountName || "The deal"} is a useful story, but one outcome is not enough to infer a repeatable win pattern. The new hire needs a few more wins before "why we win" can be trusted.`
             ],
-            [`${w.accountName} · ${dealKey(w)}`],
+            [`${w.accountName || "(unnamed)"}: ${profileText(w)}`],
             null
         );
     }
 
-    // Find shared traits.
     const personaCounts = new Map<string, number>();
     const triggerCounts = new Map<string, number>();
-    const icpCounts = new Map<string, number>();
     input.closedWon.forEach((d) => {
-        if (d.persona)
-            personaCounts.set(d.persona, (personaCounts.get(d.persona) ?? 0) + 1);
-        if (d.trigger)
-            triggerCounts.set(d.trigger, (triggerCounts.get(d.trigger) ?? 0) + 1);
-        if (d.icpLabel)
-            icpCounts.set(d.icpLabel, (icpCounts.get(d.icpLabel) ?? 0) + 1);
+        if (d.persona) personaCounts.set(d.persona, (personaCounts.get(d.persona) ?? 0) + 1);
+        if (d.trigger) triggerCounts.set(d.trigger, (triggerCounts.get(d.trigger) ?? 0) + 1);
     });
-    const topPersona = [...personaCounts.entries()].sort(
-        (a, b) => b[1] - a[1]
-    )[0];
-    const topTrigger = [...triggerCounts.entries()].sort(
-        (a, b) => b[1] - a[1]
-    )[0];
+    const topPersona = [...personaCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+    const topTrigger = [...triggerCounts.entries()].sort((a, b) => b[1] - a[1])[0];
 
-    const body: string[] = [];
-    body.push(
-        `${plural(input.closedWon.length, "win", "wins")} on record — and they share a shape. The wins look like each other in ways the losses don't.`
-    );
+    const body: string[] = [
+        `${plural(input.closedWon.length, "closed-won deal is", "closed-won deals are")} recorded. Below is what they have in common; the new hire should look for the same things when choosing accounts. This describes traits the wins share; it does not claim those traits caused the outcomes.`
+    ];
     if (topPersona && topPersona[1] >= 2) {
         body.push(
-            `${topPersona[1]} of the ${input.closedWon.length} wins were sold to "${topPersona[0]}". That's the buyer the hire should learn to recognize on a first call.`
+            `"${topPersona[0]}" is the buyer on ${topPersona[1]} of ${input.closedWon.length} wins. Have the new hire go to that role first.`
         );
     }
     if (topTrigger && topTrigger[1] >= 2) {
         body.push(
-            `${topTrigger[1]} of the wins came in with the same trigger — "${topTrigger[0]}". This is the moment a buyer is most ready to say yes; teach the hire to spot it.`
+            `"${topTrigger[0]}" was happening at ${topTrigger[1]} of ${input.closedWon.length} won accounts. Have the new hire watch for it and reach out soon after it shows up.`
         );
     }
 
     const evidence: string[] = [];
     input.closedWon.slice(0, 5).forEach((d) => {
-        evidence.push(`${d.accountName || "(unnamed)"} · ${dealKey(d)}`);
+        evidence.push(`${d.accountName || "(unnamed)"}: ${profileText(d)}`);
     });
 
-    // SURPRISE: under-represented winning pattern in current open pipeline.
     const winningIcps = new Set(
         input.closedWon
             .map((d) => d.icpLabel.toLowerCase().trim())
@@ -748,9 +743,7 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
         .map((d) => d.icpLabel.toLowerCase().trim())
         .filter((l) => l.length > 0);
     const openIcpCounts = new Map<string, number>();
-    openIcps.forEach((l) =>
-        openIcpCounts.set(l, (openIcpCounts.get(l) ?? 0) + 1)
-    );
+    openIcps.forEach((l) => openIcpCounts.set(l, (openIcpCounts.get(l) ?? 0) + 1));
     const missingFromPipeline = [...winningIcps].filter(
         (i) => (openIcpCounts.get(i) ?? 0) === 0
     );
@@ -758,55 +751,50 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
     if (missingFromPipeline.length > 0 && input.openDeals.length > 0) {
         surprise = {
             tone: "corrective",
-            headline: `The shape that wins is missing from your current pipeline.`,
-            body: `Open deals don't include any "${missingFromPipeline[0]}" — the segment that's closed for you. The hire should know to bias new prospecting toward what's worked, not toward what's ambient.`
+            headline: "The kind of customer you win is missing from your open pipeline.",
+            body: `No current open deal is labeled "${missingFromPipeline[0]}," even though that kind of customer shows up in your wins. Unless you stepped away from it on purpose, point the new hire's prospecting there.`
         };
-    } else if (missingFromPipeline.length === 0 && input.openDeals.length > 0) {
+    } else if (winningIcps.size > 0 && missingFromPipeline.length === 0 && input.openDeals.length > 0) {
         surprise = {
             tone: "affirming",
-            headline: "Current pipeline mirrors the winning shape.",
-            body: `Every open deal lines up with an ICP that's already won here. The hire inherits a pipeline already biased toward repeat patterns.`
+            headline: "Your open pipeline matches the customers you've won.",
+            body: `Every ICP in your wins also shows up in your open deals. Keep the new hire prospecting toward the customers that have already bought.`
         };
     }
 
     return frame(id, "ready", body, evidence, surprise);
 }
 
-// ─── §7 What the first week looks like ────────────────────────────────
+// ─── 7 · First-week operating cadence ─────────────────────────────────
 
 export function authorSection7(input: SectionsInput): AuthoredSection {
     const id: SectionId = "day_one_rhythm";
 
-    if (!input.quota) {
-        return frame(id, "empty", [], [], null);
-    }
+    if (!input.quota) return frame(id, "empty", [], [], null);
 
-    const acv = input.quota.acv > 0 ? input.quota.acv : 50000;
-    const winRate = input.quota.winRate > 0 ? input.quota.winRate : 0.2;
-    const dealsNeeded = Math.ceil(input.quota.quota / acv);
-    const oppsNeeded = Math.ceil(dealsNeeded / winRate);
-    const meetingsPerWeek = Math.max(2, Math.round(oppsNeeded / 26));
-    const touchesPerDay = input.quota.touchesPerDay ?? Math.max(8, meetingsPerWeek * 6);
+    // Run Quota Workback's own engine over the same plan inputs the Quota
+    // room uses, so this section states the same daily outreach, first
+    // meetings, opportunities, and deals. (It used to compute its own
+    // annual fallback — e.g. "12 a day" and "2 meetings a week" while the
+    // Quota room said 48 a day and 15 first meetings a month.)
+    const plan = quotaPlanFor(input.quota);
+    const metrics = computeQuotaMetrics(plan, EMPTY_COVERAGE);
+    const touchesPerDay = metrics.touchesDay;
 
-    const body: string[] = [];
-    body.push(
-        `The math says ${dealsNeeded} deals to hit the number. At the current win rate, that's ${oppsNeeded} qualified opportunities — about ${meetingsPerWeek} discovery meetings a week, every week, for the year.`
-    );
-    body.push(
-        `That backsolves to ${touchesPerDay} touches a day. The day-one rhythm: Monday top-3 risks on the dashboard, Tuesday is outbound day, Wednesday discovery prep + calls, Thursday recovery on stalled deals, Friday next-week setup.`
-    );
-
-    const evidence: string[] = [
-        `Annual quota: $${input.quota.quota.toLocaleString()}`,
-        `Average ACV: $${acv.toLocaleString()}`,
-        `Win rate: ${Math.round(winRate * 100)}%`,
-        `Deals needed: ${dealsNeeded}`,
-        `Touches per day: ${touchesPerDay}`,
-        `Meetings per week: ${meetingsPerWeek}`
+    const body: string[] = [
+        `To hit the number at the current Quota Workback assumptions, you need ${plural(metrics.dealsMonth, "closed-won deal", "closed-won deals")} a month, which means about ${plural(metrics.oppsMonth, "qualified opportunity", "qualified opportunities")} and about ${metrics.meetingsMonth} first meetings a month (about ${metrics.meetingsWeek} a week).`,
+        `Daily outreach target from Quota Workback: ${touchesPerDay} messages and calls per working day. The new hire's week: Monday, review the top three deal risks on the Dashboard; Tuesday, outbound; Wednesday, discovery prep and calls; Thursday, follow up on stalled deals; Friday, update next steps and set up the next week. Adjust this starting schedule using recorded results.`
     ];
 
-    // SURPRISE: what the founder tried that didn't stick.
-    // Heuristic: look for a recent dropoff in any of the activity logs.
+    const evidence: string[] = [
+        `Annual quota: $${plan.quota.toLocaleString()}`,
+        `Average ACV: $${plan.acv.toLocaleString()}`,
+        `Win-rate assumption: ${Math.round(plan.win)}%`,
+        `Closed-won deals needed per month: ${metrics.dealsMonth}`,
+        `Messages and calls per working day: ${touchesPerDay}`,
+        `First meetings per month: ${metrics.meetingsMonth}`
+    ];
+
     const recentTouches = input.touches.filter((t) => {
         if (!t.createdAtIso) return false;
         const days = daysAgo(t.createdAtIso);
@@ -818,15 +806,11 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
         return days > 14 && days <= 60;
     });
     let surprise: SurpriseCallout | null = null;
-    if (
-        olderTouches.length >= 8 &&
-        recentTouches.length === 0 &&
-        input.touches.length > 0
-    ) {
+    if (olderTouches.length >= 8 && recentTouches.length === 0 && input.touches.length > 0) {
         surprise = {
             tone: "corrective",
-            headline: `Outbound used to be on, then went quiet.`,
-            body: `${olderTouches.length} touches in the last 60 days, none in the last 14. Whatever the rhythm was, it broke. Worth telling the hire what stopped working before they assume the cadence is voluntary.`
+            headline: "Recent outbound activity is lower than before: outreach was steady, then stopped.",
+            body: `${olderTouches.length} outbound touches are recorded from 15–60 days ago and none in the last 14 days. Tell the new hire why it stopped (and whether it was on purpose) so they don't assume the cadence is optional.`
         };
     } else if (
         recentTouches.length === 0 &&
@@ -835,8 +819,8 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     ) {
         surprise = {
             tone: "corrective",
-            headline: `The math says ${touchesPerDay}/day. Nothing has been logged this week.`,
-            body: `The plan is theoretical until it's daily. The hire shouldn't inherit a planning artifact disguised as a real week — get one full week on the board first.`
+            headline: `The plan calls for ${touchesPerDay} outreach actions a day, but none are logged recently.`,
+            body: `The plan is only on paper until it happens daily. Log one full week of real outreach before handing the plan to a new hire, so they inherit a real week, not a target.`
         };
     }
 
@@ -844,13 +828,33 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
     return frame(id, status, body, evidence, surprise);
 }
 
+/**
+ * Quota Workback plan inputs for Section 7. Prefers the inputs read with
+ * Quota Workback's own loader; otherwise fills the assumptions this bag
+ * lacks with Quota Workback's defaults (including the benchmark
+ * outreach-to-meeting rate for the deal size), as its loader does.
+ */
+function quotaPlanFor(q: NonNullable<SectionsInput["quota"]>): PlanInputs {
+    if (q.plan) return q.plan;
+    const acv = q.acv > 0 ? q.acv : DEFAULT_QUOTA_INPUTS.acv;
+    // Quota Workback stores the win rate as a whole-number percent (22);
+    // older rows may hold a fraction (0.22).
+    const win = q.winRate > 1 ? q.winRate : q.winRate > 0 ? q.winRate * 100 : DEFAULT_QUOTA_INPUTS.win;
+    return {
+        ...DEFAULT_QUOTA_INPUTS,
+        quota: q.quota,
+        acv,
+        win,
+        t2m: quotaBenchmarkFor(acv).t2m,
+        cycle: q.cycle > 0 ? q.cycle : DEFAULT_QUOTA_INPUTS.cycle
+    };
+}
+
 function daysAgo(iso: string): number {
     const t = Date.parse(iso);
     if (Number.isNaN(t)) return Infinity;
     return Math.round((Date.now() - t) / 86400000);
 }
-
-// ─── Aggregate ────────────────────────────────────────────────────────
 
 export function authorAllSections(
     input: SectionsInput
@@ -866,7 +870,6 @@ export function authorAllSections(
     ];
 }
 
-/** Helper for tests + Wave 4: how many sections passed the readiness bar? */
 export function countReady(
     sections: ReadonlyArray<AuthoredSection>
 ): { ready: number; partial: number; empty: number } {
@@ -881,5 +884,4 @@ export function countReady(
     return { ready, partial, empty };
 }
 
-// Re-export types used by this file only (for downstream test convenience).
 export type { IcpRecord };

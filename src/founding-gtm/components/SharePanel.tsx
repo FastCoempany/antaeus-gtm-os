@@ -174,12 +174,10 @@ export function SharePanel() {
                 <header class="fg-share__head">
                     <p class="fg-share__kicker">{t("SHARE THIS KIT")}</p>
                     <h2 class="fg-share__title">
-                        Sign in to share the kit with a hire
+                        {t("Sign in to share the handoff document with a new hire", { class: "body" })}
                     </h2>
                     <p class="fg-share__demo-body">
-                        Share links live in your real workspace. Demo
-                        workspaces stay on this device — there's no
-                        cloud-resident kit to share yet.
+                        {t("Sharing only works in a signed-in workspace. This demo workspace is saved on this device only, so there is nothing online to share yet.", { class: "body" })}
                     </p>
                 </header>
             </section>

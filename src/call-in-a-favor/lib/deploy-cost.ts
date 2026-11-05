@@ -76,9 +76,9 @@ export interface DoNotUseCandidate {
 
 const REASONS: Readonly<Record<DeployCost, string>> = {
     "too-expensive":
-        "Too expensive for this ask. Save board capital for a higher-stakes signal.",
+        "Consider a more directly involved contact first. This rule reserves board-level advisors for executive approval questions.",
     underpowered:
-        "Too low-leverage for this ask. The deal needs more gravity than a customer reference."
+        "A customer reference may not address this executive approval question. Consider a contact with the relevant decision-making relationship."
 };
 
 export function findDoNotUseCandidate(

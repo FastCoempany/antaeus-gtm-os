@@ -29,20 +29,20 @@ describe("getBand", () => {
 });
 
 describe("benchmarkFor", () => {
-    it("returns the right benchmark per ACV", () => {
+    it("returns the benchmark selected by typical deal size", () => {
         expect(benchmarkFor(50_000).label).toBe("Mid-Market");
         expect(benchmarkFor(100_000).label).toBe("Enterprise");
     });
 });
 
 describe("qualityBand", () => {
-    it("≥82 ready / ≥68 workable / else thin", () => {
-        expect(qualityBand(90).label).toBe("Ready now");
-        expect(qualityBand(82).label).toBe("Ready now");
-        expect(qualityBand(81).label).toBe("Workable");
-        expect(qualityBand(68).label).toBe("Workable");
-        expect(qualityBand(67).label).toBe("Thin");
-        expect(qualityBand(0).label).toBe("Thin");
+    it("labels score bands as benchmark alignment, not sales readiness", () => {
+        expect(qualityBand(90).label).toBe("Near benchmark");
+        expect(qualityBand(82).label).toBe("Near benchmark");
+        expect(qualityBand(81).label).toBe("Mixed benchmark alignment");
+        expect(qualityBand(68).label).toBe("Mixed benchmark alignment");
+        expect(qualityBand(67).label).toBe("Low benchmark alignment");
+        expect(qualityBand(0).label).toBe("Low benchmark alignment");
     });
 });
 
@@ -56,7 +56,6 @@ describe("computeMetrics", () => {
     });
 
     it("realistic mid-market plan computes credible numbers", () => {
-        // $1.2M quota, $50k ACV, 20% win, 35% m2o, 0.7% touch->meeting, 80% show, 20 days, 8 tpa, 90 day cycle
         const m = computeMetrics(
             {
                 ...DEFAULT_INPUTS,
@@ -97,15 +96,15 @@ describe("computeMetrics", () => {
         expect(m.cycleState).toBe("custom");
     });
 
-    it("benchmark assumptions land in `benchmark` state (within tolerance)", () => {
+    it("benchmark assumptions land in benchmark state within tolerance", () => {
         const m = computeMetrics(
             {
                 ...DEFAULT_INPUTS,
                 quota: 600_000,
                 acv: 50_000,
-                win: 20, // benchmark
-                m2o: 35, // benchmark
-                cycle: 90 // benchmark
+                win: 20,
+                m2o: 35,
+                cycle: 90
             },
             EMPTY_COVERAGE
         );
@@ -114,7 +113,7 @@ describe("computeMetrics", () => {
         expect(m.cycleState).toBe("benchmark");
     });
 
-    it("quality score peaks near 100 with benchmark inputs + benchmark coverage", () => {
+    it("alignment score peaks near 100 with benchmark inputs + benchmark coverage", () => {
         const cov: CoverageSnapshot = {
             ...EMPTY_COVERAGE,
             ratio: 3.5,
@@ -134,7 +133,7 @@ describe("computeMetrics", () => {
         expect(m.qualityScore).toBe(100);
     });
 
-    it("clamps quality to 0-100 range", () => {
+    it("clamps alignment score to 0-100 range", () => {
         const m = computeMetrics(
             { ...DEFAULT_INPUTS, quota: 1_000, acv: 50_000 },
             EMPTY_COVERAGE

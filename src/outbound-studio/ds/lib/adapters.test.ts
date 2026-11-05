@@ -35,12 +35,12 @@ describe("toPulling", () => {
         setAccount("Acme Industries");
         expect(toPulling()).toBeUndefined();
     });
-    it("routes to LinkedIn air cover once a line is routed", () => {
+    it("routes to LinkedIn outreach once a message is routed", () => {
         setAccount("Acme Industries");
         setContact("Sarah Chen");
         const p = toPulling();
         expect(p).toBeDefined();
-        expect(p!.verb).toBe("Add air cover");
+        expect(p!.verb).toBe("Plan LinkedIn outreach");
         expect(p!.object).toBe("Acme Industries");
         expect(p!.href).toContain("/linkedin-playbook/");
         expect(p!.reasons.length).toBeGreaterThan(0);

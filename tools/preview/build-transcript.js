@@ -17,8 +17,8 @@
  *      presented (size, emphasis, primary action, disabled, where on
  *      the screen);
  *   2. what appears when each safe control is opened (tabs, toggles,
- *      drawers, "show more") — clicks that would change the sample data
- *      (log, save, send, delete…) are skipped;
+ *      drawers, "show more") in isolated demo storage; each action path
+ *      starts from the same saved demo snapshot;
  *   3. hover text (title attributes);
  *   4. the room's capability map — its purpose, what every part does,
  *      what flows in and out, what it must never become.
@@ -532,7 +532,8 @@ async function exploreRoom(holder, i, snapshot, CAP) {
     ].join("\n");
     fs.mkdirSync(path.join(OUT, id), { recursive: true });
     fs.writeFileSync(path.join(OUT, id, "index.html"), page(`${label} — Antaeus walkthrough`, body));
-    return { i, id, label, stage, actions: coverage.length, reveals: reveals.length, unexplored };
+    return { i, id, label, stage, actions: coverage.length, reveals: reveals.length, restLines: rest.length, unexplored,
+        failedActions: coverage.filter(c => /could not be used|control no longer present/.test(c.result)), coverage };
 }
 
 const errors = [];
@@ -622,11 +623,11 @@ async function main() {
     const onbMap = mapBody(path.join(MAPS, "onboarding-capability-map-2026-07-07.html"));
     const idx = [
         `<h1>Antaeus — the full walkthrough of the preview</h1>`,
-        `<p>This is a written copy of everything a visitor sees in the Antaeus preview: the sample workspace of Elena Vasquez, an enterprise account executive at Luca Industries (a fictional $100MM AI talent platform) selling to real household-name companies. The accounts, deals and history are sample data; every room, read and suggestion is the real product working on that data.</p>`,
+        `<p>This walkthrough records the Antaeus preview for Elena Vasquez, an enterprise account executive at Luca Industries, a fictional AI talent platform. Company names are illustrative; accounts, deals and activity are sample data. The application's actual components and generators operate on that sample.</p>`,
         `<p>Antaeus is a sales operating system for founders and the first serious sales hire. It turns the work a founder is doing on revenue into a clear picture of what is actually happening, so the first hire can pick it up and run it without having anything re-explained.</p>`,
         `<h2>How to read this</h2><ol>`,
         `<li>Start with the gate below — the first screen a visitor sees.</li>`,
-        `<li>Then go room by room in the order listed. The order follows the sales motion itself, from setting up who you sell to, through finding and working accounts, to advancing deals and handing the motion to a hire.</li>`,
+        `<li>Follow the rooms in order: define target buyers, research accounts, prepare outreach, advance deals, and document the sales process for another seller.</li>`,
         `<li>Each room page has four parts: every word on screen with how and where it is shown; everything the room does when each control is used; a coverage table listing every action tried and its result; and the room's purpose, parts and connections.</li>`,
         `<li>Each page links to the previous and next room, so you can read the whole app start to finish.</li></ol>`,
         `<p>The live app is at <code>/preview</code> on the same site, desktop browsers only.</p>`,
@@ -643,8 +644,8 @@ async function main() {
                 `</ol>`
         ).join("\n"),
         `<p><a href="${ROOMS[0][0]}/">Start with ${esc(ROOMS[0][1])} →</a></p>`,
-        `<h2>Moving between rooms — the Ground</h2>`,
-        `<p>There is no menu bar. At the foot of every room sits a thin line with a small tab (the Antaeus mark). Clicking it, or pressing G, raises a map of every room laid out as the sales motion, with the current room highlighted and the system's suggested next room outlined in orange. This is what it says:</p>`,
+        `<h2>Moving between rooms — Workspace map</h2>`,
+        `<p>At the foot of every room, the Antaeus tab opens the Workspace map. Click it or press G to see rooms organized by sales task, with the current room highlighted and the recommended next room outlined in orange.</p>`,
         `<pre>${esc(ground)}</pre>`,
         `<h2>Onboarding — shown but locked in the preview</h2>`,
         `<p>Onboarding appears greyed out on the room map. Hovering it shows this:</p><blockquote>${esc(lockedWhy)}</blockquote>`,
@@ -652,10 +653,21 @@ async function main() {
     ].join("\n");
     fs.writeFileSync(path.join(OUT, "index.html"), page("Antaeus — preview walkthrough", idx));
 
+    fs.writeFileSync(path.join(OUT, "coverage.json"), JSON.stringify({
+        generatedAt: new Date().toISOString(), partial: !!process.env.TRANSCRIPT_ONLY,
+        expectedRooms: ROOMS.map(r => r[0]), depth: 3, actionCap: CAP,
+        seed: "demo-seed.html?autoseed=ent", viewport: { width: 1440, height: 900 },
+        gateLines: gate.length, workspaceMapCaptured: !!ground, lockedOnboardingExplained: !!lockedWhy,
+        errors: [...new Set(errors)], rooms: index
+    }, null, 2) + "\n");
+
     await browser.close();
     server.close();
     console.log(`\nWrote ${index.length} rooms to preview-transcript/.`);
-    if (errors.length) console.log("Page errors seen:", errors.slice(0, 5));
+    if (errors.length || index.some(r => r.unexplored || r.failedActions.length || !r.restLines)) {
+        console.error("Transcript incomplete; inspect preview-transcript/coverage.json", [...new Set(errors)]);
+        process.exitCode = 1;
+    }
 }
 
 main().catch((e) => {

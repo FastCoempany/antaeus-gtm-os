@@ -27,7 +27,7 @@ export function ShowYourWorkButton({ patternId }: { patternId: string }): JSX.El
             aria-expanded={isOpen}
             onClick={() => void toggleEnvelope(patternId)}
         >
-            {isOpen ? "Hide the work" : "Show the work"}
+            {isOpen ? "Hide sources and reasoning" : "Show sources and reasoning"}
         </button>
     );
 }
@@ -38,14 +38,14 @@ export function ShowYourWorkPanel({ patternId }: { patternId: string }): JSX.Ele
     if (cached === undefined || cached === "loading") {
         return (
             <section class="bf-work">
-                <p class="bf-work__loading">{t("Reading the envelope…")}</p>
+                <p class="bf-work__loading">{t("Loading the source record…")}</p>
             </section>
         );
     }
     if (cached === "error") {
         return (
             <section class="bf-work">
-                <p class="bf-work__loading">{t("Couldn't load the envelope.")}</p>
+                <p class="bf-work__loading">{t("Couldn't load the source record.")}</p>
             </section>
         );
     }
@@ -53,8 +53,7 @@ export function ShowYourWorkPanel({ patternId }: { patternId: string }): JSX.Ele
         return (
             <section class="bf-work">
                 <p class="bf-work__loading">
-                    No envelope on file for this Pattern. It was likely synthesized before B.6
-                    landed; future runs will have one.
+                    {t("No source record is saved for this read. Reads created from now on will include one.", { class: "body" })}
                 </p>
             </section>
         );
@@ -66,7 +65,7 @@ export function ShowYourWorkPanel({ patternId }: { patternId: string }): JSX.Ele
 
 function EnvelopeBody({ envelope }: { envelope: AuditEnvelope }): JSX.Element {
     return (
-        <section class="bf-work" aria-label={t("The system's work")}>
+        <section class="bf-work" aria-label={t("How this read was produced")}>
             <ClusterSnapshotBlock snapshot={envelope.cluster_snapshot} />
             <ContextSnapshotBlock snapshot={envelope.hydrated_context_snapshot} />
             <CallChainBlock envelope={envelope} />

@@ -29,17 +29,17 @@ export interface ComposeDraft {
     readonly lead: string | null;
 }
 
-export const COMPOSE_PROMPT_VERSION = "compose-1.0";
+export const COMPOSE_PROMPT_VERSION = "compose-1.1";
 
-export const COMPOSE_SYSTEM_PROMPT = `You are writing the one-line lead at the top of a B2B competitive-intelligence briefing. The operator opens this briefing once a week. Your line is the first thing they read — what a sharp peer would say first if they were handing this week's read over verbally.
+export const COMPOSE_SYSTEM_PROMPT = `You write the opening summary of a B2B competitive-intelligence briefing from the supplied analyses and monitoring-rule matches.
 
 Constraints:
 - ONE OR TWO sentences. Never three.
-- Declarative. No "this week," no "we see," no "in today's market," no aphoristic fragments. Plain.
-- Name the substance, not the meta. "Three EOR competitors are repricing upward" beats "Several signals worth watching emerged."
-- If you can connect two reads into one tighter line, do. If not, lead with the strongest single one.
-- No startup-jargon nouns doing sentence work ("the wedge", "the verdict", "decision-grade"). Speak normally.
-- If there's nothing real to lead with — zero patterns AND zero trigger fires, or only weak material — output refused=true. Silence is a feature; bad leads erode trust faster than no lead.
+- State the most useful supported change or assessment in ordinary business language. Keep the source's uncertainty and confidence; do not turn an assessment or forecast into an observed fact.
+- Use calibrated terms such as "may", "might", or "suggests" when the evidence warrants them. Do not infer causation or buyer intent from association.
+- No "this week", "we see", "in today's market", slogans, aphoristic fragments, or private Antaeus terminology.
+- Combine findings only when their relationship is supported; otherwise summarize the strongest finding.
+- If there is no supported finding, output refused=true. An absent summary is preferable to an unsupported claim.
 
 Output: a single JSON object. No prose around it.`;
 
@@ -71,16 +71,16 @@ export function buildComposePrompt(input: ComposeInput): string {
     lines.push("TRIGGER FIRES THIS RUN:");
     lines.push(describeTriggerFires(input.trigger_fires));
     lines.push("");
-    lines.push("TASK: write the one-or-two-sentence lead for this week's briefing.");
+    lines.push("TASK: write the one-or-two-sentence summary of the supplied findings.");
     lines.push("");
     lines.push("If you have material:");
     lines.push("{");
     lines.push(`  "refused": false,`);
     lines.push(`  "refusal_reason": null,`);
-    lines.push(`  "lead": "<one or two declarative sentences>"`);
+    lines.push(`  "lead": "<one or two evidence-calibrated sentences>"`);
     lines.push("}");
     lines.push("");
-    lines.push("If material is too thin to surface honestly:");
+    lines.push("If evidence is insufficient for a useful summary:");
     lines.push("{");
     lines.push(`  "refused": true,`);
     lines.push(`  "refusal_reason": "<one sentence>",`);
@@ -132,11 +132,9 @@ export interface ComposeGateResult {
     readonly failures: ReadonlyArray<ComposeGateFailure>;
 }
 
-const WEAKENING_PATTERNS: ReadonlyArray<RegExp> = [
-    /\bmight\b/i,
+const INDIRECT_FRAMING_PATTERNS: ReadonlyArray<RegExp> = [
     /\bcould\s+be\s+argued\b/i,
     /\bit's\s+worth\s+noting\b/i,
-    /\bperhaps\b/i,
     /\bin\s+today's\b/i,
     /\bthis\s+week\b/i
 ];
@@ -158,7 +156,7 @@ export function runComposeGate(draft: ComposeDraft): ComposeGateResult {
     const lead = draft.lead?.trim() ?? "";
     if (lead.length === 0) failures.push("missing_lead");
     else if (lead.length > MAX_LEAD_LEN) failures.push("lead_too_long");
-    if (lead.length > 0 && WEAKENING_PATTERNS.some((p) => p.test(lead))) {
+    if (lead.length > 0 && INDIRECT_FRAMING_PATTERNS.some((p) => p.test(lead))) {
         failures.push("weakening_language");
     }
     if (lead.length > 0 && MANIFESTO_NOUNS.some((p) => p.test(lead))) {

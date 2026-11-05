@@ -8,21 +8,9 @@ import { draft, draftDeal } from "../../state";
 import { hrefToDealWorkspace } from "../../lib/handoff";
 
 /**
- * Pure adapters — map the Negotiation desk onto the design-system tones
- * the DS surface composes. Negotiation has no scoring engine of its own
- * (it carries seed scripts, not a quality model), so the dominant
- * synthesis the made object needs is a presentation-layer read of one
- * thing only: has the operator actually pre-decided, or are they about
- * to improvise? That is the room's whole point per canon §4.16b —
- * "every concession is a deliberate move, not a reflex." The read
- * rewards the walkaway being set above everything else: the line you
- * won't cross is the one decision that turns a negotiation from a
- * reflex into a plan.
- *
- * This is a derivation off the existing draft signal (the same shape as
- * the today surface's adapters mapping CommandObjects → zones), not a
- * new domain engine. The seed scripts, the persistence, the cross-room
- * handoff, and the cloud sync are untouched.
+ * Maps recorded negotiation preparation to display tones and next steps.
+ * The score measures field completion, not negotiation quality or actual
+ * rehearsal. Stable band identifiers support existing integrations.
  */
 
 const COST_TONE: Record<ConcessionStep["cost"], AccentRole | undefined> = {
@@ -60,9 +48,9 @@ export function prepTone(band: PrepBand): AccentRole {
 }
 
 const PREP_LABEL: Record<PrepBand, string> = {
-    improvising: "Improvising",
-    drafting: "Drafting",
-    rehearsed: "Rehearsed"
+    improvising: "Walkaway missing",
+    drafting: "Preparation incomplete",
+    rehearsed: "Ready for review"
 };
 
 export interface PrepRead {
@@ -80,10 +68,8 @@ export interface PrepInput {
 }
 
 /**
- * The rehearsal-readiness read. Pure — takes the draft + whether a deal
- * is linked, returns the dominant synthesis. The walkaway gates the
- * band: without the line you won't cross, you're improvising no matter
- * how much else is filled in.
+ * Preparation assessment from draft fields and whether a deal is linked.
+ * A missing walkaway position always uses the least-prepared band.
  */
 export function computePrepRead(input: PrepInput): PrepRead {
     const d = input.draft;
@@ -100,10 +86,10 @@ export function computePrepRead(input: PrepInput): PrepRead {
         (hasPerson ? 10 : 0);
 
     const gaps: string[] = [];
-    if (!hasWalkaway) gaps.push("The walkaway — the line you won't cross");
-    if (!hasStarting) gaps.push("The starting position you open with");
-    if (!hasOpening) gaps.push("The opening line, authored not improvised");
-    if (!input.dealLinked) gaps.push("A linked deal for the outcome to land on");
+    if (!hasWalkaway) gaps.push("Your walkaway position: terms you will not accept");
+    if (!hasStarting) gaps.push("Your starting offer");
+    if (!hasOpening) gaps.push("Your opening line for the conversation");
+    if (!input.dealLinked) gaps.push("A linked deal to associate with the outcome");
 
     let band: PrepBand;
     let title: string;
@@ -111,23 +97,25 @@ export function computePrepRead(input: PrepInput): PrepRead {
 
     if (!hasWalkaway) {
         band = "improvising";
-        title = "You haven't set the line you won't cross.";
+        title = "Your walkaway position is not recorded.";
         nextMove =
-            "Decide your walkaway first — below it you walk, and you decide that now, not in the room.";
+            "Set your walkaway position: the price or terms you will not accept. Confirm any required approval before the negotiation.";
     } else if (score >= 80) {
         band = "rehearsed";
-        title = "Every concession is pre-decided. Walk in.";
-        nextMove = input.dealLinked
-            ? "Run the pushbacks one more time, then go. The outcome lands on the deal."
-            : "Link the deal so the outcome and the ladder land where the pressure lives.";
+        title = "Core preparation is recorded. Review any remaining gaps.";
+        nextMove = !hasOpening
+            ? "Draft the opening line before rehearsing the conversation."
+            : input.dealLinked
+              ? "Rehearse the pushbacks and confirm which concessions are approved. Record the outcome on the linked deal afterward."
+              : "Link the deal to associate it with this preparation and the negotiation outcome.";
     } else {
         band = "drafting";
-        title = "The positions are forming. Decide the rest before you walk in.";
+        title = "Complete the remaining preparation before negotiating.";
         nextMove = !hasStarting
-            ? "Set the starting position you open with."
+            ? "Set the starting position you plan to offer."
             : !hasOpening
-              ? "Author the opening line — the actual first words."
-              : "Link the deal so the rehearsal lands where the pressure lives.";
+              ? "Draft the opening line for the conversation."
+              : "Link the deal to associate it with this preparation and the negotiation outcome.";
     }
 
     return {
@@ -156,11 +144,8 @@ export interface PullingData {
 }
 
 /**
- * The Wayfinder pulling cell: the negotiation is rehearsed here so its
- * outcome can land on the deal. Once a deal is linked, the one next move
- * is to carry the rehearsal back into the Deal Workspace where the
- * high-pressure phase actually lives (canon §4.16b triangle). Absent
- * until a deal is on the desk.
+ * Links this preparation and its next step to the selected Deal Workspace.
+ * No handoff is shown until a deal is linked.
  */
 export function toPulling(): PullingData | undefined {
     const deal = draftDeal.value;

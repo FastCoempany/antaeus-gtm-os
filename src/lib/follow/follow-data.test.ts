@@ -56,6 +56,15 @@ const SEEDED = {
 };
 
 describe("buildFollowRead", () => {
+    it("does not turn a booked meeting or advisor company match into an observed outcome", () => {
+        const read = buildFollowRead("Ramp", { storage: storageWith({
+            ...SEEDED,
+            gtmos_outbound_touches: { touches: [{ accountName: "Ramp", outcome: "meeting_booked" }] }
+        }) });
+        expect(read!.stops.find((s) => s.key === "discovery-studio")?.what).toContain("meeting booking is recorded");
+        expect(read!.stops.find((s) => s.key === "call-in-a-favor")?.what).toContain("Confirm the relationship and availability");
+        expect(read!.changes).not.toMatch(/close date holds|back at a healthy pace/);
+    });
     it("returns null when the name is unknown everywhere", () => {
         const read = buildFollowRead("Nobody Corp", { storage: storageWith(SEEDED) });
         expect(read).toBeNull();
@@ -144,7 +153,7 @@ describe("buildFollowRead", () => {
         expect(read!.move?.href).toContain("/deal-workspace/");
         const dw = read!.stops.find((s) => s.key === "deal-workspace");
         expect(dw?.state).toBe("next");
-        expect(read!.pulling).toContain("Stalled");
+        expect(read!.pulling).toContain("No recorded activity");
     });
 
     it("parses the { deals: [...] } envelope shape too", () => {

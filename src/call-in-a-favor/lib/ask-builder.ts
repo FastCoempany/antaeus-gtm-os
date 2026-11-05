@@ -35,13 +35,13 @@ function chooseBuyer(deal: AdvisorDeal | null): string {
  * aware, and decision-process-aware.
  */
 export function dealPressure(deal: AdvisorDeal | null): string {
-    if (!deal) return "No live deal linked yet.";
+    if (!deal) return "No deal is linked yet.";
     if (!deal.nextStepDate) {
-        return "There's no dated next step keeping the conversation alive.";
+        return "No dated next step is recorded.";
     }
     const nextDate = Date.parse(deal.nextStepDate);
     if (Number.isFinite(nextDate) && nextDate < Date.now()) {
-        return "The next step is overdue and the deal is going stale.";
+        return "The recorded next-step date is overdue.";
     }
     const stage = deal.stage;
     if (
@@ -60,9 +60,9 @@ export function dealPressure(deal: AdvisorDeal | null): string {
         return "We're this late in the deal and we still haven't identified who has signing authority.";
     }
     if ((stage === "evaluation" || stage === "poc") && !deal.champion) {
-        return "Nobody inside the buyer's team is carrying this forward.";
+        return "No champion is recorded for the buyer's team.";
     }
-    return "The ask must be precise enough to justify outside trust.";
+    return "An introduction from someone the buyer already trusts could help move this deal forward.";
 }
 
 export interface AskBuildInput {
@@ -86,14 +86,13 @@ export function buildAsk(input: AskBuildInput): GeneratedAsk {
         `Hi ${advisorFirst},\n\n` +
         `${askLine}\n\n` +
         `Why now: ${dealPressure(deal)}\n\n` +
-        `Where it stands: ${moment.proof}\n\n` +
-        "If you are open, the forwardable note is below. It should take less than two minutes to adapt.";
+        "If you are open to helping, the suggested note is below. Please adapt it to reflect what you know directly.";
     const buyerOrPlaceholder = buyer === "the right owner" ? "[Buyer]" : buyer;
     const advisorName = advisor ? advisor.name : "[Advisor]";
     const forward =
-        `Subject: Quick read on ${company}\n\n` +
+        `Subject: Introduction regarding ${company}\n\n` +
         `${buyerOrPlaceholder} -\n\n` +
-        `I wanted to connect you with [your company] because the work they are doing around this problem looks relevant to the thread at ${company}. ` +
+        `Would you be open to a conversation with [your company] about [specific business issue] at ${company}? ` +
         `${moment.advisorLine}\n\n` +
         "Worth a brief look?\n\n" +
         advisorName;

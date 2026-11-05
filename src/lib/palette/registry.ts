@@ -34,13 +34,13 @@ export type RoomFamily =
     | "trust-annex";
 
 export const FAMILY_LABEL: Record<RoomFamily, string> = {
-    threshold: "Threshold",
-    "command-chamber": "Command Chamber",
-    "live-instrument": "Live Instrument",
-    "decision-bench": "Decision Bench",
-    "diagnosis-table": "Diagnosis Table",
-    "system-ledger": "System Ledger",
-    "trust-annex": "Trust Annex"
+    threshold: "Getting started",
+    "command-chamber": "Priorities",
+    "live-instrument": "Sales activity",
+    "decision-bench": "Sales planning",
+    "diagnosis-table": "Deal risk",
+    "system-ledger": "Analysis and handoff",
+    "trust-annex": "Workspace settings"
 };
 
 export interface PaletteEntry {
@@ -63,7 +63,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Welcome",
         href: "/welcome/",
         family: "threshold",
-        description: "Activation threshold + the first real operating move."
+        description: "Today's recommended starting point."
     },
     {
         id: "onboarding",
@@ -71,7 +71,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Onboarding",
         href: "/onboarding/",
         family: "threshold",
-        description: "Seed the workspace — ICP, role, first account, quota."
+        description: "Set up your ICP, role, accounts, deals, and quota."
     },
 
     // ── Command Chamber ──────────────────────────────────────────
@@ -82,7 +82,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/dashboard/",
         family: "command-chamber",
         keywords: ["brief", "spotlight", "queue", "ranked"],
-        description: "Ranked pressure across the whole workspace."
+        description: "Pipeline, account priorities, activity, and deal risk."
     },
 
     // ── Live Instrument ──────────────────────────────────────────
@@ -93,7 +93,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/signal-console/",
         family: "live-instrument",
         keywords: ["accounts", "heat", "signals", "radar"],
-        description: "Account heat radar — convert signals to ranked motion."
+        description: "Monitor account signals and priority."
     },
     {
         id: "outbound-studio",
@@ -102,7 +102,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/outbound-studio/",
         family: "live-instrument",
         keywords: ["email", "send-line", "rack", "motion"],
-        description: "Route one live outbound line — account × buyer × trigger."
+        description: "Create and manage account-specific outbound messages."
     },
     {
         id: "cold-call-studio",
@@ -111,7 +111,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/cold-call-studio/",
         family: "live-instrument",
         keywords: ["call", "thread", "opener", "ask"],
-        description: "Six-thread spine for narrowing pressure live on the call."
+        description: "Prepare for cold calls and record the outcomes."
     },
     {
         id: "linkedin-playbook",
@@ -120,16 +120,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/linkedin-playbook/",
         family: "live-instrument",
         keywords: ["cue", "connection", "comment", "give-first"],
-        description: "Five-cue ladder for disciplined LinkedIn air cover."
-    },
-    {
-        id: "call-planner",
-        kicker: "CALL PLANNER",
-        label: "Call Planner",
-        href: "/call-planner/",
-        family: "live-instrument",
-        keywords: ["agenda", "advance-ask", "prep", "probes"],
-        description: "Four-stop spine: open / reason now / probe / advance ask."
+        description: "Plan LinkedIn outreach alongside calls and email."
     },
     {
         id: "discovery-studio",
@@ -137,8 +128,10 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Discovery Studio",
         href: "/discovery-studio/",
         family: "live-instrument",
-        keywords: ["framework", "segment", "buyer", "branch"],
-        description: "Live discovery console — ten-segment spine, nine frameworks."
+        // "agenda" / "prep" / "call planner" keep the retired Call
+        // Planner findable — its prep work lives here now (canon §4.11).
+        keywords: ["framework", "segment", "buyer", "branch", "agenda", "prep", "call planner"],
+        description: "Prepare and run a discovery call, with buyer-specific questions and next-step capture."
     },
     {
         id: "advisor-deploy",
@@ -147,7 +140,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/call-in-a-favor/",
         family: "live-instrument",
         keywords: ["backchannel", "advisor", "investor", "introduction", "favor"],
-        description: "Route one backchannel ask before spending external trust."
+        description: "Request specific help from your network for a deal."
     },
     {
         id: "negotiation",
@@ -168,7 +161,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
             "objection",
             "indemnification"
         ],
-        description: "Rehearse the conversation — counterparty × ask-moment × ladder."
+        description: "Manage legal, security, finance, and final approval."
     },
 
     // ── Decision Bench ───────────────────────────────────────────
@@ -179,7 +172,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/icp-studio/",
         family: "decision-bench",
         keywords: ["icp", "persona", "fit", "targeting"],
-        description: "Sharpen the ICP every room inherits."
+        description: "Define the companies and buyers you sell to."
     },
     {
         id: "territory-architect",
@@ -188,7 +181,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/territory-architect/",
         family: "decision-bench",
         keywords: ["tier", "focus", "approach", "300-cap"],
-        description: "Turn the ICP into a tiered territory of strategic bets."
+        description: "Create and prioritize territory segments."
     },
     {
         id: "sourcing-workbench",
@@ -197,7 +190,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/prospecting-desk/",
         family: "decision-bench",
         keywords: ["prospect", "research", "query", "sourcing"],
-        description: "Push prospects from query card to qualified account."
+        description: "Save target criteria, add companies, and qualify accounts."
     },
     {
         id: "poc-framework",
@@ -206,7 +199,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/pilot-desk/",
         family: "decision-bench",
         keywords: ["poc", "pilot", "adoption", "evidence"],
-        description: "Turn a pilot into something the buyer's boss can act on — claim, owner, metric, kill rule."
+        description: "Plan pilots, measure results, and agree on the next decision."
     },
 
     // ── Diagnosis Table ──────────────────────────────────────────
@@ -217,7 +210,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/deal-workspace/",
         family: "diagnosis-table",
         keywords: ["deal", "stage", "recovery", "intervention", "pipeline"],
-        description: "Recovery board — which deals are weakest, what to do next."
+        description: "Review open deals, next steps, and risk factors."
     },
     {
         id: "future-autopsy",
@@ -226,7 +219,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/future-autopsy/",
         family: "diagnosis-table",
         keywords: ["pre-mortem", "cause", "kill-switch", "verdict"],
-        description: "Pre-mortem the deal — causal pattern + corrective route."
+        description: "Review deal-loss risk, supporting evidence, and corrective actions."
     },
 
     // ── System Ledger ────────────────────────────────────────────
@@ -237,7 +230,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/quota-workback/",
         family: "system-ledger",
         keywords: ["quota", "coverage", "math", "weekly", "targets"],
-        description: "Quota math as weekly execution pressure."
+        description: "Calculate the activity and pipeline required to hit quota."
     },
     {
         id: "founding-gtm",
@@ -246,7 +239,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         href: "/founding-gtm/",
         family: "system-ledger",
         keywords: ["handoff", "kit", "hire", "inherit", "synthesis"],
-        description: "The living onboarding surface a first hire opens on day one."
+        description: "Document sales patterns and processes for another seller."
     },
     // Briefing is a new composition family per canon §4.21 — an
     // intelligence surface, not a System Ledger. Until the family
@@ -270,7 +263,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
             "contrarian",
             "synthesis"
         ],
-        description: "Weekly read of what's moving — and where your assumptions stop agreeing with the data."
+        description: "Review account and market changes, evidence, and recommendations."
     },
     // Outdoors Events — Live Instrument per ADR-015. The operator's
     // radar for offline gatherings where buyers show up.
@@ -291,7 +284,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
             "gathering",
             "networking"
         ],
-        description: "Where buyers gather offline — conferences, mixers, meetups you're watching."
+        description: "Find events relevant to your target buyers and accounts."
     },
 
     // ── Trust Annex ──────────────────────────────────────────────

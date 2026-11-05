@@ -2,22 +2,12 @@ import type { Prospect, WorkbenchStats } from "./types";
 import { t } from "@/lib/voice/t";
 
 /**
- * Program 6 / PR 13 — Loom Read engine.
+ * Prospecting Desk status read.
  *
- * Per the picked-winner Variant 02 / Ticket Loom wireframe
- * (deliverables/prototypes/wireframes/antaeus-sourcing-workbench-
- * triptych-2026-04-17.html line 348+), the workbench should not just
- * count rows — the loom-dock aside surfaces a Week read + an
- * Operator move so the operator sees what the workbench is saying,
- * not just what it contains.
- *
- *   - Loom score     — 0-92 derived posture
- *   - Band           — empty / loose / working / shipping
- *   - Week read      — diagnostic, what this week looks like
- *   - Operator move  — prescribed next action
- *
- * Pure: takes the prospect list + stats explicitly so tests can
- * probe every branch.
+ * The score is an internal summary of how much account qualification work
+ * is present and how much has moved to ready/sent states. User-facing copy
+ * describes the observed counts and next workflow action; it does not turn
+ * the score into a causal or predictive claim.
  */
 
 export type LoomReadBand = "empty" | "loose" | "working" | "shipping";
@@ -36,9 +26,9 @@ export interface LoomReadInputs {
 }
 
 const BAND_LABELS: Readonly<Record<LoomReadBand, string>> = {
-    shipping: "Shipping",
-    working: "Working",
-    loose: "Loose",
+    shipping: "Confirmed accounts available",
+    working: "In progress",
+    loose: "Qualification incomplete",
     empty: "Empty"
 };
 
@@ -71,12 +61,10 @@ function computeScore(s: ScoreInputs): number {
     if (s.stats.ready >= 3) score += 14;
     if (s.stats.pushed >= 1) score += 10;
     if (s.stats.pushed >= 3) score += 8;
-    // Penalize a heavy drop ratio — many captures that never converted.
     if (s.dropped > 0 && s.stats.total > 0) {
         const dropRatio = s.dropped / (s.dropped + s.stats.total);
         if (dropRatio > 0.5) score -= 8;
     }
-    // Penalize a captured pile-up with nothing researched.
     if (s.stats.captured >= 5 && s.stats.researched === 0) score -= 6;
     return Math.max(0, Math.min(92, score));
 }
@@ -95,30 +83,27 @@ interface WeekReadInputs {
 
 function pickWeekRead(s: WeekReadInputs): string {
     if (s.stats.total === 0 && s.dropped === 0) {
-        return t("Nothing in the funnel yet. Describe a search to bring companies in.", { class: "body" });
+        return t("No companies have been added yet. Save target criteria and add the first company.", { class: "body" });
     }
     if (s.stats.total === 0 && s.dropped > 0) {
-        return t("Everything so far has been set aside. Sharpen who you're targeting before adding more.", { class: "body" });
+        return t("All companies added so far have been set aside. Review the target criteria before adding more.", { class: "body" });
     }
-    // Stricter pile-up signal (5+ adds with nothing confirmed) fires
-    // before the general "added but none confirmed" rule so the
-    // heavier-debt case gets the targeted prescription.
     if (s.stats.captured >= 5 && s.stats.researched === 0) {
-        return t("Companies are piling up unconfirmed. Confirm a few before you add more.", { class: "body" });
+        return t("Five or more companies are waiting for qualification and none has been confirmed. Complete qualification before adding more.", { class: "body" });
     }
     if (s.stats.ready === 0 && s.stats.captured > 0 && s.stats.researched === 0) {
-        return t("Companies are added but none is confirmed yet. Adding is cheap; confirming is what moves them forward.", { class: "body" });
+        return t("Companies have been added, but none has completed the qualification checks yet.", { class: "body" });
     }
     if (s.dropped > 0 && s.dropped >= s.stats.total) {
-        return t("More set aside than kept. The search may be off — sharpen it before adding more.", { class: "body" });
+        return t("More companies have been set aside than remain active. Review the target criteria before adding more.", { class: "body" });
     }
     if (s.stats.ready >= 3) {
-        return `${s.stats.ready} ${t("ready to send. The funnel is producing this week.", { class: "body" })}`;
+        return `${s.stats.ready} ${t("accounts have completed qualification and are ready to send to Signal Console.", { class: "body" })}`;
     }
     if (s.stats.pushed >= s.stats.total - s.stats.pushed && s.stats.pushed > 0) {
-        return t("Most accounts are already in Signal Console. The funnel is short — bring in new companies.", { class: "body" });
+        return t("Most active accounts have already been sent to Signal Console. Add more companies if you need additional coverage.", { class: "body" });
     }
-    return t("The funnel is moving. Keep confirming before you add more.", { class: "body" });
+    return t("Continue completing qualification checks before adding more companies.", { class: "body" });
 }
 
 interface OperatorMoveInputs {
@@ -128,19 +113,19 @@ interface OperatorMoveInputs {
 
 function pickOperatorMove(s: OperatorMoveInputs): string {
     if (s.stats.total === 0) {
-        return t("Describe a search and add the first company.", { class: "body" });
+        return t("Save target criteria and add the first company.", { class: "body" });
     }
     if (s.stats.ready >= 1) {
-        return t("Send the cleanest ready account to Signal Console.", { class: "body" });
+        return t("Send a confirmed account to Signal Console.", { class: "body" });
     }
     if (s.stats.researched >= 3) {
-        return t("Finish confirming one account — the last question is usually how you'll reach out.", { class: "body" });
+        return t("Complete the remaining qualification check on one account.", { class: "body" });
     }
     if (s.stats.captured >= 5 && s.stats.researched === 0) {
-        return t("Confirm one account. Stop adding until one gets through.", { class: "body" });
+        return t("Complete qualification on one account before adding more companies.", { class: "body" });
     }
     if (s.stats.researched >= 1) {
-        return t("Finish confirming the strongest account.", { class: "body" });
+        return t("Complete the qualification checks on one active account.", { class: "body" });
     }
-    return t("Walk one account forward. The funnel rewards forward motion.", { class: "body" });
+    return t("Open an account and complete its qualification checks.", { class: "body" });
 }

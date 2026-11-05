@@ -13,20 +13,18 @@ import {
 } from "./data";
 
 /**
- * Phase 4 / Room 6 Wave 2 — send-line generator.
+ * Outbound message generator.
  *
- * Faithful TypeScript port of the legacy `generate()` function (lines
- * 1124-1241 of `app/outbound-studio/index.html`). 5 temperature
- * branches × 4 persona variants per branch, building a `lines[]`
- * array that joins with \n.
- *
- * Pure: takes an explicit `now` for deterministic date suggestions
- * (Tuesday/Thursday next week, etc.).
+ * The generator may use only the account/contact fields, the selected
+ * outreach stage, the selected trigger, an optional live signal headline,
+ * and the optional question captured in the rack. It must not invent proof,
+ * customer outcomes, buyer priorities, urgency, payback periods, or attached
+ * documents that are not present in those inputs.
  */
 
 export interface GenerateInputs {
     readonly rack: OperatorRack;
-    /** First signal headline from Signal Console; fallback to trigger meaning. */
+    /** First signal headline from Signal Console; fallback to selected trigger description. */
     readonly signalHeadline?: string;
     /** Sender's company name for substitutions; fallback "[Your Company]". */
     readonly companyName?: string;
@@ -40,7 +38,9 @@ export interface GenerateOutput {
     readonly asset: Asset;
     readonly ctaKey: CtaKey;
     readonly assetLabel: string;
+    /** Completeness heuristic for the fields available to the generator. */
     readonly qualityScore: number;
+    /** Internal completeness band retained for compatibility with existing consumers. */
     readonly motionBand: "thin" | "workable" | "ready";
 }
 
@@ -70,20 +70,16 @@ function ensurePeriod(s: string): string {
     return /[.!?]$/.test(s) ? s : s + ".";
 }
 
-/**
- * Quality score derived from rack completeness — drives the motion
- * band. Faithful port of the legacy `getMotionState` quality logic
- * but distilled to the inputs that matter.
- */
+/** Completeness score over generator inputs; not an outcome-quality score. */
 function computeQuality(rack: OperatorRack, hasSignal: boolean): number {
     let score = 0;
     if (rack.accountName.trim()) score += 14;
     if (rack.contactName.trim()) score += 14;
-    score += 16; // persona always set
-    score += 16; // temperature always set
-    score += 14; // trigger always set
+    score += 16; // persona is always set
+    score += 16; // outreach stage is always set
+    score += 14; // trigger is always set
     if (hasSignal) score += 14;
-    if (rack.noAsk) score += 3; // discipline bonus per legacy
+    if (rack.nextQuestion?.trim()) score += 6;
     return Math.min(100, score);
 }
 
@@ -93,6 +89,17 @@ function bandFor(score: number): "thin" | "workable" | "ready" {
     return "thin";
 }
 
+function reasonSentence(signalText: string): string {
+    return `I noticed ${ensurePeriod(lcFirst(signalText))}`;
+}
+
+function assetOffer(assetLabel: string, angle: string): string {
+    if (assetLabel === "No attachment") {
+        return `If ${angle} is relevant, I can send a short explanation of how we approach it.`;
+    }
+    return `If ${angle} is relevant, I can send a ${assetLabel.toLowerCase()} focused on that question.`;
+}
+
 export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
     const { rack } = inputs;
     const now = inputs.now ?? Date.now();
@@ -100,8 +107,9 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
     const contact = rack.contactName.trim() || "[Name]";
     const triggerData = TRIGGERS[rack.trigger];
     const signalText = inputs.signalHeadline?.trim() || triggerData.meaning;
-    const angle = (triggerData.angles[0] ?? "value").toLowerCase();
+    const angle = (triggerData.angles[0] ?? "the issue").toLowerCase();
     const companyName = inputs.companyName?.trim() || "[Your Company]";
+    const buyerQuestion = rack.nextQuestion?.trim();
 
     const ctaKey: CtaKey = rack.noAsk
         ? CTA_BY_TEMP[rack.temperature].noask
@@ -113,160 +121,134 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
 
     const lines: string[] = [];
 
-    // ── Ice Cold ──
+    // ── First outreach ────────────────────────────────────────────────
     if (rack.temperature === "ice_cold") {
         lines.push(`Hi ${contact},`, "");
-        lines.push(
-            `I noticed ${ensurePeriod(lcFirst(signalText))}`
-        );
+        lines.push(reasonSentence(signalText));
         lines.push("");
+
         if (rack.persona === "csuite") {
             lines.push(
-                `For ${account}, that likely puts ${angle} near the top of your priority stack this quarter.`
+                `I’m reaching out because that change could make ${angle} more relevant at ${account}.`
             );
             if (!rack.noAsk) {
                 lines.push("");
-                lines.push("Does that track with how you're thinking about it?");
+                lines.push("Is that part of the conversation internally right now?");
             }
         } else if (rack.persona === "vp") {
             lines.push(
-                `For teams at ${account}'s scale, that typically means ${angle} becomes urgent before the systems are ready for it.`
+                `I’m reaching out because ${angle} often becomes a practical question when this kind of change is underway.`
             );
             lines.push("");
-            lines.push(
-                "We've helped companies in a similar position — happy to share what we've seen if it's relevant."
-            );
+            lines.push(assetOffer(assetLabel, angle));
             if (!rack.noAsk) {
                 lines.push("");
-                lines.push("Worth a look?");
+                lines.push("Is that relevant to what your team is working through?");
             }
         } else if (rack.persona === "ic") {
             lines.push(
-                `For teams at ${account}, that usually means ${angle} work accelerates while the tooling stays the same.`
+                `I’m reaching out because this kind of change can affect ${angle} at the team level.`
             );
             lines.push("");
             lines.push(
-                `We've built something that addresses exactly this — specifically for teams dealing with ${triggerData.meaning.toLowerCase()}`
-            );
-            lines.push("");
-            lines.push(
-                `The short version: ${companyName} helps ${account} ${triggerData.angles
-                    .join(" and ")
-                    .toLowerCase()} without adding complexity to what you're already using.`
+                `${companyName} works on this area. If it is on your plate, I can send a concise overview rather than assume how ${account} is handling it.`
             );
             if (!rack.noAsk) {
                 lines.push("");
-                lines.push("Curious if this matches what you're seeing day-to-day?");
+                lines.push("Is this something you are dealing with day to day?");
             }
         } else {
             lines.push(
-                `For ${account}, that likely creates new requirements on the procurement side.`
+                `I’m reaching out because this change may create vendor, documentation, or approval questions for ${account}.`
             );
             if (!rack.noAsk) {
                 lines.push("");
-                lines.push("Does this resonate?");
+                lines.push("Are any new requirements showing up on your side?");
             }
         }
-        lines.push("");
-        lines.push("Best,");
-        lines.push("[Your Name]");
+        lines.push("", "Best,", "[Your Name]");
     }
 
-    // ── Cool ──
+    // ── Follow-up ────────────────────────────────────────────────────
     else if (rack.temperature === "cool") {
         lines.push(`Hi ${contact},`, "");
         lines.push(
-            `Quick follow-up to the note I sent about ${triggerData.label.toLowerCase()} at ${account}.`
+            `Quick follow-up on my note about ${triggerData.label.toLowerCase()} at ${account}.`
         );
         lines.push("");
-        lines.push(
-            `I put together a ${assetLabel.toLowerCase()} that's specific to how companies at ${account}'s scale are approaching ${angle}. It's based on what we've seen work across similar organizations — not a product pitch.`
-        );
+        lines.push(assetOffer(assetLabel, angle));
         if (!rack.noAsk) {
             lines.push("");
             lines.push(
-                `Worth 15 minutes for me to walk you through it? I can do ${dayName(now, 2)} or ${dayName(now, 4)}.`
+                `If a short conversation is easier, I can do ${dayName(now, 2)} or ${dayName(now, 4)}. If not, I can just send the material.`
             );
         }
-        lines.push("");
-        lines.push("[Your Name]");
+        lines.push("", "[Your Name]");
     }
 
-    // ── Warm ──
+    // ── Contact has replied ──────────────────────────────────────────
     else if (rack.temperature === "warm") {
         lines.push(`Hi ${contact},`, "");
-        lines.push(
-            `Following up on our conversation. I've been thinking about the ${angle} challenge you mentioned and wanted to share something specific.`
-        );
-        lines.push("");
-        if (rack.persona === "csuite") {
-            lines.push(
-                "I'd like to show you how a company in your space solved this in 20 minutes. No slides unless you want them."
-            );
-            if (!rack.noAsk) {
-                lines.push(`Does ${dayName(now, 3)} work?`);
-            }
-        } else {
-            lines.push(
-                `Attached is a ${assetLabel.toLowerCase()} customized for ${account} — it shows the opportunity range based on what we've seen at comparable organizations.`
-            );
-            lines.push("");
-            if (!rack.noAsk) {
-                lines.push(
-                    "Worth 20 minutes to walk through it together? I'd also want to understand who else on your team should be in the conversation."
-                );
-            }
+        lines.push("Following up on our conversation.");
+        if (buyerQuestion) {
+            lines.push("", `You asked: “${buyerQuestion}”`);
         }
-        lines.push("");
-        lines.push("[Your Name]");
+        lines.push("", assetOffer(assetLabel, angle));
+        if (!rack.noAsk) {
+            lines.push("");
+            lines.push(
+                `Would 20 minutes on ${dayName(now, 3)} work to go through it and make sure I’m addressing the right question?`
+            );
+        }
+        lines.push("", "[Your Name]");
     }
 
-    // ── Hot ──
+    // ── Active back-and-forth ────────────────────────────────────────
     else if (rack.temperature === "hot") {
         lines.push(`Hi ${contact},`, "");
-        lines.push("Wanted to send this ahead of our next conversation.");
+        lines.push("Sending a quick note before our next conversation.");
+        if (buyerQuestion) {
+            lines.push("", `I have your open question as: “${buyerQuestion}”`);
+        }
         lines.push("");
-        if (rack.persona === "csuite") {
+
+        if (rack.persona === "procurement") {
             lines.push(
-                `Attached is the business case for ${account} — the ROI model populated with the numbers your team shared. The payback period comes in at [X months]. Happy to walk through the assumptions on a quick call if useful.`
-            );
-        } else if (rack.persona === "procurement") {
-            lines.push(
-                "Attached: our security documentation, standard terms, and compliance certifications. Let me know what else you need from us to move forward — happy to pre-fill your vendor evaluation questionnaire if that saves time."
+                "I can send the security or compliance material your review requires. If there is a specific document or questionnaire, send it over and I’ll route it to the right person."
             );
         } else {
             lines.push(
-                `Here's the ${assetLabel.toLowerCase()} we discussed. I've included the evidence most relevant to ${account}'s situation and a suggested mutual action plan for the path from here to decision.`
+                `I can bring the ${assetLabel.toLowerCase()} and focus it on the points we have already discussed rather than introduce new assumptions.`
             );
-            lines.push("");
-            lines.push(
-                "Let me know what questions come up — and whether it would be useful to include [stakeholder role] in the next conversation."
-            );
+            if (!rack.noAsk) {
+                lines.push("");
+                lines.push("What should we make sure is resolved in the next conversation?");
+            }
         }
-        lines.push("");
-        lines.push("[Your Name]");
+        lines.push("", "[Your Name]");
     }
 
-    // ── Closing ──
+    // ── Approval / contract stage ────────────────────────────────────
     else if (rack.temperature === "closing") {
         lines.push(`Hi ${contact},`, "");
-        lines.push("Checking in on the contract status. On our end, we're ready to move.");
+        lines.push("Checking in on the contract and approval status.");
         lines.push("");
         if (rack.persona === "procurement") {
             lines.push(
-                "Attached is the complete security and compliance package in case your team needs it for review. Let me know if there are specific sections legal wants to discuss — happy to set up a call with our legal team to accelerate."
+                "If legal, security, or procurement has open questions, send them over and I’ll get the right person involved."
             );
         } else {
             lines.push(
-                "If your team has any open questions for legal or procurement, I've preemptively attached our security documentation and standard terms. Anything I can do to reduce friction on your side?"
-            );
-            lines.push("");
-            lines.push(
-                "If we finalize by [date], we can kick off implementation by [date] and you'll see initial results by [date]."
+                `I can send or update the ${assetLabel.toLowerCase()} based on the approvals that are still open.`
             );
         }
-        lines.push("");
-        lines.push("[Your Name]");
+        if (buyerQuestion) {
+            lines.push("", `I also have this question still open: “${buyerQuestion}”`);
+        }
+        if (!rack.noAsk) {
+            lines.push("", "What still needs to happen on your side before the agreement can move forward?");
+        }
+        lines.push("", "[Your Name]");
     }
 
     const content = lines.join("\n");

@@ -13,7 +13,7 @@ import { matchAccountToIcp } from "../../lib/icp-match";
 import { setAccountRelationship } from "../../lib/cloud-persistence";
 import {
     hrefToDealWorkspace,
-    hrefToDiscoveryAgenda,
+    hrefToDiscoveryStudio,
     hrefToOutbound
 } from "../../lib/handoff";
 import { heatRead } from "../lib/adapters";
@@ -99,8 +99,8 @@ export function AccountCardDS(props: {
     const footer = (
         <>
             {primaryCta}
-            <a class="ds-btn ds-btn--ghost" href={hrefToDiscoveryAgenda(account.name)}>
-                <Icon name="call" size={16} /> {t("Plan call")}
+            <a class="ds-btn ds-btn--ghost" href={hrefToDiscoveryStudio(account.name)}>
+                <Icon name="call" size={16} /> {t("Prepare discovery call")}
             </a>
         </>
     );

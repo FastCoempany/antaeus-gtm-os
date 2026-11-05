@@ -35,7 +35,7 @@ describe("personalize", () => {
             { accountName: "", topSignal: null, companyName: undefined }
         );
         expect(result).toBe(
-            "[account] dealing with a visible operating pressure — [your company]"
+            "[account] dealing with [specific business issue to verify] — [your company]"
         );
     });
 
@@ -147,48 +147,48 @@ describe("loomScore", () => {
 
 describe("weakestThreadCopy", () => {
     it("warns when no account is selected", () => {
-        expect(weakestThreadCopy(false)).toContain("No account selected");
+        expect(weakestThreadCopy(false)).toContain("Select an account");
     });
 
     it("warns when an account is set but the call has no dated move yet", () => {
-        expect(weakestThreadCopy(true)).toContain("dated move");
+        expect(weakestThreadCopy(true)).toContain("next step and date");
     });
 });
 
 describe("requiredCorrectionCopy", () => {
     it("prescribes naming the strain when no account is selected", () => {
         expect(requiredCorrectionCopy(false, "prep")).toContain(
-            "Name the business strain"
+            "identify a business issue"
         );
         expect(requiredCorrectionCopy(false, "ask")).toContain(
-            "Name the business strain"
+            "identify a business issue"
         );
     });
 
     it("prescribes forcing the strain on prep/opener threads", () => {
         expect(requiredCorrectionCopy(true, "prep")).toContain(
-            "Force the strain"
+            "Ask whether the business issue matters"
         );
         expect(requiredCorrectionCopy(true, "opener")).toContain(
-            "Force the strain"
+            "Ask whether the business issue matters"
         );
     });
 
     it("prescribes trade-proof-for-admission on pressure/proof threads", () => {
         expect(requiredCorrectionCopy(true, "pressure")).toContain(
-            "Trade one piece of evidence"
+            "Share relevant evidence"
         );
         expect(requiredCorrectionCopy(true, "proof")).toContain(
-            "Trade one piece of evidence"
+            "Share relevant evidence"
         );
     });
 
     it("prescribes locking the dated move on ask/exit threads", () => {
         expect(requiredCorrectionCopy(true, "ask")).toContain(
-            "Lock the dated move"
+            "next action, owner, date, and purpose"
         );
         expect(requiredCorrectionCopy(true, "exit")).toContain(
-            "Lock the dated move"
+            "next action, owner, date, and purpose"
         );
     });
 });

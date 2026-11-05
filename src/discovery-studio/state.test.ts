@@ -15,6 +15,7 @@ import {
     factStatusFor,
     frameworkRegistry,
     getSegmentKeyForNode,
+    jumpToInterruptTarget,
     holdFact,
     inboundQuestionHandlers,
     learnedFacts,
@@ -477,5 +478,28 @@ describe("state — Wave 3 getSegmentKeyForNode lookup", () => {
         __setFrameworkRegistryForTests([]);
         activeFramework.value = "legal";
         expect(getSegmentKeyForNode("of-1")).toBeNull();
+    });
+});
+
+describe("state — jumpToInterruptTarget", () => {
+    it("opens a node for a node: target", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        selectFramework("legal");
+        expect(jumpToInterruptTarget("node:cst-1")).toBe(true);
+        expect(activeNode.value).toEqual({ segmentKey: "current-state-truth", nodeId: "cst-1" });
+    });
+
+    it("opens the first node of a segment for a segment: target", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        selectFramework("legal");
+        expect(jumpToInterruptTarget("segment:current-state-truth")).toBe(true);
+        expect(activeNode.value).toEqual({ segmentKey: "current-state-truth", nodeId: "cst-1" });
+    });
+
+    it("returns false for an unknown segment or a room: target", () => {
+        __setFrameworkRegistryForTests([FIXTURE]);
+        selectFramework("legal");
+        expect(jumpToInterruptTarget("segment:not-a-segment")).toBe(false);
+        expect(jumpToInterruptTarget("room:deal-workspace")).toBe(false);
     });
 });

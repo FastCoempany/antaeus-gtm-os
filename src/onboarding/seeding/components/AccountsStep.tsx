@@ -47,11 +47,11 @@ export function AccountsStep(): JSX.Element {
 
     return (
         <section class="sd-step">
-            <p class="sd-kicker">{t("The list · who you're chasing", { class: "body" })}</p>
-            <h1 class="sd-h1">{t("Now — who are you chasing?", { class: "body" })}</h1>
+            <p class="sd-kicker">{t("Your target accounts", { class: "label" })}</p>
+            <h1 class="sd-h1">{t("Which companies are you going after?", { class: "body" })}</h1>
             <p class="sd-lede">
                 {t(
-                    "Just the companies. One per line, or paste a comma-separated list. Their website beats the name — apex.com is one company, “Apex” is a thousand — so drop a domain wherever you have it. Don't research them; the system does that next.",
+                    "Just the companies. One per line, or paste a comma-separated list. A website domain is better than a name — apex.com is one company, while “Apex” could be many — so use a domain wherever you have one. You don't need to research them; the next step looks for recent news about each one.",
                     { class: "body" }
                 )}
             </p>
@@ -86,11 +86,11 @@ export function AccountsStep(): JSX.Element {
                 {valid.length === 0
                     ? t("Paste at least five companies — even a rough list.", { class: "body" })
                     : enough
-                      ? t("{n} good to go. Even fifty is a two-minute job — breadth is cheap here.", { class: "body" }).replace(
+                      ? t("{n} ready. You can add as many as you like.", { class: "body" }).replace(
                             "{n}",
                             String(valid.length)
                         )
-                      : t("{n} so far — {m} more to go. Breadth is cheap here.", { class: "body" })
+                      : t("{n} so far — add {m} more to continue.", { class: "body" })
                             .replace("{n}", String(valid.length))
                             .replace("{m}", String(ACCOUNT_FLOOR - valid.length))}
                 {flagged.length > 0
@@ -108,7 +108,7 @@ export function AccountsStep(): JSX.Element {
                     disabled={!enough}
                     onClick={() => advance(entries)}
                 >
-                    {t("Enrich these →", { class: "body" })}
+                    {t("Research these accounts →", { class: "body" })}
                 </button>
             </div>
         </section>

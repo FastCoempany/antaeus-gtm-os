@@ -449,28 +449,22 @@ test.describe("room boot smoke tests", () => {
         ).toEqual([]);
     });
 
-    test("Phase 4 / Room 9 Wave 1 — /call-planner/ Preact rebuild boots cleanly", async ({
-        page
-    }) => {
-        const errors: string[] = [];
-        page.on("pageerror", (err) => errors.push(err.message));
-
-        await page.goto("/call-planner/");
-        await page.waitForLoadState("networkidle");
-
-        await expect(page.locator(".cp-topbar__kicker")).toContainText(
-            "CALL PLANNER"
-        );
-        await expect(page.locator(".cp-witness")).toBeAttached();
-        await expect(page.locator(".cp-spine")).toBeAttached();
-        await expect(page.locator(".cp-quality")).toBeAttached();
-        await expect(page.locator(".cp-handoff")).toBeAttached();
-
-        expect(
-            errors,
-            `page errors during boot:\n${errors.join("\n")}`
-        ).toEqual([]);
-    });
+    // Call Planner was retired into Discovery Studio (canon §4.11,
+    // 2026-07-06). Both its new-stack path and its legacy path land in
+    // Discovery Studio with query + hash preserved, so bookmarks and
+    // stored continuity params keep working.
+    for (const retired of ["/call-planner/", "/app/discovery-agenda/"]) {
+        test(`retired Call Planner path ${retired} redirects to /discovery-studio/`, async ({
+            page
+        }) => {
+            await page.goto(`${retired}?account=Acme&qa=1#segment`);
+            await page.waitForURL(/\/discovery-studio\//, { timeout: 15_000 });
+            const url = new URL(page.url());
+            expect(url.pathname).toBe("/discovery-studio/");
+            expect(url.searchParams.get("account")).toBe("Acme");
+            expect(url.hash).toBe("#segment");
+        });
+    }
 
     test("Phase 4 / Room 10 Wave 1 — /call-in-a-favor/ Preact rebuild boots cleanly", async ({
         page

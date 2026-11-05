@@ -55,8 +55,8 @@ describe("filterSkills", () => {
     });
 
     it("filters by description substring", () => {
-        const out = filterSkills("hottest account");
-        expect(out.length).toBeGreaterThanOrEqual(1);
+        const out = filterSkills("supporting evidence");
+        expect(out.some((s) => s.id === "triage-week-reads")).toBe(true);
     });
 
     it("case-insensitive", () => {
@@ -69,7 +69,7 @@ describe("filterSkills", () => {
 describe("findSkillById", () => {
     it("returns the skill when id matches", () => {
         expect(findSkillById("triage-week-reads")?.label).toBe(
-            "Triage the week's reads"
+            "Review this week's workspace analysis"
         );
     });
     it("returns null for unknown id", () => {

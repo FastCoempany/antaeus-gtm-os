@@ -21,22 +21,32 @@ describe("seeding evidence registry", () => {
         }
     });
 
-    it("the doorway makes a promise, not a citation (no source)", () => {
+    it("the doorway explains the setup without an external claim", () => {
         expect(EVIDENCE.door.source).toBeNull();
     });
 
-    it("the load-bearing steps carry a citation", () => {
-        // ICP, accounts, deals, quota, landing are the asks we must justify
-        // with evidence, not assertion (Earned Depth #3).
-        for (const step of ["icp", "accounts", "deals", "quota", "landing"] as const) {
-            expect(EVIDENCE[step].source).not.toBeNull();
+    it("states the limits of account assessments and pipeline calculations", () => {
+        expect(EVIDENCE.icp.note).toMatch(/verification/i);
+        expect(EVIDENCE.wake.note).toMatch(/not confirmed buying intent/i);
+        expect(EVIDENCE.quota.note).toMatch(/conversion assumptions/i);
+    });
+
+    it("does not present unsourced outcome percentages as a reason to enter inputs", () => {
+        for (const { note, source } of Object.values(EVIDENCE)) {
+            if (!source) expect(note).not.toMatch(/\d+%/);
         }
     });
 
-    it("does not smuggle in a fabricated percentage where the source is directional", () => {
-        // ICP win-rate percentages floating around the web are blog-grade;
-        // the note stays directional rather than citing a number we can't
-        // stand behind (the honesty flag from the sourcing pass).
-        expect(EVIDENCE.icp.note).not.toMatch(/\d+%/);
+    it("every note is non-empty and contains no percentage or statistic", () => {
+        for (const step of SEEDING_STEPS) {
+            const { note } = EVIDENCE[step];
+            expect(note.trim().length).toBeGreaterThan(0);
+            expect(note).not.toMatch(/\d+(\.\d+)?\s*%|percent/i);
+        }
+    });
+
+    it("names only inputs the steps actually collect", () => {
+        expect(EVIDENCE.quota.note).not.toMatch(/closed-won/i);
+        expect(EVIDENCE.deals.note).not.toMatch(/budget|timeline/i);
     });
 });

@@ -180,6 +180,24 @@ describe("summarizeCommandContext", () => {
 });
 
 describe("explainCommandObject", () => {
+    it.each(["queue", "spotlight", "brief"] as const)("does not conflate overdue next steps and stage age in %s mode", (mode) => {
+        const base = buildCommandObjects(input({ riskCards: [acmeRiskCard] }))[0]!;
+        const overdue = explainCommandObject({ ...base, nextStepOverdue: true, stageStuck: false }, mode);
+        const aged = explainCommandObject({ ...base, nextStepOverdue: false, stageStuck: true }, mode);
+        expect(overdue.title).toContain("next step is overdue");
+        expect(overdue.title).not.toContain("stage");
+        expect(aged.title).toContain("too long at this stage");
+        expect(aged.title).not.toContain("overdue");
+    });
+
+    it("does not treat a link to Future Autopsy as a past failure", () => {
+        const object = buildCommandObjects(input({ riskCards: [{
+            title: "Review Acme",
+            actions: [{ label: "Open Future Autopsy", href: "/future-autopsy/" }]
+        }] }))[0]!;
+        expect(object.scoreReasons).toContain("a deal-risk review is available");
+        expect(object.scoreReasons.join(" ")).not.toContain("past failure");
+    });
     it("emits a 'Why this is here' label in spotlight mode", () => {
         const objects = buildCommandObjects(input({ riskCards: [acmeRiskCard] }));
         const expl = explainCommandObject(objects[0]!, "spotlight");

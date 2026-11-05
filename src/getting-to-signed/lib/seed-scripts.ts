@@ -9,23 +9,21 @@ import type {
  * Seed script content for the Negotiation room — Phase 4 of the
  * 2026-05 navigation-intelligence roadmap.
  *
- * The CFO + Procurement + Legal scripts are carried forward verbatim
- * from the legacy `antaeus_studio_cfo_v2` localStorage shape, retired
- * in the architecture-reset. Per canon §4.16b "Migration content
- * owed" — the procurement + finance scripts were the only substance
- * worth preserving.
+ * The CFO, Procurement and Legal scripts originated in the retired
+ * `antaeus_studio_cfo_v2` localStorage shape. Role and template IDs
+ * remain stable; wording must not invent product capabilities or terms.
  *
  * VP Finance + General Counsel + InfoSec are net-new for Phase 4,
  * inferred from the recurring counterparty shapes in the Discovery
  * Studio framework families (Legal/GovTech segments for GC + Legal;
  * AI-native + Data-Intelligence segments for InfoSec; Sales/Revenue
  * Intelligence + Manufacturing segments for VP Finance). Authored to
- * match the role's actual pressure shape — VP Finance asks about
+ * address the role's responsibilities — VP Finance asks about
  * unit economics, not budget approval; InfoSec asks about SOC 2 +
  * pen-test + data-residency, not procurement rubrics.
  *
- * Operators can edit + extend per-deal; these are templates, not
- * rules.
+ * Operators must confirm capabilities, evidence and authority before
+ * making commitments. Concessions are proposals requiring approval.
  */
 
 // ─── CFO / Finance ───────────────────────────────────────────────────
@@ -35,19 +33,19 @@ export const SEED_PUSHBACKS_CFO: ReadonlyArray<PushbackTemplate> = [
         id: "p_cfo_1",
         trigger: "We need a 20% discount.",
         response:
-            "What's the business case 20% buys us — earlier signature, multi-year, expansion commitment? We can shape the discount around what you're solving."
+            "Never give a discount for nothing — ask what it buys: an earlier signature, a multi-year term, or more scope. A common trade is a smaller discount for a signature this month or a two-year term — confirm with your team that you can offer it. Set your walkaway — the lowest price and terms you won't accept — before the call, not in it."
     },
     {
         id: "p_cfo_2",
         trigger: "Procurement won't approve at this price.",
         response:
-            "Help me understand the procurement rubric. If it's TCV-based we can structure annual; if it's per-seat we can right-size. What rubric are they running?"
+            "Ask which procurement rule the price breaks: total contract value, annual spend, or per-seat cost. If it's total value, a common trade is billing annually instead of up front; if it's per-seat, a common trade is right-sizing the seat count. Confirm with your team that you can offer either."
     },
     {
         id: "p_cfo_3",
         trigger: "We need to defer this to next quarter.",
         response:
-            "What changes between now and then that makes the decision easier? If it's budget timing, we have annual prepay options. If it's confidence, that's a different conversation."
+            "Ask what changes next quarter that makes the decision easier. If it's budget timing, a common trade is starting now with a payment schedule that lands in their next budget — confirm with your team that you can offer it. If it's confidence in the business case, a payment change won't fix it; go back to what they still need to see."
     }
 ];
 
@@ -58,19 +56,19 @@ export const SEED_PUSHBACKS_VP_FINANCE: ReadonlyArray<PushbackTemplate> = [
         id: "p_vpf_1",
         trigger: "The unit economics don't work for us at list.",
         response:
-            "Let's pressure-test the unit math together — what's the cost-per-outcome you're comparing against? If we're 2× more expensive but 4× more accurate, that's a different ratio than headline price suggests."
+            "Move the comparison from headline price to cost per result. Use a template like: if you're [N]× the price but materially more accurate, show the cost per correct result at their volume. Only use accuracy and volume numbers you can back up from their pilot or your verified results."
     },
     {
         id: "p_vpf_2",
         trigger: "We need to see CAC payback under 12 months.",
         response:
-            "Show me the payback model you're running. Most teams in your shape see payback at month 7-9 once the second use case lights up — but the first six months are honest. Which use cases are you committing to in year one?"
+            "Ask to see their payback model, including setup costs and timing. Payback is usually slow while the first use case gets running, so ask which use cases they'll commit to in year one — a second use case is often what pulls payback forward. If 12 months isn't reachable on honest numbers, say so rather than stretching the model."
     },
     {
         id: "p_vpf_3",
         trigger: "What's the gross-margin impact on our P&L?",
         response:
-            "If this displaces three FTEs at $180K loaded, the GM math swings positive in quarter two. The conversation is whether you're treating this as COGS or OpEx — and that's a CFO call. Want me to send the displacement model?"
+            "Ask which costs actually change and how their finance team classifies this spend. Separate freed-up capacity from real cost cuts — finance teams discount capacity gains. If you have a cost-savings model built on their numbers, offer to send it."
     }
 ];
 
@@ -81,19 +79,19 @@ export const SEED_PUSHBACKS_PROCUREMENT: ReadonlyArray<PushbackTemplate> = [
         id: "p_proc_1",
         trigger: "We have a preferred-vendor process.",
         response:
-            "Understood. What's the typical timeline once a sponsor is identified? We can sequence around your gating — but the work needs to be moving in parallel with the paperwork, not blocked behind it."
+            "Ask for the approval steps, owners, and expected dates. Push to keep the evaluation work moving in parallel with the paperwork, not blocked behind it — deals that wait on vendor approval before any work starts often lose a quarter."
     },
     {
         id: "p_proc_2",
         trigger: "We need 3 references and 3 quotes.",
         response:
-            "Here are 3 references in your shape. On quotes — we don't bid against ourselves. If the question is value, we can show the ROI math. If it's compliance, point me at the rubric."
+            "If you have customers who have agreed to take a reference call, offer them; confirm with your team before naming anyone. On the three quotes: don't bid against yourself by dropping price before you've seen a competing number. Ask whether the quotes are about value or a compliance rule, and answer that instead."
     },
     {
         id: "p_proc_3",
         trigger: "Can you match competitor X's pricing?",
         response:
-            "Pricing-on-pricing isn't the conversation. Outcome-on-outcome is. What did they promise, what did we, who's accountable when it doesn't ship? Let's compare those."
+            "Don't trade price for price. Compare what each vendor commits to deliver, who's accountable if it doesn't, and the total cost. If you do move on price, a common trade is a lower price for a longer term or a reference — confirm with your team that you can offer it."
     }
 ];
 
@@ -104,19 +102,19 @@ export const SEED_PUSHBACKS_LEGAL: ReadonlyArray<PushbackTemplate> = [
         id: "p_legal_1",
         trigger: "We need indemnification carve-outs.",
         response:
-            "Standard indemnification covers IP and gross negligence. What's the specific risk you're seeing? If it's data residency, that's an MSA appendix. If it's IP, we can be specific."
+            "Ask what specific risk the carve-out covers. Standard indemnification usually covers IP infringement and gross negligence; if their worry is narrower, a common trade is a specific clause or appendix for that one risk instead of a broad carve-out. Confirm the wording with your legal team."
     },
     {
         id: "p_legal_2",
         trigger: "We can't agree to auto-renewal.",
         response:
-            "Auto-renewal isn't worth dying on. We can move to opt-in renewal with 90-day notice. The behavior we're trying to prevent is silent churn, which opt-in solves."
+            "Auto-renewal is rarely worth losing a deal over. A common trade is opt-in renewal with 90-day notice — it protects you from a renewal that quietly lapses and gives them control. Confirm with your contracts team that you can offer it."
     },
     {
         id: "p_legal_3",
         trigger: "Your limitation-of-liability cap is too low.",
         response:
-            "Our cap matches the 12-month subscription value, which is the industry pattern for SaaS at this ACV. If there's a specific risk vector you're sizing for, let's name it and decide if it belongs in the contract or in an insurance rider."
+            "Ask which losses they're trying to cover. A cap equal to 12 months of fees is common for SaaS at this deal size. If they need more for a specific risk, a common trade is a separate, higher cap for that risk or an insurance rider instead of raising the whole cap — confirm with your legal team that you can offer it."
     }
 ];
 
@@ -127,19 +125,19 @@ export const SEED_PUSHBACKS_GC: ReadonlyArray<PushbackTemplate> = [
         id: "p_gc_1",
         trigger: "We need exclusive rights in our vertical.",
         response:
-            "Exclusivity isn't on the table at this stage — but most-favored-nation pricing for the first 12 months is. The behavior you're protecting is being undercut, which MFN solves. What time horizon are you actually trying to fence?"
+            "Ask what exclusivity is protecting them from — usually being undercut by a competitor getting a better deal. A common trade is most-favored pricing for the first 12 months instead of exclusivity — confirm with your team that you can offer it. Ask what time horizon they actually need."
     },
     {
         id: "p_gc_2",
         trigger: "Termination-for-convenience must be 30 days.",
         response:
-            "Standard SaaS termination-for-convenience is 90 days. The work we do in months one through three is the integration that makes month four valuable. We can compress to 60 if you accept a one-time setup fee that reflects that work."
+            "Ask why they need 30 days. The first months are usually setup work that only pays off later, so a very short exit puts that work at risk. A common trade is accepting 60 days in exchange for a one-time setup fee — confirm with your team that you can offer it."
     },
     {
         id: "p_gc_3",
         trigger: "We need full source-code escrow.",
         response:
-            "We don't do source escrow — the product evolves too fast. What we do offer is a documented data-export contract: any data you put in, you can pull out in standard formats with 30 days' notice. That solves the continuity concern source-escrow is usually a proxy for."
+            "Ask what continuity risk escrow is standing in for — usually 'what happens to our data if you go away.' A common trade is a data-export clause: they can pull all their data out in standard formats on notice. Confirm with your team what you can offer — escrow, a data-export clause, or both."
     }
 ];
 
@@ -150,19 +148,19 @@ export const SEED_PUSHBACKS_INFOSEC: ReadonlyArray<PushbackTemplate> = [
         id: "p_is_1",
         trigger: "We need SOC 2 Type II before we can sign.",
         response:
-            "We're SOC 2 Type II audited — the report is current and under NDA. I can have it in your hands tomorrow. Walk me through which controls you're going to focus on so we can pre-flag any that need explanation."
+            "Which controls and reporting period must the SOC 2 Type II report cover? I'll confirm our audit status and what documentation our security team is authorized to share before promising a delivery date."
     },
     {
         id: "p_is_2",
         trigger: "Customer data has to stay in our region.",
         response:
-            "Data residency is on the roadmap for EU and APAC; we can commit to a date. For now we operate single-region US. If region commitment is a hard gate, let's talk about a contractual data-residency clause with a date-certain on the regional pod."
+            "Which region and data types does the requirement cover? I'll confirm our current storage and processing locations, including subprocessors, before assessing whether we can meet it. If you don't host in their region yet, a common trade is a contract clause with a committed date for regional hosting — confirm with your team that you can offer it."
     },
     {
         id: "p_is_3",
         trigger: "We need penetration-test results from the last 12 months.",
         response:
-            "We run quarterly external pen tests through a named firm — happy to share the most recent report and remediation tracker. The pattern most security teams want is the remediation log, not just the test result. Want both?"
+            "What test scope and remediation evidence do you need? I'll confirm the date and scope of our latest assessment and which report or remediation details our security team can share. Security teams often care more about how findings were fixed than the test itself, so if you have a remediation log, offer it alongside the report."
     }
 ];
 
@@ -171,19 +169,19 @@ export const SEED_PUSHBACKS_INFOSEC: ReadonlyArray<PushbackTemplate> = [
 export const SEED_LADDER_DEFAULT: ReadonlyArray<ConcessionStep> = [
     {
         id: "l_1",
-        give: "5% off list",
+        give: "Proposed 5% off list (approval required)",
         ask: "2-year commitment + signature this week",
         cost: "low"
     },
     {
         id: "l_2",
-        give: "10% off list + waive setup fee",
+        give: "Proposed 10% off list + waive setup fee (approval required)",
         ask: "3-year commitment + reference call",
         cost: "mid"
     },
     {
         id: "l_3",
-        give: "15% off list + extended payment terms",
+        give: "Proposed 15% off list + extended payment terms (approval required)",
         ask: "Multi-year + case study + 1 year price-lock",
         cost: "high"
     }
@@ -214,31 +212,30 @@ export function seedPushbacksFor(
 /**
  * Per-ask-moment opening-line suggestion. Authored sentences the
  * operator can carry forward into the actual opening line field.
- * Inferred from Discovery Studio's decision-architecture segments
- * across the nine framework families — these are the recurring
- * opener shapes that hold pressure without leaking confidence.
+ * These questions identify the buyer's constraint without assuming
+ * their motives or implying that an unapproved term is available.
  */
 export const ASK_MOMENT_OPENINGS: Record<AskMoment, string> = {
     pricing_position:
-        "Before we get into line items, let's anchor on the outcome you're buying — that's what determines whether the price is the right one.",
+        "Which outcomes and scope are you evaluating at this price? Let's agree on the comparison before discussing individual line items.",
     discount_request:
-        "I want to understand the case for a discount on its own terms. What business event does it unlock that list price doesn't?",
+        "What constraint would a discount address, and what commitment could accompany it?",
     terms_and_payment:
-        "Payment terms are usually a proxy for a different concern. What's the cash-flow constraint we're actually solving?",
+        "What payment schedule do you need, and which budget or cash-flow requirements does it address?",
     contract_length:
-        "Contract length is a confidence question, not a price question. What would you need to see in the first 90 days to be comfortable signing a longer term?",
+        "What concerns do you have about the contract length? Which results, review points, or commercial terms would help you assess a longer commitment?",
     auto_renewal:
-        "I hear you on auto-renewal — let's separate the behavior we're trying to prevent from the contractual mechanism.",
+        "What renewal process does your team require, including notice, approval, and cancellation dates?",
     indemnification:
-        "Walk me through the specific risk vector. Standard carve-outs cover IP and gross negligence; if you're sizing for something else, name it.",
+        "Which risks and potential losses should the indemnification terms address? Let's identify them for the legal review.",
     security_review:
-        "Tell me which controls you're going to focus on so I can pre-flag anything that needs explanation up front.",
+        "Which security controls and supporting documents does your review require, and who will assess them?",
     rampup_schedule:
-        "The first 90 days set whether the second use case lights up. What's your team's bandwidth to actually deploy versus evaluate?",
+        "What work and team capacity would deployment require in the first 90 days? Let's distinguish evaluation milestones from implementation commitments.",
     expansion_commitment:
-        "If we structure for expansion now, we both win on the second wave. What's the realistic shape of phase two if phase one works?",
+        "If the first phase meets the agreed criteria, what additional scope might you consider, and who would approve it?",
     decision_deadline:
-        "Let's name the decision date out loud. What's blocking that date from being firm?"
+        "What is the target decision date, and which approvals or unresolved questions could change it?"
 };
 
 /**

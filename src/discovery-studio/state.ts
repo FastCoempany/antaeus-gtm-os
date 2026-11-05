@@ -239,11 +239,11 @@ export interface PostCallPackage {
 export const frameworkRegistry: Signal<ReadonlyArray<Framework>> = signal([]);
 
 /**
- * Phase 2.5 — focused account from cross-room handoff. Call Planner,
- * Dashboard, or any upstream room passes `?focusObject=<account>` or
+ * Phase 2.5 — focused account from cross-room handoff. Signal Console,
+ * Deal Workspace, Dashboard, or any upstream room passes `?focusObject=<account>` or
  * `?account=<account>` to tell Discovery which account this call is
  * with. Surfaces in the kicker tail + propagates through the
- * Discovery → Deal Workspace / Future Autopsy / Call Planner handoff
+ * Discovery → Deal Workspace / Future Autopsy handoff
  * URLs so destinations land focused. Empty = no inbound.
  */
 export const focusedAccount: Signal<string> = signal("");
@@ -512,11 +512,22 @@ export function clearInterrupt(): void {
 /**
  * Route a recover jump-action to where it points. A "node:<seg>--<slug>"
  * target opens that segment + node so the seller runs the recovery from
- * the right place; the interrupt clears once routed. "room:<id>" targets
+ * the right place; a "segment:<key>" target opens that segment's first
+ * node; the interrupt clears once routed. "room:<id>" targets
  * are cross-room and handled by the caller's continuity-param navigation;
  * they no-op here. Returns true when the jump resolved to a real node.
  */
 export function jumpToInterruptTarget(target: string): boolean {
+    if (target.startsWith("segment:")) {
+        const fid = activeFramework.value;
+        const fw = fid ? frameworkRegistry.value.find((f) => f.id === fid) : undefined;
+        const seg = fw?.segments.find((s) => s.key === target.slice("segment:".length));
+        const first = seg?.nodes[0];
+        if (!seg || !first) return false;
+        setActiveNode(seg.key, first.id);
+        clearInterrupt();
+        return true;
+    }
     if (!target.startsWith("node:")) return false;
     const nodeId = target.slice("node:".length);
     const segmentKey = getSegmentKeyForNode(nodeId);

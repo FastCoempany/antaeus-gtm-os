@@ -20,13 +20,13 @@ describe("buildStatement", () => {
 
     it("returns the empty placeholder when any field is missing", () => {
         const result = buildStatement({ ...fullInput, buyer: "" });
-        expect(result.text).toContain("Fill the inputs");
+        expect(result.text).toContain("Complete the inputs");
         expect(result.hint).toContain("one owner, one pain");
     });
 
     it("returns the empty placeholder when fields are whitespace-only", () => {
         const result = buildStatement({ ...fullInput, geo: "   " });
-        expect(result.text).toContain("Fill the inputs");
+        expect(result.text).toContain("Complete the inputs");
     });
 
     it("composes the full Thin ICP statement when all 7 inputs are filled", () => {
@@ -39,7 +39,10 @@ describe("buildStatement", () => {
         // Trigger is lowercased per legacy line 1188
         expect(result.text).toContain("hiring spike");
         expect(result.text).toContain("30 days");
-        expect(result.hint).toContain("50 accounts");
+        expect(result.hint).toContain("targeting hypothesis");
+        expect(result.text).toContain("We target");
+        expect(result.text).toContain("planned value-validation period");
+        expect(result.text).not.toMatch(/We win|we can prove/);
     });
 
     it("lowercases the trigger inside the sentence (legacy parity)", () => {
@@ -56,7 +59,9 @@ describe("buildFocus", () => {
     it("uses explicit activeAccounts when > 0", () => {
         const result = buildFocus("founder", 80);
         expect(result).toContain("80 active accounts");
-        expect(result).toContain("ranked top-20");
+        expect(result).toContain("top 20 ranked");
+        expect(buildFocus("founder", 2)).not.toContain("top 20");
+        expect(buildFocus("founder", 2)).toContain("Work 2 active accounts");
     });
 
     it("falls back to founder default with no override", () => {

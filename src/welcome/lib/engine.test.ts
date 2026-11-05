@@ -14,7 +14,7 @@ describe("buildActivationModel", () => {
         // Phase 2.1 audit: empty-state copy now names the unit (ICP)
         // and the verb (define). Was: "Set up one ICP before the
         // system starts briefing you" — "ICP" was internal canon.
-        expect(m.headline).toMatch(/define one sharp icp/i);
+        expect(m.headline).toMatch(/define your first ideal customer profile/i);
         expect(m.nextMilestone?.key).toBe("icp");
     });
 
@@ -33,7 +33,7 @@ describe("buildActivationModel", () => {
         );
         expect(m.completed).toBe(4);
         expect(m.nextMilestone).toBeNull();
-        expect(m.headline).toMatch(/all four anchors are live/i);
+        expect(m.headline).toMatch(/all four setup milestones are complete/i);
     });
 
     it("calls also count toward the motion anchor", () => {
@@ -116,7 +116,7 @@ describe("buildActions — after-access first move", () => {
         const list = buildActions(postOnboarding, null);
         const top = list[0]!;
         expect(top.key).toBe("motion");
-        expect(top.title).toBe("Log the first motion.");
+        expect(top.title).toBe("Log your first sales activity.");
         expect(top.href).toBe("/outbound-studio/");
     });
 
@@ -157,12 +157,14 @@ describe("buildActions URL safety", () => {
         // engine intentionally uses /app/icp-studio/ for the same
         // reason. The other actions point at rooms already merged
         // (signal-console / deal-workspace / outbound-studio /
-        // call-planner / dashboard) so they use the new-stack paths.
+        // discovery-studio / dashboard) so they use the new-stack paths.
+        // The planner action lands in Discovery Studio now that Call
+        // Planner is retired (canon §4.11).
         const list = buildActions(counts({ icps: 1, accounts: 1, deals: 1 }));
         const dashboard = list.find((a) => a.key === "dashboard");
         if (dashboard) expect(dashboard.href).toBe("/dashboard/");
         const planner = list.find((a) => a.key === "planner");
-        if (planner) expect(planner.href).toBe("/call-planner/");
+        if (planner) expect(planner.href).toBe("/discovery-studio/");
     });
 });
 

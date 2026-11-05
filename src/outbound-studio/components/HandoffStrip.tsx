@@ -43,7 +43,7 @@ export function HandoffStrip(): JSX.Element {
                     class="ob-handoff__cta ob-handoff__cta--primary"
                     href={hrefToLinkedInPlaybook(focus)}
                 >
-                    {t("Send LinkedIn air cover")}
+                {t("Plan LinkedIn outreach")}
                 </a>
                 <a
                     class="ob-handoff__cta"

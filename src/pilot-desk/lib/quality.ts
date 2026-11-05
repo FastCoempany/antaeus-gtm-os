@@ -121,7 +121,7 @@ const WEAKEST_MAP: Record<string, MoldDiagnosis> = {
     },
     kill_rule: {
         id: "kill_rule",
-        title: "Kill rule",
+        title: "Stop criteria",
         copy: "Define when the PoC stops."
     },
     readout: {
@@ -149,15 +149,15 @@ export function weakestMold(inputs: WeakestInputs): MoldDiagnosis {
 // ─── Quality score + band ─────────────────────────────────────────────
 
 const BAND_TITLE: Record<QualityBand, string> = {
-    ready: "The evidence is ready. The buyer's boss could act on this.",
-    workable: "The evidence is hot, but the buyer can't carry it into the room yet.",
-    thin: "There's interest, but you can't take this to the buyer's boss yet."
+    ready: "Most pilot-planning fields are complete. Confirm the criteria and decision owner with the buyer.",
+    workable: "The pilot plan is partly complete. Review the missing criteria or owner details.",
+    thin: "Complete the pilot plan before using it for a buyer decision."
 };
 
 const BAND_LABEL: Record<QualityBand, string> = {
-    ready: "Cast",
-    workable: "Hot",
-    thin: "Thin"
+    ready: "Mostly complete",
+    workable: "Partly complete",
+    thin: "Incomplete"
 };
 
 export interface QualitySummary {
@@ -249,16 +249,16 @@ export function deriveMolds(
         tx(drft.readoutOwner) || "No readout owner";
     return [
         {
-            label: "Claim",
-            value: firstBullet(drft.successCriteria, "Name the evidence claim"),
+            label: "Success criterion",
+            value: firstBullet(drft.successCriteria, "Add a measurable success criterion"),
             state: quality.successCount > 0 ? "hot" : "red"
         },
         {
-            label: "Baseline",
+            label: "Criteria detail",
             value:
                 quality.successCount >= 2
-                    ? "Criteria can be tested."
-                    : "Current state is not measurable.",
+                    ? "At least two criteria are recorded. Confirm how they will be measured."
+                    : "Record at least two criteria and how they will be measured.",
             state: quality.successCount >= 2 ? "cast" : "cold"
         },
         {
@@ -275,11 +275,11 @@ export function deriveMolds(
             state: quality.successCount >= 3 ? "cast" : "hot"
         },
         {
-            label: "Kill",
+            label: "Stop criteria",
             value:
                 quality.boundaryCount >= 2
                     ? `${quality.boundaryCount} stop rules`
-                    : "Kill rule too soft",
+                    : "Record at least two stop criteria",
             state: quality.boundaryCount >= 2 ? "cast" : "red"
         }
     ];
@@ -305,15 +305,15 @@ export function deriveMolds(
  *   red  → "broken"
  */
 const STATE_WORD: Readonly<Record<MoldState, string>> = {
-    cast: "locked",
-    hot: "hot",
-    cold: "empty",
-    red: "broken"
+    cast: "recorded",
+    hot: "partly recorded",
+    cold: "incomplete",
+    red: "missing required details"
 };
 
 export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
     if (molds.length === 0) {
-        return "No molds yet — start the forge.";
+        return "No pilot criteria are recorded yet. Start the pilot plan.";
     }
     const cast = molds.filter((m) => m.state === "cast");
     const hot = molds.filter((m) => m.state === "hot");
@@ -322,11 +322,11 @@ export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
 
     // All locked → ready to carry.
     if (cast.length === molds.length) {
-        return "All five molds are locked. The evidence is ready — the buyer's boss could act on this.";
+        return "All required planning sections are complete. Verify the criteria with the buyer before using the plan.";
     }
     // Nothing started → empty foundry.
     if (cast.length === 0 && hot.length === 0) {
-        return "All five molds are still empty. The evidence has not been forged yet.";
+        return "Required planning details are missing. Add the account, owner, success criteria, and stop criteria.";
     }
 
     const clauses: string[] = [];
@@ -335,16 +335,16 @@ export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
     // (broken + empty). Cap at 3 clauses to keep the read scannable.
     if (cast.length >= 2) {
         const names = cast.slice(0, 2).map((m) => m.label.toLowerCase());
-        clauses.push(`${capitalize(names.join(" and "))} molds are locked.`);
+        clauses.push(`${capitalize(names.join(" and "))} are recorded.`);
     } else if (cast.length === 1) {
-        clauses.push(`The ${cast[0]!.label.toLowerCase()} mold is locked.`);
+        clauses.push(`${capitalize(cast[0]!.label.toLowerCase())} is recorded.`);
     }
 
     if (hot.length === 1) {
-        clauses.push(`The ${hot[0]!.label.toLowerCase()} mold is hot.`);
+        clauses.push(`${capitalize(hot[0]!.label.toLowerCase())} is partly recorded.`);
     } else if (hot.length >= 2) {
         const names = hot.slice(0, 2).map((m) => m.label.toLowerCase());
-        clauses.push(`${capitalize(names.join(" and "))} molds are hot.`);
+        clauses.push(`${capitalize(names.join(" and "))} are partly recorded.`);
     }
 
     // Add ONE weakness clause — the broken / empty mold the operator
@@ -352,7 +352,7 @@ export function buildIngotRead(molds: ReadonlyArray<MoldRow>): string {
     const weakest = red[0] ?? cold[0] ?? null;
     if (weakest && clauses.length < 3) {
         clauses.push(
-            `The ${weakest.label.toLowerCase()} mold is ${STATE_WORD[weakest.state]}.`
+            `${capitalize(weakest.label.toLowerCase())} is ${STATE_WORD[weakest.state]}.`
         );
     }
 

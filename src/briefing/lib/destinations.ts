@@ -3,15 +3,19 @@
  * tokens produced by the synthesis pipeline.
  *
  * Per canon §4.21 the Briefing produces drafts the operator reviews and
- * saves to a destination room (Discovery / Call Planner / Outbound /
- * Asset Builder / Deal Workspace). The pipeline writes destinations as
+ * saves to a destination room (Discovery / Outbound / Asset Builder /
+ * Deal Workspace). The pipeline writes destinations as
  * structured strings like:
  *
  *   "Discovery Studio · Phase 4 · refresh existing"
- *   "Call Planner · Objection Bank · new"
+ *   "Discovery Studio · Objection Bank · new"
  *   "Outbound Studio · Hook Library · new"
  *   "Asset Builder · Battlecard · Linear · refresh existing"
  *   "Deal Workspace · Deal-Watch · Acme · alert"
+ *
+ * Call Planner was retired into Discovery Studio 2026-07-06 (canon
+ * §4.11 — its objection handler moved there), so a "Call Planner · …"
+ * token still parses and routes to Discovery Studio.
  *
  * This module turns those strings into clickable routes carrying the
  * draft payload through the canonical continuity params so the
@@ -22,7 +26,6 @@ import type { RecommendedMove } from "./patterns";
 
 export type DestinationRoom =
     | "discovery-studio"
-    | "call-planner"
     | "outbound-studio"
     | "deal-workspace"
     | "asset-builder";
@@ -42,8 +45,7 @@ export interface DestinationToken {
 }
 
 const ROOM_MAP: ReadonlyArray<readonly [DestinationRoom, ReadonlyArray<string>]> = [
-    ["discovery-studio", ["discovery studio", "discovery"]],
-    ["call-planner", ["call planner"]],
+    ["discovery-studio", ["discovery studio", "discovery", "call planner"]],
     ["outbound-studio", ["outbound studio", "outbound"]],
     ["deal-workspace", ["deal workspace", "deals"]],
     ["asset-builder", ["asset builder", "assets"]]
@@ -162,8 +164,6 @@ function roomPath(room: DestinationRoom): string | null {
     switch (room) {
         case "discovery-studio":
             return "/discovery-studio/";
-        case "call-planner":
-            return "/call-planner/";
         case "outbound-studio":
             return "/outbound-studio/";
         case "deal-workspace":
@@ -175,7 +175,6 @@ function roomPath(room: DestinationRoom): string | null {
 
 export const DESTINATION_ROOM_LABEL: Record<DestinationRoom, string> = {
     "discovery-studio": "Discovery Studio",
-    "call-planner": "Call Planner",
     "outbound-studio": "Outbound Studio",
     "deal-workspace": "Deal Workspace",
     "asset-builder": "Asset Builder"

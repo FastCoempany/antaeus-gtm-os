@@ -1,12 +1,10 @@
 /**
- * Phase 4 / Room 14 — Quota Workback types.
+ * Quota Workback domain types.
  *
- * Per canon §4.18: turn a quota target into weekly execution pressure
- * the user can feel. Core nouns: PlanInputs (the operator's targets +
- * conversion assumptions), Benchmark (per-ACV-band industry defaults),
- * PlanMetrics (every derived number the rest of the room renders),
- * QualitySignal (the system-health verdict), CoverageSnapshot (live
- * pipeline coverage drawn from Deal Workspace).
+ * PlanInputs contains the seller's target and conversion assumptions.
+ * Benchmarks are selected by typical deal size (ACV band). PlanMetrics are
+ * derived planning numbers; QualitySignal reports benchmark alignment, not a
+ * holistic readiness judgment. CoverageSnapshot comes from Deal Workspace.
  */
 
 export interface PlanInputs {
@@ -14,14 +12,15 @@ export interface PlanInputs {
     readonly acv: number;
     /** Win rate, expressed as a percentage (0-100). */
     readonly win: number;
-    /** Meeting to opp, expressed as a percentage (0-100). */
+    /** Meeting to opportunity, expressed as a percentage (0-100). */
     readonly m2o: number;
-    /** Touch to meeting, expressed as a percentage (0-100). */
+    /** Outreach to first meeting, expressed as a percentage (0-100). */
     readonly t2m: number;
     /** Show rate, expressed as a percentage (0-100). */
     readonly show: number;
+    /** Working days per month used to calculate required daily activity. */
     readonly days: number;
-    /** Touches per account. */
+    /** Outreach touches per account. */
     readonly tpa: number;
     /** Average sales cycle in days. */
     readonly cycle: number;
@@ -47,17 +46,13 @@ export interface Benchmark {
     readonly maxAcv: number;
     /** Win rate, percentage. */
     readonly winRate: number;
-    /** Cycle days. */
+    /** Average sales cycle, days. */
     readonly cycle: number;
-    /** Meeting-to-opp, percentage. */
+    /** Meeting-to-opportunity conversion, percentage. */
     readonly m2o: number;
-    /**
-     * Touch-to-meeting, percentage — of every 100 messages/calls, how
-     * many turn into a first meeting. Signal-driven outbound (the whole
-     * Antaeus premise) lands well above spray-and-pray cold rates.
-     */
+    /** Outreach-to-first-meeting conversion, percentage. */
     readonly t2m: number;
-    /** Coverage multiple (e.g., 3.0x). */
+    /** Coverage multiple (e.g. 3.0x). */
     readonly coverage: number;
     readonly winRange: string;
     readonly cycleRange: string;
@@ -145,20 +140,20 @@ export type QualityTone = "good" | "warn" | "bad";
 
 export interface QualitySignal {
     readonly score: number;
-    readonly label: "Ready now" | "Workable" | "Thin";
+    readonly label: "Near benchmark" | "Mixed benchmark alignment" | "Low benchmark alignment";
     readonly tone: QualityTone;
 }
 
 export interface CoverageSnapshot {
-    /** Coverage ratio (e.g., 3.4 = 3.4x pipeline against quota). */
+    /** Coverage ratio (e.g. 3.4 = 3.4x raw pipeline against quota). */
     readonly ratio: number;
-    /** Weighted pipeline value (after stage probability). */
+    /** Weighted pipeline value after stage probability. */
     readonly weighted: number;
-    /** Raw pipeline value (sum of open deal amounts). */
+    /** Raw pipeline value, sum of open deal amounts. */
     readonly raw: number;
-    /** Gap-to-target dollar amount; 0 when on/over target. */
+    /** Gap-to-required-coverage dollar amount; 0 when on/over target. */
     readonly needed: number;
-    /** True when coverage was computed from real deals; false when no deals or no quota. */
+    /** True when coverage was computed from recorded deals. */
     readonly hasDeals: boolean;
 }
 

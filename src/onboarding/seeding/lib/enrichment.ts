@@ -8,9 +8,8 @@ import { reportError } from "@/lib/observability";
  * real web-search-grounded trigger-finder (one search pass per company,
  * source-URL-gated, honest "quiet" when nothing's found). When the
  * function isn't reachable (not deployed, no API key, network), it falls
- * back to the deterministic dev stub so internal preview still works.
- * The flow is flag-off in production, so operators only ever see the real
- * results once the function is deployed.
+ * back to an explicit unavailable result. Sample signals are available only
+ * through the separately invoked demo helper, never as a network fallback.
  */
 
 export interface EnrichedAccount {
@@ -26,11 +25,13 @@ export interface EnrichmentRead {
     readonly kind: "sees" | "doesnt-fit" | "missed";
     readonly title: string;
     readonly body: string;
+    readonly sourceUrl?: string;
 }
 
 export interface EnrichmentResult {
     readonly accounts: ReadonlyArray<EnrichedAccount>;
     readonly reads: ReadonlyArray<EnrichmentRead>;
+    readonly unavailable?: boolean;
 }
 
 // ── Real path ───────────────────────────────────────────────────────────
@@ -61,7 +62,8 @@ function parseResult(res: unknown): EnrichmentResult | null {
                 reads.push({
                     kind: o.kind,
                     title: typeof o.title === "string" ? o.title : "",
-                    body: typeof o.body === "string" ? o.body : ""
+                    body: typeof o.body === "string" ? o.body : "",
+                    sourceUrl: typeof o.sourceUrl === "string" && /^https:\/\//i.test(o.sourceUrl) ? o.sourceUrl : ""
                 });
             }
         }
@@ -85,10 +87,14 @@ export async function enrichAccounts(
             if (parsed) return parsed;
         }
     } catch (err) {
-        // Not deployed / no session / network — fall back to the stub.
+        // Preserve the operator's list without inventing evidence on failure.
         reportError(err, { op: "seeding.enrichAccounts.fallback" });
     }
-    return enrichAccountsStub(names, icp);
+    return {
+        unavailable: true,
+        accounts: names.map(name => ({ name, signal: "Account research unavailable", heat: 0, cold: true, sourceUrl: "" })),
+        reads: [{ kind: "sees", title: "Account research unavailable", body: "No company changes were verified. Continue setup with your account list and review account signals later." }]
+    };
 }
 
 // ── Dev stub (fallback) ──────────────────────────────────────────────────
@@ -126,17 +132,17 @@ export async function enrichAccountsStub(
     ranked.sort((a, b) => b.heat - a.heat);
     const accounts: EnrichedAccount[] = ranked.map((a, i) =>
         i === ranked.length - 1
-            ? { ...a, heat: Math.min(a.heat, 14), signal: "quiet — nothing fresh yet", cold: true }
-            : a
+            ? { ...a, heat: Math.min(a.heat, 14), signal: "Demo example: no recent source-backed change", cold: true }
+            : { ...a, signal: `Demo example: ${a.signal}` }
     );
     const reads: EnrichmentRead[] = [];
     if (accounts.length > 0) {
-        reads.push({ kind: "sees", title: "It sees what's happening", body: `${accounts[0]!.name} ${accounts[0]!.signal} — you never typed that. It's your hottest account now.` });
+        reads.push({ kind: "sees", title: "Demo account ranking", body: `${accounts[0]!.name} ranks first in this illustrative sample. These signals are generated examples, not verified company information.` });
     }
     if (accounts.length > 2) {
         const odd = accounts[Math.floor(accounts.length / 2)]!;
-        reads.push({ kind: "doesnt-fit", title: "Harder to fool than you are", body: `${odd.name} may not fit who you said you sell to. Want to take a second look — or drop it?` });
+        reads.push({ kind: "doesnt-fit", title: "Demo fit review", body: `Review ${odd.name} against your ICP. This example does not establish its actual fit.` });
     }
-    reads.push({ kind: "missed", title: "Already ahead of you", body: `There are companies you didn't list that fit your ICP better than some you did. The system surfaces them as it watches the market.` });
+    reads.push({ kind: "missed", title: "Demo account suggestions", body: "Live research can suggest additional accounts when sources support their fit. No additional account was researched for this example." });
     return { accounts, reads };
 }

@@ -29,7 +29,7 @@ export interface PersonalizeContext {
 }
 
 const DEFAULT_ACCOUNT = "[account]";
-const DEFAULT_PRESSURE = "a visible operating pressure";
+const DEFAULT_PRESSURE = "[specific business issue to verify]";
 const DEFAULT_COMPANY = "[your company]";
 
 export function personalize(
@@ -71,8 +71,8 @@ export function loomScore(inputs: LoomScoreInputs): number {
  */
 export function weakestThreadCopy(hasAccount: boolean): string {
     return hasAccount
-        ? "Response path must become a dated move."
-        : "No account selected. Do not dial generic.";
+        ? "Agree on a next step and date before ending the call."
+        : "Select an account so the call has relevant context.";
 }
 
 /**
@@ -97,13 +97,13 @@ export function requiredCorrectionCopy(
     threadId: ThreadId
 ): string {
     if (!hasAccount) {
-        return "Name the business strain before naming the company.";
+        return "Select the account and identify a business issue to discuss.";
     }
     if (threadId === "prep" || threadId === "opener") {
-        return "Force the strain before talking product.";
+        return "Ask whether the business issue matters before discussing your product.";
     }
     if (threadId === "pressure" || threadId === "proof") {
-        return "Trade one piece of evidence for one admission.";
+        return "Share relevant evidence and ask how it compares with the buyer's experience.";
     }
-    return "Lock the dated move with owner and reason.";
+    return "Agree on the next action, owner, date, and purpose.";
 }

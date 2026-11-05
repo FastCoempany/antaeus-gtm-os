@@ -11,8 +11,8 @@ interface Props {
  * secondary, tertiary) routing into the right next room with the
  * canonical continuity params attached.
  *
- * Per canon §4.14 flows-out: Deal Workspace, Call Planner, Discovery
- * Studio, PoC Framework. The action-plan logic picks which room is
+ * Per canon §4.14 flows-out: Deal Workspace, Discovery Studio, Pilot
+ * Desk. The action-plan logic picks which room is
  * primary based on top cause + stage.
  */
 export function RouteRack({ plan }: Props): JSX.Element {
