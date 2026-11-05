@@ -44,7 +44,9 @@ concurrency:
 jobs:
   capture:
     name: Capture all rooms
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which Playwright cannot
+    # install Chromium on ("does not support chromium on ubuntu26.04").
+    runs-on: ubuntu-24.04
     # Allow opt-out via [skip-screenshots] in the commit message —
     # useful for doc-only commits that don't change the rendered UI.
     if: |
