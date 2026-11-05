@@ -107,8 +107,11 @@ jobs:
         if: steps.decide.outputs.should_deploy == 'true'
         run: |
           echo "::group::supabase functions deploy ${{ matrix.function }}"
+          # --yes: CLI 3.x asks for confirmation and refuses to deploy
+          # when stdout is not a terminal.
           supabase functions deploy "${{ matrix.function }}" \
             --no-verify-jwt \
+            --yes \
             --project-ref "$PROJECT_REF"
           echo "::endgroup::"
           echo "Deployed ${{ matrix.function }} to project $PROJECT_REF."
