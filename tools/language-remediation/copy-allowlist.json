@@ -556,5 +556,1058 @@
     "owner": "copy-standard",
     "reviewBy": "2027-05-06",
     "justification": "CSS media feature name (prefers-reduced-motion), not visible copy."
+  },
+  {
+    "path": "js/demo-seed-data-ent.js",
+    "phrase": "pressure",
+    "excerpt": "r labs, with unusually strong pressure on recruiting and retention',",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/demo-seed-data-ent.js",
+    "phrase": "pressure",
+    "excerpt": "'Cost pressure means fewer, more careful hir",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/demo-seed-data-ent.js",
+    "phrase": "pressure",
+    "excerpt": "_e_ap3',notes:'Feels seasonal pressure directly. Opening with the se",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/demo-seed-data-ent.js",
+    "phrase": "floor",
+    "excerpt": "tment puts more people on the floor \u2014 screening decides whether t",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/demo-seed-data-ent.js",
+    "phrase": "front",
+    "excerpt": "lf by putting an AI screen in front of every funnel \u2014 sourcing, s",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/demo-seed-data-smb.js",
+    "phrase": "front",
+    "excerpt": "lf by putting an AI screen in front of every funnel \u2014 sized for t",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Demo sample data: ordinary English ('in front of', 'on the floor', real competitive or cost pressure on a buyer), not product vocabulary.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/birdseye/lib/ranker.ts",
+    "phrase": "pressure",
+    "excerpt": "sourceKind: \"deal-pressure\"",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/birdseye/lib/ranker.ts",
+    "phrase": "decay",
+    "excerpt": "case \"phase-b/deal-decay\":",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/birdseye/lib/ranker.ts",
+    "phrase": "decay",
+    "excerpt": "case \"phase-b/signal-decay\":",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cloud-seed/CloudSeedPage.tsx",
+    "phrase": "heartbeat",
+    "excerpt": "mpletes, manually trigger the heartbeat",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal founder setup page; 'heartbeat' is the literal name of the edge function to trigger.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/components/TalkLoom.tsx",
+    "phrase": "thread",
+    "excerpt": "class={`cc-thread cc-thread--${thread.id}${acti",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Stable step id or CSS class name ('pressure', 'cc-thread'); not rendered text.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/coldcall-bridge.ts",
+    "phrase": "pressure",
+    "excerpt": "\"pressure\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Stable step id or CSS class name ('pressure', 'cc-thread'); not rendered text.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/persistence.ts",
+    "phrase": "pressure",
+    "excerpt": "\"pressure\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Stable step id or CSS class name ('pressure', 'cc-thread'); not rendered text.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/personalize.ts",
+    "phrase": "pressure",
+    "excerpt": "if (threadId === \"pressure\" || threadId === \"proof\") {",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Stable step id or CSS class name ('pressure', 'cc-thread'); not rendered text.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "omething I saw at [account]: [pressure]. If that is not relevant to ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "next: \"pressure\"",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "omething I saw at [account]: [pressure]. Can I give you the 20-secon",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "ef. I saw this at [account]: [pressure]. Is that something your team",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "id: \"pressure\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/lib/threads.ts",
+    "phrase": "pressure",
+    "excerpt": "omething I saw at [account]: [pressure]. I do not know yet whether t",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'pressure' is a stable step id or the [pressure] substitution token replaced with the account's signal headline before display.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+    "phrase": "pressure",
+    "excerpt": "{ id: \"pressure\", name: t(\"Understand the imp",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Stable step id or CSS class name ('pressure', 'cc-thread'); not rendered text.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/command-intelligence.ts",
+    "phrase": "motion",
+    "excerpt": "family === \"advisor\") return \"motion\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/command-intelligence.ts",
+    "phrase": "motion",
+    "excerpt": "return \"motion\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/engine-helpers.ts",
+    "phrase": "thread",
+    "excerpt": "if (label === \"stale thread\") return \"deal record has not",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/readiness-history.ts",
+    "phrase": "thin",
+    "excerpt": "return \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/signal-profile.ts",
+    "phrase": "heat",
+    "excerpt": "const heat = signalNumber(signals, \"heat",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/lib/week-reads-filter.ts",
+    "phrase": "decay",
+    "excerpt": "export const DEAL_DECAY_GENERATOR_ID = \"phase-b/deal-",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/v4/lib/area-chip.ts",
+    "phrase": "thin",
+    "excerpt": "? { cls: \"thin\", word: t(\"limited\") }",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/dashboard/v4/lib/area-chip.ts",
+    "phrase": "thin",
+    "excerpt": ": { cls: \"thin\", word: t(\"none yet\") };",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/data-migration/DataMigrationPage.tsx",
+    "phrase": "thin",
+    "excerpt": "tone={flagOn ? \"active\" : \"thin\"}",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/data-migration/DataMigrationPage.tsx",
+    "phrase": "thin",
+    "excerpt": "ne={markerSetAt ? \"active\" : \"thin\"}",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/data-migration/DataMigrationPage.tsx",
+    "phrase": "thin",
+    "excerpt": "return \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/deal-workspace/components/InterventionRail.tsx",
+    "phrase": "motion",
+    "excerpt": " (lane === \"at-risk\") return \"motion\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/founding-gtm/v4/FoundingGtmV4.tsx",
+    "phrase": "thin",
+    "excerpt": "partial: \"is-thin\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/future-autopsy/lib/autopsy-data.ts",
+    "phrase": "front",
+    "excerpt": "s. Get one concrete result in front of the decision owner soon.\"",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom ('in front of', 'up front'), not the retired 'front' workstream term.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/future-autopsy/lib/autopsy-data.ts",
+    "phrase": "front",
+    "excerpt": " of the results are agreed up front, so the results turn straight",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom ('in front of', 'up front'), not the retired 'front' workstream term.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/getting-to-signed/lib/seed-scripts.ts",
+    "phrase": "carve",
+    "excerpt": "ger: \"We need indemnification carve-outs.\",",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "'Carve-out' is the standard legal term for an indemnification exception, not the territory metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/getting-to-signed/lib/seed-scripts.ts",
+    "phrase": "carve",
+    "excerpt": "\"Ask what specific risk the carve-out covers. Standard indemnif",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "'Carve-out' is the standard legal term for an indemnification exception, not the territory metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/getting-to-signed/lib/seed-scripts.ts",
+    "phrase": "front",
+    "excerpt": "illing annually instead of up front; if it's per-seat, a common t",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom ('up front'), not the retired 'front' workstream term.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/getting-to-signed/lib/types.ts",
+    "phrase": "carve",
+    "excerpt": "mnification: \"Indemnification carve-outs\",",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "'Carve-out' is the standard legal term for an indemnification exception, not the territory metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icons/manifest.ts",
+    "phrase": "motion",
+    "excerpt": "\"motion\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/components/AnalyticsPanel.tsx",
+    "phrase": "sharp",
+    "excerpt": "if (score >= 85) return \"sharp\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/components/AnalyticsPanel.tsx",
+    "phrase": "sharp",
+    "excerpt": "romScore(i.qualityScore) === \"sharp\"",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/components/WedgeLedger.tsx",
+    "phrase": "thin",
+    "excerpt": "y(d.proofWindow) ? \"clear\" : \"thin\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/components/WedgeLedger.tsx",
+    "phrase": "thin",
+    "excerpt": "if (v.length < 24) return \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/lib/data.ts",
+    "phrase": "pressure",
+    "excerpt": "\"Margin pressure language\"",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Names a real buyer condition (margin or audit/compliance pressure) as an ICP trigger option; ordinary English. Value is also a stored option key.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/lib/data.ts",
+    "phrase": "pressure",
+    "excerpt": "trigger: \"Audit / compliance pressure\",",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Names a real buyer condition (margin or audit/compliance pressure) as an ICP trigger option; ordinary English. Value is also a stored option key.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/lib/options.ts",
+    "phrase": "pressure",
+    "excerpt": "value: \"Audit / compliance pressure\",",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Names a real buyer condition (margin or audit/compliance pressure) as an ICP trigger option; ordinary English. Value is also a stored option key.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/lib/options.ts",
+    "phrase": "pressure",
+    "excerpt": "label: \"Audit / compliance pressure\"",
+    "category": "G",
+    "owner": "copy-standard",
+    "justification": "Names a real buyer condition (margin or audit/compliance pressure) as an ICP trigger option; ordinary English. Value is also a stored option key.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/lib/quality.ts",
+    "phrase": "sharp",
+    "excerpt": "tier = \"sharp\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/icp-studio/v4/IcpStudioV4.tsx",
+    "phrase": "sharp",
+    "excerpt": "{ tier: \"sharp\", label: t(\"Highly specific\")",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/lib/edge/LiveEdge.tsx",
+    "phrase": "motion",
+    "excerpt": ".matchMedia(\"(prefers-reduced-motion: reduce)\").matches;",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/lib/observations/generators/deal-decay.ts",
+    "phrase": "decay",
+    "excerpt": "export const DEAL_DECAY_GENERATOR_ID = \"phase-b/deal-",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/lib/observations/generators/signal-decay.ts",
+    "phrase": "decay",
+    "excerpt": "export const SIGNAL_DECAY_GENERATOR_ID = \"phase-b/signa",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/lib/voice/voice-document.ts",
+    "phrase": "heartbeat",
+    "excerpt": "o mirror: `supabase/functions/heartbeat/voice-document.ts`.",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Code comment pointing at the Deno mirror path under supabase/functions/heartbeat/; file path, not copy.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/outbound-studio/lib/generator.ts",
+    "phrase": "thin",
+    "excerpt": "return \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/outbound-studio/lib/persistence.ts",
+    "phrase": "thin",
+    "excerpt": "d: asString(o.motionBand) ?? \"thin\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/pilot-desk/lib/persistence.ts",
+    "phrase": "thin",
+    "excerpt": "adonlySet<string> = new Set([\"thin\", \"workable\", \"ready\"]);",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/pilot-desk/lib/persistence.ts",
+    "phrase": "thin",
+    "excerpt": ": \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/pilot-desk/lib/poc-bridge.ts",
+    "phrase": "thin",
+    "excerpt": "y\" || v === \"workable\" ? v : \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/pilot-desk/lib/quality.ts",
+    "phrase": "thin",
+    "excerpt": ": score >= 60 ? \"workable\" : \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/pilot-desk/v4/lib/pilot.ts",
+    "phrase": "thin",
+    "excerpt": ": \"thin\";",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/signal-console/components/HeatBadge.tsx",
+    "phrase": "heat",
+    "excerpt": "<span class={`sc-heat sc-heat--${cls}`} aria-label=",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/signal-console/lib/heat.ts",
+    "phrase": "heat",
+    "excerpt": "const stored = \"heat\" in o ? o.heat : o._heat;",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/lib/parser.ts",
+    "phrase": "hottest",
+    "excerpt": "\"hottest-signal-console-account\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/lib/parser.ts",
+    "phrase": "pressure",
+    "excerpt": "\"top-pressure-open-deal\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/lib/registry.ts",
+    "phrase": "hottest",
+    "excerpt": "[\"cast-proof-for-hottest-deal\", castProofMd],",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/lib/sources.ts",
+    "phrase": "hottest",
+    "excerpt": "case \"hottest-signal-console-account\":",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/lib/sources.ts",
+    "phrase": "pressure",
+    "excerpt": "case \"top-pressure-open-deal\":",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/recipes/cast-proof-for-hottest-deal.md",
+    "phrase": "hottest",
+    "excerpt": "id: cast-proof-for-hottest-deal",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/recipes/cast-proof-for-hottest-deal.md",
+    "phrase": "pressure",
+    "excerpt": "sources: source=top-pressure-open-deal|paramName=deal|requ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/recipes/compose-this-weeks-outbound.md",
+    "phrase": "hottest",
+    "excerpt": "sources: source=hottest-signal-console-account|paramN",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/skills/recipes/prep-next-call.md",
+    "phrase": "hottest",
+    "excerpt": "sources: source=hottest-signal-console-account|paramN",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Skill id / source id identifiers (stable keys referenced by recipes, registry and tests); not rendered.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/territory-architect/lib/persistence.ts",
+    "phrase": "pressure",
+    "excerpt": "pressure: asString(r[\"pressure\"]),",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/territory-architect/lib/territory-bridge.ts",
+    "phrase": "pressure",
+    "excerpt": "pressure: asString(data[\"pressure\"]),",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+    "phrase": "carve",
+    "excerpt": "<div class={`ta4-carve${carveOpen.value ? \" is-open\"",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "src/welcome/lib/engine.ts",
+    "phrase": "motion",
+    "excerpt": "key: \"motion\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Internal identifier: enum value, storage key, generator id, CSS class, icon name or media-query string; not rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/briefing-pipeline/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "role key (same pattern as the heartbeat).",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Developer README referring to the 'heartbeat' edge function by its deployed name; not user-facing.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/briefing-pipeline/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "did this for the heartbeat \u2014 same key is reused), do tha",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Developer README referring to the 'heartbeat' edge function by its deployed name; not user-facing.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/briefing-pipeline/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "ken for antaeus pg_cron jobs (heartbeat + briefing-pipeline)'",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Developer README referring to the 'heartbeat' edge function by its deployed name; not user-facing.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/briefing-pipeline/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "plicated. Same pattern as the heartbeat at `supabase/functions/heartb",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "Developer README referring to the 'heartbeat' edge function by its deployed name; not user-facing.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "decay",
+    "excerpt": "r the first generator (signal-decay detection) and the visible Da",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "decay",
+    "excerpt": "ing;  // e.g. \"phase-b/signal-decay\"",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "# `heartbeat` \u2014 Phase A orchestration laye",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "the operator isn't there. The heartbeat is the engine that lets the s",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "supabase functions deploy heartbeat --no-verify-jwt",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "'Bearer token for the antaeus-heartbeat pg_cron job'",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "ref>.supabase.co/functions/v1/heartbeat' \\",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/README.md",
+    "phrase": "heartbeat",
+    "excerpt": "The heartbeat only runs against \"active\" wo",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "decay",
+    "excerpt": "const DEAL_DECAY_GENERATOR_ID = \"phase-b/deal-",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "decay",
+    "excerpt": "const SIGNAL_DECAY_GENERATOR_ID = \"phase-b/signa",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] voice gate rejected candidat",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] deal_decay select failed:\", ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] signal_decay accounts select",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] signal_decay signals select ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] proof_staleness select faile",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/generators.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] discovery_rhythm select fail",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] failed to list active sessio",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] failed to list active observ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] failed to scan ${table} for ",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] dedupe-scan failed:\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] insert failed:\", inserted.er",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] writeObservation threw:\", er",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] generator threw:\", err, {",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] phase-f-variant (${workspace",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] phase-f ${generator.id} (${w",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] scheduled_skills select fail",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] scheduled_skill ${row.id} ha",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] fire-insert failed for sched",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "`[heartbeat] next_fire_at update failed f",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "\"[heartbeat] run complete:\",",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/heartbeat/index.ts",
+    "phrase": "heartbeat",
+    "excerpt": "console.error(\"[heartbeat] run failed:\", err);",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heartbeat' / 'decay' name the scheduled edge function and its generator ids; server log prefixes and deploy docs, never rendered to users.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/seeding-enrichment/README.md",
+    "phrase": "heat",
+    "excerpt": "`heat`, `cold`, `reads`, and `kind`",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/seeding-enrichment/README.md",
+    "phrase": "heat",
+    "excerpt": "ccount has `name`, `signal`, `heat`, `cold`, and `sourceUrl`.",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/seeding-enrichment/index.ts",
+    "phrase": "heat",
+    "excerpt": "eUrl\":\"<https url or empty>\",\"heat\":<0-100>,\"fits\":<true|false>}",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/seeding-enrichment/index.ts",
+    "phrase": "heat",
+    "excerpt": "\"heat: an assessed account-priority",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "supabase/functions/seeding-enrichment/index.ts",
+    "phrase": "heat",
+    "excerpt": "and a short reason in signal, heat, and fits=true \u2014 only if a so",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
+    "reviewBy": "2027-05-06"
   }
 ]

@@ -173,7 +173,7 @@ const REGISTRY: Readonly<Record<string, HelpEntry>> = {
         theMoveHere:
             "Review the sections with enough data and use the cited records before treating any pattern as a repeatable rule.",
         ifStuck:
-            "Sections remain limited when the sample is small. Add more real activity and outcomes rather than treating a thin sample as a conclusion."
+            "Sections remain limited when the sample is small. Add more real activity and outcomes rather than treating a small sample as a conclusion."
     },
     "/briefing/": {
         whatItIsFor:

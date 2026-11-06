@@ -92,7 +92,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Signal Console",
         href: "/signal-console/",
         family: "live-instrument",
-        keywords: ["accounts", "heat", "signals", "radar"],
+        keywords: ["accounts", "priority", "signals", "radar"],
         description: "Monitor account signals and priority."
     },
     {
@@ -101,7 +101,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Outbound Studio",
         href: "/outbound-studio/",
         family: "live-instrument",
-        keywords: ["email", "send-line", "rack", "motion"],
+        keywords: ["email", "send-line", "rack", "outreach"],
         description: "Create and manage account-specific outbound messages."
     },
     {
@@ -110,7 +110,7 @@ export const ALL_ROOMS: ReadonlyArray<PaletteEntry> = [
         label: "Cold Call Studio",
         href: "/cold-call-studio/",
         family: "live-instrument",
-        keywords: ["call", "thread", "opener", "ask"],
+        keywords: ["call", "step", "opener", "ask"],
         description: "Prepare for cold calls and record the outcomes."
     },
     {

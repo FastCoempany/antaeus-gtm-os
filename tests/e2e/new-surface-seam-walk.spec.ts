@@ -83,7 +83,7 @@ const SEAMS: ReadonlyArray<Seam> = [
             { dest: "/deal-workspace/", label: "Update the deal", primary: true },
             { dest: "/future-autopsy/", label: "Pre-mortem this deal" },
             { dest: "/call-in-a-favor/", label: "Carry to an advisor" },
-            { dest: "/pilot-desk/", label: "Sharpen the evidence" }
+            { dest: "/pilot-desk/", label: "Strengthen the pilot evidence" }
         ]
     },
     {

@@ -49,14 +49,14 @@ export function Topbar(): JSX.Element {
     const kickerTail =
         riskCount + moveCount > 0
             ? `${cmd.ranked.length} ranked · ${riskCount} ${riskCount === 1 ? "deal" : "deals"} at risk · ${moveCount} ${moveCount === 1 ? "move" : "moves"} queued`
-            : t("no live pressure");
+            : t("nothing needs attention");
 
     return (
         <header class="db-topbar">
             <div class="db-topbar__lead">
                 <p class="db-topbar__kicker">DASHBOARD · {kickerTail}</p>
                 <h1 class="db-topbar__title">
-                    {t("What is under the most pressure right now.", {
+                    {t("What needs attention first right now.", {
                         class: "body"
                     })}
                 </h1>

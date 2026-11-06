@@ -78,7 +78,7 @@ export function SystemHealth(): JSX.Element {
     if (m.touchesDay > 25 || m.activeAccounts > 250) {
         fragile.push(
             t(
-                "Daily pressure may still be unrealistic. The required touch volume or account load suggests the current plan could outrun actual execution capacity.",
+                "The daily workload may still be unrealistic. The required touch volume or account load suggests the current plan could outrun actual execution capacity.",
                 { class: "body" }
             )
         );
@@ -86,7 +86,7 @@ export function SystemHealth(): JSX.Element {
     if (fragile.length === 0) {
         fragile.push(
             t(
-                "No single fragility is dominating the plan. Keep pressure-testing conversions, but the quota model is behaving credibly right now.",
+                "No single fragility is dominating the plan. Keep checking conversion rates, but the quota model is behaving credibly right now.",
                 { class: "body" }
             )
         );
@@ -121,7 +121,7 @@ export function SystemHealth(): JSX.Element {
                     sub={`${m.touchesDay} per day across ${fmt(m.activeAccounts)} accounts.`}
                 />
                 <Metric
-                    label={t("Pressure fit")}
+                    label={t("Workload fit")}
                     value={`${fitCount}/3`}
                     sub={t("Win, meeting, and cycle assumptions still in band.", { class: "body" })}
                 />

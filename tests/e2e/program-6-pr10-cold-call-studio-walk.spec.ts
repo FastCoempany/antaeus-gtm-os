@@ -120,7 +120,7 @@ test.describe("Program 6 / PR 10 — Cold Call Studio refacing (Talk Loom V02)",
             const thesisText = await page
                 .locator(".cc-loom__score-headline")
                 .textContent();
-            expect(thesisText?.toLowerCase()).toContain("threads");
+            expect(thesisText?.toLowerCase()).toContain("steps");
         } finally {
             await ctx.close();
         }

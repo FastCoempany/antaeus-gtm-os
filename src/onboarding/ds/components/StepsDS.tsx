@@ -217,12 +217,12 @@ export function IcpStepDS(): JSX.Element {
     return (
         <DsStepShell
             kicker={t("STEP 5 OF 7 — ICP")}
-            title={t("Write one sharp ICP.")}
-            subtitle={t("One sentence is enough. Thin means fewer assumptions, fewer personas — that's the definition the rest of the app works from.", { class: "body" })}
+            title={t("Write one specific ICP.")}
+            subtitle={t("One sentence is enough. Specific means fewer assumptions, fewer personas — that's the definition the rest of the app works from.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}
-            nextDisabledWhy={t("Write one sharp ICP sentence first.", { class: "body" })}
+            nextDisabledWhy={t("Write one specific ICP sentence first.", { class: "body" })}
         >
             <FormField label={t("Who is this for?")}>
                 <Textarea

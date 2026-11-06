@@ -121,7 +121,7 @@ export function FoundingGtmDS(): JSX.Element {
                     <HandoffStrip
                         label={t("Carry the kit forward")}
                         kicker={t("CARRY THE KIT FORWARD")}
-                        title={t("Run the daily rhythm. Sharpen the math.", { class: "body" })}
+                        title={t("Run the daily schedule. Check the math.", { class: "body" })}
                         sub={t("The kit is read-mode here — real updates come from the work you record elsewhere in the app.", { class: "body" })}
                         routes={[
                             { label: t("Open the Dashboard"), href: buildFoundingGtmHref("/dashboard/"), primary: true },

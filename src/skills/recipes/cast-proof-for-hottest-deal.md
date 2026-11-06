@@ -2,7 +2,7 @@
 id: cast-proof-for-hottest-deal
 label: Plan a pilot for the highest-risk deal
 description: Open Pilot Desk with the highest-ranked open deal preselected for pilot planning.
-keywords: [proof, poc, deal, hottest, pressure]
+keywords: [pilot, poc, deal, priority, risk]
 action:
   kind: compose-context-and-route
   target: /pilot-desk/

@@ -100,7 +100,7 @@ export function IcpObject(): JSX.Element {
 
             {industry ? (
                 <HandoffStrip
-                    label={t("Carry the ICP into the motion")}
+                    label={t("Use the ICP in outreach")}
                     kicker={t("RUN THE ICP")}
                     title={t("Take this target into the strategy flow", {
                         class: "body"

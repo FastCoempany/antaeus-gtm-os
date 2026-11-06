@@ -72,7 +72,7 @@ export function TerritoryBuilder(): JSX.Element {
                         placeholder={t("Who you're going after", { class: "body" })}
                     />
                 </FormField>
-                <FormField label={t("Pressure now")}>
+                <FormField label={t("Why now")}>
                     <TextInput
                         value={fd.pressure}
                         onInput={(pressure) => patchThesisDraft({ pressure })}

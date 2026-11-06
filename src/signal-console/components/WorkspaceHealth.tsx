@@ -29,7 +29,7 @@ export function WorkspaceHealth(): JSX.Element | null {
             <span
                 class={`sc-health__verdict sc-health__verdict--${motionReady ? "ready" : "research"}`}
             >
-                {motionReady ? t("Motion ready") : t("Research heavy")}
+                {motionReady ? t("Ready for outreach") : t("Research heavy")}
             </span>
             <div class="sc-health__cell">
                 <span class="sc-health__label">{t("Active accounts")}</span>
@@ -46,7 +46,7 @@ export function WorkspaceHealth(): JSX.Element | null {
               "Total signals" was inventory, not pressure.
             */}
             <div class="sc-health__cell">
-                <span class="sc-health__label">{t("Top heat")}</span>
+                <span class="sc-health__label">{t("Top priority")}</span>
                 <span class="sc-health__value">{snapshot.topHeat}</span>
             </div>
         </aside>

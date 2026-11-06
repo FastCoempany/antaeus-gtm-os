@@ -19,7 +19,7 @@ export function HeatBadge({ account, now }: Props): JSX.Element {
     const cls = heatCls(score);
     const band = heatBand(score);
     return (
-        <span class={`sc-heat sc-heat--${cls}`} aria-label={`Heat ${score} (${band})`}>
+        <span class={`sc-heat sc-heat--${cls}`} aria-label={`Priority ${score} (${band})`}>
             <span class="sc-heat__score">{score}</span>
             <span class="sc-heat__band">{band}</span>
         </span>
