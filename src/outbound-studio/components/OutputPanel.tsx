@@ -31,8 +31,8 @@ import { saveAngle, saveTouch } from "../lib/cloud-persistence";
  */
 const QUALITY_BAND_LABEL: Record<string, string> = {
     ready: t("Ready to send"),
-    workable: t("Workable — sharpen further"),
-    thin: t("Too thin — add a real trigger", { class: "body" })
+    workable: t("Usable · needs more detail"),
+    thin: t("Add a real trigger before sending", { class: "body" })
 };
 
 export function OutputPanel(): JSX.Element {
@@ -127,7 +127,7 @@ export function OutputPanel(): JSX.Element {
                     </li>
                     <li
                         class={`ob-output__chip ob-output__chip--band ob-output__chip--${out.motionBand}`}
-                        title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`}
+                        title={`Quality score ${out.qualityScore}/100. Ready to send at 80 or above; usable with more detail from 60; below 60, add a trigger or more account detail before sending.`}
                     >
                         <span class="ob-output__chip-label">{t("Quality")}</span>
                         <span class="ob-output__chip-value">

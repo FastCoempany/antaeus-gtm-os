@@ -834,7 +834,7 @@ test.describe("room boot smoke tests", () => {
             "Briefing"
         );
         await expect(page.locator(".bf-topbar__title")).toContainText(
-            "What the system saw this week."
+            "What changed this week."
         );
         // ADR-014 view toggle is mounted on every render.
         await expect(page.locator(".bf-view-toggle")).toBeAttached();

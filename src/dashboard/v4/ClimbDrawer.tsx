@@ -29,17 +29,17 @@ const LADDER: ReadonlyArray<{ v: Verdict; name: string; read: string }> = [
     },
     {
         v: "inheritable_with_guardrails",
-        name: t("Runnable with founder support"),
+        name: t("Usable with founder support"),
         read: t("Another seller could run the process with you available to answer questions.", { class: "body" })
     },
     {
         v: "hire_ready",
-        name: t("Runnable independently"),
+        name: t("Hire-ready"),
         read: t("Another seller can run the documented process for two weeks without routine help from you.", { class: "body" })
     },
     {
         v: "hire_ready_repeatable",
-        name: t("Documented and repeatable"),
+        name: t("Hire-ready and repeatable"),
         read: t("Win and loss patterns are documented, and the sales handoff documentation is complete.", { class: "body" })
     }
 ];

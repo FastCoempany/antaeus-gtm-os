@@ -98,8 +98,8 @@ export function TargetFolio(): JSX.Element {
                     <span class="dw-signal__label">{t("Evidence")}</span>
                     <span class="dw-signal__copy">
                         {(deal.useCase ?? "").trim() === ""
-                            ? t("Thin · use-case not locked")
-                            : `Locked · ${deal.useCase}`}
+                            ? t("Use case not recorded")
+                            : `Use case recorded · ${deal.useCase}`}
                     </span>
                 </li>
                 <li class="dw-signal-row">

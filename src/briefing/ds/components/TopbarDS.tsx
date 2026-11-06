@@ -13,7 +13,7 @@ export function TopbarDS(): JSX.Element {
     return (
         <header class="bfd-head">
             <Kicker>{t("BRIEFING · THE DAILY READ")}</Kicker>
-            <Heading level="title">{t("What the system saw.")}</Heading>
+            <Heading level="title">{t("What changed this week.")}</Heading>
             <p class="bfd-head__sub">
                 {t(
                     "Your stated preferences are a hypothesis. The pipeline tests them against what's actually moving — and tells you when the evidence and the hypothesis stop agreeing.",

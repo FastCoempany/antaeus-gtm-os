@@ -44,9 +44,9 @@ This map is semantic, not a blind find/replace list. The replacement must reflec
 | `inheritable` | private ontology | runnable by another seller / independently runnable | Replace with concrete operating independence. |
 | `You are the system` | aphorism | Founder-dependent | Replace state name. |
 | `Building` | ambiguous state | Partially documented | When used as readiness state. |
-| `Inheritable with guardrails` | private ontology | Runnable with founder support | Replace readiness state. |
-| `Hire-ready` | ambiguous state | Runnable independently | Replace readiness state. |
-| `Hire-ready, repeatable` | ambiguous state | Documented and repeatable | Replace readiness state. |
+| `Inheritable with guardrails` | private ontology | Usable with founder support | COPY_STANDARD §17 (the earlier "Runnable with founder support" was retired 2026-11-06). |
+| `Hire-ready` | readiness state | Hire-ready (keep) | COPY_STANDARD §17 keeps it as the level-4 state name (2026-11-06; the earlier "Runnable independently" was retired). |
+| `Hire-ready, repeatable` | punctuation-joined state | Hire-ready and repeatable | COPY_STANDARD §17 (the earlier "Documented and repeatable" was retired 2026-11-06). |
 | `handoff kit` | private ontology | sales handoff documentation | Use standard noun. |
 | `seed` | internal metaphor | initialize / enter setup data | Retire from user-facing onboarding language. |
 | `seeding` | internal metaphor | onboarding data collection / workspace initialization | Rewrite internal doctrine too. |

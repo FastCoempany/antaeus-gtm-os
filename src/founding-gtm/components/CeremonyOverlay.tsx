@@ -43,7 +43,7 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
                     {t("Your handoff document is now usable.", { class: "body" })}
                 </h2>
                 <p class="fg-ceremony__sub">
-                    {t("Readiness moved from", { class: "body" })} <strong>{props.fromLabel}</strong>{" "}
+                    {t("Readiness changed from", { class: "body" })} <strong>{props.fromLabel}</strong>{" "}
                     {t("to")} <strong>{props.toLabel}</strong>.{" "}
                     {t("A new hire could read this document on their first day and follow how you sell, with you available to answer questions.", { class: "body" })}
                 </p>

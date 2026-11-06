@@ -41,10 +41,10 @@ export function PlanLedger(): JSX.Element {
 
     const summary =
         m.qualityScore >= 82
-            ? t("The math is believable. Keep coverage and execution in sync with it.", { class: "body" })
+            ? t("The plan's assumptions are close to benchmark. Keep pipeline coverage and daily activity in line with it.", { class: "body" })
             : m.qualityScore >= 68
-              ? t("The math is workable, but one weak conversion assumption can break the quarter.", { class: "body" })
-              : t("The math is too thin to trust yet — tighten the assumptions or pull the target back.", { class: "body" });
+              ? t("The plan is usable, but one conversion assumption is optimistic enough to put the quarter at risk.", { class: "body" })
+              : t("Several assumptions are far from benchmark, so the plan is not reliable yet. Adjust the assumptions or lower the target.", { class: "body" });
 
     return (
         <div class="qwd-ledger">

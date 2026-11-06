@@ -24,9 +24,9 @@ export interface Gate {
 const GATE_LABELS: ReadonlyArray<string> = [
     t("Founder-dependent"),
     t("Partially documented"),
-    t("Runnable with founder support"),
-    t("Runnable independently"),
-    t("Documented and repeatable")
+    t("Usable with founder support"),
+    t("Hire-ready"),
+    t("Hire-ready and repeatable")
 ];
 
 export interface Masthead {
