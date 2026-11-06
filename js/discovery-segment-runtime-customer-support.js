@@ -336,7 +336,7 @@
         ]),
         node("trigger-and-urgency", "consequence", "va", "Ask what breaks first if nothing changes",
           "\"If nothing changes before your next launch or peak season, what becomes visible first — backlog, CSAT, or escalation volume?\"",
-          "Use this when they feel pressure but haven't pinned what breaks first.", false, [
+          "Use this when they say it is urgent but haven't named what breaks first.", false, [
           branch("VISIBLE MISS", "ok",
             "\"Leadership would see the CSAT drop and customers would feel the wait pretty quickly.\"",
             "\"Good. Who gets measured or blamed first when that CSAT number slips?\"", [
@@ -457,7 +457,7 @@
             "You still need the backlog, AHT, or CSAT story for that person."),
           branch("NO IDEA", "fl",
             "\"I don't know who'd own the AI side yet.\"",
-            "\"Then we shouldn't fake a next step. What would we need to know before pulling more people in?\"", [
+            "\"Then we shouldn't fake a next step. What would we need to know before bringing more people in?\"", [
             jumpNode("Ask what would make the next step worth it", "next-step-lock", "soft-deferral", "red"),
             jumpNode("Ask what would make this urgent", "trigger-and-urgency", "exploratory", "blu")
           ], "Nobody knows who'd own AI in support yet.",
@@ -825,7 +825,7 @@
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ], "The open question is clear but no one's named to answer it.",
             "You still need the route that gets security or the VP into the frame."),
-          branch("EVERYTHING THIN", "fl",
+          branch("MOST DETAILS MISSING", "fl",
             "\"We still don't know too much.\"",
             "\"Then the next step should be the one most likely to get this back on track, instead of pretending it went better than it did.\"", [
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),

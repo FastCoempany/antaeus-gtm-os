@@ -155,7 +155,7 @@ export function ProofSheet(): JSX.Element {
                     </Card>
                     <Card kicker={t("SIGNAL")} title="Meridian Logistics" tone="blue" unsaved>
                         <p class="ds-card__copy">
-                            {t("Two fresh signals this week; the heat is real.", {
+                            {t("Two new signals this week back up the priority score.", {
                                 class: "body"
                             })}
                         </p>
@@ -263,7 +263,7 @@ export function ProofSheet(): JSX.Element {
                         <p class="ds-card__copy">
                             {pickByDensity({
                                 verbose: t(
-                                    "The Acme deal hasn't moved in eighteen days, and the champion has been quiet since the demo. It ranks first because it carries the most pressure right now — a mix of how long it's stalled, how big it is, and how late in the stage it should have moved by now.",
+                                    "The Acme deal hasn't moved in eighteen days, and the champion has been quiet since the demo. It ranks first because it carries the most risk right now — a mix of how long it's stalled, how big it is, and how late in the stage it should have moved by now.",
                                     { class: "body" }
                                 ),
                                 terse: t("Acme — stalled 18d at proposal. Recovery options inside.", {
@@ -372,7 +372,7 @@ export function ProofSheet(): JSX.Element {
                         </GridCell>
                     </Grid>
                     <FocalRail
-                        railLabel={t("Ranked pressure")}
+                        railLabel={t("Ranked by risk")}
                         focal={
                             <Card kicker={t("FOCAL · 8")} title={t("Object at full depth")} tone="red">
                                 <p class="ds-card__copy">
@@ -461,7 +461,7 @@ export function ProofSheet(): JSX.Element {
                     />
                 </Section>
 
-                <Section code={t("RIBBON")} title={t("The section thread")}>
+                <Section code={t("RIBBON")} title={t("The section divider")}>
                     <Ribbon label={t("RECOVERY QUEUE")} suffix={t("3 deals")} tone="red" />
                     <Ribbon label={t("COMPOUNDING")} suffix={t("on track")} tone="green" />
                 </Section>

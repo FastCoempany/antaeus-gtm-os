@@ -21,12 +21,12 @@ export function HealthStrip(): JSX.Element | null {
     return (
         <aside class="scd-health" aria-label={t("Workspace health")}>
             <StatusChip
-                label={motionReady ? t("Motion ready") : t("Research heavy")}
+                label={motionReady ? t("Ready for outreach") : t("Research heavy")}
                 tone={motionReady ? "green" : "amber"}
             />
             <Stat value={snapshot.accountCount} label={t("ON THE RADAR")} />
             <Stat value={snapshot.readyCount} label={t("HOT ≥ 75")} />
-            <Stat value={snapshot.topHeat} label={t("TOP HEAT")} />
+            <Stat value={snapshot.topHeat} label={t("TOP PRIORITY")} />
         </aside>
     );
 }

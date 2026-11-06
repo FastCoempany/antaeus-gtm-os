@@ -245,7 +245,7 @@ function FocusStudio(): JSX.Element {
                     </select>
                 </label>
                 <label class="ta-field ta-field--full">
-                    <span class="ta-field__label">{t("Pressure (why now)")}</span>
+                    <span class="ta-field__label">{t("Why now")}</span>
                     <textarea
                         class="ta-textarea"
                         placeholder={t("What's making this segment have to act now?", { class: "body" })}
@@ -762,7 +762,7 @@ function HandoffStrip(): JSX.Element {
                     Rank live signals
                 </a>
                 <a class="ta-handoff" href={hrefToIcpStudio(focus)}>
-                    Sharpen the ICP
+                    Refine the ICP
                 </a>
             </nav>
         </section>

@@ -36,7 +36,7 @@ export const ROLE_OPTIONS: ReadonlyArray<{
     {
         key: "first-gtm-hire",
         label: "First GTM hire",
-        copy: "You are inheriting a founder-built motion. The system makes the hand-off legible."
+        copy: "You are taking over a sales process the founder built. Antaeus documents it so the handoff is clear."
     },
     {
         key: "cro",

@@ -82,13 +82,12 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
             await page.goto("/login.html", { waitUntil: "domcontentloaded" });
             // Forest-split design (matches Signup B): the returning-user
             // copy lives in the .promise panel. Sarah-returning hints:
-            // "operating thread" + "your place" + the Brief she comes back
-            // for.
+            // "where you left off" + the Dashboard she comes back for
+            // (COPY_STANDARD pass retired "operating thread").
             const promise =
                 (await page.locator(".promise").textContent()) ?? "";
-            expect(promise.toLowerCase()).toContain("operating thread");
-            expect(promise.toLowerCase()).toContain("your place");
-            expect(promise.toLowerCase()).toContain("brief");
+            expect(promise.toLowerCase()).toContain("where you left off");
+            expect(promise.toLowerCase()).toContain("dashboard");
         } finally {
             await ctx.close();
         }
@@ -107,7 +106,7 @@ test.describe("Phase 5.2 — Auth pages (bright re-skin)", () => {
             const promise =
                 (await page.locator(".promise").textContent()) ?? "";
             expect(promise.toLowerCase()).toContain("what's waiting inside");
-            expect(promise.toLowerCase()).toContain("ranks the one deal");
+            expect(promise.toLowerCase()).toContain("ranks your open deals");
             // Two-field promise: name + role are deferred into onboarding.
             const form = (await page.locator(".form").textContent()) ?? "";
             expect(form.toLowerCase()).toContain("two fields now");

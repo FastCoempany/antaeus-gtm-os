@@ -32,7 +32,7 @@ const VERDICT_SUBTITLE: Record<Verdict, string> = {
         "A hire could run this if you're around for sanity-checks.",
         { class: "body" }
     ),
-    hire_ready: t("The motion would survive a 2-week founder vacation.", {
+    hire_ready: t("The sales process would keep running through a 2-week founder vacation.", {
         class: "body"
     }),
     hire_ready_repeatable: t(
@@ -79,7 +79,7 @@ export function ReadinessPanel(props: ReadinessPanelProps): JSX.Element | null {
 
                 <section class="dbt-readiness__dims">
                     <h3 class="dbt-readiness__section">
-                        {t("Where the motion stands")}
+                        {t("Where the sales process stands")}
                     </h3>
                     {summary.dimensions.map((d) => (
                         <div class="dbt-readiness__dim" key={d.id}>

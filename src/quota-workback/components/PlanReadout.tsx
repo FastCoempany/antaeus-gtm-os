@@ -38,7 +38,7 @@ export function PlanReadout(): JSX.Element {
                 <h2 class="qw-section__title">{t("What the team has to run every week.", { class: "body" })}</h2>
                 <p class="qw-section__sub">
                     {t(
-                        "Each card is a pressure number. If one feels unrealistic, change the upstream assumption.",
+                        "Each card is a number the plan requires. If one feels unrealistic, change the upstream assumption.",
                         { class: "body" }
                     )}
                 </p>
@@ -53,13 +53,13 @@ export function PlanReadout(): JSX.Element {
                 <PlanCard
                     label={t("Meetings / week")}
                     value={String(m.meetingsWeek)}
-                    note={t("Meeting-creation floor your channels need to support.", { class: "body" })}
+                    note={t("Minimum meetings your channels need to book.", { class: "body" })}
                     accent
                 />
                 <PlanCard
                     label={t("Opps / quarter")}
                     value={fmt(m.oppsQuarter)}
-                    note={t("Pipeline-creation pressure, not a passive report.", { class: "body" })}
+                    note={t("The pipeline you need to create, not a passive report.", { class: "body" })}
                 />
                 <PlanCard
                     label={t("Deals / quarter")}
@@ -75,12 +75,12 @@ export function PlanReadout(): JSX.Element {
                         {b.label} quota math currently scores{" "}
                         <strong>{m.qualityScore}/100</strong> ({q.label}).
                         Weekly revenue target is {money(m.weeklyRevenue)}.
-                        Daily account pressure is {m.accountPressure} accounts
+                        Daily account load is {m.accountPressure} accounts
                         touched per day equivalent.
                     </p>
                 </div>
                 <div class="qw-summary-box">
-                    <h4 class="qw-summary-box__title">{t("What to pressure-test")}</h4>
+                    <h4 class="qw-summary-box__title">{t("What to double-check")}</h4>
                     <p>{summary}</p>
                 </div>
             </div>

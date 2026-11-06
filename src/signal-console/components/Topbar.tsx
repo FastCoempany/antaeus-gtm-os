@@ -31,11 +31,11 @@ export function Topbar(): JSX.Element {
                     : t("no accounts yet")}
             </p>
             <h1 class="sc-topbar__title">
-                {t("Where account heat becomes real work.", { class: "body" })}
+                {t("Monitor account signals and priority.", { class: "body" })}
             </h1>
             <p class="sc-topbar__headline">
                 {t(
-                    "Signals are time-limited. Heat ranks them. Motion comes from the account ledger — not from research piling up.",
+                    "Signals are time-limited, and account priority ranks them. Outreach starts from the account list, not from research piling up.",
                     { class: "body" }
                 )}
             </p>

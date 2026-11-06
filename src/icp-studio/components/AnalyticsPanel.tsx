@@ -20,7 +20,7 @@ import { deleteIcpInCloud } from "../lib/cloud-persistence";
  */
 
 const TIER_LABELS: Readonly<Record<QualityTier, string>> = {
-    sharp: "Sharp",
+    sharp: "Highly specific",
     workable: "Workable",
     forming: "Forming",
     broad: "Broad"
@@ -71,7 +71,7 @@ export function AnalyticsPanel(): JSX.Element {
                     <p class="icp-stat__value icp-stat__value--green">
                         {sharpCount}
                     </p>
-                    <p class="icp-stat__label">{t("sharp")}</p>
+                    <p class="icp-stat__label">{t("highly specific")}</p>
                 </div>
                 <div class="icp-stat">
                     <p class="icp-stat__value icp-stat__value--orange">

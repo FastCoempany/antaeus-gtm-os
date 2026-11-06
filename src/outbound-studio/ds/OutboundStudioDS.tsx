@@ -69,8 +69,8 @@ export function OutboundStudioDS(): JSX.Element {
                     <TouchLogDS />
                     {account ? (
                         <HandoffStrip
-                            label={t("Carry the motion onward")}
-                            kicker={t("CARRY THE MOTION")}
+                            label={t("Continue the outreach")}
+                            kicker={t("CONTINUE THE OUTREACH")}
                             title={t("Line up the channels around this account", {
                                 class: "body"
                             })}

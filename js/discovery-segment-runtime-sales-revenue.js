@@ -214,7 +214,7 @@
           ],"The inspection system may be informal.","You still need a concrete deal pattern, not general discomfort.")
         ]),
         node("current-state-truth","deal-review","pr","Walk through one deal in the forecast","\"Take one deal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\"","Use this when you need the current process to get concrete fast.",false,[
-          branch("DEAL THIN","ok","\"They would have to verify the next step, the champion, and whether the timeline is actually real.\"","\"Good. Which of those is most often wrong at commit time?\"",[
+          branch("DEAL DETAILS UNVERIFIED","ok","\"They would have to verify the next step, the champion, and whether the timeline is actually real.\"","\"Good. Which of those is most often wrong at commit time?\"",[
             jumpNode("Ask what makes a committed deal less real", "pain-and-consequence", "commit-risk", "grn"),
             jumpNode("Ask who feels this problem most", "stakeholder-and-ownership", "manager-owner", "blu")
           ],"You know what managers check on a live deal.","You still need the most expensive failure inside that checklist."),
@@ -258,18 +258,18 @@
           ],"They can see the risk before a deal is missed.","You still need the fragility pattern in plain language.")
         ]),
         node("pain-and-consequence","commit-risk","pr","Ask what makes a committed deal less real","\"Inside a deal that looks healthy on paper, what usually turns out to be less solid than the stage suggests?\"","Use this to turn general forecast complaints into specific open questions on one deal.",false,[
-          branch("NEXT STEP THIN","ok","\"The next step looks real until you ask who accepted it and when.\"","\"How often does that happen late enough to damage the number?\"",[
+          branch("NEXT STEP UNCONFIRMED","ok","\"The next step looks real until you ask who accepted it and when.\"","\"How often does that happen late enough to damage the number?\"",[
             jumpNode("Ask about a recent forecast call that went badly", "trigger-and-urgency", "inspection-failure", "grn"),
             jumpNode("Book the next review meeting", "next-step-lock", "live-review", "blu")
           ],"The commit risk is now a concrete deal pattern.","You still need its frequency or cost."),
-          branch("CHAMPION THIN","ly","\"The rep sounds good, but there is not a real internal owner carrying it.\"","\"When that happens, who catches it first today: the manager, RevOps, or no one until later?\"",[
+          branch("NO REAL CHAMPION","ly","\"The rep sounds good, but there is not a real internal owner carrying it.\"","\"When that happens, who catches it first today: the manager, RevOps, or no one until later?\"",[
             jumpNode("Ask which managers feel this first", "stakeholder-and-ownership", "manager-owner", "org"),
             jumpNode("Ask what tools do this work today", "current-vendor-and-displacement", "tool-stack", "blu")
           ],"The gap may be ownership, not activity.","You still need the detection point."),
-          branch("TIMING THIN","fl","\"The timeline sounds strong until the deal sits in stage too long.\"","\"What should have caught that risk earlier than it does today?\"",[
+          branch("TIMELINE UNTESTED","fl","\"The timeline sounds strong until the deal sits in stage too long.\"","\"What should have caught that risk earlier than it does today?\"",[
             jumpNode("Ask what tools they use today", "current-vendor-and-displacement", "tool-stack", "red"),
             jumpNode("Ask what the dashboard would have to show", "proof-threshold", "dashboard-proof", "blu")
-          ],"The hidden risk may be recency and decay.","You still need the signal that should have caught it.")
+          ],"The hidden risk may be deals with no recent buyer activity.","You still need the signal that should have caught it.")
         ]),
         node("pain-and-consequence","rep-drag","fu","Find where sellers lose time","\"How much rep time still goes into feeding CRM, recapping deals, or defending the pipeline instead of selling?\"","Use this when the buyer keeps framing everything as ops efficiency.",false,[
           branch("REP DRAG REAL","ok","\"Reps still spend too much time updating, recapping, and chasing clean pipeline language.\"","\"If that went away, what would improve first: pipeline quality, manager trust, or selling time?\"",[
@@ -315,7 +315,7 @@
             jumpNode("Ask what would make this urgent", "trigger-and-urgency", "soft-trigger", "blu")
           ],"The urgency comes from a repeated pattern, not one event.","You still need one repeated failure pattern.")
         ]),
-        node("trigger-and-urgency","soft-trigger","fu","Ask what would make this urgent","\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\"","Use this when they feel pressure but cannot name the trigger cleanly.",false,[
+        node("trigger-and-urgency","soft-trigger","fu","Ask what would make this urgent","\"If the pressure is real but not urgent yet, what would have to happen before leadership treated this like a live forecast problem instead of an improvement idea?\"","Use this when they say it is urgent but cannot name the trigger.",false,[
           branch("TRIGGER SHOWS UP","ok","\"Another miss, ugly forecast call, or leadership challenge would make it active immediately.\"","\"Good. Then let us use that to keep the next step honest instead of pretending it is already urgent.\"",[
             jumpNode("Ask what would make another meeting worth it", "next-step-lock", "soft-deferral", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "blu")
@@ -444,7 +444,7 @@
           ],"The current stack may itself be fragmented.","You still need the most expensive fragment.")
         ]),
         node("current-vendor-and-displacement","internal-build","fu","If they built it themselves","\"What does the internal workflow do well today, and where does it still fail to make the forecast more trustworthy?\"","Use this when they say they already built something.",false,[
-          branch("BUILD HELPS BUT THIN","ok","\"It helps organize activity, but it still does not settle what is real.\"","\"Then we are not replacing a dashboard. We are replacing the manual interpretation still wrapped around it.\"",[
+          branch("BUILD HELPS, NOT ENOUGH","ok","\"It helps organize activity, but it still does not settle what is real.\"","\"Then we are not replacing a dashboard. We are replacing the manual interpretation still wrapped around it.\"",[
             jumpNode("Go back to how managers judge deals", "current-state-truth", "manager-read", "grn"),
             jumpNode("Agree what they need to see", "proof-threshold", "live-proof", "blu")
           ],"The internal build covers only part of the job.","You still need the missing judgment layer."),
@@ -570,7 +570,7 @@
             action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
-          branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note what is slipping now and fix it before the deal goes quiet.\"",[
+          branch("TOO MUCH UNKNOWN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note what is slipping now and fix it before the deal goes quiet.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")

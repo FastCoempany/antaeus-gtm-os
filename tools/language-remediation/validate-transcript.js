@@ -14,6 +14,6 @@ for (const room of coverage.rooms) {
     assert.deepEqual(room.failedActions, [], `${room.id} has failed interactions`);
     const html = fs.readFileSync(path.join(root, room.id, "index.html"), "utf8");
     assert.ok(html.includes('class="line"') && html.includes('class="map"'), `${room.id} is incomplete`);
-    assert.ok(html.includes(`${room.actions} actions tried in this room`), `${room.id} coverage metadata differs from page`);
+    assert.ok((html.includes(`${room.actions} actions tried in this area`) || html.includes(`${room.actions} actions tried in this room`)), `${room.id} coverage metadata differs from page`);
 }
 console.log(`Validated ${coverage.rooms.length} rooms, ${coverage.rooms.reduce((s,r) => s+r.actions,0)} actions and ${coverage.rooms.reduce((s,r) => s+r.reveals,0)} distinct revealed states. No runtime errors, failed controls or cap omissions. Depth ${coverage.depth}; empty/unseeded and network error states also require source/regression review.`);

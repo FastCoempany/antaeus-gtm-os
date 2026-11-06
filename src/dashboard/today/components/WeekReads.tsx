@@ -108,7 +108,7 @@ export function WeekReads(): JSX.Element {
                     </p>
                 ) : null}
                 <SegmentedControl<ThresholdKey>
-                    label={t("Decay threshold")}
+                    label={t("Inactivity threshold")}
                     active={threshold === 7 ? "7" : "14"}
                     onChange={pickThreshold}
                     options={[

@@ -150,7 +150,7 @@ function EmptyToday(): JSX.Element {
             <p class="ds-kicker">{t("THE BOARD IS QUIET")}</p>
             <h2 class="dbt-empty__title">
                 {t(
-                    "Nothing's under pressure yet because nothing's in the workspace yet.",
+                    "Nothing needs attention yet because the workspace is still empty.",
                     { class: "body" }
                 )}
             </h2>

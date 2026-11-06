@@ -257,7 +257,7 @@
           jumpNode("Ask what they need to see to trust it", "proof-threshold", "real-proof", "blu")
         ],"There is no active trigger.","You still need the future trigger or an honest no.")
       ]),
-      node("trigger-and-urgency","consequence","va","Tie urgency to consequence","\"If nothing changes before the next relevant event, what becomes visible first?\"","Use this when they have pressure but not yet a consequence.",false,[
+      node("trigger-and-urgency","consequence","va","Tie urgency to consequence","\"If nothing changes before the next relevant event, what becomes visible first?\"","Use this when they say it is urgent but have not named a consequence.",false,[
         branch("VISIBLE MISS","ok","\"Leadership, customers, or the team would notice pretty quickly.\"","\"Good. Who gets measured or blamed first when that happens?\"",[
           jumpNode("Ask who feels this problem most", "stakeholder-and-ownership", "pain-owner", "grn"),
           jumpNode("Ask who approves this, in what order", "decision-architecture", "path", "blu")
@@ -359,7 +359,7 @@
         branch("TECHNICAL FIRST","ly","\"IT or security would need comfort first.\"","\"Good. What would they need to believe first: control, permissions, data handling, or fallback?\"",[
           jumpNode("Ask who approves this, in what order", "decision-architecture", "gates", "org"),
           jumpNode("Book the next review meeting", "next-step-lock", "exact-shape", "blu")
-        ],"A technical trust gate is in front.","You still need the exact control question and owner."),
+        ],"A technical trust review comes first.","You still need the exact control question and owner."),
         branch("POLITICAL FIRST","fl","\"Honestly, leadership needs to believe it matters before any test.\"","\"Then the first thing they need to see is still pain and urgency, not product evidence.\"",[
           jumpNode("Go back to the problem", "pain-and-consequence", "quantify", "red"),
           jumpNode("Go back to what made this urgent", "trigger-and-urgency", "consequence", "blu")
@@ -515,7 +515,7 @@
           jumpNode("Go back to who owns this problem", "stakeholder-and-ownership", "wrong-person", "org"),
           jumpNode("Write notes for whoever picks this up", "post-call-routing", "handoff", "blu")
         ],"The blocker is attendee quality.","You still need the missing human and the reason for their time."),
-        branch("CONDITION STILL UNKNOWN","fl","\"I cannot really say yet.\"","\"Then let us stay honest and write down exactly what is still too thin before we pretend there is momentum.\"",[
+        branch("CONDITION STILL UNKNOWN","fl","\"I cannot really say yet.\"","\"Then let us stay honest and write down exactly what we still do not know before we pretend there is momentum.\"",[
           jumpNode("Note what you still need to find out", "post-call-routing", "missing-truth", "red"),
           jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
         ],"It's too early to trust that this is moving.","You still need the open question in plain language.")
@@ -548,7 +548,7 @@
           action("Set the next meeting", "segment:next-step-lock", "org"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
         ],"The open question is visible but the owner is not.","You still need the route that best finds that owner."),
-        branch("EVERYTHING THIN","fl","\"We still don't know too much.\"","\"Then the next step should be the one most likely to recover the call instead of pretending this is cleaner than it is.\"",[
+        branch("MOST DETAILS MISSING","fl","\"We still don't know too much.\"","\"Then the next step should be the one most likely to recover the call instead of pretending this is cleaner than it is.\"",[
           jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
           action("Set the next meeting", "segment:next-step-lock", "blu")
         ],"The next step may need to fix the deal, not just continue it.","You still need the most useful first correction.")

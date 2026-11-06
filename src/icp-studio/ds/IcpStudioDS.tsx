@@ -56,7 +56,7 @@ export function IcpStudioDS(): JSX.Element {
             <PageFrame>
                 <BandStack stage>
                     <ObjectControls
-                        controlsLabel={t("Sharpen the ICP")}
+                        controlsLabel={t("Make the ICP specific")}
                         object={<IcpObject />}
                         controls={<IcpBuilder />}
                     />

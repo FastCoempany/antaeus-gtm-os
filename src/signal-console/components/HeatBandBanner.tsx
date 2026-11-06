@@ -43,12 +43,12 @@ export function HeatBandBanner(): JSX.Element | null {
     }
 
     return (
-        <aside class="sc-heat-banner" aria-label={t("How heat scores work")}>
+        <aside class="sc-heat-banner" aria-label={t("How priority scores work")}>
             <div class="sc-heat-banner__body">
-                <p class="sc-heat-banner__kicker">{t("How heat works")}</p>
+                <p class="sc-heat-banner__kicker">{t("How account priority works")}</p>
                 <p class="sc-heat-banner__copy">
                     {t(
-                        "Each card's heat score blends signal volume, recency, and confidence into one number, then bands it:",
+                        "Each card's priority score blends signal volume, recency, and confidence into one number, then bands it:",
                         { class: "body" }
                     )}
                 </p>
@@ -63,7 +63,7 @@ export function HeatBandBanner(): JSX.Element | null {
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--active">
                             75+ Active
                         </span>{" "}
-                        {t("— motion-ready, Signal Console treats these as primary work", { class: "body" })}
+                        {t("— ready for outreach, Signal Console treats these as primary work", { class: "body" })}
                     </li>
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--watch">
@@ -83,7 +83,7 @@ export function HeatBandBanner(): JSX.Element | null {
                 type="button"
                 class="sc-heat-banner__close"
                 onClick={handleDismiss}
-                aria-label={t("Dismiss heat band explainer")}
+                aria-label={t("Dismiss priority score explainer")}
             >
                 ×
             </button>

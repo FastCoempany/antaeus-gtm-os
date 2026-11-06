@@ -49,7 +49,7 @@ export function Topbar(): JSX.Element {
                         {hasPlan
                             ? `touches per day across ${m.activeAccounts} accounts to hit $${m.monthlyTarget.toLocaleString()}/month`
                             : t(
-                                  "Set quota and ACV to turn revenue into weekly execution pressure.",
+                                  "Set quota and ACV to turn revenue into a weekly activity target.",
                                   { class: "body" }
                               )}
                     </span>

@@ -40,7 +40,7 @@ export function AccountRow(): JSX.Element {
                     {options.map((a) => (
                         <option key={a.id} value={a.name}>
                             {a.name}
-                            {a.heat ? ` · heat ${a.heat}` : ""}
+                            {a.heat ? ` · priority ${a.heat}` : ""}
                         </option>
                     ))}
                 </select>

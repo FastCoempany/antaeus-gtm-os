@@ -33,7 +33,7 @@ export function CallMemory(): JSX.Element {
                 <div>
                     <p class="cc-memory__kicker">{t("CALL MEMORY")}</p>
                     <h2 class="cc-memory__title">
-                        Log the outcome before the thread goes cold.
+                        Log the outcome while the call is fresh.
                     </h2>
                 </div>
                 <nav class="cc-memory__handoff" aria-label={t("Continue on another page")}>
@@ -60,7 +60,7 @@ export function CallMemory(): JSX.Element {
                 // and `gtmos_cold_call_log`, both internal architecture.
                 <p class="cc-memory__empty">
                     No outcomes logged yet. After each call, hit the
-                    outcome button below the thread sheet — every entry
+                    outcome button below the step sheet — every entry
                     here flows into the dashboard's ranking and, on
                     "meeting booked," creates a new deal automatically.
                 </p>
@@ -71,7 +71,7 @@ export function CallMemory(): JSX.Element {
                             <tr>
                                 <th scope="col">{t("Date")}</th>
                                 <th scope="col">{t("Account")}</th>
-                                <th scope="col">{t("Thread")}</th>
+                                <th scope="col">{t("Step")}</th>
                                 <th scope="col">{t("Outcome")}</th>
                             </tr>
                         </thead>
