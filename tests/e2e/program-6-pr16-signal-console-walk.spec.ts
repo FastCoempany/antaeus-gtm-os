@@ -76,8 +76,8 @@ test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-sele
             const text = await page
                 .locator(".sc-topbar__headline")
                 .textContent();
-            expect(text?.toLowerCase()).toContain("heat");
-            expect(text?.toLowerCase()).toContain("ledger");
+            expect(text?.toLowerCase()).toContain("account priority");
+            expect(text?.toLowerCase()).toContain("account list");
 
             // Confirm it's italic.
             const fontStyle = await page
