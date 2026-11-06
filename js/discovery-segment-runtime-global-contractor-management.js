@@ -213,7 +213,7 @@
           jumpNode("Ask what they need to see to trust it", "proof-threshold", "real-proof", "blu")
         ], "No audit, claim, or new market is forcing the issue right now.", "You still need the future trigger or an honest no.")
       ]),
-      node("trigger-and-urgency", "consequence", "va", "Ask what breaks first if nothing changes", "\"If nothing changes before that next country goes live or that audit arrives, what becomes visible first?\"", "They have pressure but no consequence yet. Name what breaks first when the country goes live or the audit letter arrives.", false, [
+      node("trigger-and-urgency", "consequence", "va", "Ask what breaks first if nothing changes", "\"If nothing changes before that next country goes live or that audit arrives, what becomes visible first?\"", "They say it is urgent but have not named a consequence yet. Name what breaks first when the country goes live or the audit letter arrives.", false, [
         branch("VISIBLE MISS", "ok", "\"We'd either delay the expansion or hire people in a way that's not actually compliant.\"", "\"Good. Who gets measured or blamed first when that happens, legal, finance, or the People Ops sponsor?\"", [
           jumpNode("Ask who feels this problem most", "stakeholder-and-ownership", "pain-owner", "grn"),
           jumpNode("Ask who approves this, in what order", "decision-architecture", "path", "blu")
@@ -474,7 +474,7 @@
         branch("CONDITION STILL UNKNOWN", "fl", "\"I can't really say yet.\"", "\"Then let's stay honest and write down exactly what we still don't know — the countries, the owner, the exposure — before we pretend this is moving.\"", [
           jumpNode("Note what you still need to find out", "post-call-routing", "missing-truth", "red"),
           jumpRoom("Add the meeting to the deal", "deal-workspace", "blu")
-        ], "They haven't said what would bring this back.", "You still need the thin part, countries, owner, or exposure, in plain language.")
+        ], "They haven't said what would bring this back.", "You still need the missing detail (countries, owner, or exposure) in plain language.")
       ])
     ]);
   }
@@ -504,7 +504,7 @@
           action("Set the next meeting", "segment:next-step-lock", "org"),
           jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
         ], "The classification risk is known but no Legal owner can confirm it.", "You still need the route that best finds that Legal or Compliance owner."),
-        branch("EVERYTHING THIN", "fl", "\"We still don't know too much.\"", "\"Then the next step should be the one most likely to get this back on track, instead of pretending the compliance picture is clearer than it is.\"", [
+        branch("MOST DETAILS MISSING", "fl", "\"We still don't know too much.\"", "\"Then the next step should be the one most likely to get this back on track, instead of pretending the compliance picture is clearer than it is.\"", [
           jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
           action("Set the next meeting", "segment:next-step-lock", "blu")
         ], "We know too little about compliance to call it clean.", "You still need the most useful first correction.")

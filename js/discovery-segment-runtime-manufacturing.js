@@ -602,7 +602,7 @@
             action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
-          branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note what is slipping now and fix it before the next disruption teaches the lesson the hard way.\"",[
+          branch("TOO MUCH UNKNOWN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note what is slipping now and fix it before the next disruption teaches the lesson the hard way.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")

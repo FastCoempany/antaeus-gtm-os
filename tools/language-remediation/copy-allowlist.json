@@ -1,1 +1,551 @@
-[]
+[
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "label: 'Board/Leadership Pressure',",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "subtext: 'Growth pressure creates urgenc",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "ng efficiency, or budget pressure to reduce outs",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "Flags: [{ signal: 'Board pressure on forecast',",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "quarter, new CRO, board pressure?\"' }",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "text: 'Executive / Board Pressure',",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "udget cycle? Competitive pressure? I\\'d love to",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "pressure",
+    "excerpt": "recovery: '\"No pressure — but I\\'d lov",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom 'No pressure' in a polite seller sign-off.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-frameworks.js",
+    "phrase": "front",
+    "excerpt": "'t have exact numbers in front of me. We\\'re",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom 'in front of' inside buyer or seller speech.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-ai-native.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"executive-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-ai-native.js",
+    "phrase": "pressure",
+    "excerpt": "NANCE FIRST\",\"ok\",\"\\\"The pressure is real, but g",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-ai-native.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"executive-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-ai-native.js",
+    "phrase": "pressure",
+    "excerpt": "active now: executive AI pressure, scaling limit",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-customer-support.js",
+    "phrase": "pressure",
+    "excerpt": "\"pain-and-consequence\", \"pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-customer-support.js",
+    "phrase": "pulling",
+    "excerpt": "gh, and which part keeps pulling your senior ag",
+    "owner": "copy-standard",
+    "justification": "Ordinary English: staff keep getting pulled back into manual work; a literal description, not a metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-customer-support.js",
+    "phrase": "front",
+    "excerpt": "n't have a recent one in front of me.\\\"\",",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom 'in front of' inside buyer or seller speech.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-data-intelligence.js",
+    "phrase": "motion",
+    "excerpt": "\"opening-frame\", \"motion-type\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-data-intelligence.js",
+    "phrase": "motion",
+    "excerpt": "\"opening-frame\",\"motion-type\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-global-contractor-management.js",
+    "phrase": "pressure",
+    "excerpt": "\"pain-and-consequence\", \"pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-global-contractor-management.js",
+    "phrase": "pulling",
+    "excerpt": "ed the branch that keeps pulling Legal and Fina",
+    "owner": "copy-standard",
+    "justification": "Ordinary English: staff keep getting pulled back into manual work; a literal description, not a metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-govtech.js",
+    "phrase": "pressure",
+    "excerpt": "{ title:\"Regulatory pressure\", items:[\"Audi",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-govtech.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"backlog-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-govtech.js",
+    "phrase": "pressure",
+    "excerpt": "r burnout, or leadership pressure?\\\"\",[jumpNode(",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-govtech.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"backlog-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "ries the most turnaround pressure right now\", \"W",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "s the turnaround or cost pressure\", \"Legal ops o",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "kind of work created the pressure?\\\"\",[",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"gc-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "a recent event that put pressure on legal.\")",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"gc-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "ow: visible delay, spend pressure, diligence loa",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": ", diligence load, hiring pressure, or executive",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "practice leadership, CFO pressure on outside cou",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-legal.js",
+    "phrase": "pressure",
+    "excerpt": "],\"Capacity pressure is the main is",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-manufacturing.js",
+    "phrase": "motion",
+    "excerpt": "\"opening-frame\", \"motion-type\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-manufacturing.js",
+    "phrase": "motion",
+    "excerpt": "\"opening-frame\",\"motion-type\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-manufacturing.js",
+    "phrase": "motion",
+    "excerpt": "\"internal-motion\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-manufacturing.js",
+    "phrase": "pressure",
+    "excerpt": "ng failure, or executive pressure?\\\"\",\"Start her",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-product-ux.js",
+    "phrase": "pressure",
+    "excerpt": "the adoption or velocity pressure\", \"Product ops",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-product-ux.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"miss-or-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-product-ux.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"miss-or-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-recruiting.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"headcount-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-recruiting.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"headcount-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-recruiting.js",
+    "phrase": "pressure",
+    "excerpt": "e\",\"ri\",\"Find the hiring pressure\",\"\\\"What chang",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-recruiting.js",
+    "phrase": "pressure",
+    "excerpt": "],\"Agency pressure is part of the",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-sales-revenue.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\", \"board-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-sales-revenue.js",
+    "phrase": "pressure",
+    "excerpt": "\"trigger-and-urgency\",\"board-pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-sales-revenue.js",
+    "phrase": "pressure",
+    "excerpt": "s, scrutiny, or planning pressure.\",true,[",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-sales-revenue.js",
+    "phrase": "pressure",
+    "excerpt": "e this urgent\",\"\\\"If the pressure is real but no",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime-sales-revenue.js",
+    "phrase": "front",
+    "excerpt": "lly before backing it in front of leadership?",
+    "owner": "copy-standard",
+    "justification": "Ordinary English idiom 'in front of' inside buyer or seller speech.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "\"pain-and-consequence\", \"pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "\"pain-and-consequence\",\"pressure\"",
+    "owner": "copy-standard",
+    "justification": "Node slug / jump-target identifier, not displayed copy; renaming would break saved sessions and segment jumps.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "w.\", triggerPressure:\"GC pressure, diligence loa",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "trigger:\"The GC is under pressure to modernize,",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "iggerPressure:\"Headcount pressure or hiring velo",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "cy edge cases, and audit pressure\", scaleMetric:",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": ", pressureCompare:\"audit pressure, manual review",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": "risk.\", trigger:\"Recent pressure around backlog",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": ", CSAT misses, or launch pressure are forcing th",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pressure",
+    "excerpt": ", triggerPressure:\"Board pressure, a missed quar",
+    "owner": "copy-standard",
+    "justification": "Ordinary English naming a real business pressure on the buyer (board, budget, audit, hiring), not the Antaeus private metaphor.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "category": "G",
+    "path": "js/discovery-segment-runtime.js",
+    "phrase": "pulling",
+    "excerpt": "d which part still keeps pulling smart people b",
+    "owner": "copy-standard",
+    "justification": "Ordinary English: staff keep getting pulled back into manual work; a literal description, not a metaphor.",
+    "reviewBy": "2027-05-06"
+  }
+]
