@@ -15,7 +15,7 @@ describe("ReadinessDrawer", () => {
                 onClose={() => {}}
             />
         );
-        expect(getByText("You are the system")).toBeTruthy();
+        expect(getByText("Founder-dependent")).toBeTruthy();
     });
 
     it("renders the kicker as just 'READINESS' (no totalScore)", () => {

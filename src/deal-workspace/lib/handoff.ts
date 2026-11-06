@@ -81,10 +81,11 @@ export function hrefToAdvisorDeploy(accountName?: string): string {
     });
 }
 
-export function hrefToCallPlanner(accountName?: string): string {
+/** Prepare the next discovery call (Call Planner retired into Discovery Studio, canon §4.11). */
+export function hrefToDiscoveryStudio(accountName?: string): string {
     return buildDealWorkspaceHref({
-        href: "/call-planner/",
-        roomLabel: "Call Planner",
+        href: "/discovery-studio/",
+        roomLabel: "Discovery Studio",
         ...(accountName ? { focusObject: accountName, extra: { account: accountName } } : {})
     });
 }

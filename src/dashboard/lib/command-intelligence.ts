@@ -226,12 +226,12 @@ function buildSystemObject(
     return finalizeCommandObject(
         {
             id: "system-trust",
-            title: "The dashboard is showing stale data right now.",
+            title: "Some Dashboard inputs could not sync.",
             copy:
-                "Some inputs didn't sync from the cloud and fell back to the copy stored on this device. Don't over-trust the ordering until the sync recovers.",
+                "Some inputs are using the copy stored on this device. The ranking may change when cloud sync resumes.",
             badge: "Risk",
             badgeTone: "state-risk",
-            metricLabel: "System pressure",
+            metricLabel: "Sync status",
             metricValue: "",
             meta: ["local fallback"],
             actions: [
@@ -265,12 +265,12 @@ function buildIcpObject(
     return finalizeCommandObject(
         {
             id: "icp-truth",
-            title: "Save one ICP before the week drifts.",
+            title: "Save an ideal customer profile this week.",
             copy:
-                "You have signals and deals, but no saved ICP. The rest of the app is having to guess who you're selling to. Save one in ICP Studio and the other rooms tighten up.",
+                "You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.",
             badge: "Missing ICP",
             badgeTone: "state-ready",
-            metricLabel: "ICP pressure",
+            metricLabel: "Targeting setup",
             metricValue: "",
             meta: ["missing ICP", "targeting layer"],
             actions: [
@@ -421,7 +421,7 @@ export function summarizeCommandContext(
 
 function joinReasons(reasons: ReadonlyArray<string> | undefined): string {
     const list = (Array.isArray(reasons) ? reasons : []).filter(Boolean).slice(0, 2);
-    if (!list.length) return "the command pressure is higher than the surrounding work";
+    if (!list.length) return "its calculated priority score ranks it above the other available actions";
     if (list.length === 1) return list[0]!;
     return list[0] + " and " + list[1];
 }
@@ -435,18 +435,14 @@ function explainLeadCopy(
     // Phase 2.2 audit — retired "It is in the light because…" /
     // "The lead is stable because…" canon-doc voice. Sarah parses
     // those as code comments. Plain operator phrasing now.
+    // `because` is a list of short reasons (noun phrases and clauses), so
+    // introduce it as a list rather than splicing it after "because".
     if (mode === "queue") {
-        if (confidenceLabel === "stable lead")
-            return "Ranked here because " + because + ".";
-        if (confidenceLabel === "supported")
-            return "Ranked here because " + because + ".";
-        return "Visible because " + because + ".";
+        if (confidenceLabel === "stable lead" || confidenceLabel === "supported")
+            return "Ranked here. Reasons: " + because + ".";
+        return "Shown here. Reasons: " + because + ".";
     }
-    if (confidenceLabel === "stable lead")
-        return "At the top because " + because + ".";
-    if (confidenceLabel === "supported")
-        return "At the top because " + because + ".";
-    return "At the top because " + because + ".";
+    return "Ranked first. Reasons: " + because + ".";
 }
 
 function explainTitleForObject(
@@ -473,66 +469,68 @@ function explainTitleForObject(
     if (mode === "queue") {
         if (family === "risk") {
             if (linkedRoomTop) return "Deal Workspace flagged this for intervention.";
-            if (truthDebtCount >= 2) return "Qualification gaps are real here.";
-            if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
-            if (nextStepOverdue || stageStuck) return "Next step is overdue.";
-            return "Worth recovering before chasing new pipeline.";
+            if (truthDebtCount >= 2) return "Fill in the missing qualification details before the next call.";
+            if (quotaPressureScore >= 60) return "Your quota plan needs this deal — fix its weak spots this week.";
+            if (nextStepOverdue) return "The recorded next step is overdue.";
+            if (stageStuck) return "It has sat too long at this stage — set a dated next step.";
+            return "Recover this deal before chasing new pipeline.";
         }
-        if (family === "advisor") return "An advisor ask would actually move this.";
+        if (family === "advisor") return "An advisor intro could get this deal moving — ask this week.";
         if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-            return "The week's pipeline math needs this move.";
+            return "Your quota plan needs this done this week.";
         }
         if ((family === "opportunity" || family === "move") && hasReplies) {
-            return "The thread is warm — push the next touch now.";
+            return "They replied — send the follow-up today while it's fresh.";
         }
         if (family === "opportunity" && highConfidenceCount >= 2) {
-            return "Multiple high-confidence signals make this real.";
+            return "Several strong signals on this account — reach out while they're recent.";
         }
         if (family === "opportunity" && causeId === "coverage_gap") {
             return "Coverage gap needs more open opportunities.";
         }
         if (family === "opportunity" || family === "move") {
-            return "Highest-leverage next move on the radar.";
+            return "The most useful next step on your list right now.";
         }
         if (family === "icp" && readinessIcpWeak) {
-            return "ICP sharpness needs another round.";
+            return "Tighten the ICP — it's too broad to target well.";
         }
-        if (family === "icp") return "ICP shapes how everything below ranks.";
-        if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
-        if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
-        return "Visible so the system stays honest.";
+        if (family === "icp") return "Your ICP decides how every account below gets ranked.";
+        if (readinessFragility >= 45) return "Fill in the weakest part of your setup so a new hire could use it.";
+        if (quotaPressureScore >= 60) return "Your plan is ahead of the work logged — log or do more outreach.";
+        return "Fix this so the rest of the ranking stays accurate.";
     }
 
     if (family === "risk") {
-        if (linkedRoomTop) return "Deal Workspace flagged this deal as slipping.";
-        if (truthDebtCount >= 2) return "Qualification gaps are real here.";
-        if (quotaPressureScore >= 60) return "Quota pressure is showing up as deal weakness.";
-        if (nextStepOverdue || stageStuck) return "Next step is overdue and the stage is stuck.";
-        return "Worth recovering before chasing new pipeline.";
+        if (linkedRoomTop) return "Deal Workspace prioritized this deal for review.";
+        if (truthDebtCount >= 2) return "Fill in the missing qualification details before the next call.";
+        if (quotaPressureScore >= 60) return "Your quota plan needs this deal — fix its weak spots this week.";
+        if (nextStepOverdue) return "The recorded next step is overdue.";
+        if (stageStuck) return "It has sat too long at this stage — set a dated next step.";
+        return "Recover this deal before chasing new pipeline.";
     }
-    if (family === "advisor") return "An advisor ask would actually move this.";
+    if (family === "advisor") return "An advisor intro could get this deal moving — ask this week.";
     if ((family === "opportunity" || family === "move") && quotaPressureScore >= 60) {
-        return "The week's pipeline math needs this move.";
+        return "Your quota plan needs this done this week.";
     }
     if ((family === "opportunity" || family === "move") && hasReplies) {
-        return "The thread is warm — push the next touch now.";
+        return "They replied — send the follow-up today while it's fresh.";
     }
     if (family === "opportunity" && highConfidenceCount >= 2) {
-        return "Multiple high-confidence signals make this real.";
+        return "Several strong signals on this account — reach out while they're recent.";
     }
     if (family === "opportunity" && causeId === "coverage_gap") {
         return "Coverage gap needs more open opportunities.";
     }
     if (family === "opportunity" || family === "move") {
-        return "Highest-leverage move available right now.";
+        return "The most useful next step on your list right now.";
     }
     if (family === "icp" && readinessIcpWeak) {
-        return "ICP sharpness needs another round.";
+        return "Tighten the ICP — it's too broad to target well.";
     }
-    if (family === "icp") return "ICP shapes how everything below ranks.";
-    if (readinessFragility >= 45) return "Workspace maturity needs another anchor.";
-    if (quotaPressureScore >= 60) return "Plan math is still ahead of execution.";
-    return "Visible so the rest of the system stays honest.";
+    if (family === "icp") return "Your ICP decides how every account below gets ranked.";
+    if (readinessFragility >= 45) return "Fill in the weakest part of your setup so a new hire could use it.";
+    if (quotaPressureScore >= 60) return "Your plan is ahead of the work logged — log or do more outreach.";
+    return "Fix this so the rest of the ranking stays accurate.";
 }
 
 export function explainCommandObject(

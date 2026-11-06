@@ -1,5 +1,12 @@
 import type { DataClient } from "@/lib/data-client";
 import { reportError } from "@/lib/observability";
+import {
+    sectionOrder,
+    tablesToDelete,
+    tablesToRestore,
+    WORKSPACE_TABLES,
+    type WorkspaceTable
+} from "./workspace-tables";
 
 /**
  * Cloud-sync visibility helpers for the Settings room.
@@ -178,118 +185,153 @@ export async function loadCloudRowCounts(
     }
 }
 
-// ─── Cloud-export (Trust Annex: "export all my data") ────────────────
+
+// ─── Download my workspace / Delete everything / Restore ─────────────
+//
+// Every table these cover lives in ./workspace-tables.ts — one registry
+// so the download, the delete, and the restore can't drift apart.
+
+/**
+ * The loose slice of the Supabase query builder these helpers use.
+ * Table names come from the registry at runtime, so the strict
+ * per-table generics can't narrow; we type the surface we touch.
+ */
+interface LooseResult {
+    readonly data: unknown;
+    readonly error: { readonly message: string; readonly code?: string } | null;
+    readonly count?: number | null;
+}
+interface LooseQuery extends PromiseLike<LooseResult> {
+    select(columns: string, opts?: { count?: "exact" }): LooseQuery;
+    eq(column: string, value: string): LooseQuery;
+    order(column: string, opts: { ascending: boolean }): LooseQuery;
+    range(from: number, to: number): LooseQuery;
+    upsert(rows: unknown[], opts?: { ignoreDuplicates?: boolean }): LooseQuery;
+    delete(opts?: { count?: "exact" }): LooseQuery;
+}
+interface LooseSupabase {
+    from(table: string): LooseQuery;
+    rpc(fn: string, args: Record<string, unknown>): PromiseLike<LooseResult>;
+}
+
+function looseClient(client: DataClient): LooseSupabase {
+    return client.client as unknown as LooseSupabase;
+}
+
+function messageOf(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (err && typeof err === "object" && "message" in err) {
+        return String((err as { message: unknown }).message);
+    }
+    return String(err);
+}
+
+/** Rows fetched per request while paging through a table. */
+export const EXPORT_PAGE_SIZE = 1000;
+/** Safety stop so a misbehaving endpoint can't loop forever. */
+const EXPORT_MAX_PAGES = 500;
 
 export interface CloudExportTableErr {
     readonly table: string;
     readonly reason: string;
 }
 
+export interface ExportedTable {
+    readonly table: string;
+    readonly label: string;
+    readonly rowCount: number;
+    readonly rows: ReadonlyArray<Record<string, unknown>>;
+    /** Set when the read failed; rows is then empty. */
+    readonly error: string | null;
+}
+
+export interface ExportedSection {
+    readonly name: string;
+    readonly rowCount: number;
+    readonly tables: ReadonlyArray<ExportedTable>;
+}
+
+export interface ExportManifestRow {
+    readonly section: string;
+    readonly label: string;
+    readonly table: string;
+    readonly rowCount: number;
+    readonly error: string | null;
+}
+
 export interface CloudExportSnapshot {
-    readonly schemaVersion: 1;
-    readonly source: "antaeus-cloud-export-v1";
+    readonly schemaVersion: 2;
+    readonly source: "antaeus-workspace-export-v2";
     readonly capturedAt: string;
     readonly workspaceId: string | null;
+    readonly workspaceName: string | null;
     readonly userEmail: string | null;
-    readonly tables: Readonly<Record<string, ReadonlyArray<unknown>>>;
+    /** Keyed by plain-English section name, in the order the app presents them. */
+    readonly sections: Readonly<Record<string, ExportedSection>>;
+    /** One line per table: what it is, where it sits, how many rows. */
+    readonly manifest: ReadonlyArray<ExportManifestRow>;
+    /** What the download leaves out on purpose, in plain words. */
+    readonly notIncluded: ReadonlyArray<string>;
     readonly perTableCount: Readonly<Record<string, number>>;
     readonly errors: ReadonlyArray<CloudExportTableErr>;
     readonly totalRows: number;
 }
 
+export const NOT_INCLUDED_NOTE: ReadonlyArray<string> = [
+    "Your sign-in and password",
+    "Who else is a member of this workspace",
+    "Anything saved only in this browser — use Device copy for that"
+];
 
-export interface CloudRestoreResult {
-    readonly restoredRows: number;
-    readonly errors: ReadonlyArray<CloudExportTableErr>;
+async function readEveryRow(
+    sb: LooseSupabase,
+    spec: WorkspaceTable,
+    scopeValue: string | null
+): Promise<Record<string, unknown>[]> {
+    const rows: Record<string, unknown>[] = [];
+    for (let page = 0; page < EXPORT_MAX_PAGES; page++) {
+        const from = page * EXPORT_PAGE_SIZE;
+        let q = sb.from(spec.table).select("*");
+        if (scopeValue) q = q.eq(spec.scopeColumn, scopeValue);
+        const { data, error } = await q
+            .order(spec.orderBy, { ascending: true })
+            .range(from, from + EXPORT_PAGE_SIZE - 1);
+        if (error) throw new Error(error.message);
+        const batch = Array.isArray(data)
+            ? (data as Record<string, unknown>[])
+            : [];
+        rows.push(...batch);
+        if (batch.length < EXPORT_PAGE_SIZE) break;
+    }
+    return rows;
+}
+
+function emptySnapshot(error: CloudExportTableErr): CloudExportSnapshot {
+    return {
+        schemaVersion: 2,
+        source: "antaeus-workspace-export-v2",
+        capturedAt: new Date().toISOString(),
+        workspaceId: null,
+        workspaceName: null,
+        userEmail: null,
+        sections: {},
+        manifest: [],
+        notIncluded: NOT_INCLUDED_NOTE,
+        perTableCount: {},
+        errors: [error],
+        totalRows: 0
+    };
 }
 
 /**
- * Put a cloud export back — upserts every row of every table in the
- * snapshot through the raw supabase client. RLS scopes the writes to
- * the operator's workspace; rows carry their original ids so re-running
- * a restore is idempotent (upsert on the primary key). Defensive per
- * table — one failing table doesn't abort the rest.
- */
-export async function restoreCloudExport(
-    factory: () => DataClient,
-    snapshot: {
-        readonly tables: Readonly<Record<string, ReadonlyArray<unknown>>>;
-    }
-): Promise<CloudRestoreResult> {
-    let client: DataClient;
-    try {
-        client = factory();
-    } catch (err) {
-        reportError(err, { op: "settings.restoreCloudExport.factory" });
-        return {
-            restoredRows: 0,
-            errors: [
-                {
-                    table: "<client>",
-                    reason: err instanceof Error ? err.message : String(err)
-                }
-            ]
-        };
-    }
-    const raw = (client as unknown as { raw?: unknown }).raw ?? null;
-    const { getSupabaseClient } = await import("@/lib/supabase-client");
-    let sb: { from: (t: string) => { upsert: (rows: unknown[]) => Promise<{ error: { message: string } | null }> } };
-    try {
-        sb = (raw ??
-            getSupabaseClient()) as unknown as typeof sb;
-    } catch (err) {
-        reportError(err, { op: "settings.restoreCloudExport.client" });
-        return {
-            restoredRows: 0,
-            errors: [
-                {
-                    table: "<client>",
-                    reason: err instanceof Error ? err.message : String(err)
-                }
-            ]
-        };
-    }
-    let restoredRows = 0;
-    const errors: CloudExportTableErr[] = [];
-    for (const [table, rows] of Object.entries(snapshot.tables)) {
-        if (!Array.isArray(rows) || rows.length === 0) continue;
-        try {
-            const { error } = await sb.from(table).upsert(rows as unknown[]);
-            if (error) {
-                errors.push({ table, reason: error.message });
-            } else {
-                restoredRows += rows.length;
-            }
-        } catch (err) {
-            errors.push({
-                table,
-                reason: err instanceof Error ? err.message : String(err)
-            });
-        }
-    }
-    return { restoredRows, errors };
-}
-
-/**
- * Pull every row from every workspace-scoped table the operator
- * authored content into, plus the commercial-identity surfaces. The
- * scope mirrors `deleteCloudWorkspace` (so what you can export is
- * what you can delete), with two intentional additions:
+ * Download my workspace: every row of every workspace table in
+ * ./workspace-tables.ts, paged so nothing is cut off at a row limit,
+ * filtered to the current workspace, and filed under its plain-English
+ * section.
  *
- *   - outdoors_events — added 2026-06-02 per ADR-016. Not yet in the
- *     delete scope; if it joins later, the export and delete shapes
- *     stay aligned.
- *   - workspace_profile — commercial identity (product_category,
- *     what_we_sell, value_prop). Operator-authored; the operator
- *     wants it in their portable copy.
- *
- * RLS scopes every read to the operator's workspace, so this never
- * leaks rows from other workspaces.
- *
- * Defensive: every table is fetched in its own try/catch. A single
- * table failing doesn't abort the export — that table just lands in
- * the errors array with an empty rows entry, and the rest of the
- * snapshot is preserved.
+ * Defensive: each table is read on its own. A table that fails lands
+ * with empty rows and its error recorded (in the manifest, the
+ * section, and `errors`); the rest of the download is unaffected.
  */
 export async function exportCloudWorkspace(
     factory: () => DataClient
@@ -299,182 +341,266 @@ export async function exportCloudWorkspace(
         client = factory();
     } catch (err) {
         reportError(err, { op: "settings.exportCloudWorkspace.factory" });
-        return {
-            schemaVersion: 1,
-            source: "antaeus-cloud-export-v1",
-            capturedAt: new Date().toISOString(),
-            workspaceId: null,
-            userEmail: null,
-            tables: {},
-            perTableCount: {},
-            errors: [
-                {
-                    table: "<client>",
-                    reason: err instanceof Error ? err.message : String(err)
-                }
-            ],
-            totalRows: 0
-        };
+        return emptySnapshot({ table: "<client>", reason: messageOf(err) });
     }
+    const sb = looseClient(client);
 
-    // Workspace + user metadata for the export envelope. Both reads
-    // are defensive — a failure on either leaves the field null but
-    // does not abort the export.
     let workspaceId: string | null = null;
+    let workspaceName: string | null = null;
+    let userId: string | null = null;
     let userEmail: string | null = null;
     try {
         const ws = await client.currentWorkspace();
         workspaceId = ws?.id ?? null;
+        workspaceName = ws?.name ?? null;
     } catch (err) {
         reportError(err, { op: "settings.exportCloudWorkspace.workspace" });
     }
     try {
-        const userId = await client.currentUserId();
-        if (userId) {
-            // The data-client exposes currentUserId, but not email.
-            // Read email defensively off the raw supabase client.
-            const auth = (client.client as { auth?: unknown }).auth;
-            if (
-                auth &&
-                typeof auth === "object" &&
-                "getUser" in auth &&
-                typeof (auth as { getUser: unknown }).getUser === "function"
-            ) {
-                const res = await (
-                    auth as { getUser: () => Promise<{ data: { user: { email?: string | null } | null } }> }
-                ).getUser();
-                userEmail = res.data.user?.email ?? null;
-            }
+        userId = await client.currentUserId();
+        const auth = (client.client as { auth?: unknown }).auth;
+        if (
+            userId &&
+            auth &&
+            typeof auth === "object" &&
+            typeof (auth as { getUser?: unknown }).getUser === "function"
+        ) {
+            const res = await (
+                auth as {
+                    getUser: () => Promise<{
+                        data: { user: { email?: string | null } | null };
+                    }>;
+                }
+            ).getUser();
+            userEmail = res.data.user?.email ?? null;
         }
     } catch (err) {
         reportError(err, { op: "settings.exportCloudWorkspace.user" });
     }
 
-    const tableReaders: Array<{
-        readonly label: string;
-        readonly fetch: () => Promise<ReadonlyArray<unknown>>;
-    }> = [
-        // ── Mirror of the delete scope ─────────────────────────
-        { label: "icps", fetch: () => client.icps.list({ limit: 5000 }) },
-        { label: "deals", fetch: () => client.deals.list({ limit: 5000 }) },
-        { label: "proofs", fetch: () => client.proofs.list({ limit: 5000 }) },
-        {
-            label: "advisor_deployments",
-            fetch: () => client.advisorDeployments.list({ limit: 5000 })
-        },
-        {
-            label: "signal_console_accounts",
-            fetch: () => client.signalConsoleAccounts.list({ limit: 5000 })
-        },
-        {
-            label: "sequences",
-            fetch: () => client.sequences.list({ limit: 5000 })
-        },
-        {
-            label: "discovery_call_logs",
-            fetch: () => client.discoveryCallLogs.list({ limit: 5000 })
-        },
-        {
-            label: "studio_artifacts",
-            fetch: () => client.studioArtifacts.list({ limit: 5000 })
-        },
-        {
-            label: "pipeline_settings",
-            fetch: () => client.pipelineSettings.list({ limit: 100 })
-        },
-        {
-            label: "discovery_frameworks",
-            fetch: () => client.discoveryFrameworks.list({ limit: 5000 })
-        },
-        {
-            label: "readiness_snapshots",
-            fetch: () => client.readinessSnapshots.list({ limit: 5000 })
-        },
-        {
-            label: "handoff_artifacts",
-            fetch: () => client.handoffArtifacts.list({ limit: 5000 })
-        },
-        // ── Additions beyond the delete scope ──────────────────
-        {
-            label: "outdoors_events",
-            fetch: () => client.outdoorsEvents.list({ limit: 5000 })
-        },
-        {
-            label: "workspace_profile",
-            fetch: () => client.workspaceProfile.list({ limit: 1 })
-        }
-    ];
-
-    const tables: Record<string, ReadonlyArray<unknown>> = {};
+    const bySection = new Map<string, ExportedTable[]>();
+    for (const name of sectionOrder()) bySection.set(name, []);
+    const manifest: ExportManifestRow[] = [];
     const perTableCount: Record<string, number> = {};
     const errors: CloudExportTableErr[] = [];
     let totalRows = 0;
 
-    for (const t of tableReaders) {
+    for (const spec of WORKSPACE_TABLES) {
+        if (!spec.memberRead) continue;
+        const scopeValue =
+            spec.scopeColumn === "user_id" ? userId : workspaceId;
+        // A per-person table with no known person would read teammates'
+        // rows too; skip it rather than over-share.
+        if (spec.scopeColumn === "user_id" && !scopeValue) continue;
+        let rows: Record<string, unknown>[] = [];
+        let error: string | null = null;
         try {
-            const rows = await t.fetch();
-            tables[t.label] = rows;
-            perTableCount[t.label] = rows.length;
-            totalRows += rows.length;
+            rows = await readEveryRow(sb, spec, scopeValue);
         } catch (err) {
-            errors.push({
-                table: t.label,
-                reason: err instanceof Error ? err.message : String(err)
-            });
-            tables[t.label] = [];
-            perTableCount[t.label] = 0;
+            error = messageOf(err);
+            errors.push({ table: spec.table, reason: error });
             reportError(err, {
-                op: "settings.exportCloudWorkspace.list",
-                table: t.label
+                op: "settings.exportCloudWorkspace.read",
+                table: spec.table
             });
         }
+        bySection.get(spec.section)?.push({
+            table: spec.table,
+            label: spec.label,
+            rowCount: rows.length,
+            rows,
+            error
+        });
+        manifest.push({
+            section: spec.section,
+            label: spec.label,
+            table: spec.table,
+            rowCount: rows.length,
+            error
+        });
+        perTableCount[spec.table] = rows.length;
+        totalRows += rows.length;
+    }
+
+    const sections: Record<string, ExportedSection> = {};
+    for (const [name, tables] of bySection) {
+        if (tables.length === 0) continue;
+        sections[name] = {
+            name,
+            rowCount: tables.reduce((n, t) => n + t.rowCount, 0),
+            tables
+        };
     }
 
     return {
-        schemaVersion: 1,
-        source: "antaeus-cloud-export-v1",
+        schemaVersion: 2,
+        source: "antaeus-workspace-export-v2",
         capturedAt: new Date().toISOString(),
         workspaceId,
+        workspaceName,
         userEmail,
-        tables,
+        sections,
+        manifest,
+        notIncluded: NOT_INCLUDED_NOTE,
         perTableCount,
         errors,
         totalRows
     };
 }
 
-// ─── Cloud-delete (Trust Annex: "delete my data") ─────────────────────
+// ─── Restore ─────────────────────────────────────────────────────────
+
+export interface CloudRestoreResult {
+    readonly restoredRows: number;
+    readonly errors: ReadonlyArray<CloudExportTableErr>;
+    /** Tables in the file the system rebuilds on its own (not put back). */
+    readonly skippedTables: ReadonlyArray<string>;
+}
+
+/** Is this parsed JSON a cloud download we know how to put back? */
+export function isCloudExportFile(parsed: unknown): boolean {
+    if (!parsed || typeof parsed !== "object") return false;
+    const o = parsed as { source?: unknown; tables?: unknown; sections?: unknown };
+    if (o.source === "antaeus-workspace-export-v2") {
+        return typeof o.sections === "object" && o.sections !== null;
+    }
+    if (o.source === "antaeus-cloud-export-v1") {
+        return typeof o.tables === "object" && o.tables !== null;
+    }
+    return false;
+}
+
+/** Flatten either download version into table → rows. */
+export function rowsByTable(
+    snapshot: unknown
+): Record<string, ReadonlyArray<unknown>> {
+    const out: Record<string, ReadonlyArray<unknown>> = {};
+    if (!snapshot || typeof snapshot !== "object") return out;
+    const o = snapshot as {
+        tables?: Record<string, unknown>;
+        sections?: Record<string, { tables?: unknown }>;
+    };
+    if (o.sections && typeof o.sections === "object") {
+        for (const section of Object.values(o.sections)) {
+            if (!section || !Array.isArray(section.tables)) continue;
+            for (const t of section.tables as Array<{ table?: unknown; rows?: unknown }>) {
+                if (typeof t?.table === "string" && Array.isArray(t.rows)) {
+                    out[t.table] = t.rows;
+                }
+            }
+        }
+        return out;
+    }
+    if (o.tables && typeof o.tables === "object") {
+        for (const [table, rows] of Object.entries(o.tables)) {
+            if (Array.isArray(rows)) out[table] = rows;
+        }
+    }
+    return out;
+}
+
+/**
+ * Put a download back. Accepts both the current sectioned download and
+ * the older flat one. Writes tables in registry order (parents before
+ * children); upserts on the primary key so running it twice is safe.
+ * Tables the system writes on its own are skipped — they rebuild
+ * themselves. Defensive per table.
+ */
+export async function restoreCloudExport(
+    factory: () => DataClient,
+    snapshot: unknown
+): Promise<CloudRestoreResult> {
+    let client: DataClient;
+    try {
+        client = factory();
+    } catch (err) {
+        reportError(err, { op: "settings.restoreCloudExport.factory" });
+        return {
+            restoredRows: 0,
+            errors: [{ table: "<client>", reason: messageOf(err) }],
+            skippedTables: []
+        };
+    }
+    const sb = looseClient(client);
+    const byTable = rowsByTable(snapshot);
+    let restoredRows = 0;
+    const errors: CloudExportTableErr[] = [];
+    const skippedTables: string[] = [];
+
+    for (const spec of tablesToRestore()) {
+        const rows = byTable[spec.table];
+        if (!rows || rows.length === 0) continue;
+        try {
+            const { error } = await sb
+                .from(spec.table)
+                .upsert(rows as unknown[], {
+                    ignoreDuplicates: spec.restore === "insert"
+                });
+            if (error) errors.push({ table: spec.table, reason: error.message });
+            else restoredRows += rows.length;
+        } catch (err) {
+            errors.push({ table: spec.table, reason: messageOf(err) });
+        }
+    }
+    const restorable = new Set(tablesToRestore().map((t) => t.table));
+    for (const [table, rows] of Object.entries(byTable)) {
+        if (!restorable.has(table) && rows.length > 0) skippedTables.push(table);
+    }
+    return { restoredRows, errors, skippedTables };
+}
+
+// ─── Delete everything ───────────────────────────────────────────────
 
 export interface CloudDeleteResult {
     readonly totalDeleted: number;
     readonly perTable: Readonly<Record<string, number>>;
     readonly errors: ReadonlyArray<string>;
     readonly cancelled: boolean;
+    /** "server" = the delete_workspace_data RPC; "per-table" = fallback. */
+    readonly method: "server" | "per-table" | "none";
 }
 
 const EMPTY_DELETE_RESULT: CloudDeleteResult = {
     totalDeleted: 0,
     perTable: {},
     errors: [],
-    cancelled: false
+    cancelled: false,
+    method: "none"
 };
 
+function parseRpcDelete(
+    data: unknown
+): { perTable: Record<string, number>; errors: string[] } | null {
+    if (!data || typeof data !== "object") return null;
+    const o = data as { deleted?: unknown; errors?: unknown };
+    if (!o.deleted || typeof o.deleted !== "object") return null;
+    const perTable: Record<string, number> = {};
+    for (const [t, n] of Object.entries(o.deleted as Record<string, unknown>)) {
+        perTable[t] = typeof n === "number" ? n : Number(n) || 0;
+    }
+    const errors: string[] = [];
+    if (o.errors && typeof o.errors === "object") {
+        for (const [t, msg] of Object.entries(o.errors as Record<string, unknown>)) {
+            errors.push(`${t}: ${String(msg)}`);
+        }
+    }
+    return { perTable, errors };
+}
+
 /**
- * Wipe every row in the workspace's data tables for the current user.
- * Returns a per-table delete count + any errors.
+ * Delete everything: removes every row in every workspace table in
+ * ./workspace-tables.ts (`deleteScope: "workspace"`). Keeps the
+ * workspace row, its membership, and your own profile so you can keep
+ * signing in.
  *
- * Scope: every "noun" table the operator authors content into.
- * Excludes `workspaces`, `workspace_members`, `profiles` — those are
- * identity surfaces, not workspace content, and deleting them would
- * also delete the user's ability to sign in (per RLS).
+ * Path 1 — the `delete_workspace_data` RPC (migration 20261105130000),
+ * which runs server-side and reaches the tables members can't delete
+ * under RLS (system-written logs, append-only history).
  *
- * RLS gates the deletes to the operator's workspace, so a Worker-side
- * call could only ever touch rows the operator already owns — the
- * fan-out is safe even without explicit workspace_id filtering.
- *
- * The data-client doesn't expose batch delete; we list, then delete
- * one-by-one. Typical workspace size is < 200 rows total, so the
- * loop completes in a couple of seconds.
+ * Path 2 — if the RPC isn't deployed yet or errors, a per-table delete
+ * through RLS for every table members can delete. Tables only the
+ * server can empty are reported as errors so nothing is claimed that
+ * didn't happen.
  */
 export async function deleteCloudWorkspace(
     factory: () => DataClient
@@ -487,124 +613,101 @@ export async function deleteCloudWorkspace(
         return {
             ...EMPTY_DELETE_RESULT,
             cancelled: true,
-            errors: [
-                err instanceof Error ? err.message : String(err) || "no-client"
-            ]
+            errors: [messageOf(err) || "no-client"]
+        };
+    }
+    const sb = looseClient(client);
+
+    let workspaceId: string | null = null;
+    try {
+        workspaceId = (await client.currentWorkspace())?.id ?? null;
+    } catch (err) {
+        reportError(err, { op: "settings.deleteCloudWorkspace.workspace" });
+    }
+    if (!workspaceId) {
+        return {
+            ...EMPTY_DELETE_RESULT,
+            cancelled: true,
+            errors: ["No workspace found for this sign-in — nothing was deleted."]
         };
     }
 
-    const tables: Array<{
-        readonly label: string;
-        readonly fetch: () => Promise<ReadonlyArray<{ readonly id: string }>>;
-        readonly remove: (id: string) => Promise<unknown>;
-    }> = [
-        {
-            label: "icps",
-            fetch: () => client.icps.list({ limit: 5000 }),
-            remove: (id) => client.icps.remove(id)
-        },
-        {
-            label: "deals",
-            fetch: () => client.deals.list({ limit: 5000 }),
-            remove: (id) => client.deals.remove(id)
-        },
-        {
-            label: "proofs",
-            fetch: () => client.proofs.list({ limit: 5000 }),
-            remove: (id) => client.proofs.remove(id)
-        },
-        {
-            label: "advisor_deployments",
-            fetch: () => client.advisorDeployments.list({ limit: 5000 }),
-            remove: (id) => client.advisorDeployments.remove(id)
-        },
-        {
-            label: "signal_console_accounts",
-            fetch: () => client.signalConsoleAccounts.list({ limit: 5000 }),
-            remove: (id) => client.signalConsoleAccounts.remove(id)
-        },
-        {
-            label: "sequences",
-            fetch: () => client.sequences.list({ limit: 5000 }),
-            remove: (id) => client.sequences.remove(id)
-        },
-        {
-            label: "discovery_call_logs",
-            fetch: () => client.discoveryCallLogs.list({ limit: 5000 }),
-            remove: (id) => client.discoveryCallLogs.remove(id)
-        },
-        {
-            label: "studio_artifacts",
-            fetch: () => client.studioArtifacts.list({ limit: 5000 }),
-            remove: (id) => client.studioArtifacts.remove(id)
-        },
-        {
-            label: "pipeline_settings",
-            fetch: () => client.pipelineSettings.list({ limit: 100 }),
-            remove: (id) => client.pipelineSettings.remove(id)
-        },
-        {
-            label: "discovery_frameworks",
-            fetch: () => client.discoveryFrameworks.list({ limit: 5000 }),
-            remove: (id) => client.discoveryFrameworks.remove(id)
-        },
-        {
-            label: "readiness_snapshots",
-            fetch: () => client.readinessSnapshots.list({ limit: 5000 }),
-            remove: (id) => client.readinessSnapshots.remove(id)
-        },
-        {
-            label: "handoff_artifacts",
-            fetch: () => client.handoffArtifacts.list({ limit: 5000 }),
-            remove: (id) => client.handoffArtifacts.remove(id)
+    // ── Path 1: server-side wipe ──────────────────────────────────
+    let rpcFailure: string | null = null;
+    try {
+        const { data, error } = await sb.rpc("delete_workspace_data", {
+            ws: workspaceId
+        });
+        if (error) {
+            rpcFailure = error.message;
+        } else {
+            const parsed = parseRpcDelete(data);
+            if (parsed) {
+                const totalDeleted = Object.values(parsed.perTable).reduce(
+                    (n, v) => n + v,
+                    0
+                );
+                for (const e of parsed.errors) {
+                    reportError(new Error(e), {
+                        op: "settings.deleteCloudWorkspace.rpc_table"
+                    });
+                }
+                return {
+                    totalDeleted,
+                    perTable: parsed.perTable,
+                    errors: parsed.errors,
+                    cancelled: false,
+                    method: "server"
+                };
+            }
+            rpcFailure = "unexpected response from delete_workspace_data";
         }
-    ];
+    } catch (err) {
+        rpcFailure = messageOf(err);
+    }
+    reportError(new Error(rpcFailure ?? "rpc failed"), {
+        op: "settings.deleteCloudWorkspace.rpc"
+    });
 
+    // ── Path 2: per-table fallback through RLS ────────────────────
     const perTable: Record<string, number> = {};
     const errors: string[] = [];
     let totalDeleted = 0;
-
-    for (const t of tables) {
-        try {
-            const rows = await t.fetch();
-            let deleted = 0;
-            for (const row of rows) {
-                try {
-                    await t.remove(row.id);
-                    deleted += 1;
-                } catch (err) {
-                    errors.push(
-                        `${t.label}: ${
-                            err instanceof Error ? err.message : String(err)
-                        }`
-                    );
-                    reportError(err, {
-                        op: "settings.deleteCloudWorkspace.remove",
-                        table: t.label,
-                        id: row.id
-                    });
-                }
-            }
-            perTable[t.label] = deleted;
-            totalDeleted += deleted;
-        } catch (err) {
+    for (const spec of tablesToDelete()) {
+        if (!spec.memberDelete) {
+            perTable[spec.table] = 0;
             errors.push(
-                `${t.label} (list): ${
-                    err instanceof Error ? err.message : String(err)
-                }`
+                `${spec.table}: only the server can delete these rows (${rpcFailure ?? "server delete unavailable"})`
             );
-            perTable[t.label] = 0;
+            continue;
+        }
+        try {
+            const { error, count } = await sb
+                .from(spec.table)
+                .delete({ count: "exact" })
+                .eq("workspace_id", workspaceId);
+            if (error) {
+                perTable[spec.table] = 0;
+                errors.push(`${spec.table}: ${error.message}`);
+            } else {
+                const n = typeof count === "number" ? count : 0;
+                perTable[spec.table] = n;
+                totalDeleted += n;
+            }
+        } catch (err) {
+            perTable[spec.table] = 0;
+            errors.push(`${spec.table}: ${messageOf(err)}`);
             reportError(err, {
-                op: "settings.deleteCloudWorkspace.list",
-                table: t.label
+                op: "settings.deleteCloudWorkspace.table",
+                table: spec.table
             });
         }
     }
-
     return {
         totalDeleted,
         perTable,
         errors,
-        cancelled: false
+        cancelled: false,
+        method: "per-table"
     };
 }

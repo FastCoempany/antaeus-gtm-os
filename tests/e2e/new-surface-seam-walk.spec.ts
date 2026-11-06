@@ -55,15 +55,17 @@ const SEAMS: ReadonlyArray<Seam> = [
         routes: [
             { dest: "/deal-workspace/", label: "Open the deal", primary: true },
             { dest: "/discovery-studio/", label: "Run discovery again" },
-            { dest: "/call-planner/", label: "Prep the next call" }
+            // Call Planner is retired; preparing the call is in Discovery.
+            { dest: "/discovery-studio/", label: "Prepare the next call" }
         ]
     },
     {
         room: "discovery-studio",
         routes: [
             { dest: "/deal-workspace/", label: "the deal", primary: true },
-            { dest: "/future-autopsy/", label: "Pre-mortem this deal" },
-            { dest: "/call-planner/", label: "Plan the next call" }
+            // No "plan the next call" route: Call Planner was retired
+            // into this room, so call prep happens here.
+            { dest: "/future-autopsy/", label: "Pre-mortem this deal" }
         ]
     },
     {
@@ -144,6 +146,11 @@ test.describe("new-surface cross-room seam walk", () => {
                         primary: e.className.includes("ds-btn--accent")
                     }))
                 );
+
+                // No route points at the retired Call Planner.
+                expect(
+                    hrefs.filter((h) => h.href.startsWith("/call-planner/"))
+                ).toEqual([]);
 
                 // Exactly one primary route (the one dominant move).
                 expect(hrefs.filter((h) => h.primary).length).toBe(1);

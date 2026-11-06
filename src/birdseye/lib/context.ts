@@ -1,3 +1,4 @@
+import { heatFromStoredRow } from "@/signal-console/lib/heat";
 import { listObservations } from "@/lib/observations/reader";
 import type { DealForRanking, HotAccount } from "./ranker";
 
@@ -118,12 +119,8 @@ export function loadHotAccountsForRanking(
                   ? o.account_name
                   : null;
         if (!id || !account_name) continue;
-        const heat =
-            "heat" in o && typeof o.heat === "number"
-                ? o.heat
-                : typeof o._heat === "number"
-                  ? o._heat
-                  : 0;
+        // Same account-priority number Signal Console shows.
+        const heat = heatFromStoredRow(o);
         out.push({ id, account_name, heat });
     }
     out.sort((a, b) => b.heat - a.heat);

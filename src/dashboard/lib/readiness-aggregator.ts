@@ -1,4 +1,6 @@
 import type { ReadinessInput } from "@/lib/readiness";
+import { heatFromStoredRow } from "@/signal-console/lib/heat";
+import { computeHandoffSectionsReady } from "@/founding-gtm/lib/sections-ready";
 import { EMPTY_READINESS_INPUT } from "@/lib/readiness";
 
 /**
@@ -21,8 +23,9 @@ import { EMPTY_READINESS_INPUT } from "@/lib/readiness";
  *   gtmos_outbound_touches    — Outbound Studio
  *   gtmos_cold_call_log       — Cold Call Studio
  *   gtmos_linkedin_log        — LinkedIn Playbook
- *   gtmos_discovery_agenda    — Call Planner
- *   gtmos_discovery_stats     — Cold Call + Call Planner aggregate
+ *   gtmos_discovery_agenda    — retired Call Planner (legacy agendas, read-only)
+ *   gtmos_discovery_call_log  — Discovery Studio (calls prepared + run)
+ *   gtmos_discovery_stats     — Cold Call + Discovery aggregate
  *   gtmos_deal_workspaces     — Deal Workspace
  *   gtmos_poc_data            — PoC Framework
  *   gtmos_autopsy_log_v1      — Future Autopsy
@@ -121,7 +124,8 @@ function readSignalConsole(
     accounts.forEach((raw) => {
         const o = asObject(raw);
         if (!o) return;
-        const heat = "heat" in o ? asNumber(o.heat) : asNumber(o["_heat"]);
+        // Same account-priority number Signal Console shows.
+        const heat = heatFromStoredRow(o);
         if (heat >= 50) withHeat += 1;
         if (heat >= 75) hot += 1;
     });
@@ -153,9 +157,21 @@ function readLinkedinCues(storage: StorageLike): number {
     return maybeArrayWithKey(root, "actions").length;
 }
 
+/**
+ * Prepared discovery calls. Call Planner was retired into Discovery
+ * Studio (canon §4.11), so this counts the calls logged in Discovery
+ * Studio plus any agendas the old Call Planner left behind. The
+ * legacy key held either an array or a single latest-agenda object.
+ */
 function readCallPlanner(storage: StorageLike): number {
-    const arr = asArray(parseJson(storage.getItem("gtmos_discovery_agenda")));
-    return arr.length;
+    const legacy = parseJson(storage.getItem("gtmos_discovery_agenda"));
+    const legacyCount = Array.isArray(legacy)
+        ? legacy.length
+        : asObject(legacy)
+          ? 1
+          : 0;
+    const log = asObject(parseJson(storage.getItem("gtmos_discovery_call_log")));
+    return legacyCount + maybeArrayWithKey(log, "calls").length;
 }
 
 function readDiscoveryStats(
@@ -238,10 +254,18 @@ function readAdvisorDeployments(storage: StorageLike): number {
 }
 
 function readHandoffSectionsReady(storage: StorageLike): number {
-    // Pending the Founding GTM rebuild (Phase 5.B). Once §4.19 lands,
-    // it will publish a count to a known key — likely
-    // `gtmos_founding_gtm_health.sections_ready` — and this reader
-    // will be updated.
+    // Computed live with the same function the Founding GTM room uses
+    // so Readiness, the Dashboard and Founding GTM agree on "N of 7".
+    // The `gtmos_founding_gtm_health` snapshot is only written once the
+    // Founding GTM room has been opened, so it is a fallback only.
+    try {
+        return Math.max(
+            0,
+            Math.min(7, computeHandoffSectionsReady({ storage }).ready)
+        );
+    } catch {
+        // fall through to the published snapshot
+    }
     const obj = asObject(parseJson(storage.getItem("gtmos_founding_gtm_health")));
     const n = asNumber(obj?.sections_ready);
     return Math.max(0, Math.min(7, n));

@@ -53,7 +53,6 @@ var ROOMS = [
     { slug: "outbound-studio",     path: "/outbound-studio/" },
     { slug: "cold-call-studio",    path: "/cold-call-studio/" },
     { slug: "linkedin-playbook",   path: "/linkedin-playbook/" },
-    { slug: "call-planner",        path: "/call-planner/" },
     { slug: "discovery-studio",    path: "/discovery-studio/" },
     { slug: "deal-workspace",      path: "/deal-workspace/" },
     { slug: "future-autopsy",      path: "/future-autopsy/" },

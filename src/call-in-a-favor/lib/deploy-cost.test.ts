@@ -97,6 +97,6 @@ describe("findDoNotUseCandidate", () => {
     it("returns the reason copy alongside the candidate", () => {
         const advisors = [advisor("a", "t1", "Board")];
         const c = findDoNotUseCandidate(advisors, "intro", null);
-        expect(c?.reason.toLowerCase()).toContain("board capital");
+        expect(c?.reason.toLowerCase()).toContain("board-level advisors for executive approval questions");
     });
 });

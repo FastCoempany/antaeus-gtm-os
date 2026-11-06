@@ -1,14 +1,7 @@
 import type { SeedDeal } from "../draft";
 
-/**
- * Deterministic deal diagnosis (ADR-019, slice 5). Reads the judgment the
- * operator just entered and names the risk + the smallest corrective move
- * — the differentiated "this deal is about to die, here's the fix" read,
- * the thing that makes Antaeus not a prettier CRM. No LLM: it's computed
- * from the fields (missing economic buyer, late-stage single-thread, a
- * vague next step). Mirrors the shape of the deal-health engine the
- * Deal Workspace + Future Autopsy already use.
- */
+/** Deterministic assessment of recorded deal fields. These checks identify
+ * missing information and follow-up needs; they do not predict the outcome. */
 
 export type DiagnosisTone = "red" | "amber" | "green";
 
@@ -33,8 +26,8 @@ export function diagnoseDeal(deal: SeedDeal): Diagnosis {
         return {
             tone: "amber",
             label: "Stage unclear",
-            read: "You're not sure where this sits — and if you can't place it, the buyer probably can't either. That ambiguity is the risk.",
-            move: "Pin down their actual next step and who owns it. That tells you the stage."
+            read: "No deal stage is selected. Confirm the buyer’s current decision process before assigning a stage.",
+            move: "Confirm the next buyer action, its owner, and the stage criteria it satisfies."
         };
     }
 
@@ -48,15 +41,15 @@ export function diagnoseDeal(deal: SeedDeal): Diagnosis {
     // Red: late and missing the person who signs, or late and gone silent.
     if (late && (noSigner || silent)) {
         const why = noSigner
-            ? "no economic buyer named"
-            : "it's gone quiet";
+            ? "no signer recorded"
+            : "a reported gap in buyer responses";
         return {
             tone: "red",
             label: "At risk",
-            read: `Late stage and ${why}. Deals don't close without the person who signs in the room.`,
+            read: `This deal is in a late stage with ${why}. This needs review before relying on the planned close date.`,
             move: noSigner
-                ? "Get a name on who signs, and a dated next step, before it goes cold."
-                : "Re-open it with a reason to move now — not a check-in."
+                ? "Confirm who can sign and agree on a dated next step."
+                : "Ask whether the buyer’s priorities or timeline have changed and agree on the next action."
         };
     }
 
@@ -64,33 +57,33 @@ export function diagnoseDeal(deal: SeedDeal): Diagnosis {
     if (late && single) {
         return {
             tone: "amber",
-            label: "Fragile",
-            read: "You're single-threaded this late. One departure or one skeptic kills it.",
-            move: "Multi-thread to the buying group before terms land."
+            label: "Single contact",
+            read: "The deal is in a late stage and your notes indicate one contact. A change in that person’s availability or support could delay approval.",
+            move: "Identify the other decision makers and confirm their approval requirements."
         };
     }
     if (noChampion) {
         return {
             tone: "amber",
             label: "No champion",
-            read: "Nobody named is fighting for this on the inside. That's the difference between a deal and a hope.",
-            move: "Find — or build — one person who'll sell it when you're not in the room."
+            read: "No champion is recorded. The current information does not show who will advocate for the proposal internally.",
+            move: "Identify an internal supporter and confirm whether they can help coordinate the buying process."
         };
     }
     if (noSigner) {
         return {
             tone: "amber",
-            label: "Early, watch the signer",
-            read: "You don't know who signs yet. Find that out before you invest more.",
-            move: "Map the economic buyer this week, while the champion's warm."
+            label: "Signer not recorded",
+            read: "No signer is recorded. Confirm the approval process before planning the close.",
+            move: "Ask your champion who approves the purchase and who signs the agreement."
         };
     }
 
     // Otherwise: live and reasonably qualified.
     return {
         tone: "green",
-        label: "Live",
-        read: "Champion named, signer known, nothing screaming. Keep the next step dated.",
-        move: "Protect the momentum — confirm the next step before this call ends."
+        label: "Key contacts recorded",
+        read: "A champion and signer are recorded, and these checks found no additional flag. This does not establish overall deal health.",
+        move: "Confirm the next buyer action, owner, and date."
     };
 }

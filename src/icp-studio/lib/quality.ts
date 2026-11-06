@@ -7,33 +7,10 @@ import type {
 import { containsBroadLanguage } from "./builders";
 
 /**
- * Phase 4 / Room 11 Wave 2 — quality engine.
+ * ICP quality engine.
  *
- * Faithful TypeScript port of legacy `buildIcpQuality(role, industry,
- * size, geo, buyer, pain, trigger, proof, activeAccounts)` (lines
- * 1232-1325 of `app/icp-studio/index.html`).
- *
- * 8 input checks, each adding to the score with one of three tones:
- *   good — full points, the input is sharp
- *   warn — partial points, the input is workable but soft
- *   risk — zero points, the input is missing or broken
- *
- * Scoring (full credit):
- *   industry  +15 (good) / risk if missing
- *   size      +10 (good) / +7 (warn enterprise) / risk if missing
- *   geo       +10 (good tight) / +8 (warn region) / +4 (warn global) / risk if missing
- *   buyer     +15 (good) / +8 (warn broad language) / risk if missing
- *   pain      +15 (good) / risk if missing
- *   trigger   +15 (good) / risk if missing
- *   proof     +10 (good aggressive 7d/14d) / +8 (good defined) / risk if missing
- *   active    +10 (good 20-160) / +7 (warn 161-220) / +4 (warn <20) / +2 (warn >220) / +0 (warn missing)
- *   role-aware overage warnings (founder >120 or firstae >220) — no points
- *
- * Score clamps to 0-100. Tier thresholds:
- *   ≥85 sharp     "Sharp enough to run."
- *   ≥70 workable  "Workable, but tighten one more thing."
- *   ≥50 forming   "Borderline. Tighten before you trust it."
- *   else broad    "Too broad to trust yet."
+ * The stable internal tier keys remain broad/forming/workable/sharp for
+ * compatibility. User-facing labels describe ICP specificity directly.
  */
 
 export interface QualityInput {
@@ -78,178 +55,117 @@ export function buildIcpQuality(input: QualityInput): IcpQuality {
         activeAccounts
     } = input;
 
-    // Industry
     if (industry.trim()) {
-        good(
-            15,
-            "Industry is defined. A real target list can exist."
-        );
+        good(15, "Industry is defined. A target-account list can be built from it.");
     } else {
-        risk(
-            "Choose one industry. If a list does not exist, the ICP is not real yet."
-        );
+        risk("Choose one industry so the ICP can produce a concrete target-account list.");
     }
 
-    // Size
     if (size.trim()) {
         if (size === "5,000+ employees") {
-            warn(
-                7,
-                "Size band is valid, but enterprise breadth raises process complexity fast."
-            );
+            warn(7, "The company-size band is defined, but this enterprise range can include materially different buying processes.");
         } else {
-            good(10, "Company-size band is defined. Complexity is bounded.");
+            good(10, "Company-size band is defined.");
         }
     } else {
-        risk(
-            "Choose one company-size band so downstream qualification stays believable."
-        );
+        risk("Choose one company-size band so account qualification uses a consistent criterion.");
     }
 
-    // Geo
     if (geo.trim()) {
         if (geo === "Global") {
-            warn(
-                4,
-                "Global is usually too wide for the first 30-day slice."
-            );
+            warn(4, "Global coverage is broad for an initial 30-day account set.");
         } else if (
             geo === "North America" ||
             geo === "EMEA" ||
             geo === "APAC"
         ) {
-            warn(
-                8,
-                "Region is workable, but coverage discipline still matters."
-            );
+            warn(8, "The region is usable, but account coverage still needs prioritization within it.");
         } else {
-            good(10, "Geography is tight enough to route territory cleanly.");
+            good(10, "Geography is specific enough to assign account coverage.");
         }
     } else {
-        risk("Pick one geography you can actually cover right now.");
+        risk("Choose one geography your team can cover now.");
     }
 
-    // Buyer
     if (buyer.trim()) {
         if (containsBroadLanguage(buyer)) {
-            warn(
-                8,
-                "Primary buyer still sounds broad. Name one owner, not a committee."
-            );
+            warn(8, "The primary buyer is still broad. Name one role that owns the problem.");
         } else {
-            good(
-                15,
-                "Primary buyer is explicit. Messaging can stay owner-led."
-            );
+            good(15, "Primary buyer is explicitly defined.");
         }
     } else {
-        risk(
-            'Pick one primary buyer. "Team" language will break outbound and discovery.'
-        );
+        risk("Choose one primary buyer role so outbound and discovery can address a specific owner.");
     }
 
-    // Pain
     if (pain.trim()) {
-        good(
-            15,
-            "Primary pain is explicit. Copy and discovery can stay centered on one problem."
-        );
+        good(15, "Primary problem is explicitly defined.");
     } else {
-        risk("Choose one felt pain. Listing more than one blurs the ICP.");
+        risk("Choose one primary problem the buyer is responsible for solving.");
     }
 
-    // Trigger
     if (trigger.trim()) {
-        good(
-            15,
-            "Trigger is explicit. Research can look for urgency instead of vague interest."
-        );
+        good(15, "A current trigger is defined, so research can identify accounts with a timely reason to engage.");
     } else {
-        risk(
-            "Choose one trigger. Without urgency, the list becomes fake pipeline."
-        );
+        risk("Choose one trigger that makes the problem timely for the buyer.");
     }
 
-    // Proof window
     if (proofWindow.trim()) {
         if (proofWindow === "7 days" || proofWindow === "14 days") {
-            good(
-                10,
-                "Evidence window is aggressive enough to create fast first value."
-            );
+            good(10, "The evidence window is defined and short enough to evaluate value quickly.");
         } else {
-            good(
-                8,
-                "Evidence window is defined. Qualification now has a real bar."
-            );
+            good(8, "The evidence window is defined.");
         }
     } else {
-        risk(
-            "Pick one evidence window so the deal can be pressure-tested early."
-        );
+        risk("Choose a time window for demonstrating value so opportunities can be qualified against a clear expectation.");
     }
 
-    // Active accounts (working list size)
     if (!activeAccounts || activeAccounts <= 0) {
-        warn(
-            0,
-            "No working-list size entered yet. Territory and sourcing will stay generic until you size the first 30-day slice."
-        );
+        warn(0, "No working-list size is recorded yet. Add or size the initial account set to evaluate coverage.");
     } else if (activeAccounts < 20) {
-        warn(
-            4,
-            "Working list may be too thin unless personalization is extremely high-touch."
-        );
+        warn(4, "The working account list is small; confirm that the list is large enough to support the planned outreach volume.");
     } else if (activeAccounts <= 160) {
-        good(
-            10,
-            "Working-list size is believable for a focused 30-day operating window."
-        );
+        good(10, "Working-list size is within the current focused 30-day range.");
     } else if (activeAccounts <= 220) {
-        warn(7, "Coverage is getting wide. Keep ranking ruthless.");
+        warn(7, "The working account list is broad. Prioritize accounts before increasing outreach volume.");
     } else {
-        warn(
-            2,
-            "Working-list size is too wide for a first focused 30-day slice."
-        );
+        warn(2, "The working account list is too broad for the current focused 30-day range.");
     }
 
-    // Role-aware overage warnings (no point change, just an extra check)
     if (role === "founder" && activeAccounts > 120) {
         checks.push({
             tone: "warn",
-            text: "Founder-led motion usually performs better under roughly 120 active accounts at a time."
+            text: "Founder-led sales coverage may be difficult to sustain above roughly 120 active accounts at a time."
         });
     }
     if (role === "firstae" && activeAccounts > 220) {
         checks.push({
             tone: "risk",
-            text: "First AE motion is probably too wide above roughly 220 active accounts without strong prioritization."
+            text: "A first seller is unlikely to cover more than roughly 220 active accounts effectively without stronger prioritization."
         });
     }
 
     score = Math.max(0, Math.min(100, score));
 
     let tier: QualityTier = "broad";
-    let label = "Too broad to trust yet.";
+    let label = "ICP quality: too broad";
     let summary =
-        "This still needs too much founder interpretation before the rest of the app can use it cleanly.";
+        "The ICP is missing enough specificity that downstream account qualification still requires substantial interpretation.";
 
     if (score >= 85) {
         tier = "sharp";
-        label = "Sharp enough to run.";
+        label = "ICP quality: highly specific";
         summary =
-            "This is specific enough to drive territory, sourcing, outbound, and discovery without translation.";
+            "The ICP is specific enough to use consistently across territory planning, sourcing, outbound, and discovery.";
     } else if (score >= 70) {
         tier = "workable";
-        label = "Workable, but tighten one more thing.";
+        label = "ICP quality: well defined";
         summary =
-            "The ICP is real. Tighten the remaining pressure point before scaling the list or message.";
+            "The ICP is usable across the sales process, but one or more criteria can still be made more specific.";
     } else if (score >= 50) {
         tier = "forming";
-        label = "Borderline. Tighten before you trust it.";
+        label = "ICP quality: partially defined";
         summary =
-            "You have the outline of an ICP, but the user still has to infer too much downstream.";
+            "Several ICP criteria are present, but downstream qualification still requires interpretation.";
     }
 
     return { score, tier, label, summary, checks };

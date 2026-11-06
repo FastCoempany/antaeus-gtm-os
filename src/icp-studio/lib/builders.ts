@@ -17,11 +17,11 @@ import {
 // ─── Statement composer ────────────────────────────────────────────────
 
 const EMPTY_STATEMENT: IcpStatement = {
-    text: "Fill the inputs above to generate a Thin ICP statement.",
+    text: "Complete the inputs above to draft an ideal customer profile.",
     hint: "Tip: choose one owner, one pain, one trigger, one evidence window."
 };
 
-const WIN_HINT = "If you cannot list 50 accounts that match this, thin it again.";
+const WIN_HINT = "Test this targeting hypothesis against potential accounts and recorded deal outcomes.";
 
 export interface BuildStatementInput {
     readonly industry: string;
@@ -50,7 +50,7 @@ export function buildStatement(input: BuildStatementInput): IcpStatement {
     ) {
         return EMPTY_STATEMENT;
     }
-    const text = `We win with ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}, triggered by ${trigger.toLowerCase()}, and we can prove value in ${proofWindow}.`;
+    const text = `We target ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}. The proposed buying trigger is ${trigger.toLowerCase()}, and the planned value-validation period is ${proofWindow}.`;
     return { text, hint: WIN_HINT };
 }
 
@@ -61,7 +61,7 @@ export function buildStatement(input: BuildStatementInput): IcpStatement {
  * and any explicit active-accounts override. Legacy lines 1192-1199.
  *
  * - Active accounts > 0 → use it: "Work N active accounts in a 30-day
- *   window. Maintain a ranked top-20 and rotate weekly."
+ *   window. Keep the top 20 ranked and review weekly."
  * - Founder default (no override): 60-120 active accounts.
  * - First AE default: 120-220 active accounts.
  */
@@ -73,7 +73,10 @@ export function buildFocus(
         ? activeAccounts
         : 0;
     if (n > 0) {
-        return `Work ${n} active accounts in a 30-day window (from Engine). Maintain a ranked top-20 and rotate weekly.`;
+        const ranked = Math.min(20, n);
+        return n <= 20
+            ? `Work ${n} active accounts over the next 30 days, using the target you entered. Rank them and review the order weekly.`
+            : `Work ${n} active accounts over the next 30 days, using the target you entered. Keep the top ${ranked} ranked and review the order weekly.`;
     }
     if (role === "founder") {
         return "Founder-led default: focus 60-120 active accounts for the next 30 days. If personalization is heavy, start at 60.";

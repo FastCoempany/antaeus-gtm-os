@@ -57,7 +57,7 @@ export function PinnedCaseDS(): JSX.Element {
                 </h2>
                 <p class="fad-empty__body">
                     {t(
-                        "The room pins a deal as evidence, then shows what kills it in 45 days — and the smallest move that turns it around.",
+                        "Future Autopsy pins a deal as evidence, then shows what kills it in 45 days — and the smallest step that turns it around.",
                         { class: "body" }
                     )}
                 </p>
@@ -206,7 +206,7 @@ export function PinnedCaseDS(): JSX.Element {
                 <HandoffStrip
                     label={t("Intervene")}
                     kicker={t("INTERVENE")}
-                    title={t("Take the correction into the room that fixes it", {
+                    title={t("Take the fix to the page that handles it", {
                         class: "body"
                     })}
                     routes={routes}

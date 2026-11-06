@@ -46,29 +46,29 @@ function statsFrom(prospects: ReadonlyArray<Prospect>): WorkbenchStats {
 }
 
 describe("computeLoomRead — empty board", () => {
-    it("returns empty band with no-prospects copy", () => {
+    it("returns empty band with no-company copy", () => {
         const prospects: Prospect[] = [];
         const r = computeLoomRead({
             prospects,
             stats: statsFrom(prospects)
         });
         expect(r.band).toBe("empty");
-        expect(r.weekRead.toLowerCase()).toContain("nothing in the funnel");
+        expect(r.weekRead.toLowerCase()).toContain("no companies have been added");
         expect(r.operatorMove.toLowerCase()).toContain("add the first company");
     });
 });
 
-describe("computeLoomRead — next-move priority chain", () => {
-    it("prescribes pushing when a ready prospect exists", () => {
+describe("computeLoomRead — next-action priority chain", () => {
+    it("recommends sending when a confirmed prospect exists", () => {
         const prospects = [prospect("a-1", "ready")];
         const r = computeLoomRead({
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("send the cleanest");
+        expect(r.operatorMove.toLowerCase()).toContain("send a confirmed account");
     });
 
-    it("prescribes tightening researched into ready when 3+ researched, 0 ready", () => {
+    it("recommends completing qualification when 3+ are researched and none is ready", () => {
         const prospects = [
             prospect("a-1", "researched"),
             prospect("a-2", "researched"),
@@ -78,10 +78,10 @@ describe("computeLoomRead — next-move priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("finish confirming");
+        expect(r.operatorMove.toLowerCase()).toContain("remaining qualification check");
     });
 
-    it("prescribes researching when 5+ captured pile up unworked", () => {
+    it("recommends qualifying before adding more when 5+ captured pile up", () => {
         const prospects = Array.from({ length: 6 }, (_, i) =>
             prospect(`a-${i}`, "captured")
         );
@@ -89,12 +89,12 @@ describe("computeLoomRead — next-move priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.operatorMove.toLowerCase()).toContain("confirm one account");
+        expect(r.operatorMove.toLowerCase()).toContain("before adding more companies");
     });
 });
 
-describe("computeLoomRead — week read priority chain", () => {
-    it("flags captured-pile-up when nothing researched", () => {
+describe("computeLoomRead — status copy", () => {
+    it("states the observed qualification backlog when nothing is researched", () => {
         const prospects = Array.from({ length: 5 }, (_, i) =>
             prospect(`a-${i}`, "captured")
         );
@@ -102,12 +102,10 @@ describe("computeLoomRead — week read priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.weekRead.toLowerCase()).toContain("piling up");
+        expect(r.weekRead.toLowerCase()).toContain("waiting for qualification");
     });
 
-    it("declares producing when 3+ ready (band working until pushes land)", () => {
-        // 3 ready alone is working+producing — actual shipping band
-        // requires pushed prospects landing downstream.
+    it("states the count of confirmed accounts when 3+ are ready", () => {
         const prospects = [
             prospect("a-1", "ready"),
             prospect("a-2", "ready"),
@@ -117,7 +115,7 @@ describe("computeLoomRead — week read priority chain", () => {
             prospects,
             stats: statsFrom(prospects)
         });
-        expect(r.weekRead.toLowerCase()).toContain("producing");
+        expect(r.weekRead.toLowerCase()).toContain("ready to send to signal console");
         expect(r.band).toBe("working");
     });
 });
@@ -132,7 +130,7 @@ describe("computeLoomRead — score bands", () => {
         expect(r.band).toBe("empty");
     });
 
-    it("scores a shipping board into the shipping band", () => {
+    it("keeps the existing internal high-score band threshold", () => {
         const prospects = [
             prospect("a-1", "ready"),
             prospect("a-2", "ready"),
@@ -148,5 +146,6 @@ describe("computeLoomRead — score bands", () => {
         });
         expect(r.band).toBe("shipping");
         expect(r.score).toBeGreaterThanOrEqual(70);
+        expect(r.bandLabel).toBe("Confirmed accounts available");
     });
 });

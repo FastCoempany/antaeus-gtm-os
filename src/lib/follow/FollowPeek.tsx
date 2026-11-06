@@ -7,20 +7,12 @@ import { buildFollowRead, type FollowRead } from "./follow-data";
 import "./follow.css";
 
 /**
- * Follow the Object — the unfold (G9, founder-locked 2026-07-13).
+ * Cross-workspace object history.
  *
- * Any account/deal name, anywhere it appears, is a quiet door. Click it
- * and the PEEK lands right there — a small anchored card carrying canon
- * §2's five required exposures. "See the whole thread" unfolds the same
- * card in place into the object's whole life through the rooms, each
- * stop with its own inline GO. It never takes the room and never
- * transitions to a page — the thread is an extended briefing over a
- * live room. Fold it back, Esc, or click away to put everything back.
- *
- * Mounting (the Ground pattern): rooms render <FollowPeek /> as a last
- * child and either tag names with `data-follow="<name>"` (the delegated
- * listener picks them up) or call `openFollow(el, name)` directly when
- * the element already has an in-room click behavior to preserve.
+ * Clicking a tagged account or deal opens a compact card with its current
+ * status, prioritization evidence, recommended action, expected downstream
+ * change, and recorded context. The expanded view shows related activity in
+ * other workspaces without navigating away from the current room.
  */
 
 const followRead = signal<FollowRead | null>(null);
@@ -29,6 +21,30 @@ const followOpen = signal(false);
 const followUnfolded = signal(false);
 
 let listenersBound = false;
+
+/**
+ * Compatibility boundary for legacy follow-data field names and sentences.
+ * The underlying storage/read contract remains stable, while every rendered
+ * sentence uses the same explicit account-priority and deal-risk vocabulary
+ * as the rooms that own those calculations.
+ */
+function displayText(value: string): string {
+    return value
+        .replace(/\bheat\s+(\d+)/gi, "priority score $1")
+        .replace(/\s*\((hot|warm|cool|cold)\)/gi, "")
+        .replace(/Turn the heat into a first conversation\.?/gi, "Start a first conversation.")
+        .replace(/while the account is warm/gi, "while the account signal is recent")
+        .replace(/Reach out while the signal is fresh — heat fades week by week\.?/gi, "Reach out while the signal is recent; signal age is part of account prioritization.")
+        .replace(/Nothing is decaying today — acting keeps it that way\.?/gi, "No additional deal-risk factors are currently increasing.")
+        .replace(/Act and .*? comes off the slipping list — the close date holds\.?/gi, "Complete the recommended action, then reassess the deal risk and close-date evidence.")
+        .replace(/Act and this deal is back at a healthy pace\.?/gi, "Complete the recommended action, then reassess the deal risk.")
+        .replace(/Terms are live — run it from Getting to Signed\.?/gi, "Contract terms are active. Continue in Getting to Signed.")
+        .replace(/The smallest thing that changes the read\.?/gi, "This action addresses the highest-priority recorded gap.")
+        .replace(/Not watched yet — add the account to start building heat\.?/gi, "Not monitored yet. Add the account to begin tracking signals.")
+        .replace(/Terms are live — the run to signature happens here\.?/gi, "Contract terms are active. Continue the signature process here.")
+        .replace(/Everything logged so far rides along — nothing needs restating\.?/gi, "Recorded context remains available across related workspaces.")
+        .replace(/Nothing pulling right now\.?/gi, "No current prioritization factor is recorded.");
+}
 
 export function openFollow(anchor: HTMLElement, name: string): void {
     try {
@@ -66,7 +82,6 @@ function bindListeners(): void {
     if (listenersBound || typeof document === "undefined") return;
     listenersBound = true;
 
-    // Delegated open for plain tagged names (no in-room click to fight).
     document.addEventListener("click", (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
         if (!target) return;
@@ -76,10 +91,6 @@ function bindListeners(): void {
             if (name.trim() !== "") openFollow(door, name);
             return;
         }
-        // Click-away closes — unless the click is inside the card. A
-        // target the re-render already detached (e.g. the unfold button
-        // replacing itself) has no ancestors, so require attachment
-        // before treating it as outside.
         if (
             followOpen.value &&
             document.contains(target) &&
@@ -113,25 +124,25 @@ export function FollowPeek(): JSX.Element | null {
         >
             <div class="fo-nm">{read.name}</div>
             <div class="fo-row">
-                <span class="fo-k">{t("Where it stands", { class: "label" })}</span>
-                <span>{read.stands}</span>
+                <span class="fo-k">{t("Current status", { class: "label" })}</span>
+                <span>{displayText(read.stands)}</span>
             </div>
             <div class="fo-row">
-                <span class="fo-k">{t("What's pulling", { class: "label" })}</span>
-                <span>{read.pulling}</span>
+                <span class="fo-k">{t("Why this is prioritized", { class: "label" })}</span>
+                <span>{displayText(read.pulling)}</span>
             </div>
             <div class="fo-row">
-                <span class="fo-k">{t("What changes", { class: "label" })}</span>
-                <span>{read.changes}</span>
+                <span class="fo-k">{t("What changes if you act", { class: "label" })}</span>
+                <span>{displayText(read.changes)}</span>
             </div>
             <div class="fo-row">
-                <span class="fo-k">{t("Remembered", { class: "label" })}</span>
-                <span>{read.remembered}</span>
+                <span class="fo-k">{t("Recorded context", { class: "label" })}</span>
+                <span>{displayText(read.remembered)}</span>
             </div>
             {read.move ? (
                 <a class="fo-move" href={read.move.href}>
-                    {read.move.label}
-                    <span>{read.move.detail}</span>
+                    {displayText(read.move.label)}
+                    <span>{displayText(read.move.detail)}</span>
                 </a>
             ) : null}
             {!unfolded ? (
@@ -140,14 +151,14 @@ export function FollowPeek(): JSX.Element | null {
                     class="fo-thread"
                     onClick={() => (followUnfolded.value = true)}
                 >
-                    {t("See the whole thread — every room that holds a piece", { class: "body" })}
+                    {t("See related activity across the workspace", { class: "body" })}
                 </button>
             ) : null}
 
             {unfolded ? (
                 <div class="fo-fold">
                     <div class="fo-foldk">
-                        {t("The whole thread — every room that holds a piece", { class: "body" })}
+                        {t("Related activity across the workspace", { class: "body" })}
                     </div>
                     {read.stops.map((s) => (
                         <div class={`fo-stop is-${s.state}`} key={s.key}>
@@ -165,18 +176,18 @@ export function FollowPeek(): JSX.Element | null {
                                     </a>
                                 ) : null}
                             </div>
-                            <div class="fo-wt">{s.what}</div>
+                            <div class="fo-wt">{displayText(s.what)}</div>
                         </div>
                     ))}
                     <p class="fo-remember">
-                        {t("All remembered — jump anywhere, nothing needs restating.", { class: "body" })}
+                        {t("Recorded context remains available in each related workspace.", { class: "body" })}
                     </p>
                     <button
                         type="button"
                         class="fo-back"
                         onClick={() => (followUnfolded.value = false)}
                     >
-                        {t("Fold it back", { class: "label" })} ↑
+                        {t("Close activity history", { class: "label" })} ↑
                     </button>
                 </div>
             ) : null}

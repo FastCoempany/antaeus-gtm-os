@@ -3,23 +3,11 @@ import type { ObservationView } from "@/lib/observations/types";
 import type { NextMove, NextMoveSourceKind, RankerResult } from "./types";
 
 /**
- * NextMove ranker — Phase D core logic.
- *
- * Per ADR-011 (2026-05-31). Pure function that takes the workspace's
- * inputs (observations, deals, hot accounts) and returns the single
- * highest-pressure NextMove candidate (or null if nothing passes).
- *
- * Source priority is a stable composite score — higher pressure wins
- * regardless of source kind. Equal scores break by source priority:
- * observation > deal-pressure > hot-signal-account.
- *
- * Voice gate: each candidate's label + reason are validated against
- * `src/lib/voice/voice-document.ts` before being considered. Failing
- * candidates are dropped silently; the ranker returns the next best
- * or "all-voice-failed" if nothing survives.
+ * NextMove ranker — pure function that ranks current observations,
+ * deal-risk inputs, and account-priority inputs and returns the highest
+ * ranked recommended action. Internal source-kind and score fields remain
+ * stable; user-facing labels/reasons use explicit business language.
  */
-
-// ─── Inputs ────────────────────────────────────────────────────────────
 
 export interface RankerInputs {
     readonly observations: ReadonlyArray<ObservationView>;
@@ -40,10 +28,9 @@ export interface DealForRanking {
 export interface HotAccount {
     readonly id: string;
     readonly account_name: string;
+    /** Stable internal field name for the account-priority input. */
     readonly heat: number;
 }
-
-// ─── Source-to-candidate adapters ──────────────────────────────────────
 
 function fromObservation(obs: ObservationView): NextMove | null {
     if (obs.dismissedAt) return null;
@@ -63,25 +50,21 @@ function fromObservation(obs: ObservationView): NextMove | null {
 }
 
 function deriveObservationLabel(obs: ObservationView): string {
-    // Map source_generator to a verb-shape action label. Falls back to
-    // a generic "Review this read" if the generator id isn't known.
     switch (obs.sourceGenerator) {
         case "phase-b/deal-decay":
-            return "Look at the stalling deal";
+            return "Review the deal with increasing risk";
         case "phase-b/signal-decay":
-            return "Refresh signal coverage";
+            return "Review aging account signals";
         case "phase-b/proof-staleness":
-            return "Close out the overdue evidence";
+            return "Review overdue pilot evidence";
         case "phase-b/discovery-rhythm":
             return "Run a discovery call this week";
         default:
-            return "Review the latest system read";
+            return "Review the latest analysis";
     }
 }
 
 function buildObservationTargetUrl(obs: ObservationView): string {
-    // Route based on the related-object type. Observations without an
-    // entity land on the Dashboard (WeekReadsCard is there).
     const base = (() => {
         switch (obs.relatedObjectType) {
             case "deal":
@@ -106,18 +89,16 @@ function fromDeal(deal: DealForRanking): NextMove | null {
     if (deal.recovery_rank <= 0) return null;
     if (deal.stage === "closed-won" || deal.stage === "closed-lost") return null;
     const account = (deal.account_name ?? "").trim() || "Unnamed deal";
-    // Score: anchor to recovery_rank (0-100 in the Deal Workspace's
-    // computation). Bonus for missing next step.
     const noNextStep =
         !deal.next_step_date || deal.next_step_date.trim().length === 0;
     const score = Math.min(95, deal.recovery_rank + (noNextStep ? 5 : 0));
     const reason = noNextStep
-        ? `${account} is stalling with no dated next step.`
-        : `${account} is the deal with the most recovery pressure right now.`;
+        ? `${account} has elevated deal risk and no dated next step.`
+        : `${account} is currently the highest-ranked deal by risk.`;
     const targetUrl = `/deal-workspace/?focusObject=${encodeURIComponent(deal.id)}&fromSurface=birdseye`;
     return {
         id: `deal:${deal.id}`,
-        label: "Work the deal under most pressure",
+        label: "Review the highest-risk deal",
         reason,
         score,
         targetUrl,
@@ -127,12 +108,10 @@ function fromDeal(deal: DealForRanking): NextMove | null {
 
 function fromHotAccount(account: HotAccount): NextMove | null {
     if (account.heat <= 0) return null;
-    // Score: scale heat (0-100) down so hot accounts only win when
-    // observations + deal pressure are both quiet. Heat is a proxy
-    // for opportunity; observations + deals are proxies for risk —
-    // risk wins ties.
+    // `heat` remains the stable internal score field. User-facing copy
+    // names the construct as account priority rather than temperature.
     const score = Math.min(75, Math.round(account.heat * 0.7));
-    const reason = `${account.account_name} has the highest heat in your watchlist right now.`;
+    const reason = `${account.account_name} is currently the highest-priority account in your watchlist.`;
     const targetUrl = `/outbound-studio/?account=${encodeURIComponent(account.account_name)}&fromSurface=birdseye`;
     return {
         id: `hot:${account.id}`,
@@ -143,8 +122,6 @@ function fromHotAccount(account: HotAccount): NextMove | null {
         sourceKind: "hot-signal-account"
     };
 }
-
-// ─── Ranking ───────────────────────────────────────────────────────────
 
 const SOURCE_PRIORITY: Record<NextMoveSourceKind, number> = {
     observation: 3,
@@ -177,8 +154,6 @@ export function rankNextMove(input: RankerInputs): RankerResult {
         return { ok: false, reason: "no-candidates" };
     }
 
-    // Optionally drop candidates that would route to the room the
-    // operator is currently on (count-badge semantic).
     const filtered = input.currentRoomHref
         ? candidates.filter((c) => !c.targetUrl.startsWith(input.currentRoomHref!))
         : candidates;
@@ -198,10 +173,8 @@ export function rankNextMove(input: RankerInputs): RankerResult {
 }
 
 /**
- * Decide whether the Birdseye icon should show its count badge —
- * fires when there's at least ONE candidate that targets a room the
- * operator is NOT currently on. (Phase D doesn't surface counts; the
- * badge is a binary "more-urgent-than-here-exists" indicator.)
+ * Decide whether the Birdseye icon should show its count badge when a
+ * higher-priority recommendation points to another workspace.
  */
 export function shouldFlagOtherRoom(input: RankerInputs): boolean {
     if (!input.currentRoomHref) return false;

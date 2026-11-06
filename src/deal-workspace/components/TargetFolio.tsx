@@ -77,7 +77,7 @@ export function TargetFolio(): JSX.Element {
                 </div>
                 <p class="dw-target-folio__copy">
                     {t(
-                        "The live case the room should sharpen first. If it can't survive pressure, the rest of the board becomes decorative.",
+                        "The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.",
                         { class: "body" }
                     )}
                 </p>
@@ -98,8 +98,8 @@ export function TargetFolio(): JSX.Element {
                     <span class="dw-signal__label">{t("Evidence")}</span>
                     <span class="dw-signal__copy">
                         {(deal.useCase ?? "").trim() === ""
-                            ? t("Thin · use-case not locked")
-                            : `Locked · ${deal.useCase}`}
+                            ? t("Use case not recorded")
+                            : `Use case recorded · ${deal.useCase}`}
                     </span>
                 </li>
                 <li class="dw-signal-row">

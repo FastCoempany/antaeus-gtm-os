@@ -35,7 +35,7 @@ export function Topbar(): JSX.Element {
                     : "no cues yet"}
             </p>
             <h1 class="lp-topbar__title">
-                Enter only when the room gives a cue.
+                Reach out only when the account gives you a cue.
             </h1>
             {acct ? (
                 <p class="lp-topbar__on-radar" role="status">

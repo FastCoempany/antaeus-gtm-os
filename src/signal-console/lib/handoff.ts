@@ -71,11 +71,16 @@ export function hrefToDealWorkspace(accountName: string): string {
     });
 }
 
-export function hrefToDiscoveryAgenda(accountName: string): string {
+/**
+ * Prepare the discovery call for this account. Call Planner was retired
+ * into Discovery Studio 2026-07-06 (canon §4.11 → §4.12); Discovery reads
+ * the account + its signal as pre-call context.
+ */
+export function hrefToDiscoveryStudio(accountName: string): string {
     return buildSignalRoomHref({
-        href: "/call-planner/",
+        href: "/discovery-studio/",
         focusObject: accountName,
-        roomLabel: "Call Planner",
+        roomLabel: "Discovery Studio",
         extra: { account: accountName }
     });
 }

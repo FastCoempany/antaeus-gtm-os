@@ -152,7 +152,7 @@ export function Palette(): JSX.Element | null {
             onClick={closePalette}
             role="dialog"
             aria-modal="true"
-            aria-label="Room directory"
+            aria-label="Page directory"
         >
             <div
                 class="ant-palette"
@@ -166,14 +166,14 @@ export function Palette(): JSX.Element | null {
                     <input
                         class="ant-palette__input"
                         type="text"
-                        placeholder="Jump to a room… (Esc to close)"
+                        placeholder="Jump to a page… (Esc to close)"
                         value={paletteQuery.value}
                         onInput={(e) =>
                             (paletteQuery.value = (
                                 e.currentTarget as HTMLInputElement
                             ).value)
                         }
-                        aria-label="Filter rooms"
+                        aria-label="Filter pages"
                     />
                     <span class="ant-palette__count">
                         {items.length} / {ALL_ROOMS.length + ALL_SKILLS.length}
@@ -183,7 +183,7 @@ export function Palette(): JSX.Element | null {
                     {items.length === 0 ? (
                         <p class="ant-palette__empty">
                             Nothing matches "{paletteQuery.value}". Try part of
-                            a room or skill name, or what you're trying to do.
+                            a page or skill name, or what you're trying to do.
                         </p>
                     ) : showGrouped ? (
                         <GroupedResults items={items} focusIdx={focusIdx} />

@@ -10,15 +10,15 @@
         '/methodology/when-to-hire-first-sales-person-startup.html': {
             eyebrow: 'Buyer A · Founder-led sales',
             audience: 'Founders deciding whether the first sales hire would be multiplication or rescue.',
-            bestFor: 'You are carrying the motion yourself and need to know whether the system is handoff-safe yet.',
+            bestFor: 'You are running sales yourself and need to know whether a new hire could take it over yet.',
             sessionOutcome: 'a more honest read on whether the first hire is safe, what is still fragile, and what the handoff kit would need to contain',
             modules: [
-                { href: '/app/readiness/', label: 'Readiness', reason: 'score whether the motion is mature enough to survive a first hire' },
+                { href: '/app/readiness/', label: 'Readiness', reason: 'check whether your sales process is ready for a first hire' },
                 { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'see what a first AE should inherit when the handoff is real' },
-                { href: '/app/dashboard/', label: 'Dashboard', reason: 'check whether the current system is producing enough truth to manage' }
+                { href: '/app/dashboard/', label: 'Dashboard', reason: 'check whether the workspace gives you enough reliable information to manage' }
             ],
             outputs: [
-                'A blunt read on whether the motion is ready to hand off.',
+                'A plain answer on whether your sales process is ready to hand off.',
                 'The gaps that still make a first hire dangerous.',
                 'A cleaner sense of what the eventual handoff kit must include.'
             ],
@@ -30,17 +30,17 @@
         },
         '/methodology/founder-led-sales-process.html': {
             eyebrow: 'Buyer A · Founder-led sales',
-            audience: 'Founders who need the motion to become a system before they hire or scale it.',
-            bestFor: 'You know the product matters, but you still need ICP, discovery, outbound, deal, and proof layers to handshake.',
+            audience: 'Founders who need their sales process to become repeatable before they hire or scale it.',
+            bestFor: 'You know the product matters, but you still need ICP, discovery, outbound, deal, and pilot work to connect.',
             sessionOutcome: 'a founder-led system with visible inputs and outputs instead of a pile of memory and momentum',
             modules: [
                 { href: '/app/icp-studio/', label: 'ICP Studio', reason: 'turn broad founder instinct into a target that can actually be run' },
                 { href: '/app/signal-console/', label: 'Signal Console', reason: 'make account temperature and timing visible instead of guessed' },
-                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'force the system to keep next steps, proof, and risk honest' }
+                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'keep next steps, pilot results, and risk up to date on every deal' }
             ],
             outputs: [
-                'A narrower ICP and signal model that the rest of the app can compound from.',
-                'A real deal object with visible risk and next-step truth.',
+                'A narrower ICP and signal model the rest of the app can build on.',
+                'A real deal record with visible risk and a clear next step.',
                 'A system that feels more inspectable than charismatic.'
             ],
             related: [
@@ -53,11 +53,10 @@
             eyebrow: 'Buyer B · Enterprise discovery',
             audience: 'Founders and first operators who need discovery to collect decision intelligence, not just rapport.',
             bestFor: 'You want discovery to change deal quality, not just generate nicer notes.',
-            sessionOutcome: 'a call plan, a clearer discovery structure, and a better sense of what should be captured before any pitch or proof move',
+            sessionOutcome: 'a call plan, a clearer discovery structure, and a better sense of what should be captured before you pitch or propose a pilot',
             modules: [
-                { href: '/app/discovery-studio/', label: 'Discovery Studio', reason: 'structure the live questioning and intelligence capture' },
-                { href: '/app/discovery-agenda/', label: 'Call Planner', reason: 'leave the session with a call plan instead of vague prep' },
-                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'push discovery truth forward into the actual deal object' }
+                { href: '/app/discovery-studio/', label: 'Discovery Studio', reason: 'prepare the call, run the questions live, and record what you learned' },
+                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'carry what you learned in discovery into the deal record' }
             ],
             outputs: [
                 'A repeatable discovery frame instead of ad hoc questioning.',
@@ -72,7 +71,7 @@
         },
         '/methodology/cold-call-script-b2b-saas.html': {
             eyebrow: 'Buyer B · Outbound execution',
-            audience: 'Operators who need cold call structure that produces live motion, not memorized theater.',
+            audience: 'Operators who need a cold call structure that leads to real conversations, not memorized scripts.',
             bestFor: 'You want outbound to feel operational and inspectable rather than motivational.',
             sessionOutcome: 'a call structure, logging rhythm, and better sense of how outreach should connect to the rest of the system',
             modules: [
@@ -83,7 +82,7 @@
             outputs: [
                 'A cold-call flow that is easier to run and inspect live.',
                 'A better logging habit after each touch.',
-                'A clearer bridge from call motion into broader outbound coverage.'
+                'A clearer link from cold calls to broader outbound coverage.'
             ],
             related: [
                 { href: '/methodology/first-ae-playbook.html', label: 'First AE playbook' },
@@ -94,8 +93,8 @@
         '/methodology/first-ae-playbook.html': {
             eyebrow: 'Buyer B · First-sales hire',
             audience: 'Founders and first AEs trying to turn founder memory into inherited operating context.',
-            bestFor: 'You are about to hand off the motion or need to prove what the first rep should actually inherit.',
-            sessionOutcome: 'a more explicit inherited playbook shape across ICP, proof, deal discipline, and daily command behavior',
+            bestFor: 'You are about to hand off sales or need to show what the first rep should actually inherit.',
+            sessionOutcome: 'a more explicit inherited playbook shape across ICP, pilot results, deal discipline, and daily habits',
             modules: [
                 { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'compile what the first AE should inherit instead of rediscover' },
                 { href: '/app/readiness/', label: 'Readiness', reason: 'show where the system is still too thin for a safe handoff' },
@@ -103,7 +102,7 @@
             ],
             outputs: [
                 'A clearer inherited playbook instead of a rep-sized blank space.',
-                'Visible handoff risk before the hire compounds it.',
+                'Visible handoff risk before the hire makes it worse.',
                 'A better link between daily what is actually happening and first-rep coaching.'
             ],
             related: [
@@ -115,12 +114,12 @@
         '/methodology/sales-handoff-kit.html': {
             eyebrow: 'Buyer B · Sales handoff',
             audience: 'Founders who need the handoff artifact to become a real operating asset.',
-            bestFor: 'You want the first rep to inherit context, proof, signals, and risk instead of disconnected anecdotes.',
+            bestFor: 'You want the first rep to inherit context, pilot results, signals, and risk instead of disconnected anecdotes.',
             sessionOutcome: 'a stronger sense of what the handoff kit must contain and which upstream modules need to feed it',
             modules: [
-                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'assemble the handoff kit from live upstream truth' },
-                { href: '/app/readiness/', label: 'Readiness', reason: 'score whether the motion is mature enough to transfer cleanly' },
-                { href: '/app/dashboard/', label: 'Dashboard', reason: 'keep the inherited motion operating after the handoff document exists' }
+                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'assemble the handoff kit from what the rest of the app already records' },
+                { href: '/app/readiness/', label: 'Readiness', reason: 'check whether your sales process is ready to transfer cleanly' },
+                { href: '/app/dashboard/', label: 'Dashboard', reason: 'keep the sales process running after the handoff document exists' }
             ],
             outputs: [
                 'A clearer handoff asset instead of a founder-memory dump.',
@@ -135,8 +134,8 @@
         },
         '/methodology/sales-kill-switch-framework.html': {
             eyebrow: 'Buyer B · Deal discipline',
-            audience: 'Operators who need dead-deal discipline to become systemic instead of emotional.',
-            bestFor: 'You want stale pipeline truth to become visible before it poisons the forecast.',
+            audience: 'Operators who need dead-deal discipline to become routine instead of emotional.',
+            bestFor: 'You want stale deals to become visible before they distort the forecast.',
             sessionOutcome: 'a better rule set for killing zombie deals and moving that discipline into the live pipeline',
             modules: [
                 { href: '/app/future-autopsy/', label: 'Future Autopsy', reason: 'make deal death patterns visible before they repeat' },
@@ -146,7 +145,7 @@
             outputs: [
                 'Cleaner criteria for cutting dead deals.',
                 'A more honest view of deal risk and momentum decay.',
-                'A tighter bridge between qualification and forecast truth.'
+                'A tighter link between qualification and the forecast.'
             ],
             related: [
                 { href: '/methodology/sales-champion-framework.html', label: 'Sales champion framework' },
@@ -157,17 +156,17 @@
         '/methodology/sales-champion-framework.html': {
             eyebrow: 'Buyer B · Champion health',
             audience: 'Sellers who need a real read on internal power, access, and commitment inside a deal.',
-            bestFor: 'You want champion quality to affect proof, next steps, and risk instead of staying a gut feeling.',
+            bestFor: 'You want champion quality to affect pilots, next steps, and risk instead of staying a gut feeling.',
             sessionOutcome: 'a better read on whether a deal actually has an internal mover and what to do if it does not',
             modules: [
-                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'carry champion truth into live deal notes and risk' },
+                { href: '/app/deal-workspace/', label: 'Deal Workspace', reason: 'record what you know about the champion in deal notes and risk' },
                 { href: '/pilot-desk/', label: 'Pilot Desk', reason: 'tie the pilot to the strength of the internal champion' },
-                { href: '/call-in-a-favor/', label: 'Call in a Favor', reason: 'decide when outside help should strengthen the thread' }
+                { href: '/call-in-a-favor/', label: 'Call in a Favor', reason: 'decide when outside help from your network should back up a deal' }
             ],
             outputs: [
                 'A sharper distinction between a polite contact and a real internal operator.',
-                'Proof moves that match the political reality of the deal.',
-                'A clearer sense of when the thread is too weak to trust.'
+                'Evidence and next steps that match the politics of the deal.',
+                'A clearer sense of when a champion relationship is too weak to trust.'
             ],
             related: [
                 { href: '/methodology/sales-kill-switch-framework.html', label: 'Sales kill switch framework' },
@@ -181,8 +180,8 @@
             bestFor: 'You want a portfolio company assessment to measure operating readiness instead of anecdotal updates.',
             sessionOutcome: 'a stronger frame for how a portfolio GTM review should translate into live system work',
             modules: [
-                { href: '/app/readiness/', label: 'Readiness', reason: 'score the operating maturity of the motion instead of relying on narrative' },
-                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'see what a company would hand off if the motion were actually encoded' },
+                { href: '/app/readiness/', label: 'Readiness', reason: 'check how mature your sales process is instead of relying on narrative' },
+                { href: '/app/founding-gtm/', label: 'Founding GTM', reason: 'see what a company would hand off if its sales process were written down' },
                 { href: '/app/dashboard/', label: 'Dashboard', reason: 'turn portfolio review into a recurring operating view instead of a slide' }
             ],
             outputs: [
@@ -344,14 +343,14 @@
             guide.className = 'method-hub-guide';
             guide.innerHTML =
                 '<div class="hub-guide-header">' +
-                    '<div class="hub-guide-kicker">Methodology as system entry</div>' +
-                    '<h2>Read for the bottleneck, then move straight into the operating system.</h2>' +
-                    '<p>These pages should create belief, then route that belief into demo, signup, or the annual-plan corridor that makes the topic real.</p>' +
+                    '<div class="hub-guide-kicker">How to use these guides</div>' +
+                    '<h2>Read the guide for your biggest problem, then try it in the app.</h2>' +
+                    '<p>Each guide explains one sales problem and links to the part of Antaeus that helps with it, in the demo or in your own workspace.</p>' +
                 '</div>' +
                 '<div class="hub-guide-grid">' +
-                    '<div class="hub-guide-card"><strong>1. Pick the real friction</strong><p>Choose the page that matches the current break: targeting, discovery, outbound, pipeline pressure, or handoff readiness.</p></div>' +
-                    '<div class="hub-guide-card"><strong>2. Prove it in the sample lane</strong><p>Use the demo workspace to inspect how signals, deals, proof, and handoff compound together instead of living in isolation.</p></div>' +
-                    '<div class="hub-guide-card"><strong>3. Move into workspace truth</strong><p>Start a real workspace when you want the topic to become durable operating behavior rather than another saved insight.</p></div>' +
+                    '<div class="hub-guide-card"><strong>1. Pick your biggest problem</strong><p>Choose the guide that matches it: targeting, discovery, outbound, pipeline, or getting ready to hand off.</p></div>' +
+                    '<div class="hub-guide-card"><strong>2. Try it in the sample workspace</strong><p>Use the demo workspace to see how signals, deals, pilots, and the handoff connect instead of living in separate tools.</p></div>' +
+                    '<div class="hub-guide-card"><strong>3. Start your own workspace</strong><p>Start a real workspace when you want the guide to become a daily habit rather than another saved article.</p></div>' +
                 '</div>';
             hero.insertBefore(guide, indexGrid);
         }
@@ -362,8 +361,8 @@
             cadence.innerHTML =
                 '<div class="hub-guide-header">' +
                     '<div class="hub-guide-kicker">Publishing cadence</div>' +
-                    '<h2>Keep the methodology layer compounding.</h2>' +
-                    '<p>The library should keep shipping on a visible rhythm so the public layer continues to feed the demo, the workspace, and the commercial story.</p>' +
+                    '<h2>New guides on a regular schedule.</h2>' +
+                    '<p>We add guides on a regular schedule. Here is what is coming in each area.</p>' +
                 '</div>' +
                 '<div class="cadence-grid">' + HUB_CADENCE.map(function (lane) {
                     return '<div class="cadence-card">' +

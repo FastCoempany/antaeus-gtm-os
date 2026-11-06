@@ -230,7 +230,7 @@ export function TalkLoom(): JSX.Element {
                             <p class="cc-capture__next">
                                 {next
                                     ? `Next thread: ${next.title}`
-                                    : "Log the call and choose the next room."}
+                                    : "Log the call and choose where to go next."}
                             </p>
                             {next ? (
                                 <button

@@ -83,6 +83,12 @@ export interface QueryCard {
     readonly targetIcp: string;
     readonly createdAt: string;
     readonly updatedAt: string;
+    /** Last time the seller ran "Check for new matches" on this search. */
+    readonly lastCheckedAt?: string;
+    /** How many new companies that check returned. */
+    readonly lastNewCount?: number;
+    /** "auto" when the weekly automatic re-check ran it, not the seller. */
+    readonly lastCheckedBy?: "auto" | "you";
 }
 
 export interface QueryCardDraft {
@@ -117,6 +123,59 @@ export interface Prospect {
     readonly notes: string;
     readonly createdAt: string;
     readonly updatedAt: string;
+    /** Present when the company came from Antaeus web research. */
+    readonly webResearch?: ProspectResearch;
+}
+
+// ─── Web research (cited) ──────────────────────────────────────────────
+
+export type ResearchConfidence = "high" | "medium" | "low";
+
+/** A dated public event, with the page it came from when one exists. */
+export interface ResearchSignal {
+    readonly what: string;
+    /** YYYY-MM-DD, or null when the source gives no date. */
+    readonly date: string | null;
+    /** https link to the source page; null only for demo sample data. */
+    readonly sourceUrl: string | null;
+    /** Publisher name, shown when there is no link (demo sample data). */
+    readonly sourceName: string | null;
+}
+
+export interface WhoToTarget {
+    readonly role: string;
+    readonly why: string;
+}
+
+/**
+ * Suggested answers to the three qualification questions. They are
+ * suggestions only: the seller has to accept or edit each one before it
+ * counts toward sending the account to Signal Console.
+ */
+export interface SuggestedAnswers {
+    readonly targetFit: string;
+    readonly wayIn: string;
+    readonly outreach: string;
+}
+
+export interface ProspectResearch {
+    readonly kind: "find" | "research";
+    readonly researchedAt: string;
+    /** Why it fits (find) or what the company does (research). */
+    readonly summary: string;
+    readonly domain: string | null;
+    readonly signals: ReadonlyArray<ResearchSignal>;
+    readonly sources: ReadonlyArray<string>;
+    readonly whoToTarget: WhoToTarget | null;
+    readonly openingAngle: string;
+    readonly confidence: ResearchConfidence | null;
+    readonly fitMatches: ReadonlyArray<string>;
+    readonly fitUnknowns: ReadonlyArray<string>;
+    readonly suggested: SuggestedAnswers | null;
+    /** True when this came from the demo's sample data, not a live search. */
+    readonly sample: boolean;
+    /** True when the weekly automatic re-check of a saved search found it. */
+    readonly auto?: boolean;
 }
 
 export interface ProspectDraft {

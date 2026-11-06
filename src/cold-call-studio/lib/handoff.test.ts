@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
     buildColdCallHref,
     createDealFromCall,
-    hrefToCallPlanner,
     hrefToDealWorkspace,
+    hrefToDiscoveryStudio,
     hrefToSignalConsole,
     readInboundAccount
 } from "./handoff";
@@ -71,10 +71,10 @@ describe("buildColdCallHref", () => {
     });
 });
 
-describe("hrefToSignalConsole / hrefToCallPlanner / hrefToDealWorkspace", () => {
+describe("hrefToSignalConsole / hrefToDiscoveryStudio / hrefToDealWorkspace", () => {
     it("send to the right path with the focus object", () => {
         expect(hrefToSignalConsole("Acme")).toContain("/signal-console/");
-        expect(hrefToCallPlanner("Acme")).toContain("/call-planner/");
+        expect(hrefToDiscoveryStudio("Acme")).toContain("/discovery-studio/");
         expect(hrefToDealWorkspace("Acme")).toContain("/deal-workspace/");
     });
 

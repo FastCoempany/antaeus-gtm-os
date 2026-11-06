@@ -17,7 +17,7 @@ export function NextStepDocketDS(): JSX.Element {
     const status = docketStatus(lock);
 
     return (
-        <section class="dsd-docket" aria-label={t("Next-step docket")}>
+        <section class="dsd-docket" aria-label={t("Next step")}>
             <div class="dsd-docket__head">
                 <Kicker>{t("NEXT-STEP LOCK")}</Kicker>
                 <StatusChip label={docketLabel(status)} tone={docketTone(status)} />

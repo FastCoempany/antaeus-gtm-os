@@ -18,23 +18,19 @@ export function EmptyState(): JSX.Element {
         <section class="bf-empty" aria-labelledby="bf-empty-headline">
             <p class="bf-empty__label">{t("Nothing to read this week")}</p>
             <h2 id="bf-empty-headline" class="bf-empty__headline">
-                The pipeline either hasn't fired yet, or it fired and
-                nothing cleared the quality gate.
+                {t("There are no market reads for this week yet.", { class: "body" })}
             </h2>
             <p class="bf-empty__body">
-                The cron runs Monday at 6 AM Central. When the run
-                produces something worth reading, this page will hold
-                three to five takes on what's actually moving — what's
-                new on the periphery you haven't named yet, and where
-                your stated assumptions are starting to disagree with
-                the data.
+                {t(
+                    "Market reads appear here after the weekly market review runs. Each one summarizes a change in your market: a company you aren't tracking yet that matches your targets, or evidence that disagrees with an assumption you've made.",
+                    { class: "body" }
+                )}
             </p>
             <p class="bf-empty__body">
-                Each read carries the evidence behind it. Open any one
-                of them to see the items the system clustered, the
-                draft-critique-revise chain that produced the paragraph
-                you're reading, the quality gate decisions, and what it
-                cost.
+                {t(
+                    "Each read lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.",
+                    { class: "body" }
+                )}
             </p>
         </section>
     );

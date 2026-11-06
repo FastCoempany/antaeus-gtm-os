@@ -102,9 +102,26 @@ describe("computePrepRead", () => {
         });
         expect(r.band).toBe("rehearsed");
         expect(r.score).toBeGreaterThanOrEqual(80);
-        expect(r.title).toContain("pre-decided");
+        expect(r.title).toContain("preparation is recorded");
         // no deal linked → nextMove nudges to link one
         expect(r.nextMove.toLowerCase()).toContain("link");
+    });
+
+    it("retains the score while recommending a missing opening line before rehearsal", () => {
+        const r = computePrepRead({
+            draft: {
+                ...baseDraft,
+                walkawayPosition: "No below 15% off.",
+                startingPosition: "List price, full terms.",
+                counterpartyName: "Jamie Lin"
+            },
+            dealLinked: true
+        });
+        expect(r.score).toBe(80);
+        expect(r.band).toBe("rehearsed");
+        expect(r.bandLabel).toBe("Ready for review");
+        expect(r.nextMove).toMatch(/opening line before rehearsing/i);
+        expect(r.gaps).toContain("Your opening line for the conversation");
     });
 
     it("nudges the pushbacks when fully rehearsed and the deal is linked", () => {

@@ -43,11 +43,11 @@ export function HandoffStrip(): JSX.Element {
                 </h2>
                 <p class="ng-handoff__sub">
                     {dealId
-                        ? "Outcome + concession ledger lands on the linked deal. The other rooms inherit the deal context."
-                        : "Link a deal in the rack above first, or jump to a room and pick once you're there."}
+                        ? "Outcome + concession ledger lands on the linked deal. The pages below open with that deal already selected."
+                        : "Link a deal in the rack above first, or open one of these pages and pick a deal there."}
                 </p>
             </header>
-            <nav class="ng-handoff__row" aria-label={t("Cross-room handoff")}>
+            <nav class="ng-handoff__row" aria-label={t("Continue on another page")}>
                 <a
                     class="ng-handoff__cta ng-handoff__cta--primary"
                     href={hrefToDealWorkspace(dealId, accountName)}

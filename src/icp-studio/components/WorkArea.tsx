@@ -378,7 +378,7 @@ function Outputs(): JSX.Element {
     return (
         <div class="icp-outputs" aria-label={t("Live build outputs")}>
             <article class="icp-out icp-out--statement">
-                <p class="icp-out__kicker">{t("THIN ICP STATEMENT")}</p>
+                <p class="icp-out__kicker">{t("NARROW ICP STATEMENT")}</p>
                 <p class="icp-out__statement">{statement.text}</p>
                 <p class="icp-out__hint">{statement.hint}</p>
             </article>

@@ -15,6 +15,7 @@ import type {
     SectionsInput,
     TouchRecord
 } from "./types";
+import { loadInputs as loadQuotaPlanInputs } from "@/quota-workback/lib/persistence";
 
 const DISCOVERY_DISPOSITIONS: ReadonlySet<DiscoveryDisposition> = new Set<DiscoveryDisposition>([
     "advanced",
@@ -34,7 +35,7 @@ const DISCOVERY_DISPOSITIONS: ReadonlySet<DiscoveryDisposition> = new Set<Discov
  *   gtmos_outbound_touches    — touches (channel + persona + outcome)
  *   gtmos_linkedin_log        — cues (cueIndex + actionType + outcome)
  *   gtmos_cold_call_log       — cold calls (outcome + account)
- *   gtmos_discovery_agenda    — call planner sessions
+ *   gtmos_discovery_agenda    — agendas from the retired Call Planner (read-only legacy data)
  *   gtmos_autopsy_log_v1      — autopsy task logs (per dealId)
  *   gtmos_poc_data            — proofs
  *   gtmos_advisor_deployments — advisor deployments (tier + moment + outcome)
@@ -481,7 +482,13 @@ function readQuota(storage: StorageLike): QuotaInputs | null {
         winRate: asNumber(o.winRate ?? o.win),
         cycle: asNumber(o.cycle),
         touchesPerDay: asNumber(o.touchesPerDay) || undefined,
-        meetingsPerWeek: asNumber(o.meetingsPerWeek) || undefined
+        meetingsPerWeek: asNumber(o.meetingsPerWeek) || undefined,
+        // Read with Quota Workback's own loader so Section 7 uses exactly
+        // the assumptions (and defaults) the Quota room uses.
+        plan: loadQuotaPlanInputs({
+            getItem: (k: string) => storage.getItem(k),
+            setItem: () => {}
+        })
     };
 }
 

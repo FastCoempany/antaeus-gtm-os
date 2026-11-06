@@ -19,6 +19,7 @@ function makeRow(overrides: Partial<WorkspaceProfile> = {}): WorkspaceProfile {
         density_state: "show_me_how",
         onboarding_answers: {},
         phase_f_proposals_enabled: null,
+        prospecting_auto_rerun_enabled: false,
         data: {},
         created_at: "2026-05-26T00:00:00Z",
         updated_at: "2026-05-26T00:00:00Z",

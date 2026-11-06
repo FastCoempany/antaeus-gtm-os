@@ -1,0 +1,1068 @@
+{
+  "capturedAt": "2026-11-04T17:13:34.061Z",
+  "head": "f01d44ed3a98aa8927e23c308659d3030c8cacad",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4565,
+      "sha256": "fc23e3e5863ceeaa7221221e463eb46819efbc99c6d73422d8251253919d5a18"
+    },
+    {
+      "path": "deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 21940,
+      "sha256": "93a8db1e4f82cf6cd8af33f1e5fd692c27828cc76203257ae5d910c30b4294fe"
+    },
+    {
+      "path": "deliverables/room-capability-maps/README.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3411,
+      "sha256": "cca85696d86ece06835b59faf2a6fe0387fba658474b134ca01457a2da2e7d33"
+    },
+    {
+      "path": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11429,
+      "sha256": "625ca7d239ee080cf02e3be12c05b05b82346cf4d41d0083185ade4d36bb68c2"
+    },
+    {
+      "path": "deliverables/room-capability-maps/call-in-a-favor-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 10315,
+      "sha256": "e7cecd5f54b02669c2c8ddcab6282117839327f301edc2387680895b3fea7a15"
+    },
+    {
+      "path": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9191,
+      "sha256": "f1eca3d88c0d4a7682b030e2e1fdc433edcfe29b666bfbe43a184bcd0b2f2dfd"
+    },
+    {
+      "path": "deliverables/room-capability-maps/dashboard-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11435,
+      "sha256": "8f1f30d3cbdbce659e80a8af13080010dcc4af78856c3ef233e7432376677379"
+    },
+    {
+      "path": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9146,
+      "sha256": "bb396ab6db6fc39fb21b04ace6c64f0bcbc2d0eccabdc4c6f52909df98fb7d9a"
+    },
+    {
+      "path": "deliverables/room-capability-maps/founding-gtm-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11183,
+      "sha256": "5322c18a72c97c12853420266d80739bf12769006f7ecbfc0ed2d79bfdfe2b84"
+    },
+    {
+      "path": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9086,
+      "sha256": "055f24954a90a4a4fc646096631a0c032ac711606e3d014a220e5e09b25f9341"
+    },
+    {
+      "path": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 12482,
+      "sha256": "d49e2dd0bb73fc118a34323024c3e95960dc890049a9685b089c161b20a33da0"
+    },
+    {
+      "path": "deliverables/room-capability-maps/icp-studio-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8288,
+      "sha256": "6c09a20351142f2ca48c7fe66147e21a76badd04622c2fe052f2279535ca44da"
+    },
+    {
+      "path": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8721,
+      "sha256": "e973b0ffbfbd9822a124e68c2a20a881cb1d1f7fe3c68fba4992e6ec095dfeec"
+    },
+    {
+      "path": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11822,
+      "sha256": "67b9c21a80428c50595888b90729b252e3a88d91207a4b92e9dd3efe72eab6db"
+    },
+    {
+      "path": "deliverables/room-capability-maps/outbound-studio-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8423,
+      "sha256": "c0a9d2c7eccf3cb9e0b2c7993273d7181d79101f66186390101d195152dd7b0a"
+    },
+    {
+      "path": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 10477,
+      "sha256": "46e9bfe0a8ece57650fe0806ace47023be1f75627041530f767d5c8385b73c8b"
+    },
+    {
+      "path": "deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 10993,
+      "sha256": "65ba436f60497b61dc1284a300914e2016ab4961e4f0345c39f83f6fad05b39d"
+    },
+    {
+      "path": "deliverables/room-capability-maps/prospecting-desk-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9676,
+      "sha256": "cf91ffa920bb54f66c8ca2dc1a4b9bc9bfd7a924f5d359645bdaad3969d314b7"
+    },
+    {
+      "path": "deliverables/room-capability-maps/quota-workback-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11233,
+      "sha256": "a14021c8491bc478a99eb1f9a2154d6893303b4fa68caa8d723617875085694d"
+    },
+    {
+      "path": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11897,
+      "sha256": "f5aa5d8c1c46582ff61d66472cf3af5a523e28ea5cfec258452cba7b475c167b"
+    },
+    {
+      "path": "deliverables/room-capability-maps/settings-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9022,
+      "sha256": "90fc9949d4724cafca055ac8a0851dd57480eee9e04e3a8028fff8b6960be713"
+    },
+    {
+      "path": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9300,
+      "sha256": "17c5c92707a5a5dc9c710d560d40be355d480cfea9ee3d5ff9159dba740d5782"
+    },
+    {
+      "path": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9973,
+      "sha256": "dc207f48787205ea3d73dc3f589d422698e36b61fd7ffae1bfa0cf073d08c72a"
+    },
+    {
+      "path": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9356,
+      "sha256": "bfbb5d89becf50fe37c56a64369a6c50027b227323788568895eec3380592afb"
+    },
+    {
+      "path": "js/demo-seed-data-ent.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 77006,
+      "sha256": "8667c11adf78423f0981e55b772af890392d87346c28e7aea673e32e690e49b6"
+    },
+    {
+      "path": "js/discovery-frameworks.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 189457,
+      "sha256": "3c8cbb9a763ace8470d76a3cc2b7f541c5d6e731b45d08e20a9805c9e9876fc7"
+    },
+    {
+      "path": "js/discovery-segment-runtime-ai-native.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 39341,
+      "sha256": "70f5b9830becfd833405257475e49d72793ef19b864cacd2e7983bb1f34c9975"
+    },
+    {
+      "path": "js/discovery-segment-runtime-customer-support.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 69030,
+      "sha256": "bbe2633b2a49e76ab19e8dd42d48933af5aefdac09df195b35e9ebbed251f27c"
+    },
+    {
+      "path": "js/discovery-segment-runtime-data-intelligence.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 66447,
+      "sha256": "24459b56c5bc82bd24f6b8d8d12446323788eea71360989efd3a9d1b49b54855"
+    },
+    {
+      "path": "js/discovery-segment-runtime-global-contractor-management.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 70026,
+      "sha256": "4d34b49bc684983848b2844bb12901d6bcd8d9a37b8c36deee234c534365f7ee"
+    },
+    {
+      "path": "js/discovery-segment-runtime-govtech.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 38423,
+      "sha256": "7e5d9160c21f6ae7a2f355f64bf850b04bedd9dfff1ad71910fad12f5008285c"
+    },
+    {
+      "path": "js/discovery-segment-runtime-legal.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 40375,
+      "sha256": "882c100d6642d24ddbe3a1a397ae4c0ad1b9b4d5493c08bbbb24c6ce903b7566"
+    },
+    {
+      "path": "js/discovery-segment-runtime-manufacturing.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 65999,
+      "sha256": "4f347075192c873f7dacf66c3d4df20afde2c5ce8662d4cdb47d6e8b646f657a"
+    },
+    {
+      "path": "js/discovery-segment-runtime-product-ux.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 44082,
+      "sha256": "b52d3abe931bbfda95d6f2afb65d983f04212ea362f2420cd82b3851bbcec8bc"
+    },
+    {
+      "path": "js/discovery-segment-runtime-recruiting.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 43432,
+      "sha256": "9066c95edbec4e9848021ff4c197d71205483ccc7d33b50655b26c1fb5a36e8e"
+    },
+    {
+      "path": "js/discovery-segment-runtime-sales-revenue.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 61075,
+      "sha256": "7efeadd5b7ef3124de3c70b5eb66be3a62610a65da3b521f50fe7c2e31e24406"
+    },
+    {
+      "path": "js/discovery-segment-runtime.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 86070,
+      "sha256": "c7e845ef6f4fa3ba94b7a956fe52f1499b9405593062f2ab61980b53ee93bc32"
+    },
+    {
+      "path": "package.json",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2540,
+      "sha256": "b164e5f069d464de7724b8860ece9271d43a1e451a7c6d8adf880462be8d337d"
+    },
+    {
+      "path": "playwright.config.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2200,
+      "sha256": "5e8a2585d5c0fe0f5de8b9c146c4678740bb9ef96d42099b711cb6efbea1af01"
+    },
+    {
+      "path": "preview-transcript/briefing/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 126393,
+      "sha256": "9d5136f5b48f0a78c5577299f6a95d7549ac5809aa218841873e0c002c3fcfff"
+    },
+    {
+      "path": "preview-transcript/call-in-a-favor/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 72943,
+      "sha256": "42592f5506fe7bdfb1c7e0954dc59448c8565137f07355db86652e68068869c3"
+    },
+    {
+      "path": "preview-transcript/cold-call-studio/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 121124,
+      "sha256": "8aa71b80e24f2c4e5b522eb11d4a83734bfbedb50cd1381e6bf485d9e81d14ef"
+    },
+    {
+      "path": "preview-transcript/dashboard/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 38918,
+      "sha256": "b4b23e97597f490ed2be81fda408db7e6741f1c317f3a7861846267274c91d1f"
+    },
+    {
+      "path": "preview-transcript/deal-workspace/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 157000,
+      "sha256": "5a1474242c82f3259e45b2093e5141efee1b77ec3e4c0d215cc3faf6da54282f"
+    },
+    {
+      "path": "preview-transcript/discovery-studio/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 460820,
+      "sha256": "f0d3c4eb66c226a950d886e3c1c2270d436812f3268e43d2cab53004e2805335"
+    },
+    {
+      "path": "preview-transcript/founding-gtm/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 29864,
+      "sha256": "95961d620a7185754d3c7b7a26362f617c6029ed6622f7babc28d8c153f6d042"
+    },
+    {
+      "path": "preview-transcript/future-autopsy/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 45089,
+      "sha256": "3654d36cd841ecfe233bb27acc35a4db67e46f52e673f21cf9e781b1dd664b5a"
+    },
+    {
+      "path": "preview-transcript/getting-to-signed/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 70528,
+      "sha256": "9b9548c4e203b049592b0e433eab602543b7608ba22ca614c0d36b8f61954204"
+    },
+    {
+      "path": "preview-transcript/icp-studio/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 20467,
+      "sha256": "a5730ae9fb914feaa44250301e2e9ab4566a21d0402dec0b4cc6fdf248252995"
+    },
+    {
+      "path": "preview-transcript/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 15169,
+      "sha256": "c67de233fa9d96b8348bff730dc1c88c3d1d84889d4dfcf1372cec6c2ccb0ebc"
+    },
+    {
+      "path": "preview-transcript/linkedin-playbook/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 32277,
+      "sha256": "e7980a81b0d36f77cea0df2f079d10915bfaec355f3fb30293b6f1c5260a103c"
+    },
+    {
+      "path": "preview-transcript/outbound-studio/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 35470,
+      "sha256": "98c8f942da7aa10bc2dafa6870335072157e1abbd43687e1bc52c38834002175"
+    },
+    {
+      "path": "preview-transcript/outdoors-events/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 25151,
+      "sha256": "98387b74749bedd82ccc9315d4456070e74a5b995cff275d24676604513a6655"
+    },
+    {
+      "path": "preview-transcript/pilot-desk/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 31098,
+      "sha256": "3314cfd4b85181dd97c466ac9a8814ddefe9eea54847d78b42e688ffc1878ef4"
+    },
+    {
+      "path": "preview-transcript/prospecting-desk/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 38513,
+      "sha256": "c4c8649a5422d6dd3c2e96e3201ff2ff66e7a8c6212a9fde3d3ade9f5fa31680"
+    },
+    {
+      "path": "preview-transcript/quota-workback/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 28004,
+      "sha256": "7869e194a79f85c7d3ce51ed23b566e081b9f33ec760c7c64b302cbd33935cbe"
+    },
+    {
+      "path": "preview-transcript/readiness/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 22796,
+      "sha256": "1b583bc10156273fa8485b3cbca3815c6e924f8f9df70f4313c969c9cd974e20"
+    },
+    {
+      "path": "preview-transcript/settings/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 35999,
+      "sha256": "0eafd6092282ccc5487f8b01d2a1cad4cf6a881a0f2612cec67e19382d352ada"
+    },
+    {
+      "path": "preview-transcript/signal-console/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 92181,
+      "sha256": "181d33d51641ec9c34b804de200c098e814dea193b7bfbe42499c3b41ad24366"
+    },
+    {
+      "path": "preview-transcript/territory-architect/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 44435,
+      "sha256": "586281123a86a25f0bc65add1ee97b8266f9a0fe16c338ee1fc7805f8b1f337a"
+    },
+    {
+      "path": "preview-transcript/welcome/index.html",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 14036,
+      "sha256": "e07ab6de4ca3733d3e96cd6131ca54fdd3c4f741912bea4160c24b95928f1c08"
+    },
+    {
+      "path": "src/briefing/components/AddTriggerFlow.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6293,
+      "sha256": "2764553b1317c65a96fc2a0dd2b2fe6225a3bbc061a318869c29a4977ed277b9"
+    },
+    {
+      "path": "src/briefing/lib/compose/lead.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8727,
+      "sha256": "e3bce133af0052a2e01dac18dd003ff8f6a3e95c47e4c5d771824b1584afa67d"
+    },
+    {
+      "path": "src/briefing/lib/compose/lead.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8377,
+      "sha256": "15e5f26e6e566a710380f0795168154aef7fc4f35e4f41440dbed1a83d1f12bd"
+    },
+    {
+      "path": "src/briefing/lib/synthesis/contrarian.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 13518,
+      "sha256": "bac8ec8966f9ddf62e2d56001ab9207c40b0d245180797e1eafefbd872e45463"
+    },
+    {
+      "path": "src/briefing/lib/synthesis/contrarian.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 15429,
+      "sha256": "77fa133fad3d98995b513168889bd360206222c9b9ae4cc90a9ce9a2a803220d"
+    },
+    {
+      "path": "src/briefing/v4/BriefingV4.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 25942,
+      "sha256": "404ebfa72228f836274d47c4b33d3f51cb9f521851de7206a4b702f72e67fbd6"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/ask-builder.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7673,
+      "sha256": "7d1f67a0892602c5934c0276c3a5f86895afc0d0ffbdb182f3b7a184f22724d7"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/ask-builder.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3839,
+      "sha256": "dc7b964b5b38cf5b54fa8b3dc7d9592de4c0939d662c6a53e8aa773ace107e51"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/cooldown.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4829,
+      "sha256": "37b48407498eb2bc2470d3b643c66028e56f10f8ab07185fef0f256b74298cc6"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/cooldown.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2082,
+      "sha256": "83d9ce0c0311677e7cdf9aae91eb1249182599bc71fe550a6d548ac89bf6d802"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/deploy-cost.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3901,
+      "sha256": "d4eb8a53e044583221caae98a072ef35844235c651f9fcaef28dbd476ce4be36"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/deploy-cost.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3735,
+      "sha256": "352a96a6449214a08a3fb10161bf5ba4e782530fd2cee0da2a9ea7184dcdd7b1"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/impact.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4885,
+      "sha256": "2eae96c96f08221c219bd510c493639a01742b761fbe03898249756e8d13b45c"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/impact.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3991,
+      "sha256": "1e5fa1a4b2bd7f5a477ed995ddfa351f5d7edb262036aa5493bd08149551dcaf"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/moments.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6383,
+      "sha256": "5df8cd8b08efa4b8bfe1a5aa4a9907d3a749e651534e3911929ff2434207c6d3"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/score.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4995,
+      "sha256": "463cc3ee03d8345c12bcb7ea51a4591cc88e936492550bd21f03d9731b1df564"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/score.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2568,
+      "sha256": "b125be8c59a5abea35ec8e47bbe69fa18ea4a2a6774351f93ae09ecfc5cce67d"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/sync-back.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8136,
+      "sha256": "f7026880ee9ccbf9960c8cb4d2b03a9de9fa04655ad74cc17daacbaa1043766f"
+    },
+    {
+      "path": "src/call-in-a-favor/lib/sync-back.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5968,
+      "sha256": "7a4e5a0c392e5e12654cc7cbb05ae4ec86326d0931ceea111ebada724a59362e"
+    },
+    {
+      "path": "src/call-planner/lib/advance.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2861,
+      "sha256": "2d9797ff4e5d990fb757830e18e8c5edbb8ae47a489d667fa83bbed72f3e0b6f"
+    },
+    {
+      "path": "src/call-planner/lib/advance.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 1582,
+      "sha256": "2787c563ea20f2beb299c98faa7f1bc3e2e4e9c74e3ec720d47e4adf79bad091"
+    },
+    {
+      "path": "src/call-planner/lib/brief.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6110,
+      "sha256": "476f9fd25fb8b97da46358daba9bc8d12fbe556c3146923ccb05edcd8421ca48"
+    },
+    {
+      "path": "src/call-planner/lib/quality.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 12551,
+      "sha256": "cff71e498ae86426fb578b7d45f7078d47cfbb7eb2901ca784fe3d9f37065bba"
+    },
+    {
+      "path": "src/call-planner/lib/quality.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5030,
+      "sha256": "2a7112cca72cd0faa398edc57e0b063a0913c0fb3d08be906ec6e007116f0cbe"
+    },
+    {
+      "path": "src/cold-call-studio/ds/lib/adapters.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2954,
+      "sha256": "db995135e2e6986adf4d827711eef164db7800a0007c2a3eb917571481ee42b5"
+    },
+    {
+      "path": "src/cold-call-studio/lib/personalize.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6024,
+      "sha256": "3f232d10bbf7bf174e098c19c0054a6adacd4090237b3a2250bd6b5556865be0"
+    },
+    {
+      "path": "src/cold-call-studio/lib/personalize.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4244,
+      "sha256": "6ec2f74068ff7e90d96ffe703a13aad980b25c82e3c28e71f50c97e2c4454a01"
+    },
+    {
+      "path": "src/dashboard/lib/brief-narrative.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3105,
+      "sha256": "b546d32887d20d733a006a52406fd2cf94cc246b4776a72418a97817de7d616e"
+    },
+    {
+      "path": "src/dashboard/lib/brief-narrative.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4187,
+      "sha256": "5e950546fb60dcada8ddcf607a7cd8927d757cd9051c6bf8413daca736c75f24"
+    },
+    {
+      "path": "src/dashboard/lib/command-intelligence.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 9532,
+      "sha256": "f36a963e5bed68c8b78d67ede9808c79443662463d9760c4f385e39602a713c7"
+    },
+    {
+      "path": "src/dashboard/lib/command-intelligence.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 22131,
+      "sha256": "272fcb6f10d5b2a98e3130a0bf3dbabb5cda7801d4b0bcc3b7f7ed65e96dff59"
+    },
+    {
+      "path": "src/dashboard/lib/engine-helpers.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7436,
+      "sha256": "ce42d4a21792fa6452aeaf85fa2cf377f283d53f4ecfd1b12ece02b7ecd2b2b3"
+    },
+    {
+      "path": "src/dashboard/lib/scoring.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 12799,
+      "sha256": "be7251fdb3b05ed39c1600046f9b7fc46caae6ad35c8d9d3535ae9f4493c63dd"
+    },
+    {
+      "path": "src/dashboard/lib/snapshot-aggregator.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 13172,
+      "sha256": "c11eff18c4d954ae321e713c37ac0d83b64f524cb1e68d18b22e7ee49709cc16"
+    },
+    {
+      "path": "src/design-system/ProofSheet.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 31118,
+      "sha256": "7f25d94f035fdc42469d94dfd443461e6170d9c36823326dc9333194a466fe49"
+    },
+    {
+      "path": "src/founding-gtm/lib/priors.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3779,
+      "sha256": "9d1a633064a769dde01128a5af6836ea080e464a58e110abc7d553699db8ea1f"
+    },
+    {
+      "path": "src/founding-gtm/lib/priors.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8045,
+      "sha256": "077d14ae4d2203e18c3ffe381dcd9452a685574e5497d57432595bd58c9a8f05"
+    },
+    {
+      "path": "src/founding-gtm/lib/sections.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 21865,
+      "sha256": "e18e5474b890de7aef6b4b6f52c6a4de42229083e6f6e16efed962e9f46dc6ec"
+    },
+    {
+      "path": "src/founding-gtm/lib/sections.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 35054,
+      "sha256": "b940baca160234acdb4fe5ca8506ed55fe468477206ec2d69e52538869a22e09"
+    },
+    {
+      "path": "src/future-autopsy/ds/lib/adapters.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3610,
+      "sha256": "e89b5119865102d9bfb881a29f73218aca5b12f3a0770610d6d2317349b313e1"
+    },
+    {
+      "path": "src/future-autopsy/lib/autopsy-data.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 16639,
+      "sha256": "11700213fabceb5df2962a4fee001bdac530672fe382b9194e6d30c41d628e15"
+    },
+    {
+      "path": "src/future-autopsy/lib/autopsy.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6262,
+      "sha256": "18a46cec73b811decab6faedc745cfdd3e4d9f463cb3fe4b5cfa02d7c955776d"
+    },
+    {
+      "path": "src/future-autopsy/lib/causes.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5791,
+      "sha256": "ec23145df41fbf3c272578904cf6a7cf1339343e1ed62f9a6acc2deeaae98a84"
+    },
+    {
+      "path": "src/future-autopsy/lib/causes.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4731,
+      "sha256": "c2c0b6cae0740ef40fd82d44fafbcb59ac13b7a574cb40708823b50b05bca53a"
+    },
+    {
+      "path": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 14436,
+      "sha256": "5716ac01f00bc4682ca9e259649544eb6374500df649e00f1dd013957d391cc9"
+    },
+    {
+      "path": "src/getting-to-signed/ds/ds-components.test.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6570,
+      "sha256": "030c14099d6a723037daa060a38c30e9dddcf62763ff2f9dae780930903c5776"
+    },
+    {
+      "path": "src/getting-to-signed/ds/lib/adapters.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5881,
+      "sha256": "3982a4df1a6b9312cf007bc9679f26ee483838864a254a4915170165a84232f0"
+    },
+    {
+      "path": "src/getting-to-signed/ds/lib/adapters.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5420,
+      "sha256": "a0f8153be55aa361d96073f9b87abf674f3abee3ede4c8330269159ad8280386"
+    },
+    {
+      "path": "src/getting-to-signed/lib/seed-scripts.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 13177,
+      "sha256": "589566b03fff8a9400232a4dd0d7636a70e8f340ec2f905cec137ce2b17c2399"
+    },
+    {
+      "path": "src/icp-studio/ds/lib/adapters.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2723,
+      "sha256": "1ef3b921027076065870e4596ed5532cbd86cc278af9c899f444119d549dc8ff"
+    },
+    {
+      "path": "src/icp-studio/lib/builders.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7191,
+      "sha256": "0bcba858b0e26f8de08362b12062cedc429049c0cb732d3fcbfead3d1c15d74c"
+    },
+    {
+      "path": "src/icp-studio/lib/builders.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5846,
+      "sha256": "898e6edcb4ec30e44d64a7a1dfb9879362680c0a524faf73279c453e9032aef1"
+    },
+    {
+      "path": "src/lib/edge/demo-stream.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5740,
+      "sha256": "19eff5d4fd6c1c739042d35a6775947b334da06b5986d29b57fe9313b01eefb6"
+    },
+    {
+      "path": "src/lib/edge/edge-data.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 14686,
+      "sha256": "9e20be918d18f2d9006a39676b1df7e2de98eef2e86d4b3dd3341a0f35a44557"
+    },
+    {
+      "path": "src/lib/follow/follow-data.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7395,
+      "sha256": "d835444664f30357fb2d027483e1bbf6c06960238e16985f0db1da53293640ec"
+    },
+    {
+      "path": "src/lib/follow/follow-data.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 17652,
+      "sha256": "c63e9a64355f083bae08515ff54adc4c8e8db181c1d1114137a3c141e485604d"
+    },
+    {
+      "path": "src/lib/observations/generators/discovery-rhythm.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4189,
+      "sha256": "c62ec1a69149585237d626b164381ff73a09a91c4a0a110e2d1ef7f76aaa616d"
+    },
+    {
+      "path": "src/lib/observations/generators/discovery-rhythm.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3001,
+      "sha256": "c251bf6c6ac26cd3e318129c3a7c1736c62ad65a42b249dc979ea7e13652ce43"
+    },
+    {
+      "path": "src/lib/observations/generators/signal-decay.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6796,
+      "sha256": "3d193c65d714d35c169cdad6d72e210d36888f2e3f75fddb96015e47ad6c71a3"
+    },
+    {
+      "path": "src/lib/observations/generators/signal-decay.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5088,
+      "sha256": "f9b46228deab51b5acd6ba95d4a7de463a0164ea7036862f71efae3566f1f3bb"
+    },
+    {
+      "path": "src/lib/palette/registry.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4062,
+      "sha256": "2968fff8be3e1c77bf2574c290fd12ffed40bbc6a8f71e5a0ac89dd37192d527"
+    },
+    {
+      "path": "src/lib/palette/registry.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 12352,
+      "sha256": "75e07b570f41d30923b74ac651bf86e2f7151ebfff74689cbf80c7f12330503c"
+    },
+    {
+      "path": "src/lib/voice/family-temperatures.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3218,
+      "sha256": "02b9f403648844af19e7079f13f75f8d24341497fba057930af8fda064aaba45"
+    },
+    {
+      "path": "src/onboarding/seeding/components/WakeStep.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6771,
+      "sha256": "e05c4c14ee6bd1236c2d382412653311d4611d91b96a49db3bddf1cc3ed20de9"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/diagnose.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3715,
+      "sha256": "b537d20ce6dcd229f9dc2bd5d98355b9544ddc4d12f73e588d078a52263d36f4"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/enrichment.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 1774,
+      "sha256": "bdfc72dd4d854615fa0eaedd84704397f1ba2fed6f80d01c9b28362b0db92f6e"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/enrichment.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6419,
+      "sha256": "656cabcfb538849cfc78939786bab431f3c0748c60262fee4fd3794cfe122c00"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/evidence.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 1494,
+      "sha256": "e454d864c34aeb69f7b1284ea953a05ca49fd11987d347078cba752033762cc5"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/evidence.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2537,
+      "sha256": "2dfe85f5661653334f896fec0ab6ca8f565ae63c282bfbac78b96217e773d79d"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/logic.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 5410,
+      "sha256": "1a087545370eb6c3484c0a6185c69355c3aa2b3c525f788ad184900a99d05fcc"
+    },
+    {
+      "path": "src/outbound-studio/components/HandoffStrip.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2136,
+      "sha256": "17ded7eafe58544a03cc989bcfded6903c6396038a8d4c1b4b8af19d027b9c92"
+    },
+    {
+      "path": "src/outbound-studio/ds/OutboundStudioDS.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 4278,
+      "sha256": "3936f3dec576fe4503dcec64c26978cb8988a1d93302194abe890fe519ccf198"
+    },
+    {
+      "path": "src/outbound-studio/ds/lib/adapters.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 1937,
+      "sha256": "a6dbff1467cd5a59da8a7d6e0f0e017ecc40ed4a794a7ae53d00d19348e2e33f"
+    },
+    {
+      "path": "src/outbound-studio/ds/lib/adapters.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2428,
+      "sha256": "d64f70a214b4514fa41944ef2b60fde7ceca689a675ad0f290056c7f73716760"
+    },
+    {
+      "path": "src/pilot-desk/components/HeatLedger.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 1936,
+      "sha256": "d5cdef96b2f1aa5962311cf1ace82479276a259b3fef21629e753bcf3ebe757f"
+    },
+    {
+      "path": "src/pilot-desk/lib/quality.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11826,
+      "sha256": "3adcb1315896ac517298ce58292cb6af3528249e76617b5cb34c0ac2ca153b02"
+    },
+    {
+      "path": "src/pilot-desk/lib/quality.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 12362,
+      "sha256": "ccd729900ae2b5addffe42a7b2f344cd811af10942641391f32e899b9074ddce"
+    },
+    {
+      "path": "src/settings/lib/cloud-sync.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 21444,
+      "sha256": "6b7f4c8966e96e2c7e627cd7c7c713adc63e053baf8a4fcbb25e337a114bc5ef"
+    },
+    {
+      "path": "src/settings/state.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 17983,
+      "sha256": "837373488792790424ca6b25ce692808c5a3fc9469de889c7a09412a5c657cf0"
+    },
+    {
+      "path": "src/settings/v4/SettingsV4.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 30366,
+      "sha256": "191a2f4b8a65f593efb2914f73721afdf7808e7e27b5182156a97b4899b22509"
+    },
+    {
+      "path": "src/skills/ScheduleFloat.test.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7276,
+      "sha256": "a8a73feab8c0ea93c5ed711bad53660b891c44d5d049f0933d9eef43067fa864"
+    },
+    {
+      "path": "src/skills/ScheduleFloat.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 20261,
+      "sha256": "ff342f0758c7fe574c33c701d6885a27fcb923ef6abecd8cb0880a0442131651"
+    },
+    {
+      "path": "src/skills/lib/registry.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2794,
+      "sha256": "28426b367256c8829d8d89b6a17658d5d34f56ff618f7733d69b592971fd7dad"
+    },
+    {
+      "path": "src/skills/recipes/cast-proof-for-hottest-deal.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 751,
+      "sha256": "cb878af082eda779bdf8b249ff20dd41613f3b96e364e3481b81aa951f68886b"
+    },
+    {
+      "path": "src/skills/recipes/compose-this-weeks-outbound.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 803,
+      "sha256": "9032744acdd2ff33fbba2442123d62605badde6d53a98e612ff3e7f4c909c40d"
+    },
+    {
+      "path": "src/skills/recipes/triage-week-reads.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 601,
+      "sha256": "33fcee2470f0c1a22d10f4182133a475c8f3ce1f5347f1b954f7e0930eda8d24"
+    },
+    {
+      "path": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 22892,
+      "sha256": "647944e435089d558ff5534cb7592d124c9c9c1c06c5fae28447f2bb1b34e1a7"
+    },
+    {
+      "path": "src/welcome/lib/engine.test.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8243,
+      "sha256": "ba79da52e20ee6adc2e9ab9889282d987f222d2f2b406d5d77292b64778349e8"
+    },
+    {
+      "path": "src/welcome/lib/engine.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 11348,
+      "sha256": "8ea5f5860bff6e6a52899910131ca059b5656c7b172cd6ab33ef17e38df621ca"
+    },
+    {
+      "path": "supabase/functions/briefing-pipeline/llm/compose-shared.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 6207,
+      "sha256": "a5d578ef52a0f315fd474fff1a2f7f6db4b24945a206d9de6ed560f1b84dba58"
+    },
+    {
+      "path": "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 15429,
+      "sha256": "77fa133fad3d98995b513168889bd360206222c9b9ae4cc90a9ce9a2a803220d"
+    },
+    {
+      "path": "supabase/functions/heartbeat/generators.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 14677,
+      "sha256": "c26adf15a0e4b1da9dd8eba2b05ab98a4f25b7d6c16f0034c49b4efd7583a8e0"
+    },
+    {
+      "path": "supabase/functions/outdoors-events-discovery/README.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 3658,
+      "sha256": "d9457f79d2c5617255aaa49e97bc4ac97832304b9aa8aba1713085ae8193f3ea"
+    },
+    {
+      "path": "supabase/functions/outdoors-events-discovery/index.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 18356,
+      "sha256": "68e13d1ae8ec4f3fb565023dc52050954248660b443a4ff264c60d5e42d8a5f6"
+    },
+    {
+      "path": "supabase/functions/seeding-enrichment/README.md",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 2791,
+      "sha256": "5cc431de0b3cf4fb99aa247e99d4dc066196e12299d0f1134cccf85e45ee790a"
+    },
+    {
+      "path": "supabase/functions/seeding-enrichment/index.ts",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 8896,
+      "sha256": "74d07d76e8d30c2bb4de3644d7fa41a084e563867854c6fd03998f060dbf62ae"
+    },
+    {
+      "path": "tools/language-remediation/build-copy-inventory.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 7193,
+      "sha256": "75fe30baacf837e8907a0e12768864b5b6c2dd579f54bcfc477fabc605e817a7"
+    },
+    {
+      "path": "tools/language-remediation/copy-audit.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 10199,
+      "sha256": "16aa73670736fada399f784132a4f071229ee12a7f3fa735dd045d4cd2c231ef"
+    },
+    {
+      "path": "tools/preview/build-transcript.js",
+      "status": "TRACKED_MODIFIED",
+      "bytes": 35645,
+      "sha256": "be1a00d9b8644b416c37bd149f553b0a770dfe2b6d7b1d1c40fbb77717b6ab04"
+    },
+    {
+      "path": "artifacts/language-remediation/copy-audit.json",
+      "status": "UNTRACKED",
+      "bytes": 964461,
+      "sha256": "4b97333364ab3741b9b146dd7248f01f012ebb6ea8ed6defde85957743025e40"
+    },
+    {
+      "path": "artifacts/language-remediation/copy-inventory.json",
+      "status": "UNTRACKED",
+      "bytes": 3564362,
+      "sha256": "87d12c7308f6c67bff9b916d43197abaabf5b5c916758b438b35f26da1d37f8b"
+    },
+    {
+      "path": "artifacts/language-remediation/rendered-corpus.txt",
+      "status": "UNTRACKED",
+      "bytes": 841577,
+      "sha256": "6e38de082c1d154f6eea5c7fab876d4d885feb26cea20e212d8b921164eb00be"
+    },
+    {
+      "path": "deno.lock",
+      "status": "UNTRACKED",
+      "bytes": 985,
+      "sha256": "a1fc6fb952048c0edfa11ca8c9e2901e1b752b6a4e2a67ce19eaa8ebf39c8a37"
+    },
+    {
+      "path": "docs/language-remediation-2026/14_RECOVERED_SATURATION_METHOD.md",
+      "status": "UNTRACKED",
+      "bytes": 2803,
+      "sha256": "18d83de94ac8f0494674693e11a009cd120ec1bd700eef59ba774616a3687e38"
+    },
+    {
+      "path": "docs/language-remediation-2026/15_COMPLETION_BASELINE.md",
+      "status": "UNTRACKED",
+      "bytes": 3072,
+      "sha256": "c064eb5fbca2a5d27080fc5fce4c6de4645c7a4673f75c580968146675b0cdd1"
+    },
+    {
+      "path": "docs/language-remediation-2026/16_ORIGINAL_MANIFEST_RECONCILIATION.json",
+      "status": "UNTRACKED",
+      "bytes": 4848425,
+      "sha256": "0cff80976ace4eaf8175e6024f15c90ed5444c5e1e18a5bf7078411aa1199fad"
+    },
+    {
+      "path": "docs/language-remediation-2026/16_ORIGINAL_MANIFEST_RECONCILIATION.md",
+      "status": "UNTRACKED",
+      "bytes": 1494,
+      "sha256": "f371932c05d3c3034f48e37679b9722b535bc5155e2af1855c40c62b1e210976"
+    },
+    {
+      "path": "preview-transcript/coverage.json",
+      "status": "UNTRACKED",
+      "bytes": 333368,
+      "sha256": "abe0500149e4acfd81fd894b9bf301bd2a20dc29e620e801b635f163908c39a1"
+    },
+    {
+      "path": "src/onboarding/seeding/components/WakeStep.test.tsx",
+      "status": "UNTRACKED",
+      "bytes": 2000,
+      "sha256": "cabc31b283ba6d68ac02beaeec8cf7af4dc99fd5ea551c3faf5ffa20b3e7fc6c"
+    },
+    {
+      "path": "src/onboarding/seeding/lib/enrichment-function.test.ts",
+      "status": "UNTRACKED",
+      "bytes": 3364,
+      "sha256": "b42d55b18618c8cd58a935d48d02e3ca4e894b5da7ed0fa256bab8e752c438b4"
+    },
+    {
+      "path": "src/outdoors-events/lib/discovery-function.test.ts",
+      "status": "UNTRACKED",
+      "bytes": 12014,
+      "sha256": "eb9648baf437e534f9a9e260277afa3ee295ffdc69b25d2c0ba7392a4a626620"
+    },
+    {
+      "path": "tools/language-remediation/copy-allowlist.json",
+      "status": "UNTRACKED",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "tools/language-remediation/copy-audit.test.js",
+      "status": "UNTRACKED",
+      "bytes": 2302,
+      "sha256": "7e911ef7d34172986a51c4676b1a89ea0d5819ef94e6816086b870599f7947e8"
+    },
+    {
+      "path": "tools/language-remediation/validate-transcript.js",
+      "status": "UNTRACKED",
+      "bytes": 1753,
+      "sha256": "b019bd7dc363b6e88b9ba98537df57c4440578abba788a586025a63bb1e96692"
+    },
+    {
+      "path": "tools/qa/run-e2e.js",
+      "status": "UNTRACKED",
+      "bytes": 648,
+      "sha256": "6760ea05db587e02dddbf1cb1f17ff5050520bc3bb3e85cdf992213f01f5c1ee"
+    },
+    {
+      "path": "tools/qa/serve-static.js",
+      "status": "UNTRACKED",
+      "bytes": 1169,
+      "sha256": "96a0b2d765c0472b1231d95818e290e202d8ff525aa261e380d00a0fa57d74c2"
+    }
+  ]
+}

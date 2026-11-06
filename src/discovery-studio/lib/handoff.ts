@@ -2,14 +2,15 @@
  * Discovery Studio cross-room handoff helpers.
  *
  * Added in Phase 2.5 (Discovery flow audit). Before this PR the room
- * had ZERO outbound handoff — Sarah could land in Discovery from Call
- * Planner, run the call, lock a next step, capture learned truth +
+ * had ZERO outbound handoff — Sarah could land in Discovery, run the call, lock a next step, capture learned truth +
  * worked nodes, then have nowhere to click. The deal forward-move
  * (canon §4.12 — "Discovery Studio feeds Deal Workspace") was
  * implicit only; no UI affordance existed.
  *
- * This module owns the writer + 3 destination builders per canon
- * §4.12 flows-out (Deal Workspace + Call Planner + Future Autopsy).
+ * This module owns the writer + the destination builders per canon
+ * §4.12 flows-out (Deal Workspace + Future Autopsy). Call Planner was
+ * retired into this room 2026-07-06 (canon §4.11), so there is no
+ * call-planner builder.
  *
  * Per `deliverables/audit/continuity-params-2026-05.md`:
  *   returnTo     = /discovery-studio/
@@ -67,13 +68,5 @@ export function hrefToFutureAutopsy(accountName?: string): string {
         href: "/future-autopsy/",
         roomLabel: "Future Autopsy",
         ...(accountName ? { focusObject: accountName } : {})
-    });
-}
-
-export function hrefToCallPlanner(accountName?: string): string {
-    return buildDiscoveryHref({
-        href: "/call-planner/",
-        roomLabel: "Call Planner",
-        ...(accountName ? { focusObject: accountName, extra: { account: accountName } } : {})
     });
 }

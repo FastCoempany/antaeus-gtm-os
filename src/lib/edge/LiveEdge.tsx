@@ -18,22 +18,10 @@ import { demoArrivals, demoBaseEvents, isDemoEnv } from "./demo-stream";
 import "./edge.css";
 
 /**
- * The Live Edge (founder-locked 2026-07-16) — the left wall of every
- * operating room becomes the app's live presence. Three layers, top to
- * bottom: your count (today vs the Quota room's daily habit), the
- * tagged live wire (you / the machine / the buyers), and the quiet
- * ledger foot (still-quiet account + the shift total).
- *
- * The switch (the corrected TG-2): no standing controls — hover the
- * edge and "turn off" appears. Off runs in three visible beats: STILL
- * in place (the dot stops, the wire grays) → FOLD to the wall → the
- * hairline left behind is plainly dead. On is the mirror: slide out
- * gray, then WAKE line by line. The off-state whisper follows the
- * cursor's height anywhere on the hairline. Viewport-fixed rail.
- * Settings mirrors the durable preference. Edge off ≠ capture off.
- *
- * Doctrine: deliverables/plans/
- * antaeus-live-edge-doctrine-and-build-plan-2026-07-16.md
+ * Recent activity panel. Internal LiveEdge names remain stable to avoid
+ * unnecessary component/storage churn. The user-facing surface reports
+ * today's activity count, buyer activity, automated updates, and accounts
+ * without a recent response. Hiding the panel never disables capture.
  */
 
 type VisualState = "on" | "stilling" | "off" | "waking";
@@ -68,7 +56,7 @@ function refreshLocal(): void {
 }
 
 async function loadCloudEvents(): Promise<void> {
-    if (isDemoEnv()) return; // the demo lane runs the scripted stream instead
+    if (isDemoEnv()) return;
     const floor = Date.now() - WIRE_WINDOW_MS;
     const out: EdgeEvent[] = [];
     try {
@@ -80,7 +68,7 @@ async function loadCloudEvents(): Promise<void> {
             }
         }
     } catch {
-        // No session / no cloud — the wire stays local, quietly.
+        // No session / no cloud — local activity remains available.
     }
     try {
         const data = createDataClient();
@@ -98,12 +86,12 @@ async function loadCloudEvents(): Promise<void> {
             out.push({
                 id: `cal:${r.id ?? ts}`,
                 who: "machine",
-                text: `${t("Calendar — a meeting with", { class: "body" })} ${name} ${t("is on the books.", { class: "body" })}`,
+                text: `${t("Calendar — a meeting with", { class: "body" })} ${name} ${t("is on the calendar.", { class: "body" })}`,
                 ts
             });
         }
     } catch {
-        // Same posture: cloud reads are a bonus, never a dependency.
+        // Cloud reads are supplementary, never required for local activity.
     }
     cloudEvents.value = out;
 }
@@ -119,13 +107,12 @@ function startDemoStream(): void {
                 demoEvents.value = [e, ...demoEvents.value];
                 if (a.counts) demoBump.value += 1;
             } catch {
-                // Demo drama is never worth an error.
+                // Demo updates are non-critical.
             }
         }, 9000 + i * 10_000);
     });
 }
 
-/** OFF — three beats: still in place → fold → the dead hairline. */
 export function turnEdgeOff(): void {
     if (transitioning || visual.value === "off") return;
     setLiveEdgeOn(false);
@@ -134,14 +121,13 @@ export function turnEdgeOff(): void {
         return;
     }
     transitioning = true;
-    visual.value = "stilling"; // beat 1 — watch it stop, in place
+    visual.value = "stilling";
     setTimeout(() => {
-        visual.value = "off"; // beat 2 — then it folds; beat 3 is the strip
+        visual.value = "off";
         transitioning = false;
     }, 430);
 }
 
-/** ON — the mirror: slide out still gray, then wake line by line. */
 export function turnEdgeOn(): void {
     if (transitioning || visual.value === "on") return;
     setLiveEdgeOn(true);
@@ -162,8 +148,6 @@ function boot(): void {
     if (booted || typeof window === "undefined") return;
     booted = true;
 
-    // Escape hatches: ?edge=0 hides for this load; ?edge=1 forces the
-    // rail past the kill switch (preview against a flagged-off env).
     try {
         const p = new URLSearchParams(window.location.search).get("edge");
         forceShown = p === "1";
@@ -172,8 +156,6 @@ function boot(): void {
         /* no-op */
     }
 
-    // Desktop-only organ — below this the rooms are already in their
-    // narrow-notice posture and the wall has no room to give.
     try {
         const mq = window.matchMedia("(min-width: 1240px)");
         wideEnough.value = mq.matches;
@@ -188,8 +170,6 @@ function boot(): void {
     void loadCloudEvents();
     startDemoStream();
 
-    // Accumulator upkeep: re-stamp ages every minute; re-read the local
-    // sources on a slow beat + when the tab comes back.
     setInterval(() => {
         ageTick.value += 1;
     }, 60_000);
@@ -209,8 +189,6 @@ function boot(): void {
         }
     });
 
-    // The Settings mirror flips the same preference signal — answer it
-    // with the full choreography (never a silent swap).
     effect(() => {
         const wantOn = liveEdgeOn.value;
         const v = visual.value;
@@ -218,8 +196,6 @@ function boot(): void {
         if (!wantOn && v === "on" && !transitioning) turnEdgeOff();
     });
 
-    // The room breathes with the rail: body padding while the rail is
-    // out (on/stilling/waking), back to the bare wall when off.
     effect(() => {
         const expanded = visual.value !== "off";
         const show = wideEnough.value && !forceHidden;
@@ -247,13 +223,13 @@ function onStripMove(e: MouseEvent): void {
 
 const VOICE_LABEL: Record<EdgeEvent["who"], string> = {
     you: t("you"),
-    machine: t("the machine"),
-    buyer: t("the buyers")
+    machine: t("automated updates"),
+    buyer: t("buyer activity")
 };
 
 export function LiveEdge(): JSX.Element | null {
     boot();
-    void ageTick.value; // ages re-stamp in place on the minute beat
+    void ageTick.value;
     if (forceHidden) return null;
     if (!forceShown && isFeatureEnabled("live_edge_off")) return null;
     if (!wideEnough.value) return null;
@@ -275,17 +251,17 @@ export function LiveEdge(): JSX.Element | null {
 
     return (
         <div class={`ledge is-${state}`} data-edge-state={state}>
-            <aside class="ledge-rail" aria-label={t("The live edge", { class: "body" })}>
+            <aside class="ledge-rail" aria-label={t("Recent activity", { class: "body" })}>
                 <div class="ledge-head">
                     <span class="ledge-dot" aria-hidden="true" />
-                    <span class="ledge-hk">{t("The live edge")}</span>
+                    <span class="ledge-hk">{t("Recent activity")}</span>
                     <button
                         type="button"
                         class="ledge-off"
                         onClick={turnEdgeOff}
-                        title={t("Turn the live edge off — a thin line stays on the wall", { class: "body" })}
+                        title={t("Hide recent activity", { class: "body" })}
                     >
-                        {t("Turn off")}
+                        {t("Hide")}
                     </button>
                 </div>
                 <div class="ledge-count">
@@ -319,12 +295,12 @@ export function LiveEdge(): JSX.Element | null {
                 <div class="ledge-foot">
                     {read?.stillQuiet ? (
                         <div>
-                            {t("Still quiet")} · <b>{read.stillQuiet.name}</b> · {read.stillQuiet.days}
+                            {t("No recent response")} · <b>{read.stillQuiet.name}</b> · {read.stillQuiet.days}
                             {t("d")}
                         </div>
                     ) : null}
                     <div>
-                        {t("Shift")} · <b>{shift}</b> {t("on the wire today", { class: "body" })}
+                        {t("Today")} · <b>{shift}</b> {t("messages & calls recorded", { class: "body" })}
                     </div>
                 </div>
             </aside>
@@ -334,10 +310,10 @@ export function LiveEdge(): JSX.Element | null {
                 class="ledge-strip"
                 onClick={turnEdgeOn}
                 onMouseMove={onStripMove}
-                aria-label={t("The live edge is off — click to turn on", { class: "body" })}
+                aria-label={t("Recent activity is hidden — click to show", { class: "body" })}
             >
                 <span class="ledge-hair" aria-hidden="true" />
-                <span class="ledge-whis">{t("The live edge is off — click to turn on", { class: "body" })}</span>
+                <span class="ledge-whis">{t("Recent activity is hidden — click to show", { class: "body" })}</span>
             </button>
         </div>
     );

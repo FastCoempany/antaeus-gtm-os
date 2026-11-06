@@ -19,7 +19,7 @@ describe("ScheduleFloat", () => {
         expect(
             container.querySelector(".ant-schedule-float--expanded")
         ).not.toBeNull();
-        expect(container.textContent).toContain("SCHEDULED SKILLS");
+        expect(container.textContent).toContain("SCHEDULED ACTIONS");
     });
 
     it("renders the empty-state message when no schedules + no fire", () => {
@@ -117,7 +117,7 @@ describe("ScheduleFloat", () => {
         );
         fireEvent.click(
             container.querySelector(
-                'button[aria-label="Surface visible"]'
+                'button[aria-label="Show schedule panel"]'
             ) as HTMLButtonElement
         );
         // The full card is gone, but a nub remains so it's recoverable.
@@ -139,7 +139,7 @@ describe("ScheduleFloat", () => {
         );
         fireEvent.click(
             container.querySelector(
-                'button[aria-label="Surface visible"]'
+                'button[aria-label="Show schedule panel"]'
             ) as HTMLButtonElement
         );
         const nub = container.querySelector(

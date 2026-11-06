@@ -1,0 +1,1506 @@
+
+FILE src/briefing/lib/llm/prompts.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 3e434d2..eb52015 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -34,11 +34,10 @@ export function buildEnrichPrompt(inputs: EnrichPromptInputs): string {
+     const lines: string[] = [];
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push(`TEXT${inputs.source_id}TEXT`);
+-    if (inputs.published_date) {
++    if (inputs.published_date)
+         lines.push(`TEXT${inputs.published_date}TEXT`);
+-    }
+     lines.push(`TEXT${inputs.title}TEXT`);
+     if (inputs.body && inputs.body.trim().length > 0) {
+         lines.push(`TEXT${inputs.body.trim()}TEXT`);
+     }
+@@ -119,8 +118,13 @@ export function buildEnrichPrompt(inputs: EnrichPromptInputs): string {
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
++    lines.push("STRING");
++    lines.push("STRING");
++    lines.push("STRING");
++    lines.push("STRING");
++    lines.push("STRING");
+     if (inputs.corporate_ownership_map.length > 0) {
+         lines.push("STRING");
+         lines.push("STRING");
+     }
+
+
+FILE src/briefing/lib/synthesis/contrarian.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index cce195f..89f6336 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -60,9 +60,11 @@ function listEvidence(items: ReadonlyArray<ContrarianEvidenceItem>): string {
+         const tags = [
+             e.event_category ? `TEXT${e.event_category}TEXT` : "STRING",
+             ...e.topic_tags.map((t) => `TEXT${t}TEXT`),
+             ...e.pain_tags.map((p) => `TEXT${p}TEXT`)
+-        ].filter((s) => s.length > 0).join("STRING");
++        ]
++            .filter((s) => s.length > 0)
++            .join("STRING");
+         const companies = e.companies.length > 0 ? `TEXT${e.companies.join("STRING")}TEXT` : "STRING";
+         return `TEXT${e.enriched_id}TEXT${e.source_id}TEXT${e.user_relevance_score.toFixed(2)}TEXT${e.summary}TEXT${companies}TEXT${tags.length > 0 ? `TEXT${tags}TEXT` : "STRING"}TEXT`;
+     })
+         .join("STRING");
+@@ -77,9 +79,11 @@ function describePositions(p: ContrarianStatedPositions): string {
+         lines.push(`TEXT${p.value_prop}TEXT`);
+     if (p.icp_statement)
+         lines.push(`TEXT${p.icp_statement}TEXT`);
+     if (p.watchlist_companies.length > 0) {
+-        lines.push(`TEXT${p.watchlist_companies.map((c) => `TEXT${c}TEXT`).join("STRING")}TEXT`);
++        lines.push(`TEXT${p.watchlist_companies
++            .map((c) => `TEXT${c}TEXT`)
++            .join("STRING")}TEXT`);
+     }
+     return lines.join("STRING");
+ }
+ export function buildContrarianPrompt(input: ContrarianInput): string {
+@@ -239,15 +243,8 @@ export type ContrarianGateFailure = "STRING" | "STRING" | "STRING" | "STRING" |
+ export interface ContrarianGateResult {
+     readonly passes: boolean;
+     readonly failures: ReadonlyArray<ContrarianGateFailure>;
+ }
+-const WEAKENING_PATTERNS: ReadonlyArray<RegExp> = [
+-    /\bmight\b/i,
+-    /\bcould\s+be\s+argued\b/i,
+-    /\bit's\s+worth\s+noting\b/i,
+-    /\bperhaps\b/i,
+-    /\bseems?\s+to\b/i
+-];
+ function isQuoteInPositions(quote: string, positions: ContrarianStatedPositions): boolean {
+     const needle = quote.trim().toLowerCase();
+     if (needle.length === 0)
+         return false;
+@@ -293,12 +290,6 @@ export function runContrarianGate(draft: ContrarianDraft, input: ContrarianInput
+         const missing = draft.evidence_ids.filter((id) => !ids.has(id));
+         if (missing.length > 0)
+             failures.push("STRING");
+     }
+-    if (draft.title && WEAKENING_PATTERNS.some((p) => p.test(draft.title!))) {
+-        failures.push("STRING");
+-    }
+-    if (draft.analysis && WEAKENING_PATTERNS.some((p) => p.test(draft.analysis!))) {
+-        failures.push("STRING");
+-    }
+     return { passes: failures.length === 0, failures };
+ }
+
+
+FILE src/briefing/lib/synthesis/prompts.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 9cc0483..4606a4b 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -14,11 +14,10 @@ function renderEvidence(input: SynthesisInput): string[] {
+         if (e.summary)
+             lines.push(`TEXT${e.summary}TEXT`);
+         if (e.what_changed)
+             lines.push(`TEXT${e.what_changed}TEXT`);
+-        if (e.companies.length > 0) {
++        if (e.companies.length > 0)
+             lines.push(`TEXT${e.companies.join("STRING")}TEXT`);
+-        }
+         lines.push(`TEXT${e.user_relevance_score.toFixed(2)}TEXT`);
+     }
+     return lines;
+ }
+@@ -34,11 +33,10 @@ function renderContext(input: SynthesisInput): string[] {
+             lines.push(`TEXT${input.commercial_profile.value_prop}TEXT`);
+         }
+     }
+     if (input.icp) {
+-        if (input.icp.icp_summary) {
++        if (input.icp.icp_summary)
+             lines.push(`TEXT${input.icp.icp_summary}TEXT`);
+-        }
+         if (input.icp.target_industries.length > 0) {
+             lines.push(`TEXT${input.icp.target_industries.join("STRING")}TEXT`);
+         }
+         if (input.icp.decision_maker_titles.length > 0) {
+@@ -99,9 +97,8 @@ export function buildDraftPrompt(input: SynthesisInput): string {
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
+-    lines.push("STRING");
+     return lines.join("STRING");
+ }
+ export const CRITIQUE_SYSTEM_PROMPT = "STRING";
+ export function buildCritiquePrompt(input: SynthesisInput, draft: DraftPattern): string {
+@@ -132,10 +129,8 @@ export function buildCritiquePrompt(input: SynthesisInput, draft: DraftPattern):
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
+     lines.push("STRING");
+-    lines.push("STRING");
+-    lines.push("STRING");
+     return lines.join("STRING");
+ }
+ export const REVISE_SYSTEM_PROMPT = "STRING";
+ export const GATE_REPAIR_SYSTEM_PROMPT = "STRING";
+@@ -154,10 +149,8 @@ export function buildGateRepairPrompt(pattern: DraftPattern, failures: ReadonlyA
+     lines.push("STRING");
+     lines.push(BANNED_LINE);
+     lines.push("STRING");
+     lines.push("STRING");
+-    lines.push("STRING");
+-    lines.push("STRING");
+     return lines.join("STRING");
+ }
+ export function buildRevisePrompt(input: SynthesisInput, draft: DraftPattern, critique: Critique): string {
+     const lines: string[] = [];
+@@ -177,8 +170,6 @@ export function buildRevisePrompt(input: SynthesisInput, draft: DraftPattern, cr
+     lines.push("STRING");
+     lines.push(BANNED_LINE);
+     lines.push("STRING");
+     lines.push("STRING");
+-    lines.push("STRING");
+-    lines.push("STRING");
+     return lines.join("STRING");
+ }
+
+
+FILE src/briefing/lib/synthesis/quality-gate.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 63f0905..b369c31 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -1,5 +1,5 @@
+-import { ANALYSIS_MAX_WORDS, ANALYSIS_MIN_WORDS, MAX_HEDGING_ADVERBS, MOVES_MAX, MOVES_MIN, PATTERN_NAME_MAX_WORDS, countHedgingAdverbs, findBannedHedgeConstructions, findBannedVocabulary, findMarketingSoup, wordCount } from "STRING";
++import { ANALYSIS_MAX_WORDS, ANALYSIS_MIN_WORDS, MOVES_MAX, MOVES_MIN, PATTERN_NAME_MAX_WORDS, findBannedHedgeConstructions, findBannedVocabulary, findMarketingSoup, wordCount } from "STRING";
+ import type { DraftPattern, GateCheck, GateResult } from "STRING";
+ export function runQualityGate(pattern: DraftPattern, validItemIds: ReadonlyArray<string>): GateResult {
+     const checks: GateCheck[] = [];
+     const sixQ = pattern.six_questions;
+@@ -56,9 +56,9 @@ export function runQualityGate(pattern: DraftPattern, validItemIds: ReadonlyArra
+     });
+     const allMovesRouted = pattern.recommended_moves.every((m) => m.destination.trim().length > 0 && m.action.trim().length > 0);
+     checks.push({
+         name: "STRING",
+-        pass: moveCount === 0 ? false : allMovesRouted,
++        pass: moveCount > 0 && allMovesRouted,
+         detail: allMovesRouted
+             ? "STRING" : "STRING"
+     });
+     const emptySlots = (Object.keys(sixQ) as Array<keyof typeof sixQ>).filter((k) => sixQ[k].trim().length === 0);
+@@ -67,14 +67,8 @@ export function runQualityGate(pattern: DraftPattern, validItemIds: ReadonlyArra
+         pass: emptySlots.length === 0,
+         detail: emptySlots.length === 0
+             ? "STRING" : `TEXT${emptySlots.join("STRING")}TEXT`
+     });
+-    const hedges = countHedgingAdverbs(pattern.analysis);
+-    checks.push({
+-        name: "STRING",
+-        pass: hedges <= MAX_HEDGING_ADVERBS,
+-        detail: `TEXT${hedges}TEXT${MAX_HEDGING_ADVERBS}TEXT`
+-    });
+     const hedgeConstructions = findBannedHedgeConstructions(fullText);
+     checks.push({
+         name: "STRING",
+         pass: hedgeConstructions.length === 0,
+
+
+FILE src/briefing/lib/synthesis/voice-rules.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 57bf190..a7baf09 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -33,8 +33,9 @@ export const BANNED_HEDGE_CONSTRUCTIONS: ReadonlyArray<string> = [
+     "STRING",
+     "STRING",
+     "STRING",
+     "STRING",
++    "STRING",
+     "STRING"
+ ];
+ export const MARKETING_SOUP_PHRASES: ReadonlyArray<string> = [
+     "STRING",
+
+
+FILE src/dashboard/v4/lib/cockpit.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index bfdb994..70ad182 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -31,13 +31,12 @@ export function buildMasthead(summary: ReadinessSummary): Masthead {
+         ? summary.gateBlockers[0]!
+         : summary.nextVerdict
+             ? t("STRING", { class: "STRING" })
+             : t("STRING", { class: "STRING" });
+-    const isBase = summary.verdict === "STRING";
+     return {
+         verdictLabel: summary.verdictLabel,
+-        headlinePre: isBase ? t("STRING") : t("STRING"),
+-        headlineEm: isBase ? t("STRING") : summary.verdictLabel,
++        headlinePre: t("STRING"),
++        headlineEm: summary.verdictLabel,
+         gates,
+         nextStage
+     };
+ }
+@@ -110,9 +109,9 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem>
+     const signal = readJson<SignalHealth>(store, "STRING") ?? {};
+     const quota = readJson<QuotaTargets>(store, "STRING") ?? {};
+     const founding = readJson<FoundingHealth>(store, "STRING") ?? {};
+     const pressure = Array.isArray(deal.top_pressure) ? deal.top_pressure : [];
+-    const slipN = pressure.length;
++    const riskN = pressure.length;
+     const pipeline = typeof deal.pipeline_value === "STRING" ? deal.pipeline_value : 0;
+     const worst = pressure[0];
+     const worstName = worst && typeof worst.accountName === "STRING" && worst.accountName.trim()
+         ? worst.accountName.trim()
+@@ -123,26 +122,26 @@ export function buildStanding(s?: StorageLike | null): ReadonlyArray<StandItem>
+     const coverageNeeded = hasQuota
+         ? quota.monthly_target! * (typeof quota.coverage_target === "STRING" && quota.coverage_target > 0 ? quota.coverage_target : 3)
+         : 0;
+     const behind = hasQuota && pipeline < coverageNeeded;
+-    const hotName = typeof signal.topAccountName === "STRING" && signal.topAccountName.trim()
++    const priorityName = typeof signal.topAccountName === "STRING" && signal.topAccountName.trim()
+         ? signal.topAccountName.trim()
+         : null;
+     const ready = typeof signal.readyCount === "STRING" ? signal.readyCount : 0;
+     return [
+         {
+             key: t("STRING"),
+-            value: slipN > 0 ? `TEXT${slipN}TEXT${t("STRING")}TEXT` : t("STRING"),
+-            sub: slipN > 0 && pipeline > 0
+-                ? `TEXT${money(pipeline)}TEXT${t("STRING")}TEXT`
++            value: riskN > 0 ? `TEXT${riskN}TEXT${t("STRING")}TEXT` : t("STRING"),
++            sub: pipeline > 0
++                ? `TEXT${t("STRING")}TEXT${money(pipeline)}TEXT`
+                 : t("STRING"),
+-            tone: slipN > 0 ? "STRING" : "STRING",
++            tone: riskN > 0 ? "STRING" : "STRING",
+             href: door("STRING")
+         },
+         {
+             key: t("STRING"),
+-            value: hotName
+-                ? `TEXT${hotName}TEXT${typeof signal.topHeat === "STRING" && signal.topHeat > 0 ? `TEXT${signal.topHeat}TEXT` : "STRING"}TEXT`
++            value: priorityName
++                ? `TEXT${priorityName}TEXT${typeof signal.topHeat === "STRING" && signal.topHeat > 0 ? `TEXT${signal.topHeat}TEXT` : "STRING"}TEXT`
+                 : t("STRING"),
+             sub: ready > 0 ? `TEXT${ready}TEXT${t("STRING")}TEXT` : t("STRING"),
+             tone: "STRING",
+             href: door("STRING")
+
+
+FILE src/deal-workspace/v4/lib/views.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 4f1de73..8d92d86 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -7,11 +7,26 @@ export interface LaneMeta {
+     readonly title: string;
+     readonly sub: string;
+ }
+ export const LANE_META: Record<RecoveryLane, LaneMeta> = {
+-    critical: { key: "STRING", cls: "STRING", title: "STRING", sub: "STRING" },
+-    "STRING": { key: "STRING", cls: "STRING", title: "STRING", sub: "STRING" },
+-    healthy: { key: "STRING", cls: "STRING", title: "STRING", sub: "STRING" }
++    critical: {
++        key: "STRING",
++        cls: "STRING",
++        title: "STRING",
++        sub: "STRING"
++    },
++    "STRING": {
++        key: "STRING",
++        cls: "STRING",
++        title: "STRING",
++        sub: "STRING"
++    },
++    healthy: {
++        key: "STRING",
++        cls: "STRING",
++        title: "STRING",
++        sub: "STRING"
++    }
+ };
+ export const LANE_ORDER: ReadonlyArray<RecoveryLane> = ["STRING", "STRING", "STRING"];
+ export interface HeroModel {
+     readonly calm: boolean;
+@@ -34,9 +49,13 @@ export function buildHero(active: ReadonlyArray<Deal>): HeroModel {
+ export function rankedAssessments(active: ReadonlyArray<Deal>): ReadonlyArray<RecoveryAssessment> {
+     return rankRecovery(active);
+ }
+ export function laneGroups(active: ReadonlyArray<Deal>): Record<RecoveryLane, ReadonlyArray<RecoveryAssessment>> {
+-    const out: Record<RecoveryLane, RecoveryAssessment[]> = { critical: [], "STRING": [], healthy: [] };
++    const out: Record<RecoveryLane, RecoveryAssessment[]> = {
++        critical: [],
++        "STRING": [],
++        healthy: []
++    };
+     for (const a of rankRecovery(active))
+         out[a.lane].push(a);
+     return out;
+ }
+
+
+FILE src/founding-gtm/lib/sections.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 4c0ff3f..c4f9814 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -45,9 +45,9 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
+     }
+     if (input.icps.length === 0 || totalClosed < 2) {
+         const body = input.icps.length > 0
+             ? [
+-                `TEXT${plural(input.icps.length, "STRING", "STRING")}TEXT`
++                `TEXT${plural(input.icps.length, "STRING", "STRING")}TEXT${plural(totalClosed, "STRING", "STRING")}TEXT`
+             ]
+             : [
+                 `TEXT${plural(totalClosed, "STRING", "STRING")}TEXT`
+             ];
+@@ -56,28 +56,23 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
+     const wonKeys = input.closedWon.map(dealKey);
+     const lostKeys = input.closedLost.map(dealKey);
+     const wonPatterns = uniq(wonKeys).slice(0, 3);
+     const lostPatterns = uniq(lostKeys).slice(0, 3);
+-    const body: string[] = [];
+-    body.push(`TEXT${plural(input.closedWon.length, "STRING", "STRING")}TEXT${plural(input.closedLost.length, "STRING", "STRING")}TEXT${plural(wonPatterns.length, "STRING", "STRING")}TEXT`);
++    const body: string[] = [
++        `TEXT${plural(input.closedWon.length, "STRING", "STRING")}TEXT${plural(input.closedLost.length, "STRING", "STRING")}TEXT${plural(wonPatterns.length, "STRING", "STRING")}TEXT`
++    ];
+     if (lostPatterns.length > 0) {
+         body.push(`TEXT${plural(lostPatterns.length, "STRING", "STRING")}TEXT`);
+     }
+     const evidence: string[] = [];
+-    wonPatterns.forEach((p, i) => {
+-        evidence.push(`TEXT${i + 1}TEXT${p}TEXT`);
+-    });
+-    lostPatterns.forEach((p, i) => {
+-        evidence.push(`TEXT${i + 1}TEXT${p}TEXT`);
+-    });
++    wonPatterns.forEach((p, i) => evidence.push(`TEXT${i + 1}TEXT${p}TEXT`));
++    lostPatterns.forEach((p, i) => evidence.push(`TEXT${i + 1}TEXT${p}TEXT`));
+     const statedIcpNames = input.icps.map((i) => i.name.toLowerCase().trim());
+     const actualIcpLabels = input.closedWon
+         .map((d) => d.icpLabel.toLowerCase().trim())
+         .filter((l) => l.length > 0);
+     const matched = actualIcpLabels.filter((label) => statedIcpNames.some((n) => n.length > 0 && (label.includes(n) || n.includes(label))));
+-    const matchRatio = actualIcpLabels.length === 0
+-        ? 1
+-        : matched.length / actualIcpLabels.length;
++    const matchRatio = actualIcpLabels.length === 0 ? 1 : matched.length / actualIcpLabels.length;
+     let surprise: SurpriseCallout | null = null;
+     if (statedIcpNames.length > 0 && actualIcpLabels.length > 0 && matchRatio < 0.5) {
+         const off = Math.round((1 - matchRatio) * 100);
+         surprise = {
+@@ -85,23 +80,22 @@ export function authorSection1(input: SectionsInput): AuthoredSection {
+             headline: "STRING",
+             body: `TEXT${off}TEXT`
+         };
+     }
+-    else if (matchRatio >= 0.8) {
++    else if (matchRatio >= 0.8 && actualIcpLabels.length > 0) {
+         surprise = {
+             tone: "STRING",
+             headline: "STRING",
+-            body: "STRING"
++            body: `TEXT${Math.round(matchRatio * 100)}TEXT`
+         };
+     }
+     return frame(id, "STRING", body, evidence, surprise);
+ }
+ export function authorSection2(input: SectionsInput): AuthoredSection {
+     const id: SectionId = "STRING";
+     const totalReach = input.touches.length + input.cues.length + input.coldCalls.length;
+-    if (totalReach === 0) {
++    if (totalReach === 0)
+         return frame(id, "STRING", [], [], null);
+-    }
+     const channelCounts = new Map<string, {
+         sent: number;
+         replied: number;
+     }>();
+@@ -113,9 +107,11 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
+             cur.replied += 1;
+         channelCounts.set(key, cur);
+     }
+     input.touches.forEach((t) => bumpChannel(t.channel, t.outcome === "STRING" || t.outcome === "STRING"));
+-    input.cues.forEach((c) => bumpChannel("STRING", c.outcome === "STRING" || c.outcome === "STRING" || c.outcome === "STRING"));
++    input.cues.forEach((c) => bumpChannel("STRING", c.outcome === "STRING" ||
++        c.outcome === "STRING" ||
++        c.outcome === "STRING"));
+     input.coldCalls.forEach((c) => bumpChannel("STRING", c.outcome === "STRING" || c.outcome === "STRING"));
+     const ranked = [...channelCounts.entries()]
+         .filter(([, v]) => v.sent >= 3)
+         .map(([ch, v]) => ({
+@@ -129,14 +125,14 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
+         return frame(id, "STRING", [
+             `TEXT${plural(totalReach, "STRING", "STRING")}TEXT`
+         ], [], null);
+     }
+-    const top = ranked[0];
+-    const body: string[] = [];
+-    body.push(`TEXT${top.channel}TEXT${top.replied}TEXT${top.sent}TEXT${Math.round(top.rate * 100)}TEXT`);
++    const top = ranked[0]!;
++    const body: string[] = [
++        `TEXT${top.channel}TEXT${top.replied}TEXT${top.sent}TEXT${Math.round(top.rate * 100)}TEXT`
++    ];
+     const bestLines = input.touches
+-        .filter((t) => t.outcome === "STRING" ||
+-        t.outcome === "STRING")
++        .filter((t) => t.outcome === "STRING" || t.outcome === "STRING")
+         .map((t) => t.sendLine.trim())
+         .filter((s) => s.length > 0);
+     if (bestLines.length > 0) {
+         body.push("STRING");
+@@ -155,9 +151,9 @@ export function authorSection2(input: SectionsInput): AuthoredSection {
+     if (untried.length > 0 && totalReach >= 10) {
+         surprise = {
+             tone: "STRING",
+             headline: `TEXT${untried.join("STRING")}TEXT`,
+-            body: "STRING"
++            body: `TEXT${untried.length > 1 ? "STRING" : "STRING"}TEXT`
+         };
+     }
+     else if (untried.length === 0) {
+         surprise = {
+@@ -188,17 +184,19 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
+         advancedCalls.forEach((c) => c.segmentKeysWorked.forEach((seg) => {
+             advancingSegmentCounts.set(seg, (advancingSegmentCounts.get(seg) ?? 0) + 1);
+         }));
+         const advancingSegments = [...advancingSegmentCounts.entries()].sort((a, b) => b[1] - a[1]);
+-        const body: string[] = [];
+-        body.push(`TEXT${plural(totalLogged, "STRING", "STRING")}TEXT${advancedCount}TEXT${advanceRate}TEXT`);
++        const body: string[] = [
++            `TEXT${plural(totalLogged, "STRING", "STRING")}TEXT${advancedCount}TEXT${advanceRate}TEXT`
++        ];
+         if (advancingSegments.length > 0) {
+             const top = advancingSegments[0]!;
+             const topShare = Math.round((top[1] / Math.max(1, advancedCount)) * 100);
+             body.push(`TEXT${top[0]}TEXT${topShare}TEXT`);
+         }
+-        const evidence: string[] = [];
+-        evidence.push(`TEXT${advancedCount}TEXT${totalLogged}TEXT${advanceRate}TEXT`);
++        const evidence: string[] = [
++            `TEXT${advancedCount}TEXT${totalLogged}TEXT${advanceRate}TEXT`
++        ];
+         advancingSegments.slice(0, 5).forEach(([seg, count]) => {
+             evidence.push(`TEXT${seg}TEXT${count}TEXT`);
+         });
+         const recentCalls = [...calls]
+@@ -244,18 +242,18 @@ export function authorSection3(input: SectionsInput): AuthoredSection {
+             "STRING"
+         ], [], null);
+     }
+     const advanceRate = Math.round((advancedCalls / totalCalls) * 100);
+-    const body: string[] = [];
+-    body.push(`TEXT${plural(totalCalls, "STRING", "STRING")}TEXT${advancedCalls}TEXT${advanceRate}TEXT`);
++    const body: string[] = [
++        `TEXT${plural(totalCalls, "STRING", "STRING")}TEXT${advancedCalls}TEXT${advanceRate}TEXT`
++    ];
+     if (worked.length > 0) {
+         body.push(`TEXT${plural(worked.length, "STRING", "STRING")}TEXT`);
+     }
+-    const evidence: string[] = [];
+-    evidence.push(`TEXT${advancedCalls}TEXT${totalCalls}TEXT${advanceRate}TEXT`);
+-    worked.slice(0, 6).forEach((seg) => {
+-        evidence.push(`TEXT${seg}TEXT`);
+-    });
++    const evidence: string[] = [
++        `TEXT${advancedCalls}TEXT${totalCalls}TEXT${advanceRate}TEXT`
++    ];
++    worked.slice(0, 6).forEach((seg) => evidence.push(`TEXT${seg}TEXT`));
+     let surprise: SurpriseCallout | null = null;
+     if (advancedCalls === 0) {
+         surprise = {
+             tone: "STRING",
+@@ -319,10 +317,11 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
+     });
+     const winRate = totalClosed > 0
+         ? Math.round((input.closedWon.length / totalClosed) * 100)
+         : 0;
+-    const body: string[] = [];
+-    body.push(`TEXT${winRate}TEXT${plural(totalClosed, "STRING", "STRING")}TEXT`);
++    const body: string[] = [
++        `TEXT${plural(input.closedWon.length, "STRING", "STRING")}TEXT${plural(input.closedLost.length, "STRING", "STRING")}TEXT${winRate}TEXT`
++    ];
+     if (input.advisorDeployments.length > 0) {
+         body.push(`TEXT${plural(input.advisorDeployments.length, "STRING", "STRING")}TEXT`);
+     }
+     const evidence: string[] = [];
+@@ -345,9 +344,9 @@ export function authorSection4(input: SectionsInput): AuthoredSection {
+     if (leakyStage && (advisorByStage.get(leakyStage) ?? 0) === 0) {
+         surprise = {
+             tone: "STRING",
+             headline: "STRING",
+-            body: `TEXT${leakyLossCount}TEXT${leakyStage}TEXT${leakyStage}TEXT`
++            body: `TEXT${leakyLossCount}TEXT${leakyStage}TEXT`
+         };
+     }
+     else if (input.advisorDeployments.length === 0 && totalClosed >= 3) {
+         surprise = {
+@@ -372,10 +371,11 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
+     const lostById = new Map<string, DealRecord>();
+     input.closedLost.forEach((d) => lostById.set(d.id, d));
+     const snapshotById = new Map<string, AutopsySnapshotRecord>();
+     input.autopsySnapshots.forEach((snap) => snapshotById.set(snap.dealId, snap));
+-    const body: string[] = [];
+-    body.push(`TEXT${plural(examined.length, "STRING", "STRING")}TEXT`);
++    const body: string[] = [
++        `TEXT${plural(examined.length, "STRING", "STRING")}TEXT`
++    ];
+     const killCount = examined.filter((a) => a.killSwitchFired).length;
+     if (killCount > 0) {
+         body.push(`TEXT${plural(killCount, "STRING", "STRING")}TEXT`);
+     }
+@@ -437,37 +437,34 @@ export function authorSection5(input: SectionsInput): AuthoredSection {
+     return frame(id, "STRING", body, evidence, surprise);
+ }
+ export function authorSection6(input: SectionsInput): AuthoredSection {
+     const id: SectionId = "STRING";
+-    if (input.closedWon.length === 0) {
++    if (input.closedWon.length === 0)
+         return frame(id, "STRING", [], [], null);
+-    }
+     if (input.closedWon.length === 1) {
+-        const w = input.closedWon[0];
++        const w = input.closedWon[0]!;
+         return frame(id, "STRING", [
+             `TEXT${w.accountName || "STRING"}TEXT`
+         ], [`TEXT${w.accountName}TEXT${dealKey(w)}TEXT`], null);
+     }
+     const personaCounts = new Map<string, number>();
+     const triggerCounts = new Map<string, number>();
+-    const icpCounts = new Map<string, number>();
+     input.closedWon.forEach((d) => {
+         if (d.persona)
+             personaCounts.set(d.persona, (personaCounts.get(d.persona) ?? 0) + 1);
+         if (d.trigger)
+             triggerCounts.set(d.trigger, (triggerCounts.get(d.trigger) ?? 0) + 1);
+-        if (d.icpLabel)
+-            icpCounts.set(d.icpLabel, (icpCounts.get(d.icpLabel) ?? 0) + 1);
+     });
+     const topPersona = [...personaCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+     const topTrigger = [...triggerCounts.entries()].sort((a, b) => b[1] - a[1])[0];
+-    const body: string[] = [];
+-    body.push(`TEXT${plural(input.closedWon.length, "STRING", "STRING")}TEXT`);
++    const body: string[] = [
++        `TEXT${plural(input.closedWon.length, "STRING", "STRING")}TEXT`
++    ];
+     if (topPersona && topPersona[1] >= 2) {
+-        body.push(`TEXT${topPersona[1]}TEXT${input.closedWon.length}TEXT${topPersona[0]}TEXT`);
++        body.push(`TEXT${topPersona[0]}TEXT${topPersona[1]}TEXT${input.closedWon.length}TEXT`);
+     }
+     if (topTrigger && topTrigger[1] >= 2) {
+-        body.push(`TEXT${topTrigger[1]}TEXT${topTrigger[0]}TEXT`);
++        body.push(`TEXT${topTrigger[0]}TEXT${topTrigger[1]}TEXT${input.closedWon.length}TEXT`);
+     }
+     const evidence: string[] = [];
+     input.closedWon.slice(0, 5).forEach((d) => {
+         evidence.push(`TEXT${d.accountName || "STRING"}TEXT${dealKey(d)}TEXT`);
+@@ -499,20 +496,20 @@ export function authorSection6(input: SectionsInput): AuthoredSection {
+     return frame(id, "STRING", body, evidence, surprise);
+ }
+ export function authorSection7(input: SectionsInput): AuthoredSection {
+     const id: SectionId = "STRING";
+-    if (!input.quota) {
++    if (!input.quota)
+         return frame(id, "STRING", [], [], null);
+-    }
+     const acv = input.quota.acv > 0 ? input.quota.acv : 50000;
+     const winRate = input.quota.winRate > 0 ? input.quota.winRate : 0.2;
+     const dealsNeeded = Math.ceil(input.quota.quota / acv);
+     const oppsNeeded = Math.ceil(dealsNeeded / winRate);
+     const meetingsPerWeek = Math.max(2, Math.round(oppsNeeded / 26));
+     const touchesPerDay = input.quota.touchesPerDay ?? Math.max(8, meetingsPerWeek * 6);
+-    const body: string[] = [];
+-    body.push(`TEXT${dealsNeeded}TEXT${oppsNeeded}TEXT${meetingsPerWeek}TEXT`);
+-    body.push(`TEXT${touchesPerDay}TEXT`);
++    const body: string[] = [
++        `TEXT${dealsNeeded}TEXT${oppsNeeded}TEXT${meetingsPerWeek}TEXT`,
++        `TEXT${touchesPerDay}TEXT`
++    ];
+     const evidence: string[] = [
+         `TEXT${input.quota.quota.toLocaleString()}TEXT`,
+         `TEXT${acv.toLocaleString()}TEXT`,
+         `TEXT${Math.round(winRate * 100)}TEXT`,
+@@ -532,11 +529,9 @@ export function authorSection7(input: SectionsInput): AuthoredSection {
+         const days = daysAgo(t.createdAtIso);
+         return days > 14 && days <= 60;
+     });
+     let surprise: SurpriseCallout | null = null;
+-    if (olderTouches.length >= 8 &&
+-        recentTouches.length === 0 &&
+-        input.touches.length > 0) {
++    if (olderTouches.length >= 8 && recentTouches.length === 0 && input.touches.length > 0) {
+         surprise = {
+             tone: "STRING",
+             headline: "STRING",
+             body: `TEXT${olderTouches.length}TEXT`
+
+
+FILE src/future-autopsy/lib/autopsy.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 4300ec3..ef750fa 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -6,11 +6,8 @@ export interface GenerateOptions {
+     readonly prefs?: Prefs;
+     readonly horizonDays?: number;
+ }
+ const STORY_MAX = 700;
+-function retime(lead: string, horizonDays: number): string {
+-    return lead.replace(/^45 days later/, `TEXT${horizonDays}TEXT`);
+-}
+ function clip(s: string, max = STORY_MAX): string {
+     return s.length > max ? s.slice(0, max) : s;
+ }
+ export function projectHorizonDays(vitals: Pick<ComputedVitals, "STRING" | "STRING">, fallback: number = DEFAULT_PREFS.autopsyHorizonDays, now: Date = new Date()): number {
+@@ -38,18 +35,18 @@ export function generateAutopsy(vitals: ComputedVitals, options: GenerateOptions
+     const countermeasures = chooseTasks(vitals, causes, {
+         highValueUSD: prefs.highValueUSD
+     });
+     const topCauseId: CauseId | "STRING" = causes[0]?.id ?? "STRING";
+-    const loseLead = stageLead(vitals.stageRaw, topCauseId);
+-    const winLead = stageWinLead(vitals.stageRaw);
+-    const loseTail = causes.length > 0
++    const riskLead = stageLead(vitals.stageRaw, topCauseId);
++    const correctedLead = stageWinLead(vitals.stageRaw);
++    const riskTail = causes.length > 0
+         ? "STRING" +
+             causes
+                 .slice(0, 3)
+-                .map((c) => (c.label ?? c.id).toLowerCase())
++                .map((c) => c.label ?? c.id)
+                 .join("STRING") + "STRING"
+         : "STRING";
+-    const winTail = "STRING" +
++    const correctedTail = "STRING" +
+         winConditions
+             .slice(0, 3)
+             .map((w) => w.story)
+             .join("STRING") + "STRING";
+@@ -60,10 +57,10 @@ export function generateAutopsy(vitals: ComputedVitals, options: GenerateOptions
+         chapters,
+         winConditions,
+         countermeasures,
+         killSwitch: killSwitchFor(vitals, prefs),
+-        loseStory: clip(retime(loseLead, horizonDays) + loseTail),
+-        winStory: clip(retime(winLead, horizonDays) + winTail)
++        loseStory: clip(riskLead + riskTail),
++        winStory: clip(correctedLead + correctedTail)
+     };
+ }
+ export function killSwitchFor(vitals: ComputedVitals, prefs: Prefs = DEFAULT_PREFS): string {
+     const recommended = vitals.value <= prefs.killValueUSD &&
+
+
+FILE src/lib/ground/motion.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 7e33872..9006116 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -15,30 +15,30 @@ export const MOTION_STAGES: ReadonlyArray<string> = [
+     t("STRING"),
+     t("STRING")
+ ];
+ export const MOTION_ROOMS: ReadonlyArray<MotionRoom> = [
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 0 },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 0 },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 0, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING", "STRING"] },
+-    { id: "STRING", label: t("STRING"), desc: t("STRING"), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING", "STRING"] }
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 0 },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 0 },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 0, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 1, keywords: ["STRING", "STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 2, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 3, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 4, keywords: ["STRING", "STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING"] },
++    { id: "STRING", label: t("STRING"), desc: t("STRING", { class: "STRING" }), href: "STRING", stage: 5, keywords: ["STRING", "STRING", "STRING", "STRING"] }
+ ];
+ export function currentRoomId(pathname: string): string | null {
+     const clean = `TEXT${pathname.replace(/\/+$/, "STRING")}TEXT`;
+     for (const r of MOTION_ROOMS) {
+
+
+FILE src/lib/readiness/dimensions.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 5fd2f43..cd79b34 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -31,9 +31,11 @@ export function scoreIcp(input: ReadinessInput): DimensionScore {
+     if (quality >= 4.5) {
+         evidence.push(t("STRING", { class: "STRING" }).replace("STRING", String(input.bestIcpQualityScore)));
+     }
+     else if (icpExists > 0) {
+-        gaps.push(t("STRING", { class: "STRING" }));
++        gaps.push(t("STRING", {
++            class: "STRING"
++        }));
+     }
+     const territory = saturate(input.territoryAccountCount, 30, 5);
+     if (territory >= 4) {
+         evidence.push(t("STRING", { class: "STRING" }).replace("STRING", String(input.territoryAccountCount)));
+@@ -180,16 +182,20 @@ export function scoreProof(input: ReadinessInput): DimensionScore {
+     if (autopsies >= 2) {
+         evidence.push(t("STRING", { class: "STRING" }).replace("STRING", String(input.futureAutopsiesRun)));
+     }
+     else {
+-        gaps.push(t("STRING", { class: "STRING" }));
++        gaps.push(t("STRING", {
++            class: "STRING"
++        }));
+     }
+     const advisors = saturate(input.advisorDeployments, 3, 4);
+     if (advisors >= 2) {
+         evidence.push(t("STRING", { class: "STRING" }).replace("STRING", String(input.advisorDeployments)));
+     }
+     else {
+-        gaps.push(t("STRING", { class: "STRING" }));
++        gaps.push(t("STRING", {
++            class: "STRING"
++        }));
+     }
+     const handoff = saturate(input.handoffSectionsReady, 5, 6);
+     if (handoff >= 2) {
+         evidence.push(t("STRING", { class: "STRING" }).replace("STRING", String(input.handoffSectionsReady)));
+
+
+FILE src/lib/readiness/verdict.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index e44c0b2..ac26e9d 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -5,17 +5,23 @@ import { scoreAllDimensions } from "STRING";
+ interface GateResult {
+     readonly passed: boolean;
+     readonly blockers: ReadonlyArray<string>;
+ }
++function dimensionBlocker(dimension: DimensionScore, fallback: string): string {
++    const next = dimension.gaps[0];
++    return next
++        ? `TEXT${dimension.label}TEXT${next}TEXT`
++        : `TEXT${dimension.label}TEXT${fallback}TEXT`;
++}
+ function gateHireReadyRepeatable(dimensions: ReadonlyArray<DimensionScore>, input: ReadinessInput): GateResult {
+     const blockers: string[] = [];
+     const minScore = Math.min(...dimensions.map((d) => d.score));
+     if (minScore < 14) {
+         const weak = dimensions.find((d) => d.score < 14);
+         if (weak) {
+-            blockers.push(t("STRING", {
++            blockers.push(dimensionBlocker(weak, t("STRING", {
+                 class: "STRING"
+-            }).replace("STRING", weak.label.toLowerCase()));
++            })));
+         }
+     }
+     if (input.closedWonDeals < 1) {
+         blockers.push(t("STRING", {
+@@ -40,9 +46,11 @@ function gateHireReadyRepeatable(dimensions: ReadonlyArray<DimensionScore>, inpu
+             ? Infinity
+             : 0
+         : input.closedWonDeals / input.closedLostDealsAnalyzed;
+     if (winLossRatio < 1) {
+-        blockers.push(t("STRING", { class: "STRING" }));
++        blockers.push(t("STRING", { class: "STRING" })
++            .replace("STRING", String(input.closedWonDeals))
++            .replace("STRING", String(input.closedLostDealsAnalyzed)));
+     }
+     if (input.handoffSectionsReady < 5) {
+         blockers.push(t("STRING", {
+             class: "STRING"
+@@ -55,11 +63,11 @@ function gateHireReady(dimensions: ReadonlyArray<DimensionScore>, input: Readine
+     const minScore = Math.min(...dimensions.map((d) => d.score));
+     if (minScore < 14) {
+         const weak = dimensions.find((d) => d.score < 14);
+         if (weak) {
+-            blockers.push(t("STRING", {
++            blockers.push(dimensionBlocker(weak, t("STRING", {
+                 class: "STRING"
+-            }).replace("STRING", weak.label.toLowerCase()));
++            })));
+         }
+     }
+     if (input.closedWonDeals < 1) {
+         blockers.push(t("STRING", { class: "STRING" }));
+@@ -77,14 +85,19 @@ function gateInheritable(dimensions: ReadonlyArray<DimensionScore>, input: Readi
+     const minScore = Math.min(...dimensions.map((d) => d.score));
+     if (minScore < 10) {
+         const weak = dimensions.find((d) => d.score < 10);
+         if (weak) {
+-            blockers.push(t("STRING", { class: "STRING" }).replace("STRING", weak.label.toLowerCase()));
++            blockers.push(dimensionBlocker(weak, t("STRING", {
++                class: "STRING"
++            })));
+         }
+     }
+     const maxScore = Math.max(...dimensions.map((d) => d.score));
+     if (maxScore < 16) {
+-        blockers.push(t("STRING", { class: "STRING" }));
++        const strongest = dimensions.reduce((best, d) => d.score > best.score ? d : best);
++        blockers.push(dimensionBlocker(strongest, t("STRING", {
++            class: "STRING"
++        })));
+     }
+     if (input.castProofs < 1) {
+         blockers.push(t("STRING", { class: "STRING" }));
+     }
+@@ -93,9 +106,17 @@ function gateInheritable(dimensions: ReadonlyArray<DimensionScore>, input: Readi
+ function gateBuilding(dimensions: ReadonlyArray<DimensionScore>): GateResult {
+     const blockers: string[] = [];
+     const aboveEight = dimensions.filter((d) => d.score >= 8).length;
+     if (aboveEight < 2) {
+-        blockers.push(t("STRING", { class: "STRING" }));
++        const nextTwo = [...dimensions]
++            .sort((a, b) => b.score - a.score)
++            .slice(0, 2)
++            .flatMap((d) => d.gaps.slice(0, 1));
++        blockers.push(nextTwo.length > 0
++            ? t("STRING", { class: "STRING" }).replace("STRING", nextTwo.join("STRING"))
++            : t("STRING", {
++                class: "STRING"
++            }));
+     }
+     return { passed: blockers.length === 0, blockers };
+ }
+ function pickVerdict(dimensions: ReadonlyArray<DimensionScore>, input: ReadinessInput): {
+
+
+FILE src/lib/voice/validator.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 075cbf5..e3749d9 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -1,7 +1,7 @@
+ import { ALL_BANNED_TERMS, BANNED_COMPLETION_LABELS } from "STRING";
+ import { isBlessedLabel } from "STRING";
+-import { BANNED_HEDGE_CONSTRUCTIONS, MAX_HEDGE_ADVERBS, } from "STRING";
++import { BANNED_META_HEDGE_CONSTRUCTIONS, UNCERTAINTY_STACK_REVIEW_THRESHOLD, } from "STRING";
+ import { DEFAULT_FAMILY, FAMILY_TEMPERATURES, type VoiceFamily, } from "STRING";
+ export type StringClass = "STRING" | "STRING" | "STRING";
+ export interface VoiceContext {
+     readonly class: StringClass;
+@@ -15,9 +15,12 @@ export interface StringViolation {
+ export interface StringValidation {
+     readonly ok: boolean;
+     readonly violations: ReadonlyArray<StringViolation>;
+ }
+-const HEDGE_ADVERBS = [
++const UNCERTAINTY_TERMS = [
++    "STRING",
++    "STRING",
++    "STRING",
+     "STRING",
+     "STRING",
+     "STRING",
+     "STRING",
+@@ -49,8 +52,12 @@ function findBannedTerms(text: string): string[] {
+ function isCompletionShaped(text: string): boolean {
+     const t = text.trim().toLowerCase().replace(/[.!]+$/, "STRING");
+     return BANNED_COMPLETION_LABELS.includes(t);
+ }
++function countUncertaintyTerms(text: string): number {
++    const lower = text.toLowerCase();
++    return UNCERTAINTY_TERMS.reduce((n, term) => n + (lower.match(new RegExp(`TEXT${term}TEXT`, "STRING"))?.length ?? 0), 0);
++}
+ export function validateString(text: string, context: VoiceContext): StringValidation {
+     const violations: StringViolation[] = [];
+     const family = FAMILY_TEMPERATURES[context.family ?? DEFAULT_FAMILY];
+     const trimmed = text.trim();
+@@ -112,34 +119,32 @@ export function validateString(text: string, context: VoiceContext): StringValid
+                 detail: `TEXT${words}TEXT${family.family}TEXT${family.maxSentenceWords}TEXT`,
+             });
+         }
+     }
+-    if (sentences.length >= 3 &&
+-        sentences.every((s) => wordCount(s) <= 6)) {
++    if (sentences.length >= 3 && sentences.every((s) => wordCount(s) <= 6)) {
+         violations.push({
+             severity: "STRING",
+             rule: "STRING",
+             detail: "STRING",
+         });
+     }
+     if (context.class === "STRING") {
+         const lower = trimmed.toLowerCase();
+-        for (const hedge of BANNED_HEDGE_CONSTRUCTIONS) {
+-            if (lower.includes(hedge)) {
++        for (const phrase of BANNED_META_HEDGE_CONSTRUCTIONS) {
++            if (lower.includes(phrase)) {
+                 violations.push({
+                     severity: "STRING",
+                     rule: "STRING",
+-                    detail: `TEXT${hedge}TEXT`,
++                    detail: `TEXT${phrase}TEXT`,
+                 });
+             }
+         }
+-        const hedgeCount = HEDGE_ADVERBS.reduce((n, adverb) => n +
+-            (lower.match(new RegExp(`TEXT${adverb}TEXT`, "STRING"))?.length ?? 0), 0);
+-        if (hedgeCount > MAX_HEDGE_ADVERBS) {
++        const uncertaintyCount = countUncertaintyTerms(trimmed);
++        if (uncertaintyCount > UNCERTAINTY_STACK_REVIEW_THRESHOLD) {
+             violations.push({
+                 severity: "STRING",
+                 rule: "STRING",
+-                detail: `TEXT${hedgeCount}TEXT${MAX_HEDGE_ADVERBS}TEXT`,
++                detail: `TEXT${uncertaintyCount}TEXT`,
+             });
+         }
+     }
+     return { ok: violations.every((v) => v.severity !== "STRING"), violations };
+
+
+FILE src/lib/voice/voice-document.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 286e0e6..32e6bc6 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -82,8 +82,9 @@ export const BANNED_HEDGE_CONSTRUCTIONS: ReadonlyArray<string> = [
+     "STRING",
+     "STRING",
+     "STRING"
+ ];
++export const BANNED_META_HEDGE_CONSTRUCTIONS = BANNED_HEDGE_CONSTRUCTIONS;
+ export const PREFERRED_REPLACEMENTS: Readonly<Record<string, string>> = {
+     leverage: "STRING",
+     unlock: "STRING",
+     supercharge: "STRING",
+@@ -98,20 +99,11 @@ export const PREFERRED_REPLACEMENTS: Readonly<Record<string, string>> = {
+     ecosystem: "STRING",
+     streamline: "STRING",
+     "STRING": "STRING"
+ };
+-export const MAX_HEDGE_ADVERBS = 3;
+-const HEDGE_ADVERBS: ReadonlyArray<string> = [
+-    "STRING",
+-    "STRING",
+-    "STRING",
+-    "STRING",
+-    "STRING",
+-    "STRING",
+-    "STRING",
+-    "STRING"
+-];
+-export type VoiceViolationCode = "STRING" | "STRING" | "STRING" | "STRING" | "STRING";
++export const UNCERTAINTY_STACK_REVIEW_THRESHOLD = 3;
++export const MAX_HEDGE_ADVERBS = UNCERTAINTY_STACK_REVIEW_THRESHOLD;
++export type VoiceViolationCode = "STRING" | "STRING" | "STRING" | "STRING";
+ export interface VoiceViolation {
+     readonly code: VoiceViolationCode;
+     readonly message: string;
+     readonly offender?: string;
+@@ -130,28 +122,16 @@ function containsWord(text: string, word: string): boolean {
+ }
+ function escapeRegex(s: string): string {
+     return s.replace(/[.*+?^${}()|[\]\\]/g, "STRING");
+ }
+-function countHedgeAdverbs(text: string): number {
+-    const lower = text.toLowerCase();
+-    let count = 0;
+-    for (const adv of HEDGE_ADVERBS) {
+-        const re = new RegExp(`TEXT${adv}TEXT`, "STRING");
+-        const matches = lower.match(re);
+-        if (matches)
+-            count += matches.length;
+-    }
+-    return count;
+-}
+ export function validateObservation(text: string, waivers: ReadonlyArray<string> = []): VoiceValidation {
+     const violations: VoiceViolation[] = [];
+     const waiverSet = new Set(waivers.map((w) => w.toLowerCase()));
+     if (!text || !text.trim()) {
+-        violations.push({
+-            code: "STRING",
+-            message: "STRING"
+-        });
+-        return { valid: false, violations };
++        return {
++            valid: false,
++            violations: [{ code: "STRING", message: "STRING" }]
++        };
+     }
+     for (const word of BANNED_CORPORATE_VOCAB) {
+         if (waiverSet.has(word.toLowerCase()))
+             continue;
+@@ -174,24 +154,17 @@ export function validateObservation(text: string, waivers: ReadonlyArray<string>
+             });
+         }
+     }
+     const lower = text.toLowerCase();
+-    for (const phrase of BANNED_HEDGE_CONSTRUCTIONS) {
++    for (const phrase of BANNED_META_HEDGE_CONSTRUCTIONS) {
+         if (lower.includes(phrase)) {
+             violations.push({
+                 code: "STRING",
+                 message: `TEXT${phrase}TEXT`,
+                 offender: phrase
+             });
+         }
+     }
+-    const adverbs = countHedgeAdverbs(text);
+-    if (adverbs > MAX_HEDGE_ADVERBS) {
+-        violations.push({
+-            code: "STRING",
+-            message: `TEXT${adverbs}TEXT${MAX_HEDGE_ADVERBS}TEXT`
+-        });
+-    }
+     return { valid: violations.length === 0, violations };
+ }
+ export function formatViolations(v: VoiceValidation): string {
+     if (v.valid)
+
+
+FILE src/linkedin-playbook/lib/motion.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 98030c8..2e8e42f 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -1,6 +1,6 @@
+ import { EMPTY_ACCOUNT_COUNTS, type AccountCounts, type ChannelStats, type CueIndex, type Motion, type MotionContext } from "STRING";
+-const DEFAULT_THRESHOLDS = "STRING";
++const NO_FIXED_THRESHOLD = "STRING";
+ function accountCountsFor(accountName: string | null | undefined, stats: ChannelStats): AccountCounts {
+     if (!accountName)
+         return EMPTY_ACCOUNT_COUNTS;
+     const key = accountName.trim().toLowerCase();
+@@ -8,50 +8,50 @@ function accountCountsFor(accountName: string | null | undefined, stats: Channel
+         return EMPTY_ACCOUNT_COUNTS;
+     return stats.byAccount[key] ?? EMPTY_ACCOUNT_COUNTS;
+ }
+ export function deriveMotion(ctx: MotionContext): Motion {
+-    const hottest = ctx.hottestAccount;
++    const highestPriority = ctx.hottestAccount;
+     const touch = ctx.latestTouch;
+     const stats = ctx.stats;
+-    const acct = accountCountsFor(hottest?.name, stats);
++    const acct = accountCountsFor(highestPriority?.name, stats);
+     let motion: Motion = {
+         key: "STRING",
+         label: "STRING",
+         actionType: "STRING",
+         whyNow: "STRING",
+         oneSession: "STRING",
+         nextMove: "STRING",
+-        thresholds: DEFAULT_THRESHOLDS,
+-        accountName: hottest?.name ?? touch?.accountName ?? "STRING",
++        thresholds: NO_FIXED_THRESHOLD,
++        accountName: highestPriority?.name ?? touch?.accountName ?? "STRING",
+         context: "STRING",
+         cueIndex: 1,
+         recovery: "STRING"
+     };
+-    if (hottest && acct.connection_request === 0) {
+-        const heatSuffix = hottest.heat ? `TEXT${hottest.heat}TEXT` : "STRING";
++    if (highestPriority && acct.connection_request === 0) {
++        const heatSuffix = highestPriority.heat ? `TEXT${highestPriority.heat}TEXT` : "STRING";
+         motion = {
+             ...motion,
+             key: "STRING",
+             label: "STRING",
+-            whyNow: `TEXT${hottest.name}TEXT`,
++            whyNow: `TEXT${highestPriority.name}TEXT`,
+             oneSession: "STRING",
+             nextMove: "STRING",
+-            context: `TEXT${hottest.name}TEXT${heatSuffix}TEXT`,
++            context: `TEXT${highestPriority.name}TEXT${heatSuffix}TEXT`,
+             cueIndex: (acct.content_engage > 0 ? 2 : 1) as CueIndex,
+-            recovery: `TEXT${hottest.name}TEXT`
++            recovery: `TEXT${highestPriority.name}TEXT`
+         };
+         return motion;
+     }
+-    if (hottest && acct.connection_request > 0 && acct.dm === 0) {
++    if (highestPriority && acct.connection_request > 0 && acct.dm === 0) {
+         motion = {
+             ...motion,
+             key: "STRING",
+             label: "STRING",
+             actionType: "STRING",
+-            whyNow: `TEXT${hottest.name}TEXT`,
++            whyNow: `TEXT${highestPriority.name}TEXT`,
+             oneSession: "STRING",
+             nextMove: "STRING",
+-            context: `TEXT${hottest.name}TEXT`,
++            context: `TEXT${highestPriority.name}TEXT`,
+             cueIndex: 3,
+             recovery: "STRING"
+         };
+         return motion;
+
+
+FILE src/outbound-studio/lib/generator.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 15e47c4..7a40b85 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -49,10 +49,10 @@ function computeQuality(rack: OperatorRack, hasSignal: boolean): number {
+     score += 16;
+     score += 14;
+     if (hasSignal)
+         score += 14;
+-    if (rack.noAsk)
+-        score += 3;
++    if (rack.nextQuestion?.trim())
++        score += 6;
+     return Math.min(100, score);
+ }
+ function bandFor(score: number): "STRING" | "STRING" | "STRING" {
+     if (score >= 80)
+@@ -60,8 +60,17 @@ function bandFor(score: number): "STRING" | "STRING" | "STRING" {
+     if (score >= 55)
+         return "STRING";
+     return "STRING";
+ }
++function reasonSentence(signalText: string): string {
++    return `TEXT${ensurePeriod(lcFirst(signalText))}TEXT`;
++}
++function assetOffer(assetLabel: string, angle: string): string {
++    if (assetLabel === "STRING") {
++        return `TEXT${angle}TEXT`;
++    }
++    return `TEXT${angle}TEXT${assetLabel.toLowerCase()}TEXT`;
++}
+ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
+     const { rack } = inputs;
+     const now = inputs.now ?? Date.now();
+     const account = rack.accountName.trim() || "STRING";
+@@ -69,8 +78,9 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
+     const triggerData = TRIGGERS[rack.trigger];
+     const signalText = inputs.signalHeadline?.trim() || triggerData.meaning;
+     const angle = (triggerData.angles[0] ?? "STRING").toLowerCase();
+     const companyName = inputs.companyName?.trim() || "STRING";
++    const buyerQuestion = rack.nextQuestion?.trim();
+     const ctaKey: CtaKey = rack.noAsk
+         ? CTA_BY_TEMP[rack.temperature].noask
+         : CTA_BY_TEMP[rack.temperature].normal;
+     const asset = ASSET_MATRIX[rack.temperature][rack.persona];
+@@ -78,34 +88,30 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
+     const channel: Channel = CHANNEL_ORDER[rack.temperature][rack.persona][0] ?? "STRING";
+     const lines: string[] = [];
+     if (rack.temperature === "STRING") {
+         lines.push(`TEXT${contact}TEXT`, "STRING");
+-        lines.push(`TEXT${ensurePeriod(lcFirst(signalText))}TEXT`);
++        lines.push(reasonSentence(signalText));
+         lines.push("STRING");
+         if (rack.persona === "STRING") {
+-            lines.push(`TEXT${account}TEXT${angle}TEXT`);
++            lines.push(`TEXT${angle}TEXT${account}TEXT`);
+             if (!rack.noAsk) {
+                 lines.push("STRING");
+                 lines.push("STRING");
+             }
+         }
+         else if (rack.persona === "STRING") {
+-            lines.push(`TEXT${account}TEXT${angle}TEXT`);
+-            lines.push("STRING");
++            lines.push(`TEXT${angle}TEXT`);
+             lines.push("STRING");
++            lines.push(assetOffer(assetLabel, angle));
+             if (!rack.noAsk) {
+                 lines.push("STRING");
+                 lines.push("STRING");
+             }
+         }
+         else if (rack.persona === "STRING") {
+-            lines.push(`TEXT${account}TEXT${angle}TEXT`);
+-            lines.push("STRING");
+-            lines.push(`TEXT${triggerData.meaning.toLowerCase()}TEXT`);
++            lines.push(`TEXT${angle}TEXT`);
+             lines.push("STRING");
+-            lines.push(`TEXT${companyName}TEXT${account}TEXT${triggerData.angles
+-                .join("STRING")
+-                .toLowerCase()}TEXT`);
++            lines.push(`TEXT${companyName}TEXT${account}TEXT`);
+             if (!rack.noAsk) {
+                 lines.push("STRING");
+                 lines.push("STRING");
+             }
+@@ -116,61 +122,52 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
+                 lines.push("STRING");
+                 lines.push("STRING");
+             }
+         }
+-        lines.push("STRING");
+-        lines.push("STRING");
+-        lines.push("STRING");
++        lines.push("STRING", "STRING", "STRING");
+     }
+     else if (rack.temperature === "STRING") {
+         lines.push(`TEXT${contact}TEXT`, "STRING");
+         lines.push(`TEXT${triggerData.label.toLowerCase()}TEXT${account}TEXT`);
+         lines.push("STRING");
+-        lines.push(`TEXT${assetLabel.toLowerCase()}TEXT${account}TEXT${angle}TEXT`);
++        lines.push(assetOffer(assetLabel, angle));
+         if (!rack.noAsk) {
+             lines.push("STRING");
+             lines.push(`TEXT${dayName(now, 2)}TEXT${dayName(now, 4)}TEXT`);
+         }
+-        lines.push("STRING");
+-        lines.push("STRING");
++        lines.push("STRING", "STRING");
+     }
+     else if (rack.temperature === "STRING") {
+         lines.push(`TEXT${contact}TEXT`, "STRING");
+-        lines.push(`TEXT${angle}TEXT`);
+         lines.push("STRING");
+-        if (rack.persona === "STRING") {
+-            lines.push("STRING");
+-            if (!rack.noAsk) {
+-                lines.push(`TEXT${dayName(now, 3)}TEXT`);
+-            }
++        if (buyerQuestion) {
++            lines.push("STRING", `TEXT${buyerQuestion}TEXT`);
+         }
+-        else {
+-            lines.push(`TEXT${assetLabel.toLowerCase()}TEXT${account}TEXT`);
++        lines.push("STRING", assetOffer(assetLabel, angle));
++        if (!rack.noAsk) {
+             lines.push("STRING");
+-            if (!rack.noAsk) {
+-                lines.push("STRING");
+-            }
++            lines.push(`TEXT${dayName(now, 3)}TEXT`);
+         }
+-        lines.push("STRING");
+-        lines.push("STRING");
++        lines.push("STRING", "STRING");
+     }
+     else if (rack.temperature === "STRING") {
+         lines.push(`TEXT${contact}TEXT`, "STRING");
+         lines.push("STRING");
++        if (buyerQuestion) {
++            lines.push("STRING", `TEXT${buyerQuestion}TEXT`);
++        }
+         lines.push("STRING");
+         if (rack.persona === "STRING") {
+-            lines.push(`TEXT${account}TEXT`);
+-        }
+-        else if (rack.persona === "STRING") {
+             lines.push("STRING");
+         }
+         else {
+-            lines.push(`TEXT${assetLabel.toLowerCase()}TEXT${account}TEXT`);
+-            lines.push("STRING");
+-            lines.push("STRING");
++            lines.push(`TEXT${assetLabel.toLowerCase()}TEXT`);
++            if (!rack.noAsk) {
++                lines.push("STRING");
++                lines.push("STRING");
++            }
+         }
+-        lines.push("STRING");
+-        lines.push("STRING");
++        lines.push("STRING", "STRING");
+     }
+     else if (rack.temperature === "STRING") {
+         lines.push(`TEXT${contact}TEXT`, "STRING");
+         lines.push("STRING");
+@@ -178,14 +175,17 @@ export function generateSendLine(inputs: GenerateInputs): GenerateOutput {
+         if (rack.persona === "STRING") {
+             lines.push("STRING");
+         }
+         else {
+-            lines.push("STRING");
+-            lines.push("STRING");
+-            lines.push("STRING");
++            lines.push(`TEXT${assetLabel.toLowerCase()}TEXT`);
+         }
+-        lines.push("STRING");
+-        lines.push("STRING");
++        if (buyerQuestion) {
++            lines.push("STRING", `TEXT${buyerQuestion}TEXT`);
++        }
++        if (!rack.noAsk) {
++            lines.push("STRING", "STRING");
++        }
++        lines.push("STRING", "STRING");
+     }
+     const content = lines.join("STRING");
+     const qualityScore = computeQuality(rack, !!inputs.signalHeadline?.trim());
+     const motionBand = bandFor(qualityScore);
+
+
+FILE src/quota-workback/lib/engine.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index c66f64a..9b0452c 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -62,12 +62,10 @@ export function computeMetrics(inputs: PlanInputs, coverage: CoverageSnapshot):
+     if (quota > 0 && acv > 0) {
+         qualityScore = Math.max(0, Math.min(100, 34 +
+             Math.max(0, 24 - Math.min(24, Math.abs(inputs.win - benchmark.winRate))) +
+             Math.max(0, 18 - Math.min(18, Math.abs(inputs.m2o - benchmark.m2o))) +
+-            Math.max(0, 12 -
+-                Math.min(12, Math.abs(cycle - benchmark.cycle) / 10)) +
+-            Math.max(0, 12 -
+-                Math.min(12, Math.abs((coverage.ratio || 0) - benchmark.coverage) * 6))));
++            Math.max(0, 12 - Math.min(12, Math.abs(cycle - benchmark.cycle) / 10)) +
++            Math.max(0, 12 - Math.min(12, Math.abs((coverage.ratio || 0) - benchmark.coverage) * 6))));
+     }
+     return {
+         monthlyTarget: monthly,
+         weeklyRevenue,
+
+
+FILE src/quota-workback/v4/lib/pace.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index 622c528..c6c2e10 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -173,9 +173,9 @@ export function buildBelievability(inputs: PlanInputs, benchmark: Benchmark, met
+         return {
+             solid: false,
+             read: `TEXT${t("STRING", { class: "STRING" })}TEXT${inputs.t2m}TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.t2m}TEXT`,
+             cost: moreADay > 0
+-                ? `TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.t2m}TEXT${t("STRING", { class: "STRING" })}TEXT${moreADay}TEXT${t("STRING", { class: "STRING" })}TEXT`
++                ? `TEXT${t("STRING", { class: "STRING" })}TEXT${moreADay}TEXT${t("STRING", { class: "STRING" })}TEXT`
+                 : null,
+             fix: { key: "STRING", value: benchmark.t2m }
+         };
+     }
+@@ -185,9 +185,9 @@ export function buildBelievability(inputs: PlanInputs, benchmark: Benchmark, met
+         return {
+             solid: false,
+             read: `TEXT${t("STRING", { class: "STRING" })}TEXT${inputs.m2o}TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.m2o}TEXT`,
+             cost: moreADay > 0
+-                ? `TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.m2o}TEXT${t("STRING", { class: "STRING" })}TEXT${moreADay}TEXT${t("STRING", { class: "STRING" })}TEXT`
++                ? `TEXT${t("STRING", { class: "STRING" })}TEXT${moreADay}TEXT${t("STRING", { class: "STRING" })}TEXT`
+                 : null,
+             fix: { key: "STRING", value: benchmark.m2o }
+         };
+     }
+@@ -196,9 +196,9 @@ export function buildBelievability(inputs: PlanInputs, benchmark: Benchmark, met
+     return {
+         solid: false,
+         read: `TEXT${t("STRING", { class: "STRING" })}TEXT${inputs.win}TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.winRate}TEXT`,
+         cost: moreADayW > 0
+-            ? `TEXT${t("STRING", { class: "STRING" })}TEXT${benchmark.winRate}TEXT${t("STRING", { class: "STRING" })}TEXT${moreADayW}TEXT${t("STRING", { class: "STRING" })}TEXT`
++            ? `TEXT${t("STRING", { class: "STRING" })}TEXT${moreADayW}TEXT${t("STRING", { class: "STRING" })}TEXT`
+             : null,
+         fix: { key: "STRING", value: benchmark.winRate }
+     };
+ }
+
+
+FILE src/signal-console/v4/lib/attention.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index e1c1c15..77bf2ee 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -6,9 +6,13 @@ export interface BandMeta {
+     readonly label: string;
+     readonly why: string;
+ }
+ export const BAND_META: Record<AttentionBand, BandMeta> = {
+-    now: { key: "STRING", label: "STRING", why: "STRING" },
++    now: {
++        key: "STRING",
++        label: "STRING",
++        why: "STRING"
++    },
+     warm: {
+         key: "STRING",
+         label: "STRING",
+         why: "STRING"
+@@ -17,9 +21,13 @@ export const BAND_META: Record<AttentionBand, BandMeta> = {
+         key: "STRING",
+         label: "STRING",
+         why: "STRING"
+     },
+-    cold: { key: "STRING", label: "STRING", why: "STRING" }
++    cold: {
++        key: "STRING",
++        label: "STRING",
++        why: "STRING"
++    }
+ };
+ export const BAND_ORDER: ReadonlyArray<AttentionBand> = ["STRING", "STRING", "STRING", "STRING"];
+ const DAY = 86400000;
+ function daysSince(iso: string | undefined, now: number): number | null {
+
+
+FILE src/territory-architect/lib/field-read.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index a6ca9f0..d8bf845 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -133,9 +133,9 @@ function pickReplacement(s: ReplacementInputs): string {
+     }
+     if (backfillNeeded === 1) {
+         return t("STRING", { class: "STRING" });
+     }
+-    return `TEXT${backfillNeeded}TEXT${t("STRING", { class: "STRING" })}TEXT`;
++    return `TEXT${t("STRING", { class: "STRING" })}TEXT${backfillNeeded}TEXT${t("STRING", { class: "STRING" })}TEXT`;
+ }
+ interface OperatorMoveInputs {
+     readonly focuses: ReadonlyArray<Focus>;
+     readonly approaches: ReadonlyArray<Approach>;
+
+
+FILE src/welcome/v4/lib/landing.ts
+diff --git "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts" "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+index f71b4f4..5cdaa1f 100644
+--- "a/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\old.ts"
++++ "b/C:\\Users\\tanya\\Documents\\Codex\\2026-10-30\\you-are-taking-over-the-final\\work\\frontend-normalized\\new.ts"
+@@ -145,21 +145,16 @@ export function buildLanding(options: BuildLandingOptions = {}): Landing {
+     const pipeline = readPipelineValue(store);
+     const company = activation.companyName?.trim();
+     const who = company && company.length > 0 ? `TEXT${company}TEXT` : "STRING";
+     const body = { class: "STRING" } as const;
+-    const pickNoun = spotlight?.commandFamily === "STRING"
+-        ? t("STRING", body)
+-        : t("STRING", body);
+     const kicker = reEntry
+         ? t("STRING", body)
+         : t("STRING", body);
+     const headline = reEntry
+         ? move
+             ? t("STRING", body)
+             : t("STRING", body)
+-        : move
+-            ? `TEXT${t("STRING", body)}TEXT${pickNoun}TEXT`
+-            : t("STRING", body);
++        : t("STRING", body);
+     const nothingSeeded = counts.deals === 0 && counts.accounts === 0;
+     const sub = reEntry
+         ? `TEXT${t("STRING", body)}TEXT${who}TEXT${t("STRING", body)}TEXT`
+         : nothingSeeded
+

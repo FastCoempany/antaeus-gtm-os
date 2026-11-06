@@ -65,19 +65,16 @@ export function startHealthPublishing(
 ): () => void {
     const storage = options.storage ?? safeStorage();
     const now = options.now ?? (() => new Date().toISOString());
-    let isFirstRun = true;
     let lastWrittenJson = "";
 
     const dispose = effect(() => {
         const sections = authoredSections.value;
-        if (isFirstRun) {
-            isFirstRun = false;
-            // Skip the first run — the cross-room reader hasn't
-            // finished hydrating yet on cold boot, so the count
-            // would always be 0/0.
-            return;
-        }
-
+        // Publish on the first run too. main.tsx hydrates the section
+        // input synchronously BEFORE starting this publisher, so the
+        // first run already carries the real count. The old first-run
+        // skip meant the snapshot was never written on a normal visit
+        // (the input never changed again), which left other rooms
+        // reading a stale or missing "0 / 7".
         const snapshot = buildHealthSnapshot(sections, now());
         const json = JSON.stringify(snapshot);
 

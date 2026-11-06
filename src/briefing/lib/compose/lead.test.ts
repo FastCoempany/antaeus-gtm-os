@@ -10,10 +10,11 @@ import {
     parseComposeResponse,
     runComposeGate
 } from "./lead";
+import * as deployed from "../../../../supabase/functions/briefing-pipeline/llm/compose-shared";
 
 /**
  * B.9a — Briefing Compose pure logic. The gate's role is to keep the
- * top-of-briefing line plain — no hedging, no startup-jargon nouns
+ * top-of-briefing line plain and calibrated — no startup-jargon nouns
  * doing sentence work. False-positive leads would erode operator
  * trust faster than no lead at all, so refusal is a feature.
  */
@@ -63,8 +64,9 @@ describe("COMPOSE_PROMPT_VERSION + system prompt", () => {
         expect(COMPOSE_SYSTEM_PROMPT).toMatch(/ONE OR TWO sentences/);
     });
 
-    it("system prompt names refusal as a feature", () => {
-        expect(COMPOSE_SYSTEM_PROMPT).toMatch(/Silence is a feature/);
+    it("requires refusal when no supported finding exists", () => {
+        expect(COMPOSE_SYSTEM_PROMPT).toContain("no supported finding, output refused=true");
+        expect(COMPOSE_SYSTEM_PROMPT).toContain("Keep the source's uncertainty");
     });
 
     it("system prompt bans this-week throat-clearing", () => {
@@ -180,11 +182,16 @@ describe("runComposeGate", () => {
         expect(r.failures).toContain("lead_too_long");
     });
 
-    it("fails on hedging words (might, perhaps, could be argued)", () => {
-        expect(runComposeGate(draft({ lead: "Deel might be repricing upward." })).failures)
-            .toContain("weakening_language");
-        expect(runComposeGate(draft({ lead: "Perhaps Atlas is moving fast." })).failures)
-            .toContain("weakening_language");
+    it("allows calibrated uncertainty while rejecting indirect framing in both runtimes", () => {
+        for (const lead of ["Deel might raise prices; its published proposal is not final.", "The funding announcement suggests Atlas may expand its sales team."]) {
+            expect(runComposeGate(draft({ lead })).passes).toBe(true);
+            expect(deployed.runComposeGate(draft({ lead }))).toEqual(runComposeGate(draft({ lead })));
+        }
+        const indirect = draft({ lead: "It could be argued that Deel is repricing upward." });
+        expect(runComposeGate(indirect).failures).toContain("weakening_language");
+        expect(deployed.runComposeGate(indirect)).toEqual(runComposeGate(indirect));
+        expect(deployed.COMPOSE_SYSTEM_PROMPT).toBe(COMPOSE_SYSTEM_PROMPT);
+        expect(deployed.buildComposePrompt(input())).toBe(buildComposePrompt(input()));
     });
 
     it("fails on 'in today's market' / 'this week' throat-clearing", () => {

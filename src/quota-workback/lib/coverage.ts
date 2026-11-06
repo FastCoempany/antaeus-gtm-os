@@ -1,5 +1,7 @@
 import { reportError } from "@/lib/observability";
 import { EMPTY_COVERAGE, type CoverageSnapshot } from "./types";
+import { benchmarkFor, computeMetrics } from "./engine";
+import { loadInputs } from "./persistence";
 
 /**
  * Coverage snapshot from `gtmos_deal_workspaces` (the Phase 4 / Room 1
@@ -135,4 +137,57 @@ export function computeCoverage(
         needed: Math.round(needed),
         hasDeals: true
     };
+}
+
+/**
+ * Pipeline coverage exactly as the Quota Workback room shows it
+ * ("0.8× / 5×", "below benchmark"), for rooms that summarize it
+ * elsewhere (the Dashboard "Pipeline coverage" status link).
+ *
+ * The Dashboard used to compare UNWEIGHTED open pipeline with the
+ * MONTHLY target × a stored 3× default, so it said "On pace" while the
+ * Quota room — weighted pipeline vs the ANNUAL target × the ACV-band
+ * benchmark — said "below benchmark" for the same workspace. Both now
+ * use this function.
+ */
+export function readCoverageStanding(s?: StorageLike | null): {
+    readonly hasQuota: boolean;
+    readonly hasDeals: boolean;
+    readonly ratio: number;
+    readonly targetMultiple: number;
+    readonly behind: boolean;
+} {
+    const store = getStorage(s);
+    const inputs = loadInputs(
+        store ? { getItem: (k: string) => store.getItem(k), setItem: () => {} } : null
+    );
+    const targetMultiple = benchmarkFor(inputs.acv).coverage;
+    const hasQuota = inputs.quota > 0;
+    const cov = hasQuota ? computeCoverage(inputs.quota, store, targetMultiple) : EMPTY_COVERAGE;
+    const ratio = cov.hasDeals ? cov.ratio : 0;
+    return {
+        hasQuota,
+        hasDeals: cov.hasDeals,
+        ratio,
+        targetMultiple,
+        behind: ratio < targetMultiple
+    };
+}
+
+/**
+ * The daily outreach requirement ("messages & calls per working day")
+ * computed live with the Quota Workback engine from the saved plan
+ * inputs — the exact number the Quota room shows. Null when no annual
+ * target is on record. Rooms that show a daily goal (the live edge)
+ * use this instead of the `gtmos_quota_targets.touches_day` snapshot,
+ * which can be stale (seeded, or written before an assumption changed).
+ */
+export function readDailyOutreachRequirement(s?: StorageLike | null): number | null {
+    const store = getStorage(s);
+    if (!store) return null;
+    const inputs = loadInputs({ getItem: (k: string) => store.getItem(k), setItem: () => {} });
+    if (!(inputs.quota > 0)) return null;
+    const cov = computeCoverage(inputs.quota, store, benchmarkFor(inputs.acv).coverage);
+    const n = computeMetrics(inputs, cov).touchesDay;
+    return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
 }

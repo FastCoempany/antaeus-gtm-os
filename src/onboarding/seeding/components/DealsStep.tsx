@@ -19,7 +19,7 @@ import { diagnoseDeal } from "../lib/diagnose";
  * champions it, who signs, where it's stuck). Each add computes a real
  * diagnosis (deterministic, from the fields) and lands it on the board.
  * The counter climbs to the floor of ten; fewer is allowed but the app
- * says plainly it stays thin (Earned Depth #6, the honest edge case).
+ * says plainly that its suggestions will be limited (Earned Depth #6).
  */
 const fAccount = signal("");
 const fValue = signal("");
@@ -62,9 +62,9 @@ export function DealsStep(): JSX.Element {
     const enough = n >= DEAL_FLOOR;
     return (
         <section class="sd-step">
-            <p class="sd-kicker">{t("The heavy part · your live deals", { class: "body" })}</p>
+            <p class="sd-kicker">{t("Your open deals", { class: "label" })}</p>
             <h1 class="sd-h1">
-                {t("The part no software can do for you — and the part that pays you back every morning.", { class: "body" })}
+                {t("Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.", { class: "body" })}
             </h1>
             <div class="sd-cols">
                 <div class="sd-entry">
@@ -107,7 +107,7 @@ export function DealsStep(): JSX.Element {
                     </label>
                     <label class="sd-f">
                         <span class="sd-f__l">{t("Where it's stuck")}</span>
-                        <input class="sd-f__i" value={fStuck.value} placeholder={t("The honest read", { class: "body" })}
+                        <input class="sd-f__i" value={fStuck.value} placeholder={t("What's holding it up?", { class: "body" })}
                             onInput={(e) => { fStuck.value = (e.currentTarget as HTMLInputElement).value; }} />
                     </label>
                     <button type="button" class="sd-btn sd-btn--sm" disabled={!canAdd()} onClick={add}>
@@ -117,8 +117,8 @@ export function DealsStep(): JSX.Element {
 
                 <div class="sd-board">
                     <div class="sd-bhead">
-                        <span class="sd-bhead__t">{t("Waking up")}</span>
-                        <span class="sd-bhead__c"><b>{n}</b> {t("of 10 in", { class: "body" })}</span>
+                        <span class="sd-bhead__t">{t("Deals added")}</span>
+                        <span class="sd-bhead__c"><b>{n}</b> {t("of 10 suggested", { class: "body" })}</span>
                     </div>
                     <div class="sd-track"><div class="sd-track__f" style={`width:${Math.min(n, 10) * 10}%`} /></div>
                     <div class="sd-diags">
@@ -136,7 +136,7 @@ export function DealsStep(): JSX.Element {
                             );
                         })}
                         {n === 0 ? (
-                            <p class="sd-accts__loading">{t("Add your first live deal — watch it wake.", { class: "body" })}</p>
+                            <p class="sd-accts__loading">{t("Add your first open deal to see what's missing from it.", { class: "body" })}</p>
                         ) : null}
                     </div>
                 </div>
@@ -145,7 +145,7 @@ export function DealsStep(): JSX.Element {
             <div class="sd-foot sd-foot--row">
                 {enough ? (
                     <button type="button" class="sd-btn" onClick={() => nextStep()}>
-                        {t("The math, then you're done →", { class: "body" })}
+                        {t("Next: your sales target →", { class: "body" })}
                     </button>
                 ) : n > 0 ? (
                     <button type="button" class="sd-btn sd-btn--ghost" onClick={() => nextStep()}>
@@ -158,12 +158,12 @@ export function DealsStep(): JSX.Element {
                         disabled
                         aria-disabled="true"
                     >
-                        {t("Add at least one live deal to go on", { class: "body" })}
+                        {t("Add at least one open deal to continue", { class: "body" })}
                     </button>
                 )}
                 {!enough && n > 0 ? (
                     <span class="sd-foot__note">
-                        {t("Under ten, it stays thin. Add the rest when you can.", { class: "body" })}
+                        {t("With fewer than ten deals, the workspace has less to compare and its suggestions will be limited. You can add the rest later.", { class: "body" })}
                     </span>
                 ) : null}
             </div>

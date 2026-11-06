@@ -20,18 +20,25 @@ export const BLESSED_UI_LABELS: ReadonlyArray<string> = [
     "Close",
 ];
 
-/** Canon Part III §10 — the state vocabulary, exactly as written. */
+/**
+ * Canon Part III §10 — the state vocabulary, exactly as written there
+ * (aligned to COPY_STANDARD §13/§17/§20 on 2026-11-05). A state names an
+ * observable condition. Retired as primary labels: Thin, Compounding,
+ * Still weak, Workable, Operating, Handoff-ready.
+ */
 export const STATE_VOCABULARY: ReadonlyArray<string> = [
     "Ready now",
-    "Workable",
-    "Thin",
-    "Operating",
-    "Needs intervention",
     "At risk",
-    "Handoff-ready",
-    "Partial",
-    "Compounding",
-    "Still weak",
+    "Needs intervention",
+    "Partially complete",
+    "Incomplete",
+    "Meets requirement",
+    "Below requirement",
+    "Founder-dependent",
+    "Partially documented",
+    "Usable with founder support",
+    "Hire-ready",
+    "Hire-ready and repeatable",
 ];
 
 const blessed = new Set(

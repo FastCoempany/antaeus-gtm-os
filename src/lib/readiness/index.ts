@@ -16,6 +16,7 @@ export {
     scoreDiscovery,
     scoreDeals,
     scoreProof,
-    scoreAllDimensions
+    scoreAllDimensions,
+    PILOT_RESULTS_GAP
 } from "./dimensions";
 export { evaluateReadiness, detectTransition } from "./verdict";

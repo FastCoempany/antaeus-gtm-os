@@ -22,7 +22,7 @@ export function HandoffStrip(): JSX.Element {
     const ready = stats.value.ready;
     const focus = inboundFocus.value || undefined;
     return (
-        <section class="sw-handoff" aria-label={t("Cross-room handoff")}>
+        <section class="sw-handoff" aria-label={t("Continue on another page")}>
             <header class="sw-section__head">
                 <p class="sw-section__kicker">{t("CARRY THE WORK FORWARD")}</p>
                 <h2 class="sw-section__title">{t("Hand the names off.")}</h2>

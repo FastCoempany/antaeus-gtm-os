@@ -1,7 +1,7 @@
 ---
 id: compose-this-weeks-outbound
 label: Compose this week's outbound
-description: Open Outbound Studio pre-filled with the hottest account from your Signal Console.
+description: Open Outbound Studio with the highest-priority account from Signal Console preselected.
 keywords: [outbound, compose, hottest, signal, account]
 action:
   kind: compose-context-and-route
@@ -11,11 +11,9 @@ action:
 
 # Compose this week's outbound
 
-Reads the hottest account from Signal Console (highest heat score),
-opens Outbound Studio with that account pre-filled in the operator
-rack. The send-line generator is one input away — pick the persona,
-the temperature, the trigger, the next question, and the line drafts
-itself.
+Selects the account with the highest priority score in Signal Console and
+opens Outbound Studio with that account prefilled. Confirm the buyer role,
+outreach stage, reason for outreach, and next question before generating a draft.
 
 Skips routing if Signal Console has no accounts (empty workspace).
-Source an account first via Sourcing Workbench, then re-run.
+Add an account through Prospecting Desk, then run the action again.

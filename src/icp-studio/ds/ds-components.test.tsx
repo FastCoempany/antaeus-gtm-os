@@ -37,10 +37,8 @@ describe("IcpObject", () => {
         __setDraftForTests(SHARP);
         const { container, getByText } = render(<IcpObject />);
         expect(container.querySelector(".icpd-statement")).not.toBeNull();
-        expect(getByText("Sharp enough to run.")).not.toBeNull();
-        // quality readout chip + the ICP card with the icp glyph
+        expect(getByText("ICP quality: highly specific")).not.toBeNull();
         expect(container.querySelector(".ds-card__icon .ds-icon")).not.toBeNull();
-        // sharp → the strategy-flow handoff is present
         expect(container.querySelector(".ds-handoff")).not.toBeNull();
     });
 });
@@ -50,9 +48,7 @@ describe("IcpBuilder", () => {
         __setDraftForTests(SHARP);
         const { container } = render(<IcpBuilder />);
         expect(container.querySelector(".ds-seg")).not.toBeNull();
-        // several library selects (industry / size / geo / buyer / pain / …)
         expect(container.querySelectorAll(".ds-input").length).toBeGreaterThanOrEqual(6);
-        // the dominant Save move is present + enabled for a sharp draft
         const save = container.querySelector(".ds-btn--accent");
         expect(save).not.toBeNull();
         expect((save as HTMLButtonElement).disabled).toBe(false);
@@ -61,9 +57,6 @@ describe("IcpBuilder", () => {
     it("the role toggle selects the non-first segment (not hijacked by a label)", () => {
         __setDraftForTests({ ...SHARP, role: "founder" });
         const { getByText } = render(<IcpBuilder />);
-        // Regression: the SegmentedControl must NOT be wrapped in a
-        // FormField <label> — a label forwards clicks to its first
-        // segment, so "First AE" would never select.
         fireEvent.click(getByText("First AE"));
         expect(draft.value.role).toBe("firstae");
     });
@@ -77,12 +70,11 @@ describe("IcpBuilder", () => {
 });
 
 describe("IcpStudioDS", () => {
-    it("composes the Wayfinder (with the brand lockup) over the Decision Bench", () => {
+    it("composes the Wayfinder over the ICP decision surface", () => {
         __setDraftForTests(SHARP);
         const { container } = render(<IcpStudioDS />);
         expect(container.querySelector(".ds-wayfinder")).not.toBeNull();
         expect(container.querySelector(".ds-wayfinder__mark svg")).not.toBeNull();
-        // the ObjectControls archetype — object dominant, controls aside
         expect(container.querySelector(".ds-arch-objectcontrols")).not.toBeNull();
     });
 });

@@ -9,6 +9,7 @@ import {
     loadObservationsForRanking
 } from "@/birdseye/lib/context";
 import { reportError } from "@/lib/observability";
+import { isPreviewLane } from "@/lib/preview-lane";
 import {
     MOTION_ROOMS,
     MOTION_STAGES,
@@ -21,18 +22,13 @@ import {
 import "./ground.css";
 
 /**
- * The Ground (founder-locked 2026-07-08) — the app's ONE jump-to-any-
- * room summon, supersedes the Ctrl+K palette. Every room quietly stands
- * on a near-invisible ground line at the foot of the viewport (the brand
- * mark's signature stroke). Touch it — click, or press G — and the
- * motion map RISES FROM BENEATH the room: the 22 rooms as the actual GTM
- * motion, you-are-here lit, the system's suggested-next glowing (from
- * the birdseye ranker), type-to-filter once risen. Esc (or clicking the
- * scrim, or jumping) sinks it back. Summoned-then-gone — never a rail
- * (canon §6, the hallway); mouse-first with the keyboard as accelerator.
+ * Workspace map — the shared jump-to-any-room surface.
  *
- * The myth is the mechanism: Antaeus gets his strength back by touching
- * the ground.
+ * Internal names such as GroundLine/openGround and `fromSurface=ground`
+ * remain stable to avoid unnecessary routing/telemetry churn. The
+ * customer-facing concept is simply a workspace map: open it from the
+ * footer handle or with G, see the current room, see the recommended
+ * next workspace, filter, and navigate.
  */
 
 const groundOpen = signal(false);
@@ -42,8 +38,7 @@ const suggested = signal<NextMove | null>(null);
 let keysBound = false;
 
 async function loadSuggestion(): Promise<void> {
-    // Re-rank on every open — the loaders are cheap localStorage reads
-    // and the workspace can move mid-session.
+    // Re-rank on every open because the workspace may change mid-session.
     try {
         const observations = await loadObservationsForRanking().catch(() => []);
         const result = rankNextMove({
@@ -96,14 +91,12 @@ function bindKeys(): void {
     keysBound = true;
     document.addEventListener("keydown", (e: KeyboardEvent) => {
         if (e.key === "Escape" && groundOpen.value) {
-            // The Ground sits above whatever is open beneath it — stop the
-            // event so a drawer under the map doesn't also close.
+            // The workspace map sits above whatever is open beneath it.
             e.stopPropagation();
             closeGround();
             return;
         }
-        // G summons the ground — but never while typing somewhere, and
-        // never with a modifier held (don't fight browser shortcuts).
+        // G opens the workspace map, except while typing or using a modifier.
         if (
             (e.key === "g" || e.key === "G") &&
             !groundOpen.value &&
@@ -138,22 +131,18 @@ export function GroundLine(): JSX.Element {
     const sugRoomId = sug ? roomIdForUrl(sug.targetUrl) : null;
     const q = groundQuery.value;
     const visible = new Set(filterMotionRooms(q).map((r) => r.id));
+    const preview = isPreviewLane();
 
     return (
         <div class="gnd">
-            {/* The ground line — the brand mark's signature stroke, at the
-                foot of every room. Whisper-quiet until wanted. */}
             <button
                 type="button"
                 class="gnd-line"
                 onClick={openGround}
-                title={t("Touch the ground — see the whole motion (G)", { class: "body" })}
-                aria-label={t("Open the motion map", { class: "body" })}
+                title={t("Open workspace map (G)", { class: "body" })}
+                aria-label={t("Open workspace map", { class: "body" })}
             >
                 <span class="gnd-stroke" />
-                {/* The Grip (founder-picked 2026-07-14) — the mark docked
-                    in a small raised tab with grip lines, so the ground
-                    line reads as a handle, never a page border. */}
                 <span class="gnd-tab" aria-hidden="true">
                     <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
                         <path d="M14 38L24 10l10 28" stroke="currentColor" stroke-width="4" />
@@ -166,7 +155,7 @@ export function GroundLine(): JSX.Element {
                     </span>
                 </span>
                 <span class="gnd-whisper">
-                    {t("touch the ground · see the whole motion · G", { class: "body" })}
+                    {t("open workspace map · G", { class: "body" })}
                 </span>
             </button>
 
@@ -181,32 +170,32 @@ export function GroundLine(): JSX.Element {
             <div
                 class={`gnd-panel${open ? " is-up" : ""}`}
                 role="dialog"
-                aria-label={t("The motion map", { class: "body" })}
+                aria-label={t("Workspace map", { class: "body" })}
             >
                 <div class="gnd-body">
-                    <div class="gnd-k">{t("The ground — your whole motion")}</div>
-                    <div class="gnd-t">{t("Where do you want to stand?")}</div>
+                    <div class="gnd-k">{t("Workspace map")}</div>
+                    <div class="gnd-t">{t("Where do you want to go?")}</div>
                     <div class="gnd-s">
                         {hereRoom ? (
                             <>
                                 {t("You're in")} <b>{hereRoom.label}</b>
                             </>
                         ) : (
-                            t("The whole workspace, laid out as your motion", { class: "body" })
+                            t("All workspaces in sales-process order", { class: "body" })
                         )}
                         {sug && sugRoomId ? (
                             <>
                                 {" · "}
-                                {t("the system suggests")}{" "}
+                                {t("Recommended next workspace:")}{" "}
                                 <b class="gnd-sug">{MOTION_ROOMS.find((r) => r.id === sugRoomId)?.label}</b>
-                                {" — "}
+                                {" · "}
                                 {sug.reason}
                             </>
                         ) : null}
                     </div>
                     <input
                         class="gnd-filter"
-                        placeholder={t("…or just start typing a room", { class: "body" })}
+                        placeholder={t("…or start typing a workspace", { class: "body" })}
                         value={q}
                         onInput={(e) =>
                             (groundQuery.value = (e.currentTarget as HTMLInputElement).value)
@@ -220,6 +209,26 @@ export function GroundLine(): JSX.Element {
                                     const isHere = r.id === here;
                                     const isSug = r.id === sugRoomId && !isHere;
                                     const dim = !visible.has(r.id);
+                                    if (preview && r.id === "onboarding") {
+                                        return (
+                                            <span
+                                                class={`gnd-rm is-locked${dim ? " is-dim" : ""}`}
+                                                key={r.id}
+                                                tabIndex={0}
+                                                aria-disabled="true"
+                                                aria-describedby="gnd-onb-why"
+                                            >
+                                                <span class="gnd-rn">{r.label}</span>
+                                                <span class="gnd-rd">{t("not open in the preview")}</span>
+                                                <span class="gnd-lock-why" id="gnd-onb-why" role="tooltip">
+                                                    {t(
+                                                        "Onboarding is where a new seller sets up the workspace. They define who they sell to, add target accounts, and record the judgment Antaeus cannot reliably infer about active deals, such as the champion, final approver, current blocker, and real next step. Antaeus enriches the account and company data around those inputs. This preview starts after onboarding with a workspace that is already set up.",
+                                                        { class: "body" }
+                                                    )}
+                                                </span>
+                                            </span>
+                                        );
+                                    }
                                     return (
                                         <a
                                             class={`gnd-rm${isHere ? " is-here" : ""}${isSug ? " is-next" : ""}${dim ? " is-dim" : ""}`}

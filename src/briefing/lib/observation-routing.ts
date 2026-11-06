@@ -29,7 +29,7 @@ const ROOM_FOR_TYPE: Partial<Record<FocusedObjectType, RoomTarget>> = {
     account: { path: "/signal-console/", label: "Signal Console" },
     signal: { path: "/signal-console/", label: "Signal Console" },
     proof: { path: "/pilot-desk/", label: "Pilot Desk" },
-    call: { path: "/call-planner/", label: "Call Planner" },
+    call: { path: "/discovery-studio/", label: "Discovery Studio" },
     advisor: { path: "/call-in-a-favor/", label: "Call in a Favor" },
     focus: { path: "/territory-architect/", label: "Territory Architect" },
     approach: { path: "/territory-architect/", label: "Territory Architect" }

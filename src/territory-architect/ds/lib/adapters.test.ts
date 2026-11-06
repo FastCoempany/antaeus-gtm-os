@@ -61,7 +61,7 @@ describe("fieldRead", () => {
     it("reads empty when there are no focuses", () => {
         const r = fieldRead();
         expect(r.band).toBe("empty");
-        expect(r.operatorMove.toLowerCase()).toContain("division");
+        expect(r.operatorMove.toLowerCase()).toContain("territory segment");
     });
     it("scores up as focuses + active accounts land", () => {
         setFocuses([focus(), focus({ id: "th2", title: "Second bet" }), focus({ id: "th3", title: "Third bet" })]);

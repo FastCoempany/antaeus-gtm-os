@@ -11,6 +11,7 @@ import type {
     ProspectStage,
     QueryCard
 } from "./types";
+import { parseProspectResearch, parseQueryCardCheck } from "./research-parse";
 
 /**
  * Sourcing Workbench ↔ Supabase row bridge.
@@ -116,7 +117,8 @@ export function rowToQueryCard(
         notes: asString(data["notes"]),
         targetIcp: asString(data["targetIcp"]),
         createdAt,
-        updatedAt
+        updatedAt,
+        ...parseQueryCardCheck(data)
     };
 }
 
@@ -133,7 +135,10 @@ export function queryCardToInsert(
             query: card.query,
             intent: card.intent,
             notes: card.notes,
-            targetIcp: card.targetIcp
+            targetIcp: card.targetIcp,
+            ...(card.lastCheckedAt ? { lastCheckedAt: card.lastCheckedAt } : {}),
+            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {}),
+            ...(card.lastCheckedBy ? { lastCheckedBy: card.lastCheckedBy } : {})
         } as unknown as Json
     };
 }
@@ -148,7 +153,10 @@ export function queryCardToUpdate(
             query: card.query,
             intent: card.intent,
             notes: card.notes,
-            targetIcp: card.targetIcp
+            targetIcp: card.targetIcp,
+            ...(card.lastCheckedAt ? { lastCheckedAt: card.lastCheckedAt } : {}),
+            ...(card.lastNewCount !== undefined ? { lastNewCount: card.lastNewCount } : {}),
+            ...(card.lastCheckedBy ? { lastCheckedBy: card.lastCheckedBy } : {})
         } as unknown as Json
     };
 }
@@ -168,6 +176,7 @@ export function rowToProspect(
     if (!id) return null;
     const data = asObject(r.data) ?? {};
     if (data["kind"] !== KIND_PROSPECT) return null;
+    const webResearch = parseProspectResearch(data["webResearch"]);
     const createdAt = asString(r.created_at) || new Date().toISOString();
     const updatedAt =
         asString(r.updated_at) || asString(r.created_at) || createdAt;
@@ -183,7 +192,8 @@ export function rowToProspect(
         approach: asString(data["approach"]),
         notes: asString(data["notes"]),
         createdAt,
-        updatedAt
+        updatedAt,
+        ...(webResearch ? { webResearch } : {})
     };
 }
 
@@ -204,7 +214,8 @@ export function prospectToInsert(
             stage: prospect.stage,
             entryPoint: prospect.entryPoint,
             approach: prospect.approach,
-            notes: prospect.notes
+            notes: prospect.notes,
+            ...(prospect.webResearch ? { webResearch: prospect.webResearch } : {})
         } as unknown as Json
     };
 }
@@ -223,7 +234,8 @@ export function prospectToUpdate(
             stage: prospect.stage,
             entryPoint: prospect.entryPoint,
             approach: prospect.approach,
-            notes: prospect.notes
+            notes: prospect.notes,
+            ...(prospect.webResearch ? { webResearch: prospect.webResearch } : {})
         } as unknown as Json
     };
 }

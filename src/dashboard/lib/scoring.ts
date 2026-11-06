@@ -21,22 +21,22 @@ export function buildRiskReasons(
     profile: SignalProfile
 ): string[] {
     const reasons: string[] = [];
-    if (profile.risk) pushReason(reasons, "risk " + profile.risk);
-    if (profile.staleDays) pushReason(reasons, profile.staleDays + "d stale");
+    if (profile.risk) pushReason(reasons, "risk score " + Math.min(100, profile.risk) + " out of 100");
+    if (profile.staleDays) pushReason(reasons, "deal record unchanged for " + profile.staleDays + " days");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
-    if (profile.proofThin) pushReason(reasons, "evidence thin");
+    if (profile.proofThin) pushReason(reasons, "supporting evidence is incomplete");
     if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
     if (profile.recoveryCount) pushReason(reasons, "in the recovery queue");
-    if (profile.missingChampion) pushReason(reasons, "no champion yet");
-    if (profile.weakChampion) pushReason(reasons, "champion is weak");
+    if (profile.missingChampion) pushReason(reasons, "no champion is recorded");
+    if (profile.weakChampion) pushReason(reasons, "champion details are incomplete");
     if (profile.missingNextStep) pushReason(reasons, "no next step set");
-    if (profile.threadingRisk) pushReason(reasons, "single-threaded");
+    if (profile.threadingRisk) pushReason(reasons, "limited stakeholder coverage");
     if (profile.stageStuck) pushReason(reasons, "stuck at this stage");
-    if (profile.dealRoomPressureScore >= 60) pushReason(reasons, "Deal Workspace under pressure");
-    if (profile.readinessDealsWeak) pushReason(reasons, "deals is the weakest dimension");
-    if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");
-    if (profile.linkedRoomTop) pushReason(reasons, "top of its room");
-    if (profile.hasAutopsy) pushReason(reasons, "past failure on the record");
+    if (profile.dealRoomPressureScore >= 60) pushReason(reasons, "Deal Workspace reports elevated risk");
+    if (profile.readinessDealsWeak) pushReason(reasons, "your open-deal records are below the readiness bar");
+    if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
+    if (profile.linkedRoomTop) pushReason(reasons, "prioritized by the source workspace");
+    if (profile.hasAutopsy) pushReason(reasons, "a deal-risk review is available");
     const meta = Array.isArray(card?.meta) ? card!.meta : [];
     for (const item of meta) {
         if (/\$/.test(item)) continue;
@@ -54,30 +54,30 @@ export function buildMoveReasons(
 ): string[] {
     const reasons: string[] = [];
     if (profile.causeId) pushReason(reasons, formatCauseLabel(profile.causeId));
-    if (profile.heat) pushReason(reasons, "heat " + profile.heat);
-    if (profile.coveragePressure) pushReason(reasons, "coverage pressure");
-    if (profile.highConfidenceCount >= 2) pushReason(reasons, "high-conf cluster");
-    if (profile.recentCount >= 2) pushReason(reasons, "fresh signals");
+    if (profile.heat) pushReason(reasons, "account priority score " + profile.heat + " out of 99");
+    if (profile.coveragePressure) pushReason(reasons, "pipeline coverage is below target");
+    if (profile.highConfidenceCount >= 2) pushReason(reasons, "multiple signals are marked high-confidence");
+    if (profile.recentCount >= 2) pushReason(reasons, "multiple recent signals are recorded");
     if (profile.truthDebtCount >= 2) pushReason(reasons, "qualification gaps");
-    if (profile.proofThin) pushReason(reasons, "evidence thin");
+    if (profile.proofThin) pushReason(reasons, "supporting evidence is incomplete");
     if (profile.nextStepOverdue) pushReason(reasons, "next step overdue");
     if (profile.missingNextStep) pushReason(reasons, "no next step set");
-    if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");
-    if (profile.signalRoomMotionReady) pushReason(reasons, "signal room ready");
-    if (profile.signalRoomEvidenceThin) pushReason(reasons, "evidence still thin");
-    if (profile.readinessOutreachWeak) pushReason(reasons, "outreach is the weakest dimension");
-    if (profile.readinessDiscoveryWeak) pushReason(reasons, "discovery is the weakest dimension");
+    if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
+    if (profile.signalRoomMotionReady) pushReason(reasons, "Signal Console has sufficient context for outreach");
+    if (profile.signalRoomEvidenceThin) pushReason(reasons, "account signal evidence is incomplete");
+    if (profile.readinessOutreachWeak) pushReason(reasons, "your outreach is below the readiness bar");
+    if (profile.readinessDiscoveryWeak) pushReason(reasons, "your discovery calls are below the readiness bar");
     if (profile.readinessPlaybookWeak && family === "advisor") {
-        pushReason(reasons, "playbook is the weakest dimension");
+        pushReason(reasons, "your pilot evidence is below the readiness bar");
     }
     if (profile.hasReplies) pushReason(reasons, "the prospect replied");
-    if (family === "advisor" || profile.hasAdvisor) pushReason(reasons, "advisor available");
-    if (family === "opportunity" || profile.hasSignalConsole) pushReason(reasons, "signals are live");
-    if (profile.linkedRoomTop) pushReason(reasons, "top of its room");
-    if (profile.roomReadiness >= 2) pushReason(reasons, "room is ready");
-    if (!reasons.length && profile.risk) pushReason(reasons, "risk " + profile.risk);
-    if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, "room is ready");
-    if (!reasons.length) pushReason(reasons, "next move is ready");
+    if (family === "advisor" || profile.hasAdvisor) pushReason(reasons, "an advisor request can be reviewed");
+    if (family === "opportunity" || profile.hasSignalConsole) pushReason(reasons, "account signal context is available");
+    if (profile.linkedRoomTop) pushReason(reasons, "prioritized by the source workspace");
+    if (profile.roomReadiness >= 2) pushReason(reasons, "the source workspace has enough context to proceed");
+    if (!reasons.length && profile.risk) pushReason(reasons, "risk score " + Math.min(100, profile.risk) + " out of 100");
+    if (!reasons.length && profile.hasOpenDeal) pushReason(reasons, "an open deal is recorded");
+    if (!reasons.length) pushReason(reasons, "an action is available for review");
     return reasons.slice(0, 4);
 }
 
@@ -93,25 +93,25 @@ export function buildSystemReasons(profile: SignalProfile): string[] {
         pushReason(reasons, "readiness " + profile.readinessScore + "/100");
     }
     if (profile.readinessWeakestDimension) {
-        pushReason(reasons, profile.readinessWeakestDimension.toLowerCase() + " weakest dimension");
+        pushReason(reasons, profile.readinessWeakestDimension.toLowerCase() + " is the part of readiness furthest behind");
     }
-    if (profile.quotaPressureScore >= 60) pushReason(reasons, "quota pressure");
+    if (profile.quotaPressureScore >= 60) pushReason(reasons, "the quota plan increases this item's priority");
     if (profile.quotaQualityBand) {
         pushReason(reasons, "plan " + profile.quotaQualityBand.toLowerCase());
     }
-    pushReason(reasons, "local fallback active");
+    pushReason(reasons, "using data saved on this device");
     return reasons.slice(0, 4);
 }
 
 export function buildIcpReasons(profile: SignalProfile): string[] {
     const reasons: string[] = [];
-    if (profile.readinessIcpWeak) pushReason(reasons, "ICP is the weakest dimension");
+    if (profile.readinessIcpWeak) pushReason(reasons, "your targeting is below the readiness bar");
     pushReason(reasons, "no saved ICP yet");
     if (profile.quotaPressureScore >= 60) {
-        pushReason(reasons, "quota pressure depends on it");
+        pushReason(reasons, "targeting criteria are needed to evaluate planned pipeline coverage");
     }
     if (profile.contextSignals || profile.contextAccounts) {
-        pushReason(reasons, "signals + accounts already live");
+        pushReason(reasons, "signals or accounts are already recorded");
     }
     if (profile.contextDeals) pushReason(reasons, "deals depend on ICP");
     return reasons.slice(0, 4);

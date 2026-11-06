@@ -48,7 +48,7 @@ export function getCooldownStatus(
         const remaining = Math.ceil(tier.cooldownDays - days);
         return {
             ok: false,
-            label: `Cooling ${remaining}d`,
+            label: `Wait ${remaining}d before another request`,
             daysRemaining: remaining
         };
     }

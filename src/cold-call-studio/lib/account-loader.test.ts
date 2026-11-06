@@ -33,8 +33,11 @@ describe("loadAccountOptions", () => {
         expect(loadAccountOptions(s)).toHaveLength(0);
     });
 
-    it("projects valid accounts and ranks by heat desc", () => {
+    it("projects valid accounts and ranks by the Signal Console heat", () => {
         const s = new MemStorage();
+        const fresh = new Date().toISOString();
+        // Stored `heat` numbers deliberately disagree with the signals —
+        // the loader must show the number Signal Console computes.
         s.seed(
             "gtmos_sc_v4",
             JSON.stringify({
@@ -42,17 +45,18 @@ describe("loadAccountOptions", () => {
                     {
                         id: "1",
                         name: "Beta",
-                        heat: 50,
+                        heat: 95,
                         signals: [
-                            { headline: "Hiring spike at Beta" }
+                            { id: "b1", headline: "Hiring spike at Beta", published_date: fresh }
                         ]
                     },
                     {
                         id: "2",
                         name: "Acme",
-                        heat: 80,
+                        heat: 10,
                         signals: [
-                            { headline: "Acme raised Series B" }
+                            { id: "a1", headline: "Acme raised Series B", published_date: fresh, ai: true },
+                            { id: "a2", headline: "New CRO at Acme", published_date: fresh }
                         ]
                     },
                     { id: "3", name: "Gamma", heat: 0 }
@@ -61,7 +65,9 @@ describe("loadAccountOptions", () => {
         );
         const out = loadAccountOptions(s);
         expect(out.map((a) => a.name)).toEqual(["Acme", "Beta", "Gamma"]);
-        expect(out[0]?.heat).toBe(80);
+        // 18 (AI signal) + 12 (manual signal), both fresh.
+        expect(out[0]?.heat).toBe(30);
+        expect(out[1]?.heat).toBe(12);
         expect(out[0]?.topSignal).toContain("Series B");
     });
 

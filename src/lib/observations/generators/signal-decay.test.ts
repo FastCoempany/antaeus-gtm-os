@@ -109,7 +109,7 @@ describe("deriveSignalDecayObservations — voice + shape", () => {
             NOW
         );
         expect(c!.observationText).toContain("Acme");
-        expect(c!.observationText).toContain("silent");
+        expect(c!.observationText).toContain("No new signals have been recorded");
         expect(c!.observationText).toContain("21");
     });
 

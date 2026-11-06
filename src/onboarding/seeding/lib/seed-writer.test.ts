@@ -61,6 +61,17 @@ describe("writeSeedingDraft", () => {
         expect(health.hot_accounts[0]!.name).toBe("Northwind");
     });
 
+    it("never stores a cold row's placeholder text as a signal", () => {
+        const s = new FakeStorage();
+        writeSeedingDraft(
+            draftOf({ accountNames: ["Cobalt"] }),
+            [{ name: "Cobalt", signal: "Account research unavailable", heat: 0, cold: true }],
+            { storage: s, now: 1 }
+        );
+        const sc = s.json("gtmos_sc_v4") as { accounts: Array<{ name: string; signals: unknown[] }> };
+        expect(sc.accounts[0]!.signals).toEqual([]);
+    });
+
     it("writes live deals into gtmos_deal_workspaces with the judgment fields", () => {
         const s = new FakeStorage();
         writeSeedingDraft(

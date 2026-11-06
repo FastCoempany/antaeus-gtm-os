@@ -4,6 +4,8 @@ import {
     loadHottestAccount,
     loadLatestTouch
 } from "./context";
+import { heat as computeHeat } from "@/signal-console/lib/heat";
+import { loadAccounts } from "@/signal-console/lib/persistence";
 
 class MemStorage {
     private store = new Map<string, string>();
@@ -68,6 +70,33 @@ describe("loadBestIcp", () => {
 describe("loadHottestAccount", () => {
     it("returns null when storage is null or empty", () => {
         expect(loadHottestAccount(null)).toBeNull();
+    });
+
+    it("shows the priority Signal Console computes for the account, not a stored `_heat`", () => {
+        const s = new MemStorage();
+        const fresh = new Date().toISOString();
+        s.seed(
+            "gtmos_sc_v4",
+            JSON.stringify({
+                accounts: [
+                    {
+                        id: "acc_boeing",
+                        name: "Boeing",
+                        _heat: 93,
+                        signals: [
+                            { id: "s1", headline: "Hiring ramp", published_date: fresh, ai: true },
+                            { id: "s2", headline: "New CHRO", published_date: fresh }
+                        ]
+                    },
+                    { id: "acc_gap", name: "Gap", _heat: 99, signals: [] }
+                ]
+            })
+        );
+        const boeing = loadAccounts(s).find((a) => a.name === "Boeing")!;
+        const hottest = loadHottestAccount(s);
+        expect(hottest?.name).toBe("Boeing");
+        expect(hottest?.heat).toBe(computeHeat(boeing));
+        expect(hottest?.heat).toBe(30);
     });
 
     it("picks the account with the highest heat", () => {

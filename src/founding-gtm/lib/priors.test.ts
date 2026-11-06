@@ -37,7 +37,7 @@ describe("priorForSection", () => {
     it("the note names the deal size and never claims to be the operator's own result", () => {
         const p = priorForSection("why_we_win", 80_000)!;
         expect(p.note).toContain("$80k");
-        expect(p.note.toLowerCase()).toContain("how it usually goes");
+        expect(p.note).toContain("not measured results from your workspace");
         expect(p.note.toLowerCase()).toContain("your own deals");
     });
 
@@ -87,7 +87,7 @@ describe("withPriorsForShare", () => {
     it("an empty section shares its prior, note first — self-labeling", () => {
         const [shared] = withPriorsForShare([empty], 50_000);
         expect(shared!.body.length).toBeGreaterThanOrEqual(3);
-        expect(shared!.body[0]!.toLowerCase()).toContain("how it usually goes");
+        expect(shared!.body[0]!).toContain("not measured results from your workspace");
     });
 
     it("ready sections pass through untouched", () => {

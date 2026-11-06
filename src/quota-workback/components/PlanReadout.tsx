@@ -18,16 +18,16 @@ export function PlanReadout(): JSX.Element {
     const summary =
         m.qualityScore >= 82
             ? t(
-                  "The math is believable. Make sure Dashboard coverage and Outbound execution stay in sync with it.",
+                  "The plan's assumptions are close to benchmark. Keep pipeline coverage and daily outreach in line with it.",
                   { class: "body" }
               )
             : m.qualityScore >= 68
               ? t(
-                    "The math is workable, but one weak conversion assumption can break the quarter. Tighten the weakest assumption before you trust the plan.",
+                    "The plan is usable, but one conversion assumption is optimistic enough to put the quarter at risk. Adjust that assumption before you rely on the plan.",
                     { class: "body" }
                 )
               : t(
-                    "The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.",
+                    "Several assumptions are far from benchmark, so the plan is not reliable yet. Adjust the conversion assumptions or lower the target before you rely on it.",
                     { class: "body" }
                 );
 
@@ -48,7 +48,7 @@ export function PlanReadout(): JSX.Element {
                 <PlanCard
                     label={t("Touches / week")}
                     value={fmt(m.touchesWeek)}
-                    note={t("Run {n} touches/day so the outbound machine stays on pace.", { class: "body" }).replace("{n}", String(m.touchesDay))}
+                    note={t("Send {n} messages and calls per working day to stay on plan.", { class: "body" }).replace("{n}", String(m.touchesDay))}
                 />
                 <PlanCard
                     label={t("Meetings / week")}

@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
     buildDiscoveryHref,
-    hrefToCallPlanner,
     hrefToDealWorkspace,
     hrefToFutureAutopsy
 } from "./handoff";
@@ -65,20 +64,10 @@ describe("convenience builders", () => {
         expect(u.searchParams.get("focusObject")).toBe("Meridian");
     });
 
-    it("hrefToCallPlanner routes to /call-planner/ with ?account=", () => {
-        const u = new URL(hrefToCallPlanner("Meridian"), "http://x");
-        expect(u.pathname).toBe("/call-planner/");
-        expect(u.searchParams.get("focusObject")).toBe("Meridian");
-        // Call Planner's inbound reader uses `?account=` for prefill.
-        expect(u.searchParams.get("account")).toBe("Meridian");
-    });
-
     it("convenience builders omit focusObject when account is empty", () => {
         const u1 = new URL(hrefToDealWorkspace(), "http://x");
         const u2 = new URL(hrefToFutureAutopsy(), "http://x");
-        const u3 = new URL(hrefToCallPlanner(), "http://x");
         expect(u1.searchParams.get("focusObject")).toBeNull();
         expect(u2.searchParams.get("focusObject")).toBeNull();
-        expect(u3.searchParams.get("focusObject")).toBeNull();
     });
 });

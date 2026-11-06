@@ -151,6 +151,17 @@ describe("aggregateReadinessInput", () => {
         expect(r.discoveryAdvancedCalls).toBe(4);
     });
 
+    it("counts prepared calls from Discovery Studio's call log plus legacy Call Planner agendas", () => {
+        const r = aggregateReadinessInput({
+            storage: storage({
+                gtmos_discovery_call_log: { calls: [{ id: "a" }, { id: "b" }] },
+                // The retired Call Planner saved a single latest agenda.
+                gtmos_discovery_agenda: { accountName: "Acme" }
+            })
+        });
+        expect(r.callPlannerSessions).toBe(3);
+    });
+
     it("classifies deals by stage + next-step + loss reason", () => {
         const r = aggregateReadinessInput({
             storage: storage({
@@ -217,13 +228,15 @@ describe("aggregateReadinessInput", () => {
         expect(r.advisorDeployments).toBe(4);
     });
 
-    it("clamps handoffSectionsReady to 0..7", () => {
+    it("derives handoffSectionsReady live — a stale snapshot cannot disagree with Founding GTM", () => {
+        // The published snapshot claims 99 (and -3); the workspace has no
+        // handoff material, so Founding GTM itself would show 0 of 7.
         const r = aggregateReadinessInput({
             storage: storage({
                 gtmos_founding_gtm_health: { sections_ready: 99 }
             })
         });
-        expect(r.handoffSectionsReady).toBe(7);
+        expect(r.handoffSectionsReady).toBe(0);
 
         const r2 = aggregateReadinessInput({
             storage: storage({

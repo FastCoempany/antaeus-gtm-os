@@ -40,12 +40,12 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
             <div class="fg-ceremony__panel">
                 <p class="fg-ceremony__kicker">{t("MILESTONE")}</p>
                 <h2 class="fg-ceremony__headline">
-                    The kit just became real.
+                    {t("Your handoff document is now usable.", { class: "body" })}
                 </h2>
                 <p class="fg-ceremony__sub">
-                    Readiness moved from <strong>{props.fromLabel}</strong>{" "}
-                    to <strong>{props.toLabel}</strong>. This kit is now
-                    something a first hire could actually open on day one.
+                    {t("Readiness changed from", { class: "body" })} <strong>{props.fromLabel}</strong>{" "}
+                    {t("to")} <strong>{props.toLabel}</strong>.{" "}
+                    {t("A new hire could read this document on their first day and follow how you sell, with you available to answer questions.", { class: "body" })}
                 </p>
                 <div class="fg-ceremony__counts">
                     <div class="fg-ceremony__count-cell">
@@ -68,7 +68,7 @@ export function CeremonyOverlay(props: CeremonyOverlayProps): JSX.Element {
                         class="fg-ceremony__btn fg-ceremony__btn--primary"
                         onClick={closeCeremony}
                     >
-                        Read the kit
+                        {t("Read the handoff document")}
                     </button>
                 </div>
             </div>

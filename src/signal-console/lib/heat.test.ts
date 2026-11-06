@@ -3,6 +3,7 @@ import {
     heat,
     heatBand,
     heatCls,
+    heatFromStoredRow,
     heatMetrics,
     rankByHeat,
     recency
@@ -181,5 +182,45 @@ describe("rankByHeat", () => {
 
     it("returns empty array for empty input", () => {
         expect(rankByHeat([], NOW)).toEqual([]);
+    });
+});
+
+describe("heatFromStoredRow — one account-priority number for every room", () => {
+    it("computes from the row's signals and ignores a stale stored heat", () => {
+        const row = {
+            id: "a",
+            name: "Boeing",
+            _heat: 93,
+            heat: 93,
+            signals: [
+                { id: "s1", published_date: daysAgo(2), ai: true },
+                { id: "s2", published_date: daysAgo(40), confidence: 0.95 }
+            ]
+        };
+        const expected = heat(
+            acct([
+                sig({ id: "s1", published_date: daysAgo(2), ai: true }),
+                sig({ id: "s2", published_date: daysAgo(40), confidence: 0.95 })
+            ]),
+            NOW
+        );
+        expect(heatFromStoredRow(row, NOW)).toBe(expected);
+        expect(heatFromStoredRow(row, NOW)).not.toBe(93);
+    });
+
+    it("ignores signals without an id, as Signal Console's parser does", () => {
+        const row = { signals: [{ published_date: daysAgo(1) }, { id: "x", published_date: daysAgo(1) }] };
+        expect(heatFromStoredRow(row, NOW)).toBe(12);
+    });
+
+    it("an empty signals array scores 0 even with a stored number", () => {
+        expect(heatFromStoredRow({ heat: 80, signals: [] }, NOW)).toBe(0);
+    });
+
+    it("falls back to the stored number only for legacy rows with no signals array", () => {
+        expect(heatFromStoredRow({ _heat: 70 }, NOW)).toBe(70);
+        expect(heatFromStoredRow({ heat: 0, _heat: 80 }, NOW)).toBe(0);
+        expect(heatFromStoredRow({ heat: 140 }, NOW)).toBe(99);
+        expect(heatFromStoredRow(null, NOW)).toBe(0);
     });
 });

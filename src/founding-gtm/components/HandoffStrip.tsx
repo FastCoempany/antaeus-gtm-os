@@ -33,10 +33,10 @@ export function HandoffStrip(): JSX.Element {
                 </h2>
                 <p class="fg-handoff__sub">
                     The kit is read-mode here. Real updates come from the
-                    rooms that feed it.
+                    work you record elsewhere in the app.
                 </p>
             </header>
-            <nav class="fg-handoff__row" aria-label={t("Cross-room handoff")}>
+            <nav class="fg-handoff__row" aria-label={t("Continue on another page")}>
                 <a
                     class="fg-handoff__cta fg-handoff__cta--primary"
                     href="/dashboard/"

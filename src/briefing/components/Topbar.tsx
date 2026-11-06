@@ -19,7 +19,7 @@ export function Topbar(): JSX.Element {
         <header class="bf-topbar">
             <p class="bf-topbar__kicker">{t("Briefing · weekly read")}</p>
             <h1 class="bf-topbar__title">
-                What the system saw this week.
+                What changed this week.
             </h1>
             <p class="bf-topbar__sub">
                 The operator's stated preferences are a hypothesis. The

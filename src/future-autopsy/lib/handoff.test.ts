@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
     buildFutureAutopsyRoomHref,
-    hrefToCallPlanner,
     hrefToDealWorkspace,
     hrefToDiscoveryStudio,
     hrefToPoC
@@ -29,9 +28,9 @@ describe("buildFutureAutopsyRoomHref", () => {
 
     it("preserves existing query params", () => {
         const url = buildFutureAutopsyRoomHref({
-            href: "/call-planner/?account=Acme",
+            href: "/discovery-studio/?account=Acme",
             focusObject: "Acme",
-            roomLabel: "Call Planner"
+            roomLabel: "Discovery Studio"
         });
         const p = params(url);
         expect(p.get("account")).toBe("Acme");
@@ -56,18 +55,14 @@ describe("convenience builders", () => {
         );
     });
 
-    it("hrefToCallPlanner targets call-planner + carries account", () => {
-        const url = hrefToCallPlanner("Acme");
-        expect(url.startsWith("/call-planner/?")).toBe(true);
-        expect(params(url).get("account")).toBe("Acme");
-        expect(params(url).get("focusRoom")).toBe("Call Planner");
-    });
-
     it("hrefToPoC targets poc-framework", () => {
         expect(hrefToPoC("Acme").startsWith("/pilot-desk/?")).toBe(true);
     });
 
     it("hrefToDiscoveryStudio targets discovery-studio + carries account", () => {
-        expect(params(hrefToDiscoveryStudio("Acme")).get("account")).toBe("Acme");
+        const url = hrefToDiscoveryStudio("Acme");
+        expect(url.startsWith("/discovery-studio/?")).toBe(true);
+        expect(params(url).get("account")).toBe("Acme");
+        expect(params(url).get("focusRoom")).toBe("Discovery Studio");
     });
 });

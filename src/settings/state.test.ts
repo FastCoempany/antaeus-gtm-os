@@ -83,15 +83,18 @@ vi.mock("./lib/cloud-sync", async () => {
     return {
         ...actual,
         exportCloudWorkspace: vi.fn().mockResolvedValue({
-            schemaVersion: 1,
-            source: "antaeus-cloud-export-v1",
+            schemaVersion: 2,
+            source: "antaeus-workspace-export-v2",
             capturedAt: "2026-06-02T18:00:00.000Z",
             workspaceId: "ws-1",
+            workspaceName: "Acme",
             userEmail: "test@example.com",
-            tables: {
-                icps: [{ id: "i1" }, { id: "i2" }],
-                deals: [{ id: "d1" }]
-            },
+            sections: {},
+            manifest: [
+                { section: "Your company and who you sell to", label: "Ideal customer profiles", table: "icps", rowCount: 2, error: null },
+                { section: "Deals", label: "Deals", table: "deals", rowCount: 1, error: null }
+            ],
+            notIncluded: [],
             perTableCount: { icps: 2, deals: 1 },
             errors: [],
             totalRows: 3
@@ -119,7 +122,7 @@ describe("exportCloudData", () => {
         await exportCloudData();
         expect(toast.value).not.toBeNull();
         expect(toast.value!.tone).toBe("good");
-        expect(toast.value!.message).toContain("Cloud export ready");
+        expect(toast.value!.message).toContain("Workspace downloaded");
         expect(toast.value!.message).toContain("3");
     });
 });

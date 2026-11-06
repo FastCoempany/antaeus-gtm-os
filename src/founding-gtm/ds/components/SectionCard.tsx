@@ -57,7 +57,7 @@ export function SectionCard(props: SectionCardProps): JSX.Element {
                 ) : (
                     <p class="fgd-section__empty">
                         {t(
-                            "Not yet authored — this fills in once the rooms have real evidence.",
+                            "Not yet authored — this fills in once the app has real evidence to draw from.",
                             { class: "body" }
                         )}
                     </p>

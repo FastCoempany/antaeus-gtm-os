@@ -39,7 +39,7 @@ describe("buildBriefNarrative", () => {
     it("returns the empty narrative when nothing is ranked", () => {
         const summary = summarize({});
         const n = buildBriefNarrative(summary);
-        expect(n.headline).toMatch(/nothing under pressure/i);
+        expect(n.headline).toMatch(/no prioritized actions/i);
         expect(n.sentences.length).toBeGreaterThanOrEqual(1);
         expect(n.insight).toBe("");
     });

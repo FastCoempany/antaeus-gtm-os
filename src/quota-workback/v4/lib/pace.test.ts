@@ -73,7 +73,7 @@ describe("buildBelievability", () => {
         const m = computeMetrics(inputs, EMPTY_COVERAGE);
         const b = buildBelievability(inputs, bench, m);
         expect(b.solid).toBe(false);
-        expect(b.read).toContain("stretch");
+        expect(b.read).toContain("Assumption above benchmark");
         expect(b.cost).toBeTruthy();
         expect(b.fix?.key).toBe("m2o");
     });

@@ -65,11 +65,16 @@ export function hrefToSignalConsole(account: string): string {
     });
 }
 
-export function hrefToCallPlanner(account: string): string {
+/**
+ * The discovery call booked from a cold call is prepared and run in
+ * Discovery Studio (Call Planner was retired into it 2026-07-06, canon
+ * §4.11 → §4.12).
+ */
+export function hrefToDiscoveryStudio(account: string): string {
     return buildColdCallHref({
-        href: "/call-planner/",
+        href: "/discovery-studio/",
         focusObject: account,
-        roomLabel: "Call Planner",
+        roomLabel: "Discovery Studio",
         account
     });
 }

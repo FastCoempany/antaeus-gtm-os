@@ -47,10 +47,8 @@ export interface PullingData {
 }
 
 /**
- * The Wayfinder pulling cell: once a live line is routed, the one next
- * move (canon §4.8 flows-out) is to line up LinkedIn air cover for the
- * same account — the inbox is never the opening scene. Absent until the
- * rack can generate (account + contact).
+ * Offer a LinkedIn outreach handoff for the same account once account and
+ * contact inputs are sufficient to generate an outbound message.
  */
 export function toPulling(): PullingData | undefined {
     if (!canGenerate.value) return undefined;
@@ -58,12 +56,12 @@ export function toPulling(): PullingData | undefined {
     const out = currentSendLine.value;
     const account = r.accountName.trim();
     return {
-        verb: "Add air cover",
+        verb: "Plan LinkedIn outreach",
         object: account || "the account",
         href: hrefToLinkedInPlaybook(account),
         reasons: [
             `${out.channel} · ${out.motionBand}`,
-            "Public cue first; the inbox is never the opening scene."
+            "Review the account's recorded LinkedIn activity before choosing outreach."
         ]
     };
 }

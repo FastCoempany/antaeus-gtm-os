@@ -24,6 +24,10 @@ function sess(over: Partial<DiscoverySessionRecord> = {}): DiscoverySessionRecor
 }
 
 describe("countCallsInWindow", () => {
+    it("does not count a future scheduled call as completed activity in the last week", () => {
+        expect(countCallsInWindow([sess({ call_date: daysAgo(-1) })], NOW)).toBe(0);
+        expect(deriveDiscoveryRhythmObservations([sess({ call_date: daysAgo(-1) })], NOW)).toHaveLength(1);
+    });
     it("counts sessions within the last WEEK_WINDOW_DAYS", () => {
         expect(
             countCallsInWindow(

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
     buildDashboardHref,
-    hrefToCallPlannerForAccount,
+    hrefToDiscoveryStudioForAccount,
     hrefToDealForDeal,
     hrefToFutureAutopsyForDeal,
     hrefToOutboundForAccount,
@@ -96,12 +96,12 @@ describe("convenience builders", () => {
         expect(u.searchParams.get("focusObject")).toBe("Meridian Logistics");
     });
 
-    it("hrefToCallPlannerForAccount builds /call-planner/ with focus", () => {
+    it("hrefToDiscoveryStudioForAccount builds /discovery-studio/ with focus", () => {
         const u = new URL(
-            hrefToCallPlannerForAccount("Meridian Logistics"),
+            hrefToDiscoveryStudioForAccount("Meridian Logistics"),
             "http://x"
         );
-        expect(u.pathname).toBe("/call-planner/");
+        expect(u.pathname).toBe("/discovery-studio/");
         expect(u.searchParams.get("focusObject")).toBe("Meridian Logistics");
         expect(u.searchParams.get("account")).toBe("Meridian Logistics");
     });

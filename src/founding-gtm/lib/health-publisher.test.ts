@@ -50,7 +50,7 @@ describe("startHealthPublishing", () => {
     beforeEach(() => __resetForTests());
     afterEach(() => __resetForTests());
 
-    it("skips first run, then writes on input change", () => {
+    it("publishes on the first run, then re-writes on input change", () => {
         const storage = new MemStorage();
         let publishCount = 0;
         const stop = startHealthPublishing({
@@ -60,9 +60,10 @@ describe("startHealthPublishing", () => {
                 publishCount += 1;
             }
         });
-        // First run was the boot — should not have written.
-        expect(publishCount).toBe(0);
-        expect(storage.map[FOUNDING_GTM_HEALTH_KEY]).toBeUndefined();
+        // First run is the boot — it publishes the current count so
+        // other rooms never read a missing snapshot.
+        expect(publishCount).toBe(1);
+        expect(JSON.parse(storage.map[FOUNDING_GTM_HEALTH_KEY]!).sections_ready).toBe(0);
 
         // Drive an input change that flips at least one section to non-empty.
         // §1 needs ICPs to leave 'empty'.
@@ -94,7 +95,7 @@ describe("startHealthPublishing", () => {
             discoveryWorked: []
         });
 
-        expect(publishCount).toBe(1);
+        expect(publishCount).toBe(2);
         expect(storage.map[FOUNDING_GTM_HEALTH_KEY]).toBeDefined();
         const written = JSON.parse(
             storage.map[FOUNDING_GTM_HEALTH_KEY]
@@ -118,7 +119,8 @@ describe("startHealthPublishing", () => {
             }
         });
 
-        // First run = no-op.
+        // First run publishes the boot count.
+        expect(publishCount).toBe(1);
         // Second run: real change.
         setSectionsInput({
             icps: [
@@ -147,7 +149,7 @@ describe("startHealthPublishing", () => {
             discoveryStats: null,
             discoveryWorked: []
         });
-        expect(publishCount).toBe(1);
+        expect(publishCount).toBe(2);
 
         // Same input → same section statuses → no re-publish.
         setSectionsInput({
@@ -177,7 +179,7 @@ describe("startHealthPublishing", () => {
             discoveryStats: null,
             discoveryWorked: []
         });
-        expect(publishCount).toBe(1);
+        expect(publishCount).toBe(2);
 
         stop();
     });

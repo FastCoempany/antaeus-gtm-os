@@ -33,17 +33,10 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./outdoors-events-v4.css";
 
 /**
- * OutdoorsEventsV4 (canon §4.22) — proximity + the get-there rail,
- * wired to production from the settled 2026-07-07 design. The scout:
- * "Run discovery now" is the working header; events sit on a single
- * PROXIMITY SPINE — your category (closest in) → your buyers (one ring
- * out) → their orbit (the outer ring) — the relevance tiering felt as
- * distance. Each de-carded row carries when · name · the one-line
- * reason · source, its live weather glance, and the GET-THERE rail
- * (flights / hotel / register / calendar — outbound links only, never
- * a stored itinerary), plus the mark control and dismiss. Add-by-hand
- * recedes to the bottom. Discovery, persistence, status lifecycle are
- * the shipped engine unchanged.
+ * Outdoors Events displays sourced, currently scheduled events grouped by
+ * relevance to the operator's category and buyer context. Each row keeps
+ * the source URL beside the generated relevance reason and provides
+ * outbound travel/calendar links. Manual events remain a separate group.
  */
 
 const weatherMap = signal<Readonly<Record<string, WeatherGlance | null>>>({});
@@ -51,13 +44,13 @@ const weatherMap = signal<Readonly<Record<string, WeatherGlance | null>>>({});
 function WeatherGlyph({ w }: { w: WeatherGlance | null | undefined }): JSX.Element | null {
     if (!w) return null;
     const glyph = w.kind === "sun" ? "☀" : w.kind === "rain" ? "🌧" : "⛅";
-    return <span class="oe4-wx" title={t("The forecast for the dates", { class: "body" })}>{glyph} {w.tempC}°</span>;
+    return <span class="oe4-wx" title={t("Forecast for the event dates", { class: "body" })}>{glyph} {w.tempC}°</span>;
 }
 
 const RINGS: ReadonlyArray<{ key: "direct" | "adjacent" | "indirect"; label: string; sub: string }> = [
-    { key: "direct", label: t("Your category — closest in", { class: "body" }), sub: t("gatherings squarely about what you sell", { class: "body" }) },
-    { key: "adjacent", label: t("Your buyers — one ring out", { class: "body" }), sub: t("where the people you sell to already go", { class: "body" }) },
-    { key: "indirect", label: t("Their orbit — the outer ring", { class: "body" }), sub: t("worth a look if you're already nearby", { class: "body" }) }
+    { key: "direct", label: t("Directly relevant to your category", { class: "body" }), sub: t("events focused directly on your market", { class: "body" }) },
+    { key: "adjacent", label: t("Adjacent to your buyer context", { class: "body" }), sub: t("events focused on the roles, functions, or problems you sell into", { class: "body" }) },
+    { key: "indirect", label: t("Broader related events", { class: "body" }), sub: t("events that may be useful for your territory or travel plans", { class: "body" }) }
 ];
 
 function fmtWhen(ev: OutdoorsEvent): string {
@@ -83,7 +76,7 @@ function EventRow({ ev }: { ev: OutdoorsEvent }): JSX.Element {
                 </div>
                 {ev.relevanceReason ? <div class="oe4-reason">{ev.relevanceReason}</div> : null}
                 {ev.sourceUrl ? (
-                    <a class="oe4-src" href={ev.sourceUrl} target="_blank" rel="noreferrer">{t("where the system found it →", { class: "body" })}</a>
+                    <a class="oe4-src" href={ev.sourceUrl} target="_blank" rel="noreferrer">{t("View source →", { class: "body" })}</a>
                 ) : null}
             </div>
             <span class="oe4-rail">
@@ -94,7 +87,7 @@ function EventRow({ ev }: { ev: OutdoorsEvent }): JSX.Element {
                     </>
                 ) : null}
                 {ev.sourceUrl ? (
-                    <a class="oe4-ic" title={t("Register — on their site", { class: "body" })} href={ev.sourceUrl} target="_blank" rel="noreferrer">🎫</a>
+                    <a class="oe4-ic" title={t("Open event site", { class: "body" })} href={ev.sourceUrl} target="_blank" rel="noreferrer">🎫</a>
                 ) : null}
                 <a class="oe4-ic" title={t("Add to calendar")} href={calendarIcs(ev.name, ev.startDate, ev.endDate, ev.whereAt)} download={`${ev.name.slice(0, 40)}.ics`}>📅</a>
             </span>
@@ -121,7 +114,6 @@ export function OutdoorsEventsV4(): JSX.Element {
     const run = latestRun.value;
     const d = draft.value;
 
-    // Best-effort weather for dated rows with a place (16-day window).
     useEffect(() => {
         for (const ev of events) {
             if (!ev.whereAt || weatherMap.value[ev.id] !== undefined) continue;
@@ -138,37 +130,35 @@ export function OutdoorsEventsV4(): JSX.Element {
             <div class="oe4-wrap">
                 <div class="oe4-top">
                     <span class="oe4-bname">{t("Outdoors Events")}</span>
-                    <span class="oe4-r">{t("where your buyers gather · found for you", { class: "body" })}</span>
+                    <span class="oe4-r">{t("events relevant to your market and buyer context", { class: "body" })}</span>
                 </div>
 
-                {/* discovery console — the working header */}
                 <div class="oe4-console">
                     <div>
-                        <div class="oe4-ch">{t("The system finds the gatherings — you decide which matter.", { class: "body" })}</div>
+                        <div class="oe4-ch">{t("Search current event sources, then decide which events are worth pursuing.", { class: "body" })}</div>
                         <div class="oe4-cs">
                             {run ? (
                                 <>
-                                    {t("Last swept")} {run.completedAt ? new Date(run.completedAt).toLocaleDateString() : t("just now")} ·{" "}
-                                    {run.eventsWritten} {t("found")} · {run.status}
+                                    {t("Last search")} {run.completedAt ? new Date(run.completedAt).toLocaleDateString() : t("just now")} ·{" "}
+                                    {run.eventsWritten} {t("events returned")} · {run.status}
                                 </>
                             ) : (
-                                t("No sweep yet — run the first one.", { class: "body" })
+                                t("No event search has been run yet.", { class: "body" })
                             )}
                             {discoveryError.value ? <span class="oe4-err"> · {discoveryError.value}</span> : null}
                         </div>
                     </div>
                     <button type="button" class="oe4-btn" disabled={discoveryBusy.value} onClick={() => void runDiscoveryNow()}>
-                        {discoveryBusy.value ? t("Searching the world…") : t("Run discovery now")}
+                        {discoveryBusy.value ? t("Searching event sources…") : t("Find relevant events")}
                     </button>
                 </div>
 
-                {/* the proximity spine */}
                 {!loaded.value ? (
                     <div class="oe4-empty">{t("Loading…")}</div>
                 ) : events.length === 0 ? (
                     <div class="oe4-empty">
-                        <h3>{t("Nothing on the radar yet.")}</h3>
-                        <p>{t("Run discovery and the system searches the world for gatherings in your category, one ring at a time.", { class: "body" })}</p>
+                        <h3>{t("No events found yet.")}</h3>
+                        <p>{t("Run event discovery to search for currently scheduled events relevant to your category and buyer context.", { class: "body" })}</p>
                     </div>
                 ) : (
                     <div class="oe4-spine">
@@ -189,7 +179,7 @@ export function OutdoorsEventsV4(): JSX.Element {
                         {byHand.length > 0 ? (
                             <div class="oe4-ring is-hand">
                                 <div class="oe4-rh">
-                                    <span class="oe4-rl">{t("Added by hand")}</span>
+                                    <span class="oe4-rl">{t("Added manually")}</span>
                                     <span class="oe4-rn">{byHand.length}</span>
                                 </div>
                                 {byHand.map((ev) => <EventRow ev={ev} key={ev.id} />)}
@@ -198,7 +188,6 @@ export function OutdoorsEventsV4(): JSX.Element {
                     </div>
                 )}
 
-                {/* add by hand — recedes to the bottom */}
                 <div class="oe4-hand">
                     {composerOpen.value ? (
                         <div class="oe4-form">
@@ -210,14 +199,14 @@ export function OutdoorsEventsV4(): JSX.Element {
                                 onInput={(e) => patchDraft({ startDate: (e.currentTarget as HTMLInputElement).value })} />
                             <button type="button" class="oe4-btn" disabled={composerBusy.value || !d.name.trim()}
                                 onClick={() => void saveDraft()}>
-                                {composerBusy.value ? t("Adding…") : t("Add it")}
+                                {composerBusy.value ? t("Adding…") : t("Add event")}
                             </button>
                             <button type="button" class="oe4-ghost" onClick={closeComposer}>{t("Close")}</button>
                             {composerError.value ? <span class="oe4-err">{composerError.value}</span> : null}
                         </div>
                     ) : (
                         <button type="button" class="oe4-handbtn" onClick={openComposer}>
-                            + {t("Add one by hand — a private invite the system can't see", { class: "body" })}
+                            + {t("Add event manually", { class: "body" })}
                         </button>
                     )}
                 </div>

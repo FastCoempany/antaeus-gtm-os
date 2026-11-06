@@ -8,13 +8,19 @@ import {
 } from "./registry";
 
 describe("ALL_ROOMS — registry shape", () => {
-    it("contains all 22 canonical rooms", () => {
+    it("contains all 21 canonical rooms", () => {
         // 20 rooms per canon §4 plus Briefing (canon §4.21 + ADR-006)
-        // plus Outdoors Events (canon §4.22 + ADR-015). Briefing sits
-        // under system-ledger as the closest neighbor until the
-        // intelligence-surface family lands formally; Outdoors Events
-        // is a Live Instrument.
-        expect(ALL_ROOMS).toHaveLength(22);
+        // plus Outdoors Events (canon §4.22 + ADR-015), minus Call
+        // Planner (retired into Discovery Studio 2026-07-06, canon
+        // §4.11). Briefing sits under system-ledger as the closest
+        // neighbor until the intelligence-surface family lands
+        // formally; Outdoors Events is a Live Instrument.
+        expect(ALL_ROOMS).toHaveLength(21);
+    });
+
+    it("does not list the retired Call Planner", () => {
+        expect(ALL_ROOMS.some((r) => r.href === "/call-planner/")).toBe(false);
+        expect(ALL_ROOMS.some((r) => r.label === "Call Planner")).toBe(false);
     });
 
     it("every entry has the required fields", () => {
@@ -81,14 +87,14 @@ describe("filterRooms", () => {
     });
 
     it("matches against family label", () => {
-        const result = filterRooms("threshold");
+        const result = filterRooms("getting started");
         const ids = result.map((r) => r.id);
         expect(ids).toContain("welcome");
         expect(ids).toContain("onboarding");
     });
 
     it("matches against description", () => {
-        const result = filterRooms("ranked pressure");
+        const result = filterRooms("account priorities");
         expect(result.some((r) => r.id === "dashboard")).toBe(true);
     });
 

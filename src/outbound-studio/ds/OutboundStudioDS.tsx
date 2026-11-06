@@ -76,7 +76,7 @@ export function OutboundStudioDS(): JSX.Element {
                             })}
                             routes={[
                                 {
-                                    label: t("Add LinkedIn air cover"),
+                        label: t("Plan LinkedIn outreach"),
                                     href: hrefToLinkedInPlaybook(account),
                                     primary: true
                                 },

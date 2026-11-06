@@ -143,6 +143,8 @@ The fixed segment spine is:
 9. `next-step-lock`
 10. `post-call-routing`
 
+> **Display titles renamed to plain language 2026-11-05 (owner-directed).** The segment keys above are unchanged; only the titles a seller reads changed: Opening frame → **Opening**, Current-state truth → **How they work today**, Pain and consequence → **The problem and its cost**, Trigger and urgency → **Why now**, Stakeholder and ownership → **Who's involved**, Proof threshold / Evidence threshold → **What they need to see**, Current vendor and displacement → **Current vendor**, Decision architecture → **How they'll decide**, Next-step lock → **Next step**, Post-call routing → **After the call**. The section headings below keep the original 2026-04-10 names as the historical contract.
+
 ### Segment 1: Opening frame
 
 Must include:

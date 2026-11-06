@@ -1,13 +1,13 @@
 import { reportError } from "@/lib/observability";
 
 /**
- * Getting to Signed — the fronts model (canon §4.16b). The shipped
- * negotiation engine carries positions + outcomes; this additive layer
- * carries the RUN-TO-SIGNED war room the 2026-07-07 rename added: the
- * four fronts (their ask → your line → status), the committee with
- * engagement reads, the papers-ready strip, the security coverage map,
- * and the plan-to-signed. Persisted per deal at
- * gtmos_getting_to_signed_v1.
+ * Getting to Signed persisted workstream model.
+ *
+ * Stable internal identifiers such as `fronts`, `theirAsk`, `yourLine`,
+ * and `planToSigned` remain unchanged to avoid an unnecessary stored-data
+ * migration. User-facing code translates those fields into standard terms:
+ * workstream, customer request, proposed position, and signature plan.
+ * The four workstreams are Legal, Security, Finance, and Business approval.
  */
 
 export const GTS_KEY = "gtmos_getting_to_signed_v1";
@@ -42,7 +42,7 @@ export interface CommitteeMember {
     readonly name: string;
     readonly role: string;
     readonly kind: MemberKind;
-    /** ISO of the last real touch — drives warm / quiet reads. */
+    /** ISO of the last recorded stakeholder touch. */
     readonly lastTouch: string | null;
 }
 
@@ -53,11 +53,11 @@ export interface PapersReady {
     readonly dpa: boolean;
 }
 
-/** The security coverage map — how many questions your papers answer. */
+/** Security questionnaire coverage from existing documents and saved answers. */
 export interface Coverage {
     readonly total: number;
     readonly covered: number;
-    /** Of the open ones, how many have saved answers (vs need engineering). */
+    /** Of the open questions, how many have reusable saved answers. */
     readonly saved: number;
 }
 
@@ -67,7 +67,7 @@ export interface SignedState {
     readonly papers: PapersReady;
     readonly coverage: Coverage;
     readonly planToSigned: string;
-    /** "to signed by …" — the shared target. */
+    /** Shared target signature date. */
     readonly targetDate: string;
 }
 
@@ -217,7 +217,7 @@ export function memberId(now: number = Date.now()): string {
     return `cm_${now}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
-/** Engagement read: warm (< 7d) / quiet Nd / new (never touched). */
+/** Engagement state: recent (< 7d), no recent touch, or new. */
 export function engagementRead(
     m: CommitteeMember,
     now: number = Date.now()
@@ -229,7 +229,7 @@ export function engagementRead(
     return days >= 7 ? { band: "quiet", days } : { band: "warm", days };
 }
 
-/** The front the face-off leads with: blocking wins; else at_risk; else first open. */
+/** Select the workstream that currently needs attention first. */
 export function pickBlocking(state: SignedState): FrontId | null {
     const open = FRONT_IDS.filter((id) => state.fronts[id].status !== "settled");
     if (open.length === 0) return null;

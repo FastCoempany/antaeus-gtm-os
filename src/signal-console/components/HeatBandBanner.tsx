@@ -63,7 +63,7 @@ export function HeatBandBanner(): JSX.Element | null {
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--active">
                             75+ Active
                         </span>{" "}
-                        {t("— motion-ready, the room treats these as primary work", { class: "body" })}
+                        {t("— motion-ready, Signal Console treats these as primary work", { class: "body" })}
                     </li>
                     <li>
                         <span class="sc-heat-banner__chip sc-heat-banner__chip--watch">

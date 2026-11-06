@@ -42,7 +42,7 @@ describe("buildActionPlan", () => {
         expect(plan.primary?.roomLabel).toBe("Pilot Desk");
     });
 
-    it("routes to Call Planner when EB is missing", () => {
+    it("routes to Discovery Studio to prepare the next call when EB is missing", () => {
         const filled = "x".repeat(40);
         const v = computeVitals(
             deal({
@@ -65,6 +65,8 @@ describe("buildActionPlan", () => {
         const plan = buildActionPlan(generateAutopsy(v));
         // Top cause should be no_eb (since everything else is filled).
         expect(plan.primary?.roomLabel).toBe("Discovery Studio");
+        expect(plan.primary?.href.startsWith("/discovery-studio/?")).toBe(true);
+        expect(plan.primary?.label).toBe("Prepare the next call");
     });
 
     it("primary CTA carries continuity params", () => {

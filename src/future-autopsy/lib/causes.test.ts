@@ -39,6 +39,23 @@ describe("CAUSES table", () => {
 });
 
 describe("topCauses", () => {
+    it("describes short populated fields accurately without changing rule weights", () => {
+        const v = computeVitals(deal({ champion: "Alex", economicBuyer: "Morgan", nextStep: "Review", nextStepDate: "2026-05-15" }), { now: NOW, storage: null });
+        const causes = topCauses(v, DEFAULT_PREFS, 13);
+        expect(causes.find((c) => c.id === "no_champion")?.label).not.toContain("No champion");
+        expect(causes.find((c) => c.id === "no_eb")?.label).not.toContain("No economic buyer");
+        expect(causes.find((c) => c.id === "no_nextstep")).toMatchObject({ weight: 9, label: expect.stringContaining("A dated next step is recorded") });
+    });
+
+    it("does not confuse record age with buyer inactivity or two contacts with one", () => {
+        const v = computeVitals(deal({ updated_at: daysAgo(14), stakeholders: [
+            { name: "Alex", role: "technical", engaged: true },
+            { name: "Morgan", role: "end_user", engaged: true }
+        ] }), { now: NOW, storage: null });
+        const causes = topCauses(v, DEFAULT_PREFS, 13);
+        expect(causes.find((c) => c.id === "stale_thread")?.label).toContain("record was last updated 14 days ago");
+        expect(causes.find((c) => c.id === "single_threaded")?.label).toContain("count is 2");
+    });
     it("returns empty for a fully-qualified, fresh, low-value deal", () => {
         const filled = "x".repeat(40);
         const v = computeVitals(

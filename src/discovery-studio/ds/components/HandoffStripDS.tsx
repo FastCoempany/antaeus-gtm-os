@@ -2,16 +2,13 @@ import type { JSX } from "preact";
 import { HandoffStrip } from "@/components";
 import { t } from "@/lib/voice/t";
 import { focusedAccount, nextStepLock } from "../../state";
-import {
-    hrefToCallPlanner,
-    hrefToDealWorkspace,
-    hrefToFutureAutopsy
-} from "../../lib/handoff";
+import { hrefToDealWorkspace, hrefToFutureAutopsy } from "../../lib/handoff";
 
 /**
  * HandoffStripDS — the bottom-of-room cross-room handoff on the library
  * HandoffStrip (canon §4.12: Discovery feeds Deal Workspace + Future
- * Autopsy + Call Planner). Three verb-shape routes with the continuity
+ * Autopsy; preparing the next call happens in this room, since Call
+ * Planner was retired into it). Two verb-shape routes with the continuity
  * wrap; the primary pushes the call into the deal. The href builders
  * (which thread the continuity params) are the unchanged lib.
  */
@@ -41,11 +38,6 @@ export function HandoffStripDS(): JSX.Element {
                     label: t("Pre-mortem this deal"),
                     href: hrefToFutureAutopsy(account),
                     dataHandoff: "future-autopsy"
-                },
-                {
-                    label: t("Plan the next call"),
-                    href: hrefToCallPlanner(account),
-                    dataHandoff: "call-planner"
                 }
             ]}
         />

@@ -99,7 +99,7 @@ describe("MethodSheetsDS", () => {
             container.querySelectorAll(".lpd-method__token").length
         ).toBeGreaterThan(0);
         // the four archetypes are present by kicker
-        for (const kicker of ["Connection", "Public cue", "Give-first", "Ask"]) {
+        for (const kicker of ["Connection", "Comment", "Useful information", "Meeting request"]) {
             expect(
                 [...container.querySelectorAll(".lpd-method__kicker")].some(
                     (el) => el.textContent === kicker

@@ -1,11 +1,7 @@
 import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import { focusedAccount, nextStepLock } from "../state";
-import {
-    hrefToCallPlanner,
-    hrefToDealWorkspace,
-    hrefToFutureAutopsy
-} from "../lib/handoff";
+import { hrefToDealWorkspace, hrefToFutureAutopsy } from "../lib/handoff";
 
 /**
  * HandoffStrip — bottom-of-room cross-room handoff.
@@ -14,19 +10,19 @@ import {
  * framework, learned facts, stakeholder map, current-state method,
  * trigger event, proof threshold, blockers, next-step lock) +
  * Future Autopsy (failure-pattern clues, unresolved proof gaps,
- * stalled-next-step evidence) + Call Planner (re-prep when the call
- * spawns a follow-up).
+ * stalled-next-step evidence). Preparing a follow-up call happens here
+ * in Discovery Studio itself (Call Planner was retired into this room
+ * 2026-07-06, canon §4.11), so there is no "plan the next call" route.
  *
  * Before Phase 2.5 the room had ZERO outbound handoff CTAs — Sarah
  * could finish the call, lock the next step, and have nowhere to
  * click. Added in the Discovery flow audit.
  *
- * Three verb-shape sales moves:
+ * Two verb-shape sales moves:
  *   - Push to the deal (primary)         → /deal-workspace/
  *   - Pre-mortem this deal               → /future-autopsy/
- *   - Plan the next call                 → /call-planner/
  *
- * All three carry continuity wrap (returnTo=/discovery-studio/,
+ * Both carry continuity wrap (returnTo=/discovery-studio/,
  * focusObject=account when known, fromMode=room) so destinations
  * land with provenance + focus.
  */
@@ -47,7 +43,7 @@ export function HandoffStrip(): JSX.Element {
                 </h2>
                 <p class="ds-handoff__sub">{lockStatus}</p>
             </header>
-            <nav class="ds-handoff__row" aria-label={t("Cross-room handoff")}>
+            <nav class="ds-handoff__row" aria-label={t("Continue on another page")}>
                 <a
                     class="ds-handoff__cta ds-handoff__cta--primary"
                     href={hrefToDealWorkspace(account)}
@@ -61,13 +57,6 @@ export function HandoffStrip(): JSX.Element {
                     data-ds-handoff="future-autopsy"
                 >
                     Pre-mortem this deal
-                </a>
-                <a
-                    class="ds-handoff__cta"
-                    href={hrefToCallPlanner(account)}
-                    data-ds-handoff="call-planner"
-                >
-                    Plan the next call
                 </a>
             </nav>
         </section>

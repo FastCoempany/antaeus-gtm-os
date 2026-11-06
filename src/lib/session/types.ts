@@ -47,7 +47,7 @@ export type RoomId =
     | "outbound-studio"
     | "cold-call-studio"
     | "linkedin-playbook"
-    | "call-planner"
+    | "call-planner" // retired 2026-07-06 (canon §4.11); kept so stored sessions still parse
     | "discovery-studio"
     | "advisor-deploy"
     | "negotiation"

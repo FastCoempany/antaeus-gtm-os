@@ -30,7 +30,7 @@ enabled = true
 port = 54323
 api_url = "http://127.0.0.1"
 
-[inbucket]
+[local_smtp]
 enabled = true
 port = 54324
 
@@ -51,13 +51,13 @@ enable_manual_linking = false
 minimum_password_length = 8
 
 [auth.email]
-enable_signup = true
+enabled = true
 double_confirm_changes = true
 enable_confirmations = false
 
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 [auth.sms]
-enable_signup = false
+enabled = false
 enable_confirmations = false
 
 # Use an external OAuth provider. The full list of providers are:

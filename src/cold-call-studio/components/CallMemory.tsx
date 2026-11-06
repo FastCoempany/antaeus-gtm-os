@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { t } from "@/lib/voice/t";
 import { callLog, selectedAccountName } from "../state";
 import { OUTCOME_LABELS } from "../lib/types";
-import { hrefToCallPlanner, hrefToDealWorkspace } from "../lib/handoff";
+import { hrefToDealWorkspace, hrefToDiscoveryStudio } from "../lib/handoff";
 
 /**
  * CallMemory — Wave 4 implementation.
@@ -10,7 +10,7 @@ import { hrefToCallPlanner, hrefToDealWorkspace } from "../lib/handoff";
  * Renders the most-recent 8 calls (newest first) from `callLog`.
  * Each row carries: created date, account + contact, thread title +
  * buyer response, outcome. Wave 5 wires the cross-room handoff strip
- * (Open Call Planner / Open Deal Workspace) below the grid.
+ * (Prepare the discovery call / Open the deal) below the grid.
  */
 
 function fmtDate(iso: string): string {
@@ -36,13 +36,13 @@ export function CallMemory(): JSX.Element {
                         Log the outcome before the thread goes cold.
                     </h2>
                 </div>
-                <nav class="cc-memory__handoff" aria-label={t("Cross-room handoff")}>
+                <nav class="cc-memory__handoff" aria-label={t("Continue on another page")}>
                     <a
                         class="cc-handoff cc-handoff--ghost"
-                        href={hrefToCallPlanner(account)}
-                        data-cc-handoff="call-planner"
+                        href={hrefToDiscoveryStudio(account)}
+                        data-cc-handoff="discovery-studio"
                     >
-                        Plan the next call
+                        Prepare the discovery call
                     </a>
                     <a
                         class="cc-handoff cc-handoff--primary"

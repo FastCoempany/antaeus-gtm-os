@@ -3488,7 +3488,7 @@
       "issues": [],
       "severity_before": 0,
       "replacement": "Quota Workback",
-      "action": "keep",
+      "action": "rewrite",
       "issues_after": [],
       "severity_after": 0
     },

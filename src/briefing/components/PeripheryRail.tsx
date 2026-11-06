@@ -11,17 +11,9 @@ import {
 import type { PeripheryCandidate } from "../lib/periphery-client";
 
 /**
- * PeripheryRail (B.4c) — the "consider watching" surface.
- *
- * Lists the candidates the detector produced for the latest run with
- * three actions per row: Add to watchlist (promotes the entity into
- * briefing_watchlist_entities), Snooze (hide for now), Dismiss (never
- * surface again). Renders nothing when there are no candidates — the
- * section shouldn't take vertical space on a quiet run.
- *
- * Per canon §4.21 this is the Coverage obligation's surface. Voice
- * (Part III §11): the header reads "Consider watching", not "Periphery
- * candidates" — a peer would name the move, not the concept.
+ * Accounts-to-consider surface. Lists companies that repeatedly appear in
+ * relevant evidence alongside watched accounts but are not on the current
+ * watchlist. The user can add, temporarily hide, or dismiss each account.
  */
 
 const ACTION_BUSY = "…";
@@ -39,7 +31,6 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
             setError("Couldn't add it. Try again.");
             setBusy(null);
         }
-        // On success the row drops out via the signal — no need to clear busy.
     }
 
     async function handleSnooze(): Promise<void> {
@@ -47,7 +38,7 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
         setBusy("snooze");
         const ok = await snoozePeripheryAction(candidate.id);
         if (!ok) {
-            setError("Couldn't snooze it. Try again.");
+            setError("Couldn't hide it for now. Try again.");
             setBusy(null);
         }
     }
@@ -67,16 +58,16 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
             <div class="bf-peri__head">
                 <p class="bf-peri__name">{candidate.entity_name}</p>
                 <span class="bf-peri__score">
-                    co-occ {candidate.co_occurrence_score}
+                    {t("co-occurrence")} {candidate.co_occurrence_score}
                     {candidate.vocab_overlap_score > 0
-                        ? ` · vocab ${candidate.vocab_overlap_score}`
+                        ? ` · ${t("topic overlap")} ${candidate.vocab_overlap_score}`
                         : ""}
                 </span>
             </div>
             <p class="bf-peri__why">{candidate.reasoning}</p>
             {candidate.entity_aliases.length > 0 && (
                 <p class="bf-peri__aliases">
-                    Also seen as: {candidate.entity_aliases.join(", ")}
+                    {t("Also seen as:")} {candidate.entity_aliases.join(", ")}
                 </p>
             )}
             <div class="bf-peri__actions">
@@ -86,7 +77,7 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
                     disabled={busy !== null}
                     onClick={() => void handleAdd()}
                 >
-                    {busy === "add" ? ACTION_BUSY : "Add to watchlist"}
+                    {busy === "add" ? ACTION_BUSY : t("Add to watchlist")}
                 </button>
                 <button
                     type="button"
@@ -94,7 +85,7 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
                     disabled={busy !== null}
                     onClick={() => void handleSnooze()}
                 >
-                    {busy === "snooze" ? ACTION_BUSY : "Snooze"}
+                    {busy === "snooze" ? ACTION_BUSY : t("Hide for now")}
                 </button>
                 <button
                     type="button"
@@ -102,7 +93,7 @@ function CandidateRow({ candidate }: { candidate: PeripheryCandidate }): JSX.Ele
                     disabled={busy !== null}
                     onClick={() => void handleDismiss()}
                 >
-                    {busy === "dismiss" ? ACTION_BUSY : "Dismiss"}
+                    {busy === "dismiss" ? ACTION_BUSY : t("Dismiss")}
                 </button>
             </div>
             {error && <p class="bf-peri__error">{error}</p>}
@@ -116,17 +107,16 @@ export function PeripheryRail(): JSX.Element | null {
     if (list.length === 0) return null;
 
     return (
-        <section class="bf-peri-rail" aria-label={t("Consider watching")}>
+        <section class="bf-peri-rail" aria-label={t("Accounts to consider")}>
             <div class="bf-peri-rail__head">
-                <p class="bf-peri-rail__kicker">{t("Consider watching")}</p>
+                <p class="bf-peri-rail__kicker">{t("Accounts to consider")}</p>
                 <p class="bf-peri-rail__sub">
-                    Companies you haven't named, but the data this week kept mentioning
-                    them alongside the ones you have.
+                    {t("These companies repeatedly appear in relevant evidence alongside watched accounts but are not currently on your watchlist.", { class: "body" })}
                 </p>
             </div>
             <ul class="bf-peri-list">
-                {list.map((c) => (
-                    <CandidateRow candidate={c} key={c.id} />
+                {list.map((candidate) => (
+                    <CandidateRow candidate={candidate} key={candidate.id} />
                 ))}
             </ul>
         </section>

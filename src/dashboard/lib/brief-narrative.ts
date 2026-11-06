@@ -21,7 +21,7 @@ export interface BriefNarrative {
 }
 
 const EMPTY_NARRATIVE: BriefNarrative = {
-    headline: "Nothing under pressure right now.",
+    headline: "No prioritized actions are available yet.",
     sentences: [
         "No active deals, signals, or recovery moves to triage yet.",
         "Add an account in Signal Console or load a live deal in Deal Workspace — the morning brief fills in immediately."
@@ -63,26 +63,26 @@ export function buildBriefNarrative(
 
     // Sentence 1 — what's at the top (sentence-shaped, not card-shaped).
     sentences.push(
-        `${spotlight.title.replace(/\.$/, "")} is the morning's top move.`
+        `The highest-ranked action is: ${spotlight.title.replace(/\.$/, "")}.`
     );
 
     // Sentence 2 — composition of the queue.
     const compositionParts: string[] = [];
     if (riskCount) compositionParts.push(pluralize(riskCount, "deal", "deals") + " in recovery");
     if (moveCount) compositionParts.push(pluralize(moveCount, "move", "moves") + " queued");
-    if (systemCount) compositionParts.push(pluralize(systemCount, "system", "system") + " note");
+    if (systemCount) compositionParts.push(pluralize(systemCount, "system note", "system notes"));
     if (compositionParts.length) {
-        sentences.push(`${joinList(compositionParts).replace(/^\w/, (c) => c.toUpperCase())} behind it.`);
+        sentences.push(`The current list includes ${joinList(compositionParts)}.`);
     }
 
     // Sentence 3 — confidence on the lead, if interesting.
     const label = spotlight.rankingConfidenceLabel;
     if (label === "stable lead") {
-        sentences.push("The ranking is stable — this should still be the top move tomorrow.");
+        sentences.push("The ranking has strong support from the recorded inputs and may change as they are updated.");
     } else if (label === "supported") {
         sentences.push("The ranking is well-supported by the live signals.");
     } else if (label === "mixed signal") {
-        sentences.push("Ranking confidence is mixed — worth re-checking after lunch.");
+        sentences.push("Support for this ranking is mixed. Review the underlying inputs before acting.");
     }
 
     // Sentence 4 — closest follow-on, if there is one.

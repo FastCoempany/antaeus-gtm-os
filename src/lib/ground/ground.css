@@ -256,3 +256,45 @@
 .gnd-rm.is-dim {
     opacity: 0.22;
 }
+
+/* Preview lane — onboarding shown but locked, with the plain
+   explanation on hover/focus (worker/index.ts PREVIEW_CODE). */
+.gnd-rm.is-locked {
+    position: relative;
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+.gnd-rm.is-locked:hover,
+.gnd-rm.is-locked:focus-visible {
+    opacity: 1;
+    background: transparent;
+    border-color: var(--ds-hair, rgba(10, 28, 64, 0.09));
+    outline: none;
+}
+.gnd-rm.is-locked .gnd-rn,
+.gnd-rm.is-locked .gnd-rd {
+    color: var(--ds-ink-3, rgba(10, 28, 64, 0.42));
+}
+.gnd-lock-why {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 8px);
+    width: 300px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--ds-hair, rgba(10, 28, 64, 0.09));
+    border-left: 3px solid var(--ds-blue, #2563eb);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(10, 28, 64, 0.14);
+    font-size: 12px;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--ds-ink-2, rgba(10, 28, 64, 0.72));
+    z-index: 5;
+    cursor: default;
+}
+.gnd-rm.is-locked:hover .gnd-lock-why,
+.gnd-rm.is-locked:focus-visible .gnd-lock-why {
+    display: block;
+}

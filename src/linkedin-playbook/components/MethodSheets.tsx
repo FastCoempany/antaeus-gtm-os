@@ -83,7 +83,7 @@ export function MethodSheets(): JSX.Element {
                     </h2>
                 </div>
                 <p class="lp-method__copy">
-                    These support the cue. They do not organize the room.
+                    These support the cue. They do not organize the page.
                 </p>
             </header>
             <div class="lp-method__grid">

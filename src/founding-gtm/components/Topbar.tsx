@@ -34,8 +34,8 @@ export function Topbar(props: TopbarProps): JSX.Element {
                     What your first hire opens on day one.
                 </h1>
                 <p class="fg-topbar__sub">
-                    Authored opinion + cross-room synthesis. The sections
-                    populate as the underlying rooms fill with evidence.
+                    Authored opinion drawn from everything you record across
+                    the app. The sections fill in as that evidence builds up.
                 </p>
             </div>
             {props.verdictLabel && (

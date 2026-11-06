@@ -307,13 +307,13 @@ window.seed=function(mode){
     if(autoSeed&&autoSeed===String(mode||'').toLowerCase()){
       trackDemo('demo_autoseed_requested',{demo_mode:mode,scenario:meta.label,return_path:returnUrl});
       if(status)status.innerHTML+='<br><br>Opening the workspace...';
-      setTimeout(function(){window.location.href=returnUrl;},700);
+      setTimeout(function(){window.location.replace(returnUrl);},700);
       return;
     }
   }catch(e){}
 
   if(status)status.innerHTML+='<br><br>Opening the workspace...';
-  setTimeout(function(){window.location.href=returnUrl;},900);
+  setTimeout(function(){window.location.replace(returnUrl);},900);
 };
 
 window.clearAll=function(){

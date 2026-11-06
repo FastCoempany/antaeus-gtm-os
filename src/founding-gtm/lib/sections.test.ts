@@ -10,11 +10,12 @@ import {
     authorSection7,
     countReady
 } from "./sections";
-import type {
-    DealRecord,
-    IcpRecord,
-    SectionsInput
-} from "./types";
+import type { DealRecord, IcpRecord, SectionsInput } from "./types";
+import { loadSectionsInput } from "./cross-room";
+import { computeMetrics as computeQuotaMetrics } from "@/quota-workback/lib/engine";
+import { loadInputs as loadQuotaInputs } from "@/quota-workback/lib/persistence";
+import { readDailyOutreachRequirement } from "@/quota-workback/lib/coverage";
+import { EMPTY_COVERAGE } from "@/quota-workback/lib/types";
 
 const empty: SectionsInput = {
     icps: [],
@@ -68,32 +69,26 @@ function icp(over: Partial<IcpRecord> = {}): IcpRecord {
     };
 }
 
-// ─── §1 ────────────────────────────────────────────────────────────────
-
-describe("authorSection1 — Who hits, who misses, why", () => {
+describe("authorSection1 — target customers", () => {
     it("is empty with no ICPs and no closes", () => {
-        const s = authorSection1(empty);
-        expect(s.status).toBe("empty");
-        expect(s.body).toEqual([]);
+        expect(authorSection1(empty).status).toBe("empty");
     });
 
-    it("is partial with ICPs but no closes", () => {
+    it("is partial when an ICP exists without enough closed-deal history", () => {
         const s = authorSection1(input({ icps: [icp()] }));
         expect(s.status).toBe("partial");
-        expect(s.body[0]).toContain("hypothesis");
+        expect(s.body.join(" ")).toMatch(/not enough outcome history/i);
     });
 
-    it("is partial with closes but no named ICPs", () => {
+    it("is partial when closed deals exist without an explicit ICP", () => {
         const s = authorSection1(
-            input({
-                closedWon: [deal({ id: "w1" }), deal({ id: "w2" })]
-            })
+            input({ closedWon: [deal({ id: "w1" }), deal({ id: "w2" })] })
         );
         expect(s.status).toBe("partial");
-        expect(s.body[0].toLowerCase()).toContain("instinct");
+        expect(s.body.join(" ")).toMatch(/no explicit targeting definition/i);
     });
 
-    it("becomes ready with ICPs + closes; surprises on ICP mismatch", () => {
+    it("reports ICP mismatch as an observed label mismatch", () => {
         const s = authorSection1(
             input({
                 icps: [icp({ name: "Mid-market ops leader" })],
@@ -106,33 +101,29 @@ describe("authorSection1 — Who hits, who misses, why", () => {
         );
         expect(s.status).toBe("ready");
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain("doesn't match");
+        expect(s.surprise?.headline).toMatch(/does not match/i);
+        expect(s.surprise?.body).toMatch(/closed-won deals with an ICP label/i);
     });
 
-    it("affirms when stated ICP matches actual closes", () => {
+    it("does not claim a lost customer profile caused the loss", () => {
         const s = authorSection1(
             input({
-                icps: [icp({ name: "ops leader" })],
-                closedWon: [
-                    deal({ id: "w1", icpLabel: "ops leader" }),
-                    deal({ id: "w2", icpLabel: "ops leader" })
-                ]
+                icps: [icp({ name: "ops" })],
+                closedWon: [deal({ id: "w1", icpLabel: "ops" }), deal({ id: "w2", icpLabel: "ops" })],
+                closedLost: [deal({ id: "l1", icpLabel: "agency" })]
             })
         );
-        expect(s.status).toBe("ready");
-        expect(s.surprise?.tone).toBe("affirming");
+        expect(s.body.join(" ")).toMatch(/screen for these at intake/i);
+        expect(s.body.join(" ")).toMatch(/does not show that the profile caused/i);
     });
 });
 
-// ─── §2 ────────────────────────────────────────────────────────────────
-
-describe("authorSection2 — The rails that worked", () => {
-    it("is empty with no reach activity", () => {
-        const s = authorSection2(empty);
-        expect(s.status).toBe("empty");
+describe("authorSection2 — outreach patterns", () => {
+    it("is empty with no outreach activity", () => {
+        expect(authorSection2(empty).status).toBe("empty");
     });
 
-    it("is partial under 10 touches total", () => {
+    it("is partial below the comparison threshold", () => {
         const s = authorSection2(
             input({
                 touches: Array(3).fill({
@@ -148,9 +139,10 @@ describe("authorSection2 — The rails that worked", () => {
             })
         );
         expect(s.status).toBe("partial");
+        expect(s.body.join(" ")).toMatch(/not yet enough channel volume/i);
     });
 
-    it("ranks channels by reply rate when ≥10 touches", () => {
+    it("ranks observed channel response rates", () => {
         const touches = [
             ...Array(10).fill({
                 accountName: "A",
@@ -159,7 +151,7 @@ describe("authorSection2 — The rails that worked", () => {
                 trigger: "",
                 channel: "email",
                 outcome: "replied",
-                sendLine: "Hi —",
+                sendLine: "Specific message",
                 createdAtIso: ""
             }),
             ...Array(10).fill({
@@ -175,10 +167,12 @@ describe("authorSection2 — The rails that worked", () => {
         ];
         const s = authorSection2(input({ touches }));
         expect(s.status).toBe("ready");
-        expect(s.evidence[0]).toContain("email");
+        expect(s.evidence[0]).toBe("Email: 10 responses from 10 attempts (100%)");
+        expect(s.body.join(" ")).toMatch(/observed response rate/i);
+        expect(s.body.join(" ")).toMatch(/start the new hire on that channel/i);
     });
 
-    it("surfaces 'untried channel' surprise when only one channel is hit", () => {
+    it("treats unused channels as untested rather than ineffective", () => {
         const touches = Array(15).fill({
             accountName: "A",
             persona: "csuite",
@@ -191,21 +185,16 @@ describe("authorSection2 — The rails that worked", () => {
         });
         const s = authorSection2(input({ touches }));
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain("never tried");
+        expect(s.surprise?.headline).toMatch(/haven.t tried/i);
     });
 });
 
-// ─── §3 ────────────────────────────────────────────────────────────────
-
-describe("authorSection3 — The questions that earned the next meeting", () => {
+describe("authorSection3 — discovery patterns", () => {
     it("is empty with no discovery activity", () => {
-        const s = authorSection3(empty);
-        expect(s.status).toBe("empty");
+        expect(authorSection3(empty).status).toBe("empty");
     });
 
-    it("is partial when an agenda is planned but no calls are logged", () => {
-        // A plan exists (callPlanner) but Discovery Studio has logged no
-        // completed calls — discoveryStats is null / totalCalls 0.
+    it("is partial when a plan exists but no completed call is recorded", () => {
         const s = authorSection3(
             input({
                 callPlanner: [
@@ -221,61 +210,23 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
             })
         );
         expect(s.status).toBe("partial");
+        expect(s.body.join(" ")).toMatch(/without outcome history/i);
     });
 
-    it("reports advance rate + threads pulled from discovery aggregates", () => {
+    it("reports aggregate advance rate as observed data", () => {
         const s = authorSection3(
             input({
                 discoveryStats: { totalCalls: 12, advancedCalls: 5 },
-                discoveryWorked: [
-                    "cx_resolution_1",
-                    "cx_resolution_2",
-                    "cx_agent_1"
-                ]
+                discoveryWorked: ["cx_resolution_1", "cx_resolution_2"]
             })
         );
         expect(s.status).toBe("ready");
-        // 5/12 = 42% advance rate.
         expect(s.body[0]).toContain("42%");
-        expect(s.body[1]).toContain("discovery threads");
-        expect(s.evidence.some((e) => e.includes("cx_resolution_1"))).toBe(
-            true
-        );
+        expect(s.body[0]).toMatch(/observed advance rate/i);
+        expect(s.evidence.some((e) => e.includes("cx_resolution_1"))).toBe(true);
     });
 
-    it("surprises (corrective) when most calls aren't advancing", () => {
-        const s = authorSection3(
-            input({
-                discoveryStats: { totalCalls: 10, advancedCalls: 2 }
-            })
-        );
-        // 20% advance rate < 33% → corrective.
-        expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain("advancing");
-    });
-
-    it("surprises (corrective) when zero calls advanced", () => {
-        const s = authorSection3(
-            input({ discoveryStats: { totalCalls: 6, advancedCalls: 0 } })
-        );
-        expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain(
-            "isn't moving deals"
-        );
-    });
-
-    it("affirms when calls advance more often than not", () => {
-        const s = authorSection3(
-            input({
-                discoveryStats: { totalCalls: 10, advancedCalls: 7 }
-            })
-        );
-        // 70% ≥ 60% → affirming.
-        expect(s.surprise?.tone).toBe("affirming");
-    });
-
-    // ─── per-call (precise) path ─────────────────────────────────────────
-    it("names the top-advancing thread when per-call records exist", () => {
+    it("reports a frequent segment on advanced calls without assigning causality", () => {
         const advanced = (id: string, segs: ReadonlyArray<string>) => ({
             id,
             createdAtIso: "2026-05-20T10:00:00.000Z",
@@ -293,35 +244,27 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
                 ]
             })
         );
-        expect(s.status).toBe("ready");
-        // 3 of 3 advanced → 100%.
         expect(s.body[0]).toContain("100%");
-        // pain-and-consequence is on 3/3 advancing calls — the top thread.
-        expect(s.body[1]).toContain("pain-and-consequence");
-        expect(
-            s.evidence.some((e) => e.includes("pain-and-consequence · 3"))
-        ).toBe(true);
+        expect(s.body[1]).toContain("The problem and its cost");
+        expect(s.body[1]).not.toContain("pain-and-consequence");
+        expect(s.body[1]).toMatch(/teach that question first/i);
+        expect(s.body[1]).toMatch(/does not show/i);
     });
 
-    it("surprises (stopped asking) when an advancing thread is absent from recent calls", () => {
-        // One old advancing call pulled "trigger-and-urgency"; five
-        // recent advancing calls pulled only "pain-and-consequence".
+    it("describes missing recent segments as a change to review", () => {
         const s = authorSection3(
             input({
                 discoveryCalls: [
                     {
-                        id: "c_old",
+                        id: "old",
                         createdAtIso: "2026-01-01T10:00:00.000Z",
                         accountName: "Old",
                         activeFramework: "customer-support",
-                        segmentKeysWorked: [
-                            "pain-and-consequence",
-                            "trigger-and-urgency"
-                        ],
+                        segmentKeysWorked: ["pain-and-consequence", "trigger-and-urgency"],
                         disposition: "advanced"
                     },
                     ...Array.from({ length: 5 }, (_, i) => ({
-                        id: `c_recent_${i}`,
+                        id: `recent-${i}`,
                         createdAtIso: `2026-05-${10 + i}T10:00:00.000Z`,
                         accountName: "Recent",
                         activeFramework: "customer-support",
@@ -332,15 +275,11 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain(
-            "stopped asking"
-        );
-        expect(s.surprise?.body).toContain("trigger-and-urgency");
+        expect(s.surprise?.headline).toMatch(/stopped asking/i);
+        expect(s.surprise?.body).toContain("Why now");
     });
 
-    it("per-call path beats the aggregate fallback when both are present", () => {
-        // Aggregate stats say 70% advance rate (affirming), but the
-        // per-call records have all losses → corrective. Precise wins.
+    it("uses per-call data before aggregate fallback", () => {
         const s = authorSection3(
             input({
                 discoveryStats: { totalCalls: 10, advancedCalls: 7 },
@@ -356,33 +295,24 @@ describe("authorSection3 — The questions that earned the next meeting", () => 
                 ]
             })
         );
-        // Per-call: 0/1 advanced → corrective ("isn't moving deals").
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain(
-            "isn't moving deals"
-        );
+        expect(s.surprise?.headline).toMatch(/no logged discovery call/i);
     });
 });
 
-// ─── §4 ────────────────────────────────────────────────────────────────
-
-describe("authorSection4 — Where deals are won + where they leak", () => {
+describe("authorSection4 — deal progression", () => {
     it("is empty with no deals", () => {
-        const s = authorSection4(empty);
-        expect(s.status).toBe("empty");
+        expect(authorSection4(empty).status).toBe("empty");
     });
 
-    it("is partial with <2 closes", () => {
+    it("is partial with fewer than two closed deals", () => {
         const s = authorSection4(
-            input({
-                openDeals: [deal({ id: "o1" })],
-                closedWon: [deal({ id: "w1" })]
-            })
+            input({ openDeals: [deal({ id: "o1" })], closedWon: [deal({ id: "w1" })] })
         );
         expect(s.status).toBe("partial");
     });
 
-    it("computes win rate and lists stage stops on ready path", () => {
+    it("reports win rate without treating stage as a cause", () => {
         const s = authorSection4(
             input({
                 closedWon: [deal({ id: "w1" }), deal({ id: "w2" })],
@@ -394,10 +324,11 @@ describe("authorSection4 — Where deals are won + where they leak", () => {
             })
         );
         expect(s.status).toBe("ready");
-        expect(s.body[0]).toContain("Win rate");
+        expect(s.body[0]).toContain("40%");
+        expect(s.body[0]).toMatch(/does not establish why/i);
     });
 
-    it("surprises when leaky stage has zero advisor coverage", () => {
+    it("treats zero outside-support coverage as a hypothesis to test", () => {
         const s = authorSection4(
             input({
                 closedWon: [deal({ id: "w1" })],
@@ -405,277 +336,180 @@ describe("authorSection4 — Where deals are won + where they leak", () => {
                     deal({ id: "l1", stage: "evaluation" }),
                     deal({ id: "l2", stage: "evaluation" })
                 ]
-                // no advisor deployments → corrective surprise
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.body).toMatch(/test whether outside support helps/i);
     });
 });
 
-// ─── §5 ────────────────────────────────────────────────────────────────
-
-describe("authorSection5 — The losses we paid for", () => {
-    it("is empty with no losses + no autopsies", () => {
-        const s = authorSection5(empty);
-        expect(s.status).toBe("empty");
+describe("authorSection5 — loss patterns", () => {
+    it("is empty with no losses and no reviews", () => {
+        expect(authorSection5(empty).status).toBe("empty");
     });
 
-    it("is partial when losses exist but no corrected autopsies", () => {
+    it("is partial when losses exist without reviewed corrective actions", () => {
         const s = authorSection5(
-            input({
-                closedLost: [deal({ id: "l1", lossReason: "Budget" })]
-            })
+            input({ closedLost: [deal({ id: "l1", lossReason: "Budget" })] })
         );
         expect(s.status).toBe("partial");
-        expect(s.body[0]).toContain("folklore");
+        expect(s.body.join(" ")).toMatch(/no deal-risk review has a corrected assessment or completed corrective action/i);
     });
 
-    it("becomes ready with corrected autopsies + cross-refs open deals", () => {
+    it("counts checked Future Autopsy tasks as reviewed records", () => {
         const s = authorSection5(
             input({
                 closedLost: [
-                    deal({
-                        id: "l1",
-                        accountName: "Initech",
-                        lossReason: "no champion identified"
-                    })
+                    deal({ id: "l1", accountName: "Meridian Logistics", lossReason: "single-threaded" })
                 ],
                 autopsies: [
                     {
                         dealId: "l1",
-                        accountName: "Initech",
-                        verdict: "corrected",
-                        killSwitchFired: false,
-                        tasks: [
-                            {
-                                id: "t1",
-                                text: "always identify champion before pricing",
-                                checked: true
-                            }
-                        ]
-                    }
-                ],
-                openDeals: [
-                    deal({
-                        id: "o1",
-                        accountName: "Globex",
-                        nextStep: "Need to identify champion before next call"
-                    })
-                ]
-            })
-        );
-        expect(s.status).toBe("ready");
-        expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain(
-            "symptoms of past losses"
-        );
-    });
-
-    it("surfaces the most common top-cause from autopsy snapshots", () => {
-        // Three examined losses, two of which share the same regenerated
-        // top cause. §5 should name it in the body.
-        const dealRecord = (id: string, account: string) =>
-            deal({
-                id,
-                accountName: account,
-                lossReason: "lost"
-            });
-        const examinedAutopsy = (dealId: string) => ({
-            dealId,
-            accountName: "",
-            verdict: "unknown" as const,
-            killSwitchFired: false,
-            tasks: [{ id: "t1", text: "t1", checked: true }]
-        });
-        const s = authorSection5(
-            input({
-                closedLost: [
-                    dealRecord("d1", "Acme"),
-                    dealRecord("d2", "Globex"),
-                    dealRecord("d3", "Initech")
-                ],
-                autopsies: [
-                    examinedAutopsy("d1"),
-                    examinedAutopsy("d2"),
-                    examinedAutopsy("d3")
-                ],
-                autopsySnapshots: [
-                    {
-                        dealId: "d1",
-                        accountName: "Acme",
-                        verdictMode: "corrected",
-                        killSwitch: "x",
-                        topCauseLabel: "No champion at EB level"
-                    },
-                    {
-                        dealId: "d2",
-                        accountName: "Globex",
-                        verdictMode: "corrected",
-                        killSwitch: "x",
-                        topCauseLabel: "No champion at EB level"
-                    },
-                    {
-                        dealId: "d3",
-                        accountName: "Initech",
-                        verdictMode: "left",
-                        killSwitch: "x",
-                        topCauseLabel: "Next step has no date"
-                    }
-                ]
-            })
-        );
-        expect(s.status).toBe("ready");
-        const fullBody = s.body.join(" ");
-        expect(fullBody).toContain("No champion at EB level");
-        expect(fullBody).toContain("2 of 3");
-    });
-
-    it("counts a loss as examined from real task-log data (no verdict)", () => {
-        // The real Future Autopsy log carries no verdict — just checked
-        // tasks. Before the fix this fell through to "partial" (folklore)
-        // even though the operator had done the postmortem. The account +
-        // reason are resolved by joining the autopsy's dealId to the
-        // closed-lost deal.
-        const s = authorSection5(
-            input({
-                closedLost: [
-                    deal({
-                        id: "deal_real",
                         accountName: "Meridian Logistics",
-                        lossReason: "single-threaded, never reached the EB"
-                    })
-                ],
-                autopsies: [
-                    {
-                        dealId: "deal_real",
-                        accountName: "", // real log stores no account_name
-                        verdict: "unknown", // real log stores no verdict
+                        verdict: "unknown",
                         killSwitchFired: false,
-                        tasks: [
-                            { id: "send_eb_request", text: "send_eb_request", checked: true },
-                            { id: "set_deadline", text: "set_deadline", checked: false }
-                        ]
+                        tasks: [{ id: "t1", text: "Engage more stakeholders", checked: true }]
                     }
                 ]
             })
         );
         expect(s.status).toBe("ready");
-        // Account + reason resolved from the joined closed-lost deal.
         const row = s.evidence.find((e) => e.includes("Meridian Logistics"));
-        expect(row).toBeTruthy();
         expect(row).toContain("single-threaded");
-        expect(row).toContain("1 commitment");
+        expect(row).toContain("1 corrective action");
+    });
+
+    it("labels historical-loss keyword overlap as a text match, not recurrence proof", () => {
+        const s = authorSection5(
+            input({
+                closedLost: [deal({ id: "l1", lossReason: "security review stalled" })],
+                openDeals: [deal({ id: "o1", accountName: "OpenCo", nextStep: "complete security review" })],
+                autopsies: [
+                    {
+                        dealId: "l1",
+                        accountName: "Acme",
+                        verdict: "unknown",
+                        killSwitchFired: false,
+                        tasks: [{ id: "t1", text: "Review security", checked: true }]
+                    }
+                ]
+            })
+        );
+        expect(s.surprise?.tone).toBe("corrective");
+        expect(s.surprise?.headline).toMatch(/look like deals you.ve lost/i);
+        expect(s.surprise?.body).toMatch(/not evidence/i);
     });
 });
 
-// ─── §6 ────────────────────────────────────────────────────────────────
-
-describe("authorSection6 — Why we win", () => {
-    it("is empty with no wins", () => {
-        const s = authorSection6(empty);
-        expect(s.status).toBe("empty");
-    });
-
-    it("is partial with one win (anecdote, not pattern)", () => {
+describe("authorSection6 — win patterns", () => {
+    it("is partial with one win", () => {
         const s = authorSection6(
             input({ closedWon: [deal({ id: "w1", accountName: "Acme" })] })
         );
         expect(s.status).toBe("partial");
-        expect(s.body[0]).toContain("anecdote");
+        expect(s.body[0]).toMatch(/not enough to infer/i);
     });
 
-    it("names the dominant persona + trigger on ≥2 wins", () => {
+    it("reports recurring persona and trigger as frequencies, not causes", () => {
         const s = authorSection6(
             input({
                 closedWon: [
-                    deal({
-                        id: "w1",
-                        persona: "VP Ops",
-                        trigger: "burn cut"
-                    }),
-                    deal({
-                        id: "w2",
-                        persona: "VP Ops",
-                        trigger: "burn cut"
-                    })
+                    deal({ id: "w1", persona: "VP Ops", trigger: "burn cut", icpLabel: "enterprise" }),
+                    deal({ id: "w2", persona: "VP Ops", trigger: "burn cut", icpLabel: "enterprise" })
                 ]
             })
         );
         expect(s.status).toBe("ready");
         expect(s.body.join(" ")).toContain("VP Ops");
         expect(s.body.join(" ")).toContain("burn cut");
+        expect(s.body.join(" ")).toMatch(/does not claim those traits caused/i);
     });
 
-    it("surprises on winning ICP missing from open pipeline", () => {
+    it("reports a closed-won ICP label missing from open pipeline", () => {
         const s = authorSection6(
             input({
                 closedWon: [
-                    deal({ id: "w1", icpLabel: "fintech ops" }),
-                    deal({ id: "w2", icpLabel: "fintech ops" })
+                    deal({ id: "w1", icpLabel: "enterprise" }),
+                    deal({ id: "w2", icpLabel: "enterprise" })
                 ],
                 openDeals: [deal({ id: "o1", icpLabel: "agency" })]
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain(
-            "missing from your current pipeline"
-        );
+        expect(s.surprise?.headline).toMatch(/missing from your open pipeline/i);
     });
 });
 
-// ─── §7 ────────────────────────────────────────────────────────────────
-
-describe("authorSection7 — What the first week looks like", () => {
-    it("is empty with no quota", () => {
-        const s = authorSection7(empty);
-        expect(s.status).toBe("empty");
+describe("authorSection7 — first-week cadence", () => {
+    it("is empty without quota inputs", () => {
+        expect(authorSection7(empty).status).toBe("empty");
     });
 
-    it("computes deals/touches/meetings from quota math", () => {
+    it("calculates the same quota planning requirements", () => {
         const s = authorSection7(
             input({
                 quota: {
-                    quota: 500_000,
-                    acv: 50_000,
-                    winRate: 0.2,
-                    cycle: 60
+                    quota: 6000000,
+                    acv: 50000,
+                    winRate: 0.25,
+                    cycle: 90,
+                    touchesPerDay: 20
                 },
                 openDeals: [deal({ id: "o1" })]
             })
         );
         expect(s.status).toBe("ready");
-        expect(s.body[0]).toContain("10 deals"); // 500k / 50k
-        expect(s.evidence.find((e) => e.includes("Win rate"))).toBeDefined();
+        // $6M a year at $50k deals = exactly 120 deals a year (30 a quarter).
+        expect(s.body[0]).toContain("120 closed-won deals a year (about 30 a quarter)");
+        expect(s.evidence.find((e) => e.includes("Win-rate assumption"))).toBeDefined();
+        expect(s.body.join(" ")).toContain("Adjust this starting schedule using recorded results.");
     });
 
-    it("surprises when activity stopped (history but nothing recent)", () => {
+    it("reads a whole-number percent win rate the way Quota Workback stores it", () => {
+        const s = authorSection7(
+            input({
+                quota: { quota: 6000000, acv: 50000, winRate: 25, cycle: 90, touchesPerDay: 20 },
+                openDeals: [deal({ id: "o1" })]
+            })
+        );
+        expect(s.evidence).toContain("Win-rate assumption: 25%");
+        // 120 deals a year at a 25% win rate = 480 qualified opportunities, not 1.
+        expect(s.body[0]).toContain("about 480 qualified opportunities a year");
+    });
+
+    it("reports recent activity dropoff as an observation", () => {
         const olderIso = new Date(Date.now() - 30 * 86400000).toISOString();
         const s = authorSection7(
             input({
-                quota: { quota: 100000, acv: 50000, winRate: 0.2, cycle: 60 },
-                touches: Array(10).fill({
+                quota: {
+                    quota: 500000,
+                    acv: 50000,
+                    winRate: 0.25,
+                    cycle: 90,
+                    touchesPerDay: 20
+                },
+                touches: Array(8).fill({
                     accountName: "A",
-                    persona: "csuite",
+                    persona: "vp",
                     temperature: "warm",
                     trigger: "",
                     channel: "email",
-                    outcome: "replied",
+                    outcome: "no_reply",
                     sendLine: "",
                     createdAtIso: olderIso
                 })
             })
         );
         expect(s.surprise?.tone).toBe("corrective");
-        expect(s.surprise?.headline.toLowerCase()).toContain("went quiet");
+        expect(s.surprise?.headline).toMatch(/recent outbound activity is lower/i);
     });
 });
 
-// ─── Aggregate ────────────────────────────────────────────────────────
-
-describe("authorAllSections + countReady", () => {
-    it("returns 7 sections in canonical order", () => {
-        const all = authorAllSections(empty);
-        expect(all.map((s) => s.id)).toEqual([
+describe("aggregate", () => {
+    it("returns all seven sections in stable order", () => {
+        const sections = authorAllSections(empty);
+        expect(sections).toHaveLength(7);
+        expect(sections.map((s) => s.id)).toEqual([
             "who_hits",
             "rails_that_worked",
             "questions_that_earned",
@@ -686,10 +520,122 @@ describe("authorAllSections + countReady", () => {
         ]);
     });
 
-    it("counts statuses correctly", () => {
-        const all = authorAllSections(empty);
-        const counts = countReady(all);
-        expect(counts.empty).toBe(7);
-        expect(counts.ready).toBe(0);
+    it("counts ready / partial / empty", () => {
+        expect(
+            countReady([
+                { id: "who_hits", kicker: "", title: "", status: "ready", body: [], evidence: [], surprise: null },
+                { id: "rails_that_worked", kicker: "", title: "", status: "partial", body: [], evidence: [], surprise: null },
+                { id: "questions_that_earned", kicker: "", title: "", status: "empty", body: [], evidence: [], surprise: null }
+            ])
+        ).toEqual({ ready: 1, partial: 1, empty: 1 });
+    });
+});
+
+describe("evidence integrity regressions", () => {
+    it("counts every distinct profile while limiting examples to three", () => {
+        const s = authorSection1(input({
+            icps: [icp()],
+            closedWon: ["A", "B", "C", "D"].map((icpLabel) => deal({ id: icpLabel, icpLabel }))
+        }));
+        expect(s.body[0]).toContain("4 distinct customer profiles");
+        expect(s.evidence.filter((row) => row.startsWith("1 win · ICP: "))).toHaveLength(3);
+    });
+
+    it("labels profile rows with how many deals share each profile, so they add up to the summary", () => {
+        const s = authorSection1(input({
+            icps: [icp()],
+            closedWon: [deal({ id: "w1" }), deal({ id: "w2" }), deal({ id: "w3" })],
+            closedLost: [deal({ id: "l1" }), deal({ id: "l2" })]
+        }));
+        expect(s.body[0]).toContain("Across 3 wins and 2 losses");
+        expect(s.evidence).toEqual([
+            "3 wins with no ICP, buyer, or trigger recorded",
+            "2 losses with no ICP, buyer, or trigger recorded"
+        ]);
+        expect(s.body.join(" ")).toContain("treat this as an early warning sign");
+    });
+
+    it("does not recommend support at an unknown historical stage", () => {
+        const s = authorSection4(input({
+            closedLost: [deal({ id: "l1", stage: "closed-lost" }), deal({ id: "l2", stage: "" })]
+        }));
+        expect(s.evidence).toContain("stage before loss not recorded · 0 won · 2 lost · 0 Call in a Favor requests");
+        expect(s.surprise).toBeNull();
+    });
+
+    it("says how many Call in a Favor requests are on closed vs open deals, matching the stage rows", () => {
+        const dep = (accountName: string) => ({ id: accountName, accountName, tier: "t1", moment: "intro", outcome: "pending" });
+        const s = authorSection4(input({
+            closedWon: [deal({ id: "w1", accountName: "Chipotle", stage: "closed-won" }), deal({ id: "w2", accountName: "Deel", stage: "closed-won" })],
+            closedLost: [deal({ id: "l1", accountName: "Lost Co", stage: "closed-lost" })],
+            openDeals: [deal({ id: "o1", accountName: "Boeing" }), deal({ id: "o2", accountName: "OpenAI" })],
+            advisorDeployments: [dep("Chipotle"), dep("Boeing"), dep("OpenAI"), dep("OpenAI")]
+        }));
+        expect(s.body[1]).toContain("4 Call in a Favor requests are recorded: 1 on closed deals (counted in the stage rows below), 3 on open deals.");
+        const rowTotal = s.evidence
+            .map((row) => Number(/· (\d+) Call in a Favor request/.exec(row)?.[1] ?? 0))
+            .reduce((a, b) => a + b, 0);
+        expect(rowTotal).toBe(1);
+        expect(s.evidence).toContain("closed-won · 2 won · 0 lost · 1 Call in a Favor request");
+        expect(s.surprise).toBeNull();
+    });
+
+    it("distinguishes a corrected open-deal risk review from a recorded loss", () => {
+        const s = authorSection5(input({
+            openDeals: [deal({ id: "o1" })],
+            autopsies: [{ dealId: "o1", accountName: "Acme", verdict: "corrected", killSwitchFired: false, tasks: [] }]
+        }));
+        expect(s.status).toBe("ready");
+        expect(s.body[0]).toContain("1 deal-risk review has");
+        expect(s.body[0]).toContain("may include open deals");
+        expect(s.body[0]).not.toMatch(/1 (?:recorded )?loss/);
+    });
+
+    it("counts an open deal once when it matches multiple historical loss reasons", () => {
+        const s = authorSection5(input({
+            closedLost: [deal({ id: "l1", lossReason: "security review" }), deal({ id: "l2", lossReason: "security requirements" })],
+            openDeals: [deal({ id: "o1", nextStep: "Complete security review" })],
+            autopsies: [{ dealId: "l1", accountName: "Acme", verdict: "corrected", killSwitchFired: false, tasks: [] }]
+        }));
+        expect(s.surprise?.body).toContain("1 open deal has a keyword overlap");
+    });
+
+    it("does not affirm ICP alignment when no winning ICP labels are recorded", () => {
+        const s = authorSection6(input({
+            closedWon: [deal({ id: "w1" }), deal({ id: "w2" })],
+            openDeals: [deal({ id: "o1", icpLabel: "enterprise" })]
+        }));
+        expect(s.surprise).toBeNull();
+    });
+
+    it("states the same daily outreach, meetings, opportunities and deals as Quota Workback", () => {
+        // The enterprise demo plan: $2M target, $250k deals, 22% win rate.
+        const store = new Map<string, string>([
+            ["gtmos_qw_inputs", JSON.stringify({ quota: 2000000, acv: 250000, win: 22, m2o: 35, t2m: 2, show: 80, days: 20, tpa: 8, cycle: 180 })]
+        ]);
+        const storage = {
+            getItem: (k: string) => store.get(k) ?? null,
+            setItem: (k: string, v: string) => void store.set(k, v),
+            removeItem: (k: string) => void store.delete(k),
+            key: (i: number) => [...store.keys()][i] ?? null,
+            get length() { return store.size; }
+        };
+        const plan = loadQuotaInputs(storage);
+        const quotaRoom = computeQuotaMetrics(plan, EMPTY_COVERAGE);
+        const s = authorSection7(loadSectionsInput({ storage }));
+        expect(readDailyOutreachRequirement(storage)).toBe(quotaRoom.touchesDay);
+        expect(s.body[1]).toContain(`Daily outreach target from Quota Workback: ${quotaRoom.touchesDay} messages and calls per working day.`);
+        expect(s.body[0]).toContain(`about ${quotaRoom.meetingsYear} first meetings a year (about ${quotaRoom.meetingsWeek} a week)`);
+        expect(s.body[0]).toContain("8 closed-won deals a year (about 2 a quarter)");
+        expect(s.body[0]).toContain(`about ${quotaRoom.oppsYear} qualified`);
+        expect(s.evidence).toContain(`Closed-won deals needed per year: ${quotaRoom.dealsYear}`);
+        // Both rooms state the same plan. 28 a day and 8.8 first meetings a month
+        // since the plan stopped rounding 0.7 deals a month up to 1 (it read 48 / 15).
+        expect(quotaRoom.dealsYear).toBe(8);
+        expect(quotaRoom.touchesDay).toBe(28);
+        expect(quotaRoom.meetingsMonth).toBe(8.8);
+        // An entered touches-per-day value is not used by the Quota room, so it is not used here either.
+        const withEntered = authorSection7(input({ quota: { quota: 2000000, acv: 250000, winRate: 22, cycle: 180, touchesPerDay: 12, plan } }));
+        expect(withEntered.body[1]).toContain("28 messages and calls per working day");
     });
 });

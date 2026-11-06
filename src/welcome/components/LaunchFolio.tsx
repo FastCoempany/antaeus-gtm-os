@@ -115,14 +115,14 @@ function buildWhereYouAre(
         const companyPiece = ctx.companyName ? `${ctx.companyName} workspace` : "Fresh workspace";
         return {
             value: companyPiece,
-            note: "Onboarding is closed. The room is waiting for the first anchor."
+            note: "Onboarding is finished. The workspace is waiting for the first anchor."
         };
     }
     return {
         value: `${completed} of ${total} anchors live.`,
         note: completed === total
             ? "The workspace is operating. Daily rhythm runs from the Dashboard."
-            : "Internal shape is forming. The downstream rooms are listening."
+            : "The workspace is taking shape. The rest of the app already uses what you've added."
     };
 }
 
@@ -179,7 +179,7 @@ function buildReturnBehavior(
     if (allLive) {
         return {
             value: "Re-enter through the Dashboard.",
-            note: "The room knows enough to rank what to work on."
+            note: "The app knows enough to rank what to work on."
         };
     }
     if (!dominant) {
@@ -213,5 +213,5 @@ function roomLabelFromHref(href: string): string {
     for (const [path, label] of Object.entries(map)) {
         if (href.startsWith(path)) return label;
     }
-    return "the next room";
+    return "the next page";
 }

@@ -52,7 +52,7 @@ export function DarkHero(): JSX.Element {
     });
     const worked = totalWorked.value;
     const saved = recentIcps.value.length;
-    const placeholder = statement.text.startsWith("Fill the inputs");
+    const placeholder = statement.text.startsWith("Complete the inputs");
 
     const kicker =
         saved > 0
@@ -69,7 +69,7 @@ export function DarkHero(): JSX.Element {
                 </h1>
                 <p class="icp-hero__note">
                     A thin ICP — one industry, one buyer, one pain — is what
-                    every downstream room targets against.
+                    every other part of the app targets against.
                 </p>
                 {!placeholder ? (
                     <p class="icp-hero__statement">{statement.text}</p>

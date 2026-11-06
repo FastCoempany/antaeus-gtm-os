@@ -114,7 +114,7 @@ function renderCandidate(s: SilentAccount): ObservationCandidate {
     const text =
         s.lastSignalIso === null
             ? `${account} is on the watchlist but no signals are on record.`
-            : `${account} has been silent for ${s.daysSilent} days — no fresh signal coverage.`;
+            : `No new signals have been recorded for ${account} in ${s.daysSilent} days.`;
     return {
         observationText: text,
         relatedObjectType: RELATED_OBJECT_TYPE,

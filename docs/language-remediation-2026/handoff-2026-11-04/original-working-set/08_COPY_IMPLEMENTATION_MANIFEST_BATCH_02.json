@@ -1,0 +1,610 @@
+{
+  "version": "batch-02",
+  "scope": [
+    "Territory Architect",
+    "Signal Console",
+    "Briefing",
+    "Getting to Signed",
+    "Pilot Desk",
+    "Founding GTM",
+    "Call in a Favor"
+  ],
+  "exact_replacements": [
+    {
+      "current": "29 / 300 covered",
+      "replacement": "29 / 300 accounts assigned to a segment"
+    },
+    {
+      "current": "◎ Geography Regions & metros",
+      "replacement": "◎ Geography · regions and metros"
+    },
+    {
+      "current": "▣ Vertical Industries",
+      "replacement": "▣ Industry · verticals"
+    },
+    {
+      "current": "☰ Segment Size / stage bands",
+      "replacement": "☰ Company size / stage"
+    },
+    {
+      "current": "◈ Named accounts Hand-picked lists",
+      "replacement": "◈ Named accounts · selected lists"
+    },
+    {
+      "current": "⚡ Trigger Signal-driven",
+      "replacement": "⚡ Buying signals"
+    },
+    {
+      "current": "⧉ Blend Stack cuts across axes",
+      "replacement": "⧉ Combined criteria"
+    },
+    {
+      "current": "Cut by size — the band you actually win in.",
+      "replacement": "Define a company-size segment based on where you win."
+    },
+    {
+      "current": "271 open",
+      "replacement": "271 not yet assigned"
+    },
+    {
+      "current": "Strategic (must-win) 0/30",
+      "replacement": "Strategic 0 / 30"
+    },
+    {
+      "current": "Core (recurring focus) 29/90",
+      "replacement": "Core 29 / 90"
+    },
+    {
+      "current": "Develop (research-led) 0/120",
+      "replacement": "Develop 0 / 120"
+    },
+    {
+      "current": "Watch (monitor only) 0/60",
+      "replacement": "Monitor 0 / 60"
+    },
+    {
+      "current": "EMPTY",
+      "replacement": "NO SEGMENTS YET"
+    },
+    {
+      "current": "You haven't carved a division yet, so there's nothing to organize the territory around.",
+      "replacement": "No territory segments have been created yet."
+    },
+    {
+      "current": "NEXT Carve one division. Name the group of buyers you believe you can win.",
+      "replacement": "Create a segment for a group of accounts you want to cover."
+    },
+    {
+      "current": "Carve a segment division Name it, set a tier, say why you. + Carve division",
+      "replacement": "Create segment · name it, assign a priority tier, and record why it fits"
+    },
+    {
+      "current": "Carve your first division.",
+      "replacement": "Create your first territory segment."
+    },
+    {
+      "current": "Nothing on this axis yet — most teams start rough. Name one group of buyers worth covering; the 300-cap and the tiers do the rest.",
+      "replacement": "No segments exist for this criterion yet. Create one group of accounts worth covering and assign it a priority tier."
+    },
+    {
+      "current": "Warming up — reach the warm accounts before they cool",
+      "replacement": "Account priority based on recent signals and activity"
+    },
+    {
+      "current": "Enrich all ↻",
+      "replacement": "Refresh account data ↻"
+    },
+    {
+      "current": "+ Watch a company",
+      "replacement": "+ Add company to watchlist"
+    },
+    {
+      "current": "act now",
+      "replacement": "high priority"
+    },
+    {
+      "current": "reach while warm",
+      "replacement": "priority declining"
+    },
+    {
+      "current": "emerging",
+      "replacement": "new signals"
+    },
+    {
+      "current": "going cold",
+      "replacement": "low recent activity"
+    },
+    {
+      "current": "The shape of your attention today. Scan the bands, open any account in place, strike where it's ripe.",
+      "replacement": "Review accounts by current priority. Open an account to see the signals and activity driving its ranking."
+    },
+    {
+      "current": "29 accounts watched · 1 signals this week · 1 compounding, 27 still weak",
+      "replacement": "29 watched accounts · 1 new signal this week · 1 account with multiple reinforcing signals"
+    },
+    {
+      "current": "REACH WHILE WARM",
+      "replacement": "PRIORITY DECLINING"
+    },
+    {
+      "current": "— still hot, but the signal is aging — go before it cools",
+      "replacement": "The signal is still relevant, but it is becoming older. Consider outreach while the event is still timely."
+    },
+    {
+      "current": "EMERGING",
+      "replacement": "NEW SIGNALS"
+    },
+    {
+      "current": "— a fresh trigger, heat still building — get in early",
+      "replacement": "A recent signal increased this account's priority. Review it before deciding whether to reach out."
+    },
+    {
+      "current": "Open the system's read",
+      "replacement": "Open analysis"
+    },
+    {
+      "current": "SCHEDULED SKILLS",
+      "replacement": "SCHEDULED CHECKS"
+    },
+    {
+      "current": "QUEUED",
+      "replacement": "SCHEDULED"
+    },
+    {
+      "current": "FIRST TIME HERE",
+      "replacement": "ABOUT BRIEFING"
+    },
+    {
+      "current": "This room is what the system saw — in your work, and in your market.",
+      "replacement": "Briefing summarizes changes in your deals and accounts, along with relevant developments in your market."
+    },
+    {
+      "current": "Open it daily. It reads top to bottom the way your morning does: your work first (what's moving in your own deals, signals, and pilot evidence — refreshed every 30 minutes), then your market (what's moving in the world you sell into — refreshed Monday mornings).",
+      "replacement": "Your account and deal activity is refreshed every 30 minutes. Market analysis is refreshed on Monday mornings."
+    },
+    {
+      "current": "Your work — heartbeat-fresh reads about your deals going stale, accounts going quiet, evidence past its readout. Dismiss what doesn't matter; the rest tells you where to look first.",
+      "replacement": "Your work shows material changes in active deals, watched accounts, and pilot evidence. Dismiss items that are not useful."
+    },
+    {
+      "current": "Your market · Patterns — synthesized reads of what's moving in your market. Click any destination chip to draft a move in the destination room. \"Show the work\" expands the audit trail.",
+      "replacement": "Market patterns summarize recurring developments across your target market. Open the supporting evidence or continue into the relevant workspace."
+    },
+    {
+      "current": "Your market · The data disagrees — the system challenging an assumption you've stated. Quiet most weeks. Loud when the evidence stops matching.",
+      "replacement": "Conflicting evidence identifies cases where current data does not support an assumption in your workspace."
+    },
+    {
+      "current": "Your market · Consider watching — companies the data kept mentioning alongside the ones you've named but that aren't on your watchlist yet.",
+      "replacement": "Accounts to consider lists companies that repeatedly appear in relevant evidence but are not currently on your watchlist."
+    },
+    {
+      "current": "Watch list — your standing orders on the watching-for strip. Arm one and the system tells you when it fires.",
+      "replacement": "Saved monitoring rules let you define events to watch for. Antaeus adds an item here when a rule matches new data."
+    },
+    {
+      "current": "inside your deals and accounts",
+      "replacement": "changes in your deals and accounts"
+    },
+    {
+      "current": "Nothing to flag in your work right now. The system checks every half hour — when something starts slipping, it shows up here.",
+      "replacement": "No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes."
+    },
+    {
+      "current": "THE MARKET",
+      "replacement": "MARKET UPDATES"
+    },
+    {
+      "current": "pattern",
+      "replacement": "market pattern"
+    },
+    {
+      "current": "WHERE YOUR WORLD IS GATHERING",
+      "replacement": "UPCOMING EVENTS RELEVANT TO YOUR TARGET MARKET"
+    },
+    {
+      "current": "Your market, in full",
+      "replacement": "Market analysis"
+    },
+    {
+      "current": "every read links to its evidence",
+      "replacement": "every analysis includes supporting evidence"
+    },
+    {
+      "current": "3 READS THIS WEEK",
+      "replacement": "3 MARKET ANALYSES THIS WEEK"
+    },
+    {
+      "current": "RISING",
+      "replacement": "INCREASING"
+    },
+    {
+      "current": "Your food-service accounts close twice as fast as your airline accounts — the book is tiered the other way",
+      "replacement": "Your food-service deals have closed faster than your airline deals, while the current territory tiers prioritize airlines."
+    },
+    {
+      "current": "Boeing is rebuilding its production workforce after the strike, Chipotle's burrito-season engine hires ~20,000 every spring, and CoreWeave's datacenter buildout roughly tripled its headcount in a year. Public hiring events are the book's whole engine — each one dates the conversation for you.",
+      "replacement": "Boeing, Chipotle, and CoreWeave each have public, dated hiring activity relevant to your ICP. These events provide current reasons to contact the accounts."
+    },
+    {
+      "current": "A public hiring push is urgency you don't have to manufacture.",
+      "replacement": "A public hiring event provides a timely, evidence-based reason for outreach."
+    },
+    {
+      "current": "Open on their own announcement; bring the seasonal math.",
+      "replacement": "Reference the company's own announcement and connect it to the relevant hiring-volume problem."
+    },
+    {
+      "current": "Announced events fade from the news cycle fast.",
+      "replacement": "The relevance of a public announcement declines as it gets older."
+    },
+    {
+      "current": "Chipotle closed in 132 days and Sweetgreen's sister motion runs faster still; the airline deals average past 150 with the signer arriving late. The tiering puts aviation first. The record says the fast-casual lane deserves the first hour of the day.",
+      "replacement": "Your closed-won food-service deals have moved faster than your airline deals. The current territory tiers prioritize aviation, so review whether the ranking still reflects your own sales history."
+    },
+    {
+      "current": "The close-rate gap between lanes is now visible in your own record.",
+      "replacement": "Your workspace now contains enough closed-deal history to compare performance by segment."
+    },
+    {
+      "current": "The book's tiering decides where mornings go — and it disagrees with the record.",
+      "replacement": "The current territory tiers prioritize aviation, while your recorded results currently favor food service."
+    },
+    {
+      "current": "Whoever owns the territory carve.",
+      "replacement": "The person responsible for territory prioritization."
+    },
+    {
+      "current": "Re-tier or defend the airline-first bet deliberately.",
+      "replacement": "Review the territory tiers and either change the priority or record why aviation should remain first."
+    },
+    {
+      "current": "Review the tier map against the close record A deliberate bet beats an inherited one. Territory Architect · tiers · review",
+      "replacement": "Review territory tiers against closed-deal performance · Territory Architect"
+    },
+    {
+      "current": "Automated-hiring rules keep tightening — buyers now cite NYC's audit law in security reviews",
+      "replacement": "Automated-hiring compliance requirements are appearing in enterprise security reviews"
+    },
+    {
+      "current": "New York's automated employment-decision law made bias audits table stakes, and enterprise security reviews increasingly borrow its language. Boeing's 150-question review already asks for it. The compliance answer is a paper you hold — make it part of the first conversation, not the last.",
+      "replacement": "New York's automated-employment law requires bias-audit-related controls, and similar requirements are appearing in enterprise security reviews. Boeing's current review includes audit-related questions, so address this evidence early in security discussions."
+    },
+    {
+      "current": "Deals die in late security reviews — the Palantir loss already proved it.",
+      "replacement": "A late security review contributed to the recorded Palantir loss."
+    },
+    {
+      "current": "Whoever runs the security front on live deals.",
+      "replacement": "The person responsible for security review on active deals."
+    },
+    {
+      "current": "Open the compliance conversation in week one on every gated deal.",
+      "replacement": "Address known compliance requirements early on deals that require security review."
+    },
+    {
+      "current": "Check the security front on the live negotiation",
+      "replacement": "Review the current security workstream"
+    },
+    {
+      "current": "The blocking front is the deal's clock.",
+      "replacement": "An unresolved security issue can delay the expected close date."
+    },
+    {
+      "current": "WATCH LIST",
+      "replacement": "SAVED MONITORING RULES"
+    },
+    {
+      "current": "Add a trigger",
+      "replacement": "Add monitoring rule"
+    },
+    {
+      "current": "NO STANDING ORDERS YET",
+      "replacement": "NO MONITORING RULES YET"
+    },
+    {
+      "current": "Arm a trigger and the system watches for it every run — a product launch from a named competitor, two or more of them moving at once, a partner going quiet. When one fires, it shows up here.",
+      "replacement": "Create a monitoring rule for an event you care about, such as a competitor launch, simultaneous competitor activity, or a partner becoming inactive. Matching events appear here."
+    },
+    {
+      "current": "the deal isn't won at yes",
+      "replacement": "a verbal yes still requires legal, security, finance, and final approval"
+    },
+    {
+      "current": "to signed by",
+      "replacement": "target signature date"
+    },
+    {
+      "current": "Papers ready:",
+      "replacement": "Security documents available:"
+    },
+    {
+      "current": "THE ONE THING BLOCKING — SETTLE THIS AND THE NEXT FRONT OPENS",
+      "replacement": "CURRENT BLOCKING ISSUE"
+    },
+    {
+      "current": "THEIR SIDE · BUSINESS",
+      "replacement": "CUSTOMER REQUEST · BUSINESS"
+    },
+    {
+      "current": "THE GAP",
+      "replacement": "GAP"
+    },
+    {
+      "current": "YOUR LINE",
+      "replacement": "YOUR PROPOSED POSITION"
+    },
+    {
+      "current": "Your counter — and the line you won't cross",
+      "replacement": "Your proposed response and any non-negotiable limit"
+    },
+    {
+      "current": "This is the front that actually kills deals — not losing the argument, but the committee going quiet. Build the plan-to-signed with your champion — dated steps, named owners — and give the quiet person a real reason to re-engage, never a \"just checking in.\"",
+      "replacement": "This workstream is currently blocking progress. Build a dated signature plan with named owners, and give any inactive stakeholder a specific reason to re-engage."
+    },
+    {
+      "current": "Send the counter-position →",
+      "replacement": "Send proposed response →"
+    },
+    {
+      "current": "Loop in someone who's won this fight",
+      "replacement": "Ask someone with relevant experience"
+    },
+    {
+      "current": "Work this front ▾",
+      "replacement": "Open this workstream ▾"
+    },
+    {
+      "current": "ALL FOUR FRONTS · THEIR ASK → YOUR LINE",
+      "replacement": "ALL FOUR WORKSTREAMS · CUSTOMER REQUEST → YOUR POSITION"
+    },
+    {
+      "current": "LEGAL liability, indemnification, redlines — the changes they want to the contract TO DO open ▾",
+      "replacement": "LEGAL · liability, indemnification, and requested contract changes · TO DO · open ▾"
+    },
+    {
+      "current": "SECURITY the questionnaire — mostly answered by papers you already hold TO DO open ▾",
+      "replacement": "SECURITY · questionnaire and supporting documents · TO DO · open ▾"
+    },
+    {
+      "current": "FINANCE payment terms — every give gets something back TO DO open ▾",
+      "replacement": "FINANCE · payment terms and commercial concessions · TO DO · open ▾"
+    },
+    {
+      "current": "BUSINESS keep the committee moving — this front is what actually kills deals AT RISK open ▾",
+      "replacement": "BUSINESS APPROVAL · stakeholder engagement and signature plan · AT RISK · open ▾"
+    },
+    {
+      "current": "WE WON'T REPEAT THIS",
+      "replacement": "LESSONS FOR FUTURE DEALS"
+    },
+    {
+      "current": "What did this run to signature teach you?",
+      "replacement": "What did this signature process teach you?"
+    },
+    {
+      "current": "the guided pilot",
+      "replacement": "pilot plan and execution"
+    },
+    {
+      "current": "YOU'RE HERE",
+      "replacement": "CURRENT STEP"
+    },
+    {
+      "current": "Agree what the pilot has to show — before anyone touches the product.",
+      "replacement": "Define the pilot's success criteria before the pilot begins."
+    },
+    {
+      "current": "A pilot without an agreed finish line runs forever and shows nothing. Write the three answers down with your champion — these three answers become the Mutual pilot plan.",
+      "replacement": "Agree on success criteria, the person who approves the result, and the pilot end date with your champion. These become the pilot plan."
+    },
+    {
+      "current": "WHAT IT HAS TO SHOW",
+      "replacement": "SUCCESS CRITERIA"
+    },
+    {
+      "current": "WHO SIGNS OFF",
+      "replacement": "WHO APPROVES THE RESULT"
+    },
+    {
+      "current": "WHEN YOU'LL STOP",
+      "replacement": "PILOT END DATE"
+    },
+    {
+      "current": "THE WINDOW",
+      "replacement": "PILOT LENGTH"
+    },
+    {
+      "current": "Lock the setup →",
+      "replacement": "Save pilot setup →"
+    },
+    {
+      "current": "Bring in the first people",
+      "replacement": "Identify pilot participants"
+    },
+    {
+      "current": "AHEAD",
+      "replacement": "NEXT"
+    },
+    {
+      "current": "Your hands-on users + champion. The circle above is where you keep growing it.",
+      "replacement": "Add the hands-on users and the champion who will evaluate the pilot."
+    },
+    {
+      "current": "Keep the pilot moving",
+      "replacement": "Monitor pilot engagement"
+    },
+    {
+      "current": "Hold their hand between check-ins — is the product getting used, and who else can you pull in?",
+      "replacement": "Track usage between check-ins and add participants when broader evaluation is needed."
+    },
+    {
+      "current": "Read the adoption",
+      "replacement": "Review adoption"
+    },
+    {
+      "current": "Are enough of the right people actually using the product day-to-day to give it a fair shot?",
+      "replacement": "Confirm that the intended users are using the product often enough to evaluate the pilot fairly."
+    },
+    {
+      "current": "Write up what it showed, for your champion to carry",
+      "replacement": "Summarize pilot results for the buyer"
+    },
+    {
+      "current": "A short write-up your champion can take to their boss and defend on their own — without you in the room.",
+      "replacement": "Create a concise results summary that your champion can share internally without you present."
+    },
+    {
+      "current": "IF A HIRE STARTED MONDAY",
+      "replacement": "SALES HANDOFF"
+    },
+    {
+      "current": "The handoff",
+      "replacement": "Sales handoff"
+    },
+    {
+      "current": "The motion, written down — what a sharp operator would leave for their replacement. Readiness today: Building.",
+      "replacement": "The sales process documented for another seller. Current readiness: Partially documented."
+    },
+    {
+      "current": "1 · Who hits, who misses, why",
+      "replacement": "1 · Target customers and disqualification criteria"
+    },
+    {
+      "current": "2 · The outreach that actually landed",
+      "replacement": "2 · Outreach patterns associated with responses"
+    },
+    {
+      "current": "3 · The questions that won the next meeting",
+      "replacement": "3 · Discovery questions used on calls that progressed"
+    },
+    {
+      "current": "4 · Where deals are won + where they leak",
+      "replacement": "4 · Where deals tend to advance or stall"
+    },
+    {
+      "current": "5 · The losses we paid for",
+      "replacement": "5 · Loss patterns"
+    },
+    {
+      "current": "6 · Why we win",
+      "replacement": "6 · Win patterns"
+    },
+    {
+      "current": "7 · What the first week looks like",
+      "replacement": "7 · First-week operating cadence"
+    },
+    {
+      "current": "Who hits, who misses, why",
+      "replacement": "Target customers and disqualification criteria"
+    },
+    {
+      "current": "Out of 3 wins and 2 losses, the pattern that closes is concrete — 1 shape of customer.",
+      "replacement": "Across 3 wins and 2 losses, one customer profile appears most often in the closed-won deals."
+    },
+    {
+      "current": "The losses are not random either — 1 shape of customer never gets to yes here. A hire should know to disqualify these on intake.",
+      "replacement": "One customer profile also appears repeatedly in the recorded losses. Review whether that pattern should become a disqualification criterion."
+    },
+    {
+      "current": "ONE THING TO NOTICE",
+      "replacement": "KEY OBSERVATION"
+    },
+    {
+      "current": "Your stated ICP is also your actual ICP.",
+      "replacement": "Your current ICP matches the profile represented in the closed-won deals."
+    },
+    {
+      "current": "Closed-won deals match the ICPs you've named. The hire inherits a clear target — keep it that way.",
+      "replacement": "The recorded closed-won deals match the ICP currently defined in the workspace. Preserve that alignment when the ICP changes."
+    },
+    {
+      "current": "the guided backchannel",
+      "replacement": "network-assisted deal support"
+    },
+    {
+      "current": "Some deals you can't move alone — but someone in your corner can. Pick the one that needs it most, and set the favor up clean.",
+      "replacement": "Use an advisor, investor, or customer relationship when an outside introduction or endorsement could help move a deal."
+    },
+    {
+      "current": "DEALS WHERE A FAVOR WOULD HELP · MOST STUCK FIRST",
+      "replacement": "DEALS WHERE OUTSIDE HELP MAY BE USEFUL · HIGHEST NEED FIRST"
+    },
+    {
+      "current": "2 have no one who could put in a word —",
+      "replacement": "2 deals have no potential helper identified"
+    },
+    {
+      "current": "line someone up →",
+      "replacement": "Add a potential helper →"
+    },
+    {
+      "current": "On track — a favor could still speed it",
+      "replacement": "On track · outside support may still help"
+    },
+    {
+      "current": "The ask must be precise enough to justify outside trust. No meeting yet. One trusted person can open the door for us.",
+      "replacement": "Make the request specific and easy to act on. No meeting is currently recorded, so an introduction from a trusted contact may help."
+    },
+    {
+      "current": "WHAT YOU SEND YOUR PERSON",
+      "replacement": "MESSAGE TO YOUR CONTACT"
+    },
+    {
+      "current": "PASSES IT ON",
+      "replacement": "FORWARDABLE NOTE"
+    },
+    {
+      "current": "WHAT YOUR PERSON SENDS THE BUYER",
+      "replacement": "NOTE YOUR CONTACT CAN FORWARD"
+    },
+    {
+      "current": "All your person has to do is tweak a couple of lines and hit send. The easier you make their part, the more likely they say yes — and the less you lean on a favor you might need again later.",
+      "replacement": "Keep the forwardable note short and specific so your contact can send it with minimal editing."
+    },
+    {
+      "current": "Ready to send. Specific enough to send, and small enough that it won't cost you trust with the advisor.",
+      "replacement": "Ready to send. The request is specific and limited in scope."
+    },
+    {
+      "current": "You'll see what comes of it right here on the Boeing deal — a reply, a meeting, or a clean no.",
+      "replacement": "Track the outcome on the Boeing deal: reply, meeting, or no response."
+    },
+    {
+      "current": "FAVORS OUT — CLOSE EVERY LOOP",
+      "replacement": "OPEN REQUESTS · TRACK OUTCOMES"
+    },
+    {
+      "current": "eb_bridge · United Airlines",
+      "replacement": "executive introduction · United Airlines"
+    },
+    {
+      "current": "reference · Starbucks",
+      "replacement": "customer reference · Starbucks"
+    },
+    {
+      "current": "intro · Chipotle",
+      "replacement": "introduction · Chipotle"
+    },
+    {
+      "current": "procurement · Boeing",
+      "replacement": "procurement help · Boeing"
+    }
+  ],
+  "semantic_migrations": {
+    "territory": "carve/division -> create/territory segment",
+    "signal_console": "temperature/heat model -> account priority + evidence + signal age",
+    "briefing": "system read/personification -> observation/evidence/interpretation/action",
+    "signature": "front/face-off/line -> workstream/blocking issue/proposed position",
+    "pilot": "guided/final-line metaphor -> standard pilot planning and evaluation",
+    "founding_gtm": "motion/handoff aphorisms -> explicit sales handoff documentation",
+    "favor": "relay/backchannel/spend-trust model -> network assistance + trackable request/outcome"
+  },
+  "implementation_rules": [
+    "Do not alter calculations or data meaning solely to fit new copy.",
+    "If a renamed state is stored as an enum, preserve the enum key when changing it would risk data migration; change only the user-facing label unless a deliberate model migration is approved.",
+    "For generated Briefing language, update prompt/template instructions so future outputs do not recreate banned metaphors.",
+    "For Signal Console, retain numeric scores only if the UI exposes what the score represents and why an account received it.",
+    "For Founding GTM, avoid causal wording unless the underlying data establishes causality."
+  ]
+}

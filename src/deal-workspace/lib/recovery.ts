@@ -2,29 +2,21 @@ import type { Deal, StageId } from "./deal-shape";
 import { isClosed, STAGE_ORDER } from "./deal-shape";
 
 /**
- * Recovery ranking — ports the legacy `getRecoveryMoves` logic from
- * `js/deal-health.js` + `app/deal-workspace/index.html` into typed code.
+ * Deal-risk ranking derived deterministically from current deal state.
  *
- * The room's mind (canon §4.13) demands: "first-fold should expose
- * pressure fast — which deals will close-lost if I do nothing this week,
- * and what's the smallest corrective move." This module derives that
- * ranking deterministically from deal state.
+ * The model ranks open deals by three observable factor groups:
+ *   - inactivity: days since the last recorded update;
+ *   - next-step status: missing, undated, overdue, or due soon;
+ *   - close-date timing: overdue or expected in the current quarter.
  *
- * Three ranking signals (highest combined score = most urgent recovery):
- *   - **Staleness** (days since last update): 0 days = 0, ≥30 days = 100
- *   - **Next-step pressure**: missing next-step = 60, overdue = 80,
- *     due-soon = 30
- *   - **Close-date pressure**: in-quarter deals get +30; overdue gets +50
+ * The score is a prioritization heuristic. It does not predict that a deal
+ * will be lost on a particular date.
  *
- * Total score caps at 100 per signal, summed (max 290).
- *
- * Lane assignment from the score:
- *   - score >= 150 → critical
- *   - score >= 80  → at-risk
- *   - score < 80   → healthy
- *
- * Already-closed deals (won or lost) are filtered out; they don't need
- * recovery, only post-mortem.
+ * Existing scoring behavior is unchanged:
+ *   - inactivity: 0 days = 0, >=30 days = 100;
+ *   - next step: missing = 60, overdue = 80, due soon = 30;
+ *   - close date: current quarter = +30, overdue = +50;
+ *   - score >=150 = critical, >=80 = at-risk, otherwise healthy.
  */
 
 export type RecoveryLane = "healthy" | "at-risk" | "critical";
@@ -64,23 +56,23 @@ function isThisQuarter(d: string | undefined, ref: Date = NOW()): boolean {
 
 function stalenessScore(deal: Deal): { score: number; cause: string | null } {
     const days = daysBetween(deal.updated_at ?? deal.created_at);
-    if (days >= 30) return { score: 100, cause: `Stalled ${days} days` };
-    if (days >= 14) return { score: 70, cause: `${days} days since last activity` };
-    if (days >= 7) return { score: 35, cause: `${days} days since last activity` };
+    if (days >= 30) return { score: 100, cause: `No recorded activity for ${days} days` };
+    if (days >= 14) return { score: 70, cause: `${days} days since last recorded activity` };
+    if (days >= 7) return { score: 35, cause: `${days} days since last recorded activity` };
     return { score: 0, cause: null };
 }
 
 function nextStepScore(deal: Deal): { score: number; cause: string | null } {
     if (!deal.nextStep || deal.nextStep.trim() === "") {
-        return { score: 60, cause: "No next step set" };
+        return { score: 60, cause: "No next step is recorded" };
     }
     if (!deal.nextStepDate) {
-        return { score: 30, cause: "Next step has no date" };
+        return { score: 30, cause: "The next step has no date" };
     }
     const days = daysUntil(deal.nextStepDate);
-    if (days === null) return { score: 30, cause: "Next step date unparseable" };
-    if (days < 0) return { score: 80, cause: `Next step ${Math.abs(days)} days overdue` };
-    if (days <= 3) return { score: 30, cause: `Next step due in ${days} days` };
+    if (days === null) return { score: 30, cause: "The next-step date could not be read" };
+    if (days < 0) return { score: 80, cause: `Next step is ${Math.abs(days)} days overdue` };
+    if (days <= 3) return { score: 30, cause: `Next step is due in ${days} days` };
     return { score: 0, cause: null };
 }
 
@@ -88,9 +80,9 @@ function closeDateScore(deal: Deal): { score: number; cause: string | null } {
     if (!deal.closeDate) return { score: 0, cause: null };
     const days = daysUntil(deal.closeDate);
     if (days === null) return { score: 0, cause: null };
-    if (days < 0) return { score: 50, cause: `Close date ${Math.abs(days)} days overdue` };
+    if (days < 0) return { score: 50, cause: `Expected close date is ${Math.abs(days)} days overdue` };
     if (isThisQuarter(deal.closeDate)) {
-        return { score: 30, cause: "Closing this quarter" };
+        return { score: 30, cause: "Expected close date is in the current quarter" };
     }
     return { score: 0, cause: null };
 }
@@ -104,19 +96,19 @@ function laneFromScore(score: number): RecoveryLane {
 function suggestedNextMove(deal: Deal, lane: RecoveryLane): string {
     if (lane === "critical") {
         if (!deal.nextStep) {
-            return "Lock a real next step today — anything specific moves this forward.";
+            return "Set a dated next step with the buyer.";
         }
-        return "Restart the next step — the deal is going stale.";
+        return "Confirm or replace the current next step with the buyer.";
     }
     if (lane === "at-risk") {
-        if (!deal.nextStep) return "Set a concrete next step with a date.";
-        if (!deal.champion) return "Confirm who the champion is before more activity.";
-        return "Tighten the next step with the buyer.";
+        if (!deal.nextStep) return "Set a dated next step with the buyer.";
+        if (!deal.champion) return "Identify the internal champion and confirm their role.";
+        return "Confirm that the current next step is still agreed and dated.";
     }
     if (deal.stage === "prospect" || deal.stage === "discovery") {
-        return "Push toward a conversation about what the buyer needs to see to say yes.";
+        return "Confirm what the buyer needs to evaluate next.";
     }
-    return "Keep the pace. Check the quality of the next step the next time you log in.";
+    return "Review the current next step and keep it dated.";
 }
 
 export function assessDeal(deal: Deal): RecoveryAssessment | null {
@@ -144,15 +136,16 @@ export function rankRecovery(deals: ReadonlyArray<Deal>): ReadonlyArray<Recovery
         const a = assessDeal(d);
         if (a) assessments.push(a);
     }
-    // Highest-score first; tiebreak by stage proximity to close (later
-    // stages first because they're closer to the cliff).
+    // Highest risk score first. Ties use later sales stage because more of the
+    // recorded buying process has already occurred; this is prioritization,
+    // not a claim that the deal is closer to loss.
     return assessments.sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
         return STAGE_ORDER[b.deal.stage] - STAGE_ORDER[a.deal.stage];
     });
 }
 
-/** Group ranked assessments by lane. */
+/** Group ranked assessments by stable internal lane. */
 export function groupByLane(
     assessments: ReadonlyArray<RecoveryAssessment>
 ): Record<RecoveryLane, ReadonlyArray<RecoveryAssessment>> {
@@ -165,7 +158,7 @@ export function groupByLane(
     return groups;
 }
 
-/** Stage-stage progression check used by the loss-reason modal trigger. */
+/** Stage transition check used by the loss-reason modal trigger. */
 export function transitionedToLost(prev: StageId, next: StageId): boolean {
     return prev !== "closed-lost" && next === "closed-lost";
 }

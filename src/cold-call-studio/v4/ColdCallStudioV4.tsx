@@ -28,16 +28,10 @@ import { LiveEdge } from "@/lib/edge/LiveEdge";
 import "./cold-call-studio-v4.css";
 
 /**
- * ColdCallStudioV4 (canon §4.9) — the game plan, wired to production
- * from the settled 2026-07-06 mockup. A prep surface + an after-the-
- * call capture surface, never a during-call console: the pre-flight
- * bar (who · your reason to call, live from Signal Console · your one
- * goal), the 5-step game plan read BEFORE dialing (each step: the line
- * you say + the pushbacks you'll likely hear with an answer ready +
- * add-your-own), and the after-the-call outcome capture (booked →
- * creates a deal; the week's read). The thread data, personalize,
- * call log, discovery stats, and the deal-creation side effect are
- * reused unchanged. No clock, no mid-call clicking.
+ * Cold Call Studio is a preparation and post-call logging surface. It uses
+ * the selected account signal as a reason for the call, provides response
+ * prompts for common buyer reactions, and records the outcome afterward.
+ * A booked meeting creates a deal through the existing state-side effect.
  */
 
 const customPb = signal<CustomPushbackMap>(loadCustomPushbacks());
@@ -53,18 +47,17 @@ function toast(msg: string): void {
     toastTimer = setTimeout(() => (toastMsg.value = null), 2400);
 }
 
-/** The five call steps, said plainly (§13). The prep thread became the pre-flight bar. */
+/** Existing internal thread ids rendered as plain call-plan steps. */
 const STEP_META: ReadonlyArray<{ id: ThreadId; name: string; par?: string }> = [
     { id: "opener", name: t("Open the call") },
-    { id: "pressure", name: t("Why it matters to them"), par: t("(what's the cost)") },
-    { id: "proof", name: t("Show them it's worked before", { class: "body" }) },
-    { id: "ask", name: t("Ask for the meeting") },
-    { id: "exit", name: t("Wrap up") }
+    { id: "pressure", name: t("Understand the impact") },
+    { id: "proof", name: t("Understand the current approach", { class: "body" }) },
+    { id: "ask", name: t("Ask for the next conversation", { class: "body" }) },
+    { id: "exit", name: t("Close the call") }
 ];
 
-/** Outcomes grouped the way the seller thinks about them. */
-const ALIVE: ReadonlyArray<Outcome> = ["callback_scheduled", "referral"];
-const NO_THIS_TIME: ReadonlyArray<Outcome> = ["voicemail", "rejected", "hung_up", "no_answer"];
+const FOLLOW_UP_POSSIBLE: ReadonlyArray<Outcome> = ["callback_scheduled", "referral"];
+const OTHER_OUTCOMES: ReadonlyArray<Outcome> = ["voicemail", "rejected", "hung_up", "no_answer"];
 
 function saveAdd(): void {
     const threadId = addingFor.value;
@@ -76,7 +69,7 @@ function saveAdd(): void {
     addingFor.value = null;
     addBuyer.value = "";
     addReply.value = "";
-    toast(t("Added to your game plan."));
+    toast(t("Response prompt saved."));
 }
 
 function removePb(threadId: ThreadId, id: string): void {
@@ -87,19 +80,15 @@ function removePb(threadId: ThreadId, id: string): void {
 
 function logOutcome(outcome: Outcome): void {
     const account = selectedAccount.value;
-    // Never log a junk row — an outcome needs a named account (the
-    // stats + Readiness discovery inputs read this log).
     if (!account) {
-        toast(t("Pick the account you called first.", { class: "body" }));
+        toast(t("Select the account you called first.", { class: "body" }));
         return;
     }
     const entry = logCall(outcome);
     if (!entry) return;
-    // Cloud write too — a local-only log is clobbered when cloud
-    // replaces local on boot.
     void saveCallEntry(entry);
-    if (outcome === "meeting_booked" && account) {
-        toast(`${t("Meeting booked — a deal was created for", { class: "body" })} ${account.name}.`);
+    if (outcome === "meeting_booked") {
+        toast(`${t("Meeting booked. A deal was created for", { class: "body" })} ${account.name}.`);
     } else {
         toast(`${t("Logged:")} ${OUTCOME_LABELS[outcome]}.`);
     }
@@ -123,61 +112,59 @@ export function ColdCallStudioV4(): JSX.Element {
             <div class="cc4-wrap">
                 <div class="cc4-top">
                     <span class="cc4-bname">{t("Cold Call Studio")}</span>
-                    <span class="cc4-r">{t("walk in ready · log it after", { class: "body" })}</span>
+                    <span class="cc4-r">{t("prepare before the call · log the outcome after", { class: "body" })}</span>
                 </div>
 
-                {/* pre-flight */}
                 <div class="cc4-pre">
                     <div class="cc4-cell cc4-who">
-                        <div class="cc4-k">{t("Who you're calling")}</div>
+                        <div class="cc4-k">{t("Account and contact")}</div>
                         <div class="cc4-v">
                             <select
                                 class="cc4-acct"
                                 value={account?.name ?? ""}
                                 onChange={(e) => setSelectedAccount((e.currentTarget as HTMLSelectElement).value || null)}
                             >
-                                <option value="">{t("Pick an account…")}</option>
+                                <option value="">{t("Select an account…")}</option>
                                 {options.map((a) => (
                                     <option value={a.name} key={a.id}>{a.name}</option>
                                 ))}
                             </select>
-                            {account && account.heat > 75 ? <span class="cc4-hot">{t("HOT")}</span> : null}
+                            {account && account.heat > 75 ? <span class="cc4-hot">{t("HIGH PRIORITY")}</span> : null}
                         </div>
                         <input
                             class="cc4-contact"
                             value={d.contactName}
-                            placeholder={t("Who picks up? (name · role)", { class: "body" })}
+                            placeholder={t("Contact name · role", { class: "body" })}
                             onInput={(e) => patchDraft({ contactName: (e.currentTarget as HTMLInputElement).value })}
                         />
                     </div>
                     <div class="cc4-cell cc4-reason">
                         <div class="cc4-k">
-                            {t("Your reason to call")}
+                            {t("Reason for the call")}
                             {account ? (
-                                <a class="cc4-src" href={hrefToSignalConsole(account.name)}>◆ {t("live from Signal Console", { class: "body" })}</a>
+                                <a class="cc4-src" href={hrefToSignalConsole(account.name)}>◆ {t("Signal Console")}</a>
                             ) : null}
                         </div>
                         <div class="cc4-v">
                             {account?.topSignal ? (
                                 <span class="cc4-hi">{account.topSignal}</span>
                             ) : account ? (
-                                t("No live signal on this account yet — go find one before you dial.", { class: "body" })
+                                t("No current account signal is available. Use another evidence-based reason for the call or return after the account has a relevant signal.", { class: "body" })
                             ) : (
-                                t("Pick an account and its freshest signal lands here.", { class: "body" })
+                                t("Select an account to review its current signal.", { class: "body" })
                             )}
                         </div>
-                        <div class="cc4-note">{t("This is your way in — the call is built around it.", { class: "body" })}</div>
+                        <div class="cc4-note">{t("Use the account signal as the reason for the call. Let the buyer tell you whether it creates a problem internally.", { class: "body" })}</div>
                     </div>
                     <div class="cc4-cell cc4-goal">
-                        <div class="cc4-k">{t("Your one goal")}</div>
-                        <div class="cc4-v">{t("Book 20 minutes")}</div>
+                        <div class="cc4-k">{t("Call goal")}</div>
+                        <div class="cc4-v">{t("Determine whether a 20-minute follow-up is warranted", { class: "body" })}</div>
                     </div>
                 </div>
 
-                {/* the game plan */}
                 <div class="cc4-planhd">
-                    <span class="cc4-h">{t("Your game plan")}</span>
-                    <span class="cc4-s">{t("read it before you dial · then put the phone in your hand", { class: "body" })}</span>
+                    <span class="cc4-h">{t("Call plan")}</span>
+                    <span class="cc4-s">{t("Review the plan before dialing.", { class: "body" })}</span>
                 </div>
                 {STEP_META.map((step, i) => {
                     const thread = THREADS.find((th) => th.id === step.id);
@@ -190,11 +177,11 @@ export function ColdCallStudioV4(): JSX.Element {
                                 <span class="cc4-nm">{step.name}{step.par ? <span class="cc4-par"> {step.par}</span> : null}</span>
                             </div>
                             <div class="cc4-say">
-                                <span class="cc4-tag">{t("You say")}</span>
+                                <span class="cc4-tag">{t("Suggested line")}</span>
                                 <span class="cc4-line">{personalize(thread.say, ctx)}</span>
                             </div>
                             <div class="cc4-push">
-                                <div class="cc4-pbhead"><span class="cc4-c1">{t("If they say")}</span><span class="cc4-c2">{t("You say — the answer's ready", { class: "body" })}</span><span /></div>
+                                <div class="cc4-pbhead"><span class="cc4-c1">{t("If they say")}</span><span class="cc4-c2">{t("Suggested response")}</span><span /></div>
                                 {thread.replies.map((rep) => (
                                     <div class="cc4-pb" key={rep.id}>
                                         <span class="cc4-q">{personalize(rep.buyer, ctx)}</span>
@@ -204,23 +191,23 @@ export function ColdCallStudioV4(): JSX.Element {
                                 ))}
                                 {custom.map((rep) => (
                                     <div class="cc4-pb is-yours" key={rep.id}>
-                                        <span class="cc4-q">{rep.buyer || t("(what they said)")}</span>
-                                        <span class="cc4-a">{rep.reply || t("(your answer)")}</span>
+                                        <span class="cc4-q">{rep.buyer || t("(buyer response)")}</span>
+                                        <span class="cc4-a">{rep.reply || t("(your response)")}</span>
                                         <button type="button" class="cc4-rm" title={t("remove")} onClick={() => removePb(step.id, rep.id)}>✕</button>
                                     </div>
                                 ))}
                                 {addingFor.value === step.id ? (
                                     <div class="cc4-addrow">
-                                        <input value={addBuyer.value} placeholder={t("What they said")}
+                                        <input value={addBuyer.value} placeholder={t("Buyer response")}
                                             onInput={(e) => (addBuyer.value = (e.currentTarget as HTMLInputElement).value)} />
-                                        <input value={addReply.value} placeholder={t("Your answer, ready for next time", { class: "body" })}
+                                        <input value={addReply.value} placeholder={t("Response to use next time", { class: "body" })}
                                             onInput={(e) => (addReply.value = (e.currentTarget as HTMLInputElement).value)}
                                             onKeyDown={(e) => { if (e.key === "Enter") saveAdd(); }} />
-                                        <button type="button" class="cc4-addok" onClick={saveAdd}>{t("Keep it")}</button>
+                                        <button type="button" class="cc4-addok" onClick={saveAdd}>{t("Save")}</button>
                                     </div>
                                 ) : (
                                     <button type="button" class="cc4-addpb" onClick={() => { addingFor.value = step.id; addBuyer.value = ""; addReply.value = ""; }}>
-                                        + {t("Add a pushback you hear", { class: "body" })}
+                                        + {t("Add a buyer response you hear", { class: "body" })}
                                     </button>
                                 )}
                             </div>
@@ -228,32 +215,31 @@ export function ColdCallStudioV4(): JSX.Element {
                     );
                 })}
 
-                {/* after the call */}
                 <div class="cc4-after">
-                    <div class="cc4-ah"><span class="cc4-ak">{t("After the call")}</span><h3>{t("How'd it go?")}</h3></div>
+                    <div class="cc4-ah"><span class="cc4-ak">{t("After the call")}</span><h3>{t("Record the outcome")}</h3></div>
                     <button type="button" class="cc4-win" disabled={!account} onClick={() => logOutcome("meeting_booked")}>
                         <span class="cc4-ic">📅</span>
                         <span class="cc4-wt">
                             {t("Booked a meeting")}
-                            <span class="cc4-wsub">{t("→ creates a deal you can work in Deal Workspace", { class: "body" })}</span>
+                            <span class="cc4-wsub">{t("Creates a deal in Deal Workspace", { class: "body" })}</span>
                         </span>
-                        <span class="cc4-go">{account ? t("tap to log →") : t("pick an account first")}</span>
+                        <span class="cc4-go">{account ? t("log outcome →") : t("select an account first")}</span>
                     </button>
                     <div class="cc4-og">
                         <div class="cc4-grp is-alive">
-                            <div class="cc4-gl">{t("Still alive")}</div>
+                            <div class="cc4-gl">{t("Follow-up possible")}</div>
                             <div class="cc4-pills">
-                                {ALIVE.map((o) => (
+                                {FOLLOW_UP_POSSIBLE.map((o) => (
                                     <button type="button" class="cc4-out" key={o} disabled={!account} onClick={() => logOutcome(o)}>
-                                        {o === "callback_scheduled" ? t("Call me back") : t("Gave a referral")}
+                                        {o === "callback_scheduled" ? t("Callback requested") : t("Referral provided")}
                                     </button>
                                 ))}
                             </div>
                         </div>
                         <div class="cc4-grp">
-                            <div class="cc4-gl">{t("No, this time")}</div>
+                            <div class="cc4-gl">{t("Other outcomes")}</div>
                             <div class="cc4-pills">
-                                {NO_THIS_TIME.map((o) => (
+                                {OTHER_OUTCOMES.map((o) => (
                                     <button type="button" class="cc4-out" key={o} disabled={!account} onClick={() => logOutcome(o)}>
                                         {o === "rejected" ? t("Not interested") : OUTCOME_LABELS[o].replace(/^./, (c) => c.toUpperCase())}
                                     </button>
@@ -264,15 +250,15 @@ export function ColdCallStudioV4(): JSX.Element {
                     <textarea
                         class="cc4-notes"
                         value={d.notes}
-                        placeholder={t("What did you hear? One line is enough.", { class: "body" })}
+                        placeholder={t("What did you learn? One line is enough.", { class: "body" })}
                         onInput={(e) => patchDraft({ notes: (e.currentTarget as HTMLTextAreaElement).value })}
                     />
                     <div class="cc4-week">
-                        <span class="cc4-wn">{t("So far:")} <b>{stats.meetings} {t("booked")}</b></span>
+                        <span class="cc4-wn">{t("Recorded:")} <b>{stats.meetings} {t("meetings booked")}</b></span>
                         <span class="cc4-bar"><span class="cc4-fill" style={`width:${Math.min(100, pct)}%`} /></span>
                         <span class="cc4-wr">
-                            <b>{stats.total}</b> {t("calls")}{stats.total > 0 ? <> · <b>{pct}%</b> {t("reached a meeting")}</> : null}
-                            {recent.length > 0 ? <> · {t("last:")} {recent.map((c) => `${c.accountName || "—"} (${OUTCOME_LABELS[c.outcome]})`).join(" · ")}</> : null}
+                            <b>{stats.total}</b> {t("calls")}{stats.total > 0 ? <> · <b>{pct}%</b> {t("resulted in a booked meeting", { class: "body" })}</> : null}
+                            {recent.length > 0 ? <> · {t("most recent:")} {recent.map((c) => `${c.accountName || "—"} (${OUTCOME_LABELS[c.outcome]})`).join(" · ")}</> : null}
                         </span>
                         {stats.meetings > 0 && account ? (
                             <a class="cc4-dw" href={hrefToDealWorkspace(account.name)}>{t("Open Deal Workspace →")}</a>
