@@ -117,7 +117,7 @@ export function AccountCardDS(props: {
                 ratio={read.ratio}
                 read={read.read}
                 tone={read.tone}
-                label={`Heat ${read.score}`}
+                label={`Priority ${read.score}`}
             />
 
             <div class="scd-card__chips">

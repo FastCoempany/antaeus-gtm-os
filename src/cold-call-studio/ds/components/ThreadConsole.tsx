@@ -52,7 +52,7 @@ export function ThreadConsole(): JSX.Element {
     }
 
     return (
-        <section class="ccd-console" aria-label={`Thread: ${thread.label}`}>
+        <section class="ccd-console" aria-label={`Step: ${thread.label}`}>
             <header class="ccd-console__head">
                 <div class="ccd-console__kicker">
                     <span class="ccd-console__num">{thread.num}</span>
@@ -97,7 +97,7 @@ export function ThreadConsole(): JSX.Element {
                             variant="accent"
                             onClick={() => setActiveThread(reply.next as ThreadId)}
                         >
-                            {t("Pull the next thread")}
+                            {t("Go to the next step")}
                         </Button>
                     ) : null}
                 </div>

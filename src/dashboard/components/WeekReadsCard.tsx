@@ -103,7 +103,7 @@ export function WeekReadsCard(): JSX.Element {
                         class: "body"
                     })}
                 </h2>
-                <div class="db-week-reads__toggle" role="group" aria-label={t("Decay threshold")}>
+                <div class="db-week-reads__toggle" role="group" aria-label={t("Inactivity threshold")}>
                     <button
                         type="button"
                         class={`db-week-reads__pill${threshold === 14 ? " is-active" : ""}`}

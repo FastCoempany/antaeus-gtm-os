@@ -155,9 +155,9 @@ export function WorkspaceReads(): JSX.Element {
                     The system has nothing to flag in your work right now.
                 </h2>
                 <p class="bf-workspace__empty-body">
-                    Workspace reads fire on the heartbeat — every 30 minutes
-                    against your deals, signals, pilot evidence, and discovery
-                    cadence. When something starts decaying, it will show
+                    A scheduled check reviews your deals, signals, pilot
+                    evidence, and discovery calls every 30 minutes. When a
+                    deal or account goes without activity, it will show
                     up here.
                 </p>
             </section>

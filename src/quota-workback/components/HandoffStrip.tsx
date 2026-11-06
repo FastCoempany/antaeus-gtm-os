@@ -28,7 +28,7 @@ export function HandoffStrip(): JSX.Element {
     return (
         <section class="qw-handoff" aria-label={t("Downstream handoffs")}>
             <header class="qw-section__head">
-                <p class="qw-section__kicker">{t("CARRY THE PRESSURE FORWARD")}</p>
+                <p class="qw-section__kicker">{t("USE THE PLAN IN OUTREACH")}</p>
                 <h2 class="qw-section__title">{t("Where the plan lives next.")}</h2>
                 <p class="qw-section__sub">
                     {t(
@@ -51,18 +51,18 @@ export function HandoffStrip(): JSX.Element {
                     title={t("Cold Call Studio")}
                     metric={`${fmt(m.meetingPushesWeek)} meeting pushes / week`}
                     body={t("Calls when the plan needs faster conversation density.", { class: "body" })}
-                    meta={`${m.touchesDay} touches/day floor · ${pct(m.showRateRaw)} show rate · ${pct(m.meetingToOppRaw)} meeting→opp.`}
+                    meta={`${m.touchesDay} messages & calls per day minimum · ${pct(m.showRateRaw)} show rate · ${pct(m.meetingToOppRaw)} meeting→opp.`}
                     href={hrefToColdCallStudio()}
                     cta={t("Run a call")}
                 />
                 <Card
                     title={t("Dashboard")}
                     metric={money(m.pipelineNeeded)}
-                    body={t("Hold yourself accountable to coverage, recovery pressure, and whether the workspace supports the quota.", { class: "body" })}
+                    body={t("Hold yourself accountable to coverage, deal risk, and whether the workspace supports the quota.", { class: "body" })}
                     meta={
                         c.ratio > 0
                             ? `Current coverage: ${c.ratio}x against ${b.coverage}x target.`
-                            : t("Set quota and load deals to see live coverage pressure.", { class: "body" })
+                            : t("Set quota and load deals to see live pipeline coverage.", { class: "body" })
                     }
                     href={hrefToDashboard()}
                     cta={t("Check coverage")}

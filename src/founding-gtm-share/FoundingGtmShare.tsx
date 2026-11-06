@@ -72,7 +72,7 @@ export function FoundingGtmShare(): JSX.Element {
                 </h1>
                 <p class="fg-share-mode__lede">
                     Seven authored sections — what the operator built up about
-                    who their motion serves, what worked, what didn't, and what
+                    who their sales process serves, what worked, what didn't, and what
                     the first hire should run on day one.
                 </p>
                 <p class="fg-share-mode__meta">

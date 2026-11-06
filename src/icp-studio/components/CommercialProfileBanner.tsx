@@ -55,7 +55,7 @@ export function CommercialProfileBanner(): JSX.Element {
                     The category you compete in and the value you carry into
                     every deal. The briefing reads this to tell you what's
                     moving in your space — and who you compete with. Below,
-                    you sharpen who you sell it to.
+                    you define who you sell it to.
                 </p>
             </div>
 

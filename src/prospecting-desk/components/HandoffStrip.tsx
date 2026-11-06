@@ -28,7 +28,7 @@ export function HandoffStrip(): JSX.Element {
                 <h2 class="sw-section__title">{t("Hand the names off.")}</h2>
                 <p class="sw-section__sub">
                     {ready === 0
-                        ? "Nothing is push-ready yet. Sharpen a name to ready before routing."
+                        ? "Nothing is push-ready yet. Bring an account to ready before sending it."
                         : `${ready} ${
                               ready === 1 ? "name is" : "names are"
                           } ready to leave the workbench.`}

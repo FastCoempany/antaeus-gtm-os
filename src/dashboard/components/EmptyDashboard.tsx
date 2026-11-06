@@ -31,7 +31,7 @@ export function EmptyDashboard(): JSX.Element {
                 <p class="db-empty__kicker">{t("DASHBOARD IS QUIET")}</p>
                 <h2 class="db-empty__title">
                     {t(
-                        "Nothing's under pressure yet because nothing's in the workspace yet.",
+                        "Nothing needs attention yet because the workspace is still empty.",
                         { class: "body" }
                     )}
                 </h2>
@@ -53,7 +53,7 @@ export function EmptyDashboard(): JSX.Element {
                     </h3>
                     <p class="db-empty__path-body">
                         {t(
-                            "Sourcing Workbench is where prospects become qualified accounts. A few real names light up signal heat + pipeline pressure.",
+                            "Prospecting Desk is where prospects become qualified accounts. A few real accounts give the Dashboard account priorities and deal risk to rank.",
                             { class: "body" }
                         )}
                     </p>
@@ -74,7 +74,7 @@ export function EmptyDashboard(): JSX.Element {
                     </h3>
                     <p class="db-empty__path-body">
                         {t(
-                            "Signal Console is the radar. One live account with a recent event lights up the heat engine — and the Dashboard ranks against that.",
+                            "Signal Console tracks the accounts you watch. One account with a recent event gets a priority score, and the Dashboard ranks against that.",
                             { class: "body" }
                         )}
                     </p>
@@ -87,7 +87,7 @@ export function EmptyDashboard(): JSX.Element {
                 </li>
 
                 <li class="db-empty__path">
-                    <p class="db-empty__path-kicker">{t("OR · LIVE PRESSURE")}</p>
+                    <p class="db-empty__path-kicker">{t("OR · OPEN DEAL RISK")}</p>
                     <h3 class="db-empty__path-title">
                         {t("Load one deal you're currently working.", {
                             class: "body"
@@ -95,7 +95,7 @@ export function EmptyDashboard(): JSX.Element {
                     </h3>
                     <p class="db-empty__path-body">
                         {t(
-                            "Deal Workspace turns pipeline into recovery pressure. One live deal makes the ranking concrete: which deal is weakest, what's the next move.",
+                            "Deal Workspace ranks your open deals by risk. One live deal makes the ranking concrete: which deal is weakest and what the next step is.",
                             { class: "body" }
                         )}
                     </p>

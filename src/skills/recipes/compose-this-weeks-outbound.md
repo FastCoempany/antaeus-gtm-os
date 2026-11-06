@@ -2,7 +2,7 @@
 id: compose-this-weeks-outbound
 label: Compose this week's outbound
 description: Open Outbound Studio with the highest-priority account from Signal Console preselected.
-keywords: [outbound, compose, hottest, signal, account]
+keywords: [outbound, compose, priority, signal, account]
 action:
   kind: compose-context-and-route
   target: /outbound-studio/

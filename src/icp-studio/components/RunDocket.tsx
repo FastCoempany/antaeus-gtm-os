@@ -125,7 +125,7 @@ export function RunDocket(): JSX.Element {
                 </p>
                 <p class="icp-docket__block-copy">
                     {weakest?.copy ??
-                        "No obviously weak field. Revisit the trigger if the pressure on the buyer shifts."}
+                        "No obviously weak field. Revisit the trigger if the buyer's urgency changes."}
                 </p>
             </article>
 

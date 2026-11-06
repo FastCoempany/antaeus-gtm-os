@@ -104,19 +104,19 @@ export function ProofObject(): JSX.Element {
                     ratio={q.heat.claim.value / 100}
                     read={t("Claim — the pass/fail evidence", { class: "body" })}
                     tone={moldTone(q.heat.claim.value >= 80 ? "cast" : q.heat.claim.value >= 25 ? "hot" : "cold")}
-                    label={t("Claim heat")}
+                    label={t("Success criteria strength")}
                 />
                 <Meter
                     ratio={q.heat.owner.value / 100}
                     read={t("Owner — who signs off on the readout", { class: "body" })}
                     tone={moldTone(q.heat.owner.value >= 80 ? "cast" : q.heat.owner.value >= 25 ? "hot" : "cold")}
-                    label={t("Owner heat")}
+                    label={t("Owner strength")}
                 />
                 <Meter
                     ratio={q.heat.kill.value / 100}
                     read={t("Kill — when the pilot stops", { class: "body" })}
                     tone={moldTone(q.heat.kill.value >= 80 ? "cast" : q.heat.kill.value >= 25 ? "hot" : "cold")}
-                    label={t("Kill heat")}
+                    label={t("Stop rule strength")}
                 />
             </div>
 

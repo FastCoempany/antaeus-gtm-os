@@ -20,7 +20,7 @@ import {
  *   - Update the deal (primary)        → /deal-workspace/?deal=…
  *   - Pre-mortem this deal             → /future-autopsy/?deal=…
  *   - Carry to an advisor              → /call-in-a-favor/?deal=…
- *   - Sharpen the evidence                → /pilot-desk/?deal=…
+ *   - Strengthen the pilot evidence                → /pilot-desk/?deal=…
  *
  * When a focal deal is pinned (draftDeal signal), focusObject =
  * that deal's account name and `?deal=` threads through. When no
@@ -74,7 +74,7 @@ export function HandoffStrip(): JSX.Element {
                     href={hrefToPocFramework(dealId, accountName)}
                     data-ng-handoff="poc-framework"
                 >
-                    Sharpen the evidence
+                    Strengthen the pilot evidence
                 </a>
             </nav>
         </section>

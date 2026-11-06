@@ -247,8 +247,8 @@ export function IcpStep(): JSX.Element {
     return (
         <StepShell
             kicker={t("STEP 5 OF 7 — ICP")}
-            title={t("Write one sharp ICP.")}
-            subtitle={t("One sentence is enough. Thin means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.", { class: "body" })}
+            title={t("Write one specific ICP.")}
+            subtitle={t("One sentence is enough. Specific means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.", { class: "body" })}
             onNext={() => nextStep()}
             onBack={() => prevStep()}
             nextDisabled={d.icpStatement.trim().length === 0}

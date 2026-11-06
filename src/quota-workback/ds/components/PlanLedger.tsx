@@ -51,7 +51,7 @@ export function PlanLedger(): JSX.Element {
             {/* The dominant summary state — daily touch pressure. */}
             <div class="qwd-hero">
                 <div class="qwd-hero__head">
-                    <Kicker>{t("THE WEEKLY PRESSURE")}</Kicker>
+                    <Kicker>{t("THE WEEKLY TARGET")}</Kicker>
                     <StatusChip label={q.label} tone={tone} />
                 </div>
                 <div class="qwd-hero__stat">
@@ -61,7 +61,7 @@ export function PlanLedger(): JSX.Element {
                 <p class="qwd-hero__read">
                     {hasQuota
                         ? `${b.label} quota math scores ${m.qualityScore}/100. Weekly revenue target ${money(m.weeklyRevenue)}.`
-                        : t("Set a quota in the controls to see the weekly pressure.", { class: "body" })}
+                        : t("Set a quota in the controls to see the weekly target.", { class: "body" })}
                 </p>
             </div>
 
@@ -71,10 +71,10 @@ export function PlanLedger(): JSX.Element {
                     <Stat value={fmt(m.touchesWeek)} label={t("across the working week")} />
                 </Card>
                 <Card kicker={t("MEETINGS / WEEK")} tone="blue">
-                    <Stat value={fmt(m.meetingsWeek)} label={t("the meeting-creation floor")} />
+                    <Stat value={fmt(m.meetingsWeek)} label={t("minimum meetings to book")} />
                 </Card>
                 <Card kicker={t("OPPS / QUARTER")}>
-                    <Stat value={fmt(m.oppsQuarter)} label={t("pipeline-creation pressure")} />
+                    <Stat value={fmt(m.oppsQuarter)} label={t("opportunities to create")} />
                 </Card>
                 <Card kicker={t("DEALS / QUARTER")}>
                     <Stat value={fmt(m.dealsQuarter)} label={t("the close-rate target")} />
@@ -124,7 +124,7 @@ export function PlanLedger(): JSX.Element {
 
             {/* The system-health read — is the model holding? */}
             <div class="qwd-health">
-                <Card kicker={t("WHAT TO PRESSURE-TEST")} tone={tone}>
+                <Card kicker={t("WHAT TO DOUBLE-CHECK")} tone={tone}>
                     <p class="ds-card__copy">{summary}</p>
                 </Card>
             </div>
@@ -147,9 +147,9 @@ export function PlanLedger(): JSX.Element {
 
             {hasQuota ? (
                 <HandoffStrip
-                    label={t("Carry the pressure into execution")}
+                    label={t("Use the target in outreach")}
                     kicker={t("RUN THE PLAN")}
-                    title={t("Take the weekly pressure into the motion.", { class: "body" })}
+                    title={t("Take the weekly target into your outreach.", { class: "body" })}
                     routes={[
                         { label: t("Run the outbound"), href: hrefToOutboundStudio(), primary: true },
                         { label: t("Run cold calls"), href: hrefToColdCallStudio() },

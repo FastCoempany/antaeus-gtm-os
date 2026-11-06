@@ -122,7 +122,7 @@ export function TalkLoom(): JSX.Element {
             <div class="cc-loom__head">
                 <p class="cc-loom__kicker">{t("LIVE CALL THREADS")}</p>
                 <h2 class="cc-loom__title">
-                    Pull <span>{t("one")}</span> thread at a time.
+                    Work <span>{t("one")}</span> step at a time.
                 </h2>
             </div>
 
@@ -150,8 +150,8 @@ export function TalkLoom(): JSX.Element {
                       re-introducing the retired "Room law" paragraph.
                     */}
                     <p class="cc-loom__score-headline">
-                        Six threads are enough if each one carries
-                        its own pressure.
+                        Six steps are enough if each one has a
+                        clear purpose.
                     </p>
                     <div class="cc-loom__read-block">
                         <p class="cc-loom__read-label">{t("Current pull")}</p>
@@ -159,7 +159,7 @@ export function TalkLoom(): JSX.Element {
                         <p class="cc-loom__read-copy">{activeT.copy}</p>
                     </div>
                     <div class="cc-loom__read-block">
-                        <p class="cc-loom__read-label">{t("Weakest thread")}</p>
+                        <p class="cc-loom__read-label">{t("Weakest step")}</p>
                         <p class="cc-loom__read-title">
                             {weakestThreadCopy(hasAccount)}
                         </p>
@@ -229,7 +229,7 @@ export function TalkLoom(): JSX.Element {
                             </p>
                             <p class="cc-capture__next">
                                 {next
-                                    ? `Next thread: ${next.title}`
+                                    ? `Next step: ${next.title}`
                                     : "Log the call and choose where to go next."}
                             </p>
                             {next ? (
@@ -239,7 +239,7 @@ export function TalkLoom(): JSX.Element {
                                     onClick={() => setActiveThread(next.id)}
                                     data-cc-next={next.id}
                                 >
-                                    Pull next thread
+                                    Go to the next step
                                 </button>
                             ) : null}
                         </>

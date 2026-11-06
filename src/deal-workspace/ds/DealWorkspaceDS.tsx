@@ -78,7 +78,7 @@ export function DealWorkspaceDS(): JSX.Element {
                         <HandoffStrip
                             label={t("Where the deal goes next")}
                             kicker={t("CARRY THE DEAL")}
-                            title={t("Take the pressure somewhere it resolves")}
+                            title={t("Go where the risk gets fixed")}
                             routes={[
                                 {
                                     label: t("Pre-mortem a deal"),

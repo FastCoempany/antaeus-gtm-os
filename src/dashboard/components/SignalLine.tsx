@@ -53,7 +53,7 @@ export function SignalLine({ objects }: Props): JSX.Element {
     }
 
     return (
-        <ul class="db-signal-line" aria-label={t("Ranked pressure by tone")}>
+        <ul class="db-signal-line" aria-label={t("Ranked risk by tone")}>
             {TONES.map((tone) => {
                 const n = counts.get(tone.key) ?? 0;
                 const dim = n === 0;

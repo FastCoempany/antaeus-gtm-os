@@ -64,7 +64,7 @@ export function IcpBuilder(): JSX.Element {
 
     return (
         <div class="icpd-builder">
-            <Kicker>{t("SHARPEN THE ICP")}</Kicker>
+            <Kicker>{t("MAKE THE ICP SPECIFIC")}</Kicker>
 
             {/* A button group, not a single control — NOT wrapped in a
                 FormField <label> (a label forwards clicks to its first

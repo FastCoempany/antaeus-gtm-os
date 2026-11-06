@@ -72,7 +72,7 @@ const STATE_LABEL: Record<LedgerState, string> = {
     runnable: "Runnable",
     tighten: "Tighten",
     good: "Good",
-    thin: "Thin",
+    thin: "Incomplete",
     missing: "Missing",
     clear: "Clear"
 };
