@@ -381,7 +381,7 @@ function Ticket(props: {
         detailPieces.push(t("No dated next step"));
     }
     if (!deal.useCase || !deal.useCase.trim()) {
-        detailPieces.push(t("Use case thin"));
+        detailPieces.push(t("Use case not recorded"));
     }
     return (
         <li class="dw-rail__ticket-item">
@@ -445,7 +445,7 @@ function reserveLabelFor(
     assessment: RecoveryAssessment
 ): string {
     if (!deal.nextStep || !deal.nextStep.trim()) return t("Stale");
-    if (!deal.useCase || !deal.useCase.trim()) return t("Thin evidence");
+    if (!deal.useCase || !deal.useCase.trim()) return t("Use case not recorded");
     if (assessment.lane === "at-risk") return t("At risk");
     return t("Healthy");
 }

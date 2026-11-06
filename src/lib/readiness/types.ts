@@ -30,9 +30,9 @@ export const VERDICT_RANK: Record<Verdict, number> = {
 export const VERDICT_LABEL: Record<Verdict, string> = {
     you_are_the_system: t("Founder-dependent"),
     building: t("Partially documented"),
-    inheritable_with_guardrails: t("Runnable with founder support"),
-    hire_ready: t("Runnable independently"),
-    hire_ready_repeatable: t("Documented and repeatable")
+    inheritable_with_guardrails: t("Usable with founder support"),
+    hire_ready: t("Hire-ready"),
+    hire_ready_repeatable: t("Hire-ready and repeatable")
 };
 
 /**

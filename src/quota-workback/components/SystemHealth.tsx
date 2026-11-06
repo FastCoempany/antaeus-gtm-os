@@ -30,7 +30,7 @@ export function SystemHealth(): JSX.Element {
     if (m.qualityScore >= 82) {
         compounding.push(
             t(
-                "The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them.",
+                "The planning math is believable right now. The assumptions, the coverage, and the weekly activity targets are close enough to reality that you can act on them.",
                 { class: "body" }
             )
         );
@@ -129,12 +129,12 @@ export function SystemHealth(): JSX.Element {
 
             <div class="qw-health__split">
                 <Panel
-                    title={t("Compounding")}
+                    title={t("What is working")}
                     items={compounding.slice(0, 2)}
                     tone="good"
                 />
                 <Panel
-                    title={t("Still weak")}
+                    title={t("What still needs evidence")}
                     items={fragile.slice(0, 2)}
                     tone="warn"
                 />

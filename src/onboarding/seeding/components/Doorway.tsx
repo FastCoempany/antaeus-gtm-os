@@ -25,7 +25,7 @@ export function Doorway(): JSX.Element {
             </p>
             <div class="sd-compact">
                 {t(
-                    "You enter it once, and you'll get it back every morning on the Dashboard: which deal is slipping, what it's missing, and which one to work on first. The more honest your answers, the more useful it gets.",
+                    "You enter it once, and you'll get it back every morning on the Dashboard: which deals have gone quiet or missed a next step, what each one is missing, and which one to work on first. The more honest your answers, the more useful it gets.",
                     { class: "body" }
                 )}
             </div>

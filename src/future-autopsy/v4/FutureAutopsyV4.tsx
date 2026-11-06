@@ -142,7 +142,7 @@ export function FutureAutopsyV4(): JSX.Element {
     const nowPct = Math.min(92, Math.max(4, (quiet / (quiet + total)) * 100));
     const risk = riskWord(current.riskScore);
     const factorSummary = doc.causes.map((c) => c.label).slice(0, 4).join(" ");
-    const horizonLine = t("If nothing changes, {name} is at {risk} risk of slipping inside the next {days} days.", { class: "body" })
+    const horizonLine = t("If nothing changes, {name} is at {risk} risk of stalling or being lost within the next {days} days.", { class: "body" })
         .replace("{name}", current.name)
         .replace("{risk}", risk.toLowerCase())
         .replace("{days}", String(horizon));
@@ -184,7 +184,7 @@ export function FutureAutopsyV4(): JSX.Element {
                     {allDone ? (
                         <>{t("Corrective actions completed for")} <b class="fa4-g">{current.name}</b>.</>
                     ) : (
-                        <>{t("If nothing changes,")} <b class="fa4-rr">{current.name}</b> {t("is at {risk} risk of slipping inside the next {days} days.", { class: "body" }).replace("{risk}", risk.toLowerCase()).replace("{days}", String(horizon))}</>
+                        <>{t("If nothing changes,")} <b class="fa4-rr">{current.name}</b> {t("is at {risk} risk of stalling or being lost within the next {days} days.", { class: "body" }).replace("{risk}", risk.toLowerCase()).replace("{days}", String(horizon))}</>
                     )}
                 </h1>
                 <p class="fa4-sub">
