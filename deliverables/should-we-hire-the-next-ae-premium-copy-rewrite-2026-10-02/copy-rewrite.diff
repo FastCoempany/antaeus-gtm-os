@@ -1,0 +1,183 @@
+diff --git a/deliverables/should-we-hire-the-next-ae-premium-copy-rewrite-2026-10-02/should-we-hire-the-next-ae-premium.source.html b/deliverables/should-we-hire-the-next-ae-premium-copy-rewrite-2026-10-02/should-we-hire-the-next-ae-premium.copy-rewrite.html
+index 3f84f4c..4554156 100644
+--- a/deliverables/should-we-hire-the-next-ae-premium-copy-rewrite-2026-10-02/should-we-hire-the-next-ae-premium.source.html
++++ b/deliverables/should-we-hire-the-next-ae-premium-copy-rewrite-2026-10-02/should-we-hire-the-next-ae-premium.copy-rewrite.html
+@@ -8 +8 @@
+-<meta name="description" content="Before you add the next quota-carrying AE, find out whether your sales motion can carry them, and what has to become true first if it can't. The method does the math. A person reads what it means.">
++<meta name="description" content="Before you hire another AE, find out whether your sales process can support one, and what has to change first if it can't. The analysis does the math. On the reviewed brief, a person goes through the results with you.">
+@@ -465,2 +465,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <h1 class="h1" id="hero-title">Most sales leaders get about 18&nbsp;months. The next AE hire is <em>where that clock starts.</em></h1>
+-        <p class="lede">Find out whether your company can carry another quota-carrying AE right now, and if it can’t, exactly what has to become true first. The method does the math and catches the numbers that don’t agree. On the reviewed brief, a person who has watched this hire go wrong five times reads what it means with you.</p>
++        <h1 class="h1" id="hero-title">Most sales leaders get about 18&nbsp;months to show results. <em>The next AE they hire often decides how those months go.</em></h1>
++        <p class="lede">Find out whether your company can support another AE with a quota right now and, if it can’t, exactly what has to change first. The analysis does the math and flags numbers that contradict each other. On the reviewed brief, the founder of Antaeus, who has watched this hire go wrong at five companies, goes through the results with you.</p>
+@@ -484 +484 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <h2 class="sheet__q">Should we add the next quota-carrying AE?</h2>
++        <h2 class="sheet__q">Should we hire another AE?</h2>
+@@ -487,2 +487,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <span class="state__chip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Conditional</span>
+-          <p>Pipeline supply is the limiting condition.</p>
++          <span class="state__chip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Supported with conditions</span>
++          <p>There isn’t enough qualified pipeline yet for another seller.</p>
+@@ -494,3 +494,3 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <div class="lane lane--thin"><dt>Demand supply</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Thin</dd></div>
+-          <div class="lane"><dt>Motion repeatability</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Supported</dd></div>
+-          <div class="lane"><dt>Timing &amp; management</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Supported</dd></div>
++          <div class="lane lane--thin"><dt>Pipeline supply</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Short</dd></div>
++          <div class="lane"><dt>Repeatable without the founder</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Supported</dd></div>
++          <div class="lane"><dt>Timing and management</dt><dd><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg>Supported</dd></div>
+@@ -499 +499 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <span class="mono-label sheet__sec">Next AE economics</span>
++        <span class="mono-label sheet__sec">What the new AE must produce</span>
+@@ -503,3 +503,3 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <div><dt>Wins required</dt><dd>≈13</dd></div>
+-          <div><dt>Qualified opportunities required</dt><dd>≈62</dd></div>
+-          <div class="econ__wide"><dt>Qualified pipeline required</dt><dd>$3.21M</dd></div>
++          <div><dt>Deals to win</dt><dd>≈13</dd></div>
++          <div><dt>Qualified opportunities needed</dt><dd>≈62</dd></div>
++          <div class="econ__wide"><dt>Qualified pipeline needed</dt><dd>$3.21M</dd></div>
+@@ -508 +508 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <span class="mono-label sheet__sec">The hire becomes supportable when</span>
++        <span class="mono-label sheet__sec">The hire is supported once</span>
+@@ -510 +510 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <li>Qualified pipeline you can hand the new AE reaches the required amount.</li>
++          <li>The qualified pipeline you can hand the new AE reaches the amount needed.</li>
+@@ -512 +512 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <li>The qualified opportunities you create each month can feed one more seat.</li>
++          <li>You create enough new qualified opportunities each month for one more seller.</li>
+@@ -528 +528 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <p>A hiring plan usually counts only the salary. Add the ramp, the recruiting and the pipeline that never closes, and the bill for a seat the motion couldn’t carry adds up fast.</p>
++            <p>A hiring plan usually counts only the salary. Add the ramp time, the recruiting and the pipeline that never closes, and the cost of a hire your sales process couldn’t support adds up fast.</p>
+@@ -535,2 +535,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li><div><h3>Pipeline handed over that doesn’t close</h3><p>Accounts given to a seat the motion couldn’t feed. Many are hard to restart once the seller leaves.</p></div></li>
+-            <li><div><h3>Your team’s time</h3><p>Onboarding, call reviews and the manager hours spent trying to make the seat work.</p></div></li>
++            <li><div><h3>Pipeline handed over that doesn’t close</h3><p>Accounts given to a new seller when there wasn’t enough pipeline to keep them busy. Many are hard to restart once the seller leaves.</p></div></li>
++            <li><div><h3>Your team’s time</h3><p>Onboarding, call reviews and the manager hours spent trying to make the hire work.</p></div></li>
+@@ -540 +540 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <div><strong>roughly <span class="nb">$200–300k</span></strong><small>for one seat that doesn’t work out</small></div>
++            <div><strong>roughly <span class="nb">$200–300k</span></strong><small>for one hire that doesn’t work out</small></div>
+@@ -550,2 +550,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <div class="track" role="img" aria-label="An illustrative 18-month timeline. Months 1 to 3: you ask for the seat and recruit. Months 4 to 9: the new AE ramps. Months 10 to 15: their number comes due. Months 16 to 18: the board asks what happened.">
+-          <p class="track__lab" style="grid-column:1/4"><b>Months 1–3</b>You ask for the seat and recruit</p>
++        <div class="track" role="img" aria-label="An illustrative 18-month timeline. Months 1 to 3: you get the role approved and recruit. Months 4 to 9: the new AE ramps. Months 10 to 15: they are expected to hit quota. Months 16 to 18: the board asks what happened.">
++          <p class="track__lab" style="grid-column:1/4"><b>Months 1–3</b>You get the role approved and recruit</p>
+@@ -553 +553 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p class="track__lab" style="grid-column:10/16"><b>Months 10–15</b>Their number comes due</p>
++          <p class="track__lab" style="grid-column:10/16"><b>Months 10–15</b>They’re expected to hit quota</p>
+@@ -565 +565 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <li><i class="cell--ask"></i><b>1–3</b>You ask for the seat and recruit</li>
++          <li><i class="cell--ask"></i><b>1–3</b>You get the role approved and recruit</li>
+@@ -567 +567 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <li><i class="cell--due"></i><b>10–15</b>Their number comes due</li>
++          <li><i class="cell--due"></i><b>10–15</b>They’re expected to hit quota</li>
+@@ -570 +570 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <p class="clock__read">By the time anyone can say a hire isn’t working, most of the clock is spent. The answer has to be right before the offer goes out.</p>
++        <p class="clock__read">By the time anyone can tell a hire isn’t working, most of those 18 months are gone. That’s why the decision has to be checked before the offer goes out.</p>
+@@ -585,3 +585,3 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p>A sales leader sees the motion from inside one tenure: their own. That isn’t a flaw in the leader. It’s the only view the job gives you. The seller who stays sees the same pattern play out under several leaders, several boards and several strategies, and starts to notice what didn’t change.</p>
+-          <p>What didn’t change usually wasn’t the people. It was the decision to hire an AE into a motion that couldn’t carry them yet. The AEs who were let go were left guessing whether it was the culture, the board or the runway. In most of the cases I saw, the numbers hadn’t supported the seat when it was opened, and there was no simple way to check that before the offer went out.</p>
+-          <p>I helped build the sales processes behind millions in ARR at these companies, and at several of them I watched that work help carry the company into its next funding round. Antaeus is the check I wish those leaders had before the hire: does the motion survive the person running it?</p>
++          <p>A sales leader sees the sales process only from inside their own time in the job. That isn’t a flaw in the leader. It’s the only view the job gives you. The seller who stays sees the same pattern play out under several leaders, several boards and several strategies, and starts to notice what didn’t change.</p>
++          <p>What didn’t change usually wasn’t the people. It was the decision to hire an AE before the sales process could support one. The AEs who were let go were left guessing whether it was the culture, the board or the runway. In most of the cases I saw, the numbers hadn’t supported the role when it was opened, and there was no simple way to check that before the offer went out.</p>
++          <p>I helped build the sales processes behind millions in ARR at these companies, and at several of them that work helped the company raise its next funding round. Antaeus is the check I wish those leaders had before the hire: does the sales process still work when the person who built it isn’t the one selling?</p>
+@@ -589 +589 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p class="letter__thesis">The headcount decision is where most of those 18‑month clocks start.</p>
++          <p class="letter__thesis">For most of those leaders, the 18 months started with a hiring decision.</p>
+@@ -603 +603 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <h2 class="h2" id="living-title">Does the motion survive the person running it?</h2>
++          <h2 class="h2" id="living-title">Does your sales process still work without the person who built it?</h2>
+@@ -605 +605 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <p class="myth">Antaeus is named for the giant of Greek myth who was strong while his feet touched the earth and weak when he was lifted off it. A sales motion works the same way.</p>
++        <p class="myth">Antaeus is named for the giant of Greek myth who was strong while his feet touched the earth and weak when he was lifted off it. A sales process works the same way: it holds up when it rests on things anyone can see and use, and fails when it depends on one person.</p>
+@@ -618,2 +618,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <h3>Lives in one head</h3>
+-            <p>Deals close because one person knows which buyers to call and what to say. A new AE inherits a quota and a guess.</p>
++            <h3>Depends on one person</h3>
++            <p>Deals close because one person knows which buyers to call and what to say. A new AE gets the quota but not the knowledge behind it.</p>
+@@ -631,2 +631,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <h3>A new AE can run it</h3>
+-            <p>The pipeline, the win rate and the way deals move hold up without the founder on the call. A new AE inherits a system that already works.</p>
++            <h3>A new AE can use it</h3>
++            <p>The pipeline, the win rate and the steps deals go through hold up without the founder on the call. A new AE takes over a process that already works.</p>
+@@ -636 +636 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-      <p class="living__close">The brief tells you which one you have before you put another quota on it.</p>
++      <p class="living__close">The brief tells you which one you have before you hire another AE onto it.</p>
+@@ -646 +646 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <h2 class="h2" id="how-title">The method does the math. A person reads what it means.</h2>
++          <h2 class="h2" id="how-title">The analysis does the math. A person helps you understand it.</h2>
+@@ -648 +648 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <p class="body soft">Every brief runs the same four tests on your numbers. Each comes back with a plain answer, and the brief names the one that’s holding the hire back.</p>
++        <p class="body soft">Every brief applies the same four tests to your numbers. Each comes back with a plain answer, and the brief names the one that’s holding the hire back.</p>
+@@ -653,3 +653,3 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-blue)"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="12" r="1.6" style="fill:var(--ds-icon-accent,currentColor);stroke:none"/></svg><span class="test__n">Test 2</span><h3 class="h3">Demand supply</h3><p>Is there enough qualified pipeline to feed one more seller without starving the ones you have?</p></li>
+-        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M5 19L19 5"/><path d="M10 5h9v9"/></svg><span class="test__n">Test 3</span><h3 class="h3">Motion repeatability</h3><p>Can someone other than the founder win deals the same way, often enough to plan on?</p></li>
+-        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span class="test__n">Test 4</span><h3 class="h3">Timing &amp; management</h3><p>Can the hire ramp in time to matter to this year’s number, with a manager who has the hours to coach them?</p></li>
++        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-blue)"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="12" r="1.6" style="fill:var(--ds-icon-accent,currentColor);stroke:none"/></svg><span class="test__n">Test 2</span><h3 class="h3">Pipeline supply</h3><p>Is there enough qualified pipeline for one more seller without taking deals your current sellers need?</p></li>
++        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M5 19L19 5"/><path d="M10 5h9v9"/></svg><span class="test__n">Test 3</span><h3 class="h3">Repeatable without the founder</h3><p>Can someone other than the founder win deals the same way, often enough to plan on?</p></li>
++        <li class="test"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span class="test__n">Test 4</span><h3 class="h3">Timing and management</h3><p>Can the hire ramp in time to help this year’s revenue target, with a manager who has the hours to coach them?</p></li>
+@@ -660 +660 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <div class="half__head"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M4 4l5 5M9 4v5H4"/><path d="M20 20l-5-5M15 20v-5h5"/></svg><div><h3 class="h3">The method</h3><span class="mono-label">Runs on every brief</span></div></div>
++          <div class="half__head"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M4 4l5 5M9 4v5H4"/><path d="M20 20l-5-5M15 20v-5h5"/></svg><div><h3 class="h3">The analysis</h3><span class="mono-label">Included in every brief</span></div></div>
+@@ -662,2 +662,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li><div><strong>Works backward from your target</strong> to the wins, qualified opportunities and pipeline the new seat would need.</div></li>
+-            <li><div><strong>Catches numbers that don’t agree</strong>, like a win rate that can’t produce the target, or a sales cycle longer than the time you have.</div></li>
++            <li><div><strong>Works backward from your target</strong> to the wins, qualified opportunities and pipeline the new AE would need.</div></li>
++            <li><div><strong>Flags numbers that contradict each other</strong>, like a win rate that can’t produce the target, or a sales cycle longer than the time you have.</div></li>
+@@ -671 +671 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li><div><strong>Spends 60 minutes on what’s really happening</strong> behind the limiting condition, and goes through each condition the brief names.</div></li>
++            <li><div><strong>Spends 60 minutes with you on why the main limit exists</strong>, and goes through each condition the brief lists.</div></li>
+@@ -675 +675 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <p>Is pipeline thin because the demand isn’t there, or because nobody is creating it yet? Those two lead to very different hires.</p>
++            <p>Is pipeline short because there aren’t enough buyers, or because nobody is creating pipeline yet? Those two call for very different hires.</p>
+@@ -687 +687 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <h2 class="h2" id="get-title">One clear answer, and everything behind it.</h2>
++        <h2 class="h2" id="get-title">The brief gives you one clear answer and the reasoning behind it.</h2>
+@@ -693,4 +693,4 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Supported</h3><p>Your numbers can carry another AE now.</p></div></li>
+-            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Conditional</h3><p>The economics work, but something has to change first, and the brief names what.</p></div></li>
+-            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-red)"><path d="M12 3L2 20h20z" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 10v5" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 16.5v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Not yet supported</h3><p>The motion can’t carry another seat yet. The brief says what would change that.</p></div></li>
+-            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><div><h3>Not enough information yet</h3><p>Too much is unknown to call it. The brief lists exactly what to go find out.</p></div></li>
++            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-green)"><path d="M5 12.5l4.5 4.5L19 7" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Supported</h3><p>Your numbers support another AE now.</p></div></li>
++            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-amber)"><path d="M12 4v10" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 17v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Supported with conditions</h3><p>The numbers work, but something has to change first, and the brief names what.</p></div></li>
++            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false" style="--ds-icon-accent:var(--ds-red)"><path d="M12 3L2 20h20z" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 10v5" style="stroke:var(--ds-icon-accent,currentColor)"/><path d="M12 16.5v2" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>Not yet supported</h3><p>Your sales process can’t support another AE yet. The brief says what would change that.</p></div></li>
++            <li class="outcome"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><div><h3>Not enough information yet</h3><p>Too many numbers are unknown to give an answer. The brief lists exactly what to go find out.</p></div></li>
+@@ -703,2 +703,2 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M4 17h16"/><path d="M7 17v-2M11 17v-3M15 17v-1"/></svg><div><h3>The one thing limiting it</h3><p>Named plainly, like “pipeline supply is the limiting condition.”</p></div></li>
+-            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M7 16v-3M12 16V8M17 16v-6"/></svg><div><h3>The math, worked backward from your target</h3><p>From your revenue target down to the wins, qualified opportunities and pipeline the seat needs.</p></div></li>
++            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M4 17h16"/><path d="M7 17v-2M11 17v-3M15 17v-1"/></svg><div><h3>The one thing limiting it</h3><p>Named plainly, like “there isn’t enough qualified pipeline yet for another seller.”</p></div></li>
++            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M7 16v-3M12 16V8M17 16v-6"/></svg><div><h3>The math, worked backward from your target</h3><p>From your revenue target down to the deals to win, qualified opportunities and pipeline the new AE needs.</p></div></li>
+@@ -707 +707 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M12 4v6M12 14v6M4 12h6M14 12h6" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>What would change the answer</h3><p>The input that moves the decision fastest, so you know where to look first.</p></div></li>
++            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M12 4v6M12 14v6M4 12h6M14 12h6" style="stroke:var(--ds-icon-accent,currentColor)"/></svg><div><h3>What would change the answer</h3><p>The number that would change the answer fastest if it were different, so you know where to look first.</p></div></li>
+@@ -723 +723 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <p>A “not yet” names the exact thing that has to become true first: more qualified pipeline, a win rate someone other than the founder can repeat, or a manager with time to coach. <strong>You walk away knowing what to fix</strong>, and once you’ve fixed it, you’ll have the numbers to back the request the next time you ask for the seat.</p>
++        <p>A “not yet” names the exact thing that has to change first: more qualified pipeline, a win rate someone other than the founder can repeat, or a manager with time to coach. <strong>You walk away knowing what to fix</strong>, and once you’ve fixed it, you’ll have the numbers to back the request the next time you ask for the role.</p>
+@@ -737 +737 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <p class="lead">That’s what the brief is for: a method that checks the math, and on the reviewed brief, a person who has watched it go wrong reading what it means. It’s priced like the decision matters, because it does. All three are one-time payments, with no subscription.</p>
++        <p class="lead">That’s what the brief is for: an analysis that checks the math and, on the reviewed brief, a person who has watched this hire go wrong going through the results with you. It’s priced for a decision of that size. All three are one-time payments, with no subscription.</p>
+@@ -745 +745 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p class="tier__for">The method, on your numbers. You read the brief on your own.</p>
++          <p class="tier__for">The analysis of your numbers, which you read on your own.</p>
+@@ -748 +748 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li>The math, worked backward from your target to the pipeline the seat needs</li>
++            <li>The math, worked backward from your target to the pipeline the new AE needs</li>
+@@ -759 +759 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p class="tier__for">The method, plus a 60-minute call with a person who has watched this go wrong.</p>
++          <p class="tier__for">The analysis, plus a 60-minute call with the founder, who has watched this hire go wrong.</p>
+@@ -763 +763 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-            <li>A 60-minute call on what’s really happening</li>
++            <li>A 60-minute call on what’s behind your numbers</li>
+@@ -766 +766 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p class="tier__note">If I were the one asking for the seat, this is the version I’d buy. The brief shows what your numbers say, and on the call we work out why.</p>
++          <p class="tier__note">If I were the one asking for the role, this is the version I’d buy. The brief shows what your numbers say, and on the call we work out why.</p>
+@@ -793 +793 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-        <h2 class="h2" id="faq-title">Before you buy.</h2>
++        <h2 class="h2" id="faq-title">Questions before you buy</h2>
+@@ -798 +798 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p>On the reviewed brief and the before-the-board brief, I do. I’m the founder, and I read your numbers myself before we talk. The self-serve brief is the method on its own: the math, the numbers it flags as not agreeing, and the decision, with no person reading it.</p>
++          <p>On the reviewed brief and the before-the-board brief, I do. I’m the founder, and I read your numbers myself before we talk. The self-serve brief is the analysis on its own: the math, the numbers it flags as not agreeing, and the decision, with no person reading it.</p>
+@@ -806 +806 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p>A calculator takes your numbers and multiplies them. The method also checks whether they agree with each other, for example whether your win rate and pipeline can actually produce the target, and it can tell you not to hire. The reviewed brief adds a person who has watched this decision play out at five companies.</p>
++          <p>A calculator takes your numbers and multiplies them. The analysis also checks whether they agree with each other, for example whether your win rate and pipeline can actually produce the target, and it can tell you not to hire. The reviewed brief adds a person who has watched this decision play out at five companies.</p>
+@@ -819 +819 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
+-          <p>No. Antaeus doesn’t find, screen or place candidates. The brief answers whether your company should add the seat, not who should fill it.</p>
++          <p>No. Antaeus doesn’t find, screen or place candidates. The brief answers whether your company should add the role, not who should fill it.</p>
