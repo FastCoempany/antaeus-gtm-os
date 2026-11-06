@@ -1,17 +1,17 @@
 {
-  "files": 1205,
+  "files": 1212,
   "renderedOccurrences": 5626,
   "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 480,
+  "tier2ReviewWarnings": 449,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
-      "hits": 40
+      "hits": 39
     },
     "B": {
       "description": "runtime/customer-visible candidate",
-      "hits": 385
+      "hits": 370
     },
     "C": {
       "description": "prompt/template",
@@ -19,15 +19,15 @@
     },
     "D": {
       "description": "active doctrine",
-      "hits": 54
+      "hits": 39
     },
     "E": {
       "description": "tests/comments/deprecated examples",
-      "hits": 966
+      "hits": 968
     },
     "F": {
       "description": "internal identifier",
-      "hits": 613
+      "hits": 614
     },
     "G": {
       "description": "reviewed ordinary usage",
@@ -36,38 +36,6 @@
   },
   "allowlistedHits": 0,
   "rows": [
-    {
-      "file": "deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html",
-      "line": 169,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "D",
-      "context": "<li>Not a <b>FAQ page</b> or second main canvas</li> <li>No <b>decorative timer</b>, no heat meters / abstract chips</li> <li>No <b>fake branching</b> that all lands the same</li> <li>No dense chrome that competes with the live node</li> </ul></div>"
-    },
-    {
-      "file": "deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html",
-      "line": 36,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "D",
-      "context": "Language doctrine · 2026-11-02</div><div class=\"cb\">Keep stable schema keys such as earnedTruth and thin. Display confirmed facts, evidence gaps, buyer roles, and recommended next steps in ordinary language. Suggested buyer responses are examples, not observations about the actual bu"
-    },
-    {
-      "file": "deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html",
-      "line": 69,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "D",
-      "context": "ve</b> (the segment open right now), <b>worked</b> (the buyer gave you information you can use), <b>thin</b> (some answers, but not enough to rely on in later rooms), and <b>flagged</b> (something needs attention: the buyer pushed back, a key person is missing, the timing is wrong, o"
-    },
-    {
-      "file": "deliverables/room-capability-maps/briefing-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "heartbeat",
-      "tier": 2,
-      "category": "D",
-      "context": "</td><td>the operator’s own deals / signals / pilots (the ADR-009 ledger)</td><td>daily-fresh · SQL heartbeat generators</td></tr><tr><td><b>World</b></td><td>the market — Recipe-Layer Patterns + Contrarian + Periphery</td><td>weekly synthesis · full Recipe Layer</td></tr></table></div><d"
-    },
     {
       "file": "deliverables/room-capability-maps/cold-call-studio-capability-map-2026-07-07.html",
       "line": 41,
@@ -83,54 +51,6 @@
       "tier": 2,
       "category": "E",
       "context": "2><div data-copy-context=\"deprecated-example\" class=\"sd\">Banned on the face: thread · loom · pull · pressure · proof · say-next · call memory · “the move.” The user is the <b>seller</b> (or <i>you</i>), never “rep.”</div></div><div class=\"sec\"><div class=\"sn\">6 · Guardrails</div><h2>Must"
-    },
-    {
-      "file": "deliverables/room-capability-maps/future-autopsy-capability-map-2026-07-07.html",
-      "line": 40,
-      "phrase": "decay",
-      "tier": 2,
-      "category": "D",
-      "context": "subset (shipped src/future-autopsy). Settled design: future-autopsy-countdown-2026-07-04.html (the decay line).</div></div> <div class=\"sec\"><div class=\"sn\">1 · Purpose</div><h2>What the room is for</h2><div class=\"sd\">Show the recorded conditions, risk assessment, evidence, correc"
-    },
-    {
-      "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "hottest",
-      "tier": 2,
-      "category": "D",
-      "context": "/table></div><div class=\"sec\"><div class=\"sn\">3 · The workstreams</div><h2>One ledger row each; the hottest is the current blocking issue</h2><div class=\"sd\">Select the current blocking workstream from recorded status, rather than a fixed category order.</div><table><tr><th style=\"width"
-    },
-    {
-      "file": "deliverables/room-capability-maps/linkedin-playbook-capability-map-2026-07-07.html",
-      "line": 40,
-      "phrase": "motion",
-      "tier": 2,
-      "category": "D",
-      "context": "rom activity counts.</p><div class=\"src\">Sourced from: canon §4.10 + the recommendation engine (lib/motion.ts) + 5-cue ladder (shipped src/linkedin-playbook). Settled design: linkedin-playbook-one-move-2026-07-06.html.</div></div> <div class=\"sec\"><div class=\"sn\">1 · Purpose</div><h2"
-    },
-    {
-      "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "invite the rest</h2><div class=\"sd\">Heavy-seeding doctrine #6. The deal-level judgment is the hard floor — the thing that stops Antaeus being a prettier CRM.</div><table><tr><th style=\"width:140px\">Tier</th><th>What</th><th>Rule</th></tr><tr><td><b>Required</b></td><td>ICP + the acco"
-    },
-    {
-      "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "y-know judgment; the company arrives enriched.</td></tr><tr><td style=\"width:230px\"><b>The ≥10-deal floor</b></td><td>Required seller judgment, with an explicit limited-sample explanation when fewer deals are available.</td></tr><tr><td style=\"width:230px\"><b>The quota set</b></td><td"
-    },
-    {
-      "file": "deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "<b>becoming</b> the live rooms (never a separate “completion” screen)</li><li>The ≥10-deal judgment floor</li><li>The citable evidence margin</li><li>“They bring judgment, the app brings depth”</li></ul></div><div><div class=\"sn\" style=\"color:var(--ink-3)\">What it is NOT</div><ul clas"
     },
     {
       "file": "deliverables/room-capability-maps/pilot-desk-capability-map-2026-07-07.html",
@@ -155,46 +75,6 @@
       "tier": 2,
       "category": "E",
       "context": "messages & calls a day · real opportunities · first meetings</td></tr><tr><td>“the meeting-creation floor”</td><td>name the plain thing</td></tr><tr><td>“quality score 71/100”</td><td>a plain judgment — “this plan is a stretch”</td></tr></table></div><div class=\"sec\"><div class=\"sn\">7"
-    },
-    {
-      "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
-      "line": 40,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "D",
-      "context": "eview those inputs before recommending outreach.</p><div class=\"src\">Sourced from: canon §4.7 + the heat engine (shipped src/signal-console) + ADR-006 (substrate role). Settled design: signal-console-attention-router-2026-07-04.html.</div></div> <div class=\"sec\"><div class=\"sn\">1 ·"
-    },
-    {
-      "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "going cold",
-      "tier": 2,
-      "category": "D",
-      "context": "i><li>Bands (the Attention Router): <b>act now</b> · <b>reach while warm</b> · <b>emerging</b> · <b>going cold</b> — the relevance is felt as a band, not a bare number</li></ul></div><div class=\"sec\"><div class=\"sn\">3 · What it offers</div><h2>The primitives</h2><table><tr><th style=\"width"
-    },
-    {
-      "file": "deliverables/room-capability-maps/signal-console-capability-map-2026-07-07.html",
-      "line": 41,
-      "phrase": "decay",
-      "tier": 2,
-      "category": "D",
-      "context": "<ul class=\"plain\"><li><b>Priority score = signal count × type weight × source credibility × recency decay</b></li><li>Bands (the Attention Router): <b>act now</b> · <b>reach while warm</b> · <b>emerging</b> · <b>going cold</b> — the relevance is felt as a band, not a bare number</li><"
-    },
-    {
-      "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
-      "line": 40,
-      "phrase": "carve",
-      "tier": 2,
-      "category": "D",
-      "context": "size, named accounts, and observable buying signals.</p><div class=\"src\">Sourced from: canon §4.5 (carve-axis malleability + why-you/why-now charter, 2026-07-03) + shipped src/territory-architect. Settled design: territory-architect-axis-morph-2026-07-04.html.</div></div> <div clas"
-    },
-    {
-      "file": "deliverables/room-capability-maps/territory-architect-capability-map-2026-07-07.html",
-      "line": 40,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "g tool for working out a strategic decision before acting on it · settled 2026-07-04 (axis-morphing floor)</div><p>Territory Architect organizes target accounts into segments with priority tiers, approaches, and a 300-account ceiling. Segments can combine geography, industry, size, na"
     },
     {
       "file": "js/demo-seed-data-ent.js",
@@ -2237,14 +2117,6 @@
       "context": "f (!Number.isFinite(startedAt)) return 0; const ms = now.getTime() - startedAt; return Math.floor(ms / (24 * 60 * 60 * 1000)); } export function isStaleRun( runStartedAtIso: string | null | undefined, now: Date = new Date() ): boolean { if (!runStartedAtIso) retur"
     },
     {
-      "file": "src/briefing/components/Topbar.tsx",
-      "line": 22,
-      "phrase": "what the system saw",
-      "tier": 2,
-      "category": "A",
-      "context": "kicker\">{t(\"Briefing · weekly read\")}</p> <h1 class=\"bf-topbar__title\"> What the system saw this week. </h1> <p class=\"bf-topbar__sub\"> The operator's stated preferences are a hypothesis. The pipeline tests them aga"
-    },
-    {
       "file": "src/briefing/components/WorkspaceReads.tsx",
       "line": 160,
       "phrase": "decaying",
@@ -2283,14 +2155,6 @@
       "tier": 2,
       "category": "E",
       "context": "ce/t\"; /** * TopbarDS — the Briefing's thesis head on the library. A peer telling * the operator what the system saw (canon §4.21): the operator's stated * preferences are a hypothesis the pipeline tests against what's * actually moving. Composed on Kicker + Heading; the LLM-governed reads *"
-    },
-    {
-      "file": "src/briefing/ds/components/TopbarDS.tsx",
-      "line": 16,
-      "phrase": "what the system saw",
-      "tier": 2,
-      "category": "B",
-      "context": "<Kicker>{t(\"BRIEFING · THE DAILY READ\")}</Kicker> <Heading level=\"title\">{t(\"What the system saw.\")}</Heading> <p class=\"bfd-head__sub\"> {t( \"Your stated preferences are a hypothesis. The pipeline tests them against what's actua"
     },
     {
       "file": "src/briefing/lib/cluster/core.test.ts",
@@ -6549,22 +6413,6 @@
       "context": "tion\" | \"healthy\" { if (lane === \"critical\") return \"risk\"; if (lane === \"at-risk\") return \"motion\"; return \"healthy\"; } function actionLabelFor( lane: RecoveryAssessment[\"lane\"] ): string { if (lane === \"critical\") return t(\"Recover now\"); if (lane === \"at-ris"
     },
     {
-      "file": "src/deal-workspace/components/InterventionRail.tsx",
-      "line": 384,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "ep\")); } if (!deal.useCase || !deal.useCase.trim()) { detailPieces.push(t(\"Use case thin\")); } return ( <li class=\"dw-rail__ticket-item\"> <button type=\"button\" class={`dw-rail__ticket dw-rail__ticket--${edge}"
-    },
-    {
-      "file": "src/deal-workspace/components/InterventionRail.tsx",
-      "line": 448,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "!deal.nextStep.trim()) return t(\"Stale\"); if (!deal.useCase || !deal.useCase.trim()) return t(\"Thin evidence\"); if (assessment.lane === \"at-risk\") return t(\"At risk\"); return t(\"Healthy\"); }"
-    },
-    {
       "file": "src/deal-workspace/components/TargetFolio.tsx",
       "line": 23,
       "phrase": "motion",
@@ -6603,14 +6451,6 @@
       "tier": 2,
       "category": "B",
       "context": "{t( \"The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.\", { class: \"body\" } )} </p> </div> <ul class=\"dw-signal-g"
-    },
-    {
-      "file": "src/deal-workspace/components/TargetFolio.tsx",
-      "line": 101,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "copy\"> {(deal.useCase ?? \"\").trim() === \"\" ? t(\"Thin · use-case not locked\") : `Locked · ${deal.useCase}`} </span> </li> <li class=\"dw-signal-row\">"
     },
     {
       "file": "src/deal-workspace/ds/DealWorkspaceDS.tsx",
@@ -6851,22 +6691,6 @@
       "tier": 2,
       "category": "F",
       "context": "sheet\")} trail={[{ label: t(\"SIGNAL\"), href: \"/signal-console/\" }]} pulling={{ verb: t(\"Recover\"), object: t(\"Acme — stalled 18d at proposal\"), href: \"/deal-workspace/\", why:"
-    },
-    {
-      "file": "src/design-system/ProofSheet.tsx",
-      "line": 130,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "tatusChip label={t(\"Compounding\")} tone=\"blue\" /> <StatusChip label={t(\"Thin\")} /> </div> </div> </Section> <Section code={t(\"GROUNDED\")} title={t(\"The card in five data states\")}"
-    },
-    {
-      "file": "src/design-system/ProofSheet.tsx",
-      "line": 533,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "account: \"Harbor Freight Co\", cause: t(\"Use case thin\"), value: \"$38k\" } } ]} />"
     },
     {
       "file": "src/discovery-studio/components/CallClock.tsx",
@@ -7837,14 +7661,6 @@
       "context": "eo / buyer / pain / trigger / * proof) + active accounts numeric input * - 4 build outputs (Thin ICP statement / focus / buying group / * evidence) * - quality readout (8-check list + tier-tinted score) */ function applyTemplate(id: string): void { const t = fin"
     },
     {
-      "file": "src/icp-studio/components/WorkArea.tsx",
-      "line": 381,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "<article class=\"icp-out icp-out--statement\"> <p class=\"icp-out__kicker\">{t(\"THIN ICP STATEMENT\")}</p> <p class=\"icp-out__statement\">{statement.text}</p> <p class=\"icp-out__hint\">{statement.hint}</p> </article>"
-    },
-    {
       "file": "src/icp-studio/ds/IcpStudioDS.tsx",
       "line": 18,
       "phrase": "sharp",
@@ -8122,11 +7938,11 @@
       "phrase": "motion",
       "tier": 2,
       "category": "E",
-      "context": "tegory: \"revenue OS\", what_we_sell: \"a GTM operating system\", value_prop: \"make the motion inheritable\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: {}, phase_f_proposals_enabled: null, data: {},"
+      "context": "tegory: \"revenue OS\", what_we_sell: \"a GTM operating system\", value_prop: \"make the motion inheritable\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: {}, phase_f_proposals_enabled: null, prospectin"
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 35,
+      "line": 36,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8134,7 +7950,7 @@
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 62,
+      "line": 63,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8142,7 +7958,7 @@
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 69,
+      "line": 70,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8234,7 +8050,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "E",
-      "context": "product_category: \"revenue OS\", what_we_sell: \"a GTM OS\", value_prop: \"inheritable motion\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: { step: 7 }, phase_f_proposals_enabled: null, data: {},"
+      "context": "product_category: \"revenue OS\", what_we_sell: \"a GTM OS\", value_prop: \"inheritable motion\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: { step: 7 }, phase_f_proposals_enabled: null, prospecting_a"
     },
     {
       "file": "src/icp-studio/lib/quality.test.ts",
@@ -9238,11 +9054,11 @@
     },
     {
       "file": "src/lib/voice/blessed-labels.ts",
-      "line": 27,
+      "line": 26,
       "phrase": "thin",
       "tier": 2,
-      "category": "B",
-      "context": ". */ export const STATE_VOCABULARY: ReadonlyArray<string> = [ \"Ready now\", \"Workable\", \"Thin\", \"Operating\", \"Needs intervention\", \"At risk\", \"Handoff-ready\", \"Partial\", \"Compounding\", \"Still weak\", ]; const blessed = new Set( [...BLESSED_U"
+      "category": "E",
+      "context": "RD §13/§17/§20 on 2026-11-05). A state names an * observable condition. Retired as primary labels: Thin, Compounding, * Still weak, Workable, Operating, Handoff-ready. */ export const STATE_VOCABULARY: ReadonlyArray<string> = [ \"Ready now\", \"At risk\", \"Needs interventi"
     },
     {
       "file": "src/lib/voice/voice-document.ts",
@@ -9259,6 +9075,22 @@
       "tier": 2,
       "category": "D",
       "context": "ed language when * the evidence does not support certainty. * * Deno mirror: `supabase/functions/heartbeat/voice-document.ts`. */ export const BANNED_CORPORATE_VOCAB: ReadonlyArray<string> = [ \"leverage\", \"leveraged\", \"leveraging\", \"leverages\", \"unlock\", \"unlocked\", \"unlockin"
+    },
+    {
+      "file": "src/lib/zip-store.ts",
+      "line": 7,
+      "phrase": "pulling",
+      "tier": 2,
+      "category": "E",
+      "context": "ll and the browser * download is local, so skipping compression keeps this ~80 lines * instead of pulling in a zip library. * * Format: PKZIP APPNOTE local file headers + central directory + end * record. File names are UTF-8 (general-purpose flag bit 11). */ export interface Zip"
+    },
+    {
+      "file": "src/lib/zip-store.ts",
+      "line": 47,
+      "phrase": "floor",
+      "tier": 2,
+      "category": "F",
+      "context": "0, d.getFullYear()); return { time: (d.getHours() << 11) | (d.getMinutes() << 5) | Math.floor(d.getSeconds() / 2), date: ((year - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate() }; } export function createZip(entries: ReadonlyArray<ZipEntry>, now: Date ="
     },
     {
       "file": "src/linkedin-playbook/LinkedinPlaybook.tsx",
@@ -11286,43 +11118,11 @@
     },
     {
       "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 34,
-      "phrase": "sharpen",
-      "tier": 2,
-      "category": "B",
-      "context": "Y_BAND_LABEL: Record<string, string> = { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enable"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 130,
-      "phrase": "sharpen",
-      "tier": 2,
-      "category": "B",
-      "context": "title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`} > <span class=\"ob-output__chip-label\">{t(\"Quality\")}</span> <span c"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
       "line": 35,
       "phrase": "thin",
       "tier": 2,
       "category": "F",
-      "context": "ring, string> = { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate.valu"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 35,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "= { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate.value; const"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 130,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "} title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`} > <span class=\"ob-output__chip-label\">{t(\"Quality\")}</span>"
+      "context": "ring, string> = { ready: t(\"Ready to send\"), workable: t(\"Usable · needs more detail\"), thin: t(\"Add a real trigger before sending\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate."
     },
     {
       "file": "src/outbound-studio/components/Switchboard.tsx",
@@ -12390,7 +12190,7 @@
     },
     {
       "file": "src/prospecting-desk/lib/research-parse.ts",
-      "line": 107,
+      "line": 110,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -12477,28 +12277,12 @@
       "context": ")} value={String(m.meetingsWeek)} note={t(\"Meeting-creation floor your channels need to support.\", { class: \"body\" })} accent /> <PlanCard label={t(\"Opps / quarter\")}"
     },
     {
-      "file": "src/quota-workback/components/PlanReadout.tsx",
-      "line": 30,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "{ class: \"body\" } ) : t( \"The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.\", { class: \"body\" } ); return ("
-    },
-    {
       "file": "src/quota-workback/components/SystemHealth.tsx",
       "line": 13,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
       "context": "dger family Quota Workback uses room-native framing * (planning posture, coverage, weekly touches, pressure fit). Tone * follows the quality engine. */ export function SystemHealth(): JSX.Element { const m = metrics.value; const b = benchmark.value; const c = coverage.valu"
-    },
-    {
-      "file": "src/quota-workback/components/SystemHealth.tsx",
-      "line": 33,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "B",
-      "context": "\"The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them.\", { class: \"body\" } ) ); } if ((c.ratio || 0) >= b.coverage) { compoundin"
     },
     {
       "file": "src/quota-workback/components/SystemHealth.tsx",
@@ -12725,14 +12509,6 @@
       "context": "} tone=\"blue\"> <Stat value={fmt(m.meetingsWeek)} label={t(\"the meeting-creation floor\")} /> </Card> <Card kicker={t(\"OPPS / QUARTER\")}> <Stat value={fmt(m.oppsQuarter)} label={t(\"pipeline-creation pressure\")} />"
     },
     {
-      "file": "src/quota-workback/ds/components/PlanLedger.tsx",
-      "line": 47,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "onversion assumption can break the quarter.\", { class: \"body\" }) : t(\"The math is too thin to trust yet — tighten the assumptions or pull the target back.\", { class: \"body\" }); return ( <div class=\"qwd-ledger\"> {/* The dominant summary state — d"
-    },
-    {
       "file": "src/quota-workback/ds/ds-components.test.tsx",
       "line": 15,
       "phrase": "pressure",
@@ -12862,11 +12638,11 @@
     },
     {
       "file": "src/settings/state.ts",
-      "line": 399,
+      "line": 416,
       "phrase": "live edge",
       "tier": 1,
       "category": "E",
-      "context": "als turned off.\" ); } finally { phaseFSaving.value = false; } } /** * The Live Edge's durable switch (locked 2026-07-16) — mirrors the * hover control on the rail itself. Edge off ≠ capture off: the wire * hides; the counting keeps running. */ export function"
+      "context": "ons turned off.\" ); } finally { phaseFSaving.value = false; } } /** * The Live Edge's durable switch (locked 2026-07-16) — mirrors the * hover control on the rail itself. Edge off ≠ capture off: the wire * hides; the counting keeps running. */ export function"
     },
     {
       "file": "src/signal-console/SignalConsole.tsx",
@@ -16510,8 +16286,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 160,
-    "current": 158,
-    "delta": -2
+    "previous": 15,
+    "current": 0,
+    "delta": -15
   }
 }
