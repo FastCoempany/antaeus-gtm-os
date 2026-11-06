@@ -66,7 +66,7 @@
     "category": "G",
     "path": "js/discovery-frameworks.js",
     "phrase": "pressure",
-    "excerpt": "recovery: '\"No pressure — but I\\'d lov",
+    "excerpt": "recovery: '\"No pressure \u2014 but I\\'d lov",
     "owner": "copy-standard",
     "justification": "Ordinary English idiom 'No pressure' in a polite seller sign-off.",
     "reviewBy": "2027-05-06"
@@ -547,5 +547,14 @@
     "owner": "copy-standard",
     "justification": "Ordinary English: staff keep getting pulled back into manual work; a literal description, not a metaphor.",
     "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "coming-soon.html",
+    "phrase": "motion",
+    "excerpt": "@media (prefers-reduced-motion: reduce)",
+    "category": "F",
+    "owner": "copy-standard",
+    "reviewBy": "2027-05-06",
+    "justification": "CSS media feature name (prefers-reduced-motion), not visible copy."
   }
 ]

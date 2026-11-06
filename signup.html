@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Create the workspace · Antaeus</title>
+<title>Create your workspace · Antaeus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -39,7 +39,7 @@
   .rank .nm{font-family:var(--serif);font-size:1.5rem;margin-top:8px}
   .rank .meta{display:flex;gap:8px;align-items:center;margin-top:4px}
   .rank .pill{font-family:var(--mono);font-size:.64rem;font-weight:700;color:#ff8b82;background:rgba(207,59,52,.18);padding:3px 8px;border-radius:6px}
-  .rank .heat{display:flex;align-items:center;gap:9px;margin-top:14px}
+  .rank .prio{display:flex;align-items:center;gap:9px;margin-top:14px}
   .rank .bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
   .rank .bar i{display:block;height:100%;width:0;background:var(--orange);border-radius:3px;transition:width 1.3s cubic-bezier(.2,.7,.2,1)}
   .rank.go .bar i{width:91%}
@@ -88,7 +88,7 @@
       <svg class="mark" viewBox="0 0 48 48"><path d="M14 38L24 10l10 28"/><path d="M18.2 28h11.6"/><path d="M2 38h44"/></svg>
       <span class="auth-chrome__mark">ANTAEUS</span>
     </a>
-    <a class="auth-chrome__back" href="/start.html" aria-label="Back to operator preview">← Back to preview</a>
+    <a class="auth-chrome__back" href="/start.html" aria-label="Back to the Antaeus homepage">← Back to homepage</a>
   </header>
 
   <div class="split">
@@ -96,16 +96,16 @@
     <div class="promise">
       <div class="body">
         <span class="kick">What's waiting inside</span>
-        <h1>A morning that already knows what's slipping.</h1>
-        <p class="p">Seed it once. Then every morning it ranks the one deal under the most pressure — and names the move that saves it.</p>
+        <h1>Start each morning knowing which deal is most at risk.</h1>
+        <p class="p">Enter your target customers and live deals once. After that, Antaeus ranks your open deals by risk every morning and recommends the next step for the deal at the top.</p>
         <div class="rank" id="rank">
-          <div class="rl">Your morning · ranked</div>
+          <div class="rl">Highest-risk deal · this morning</div>
           <div class="nm">Northwind Logistics</div>
-          <div class="meta"><span class="pill">stalls in 9 days</span><span style="font-size:.78rem;color:rgba(255,255,255,.5)">no dated next step</span></div>
-          <div class="heat"><span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);font-weight:700">HEAT</span><span class="bar"><i></i></span><span class="hv">91</span></div>
+          <div class="meta"><span class="pill">at risk · 9 days</span><span style="font-size:.78rem;color:rgba(255,255,255,.5)">no dated next step</span></div>
+          <div class="prio"><span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);font-weight:700">PRIORITY</span><span class="bar"><i></i></span><span class="hv">91</span></div>
         </div>
       </div>
-      <div class="foot">the motion, made inheritable</div>
+      <div class="foot">a sales process your first hire can run</div>
     </div>
 
     <!-- RIGHT · the form -->
@@ -114,7 +114,7 @@
 
       <div class="fwrap" id="formCard">
         <h2>Start your workspace.</h2>
-        <p class="lede">Two fields now. The real work — who you sell to, your live deals — comes next, inside.</p>
+        <p class="lede">Two fields now. The real work — who you sell to and where your live deals stand — comes next, inside the app.</p>
 
         <div class="ctx hide" id="contextMessage"></div>
 
@@ -124,18 +124,18 @@
 
           <div class="err hide" id="errorMessage"><span id="errorText"></span><span id="errorAction"></span></div>
 
-          <button class="btn" id="submitBtn" type="submit"><span id="btnText">Run your first morning →</span></button>
+          <button class="btn" id="submitBtn" type="submit"><span id="btnText">Create your workspace →</span></button>
         </form>
 
-        <div class="note">Free during operator preview · no card</div>
+        <div class="note">Free during the private preview · no card required</div>
         <div class="alt">Already have an account? <a href="/login.html">Sign in</a></div>
-        <div class="notready">Not signing up yet? <a href="/why-antaeus/">See what this actually is →</a> — could a hire run your motion tomorrow?</div>
+        <div class="notready">Not signing up yet? <a href="/why-antaeus/">See what Antaeus actually is →</a> — could a new hire run your sales process tomorrow?</div>
       </div>
 
       <div class="fwrap confirm hide" id="confirmCard">
         <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></div>
         <h2>One click and you're inside.</h2>
-        <p>We sent a link to <span class="email" id="confirmEmail">you@company.com</span>. Open it and you go straight to seeding the workspace on the left.</p>
+        <p>We sent a link to <span class="email" id="confirmEmail">you@company.com</span>. Open it to go straight to workspace setup.</p>
         <div class="resend">Didn't get it? <a href="#" id="resendLink">Resend</a> · <a href="#" id="editEmail">Use a different email</a></div>
       </div>
     </div>
@@ -265,7 +265,7 @@
         errorMessage.classList.remove('hide');
       } finally {
         submitBtn.disabled = false;
-        btnText.textContent = 'Run your first morning →';
+        btnText.textContent = 'Create your workspace →';
       }
     });
 
