@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "path": "coming-soon.html",
+    "phrase": "motion",
+    "excerpt": "@media (prefers-reduced-motion: reduce)",
+    "category": "F",
+    "owner": "copy-standard",
+    "reviewBy": "2027-05-06",
+    "justification": "CSS media feature name (prefers-reduced-motion), not visible copy."
+  }
+]

@@ -1,17 +1,17 @@
 {
-  "files": 1205,
+  "files": 1220,
   "renderedOccurrences": 5626,
   "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 480,
+  "tier2ReviewWarnings": 464,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
-      "hits": 40
+      "hits": 39
     },
     "B": {
       "description": "runtime/customer-visible candidate",
-      "hits": 385
+      "hits": 370
     },
     "C": {
       "description": "prompt/template",
@@ -23,19 +23,30 @@
     },
     "E": {
       "description": "tests/comments/deprecated examples",
-      "hits": 966
+      "hits": 968
     },
     "F": {
       "description": "internal identifier",
-      "hits": 613
+      "hits": 615
     },
     "G": {
       "description": "reviewed ordinary usage",
       "hits": 0
     }
   },
-  "allowlistedHits": 0,
+  "allowlistedHits": 1,
   "rows": [
+    {
+      "file": "coming-soon.html",
+      "line": 314,
+      "phrase": "motion",
+      "tier": 2,
+      "category": "F",
+      "context": "ase; margin: 0; } .earthzone__landed.on { opacity: 1; } @media (prefers-reduced-motion: reduce) { .earthzone__mark, .earthzone__root, .earthzone__landed, .gate__step, .gate__input, .gate__submit { transition: none; } } @media (max-width: 760px)",
+      "review": "CSS media feature name (prefers-reduced-motion), not visible copy.",
+      "owner": "copy-standard",
+      "reviewBy": "2027-05-06"
+    },
     {
       "file": "deliverables/design-principle-strict-bible/08-room-guardian-specs/antaeus-discovery-studio-capability-map-2026-07-07.html",
       "line": 169,
@@ -2237,14 +2248,6 @@
       "context": "f (!Number.isFinite(startedAt)) return 0; const ms = now.getTime() - startedAt; return Math.floor(ms / (24 * 60 * 60 * 1000)); } export function isStaleRun( runStartedAtIso: string | null | undefined, now: Date = new Date() ): boolean { if (!runStartedAtIso) retur"
     },
     {
-      "file": "src/briefing/components/Topbar.tsx",
-      "line": 22,
-      "phrase": "what the system saw",
-      "tier": 2,
-      "category": "A",
-      "context": "kicker\">{t(\"Briefing · weekly read\")}</p> <h1 class=\"bf-topbar__title\"> What the system saw this week. </h1> <p class=\"bf-topbar__sub\"> The operator's stated preferences are a hypothesis. The pipeline tests them aga"
-    },
-    {
       "file": "src/briefing/components/WorkspaceReads.tsx",
       "line": 160,
       "phrase": "decaying",
@@ -2283,14 +2286,6 @@
       "tier": 2,
       "category": "E",
       "context": "ce/t\"; /** * TopbarDS — the Briefing's thesis head on the library. A peer telling * the operator what the system saw (canon §4.21): the operator's stated * preferences are a hypothesis the pipeline tests against what's * actually moving. Composed on Kicker + Heading; the LLM-governed reads *"
-    },
-    {
-      "file": "src/briefing/ds/components/TopbarDS.tsx",
-      "line": 16,
-      "phrase": "what the system saw",
-      "tier": 2,
-      "category": "B",
-      "context": "<Kicker>{t(\"BRIEFING · THE DAILY READ\")}</Kicker> <Heading level=\"title\">{t(\"What the system saw.\")}</Heading> <p class=\"bfd-head__sub\"> {t( \"Your stated preferences are a hypothesis. The pipeline tests them against what's actua"
     },
     {
       "file": "src/briefing/lib/cluster/core.test.ts",
@@ -6549,22 +6544,6 @@
       "context": "tion\" | \"healthy\" { if (lane === \"critical\") return \"risk\"; if (lane === \"at-risk\") return \"motion\"; return \"healthy\"; } function actionLabelFor( lane: RecoveryAssessment[\"lane\"] ): string { if (lane === \"critical\") return t(\"Recover now\"); if (lane === \"at-ris"
     },
     {
-      "file": "src/deal-workspace/components/InterventionRail.tsx",
-      "line": 384,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "ep\")); } if (!deal.useCase || !deal.useCase.trim()) { detailPieces.push(t(\"Use case thin\")); } return ( <li class=\"dw-rail__ticket-item\"> <button type=\"button\" class={`dw-rail__ticket dw-rail__ticket--${edge}"
-    },
-    {
-      "file": "src/deal-workspace/components/InterventionRail.tsx",
-      "line": 448,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "!deal.nextStep.trim()) return t(\"Stale\"); if (!deal.useCase || !deal.useCase.trim()) return t(\"Thin evidence\"); if (assessment.lane === \"at-risk\") return t(\"At risk\"); return t(\"Healthy\"); }"
-    },
-    {
       "file": "src/deal-workspace/components/TargetFolio.tsx",
       "line": 23,
       "phrase": "motion",
@@ -6603,14 +6582,6 @@
       "tier": 2,
       "category": "B",
       "context": "{t( \"The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.\", { class: \"body\" } )} </p> </div> <ul class=\"dw-signal-g"
-    },
-    {
-      "file": "src/deal-workspace/components/TargetFolio.tsx",
-      "line": 101,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "copy\"> {(deal.useCase ?? \"\").trim() === \"\" ? t(\"Thin · use-case not locked\") : `Locked · ${deal.useCase}`} </span> </li> <li class=\"dw-signal-row\">"
     },
     {
       "file": "src/deal-workspace/ds/DealWorkspaceDS.tsx",
@@ -6851,22 +6822,6 @@
       "tier": 2,
       "category": "F",
       "context": "sheet\")} trail={[{ label: t(\"SIGNAL\"), href: \"/signal-console/\" }]} pulling={{ verb: t(\"Recover\"), object: t(\"Acme — stalled 18d at proposal\"), href: \"/deal-workspace/\", why:"
-    },
-    {
-      "file": "src/design-system/ProofSheet.tsx",
-      "line": 130,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "tatusChip label={t(\"Compounding\")} tone=\"blue\" /> <StatusChip label={t(\"Thin\")} /> </div> </div> </Section> <Section code={t(\"GROUNDED\")} title={t(\"The card in five data states\")}"
-    },
-    {
-      "file": "src/design-system/ProofSheet.tsx",
-      "line": 533,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "account: \"Harbor Freight Co\", cause: t(\"Use case thin\"), value: \"$38k\" } } ]} />"
     },
     {
       "file": "src/discovery-studio/components/CallClock.tsx",
@@ -7837,14 +7792,6 @@
       "context": "eo / buyer / pain / trigger / * proof) + active accounts numeric input * - 4 build outputs (Thin ICP statement / focus / buying group / * evidence) * - quality readout (8-check list + tier-tinted score) */ function applyTemplate(id: string): void { const t = fin"
     },
     {
-      "file": "src/icp-studio/components/WorkArea.tsx",
-      "line": 381,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "<article class=\"icp-out icp-out--statement\"> <p class=\"icp-out__kicker\">{t(\"THIN ICP STATEMENT\")}</p> <p class=\"icp-out__statement\">{statement.text}</p> <p class=\"icp-out__hint\">{statement.hint}</p> </article>"
-    },
-    {
       "file": "src/icp-studio/ds/IcpStudioDS.tsx",
       "line": 18,
       "phrase": "sharp",
@@ -8122,11 +8069,11 @@
       "phrase": "motion",
       "tier": 2,
       "category": "E",
-      "context": "tegory: \"revenue OS\", what_we_sell: \"a GTM operating system\", value_prop: \"make the motion inheritable\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: {}, phase_f_proposals_enabled: null, data: {},"
+      "context": "tegory: \"revenue OS\", what_we_sell: \"a GTM operating system\", value_prop: \"make the motion inheritable\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: {}, phase_f_proposals_enabled: null, prospectin"
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 35,
+      "line": 36,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8134,7 +8081,7 @@
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 62,
+      "line": 63,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8142,7 +8089,7 @@
     },
     {
       "file": "src/icp-studio/lib/commercial-profile.test.ts",
-      "line": 69,
+      "line": 70,
       "phrase": "motion",
       "tier": 2,
       "category": "E",
@@ -8234,7 +8181,7 @@
       "phrase": "motion",
       "tier": 2,
       "category": "E",
-      "context": "product_category: \"revenue OS\", what_we_sell: \"a GTM OS\", value_prop: \"inheritable motion\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: { step: 7 }, phase_f_proposals_enabled: null, data: {},"
+      "context": "product_category: \"revenue OS\", what_we_sell: \"a GTM OS\", value_prop: \"inheritable motion\", onboarding_completed: true, density_state: \"show_me_how\", onboarding_answers: { step: 7 }, phase_f_proposals_enabled: null, prospecting_a"
     },
     {
       "file": "src/icp-studio/lib/quality.test.ts",
@@ -9238,11 +9185,11 @@
     },
     {
       "file": "src/lib/voice/blessed-labels.ts",
-      "line": 27,
+      "line": 26,
       "phrase": "thin",
       "tier": 2,
-      "category": "B",
-      "context": ". */ export const STATE_VOCABULARY: ReadonlyArray<string> = [ \"Ready now\", \"Workable\", \"Thin\", \"Operating\", \"Needs intervention\", \"At risk\", \"Handoff-ready\", \"Partial\", \"Compounding\", \"Still weak\", ]; const blessed = new Set( [...BLESSED_U"
+      "category": "E",
+      "context": "RD §13/§17/§20 on 2026-11-05). A state names an * observable condition. Retired as primary labels: Thin, Compounding, * Still weak, Workable, Operating, Handoff-ready. */ export const STATE_VOCABULARY: ReadonlyArray<string> = [ \"Ready now\", \"At risk\", \"Needs interventi"
     },
     {
       "file": "src/lib/voice/voice-document.ts",
@@ -9259,6 +9206,22 @@
       "tier": 2,
       "category": "D",
       "context": "ed language when * the evidence does not support certainty. * * Deno mirror: `supabase/functions/heartbeat/voice-document.ts`. */ export const BANNED_CORPORATE_VOCAB: ReadonlyArray<string> = [ \"leverage\", \"leveraged\", \"leveraging\", \"leverages\", \"unlock\", \"unlocked\", \"unlockin"
+    },
+    {
+      "file": "src/lib/zip-store.ts",
+      "line": 7,
+      "phrase": "pulling",
+      "tier": 2,
+      "category": "E",
+      "context": "ll and the browser * download is local, so skipping compression keeps this ~80 lines * instead of pulling in a zip library. * * Format: PKZIP APPNOTE local file headers + central directory + end * record. File names are UTF-8 (general-purpose flag bit 11). */ export interface Zip"
+    },
+    {
+      "file": "src/lib/zip-store.ts",
+      "line": 47,
+      "phrase": "floor",
+      "tier": 2,
+      "category": "F",
+      "context": "0, d.getFullYear()); return { time: (d.getHours() << 11) | (d.getMinutes() << 5) | Math.floor(d.getSeconds() / 2), date: ((year - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate() }; } export function createZip(entries: ReadonlyArray<ZipEntry>, now: Date ="
     },
     {
       "file": "src/linkedin-playbook/LinkedinPlaybook.tsx",
@@ -11286,43 +11249,11 @@
     },
     {
       "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 34,
-      "phrase": "sharpen",
-      "tier": 2,
-      "category": "B",
-      "context": "Y_BAND_LABEL: Record<string, string> = { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enable"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 130,
-      "phrase": "sharpen",
-      "tier": 2,
-      "category": "B",
-      "context": "title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`} > <span class=\"ob-output__chip-label\">{t(\"Quality\")}</span> <span c"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
       "line": 35,
       "phrase": "thin",
       "tier": 2,
       "category": "F",
-      "context": "ring, string> = { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate.valu"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 35,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "= { ready: t(\"Ready to send\"), workable: t(\"Workable — sharpen further\"), thin: t(\"Too thin — add a real trigger\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate.value; const"
-    },
-    {
-      "file": "src/outbound-studio/components/OutputPanel.tsx",
-      "line": 130,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "} title={`Quality score ${out.qualityScore}/100. Ready ≥ 80, workable ≥ 60, thin below 60. Sharpen the switchboard inputs to lift the score.`} > <span class=\"ob-output__chip-label\">{t(\"Quality\")}</span>"
+      "context": "ring, string> = { ready: t(\"Ready to send\"), workable: t(\"Usable · needs more detail\"), thin: t(\"Add a real trigger before sending\", { class: \"body\" }) }; export function OutputPanel(): JSX.Element { const out = currentSendLine.value; const enabled = canGenerate."
     },
     {
       "file": "src/outbound-studio/components/Switchboard.tsx",
@@ -12390,7 +12321,7 @@
     },
     {
       "file": "src/prospecting-desk/lib/research-parse.ts",
-      "line": 107,
+      "line": 110,
       "phrase": "floor",
       "tier": 2,
       "category": "F",
@@ -12477,28 +12408,12 @@
       "context": ")} value={String(m.meetingsWeek)} note={t(\"Meeting-creation floor your channels need to support.\", { class: \"body\" })} accent /> <PlanCard label={t(\"Opps / quarter\")}"
     },
     {
-      "file": "src/quota-workback/components/PlanReadout.tsx",
-      "line": 30,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "{ class: \"body\" } ) : t( \"The math is too thin to trust yet. Improve the conversion assumptions or pull the target back before you bet on this plan.\", { class: \"body\" } ); return ("
-    },
-    {
       "file": "src/quota-workback/components/SystemHealth.tsx",
       "line": 13,
       "phrase": "pressure",
       "tier": 2,
       "category": "E",
       "context": "dger family Quota Workback uses room-native framing * (planning posture, coverage, weekly touches, pressure fit). Tone * follows the quality engine. */ export function SystemHealth(): JSX.Element { const m = metrics.value; const b = benchmark.value; const c = coverage.valu"
-    },
-    {
-      "file": "src/quota-workback/components/SystemHealth.tsx",
-      "line": 33,
-      "phrase": "pressure",
-      "tier": 2,
-      "category": "B",
-      "context": "\"The planning math is believable right now. The assumptions, the coverage, and the weekly pressure are close enough to reality that you can act on them.\", { class: \"body\" } ) ); } if ((c.ratio || 0) >= b.coverage) { compoundin"
     },
     {
       "file": "src/quota-workback/components/SystemHealth.tsx",
@@ -12725,14 +12640,6 @@
       "context": "} tone=\"blue\"> <Stat value={fmt(m.meetingsWeek)} label={t(\"the meeting-creation floor\")} /> </Card> <Card kicker={t(\"OPPS / QUARTER\")}> <Stat value={fmt(m.oppsQuarter)} label={t(\"pipeline-creation pressure\")} />"
     },
     {
-      "file": "src/quota-workback/ds/components/PlanLedger.tsx",
-      "line": 47,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "B",
-      "context": "onversion assumption can break the quarter.\", { class: \"body\" }) : t(\"The math is too thin to trust yet — tighten the assumptions or pull the target back.\", { class: \"body\" }); return ( <div class=\"qwd-ledger\"> {/* The dominant summary state — d"
-    },
-    {
       "file": "src/quota-workback/ds/ds-components.test.tsx",
       "line": 15,
       "phrase": "pressure",
@@ -12862,11 +12769,11 @@
     },
     {
       "file": "src/settings/state.ts",
-      "line": 399,
+      "line": 416,
       "phrase": "live edge",
       "tier": 1,
       "category": "E",
-      "context": "als turned off.\" ); } finally { phaseFSaving.value = false; } } /** * The Live Edge's durable switch (locked 2026-07-16) — mirrors the * hover control on the rail itself. Edge off ≠ capture off: the wire * hides; the counting keeps running. */ export function"
+      "context": "ons turned off.\" ); } finally { phaseFSaving.value = false; } } /** * The Live Edge's durable switch (locked 2026-07-16) — mirrors the * hover control on the rail itself. Edge off ≠ capture off: the wire * hides; the counting keeps running. */ export function"
     },
     {
       "file": "src/signal-console/SignalConsole.tsx",
@@ -16510,8 +16417,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 160,
-    "current": 158,
-    "delta": -2
+    "previous": 59,
+    "current": 0,
+    "delta": -59
   }
 }

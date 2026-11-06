@@ -48,7 +48,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             expect(await back.count()).toBe(1);
             expect(await back.getAttribute("href")).toBe("/start.html");
 
-            // The chrome carries a primary "Run your first morning" CTA so
+            // The chrome carries a primary "Start your workspace" CTA so
             // Marcus can sign up directly from any scroll position.
             const chromeBtn = page.locator(".chrome .btn--primary");
             expect(await chromeBtn.count()).toBe(1);
@@ -115,7 +115,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         }
     });
 
-    test("loop rail names the four sacred nouns (signal → motion → deal+proof → handoff)", async ({
+    test("loop rail names the four sacred nouns (signal → outreach → deal + evidence → handoff)", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -126,7 +126,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             expect(await loopSteps.count()).toBe(4);
             const names = await page.locator(".loop__name").allTextContents();
             expect(names.join(" · ")).toContain("Signal");
-            expect(names.join(" · ")).toContain("Motion");
+            expect(names.join(" · ")).toContain("Outreach");
             expect(names.join(" · ").toLowerCase()).toContain("deal");
             expect(names.join(" · ")).toContain("Handoff");
         } finally {
@@ -153,7 +153,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
         }
     });
 
-    test("closing CTA — one dominant move (Run your first morning), sign-in secondary", async ({
+    test("closing CTA — one dominant action (Start your workspace), sign-in secondary", async ({
         browser
     }) => {
         const ctx = await browser.newContext();
@@ -165,7 +165,7 @@ test.describe("Phase 5.4 — /why-antaeus/", () => {
             expect(await primaryCta.getAttribute("href")).toBe("/signup.html");
             // Unified with the corridor CTA voice (was "Create your workspace").
             expect(await primaryCta.textContent()).toMatch(
-                /run your first morning/i
+                /start your workspace/i
             );
 
             const ghost = page.locator(".closing .btn--ghost");

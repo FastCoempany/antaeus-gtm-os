@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Antaeus" />
+  <meta name="description" content="Antaeus private build — enter your invite code." />
   <meta name="robots" content="noindex, nofollow" />
   <title>Antaeus</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -326,7 +326,7 @@
 <body>
   <main class="page">
     <h1>Antaeus is strongest on the ground.</h1>
-    <p class="sub">So is your sales motion. The private build is open to invited operators.</p>
+    <p class="sub">So is a sales process that is written down. The private build is open by invitation only.</p>
 
     <form class="gate" id="gate-form" method="get" action="/_gate/unlock" autocomplete="off">
       <p class="gate__kicker">Antaeus · Private build</p>
@@ -369,7 +369,7 @@
         <i style="bottom:88px"></i><i style="bottom:62px"></i><i style="bottom:38px"></i><i style="bottom:16px"></i>
       </div>
       <div class="earthzone__root" id="gate-root"></div>
-      <p class="earthzone__landed" id="gate-landed">GROUNDED · ROOTED</p>
+      <p class="earthzone__landed" id="gate-landed">CHECKING YOUR CODE</p>
     </div>
   </main>
 
@@ -420,7 +420,7 @@
         // Surface ?error=1 inline + carry ?next= through the unlock GET.
         var params = new URLSearchParams(window.location.search || '');
         if (params.get('error') === '1') {
-          if (err) err.textContent = "That code doesn't open anything yet. Check it and try again.";
+          if (err) err.textContent = "That invite code isn't valid. Check it and try again.";
         }
         var next = params.get('next');
         if (next && next.charAt(0) === '/' && next.charAt(1) !== '/') {
