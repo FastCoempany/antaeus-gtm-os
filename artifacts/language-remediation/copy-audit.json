@@ -3,7 +3,7 @@
   "renderedOccurrences": 5626,
   "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
-  "tier2ReviewWarnings": 36,
+  "tier2ReviewWarnings": 21,
   "categories": {
     "A": {
       "description": "rendered/customer-visible",
@@ -19,7 +19,7 @@
     },
     "D": {
       "description": "active doctrine",
-      "hits": 15
+      "hits": 0
     },
     "E": {
       "description": "tests/comments/deprecated examples",
@@ -1699,14 +1699,6 @@
       "reviewBy": "2027-05-06"
     },
     {
-      "file": "preview-transcript/briefing/index.html",
-      "line": 915,
-      "phrase": "heartbeat",
-      "tier": 2,
-      "category": "D",
-      "context": "</td><td>the operator’s own deals / signals / pilots (the ADR-009 ledger)</td><td>daily-fresh · SQL heartbeat generators</td></tr><tr><td><b>World</b></td><td>the market — Recipe-Layer Patterns + Contrarian + Periphery</td><td>weekly synthesis · full Recipe Layer</td></tr></table></div><d"
-    },
-    {
       "file": "preview-transcript/cold-call-studio/index.html",
       "line": 311,
       "phrase": "thread",
@@ -1721,14 +1713,6 @@
       "tier": 2,
       "category": "E",
       "context": "2><div data-copy-context=\"deprecated-example\" class=\"sd\">Banned on the face: thread · loom · pull · pressure · proof · say-next · call memory · “the move.” The user is the <b>seller</b> (or <i>you</i>), never “rep.”</div></div><div class=\"sec\"><div class=\"sn\">6 · Guardrails</div><h2>Must"
-    },
-    {
-      "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1686,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "D",
-      "context": "<li>Not a <b>FAQ page</b> or second main canvas</li> <li>No <b>decorative timer</b>, no heat meters / abstract chips</li> <li>No <b>fake branching</b> that all lands the same</li> <li>No dense chrome that competes with the live node</li> </ul></div>"
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
@@ -1852,22 +1836,6 @@
     },
     {
       "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1553,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "D",
-      "context": "Language doctrine · 2026-11-02</div><div class=\"cb\">Keep stable schema keys such as earnedTruth and thin. Display confirmed facts, evidence gaps, buyer roles, and recommended next steps in ordinary language. Suggested buyer responses are examples, not observations about the actual bu"
-    },
-    {
-      "file": "preview-transcript/discovery-studio/index.html",
-      "line": 1586,
-      "phrase": "thin",
-      "tier": 2,
-      "category": "D",
-      "context": "ve</b> (the segment open right now), <b>worked</b> (the buyer gave you information you can use), <b>thin</b> (some answers, but not enough to rely on in later rooms), and <b>flagged</b> (something needs attention: the buyer pushed back, a key person is missing, the timing is wrong, o"
-    },
-    {
-      "file": "preview-transcript/discovery-studio/index.html",
       "line": 1286,
       "phrase": "front",
       "tier": 2,
@@ -1881,14 +1849,6 @@
       "tier": 2,
       "category": "A",
       "context": "eal the forecast treats as real. What would the manager have to check manually before backing it in front of leadership?\" <span class=\"cue\">— serif · top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> WHEN TO ASK Use this when you need the current proc"
-    },
-    {
-      "file": "preview-transcript/future-autopsy/index.html",
-      "line": 180,
-      "phrase": "decay",
-      "tier": 2,
-      "category": "D",
-      "context": "subset (shipped src/future-autopsy). Settled design: future-autopsy-countdown-2026-07-04.html (the decay line).</div></div> <div class=\"sec\"><div class=\"sn\">1 · Purpose</div><h2>What the room is for</h2><div class=\"sd\">Show the recorded conditions, risk assessment, evidence, correc"
     },
     {
       "file": "preview-transcript/future-autopsy/index.html",
@@ -1913,46 +1873,6 @@
       "tier": 2,
       "category": "A",
       "context": "orth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon. These are conditions in the deal record; they don't tell you for certain what would cause a loss. <span class=\"cue\">— middle of page, center</span></di"
-    },
-    {
-      "file": "preview-transcript/getting-to-signed/index.html",
-      "line": 203,
-      "phrase": "hottest",
-      "tier": 2,
-      "category": "D",
-      "context": "/table></div><div class=\"sec\"><div class=\"sn\">3 · The workstreams</div><h2>One ledger row each; the hottest is the current blocking issue</h2><div class=\"sd\">Select the current blocking workstream from recorded status, rather than a fixed category order.</div><table><tr><th style=\"width"
-    },
-    {
-      "file": "preview-transcript/index.html",
-      "line": 95,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "invite the rest</h2><div class=\"sd\">Heavy-seeding doctrine #6. The deal-level judgment is the hard floor — the thing that stops Antaeus being a prettier CRM.</div><table><tr><th style=\"width:140px\">Tier</th><th>What</th><th>Rule</th></tr><tr><td><b>Required</b></td><td>ICP + the acco"
-    },
-    {
-      "file": "preview-transcript/index.html",
-      "line": 95,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "y-know judgment; the company arrives enriched.</td></tr><tr><td style=\"width:230px\"><b>The ≥10-deal floor</b></td><td>Required seller judgment, with an explicit limited-sample explanation when fewer deals are available.</td></tr><tr><td style=\"width:230px\"><b>The quota set</b></td><td"
-    },
-    {
-      "file": "preview-transcript/index.html",
-      "line": 95,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "<b>becoming</b> the live rooms (never a separate “completion” screen)</li><li>The ≥10-deal judgment floor</li><li>The citable evidence margin</li><li>“They bring judgment, the app brings depth”</li></ul></div><div><div class=\"sn\" style=\"color:var(--ink-3)\">What it is NOT</div><ul clas"
-    },
-    {
-      "file": "preview-transcript/linkedin-playbook/index.html",
-      "line": 139,
-      "phrase": "motion",
-      "tier": 2,
-      "category": "D",
-      "context": "rom activity counts.</p><div class=\"src\">Sourced from: canon §4.10 + the recommendation engine (lib/motion.ts) + 5-cue ladder (shipped src/linkedin-playbook). Settled design: linkedin-playbook-one-move-2026-07-06.html.</div></div> <div class=\"sec\"><div class=\"sn\">1 · Purpose</div><h2"
     },
     {
       "file": "preview-transcript/pilot-desk/index.html",
@@ -1980,51 +1900,11 @@
     },
     {
       "file": "preview-transcript/signal-console/index.html",
-      "line": 454,
-      "phrase": "heat",
-      "tier": 2,
-      "category": "D",
-      "context": "eview those inputs before recommending outreach.</p><div class=\"src\">Sourced from: canon §4.7 + the heat engine (shipped src/signal-console) + ADR-006 (substrate role). Settled design: signal-console-attention-router-2026-07-04.html.</div></div> <div class=\"sec\"><div class=\"sn\">1 ·"
-    },
-    {
-      "file": "preview-transcript/signal-console/index.html",
-      "line": 455,
-      "phrase": "going cold",
-      "tier": 2,
-      "category": "D",
-      "context": "i><li>Bands (the Attention Router): <b>act now</b> · <b>reach while warm</b> · <b>emerging</b> · <b>going cold</b> — the relevance is felt as a band, not a bare number</li></ul></div><div class=\"sec\"><div class=\"sn\">3 · What it offers</div><h2>The primitives</h2><table><tr><th style=\"width"
-    },
-    {
-      "file": "preview-transcript/signal-console/index.html",
       "line": 153,
       "phrase": "pressure",
       "tier": 2,
       "category": "A",
       "context": "\"kind\">[text]</span> High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention — News coverage <span class=\"cue\">— top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> New Chief People Officer arrive"
-    },
-    {
-      "file": "preview-transcript/signal-console/index.html",
-      "line": 455,
-      "phrase": "decay",
-      "tier": 2,
-      "category": "D",
-      "context": "<ul class=\"plain\"><li><b>Priority score = signal count × type weight × source credibility × recency decay</b></li><li>Bands (the Attention Router): <b>act now</b> · <b>reach while warm</b> · <b>emerging</b> · <b>going cold</b> — the relevance is felt as a band, not a bare number</li><"
-    },
-    {
-      "file": "preview-transcript/territory-architect/index.html",
-      "line": 142,
-      "phrase": "carve",
-      "tier": 2,
-      "category": "D",
-      "context": "size, named accounts, and observable buying signals.</p><div class=\"src\">Sourced from: canon §4.5 (carve-axis malleability + why-you/why-now charter, 2026-07-03) + shipped src/territory-architect. Settled design: territory-architect-axis-morph-2026-07-04.html.</div></div> <div clas"
-    },
-    {
-      "file": "preview-transcript/territory-architect/index.html",
-      "line": 142,
-      "phrase": "floor",
-      "tier": 2,
-      "category": "D",
-      "context": "g tool for working out a strategic decision before acting on it · settled 2026-07-04 (axis-morphing floor)</div><p>Territory Architect organizes target accounts into segments with priority tiers, approaches, and a 300-account ceiling. Segments can combine geography, industry, size, na"
     },
     {
       "file": "src/birdseye/BirdseyeFloat.tsx",
@@ -15844,8 +15724,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 225,
-    "current": 0,
-    "delta": -225
+    "previous": 261,
+    "current": 21,
+    "delta": -240
   }
 }
