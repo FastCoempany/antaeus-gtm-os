@@ -32,11 +32,11 @@ function renderDemoLane(){
       '<div class="hero-copy">' +
         '<div class="logo">antaeus<span>.</span></div>' +
         '<div class="sub">Sample workspace, real system flow</div>' +
-        '<h1>Pick the demo that makes Antaeus believable in one session.</h1>' +
-        '<p>This is the guided sample workspace for seeing how signal, territory, outbound, discovery, deal motion, proof, and handoff all stack inside one operating system.</p>' +
+        '<h1>Pick a sample workspace to explore.</h1>' +
+        '<p>Each sample is a full workspace: accounts and their signals, territory, outreach, discovery calls, open deals, pilots, and the sales handoff document, all connected.</p>' +
         '<div class="note-list">' +
-          '<div class="note"><strong>What is sample</strong>Accounts, deals, touches, advisor moves, PoC motion, and handoff evidence are seeded so the product never feels empty.</div>' +
-          '<div class="note"><strong>What is real</strong>The module logic, module handshakes, saved state, tour path, and shell behavior are the real app. Demo data just makes the story legible.</div>' +
+          '<div class="note"><strong>What is sample</strong>The accounts, deals, outreach, favors, pilots and handoff notes are sample data, so every product area has something in it.</div>' +
+          '<div class="note"><strong>What is real</strong>The rankings, the links between product areas, saving, and navigation are the real app. Only the data is sample.</div>' +
         '</div>' +
         '<div class="quick-links">' +
           '<a class="link-chip" href="/purchase/?entry=demo-lane">See Annual Plan</a>' +
@@ -45,13 +45,13 @@ function renderDemoLane(){
         '</div>' +
       '</div>' +
       '<div class="hero-side">' +
-        '<h2>What this demo should prove</h2>' +
-        '<p>By the time you hit dashboard, the path should feel coherent enough to explain in a Loom, a live demo, or a founder handoff conversation.</p>' +
+        '<h2>What the sample shows</h2>' +
+        '<p>By the time you reach the Dashboard, you should be able to explain how the product areas connect.</p>' +
         '<ul class="proof-list">' +
-          '<li>Signal Console feeds territory, deal, and outbound context instead of living in isolation.</li>' +
-          '<li>Discovery, autopsy, and PoC work look like one system, not separate templates.</li>' +
-          '<li>The handoff path is visible, not theoretical.</li>' +
-          '<li>Sample data is clearly marked as sample, and real workspace return is easy.</li>' +
+          '<li>Signal Console passes account context to territory, deals and outreach.</li>' +
+          '<li>Discovery calls, deal risk reviews and pilots share the same deal records.</li>' +
+          '<li>You can see how the work becomes the sales handoff document.</li>' +
+          '<li>Sample data is marked as sample, and you can return to your own workspace at any time.</li>' +
         '</ul>' +
       '</div>' +
     '</div>' +
