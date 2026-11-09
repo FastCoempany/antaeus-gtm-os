@@ -17,7 +17,7 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         expect(description).toContain("Get an AE Hiring Brief for $149.");
         expect(await page.locator("h1").count()).toBe(1);
         await expect(page.locator("h1")).toHaveText(
-            "Before you hire the next AE, prove there’s a sales system for them to inherit."
+            "Before you hire another account executive, check that your pipeline and sales process can support one."
         );
     });
 
@@ -38,16 +38,16 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         }
         const headings = await page.locator("main h1, main h2").allTextContents();
         expect(headings.map(h => h.trim())).toEqual([
-            "Before you hire the next AE, prove there’s a sales system for them to inherit.",
-            "A revenue target does not prove you need another salesperson.",
-            "Four things have to survive the math.",
-            "Start with the revenue. Work backward until the seat either holds or breaks.",
-            "A decision brief, not a dashboard.",
+            "Before you hire another account executive, check that your pipeline and sales process can support one.",
+            "A revenue gap doesn’t mean you need another salesperson.",
+            "Another AE is supported only if four things hold up in the numbers.",
+            "We start with the revenue you need and work backward to the pipeline one more seller would require.",
+            "You get a written brief that answers one hiring question.",
             "The answer can be “yes” to the economics and “not yet” to the hire.",
             "You probably already know most of what we need.",
-            "Built for an actual headcount decision.",
-            "Before you buy.",
-            "Know what has to be true before you put another quota on payroll."
+            "Use it when you are deciding whether to hire a salesperson.",
+            "Questions before you buy",
+            "Find out what has to be true before you hire another salesperson with a quota."
         ]);
     });
 
@@ -60,7 +60,7 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
 
     test("every sample is labeled SAMPLE or illustrative", async ({ page }) => {
         await page.goto(PATH, { waitUntil: "domcontentloaded" });
-        await expect(page.locator(".decision-sheet")).toContainText("SAMPLE · AE CAPACITY DECISION");
+        await expect(page.locator(".decision-sheet")).toContainText("SAMPLE RESULT · ADDING AN AE");
         await expect(page.locator(".decision-sheet")).toContainText("Illustrative sample.");
         await expect(page.locator(".sample-case")).toContainText("FICTIONAL EXAMPLE");
         await expect(page.locator(".sample-case")).toContainText("Illustrative sample. Not a benchmark and not a customer result.");
@@ -280,7 +280,7 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         try {
             await page.goto(PATH, { waitUntil: "domcontentloaded" });
             await expect(page.locator("h1")).toBeVisible();
-            await expect(page.locator("#sample")).toContainText("CONDITIONAL");
+            await expect(page.locator("#sample")).toContainText("YES, WITH CONDITIONS");
             await expect(page.locator(".faq-row").first()).toBeVisible();
             // Missing checkout must be explicit even without JavaScript.
             await expect(page.locator("[data-checkout-unconfigured]")).toBeVisible();
@@ -295,7 +295,7 @@ test.describe("AE Hiring Brief landing — /should-we-hire-an-ae/", () => {
         await page.goto(PATH, { waitUntil: "domcontentloaded" });
         const tags = await page.locator(".decision-tag, .decision-state").allTextContents();
         expect(tags.length).toBeGreaterThan(0);
-        for (const tag of tags) expect(tag.trim()).toMatch(/^(SUPPORTED|THIN|CONDITIONAL)$/);
+        for (const tag of tags) expect(tag.trim()).toMatch(/^(SUPPORTED|SHORT|YES, WITH CONDITIONS)$/);
     });
 
     test("no fabricated proof: no reviews, ratings or customer counts", async ({ page }) => {

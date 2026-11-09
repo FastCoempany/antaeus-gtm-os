@@ -1609,5 +1609,23 @@
     "owner": "copy-standard",
     "justification": "'heat' is the JSON response key the parser reads (kept for compatibility); the prompt defines it as an account-priority score. Renaming would break the stored shape.",
     "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "js/ae-hire-landing.js",
+    "phrase": "motion",
+    "excerpt": "prefers-reduced-motion",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "CSS media-query name (prefers-reduced-motion), not copy.",
+    "reviewBy": "2027-05-06"
+  },
+  {
+    "path": "should-we-hire-an-ae/index.html",
+    "phrase": "thin",
+    "excerpt": "decision-tag--thin",
+    "category": "F",
+    "owner": "copy-standard",
+    "justification": "CSS class name for the amber state tag; the visible label is SHORT.",
+    "reviewBy": "2027-05-06"
   }
 ]

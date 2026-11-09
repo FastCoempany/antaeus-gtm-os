@@ -27,8 +27,8 @@ const money = value => value >= 1e6 ? '$' + (value / 1e6).toFixed(2) + 'M' : '$'
 test('published decision state and constraint match the engine', () => {
   assert.equal(sample.decision.state, 'conditional');
   assert.equal(sample.decision.primary_constraint, 'pipeline_supply');
-  assert.match(html, /CONDITIONAL[\s\S]*Pipeline supply is the limiting condition\./);
-  assert.match(html, /Primary constraint: pipeline supply/);
+  assert.match(html, /YES, WITH CONDITIONS[\s\S]*There isn’t enough qualified pipeline yet for another seller\./);
+  assert.match(html, /Main limit: not enough qualified pipeline/);
 });
 test('published next-AE economics match the engine', () => {
   const c = sample.calculations;
@@ -40,7 +40,7 @@ test('published next-AE economics match the engine', () => {
 });
 test('published lane states match the engine tests', () => {
   assert.equal(sample.tests.economic_need.state, 'supported');
-  assert.ok(['near', 'short'].includes(sample.tests.demand_sufficiency.state), 'demand is shown as THIN');
+  assert.ok(['near', 'short'].includes(sample.tests.demand_sufficiency.state), 'pipeline supply is shown as SHORT');
   assert.equal(sample.tests.repeatability.state, 'demonstrated');
   assert.equal(sample.tests.timing_management.timing.state, 'compatible');
   assert.equal(sample.tests.timing_management.management.state, 'ready');
@@ -52,7 +52,7 @@ test('published workback arithmetic is correct', () => {
   assert.match(html, /= 16 wins[\s\S]*= 67 qualified opportunities[\s\S]*= \$5\.0M qualified pipeline/);
 });
 test('every sample on the page is labeled as illustrative', () => {
-  assert.match(html, /SAMPLE · AE CAPACITY DECISION/);
+  assert.match(html, /SAMPLE RESULT · ADDING AN AE/);
   assert.match(html, /FICTIONAL EXAMPLE/);
   assert.equal((html.match(/Illustrative sample\. Not a benchmark and not a customer result\./g) || []).length, 2);
 });
