@@ -35,7 +35,7 @@ Prefer:
 - stakeholder
 - activity
 - recommendation
-- ranking
+- order (as in "in order of risk" — describing what the product does; see §26)
 - evidence
 - blocker
 - risk
@@ -129,7 +129,7 @@ Do not rely on juxtaposition to imply causality.
 
 ### Prefer
 
-> Chomps announced two plants that will require several hundred hires. Because the company appears to have limited recruiting capacity, Antaeus ranks the account as a high-priority outreach opportunity.
+> Chomps announced two plants that will require several hundred hires. Because the company appears to have limited recruiting capacity, Antaeus marks the account as a high-priority outreach opportunity.
 
 Use words such as:
 
@@ -193,7 +193,7 @@ Keep the word only when its referent is unmistakable within the same sentence or
 
 ### Prefer
 
-> The highest-priority action, with the evidence behind its ranking.
+> The highest-priority action, with the evidence for why it comes first.
 
 ### Reject
 
@@ -227,7 +227,7 @@ Prefer:
 - analyzes
 - detects
 - compares
-- ranks
+- sorts / puts in order (never "ranks"; see §26)
 - records
 - surfaces
 - displays
@@ -315,7 +315,7 @@ Requirements:
 
 - use literal status labels;
 - name the event that changed;
-- name the reason for a ranking;
+- name the reason something comes first;
 - name the blocker;
 - state units and time frames;
 - use verbs that describe actual system behavior;
@@ -369,7 +369,7 @@ Comparison copy must identify the concrete capability being compared.
 
 Prefer:
 
-- “Ranks next actions and shows the evidence behind each ranking.”
+- “Puts next actions in order and shows the evidence for why each one is where it is.”
 - “Stores activity and pipeline data for reporting.”
 - “Manual tracking configured by the user.”
 
@@ -559,6 +559,7 @@ For every visible string, ask:
 11. Is UI microcopy shorter and more literal than marketing copy?
 12. Is the FAQ clearer than the page it explains?
 13. Does the wording preserve only claims the product actually supports?
+14. Does it pass every rule in §26 (no stand-in nouns, no describing by absence, no judgment words, no app-made threats, no no-exception rules, no "rank")?
 
 If any answer fails, revise before shipping.
 
@@ -577,3 +578,47 @@ A page is acceptable when:
 
 **Target saturation: 5-10/100.**  
 Below 5 is possible, but not required if reaching it would erase useful product names or make the writing generic.
+
+---
+
+## 26. Writing to the reader (added 2026-11-09, founder-directed)
+
+These rules came out of the onboarding rewrite. They apply to every visible string.
+
+### Name the thing
+
+Banned patterns, whatever the exact words:
+
+- **Casual stand-in nouns.** An insider-sounding noun used where the specific thing should be named: "the calls," "your read," "the work," "this work." Name it: *who's championing each deal, who signs, what's holding it up.*
+- **Describing by absence.** Defining something by where it isn't or who doesn't do it: "what isn't written down anywhere yet," "the questions no CRM asks," "what most setup screens skip." Say what it is.
+- **Judgment words about the reader.** Words that assume a failing: "honest," "yet," "really," "actually" (as in "where it actually stands"). Remove the word; the sentence works without it.
+
+### Stakes come from buyers and deals, never from the app
+
+The app does not threaten, catch, name, or report on the user. Pressure comes from what buyers and deals do.
+
+#### Reject
+
+> Any open deal without a next step on the calendar will be named on your Dashboard tomorrow morning.
+
+#### Prefer
+
+> Without that, the first sign one of your deals is in trouble is going to be an email saying they went with someone else.
+
+### No sentences built as rules with no exceptions
+
+Sentences shaped "any X will…," "every Y is…," or "all Z…" read as maxims, even when they describe product behavior. A schedule fact ("every morning") is fine; a universal rule about the reader or their deals is not.
+
+### Write to this reader, about what will happen
+
+Prefer a concrete prediction about the reader's own situation to a general truth. "Is going to be an email" beats "is an email": the first is about the reader, the second could go on a poster. Test every line by asking whether it would make sense on a poster; if it would, rewrite it.
+
+### "Rank" is out
+
+Do not use "rank," "ranks," "ranked," or "ranking" in visible copy. Ordering words ("in order of risk," "sorts," "comes first," "at the top") describe only what the product does to the user's data. They never describe something the user is asked to do or owns.
+
+- Fine: "Your Dashboard lists your open deals in order of risk." On an input screen, a line saying the order those deals will appear in tomorrow is also fine.
+- Not fine: "Rank your top accounts," "Put your deals in order of priority," "your ranking."
+
+Code identifiers (`rankByHeat`, `recovery_rank`) are not visible copy and stay.
+

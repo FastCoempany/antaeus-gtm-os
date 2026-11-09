@@ -998,7 +998,7 @@ This rule governs every sentence in the product, in canon, in audit docs, in PR 
 - **Literal nouns and verbs first** (§2): account, deal, buyer, activity, recommendation, ranking, evidence, blocker, risk, sales process, revenue target.
 - **Scrutinize the private vocabulary** (§3): *motion, move, moved, room, shape, line, hot/warm/cold, slip, die, run, carry, in your head, awake* are replaced whenever they stand in for a more precise concept — "move" → action or next step; "room" → product area or the feature's name; "line" → message, question, or response; "slip" → name the missed date or lost momentum.
 - **State the reasoning** (§6, §7): evidence → interpretation → action, joined by *because / based on / which means*. Punctuation and fragments never carry the reasoning (§18, §19).
-- **Don't personify the software** (§9): no "sees," "notices," "knows," "wakes," "remembers," "hands you." Say *reviews, detects, compares, ranks, records, displays, recommends*.
+- **Don't personify the software** (§9): no "sees," "notices," "knows," "wakes," "remembers," "hands you." Say *reviews, detects, compares, sorts, records, displays, recommends* ("rank" is out — COPY_STANDARD §26).
 - **No insight voice** (§10): no sentence written mainly to sound like a distilled truth.
 - **Claims discipline** (§21): never be more certain than the data. Say "No logged activity for 14 days," not "the buyer lost interest."
 
@@ -1224,7 +1224,7 @@ there in the sentence:
 - **Personifying the software (COPY_STANDARD §9, added 2026-11-05):**
   "the system sees / noticed / knows / thinks," "the workspace is awake,"
   "wakes up," "hands you," "reads you back." Name the actual behavior:
-  *reviews, detects, compares, ranks, records, displays, recommends*.
+  *reviews, detects, compares, sorts, records, displays, recommends*.
   "Workspace setup complete," not "the workspace is awake."
 
 **Forbidden sentence styling — never narrate the machine to the user
