@@ -171,6 +171,12 @@ jobs:
 
       - name: Write verification to workflow job summary
         if: steps.gate.outputs.run == 'true'
+        # The commit message is passed through env, never pasted into the
+        # script: backticks or $( ) in a message would otherwise run as
+        # shell commands (this failed the 2026-11-09 deploy of #332).
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           # The job summary is the canonical verification surface. It
           # renders in the workflow run page, is retained for 90 days,
@@ -185,8 +191,8 @@ jobs:
           # discoverable record.
           formatted=$(python3 .github/scripts/format-briefing-verification.py \
             /tmp/verification.json \
-            "${{ github.sha }}" \
-            "${{ github.event.head_commit.message }}")
+            "$COMMIT_SHA" \
+            "$COMMIT_MESSAGE")
           {
             echo "## Briefing pipeline verification"
             echo ""
