@@ -41,7 +41,6 @@ function renderDemoLane(){
         '<div class="quick-links">' +
           '<a class="link-chip" href="/purchase/?entry=demo-lane">See Annual Plan</a>' +
           '<a class="link-chip" href="/login.html">Sign In</a>' +
-          '<a class="link-chip" href="/methodology/">Read Methodology</a>' +
         '</div>' +
       '</div>' +
       '<div class="hero-side">' +
