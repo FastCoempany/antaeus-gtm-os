@@ -36,9 +36,9 @@ export function SliceRail({ objects, mode }: Props): JSX.Element {
 
     if (objects.length === 0) {
         return (
-            <aside class="db-rail db-rail--empty" aria-label={t("Ranked pressure")}>
+            <aside class="db-rail db-rail--empty" aria-label={t("Ranked by priority")}>
                 <header class="db-rail__head">
-                    <p class="db-rail__kicker">{t("MOST PRESSURE")}</p>
+                    <p class="db-rail__kicker">{t("HIGHEST PRIORITY")}</p>
                     <p class="db-rail__title">{t("What needs you")}</p>
                 </header>
                 <p class="db-rail__empty">
@@ -52,9 +52,9 @@ export function SliceRail({ objects, mode }: Props): JSX.Element {
     }
 
     return (
-        <aside class="db-rail" aria-label={t("Ranked pressure")}>
+        <aside class="db-rail" aria-label={t("Ranked by priority")}>
             <header class="db-rail__head">
-                <p class="db-rail__kicker">MOST PRESSURE · {objects.length}</p>
+                <p class="db-rail__kicker">HIGHEST PRIORITY · {objects.length}</p>
                 <p class="db-rail__title">{t("What needs you")}</p>
             </header>
             <div class="db-rail__stack">

@@ -71,7 +71,7 @@ describe("ThreadConsole", () => {
         activeThread.value = "prep";
         const { container, getByText } = render(<ThreadConsole />);
         fireEvent.click(container.querySelector(".ccd-branch") as HTMLButtonElement);
-        fireEvent.click(getByText("Pull the next thread"));
+        fireEvent.click(getByText("Go to the next step"));
         expect(activeThread.value).toBe("opener");
     });
 });

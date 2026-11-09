@@ -44,7 +44,7 @@ export function OutcomeRack(): JSX.Element {
                         class="ng-outcome__notes-textarea"
                         rows={4}
                         value={d.notes}
-                        placeholder={t("What surprised you? Where did pressure come from? What did they say after the third pushback?", { class: "body" })}
+                        placeholder={t("What surprised you? Where did the pushback come from? What did they say after the third pushback?", { class: "body" })}
                         onInput={(e) =>
                             setNotes((e.currentTarget as HTMLTextAreaElement).value)
                         }

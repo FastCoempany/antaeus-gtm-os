@@ -76,8 +76,8 @@ test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-sele
             const text = await page
                 .locator(".sc-topbar__headline")
                 .textContent();
-            expect(text?.toLowerCase()).toContain("heat");
-            expect(text?.toLowerCase()).toContain("ledger");
+            expect(text?.toLowerCase()).toContain("account priority");
+            expect(text?.toLowerCase()).toContain("account list");
 
             // Confirm it's italic.
             const fontStyle = await page
@@ -114,7 +114,7 @@ test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-sele
             // "Ready (heat ≥75)" label.
             expect(lower.some((l) => l.includes("hot"))).toBe(true);
             // Top heat replaces the prior Total signals cell.
-            expect(lower.some((l) => l.includes("top heat"))).toBe(true);
+            expect(lower.some((l) => l.includes("top priority"))).toBe(true);
             expect(lower.some((l) => l.includes("total signals"))).toBe(false);
         } finally {
             await ctx.close();
@@ -137,7 +137,7 @@ test.describe("Program 6 / PR 16 — Signal Console refacing (Variant 01 AI-sele
 
             const topHeatCell = page
                 .locator(".sc-health__cell")
-                .filter({ hasText: /top heat/i });
+                .filter({ hasText: /top priority/i });
             await expect(topHeatCell).toBeAttached();
             const value = await topHeatCell
                 .locator(".sc-health__value")

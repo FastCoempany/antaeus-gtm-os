@@ -28,7 +28,7 @@ export function PatternCard(props: {
     readonly moves?: ComponentChildren;
 }): JSX.Element {
     return (
-        <Card kicker={props.kicker ?? t("THE SYSTEM'S READ")} tone="blue">
+        <Card kicker={props.kicker ?? t("ANALYSIS")} tone="blue">
             <p class="ds-card__copy ds-pattern__claim">{props.claim}</p>
             <ul class="ds-pattern__evidence">
                 {props.evidence.map((e) => (

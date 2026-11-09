@@ -214,7 +214,7 @@ export function RehearsalObject(): JSX.Element {
                     rows={3}
                     value={d.notes}
                     onInput={setNotes}
-                    placeholder={t("What surprised you? Where did the pressure come from?", {
+                    placeholder={t("What surprised you? Where did the pushback come from?", {
                         class: "body"
                     })}
                 />
@@ -293,7 +293,7 @@ export function RehearsalObject(): JSX.Element {
                         dataHandoff: "advisor-deploy"
                     },
                     {
-                        label: t("Sharpen the evidence"),
+                        label: t("Strengthen the pilot evidence"),
                         href: hrefToPocFramework(dealId, accountName),
                         dataHandoff: "poc-framework"
                     }

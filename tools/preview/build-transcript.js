@@ -337,7 +337,7 @@ function renderLines(lines) {
 }
 
 function mapBody(file) {
-    if (!fs.existsSync(file)) return "<p>(No capability map on file for this room.)</p>";
+    if (!fs.existsSync(file)) return "<p>(No capability map on file for this area.)</p>";
     let h = fs.readFileSync(file, "utf8");
     h = h.replace(/[\s\S]*<body[^>]*>/i, "").replace(/<\/body>[\s\S]*/i, "");
     h = h.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "");
@@ -427,14 +427,14 @@ async function exploreRoom(holder, i, snapshot, CAP) {
     const roomPath = new URL(url).pathname;
     await replay(holder, url, snapshot, []);
     if (new URL(holder.page.url()).pathname !== new URL(url).pathname) {
-        throw new Error(`${label}: loading the room landed on ${holder.page.url()} instead`);
+        throw new Error(`${label}: loading the page landed on ${holder.page.url()} instead`);
     }
     const rest = await holder.page.evaluate(extractInPage);
     const rootControls = await holder.page.evaluate(controlsInPage, id === "dashboard");
     const lineKey = (l) => l.kind + "|" + l.text;
     const sig = (lines) => lines.map(lineKey).sort().join("\n");
 
-    const states = new Map([[sig(rest), "the room at rest"]]);
+    const states = new Map([[sig(rest), "the area at rest"]]);
     const reveals = [];
     const coverage = [];
     const queue = [];
@@ -506,12 +506,12 @@ async function exploreRoom(holder, i, snapshot, CAP) {
     const body = [
         nav(i),
         `<h1>${esc(label)}</h1>`,
-        `<p class="k">Stage: ${esc(STAGES[stage])} · room ${i + 1} of ${ROOMS.length} · address in the app: ${esc(href)}</p>`,
-        `<h2>1. The room at rest</h2>`,
-        `<p>Every word in the room in reading order, top to bottom, including what sits below the fold. Each line says what it is (heading, button, link, field, text), how it is shown (size, typeface, colour, emphasis) and where it sits on a 1440-pixel-wide desktop screen. Orange marks the one main action on a surface; blue is information from the system; green and forest green mean healthy or lasting; amber is caution; red is real risk. Links show where they go.</p>`,
+        `<p class="k">Stage: ${esc(STAGES[stage])} · area ${i + 1} of ${ROOMS.length} · address in the app: ${esc(href)}</p>`,
+        `<h2>1. The area at rest</h2>`,
+        `<p>Every word in this area in reading order, top to bottom, including what sits below the fold. Each line says what it is (heading, button, link, field, text), how it is shown (size, typeface, colour, emphasis) and where it sits on a 1440-pixel-wide desktop screen. Orange marks the one main action on a surface; blue is information from the system; green and forest green mean healthy or lasting; amber is caution; red is real risk. Links show where they go.</p>`,
         renderLines(rest),
-        `<h2>2. Everything the room does when you use it</h2>`,
-        `<p>Each control in the room was used — clicked, hovered, and every dropdown option chosen — starting from the same sample workspace each time. Whatever a control revealed was then used in turn, up to three steps deep. Each entry lists what appeared, and what went away, on screen.</p>`,
+        `<h2>2. Everything this area does when you use it</h2>`,
+        `<p>Each control in this area was used — clicked, hovered, and every dropdown option chosen — starting from the same sample workspace each time. Whatever a control revealed was then used in turn, up to three steps deep. Each entry lists what appeared, and what went away, on screen.</p>`,
         reveals
             .map(
                 (r) =>
@@ -523,11 +523,11 @@ async function exploreRoom(holder, i, snapshot, CAP) {
             )
             .join("\n"),
         `<h2>3. Coverage — every control and what it did</h2>`,
-        `<p>${coverage.length} actions tried in this room${unexplored ? `; ${unexplored} deeper actions beyond the cap of ${CAP} were not tried` : ", none left untried"}.</p>`,
+        `<p>${coverage.length} actions tried in this area${unexplored ? `; ${unexplored} deeper actions beyond the cap of ${CAP} were not tried` : ", none left untried"}.</p>`,
         `<table><tr><th>Action</th><th>Result</th></tr>${coverage
             .map((c) => `<tr><td>${esc(c.what)}</td><td>${esc(c.result)}</td></tr>`)
             .join("")}</table>`,
-        `<div class="map"><h2>4. What this room is for and how it works</h2><p>The room's capability map: its purpose, every part and what it does, what flows in from and out to other rooms, and what it must never become.</p>${mapBody(mapFile)}</div>`,
+        `<div class="map"><h2>4. What this area is for and how it works</h2><p>The capability map for this area: its purpose, every part and what it does, what flows in from and out to other product areas, and what it must never become.</p>${mapBody(mapFile)}</div>`,
         nav(i)
     ].join("\n");
     fs.mkdirSync(path.join(OUT, id), { recursive: true });
@@ -627,14 +627,14 @@ async function main() {
         `<p>Antaeus is a sales operating system for founders and the first serious sales hire. It turns the work a founder is doing on revenue into a clear picture of what is actually happening, so the first hire can pick it up and run it without having anything re-explained.</p>`,
         `<h2>How to read this</h2><ol>`,
         `<li>Start with the gate below — the first screen a visitor sees.</li>`,
-        `<li>Follow the rooms in order: define target buyers, research accounts, prepare outreach, advance deals, and document the sales process for another seller.</li>`,
-        `<li>Each room page has four parts: every word on screen with how and where it is shown; everything the room does when each control is used; a coverage table listing every action tried and its result; and the room's purpose, parts and connections.</li>`,
-        `<li>Each page links to the previous and next room, so you can read the whole app start to finish.</li></ol>`,
+        `<li>Follow the product areas in order: define target buyers, research accounts, prepare outreach, advance deals, and document the sales process for another seller.</li>`,
+        `<li>Each product area's page has four parts: every word on screen with how and where it is shown; everything the area does when each control is used; a coverage table listing every action tried and its result; and the area's purpose, parts and connections.</li>`,
+        `<li>Each page links to the previous and next product area, so you can read the whole app start to finish.</li></ol>`,
         `<p>The live app is at <code>/preview</code> on the same site, desktop browsers only.</p>`,
         `<h2>The gate — the first screen</h2>`,
         `<p>A visitor opens the preview link and sees this. Typing the code they were sent opens the sample workspace and lands them on the Dashboard. Phones and tablets get a "desktop only" message instead.</p>`,
         renderLines(gate),
-        `<h2>The rooms, in order</h2>`,
+        `<h2>The product areas, in order</h2>`,
         STAGES.map(
             (s, si) =>
                 `<h3>${esc(s)}</h3><ol>` +
@@ -644,11 +644,11 @@ async function main() {
                 `</ol>`
         ).join("\n"),
         `<p><a href="${ROOMS[0][0]}/">Start with ${esc(ROOMS[0][1])} →</a></p>`,
-        `<h2>Moving between rooms — Workspace map</h2>`,
-        `<p>At the foot of every room, the Antaeus tab opens the Workspace map. Click it or press G to see rooms organized by sales task, with the current room highlighted and the recommended next room outlined in orange.</p>`,
+        `<h2>Moving between product areas — Workspace map</h2>`,
+        `<p>At the foot of every product area, the Antaeus tab opens the Workspace map. Click it or press G to see the product areas organized by sales task, with the current area highlighted and the recommended next area outlined in orange.</p>`,
         `<pre>${esc(ground)}</pre>`,
         `<h2>Onboarding — shown but locked in the preview</h2>`,
-        `<p>Onboarding appears greyed out on the room map. Hovering it shows this:</p><blockquote>${esc(lockedWhy)}</blockquote>`,
+        `<p>Onboarding appears greyed out on the Workspace map. Hovering it shows this:</p><blockquote>${esc(lockedWhy)}</blockquote>`,
         `<p>What onboarding is and does in the full product:</p><div class="map">${onbMap}</div>`
     ].join("\n");
     fs.writeFileSync(path.join(OUT, "index.html"), page("Antaeus — preview walkthrough", idx));

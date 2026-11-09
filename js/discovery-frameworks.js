@@ -457,7 +457,7 @@ const DISCOVERY_FRAMEWORKS = {
                 purpose: 'Why NOW? What changed? No trigger = no urgency = no deal (or very slow deal).',
                 gateCriteria: [
                     'Specific event that created urgency',
-                    'Timeline (when does pressure hit?)',
+                    'Timeline (when does it have to be solved?)',
                     'Consequence of missing the timeline',
                     'Is this a "must do" or "nice to have"?',
                     'Competing priorities'
@@ -611,7 +611,7 @@ const DISCOVERY_FRAMEWORKS = {
                     }
                 ],
                 redFlags: [
-                    { signal: 'No timeline, no event, no pressure', why: 'This deal will stall without urgency.', exit: 'Create a real deadline or move to nurture.' },
+                    { signal: 'No timeline, no event, no deadline', why: 'This deal will stall without urgency.', exit: 'Create a real deadline or move to nurture.' },
                     { signal: '"Evaluating for next year\'s budget"', why: 'Very long cycle. Might not be worth heavy investment now.', exit: 'Light touch. Check back Q4 for budget planning.' },
                     { signal: 'Internal project competing for resources', why: 'They might build instead of buy.', exit: 'Understand the internal project timeline and scope.' }
                 ],
@@ -1734,7 +1734,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                         listenFor: [
                             { signal: '"Can we get that in the contract?"', action: '🟢 Deal progression. Get legal involved.' },
                             { signal: '"Who else handles it this way?"', action: '🟢 Reference request. Share reference customers.' },
-                            { signal: '"Our legal team should hear this"', action: '🟢 GOLD. Multi-thread into legal. Book the meeting.' }
+                            { signal: '"Our legal team should hear this"', action: '🟢 GOLD. Bring legal into the deal. Book the meeting.' }
                         ],
                         transition: '"The companies that struggle with AI aren\'t the ones who worry about liability — they\'re the ones who don\'t build proper oversight into the workflow. Who on your legal team would want to be part of the evaluation?"',
                         nextTerritory: '5. Human-in-the-Loop Control'
@@ -1900,7 +1900,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                         listenFor: [
                             { signal: '"Can we export the audit logs?"', action: '🟢 Specific requirement. Confirm the format and move to pilot.' },
                             { signal: '"This is better than what our current system provides"', action: '🟢 GOLD. They\'re comparing you favorably to status quo.' },
-                            { signal: '"Our compliance team needs to see this"', action: '🟢 Multi-thread into compliance. Book the demo.' }
+                            { signal: '"Our compliance team needs to see this"', action: '🟢 Bring compliance into the deal. Book the demo.' }
                         ],
                         transition: '"Want me to walk through an actual audit trail from a customer in a regulated industry? It\'s the fastest way to see if this meets your bar."',
                         nextTerritory: '5. Human-in-the-Loop Control'
@@ -2156,7 +2156,7 @@ DISCOVERY_FRAMEWORKS['ai-objections'] = {
                         meaning: 'Respect it. Don\'t push. Leave the door open.',
                         move: {
                             label: 'Qualify Out Gracefully',
-                            text: '"I appreciate the honesty — and I\'d rather hear that directly than chase a dead thread. Quick question before I go: what would need to change for AI to make sense for you in the future? New leadership priority? Budget cycle? Competitive pressure? I\'d love to stay in touch and be useful when the timing is right."',
+                            text: '"I appreciate the honesty — and I\'d rather hear that directly than keep chasing a deal that is not moving. Quick question before I go: what would need to change for AI to make sense for you in the future? New leadership priority? Budget cycle? Competitive pressure? I\'d love to stay in touch and be useful when the timing is right."',
                             subtext: 'A graceful exit is the best way to keep the door open. They\'ll remember you weren\'t pushy.'
                         },
                         listenFor: [

@@ -200,7 +200,7 @@
       ]),
       segment("current-state-truth","02","How they work today","Ask where the data comes from today and what they do when it is wrong.",true,[
         node("current-state-truth","downstream-use","fu","Ask what depends on this data today","\"What does this feed power today: AI retrieval, monitoring, risk, compliance, market intelligence, supplier intelligence, or something else?\"","Start here once you roughly know which kind of problem this is.",true,[
-          branch("USE CLEAR","ok","\"We know the exact downstream system or team that depends on it.\"","\"Good. What breaks first when the feed is late, thin, or noisy in that workflow?\"",[
+          branch("USE CLEAR","ok","\"We know the exact downstream system or team that depends on it.\"","\"Good. What breaks first when the feed is late, incomplete, or noisy in that workflow?\"",[
             jumpNode("Ask what breaks when the data is late", "pain-and-consequence", "downstream-cost", "grn"),
             jumpNode("Ask for one recent time bad data hurt a team", "current-state-truth", "live-example", "blu")
           ],"You can see what depends on the data.","You still need the first broken moment inside it."),
@@ -602,7 +602,7 @@
             action("Set the next meeting", "segment:next-step-lock", "org"),
             jumpRoom("Open Deal Workspace", "deal-workspace", "blu")
           ],"The open question is clear, but nobody owns it.","You still need the best route to the right person."),
-          branch("TOO THIN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note now where trust or ownership is slipping, and fix it before the systems that use the data pay for it.\"",[
+          branch("TOO MUCH UNKNOWN","fl","\"Too much is still vague.\"","\"Then do not pretend this is a healthy progression. Note now where trust or ownership is slipping, and fix it before the systems that use the data pay for it.\"",[
             jumpRoom("Open Future Autopsy", "future-autopsy", "red"),
             action("Set the next meeting", "segment:next-step-lock", "blu")
           ],"The call may need correction more than continuation.","You still need the clearest failure pattern.")

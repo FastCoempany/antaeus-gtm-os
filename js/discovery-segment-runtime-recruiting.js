@@ -203,7 +203,7 @@
           branch("BANDWIDTH CLEAR","ok","\"Recruiters spend too much time triaging and coordinating instead of actually recruiting.\"","\"What does that crowd out first: speed, candidate quality, or stakeholder trust?\"",[
             jumpNode("Ask who feels this problem most", "stakeholder-and-ownership", "recruiting-ops", "grn"),
             jumpNode("Ask what made this urgent", "trigger-and-urgency", "headcount-pressure", "blu")
-          ],"They said recruiters are stretched too thin.","You still need the business consequence of it."),
+          ],"They said recruiters are carrying more reqs than they can handle.","You still need the business consequence of it."),
           branch("NOT BIG ENOUGH","fl","\"It is annoying, but not severe.\"","\"Then what would have to happen before it becomes worth changing the workflow?\"",[
             jumpNode("Ask whether this matters enough now", "trigger-and-urgency", "soft-trigger", "red"),
             jumpNode("Ask about lost candidates", "pain-and-consequence", "candidate-drop", "blu")

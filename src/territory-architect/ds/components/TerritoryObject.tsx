@@ -102,7 +102,7 @@ export function TerritoryObject(): JSX.Element {
                         <Kicker>{t("NO FOCUSES YET")}</Kicker>
                     </div>
                     <h2 class="tad-empty__title">
-                        {t("Name the first strategic bet — a group of buyers under pressure now.", {
+                        {t("Name the first strategic bet — a group of buyers with a reason to act now.", {
                             class: "body"
                         })}
                     </h2>
@@ -169,7 +169,7 @@ export function TerritoryObject(): JSX.Element {
 
             {focusList.length > 0 ? (
                 <HandoffStrip
-                    label={t("Carry the territory into the motion")}
+                    label={t("Use the territory in outreach")}
                     kicker={t("RUN THE TERRITORY")}
                     title={t("Push these focuses into prospects")}
                     routes={[

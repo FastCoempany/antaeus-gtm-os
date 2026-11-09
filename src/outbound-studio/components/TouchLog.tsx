@@ -60,7 +60,7 @@ export function TouchLog(): JSX.Element {
               { class: "body" }
           )
         : t(
-              "No touches logged yet. Every touch you log here flows into the account's heat score and the dashboard's ranking.",
+              "No touches logged yet. Every touch you log here flows into the account's priority score and the dashboard's ranking.",
               { class: "body" }
           );
 

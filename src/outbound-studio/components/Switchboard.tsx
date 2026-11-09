@@ -61,7 +61,7 @@ export function Switchboard(): JSX.Element {
                     <datalist id="ob-account-options">
                         {accounts.map((a) => (
                             <option key={a.id} value={a.name}>
-                                {a.heat ? `heat ${a.heat} · ${a.band}` : ""}
+                                {a.heat ? `priority ${a.heat} · ${a.band}` : ""}
                             </option>
                         ))}
                     </datalist>

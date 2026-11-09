@@ -70,7 +70,7 @@ describe("getProspectQuality", () => {
 
     it("notes between 1 and 39 chars give partial credit + a gap", () => {
         const q = getProspectQuality(makeProspect({ notes: "short notes" }));
-        expect(q.gaps.some((g) => /thin/i.test(g))).toBe(true);
+        expect(q.gaps.some((g) => /incomplete/i.test(g))).toBe(true);
     });
 
     it("score is clamped to 100", () => {

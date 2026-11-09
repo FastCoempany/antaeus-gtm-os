@@ -64,11 +64,11 @@ export function DarkHero(): JSX.Element {
             <div class="icp-hero__inner">
                 <p class="icp-hero__kicker">{kicker}</p>
                 <h1 class="icp-hero__title">
-                    Sharpen <span>{t("one")}</span> ICP before scale compounds the
+                    Define <span>{t("one")}</span> specific ICP before scale compounds the
                     wrong things.
                 </h1>
                 <p class="icp-hero__note">
-                    A thin ICP — one industry, one buyer, one pain — is what
+                    A narrow ICP — one industry, one buyer, one pain — is what
                     every other part of the app targets against.
                 </p>
                 {!placeholder ? (

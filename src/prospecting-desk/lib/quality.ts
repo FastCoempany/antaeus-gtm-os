@@ -90,7 +90,7 @@ export function getProspectQuality(prospect: Prospect): ProspectQuality {
         reasons.push("research depth");
     } else if (prospect.notes.trim().length > 0) {
         score += 4;
-        gaps.push("Research notes are still thin.");
+        gaps.push("Research notes are incomplete.");
     } else {
         gaps.push("No research notes yet.");
     }

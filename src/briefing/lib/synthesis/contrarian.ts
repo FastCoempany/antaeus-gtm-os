@@ -79,7 +79,7 @@ Do not manufacture a disagreement. If the evidence is consistent with the stated
 
 When evidence does conflict with a stated position:
 - Quote the operator's exact stated text in target_position.quoted_text. Do not paraphrase the quote.
-- Cite at least 3 enriched_ids. Fewer than 3 means the evidence is too thin and found_contradiction must be false.
+- Cite at least 3 enriched_ids. Fewer than 3 means the evidence is insufficient and found_contradiction must be false.
 - Separate evidence from interpretation. State what the sources report, then explain the assessment you draw from those reports.
 - Calibrate certainty to the evidence. Use words such as "may", "suggests", "is consistent with", or "does not support" when that is more accurate than a categorical claim. Do not hedge facts that are directly supported.
 - Do not claim that correlation proves causation.

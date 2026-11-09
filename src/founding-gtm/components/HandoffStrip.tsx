@@ -29,7 +29,7 @@ export function HandoffStrip(): JSX.Element {
             <header class="fg-handoff__head">
                 <p class="fg-handoff__kicker">{t("CARRY THE KIT FORWARD")}</p>
                 <h2 class="fg-handoff__title">
-                    Run the daily rhythm. Sharpen the math.
+                    Run the daily schedule. Check the math.
                 </h2>
                 <p class="fg-handoff__sub">
                     The kit is read-mode here. Real updates come from the

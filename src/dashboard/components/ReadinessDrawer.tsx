@@ -35,7 +35,7 @@ const VERDICT_SUBTITLE: Record<Verdict, string> = {
         "A hire could run this if you're around for sanity-checks.",
         { class: "body" }
     ),
-    hire_ready: t("The motion would survive a 2-week founder vacation.", {
+    hire_ready: t("The sales process would keep running through a 2-week founder vacation.", {
         class: "body"
     }),
     hire_ready_repeatable: t(
@@ -125,7 +125,7 @@ export function ReadinessDrawer(props: ReadinessDrawerProps): JSX.Element {
 
                 <section class="db-readiness-drawer__dimensions">
                     <h3 class="db-readiness-drawer__section-title">
-                        {t("Where the motion stands")}
+                        {t("Where the sales process stands")}
                     </h3>
                     <ul class="db-readiness-dim-list">
                         {props.summary.dimensions.map((d) => (

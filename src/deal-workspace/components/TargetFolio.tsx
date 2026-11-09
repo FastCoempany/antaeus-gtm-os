@@ -51,7 +51,7 @@ export function TargetFolio(): JSX.Element {
             <section class="dw-target-folio dw-target-folio--empty">
                 <p class="dw-target-folio__empty">
                     No active deal to focus. Add a deal — the workspace
-                    will surface the highest-pressure case here.
+                    will show the highest-risk deal here.
                 </p>
             </section>
         );
@@ -77,7 +77,7 @@ export function TargetFolio(): JSX.Element {
                 </div>
                 <p class="dw-target-folio__copy">
                     {t(
-                        "The deal to work on first. If it can't hold up under pressure, the rest of the board matters less.",
+                        "The deal to work on first. If this one is lost, the rest of the board matters less.",
                         { class: "body" }
                     )}
                 </p>
@@ -104,7 +104,7 @@ export function TargetFolio(): JSX.Element {
                 </li>
                 <li class="dw-signal-row">
                     <span class="dw-signal__mark dw-signal__mark--motion">→</span>
-                    <span class="dw-signal__label">{t("Motion")}</span>
+                    <span class="dw-signal__label">{t("Next step")}</span>
                     <span class="dw-signal__copy">
                         {(deal.nextStep ?? "").trim() === ""
                             ? t("Stalled · no next step set")
