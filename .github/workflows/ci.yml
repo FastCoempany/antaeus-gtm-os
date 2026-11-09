@@ -116,8 +116,66 @@ jobs:
           test -d dist || (echo "dist/ missing" && exit 1)
           ls -la dist/
 
+  # Decides whether the rendered language audit needs to run. The audit walks
+  # the whole enterprise demo (~30 min), which only matters when something a
+  # customer can see might have changed. PRs that only touch workflows (other
+  # than this file), docs, root-level Markdown or non-rendered deliverables
+  # skip it. The capability maps are rendered into the walkthrough, so they
+  # still count as visible.
+  language-audit-scope:
+    name: Rendered language audit scope
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.scope.outputs.run }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - id: scope
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            base="$BASE_SHA"
+          else
+            base="$BEFORE_SHA"
+          fi
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] \
+             || ! changed=$(git diff --name-only "$base" HEAD 2>/dev/null); then
+            echo "Could not work out the changed files; running the audit."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          visible=$(printf '%s\n' "$changed" | grep -v '^$' | grep -vE \
+            -e '^\.github/' \
+            -e '^docs/' \
+            -e '^[^/]+\.md$' \
+            -e '^deliverables/' \
+            || true)
+          # Exceptions to the skip list: this workflow, and the deliverables
+          # that the walkthrough embeds.
+          visible="$visible
+          $(printf '%s\n' "$changed" | grep -E \
+            -e '^\.github/workflows/ci\.yml$' \
+            -e '^deliverables/room-capability-maps/' \
+            -e '^deliverables/design-principle-strict-bible/08-room-guardian-specs/' \
+            || true)"
+          if [ -n "$(printf '%s' "$visible" | tr -d '[:space:]')" ]; then
+            echo "Customer-visible files changed; running the audit:"
+            printf '%s\n' "$visible" | sed '/^[[:space:]]*$/d' | head -20
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Only workflows, docs or non-rendered deliverables changed; skipping the audit."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   language-audit:
     name: Rendered language audit
+    needs: language-audit-scope
+    if: needs.language-audit-scope.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     container:
