@@ -12,11 +12,15 @@
   The mechanic under test: the artifact shows the problem, and the user's own
   answer resolves it on screen.
    - A beat after the step loads, the champion's text arrives on the phone.
-   - The "Who signs the check" field is the one that covers it; it pulses once.
-   - Typing a name there shows "Named for this deal" on the text, live.
-   - Each added deal updates the count of deals with who signs named. A deal
-     added without one is called out by its account name (the user's input).
-   - When every added deal names who signs, the text is marked covered (forest).
+   - "Who else weighs in" (optional) is the field that covers it; it pulses once.
+     Signing authority is not sole authority: a signer still runs a purchase
+     past finance, the people who'd use it, and others. The gap the text shows
+     is that those people aren't named, whoever signs.
+   - Typing there shows "Named for this deal" on the text, live.
+   - A deal with only one person named (champion, signer and anyone else all
+     the same person or blank) is flagged "One person named". A deal at
+     Proposal or later with no one else named is flagged too.
+   - When every deal names who else weighs in, the text is marked covered.
   Form fields, stages and the deal check are ported from
   src/onboarding/seeding/components/DealsStep.tsx + lib/diagnose.ts.
   Copy changes from the live step: the headline drops "really" (banned
@@ -49,6 +53,9 @@ html,body{background:var(--field);color:var(--ink);font-family:var(--sans)}
 .f-i{width:100%;background:var(--field);border:1px solid var(--hair-strong);border-radius:4px;padding:9px 11px;font-family:var(--sans);font-size:.9rem;color:var(--ink)}
 .f-i:focus{outline:none;border-color:var(--orange)}
 .frow{display:flex;gap:10px} .frow .f{flex:1}
+.opt-tag{font-style:normal;font-weight:500;letter-spacing:.08em;color:var(--ink-faint);margin-left:4px}
+.f-hint{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:5px;line-height:1.4}
+.f-hint.firm{color:var(--amber)}
 /* the field that covers the text */
 .f.covers .f-l{color:var(--blue)}
 .f.covers .f-l::after{content:" · covers the text";font-weight:700;letter-spacing:.12em;color:var(--blue)}
@@ -103,6 +110,7 @@ html,body{background:var(--field);color:var(--ink);font-family:var(--sans)}
 .res.live{display:block;color:var(--blue)}
 .res.done{display:block;color:var(--forest)}
 .res.warn{display:block;color:var(--amber)}
+.res.info{display:block;color:var(--ink-soft)}
 .res.done::before{content:"✓ ";font-weight:700}
 .covered .n-who .un{opacity:0}
 .cap{margin-top:18px;font-size:.86rem;line-height:1.55;color:var(--ink-soft)}
@@ -137,7 +145,8 @@ html,body{background:var(--field);color:var(--ink);font-family:var(--sans)}
             </select></label>
         </div>
         <label class="f"><span class="f-l">Champion — who's fighting for it inside</span><input class="f-i" id="fChampion" placeholder="Name or role"></label>
-        <label class="f covers" id="signsField"><span class="f-l">Who signs the check</span><input class="f-i" id="fSigns" placeholder="The economic buyer"></label>
+        <label class="f"><span class="f-l">Who signs the check</span><input class="f-i" id="fSigns" placeholder="The economic buyer"></label>
+        <label class="f covers" id="weighField"><span class="f-l">Who else weighs in <em class="opt-tag">optional</em></span><input class="f-i" id="fWeigh" placeholder="Finance, the team that would use it, anyone else"><span class="f-hint" id="weighHint">Who will the person who signs run this by?</span></label>
         <label class="f"><span class="f-l">Where it's stuck</span><input class="f-i" id="fStuck" placeholder="What's holding it up?"></label>
         <button class="btn sm" id="add" disabled>Add this deal →</button>
       </div>
@@ -174,9 +183,9 @@ html,body{background:var(--field);color:var(--ink);font-family:var(--sans)}
         </div>
       </div>
     </div>
-    <p class="cap">"A couple of people" are who decide whether a deal survives a spending freeze. The field that covers this is <button class="jump" id="jump">Who signs the check</button>. Any deal where no one is named there is flagged.</p>
+    <p class="cap">"A couple of people" is everyone the person who signs will run this by. Name them in <button class="jump" id="jump">Who else weighs in</button>, and you'll know who to talk to before a freeze, not after.</p>
     <div class="tally">
-      <p class="tally-l">Who signs · across your deals</p>
+      <p class="tally-l">Who else weighs in · across your deals</p>
       <p class="tally-v" id="tally">No deals added yet.</p>
     </div>
   </aside>
@@ -189,6 +198,16 @@ var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function blank(s){return !s||!s.trim()}
 function late(st){return st==="proposal"||st==="negotiation"||st==="verbal-yes"}
 function noSigner(d){return blank(d.whoSigns)||/not\s+named|unknown|\?/i.test(d.whoSigns)}
+var SAME=/^(same|same person|same as (the )?champion|them|him|her|champion|the champion)$/;
+function parts(x){return (x||"").split(/,|;|\/|\band\b|&/i).map(function(t){return t.trim().toLowerCase()}).filter(Boolean)}
+/* distinct people named across champion, signer and who else weighs in */
+function people(d){
+  var champ=(d.champion||"").trim().toLowerCase(),set={};
+  if(champ)set[champ]=1;
+  parts(d.whoSigns).concat(parts(d.weighs)).forEach(function(t){if(SAME.test(t)&&champ)t=champ;if(!/not\s+named|unknown|\?/.test(t))set[t]=1});
+  return Object.keys(set).length;
+}
+function noOthers(d){return blank(d.weighs)}
 /* ported from src/onboarding/seeding/lib/diagnose.ts */
 function diagnose(d){
   if(d.stage==="unsure")return{tone:"amber",label:"Stage unclear",read:"No deal stage is selected. Confirm the buyer's current decision process before assigning a stage.",move:"Confirm the next buyer action, its owner, and the stage criteria it satisfies."};
@@ -196,35 +215,47 @@ function diagnose(d){
   var silent=/silent|no reply|quiet|dark|stalled|no response/.test(st),single=/single|one contact|only talking|one person/.test(st);
   if(lt&&(ns||silent))return{tone:"red",label:"At risk",read:"This deal is in a late stage with "+(ns?"no signer recorded":"a reported gap in buyer responses")+". This needs review before relying on the planned close date.",move:ns?"Confirm who can sign and agree on a dated next step.":"Ask whether the buyer's priorities or timeline have changed and agree on the next action."};
   if(lt&&single)return{tone:"amber",label:"Single contact",read:"The deal is in a late stage and your notes indicate one contact. A change in that person's availability or support could delay approval.",move:"Identify the other decision makers and confirm their approval requirements."};
+  if(people(d)===1)return{tone:"amber",label:"One person named",read:"Only one person is named on this deal. If anyone else weighs in on the purchase, they aren't recorded.",move:"Ask who else will review this: finance, the team that would use it, anyone else."};
   if(nc)return{tone:"amber",label:"No champion",read:"No champion is recorded. The current information does not show who will advocate for the proposal internally.",move:"Identify an internal supporter and confirm whether they can help coordinate the buying process."};
   if(ns)return{tone:"amber",label:"Signer not recorded",read:"No signer is recorded. Confirm the approval process before planning the close.",move:"Ask your champion who approves the purchase and who signs the agreement."};
-  return{tone:"green",label:"Key contacts recorded",read:"A champion and signer are recorded, and these checks found no additional flag. This does not establish overall deal health.",move:"Confirm the next buyer action, owner, and date."};
+  if(lt&&noOthers(d))return{tone:"amber",label:"Others not named",read:"This deal is at the "+({proposal:"Proposal",negotiation:"Negotiation","verbal-yes":"Verbal yes"})[d.stage]+" stage and no one is recorded beyond the champion and the person who signs. Others may review the purchase at this stage.",move:"Ask who else will review this before it's signed: finance, procurement, the team that would use it."};
+  return{tone:"green",label:"Key contacts recorded",read:(noOthers(d)?"A champion and signer are recorded":"A champion, the person who signs, and others who weigh in are recorded")+", and these checks found no additional flag. This does not establish overall deal health.",move:"Confirm the next buyer action, owner, and date."};
 }
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
+function needsOthers(d){return people(d)<=1||(late(d.stage)&&noOthers(d))}
 function renderPanel(){
-  var typed=$("fSigns").value.trim(), lead=$("lead"), res=$("res");
-  var missing=deals.filter(noSigner), named=deals.length-missing.length;
+  var typed=$("fWeigh").value.trim(), lead=$("lead"), res=$("res");
+  var warn=deals.filter(needsOthers), named=deals.filter(function(d){return !noOthers(d)}).length;
   lead.classList.remove("covered"); res.className="res"; res.innerHTML="";
   if(typed.length>=2){
     res.className="res live";
     res.innerHTML="Named for this deal: <b>"+esc(typed)+"</b>";
-  } else if(deals.length&&!missing.length){
+  } else if(warn.length){
+    var one=warn.filter(function(d){return people(d)<=1}).map(function(d){return d.account});
+    var lateOnly=warn.filter(function(d){return people(d)>1}).map(function(d){return d.account});
+    var bits=[];
+    if(one.length)bits.push("Only one person is named at <b>"+esc(one.slice(0,2).join(", "))+"</b>"+(one.length>2?" and "+(one.length-2)+" more":"")+".");
+    if(lateOnly.length)bits.push("No one else is named at <b>"+esc(lateOnly.slice(0,2).join(", "))+"</b>"+(lateOnly.length>2?" and "+(lateOnly.length-2)+" more":"")+", and "+(lateOnly.length===1?"it's":"they're")+" at Proposal or later.");
+    res.className="res warn"; res.innerHTML=bits.join(" ")+" If anyone else weighs in on spending, they aren't on the deal.";
+  } else if(deals.length&&named===deals.length){
     res.className="res done";
-    res.innerHTML="Covered. You've named who signs on every deal you've added.";
+    res.innerHTML="Covered. On every deal you've added, you've named who else weighs in.";
     lead.classList.add("covered");
-  } else if(missing.length){
-    res.className="res warn";
-    res.innerHTML="Not covered at <b>"+esc(missing.map(function(d){return d.account}).slice(0,2).join(", "))+"</b>"+(missing.length>2?" and "+(missing.length-2)+" more":"")+": no one is named who signs.";
+  } else if(deals.length){
+    res.className="res info";
+    res.innerHTML="Who else weighs in is open on "+(deals.length-named)+" early-stage "+(deals.length-named===1?"deal":"deals")+". Optional for now, and worth filling in before Proposal.";
   }
   var t=$("tally");
   if(!deals.length){t.className="tally-v";t.textContent="No deals added yet.";}
-  else if(!missing.length){t.className="tally-v ok";t.textContent="Named on "+named+" of "+deals.length+(deals.length===1?" deal.":" deals.");}
   else{
-    t.className="tally-v warn";
-    var names=missing.map(function(d){return d.account}).slice(0,3).join(", ");
-    t.textContent="Named on "+named+" of "+deals.length+". No one named who signs at "+names+(missing.length>3?" and "+(missing.length-3)+" more":"")+".";
+    t.className="tally-v"+(warn.length?" warn":named===deals.length?" ok":"");
+    t.textContent="Named on "+named+" of "+deals.length+(deals.length===1?" deal.":" deals.")+(warn.length?" Flagged: "+warn.map(function(d){return d.account}).slice(0,3).join(", ")+(warn.length>3?" and "+(warn.length-3)+" more":"")+".":"");
   }
+  /* the hint under the field firms up at Proposal or later */
+  var h=$("weighHint");
+  if(late($("fStage").value)&&!typed){h.className="f-hint firm";h.textContent="At this stage, others may review the purchase. Who will the person who signs run it by?";}
+  else{h.className="f-hint";h.textContent="Who will the person who signs run this by?";}
 }
 function renderBoard(){
   var n=deals.length;$("count").textContent=n;$("track").style.width=Math.min(n,10)*10+"%";
@@ -241,19 +272,20 @@ function renderBoard(){
     note.textContent="With fewer than ten deals, the workspace has less to compare and its suggestions will be limited. You can add the rest later.";}
 }
 function sync(){ $("add").disabled=!$("fAccount").value.trim(); renderPanel(); }
-["fAccount","fSigns"].forEach(function(id){$(id).addEventListener("input",sync)});
+["fAccount","fSigns","fWeigh","fChampion"].forEach(function(id){$(id).addEventListener("input",sync)});
+$("fStage").addEventListener("change",sync);
 $("add").addEventListener("click",function(){
   if(!$("fAccount").value.trim())return;
-  deals.push({account:$("fAccount").value.trim(),stage:$("fStage").value,champion:$("fChampion").value.trim(),whoSigns:$("fSigns").value.trim(),stuck:$("fStuck").value.trim()});
-  ["fAccount","fValue","fChampion","fSigns","fStuck"].forEach(function(id){$(id).value=""});$("fStage").value="discovery";
+  deals.push({account:$("fAccount").value.trim(),stage:$("fStage").value,champion:$("fChampion").value.trim(),whoSigns:$("fSigns").value.trim(),weighs:$("fWeigh").value.trim(),stuck:$("fStuck").value.trim()});
+  ["fAccount","fValue","fChampion","fSigns","fWeigh","fStuck"].forEach(function(id){$(id).value=""});$("fStage").value="discovery";
   renderBoard();sync();
 });
-$("jump").addEventListener("click",function(){var f=$("signsField");$("fSigns").focus();f.classList.remove("pulse");void f.offsetWidth;f.classList.add("pulse")});
+$("jump").addEventListener("click",function(){var f=$("weighField");$("fWeigh").focus();f.classList.remove("pulse");void f.offsetWidth;f.classList.add("pulse")});
 /* the text arrives a beat after the step loads, then points at its field */
 setTimeout(function(){$("frame").classList.add("arrived")},reduce?0:1400);
-setTimeout(function(){$("signsField").classList.add("pulse")},reduce?0:2000);
+setTimeout(function(){$("weighField").classList.add("pulse")},reduce?0:2000);
 renderBoard();sync();
-window.__fill=function(d){$("fAccount").value=d.account;$("fValue").value=d.value||"";$("fStage").value=d.stage;$("fChampion").value=d.champion||"";$("fSigns").value=d.whoSigns||"";$("fStuck").value=d.stuck||"";sync();};
+window.__fill=function(d){$("fAccount").value=d.account;$("fValue").value=d.value||"";$("fStage").value=d.stage;$("fChampion").value=d.champion||"";$("fSigns").value=d.whoSigns||"";$("fWeigh").value=d.weighs||"";$("fStuck").value=d.stuck||"";sync();};
 </script>
 </body>
 </html>
