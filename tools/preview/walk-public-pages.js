@@ -228,7 +228,11 @@ function startWalk(browser, name) {
             actions.push(`open ${url} in a fresh browser context`);
         },
         close: () => ctx && ctx.close(),
-        miss: (state, reason) => rec.notReached.push({ state, reason }),
+        // A row that failed: record why and forget what it had gathered.
+        miss(state, reason) {
+            rec.notReached.push({ state, reason });
+            [actions, notes, extra, w.mode] = [[], [], [], ""];
+        },
         click: (what) => did(`click “${what}”`, control(what).click({ timeout: 5000 })),
         fill: (selector, value) => did(`type “${value}” into ${selector}`, page.locator(selector).first().fill(value, { timeout: 5000 })),
         waitFor: (selector) => page.waitForSelector(selector, { timeout: 12000 }),
@@ -308,7 +312,7 @@ const checkout = async (w) => {
 };
 
 // A state three of the sign-in pages have that the walk does not force.
-const LIBRARY = ["sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)", "needs the page to load while cdn.jsdelivr.net does not answer; the walk does not block hosts"];
+const LIBRARY = ["sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)", "needs the page to load while its sign-in library (from cdn.jsdelivr.net) does not; the walk does not force that"];
 
 // [page, rows, states that cannot be reached here and why]
 const PAGES = [
@@ -393,7 +397,6 @@ async function main() {
                 for (const a of acts) await a(w);
                 if (state) await w.snap(state);
             } catch (e) {
-                w.mode = "";
                 w.miss(state || "following the page after the previous state", e.message.split("\n")[0]);
             }
         }

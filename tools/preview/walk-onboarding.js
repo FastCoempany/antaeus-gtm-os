@@ -245,7 +245,10 @@ async function startWalk(browser, variant) {
         async snapWatched(state, selector) {
             await page.waitForSelector(selector, { state: "detached", timeout: 180000 });
             await page.waitForTimeout(400);
-            const seen = await page.evaluate(() => window.__walkSeen);
+            const seen = await page.evaluate(() => {
+                window.__walkObs.disconnect();
+                return [window.__walkSeen, (window.__walkSeen = null)][0];
+            });
             if (!seen.lines.length) return w.miss(state, "the loading text never entered the page");
             keep(state, { lines: seen.lines }, seen.frames ? `Loading text was on screen for about ${seen.frames} animation frames.` : "Loading text was placed in the page and replaced before the browser drew a frame (the call it waits on failed at once), so a person does not see it in this run. Captured by a DOM observer.");
         }
