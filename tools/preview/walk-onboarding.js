@@ -67,7 +67,8 @@ function serve() {
 // the layout cues). Hover titles, aria-labels, placeholders, alt text and
 // dropdown choices come out as lines of their own, and a sentence with links
 // in it stays whole. `includeFaded` keeps text still at opacity 0 (a step
-// caught in the first instant of fading in).
+// caught in the first instant of fading in). (walk-public-pages.js carries
+// the same function.)
 function extractInPage(includeFaded) {
     const BLOCK = new Set(["P", "LI", "H1", "H2", "H3", "H4", "H5", "H6", "TD", "TH", "DT", "DD", "LABEL", "FIGCAPTION", "BLOCKQUOTE", "PRE", "SUMMARY", "LEGEND", "CAPTION"]);
     const CONTROLS = "button, input, textarea, select, [role=button], [role=tab]";
@@ -75,7 +76,9 @@ function extractInPage(includeFaded) {
     const disabled = [];
     const links = {};
     const seen = new Set();
-    const shown = (el, s = getComputedStyle(el)) => !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0));
+    // checkVisibility() also catches what Chromium hides without display:none,
+    // such as the answer inside a closed <details>.
+    const shown = (el, s = getComputedStyle(el)) => !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0)) && (s.display === "contents" || !el.checkVisibility || el.checkVisibility());
     const sized = (el, r = el.getBoundingClientRect()) => r.width > 0 && r.height > 0;
     const squash = (t) => String(t || "").replace(/\s+/g, " ").trim();
     const text = (el) => squash(el.innerText || el.textContent);
@@ -111,6 +114,7 @@ function extractInPage(includeFaded) {
             return attrs(el, own);
         }
         if (field) {
+            if (el.type === "hidden") return;
             // The field's name: the label's words that come before the control
             // (all of them when the control comes first, as with a tick box).
             const lbl = (el.id && document.querySelector(`label[for="${el.id}"]`)) || el.closest("label");
@@ -184,7 +188,7 @@ async function startWalk(browser, variant) {
             await ctx.addInitScript({ content: `window.__walkExtract = ${extractInPage.toString()};` });
             page = await ctx.newPage();
             page.on("pageerror", (e) => rec.pageErrors.push(e.message));
-            page.on("console", (m) => m.type() === "error" && rec.consoleErrors.push(m.text().slice(0, 240)));
+            page.on("console", (m) => m.type() === "error" && rec.consoleErrors.push(`${m.text().slice(0, 240)} @ ${m.location().url || "page"}`));
             page.on("requestfailed", (r) => rec.failedRequests.push(`${r.url()} — ${(r.failure() || {}).errorText || "failed"}`));
             page.on("response", (r) => r.status() >= 400 && rec.failedRequests.push(`${r.url()} — HTTP ${r.status()}`));
             await page.goto(BASE + variant.url);

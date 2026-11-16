@@ -19,9 +19,11 @@
  *
  * Every page load uses a new browser context (empty storage, no cookies).
  * Nothing is mocked: sign-in, sign-up and reset requests go wherever the page
- * sends them and the walk records what the visitor is told when they fail.
- * Only made-up values are typed ("not-an-email", "x"); the walk never sends a
- * well-formed email address, so it cannot create an account or trigger mail.
+ * sends them (the live sign-in service, when it is reachable) and the walk
+ * records what the visitor is told. Only made-up values are typed
+ * ("not-an-email", "x"); the walk never sends a well-formed email address, so
+ * it cannot create an account or trigger mail. One row per form switches the
+ * browser offline first, to record the lost-connection message.
  * The invite and preview codes are checked by the production Worker, which a
  * static server does not run; their "wrong code" pages are opened directly.
  *
@@ -72,7 +74,9 @@ function serve() {
 // Adapted from build-transcript.js (same visibility rules and kinds, without
 // the layout cues). Hover titles, aria-labels, placeholders, alt text and
 // dropdown choices come out as lines of their own, and a sentence with links
-// in it stays whole. (The same function as in walk-onboarding.js.)
+// in it stays whole. `includeFaded` keeps text still at opacity 0 (a step
+// caught in the first instant of fading in). (walk-onboarding.js carries
+// the same function.)
 function extractInPage(includeFaded) {
     const BLOCK = new Set(["P", "LI", "H1", "H2", "H3", "H4", "H5", "H6", "TD", "TH", "DT", "DD", "LABEL", "FIGCAPTION", "BLOCKQUOTE", "PRE", "SUMMARY", "LEGEND", "CAPTION"]);
     const CONTROLS = "button, input, textarea, select, [role=button], [role=tab]";
@@ -80,7 +84,9 @@ function extractInPage(includeFaded) {
     const disabled = [];
     const links = {};
     const seen = new Set();
-    const shown = (el, s = getComputedStyle(el)) => !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0));
+    // checkVisibility() also catches what Chromium hides without display:none,
+    // such as the answer inside a closed <details>.
+    const shown = (el, s = getComputedStyle(el)) => !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0)) && (s.display === "contents" || !el.checkVisibility || el.checkVisibility());
     const sized = (el, r = el.getBoundingClientRect()) => r.width > 0 && r.height > 0;
     const squash = (t) => String(t || "").replace(/\s+/g, " ").trim();
     const text = (el) => squash(el.innerText || el.textContent);
@@ -197,7 +203,7 @@ function startWalk(browser, name) {
             pending = 0;
             const data = (r) => r.resourceType() === "fetch" || r.resourceType() === "xhr";
             page.on("pageerror", (e) => rec.pageErrors.push(e.message));
-            page.on("console", (m) => m.type() === "error" && rec.consoleErrors.push(m.text().slice(0, 240)));
+            page.on("console", (m) => m.type() === "error" && rec.consoleErrors.push(`${m.text().slice(0, 240)} @ ${m.location().url || "page"}`));
             page.on("request", (r) => data(r) && pending++);
             page.on("requestfinished", (r) => data(r) && pending--);
             page.on("requestfailed", (r) => (data(r) && pending--, rec.failedRequests.push(`${r.url().split("?")[0]} — ${(r.failure() || {}).errorText || "failed"}`)));
@@ -206,11 +212,11 @@ function startWalk(browser, name) {
             await page.goto(BASE + url).catch(() => page.waitForLoadState("load"));
             // Scroll through once so scroll-triggered reveals run, then back to the top.
             await page.evaluate(async () => {
-                for (let y = 0; y < document.documentElement.scrollHeight; y += 500) {
-                    window.scrollTo(0, y);
-                    await new Promise((r) => setTimeout(r, 100));
+                for (let y = 0; y < document.documentElement.scrollHeight; y += 400) {
+                    window.scrollTo({ top: y, behavior: "instant" });
+                    await new Promise((r) => setTimeout(r, 150));
                 }
-                window.scrollTo(0, 0);
+                window.scrollTo({ top: 0, behavior: "instant" });
             }).catch(() => {});
             actions.push(`open ${url} in a fresh browser context`);
         },
@@ -220,6 +226,9 @@ function startWalk(browser, name) {
         fill: (selector, value) => did(`type “${value}” into ${selector}`, page.locator(selector).first().fill(value, { timeout: 5000 })),
         waitFor: (selector) => page.waitForSelector(selector, { timeout: 12000 }),
         wait: (ms) => page.waitForTimeout(ms),
+        // The browser's own offline switch (not a mock): requests fail as they
+        // would for a visitor whose connection has dropped.
+        offline: () => did("take the browser offline", ctx.setOffline(true)),
         run: (fn) => page.evaluate(fn),
         async clickAll(selector) {
             for (const el of await page.locator(selector).all()) await el.click({ timeout: 5000 });
@@ -282,12 +291,16 @@ const wait = (ms) => act("wait", ms); // for a scripted animation that pauses be
 const NOW = (w) => void (w.mode = "now"); // record at once: the page is about to leave
 const REDIRECT = (w) => void (w.mode = "redirect"); // record only where the page went
 const follow = act("follow");
+const offline = act("offline");
 // The checkout button is pressed only while no checkout endpoint is set, so
 // the click can never start a real checkout.
 const checkout = async (w) => {
     if (await w.run(() => Boolean((window.AE_HIRE_COMMERCE || {}).checkoutEndpoint))) throw new Error("a checkout endpoint is configured, so the button was not pressed (it would start a real checkout session)");
     await w.click("css=[data-ae-checkout=hero]");
 };
+
+// A state three of the sign-in pages have that the walk does not force.
+const LIBRARY = ["sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)", "needs the page to load while cdn.jsdelivr.net does not answer; the walk does not block hosts"];
 
 // [page, rows, states that cannot be reached here and why]
 const PAGES = [
@@ -300,20 +313,23 @@ const PAGES = [
         ["at rest", go("/login.html")],
         ["form sent empty", click("Sign in →")],
         ["form sent with a bad value (email “not-an-email”, password “x”)", go("/login.html"), fill("#email", "not-an-email"), fill("#password", "x"), click("Sign in →")],
+        ["form sent while the browser is offline", go("/login.html"), fill("#email", "not-an-email"), fill("#password", "x"), offline, click("Sign in →")],
         ["arriving from checkout (?source=checkout)", go("/login.html?source=checkout")]
-    ], [["signed in", "needs real credentials and a reachable sign-in service; the walk sends neither"]]],
+    ], [["signed in", "needs real credentials; the walk sends none"], LIBRARY]],
     ["/signup.html", [
         ["at rest", go("/signup.html")],
         ["form sent empty", click("Create your workspace →")],
         ["form sent with a bad value (email “not-an-email”, password “short”)", fill("#email", "not-an-email"), fill("#password", "short"), click("Create your workspace →")],
         ["form sent with a malformed email and a long-enough password (the page sends the request)", fill("#password", "not-a-real-password"), click("Create your workspace →")],
+        ["form sent while the browser is offline", go("/signup.html"), fill("#email", "not-an-email"), fill("#password", "not-a-real-password"), offline, click("Create your workspace →")],
         ["arriving from checkout (?source=checkout)", go("/signup.html?source=checkout")]
-    ], [["confirmation screen (“One click and you're inside.”)", "appears only after a real account is created; the walk never sends a well-formed email"]]],
+    ], [["confirmation screen (“One click and you're inside.”)", "appears only after a real account is created; the walk never sends a well-formed email"], LIBRARY]],
     ["/forgot-password.html", [
         ["at rest", go("/forgot-password.html")],
         ["form sent empty", click("Send reset link →")],
-        ["form sent with a bad value (email “not-an-email”)", go("/forgot-password.html"), fill("#email", "not-an-email"), click("Send reset link →")]
-    ], [["“Check your email if the account exists.” confirmation", "appears only when the reset service accepts a request; the walk never sends a well-formed email"]]],
+        ["form sent with a bad value (email “not-an-email”)", go("/forgot-password.html"), fill("#email", "not-an-email"), click("Send reset link →")],
+        ["form sent while the browser is offline", go("/forgot-password.html"), fill("#email", "not-an-email"), offline, click("Send reset link →")]
+    ], [["“Check your email if the account exists.” confirmation", "appears only when the reset service accepts a request; the walk never sends a well-formed email"], LIBRARY]],
     ["/reset-password.html", [
         ["on arrival, while the link is being checked (about five seconds)", go("/reset-password.html")],
         ["after the check: link expired or invalid", waitFor("#expiredState:not(.hide)")]
