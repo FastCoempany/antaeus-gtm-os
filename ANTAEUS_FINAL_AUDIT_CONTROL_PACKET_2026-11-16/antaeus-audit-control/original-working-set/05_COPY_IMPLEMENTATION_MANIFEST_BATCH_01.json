@@ -1,0 +1,816 @@
+{
+  "version": "batch-01",
+  "scope": [
+    "shared workspace navigation",
+    "shared recent-activity chrome",
+    "Welcome",
+    "Dashboard",
+    "Readiness Score",
+    "ICP Studio",
+    "Future Autopsy"
+  ],
+  "instructions": [
+    "Implement exact replacements where a literal source string exists.",
+    "If a string is generated dynamically, change the generator/template rather than hardcoding sample output.",
+    "If repeated occurrences originate from one shared component, modify the shared component once.",
+    "Do not use nearby deprecated Antaeus copy as a style reference.",
+    "Preserve product behavior, calculations, visual hierarchy, and data semantics unless the manifest explicitly changes a label/state taxonomy.",
+    "After implementation regenerate the preview transcript and run the deprecated-term scan."
+  ],
+  "exact_replacements": [
+    {
+      "current": "TOUCH THE GROUND · SEE THE WHOLE MOTION · G",
+      "replacement": "OPEN WORKSPACE MAP · G"
+    },
+    {
+      "current": "THE GROUND — YOUR WHOLE MOTION",
+      "replacement": "WORKSPACE MAP"
+    },
+    {
+      "current": "Where do you want to stand?",
+      "replacement": "Where do you want to go?"
+    },
+    {
+      "current": "THE LIVE EDGE",
+      "replacement": "RECENT ACTIVITY"
+    },
+    {
+      "current": "THE MACHINE",
+      "replacement": "AUTOMATED UPDATES"
+    },
+    {
+      "current": "THE BUYERS",
+      "replacement": "BUYER ACTIVITY"
+    },
+    {
+      "current": "STILL QUIET · DAYFORCE · 33D",
+      "replacement": "DAYFORCE · NO RECORDED RESPONSE FOR 33 DAYS"
+    },
+    {
+      "current": "SHIFT · 12 ON THE WIRE TODAY",
+      "replacement": "TODAY · 12 MESSAGES & CALLS RECORDED"
+    },
+    {
+      "current": "the workspace is awake",
+      "replacement": "workspace setup complete"
+    },
+    {
+      "current": "YOU DID THE HARD WORK — HERE'S THE FIRST MORNING IT PAYS BACK",
+      "replacement": "SETUP COMPLETE"
+    },
+    {
+      "current": "The workspace is awake. It already found the first move that needs you.",
+      "replacement": "Antaeus analyzed the active deals and watched accounts in this workspace."
+    },
+    {
+      "current": "START HERE · THE SYSTEM'S PICK",
+      "replacement": "HIGHEST-PRIORITY ACTION"
+    },
+    {
+      "current": "At the top because heat 62 and fresh signals.",
+      "replacement": "Ranked first because Boeing has a priority score of 62 and recent account signals."
+    },
+    {
+      "current": "WHAT THE SYSTEM SAW WHILE YOU WERE AWAY",
+      "replacement": "CHANGES SINCE YOUR LAST VISIT"
+    },
+    {
+      "current": "the workspace is running — this is just the morning door into it.",
+      "replacement": "Your accounts, active deals, and pipeline are available on the Dashboard."
+    },
+    {
+      "current": "where your motion stands · all day",
+      "replacement": "current sales status"
+    },
+    {
+      "current": "WHERE YOUR WHOLE MOTION STANDS",
+      "replacement": "CURRENT SALES STATUS"
+    },
+    {
+      "current": "You are the system",
+      "replacement": "Founder-dependent"
+    },
+    {
+      "current": "Building",
+      "replacement": "Partially documented"
+    },
+    {
+      "current": "Inheritable",
+      "replacement": "Runnable with founder support"
+    },
+    {
+      "current": "Hire-ready",
+      "replacement": "Runnable independently"
+    },
+    {
+      "current": "Repeatable",
+      "replacement": "Documented and repeatable"
+    },
+    {
+      "current": "You're Building.",
+      "replacement": "Your sales process is partially documented."
+    },
+    {
+      "current": "WHAT GETS YOU TO THE NEXT STAGE",
+      "replacement": "WHAT WOULD IMPROVE READINESS"
+    },
+    {
+      "current": "See the whole thing →",
+      "replacement": "Review readiness →"
+    },
+    {
+      "current": "The most valuable move on your board",
+      "replacement": "Highest-priority recommended action"
+    },
+    {
+      "current": "stable lead",
+      "replacement": "priority remains stable"
+    },
+    {
+      "current": "not now — show me the next",
+      "replacement": "Show next recommendation"
+    },
+    {
+      "current": "WHERE EACH PART STANDS RIGHT NOW",
+      "replacement": "CURRENT STATUS BY AREA"
+    },
+    {
+      "current": "HOTTEST Boeing · 62 no hot accounts yet Hottest ↗",
+      "replacement": "ACCOUNT PRIORITY Boeing · score 62 Account priority ↗"
+    },
+    {
+      "current": "DYING Nordstrom · 21d your worst open deal Dying ↗",
+      "replacement": "DEAL RISK Nordstrom · no recorded activity for 21 days Deal risk ↗"
+    },
+    {
+      "current": "HANDOFF 0 / 7 a hire could inherit Handoff ↗",
+      "replacement": "SALES HANDOFF 0 / 7 sections ready Sales handoff ↗"
+    },
+    {
+      "current": "READINESS · COULD A HIRE RUN THIS YET?",
+      "replacement": "READINESS · COULD ANOTHER SELLER RUN THIS PROCESS?"
+    },
+    {
+      "current": "THE CLIMB — WHERE THE WORKSPACE HAS BEEN, AND WHERE IT GOES NEXT",
+      "replacement": "READINESS PROGRESSION"
+    },
+    {
+      "current": "It all lived in your head — nothing to inherit.",
+      "replacement": "The sales process was not yet documented for another seller."
+    },
+    {
+      "current": "LEFT BEHIND",
+      "replacement": "PREVIOUS STATE"
+    },
+    {
+      "current": "Real activity is on the board, but a hire would still be improvising the motion.",
+      "replacement": "Sales activity is recorded, but another seller would still need to improvise parts of the process."
+    },
+    {
+      "current": "YOU ARE HERE",
+      "replacement": "CURRENT STATE"
+    },
+    {
+      "current": "Inheritable with guardrails",
+      "replacement": "Runnable with founder support"
+    },
+    {
+      "current": "A hire could run it with you there to answer questions.",
+      "replacement": "Another seller could run the process with you available to answer questions."
+    },
+    {
+      "current": "NEXT",
+      "replacement": "NEXT STATE"
+    },
+    {
+      "current": "The motion survives you taking two weeks off.",
+      "replacement": "Another seller can run the documented process for two weeks without routine help from you."
+    },
+    {
+      "current": "LATER",
+      "replacement": "LATER STATE"
+    },
+    {
+      "current": "Hire-ready, repeatable",
+      "replacement": "Documented and repeatable"
+    },
+    {
+      "current": "Wins and losses both feed the machine; the handoff kit is written.",
+      "replacement": "Win and loss patterns are documented, and the sales handoff documentation is complete."
+    },
+    {
+      "current": "THE SUMMIT",
+      "replacement": "HIGHEST READINESS STATE"
+    },
+    {
+      "current": "To reach Inheritable with guardrails",
+      "replacement": "To become runnable with founder support"
+    },
+    {
+      "current": "WHAT'S CARRYING THIS RIGHT NOW",
+      "replacement": "CURRENT READINESS BY AREA"
+    },
+    {
+      "current": "Deal motion",
+      "replacement": "Deal management"
+    },
+    {
+      "current": "Sharp enough to run.",
+      "replacement": "ICP quality: highly specific"
+    },
+    {
+      "current": "WHO YOU SELL TO — THE ONE DEFINITION EVERY ROOM FILTERS AGAINST",
+      "replacement": "WHO YOU SELL TO · USED ACROSS THE WORKSPACE"
+    },
+    {
+      "current": "TOO BROAD",
+      "replacement": "TOO BROAD"
+    },
+    {
+      "current": "FORMING",
+      "replacement": "PARTIALLY DEFINED"
+    },
+    {
+      "current": "WORKABLE",
+      "replacement": "WELL DEFINED"
+    },
+    {
+      "current": "SHARP",
+      "replacement": "HIGHLY SPECIFIC"
+    },
+    {
+      "current": "WHAT MAKES IT SHARP — 6 OF 8",
+      "replacement": "WHY THIS ICP IS SPECIFIC · 6 OF 8 CRITERIA"
+    },
+    {
+      "current": "ITS BITE — HOW YOUR 29 WATCHED ACCOUNTS FIT",
+      "replacement": "HOW YOUR 29 WATCHED ACCOUNTS MATCH"
+    },
+    {
+      "current": "0 sharp — act here now",
+      "replacement": "0 strong matches · review the ICP or add accounts"
+    },
+    {
+      "current": "11 loose — watch",
+      "replacement": "11 partial matches · monitor"
+    },
+    {
+      "current": "18 not your buyer",
+      "replacement": "18 do not match the ICP"
+    },
+    {
+      "current": "SHARP MATCHES — WHERE IT BITES",
+      "replacement": "STRONG ICP MATCHES"
+    },
+    {
+      "current": "KEPT OUT — AND WHY (GOOD)",
+      "replacement": "ACCOUNTS THAT DO NOT MATCH · AND WHY"
+    },
+    {
+      "current": "SHARPEN THE PIECES",
+      "replacement": "REFINE THE ICP"
+    },
+    {
+      "current": "WHO'S RUNNING THE MOTION?",
+      "replacement": "WHO IS RUNNING THE SALES PROCESS?"
+    },
+    {
+      "current": "FOCUS RECOMMENDATION",
+      "replacement": "RECOMMENDED FOCUS"
+    },
+    {
+      "current": "PRE-MORTEM · WORST FIRST",
+      "replacement": "DEAL RISK · HIGHEST RISK FIRST"
+    },
+    {
+      "current": "6 deals on the table · worst first",
+      "replacement": "6 deals reviewed · highest risk first"
+    },
+    {
+      "current": "Nordstrom is headed to close-lost — inside the next 7 days if nothing changes.",
+      "replacement": "Nordstrom has a high risk of being lost if buyer engagement does not improve."
+    },
+    {
+      "current": "now · quiet 21d",
+      "replacement": "current · no recorded buyer activity for 21 days"
+    },
+    {
+      "current": "inside 7d · close-lost",
+      "replacement": "near-term risk · high"
+    },
+    {
+      "current": "WHAT KILLS IT — THE EVIDENCE",
+      "replacement": "WHY RISK IS HIGH · EVIDENCE"
+    },
+    {
+      "current": "There was never a dated next step, so momentum decayed.",
+      "replacement": "No dated next step is recorded."
+    },
+    {
+      "current": "Calendar ambiguity turned every follow-up into a maybe.",
+      "replacement": "Follow-up timing is not tied to a confirmed buyer commitment."
+    },
+    {
+      "current": "The thread went stale and urgency died.",
+      "replacement": "No recent buyer activity indicates that urgency may have declined."
+    },
+    {
+      "current": "Silence signaled low priority internally.",
+      "replacement": "Twenty-one days without recorded buyer activity increases the risk that the opportunity is no longer a priority."
+    },
+    {
+      "current": "No real champion carried this inside.",
+      "replacement": "No confirmed champion is recorded."
+    },
+    {
+      "current": "Without a champion, you got parked in committee.",
+      "replacement": "Without a confirmed champion, there is no identified internal owner driving the purchase."
+    },
+    {
+      "current": "Economic buyer never entered the thread.",
+      "replacement": "No economic buyer is recorded."
+    },
+    {
+      "current": "Budget authority stayed invisible until it was too late.",
+      "replacement": "Budget authority has not been identified."
+    },
+    {
+      "current": "THE CUTS",
+      "replacement": "RECOMMENDED CORRECTIVE ACTIONS"
+    },
+    {
+      "current": "Check them off as you make them. Each carries the line to send.",
+      "replacement": "Complete these actions as they happen. Open an action to view the suggested message."
+    },
+    {
+      "current": "No calendar anchor means no deal.",
+      "replacement": "A dated next step gives both sides a concrete commitment."
+    },
+    {
+      "current": "Single-threaded deals die when your one contact gets busy.",
+      "replacement": "A deal that depends on one contact is more vulnerable if that contact disengages."
+    },
+    {
+      "current": "No internal driver, no motion.",
+      "replacement": "A confirmed champion gives the deal an internal owner."
+    },
+    {
+      "current": "Shared plan reduces ambiguity.",
+      "replacement": "A mutual action plan gives the buyer and seller shared dates, owners, and next steps."
+    },
+    {
+      "current": "Unknown process causes slippage.",
+      "replacement": "An undefined decision process makes timing and ownership harder to manage."
+    },
+    {
+      "current": "THE PATTERN",
+      "replacement": "RISK SUMMARY"
+    },
+    {
+      "current": "WHEN TO WALK AWAY",
+      "replacement": "WHEN TO CONSIDER CLOSING THE DEAL"
+    },
+    {
+      "current": "Not there yet - keep working it, and walk away only if the cuts above go nowhere.",
+      "replacement": "Keep working the deal for now. Consider closing it only if the corrective actions do not produce buyer engagement."
+    },
+    {
+      "current": "Copy the brief",
+      "replacement": "Copy risk summary"
+    }
+  ],
+  "navigation": [
+    {
+      "room": "Welcome",
+      "description": "Today's recommended starting point"
+    },
+    {
+      "room": "Dashboard",
+      "description": "Pipeline, account priorities, activity, and deal risk"
+    },
+    {
+      "room": "Readiness Score",
+      "description": "Can another seller run the sales process?"
+    },
+    {
+      "room": "ICP Studio",
+      "description": "Define the companies and buyers you sell to"
+    },
+    {
+      "room": "Territory Architect",
+      "description": "Create and prioritize territory segments"
+    },
+    {
+      "room": "Prospecting Desk",
+      "description": "Find accounts that match your ICP"
+    },
+    {
+      "room": "Signal Console",
+      "description": "Monitor account signals and priority"
+    },
+    {
+      "room": "Briefing",
+      "description": "Review changes in your accounts, deals, and market"
+    },
+    {
+      "room": "Outdoors Events",
+      "description": "Find events where target buyers may be present"
+    },
+    {
+      "room": "Outbound Studio",
+      "description": "Create and manage outbound messages"
+    },
+    {
+      "room": "Cold Call Studio",
+      "description": "Prepare and run cold calls"
+    },
+    {
+      "room": "LinkedIn Playbook",
+      "description": "Plan LinkedIn outreach"
+    },
+    {
+      "room": "Discovery Studio",
+      "description": "Prepare and run discovery"
+    },
+    {
+      "room": "Deal Workspace",
+      "description": "Review open deals, next steps, and risk"
+    },
+    {
+      "room": "Pilot Desk",
+      "description": "Plan and evaluate pilots"
+    },
+    {
+      "room": "Getting to Signed",
+      "description": "Manage legal, security, finance, and final approval"
+    },
+    {
+      "room": "Call in a Favor",
+      "description": "Use your network to help move a deal"
+    },
+    {
+      "room": "Future Autopsy",
+      "description": "Identify deals with high loss risk and why"
+    },
+    {
+      "room": "Quota Workback",
+      "description": "Calculate activity and pipeline required to hit quota"
+    },
+    {
+      "room": "Founding GTM",
+      "description": "Document the sales process for another seller"
+    },
+    {
+      "room": "Settings",
+      "description": "Manage workspace data and account settings"
+    }
+  ],
+  "deprecated_terms": [
+    {
+      "term": "Ground",
+      "preferred": "Workspace map / navigation",
+      "rule": "Retire from user-facing language. If retained internally, never use it as the only functional name."
+    },
+    {
+      "term": "Touch the Ground",
+      "preferred": "Open workspace map",
+      "rule": "CTA must say what opens."
+    },
+    {
+      "term": "whole motion",
+      "preferred": "sales workspace / sales process / pipeline + activity",
+      "rule": "Replace with the exact scope in that context."
+    },
+    {
+      "term": "motion",
+      "preferred": "sales process / activity / pipeline / outreach / deal process",
+      "rule": "Never use as a catch-all."
+    },
+    {
+      "term": "heat",
+      "preferred": "account priority / signal strength",
+      "rule": "Name the actual metric; if a score is shown, explain inputs."
+    },
+    {
+      "term": "hottest",
+      "preferred": "highest-priority account",
+      "rule": "Use only if literally comparing measured temperature—otherwise retire."
+    },
+    {
+      "term": "sharp",
+      "preferred": "specific / well-defined / high-quality",
+      "rule": "For ICP, prefer 'ICP specificity' or 'well-defined ICP'."
+    },
+    {
+      "term": "sharpness",
+      "preferred": "specificity / quality",
+      "rule": "Replace with the actual quality being assessed."
+    },
+    {
+      "term": "bite",
+      "preferred": "match / accounts that fit",
+      "rule": "Retire in ICP and territory surfaces."
+    },
+    {
+      "term": "where it bites",
+      "preferred": "matching accounts",
+      "rule": "Retire."
+    },
+    {
+      "term": "carve",
+      "preferred": "create / define / segment",
+      "rule": "Use the literal action."
+    },
+    {
+      "term": "Live Edge",
+      "preferred": "Activity feed / recent activity",
+      "rule": "Choose one functional name and use it consistently."
+    },
+    {
+      "term": "the machine",
+      "preferred": "automated update / Antaeus automation",
+      "rule": "Name the process or source."
+    },
+    {
+      "term": "machine",
+      "preferred": "system / automation",
+      "rule": "Avoid as a brand noun."
+    },
+    {
+      "term": "one move",
+      "preferred": "highest-priority recommended action",
+      "rule": "State the action and why it ranks first."
+    },
+    {
+      "term": "system's pick",
+      "preferred": "recommended action",
+      "rule": "Name recommendation + evidence."
+    },
+    {
+      "term": "workspace is awake",
+      "preferred": "workspace setup is complete / analysis is ready",
+      "rule": "Retire."
+    },
+    {
+      "term": "awake",
+      "preferred": "ready / active / analyzed",
+      "rule": "Use actual state."
+    },
+    {
+      "term": "wake-up",
+      "preferred": "enrichment complete / data loaded",
+      "rule": "Internal and external."
+    },
+    {
+      "term": "first morning",
+      "preferred": "first completed setup / first daily overview",
+      "rule": "Use time literally."
+    },
+    {
+      "term": "morning landing",
+      "preferred": "daily overview / welcome",
+      "rule": "Retire as functional label."
+    },
+    {
+      "term": "landing",
+      "preferred": "arrival / overview / completion",
+      "rule": "Use exact event."
+    },
+    {
+      "term": "dividend",
+      "preferred": "benefit / result / output",
+      "rule": "Retire from product explanation."
+    },
+    {
+      "term": "thread",
+      "preferred": "account/deal history / communication history / stakeholder path",
+      "rule": "Name which history or relationship is meant."
+    },
+    {
+      "term": "whole thread",
+      "preferred": "related account and deal activity",
+      "rule": "Use literal title."
+    },
+    {
+      "term": "pressure",
+      "preferred": "risk / urgency / priority",
+      "rule": "Choose the actual construct."
+    },
+    {
+      "term": "pulling",
+      "preferred": "factors increasing priority",
+      "rule": "Use reasons/factors."
+    },
+    {
+      "term": "decaying",
+      "preferred": "becoming stale / risk increasing",
+      "rule": "State the observable change."
+    },
+    {
+      "term": "dying",
+      "preferred": "high loss risk / likely to be lost",
+      "rule": "Retire from state labels."
+    },
+    {
+      "term": "dies",
+      "preferred": "is lost / becomes unlikely to close",
+      "rule": "Use only in optional editorial copy, not diagnosis."
+    },
+    {
+      "term": "Future Autopsy",
+      "preferred": "Deal Risk (or retain as title + literal subtitle)",
+      "rule": "Can survive only with explicit functional subtitle."
+    },
+    {
+      "term": "climb",
+      "preferred": "readiness progression",
+      "rule": "Retire from functional language."
+    },
+    {
+      "term": "summit",
+      "preferred": "highest readiness level",
+      "rule": "Retire."
+    },
+    {
+      "term": "inheritable",
+      "preferred": "runnable by another seller / independently runnable",
+      "rule": "Replace with concrete operating independence."
+    },
+    {
+      "term": "You are the system",
+      "preferred": "Founder-dependent",
+      "rule": "Replace state name."
+    },
+    {
+      "term": "Building",
+      "preferred": "Partially documented",
+      "rule": "When used as readiness state."
+    },
+    {
+      "term": "Inheritable with guardrails",
+      "preferred": "Runnable with founder support",
+      "rule": "Replace readiness state."
+    },
+    {
+      "term": "Hire-ready",
+      "preferred": "Runnable independently",
+      "rule": "Replace readiness state."
+    },
+    {
+      "term": "Hire-ready, repeatable",
+      "preferred": "Documented and repeatable",
+      "rule": "Replace readiness state."
+    },
+    {
+      "term": "handoff kit",
+      "preferred": "sales handoff documentation",
+      "rule": "Use standard noun."
+    },
+    {
+      "term": "seed",
+      "preferred": "initialize / enter setup data",
+      "rule": "Retire from user-facing onboarding language."
+    },
+    {
+      "term": "seeding",
+      "preferred": "onboarding data collection / workspace initialization",
+      "rule": "Rewrite internal doctrine too."
+    },
+    {
+      "term": "heavy-seeding",
+      "preferred": "comprehensive onboarding",
+      "rule": "Rewrite internal doctrine."
+    },
+    {
+      "term": "floor",
+      "preferred": "minimum requirement",
+      "rule": "Use only when standard, otherwise state the threshold."
+    },
+    {
+      "term": "thin",
+      "preferred": "incomplete / insufficient / limited",
+      "rule": "Name what is insufficient."
+    },
+    {
+      "term": "front",
+      "preferred": "negotiation workstream / issue area",
+      "rule": "Getting to Signed: Legal, Security, Finance, Business approval."
+    },
+    {
+      "term": "face-off",
+      "preferred": "current blocking issue",
+      "rule": "Retire."
+    },
+    {
+      "term": "your line",
+      "preferred": "your proposed position",
+      "rule": "Retire where it means negotiation position."
+    },
+    {
+      "term": "relay",
+      "preferred": "introduction / forwarded request",
+      "rule": "Retire as conceptual model."
+    },
+    {
+      "term": "carries weight",
+      "preferred": "has influence with this account",
+      "rule": "Prefer literal influence language."
+    },
+    {
+      "term": "air cover",
+      "preferred": "LinkedIn outreach / supporting outreach",
+      "rule": "Retire."
+    },
+    {
+      "term": "run to signature",
+      "preferred": "signature process",
+      "rule": "Use literal process name."
+    },
+    {
+      "term": "run-to-signed",
+      "preferred": "signature process",
+      "rule": "Retire internally."
+    },
+    {
+      "term": "system saw",
+      "preferred": "recent changes / analysis / observations",
+      "rule": "State the result rather than narrating system perception."
+    },
+    {
+      "term": "system's read",
+      "preferred": "analysis / assessment",
+      "rule": "Prefer the actual output category."
+    },
+    {
+      "term": "what the system saw",
+      "preferred": "recent changes / analysis",
+      "rule": "Retire as a section heading."
+    },
+    {
+      "term": "read",
+      "preferred": "analysis / assessment / summary",
+      "rule": "When used as a noun, replace with the specific artifact."
+    },
+    {
+      "term": "heartbeat",
+      "preferred": "scheduled check / recent activity check",
+      "rule": "Use literal monitoring language."
+    },
+    {
+      "term": "standing orders",
+      "preferred": "saved monitoring rules",
+      "rule": "Retire."
+    },
+    {
+      "term": "fires",
+      "preferred": "matches / triggers / detects",
+      "rule": "Use literal event."
+    },
+    {
+      "term": "the data disagrees",
+      "preferred": "evidence conflicts with an assumption",
+      "rule": "Use evidence language."
+    },
+    {
+      "term": "walk in cold",
+      "preferred": "start without preparation",
+      "rule": "Avoid as core explanatory language."
+    },
+    {
+      "term": "on the wire",
+      "preferred": "scheduled / active / due today",
+      "rule": "Name actual status."
+    }
+  ],
+  "readiness_state_migration": [
+    {
+      "current": "You are the system",
+      "replacement": "Founder-dependent"
+    },
+    {
+      "current": "Building",
+      "replacement": "Partially documented"
+    },
+    {
+      "current": "Inheritable with guardrails",
+      "replacement": "Runnable with founder support"
+    },
+    {
+      "current": "Hire-ready",
+      "replacement": "Runnable independently"
+    },
+    {
+      "current": "Hire-ready, repeatable",
+      "replacement": "Documented and repeatable"
+    }
+  ],
+  "epistemic_output_schema": [
+    "object",
+    "observation",
+    "evidence",
+    "assessment",
+    "forecast_if_applicable",
+    "recommended_action",
+    "expected_effect_if_useful"
+  ]
+}

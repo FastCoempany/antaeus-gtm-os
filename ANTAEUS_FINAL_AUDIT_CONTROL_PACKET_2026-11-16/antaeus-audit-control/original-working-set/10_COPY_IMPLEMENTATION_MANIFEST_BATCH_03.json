@@ -1,0 +1,474 @@
+{
+  "version": "batch-03",
+  "scope": [
+    "Prospecting Desk",
+    "Outdoors Events",
+    "Outbound Studio",
+    "Cold Call Studio",
+    "LinkedIn Playbook",
+    "Discovery Studio",
+    "Deal Workspace",
+    "Quota Workback",
+    "Settings"
+  ],
+  "exact_replacements": [
+    {
+      "current": "One funnel, top to bottom — find, confirm, send.",
+      "replacement": "Find accounts, confirm they fit, then send qualified accounts to Signal Console."
+    },
+    {
+      "current": "Accounts enter at the top and only leave once you've confirmed them.",
+      "replacement": "Accounts remain in Prospecting Desk until their qualification checks are complete."
+    },
+    {
+      "current": "WORKING",
+      "replacement": "IN PROGRESS"
+    },
+    {
+      "current": "The funnel is moving. Keep confirming before you add more.",
+      "replacement": "Continue confirming the accounts already in progress before adding more."
+    },
+    {
+      "current": "Send the cleanest ready account to Signal Console.",
+      "replacement": "Send a confirmed account to Signal Console."
+    },
+    {
+      "current": "— describe who you want; keep the search; add the companies it turns up",
+      "replacement": "Describe the target account criteria, save the search, and add relevant companies."
+    },
+    {
+      "current": "The desk keeps every search you describe. Add the companies it turns up — each one enters the funnel below and gets confirmed before anything reaches Signal Console.",
+      "replacement": "Saved searches remain available here. Added companies move into confirmation before they can be sent to Signal Console."
+    },
+    {
+      "current": "— the real work: three questions before an account qualifies for Signal Console",
+      "replacement": "Answer three qualification questions before an account can be sent to Signal Console."
+    },
+    {
+      "current": "Not confirmed yet — click one to work it.",
+      "replacement": "Not confirmed yet. Open an account to complete its qualification checks."
+    },
+    {
+      "current": "Ready to send",
+      "replacement": "Confirmed accounts"
+    },
+    {
+      "current": "Send each with one click.",
+      "replacement": "Send a confirmed account to Signal Console."
+    },
+    {
+      "current": "WHERE THIS FITS",
+      "replacement": "WORKFLOW"
+    },
+    {
+      "current": "who we're targeting",
+      "replacement": "target account criteria"
+    },
+    {
+      "current": "YOU ARE HERE",
+      "replacement": "CURRENT STEP"
+    },
+    {
+      "current": "confirmed accounts",
+      "replacement": "confirmed accounts"
+    },
+    {
+      "current": "also to Outbound Studio — a ready account → the first message",
+      "replacement": "Outbound Studio can use a confirmed account to create the first message"
+    },
+    {
+      "current": "where your buyers gather · found for you",
+      "replacement": "events relevant to your target buyers"
+    },
+    {
+      "current": "The system finds the gatherings — you decide which matter.",
+      "replacement": "Antaeus identifies relevant events; you decide which ones are worth pursuing."
+    },
+    {
+      "current": "No sweep yet — run the first one.",
+      "replacement": "No event search has been run yet."
+    },
+    {
+      "current": "Run discovery now",
+      "replacement": "Find relevant events"
+    },
+    {
+      "current": "YOUR CATEGORY — CLOSEST IN",
+      "replacement": "DIRECTLY RELEVANT TO YOUR CATEGORY"
+    },
+    {
+      "current": "gatherings squarely about what you sell",
+      "replacement": "events focused directly on your market"
+    },
+    {
+      "current": "where the system found it →",
+      "replacement": "View source →"
+    },
+    {
+      "current": "YOUR BUYERS — ONE RING OUT",
+      "replacement": "ADJACENT EVENTS YOUR BUYERS ATTEND"
+    },
+    {
+      "current": "where the people you sell to already go",
+      "replacement": "events commonly attended by your target buyers"
+    },
+    {
+      "current": "THEIR ORBIT — THE OUTER RING",
+      "replacement": "BROADER RELATED EVENTS"
+    },
+    {
+      "current": "worth a look if you're already nearby",
+      "replacement": "broader events that may be useful when relevant to your territory or travel"
+    },
+    {
+      "current": "+ Add one by hand — a private invite the system can't see",
+      "replacement": "+ Add event manually"
+    },
+    {
+      "current": "one real message · not a blast",
+      "replacement": "one account-specific message"
+    },
+    {
+      "current": "WHERE ARE YOU WITH THEM?",
+      "replacement": "CURRENT OUTREACH STAGE"
+    },
+    {
+      "current": "THE MESSAGE · FOLLOWING UP",
+      "replacement": "FOLLOW-UP MESSAGE"
+    },
+    {
+      "current": "Name the account and the person above, and the message writes itself here — built from what's actually happening at their company.",
+      "replacement": "Enter the account and contact above. Antaeus drafts a message using the account context and relevant signals."
+    },
+    {
+      "current": "WHY NOW — WHAT'S HAPPENING",
+      "replacement": "REASON FOR OUTREACH"
+    },
+    {
+      "current": "Capital deployed under board pressure. (no live signal on this account yet — the trigger you picked carries the message)",
+      "replacement": "Selected trigger: Capital deployed under board pressure. No current account signal is available, so the selected trigger is being used as the reason for outreach."
+    },
+    {
+      "current": "Shorter than the first one. Add one new thing, and give them an easy out — \"or I'll just send it.\"",
+      "replacement": "Keep the follow-up shorter than the first message, add one new piece of information, and make the response easy."
+    },
+    {
+      "current": "Give-to-get",
+      "replacement": "Value offered before the meeting request"
+    },
+    {
+      "current": "walk in ready · log it after",
+      "replacement": "prepare before the call · log the outcome after"
+    },
+    {
+      "current": "HOT",
+      "replacement": "HIGH PRIORITY"
+    },
+    {
+      "current": "This is your way in — the call is built around it.",
+      "replacement": "Use this account signal as the reason for the call."
+    },
+    {
+      "current": "YOUR ONE GOAL",
+      "replacement": "CALL GOAL"
+    },
+    {
+      "current": "Your game plan",
+      "replacement": "Call plan"
+    },
+    {
+      "current": "read it before you dial · then put the phone in your hand",
+      "replacement": "Review the plan before dialing."
+    },
+    {
+      "current": "Show them it's worked before",
+      "replacement": "Use a relevant example"
+    },
+    {
+      "current": "Good. I will send a calendar hold with a tight agenda: the pressure, where it shows up, and whether there is enough value to keep going.",
+      "replacement": "Good. I will send a calendar hold with a focused agenda: the problem, where it shows up, and whether there is enough value to keep going."
+    },
+    {
+      "current": "Understood. Is this a bad quarter, wrong owner, or just not a priority?",
+      "replacement": "Understood. Is the timing bad, am I speaking with the wrong person, or is this simply not a priority?"
+    },
+    {
+      "current": "I will. What is the right window, and what should I reference so this does not restart cold?",
+      "replacement": "I will. What is the right time to follow up, and what should I reference so you have the context?"
+    },
+    {
+      "current": "Appreciate it. Who is closest to this pressure, and can I mention you pointed me there?",
+      "replacement": "Appreciate it. Who is closest to this problem, and can I mention that you pointed me to them?"
+    },
+    {
+      "current": "STILL ALIVE",
+      "replacement": "FOLLOW-UP POSSIBLE"
+    },
+    {
+      "current": "NO, THIS TIME",
+      "replacement": "NO FOLLOW-UP"
+    },
+    {
+      "current": "air cover · never the opening scene",
+      "replacement": "supporting outreach · not the primary channel"
+    },
+    {
+      "current": "LinkedIn warms your name so your calls and emails land. Not where you pitch — where they start to know you.",
+      "replacement": "Use LinkedIn to build familiarity with a contact before or alongside calls and email."
+    },
+    {
+      "current": "One account at a time. Here's your move on the one that's hottest right now.",
+      "replacement": "Current recommended LinkedIn action for the highest-priority account."
+    },
+    {
+      "current": "HOT · 93",
+      "replacement": "HIGH PRIORITY · 93"
+    },
+    {
+      "current": "You're at the fourth rung with Boeing — You're connected. Send something useful before any ask.",
+      "replacement": "You are connected with Boeing. Send useful information before asking for a meeting."
+    },
+    {
+      "current": "No meeting ask until the give-first touch lands.",
+      "replacement": "Send useful information before making a meeting request."
+    },
+    {
+      "current": "Why now: A real signal exists on Boeing, but LinkedIn trust is still cold. Make the account recognize your name before you ask for access.",
+      "replacement": "Why now: Boeing has a relevant account signal, but no substantive LinkedIn interaction is recorded yet. Use a useful, non-promotional message before asking for a meeting."
+    },
+    {
+      "current": "· say one useful thing, then leave — no pitch",
+      "replacement": "Send one useful observation without a meeting request."
+    },
+    {
+      "current": "One good touch today. That's the whole job. The ask comes later.",
+      "replacement": "Complete the useful-information step before asking for a meeting."
+    },
+    {
+      "current": "OTHER ACCOUNTS YOU'RE WARMING",
+      "replacement": "OTHER ACCOUNTS WITH LINKEDIN ACTIONS"
+    },
+    {
+      "current": "Off the list? Pick the closest fit — the call path and the recover moves hold either way.",
+      "replacement": "If no framework exactly matches, choose the closest fit. The question flow and recovery prompts remain available."
+    },
+    {
+      "current": "4 deals will slip this week if you do nothing.",
+      "replacement": "4 deals have elevated risk this week based on inactivity, missing next steps, or close-date pressure."
+    },
+    {
+      "current": "Gone quiet",
+      "replacement": "No recent activity"
+    },
+    {
+      "current": "Slipping now · your biggest deal",
+      "replacement": "Highest-risk deal · largest value"
+    },
+    {
+      "current": "WHY IT'S SLIPPING",
+      "replacement": "WHY RISK IS HIGH"
+    },
+    {
+      "current": "21 days since last activity · No next step set · Closing this quarter. Lock a real next step today — anything specific moves this forward.",
+      "replacement": "21 days since last recorded activity · no dated next step · expected to close this quarter. Set a dated next step with the buyer."
+    },
+    {
+      "current": "Lock a real next step today — anything specific moves this forward.",
+      "replacement": "Set a dated next step with the buyer"
+    },
+    {
+      "current": "Pre-mortem",
+      "replacement": "Review loss risk"
+    },
+    {
+      "current": "THE REST, RANKED",
+      "replacement": "OTHER OPEN DEALS · RANKED BY RISK"
+    },
+    {
+      "current": "TAKE A DEAL SOMEWHERE IT GETS RESOLVED",
+      "replacement": "CONTINUE WORKING THIS DEAL"
+    },
+    {
+      "current": "Pre-mortem a deal",
+      "replacement": "Review deal risk"
+    },
+    {
+      "current": "pace · $2M by year-end",
+      "replacement": "target · $2M by year-end"
+    },
+    {
+      "current": "WHERE TODAY'S PACE LANDS YOU",
+      "replacement": "PROJECTED YEAR-END REVENUE AT CURRENT PACE"
+    },
+    {
+      "current": "At the rate you're working, you finish the year around $2.4M — on your number.",
+      "replacement": "At your current recorded pace, projected year-end revenue is approximately $2.4M against a $2M target."
+    },
+    {
+      "current": "on pace for $2.4M",
+      "replacement": "projected $2.4M at current pace"
+    },
+    {
+      "current": "WHAT YOUR NUMBER NEEDS",
+      "replacement": "ACTIVITY AND PIPELINE REQUIRED"
+    },
+    {
+      "current": "Is the plan real?",
+      "replacement": "ASSUMPTION CHECK"
+    },
+    {
+      "current": "The one stretch: you're assuming 2% of your messages and calls turn into a first meeting — teams your size usually see about 1%.",
+      "replacement": "One assumption is above the current benchmark: the plan assumes 2% of messages and calls become a first meeting, compared with a benchmark of about 1%."
+    },
+    {
+      "current": "At 1% that means about 47 more messages & calls a day — plan for it now, not in month three.",
+      "replacement": "At a 1% conversion rate, the model requires about 47 additional messages and calls per day."
+    },
+    {
+      "current": "WHERE YOU ACTUALLY ARE",
+      "replacement": "CURRENT ACTIVITY AND PIPELINE"
+    },
+    {
+      "current": "44 SHORT",
+      "replacement": "44 BELOW DAILY REQUIREMENT"
+    },
+    {
+      "current": "BEHIND",
+      "replacement": "BELOW REQUIRED PACE"
+    },
+    {
+      "current": "LIGHT",
+      "replacement": "PIPELINE BELOW TARGET"
+    },
+    {
+      "current": "Do you have the pipeline?",
+      "replacement": "PIPELINE COVERAGE"
+    },
+    {
+      "current": "You have $3.8M in open deals. Your number wants about $10M in flight to be safe — roughly $8.5M short. The daily number is how you close it.",
+      "replacement": "You have $3.8M in open deals. Based on the 5× coverage assumption, the plan requires about $10M in open pipeline. Review the coverage calculation and the activity required to create additional qualified opportunities."
+    },
+    {
+      "current": "CLOSE THE GAP",
+      "replacement": "ACTIONS TO INCREASE COVERAGE"
+    },
+    {
+      "current": "Your workspace is safe",
+      "replacement": "WORKSPACE DATA"
+    },
+    {
+      "current": "Everything you build is saved — not trapped on this laptop.",
+      "replacement": "Your workspace can be saved to the cloud and exported at any time."
+    },
+    {
+      "current": "Take a copy of everything, put a copy back, or erase it all. Your call, any time.",
+      "replacement": "Download a copy, restore from a previous copy, or delete your workspace data."
+    },
+    {
+      "current": "A full file of your whole workspace — take it anywhere, keep it as a backup.",
+      "replacement": "Download a full workspace file for backup or transfer."
+    },
+    {
+      "current": "Put a copy back",
+      "replacement": "Restore a previous copy"
+    },
+    {
+      "current": "Sold before you had Antaeus? Paste your closed deals from a spreadsheet — one deal per line: account, deal size, won or lost, close date, and (for losses) why. A header row is fine. Your history switches on the reads that otherwise wait for new deals to close: who hits and who misses, the losses you paid for, why you win, and whether your plan is realistic.",
+      "replacement": "Paste historical closed deals from a spreadsheet, one deal per line: account, deal size, outcome, close date, and loss reason where applicable. Historical deals improve ICP, win/loss, and planning analysis before new deals close in Antaeus."
+    },
+    {
+      "current": "Counting your work automatically",
+      "replacement": "Automatic activity capture"
+    },
+    {
+      "current": "The less you have to log by hand, the truer every read gets. Three ways in — all optional.",
+      "replacement": "Automatic activity capture reduces manual logging and improves the accuracy of activity-based analysis. All connection methods are optional."
+    },
+    {
+      "current": "Add your Antaeus address to the BCC line when you send outreach, and the send counts itself: it's matched to the account you're watching and logged as a touch — the outreach tallies, the \"where you are with them\" read, and your daily pace all pick it up. What gets saved: the subject line, who it went to, and when — never the message itself.",
+      "replacement": "Add your Antaeus address to the BCC line when you send outreach. Antaeus matches the send to a watched account and logs the activity. It stores the subject line, recipient, and send time, but not the message body."
+    },
+    {
+      "current": "There's no dialer in Antaeus, on purpose — call from whatever you already use: your phone, Zoom, Meet, OpenPhone, Aircall. Here's how the calls still count:",
+      "replacement": "Antaeus does not include a dialer. Use your existing calling tool and log the result through the relevant Antaeus workflow."
+    },
+    {
+      "current": "Cold calls: open Cold Call Studio before you dial — it hands you the game plan — and tap the outcome the moment you hang up (meeting booked, callback, voicemail…). A booked meeting creates the deal by itself.",
+      "replacement": "Cold calls: open Cold Call Studio before dialing to review the call plan, then log the outcome after the call. A booked meeting creates a deal automatically."
+    },
+    {
+      "current": "Scheduled discovery calls: run the call inside Discovery Studio — it's built to be glanced at while you talk, and what you capture flows straight to the deal.",
+      "replacement": "Scheduled discovery calls: use Discovery Studio during the call. Notes and captured fields are added to the related deal."
+    },
+    {
+      "current": "If your tool records or transcribes (Zoom, Meet, OpenPhone): after the call, skim the recap and put the two things that matter into the room you ran it from — what they admitted, and the dated next step. Two lines is enough; the rooms do the rest.",
+      "replacement": "If your calling tool records or transcribes the meeting, review the recap and add the key buyer information and dated next step to the relevant Antaeus workflow."
+    },
+    {
+      "current": "Direct connections to call tools may come later. The habit above costs about thirty seconds a call and keeps every read honest today.",
+      "replacement": "Direct calling integrations may be added later. For now, logging the outcome after each call keeps activity and deal analysis current."
+    },
+    {
+      "current": "How the app works for you",
+      "replacement": "Preferences"
+    },
+    {
+      "current": "Small preferences — change them any time.",
+      "replacement": "Change these preferences at any time."
+    },
+    {
+      "current": "How much the app explains",
+      "replacement": "Explanation level"
+    },
+    {
+      "current": "Show me how walks you through everything. Step back trusts you and gets dense.",
+      "replacement": "Show me how includes more explanation. Step back uses a more compact interface."
+    },
+    {
+      "current": "Show the live edge",
+      "replacement": "Show recent activity"
+    },
+    {
+      "current": "The left wall carries your day — your count, what just landed, who's gone quiet. Turn it off and a thin line stays; click that line any time to bring it back. Your work is counted either way.",
+      "replacement": "The recent-activity panel shows today's activity, new events, and accounts with no recent response. Hiding the panel does not stop activity tracking."
+    },
+    {
+      "current": "Let the system suggest things",
+      "replacement": "Allow recommendations"
+    },
+    {
+      "current": "It'll flag a pattern now and then. You always accept or dismiss — nothing changes on its own.",
+      "replacement": "Antaeus may surface patterns and recommendations. You can accept or dismiss them; no data changes automatically."
+    }
+  ],
+  "preserve_standard_sales_terms": [
+    "Account",
+    "Contact",
+    "Stage",
+    "Value",
+    "Close date",
+    "Next step",
+    "Forecast",
+    "Momentum",
+    "Champion",
+    "Economic buyer",
+    "Stakeholders",
+    "Use case",
+    "Pain",
+    "Competition",
+    "Decision process",
+    "Notes",
+    "Pipeline",
+    "Quota",
+    "Closed Won",
+    "Closed Lost"
+  ],
+  "rules": [
+    "Do not rename standard sales concepts solely for brand voice.",
+    "Keep conversational scripts conversational; remove only private Antaeus ontology, unsupported certainty, and obscuring metaphors.",
+    "Do not imply causality from correlation.",
+    "Deal-risk language must expose the evidence driving the assessment.",
+    "Quota projections must identify their assumptions.",
+    "Settings language must describe actual storage/integration behavior directly."
+  ]
+}
