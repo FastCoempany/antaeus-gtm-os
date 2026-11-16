@@ -219,6 +219,7 @@ function startWalk(browser, name) {
         click: (what) => did(`click “${what}”`, control(what).click({ timeout: 5000 })),
         fill: (selector, value) => did(`type “${value}” into ${selector}`, page.locator(selector).first().fill(value, { timeout: 5000 })),
         waitFor: (selector) => page.waitForSelector(selector, { timeout: 12000 }),
+        wait: (ms) => page.waitForTimeout(ms),
         run: (fn) => page.evaluate(fn),
         async clickAll(selector) {
             for (const el of await page.locator(selector).all()) await el.click({ timeout: 5000 });
@@ -242,14 +243,18 @@ function startWalk(browser, name) {
         async snap(state) {
             const mode = w.mode;
             w.mode = "";
-            if (mode !== "now") await settle();
+            if (!mode) await settle();
             const at = new URL(page.url());
             const got = mode === "redirect" ? { lines: [{ kind: "redirect", text: at.pathname + at.search }], disabled: [], links: {} } : await grab();
             got.lines.push(...extra);
             // Lines that came and went since the last recorded state. Dropped:
             // lines with no letters (counters) and the fragments of a typing
             // animation (the beginning of a longer line of the same kind).
-            const seen = mode === "redirect" ? [] : await page.evaluate(() => [window.__walkSeen.lines, (window.__walkSeen = { lines: [], keys: {} })][0]);
+            const seen = await page.evaluate((skip) => {
+                const lines = window.__walkSeen.lines;
+                window.__walkSeen = { lines: [], keys: {} };
+                return skip ? [] : lines;
+            }, mode === "redirect");
             const now = new Set(got.lines.map(key));
             const whole = seen.concat(got.lines);
             const stem = (l) => l.text.replace(/\|$/, "");
@@ -273,6 +278,7 @@ const go = (url) => act("go", url);
 const click = (what) => act("click", what);
 const fill = (selector, value) => act("fill", selector, value);
 const waitFor = (selector) => act("waitFor", selector);
+const wait = (ms) => act("wait", ms); // for a scripted animation that pauses between beats
 const NOW = (w) => void (w.mode = "now"); // record at once: the page is about to leave
 const REDIRECT = (w) => void (w.mode = "redirect"); // record only where the page went
 const follow = act("follow");
@@ -286,8 +292,8 @@ const checkout = async (w) => {
 // [page, rows, states that cannot be reached here and why]
 const PAGES = [
     ["/start.html", [
-        ["at rest, after the ranking demo and the scroll reveals finish", go("/start.html")],
-        ["after “↻ Watch it rank” replays the ranking demo", click("↻ Watch it rank")]
+        ["at rest, after the ranking demo and the scroll reveals finish", go("/start.html"), wait(9000)],
+        ["after “↻ Watch it rank” replays the ranking demo", click("↻ Watch it rank"), wait(9000)]
     ]],
     ["/why-antaeus/", [["at rest", go("/why-antaeus/")]]],
     ["/login.html", [
@@ -315,7 +321,7 @@ const PAGES = [
     ["/coming-soon.html", [
         ["at rest", go("/coming-soon.html")],
         ["“Enter” pressed with no code", click("Enter"), act("browserMessage", "#gate-input")],
-        ["six digits typed and “Enter” pressed, before the page moves on", fill("#gate-input", "000000"), click("Enter"), act("waitFor", "#gate-landed.on"), NOW],
+        ["six digits typed and “Enter” pressed, before the page moves on", fill("#gate-input", "000000"), click("Enter"), waitFor("#gate-landed.on"), NOW],
         [null, follow],
         ["after a wrong code (where the Worker sends the visitor: ?error=1)", go("/coming-soon.html?error=1")]
     ], [["a correct code", "codes are checked by the production Worker at /_gate/unlock, which a static server does not run"]]],
