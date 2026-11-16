@@ -1,0 +1,750 @@
+{
+ "area": "deal-workspace",
+ "coverage": [
+  {
+   "surface": "Deal Workspace default screen (Focus / Timeline / List, hero, filters, closed-deals bar, handoff strip)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+    "src/deal-workspace/v4/lib/views.ts",
+    "src/deal-workspace/v4/deal-workspace-v4.css",
+    "src/deal-workspace/main.tsx",
+    "src/deal-workspace/index.html"
+   ],
+   "note": "Read every line of the v4 component, its view model and CSS. Rendered evidence: SMB walkthrough generated today (corpus-smb/deal-workspace.txt) for the area at rest, Timeline, List, each filter chip, every queue row and every account-name click. Empty states (no deals, no match for a filter, all-lower-risk hero) and the 'One deal has' singular were reviewed from source only; the demo books never reach them."
+  },
+  {
+   "surface": "Deal editor drawer and loss-reason dialog (opened from the default screen and from the previous version)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/deal-workspace/ds/components/DealDrawer.tsx",
+    "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+    "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+    "src/deal-workspace/lib/deal-shape.ts",
+    "src/components/input.tsx",
+    "src/components/action.tsx",
+    "src/components/feedback.tsx"
+   ],
+   "note": "Editor: every label, option list, placeholder and button is in today's SMB walkthrough (states 'After clicking Set a dated next step with the buyer.' and 'List → Open'), including Save and Remove stakeholder. The loss-reason dialog only opens when a save moves a deal to Closed Lost; the walk never does that, so the dialog was reviewed from source and its test (src/deal-workspace/ds/forms.test.tsx). Validation: the form has none; typed-value handling was reviewed from source."
+  },
+  {
+   "surface": "Risk ranking, risk-factor sentences, recommended next step, filters (deterministic generator feeding all three screen versions, the Dashboard, Welcome and the account card)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/deal-workspace/lib/recovery.ts",
+    "src/deal-workspace/ds/lib/adapters.ts",
+    "src/deal-workspace/ds/lib/adapters.test.ts",
+    "src/deal-workspace/v4/lib/views.test.ts",
+    "src/deal-workspace/lib/health-snapshot.ts",
+    "src/deal-workspace/lib/health-snapshot.test.ts"
+   ],
+   "note": "Read in full. Ran a script against the real modules (dw-work/probe1.ts) with synthetic deals covering every branch of the three score functions, both singular day counts, an unreadable date, and each filter. The engine's output for the SMB book is also in today's walkthrough. Scoring thresholds were compared with the pre-remediation commit (git show 6d11561^): unchanged."
+  },
+  {
+   "surface": "CSV export",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/deal-workspace/state.ts",
+    "src/deal-workspace/lib/export-csv.ts",
+    "src/deal-workspace/state.test.ts",
+    "src/lib/export-utils.ts"
+   ],
+   "note": "Column headers and cell values read from source. The walkthrough shows the button but does not capture the downloaded file. src/deal-workspace/lib/export-csv.ts is a second, unused implementation (no importer)."
+  },
+  {
+   "surface": "Cloud persistence, device copy of deals (gtmos_deal_workspaces), realtime, stage translation, health snapshot and its readers",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/deal-workspace/lib/persistence.ts",
+    "src/deal-workspace/lib/deal-bridge.ts",
+    "src/deal-workspace/lib/legacy-mirror.ts",
+    "src/deal-workspace/lib/health-snapshot.ts",
+    "src/deal-workspace/main.tsx",
+    "src/deal-workspace/lib/persistence.test.ts",
+    "src/deal-workspace/lib/deal-bridge.test.ts",
+    "src/deal-workspace/lib/legacy-mirror.test.ts",
+    "src/lib/data-client.ts",
+    "src/lib/data-client-demo-local.ts",
+    "src/onboarding/seeding/lib/seed-writer.ts",
+    "src/onboarding/seeding/lib/cloud-mirror.ts",
+    "src/cold-call-studio/lib/handoff.ts",
+    "src/call-in-a-favor/lib/sync-back.ts",
+    "src/pilot-desk/lib/deal-sync.ts",
+    "src/quota-workback/lib/coverage.ts",
+    "src/getting-to-signed/lib/cross-room.ts",
+    "src/dashboard/lib/snapshot-aggregator.ts",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/dashboard/today/lib/adapters.ts"
+   ],
+   "note": "Read every file in full or at the cited lines. The save, reload, load-with-cloud-rows and failed-save paths were run with the real Deal Workspace modules bundled by esbuild (scripts in final-audit/dw-work/probe2.ts to probe5.ts): probe3 uses the real demo data client and the real SMB demo book; probe2 and probe4 use a stub cloud client, because no signed-in Supabase session exists here. The duplicate after Save is also visible in today's SMB walkthrough and in the enterprise walkthrough of 2026-11-06. Not executed: a real Supabase round trip, realtime delivery from a second device, and row-level security."
+  }
+ ],
+ "findings": [
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 134,
+   "generation": "v4",
+   "state": "Focus view, the label above the focal deal's name. Shown at rest and after clicking any row in 'Other open deals'.",
+   "current": "{focal.lane === \"healthy\" ? t(\"Lower risk\") : t(\"Highest-risk deal\")}{focal.deal.value >= 100 ? t(\" · largest value\") : \"\"} — SMB walkthrough at rest: \"Highest-risk deal · largest value\" over \"Liquid Death $48k\"; after clicking Bombas: \"Lower risk · largest value\" over \"Bombas $42k\".",
+   "problem": "Two facts are asserted that the code does not check. (1) \" · largest value\" is appended whenever the deal value is $100 or more (line 135), so every deal gets it. In the SMB book Liquid Death ($48k) is labelled largest while Sweetgreen is $88k, and Bombas, the smallest open deal at $42k, is also labelled largest. (2) \"Highest-risk deal\" is shown for every focal deal outside the lower-risk band, including a deal the user picked from the list that is ranked third or fifth. Before the remediation the label was the state \"Slipping now\", which was true of any at-risk deal; the approved replacement turned it into a superlative that is only true for the first-ranked deal. A first-time user reads both as facts about this deal.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[62] (B3-X-062: \"Slipping now · your biggest deal\" → \"Highest-risk deal · largest value\"); COPY_STANDARD.md §21 Claims discipline (do not make the copy more precise than the product evidence permits)",
+   "proposed": "Compute both facts from all open deals, not from the filtered list. In FocusView: const all = rankedAssessments(activeDeals.value); const isTopRanked = all[0]?.deal.id === focal.deal.id; const maxValue = Math.max(...activeDeals.value.map((d) => d.value || 0)); const isLargest = focal.deal.value > 0 && focal.deal.value === maxValue. Label: healthy → \"Lower risk\"; not healthy and isTopRanked → \"Highest-risk deal\"; otherwise LANE_META[focal.lane].title (the band name). Append \" · largest value\" only when isLargest. Delete the value >= 100 test. Use the same band test for the panel heading at line 141: \"Why risk is high\" only for the high-risk band; \"Risk factors\" for the middle band.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-001"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 297,
+   "generation": "v4",
+   "state": "Closed-deals bar under the views, always shown.",
+   "current": "<b>{won.length} {t(\"won\")}</b> {t(\"this quarter\")} — SMB walkthrough: \"6 won this quarter\" / \"3 lost\".",
+   "problem": "wonDeals (src/deal-workspace/state.ts:42) is every closed-won deal in the workspace; nothing filters by close date. In the SMB demo book the six won deals closed 50 to 160 days ago (js/demo-seed-data-smb.js:229-252), and the current quarter began 46 days before today, so none of them was won this quarter. A user who pastes deal history in Settings would see their whole history counted as this quarter. The lost count beside it has no time period, so the two numbers are not comparable either.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline; COPY_STANDARD.md §13 (state units and time frames); /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (copy that claims something the code does not do)",
+   "proposed": "Smallest accurate change: drop the period so the bar reads \"6 won · 3 lost\" (remove the t(\"this quarter\") node). OWNER DECISION: if a per-quarter count is wanted, filter both counts by closeDate inside the current quarter (isThisQuarter in src/deal-workspace/lib/recovery.ts is not exported today) and label both \"this quarter\".",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-002"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 138,
+   "generation": "v4",
+   "state": "Stage shown under the focal deal (line 138), on each List row (line 99) and on each high-risk row in Timeline (line 220).",
+   "current": "{focal.deal.stage} / <span class=\"dw4-stg\">{a.deal.stage}</span> / {money(a.deal.value)} · {a.deal.stage} — SMB walkthrough: \"EVALUATION\" under Liquid Death and \"$48k · evaluation\" in Timeline, while the editor's Stage menu and the account card for the same deal say \"Solution Fit\".",
+   "problem": "The stored stage key is printed where the stage name belongs. The keys evaluation, poc and verbal are shown for stages the rest of the product calls Solution Fit, PoC / Pilot and Verbal Commit (STAGE_LABELS, src/deal-workspace/lib/deal-shape.ts:30). The same deal therefore has two stage names on one screen, and \"POC\" and \"VERBAL\" are not stage names a newcomer was ever shown.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (a stable key displayed where a label belongs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Preserve unchanged' list (Stage is a standard sales term and should read as one)",
+   "proposed": "Import STAGE_LABELS from ../lib/deal-shape and render STAGE_LABELS[a.deal.stage] at lines 99, 138 and 220 (the CSS already uppercases lines 99 and 138).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-003"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 303,
+   "generation": "v4",
+   "state": "Handoff strip at the foot of the page, in all three views.",
+   "current": "\"Continue working this deal\" above five links: Review deal risk → hrefToFutureAutopsy(), Run a pilot → hrefToPocFramework(), Call in a favor → hrefToAdvisorDeploy(), Prep the next call → discoveryHref(\"\"), Getting to signed → hrefToNegotiation().",
+   "problem": "Every link is built with no deal: no focusObject, no deal id, and an empty account= for Discovery Studio. The heading says \"this deal\", but the destination opens on whatever it selects by default, not on the deal the user was looking at. In Timeline and List there is no single deal on screen for \"this deal\" to mean. The original label was about \"a deal\"; the replacement made it specific without the links being specific.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[68] (B3-X-068: \"TAKE A DEAL SOMEWHERE IT GETS RESOLVED\" → \"CONTINUE WORKING THIS DEAL\"); CLAUDE.md Part I §2 (focusObject / returnTo continuity must carry the object between areas); COPY_STANDARD.md §8 (this must have an unmistakable referent)",
+   "proposed": "Pass the focal deal into the links. In DealWorkspaceV4 resolve const focal = items.find((a) => a.deal.id === focusedDealId.value) ?? items[0]; then use hrefToFutureAutopsy(focal?.deal.accountName), hrefToPocFramework(focal?.deal.accountName), hrefToAdvisorDeploy(focal?.deal.accountName), hrefToDiscoveryStudio(focal?.deal.accountName) (the helper already exists in src/deal-workspace/lib/handoff.ts:85 and replaces the local discoveryHref), hrefToNegotiation(focal?.deal.id, focal?.deal.accountName). Heading: when view is Focus and a focal deal exists, \"Continue working {account}\"; otherwise \"Continue working a deal\".",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-004"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 59,
+   "generation": "v4",
+   "state": "\"Prep the next call\" link in the handoff strip.",
+   "current": "return `/discovery-studio/?account=${q}&returnTo=%2Fdeal-workspace%2F&returnLabel=Deal%20Workspace&fromMode=room&fromSurface=deal-workspace`; called as discoveryHref(\"\").",
+   "problem": "This one link is hand-built instead of using the area's handoff builder. It sends returnLabel \"Deal Workspace\" where the other four links send \"Back to Deal Workspace\", it sends an empty account= parameter, and it omits focusRoom. The return control in Discovery Studio therefore reads differently from the return control in the other four destinations.",
+   "governing": "CLAUDE.md Part I §2 and §6 (continuity parameters must not be broken); deliverables/audit/continuity-params-2026-05.md (returnLabel for this area is \"Back to Deal Workspace\")",
+   "proposed": "Delete discoveryHref and use hrefToDiscoveryStudio from src/deal-workspace/lib/handoff.ts:85, which sets returnTo, returnLabel \"Back to Deal Workspace\", focusRoom, fromMode and fromSurface and only adds account= when there is one.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-005"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 276,
+   "generation": "v4",
+   "state": "View switch (Focus / Timeline / List) and the Timeline view it opens.",
+   "current": "Button \"Timeline\"; the view shows three columns headed \"High risk · review this week\", \"Elevated risk · review risk factors\", \"Lower risk · no immediate risk action\", a red line at the left edge labelled \"risk\" (line 197), and one pill per deal.",
+   "problem": "Nothing on this view is a date or a length of time. horizonPercent (src/deal-workspace/v4/lib/views.ts:91) places each pill by risk score, and its own comment says the position is not a time estimate. The remediation correctly removed the old column headings that promised dates (\"Slips this week\", \"Slips in ~2 weeks\") but the button still says Timeline and the marker that used to read \"now\" reads \"risk\" with no direction. A first-time user expects close dates or next-step dates and has to work out that left means riskier.",
+   "governing": "COPY_STANDARD.md §12 (labels name the destination) and §21; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md area instruction (the risk score is not a loss-date forecast)",
+   "proposed": "Smallest accurate change, keeping the button: replace the marker text t(\"risk\") with t(\"highest risk\") and add one caption line under the three column headings: \"Deals are placed left to right by risk score. Position is not a date.\" OWNER DECISION: rename the button from \"Timeline\" to \"Risk map\" (canon §4.13 and the capability map name the three views Focus / Timeline / List; the internal view key can stay timeline).",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DW-006"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/lib/views.ts",
+   "line": 91,
+   "generation": "v4",
+   "state": "Timeline view, horizontal position of each deal pill against the three column headings.",
+   "current": "horizonPercent returns 4 + (1 - score/160) * 88 for every deal; the column boundaries are fixed by CSS at 29.7% and 56.7% (deal-workspace-v4.css:105, 116-117: grid 1.1fr 1fr 1.6fr).",
+   "problem": "Lane membership is decided by score thresholds (150 and 80) but the columns are drawn at 29.7% and 56.7%, which correspond to scores of about 113 and 64. A deal scoring 113 to 149 is in the Elevated-risk lane yet its pill sits under the \"High risk · review this week\" heading; a deal scoring 65 to 79 is Lower risk yet sits under \"Elevated risk\". In the SMB book Warby Parker scores 125 (12 days inactive 35 + no next step 60 + closes this quarter 30): it is drawn under High risk at 23%, while the list below headed \"High-risk deals to review this week\" contains only Liquid Death. The same view gives two answers about which deals are high risk.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (a number or position that no longer matches its formula); COPY_STANDARD.md §21",
+   "proposed": "Make the position lane-aware so a pill always starts inside its own column: critical → Math.round(4 + (1 - (Math.min(score,160) - 150) / 10) * 14); at-risk → Math.round(31 + (1 - (score - 80) / 70) * 16); healthy → Math.round(58 + (1 - score / 80) * 30). Order within a column still follows score. Add a test in src/deal-workspace/v4/lib/views.test.ts that a score-125 at-risk deal returns a value between 30 and 56.",
+   "testsAffected": [
+    "src/deal-workspace/v4/lib/views.test.ts (horizonPercent: 'places higher risk scores further left' — still passes)"
+   ],
+   "confidence": "high",
+   "id": "DW-007"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 155,
+   "generation": "v4",
+   "state": "Focus view, 'Deal health' panel under the focal deal.",
+   "current": "\"Deal health\" · button \"edit all 9 →\" above eight labelled values (Champion, Economic buyer, Use case, Pain, Competition, Next step, Decision process, Momentum); a missing value reads \"⚠ not named\" (line 161); a recorded next step reads \"set\".",
+   "problem": "\"all 9\" refers to an internal count (the nine-field health form in the design notes). The panel shows eight values and the editor it opens has fifteen fields plus the stakeholder list, so the reader cannot tell what the nine things are. Every missing value is printed in red with a warning sign (deal-workspace-v4.css:92-93), including optional ones such as Competition and Momentum. \"not named\" fits a person (Champion, Economic buyer) but is wrong for Pain, Use case, Competition, Decision process, Momentum and Next step, which are not names. The next step itself is replaced by the word \"set\", so the one field the risk ranking depends on most is the only one whose content is hidden.",
+   "governing": "COPY_STANDARD.md §8 (placeholder test) and §14 (noun + state); /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §3 owner rule 'name the thing'",
+   "proposed": "Button: \"Edit deal details →\". Missing value: \"not recorded\". Next step: show the step and its date, e.g. `${deal.nextStep}${deal.nextStepDate ? \" · \" + deal.nextStepDate : \" · no date\"}` in nineFields (src/deal-workspace/v4/lib/views.ts:115) instead of \"set\".",
+   "testsAffected": [
+    "src/deal-workspace/v4/lib/views.test.ts (nineFields: expects 8 fields and empty string for a missing next step — unaffected by the label changes)"
+   ],
+   "confidence": "high",
+   "id": "DW-008"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 256,
+   "generation": "v4",
+   "state": "Hero sentence, any time at least one deal is outside the lower-risk band.",
+   "current": "\"4 deals have elevated risk based on recorded inactivity, next-step, or close-date factors.\" with \"$261k AT RISK RIGHT NOW\"; List view on the same data: \"HIGH RISK — review this week 1\" and \"ELEVATED RISK — review risk factors 3\"; filter chip \"At risk\".",
+   "problem": "The hero uses \"elevated risk\" for both bands together (4), while the List and Timeline use \"Elevated risk\" as the name of the middle band only (3). The filter chip and the dollar label call the same four deals \"at risk\". One count, three names, and one of the names also means a different count on the next view.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[60] (B3-X-060); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 10 (inconsistent terms)",
+   "proposed": "Keep the hero (it follows the approved Batch 03 sentence, and the Dashboard uses the same words: \"4 at elevated risk\", src/dashboard/v4/lib/cockpit.ts:233). Rename the middle band so the phrase has one meaning: in src/deal-workspace/v4/lib/views.ts change LANE_META[\"at-risk\"].title (line 35) and TIMELINE_ZONES[1].zt (line 103) from \"Elevated risk\" to \"Medium risk\". The bands then read High risk / Medium risk / Lower risk, and \"elevated risk\" always means High plus Medium, which is what the hero, the \"At risk\" chip and the Dashboard count.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-009"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 247,
+   "generation": "v4",
+   "state": "Top bar count and two empty states.",
+   "current": "\"12 live · $803k pipeline\" (line 247); \"No live deals yet. Add one, or wait for one from a cold call.\" (line 285); \"No open deals yet.\" (line 121); queue heading \"Other open deals · ranked by risk\" (line 168).",
+   "problem": "The same thing is called live deals in two places and open deals in two others on one screen. \"12 live\" on its own does not say twelve of what.",
+   "governing": "COPY_STANDARD.md §14 (number + unit); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 10 (inconsistent terms)",
+   "proposed": "\"12 open deals · $803k pipeline\"; \"No open deals yet.\" in both empty states.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DW-010"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 121,
+   "generation": "v4",
+   "state": "Empty states: Focus view with no deals (line 121) and the page-level empty state under the 'All' filter (line 285).",
+   "current": "\"No open deals yet. Add a deal, or wait for one from a cold call.\" / \"No live deals yet. Add one, or wait for one from a cold call.\"",
+   "problem": "Deal Workspace has no control that adds a deal: emptyDeal() in src/deal-workspace/lib/deal-shape.ts:145 is never called and no component in any of the three screen versions renders an add button. The only ways a deal appears are onboarding, a meeting booked in Cold Call Studio, and the deal-history paste in Settings (closed deals only). The empty state tells a new user to do something this screen cannot do, and \"wait for one from a cold call\" does not say where that happens.",
+   "governing": "COPY_STANDARD.md §1 (what the user can do next) and §21; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (empty)",
+   "proposed": "Smallest accurate change: \"No open deals. A deal is created when you log a booked meeting in Cold Call Studio.\" with \"Cold Call Studio\" linked to /cold-call-studio/ through buildDealWorkspaceHref. OWNER DECISION: add an \"Add deal\" button that opens the editor on emptyDeal() (the insert path in saveDealEdit already handles a deal with no stored id).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-011"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/deal-workspace/ds/lib/adapters.ts",
+   "line": 66,
+   "generation": "shared",
+   "state": "Filter chip 'No recent activity' on the default screen and the previous version (and the 'Stalled' pill path in the same adapter).",
+   "current": "const STALE_PHRASE = /(stalled|days since)/i; applyFilter keeps a deal when one of its risk-factor sentences matches. The engine now writes `No recorded activity for ${days} days` for 30 days or more (src/deal-workspace/lib/recovery.ts:59).",
+   "problem": "Regression from the language work. Before commit 6d11561 the 30-day sentence was `Stalled ${days} days`, which the filter matched. The sentence was reworded and the filter was not, so a deal with 30 or more days of no recorded activity no longer appears under 'No recent activity'; only deals at 7 to 29 days do. Run with the real modules: a deal 45 days inactive is dropped by the filter, a deal 16 days inactive is kept. The unit test still passes because its fixture uses the old sentence (\"Stalled 42 days\").",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (a renamed label that breaks behavior); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 7 (adversarial functional review) and stop condition 'genuine regressions repaired'",
+   "proposed": "Stop matching on display text. Add structured factors to RecoveryAssessment in recovery.ts, e.g. factors: { inactiveDays: number; nextStep: \"missing\" | \"undated\" | \"unreadable\" | \"overdue\" | \"due-soon\" | \"ok\"; closeDate: \"overdue\" | \"this-quarter\" | \"none\" }, filled by the three score functions, and filter on them: stalled → factors.inactiveDays >= 7. Replace the adapters.test.ts fixtures with assessments produced by rankRecovery on real Deal objects, including one 45 days inactive, so the test fails if wording and filter drift apart again. (Stop-gap if the structured change is deferred: /(stalled|days since|no recorded activity)/i.)",
+   "testsAffected": [
+    "src/deal-workspace/ds/lib/adapters.test.ts ('stalled keys off the staleness cause phrase' asserts causes[0] contains \"Stalled\"; fixtures use pre-remediation sentences)"
+   ],
+   "confidence": "high",
+   "id": "DW-012"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/lib/adapters.ts",
+   "line": 67,
+   "generation": "shared",
+   "state": "Filter chip 'This quarter' on the default screen and the previous version.",
+   "current": "const QUARTER_PHRASE = /(quarter|overdue)/i; label t(\"This quarter\") (src/deal-workspace/v4/DealWorkspaceV4.tsx:54).",
+   "problem": "The chip does not say what happens this quarter, and the filter keeps any deal whose risk factors contain the word overdue. A deal whose next step is 5 days overdue but whose close date is 300 days away is listed under 'This quarter' (run with the real modules). A deal whose close date has already passed, possibly in an earlier quarter, is listed too.",
+   "governing": "COPY_STANDARD.md §14 (noun + state) and §21; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function",
+   "proposed": "Label: \"Closing this quarter\". Filter on the structured factor proposed for the 'No recent activity' filter: this-quarter → factors.closeDate === \"this-quarter\". OWNER DECISION: whether deals with a past-due close date should also be listed here (today they are, by accident of the word overdue); if yes, label it \"Closing this quarter or past due\".",
+   "testsAffected": [
+    "src/deal-workspace/ds/lib/adapters.test.ts ('this-quarter keys off the quarter / overdue cause phrase' expects \"Next step 3 days overdue\" to match)"
+   ],
+   "confidence": "high",
+   "id": "DW-013"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 105,
+   "generation": "shared",
+   "state": "Recommended next step for a deal in the Elevated-risk band that has a next step but no champion; shown as the sentence after the risk factors, on the action button, in the Dashboard and on the account card.",
+   "current": "if (!deal.champion) return \"Identify the internal champion and confirm their role.\"; — rendered after the factors, e.g. \"Next step is 5 days overdue. Identify the internal champion and confirm their role.\"",
+   "problem": "The recommendation is chosen because no champion is recorded, but the sentence does not say so and the factors listed in front of it are about something else (an overdue step, inactivity, the close date). The reader sees evidence about dates followed by an action about people, with no stated link, and the more obvious fix for the evidence shown (the overdue step) is not mentioned.",
+   "governing": "COPY_STANDARD.md §6 (restore causal connective tissue) and §7 (evidence → interpretation → action); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (recommendations state their basis)",
+   "proposed": "\"No champion is recorded for this deal. Identify the internal champion and confirm their role.\" (text only; the selection rule is unchanged).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-014"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 75,
+   "generation": "shared",
+   "state": "Risk-factor sentence with a day count of 0 or 1 (next step due, next step overdue, close date overdue). Lines 74, 75 and 83.",
+   "current": "`Next step is due in ${days} days` → SMB walkthrough: \"Next step is due in 1 days\"; with the real modules also \"Next step is due in 0 days\", \"Next step is 1 days overdue\", \"Expected close date is 1 days overdue\".",
+   "problem": "\"1 days\" is a grammar error on the default screen, and \"due in 0 days\" makes the reader work out that it means today.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §1 governing principle (understand what a state or number means without translation)",
+   "proposed": "days === 0 → \"Next step is due today\"; days === 1 → \"Next step is due tomorrow\"; otherwise \"Next step is due in N days\". Overdue: `${n} ${n === 1 ? \"day\" : \"days\"} overdue` for both the next step and the expected close date. The Dashboard reads the number with a regex that accepts day or days (src/dashboard/v4/lib/cockpit.ts:188), so it is unaffected.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-015"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 113,
+   "generation": "v4",
+   "state": "Deal editor drawer, second section heading. Default screen and previous version.",
+   "current": "t(\"NEXT MOVE\") above the fields Next step, Next step date, Forecast, Momentum.",
+   "problem": "\"Next move\" is the private label for the product's recommendation. Here it heads the user's own next-step fields, and two of the four fields under it (Forecast, Momentum) are not a next step at all.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `one move` → highest-priority recommended action; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §3 disputed terms, move / next move; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Preserve unchanged' (Next step is the standard term)",
+   "proposed": "\"NEXT STEP & FORECAST\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-016"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 104,
+   "generation": "v4",
+   "state": "Deal editor, 'Value (USD)' field, while typing.",
+   "current": "<TextInput value={String(d.value || 0)} onInput={(v) => patch({ value: Number(v) || 0 })} /> — a plain text input.",
+   "problem": "Any keystroke that makes the text not a bare number sets the value to 0 and redraws the field as \"0\": typing \"250,000\", \"$250000\" or \"250k\" ends with a deal worth $0 or a wrong number, with no message. The value feeds 'at risk right now', the pipeline total, Quota Workback coverage and the Dashboard, so a mistyped comma silently changes numbers in four areas.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (validation) and Function (error handling); CLAUDE.md Part II §6 (every surface treats error and unsaved states explicitly)",
+   "proposed": "Keep the typed text in the draft and parse on save: strip $ , and spaces, accept a trailing k or m, and show the FormField error \"Enter the deal value as a number, for example 250000.\" when the result is not a number, leaving the stored value unchanged.",
+   "testsAffected": [
+    "src/deal-workspace/ds/forms.test.tsx"
+   ],
+   "confidence": "medium",
+   "id": "DW-017"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 221,
+   "generation": "v4",
+   "state": "Deal editor, each stakeholder row.",
+   "current": "<TextInput placeholder=\"Name\" /> <Select options=[\"Role…\", …] /> <Toggle label={t(\"Engaged\")} /> <IconButton label=\"Remove stakeholder\" /> — walkthrough: \"[field] Name\", \"[field] (unlabelled field)\", \"[button] Engaged\".",
+   "problem": "The switch has no visible text: \"Engaged\" exists only as its accessible name (src/components/action.tsx:99), so a sighted first-time user sees an unexplained on/off control beside each stakeholder. The role menu has no accessible name at all (the walkthrough records it as an unlabelled field), and the name box is named only by its placeholder.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (aria-label, placeholder) and category A11Y; COPY_STANDARD.md §14",
+   "proposed": "Show the word next to the switch: wrap it as <label class=\"dwd-stk__eng\"><Toggle … /><span>{t(\"Engaged\")}</span></label>. Add an optional ariaLabel prop to TextInput and Select in src/components/input.tsx and pass t(\"Stakeholder name\") and t(\"Stakeholder role\").",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-018"
+  },
+  {
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 203,
+   "generation": "v4",
+   "state": "Deal editor, button beside the Stakeholders label; and the footer button (line 173).",
+   "current": "t(\"Add one\") and t(\"Back\").",
+   "problem": "\"Add one\" depends on the label next to it; read on its own, as a screen reader's button list does, it does not say what is added. \"Back\" closes the drawer and discards whatever was typed; it reads as navigation, and nothing says the edits are dropped (the dialog on the same screen uses \"Cancel\").",
+   "governing": "COPY_STANDARD.md §8 (one must have an unmistakable referent) and §14 (verb + object)",
+   "proposed": "\"Add stakeholder\" and \"Cancel\".",
+   "testsAffected": [
+    "src/deal-workspace/ds/forms.test.tsx (check for a Back assertion before changing)"
+   ],
+   "confidence": "medium",
+   "id": "DW-019"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+   "line": 77,
+   "generation": "v4",
+   "state": "Loss-reason dialog, shown after a save moves a deal to Closed Lost. Default screen and previous version. (The oldest version says the same thing in other words: src/deal-workspace/components/LossReasonModal.tsx.)",
+   "current": "\"Pick the closest reason. Loss patterns feed the founding-GTM win/loss section and Future Autopsy.\"",
+   "problem": "Half of this is not what the code does. Founding GTM uses the reason in its Loss patterns section (src/founding-gtm/lib/sections.ts:646) and the Dashboard counts a lost deal with a reason as a reviewed loss (src/dashboard/lib/readiness-aggregator.ts:210). Future Autopsy copies the field when it loads deals (src/future-autopsy/lib/deal-loader.ts:111) and never uses it. The wording also needs translation: \"founding-GTM win/loss section\" is not the name of anything on screen (the section is called Loss patterns) and \"feed\" hides what happens.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline, §4 (a branded name needs a literal description); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md navigation rewrite (Founding GTM: document the sales process for another seller)",
+   "proposed": "\"Pick the closest reason. It appears under Loss patterns in your sales handoff document (Founding GTM), and a lost deal with a reason counts as a reviewed loss in your readiness assessment.\"",
+   "testsAffected": [
+    "src/deal-workspace/ds/forms.test.tsx"
+   ],
+   "confidence": "high",
+   "id": "DW-020"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+   "line": 93,
+   "generation": "v4",
+   "state": "Loss-reason dialog, placeholder in the optional notes box.",
+   "current": "\"What changed? What would have moved this?\"",
+   "problem": "\"moved this\" leaves out what would have moved and where to; the reader has to supply 'the deal forward'.",
+   "governing": "COPY_STANDARD.md §3 (moved → name the actual event) and §8",
+   "proposed": "\"What changed? What would have kept this deal moving forward?\"",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DW-021"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/deal-workspace/state.ts",
+   "line": 203,
+   "generation": "shared",
+   "state": "File downloaded by 'Export pipeline (CSV) ↓' (default screen) and 'Export pipeline (CSV)' (oldest version).",
+   "current": "{ header: \"Stage\", value: (d) => d.stage }, { header: \"Momentum\", value: (d) => d.momentum ?? \"\" }, { header: \"Forecast category\", value: (d) => d.forecastCategory ?? \"\" }, { header: \"Loss reason\", value: (d) => d.lossReason ?? \"\" } — rows come from allDeals (line 230), open and closed.",
+   "problem": "The file contains storage keys where the screen shows names: Stage evaluation / poc / verbal / closed-won (screen: Solution Fit, PoC / Pilot, Verbal Commit, Closed Won), Loss reason champion_left / no_decision (screen: Champion Left / Reorg, No Decision / Status Quo), Forecast category best_case. The column is headed 'Forecast category' while the form field is 'Forecast'. The button says pipeline, but every closed deal is exported as well. Stakeholders are not exported. A better mapper already exists and is unused (src/deal-workspace/lib/export-csv.ts uses STAGE_LABELS and includes stakeholders).",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (exports and downloaded files) and Function (a stable key where a label belongs)",
+   "proposed": "In DEAL_CSV_COLUMNS write STAGE_LABELS[d.stage], LOSS_LABELS[d.lossReason], the forecast and momentum option labels, rename the header to \"Forecast\", add a \"Stakeholders\" column (name (role), joined with \" | \", as in lib/export-csv.ts), and delete the unused lib/export-csv.ts. Button: \"Export all deals (CSV) ↓\". OWNER DECISION: if the file is meant to be re-imported by a tool that expects the keys, keep the keys in extra columns instead.",
+   "testsAffected": [
+    "src/deal-workspace/state.test.ts (exportDealsCsv: asserts row count only)"
+   ],
+   "confidence": "high",
+   "id": "DW-022"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 111,
+   "generation": "shared",
+   "state": "A deal in the lower-risk band that has no next step recorded (a missing next step alone scores 60; the at-risk band starts at 80). Focus view status line, the action button, the List row, the Dashboard and the account card.",
+   "current": "Line 111: return \"Review the current next step and keep it dated.\"; line 109: return \"Confirm what the buyer needs to evaluate next.\"; List view (src/deal-workspace/v4/DealWorkspaceV4.tsx:103) prints for every lower-risk row: \"No immediate risk action is required. Review the next step when the deal changes.\" Run with the real engine, a Solution Fit deal with no next step: factors [\"No next step is recorded\"], recommendation \"Review the current next step and keep it dated.\" SMB walkthrough, List: 1Password shows 'NO NEXT STEP IS RECORDED' beside 'No immediate risk action is required. Review the next step when the deal changes.'",
+   "problem": "The evidence and the recommendation contradict each other in one line: no next step is recorded, and the reader is told to review the current next step. In the lower-risk band the recommendation never checks whether a next step exists, although a missing next step is the heaviest single factor in the score. The List sentence adds a second contradiction ('No immediate risk action is required') next to a listed risk factor. A related edge: the factor test trims the text (line 66) but the recommendation test does not (lines 98 and 104), so a next step saved as spaces reads 'No next step is recorded … Confirm or replace the current next step with the buyer.'",
+   "governing": "COPY_STANDARD.md §7 (evidence, interpretation, action must agree); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 10 (recommendation/logic mismatch); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (generated recommendations must follow from the stated evidence)",
+   "proposed": "Wording and display only, no change to which band a deal is in: (a) line 111 becomes \"Keep a dated next step on this deal.\"; (b) use one helper, const hasNextStep = !!deal.nextStep && deal.nextStep.trim() !== \"\", in nextStepScore and suggestedNextMove; (c) in ListView line 103 show the fixed sentence only when the deal has no risk factors (a.causes.length === 0), reworded to \"No risk factors are recorded for this deal.\", and otherwise show a.nextMove as the other bands do. OWNER DECISION: have suggestedNextMove return \"Set a dated next step with the buyer.\" whenever no next step is recorded, in every band. That changes the recommendation lower-risk deals receive.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-023"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 58,
+   "generation": "shared",
+   "state": "Every risk-factor sentence about inactivity ('14 days since last recorded activity', 'No recorded activity for 45 days'), the headline's 'recorded inactivity', and the 'No recent activity' filter. All screen versions, the Dashboard and the account card.",
+   "current": "const days = daysBetween(deal.updated_at ?? deal.created_at); — the number is the time since the deal record itself was last saved. SMB walkthrough: 'Liquid Death · 14 days since last recorded activity' while the account card for the same deal says '1 touch logged' and the activity panel on the same page lists outreach recorded today for other accounts.",
+   "problem": "'Recorded activity' reads as the activity the product has recorded for the account: outreach, calls, meetings, favors. None of those change the deal record (only the Deal Workspace editor and the cloud row's update trigger set updated_at; Outbound Studio, Cold Call Studio, Call in a Favor and Pilot Desk do not). A seller who logged a call with the buyer yesterday is still told there has been no recorded activity for 30 days, and nothing explains that editing the deal is what resets the count. The wording is the approved Batch 03 sentence, but the product measures something narrower than the sentence says. The Dashboard already describes the same number accurately: 'deal record unchanged for N days' (src/dashboard/lib/scoring.ts:25).",
+   "governing": "COPY_STANDARD.md §21 Claims discipline (say only what the product knows) and §20 (name the measure); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[64] (B3-X-064, the approved sentence this implements)",
+   "proposed": "Smallest accurate change (text only): lines 60-61 \"${days} days since this deal was last updated\"; line 59 \"This deal has not been updated in ${days} days\"; headline \"…elevated risk based on time since the last update, next-step status, or close date.\"; filter chip \"Not updated recently\". OWNER DECISION: keep the approved words 'recorded activity' and make them true by counting logged outreach, calls and meetings for the account as activity (take the most recent of deal.updated_at and the account's latest entry in gtmos_outbound_touches, gtmos_cold_call_log and the discovery call log). That changes which deals are ranked as at risk.",
+   "testsAffected": [
+    "src/deal-workspace/v4/lib/views.test.ts",
+    "src/deal-workspace/ds/lib/adapters.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "DW-024"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 268,
+   "generation": "v4",
+   "state": "Default screen, keyboard or screen-reader use: the four filter chips (line 268), the 'Open' control on each List row (line 108), each row under 'Other open deals' (line 170), each Timeline pill (line 203) and every account name that opens the account card (lines 97, 137, 172, 204, 219).",
+   "current": "<span class=\"dw4-chip…\" onClick={() => setDealFilter(f.key)}>, <a onClick={() => openDealEditor(a.deal)}>Open</a> (no href), <div class=\"dw4-qr\" … onClick=…>, <div class=\"dw4-pill\" … onClick=…>, <span class=\"fo-obj\" onClick=…>. Today's walkthrough records the chips as plain text, not as controls.",
+   "problem": "None of these can be reached with the Tab key or activated from the keyboard, and a screen reader announces them as text. A keyboard user cannot filter the list, open a deal from the List view, change the focused deal, or open an account card. The view switch (line 275) is built from buttons but does not say which view is selected.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (accessible names and roles) and category A11Y; CLAUDE.md Part II §5 (the mouse-first user must succeed, and so must the keyboard user of a summoned control)",
+   "proposed": "Render each as a button: <button type=\"button\" class=\"dw4-chip…\" aria-pressed={dealFilter.value === f.key}> for chips; <button type=\"button\" class=\"dw4-linkbtn\"> for Open; wrap the queue row's and the pill's clickable area in a <button type=\"button\"> with the account name as its text; make the account-name span a <button type=\"button\" class=\"fo-obj\">. Add aria-pressed to the three view buttons. Reset button styles in deal-workspace-v4.css so nothing changes visually.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-025"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 254,
+   "generation": "v4",
+   "state": "Headline when no open deal is in the high or middle band (also shown on an empty workspace). Reviewed from source; the demo books never reach it.",
+   "current": "No elevated-risk deals in the current ranking. No active deal currently crosses the at-risk threshold.",
+   "problem": "Two sentences say the same thing, and both describe the product's own bookkeeping ('the current ranking', 'the at-risk threshold') instead of the user's deals. 'Elevated-risk' and 'at-risk' are used for the same group in adjacent sentences. On an empty workspace the same headline appears above 'No live deals yet', where there is no ranking at all.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §1 (remove unnecessary narration of the system's own analysis); COPY_STANDARD.md §1 (what exists, why it matters, what to do next)",
+   "proposed": "With open deals: 'No open deals are at elevated risk. A deal appears here when it has not been updated recently, has no dated next step, or is close to or past its expected close date.' With no open deals: 'No open deals yet.' and no second sentence.",
+   "testsAffected": [
+    "src/deal-workspace/v4/lib/views.test.ts ('reads calm when nothing crosses the at-risk threshold' tests the model, not the sentence)"
+   ],
+   "confidence": "medium",
+   "id": "DW-026"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/index.html",
+   "line": 13,
+   "generation": "static",
+   "state": "Page description in the HTML head (shown by search engines, link previews and some assistive tools). Not visible on the screen itself.",
+   "current": "Find the weakest deals first. Recovery queue + a board for stepping in before the deal goes lost.",
+   "problem": "Pre-remediation wording that the page no longer uses anywhere else: 'weakest deals', 'recovery queue', 'a board for stepping in', and 'goes lost' is not standard English. It also promises a board the default screen does not have.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md navigation rewrite (Deal Workspace: Review open deals, next steps, and risk)",
+   "proposed": "Review open deals, next steps, and risk. Deals are listed in order of risk, each with its risk factors and a recommended next step.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DW-027"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/deal-workspace/lib/persistence.ts",
+   "line": 156,
+   "generation": "shared",
+   "state": "Deal editor, Save the deal, on a deal that is not stored as a cloud row. That is every deal in the demo, and for a signed-in user any deal that exists only on the device while the cloud holds none (for example deals created by booked meetings in Cold Call Studio). All three screen versions save through this function.",
+   "current": "const isUpdate = looksLikePersistedId(deal.id); const row = isUpdate ? await clientRef.deals.update(deal.id, write) : await clientRef.deals.insert(write); const saved = dbRowToDeal(row); upsertDeal(saved); — the inserted row comes back with a new id, so it is added beside the original instead of replacing it. SMB walkthrough, state 'After clicking Set a dated next step with the buyer., then clicking Save the deal': '12 live · $803k pipeline' becomes '13 live · $851k pipeline', the headline goes from 4 to '5 deals have elevated risk', '$261k' becomes '$309k', and Liquid Death is listed twice.",
+   "problem": "Pressing Save, even with nothing changed, adds a second copy of the deal. The open-deal count, pipeline value, at-risk count and value, the CSV export, and (through the shared device copy) the Dashboard and Quota Workback all count the deal twice. A reload then makes it worse: the store now holds one row, loadDeals treats that row as the complete list (lines 84-90) and overwrites the shared device copy with it. Run with the real modules, the real demo data client and the SMB demo book: 21 deals at rest, 22 after Save, 1 after reload, and gtmos_deal_workspaces then holds 1 deal, so every other area loses the other 20. In the demo this is the path a tester follows first: open a deal, save, look around. The enterprise walkthrough of 2026-11-06 already showed '13 live · $4.1M pipeline' after Save, so the defect was present in the certified transcript.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (persisted shapes, dedupe/upsert, cross-area handoffs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 7 (adversarial functional review of persistence, translators and fallbacks)",
+   "proposed": "(1) In saveDealEdit, replace the local copy after an insert instead of adding to it: if (!isUpdate && saved.id !== deal.id) { removeDeal(deal.id); if (focusedDealId.value === deal.id) setFocusedDealId(saved.id); } before upsertDeal(saved). (2) Keep the demo on the device copy only: in bootPersistence, when isDemoModeActive() (src/lib/data-client-demo-local.ts:235) is true, call loadFromLegacyMirror() and leave clientRef null. A demo save is then the existing local path (upsertDeal + publishExternalState), and ids such as deal_s_liquid, which Pilot Desk and Getting to Signed link to, do not change. On that local path set updated_at to the current time before upsertDeal, so a device-only save resets the inactivity factor the way a cloud save does. (3) The signed-in load side is the next finding. Tests to add in src/deal-workspace/lib/persistence.test.ts: saving a 'legacy_0' deal through a stub insert leaves allDeals the same length with no 'legacy_0' entry; with demo mode on, saveDealEdit never calls insert.",
+   "testsAffected": [
+    "src/deal-workspace/lib/persistence.test.ts ('calls deals.insert for non-uuid ids (legacy / blob)' checks the insert call only, not the resulting list)"
+   ],
+   "confidence": "high",
+   "id": "DW-028"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/deal-workspace/lib/persistence.ts",
+   "line": 89,
+   "generation": "backend",
+   "state": "Opening Deal Workspace while signed in, when the cloud holds at least one deal. No click is needed. Also every later save and realtime update, which call the same publish step.",
+   "current": "loadDeals: if (supabaseDealCount > 0) { setAllDeals(deals); publishExternalState(); return; } — publishExternalState calls mirrorToLegacyStorage(allDeals.value), which replaces gtmos_deal_workspaces with only the loaded deals and only the fields this area knows (src/deal-workspace/lib/legacy-mirror.ts:27-54 and 71).",
+   "problem": "gtmos_deal_workspaces is shared: Cold Call Studio, Call in a Favor, Pilot Desk, onboarding and the Settings history import write to it, and more than a dozen areas read it. Deal Workspace overwrites it as if it were the only writer, and two things are lost. (1) Deals that exist only on the device. Cold Call Studio creates the deal for a booked meeting there (src/cold-call-studio/lib/handoff.ts:136-170) and never inserts a cloud row, so for a signed-in user who already has a cloud deal the new deal never appears in Deal Workspace and is deleted from the device copy the next time Deal Workspace opens. Settings tells the user that a booked meeting creates a deal automatically, and this screen's empty state says to wait for one from a cold call. (2) Fields other areas store on a deal. Call in a Favor writes advisorHistory, nextStep and nextStepDate (src/call-in-a-favor/lib/sync-back.ts:162) and Pilot Desk writes the pilot summary under poc (src/pilot-desk/lib/deal-sync.ts:133). Run with the real modules and a stub cloud client: before load the device copy held Acme with a favor's next step, advisor history and a pilot summary, plus Initech from a cold call; after load it held Acme with the older cloud next step and neither field, and Initech was gone.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (persisted shapes, dedupe/upsert, cross-area handoffs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 7 (adversarial functional review of persistence, translators and fallbacks); CLAUDE.md Part I §6 (Cold Call creates Deals on a booked meeting and feeds Deal Workspace; Call in a Favor and Pilot Desk feed Deal Workspace)",
+   "proposed": "Make the device copy a merge instead of a replacement. In mirrorToLegacyStorage, read the existing array first; write { ...existingItemWithSameId, ...dealToLegacyItem(deal) } for each loaded deal so fields this area does not own survive; keep existing items whose id is not a cloud id (looksLikePersistedId(id) is false) and whose account name does not match a loaded open deal (onboarding writes each deal to both places, so the name check prevents doubles). In loadDeals, add those device-only deals to the list given to setAllDeals so they are visible and editable, and insert each one through client.deals.insert, swapping the local id for the returned id. The lasting fix for (2) is for Call in a Favor and Pilot Desk to write through the deals accessor when a session exists: route to src/call-in-a-favor/lib/sync-back.ts and src/pilot-desk/lib/deal-sync.ts. Tests: add cases to src/deal-workspace/lib/legacy-mirror.test.ts for a preserved poc field and a preserved device-only deal.",
+   "testsAffected": [
+    "src/deal-workspace/lib/legacy-mirror.test.ts ('overwrites a previous mirror cleanly' pins the replacement)",
+    "src/deal-workspace/lib/persistence.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DW-029"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/deal-workspace/lib/deal-bridge.ts",
+   "line": 39,
+   "generation": "shared",
+   "state": "Any deal whose stored stage is 'proposal' or 'verbal-yes'. Onboarding offers both as stages (Proposal, Verbal yes; src/onboarding/seeding/draft.ts:29-35) and writes them to the cloud and to the device copy; each demo book has two 'proposal' deals. Shown in all three screen versions, in the editor's Stage menu and on the account card.",
+   "current": "function asStage(v: unknown): StageId { if (typeof v === \"string\" && STAGE_ID_SET.has(v)) return v as StageId; return \"prospect\"; } — STAGE_IDS (src/deal-workspace/lib/deal-shape.ts:18-27) has no proposal and no verbal-yes. SMB walkthrough: Warby Parker and Chomps, stored at stage 'proposal' (js/demo-seed-data-smb.js:152 and 162), are listed as 'PROSPECT' and '$78k · Prospect'.",
+   "problem": "A deal the user placed at Proposal or Verbal yes is shown as Prospect, the earliest stage. The recommendation then follows the wrong stage: Chomps, whose recorded next step is a proposal walkthrough with the COO, is told 'Confirm what the buyer needs to evaluate next.' The wrong stage is also written back. When cloud deals load, the device copy is rewritten with 'prospect' (persistence.ts:89), and any save writes stage 'prospect' to the cloud row (dealToDbWrite, line 234). Other areas read the stage from that copy. Quota Workback weights proposal at 0.65 and prospect at 0.1 (src/quota-workback/lib/coverage.ts:29-40), so weighted pipeline drops once Deal Workspace has rewritten the copy; that table also has no entry for this area's 'evaluation' and 'verbal' stages, so Solution Fit and Verbal Commit deals both fall to its 0.3 default. Getting to Signed lists only deals at evaluation, negotiation, proposal or verbal-yes (src/getting-to-signed/lib/cross-room.ts:60-65), so the deal disappears from its picker; the same list also leaves out this area's own 'verbal' (Verbal Commit) and 'poc' stages. The unit test pins the fallback as intended behaviour (deal-bridge.test.ts:43-53).",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (persisted shapes, dedupe/upsert, cross-area handoffs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 7 (adversarial functional review of persistence, translators and fallbacks); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Preserve unchanged' (Stage is standard sales data and must stay what the user entered)",
+   "proposed": "Accept the stages that stored data already contains. In src/deal-workspace/lib/deal-shape.ts add 'proposal' to STAGE_IDS between 'poc' and 'negotiation', with STAGE_LABELS 'Proposal', STAGE_ORDER re-numbered, and STAGE_PROB 0.65 (the value Quota Workback already uses). In asStage, read 'verbal-yes' as 'verbal' (the same stage under onboarding's id). Keep 'prospect' as the fallback only for values that match nothing. Replace the deal-bridge test expectation with cases for both values. Route to Getting to Signed: accept 'verbal' and 'poc' in src/getting-to-signed/lib/cross-room.ts:60-65. Apply the same mapping in src/lib/follow/follow-data.ts:131 (sanitizeStage). OWNER DECISION: choose one stage list for the product. Onboarding offers Prospecting, Discovery, Proposal, Negotiation, Verbal yes; Deal Workspace offers Prospect, Discovery, Solution Fit, PoC / Pilot, Negotiation, Verbal Commit. Until one list is chosen the two screens will keep naming stages differently.",
+   "testsAffected": [
+    "src/deal-workspace/lib/deal-bridge.test.ts ('falls back gracefully on invalid stage / momentum / loss reason')"
+   ],
+   "confidence": "high",
+   "id": "DW-030"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 78,
+   "generation": "shared",
+   "state": "Deal editor, Save the deal, when the cloud write fails (offline, expired session, a rejected write). The loss-reason dialog saves the same way (LossReasonModalDS.tsx:48), and so do the oldest version's form and dialog.",
+   "current": "handleSave: const saved = await saveDealEdit(d); saving.value = false; … closeDealEditor(); — saveDealEdit catches the error, reports it to error tracking and returns the unsaved deal (persistence.ts:169-172). Nothing is shown to the user.",
+   "problem": "A failed save looks exactly like a successful one: the editor closes and the list shows the edit. The edit exists only in this tab. Run with the real modules and a cloud client whose update throws: after a reload the next step the user typed was gone from the list and from the device copy. The user is never told the change was not saved, so they cannot retry.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 States (error, success) and Function (error handling); CLAUDE.md Part II §6 (every surface treats error and saved/unsaved states explicitly; an error is never swallowed)",
+   "proposed": "Tell the form whether the write reached the cloud. Export a signal from persistence.ts, for example saveFailed: Signal<boolean>, cleared at the start of saveDealEdit and set in its catch block. In handleSave (and in LossReasonModalDS.handleSave), when saveFailed is true keep the editor open and show an Alert above the buttons: 'This change could not be saved to your workspace. It is kept on this device for now. Check your connection, then select Save the deal again.' Extend the existing test 'preserves the local edit when the server save throws' to assert the signal.",
+   "testsAffected": [
+    "src/deal-workspace/lib/persistence.test.ts ('preserves the local edit when the server save throws')",
+    "src/deal-workspace/ds/forms.test.tsx"
+   ],
+   "confidence": "high",
+   "id": "DW-031"
+  },
+  {
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/deal-workspace/lib/deal-bridge.ts",
+   "line": 117,
+   "generation": "backend",
+   "state": "Deals written by onboarding and read from the device copy (no session, or the cloud insert did not complete).",
+   "current": "created_at: asString(r.created_at), updated_at: asString(r.updated_at) — onboarding writes the timestamp as createdAt (src/onboarding/seeding/lib/seed-writer.ts:183), which this translator does not read.",
+   "problem": "These deals arrive with no dates, so the inactivity factor is always zero for them: a deal entered in onboarding and never touched again is never reported as inactive. src/lib/follow/follow-data.ts:160-161 already reads both spellings, so the account card and this screen can disagree. Run with the real translator on an onboarding-shaped item: created_at and updated_at were both missing from the result.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (persisted shapes, dedupe/upsert, cross-area handoffs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work item 7 (adversarial functional review of persistence, translators and fallbacks)",
+   "proposed": "created_at: asString(r.created_at) ?? asString(r.createdAt), updated_at: asString(r.updated_at) ?? asString(r.updatedAt) ?? asString(r.createdAt). Add a deal-bridge test with an onboarding-shaped item.",
+   "testsAffected": [
+    "src/deal-workspace/lib/deal-bridge.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DW-032"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/today/lib/adapters.ts",
+   "line": 47,
+   "generation": "ds",
+   "state": "Dashboard, previous screen version (the 'today' surface), queue view: which deals are counted under 'gone quiet'. Routed here because the text it matches is produced by Deal Workspace.",
+   "current": "const QUIET_PHRASE = /(stalled|stale|days since|gone quiet|no reply|no activity|drift|dark|silent)/i; tested against the deal's first risk-factor sentence, which the Dashboard copies from gtmos_deal_workspace_health.top_pressure[].cause (src/dashboard/lib/snapshot-aggregator.ts:105-111, command-intelligence.ts:203).",
+   "problem": "Same regression as the 'No recent activity' filter, one step downstream. Before the remediation a deal inactive for 30 days or more published 'Stalled 45 days', which matched. It now publishes 'No recorded activity for 45 days', which matches nothing in the pattern ('no activity' needs the two words together). The longest-inactive deals therefore drop out of the group, while deals at 7 to 29 days ('14 days since last recorded activity') stay in. The test fixture still uses 'Stalled 42 days' (src/dashboard/today/lib/adapters.test.ts:91), so the test passes.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Function (a renamed label that breaks behavior); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md stop condition 'genuine regressions repaired'",
+   "proposed": "Publish the fact instead of asking readers to parse the sentence: add inactiveDays (number) to each top_pressure entry in src/deal-workspace/lib/health-snapshot.ts and have isQuiet use it (inactiveDays >= 7), falling back to the text test for older snapshots. Stop-gap: add 'no recorded activity' to QUIET_PHRASE. Change the fixture in adapters.test.ts to the sentence the engine writes today.",
+   "testsAffected": [
+    "src/dashboard/today/lib/adapters.test.ts ('isQuiet: overdue OR a staleness phrase in the reasons')"
+   ],
+   "confidence": "high",
+   "id": "DW-033"
+  },
+  {
+   "category": "FUNC",
+   "severity": 1,
+   "file": "js/demo-seed-data-smb.js",
+   "line": 134,
+   "generation": "seed",
+   "state": "Demo, deal editor, Forecast field for Sweetgreen and Notion (SMB book) and for the two enterprise deals at js/demo-seed-data-ent.js:277 and 312. Also the CSV export.",
+   "current": "forecastCategory:'bestCase' — the editor's Forecast menu stores commit, best_case, pipeline or omitted (src/deal-workspace/ds/components/DealHealthFormDS.tsx:54-60).",
+   "problem": "'bestCase' matches no option, so the Forecast field shows no selection for deals the demo book means to be Best case, and the exported file carries the unmatched key. Reviewed from source; the walkthrough records the menu's options, not the selected one.",
+   "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 Generation (demo and sample content) and Function (stored shapes)",
+   "proposed": "Change the four seed values to 'best_case' (js/demo-seed-data-smb.js:134 and 145; js/demo-seed-data-ent.js:277 and 312).",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DW-034"
+  }
+ ],
+ "dispositions": [],
+ "retained": [
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 168,
+   "text": "Other open deals · ranked by risk",
+   "term": "rank",
+   "why": "Describes what the product does to the user's deals and says what is ordered and by what. Verbatim Batch 03 replacement (B3-X-067); COPY_STANDARD §26 allowed form."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 254,
+   "text": "No elevated-risk deals in the current ranking. No active deal currently crosses the at-risk threshold.",
+   "term": "rank",
+   "why": "\"the current ranking\" refers to the product's risk ordering of the user's open deals, shown on the same screen; not something the user is asked to do. Reviewed from source only (state not reached by the demo books)."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 150,
+   "text": "Review loss risk",
+   "term": "risk",
+   "why": "Verbatim Batch 03 replacement for \"Pre-mortem\" (B3-X-066); says what the linked area does."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 305,
+   "text": "Review deal risk",
+   "term": "risk",
+   "why": "Verbatim Batch 03 replacement for \"Pre-mortem a deal\" (B3-X-069)."
+  },
+  {
+   "file": "src/deal-workspace/lib/deal-shape.ts",
+   "line": 34,
+   "text": "PoC / Pilot",
+   "term": "proof",
+   "why": "Stage name in the Stage menu. 'PoC' is the ordinary sales abbreviation for proof of concept and is paired with the plain word Pilot; AUDIT_BRIEF §3 disputed terms (proof): ordinary 'proof of concept' is not the retired product noun."
+  },
+  {
+   "file": "src/deal-workspace/lib/deal-shape.ts",
+   "line": 75,
+   "text": "Budget Killed",
+   "term": "killed",
+   "why": "Loss-reason option the seller picks. Ordinary business idiom for a cancelled budget; it is not a state the product assigns and not Antaeus vocabulary. A newcomer understands it."
+  },
+  {
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 148,
+   "text": "DEAL INTEL",
+   "term": "intel",
+   "why": "Section heading over Use case, Pain, Competition, Decision process, Notes. Common informal sales English for information about the deal; no Antaeus-specific meaning."
+  },
+  {
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 207,
+   "text": "No stakeholders mapped yet.",
+   "term": "yet",
+   "why": "Empty state. 'yet' marks that the list can be filled, in the same way as the approved Batch 03 replacements 'Not confirmed yet.' and 'No event search has been run yet.'; it is not a judgment about the reader. 'Mapped' is the ordinary sales term (stakeholder mapping)."
+  },
+  {
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 60,
+   "text": "${days} days since last recorded activity",
+   "term": "activity",
+   "why": "Matches the approved Batch 03 wording ('21 days since last recorded activity'). The number is days since the deal record was last updated (deal.updated_at); 'recorded' keeps the claim to what the product knows and does not say the buyer went silent."
+  },
+  {
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 99,
+   "text": "Set a dated next step with the buyer.",
+   "term": "next step",
+   "why": "Verbatim Batch 03 / interaction-patch replacement (B3-X-065, first sentence of HS-040). Names the action; 'next step' is standard sales language."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 141,
+   "text": "Why risk is high",
+   "term": "risk",
+   "why": "Verbatim Batch 03 replacement for 'WHY IT'S SLIPPING' (B3-X-063). It heads the list of recorded factors and the recommended step for the focal deal. It is accurate for the high-risk band; its use on a middle-band deal is covered by the finding on the 'Highest-risk deal' label."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 261,
+   "text": "at risk right now",
+   "term": "risk",
+   "why": "Caption under the dollar total of open deals outside the lower-risk band. Number plus unit plus state; the headline beside it says what the risk is based on."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 214,
+   "text": "High-risk deals to review this week",
+   "term": "risk",
+   "why": "Heading over the Timeline's list of high-band deals. 'This week' is a recommended review interval, not a prediction of when a deal will be lost."
+  },
+  {
+   "file": "src/deal-workspace/v4/lib/views.ts",
+   "line": 42,
+   "text": "no immediate risk action",
+   "term": "risk",
+   "why": "Sub-label of the lower-risk band. Understandable as 'nothing to do about risk right now'; the sentence form of it in the List view is changed by the finding on lower-risk recommendations."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 306,
+   "text": "Run a pilot",
+   "term": "proof",
+   "why": "Link to Pilot Desk. Uses 'pilot', not 'proof'; the builder is still named hrefToPocFramework, which is an identifier and not visible."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 307,
+   "text": "Call in a favor",
+   "term": "move",
+   "why": "The destination's own name, used as a verb phrase the newcomer understands (ask someone in your network for help)."
+  }
+ ],
+ "gaps": []
+}

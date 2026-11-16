@@ -1,0 +1,456 @@
+{
+ "area": "variant-pages",
+ "coverage": [
+  {
+   "surface": "demo-a-time.html — Activation demo, Variant A \"Time / the verdict climbs\" (~28s animated film of a readiness verdict climbing over 12 weeks)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "demo-a-time.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only referenced by the deploy include list. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "demo-b-space.html — Activation demo, Variant B \"Space / what the system sees\" (~30s pan across Signal Console, Discovery, Future Autopsy, handoff kit)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "demo-b-space.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only referenced by the deploy include list. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "demo-c-story.html — Activation demo, Variant C \"Story / your head → a machine they inherit\" (~30s: scattered notes resolve into a handoff kit)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "demo-c-story.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only referenced by the deploy include list. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "demo-reveal.html — \"The reveal — seed to alive\" (~26s: six typed account names become an awake dashboard and a top recommendation)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "demo-reveal.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only referenced by the deploy include list. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "demo-90.html — 90-second combined film \"From your head to a machine they inherit\" (head → the system works → it compounds → seed CTA)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "demo-90.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): href=\"/demo-90.html\" in landing-a-system.html and landing-a-alive.html only; it links out to /onboarding/?seeding=1. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-a-system.html — Sales-landing concept A \"You are the system\" (full marketing page built around the readiness ladder)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-a-system.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-b-monday.html — Sales-landing concept B \"The Monday machine\" (ranked morning instrument as the hero)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-b-monday.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-c-inherit.html — Sales-landing concept C \"Inherit the machine\" (handoff document as the hero, giant Grounded-A mark)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-c-inherit.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-a-alive.html — Concept A \"alive\" pass (\"it judges you\" — interactive three-question self-check that renders a readiness verdict live)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-a-alive.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-b-alive.html — Concept B \"alive\" pass (\"forest ignition\" — the ranked morning card animates itself; includes a customer-validation marquee)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-b-alive.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "landing-c-alive.html — Concept C \"alive\" pass (\"it authors itself\" — mark draws, handoff sections compose on scroll)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "landing-c-alive.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "signup-a-momentum.html — Signup concept A \"Momentum\" (minimal two-field form with a fake confirmation state)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "signup-a-momentum.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "signup-b-promise.html — Signup concept B \"Promise + form\" (ranked morning card beside a two-field form with a fake confirmation state)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "signup-b-promise.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "signup-c-read.html — Signup concept C \"The Read\" (five-question \"could a hire run this?\" self-check producing a readiness verdict, then a CTA into onboarding)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "signup-c-read.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): href=\"/signup-c-read.html\" in signup-a-momentum.html and signup-b-promise.html only. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "seeding-flow-front.html — Seeding flow, front half (doorway → ICP sharpening → name-only accounts → \"half awake\" wake-up, with the \"why we ask\" evidence margin)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "seeding-flow-front.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "seeding-flow.html — The full seeding flow, stitched end to end (doorway → ICP → accounts → wake-up → live deals → quota → \"awake\" landing) — the settled onboarding design referenced by canon §4.3",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "seeding-flow.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  },
+  {
+   "surface": "seeding-flow-deals.html — Seeding flow, the heavy middle (live deals entered one at a time, each producing a diagnosis; counter climbs to 10)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "seeding-flow-deals.html",
+    "tools/deploy/build-cloudflare-assets.js",
+    "worker/index.ts"
+   ],
+   "note": "Read the full page source (markup + inline script strings). Not in the rendered walkthrough (area has none). Link search across served files (src, app, js, worker, tools, root html, why-antaeus): only the deploy include list references it. Not browser-rendered (instruction: no browser walk)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "VARIANT-PAGES-001",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "demo-a-time.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Saturated. Representative lines: 7 title \"Activation demo — Variant A (Time / the verdict climbs)\"; 70 \"The readiness verdict\"; 72/120 \"Right now the motion lives in your head. Watch what twelve weeks in here does to it.\"; 79 \"Proof forged 0\"; 80 \"Handoff kit\"; 123 \"You are the system.\"; 131 \"Pilots get forged into proof a buyer’s boss can act on. The kit starts filling.\"; 135 \"Inheritable, with a hand on the wheel.\"; 137 \"Wins and losses both get studied. Advisors get spent. The motion repeats without you.\"; 141 \"This is where the work goes. A machine, not a memory.\"; 87 \"Seed the workspace →\" is a plain <div class=cta> with no link (dead CTA).",
+   "problem": "Nearly every line of copy (about 15 strings) uses retired private ontology: \"verdict\" (banned user-facing), \"the motion\" as catch-all, \"lives in your head\", \"proof\"/\"forged\" (hard-banned), \"kit\", the retired readiness state name \"You are the system\" and the pre-§17 \"Inheritable, with a hand on the wheel\" instead of Founder-dependent / Usable with founder support / Hire-ready, aphoristic fragments (\"A machine, not a memory.\"), and \"Advisors get spent\". The concept itself is \"the verdict climbs\", so it depends on a retired term; a rewrite would replace essentially all copy (~15 lines) and the framing title. \"Seed the workspace\" is internal seeding doctrine language and the CTA is not a link. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for verdict, motion, in your head, proof, kit, you are the system; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-002",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "demo-b-space.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Saturated. Representative lines: 7 \"Activation demo — Variant B (Space / what the system sees)\"; 81-84 \"Apex Health heat 38\" / \"Northwind Logistics heat 91\"; 86/99/110/121 \"The system sees\" (four frame captions); 91-97 retired Discovery segment titles \"Opening frame\", \"Current-state truth\", \"Pain consequence\", \"Proof threshold\", \"Next-step lock\"; 94 \"Buyer said: “we already have a tool.” → pull the displacement question.\"; 107 \"Pattern: pressure before clarity. The next step isn’t dated and no one owns the proof. Fix the agenda before the call.\"; 115-116 \"Who hits, who misses, and why\" / \"The rails that actually converted\"; 128 \"Signals become calls. Calls become deals. Deals become proof. Proof becomes a motion a hire inherits.\"; 129 \"Seed the workspace →\" (non-link div).",
+   "problem": "Personification as the organizing device (\"The system sees\", COPY_STANDARD §9); \"heat\" instead of account priority; the pre-2026-11-05 Discovery segment titles that the owner replaced (Opening · How they work today · The problem and its cost … ); \"proof\" five times; the internal handoff-section working names (\"The rails that actually converted\") instead of the shipped literal titles; an aphoristic chain (128) using \"motion\" as catch-all; Future Autopsy causation stated as fact (\"pressure before clarity\"). The concept (\"what the system sees\") is itself personification, so a faithful rewrite would replace the frame captions and ~20 lines. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for heat, the system sees, proof, motion, Discovery segment titles, kit section titles; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-003",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "demo-c-story.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Moderately saturated. Representative lines: 7 \"Activation demo — Variant C (Story / your head → a machine they inherit)\"; 88 \"Evermark pilot → proof\"; 93 \"The handoff kit · day one\"; 94 \"Run the motion. Here’s everything.\"; 96 \"The exact touches that converted\"; 105 \"The work stops living in your head.\"; 106 \"What you build in here becomes a machine someone can inherit — not a memory only you can run. That starts the moment you put the real accounts in. The ten that matter this quarter.\"; 83 \"Northwind Logistics new GC · hot\"; 107 \"Seed the workspace →\" (non-link div). The scattered-note fragments (73-78) are deliberately informal founder notes and are fine as content.",
+   "problem": "The page's concept is the retired \"in your head → a machine\" framing (Batch 01 exact_replacements[34] maps \"lived in your head\" to \"The sales process was not yet documented for another seller\"); \"the handoff kit\" (canon: never \"the kit\"), \"Run the motion\", \"proof\", \"hot\" as a temperature label, aphorism (\"not a memory only you can run\"), and the casual stand-in \"The work\" (§26). About 10 lines of copy plus the framing title would need rewriting. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for in your head, machine, kit, proof, motion; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-004",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "demo-reveal.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Saturated. Representative lines: 7 \"The reveal — seed to alive\"; 83/124 \"You gave it six names. It did the rest.\"; 110 row template \"heat ${a.heat}\"; 127 \"The system goes to work — reading the accounts you named\"; 138 \"Your dashboard, awake\"; 139 \"Readiness: you are the system\"; 141 \"They just opened a General Counsel search — that’s your trigger, and it’s the hottest thing on your board.\"; 143 \"Why this — Six names in, the system found a live trigger on four of them — and ranked the one worth your morning.\"",
+   "problem": "Personification throughout (\"It did the rest\", \"The system goes to work\", \"awake\", \"found\"); retired readiness state \"you are the system\" (COPY_STANDARD §17 → Founder-dependent); \"heat\"/\"hottest thing on your board\" instead of account priority, and an unexplained ranking claim with no ordering criterion (\"ranked the one worth your morning\") — the disputed-terms rule allows \"ranked\" only when the copy says what is ordered and by what. The concept \"seed to alive\" is itself the retired awake metaphor; a rewrite would touch the title, every caption and the recommendation block (~10 strings). Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for heat, awake, the system goes to work, you are the system, ranked, hottest, board; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-005",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "demo-90.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. Linked from landing-a-system.html and landing-a-alive.html (both unlinked mockups); its \"Skip → seed\" and closing CTA lead into the live /onboarding/?seeding=1.",
+   "current": "The most saturated page in the set (it stitches A, B and C). Representative lines: 7 \"From your head to a machine they inherit — 90s\"; 121 \"Right now it lives in your head\"; 140/264 \"The system reads what you gave it\"; 152 \"Right now the motion lives in you.\"; 159 \"Proof forged 0\"; 210-214 \"Opening frame\" / \"Current-state truth\" / \"Proof threshold\" / \"Next-step lock\"; 217 \"Future Autopsy · before it dies\"; 282 \"Harder to fool than you are\"; 288 \"It sees the deal before it dies\"; 293 \"Do it once — it compounds every morning\"; 296 \"You are the system.\"; 301 \"Pilots get forged into proof a buyer’s boss can act on\"; 304 \"Inheritable, with a hand on the wheel.\"; 305 \"Advisors get spent. The motion repeats without you.\"; 309 \"A machine, not a memory.\"",
+   "problem": "Combines every retired pattern: private ontology (motion, kit, proof/forged, verdict state names), personification (reads, sees, catches), the app aimed at the reader (\"Harder to fool than you are\" — COPY_STANDARD §26: stakes come from buyers and deals, not the app catching the user), Future Autopsy framed as \"before it dies\" (canon §4.14: internal shorthand, never copy), the pre-rename Discovery segment titles, aphorisms. Because it is the only variant page that hands off into the live onboarding, it is the most likely to be seen. A faithful rewrite would replace roughly 30 strings and the film's narrative premise (\"from your head to a machine\"). Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for in your head, motion, proof, verdict states, heat, Discovery segment titles, the system sees/catches, before it dies, earned-depth seeding; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-006",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-a-system.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; it links to the live /signup.html, /login.html, /why-antaeus/ and to /demo-90.html.",
+   "current": "Saturated, and the concept depends on a retired term. Representative lines: 7 title \"Antaeus · You are the system\"; 153 \"The motion lives in one head. Yours.\"; 154 \"Right now, you are the system.\"; 163-167 ladder \"You are the system / Building / Inheritable / Hire-ready / Repeatable\"; 184 \"A pipeline of stages nobody earned.\"; 194 \"Nothing closes. It becomes the next move.\"; 203 \"Proof a boss can act on\"; 212 \"It ranks the pressure. One deal, one reason, one move — not a dashboard to browse.\"; 213 \"It's harder to fool than you are. Stages you haven't earned, proofs nobody owns — it says so out loud, so you stop self-coaching past them.\"; 222 \"The verdict that matters\"; 230 \"Inheritable They could run it with you on call for sanity checks.\"; 241 \"It doesn't ask you to keep it updated.\"; 250 \"02 The rails that converted\"; 270 \"Start the climb →\"; 283 \"the motion, made inheritable\".",
+   "problem": "The page's central idea is the retired readiness state \"You are the system\" and the retired ladder names (§17 now: Founder-dependent · Partially documented · Usable with founder support · Hire-ready · Hire-ready and repeatable); it also uses hard-banned \"earned\", \"proof\", \"verdict\", \"sanity checks\", \"the one move\", \"the kit\", \"rails\", \"the climb\", \"the motion\" as catch-all, an unexplained ranking claim, and copy aimed at the reader (\"harder to fool than you are\", \"self-coaching past them\", \"Five honest answers\") against COPY_STANDARD §26. CLAIM risks: \"It doesn't ask you to keep it updated\" contradicts the product (onboarding asks for at least 10 live deals and rooms are filled by hand); \"$299/year when it opens up\" and the Salesforce statistic (173) are unverified marketing claims. A faithful rewrite is a new page (~60 strings) with a different headline concept, which is what start.html already is. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for you are the system, motion, in your head, verdict, kit, proof, earned, move, rails, Inheritable/Building/Repeatable; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-007",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-b-monday.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; it links to the live /signup.html, /login.html, /why-antaeus/.",
+   "current": "Saturated. Representative lines: 155 \"Antaeus ranks every deal, signal, and proof under pressure — and names the one move that clears the most weight today.\"; 164 \"No dated next step, and no one owns the proof. The deal isn't dead — it's drifting.\"; 166 \"HEAT 91\"; 169 \"Apex Health new CFO · proof gap heat 64\"; 198 \"Motion the right line →\"; 207 \"Ranked, not stored. It tells you the one to act on, with the reason it came up first.\"; 215 \"… surfaced, scored, and ranked against who you actually sell to. You never typed them.\"; 222 \"Deals that don't die quietly. It names the deal nine days before it stalls\"; 223 \"Before it dies\"; 232 \"One move, ranked above everything else. One focal object.\"; 235 \"Pulling hardest\"; 237 \"The single move that clears the most weight today:\"; 252 \"Every rail, every reason, every win — ready to inherit.\"; 256 \"Do the hard part once. It plays back every morning.\"",
+   "problem": "Private ontology throughout (\"the one move\", \"heat\", \"proof gap\", \"Motion the right line\", \"rails\", \"Pulling hardest\", \"one focal object\" — internal architecture language as copy), metaphor (\"clears the most weight\", \"plays back every morning\"), personification (\"It names\", \"It tells you\", \"What it found\"), and certainty claims the engine does not make: \"It names the deal nine days before it stalls\" / \"stalls in 9 days\" present a heuristic horizon as fact (Future Autopsy approved evolution avoids forecast certainty). \"Ranked, not stored\" and \"ranks every deal, signal, and proof\" use ranking without saying by what in the headline. CLAIM risk: \"You never typed them\" (signals); \"$299/year\". Rewrite would touch ~45 strings; the instrument concept could survive with literal labels (\"Highest-priority action\", \"account priority\"). Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for ranked, the one move, heat, proof, motion, rails, before it dies, plays it back; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-008",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-c-inherit.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; it links to the live /signup.html, /login.html, /why-antaeus/.",
+   "current": "Saturated with aphorism. Representative lines: 7 \"Antaeus · Inherit the machine\"; 128 \"Build the machine. Not the memory.\"; 129 \"… Antaeus is where your revenue motion becomes something you can hand off.\"; 137 \"The cost of it living in your head\"; 138 \"A motion only you can run isn't an asset. It's a liability with good months.\"; 143 \"You run the motion. It becomes the machine.\"; 145 \"Capture as you work No data entry. The work itself is the input.\"; 147 \"The kit assembles itself\"; 163 \"02 The rails that worked The exact touches that converted.\"; 166 \"05 The losses you paid for Real autopsies, not anecdotes.\"; 176/178 \"A memory only you can run.\" / \"A machine someone can inherit.\"; 184 \"Not an export. Not a doc. The thing itself\".",
+   "problem": "Built on aphoristic cadence (COPY_STANDARD §10 insight voice: \"Build the machine. Not the memory.\", \"a liability with good months\") and the retired \"in your head\" / \"motion\" / \"kit\" vocabulary; the handoff section titles are the internal working names, not the shipped literal titles (Target customers and disqualification criteria · Outreach patterns associated with responses …). CLAIM: \"No data entry. The work itself is the input.\" and \"The kit assembles itself\" contradict the product, which asks for deal judgment by hand (onboarding ≥10 deals, Deal Workspace fields). Rewrite ~35 strings; the handoff-first concept itself is legitimate and could be kept with literal copy. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for machine vs memory, motion, in your head, kit, rails, autopsies; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-009",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-a-alive.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; links to the live /signup.html, /login.html, /why-antaeus/ and to /demo-90.html.",
+   "current": "Same copy as landing-a-system.html plus an interactive verdict. Representative lines: 7 \"Antaeus · You are the system (alive)\"; 158 \"Right now, you are the system.\"; 159 \"Don't take our word for it. Answer three honest questions and watch the system render the verdict on your motion — live.\"; 169 \"The next steps are written down — not in your head\"; 174/273 \"You are the system.\"; 176 \"You are it Building Inheritable Hire-ready\"; 186 \"A pipeline of stages nobody earned.\"; 208 \"It's harder to fool than you are …\"; 225 \"Inheritable They could run it with you on call for sanity checks.\"; 233 \"… It doesn't ask you to keep it updated. …\"; 263 \"Concept A · alive · it judges you\"; 275 \"Inheritable, with a hand on the wheel.\"",
+   "problem": "Everything in landing-a-system.html applies (retired state names, hard-banned \"earned\"/\"proof\"/\"verdict\"/\"sanity checks\", \"the motion\", \"the kit\", \"rails\", \"the one move\", copy aimed at the reader, unsupported \"doesn't ask you to keep it updated\" and $299 price claims). The added interactive piece makes it worse: the self-check output uses the retired state names and the design note \"it judges you\" is literally the app-judging-the-user stance COPY_STANDARD §26 rules out (\"Answer three honest questions\", \"harder to fool than you are\"). Concept depends on the retired \"You are the system\" state. Rewrite ~65 strings plus the verdict script. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for you are the system, verdict, motion, in your head, earned, proof, kit, rails, sanity checks, honest; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-010",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-b-alive.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; links to the live /signup.html, /login.html, /why-antaeus/.",
+   "current": "Saturated, plus an unverified endorsement block. Representative lines: 244 \"It ranks every deal, signal, and proof under pressure and names the one move that clears the most weight today\"; 251 \"Reading the board…\"; 273 \"Lifted off the ground = at risk. One sits grounded — the rest are off the floor, and you can't tell which is slipping.\"; 281 \"The same five moves, in the same order, every week\"; 295 \"… a signal becomes a motion, a deal, proof, and finally a handoff a hire inherits.\"; 336 \"It names the deal nine days before it stalls\"; 338 \"Before it dies\"; 354 \"Every ranked morning compounds. You watch the motion climb out of your head\"; 360 \"Inheritable They could run it with you on call for sanity checks.\"; 371 \"Validated by founders and sales leaders at companies worth $20B+\"; 372 \"25 companies. Seed to Series E. Every founder said the same thing: \\\"I needed this 12 months ago.\\\"\"; 470 \"Northwind opened a General Counsel search — you never typed that. It stalls in 9 days. The one move that clears the most weight:\"; 502 marquee of real company names with valuations (Harvey $8B, Pendo $2.6B, OpenGov $1.8B …).",
+   "problem": "All of landing-b-monday.html's problems (the one move, heat, proof, motion, rails, before it dies, forecast certainty \"stalls in 9 days\", personification \"Reading the board\", retired readiness ladder names, \"sanity checks\") plus: the Living-Mark lifted/grounded metaphor used as the explanation of risk (273: metaphor doing the work of explanation); and a CLAIM block (371-372, 502) that names real companies and valuations as having \"validated\" the product and quotes \"every founder\". Nothing in the repo substantiates it, and publishing real organizations' names as endorsers needs their permission. Rewrite ~55 strings; the endorsement block needs verification or removal regardless. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for ranked, the one move, heat, proof, motion, rails, before it dies, lifted/grounded, plays it back; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. Independently of (a)/(b)/(c), do not show the 'Validated by … $20B+' heading or the company marquee unless the owner confirms each named company agreed to be listed. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-011",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-c-alive.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; links to the live /signup.html, /login.html, /why-antaeus/.",
+   "current": "Same copy as landing-c-inherit.html with animation. Representative lines: 140 \"Build the machine. Not the memory.\"; 149 \"The cost of it living in your head\"; 150 \"A motion only you can run isn't an asset. It's a liability with good months.\"; 155 \"You run the motion. It becomes the machine.\"; 157 \"Capture as you work No data entry. The work itself is the input.\"; 159 \"The kit assembles itself\"; 172 \"Seven sections. It writes them as you work. Composing the kit…\"; 175 \"02 The rails that worked\"; 178 \"Real autopsies, not anecdotes.\"; 210 \"Concept C · alive · it authors itself\".",
+   "problem": "Same as landing-c-inherit.html: aphoristic cadence, retired \"in your head\"/\"motion\"/\"kit\"/\"rails\", internal handoff-section working names instead of shipped titles, personification (\"It writes them as you work\", \"it authors itself\"), and the CLAIM \"No data entry. The work itself is the input.\" which the product contradicts. Rewrite ~35 strings. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for machine vs memory, motion, in your head, kit, rails, autopsies; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-012",
+   "category": "LANG-A",
+   "severity": 3,
+   "file": "signup-a-momentum.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; it links to /signup-c-read.html, /start.html, /login.html. Blocked for preview-cookie visitors because PREVIEW_BLOCKED_PREFIXES contains \"/signup\".",
+   "current": "Moderately saturated copy on a form that does not work. Representative lines: 71 \"You're one step from your first morning.\"; 72 \"Two fields. Then you seed the workspace once — and it reads your motion back to you every morning after.\"; 73 \"Sign up → Seed it → Your morning, ranked\"; 87 \"Run your first morning →\"; 90 \"Not ready? Take the 20-second read → — an honest answer to \\\"could a hire run this?\\\"\"; 96 \"Your workspace is waiting behind one click.\"; 97 \"We sent a link to you@company.com . Open it and you walk straight into seeding your workspace.\" Behavior (lines 105-109): clicking \"Run your first morning →\" only swaps the card and writes the typed email into the confirmation; no account is created and no email is sent (the page loads no Supabase client).",
+   "problem": "Language: internal seeding doctrine (\"seed the workspace\", \"reads your motion back to you\" — CLAUDE.md §12 language note: these are internal metaphors), \"motion\" as catch-all, \"Your morning, ranked\" (ranking with no criterion), personification (\"it reads\"), and \"honest answer\" aimed at the reader (§26). Severity 3 because a visitor past the gate who types a real email and password is told \"We sent a link to <their email>\" when nothing was sent — copy asserting behavior the code does not perform. A rewrite is ~12 strings, but the mock confirmation is the bigger problem. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for seed, motion, ranked, your morning, honest; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. If it stays deployed in any form, the confirmation must not claim an email was sent (e.g. label the card 'Design mockup — no account is created' or wire the form to the real /signup.html flow). OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-013",
+   "category": "LANG-A",
+   "severity": 3,
+   "file": "signup-b-promise.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it; it links to /signup-c-read.html, /start.html, /login.html. Blocked for preview-cookie visitors (\"/signup\" prefix).",
+   "current": "Saturated, and the form is a mock. Representative lines: 86 \"A morning that already knows what's slipping.\"; 87 \"Seed it once. Then every morning it ranks the one deal under the most pressure — and names the move that saves it.\"; 89 \"Your morning · ranked\"; 91 \"stalls in 9 days no dated next step\"; 92 \"HEAT 91\"; 95 \"the motion, made inheritable\"; 107 \"Run your first morning →\"; 110 \"Not signing up yet? Take the 20-second read → — could a hire run your motion tomorrow?\"; 116 \"We sent a link to you@company.com . Open it and you go straight to seeding the workspace above.\" Behavior (lines 125-128): submit only swaps cards; nothing is sent, no account is created.",
+   "problem": "Personification (\"A morning that already knows\"), \"the move that saves it\", \"HEAT\", \"motion\", \"seed\", forecast certainty (\"stalls in 9 days\"), unexplained \"ranked\". Severity 3 for the same reason as signup-a: a real email/password entry produces a false \"We sent a link\" confirmation. ~12 strings to rewrite. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for ranked, the one move, heat, motion, seed; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. If it stays deployed in any form, the confirmation must not claim an email was sent. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-014",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "signup-c-read.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. Linked from signup-a-momentum.html and signup-b-promise.html (both unlinked); its CTA goes to the live /onboarding/?seeding=1. Blocked for preview-cookie visitors (\"/signup\" prefix).",
+   "current": "Saturated, concept depends on retired states. Representative lines: 74 \"Could a hire run your motion tomorrow?\"; 75 \"Most founders are the system — and don't feel it until they hire and it stalls. Take the 20-second read. No signup, no email. Just an honest answer.\"; 96 \"Your read · keep it\"; 112 \"Write down the one move that clears the most weight each morning — so someone else could make it.\"; 113 \"Rank your deals by pressure, not by who's loudest.\"; 116 \"Undated means drifting — and drifting is how deals die quietly.\"; 119 \"You are the system.\" / \"Right now the whole motion lives in your head. … a hire would inherit confusion, not a system.\"; 121 \"Inheritable, with a hand on the wheel.\"; 122 \"Hire-ready.\" / \"The motion would survive you taking two weeks off. Rare — and worth protecting.\"",
+   "problem": "Results use the retired readiness names instead of COPY_STANDARD §17 (Founder-dependent · Partially documented · Usable with founder support · Hire-ready …); \"Rank your deals\" asks the user to rank (disallowed by the disputed-terms rule and owner 2026-11-09); \"the one move\", \"the motion\", \"in your head\", \"your read\" (§26 casual stand-in), \"honest answer\" aimed at the reader, aphorism (\"drifting is how deals die quietly\"). The five-question self-check itself is a legitimate concept that would survive a rewrite (~25 strings: 5 questions, 5 fixes, 4 result states, intro/outro). Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for you are the system, verdict states, motion, in your head, the one move, rank your deals, honest, drifting/die; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-015",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "seeding-flow-front.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Saturated. Representative lines: 96 \"Before the easy part — the honest part\"; 98 \"… the thinking that lives in your head and nowhere else …\"; 99 \"Do it once, and the system reads your motion back to you every morning — which deal is slipping, which move clears the most weight.\"; 117 \"… the system goes and finds the rest.\"; 134 \"Half awake\"; 135 \"It read your list. Here’s what it already sees.\"; 138 \"Your list · ranked by what’s live\"; 169 \"Make it rise up to meet you every morning →\"; 180-182 cards \"It sees what’s happening\" / \"Harder to fool than you are\" / \"Already ahead of you\"; 227 row template \"heat ${a.ht}\".",
+   "problem": "Personification and the awake metaphor as the structure (\"Half awake\", \"it already sees\", \"rise up to meet you\" — COPY_STANDARD §9; CLAUDE.md §4.3 language note: \"rises up to greet\", \"wake up\" are design shorthand, never copy), \"honest\" and \"Harder to fool than you are\" aimed at the reader (§26), \"the motion\", \"which move clears the most weight\", \"heat\", unexplained ranking (\"ranked by what’s live\"). The live onboarding (src/onboarding/seeding/, the default onboarding per src/onboarding/main.tsx:52-56) no longer contains these strings (grep of src/onboarding for \"Half awake\", \"Harder to fool\", \"honest part\", \"rise up to meet you\", \"This asks real work\" returns nothing), so this root file is a stale pre-remediation copy of a design whose canonical banked copy already lives in deliverables/mockups/ (canon §4.3). Serving it now shows a version of onboarding that contradicts the shipped one. A rewrite would duplicate work already done in src/onboarding/seeding (~30 strings). Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for honest, in your head, motion, the one move, heat, half awake, the system sees, ranked, harder to fool; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-016",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "seeding-flow.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Saturated. Representative lines: 7 \"The full seeding flow — doorway to awake\"; 125 \"Before the easy part — the honest part\"; 128 \"Do it once, and the system reads your motion back to you every morning — which deal is slipping, which move clears the most weight.\"; 161-162 \"Half awake\" / \"It read your list. Here’s what it already sees.\"; 175 \"Waking up 0 of 10 in\"; 192 \"… You seeded 10 — you’re one good week from covered, and the system will tell you the moment you slip under.\"; 196-197 \"Awake · your workspace\" / \"This is yours now. It was thinking while you worked.\"; 199 \"The morning · your one move\"; 201 \"Right now this all lives in you . The system can see it, rank it, and catch what’s decaying — but a hire couldn’t run it yet. That climbs as you keep going.\"; 202 \"Over the coming days it’ll ask for your proof , your advisors , and your wins and losses.\"; 313 \"Harder to fool than you are\".",
+   "problem": "Every retired onboarding pattern: personification (\"It was thinking while you worked\", \"can see it, rank it, and catch\"), the awake/waking metaphor, \"your one move\", \"proof\", \"lives in you\", \"the motion\", \"climbs\", reader-aimed \"honest\"/\"Harder to fool than you are\", \"seeded\". CLAIM: \"the system will tell you the moment you slip under\" (no such real-time alert exists in onboarding output; the cadence is the heartbeat/Dashboard). The live onboarding (src/onboarding/seeding/, the default onboarding per src/onboarding/main.tsx:52-56) no longer contains these strings (grep of src/onboarding for \"Half awake\", \"Harder to fool\", \"honest part\", \"rise up to meet you\", \"This asks real work\" returns nothing), so this root file is a stale pre-remediation copy of a design whose canonical banked copy already lives in deliverables/mockups/ (canon §4.3). Serving it now shows a version of onboarding that contradicts the shipped one. ~50 strings. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for honest, in your head, motion, the one move, awake, proof, the system thinks/sees/catches, climbs; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "VARIANT-PAGES-017",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "seeding-flow-deals.html",
+   "line": 1,
+   "generation": "static",
+   "state": "Whole page (design-exploration mockup), reachable by direct URL past the access gate. No served page links to it.",
+   "current": "Moderately saturated. Representative lines: 7 \"Seeding flow — the heavy middle (live deals → diagnosis wakes up)\"; 94 \"The part no software can do for you — and the part that pays you back every morning.\"; 98 \"Waking up 0 of 10 in\"; 108 \"… it isn’t on the internet, it’s in your head: who’s really championing the deal …\"; 119 \"Smallest move: get a name on who signs and a date on the next step\"; 125 \"Move: multi-thread into the CFO’s team before terms land — one departure kills it.\"; 176 \"Ten in. The board just woke up.\"; 180 \"It reads all ten while you sleep…\"; 183 \"Done. The hard part is behind you — and it only had to happen once.\"",
+   "problem": "The per-deal diagnoses are mostly ordinary sales language and the deal-judgment-card concept is sound, but the frame uses the retired awake metaphor and personification (\"The board just woke up\", \"It reads all ten while you sleep\"), \"in your head\", \"Move:\" as the label for the recommended action (migration map: → next step / recommended action), and certainty (\"one departure kills it\"). The live onboarding (src/onboarding/seeding/, the default onboarding per src/onboarding/main.tsx:52-56) no longer contains these strings (grep of src/onboarding for \"Half awake\", \"Harder to fool\", \"honest part\", \"rise up to meet you\", \"This asks real work\" returns nothing), so this root file is a stale pre-remediation copy of a design whose canonical banked copy already lives in deliverables/mockups/ (canon §4.3). Serving it now shows a version of onboarding that contradicts the shipped one. ~15 strings. Deployed via tools/deploy/build-cloudflare-assets.js include list; served only past the pre-beta gate (worker/index.ts: antaeus_gate cookie required, GATE_ENABLED=true in wrangler.jsonc); page carries <meta name=robots noindex>; not in tools/language-remediation/copy-audit.js TARGETS, so the Tier-1 gate never scans it.",
+   "governing": "COPY_STANDARD.md §2, §3, §9, §10, §17, §26; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows for in your head, waking up, awake, the move, slipping, board woke up; CLAUDE.md Part III §13 (proof/earned bans); comprehension principle",
+   "proposed": "(b) Stop deploying it: remove the filename from the include array in tools/deploy/build-cloudflare-assets.js and keep the file in the repo as a design record. Reasons: nothing in the app or public pages links to it, it is a superseded exploration, and a faithful rewrite would change most of its copy without any user benefit. If the owner instead wants it kept viewable, (c) is acceptable only with a visible 'Design exploration — not product copy' banner; (a) is warranted only if this concept is promoted to a live page. OWNER DECISION: which of (a)/(b)/(c) applies to the 17 variant pages as a group.",
+   "testsAffected": [],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": [
+  "No walkthrough text exists for this area; all evidence is from reading page source, not from rendering. Animated states (timed setTimeout sequences) were read from script strings, not observed.",
+  "Preview-lane reachability inferred from worker/index.ts: PREVIEW_BLOCKED_PREFIXES includes \"/signup\", which also blocks /signup-a-momentum.html, /signup-b-promise.html, /signup-c-read.html for preview visitors; the other 14 pages are reachable by a preview-cookie visitor. Not verified against a deployed worker.",
+  "Owner decision (all 17 pages): rewrite vs stop deploying vs leave as labeled artifact. CLAUDE.md 2026-11-09 session log already records \"Left on purpose: the 17 unlinked design-variant pages … rewrite whichever one is promoted to a live page\"."
+ ]
+}

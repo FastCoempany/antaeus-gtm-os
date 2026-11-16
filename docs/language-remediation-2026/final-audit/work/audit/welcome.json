@@ -1,0 +1,1106 @@
+{
+ "area": "welcome",
+ "coverage": [
+  {
+   "surface": "Welcome default screen, first visit, enterprise demo book",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/welcome/v4/WelcomeV4.tsx",
+    "src/welcome/v4/lib/landing.ts",
+    "src/welcome/v4/state.ts",
+    "src/welcome/v4/welcome-v4.css"
+   ],
+   "note": "Read the whole walkthrough slice (corpus/welcome.txt — one state, 'The room at rest') against source. Batch 01 Welcome order checked item by item: all nine items render in order (setup state, counts sentence, 'Highest-priority action', the action, 'Ranked first. Reasons: …', 'Changes since your last visit', totals, 'OPEN WORKSPACE MAP · G', 'RECENT ACTIVITY'). None of the do-not-use words (awake, first morning, dividend, system's pick, morning door, what the system saw) appears in src/welcome outside test files. Also re-ran the same state from the real modules in a vitest probe kept outside the repo; output matched the walkthrough."
+  },
+  {
+   "surface": "Welcome default screen, return visit (second and later visits)",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/v4/lib/landing.ts",
+    "src/welcome/v4/WelcomeV4.tsx"
+   ],
+   "note": "Not in the walkthrough. Executed buildLanding() and rendered WelcomeV4 after the visit marker was set, using the enterprise seed data, in an out-of-repo vitest probe. Text quoted in findings comes from that run."
+  },
+  {
+   "surface": "Welcome default screen, empty workspace (first and return visit)",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/v4/lib/landing.ts",
+    "src/welcome/v4/WelcomeV4.tsx"
+   ],
+   "note": "Not in the walkthrough. Executed and rendered in the probe with empty storage."
+  },
+  {
+   "surface": "Welcome default screen, other data states: a deal ranked first, one open deal plus a saved ICP, accounts with no signals, SMB demo book",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/v4/lib/landing.ts",
+    "src/welcome/lib/handoff.ts",
+    "src/dashboard/lib/command-intelligence.ts",
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/snapshot-aggregator.ts",
+    "src/dashboard/lib/snapshot-warmup.ts",
+    "src/dashboard/lib/signal-profile.ts"
+   ],
+   "note": "Executed in the probe: all 11 ranked recommendations for each demo book with their reason sentences and the Welcome link rewrite; a deal-led workspace; a workspace with a saved ICP and one open deal; a single account without signals; the 260-character reason cap. The engine's sync-warning item and its `primary` fallback are never produced by the aggregator, so those two branches were read but cannot render on Welcome."
+  },
+  {
+   "surface": "Welcome previous design-system screen (?v4=0, or room_welcome_v4_off)",
+   "generation": "ds",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/ds/WelcomeDS.tsx",
+    "src/welcome/ds/components/ActionsObject.tsx",
+    "src/welcome/ds/lib/adapters.ts",
+    "src/welcome/ds/ds-components.test.tsx",
+    "src/components/navigation.tsx"
+   ],
+   "note": "Not in the walkthrough. Rendered in the probe for five states (empty, ICP only, account without ICP, ICP plus account, enterprise demo) and read every text node, aria-label and title. Shared chrome inside it (Wayfinder help panel, schedule float, palette, current-analysis float) was read only where Welcome supplies the text."
+  },
+  {
+   "surface": "Welcome oldest screen (?v4=0&ds=0, or room_welcome_legacy)",
+   "generation": "legacy",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/Welcome.tsx",
+    "src/welcome/components/Hero.tsx",
+    "src/welcome/components/LaunchFolio.tsx",
+    "src/welcome/components/MilestoneLadder.tsx",
+    "src/welcome/components/ActionStack.tsx",
+    "src/welcome/welcome.css",
+    "tests/e2e/program-6-pr3-welcome-refacing-walk.spec.ts"
+   ],
+   "note": "Not in the walkthrough. Rendered in the probe for the same five states. This screen and the design-system one use a setup-milestone design, not the Batch 01 nine-item order; the order was written for the default screen and is not applied to them here."
+  },
+  {
+   "surface": "Shared Welcome logic: milestone and action builder, storage readers, handoff links, time-since-setup stamp, state",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/lib/engine.ts",
+    "src/welcome/lib/loader.ts",
+    "src/welcome/lib/handoff.ts",
+    "src/welcome/lib/stamp.ts",
+    "src/welcome/lib/types.ts",
+    "src/welcome/state.ts",
+    "src/welcome/lib/engine.test.ts",
+    "src/welcome/lib/handoff.test.ts",
+    "src/welcome/lib/loader.test.ts",
+    "src/welcome/lib/stamp.test.ts",
+    "src/welcome/state.test.ts",
+    "src/welcome/v4/lib/landing.test.ts"
+   ],
+   "note": "Read in full. `npx vitest run src/welcome` passes (7 files, 75 tests) on the current head. Compared engine.ts against commit 6d11561 to separate strings the remediation changed from strings it left."
+  },
+  {
+   "surface": "Routing, flags, entry page, old-path redirect",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/main.tsx",
+    "src/welcome/index.html",
+    "app/welcome/index.html"
+   ],
+   "note": "Screen selection (?v4, ?ds, room_welcome_v4_off, room_welcome_legacy) read in source; flags were not toggled in a browser. No user-visible error state exists: storage read failures are reported and fall through to the empty state."
+  },
+  {
+   "surface": "Handoffs: links out of Welcome and arrivals into it",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/welcome/lib/handoff.ts",
+    "src/dashboard/lib/handoff.ts",
+    "src/deal-workspace/main.tsx",
+    "src/onboarding/main.tsx",
+    "src/lib/back-button.tsx",
+    "src/components/navigation.tsx"
+   ],
+   "note": "Outbound hrefs executed in the probe for every ranked recommendation. The arrival from the onboarding cross-device check (src/onboarding/main.tsx:90-106) was read, not executed."
+  },
+  {
+   "surface": "Welcome capability map and canon section 4.1",
+   "generation": "doctrine",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+    "CLAUDE.md"
+   ],
+   "note": "Capability map read in full (all visible text extracted); every doctrine record DOC-000 to DOC-015 matched to its current sentence. CLAUDE.md lines 168-177 read."
+  },
+  {
+   "surface": "Spot-check of records matched automatically as verbatim",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/welcome/v4/WelcomeV4.tsx",
+    "src/welcome/v4/lib/landing.ts"
+   ],
+   "note": "Checked all 16: 'CHANGES SINCE YOUR LAST VISIT' (INV-0019, B1-X-013, HS-019 — WelcomeV4.tsx:72), 'workspace setup complete' (INV-0120, B1-X-008, HS-120 — WelcomeV4.tsx:21), 'SETUP COMPLETE' (INV-0125, B1-X-009, HS-125 — landing.ts:176), 'HIGHEST-PRIORITY ACTION' (INV-0225, B1-X-011 — WelcomeV4.tsx:40), 'Antaeus analyzed the active deals and watched accounts in this workspace.' (INV-0254, B1-X-010 — landing.ts:182), 'Your accounts, active deals, and pipeline are available on the Dashboard.' (INV-1444, B1-X-014 — WelcomeV4.tsx:108), and the HS-020 sentence (landing.ts:189). All are rendered as approved. Three carry accuracy problems filed as findings: the 'changes' label (WELCOME-002), the number inside the HS-020 sentence (WELCOME-001) and its 'buyer activity' (WELCOME-012), and the headline on an empty workspace (WELCOME-011). The `watch` list for this area is empty."
+  },
+  {
+   "surface": "Tooling that covers Welcome: copy audit report, walkthrough builder, end-to-end tests",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "tools/language-remediation/copy-audit.js",
+    "artifacts/language-remediation/copy-audit.json",
+    "tools/preview/build-transcript.js",
+    "tests/e2e/program-6-pr3-welcome-refacing-walk.spec.ts",
+    "tests/e2e/smoke.spec.ts"
+   ],
+   "note": "Read the existing copy-audit report rows for src/welcome (51 rows, all tests, comments or identifiers) without re-running the audit, because it writes into artifacts/. Did not run Playwright."
+  },
+  {
+   "surface": "Shared chrome shown on the Welcome page (workspace map, recent-activity panel)",
+   "generation": "shared",
+   "how": "not-verified",
+   "files": [
+    "src/lib/ground/GroundLine.tsx",
+    "src/lib/edge/LiveEdge.tsx"
+   ],
+   "note": "Rendered text appears in the Welcome walkthrough slice, but these components belong to the shared-chrome reviewer and were not audited here."
+  },
+  {
+   "surface": "Signed-in cloud workspace (new device, cleared site data)",
+   "generation": "v4",
+   "how": "not-verified",
+   "files": [
+    "src/welcome/v4/state.ts",
+    "src/welcome/lib/loader.ts"
+   ],
+   "note": "Needs an authenticated Supabase session; behaviour inferred from source (WELCOME-015)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "WELCOME-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/welcome/lib/loader.ts",
+   "line": 101,
+   "generation": "shared",
+   "state": "Default Welcome at rest, both demo books and any workspace that has closed deals. Walkthrough: 'The room at rest'.",
+   "current": "\"This workspace contains 17 active deals and 29 watched accounts.\" and, in the totals line, \"17 active deals\" beside \"$3.8m open pipeline\" (enterprise book; the SMB book shows 21). Deal Workspace shows \"12 live · $3.8M pipeline\".",
+   "problem": "`loadCounts().deals` is `dealRows.length`: every row in `gtmos_deal_workspaces`, closed-won and closed-lost included (enterprise book 12 open + 3 won + 2 lost = 17; SMB 12 open + 9 closed = 21). Welcome labels that total \"active deals\" (src/welcome/v4/lib/landing.ts:189 and :200, WelcomeV4.tsx:96) and prints it next to a pipeline figure that covers only the 12 open deals. The number disagrees with Deal Workspace, which owns it.",
+   "governing": "AUDIT_BRIEF.md §4, owner decision \"Numbers shown in more than one area come from the area that owns them\" (docs/language-remediation-2026/18_CERTIFICATION.md, \"Numbers agree between rooms\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[20] (the approved sentence says \"active deals\"); COPY_STANDARD.md §21.",
+   "proposed": "In `buildLanding` (src/welcome/v4/lib/landing.ts) take the open-deal count from the Deal Workspace snapshot the function already reads for pipeline value: `active_count` in `gtmos_deal_workspace_health` (written at src/deal-workspace/lib/health-snapshot.ts:69 and filled by `warmUpMissingSnapshots` on landing.ts:137). When the snapshot has no `active_count`, count the rows of `gtmos_deal_workspaces` whose `stage` is not `closed-won` or `closed-lost`. Use that value in the sentence on line 189 and in `operating.deals` on line 200. Keep `loadCounts().deals` (all rows) for the `nothingSeeded` test on line 184 and for the \"First real deal created\" milestone on the older screens. Enterprise book result: \"This workspace contains 12 active deals and 29 watched accounts.\" and \"12 active deals\".",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts — \"reports the operating line from counts + pipeline value\" stays at 2 (both fixture deals are open); add a case with a closed deal"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-002",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/welcome/v4/WelcomeV4.tsx",
+   "line": 72,
+   "generation": "v4",
+   "state": "Default Welcome whenever more than one recommendation exists, including the first visit. Walkthrough: 'The room at rest'.",
+   "current": "\"CHANGES SINCE YOUR LAST VISIT\" above three rows such as \"Outbound to OpenAI — Ranked here. Reasons: account priority score 50 out of 99 and multiple recent signals are recorded\" · \"now\".",
+   "problem": "The rows are the second to fourth ranked recommendations (`summary.ranked.filter(o => o.id !== spotlight?.id).slice(0, 3)`, src/welcome/v4/lib/landing.ts:166). Nothing is compared with an earlier visit: the only trace of a visit is the `gtmos_welcome_seen` timestamp. The section also renders on the first visit, when there is no last visit. A new user reads three recommendations as three things that have just changed.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); AUDIT_BRIEF.md §5 Function (\"copy that now claims something the code does not do\"). The label is the approved replacement for \"WHAT THE SYSTEM SAW WHILE YOU WERE AWAY\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, exact-replacement table, and Welcome order item 6), so this is an accuracy problem with approved text, not a wording preference.",
+   "proposed": "Label the section for what it lists: \"Next recommended actions\" (WelcomeV4.tsx:72). Needs the owner's decision: Batch 01's Welcome order asks for a \"Changes since your last visit\" section, and keeping that label truthfully means new behaviour — save deal stages, next-step dates and account signal counts at each visit, list the differences on the next visit, and hide the section on the first visit.",
+   "testsAffected": [
+    "none in src or tests; tools/language-remediation/reconcile-original.js will no longer match INV-0019, B1-X-013 and HS-019 verbatim and those records will need a written disposition"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-003",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 264,
+   "generation": "shared",
+   "state": "Welcome default screen and the Dashboard, in any workspace with at least one open deal. On Welcome it shows when the item ranks in the first four. Executed: a saved ICP, one open deal, no watched accounts — it is the highest-priority action. Both demo books carry it at position 10 of the Dashboard's 11 recommendations.",
+   "current": "\"Save an ideal customer profile this week.\" with \"Ranked first. Reasons: no saved ICP yet and deals depend on ICP. You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.\" — rendered while `gtmos_icp_analytics` holds a saved ICP and no signals exist.",
+   "problem": "`aggregateEngineInput` builds `shellContext` as `{ deals }` only (lines 264-270). `buildCommandObjects` adds the ICP item when `!icps && (accounts || signals || deals)` (src/dashboard/lib/command-intelligence.ts:370-377). `icps` is never supplied, so the item is created for every workspace with an open deal, and its text states two things the code did not check: that no ICP is saved and that signals exist.",
+   "governing": "COPY_STANDARD.md §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (generated recommendations must rest on recorded inputs); AUDIT_BRIEF.md §5 Function (recommendation selection).",
+   "proposed": "In `aggregateEngineInput`, supply the counts the engine already reads: `icps` = number of entries in `gtmos_icp_analytics.icps`; `accounts` and `signals` = `accountCount` and `signalCount` from the Signal Console health summary; keep `deals`. Change the ICP item's text (command-intelligence.ts:269-270) to the checked fact only: \"No ideal customer profile is saved. Save one in ICP Studio so account scoring, prospecting, and outreach use the same targeting criteria.\" Add a regression test: a workspace with a saved ICP and an open deal produces no ICP item.",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts (add the saved-ICP case)",
+    "src/dashboard/lib/command-intelligence.test.ts:85-92 passes an explicit shellContext and is unaffected"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-004",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 75,
+   "generation": "shared",
+   "state": "Welcome default screen, highest-priority action, when the top watched account has no recorded signals. Executed with one watched account and an empty signal list — the state after an account is added by name.",
+   "current": "\"Outbound to Ramp\" — \"Ranked first. Reasons: account signal context is available and the source workspace has enough context to proceed.\"",
+   "problem": "Neither reason comes from account data. \"account signal context is available\" is added for every outbound recommendation (`family === \"opportunity\"`). \"the source workspace has enough context to proceed\" is true whenever the recommendation has two buttons, because `roomReadiness` defaults to `countActions(card)` (src/dashboard/lib/signal-profile.ts:132). With zero signals the page tells the user that signal context exists. \"The source workspace\" is also internal vocabulary a new user cannot place.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Welcome order item 5 (\"Why this is ranked first with factual inputs\"); COPY_STANDARD.md §7 and §21.",
+   "proposed": "In `buildMoveReasons`: (1) line 75 — add \"signals are recorded for this account\" only when `signalCount`, `recentCount` or `highConfidenceCount` is above zero, and pass `signalCount` in the `rankingSignals` written at src/dashboard/lib/snapshot-aggregator.ts:195-200 (the `hot_accounts` rows already carry it); (2) line 77 — delete the \"the source workspace has enough context to proceed\" reason, which counts buttons; (3) when an outbound recommendation has no data-backed reason, use \"this is a watched account with no recorded signals\". Result for the executed case: \"Ranked first. Reasons: this is a watched account with no recorded signals.\"",
+   "testsAffected": [
+    "none found that assert these reason strings"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-005",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 115,
+   "generation": "v4",
+   "state": "Default Welcome, the three rows under the highest-priority action. Walkthrough: 'The room at rest'.",
+   "current": "\"Outbound to OpenAI — Ranked here. Reasons: account priority score 50 out of 99 and multiple recent signals are recorded\"; for lower-confidence items \"Northwind — Shown here. Reasons: prospect\".",
+   "problem": "`sawFromObject` strips `/^Ranked here because\\s*/` and `/^Visible because\\s*/`, but the Dashboard queue sentence now begins \"Ranked here. Reasons: \" or \"Shown here. Reasons: \" (src/dashboard/lib/command-intelligence.ts:442-443). The strip no longer matches, so the queue lead-in leaks into Welcome, where \"here\" points at nothing. The approved shape for these rows is compact metadata.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[101], records[102], records[103] / ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md rows \"Outbound to OpenAI — heat 50 and fresh signals\" → \"Outbound to OpenAI · priority score 50 · recent signals\"; COPY_STANDARD.md §8 (referent) and §18.",
+   "proposed": "Build the row from the reasons already on the object instead of trimming a sentence: `const reasons = (o.scoreReasons ?? []).slice(0, 2); rest = reasons.length ? \"· \" + reasons.join(\" · \") : \"\";` Renders \"Outbound to OpenAI · account priority score 50 out of 99 · multiple recent signals are recorded\".",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts has no assertion on row text; add one"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-006",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 121,
+   "generation": "v4",
+   "state": "Default Welcome, right-hand end of each row under the highest-priority action. Walkthrough: 'The room at rest'.",
+   "current": "\"now\" on every row.",
+   "problem": "`time` falls back to the literal \"now\" unless one of the item's meta strings mentions a time unit. The items' meta strings are \"account priority N out of 99\", a stage id, or tags such as \"missing ICP\"; none mentions a time, so every row is stamped \"now\" although no event time is known. If a meta string does match, the code keeps its first six characters (\"Stale \" from \"Stale 21 days\").",
+   "governing": "COPY_STANDARD.md §21 (\"Do not make the copy more precise than the underlying product evidence permits\").",
+   "proposed": "Remove the time column: drop `time` from `SawRow` (landing.ts:26-31, 116, 121) and the `<span class=\"wl4-tm\">` at src/welcome/v4/WelcomeV4.tsx:81. A ranked recommendation has no event time.",
+   "testsAffected": [
+    "none assert it"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-007",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/welcome/lib/handoff.ts",
+   "line": 111,
+   "generation": "shared",
+   "state": "Default Welcome when the highest-priority item is a deal; button \"Open the deal\". Executed with a deal-led workspace and for the five deal items in each demo book.",
+   "current": "The button links to `/deal-workspace/?returnTo=%2Fwelcome%2F&returnLabel=Back+to+setup&focusRoom=Deal+Workspace&fromMode=threshold&fromSurface=welcome`. The engine's link carried `focusObject=Nordstrom&deal=deal_e_nordstrom`.",
+   "problem": "`hrefForActionDestination` replaces any `/deal-workspace/` link with `hrefToDealWorkspace()`, discarding the deal id and `focusObject`. Deal Workspace opens a deal only when `focusObject` is present (src/deal-workspace/main.tsx:125-139), so the button named \"Open the deal\" opens the Deal Workspace default view instead.",
+   "governing": "AUDIT_BRIEF.md §5 Function (URL params `focusObject`, cross-area handoffs); CLAUDE.md Part I §2 (continuity params: \"Do not break them\"); deliverables/audit/continuity-params-2026-05.md.",
+   "proposed": "Keep the deal on the link: `case \"/deal-workspace/\": { const deal = incoming.get(\"deal\")?.trim(); const focus = incoming.get(\"focusObject\")?.trim(); return deal || focus ? buildWelcomeHref({ href: \"/deal-workspace/\", roomLabel: \"Deal Workspace\", ...(focus ? { focusObject: focus } : {}), ...(deal ? { extra: { deal } } : {}) }) : hrefToDealWorkspace(); }`",
+   "testsAffected": [
+    "src/welcome/lib/handoff.test.ts (add a case for a deal link; existing cases keep passing)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-008",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 155,
+   "generation": "v4",
+   "state": "Default Welcome when a deal is the highest-priority item or appears in the rows. Executed; in the demo books the deal items sit at Dashboard positions 6-9 and 11.",
+   "current": "Title \"Northwind\"; reason \"Ranked first. Reasons: risk score 100 out of 100 and prospect. 21 days since last recorded activity\"; button \"Open the deal\". Row: \"Northwind — Shown here. Reasons: prospect\". Demo books: \"Ranked first. Reasons: risk score 100 out of 100 and evaluation.\"",
+   "problem": "Under \"HIGHEST-PRIORITY ACTION\" the action is only a company name. The second \"reason\" is the deal's stage id (\"prospect\", \"evaluation\"), because `buildRiskReasons` appends card meta (src/dashboard/lib/scoring.ts:40-46) and the aggregator puts the stage id there (src/dashboard/lib/snapshot-aggregator.ts:113). The Deal Workspace cause is then appended as a fragment with no full stop.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Welcome order items 4 and 5 (\"The action itself\"; \"Why this is ranked first with factual inputs\"); COPY_STANDARD.md §6 and §18.",
+   "proposed": "(a) landing.ts:155 and :119 — for items whose `commandFamily` is \"risk\", use `Review the ${title} deal` as the title and row lead. (b) src/dashboard/lib/scoring.ts:40-46 — skip meta entries that are stage ids, and add the Deal Workspace cause carried on the card (`copy`, which the engine fills from the aggregator's `subtitle`; first letter lower-cased) as the second reason. (c) landing.ts:150 — do not append `spotlight.copy` for risk items once (b) carries the cause. Result: \"Review the Northwind deal\" — \"Ranked first. Reasons: risk score 100 out of 100 and 21 days since last recorded activity.\"",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts:94-102 (asserts only that a title exists)",
+    "src/dashboard/lib/scoring tests, if any assert stage ids as reasons — none found"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-009",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 156,
+   "generation": "v4",
+   "state": "Default Welcome, reason text under the highest-priority action, whenever the combined reason is longer than 260 characters. Executed: open deal, no saved ICP, readiness summary marking targeting as weak.",
+   "current": "\"Ranked first. Reasons: your targeting is below the readiness bar and no saved ICP yet. You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can ta\"",
+   "problem": "`reasonBits.join(\" \").slice(0, 260)` cuts the text at 260 characters, mid-word and without an ellipsis.",
+   "governing": "comprehension principle (AUDIT_BRIEF.md §1): the reader must not have to reconstruct a sentence.",
+   "proposed": "Remove `.slice(0, 260)`; the block wraps. If a cap is wanted, cut at the last sentence end before the limit.",
+   "testsAffected": [
+    "none assert the cap"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-010",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 180,
+   "generation": "v4",
+   "state": "Default Welcome on any return visit (the visit marker `gtmos_welcome_seen` exists). Executed with the enterprise data and with an empty workspace.",
+   "current": "Headline \"Your accounts and deals have been updated since your last visit.\" Sub \"Antaeus analyzed current account signals, buyer activity, and recorded next steps · Luca Industries. The current recommendation is ranked from that workspace data.\" With no recommendation: headline \"No new priority action is available right now.\" and the same sub.",
+   "problem": "(1) The headline appears on every return visit that has a recommendation, including a reload seconds later; nothing checks whether an account or deal changed. (2) With no recommendation the sub still refers to \"The current recommendation\", and on an empty workspace it says signals, activity and next steps were analyzed. (3) The company name is attached with a middle dot (\" · Luca Industries.\"), which leaves its relation to the sentence unstated and doubles the full stop for names that end in one (\"Acme, Inc..\").",
+   "governing": "COPY_STANDARD.md §21 and §18; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md (\"system saw\" → \"State the result rather than narrating system perception\").",
+   "proposed": "landing.ts:178-189. Headline, return visit with a recommendation: \"Here is today's recommended starting point.\" Headline, return visit without one: \"No recommended action is ranked right now.\" Sub with a recommendation: \"The recommendation is ranked from the account signals, deal activity, and next steps recorded in the Luca Industries workspace.\" (no company name: \"…recorded in this workspace.\"). Sub without a recommendation but with data: \"12 active deals and 29 watched accounts are recorded in this workspace.\" Sub with nothing recorded: the empty-workspace text in WELCOME-011.",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts:81-92 (asserts the two headlines differ — still true)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-011",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 182,
+   "generation": "v4",
+   "state": "Default Welcome, first visit, workspace with no deals and no watched accounts. Executed and rendered.",
+   "current": "\"SETUP COMPLETE\" / \"Antaeus analyzed the active deals and watched accounts in this workspace.\" / \"The workspace is ready. Add deals and watched accounts to generate ranked recommendations, deal-risk assessments, and account-priority analysis.\" / \"Open Dashboard →\" / \"0 accounts watched · 0 active deals\".",
+   "problem": "The headline says deals and accounts were analyzed when there are none; it is not conditioned on `nothingSeeded` (line 184). The sub tells the user to add deals and watched accounts but names no place to do it, and the only link opens the Dashboard. \"Setup complete\" also shows when no onboarding record exists, because the first-visit state only tests the visit marker.",
+   "governing": "COPY_STANDARD.md §1 item 4 (what the user can do next) and §21; AUDIT_BRIEF.md §1 (\"what to do next, and where to do it\").",
+   "proposed": "When `counts.deals === 0 && counts.accounts === 0`, on first and return visits: headline \"Add deals and watched accounts to get recommendations.\"; sub \"Add deals in Deal Workspace and watched accounts in Signal Console. Antaeus then ranks recommended actions, assesses deal risk, and scores account priority from them.\" In the block at src/welcome/v4/WelcomeV4.tsx:54-66 add two links beside \"Open Dashboard →\": \"Add a deal\" (`hrefForActionDestination(\"/deal-workspace/\")`) and \"Add an account\" (`hrefForActionDestination(\"/signal-console/\")`).",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts:135-146 (asserts the sub has no \"0 deals\" / \"0 accounts\" — still true)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-012",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 189,
+   "generation": "v4",
+   "state": "Default Welcome, first visit, the sentence under the headline. Walkthrough: 'The room at rest'. The same phrase is in the return-visit sub on line 186.",
+   "current": "\"Antaeus analyzed the active deals and watched accounts in this workspace.\" followed by \"This workspace contains 17 active deals and 29 watched accounts. Antaeus analyzed recent account signals, buyer activity, and recorded next steps to rank the current recommendations.\"",
+   "problem": "Buyer activity is not an input to the ranking. The inputs are account signals (priority score, recent and high-confidence signal counts), the Deal Workspace risk score (days since the deal record was last updated, next-step status, close-date timing) and the readiness and quota summaries; the engine's `hasReplies` input is never set by the aggregator. Deal Workspace calls the same measure \"recorded activity\". Placed together, the two approved sentences also say \"Antaeus analyzed\" twice in three sentences.",
+   "governing": "COPY_STANDARD.md §21 (\"If the product knows only that there has been no logged activity, say that\"). Both sentences are approved replacements (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[20]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact-replacement table), so the change needs the owner's sign-off; the accuracy problem is the stated reason for departing from them.",
+   "proposed": "Keep the headline. Sub: \"This workspace contains 12 active deals and 29 watched accounts. The current recommendations are ranked from recent account signals, recorded deal activity, and next steps.\" (count as in WELCOME-001).",
+   "testsAffected": [
+    "none assert the sentence; tools/language-remediation/reconcile-original.js will stop matching HS-020 verbatim"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-013",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/welcome/v4/WelcomeV4.tsx",
+   "line": 85,
+   "generation": "v4",
+   "state": "Default Welcome: link under the rows (line 85) and the secondary link beside the main button (line 49). Walkthrough: 'The room at rest'.",
+   "current": "\"Review all current status →\" and \"See current sales status\". The closing line and the empty-state button name the same destination a third and fourth way (\"…are available on the Dashboard.\", \"Open Dashboard →\").",
+   "problem": "Both links open the Dashboard but neither says so, and \"all current status\" does not say status of what. The strings they replaced named the destination and were marked as plain in the original inventory (\"See all of it on the Dashboard →\", \"or see the full Dashboard\").",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md, CTA standard (\"Buttons must predict the resulting action\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[2513] and records[1223] (retained strings); owner requirement 10 in ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md (overcorrection).",
+   "proposed": "Line 49: \"Open Dashboard\". Line 85: \"See all recommendations on the Dashboard →\".",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-014",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 152,
+   "generation": "shared",
+   "state": "Default Welcome and Dashboard, enterprise demo book. Walkthrough: 'The room at rest'.",
+   "current": "\"HIGHEST-PRIORITY ACTION\" — \"Outbound to Boeing\" — \"Compose outbound\", with the rows \"Outbound to OpenAI\", \"Outbound to Chipotle\", \"Outbound to Starbucks\". In the seed, Boeing is an open $480k deal in negotiation, OpenAI and Starbucks are open deals, and Chipotle is a closed-won customer. The activity panel on the same page lists \"Outreach recorded for Boeing.\" one hour ago.",
+   "problem": "`signalSnapshotToMoveCards` turns each of the five highest-priority watched accounts into an \"Outbound to {account}\" recommendation without checking for an open deal, a won deal or recent outreach. Signal Console's account cards on the older screens switch their main button to Deal Workspace when the account has an active deal (src/signal-console/lib/execution-context.ts:129). The reason shown is accurate to the scoring, but the recommended action does not take the deal into account.",
+   "governing": "Owner requirement 10, \"recommendation/logic mismatch\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md); AUDIT_BRIEF.md §5 Function (recommendation selection). Not part of the approved behavioural changes in AUDIT_BRIEF.md §4.",
+   "proposed": "Needs the owner's decision, because it changes which recommendations appear. Option A: in `signalSnapshotToMoveCards`, look the account up in `gtmos_deal_workspaces`; when it has an open deal, title the item \"Review new signals for {account}\" with \"Check the signals\" as the main button, and leave outbound for accounts without an open deal. Option B: keep the behaviour and add the deal to the reason (\"…and an open deal is recorded at the negotiation stage\").",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts (move-card titles)",
+    "src/welcome/v4/lib/landing.test.ts (none assert titles)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-015",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/welcome/v4/state.ts",
+   "line": 18,
+   "generation": "v4",
+   "state": "Signed-in user with a completed workspace who opens Welcome on a new device or after clearing site data. src/onboarding/main.tsx:90-106 sends exactly that user to /welcome/. Read from source; not executed (needs an authenticated cloud session).",
+   "current": "Welcome builds its page from this browser's localStorage only (`gtmos_deal_workspaces`, `gtmos_sc_v4`, the two health snapshots). With those empty it renders \"The workspace is ready. Add deals and watched accounts to generate ranked recommendations, deal-risk assessments, and account-priority analysis.\" and \"0 accounts watched · 0 active deals\".",
+   "problem": "The deals and accounts exist in the cloud tables. The local copies are written only after Deal Workspace and Signal Console have been opened on this device, so the user is told to add data they already have.",
+   "governing": "AUDIT_BRIEF.md §5 Function (persistence, cloud tables, \"copy that now claims something the code does not do\").",
+   "proposed": "In `initWelcomeV4`, when the first `buildLanding()` finds no deals and no accounts and the session is not the demo, read the workspace's deals and watched accounts through the data client (the reads behind `loadDeals` in src/deal-workspace/lib/persistence.ts:81 and `bootCloudPersistence` in src/signal-console/lib/cloud-persistence.ts:82), write them to the local copies (`mirrorToLegacyStorage`, `saveAccounts`), then rebuild `landing.value`, keeping the first-visit/return-visit state already captured. While loading, show \"Loading your workspace…\" instead of the empty-workspace text.",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts (new async path needs its own test)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-016",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/welcome/components/LaunchFolio.tsx",
+   "line": 52,
+   "generation": "legacy",
+   "state": "Oldest Welcome screen (?v4=0&ds=0 or room_welcome_legacy), the four-cell panel under the headline, all workspace states. Rendered in the probe.",
+   "current": "aria-label \"Launch folio\"; \"LAUNCH FOLIO · COMMISSION LOCK\"; \"Open the live mandate.\"; \"The file is commissioned. One cell stays locked until the next anchor lands.\"; aria-label \"Mandate map\"; cell label \"Return behavior\"; values and notes \"Fresh workspace\", \"Onboarding is finished. The workspace is waiting for the first anchor.\", \"4 of 4 anchors live.\", \"The workspace is operating. Daily rhythm runs from the Dashboard.\", \"Nothing — the file is live.\", \"Every anchor has landed. Depth is the next thing, not setup.\", \"The daily rhythm.\", \"Brief / Spotlight / Queue carry the workspace from here.\", \"Sharper signals + cleaner outbound.\", \"The Dashboard brief sharpens around the first anchor.\", \"Re-enter through the Dashboard.\", \"The app knows enough to rank what to work on.\", \"The brief sharpens once the first anchor is live.\", \"Each anchor lights up another part of the workspace.\"",
+   "problem": "The panel is written in a private vocabulary — folio, commission lock, mandate, file, anchor, lights up, sharpens, daily rhythm — that a new user has to translate into \"setup milestones\" and \"what to do next\". The kicker is the name of a design variant (\"Launch Folio · Commission Lock\") used as product copy. \"Brief / Spotlight / Queue\" names Dashboard modes the default Dashboard no longer has. \"The app knows enough\" personifies the software. The remediation changed only the word \"room\" in this file (commit a01634f) because the older screens were out of scope on 2026-11-04 (docs/language-remediation-2026/18_CERTIFICATION.md lines 4-6); they are in scope now (AUDIT_BRIEF.md §5).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `sharp`, `landing`, `awake` and the governing rule; COPY_STANDARD.md §3, §5 (private-ontology cascade), §9; CLAUDE.md Part II §5 hard reject \"internal architecture language as visible product copy\".",
+   "proposed": "LaunchFolio.tsx — :50 \"Setup summary\"; :52 \"SETUP SUMMARY\"; :53 \"Where setup stands and what comes next.\"; :55-56 \"The highlighted cell shows the setup milestone that is still missing.\"; :59 \"Setup summary details\"; :77 \"Where to continue\"; :115 \"New workspace\"; :118 \"No setup milestone is complete.\"; :122 `${completed} of ${total} setup milestones complete.`; :124 \"Setup is complete. Use the Dashboard for daily priorities.\"; :125 \"The rest of the app already uses what you have added.\"; :136 \"Nothing. All four setup milestones are complete.\"; :137 \"Next, add detail to accounts and deals as you work.\"; :159 \"Daily priorities.\"; :160 \"The Dashboard shows the highest-priority recommended action each day.\"; :165 \"Account signals and outreach.\"; :166 \"Dashboard recommendations start once the first setup milestone is complete.\"; :181 and :187 \"Continue in the Dashboard.\"; :182 \"The workspace has enough data to rank recommended actions.\"; :188 \"Recommendations start once the first setup milestone is complete.\"; :193 `Continue in ${roomLabel}.`; :194 \"Each setup milestone adds data that other areas use.\" Alternative for the owner: retire this screen and send `room_welcome_legacy` / `?ds=0` to the design-system screen.",
+   "testsAffected": [
+    "tests/e2e/program-6-pr3-welcome-refacing-walk.spec.ts:52-53, 56, 65-68, 133-135 (assert \"LAUNCH FOLIO\", \"COMMISSION LOCK\", \"open the live mandate\", the four cell labels, /nothing|file is live/)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-017",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/welcome/components/MilestoneLadder.tsx",
+   "line": 16,
+   "generation": "legacy",
+   "state": "Oldest Welcome screen: milestone list, headline chips and progress bar. Rendered in the probe.",
+   "current": "MilestoneLadder.tsx: aria-label \"Activation anchors\"; \"ANCHORS\"; \"What week one is asking for.\"; \"Each anchor lights up another part of the workspace. Hit them in order; the system gets sharper as you go.\"; status \"Live\". Hero.tsx: aria-label \"Activation context\" (:51); \"Anchors live\" (:61); chip \"2/4 anchors live\" (:90).",
+   "problem": "\"Anchor\" is a private name for a setup milestone; the same page's headline already says \"setup milestones\" (\"All four setup milestones are complete.\"), so one object has two names. \"Lights up\", \"gets sharper\" and \"what week one is asking for\" are metaphor and personification standing in for a plain statement, and the title is wrong after the first week. A completed milestone is labelled \"Live\".",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `sharp` and `awake` (\"Use actual state\"); COPY_STANDARD.md §3, §9, §17 (a state names an observable condition).",
+   "proposed": "MilestoneLadder.tsx — :14 \"Setup milestones\"; :16 \"SETUP MILESTONES\"; :17 \"Four steps that set up the workspace.\"; :19-20 \"Each completed step adds data that other areas of the workspace use. Complete them in order.\"; :40 \"Complete\". Hero.tsx — :51 \"Workspace details\"; :61 \"Setup milestones complete\"; :90 `${m.completed} of ${m.total} setup milestones complete`.",
+   "testsAffected": [
+    "none assert these strings (tests/e2e/smoke.spec.ts:589-611 checks structure only)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-018",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/welcome/components/ActionStack.tsx",
+   "line": 17,
+   "generation": "legacy",
+   "state": "Oldest Welcome screen: heading of the action list. Rendered in the probe.",
+   "current": "aria-label \"Next moves\" (:15); \"NEXT MOVES\" (:17); \"Pick the action that compounds.\" (:18); \"The first card is the strongest move from where you are. The rest stay queued, in order.\" (:20-21).",
+   "problem": "\"Move\" is the private name for a recommendation. \"The action that compounds\" is a slogan: it does not say what compounding means for an action or how to pick.",
+   "governing": "AUDIT_BRIEF.md §3 disputed-terms table, `move` (\"the private recommendation label … becomes the specific action or 'recommended action' / 'next step'\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `one move`; COPY_STANDARD.md §10.",
+   "proposed": ":15 \"Recommended next steps\"; :17 \"RECOMMENDED NEXT STEPS\"; :18 \"Start with the first step.\"; :20-21 \"The first card is the recommended next step for the workspace as it stands. The others follow in order.\"",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-019",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/welcome/ds/components/ActionsObject.tsx",
+   "line": 31,
+   "generation": "ds",
+   "state": "Design-system Welcome screen (?v4=0 or room_welcome_v4_off): action list heading and the progress rail. Rendered in the probe.",
+   "current": "ActionsObject.tsx: aria-label \"Next moves\" (:29); \"NEXT MOVES\" (:31); \"Pick the action that compounds.\" (:32). adapters.ts:47 \"2 of 4 anchors live\". WelcomeDS.tsx:103 progress label \"Activation anchors\".",
+   "problem": "Same private vocabulary as the oldest screen (WELCOME-017, WELCOME-018): \"moves\" for recommendations, \"anchors\" for setup milestones, and a slogan as the section title.",
+   "governing": "AUDIT_BRIEF.md §3 disputed-terms table, `move`; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `one move`; COPY_STANDARD.md §3 and §10.",
+   "proposed": "ActionsObject.tsx — :29 \"Recommended next steps\"; :31 \"RECOMMENDED NEXT STEPS\"; :32 \"Start with the first step.\" adapters.ts:47 `${m.completed} of ${m.total} setup milestones complete`. WelcomeDS.tsx:103 \"Setup milestones\".",
+   "testsAffected": [
+    "src/welcome/ds/ds-components.test.tsx:67 (expects \"2 of 4 anchors live\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-020",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/welcome/ds/lib/adapters.ts",
+   "line": 33,
+   "generation": "ds",
+   "state": "Design-system Welcome screen, top bar next action and the button inside its \"Why\" panel. Rendered in the probe with the enterprise data and with a named-account workspace.",
+   "current": "\"Prepare the discovery call\" + \"Luca Industries\"; with a named account, \"Compose outbound\" + \"Acme, Inc.\" although the action is \"Compose outbound to Ramp.\" The panel button reads \"Prepare the discovery call · Luca Industries\" (src/components/navigation.tsx:168-170).",
+   "problem": "The top bar shows a verb and the object it acts on. Welcome fills the object with the user's own company name, so the bar reads as a discovery call with, or outbound to, the user's own company.",
+   "governing": "COPY_STANDARD.md §8 (referent must be unmistakable); comprehension principle.",
+   "proposed": "adapters.ts:30-33 — stop using the company name. Use the account when the top action names one (the `account` value on the action's link, e.g. \"Ramp\"); otherwise keep \"your workspace\".",
+   "testsAffected": [
+    "src/welcome/ds/ds-components.test.tsx:45-53 (\"uses the company name as the pull object when present\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-021",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 69,
+   "generation": "shared",
+   "state": "Design-system and oldest Welcome screens, page headline, when one to three of the four setup milestones are complete. Rendered in the probe.",
+   "current": "\"Next move: first icp saved.\" (account saved, no ICP); \"Next move: first live signal or account saved.\"; \"Next move: first real deal created.\" shown above a first card that says \"Compose outbound to Ramp.\"",
+   "problem": "(1) \"Next move\" is the private recommendation label. (2) The sentence lower-cases a milestone label, so \"ICP\" becomes \"icp\" and the next step reads as something already done (\"first real deal created\"). (3) The headline is taken from the milestone list while the first card comes from the action builder, which puts outbound ahead of the deal when an account exists and no activity is logged (lines 231-237). The page then names two different next steps.",
+   "governing": "AUDIT_BRIEF.md §3 disputed-terms table, `move`; owner requirement 10, \"recommendation/logic mismatch\"; COPY_STANDARD.md §2.",
+   "proposed": "Build the headline from the first action so both agree. engine.ts: `buildActivationModel(counts, topActionTitle?)`; lines 68-70 become `headline = topActionTitle ? \"Next step: \" + topActionTitle.charAt(0).toLowerCase() + topActionTitle.slice(1) : \"Complete the remaining setup step.\"`. src/welcome/state.ts:37-39 passes `actions.value[0]?.title`. Renders \"Next step: define your first ICP.\", \"Next step: add one live account.\", \"Next step: compose outbound to Ramp.\"",
+   "testsAffected": [
+    "src/welcome/lib/engine.test.ts:26 (expects /next move/i — change to the corrected wording)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-022",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 240,
+   "generation": "shared",
+   "state": "Design-system and oldest Welcome screens, action list, any workspace past the first steps. Rendered in the probe with the enterprise data, which has saved quota targets.",
+   "current": "Second card: \"Set quota and targets.\" — \"Put your quota number and your average deal size in. The Dashboard starts pointing at the revenue gap, not just activity.\" — button \"Set the targets\".",
+   "problem": "`buildActions` adds the quota action whenever fewer than four actions are queued; nothing checks whether a quota is saved. Onboarding saves one in `gtmos_qw_inputs` (src/onboarding/lib/seed.ts:305, src/onboarding/seeding/lib/seed-writer.ts:216) and the demo saves `gtmos_qw_inputs` and `gtmos_quota_targets`, so the page tells the user to set a quota that is already set. The body text also uses a figure of speech (\"starts pointing at the revenue gap, not just activity\") where it could say what the Dashboard shows.",
+   "governing": "COPY_STANDARD.md §21 and §9; AUDIT_BRIEF.md §5 Function (recommendation selection).",
+   "proposed": "Read `gtmos_qw_inputs.quota` in `loadCounts` (src/welcome/lib/loader.ts) as a `quotaSet` flag and skip the quota action at engine.ts:240 when it is true. Body at engine.ts:167: \"Enter your quota and average deal size. The Dashboard then compares your weighted pipeline with the revenue target.\"",
+   "testsAffected": [
+    "src/welcome/lib/engine.test.ts:139-153 (reads the quota action when present — unaffected)",
+    "src/welcome/lib/loader.test.ts (new field)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-023",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 176,
+   "generation": "shared",
+   "state": "Design-system and oldest Welcome screens, action list, third card in a set-up workspace.",
+   "current": "\"Export the first backup.\" — \"Save a backup of the workspace data outside this browser.\" — button \"Export now\" — \"A backup provides a copy you can use if local data is lost.\"",
+   "problem": "The button opens Settings; nothing is exported by clicking it. For a signed-in workspace the data is saved in the cloud and Settings calls the action \"Download my workspace\", so \"outside this browser\" and \"if local data is lost\" describe storage the product no longer relies on.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md, CTA standard (\"Buttons must predict the resulting action\"); COPY_STANDARD.md §21.",
+   "proposed": "engine.ts:176-182 — title \"Download a copy of your workspace.\"; body \"Save a full copy of your workspace data as a file from Settings.\"; button \"Open Settings\"; why \"A downloaded copy can be kept as a record or used to restore the workspace.\"; opens up \"A file containing your workspace data.\"",
+   "testsAffected": [
+    "none assert these strings"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-024",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 20,
+   "generation": "shared",
+   "state": "Oldest Welcome screen: milestone list rows that are not complete, and the \"What is missing\" cell.",
+   "current": "Pending rows: \"First ICP saved — Use this ICP to evaluate which accounts to target. — Next\"; \"First real deal created — Review this deal in the Dashboard, Deal Workspace, and Pilot Desk. — Pending\"; \"First sales activity logged — Calls, outreach, and LinkedIn activity can now be reviewed in the workspace. — Pending\". Cell: \"What is missing: First ICP saved. Use this ICP to evaluate which accounts to target.\"",
+   "problem": "Each milestone has one sentence, written for the completed state (\"this ICP\", \"this deal\", \"can now be reviewed\"). It is shown for milestones that are not complete, where it refers to an object that does not exist.",
+   "governing": "COPY_STANDARD.md §8 and §21.",
+   "proposed": "Show the sentence only when the milestone is done (src/welcome/components/MilestoneLadder.tsx:37). In src/welcome/components/LaunchFolio.tsx:146-150 name the missing thing instead of the completed label and drop the note: \"A saved ICP.\", \"A saved account or signal.\", \"A recorded deal.\", \"Logged sales activity.\"",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-025",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 96,
+   "generation": "shared",
+   "state": "Design-system and oldest Welcome screens, action cards: tag chips and four explanatory lines.",
+   "current": "Chips: \"targeting criteria\", \"first input\"; \"real account\", \"deep research\"; \"real pipeline\", \"dashboard unlock\"; \"activity trail\", \"week one\"; \"first real touch\", \"named account\"; \"call quality\", \"active deal\"; \"system math\", \"benchmarks\"; \"durability\", \"trust\"; \"daily rhythm\", \"ranked work\". Lines: \"Without a real deal, the rest of the app is working on hypothetical pipeline.\" (:117); \"You named Ramp as your first target — you can now prepare outreach using its recorded context.\" (:150); \"Review the ranked list of recommended actions.\" (:187); \"The app should now act like a morning briefing for what to work on first.\" (:191).",
+   "problem": "The chips are loose tags; several need translation (\"system math\", \"dashboard unlock\", \"ranked work\", \"durability\", \"daily rhythm\") and \"deep research\" promises something the card does not describe. Line 150 says the user named the account as a first target, but the name is simply the first account in the Signal Console list (`loadFirstAccountName`). Line 191 explains the Dashboard by simile, and \"briefing\" collides with the Briefing area's name. Line 187 says the list is ranked without saying by what.",
+   "governing": "COPY_STANDARD.md §14 (microcopy: literal), §21, §26 (rank: say what is ordered and by what); CLAUDE.md Part II §5 (\"Chips must be semantic, not decorative\").",
+   "proposed": "Replace each `meta` pair with the one destination the button opens: [\"ICP Studio\"], [\"Signal Console\"], [\"Deal Workspace\"], [\"Outbound Studio\"], [\"Outbound Studio\"], [\"Discovery Studio\"], [\"Quota Workback\"], [\"Settings\"], [\"Dashboard\"]. :117 \"Deal risk review, pilot planning, and advisor requests all start from a recorded deal.\" :150 `${name} is on your watch list, so you can prepare outreach using its recorded context.` :187 \"Review the recommended actions in order of priority.\" :191 \"The Dashboard has enough recorded data to rank recommended actions.\"",
+   "testsAffected": [
+    "none assert these strings"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-026",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/welcome/lib/engine.ts",
+   "line": 265,
+   "generation": "shared",
+   "state": "Design-system and oldest Welcome screens, role chip under the headline. Rendered in the probe with onboarding role keys.",
+   "current": "\"First Gtm Hire\", \"Vp Sales\", \"Cro\"; \"Operator\" when no role is stored.",
+   "problem": "`prettyRole` title-cases the stored role key, so acronyms are mis-capitalised, and it prints \"Operator\" for a user who never chose a role. Onboarding already has display labels for these keys (src/onboarding/lib/types.ts:26-62: \"First GTM hire\", \"VP Sales\", \"CRO / Head of Revenue\").",
+   "governing": "comprehension principle; COPY_STANDARD.md §21 for the default role.",
+   "proposed": "In `prettyRole`, look the key up in onboarding's `ROLE_OPTIONS` labels first, keep the title-casing only for free-text roles (the demo's \"Enterprise Account Executive\"), and return an empty string for a missing role so the chip is omitted (Hero.tsx:88, WelcomeDS.tsx:47).",
+   "testsAffected": [
+    "src/welcome/lib/engine.test.ts:171-183 (expects \"Founder Ceo\", \"Vp Sales\", \"Head Of Marketing\", \"Operator\")",
+    "src/welcome/state.test.ts:44-55 (expects \"Vp Sales\", \"Operator\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-027",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/welcome/lib/stamp.ts",
+   "line": 62,
+   "generation": "shared",
+   "state": "Oldest Welcome screen, top right of the headline; design-system screen, top bar after the company name.",
+   "current": "\"Week 1 · Day 1\" (later e.g. \"Week 3 · Day 15\"); top bar \"WELCOME · Luca Industries · Week 1 · Day 1\".",
+   "problem": "Nothing on screen says what is being counted (days since onboarding finished). \"Day\" is a running total, not the day of that week, so \"Week 3 · Day 15\" reads as inconsistent.",
+   "governing": "COPY_STANDARD.md §13 (\"state units and time frames\").",
+   "proposed": "stamp.ts:62 `label: \"Day \" + day + \" since setup\"` (\"Day 15 since setup\").",
+   "testsAffected": [
+    "src/welcome/lib/stamp.test.ts (label format)",
+    "tests/e2e/program-6-pr3-welcome-refacing-walk.spec.ts:31 (/Week \\d+ · Day \\d+/)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-028",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/welcome/v4/WelcomeV4.tsx",
+   "line": 33,
+   "generation": "v4",
+   "state": "Default Welcome, whole page.",
+   "current": "The headline (:33), the action title (:42) and the section labels (:40, :72) are `div` elements; the page has no heading and no `main` landmark. The walkthrough lists every Welcome line as text, link or button, while the Dashboard exposes heading 1 and heading 2.",
+   "problem": "A screen-reader user cannot move through the page by heading or jump to the recommended action.",
+   "governing": "AUDIT_BRIEF.md §5 (states: accessible names) and §7 category A11Y.",
+   "proposed": "Render the headline as `<h1 class=\"wl4-h\">`, the action title as `<h2 class=\"wl4-mt\">`, the list label as `<h2 class=\"wl4-sl\">`, and wrap `.wl4-wrap` in `<main>`. Class names and styles stay.",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-029",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/welcome/components/Hero.tsx",
+   "line": 45,
+   "generation": "legacy",
+   "state": "Oldest Welcome screen, time stamp at the top right of the headline.",
+   "current": "`<span class=\"wel-hero__stamp\" aria-label=\"Workspace age\">Week 1 · Day 1</span>`",
+   "problem": "An `aria-label` on a plain `span` is either ignored or replaces the span's text, so assistive technology announces \"Workspace age\" without the value, or the value without a label.",
+   "governing": "AUDIT_BRIEF.md §5 (aria-label) and §7 category A11Y.",
+   "proposed": "Remove the `aria-label` and put the label in the text; with WELCOME-027 the visible text \"Day 15 since setup\" needs no extra label.",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-030",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/welcome/lib/handoff.ts",
+   "line": 37,
+   "generation": "shared",
+   "state": "Back link on a destination page reached from any Welcome link (shown by the older screens' top bar and back button; e.g. src/components/navigation.tsx trail, src/lib/back-button.tsx).",
+   "current": "`returnLabel=Back to setup`, shown as \"← Back to setup\".",
+   "problem": "The link returns to Welcome, not to setup. Every other area labels its return link with its own name (\"Back to Dashboard\", \"Back to Deal Workspace\"). On a return visit weeks after onboarding, \"setup\" is the wrong name for where the link goes.",
+   "governing": "COPY_STANDARD.md §12 (navigation labels name destinations).",
+   "proposed": "handoff.ts:37 `params.set(\"returnLabel\", \"Back to Welcome\")` (and the comment on line 11).",
+   "testsAffected": [
+    "src/welcome/lib/handoff.test.ts:20",
+    "src/components/library.test.tsx:347, 355 (uses the string as a URL fixture)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-031",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 83,
+   "generation": "v4",
+   "state": "Default Welcome, totals line. Walkthrough: 'The room at rest'.",
+   "current": "\"$3.8m\" open pipeline. Deal Workspace and the Dashboard print the same figure as \"$3.8M\".",
+   "problem": "The same number is formatted two ways across areas.",
+   "governing": "AUDIT_BRIEF.md §4 (numbers shown in more than one area agree with the owning area).",
+   "proposed": "`formatMoney` (landing.ts:83): use \"M\" for millions; keep \"k\".",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts:122 expects \"$840k\" — unaffected"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-032",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "Welcome capability map, shown to testers inside the walkthrough page for Welcome: capability table, lifecycle table, 'Flows in', guardrails.",
+   "current": "\"Recent changes | Two to four concise lines describing recent account and deal changes, with their supporting inputs.\"; \"Re-entry | “Changes since your last visit.” | account/deal movement since last session + the recommended action\"; \"account + deal movement since the last session\"; \"The setup results made visible (“changes since your last visit”)\".",
+   "problem": "The map describes change tracking that the source does not implement (see WELCOME-002): Welcome lists up to three further ranked recommendations, and no account or deal movement is recorded between sessions. The map's own header says earlier references \"do not authorize … capabilities that the source does not implement\".",
+   "governing": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html line 39 (its own review note); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md (\"Current code shows what the product does\").",
+   "proposed": "If WELCOME-002 is resolved by relabelling: row \"Next recommended actions | Up to three further ranked recommendations, each with its reasons.\"; lifecycle row \"Re-entry | “Here is today's recommended starting point.” | the recommended action and the next ranked recommendations\"; delete the 'Flows in' bullet \"account + deal movement since the last session\"; guardrail \"The reasons for each recommendation stay visible.\" If the owner chooses to build change tracking, leave the map and build to it.",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-033",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "Welcome capability map, guardrails list and capability table.",
+   "current": "\"Welcome as the onboarding data collection’s landing — never an empty-workspace “create your first…” threshold\"; \"A quiet, non-competing path to the full command surface for the operator who wants more than the recommended action.\"",
+   "problem": "\"Seeding flow\" was swapped word-for-word for \"onboarding data collection\", which leaves an awkward phrase and keeps the metaphors \"landing\" and \"threshold\" as the functional nouns. \"The full command surface\" and \"the operator\" are internal design vocabulary for the Dashboard and the user.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md governing rule (\"semantic, not a blind find/replace list\") and row `landing` (\"Use exact event\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md table (Command Chamber → Dashboard ranking system).",
+   "proposed": "\"Welcome is the page a user reaches after onboarding. It is not an empty-workspace “create your first…” screen.\" and \"A quiet, non-competing link to the full Dashboard for a user who wants more than the recommended action.\"",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-034",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "CLAUDE.md",
+   "line": 170,
+   "generation": "doctrine",
+   "state": "Canon Part I §4.1 Welcome (lines 170-175), read by every session before it writes anything.",
+   "current": "\"the moment the app \"rises up to greet\" them and hands back the one move … it is the first morning the setup pays back\"; \"the system's top pick, read overnight across the whole workspace\"; \"the \"what the system saw\" read (2–4 plain lines — the dividend, never a checklist)\"; \"the \"morning door\"\"; Flows in: \"account/deal movement since last session\".",
+   "problem": "The section still describes Welcome in the vocabulary the remediation retires. Line 176 says these phrases are design shorthand and never copy, which limits the risk, but the prose remains the nearest model for the next writer. \"Read overnight\" and \"account/deal movement since last session\" also describe behaviour the code does not have (the ranking runs when the page loads; no movement is tracked).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (\"Internal metaphors therefore need to be translated even when they are not visible to customers\"; table rows `one move`, `seeding flow`). Canon edits need the founder's approval (CLAUDE.md Part IV §4), so this is an owner decision.",
+   "proposed": "Rewrite lines 170-175 in the plain terms the capability map already uses, for example Purpose: \"the page a user reaches after onboarding and on later visits. It shows the setup state, the highest-priority recommended action with its reasons, the next ranked recommendations, and workspace totals.\" Remove \"read overnight\" and \"account/deal movement since last session\" unless that behaviour is built.",
+   "testsAffected": [
+    "none"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-035",
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "tools/preview/build-transcript.js",
+   "line": 55,
+   "generation": "tooling",
+   "state": "Tester walkthrough and the corpus that is scored.",
+   "current": "Welcome contributes one state to the corpus: the default screen, first visit, enterprise book (corpus/welcome.txt, 43 lines, all 'The room at rest').",
+   "problem": "The return visit, the empty workspace, a deal-led workspace and both older screens never enter the walkthrough, so none of the text in WELCOME-003, WELCOME-004, WELCOME-008 to WELCOME-011 or WELCOME-016 to WELCOME-027 is in the corpus the saturation score is computed from. The copy audit cannot stand in for it: its phrase lists do not contain this vocabulary (\"anchors\", \"mandate\", \"next moves\", \"sharper\"), and its report for src/welcome has no customer-visible rows.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md (\"not permission to omit … a fallback interface\"; \"Enumerate current routes and available variants from source\").",
+   "proposed": "Add Welcome variants to the walkthrough builder: a second load of /welcome/ (return visit); /welcome/?v4=0 and /welcome/?v4=0&ds=0; and one capture with the demo deals and accounts removed (empty workspace). Mark each in coverage.json.",
+   "testsAffected": [
+    "tools/language-remediation/validate-transcript.js expectations for room and state counts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-036",
+   "category": "TOOLING",
+   "severity": 1,
+   "file": "src/welcome/v4/lib/landing.test.ts",
+   "line": 104,
+   "generation": "tooling",
+   "state": "Unit tests for the Welcome landing model.",
+   "current": "Test at lines 104-114 runs its assertions only `if (l.headline.startsWith(\"The workspace is awake. It already found\"))`. Test at lines 94-102 expects the headline to contain \"deal\".",
+   "problem": "The first condition can never be true since the headline changed, so the test asserts nothing. The second passes only because the fixed headline contains \"active deals\"; it no longer tests that a deal-led workspace is described as one. Neither test would catch WELCOME-001, 003, 005, 007 or 009.",
+   "governing": "Owner requirement 11 (\"targeted discovered-defect regressions … Do not weaken tests\") in ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md.",
+   "proposed": "Replace both with assertions on current behaviour: the first-visit headline and sub; the reason starts \"Ranked first. Reasons:\"; no row contains \"Ranked here\" or \"Shown here\"; the active-deal count excludes closed deals; no ICP item when an ICP is saved; a deal link keeps `focusObject` and `deal`; the reason is not cut mid-word.",
+   "testsAffected": [
+    "src/welcome/v4/lib/landing.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "WELCOME-037",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "js/demo-seed-data-ent.js",
+   "line": 286,
+   "generation": "seed",
+   "state": "Both demo books (also js/demo-seed-data-ent.js:297 and js/demo-seed-data-smb.js:152, 162). Outside the Welcome area; found while checking Welcome's deal count against Deal Workspace.",
+   "current": "Starbucks ($420k) and United Airlines ($380k) are seeded with `stage:'proposal'`, as are Chomps and Warby Parker in the SMB book. Deal Workspace shows them as \"$420k · Prospect\" and \"$380k · Prospect\"; Future Autopsy shows \"$380k · proposal\".",
+   "problem": "\"proposal\" is not one of Deal Workspace's stage ids (src/deal-workspace/lib/deal-shape.ts:18-27: prospect, discovery, evaluation, poc, negotiation, verbal, closed-won, closed-lost). `asStage` (src/deal-workspace/lib/deal-bridge.ts:39-42) turns unknown stages into \"prospect\", so two late-stage deals per book display as Prospect in Deal Workspace. Quota Workback's coverage table does know the stage (src/quota-workback/lib/coverage.ts:34, `proposal: 0.65`) and Future Autopsy prints the raw lower-case id, so one deal gets three different stage treatments. Whether the copy Deal Workspace saves back then changes the weighted-pipeline figure was not traced.",
+   "governing": "AUDIT_BRIEF.md §5 Function (stored shapes; a number that no longer matches its formula); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row \"$380k · proposal · quiet 16d …\" → \"$380k · Proposal · …\" (the stage was meant to read \"Proposal\").",
+   "proposed": "Either add \"proposal\" to Deal Workspace's `STAGE_IDS` with a label (\"Proposal\"), an order between evaluation and negotiation, and the probability Quota Workback already uses, or seed these four deals and their `stageHistory` steps with a stage Deal Workspace has. Both change what the demo shows, so the choice is the owner's.",
+   "testsAffected": [
+    "demo-seed tests and the regenerated walkthrough"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "WELCOME-038",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/lib/types.ts",
+   "line": 34,
+   "generation": "legacy",
+   "state": "Older onboarding role step (src/onboarding/components/Steps.tsx:109, src/onboarding/ds/components/StepsDS.tsx:122). Outside the Welcome area; found while tracing the role value Welcome displays.",
+   "current": "\"You are still the one selling. Antaeus is the system holding everything you can't keep in your head.\" Also \"The system is the operating layer underneath your team.\" (:44), \"you need the right object on top, fast.\" (:54), \"You are an outside lens — the system shows you what is real.\" (:59).",
+   "problem": "\"Can't keep in your head\" is the readiness metaphor the original remediation replaced; the other three lines explain the product through internal architecture terms (\"operating layer\", \"the right object on top\") and a metaphor (\"outside lens\").",
+   "governing": "AUDIT_BRIEF.md §3 disputed-terms table, `in your head` (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34]); COPY_STANDARD.md §3.",
+   "proposed": ":34 \"You are still the one selling. Antaeus documents the sales process so it does not depend on your memory.\" :44 \"You own the sales function. Antaeus records the process your team runs.\" :54 \"You run day-to-day sales work and need the highest-priority account or deal shown first.\" :59 \"You advise from outside. Antaeus shows you the recorded state of accounts and deals.\"",
+   "testsAffected": [
+    "src/onboarding tests that assert role copy, if any"
+   ],
+   "confidence": "medium"
+  }
+ ],
+ "dispositions": [
+  {
+   "recordId": "INV-0020",
+   "status": "IMPLEMENTED",
+   "currentText": "This workspace contains 17 active deals and 29 watched accounts. Antaeus analyzed recent account signals, buyer activity, and recorded next steps to rank the current recommendations.",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:189",
+   "note": "The inventory record has no replacement of its own; the same original is HS-020, whose approved sentence is rendered word for word. The dividend, heat, overnight and walk-in-cold language is gone. Two accuracy problems inside the approved sentence are filed separately: the count includes closed deals (WELCOME-001) and \"buyer activity\" is not a ranking input (WELCOME-012)."
+  },
+  {
+   "recordId": "INV-0101",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to Chipotle — Ranked here. Reasons: account priority score 36 out of 99 and multiple signals are marked high-confidence",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Private terms are gone: \"heat\" is now \"account priority score 36 out of 99\" and the signal basis is spelled out (\"multiple signals are marked high-confidence\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "INV-0102",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to OpenAI — Ranked here. Reasons: account priority score 50 out of 99 and multiple recent signals are recorded",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Private terms are gone: \"heat\" is now \"account priority score 50 out of 99\" and the signal basis is spelled out (\"multiple recent signals are recorded\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "INV-0103",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to Starbucks — Ranked here. Reasons: account priority score 37 out of 99 and multiple recent signals are recorded",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Private terms are gone: \"heat\" is now \"account priority score 37 out of 99\" and the signal basis is spelled out (\"multiple recent signals are recorded\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "HS-101",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to Chipotle — Ranked here. Reasons: account priority score 36 out of 99 and multiple signals are marked high-confidence",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Approved: \"Outbound to Chipotle · priority score 36 · multiple supporting signals\". Same content today — account, priority score, signal basis — in different words. Private terms are gone: \"heat\" is now \"account priority score 36 out of 99\" and the signal basis is spelled out (\"multiple signals are marked high-confidence\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "HS-102",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to OpenAI — Ranked here. Reasons: account priority score 50 out of 99 and multiple recent signals are recorded",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Approved: \"Outbound to OpenAI · priority score 50 · recent signals\". Same content today in different words. Private terms are gone: \"heat\" is now \"account priority score 50 out of 99\" and the signal basis is spelled out (\"multiple recent signals are recorded\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "HS-103",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Outbound to Starbucks — Ranked here. Reasons: account priority score 37 out of 99 and multiple recent signals are recorded",
+   "where": "walkthrough: welcome | 1. The room at rest; src/welcome/v4/lib/landing.ts:114-123 with src/dashboard/lib/command-intelligence.ts:440-443 and src/dashboard/lib/scoring.ts:57-60",
+   "note": "Approved: \"Outbound to Starbucks · priority score 37 · recent signals\". Same content today in different words. Private terms are gone: \"heat\" is now \"account priority score 37 out of 99\" and the signal basis is spelled out (\"multiple recent signals are recorded\"). The words differ from the approved compact form because the row reuses the Dashboard queue sentence; the leftover \"Ranked here.\" lead-in and the \"now\" stamp are filed as WELCOME-005 and WELCOME-006, and the section label as WELCOME-002."
+  },
+  {
+   "recordId": "DOC-000",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Welcome · entry page · capability map — Workspace setup and the next recommended action. — Type of area: the first screens a new user moves through · the destination after onboarding · design settled 2026-07-07",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:40",
+   "note": "\"The first morning the setup pays back\", \"Threshold (entry)\" and \"the seeding flow's landing\" are replaced by a literal title and a plain description of the area type."
+  },
+  {
+   "recordId": "DOC-001",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Welcome summarizes the configured workspace, the highest-priority recommended action, and recent changes. The recommendation and its evidence come from the Dashboard ranking engine. Sourced from: canon §4.1 + the heavy-seeding doctrine (§12) + the seeding flow (§4.3). Settled design: welcome-flow-landing-2026-07-07.html.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:40",
+   "note": "The description (\"rises up to greet\", \"hands back the one move\", \"the first morning the hard work reads itself back\") is rewritten plainly. The \"Sourced from\" line is unchanged; it cites two canon sections by their current titles and one mockup by its file name, and the map's header (line 39) states that such references preserve history and do not authorize customer language. Recorded under retained. \"Recent changes\" in the first sentence describes a capability the code lacks (WELCOME-032)."
+  },
+  {
+   "recordId": "DOC-002",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "What this area is for — After onboarding and on later visits, show the current setup state, the recommended action with supporting evidence, and account/deal totals. Keep one primary action and a secondary route to Dashboard. Do not claim that analysis happened overnight unless that execution is recorded.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"The system reads your motion back to you\", \"playback\", \"the system's top pick, read overnight\" and \"the payback\" are gone; the purpose is stated as what the page shows, with an explicit instruction not to claim overnight analysis."
+  },
+  {
+   "recordId": "DOC-003",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The setup-state heading | A prominent heading names setup completion or welcomes a returning user. Supporting information reflects the available account and deal evidence.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"The commanding statement\", \"day-one landing ('the workspace is awake')\" and \"what moved since you left\" are replaced by a literal description of the heading."
+  },
+  {
+   "recordId": "DOC-004",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The highest-priority recommended action | The highest-ranked current recommendation, its evidence, and one action link. Do not imply an overnight execution that was not recorded.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"The one dominant move\" and \"the system's single overnight pick\" are replaced with the migration map's wording for `one move` (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md)."
+  },
+  {
+   "recordId": "DOC-005",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Recent changes | Two to four concise lines describing recent account and deal changes, with their supporting inputs.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"What the system saw\", \"the dividend\" and \"what the system noticed on its own\" are gone, so the language obligation is met. The row now states a capability the source does not implement — the lines are further ranked recommendations, not changes — filed as WELCOME-032."
+  },
+  {
+   "recordId": "DOC-006",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The operating line | A secondary summary of watched accounts, active deals, and open pipeline.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"A recessive read\", \"in flight\" and \"the 'morning door'\" are replaced with the three totals the line shows."
+  },
+  {
+   "recordId": "DOC-007",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The calm route to the Dashboard | A quiet, non-competing path to the full command surface for the operator who wants more than the recommended action.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "The flagged term \"the one move\" is now \"the recommended action\". \"The full command surface\" and \"the operator\" remain as internal vocabulary; a plain rewrite is proposed in WELCOME-033."
+  },
+  {
+   "recordId": "DOC-008",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "One layout, two headlines — After setup and re-entry reuse the exact same shape; only the headline changes. Both lifecycle states use the same overview layout.",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"Day-one landing\", \"the whole trick of the room\", \"the payback surface\" and \"the first morning or the hundredth\" are gone."
+  },
+  {
+   "recordId": "DOC-009",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Lifecycle | Headline register | What the overview says",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"What the read says\" is now \"What the overview says\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `read`)."
+  },
+  {
+   "recordId": "DOC-010",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "After setup | “Workspace setup is complete.” | the recommended action and available setup data",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"Day-one landing\", \"The workspace is awake — here's what you just switched on.\" and \"what the seeding produced\" are replaced. The shipped first-visit screen says \"SETUP COMPLETE\" and \"workspace setup complete\" (src/welcome/v4/lib/landing.ts:176, src/welcome/v4/WelcomeV4.tsx:21)."
+  },
+  {
+   "recordId": "DOC-011",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Re-entry | “Changes since your last visit.” | account/deal movement since last session + the recommended action",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"What moved since you left\" and \"the one move\" are replaced. The cell still promises account and deal movement since the last session, which is not implemented (WELCOME-032), and the shipped return-visit headline is \"Your accounts and deals have been updated since your last visit.\" (WELCOME-010)."
+  },
+  {
+   "recordId": "DOC-012",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "directional handoff into the product area that owns the recommended action — Signal Console / Deal Workspace / Outbound",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"The room that owns the one move\" is now \"the product area that owns the recommended action\"."
+  },
+  {
+   "recordId": "DOC-013",
+   "status": "STILL MISSING",
+   "currentText": "Welcome as the onboarding data collection’s landing — never an empty-workspace “create your first…” threshold",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"Seeding flow\" was replaced word for word, which leaves an awkward phrase, and the flagged metaphor \"landing\" is still the functional noun (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `landing`: \"Use exact event\"). Rewrite proposed in WELCOME-033."
+  },
+  {
+   "recordId": "DOC-014",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The setup results made visible (“changes since your last visit”)",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:41",
+   "note": "\"The payback made visible ('what the system saw while you were away')\" is replaced. The quoted label has the accuracy problem in WELCOME-002 and WELCOME-032."
+  },
+  {
+   "recordId": "DOC-015",
+   "status": "IMPLEMENTED",
+   "currentText": "REFERENCE · Welcome capability map · compiled from canon §4.1 + shipped src/welcome + reconciled to current doctrine (2026-07-07). Settled design: welcome-flow-landing-2026-07-07.html",
+   "where": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:42",
+   "note": "Unchanged, and correctly so: the only flagged term, \"landing\", occurs inside the file name of the mockup deliverables/mockups/welcome-flow-landing-2026-07-07.html, which exists. A file name is an identifier, not doctrine prose (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md: internal names may be technical; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md: classify identifiers rather than erase them)."
+  }
+ ],
+ "retained": [
+  {
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 189,
+   "text": "Antaeus analyzed recent account signals, buyer activity, and recorded next steps to rank the current recommendations.",
+   "term": "rank",
+   "why": "Describes what the product does to the user's data and says what is ranked and from what. Approved wording (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[20]). The phrase \"buyer activity\" in it is challenged separately in WELCOME-012."
+  },
+  {
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 186,
+   "text": "The current recommendation is ranked from that workspace data.",
+   "term": "rank",
+   "why": "Product behaviour; the basis is named in the sentence before it. (The sentence is rewritten in WELCOME-010 for other reasons.)"
+  },
+  {
+   "file": "src/welcome/v4/lib/landing.ts",
+   "line": 188,
+   "text": "Add deals and watched accounts to generate ranked recommendations, deal-risk assessments, and account-priority analysis.",
+   "term": "rank",
+   "why": "Names an output of the product; nothing is asked of the user in ordering terms (COPY_STANDARD.md §26)."
+  },
+  {
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 445,
+   "text": "Ranked first. Reasons: account priority score 62 out of 99 and multiple recent signals are recorded.",
+   "term": "rank",
+   "why": "The ranking statement is followed by its reasons. Matches the approved pattern \"Ranked first because Boeing has a priority score of 62 and recent account signals.\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md) in different words; satisfies Welcome order item 5."
+  },
+  {
+   "file": "src/welcome/v4/WelcomeV4.tsx",
+   "line": 37,
+   "text": "l.move, LandingMove, class \"wl4-move\"",
+   "term": "move",
+   "why": "Code identifiers and a CSS class; never rendered. The visible label is \"Highest-priority action\"."
+  },
+  {
+   "file": "src/welcome/lib/handoff.ts",
+   "line": 39,
+   "text": "roomLabel option, focusRoom URL param",
+   "term": "room",
+   "why": "Stable URL parameter and option name in the continuity contract (CLAUDE.md Part I §2); not visible text."
+  },
+  {
+   "file": "src/welcome/components/Hero.tsx",
+   "line": 38,
+   "text": "<RoomChrome kicker=… />",
+   "term": "room",
+   "why": "Component name; not rendered."
+  },
+  {
+   "file": "src/welcome/lib/engine.ts",
+   "line": 36,
+   "text": "key: \"motion\" (also lines 121 and 144)",
+   "term": "motion",
+   "why": "Internal milestone and action key; the visible labels are \"First sales activity logged\" and \"Log your first sales activity.\" Listed in tools/language-remediation/copy-allowlist.json as an identifier."
+  },
+  {
+   "file": "src/welcome/lib/types.ts",
+   "line": 43,
+   "text": "unlocks (field name)",
+   "term": "unlock",
+   "why": "Field name only; the visible label is \"Opens up\"."
+  },
+  {
+   "file": "src/welcome/v4/lib/landing.test.ts",
+   "line": 110,
+   "text": "\"The workspace is awake. It already found\"",
+   "term": "awake",
+   "why": "Test file (category E). The string makes the test vacuous, which is filed as WELCOME-036; the word itself is not customer text."
+  },
+  {
+   "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+   "line": 40,
+   "text": "Sourced from: canon §4.1 + the heavy-seeding doctrine (§12) + the seeding flow (§4.3). Settled design: welcome-flow-landing-2026-07-07.html.",
+   "term": "seeding / landing",
+   "why": "A citation of two canon sections by their current titles (CLAUDE.md Part III §12; Part I §4.3) and of a mockup by its file name. The map's header on line 39 states that earlier references preserve history and do not authorize customer language. Not an instruction to writers."
+  },
+  {
+   "file": "deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html",
+   "line": 40,
+   "text": "The recommendation and its evidence come from the Dashboard ranking engine.",
+   "term": "rank",
+   "why": "Internal reference document naming the code module that produces the ranking; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md allows technical architecture names internally and gives \"Dashboard ranking system\" as the model. It is not customer copy."
+  },
+  {
+   "file": "src/welcome/v4/WelcomeV4.tsx",
+   "line": 21,
+   "text": "workspace setup complete / Setup complete (landing.ts:176)",
+   "term": "setup complete",
+   "why": "Both are approved replacements (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact-replacement table) and both render. They state the same fact twice at the top of the page; left as approved because the repetition does not hinder understanding."
+  },
+  {
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 169,
+   "text": "Outbound to Boeing / Compose outbound (line 185)",
+   "term": "outbound",
+   "why": "Ordinary sales term; both strings were retained as plain in the original inventory (records INV-0497, INV-0878)."
+  }
+ ],
+ "gaps": [
+  "No browser run: the default screen's layout and upper-casing were taken from the walkthrough corpus and the CSS; the older screens and the non-default states were rendered with @testing-library in a vitest probe outside the repo, not in Chromium.",
+  "Signed-in cloud behaviour (new device, cleared site data) was read from source only; WELCOME-015 is unexecuted.",
+  "Feature flags room_welcome_v4_off and room_welcome_legacy were not toggled; screen selection was verified through the ?v4 / ?ds parameters in source only.",
+  "The workspace map and recent-activity panel that render on the Welcome page were not audited here (shared chrome).",
+  "The SMB demo book was checked through the landing model and the ranked list only, not rendered.",
+  "The older screens were not held to Batch 01's nine-item Welcome order: they use a different, setup-milestone design. Whether to bring them to that order, or retire them, is the owner's call.",
+  "Downstream numeric effects of the seed's 'proposal' stage (WELCOME-037) on weighted pipeline and coverage were not traced; only the stage shown in Deal Workspace and Future Autopsy was confirmed from the walkthrough.",
+  "Findings WELCOME-003, 004, 008(b), 014 and 037, 038 sit in files outside src/welcome and may duplicate another reviewer's report; they are included because the text renders on Welcome or was found while tracing Welcome's inputs."
+ ]
+}

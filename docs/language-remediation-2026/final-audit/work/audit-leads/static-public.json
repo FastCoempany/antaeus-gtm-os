@@ -1,0 +1,372 @@
+{
+ "area": "static-public",
+ "coverage": [
+  {
+   "surface": "index.html smart router (no visible text except noscript fallback)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "index.html"
+   ],
+   "note": "Read in full. Only visible text is the <noscript> link 'Continue to Antaeus'. Routes: no session -> /start.html; session + onboarding incomplete -> /onboarding/?seeding=1; complete + welcome unseen -> /welcome/; else /dashboard/. Parse errors fail safe to /start.html. No language issue. Not executed in a browser (no browser walk allowed on this machine)."
+  },
+  {
+   "surface": "start.html public landing (static copy + animated ranking demo script + marquee + ladder)",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "start.html"
+   ],
+   "note": "Read every visible line (stripped-tag pass) and the full inline script (demo ACCTS data, status texts, typed reason). Compared mock strings against src/ (Future Autopsy horizon sentence, readiness ClimbDrawer reads, causes.ts staleness wording). Playwright walk exists at tests/e2e (phase-5 landing tests per CLAUDE.md session log 2026-05-18) but was not run here (no browser walks allowed). Not in the tester walkthrough."
+  },
+  {
+   "surface": "why-antaeus/index.html positioning page",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "why-antaeus/index.html"
+   ],
+   "note": "Read every visible line + meta description. Checked claims against src/signal-console (heat formula, v4 ordering via rankByHeat, ICP match only shown in legacy/ds account cards) and onboarding seeding flow. Phase 5.4 Playwright tests exist per CLAUDE.md session log (11 tests) but were not run here."
+  }
+ ],
+ "findings": [
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "start.html",
+   "line": 341,
+   "generation": "static",
+   "state": "Capability row 03 mock card 'At risk' (scroll to capabilities)",
+   "current": "Cobalt Freight \u00b7 $84k stalls in 9 days",
+   "problem": "Declarative certainty (dimension 4). The mock product screen states a forecast as fact; the live Future Autopsy deliberately renders 'If nothing changes, {name} is at {risk} risk of stalling or being lost within the next {days} days' (src/future-autopsy/v4/FutureAutopsyV4.tsx:145/187), part of the owner-approved evolution that avoids forecast certainty. The landing page re-asserts the certainty the app removed and does not use a string the app renders.",
+   "governing": "COPY_STANDARD.md \u00a713 (product demos behave like real software), \u00a721 (claims discipline); owner-approved evolution 'Future Autopsy generation that avoids false causation and forecast certainty' (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Approved product evolution)",
+   "proposed": "Cobalt Freight \u00b7 $84k \u00b7 high risk of stalling within 9 days",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "STATIC-001"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "start.html",
+   "line": 338,
+   "generation": "static",
+   "state": "Capability row 03 body",
+   "current": "Deals at risk, flagged early. Antaeus flags a deal before it stalls and recommends the smallest next step to keep it moving.",
+   "problem": "Certainty: 'flags a deal before it stalls' asserts a prediction the product only estimates (risk score from record staleness, stage age, missing next step). Paired with the 'stalls in 9 days' mock it tells a first-time buyer the product forecasts stall dates.",
+   "governing": "COPY_STANDARD.md \u00a721; owner-approved Future Autopsy evolution (01_OWNER_REQUIREMENTS.md)",
+   "proposed": "Deals at risk, flagged early. Antaeus scores each open deal for stall risk from its record (days since update, stage age, missing next step) and recommends the smallest next step to keep it moving.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-002"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "start.html",
+   "line": 398,
+   "generation": "static",
+   "state": "Hero ranking demo (row 'Harbor Point' signal) and weekly routine Thu card (line 289)",
+   "current": "{nm:'Harbor Point', sg:'no buyer activity \u00b7 21d', ...}  /  Thu: 'Follow up on deals with no recent buyer activity.'",
+   "problem": "Claims discipline. The product does not measure buyer activity on deals; it measures days since the deal record was updated, and the app itself says so ('The deal record was last updated N days ago; this is not a measure of buyer activity', src/future-autopsy/lib/causes.ts:105). The mock claims a measurement the app explicitly disclaims.",
+   "governing": "COPY_STANDARD.md \u00a721 ('If the product knows only that there has been no logged activity, say that'), \u00a713",
+   "proposed": "sg:'no logged activity \u00b7 21d'  and Thu: 'Follow up on deals with no logged activity.'",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "STATIC-003"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "start.html",
+   "line": 327,
+   "generation": "static",
+   "state": "Capability row 02",
+   "current": "A new General Counsel search or a newly hired CFO is detected, scored, and ranked against your target customer profile. You don't have to enter these events yourself.",
+   "problem": "Overstates automation. Account signals arrive when the operator runs enrichment (Signal Console 'Enrich' button \u2192 src/signal-console/lib/enrich-actions.ts runEnrichAll, POST /enrich against a configured enrichment server) \u2014 they are not detected continuously in the background. 'You don't have to enter these events yourself' is true only after the user triggers enrichment.",
+   "governing": "COPY_STANDARD.md \u00a721 claims discipline",
+   "proposed": "When you run enrichment on an account, Antaeus pulls public company events \u2014 a new General Counsel search, a newly hired CFO \u2014 scores them, and orders accounts by priority against your target customer profile. You don't type these events in yourself.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-004"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "start.html",
+   "line": 364,
+   "generation": "static",
+   "state": "Readiness ladder section 'Where this is heading'",
+   "current": "Hire-ready and repeatable Wins repeat without you on the call. (also line 360: 'Nothing is documented yet. It all depends on you.')",
+   "problem": "The ladder descriptions differ from what the live readiness drawer says (src/dashboard/v4/ClimbDrawer.tsx:20-44). 'Wins repeat without you on the call' is not what the gate measures (win/loss patterns documented + handoff documentation complete); the product does not track whether the founder was on calls. Mock product copy should use the strings the app renders.",
+   "governing": "COPY_STANDARD.md \u00a713, \u00a721; CLAUDE.md \u00a74.17 readiness state definitions",
+   "proposed": "Use the ClimbDrawer reads: Founder-dependent \u2014 'The sales process is not yet documented for another seller.' \u2026 Hire-ready and repeatable \u2014 'Win and loss patterns are documented, and the sales handoff documentation is complete.'",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "STATIC-005"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "start.html",
+   "line": 275,
+   "generation": "static",
+   "state": "'Monday, 8:47 AM' section, pile caption",
+   "current": "Raised off the line = at risk. One deal is on track. The rest are at risk, and you can't tell which one is about to stall.",
+   "problem": "Private visual metaphor (the lifted Living Mark) explained by an '=' sign \u2014 punctuation carries the logical relation (COPY_STANDARD \u00a718) and the reader must learn the mark's grounded/lifted code to read the illustration.",
+   "governing": "COPY_STANDARD.md \u00a718 punctuation rule, \u00a75 private ontology; comprehension principle",
+   "proposed": "Each tilted mark is a deal at risk; the one standing on the line is on track. You can't tell which at-risk deal is about to stall.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-006"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "start.html",
+   "line": 315,
+   "generation": "static",
+   "state": "Capability row 01 title",
+   "current": "Ranked, not stored.",
+   "problem": "Aphoristic paired fragment (dimension 5, 9) standing where the capability name should be; the following sentence does the explaining. Rank wording here describes the product, so the term itself is allowed; the problem is the slogan shape.",
+   "governing": "COPY_STANDARD.md \u00a711 (avoid paired slogan fragments in headlines), \u00a710",
+   "proposed": "Open accounts and deals, in order of what to act on first.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-007"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "start.html",
+   "line": 244,
+   "generation": "static",
+   "state": "Hero kicker",
+   "current": "Stop opening Monday blind.",
+   "problem": "Metaphor ('blind') as the sole meaning carrier of a kicker; mild. The H1 and sub-paragraph below make the meaning clear, so this is editorial personality, but it is also aimed at the reader's failing (COPY_STANDARD \u00a726).",
+   "governing": "COPY_STANDARD.md \u00a711, \u00a726 (judgment words about the reader)",
+   "proposed": "Know where to start on Monday.",
+   "testsAffected": [],
+   "confidence": "low",
+   "id": "STATIC-008"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "start.html",
+   "line": 355,
+   "generation": "static",
+   "state": "Readiness ladder section heading",
+   "current": "Could a new hire run your sales process yet?",
+   "problem": "'yet' is a judgment word aimed at the reader that implies a failing (COPY_STANDARD \u00a726). Also line 360 'Nothing is documented yet.'",
+   "governing": "COPY_STANDARD.md \u00a726 'Judgment words about the reader'",
+   "proposed": "Could a new hire run your sales process?",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-009"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "start.html",
+   "line": 283,
+   "generation": "static",
+   "state": "'A weekly routine' deck",
+   "current": "The same five tasks, in the same order, every week \u2014 so the work becomes a routine a new hire could take over.",
+   "problem": "'the work' is a casual stand-in noun (COPY_STANDARD \u00a726 'Name the thing'); also line 386 'Enter the hard information once.' names nothing specific.",
+   "governing": "COPY_STANDARD.md \u00a726 'Name the thing'",
+   "proposed": "The same five tasks, in the same order, every week \u2014 so your selling becomes a routine a new hire could take over.  /  line 386: 'Enter your ICP, accounts and open deals once. Antaeus uses them every morning.'",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-010"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "start.html",
+   "line": 374,
+   "generation": "static",
+   "state": "Validation band",
+   "current": "25 companies. Seed to Series E. Every founder said the same thing: \"I needed this 12 months ago.\"",
+   "problem": "Unverifiable universal claim built as a no-exception sentence ('Every founder said\u2026', COPY_STANDARD \u00a726). Heading line 373 'Validated by founders and sales leaders at companies worth $20B+' is an aggregate valuation claim with the logo marquee (script line ~493) listing named companies; cannot be checked from source.",
+   "governing": "COPY_STANDARD.md \u00a721, \u00a726 'No sentences built as rules with no exceptions'",
+   "proposed": "25 companies, seed to Series E. The line we heard most: \"I needed this 12 months ago.\" OWNER DECISION: confirm the $20B+ aggregate and that each named company in the marquee consented to appear.",
+   "testsAffected": [],
+   "confidence": "low",
+   "id": "STATIC-011"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "why-antaeus/index.html",
+   "line": 538,
+   "generation": "static",
+   "state": "Buyer section kicker + cell labels (lines 546, 550, 554)",
+   "current": "BUYER LOCK \u00b7 WHO THIS IS FOR / PRIMARY BUYER / PRIMARY FEAR / PRIMARY ASPIRATION",
+   "problem": "Private ontology / internal doctrine leak (dimension 2, 6): 'Buyer lock' and the fear/aspiration grid are the canon's internal positioning framework (CLAUDE.md Part I \u00a71 'Buyer lock') rendered to a visitor. A first-time reader has to work out what a 'buyer lock' is and why the page is listing its own fears.",
+   "governing": "COPY_STANDARD.md \u00a73, \u00a74 (private grammar), \u00a712; CLAUDE.md Part II \u00a75 hard reject 'Uses internal architecture language as visible product copy'",
+   "proposed": "Kicker: 'WHO THIS IS FOR'. Cell labels: 'WHO IT'S BUILT FOR' / 'THE PROBLEM IT PREVENTS' / 'WHAT IT HELPS YOU DO'.",
+   "testsAffected": [
+    "tests/e2e (Phase 5.4 why-antaeus buyer-lock panel test \u2014 check for an assertion on the 'BUYER LOCK' kicker or 3-cell labels)"
+   ],
+   "confidence": "medium",
+   "id": "STATIC-012"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "why-antaeus/index.html",
+   "line": 571,
+   "generation": "static",
+   "state": "Closing section subtext",
+   "current": "Signup takes a few minutes. Onboarding helps you define your first ICP and sets up your first ranked Dashboard. By the end of setup you're not browsing features \u2014 you're already using Antaeus.",
+   "problem": "Contradicts the shipped onboarding. The seeding flow (canon \u00a74.3, ADR-019) deliberately asks for real work \u2014 ICP interview, account list, at least 10 live deals with judgment, quota \u2014 and its doorway says so. Telling a visitor setup takes 'a few minutes' and only defines an ICP misleads them about the effort and what is collected.",
+   "governing": "COPY_STANDARD.md \u00a721; CLAUDE.md \u00a74.3 Onboarding (heavy-seeding doctrine \u2014 never apologize for or hide the work)",
+   "proposed": "Signup takes a few minutes. Setup asks for real information \u2014 your ICP, the accounts you're targeting, and at least ten live deals \u2014 and uses it to build your first Dashboard, in order of what needs attention first. By the end of setup you're already using Antaeus.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "STATIC-013"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "why-antaeus/index.html",
+   "line": 517,
+   "generation": "static",
+   "state": "How it works \u00b7 Step 01 Signal",
+   "current": "A time-limited event suggesting an account may be ready to buy. Ranked by account priority, source, recency, and ICP match, and shown as a ranked list of accounts to act on, not a passive timeline.",
+   "problem": "ICP match is not an input to the ordering: Signal Console orders accounts with rankByHeat (src/signal-console/v4/lib/attention.ts:144) and heat = signal count \u00d7 type weight \u00d7 source credibility \u00d7 recency (src/signal-console/lib/heat.ts:11). ICP match is shown only on the older account cards. Also 'Ranked by account priority' is circular (priority is the ranking). Repeating 'ranked' twice compresses.",
+   "governing": "COPY_STANDARD.md \u00a721, \u00a726 'Rank' (state the basis)",
+   "proposed": "A time-limited event suggesting an account may be ready to buy. Signal Console orders accounts by priority \u2014 how many signals each has, what kind, how credible the source is and how recent \u2014 so you see which account to act on first, not a passive timeline.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "STATIC-014"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "why-antaeus/index.html",
+   "line": 465,
+   "generation": "static",
+   "state": "'Why this exists' body",
+   "current": "The pattern is so common it has a category: founder-to-first-operator handoff failure.",
+   "problem": "Presents an Antaeus-coined term as an established industry category (certainty / high-context). A reader may search for it and find nothing.",
+   "governing": "COPY_STANDARD.md \u00a721",
+   "proposed": "The pattern is common enough to have a name: the founder-to-first-hire handoff.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-015"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "why-antaeus/index.html",
+   "line": 448,
+   "generation": "static",
+   "state": "Hero kicker (also meta description line 7: 'The workspace the new hire actually starts in.')",
+   "current": "CATEGORY \u00b7 WHAT THIS ACTUALLY IS",
+   "problem": "'actually' implies the reader holds a mistaken idea (COPY_STANDARD \u00a726 judgment words). The brief asks for a judgment on this line: it is a mild positioning device, not unreadable, but the word adds nothing; the second kicker (line 474) already says 'WHAT THIS IS AND ISN'T'.",
+   "governing": "COPY_STANDARD.md \u00a726 'Judgment words about the reader'",
+   "proposed": "CATEGORY \u00b7 WHAT ANTAEUS IS  (meta: 'The workspace the new hire starts in.')",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "STATIC-016"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "why-antaeus/index.html",
+   "line": 522,
+   "generation": "static",
+   "state": "How it works \u00b7 Step 02 Outreach",
+   "current": "Written in Outbound Studio, Cold Call Studio, or LinkedIn Playbook \u2014 never template spam, always matched to the account, the buyer, their recent engagement, and the trigger.",
+   "problem": "No-exception rule shape ('never\u2026 always\u2026', COPY_STANDARD \u00a726). Outbound Studio does use account, persona, temperature and trigger inputs, so the substance is fine; the absolutes overclaim.",
+   "governing": "COPY_STANDARD.md \u00a726 'No sentences built as rules with no exceptions'",
+   "proposed": "Written in Outbound Studio, Cold Call Studio, or LinkedIn Playbook, and matched to the account, the buyer, how recently they engaged, and the trigger \u2014 not a template.",
+   "testsAffected": [],
+   "confidence": "low",
+   "id": "STATIC-017"
+  }
+ ],
+ "dispositions": [],
+ "retained": [
+  {
+   "file": "start.html",
+   "line": 247,
+   "text": "\u21bb Watch it rank",
+   "term": "rank",
+   "why": "Replay control for the hero demo directly under a sentence that says what is ranked and by what ('ranks your deals, account signals, and pilot results by risk and urgency'); describes what the product does, not the user. COPY_STANDARD \u00a726 'Rank' allowed case. Minor: 'Replay the ranking' would be more literal, not required."
+  },
+  {
+   "file": "start.html",
+   "line": 246,
+   "text": "recommends today's highest-priority action with the reason it ranks first",
+   "term": "rank",
+   "why": "Product-behavior rank with stated basis (risk and urgency). Matches the migration map 'one move \u2192 highest-priority recommended action'."
+  },
+  {
+   "file": "start.html",
+   "line": 286,
+   "text": "Mon The top three risks, ranked.",
+   "term": "rank",
+   "why": "Describes product output (Dashboard top risks); basis is 'risks'."
+  },
+  {
+   "file": "start.html",
+   "line": 348,
+   "text": "This isn't a prettier Salesforce. A CRM stores the records you maintain. Antaeus ranks what needs attention and shows the evidence before you go looking.",
+   "term": "rank",
+   "why": "Comparison names the concrete capability (COPY_STANDARD \u00a715)."
+  },
+  {
+   "file": "start.html",
+   "line": 448,
+   "text": "statusText 'Reviewing accounts\u2026' / 'Ranking\u2026' / 'Ranked'",
+   "term": "rank",
+   "why": "Animated status of the product's own ordering in a demo card titled with the scores; ordinary status labels."
+  },
+  {
+   "file": "index.html",
+   "line": 75,
+   "text": "Continue to Antaeus",
+   "term": "none",
+   "why": "noscript fallback link; plain."
+  },
+  {
+   "file": "why-antaeus/index.html",
+   "line": 475,
+   "text": "A system that ranks sales work by risk and evidence.",
+   "term": "rank",
+   "why": "Describes the product; states basis (risk and evidence). COPY_STANDARD \u00a726 allowed."
+  },
+  {
+   "file": "why-antaeus/index.html",
+   "line": 486,
+   "text": "A ranked list of what to do next, not a place to store records",
+   "term": "rank",
+   "why": "Product output in an IS/IS-NOT comparison list (\u00a715); preceding line 484 states the basis."
+  },
+  {
+   "file": "why-antaeus/index.html",
+   "line": 511,
+   "text": "The loop is the product; each page is where one step gets done.",
+   "term": "room",
+   "why": "Uses 'page' (the brief's preferred replacement for the room metaphor). Mildly aphoristic but each step is explained above."
+  },
+  {
+   "file": "why-antaeus/index.html",
+   "line": 527,
+   "text": "checked for loss risk in Future Autopsy",
+   "term": "Future Autopsy",
+   "why": "Branded name followed immediately by its function, per owner decision (Future Autopsy stays when copy says it reviews open deals for loss risk)."
+  },
+  {
+   "file": "why-antaeus/index.html",
+   "line": 551,
+   "text": "The first real hire will inherit confusion, not a system.",
+   "term": "inherit",
+   "why": "Ordinary-English 'inherit' (not the retired 'inheritable' readiness state); still a slogan, covered by the BUYER LOCK finding's proposed relabel."
+  }
+ ],
+ "gaps": []
+}

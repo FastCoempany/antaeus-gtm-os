@@ -1,0 +1,688 @@
+[onboarding | 1 Intro — at rest | aria-label] Wayfinder
+[onboarding | 1 Intro — at rest | link] ANTAEUS
+[onboarding | 1 Intro — at rest | aria-label] Home
+[onboarding | 1 Intro — at rest | text] ONBOARDING · STEP 1 OF 7
+[onboarding | 1 Intro — at rest | button] ?
+[onboarding | 1 Intro — at rest | title] What is this page for?
+[onboarding | 1 Intro — at rest | aria-label] What is this page for?
+[onboarding | 1 Intro — at rest | aria-label] Onboarding steps
+[onboarding | 1 Intro — at rest | text] Step 1 of 7
+[onboarding | 1 Intro — at rest | text] Intro
+[onboarding | 1 Intro — at rest | text] Company
+[onboarding | 1 Intro — at rest | text] Role
+[onboarding | 1 Intro — at rest | text] Category
+[onboarding | 1 Intro — at rest | text] ICP
+[onboarding | 1 Intro — at rest | text] Account
+[onboarding | 1 Intro — at rest | text] Quota
+[onboarding | 1 Intro — at rest | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — at rest | heading 2] Antaeus turns the revenue work you're doing into a clear picture of what's happening.
+[onboarding | 1 Intro — at rest | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — at rest | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — at rest | text] You can skip any step except the first. The first ask is a one-line ICP — everything else compounds off of it.
+[onboarding | 1 Intro — at rest | text] Nothing is sent anywhere. Everything stays on this device until you wire cloud sync from Settings.
+[onboarding | 1 Intro — at rest | button] Begin
+[onboarding | 2 Company — at rest | aria-label] Wayfinder
+[onboarding | 2 Company — at rest | link] ANTAEUS
+[onboarding | 2 Company — at rest | aria-label] Home
+[onboarding | 2 Company — at rest | text] ONBOARDING · STEP 2 OF 7
+[onboarding | 2 Company — at rest | button] ?
+[onboarding | 2 Company — at rest | title] What is this page for?
+[onboarding | 2 Company — at rest | aria-label] What is this page for?
+[onboarding | 2 Company — at rest | aria-label] Onboarding steps
+[onboarding | 2 Company — at rest | text] Step 2 of 7
+[onboarding | 2 Company — at rest | text] ✓ Intro
+[onboarding | 2 Company — at rest | text] Company
+[onboarding | 2 Company — at rest | text] Role
+[onboarding | 2 Company — at rest | text] Category
+[onboarding | 2 Company — at rest | text] ICP
+[onboarding | 2 Company — at rest | text] Account
+[onboarding | 2 Company — at rest | text] Quota
+[onboarding | 2 Company — at rest | text] STEP 2 OF 7 — COMPANY
+[onboarding | 2 Company — at rest | heading 2] Your company name?
+[onboarding | 2 Company — at rest | text] Lowest-friction question first. Everything else stays optional.
+[onboarding | 2 Company — at rest | text] Company name
+[onboarding | 2 Company — at rest | field] Company name
+[onboarding | 2 Company — at rest | placeholder] e.g., Antaeus GTM
+[onboarding | 2 Company — at rest | text] Doesn't have to be the legal entity — just what your team calls itself.
+[onboarding | 2 Company — at rest | button] Back
+[onboarding | 2 Company — at rest | button] Continue
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Wayfinder
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | link] ANTAEUS
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Home
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] ONBOARDING · STEP 2 OF 7
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] ?
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | title] What is this page for?
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] What is this page for?
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Onboarding steps
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Step 2 of 7
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] ✓ Intro
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Company
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Role
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Category
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] ICP
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Account
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Quota
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] STEP 2 OF 7 — COMPANY
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | heading 2] Your company name?
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Lowest-friction question first. Everything else stays optional.
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Company name
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | field] Company name
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | placeholder] e.g., Antaeus GTM
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Doesn't have to be the legal entity — just what your team calls itself.
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] Back
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] Continue
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Wayfinder
+[onboarding | 3 Role — at rest, nothing picked (validation) | link] ANTAEUS
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Home
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ONBOARDING · STEP 3 OF 7
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] ?
+[onboarding | 3 Role — at rest, nothing picked (validation) | title] What is this page for?
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] What is this page for?
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Onboarding steps
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Step 3 of 7
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ✓ Intro
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ✓ Company
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Role
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Category
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ICP
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Account
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Quota
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] STEP 3 OF 7 — ROLE
+[onboarding | 3 Role — at rest, nothing picked (validation) | heading 2] Which seat are you in?
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Role decides which surface the Dashboard centers first. Change it anytime from Settings.
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Role
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Founder You are still the one selling. Antaeus is the system holding everything you can't keep in your head.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] First GTM hire You are taking over a sales process the founder built. Antaeus documents it so the handoff is clear.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] CRO / Head of Revenue You own the function. The system is the operating layer underneath your team.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] VP Sales You are formalizing the system for the next 3-5 hires.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Operator You run the day-to-day — you need the right object on top, fast.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Advisor You are an outside lens — the system shows you what is real.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Back
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Continue
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Pick a role first.
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Wayfinder
+[onboarding | 4 Category — at rest, nothing picked (validation) | link] ANTAEUS
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Home
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ONBOARDING · STEP 4 OF 7
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] ?
+[onboarding | 4 Category — at rest, nothing picked (validation) | title] What is this page for?
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] What is this page for?
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Onboarding steps
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Step 4 of 7
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ✓ Intro
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ✓ Company
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ✓ Role
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Category
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ICP
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Account
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Quota
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] STEP 4 OF 7 — CATEGORY
+[onboarding | 4 Category — at rest, nothing picked (validation) | heading 2] What do you sell, and who to?
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] The category you sell from
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Product category
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] HR Tech / People Ops
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Marketing Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] CX / Support Automation
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Customer Data Platform
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Vertical SaaS
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] DevOps / Engineering Tools
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Cybersecurity / Compliance
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] FinTech / Payments
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Legal Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Hardware / IoT
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Services / Consulting
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Other
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] The industries you sell into
+[onboarding | 4 Category — at rest, nothing picked (validation) | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Industries
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] B2B SaaS / Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Financial Services / FinTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Healthcare / Health Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Retail / E-commerce
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Manufacturing / Industrial
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Logistics / Supply Chain
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Energy / Utilities
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Real Estate / PropTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Construction
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Education / EdTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Media / Entertainment
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Telecommunications
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Travel / Hospitality
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Insurance / InsurTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Legal / Professional Services
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Government / Public Sector
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Non-profit / Social Impact
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Agriculture / AgTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Aerospace / Defense
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Pharma / Biotech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Consumer Goods / CPG
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Marketing / Advertising
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Cybersecurity
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Back
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Continue
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Pick a category and at least one industry.
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Wayfinder
+[onboarding | 4 Category — product category picked, no industry yet (validation) | link] ANTAEUS
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Home
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ONBOARDING · STEP 4 OF 7
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] ?
+[onboarding | 4 Category — product category picked, no industry yet (validation) | title] What is this page for?
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] What is this page for?
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Onboarding steps
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Step 4 of 7
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ✓ Intro
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ✓ Company
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ✓ Role
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Category
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ICP
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Account
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Quota
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] STEP 4 OF 7 — CATEGORY
+[onboarding | 4 Category — product category picked, no industry yet (validation) | heading 2] What do you sell, and who to?
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] The category you sell from
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Product category
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] HR Tech / People Ops
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Marketing Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] CX / Support Automation
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Customer Data Platform
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Vertical SaaS
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] DevOps / Engineering Tools
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Cybersecurity / Compliance
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] FinTech / Payments
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Legal Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Hardware / IoT
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Services / Consulting
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Other
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] The industries you sell into
+[onboarding | 4 Category — product category picked, no industry yet (validation) | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Industries
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] B2B SaaS / Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Financial Services / FinTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Healthcare / Health Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Retail / E-commerce
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Manufacturing / Industrial
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Logistics / Supply Chain
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Energy / Utilities
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Real Estate / PropTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Construction
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Education / EdTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Media / Entertainment
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Telecommunications
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Travel / Hospitality
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Insurance / InsurTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Legal / Professional Services
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Government / Public Sector
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Non-profit / Social Impact
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Agriculture / AgTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Aerospace / Defense
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Pharma / Biotech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Consumer Goods / CPG
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Marketing / Advertising
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Cybersecurity
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Back
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Continue
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Pick a category and at least one industry.
+[onboarding | 4 Category — one industry picked | aria-label] Wayfinder
+[onboarding | 4 Category — one industry picked | link] ANTAEUS
+[onboarding | 4 Category — one industry picked | aria-label] Home
+[onboarding | 4 Category — one industry picked | text] ONBOARDING · STEP 4 OF 7
+[onboarding | 4 Category — one industry picked | button] ?
+[onboarding | 4 Category — one industry picked | title] What is this page for?
+[onboarding | 4 Category — one industry picked | aria-label] What is this page for?
+[onboarding | 4 Category — one industry picked | aria-label] Onboarding steps
+[onboarding | 4 Category — one industry picked | text] Step 4 of 7
+[onboarding | 4 Category — one industry picked | text] ✓ Intro
+[onboarding | 4 Category — one industry picked | text] ✓ Company
+[onboarding | 4 Category — one industry picked | text] ✓ Role
+[onboarding | 4 Category — one industry picked | text] Category
+[onboarding | 4 Category — one industry picked | text] ICP
+[onboarding | 4 Category — one industry picked | text] Account
+[onboarding | 4 Category — one industry picked | text] Quota
+[onboarding | 4 Category — one industry picked | text] STEP 4 OF 7 — CATEGORY
+[onboarding | 4 Category — one industry picked | heading 2] What do you sell, and who to?
+[onboarding | 4 Category — one industry picked | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — one industry picked | text] The category you sell from
+[onboarding | 4 Category — one industry picked | aria-label] Product category
+[onboarding | 4 Category — one industry picked | button] HR Tech / People Ops
+[onboarding | 4 Category — one industry picked | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — one industry picked | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — one industry picked | button] Marketing Tech
+[onboarding | 4 Category — one industry picked | button] CX / Support Automation
+[onboarding | 4 Category — one industry picked | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — one industry picked | button] Customer Data Platform
+[onboarding | 4 Category — one industry picked | button] Vertical SaaS
+[onboarding | 4 Category — one industry picked | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — one industry picked | button] DevOps / Engineering Tools
+[onboarding | 4 Category — one industry picked | button] Cybersecurity / Compliance
+[onboarding | 4 Category — one industry picked | button] FinTech / Payments
+[onboarding | 4 Category — one industry picked | button] Legal Tech
+[onboarding | 4 Category — one industry picked | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — one industry picked | button] Hardware / IoT
+[onboarding | 4 Category — one industry picked | button] Services / Consulting
+[onboarding | 4 Category — one industry picked | button] Other
+[onboarding | 4 Category — one industry picked | text] The industries you sell into
+[onboarding | 4 Category — one industry picked | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — one industry picked | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — one industry picked | aria-label] Industries
+[onboarding | 4 Category — one industry picked | button] B2B SaaS / Tech
+[onboarding | 4 Category — one industry picked | button] Financial Services / FinTech
+[onboarding | 4 Category — one industry picked | button] Healthcare / Health Tech
+[onboarding | 4 Category — one industry picked | button] Retail / E-commerce
+[onboarding | 4 Category — one industry picked | button] Manufacturing / Industrial
+[onboarding | 4 Category — one industry picked | button] Logistics / Supply Chain
+[onboarding | 4 Category — one industry picked | button] Energy / Utilities
+[onboarding | 4 Category — one industry picked | button] Real Estate / PropTech
+[onboarding | 4 Category — one industry picked | button] Construction
+[onboarding | 4 Category — one industry picked | button] Education / EdTech
+[onboarding | 4 Category — one industry picked | button] Media / Entertainment
+[onboarding | 4 Category — one industry picked | button] Telecommunications
+[onboarding | 4 Category — one industry picked | button] Travel / Hospitality
+[onboarding | 4 Category — one industry picked | button] Insurance / InsurTech
+[onboarding | 4 Category — one industry picked | button] Legal / Professional Services
+[onboarding | 4 Category — one industry picked | button] Government / Public Sector
+[onboarding | 4 Category — one industry picked | button] Non-profit / Social Impact
+[onboarding | 4 Category — one industry picked | button] Agriculture / AgTech
+[onboarding | 4 Category — one industry picked | button] Aerospace / Defense
+[onboarding | 4 Category — one industry picked | button] Pharma / Biotech
+[onboarding | 4 Category — one industry picked | button] Consumer Goods / CPG
+[onboarding | 4 Category — one industry picked | button] Marketing / Advertising
+[onboarding | 4 Category — one industry picked | button] Cybersecurity
+[onboarding | 4 Category — one industry picked | button] Back
+[onboarding | 4 Category — one industry picked | button] Continue
+[onboarding | 4 Category — two industries picked | aria-label] Wayfinder
+[onboarding | 4 Category — two industries picked | link] ANTAEUS
+[onboarding | 4 Category — two industries picked | aria-label] Home
+[onboarding | 4 Category — two industries picked | text] ONBOARDING · STEP 4 OF 7
+[onboarding | 4 Category — two industries picked | button] ?
+[onboarding | 4 Category — two industries picked | title] What is this page for?
+[onboarding | 4 Category — two industries picked | aria-label] What is this page for?
+[onboarding | 4 Category — two industries picked | aria-label] Onboarding steps
+[onboarding | 4 Category — two industries picked | text] Step 4 of 7
+[onboarding | 4 Category — two industries picked | text] ✓ Intro
+[onboarding | 4 Category — two industries picked | text] ✓ Company
+[onboarding | 4 Category — two industries picked | text] ✓ Role
+[onboarding | 4 Category — two industries picked | text] Category
+[onboarding | 4 Category — two industries picked | text] ICP
+[onboarding | 4 Category — two industries picked | text] Account
+[onboarding | 4 Category — two industries picked | text] Quota
+[onboarding | 4 Category — two industries picked | text] STEP 4 OF 7 — CATEGORY
+[onboarding | 4 Category — two industries picked | heading 2] What do you sell, and who to?
+[onboarding | 4 Category — two industries picked | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — two industries picked | text] The category you sell from
+[onboarding | 4 Category — two industries picked | aria-label] Product category
+[onboarding | 4 Category — two industries picked | button] HR Tech / People Ops
+[onboarding | 4 Category — two industries picked | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — two industries picked | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — two industries picked | button] Marketing Tech
+[onboarding | 4 Category — two industries picked | button] CX / Support Automation
+[onboarding | 4 Category — two industries picked | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — two industries picked | button] Customer Data Platform
+[onboarding | 4 Category — two industries picked | button] Vertical SaaS
+[onboarding | 4 Category — two industries picked | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — two industries picked | button] DevOps / Engineering Tools
+[onboarding | 4 Category — two industries picked | button] Cybersecurity / Compliance
+[onboarding | 4 Category — two industries picked | button] FinTech / Payments
+[onboarding | 4 Category — two industries picked | button] Legal Tech
+[onboarding | 4 Category — two industries picked | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — two industries picked | button] Hardware / IoT
+[onboarding | 4 Category — two industries picked | button] Services / Consulting
+[onboarding | 4 Category — two industries picked | button] Other
+[onboarding | 4 Category — two industries picked | text] The industries you sell into
+[onboarding | 4 Category — two industries picked | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — two industries picked | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — two industries picked | aria-label] Industries
+[onboarding | 4 Category — two industries picked | button] B2B SaaS / Tech
+[onboarding | 4 Category — two industries picked | button] Financial Services / FinTech
+[onboarding | 4 Category — two industries picked | button] Healthcare / Health Tech
+[onboarding | 4 Category — two industries picked | button] Retail / E-commerce
+[onboarding | 4 Category — two industries picked | button] Manufacturing / Industrial
+[onboarding | 4 Category — two industries picked | button] Logistics / Supply Chain
+[onboarding | 4 Category — two industries picked | button] Energy / Utilities
+[onboarding | 4 Category — two industries picked | button] Real Estate / PropTech
+[onboarding | 4 Category — two industries picked | button] Construction
+[onboarding | 4 Category — two industries picked | button] Education / EdTech
+[onboarding | 4 Category — two industries picked | button] Media / Entertainment
+[onboarding | 4 Category — two industries picked | button] Telecommunications
+[onboarding | 4 Category — two industries picked | button] Travel / Hospitality
+[onboarding | 4 Category — two industries picked | button] Insurance / InsurTech
+[onboarding | 4 Category — two industries picked | button] Legal / Professional Services
+[onboarding | 4 Category — two industries picked | button] Government / Public Sector
+[onboarding | 4 Category — two industries picked | button] Non-profit / Social Impact
+[onboarding | 4 Category — two industries picked | button] Agriculture / AgTech
+[onboarding | 4 Category — two industries picked | button] Aerospace / Defense
+[onboarding | 4 Category — two industries picked | button] Pharma / Biotech
+[onboarding | 4 Category — two industries picked | button] Consumer Goods / CPG
+[onboarding | 4 Category — two industries picked | button] Marketing / Advertising
+[onboarding | 4 Category — two industries picked | button] Cybersecurity
+[onboarding | 4 Category — two industries picked | button] Back
+[onboarding | 4 Category — two industries picked | button] Continue
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Wayfinder
+[onboarding | 5 ICP — at rest, nothing typed (validation) | link] ANTAEUS
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Home
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ONBOARDING · STEP 5 OF 7
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] ?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | title] What is this page for?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] What is this page for?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Onboarding steps
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Step 5 of 7
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ✓ Intro
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ✓ Company
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ✓ Role
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ✓ Category
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ICP
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Account
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Quota
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — at rest, nothing typed (validation) | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] One sentence is enough. Specific means fewer assumptions, fewer personas — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Who is this for?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | field] Who is this for?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | placeholder] e.g., Mid-market freight forwarders in EU past their first compliance audit.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] What pain do you solve? (optional)
+[onboarding | 5 ICP — at rest, nothing typed (validation) | field] What pain do you solve? (optional)
+[onboarding | 5 ICP — at rest, nothing typed (validation) | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] Back
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] Continue
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Write one specific ICP sentence first.
+[onboarding | 5 ICP — vague answer typed | aria-label] Wayfinder
+[onboarding | 5 ICP — vague answer typed | link] ANTAEUS
+[onboarding | 5 ICP — vague answer typed | aria-label] Home
+[onboarding | 5 ICP — vague answer typed | text] ONBOARDING · STEP 5 OF 7
+[onboarding | 5 ICP — vague answer typed | button] ?
+[onboarding | 5 ICP — vague answer typed | title] What is this page for?
+[onboarding | 5 ICP — vague answer typed | aria-label] What is this page for?
+[onboarding | 5 ICP — vague answer typed | aria-label] Onboarding steps
+[onboarding | 5 ICP — vague answer typed | text] Step 5 of 7
+[onboarding | 5 ICP — vague answer typed | text] ✓ Intro
+[onboarding | 5 ICP — vague answer typed | text] ✓ Company
+[onboarding | 5 ICP — vague answer typed | text] ✓ Role
+[onboarding | 5 ICP — vague answer typed | text] ✓ Category
+[onboarding | 5 ICP — vague answer typed | text] ICP
+[onboarding | 5 ICP — vague answer typed | text] Account
+[onboarding | 5 ICP — vague answer typed | text] Quota
+[onboarding | 5 ICP — vague answer typed | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — vague answer typed | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — vague answer typed | text] One sentence is enough. Specific means fewer assumptions, fewer personas — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — vague answer typed | text] Who is this for?
+[onboarding | 5 ICP — vague answer typed | field] Who is this for?
+[onboarding | 5 ICP — vague answer typed | placeholder] e.g., Mid-market freight forwarders in EU past their first compliance audit.
+[onboarding | 5 ICP — vague answer typed | text] What pain do you solve? (optional)
+[onboarding | 5 ICP — vague answer typed | field] What pain do you solve? (optional)
+[onboarding | 5 ICP — vague answer typed | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — vague answer typed | button] Back
+[onboarding | 5 ICP — vague answer typed | button] Continue
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Wayfinder
+[onboarding | 5 ICP — specific answer and pain typed | link] ANTAEUS
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Home
+[onboarding | 5 ICP — specific answer and pain typed | text] ONBOARDING · STEP 5 OF 7
+[onboarding | 5 ICP — specific answer and pain typed | button] ?
+[onboarding | 5 ICP — specific answer and pain typed | title] What is this page for?
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] What is this page for?
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Onboarding steps
+[onboarding | 5 ICP — specific answer and pain typed | text] Step 5 of 7
+[onboarding | 5 ICP — specific answer and pain typed | text] ✓ Intro
+[onboarding | 5 ICP — specific answer and pain typed | text] ✓ Company
+[onboarding | 5 ICP — specific answer and pain typed | text] ✓ Role
+[onboarding | 5 ICP — specific answer and pain typed | text] ✓ Category
+[onboarding | 5 ICP — specific answer and pain typed | text] ICP
+[onboarding | 5 ICP — specific answer and pain typed | text] Account
+[onboarding | 5 ICP — specific answer and pain typed | text] Quota
+[onboarding | 5 ICP — specific answer and pain typed | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — specific answer and pain typed | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — specific answer and pain typed | text] One sentence is enough. Specific means fewer assumptions, fewer personas — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — specific answer and pain typed | text] Who is this for?
+[onboarding | 5 ICP — specific answer and pain typed | field] Who is this for?
+[onboarding | 5 ICP — specific answer and pain typed | placeholder] e.g., Mid-market freight forwarders in EU past their first compliance audit.
+[onboarding | 5 ICP — specific answer and pain typed | text] What pain do you solve? (optional)
+[onboarding | 5 ICP — specific answer and pain typed | field] What pain do you solve? (optional)
+[onboarding | 5 ICP — specific answer and pain typed | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — specific answer and pain typed | button] Back
+[onboarding | 5 ICP — specific answer and pain typed | button] Continue
+[onboarding | 6 First account — at rest | aria-label] Wayfinder
+[onboarding | 6 First account — at rest | link] ANTAEUS
+[onboarding | 6 First account — at rest | aria-label] Home
+[onboarding | 6 First account — at rest | text] ONBOARDING · STEP 6 OF 7
+[onboarding | 6 First account — at rest | button] ?
+[onboarding | 6 First account — at rest | title] What is this page for?
+[onboarding | 6 First account — at rest | aria-label] What is this page for?
+[onboarding | 6 First account — at rest | aria-label] Onboarding steps
+[onboarding | 6 First account — at rest | text] Step 6 of 7
+[onboarding | 6 First account — at rest | text] ✓ Intro
+[onboarding | 6 First account — at rest | text] ✓ Company
+[onboarding | 6 First account — at rest | text] ✓ Role
+[onboarding | 6 First account — at rest | text] ✓ Category
+[onboarding | 6 First account — at rest | text] ✓ ICP
+[onboarding | 6 First account — at rest | text] Account
+[onboarding | 6 First account — at rest | text] Quota
+[onboarding | 6 First account — at rest | text] STEP 6 OF 7 — FIRST ACCOUNT
+[onboarding | 6 First account — at rest | heading 2] Pick one company that fits the ICP.
+[onboarding | 6 First account — at rest | text] Optional, but the workspace feels real once a named account lands in Signal Console.
+[onboarding | 6 First account — at rest | text] Account name (optional)
+[onboarding | 6 First account — at rest | field] Account name (optional)
+[onboarding | 6 First account — at rest | placeholder] e.g., Meridian Logistics
+[onboarding | 6 First account — at rest | text] Why now? One signal that pulled them up (optional)
+[onboarding | 6 First account — at rest | field] Why now? One signal that pulled them up (optional)
+[onboarding | 6 First account — at rest | placeholder] e.g., Just announced EU expansion.
+[onboarding | 6 First account — at rest | button] Back
+[onboarding | 6 First account — at rest | button] Continue
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Wayfinder
+[onboarding | 6 First account — Boeing and a reason entered | link] ANTAEUS
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Home
+[onboarding | 6 First account — Boeing and a reason entered | text] ONBOARDING · STEP 6 OF 7
+[onboarding | 6 First account — Boeing and a reason entered | button] ?
+[onboarding | 6 First account — Boeing and a reason entered | title] What is this page for?
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] What is this page for?
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Onboarding steps
+[onboarding | 6 First account — Boeing and a reason entered | text] Step 6 of 7
+[onboarding | 6 First account — Boeing and a reason entered | text] ✓ Intro
+[onboarding | 6 First account — Boeing and a reason entered | text] ✓ Company
+[onboarding | 6 First account — Boeing and a reason entered | text] ✓ Role
+[onboarding | 6 First account — Boeing and a reason entered | text] ✓ Category
+[onboarding | 6 First account — Boeing and a reason entered | text] ✓ ICP
+[onboarding | 6 First account — Boeing and a reason entered | text] Account
+[onboarding | 6 First account — Boeing and a reason entered | text] Quota
+[onboarding | 6 First account — Boeing and a reason entered | text] STEP 6 OF 7 — FIRST ACCOUNT
+[onboarding | 6 First account — Boeing and a reason entered | heading 2] Pick one company that fits the ICP.
+[onboarding | 6 First account — Boeing and a reason entered | text] Optional, but the workspace feels real once a named account lands in Signal Console.
+[onboarding | 6 First account — Boeing and a reason entered | text] Account name (optional)
+[onboarding | 6 First account — Boeing and a reason entered | field] Account name (optional)
+[onboarding | 6 First account — Boeing and a reason entered | placeholder] e.g., Meridian Logistics
+[onboarding | 6 First account — Boeing and a reason entered | text] Why now? One signal that pulled them up (optional)
+[onboarding | 6 First account — Boeing and a reason entered | field] Why now? One signal that pulled them up (optional)
+[onboarding | 6 First account — Boeing and a reason entered | placeholder] e.g., Just announced EU expansion.
+[onboarding | 6 First account — Boeing and a reason entered | button] Back
+[onboarding | 6 First account — Boeing and a reason entered | button] Continue
+[onboarding | 7 Quota — at rest | aria-label] Wayfinder
+[onboarding | 7 Quota — at rest | link] ANTAEUS
+[onboarding | 7 Quota — at rest | aria-label] Home
+[onboarding | 7 Quota — at rest | text] ONBOARDING · STEP 7 OF 7
+[onboarding | 7 Quota — at rest | button] ?
+[onboarding | 7 Quota — at rest | title] What is this page for?
+[onboarding | 7 Quota — at rest | aria-label] What is this page for?
+[onboarding | 7 Quota — at rest | aria-label] Onboarding steps
+[onboarding | 7 Quota — at rest | text] Step 7 of 7
+[onboarding | 7 Quota — at rest | text] ✓ Intro
+[onboarding | 7 Quota — at rest | text] ✓ Company
+[onboarding | 7 Quota — at rest | text] ✓ Role
+[onboarding | 7 Quota — at rest | text] ✓ Category
+[onboarding | 7 Quota — at rest | text] ✓ ICP
+[onboarding | 7 Quota — at rest | text] ✓ Account
+[onboarding | 7 Quota — at rest | text] Quota
+[onboarding | 7 Quota — at rest | text] STEP 7 OF 7 — QUOTA
+[onboarding | 7 Quota — at rest | heading 2] What revenue does the year owe?
+[onboarding | 7 Quota — at rest | text] Quota Workback turns these into a weekly execution plan. Optional — you can fill it later.
+[onboarding | 7 Quota — at rest | text] Annual quota ($)
+[onboarding | 7 Quota — at rest | field] Annual quota ($)
+[onboarding | 7 Quota — at rest | placeholder] e.g., 1,200,000
+[onboarding | 7 Quota — at rest | text] Avg deal size ($)
+[onboarding | 7 Quota — at rest | field] Avg deal size ($)
+[onboarding | 7 Quota — at rest | placeholder] e.g., 50,000
+[onboarding | 7 Quota — at rest | button] Back
+[onboarding | 7 Quota — at rest | button] Finish onboarding
+[onboarding | 7 Quota — annual quota entered | aria-label] Wayfinder
+[onboarding | 7 Quota — annual quota entered | link] ANTAEUS
+[onboarding | 7 Quota — annual quota entered | aria-label] Home
+[onboarding | 7 Quota — annual quota entered | text] ONBOARDING · STEP 7 OF 7
+[onboarding | 7 Quota — annual quota entered | button] ?
+[onboarding | 7 Quota — annual quota entered | title] What is this page for?
+[onboarding | 7 Quota — annual quota entered | aria-label] What is this page for?
+[onboarding | 7 Quota — annual quota entered | aria-label] Onboarding steps
+[onboarding | 7 Quota — annual quota entered | text] Step 7 of 7
+[onboarding | 7 Quota — annual quota entered | text] ✓ Intro
+[onboarding | 7 Quota — annual quota entered | text] ✓ Company
+[onboarding | 7 Quota — annual quota entered | text] ✓ Role
+[onboarding | 7 Quota — annual quota entered | text] ✓ Category
+[onboarding | 7 Quota — annual quota entered | text] ✓ ICP
+[onboarding | 7 Quota — annual quota entered | text] ✓ Account
+[onboarding | 7 Quota — annual quota entered | text] Quota
+[onboarding | 7 Quota — annual quota entered | text] STEP 7 OF 7 — QUOTA
+[onboarding | 7 Quota — annual quota entered | heading 2] What revenue does the year owe?
+[onboarding | 7 Quota — annual quota entered | text] Quota Workback turns these into a weekly execution plan. Optional — you can fill it later.
+[onboarding | 7 Quota — annual quota entered | text] Annual quota ($)
+[onboarding | 7 Quota — annual quota entered | field] Annual quota ($)
+[onboarding | 7 Quota — annual quota entered | placeholder] e.g., 1,200,000
+[onboarding | 7 Quota — annual quota entered | text] Avg deal size ($)
+[onboarding | 7 Quota — annual quota entered | field] Avg deal size ($)
+[onboarding | 7 Quota — annual quota entered | placeholder] e.g., 50,000
+[onboarding | 7 Quota — annual quota entered | button] Back
+[onboarding | 7 Quota — annual quota entered | button] Finish onboarding
+[onboarding | 8 Complete — after finishing | aria-label] Wayfinder
+[onboarding | 8 Complete — after finishing | link] ANTAEUS
+[onboarding | 8 Complete — after finishing | aria-label] Home
+[onboarding | 8 Complete — after finishing | text] ONBOARDING · WORKSPACE LIVE
+[onboarding | 8 Complete — after finishing | button] ?
+[onboarding | 8 Complete — after finishing | title] What is this page for?
+[onboarding | 8 Complete — after finishing | aria-label] What is this page for?
+[onboarding | 8 Complete — after finishing | aria-label] Onboarding steps
+[onboarding | 8 Complete — after finishing | text] All 7 steps complete
+[onboarding | 8 Complete — after finishing | text] ✓ Intro
+[onboarding | 8 Complete — after finishing | text] ✓ Company
+[onboarding | 8 Complete — after finishing | text] ✓ Role
+[onboarding | 8 Complete — after finishing | text] ✓ Category
+[onboarding | 8 Complete — after finishing | text] ✓ ICP
+[onboarding | 8 Complete — after finishing | text] ✓ Account
+[onboarding | 8 Complete — after finishing | text] ✓ Quota
+[onboarding | 8 Complete — after finishing | text] ONBOARDING COMPLETE
+[onboarding | 8 Complete — after finishing | heading 2] The workspace is live.
+[onboarding | 8 Complete — after finishing | text] Your answers seeded an ICP, an account, and a quota plan. Welcome will guide the next real moves.
+[onboarding | 8 Complete — after finishing | link] Start the first move
+[onboarding | 8 Complete — after finishing | text] Or jump straight to the Dashboard, Quota Workback, or Settings.
+[onboarding | 8 Complete — after finishing | link] the Dashboard
+[onboarding | 8 Complete — after finishing | link] Quota Workback
+[onboarding | 8 Complete — after finishing | link] Settings
+[onboarding | 1 Intro — page help opened (“?”) | aria-label] Wayfinder
+[onboarding | 1 Intro — page help opened (“?”) | link] ANTAEUS
+[onboarding | 1 Intro — page help opened (“?”) | aria-label] Home
+[onboarding | 1 Intro — page help opened (“?”) | text] ONBOARDING · STEP 1 OF 7
+[onboarding | 1 Intro — page help opened (“?”) | button] ?
+[onboarding | 1 Intro — page help opened (“?”) | title] What is this page for?
+[onboarding | 1 Intro — page help opened (“?”) | aria-label] What is this page for?
+[onboarding | 1 Intro — page help opened (“?”) | aria-label] Page help
+[onboarding | 1 Intro — page help opened (“?”) | text] WHAT THIS PAGE IS FOR
+[onboarding | 1 Intro — page help opened (“?”) | text] Onboarding collects the initial information Antaeus uses to configure the workspace.
+[onboarding | 1 Intro — page help opened (“?”) | text] WHAT TO DO HERE
+[onboarding | 1 Intro — page help opened (“?”) | text] Answer the current step. Only the required fields must be completed before you continue.
+[onboarding | 1 Intro — page help opened (“?”) | text] IF IT LOOKS EMPTY OR WRONG
+[onboarding | 1 Intro — page help opened (“?”) | text] Leave optional fields blank if you do not know them yet. You can update them later from the relevant pages.
+[onboarding | 1 Intro — page help opened (“?”) | link] Still stuck? Email us
+[onboarding | 1 Intro — page help opened (“?”) | button] Close
+[onboarding | 1 Intro — page help opened (“?”) | aria-label] Onboarding steps
+[onboarding | 1 Intro — page help opened (“?”) | text] Step 1 of 7
+[onboarding | 1 Intro — page help opened (“?”) | text] Intro
+[onboarding | 1 Intro — page help opened (“?”) | text] Company
+[onboarding | 1 Intro — page help opened (“?”) | text] Role
+[onboarding | 1 Intro — page help opened (“?”) | text] Category
+[onboarding | 1 Intro — page help opened (“?”) | text] ICP
+[onboarding | 1 Intro — page help opened (“?”) | text] Account
+[onboarding | 1 Intro — page help opened (“?”) | text] Quota
+[onboarding | 1 Intro — page help opened (“?”) | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — page help opened (“?”) | heading 2] Antaeus turns the revenue work you're doing into a clear picture of what's happening.
+[onboarding | 1 Intro — page help opened (“?”) | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — page help opened (“?”) | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — page help opened (“?”) | text] You can skip any step except the first. The first ask is a one-line ICP — everything else compounds off of it.
+[onboarding | 1 Intro — page help opened (“?”) | text] Nothing is sent anywhere. Everything stays on this device until you wire cloud sync from Settings.
+[onboarding | 1 Intro — page help opened (“?”) | button] Begin
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Wayfinder
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] ANTAEUS
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Home
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] ONBOARDING · STEP 1 OF 7
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] ?
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | title] What is this page for?
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] What is this page for?
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Onboarding steps
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Step 1 of 7
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Intro
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Company
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Role
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Category
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] ICP
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Account
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Quota
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | heading 2] Antaeus turns the revenue work you're doing into a clear picture of what's happening.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] You can skip any step except the first. The first ask is a one-line ICP — everything else compounds off of it.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] Nothing is sent anywhere. Everything stays on this device until you wire cloud sync from Settings.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] Begin
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Page directory
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] ⌘K
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | field] Filter pages
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Filter pages
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | placeholder] Jump to a page… (Esc to close)
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] 26 / 26
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] GETTING STARTED
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] WELCOME Welcome Today's recommended starting point.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] PRIORITIES
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] SALES ACTIVITY
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] SIGNAL CONSOLE Signal Console Monitor account signals and priority.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific questions and next-step capture.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] SALES PLANNING
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] ICP STUDIO ICP Studio Define the companies and buyers you sell to.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify accounts.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] DEAL RISK
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective actions.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] ANALYSIS AND HANDOFF
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] BRIEFING Briefing Review account and market changes, evidence, and recommendations.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] WORKSPACE SETTINGS
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | link] SETTINGS Settings Backup, restore, demo mode, category, cloud sync.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] SKILLS
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] SKILL Review this week's workspace analysis Open the Dashboard to review current sales priorities and supporting evidence.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] ⏰
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Schedule Review this week's workspace analysis
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Signal Console, ready to prepare the call.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Schedule Prep for my next call
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled open deals in your pipeline.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Schedule What's at risk this week
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open deal preselected for pilot planning.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Schedule Plan a pilot for the highest-risk deal
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | button] SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account from Signal Console preselected.
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | aria-label] Schedule Compose this week's outbound
+[onboarding | 1 Intro — jump list opened (Ctrl+K) | text] ↑↓ navigate · ↵ open · Esc close

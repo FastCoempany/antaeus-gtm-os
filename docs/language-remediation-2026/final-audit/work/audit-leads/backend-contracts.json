@@ -1,0 +1,168 @@
+{
+ "area": "backend-contracts",
+ "coverage": [
+  {
+   "surface": "Dashboard command engine scoring/reasons + snapshot aggregator + Today adapters",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/engine-helpers.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/dashboard/lib/snapshot-aggregator.ts",
+    "src/dashboard/lib/command-intelligence.ts",
+    "src/dashboard/today/lib/adapters.ts"
+   ],
+   "note": "git diff f6416124..HEAD reviewed: score arithmetic and thresholds unchanged; only reason/copy strings changed. Text-matching consumers (testCardText regexes, isQuiet, parseHeat/parseStaleDays) checked against new strings."
+  },
+  {
+   "surface": "Deal Workspace recovery engine + health snapshot",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/deal-workspace/lib/recovery.ts",
+    "src/deal-workspace/lib/health-snapshot.ts"
+   ],
+   "note": "Score values/thresholds unchanged (100/70/35, 60/30, 80/30, 50/30); cause strings changed (see 001)."
+  },
+  {
+   "surface": "Readiness verdict persistence (readiness_snapshots + gtmos_readiness_last_verdict + gtmos_readiness_snapshot)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/readiness-history.ts",
+    "src/dashboard/lib/readiness-snapshot-publisher.ts",
+    "src/founding-gtm/main.tsx",
+    "supabase/migrations/20260424170003_new_noun_tables.sql"
+   ],
+   "note": "Engine ids stored, labels derived at read; DB verdict column mapped to its 3-value check constraint. Weak-flags written as explicit booleans so the label rename (Deal motion -> Deal management) does not break the /deals/ regex fallback."
+  },
+  {
+   "surface": "Quota, Future Autopsy, Outbound, Readiness-dimension engines",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/quota-workback/lib/engine.ts",
+    "src/future-autopsy/lib/autopsy.ts",
+    "src/future-autopsy/lib/causes.ts",
+    "src/lib/readiness/dimensions.ts",
+    "src/lib/readiness/verdict.ts",
+    "src/outbound-studio/lib/generator.ts",
+    "src/signal-console/lib/heat.ts"
+   ],
+   "note": "Diffed against f6416124. Quota quality formula unchanged (reformat only); exact-deal annual rounding is owner-approved (CLAUDE.md 2026-11-05). FA retime() removed but no lead text embeds a day count any more, so no contradiction. Outbound noAsk+3 -> nextQuestion+6 present (approved). Readiness gate math unchanged; blocker text selection changed (approved). heatFromStoredRow new single source; recomputes from signals."
+  },
+  {
+   "surface": "LinkedIn Playbook persisted action log (cueLabel/motionLabel) and readers",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/linkedin-playbook/lib/types.ts",
+    "src/linkedin-playbook/lib/persistence.ts",
+    "src/linkedin-playbook/lib/linkedin-bridge.ts",
+    "src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx",
+    "src/linkedin-playbook/lib/motion.ts",
+    "src/linkedin-playbook/lib/cues.ts"
+   ],
+   "note": "All historical cue names recovered from git log of cues.ts and compared with the legacy map; seed data cueLabels use current names."
+  },
+  {
+   "surface": "Call in a Favor / Pilot Desk / Prospecting Desk / Cold Call persisted keys",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/call-in-a-favor/lib/advisor-bridge.ts",
+    "src/call-in-a-favor/lib/moments.ts",
+    "src/pilot-desk/lib/quality.ts",
+    "src/cold-call-studio/lib",
+    "src/prospecting-desk/lib/sourcing-bridge.ts"
+   ],
+   "note": "Diffs show display-label changes only; moment ids, tier/outcome stamps, band keys (ready/workable/thin, cast/hot/cold/red), thread ids and outcome enums unchanged and within DB check constraints."
+  }
+ ],
+ "findings": [
+  {
+   "id": "BACKEND-CONTRACTS-001",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/today/lib/adapters.ts",
+   "line": 47,
+   "generation": "ds",
+   "state": "Dashboard Today surface (?v4=0 / room_dashboard_v4_off), Queue read, GONE QUIET zone, with a deal silent for 30+ days and a dated next step that is not overdue",
+   "current": "QUIET_PHRASE = /(stalled|stale|days since|gone quiet|no reply|no activity|drift|dark|silent)/i. Deal Workspace recovery.ts:assessStaleness now emits the 30+ day cause as `No recorded activity for ${days} days` (was `Stalled ${days} days`); this cause is causes[0] (recovery.ts:121), becomes health-snapshot top_pressure.cause (health-snapshot.ts:64), then the Dashboard card subtitle -> CommandObject.copy (snapshot-aggregator.ts:111, command-intelligence.ts:203).",
+   "problem": "Regression from the language work: the new 30+ day wording no longer matches the quiet detector ('No recorded activity' does not match /no activity/, and there is no 'stalled'/'days since'). The most-stale deals (score 100) now fall into NOW/THIS WEEK instead of GONE QUIET unless their next step is also overdue. The 7\u201329 day wording ('days since last recorded activity') still matches, so the stalest deals are the only ones dropped. adapters.test.ts:91 still feeds the retired literal 'Stalled 42 days', so the test passes while the real input no longer matches.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md (language work must not change behavior); AUDIT_BRIEF \u00a75 'a renamed label that breaks' behavior",
+   "proposed": "Extend the pattern to the new wording: const QUIET_PHRASE = /(stalled|stale|days since|gone quiet|no reply|no (?:recorded )?activity|drift|dark|silent)/i; and change adapters.test.ts:91 to use the real recovery output 'No recorded activity for 42 days' (keep the old literal as a second case). Better: carry staleDays as a rankingSignal on the deal risk card in snapshot-aggregator.ts so isQuiet does not depend on display text.",
+   "testsAffected": [
+    "src/dashboard/today/lib/adapters.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-002",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/signal-profile.ts",
+   "line": 229,
+   "generation": "shared",
+   "state": "Dashboard ranking (all three generations) whenever a Quota Workback plan is saved",
+   "current": "signal-profile.ts:229-235 reads the quota health summary with camelCase keys: qualityScore, pressureScore, touchesWeek, activeAccounts, qualityBand. snapshot-aggregator.ts passes gtmos_quota_targets through raw (parseJson, no translation). quota-workback/lib/persistence.ts:110-128 writes that key in snake_case (quality_score, quality_band, touches_week, active_accounts) and never writes any pressure score.",
+   "problem": "Contract mismatch between the writer (Quota Workback) and the reader (Dashboard command engine): quotaPressureScore, quotaQualityScore, quotaQualityBand, quotaTouchesWeek and quotaActiveAccounts are always 0/empty. Every quota-driven ranking boost in scoring.ts and every quota reason/copy line ('the quota plan increases this item's priority', 'Your quota plan needs this done this week.', 'Your plan is ahead of the work logged \u2014 log or do more outreach.') is dead code, while the Dashboard copy implies the quota plan feeds the ranking. Pre-existing (the aggregator is unchanged from f6416124), not introduced by the language work, but it makes the newly explicit reason copy describe behavior that never happens.",
+   "governing": "CLAUDE.md Part I \u00a74.18 Flows out ('targets into Dashboard'); AUDIT_BRIEF \u00a75 (copy that claims something the code does not do)",
+   "proposed": "In snapshot-aggregator.ts readHealthSummaries, normalise the quota summary before handing it to the engine: { qualityScore: q.quality_score, qualityBand: q.quality_band, touchesWeek: q.touches_week, activeAccounts: q.active_accounts, pressureScore: <derived> } with a regression test that saves a plan via saveOutputs and asserts buildSignalProfile sees non-zero values. OWNER DECISION: there is no defined pressureScore formula; either define one (e.g. from readPaceStanding / coverage gap in quota-workback/lib/coverage.ts) or delete the quotaPressureScore branches and their reason/copy strings so the Dashboard stops implying a quota input it never receives.",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts (none asserts the quota translation)",
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-003",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 93,
+   "generation": "shared",
+   "state": "Dashboard 'system' object reasons (shown when sync warnings exist): Why panel / reason chips",
+   "current": "pushReason(reasons, \"readiness \" + profile.readinessScore + \"/100\"); and profile.readinessWeakestDimension.toLowerCase() + \" is the part of readiness furthest behind\" (lines 93, 96) \u2014 renders e.g. 'readiness 58/100' and 'icp & targeting is the part of readiness furthest behind' / 'pilots, reviews and handoff records is the part of readiness furthest behind'.",
+   "problem": "Surfaces the bare internal readiness score as '/100' (canon \u00a74.17 Language: never surface a bare score; the state name is the value) and lowercases the dimension label, so 'ICP' becomes 'icp' and the plural label gets a singular verb. High-context/compressed for a first-time user.",
+   "governing": "CLAUDE.md Part I \u00a74.17 Language bullet; COPY_STANDARD \u00a717",
+   "proposed": "Replace line 93 with the state name the summary already carries (e.g. \"readiness: \" + verdict label, or drop the reason), and line 96 with: \"Furthest behind for readiness: \" + profile.readinessWeakestDimension (no toLowerCase).",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-004",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx",
+   "line": 67,
+   "generation": "v4",
+   "state": "LinkedIn Playbook default screen, per-account step rail, for an action logged between 2026-07-01 and 2026-07-09 (stored in gtmos_linkedin_log / cloud linkedin_actions data.cueLabel)",
+   "current": "LEGACY_CUE_NAMES maps 'Watch public signal', 'Watch the public signal', 'Comment with one operating read', 'Comment with one useful observation', 'Connect after recognition', 'Give proof before asking', 'Give something useful before asking', 'Ask only when earned', 'Ask only when it is warranted', 'Ask only when it's warranted'. It omits 'Give evidence before asking', which was the shipped name of step 4 from #294 (4825d83, 2026-07-01) until #297 (d177359, 2026-07-09).",
+   "problem": "cueLabel is a persisted display label (types.ts:177). An action logged under that name resolves to null in cueIndexForEntry, so the account's step 4 never shows as done and statsWithLoggedSteps (motion.ts) undercounts, which can change the recommended LinkedIn action for that account. A renamed label breaking stored history.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/13_IMPLEMENTATION_ORDER_FOR_CODING_AGENT.md 'Enum/state rule'",
+   "proposed": "Add \"Give evidence before asking\": 3 to LEGACY_CUE_NAMES, and move the map to lib/cues.ts (export cueIndexForLabel) so the ds ChannelBoard and legacy CueLedger can use it too; add a test that every historical step name in git (list above) maps to an index.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-005",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/linkedin-playbook/ds/components/ChannelBoard.tsx",
+   "line": 47,
+   "generation": "ds",
+   "state": "LinkedIn Playbook previous generation (?v4=0) activity list, and oldest generation CueLedger (src/linkedin-playbook/components/CueLedger.tsx:228), for any action logged before the 2026 rename",
+   "current": "{a.cueLabel} \u00b7 {a.motionLabel} \u2014 renders the stored label verbatim, e.g. 'Give proof before asking' or 'Ask only when earned' for older logs.",
+   "problem": "The stored label from an older build is shown with no translation on the two fallback generations, so retired wording ('proof', 'earned', 'operating read') reappears for existing users. The v4 screen maps old names to positions but does not translate the visible text either.",
+   "governing": "CLAUDE.md Part III \u00a713 (proof / earned bans); interaction manifest records[112] (proof)",
+   "proposed": "Render the current step name for the resolved index instead of the stored string: const idx = cueIndexForLabel(a.cueLabel); display idx != null ? findCue(idx).name : a.cueLabel (same in CueLedger.tsx). Stored data stays unchanged.",
+   "testsAffected": [],
+   "confidence": "medium"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

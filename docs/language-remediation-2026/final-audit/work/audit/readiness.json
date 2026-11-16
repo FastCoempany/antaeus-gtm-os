@@ -1,0 +1,261 @@
+{
+ "area": "readiness",
+ "coverage": [
+  {
+   "surface": "Readiness on the default Dashboard: masthead (five-state strip, 'Current readiness: …', 'What would improve readiness') and the readiness panel opened by 'Review readiness →' (IN PROGRESS — first save)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/dashboard/v4/DashboardV4.tsx",
+    "src/dashboard/v4/ClimbDrawer.tsx",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/dashboard/v4/lib/area-chip.ts"
+   ],
+   "note": "Read in full; compared with the SMB walkthrough generated today and with the enterprise text captured from the built app earlier today. Further rows are added as each surface is finished."
+  }
+ ],
+ "findings": [
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 218,
+   "generation": "shared",
+   "state": "Every readiness surface (Dashboard masthead 'What would improve readiness', readiness panel 'To become Usable with founder support', the area chips, the export, the stored history) in any workspace where a pilot has been saved in Pilot Desk. Both demo books show it: each seeds a converted pilot (Chipotle in the enterprise book, Rothy's in the SMB book) and the Dashboard still says 'Run a pilot whose result the buyer's boss could act on without you in the room.'",
+   "current": "readProofs() does `const arr = asArray(parseJson(storage.getItem(\"gtmos_poc_data\")));` and loops over a top-level array. Pilot Desk saves the key as an object: `storage.setItem(STORAGE_KEY, JSON.stringify({ pocs: capped }))` (src/pilot-desk/lib/persistence.ts:132), and both demo seeds write `pocData:{pocs:[…]}` (js/demo-seed-data-ent.js:638, js/demo-seed-data-smb.js:449). asArray() of an object is [], so castProofs is always 0.",
+   "problem": "Functional defect, confirmed by running the aggregator (scratchpad script readiness-fable/run_poc.cjs): the shape Pilot Desk writes returns castProofs = 0; only a bare array, which nothing writes any more, is counted. Three results follow. (1) gateInheritable() requires castProofs >= 1, so no workspace can ever get past 'Partially documented', whatever is recorded; the Founding GTM state-change announcement that depends on reaching 'Usable with founder support' can never appear. (2) The blocker 'Run a pilot whose result the buyer's boss could act on without you in the room.' stays on screen after the user has done exactly that, and nothing the user does can clear it, so a first-time user is told something false about their own workspace. (3) The '…, but few pilot results are recorded' chip suffix and the 'Record results from 3+ pilots' item are permanent for the same reason. The 2026-11-05 label change to 'Pilots, reviews and handoff records' treated the symptom (the area read 'solid' with 'no pilot recorded'); the pilots were recorded and not read. Founding GTM's reader of the same key was already corrected for this (src/founding-gtm/lib/cross-room.ts:323-330, comment: 'reading the bare array off the real { pocs: [...] } object is what silently returned zero proofs before'). The unit test passes only because its fixture uses the bare-array shape with `outcome: \"open\"` and a `heat` object (src/dashboard/lib/readiness-aggregator.test.ts:191-202), neither of which Pilot Desk writes.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (adversarial functional review: persisted-state/localStorage shapes, scoring/thresholds/recommendation selection, cross-room handoffs) and 'Approved product evolution' (readiness recommendation/blocker selection must be intact); AUDIT_BRIEF.md section 4 owner decision 'Numbers shown in more than one area come from the area that owns them'; COPY_STANDARD.md §21 (copy may not claim more than the product evidence supports).",
+   "proposed": "In readProofs() accept both stored shapes, the way src/founding-gtm/lib/cross-room.ts readProofs() does: `const parsed = parseJson(storage.getItem(\"gtmos_poc_data\")); const arr = Array.isArray(parsed) ? parsed : maybeArrayWithKey(asObject(parsed), \"pocs\");`. Keep the existing counting rule for now (a saved pilot whose outcome is not blank/\"open\", or whose legacy heat sum is above 0). Add regression tests to src/dashboard/lib/readiness-aggregator.test.ts that seed `gtmos_poc_data` with `{ pocs: [...] }` exactly as saveProofs() writes it and with the enterprise demo seed excerpt, and correct the 'Enterprise demo shape: no completed pilot' premise in src/dashboard/v4/lib/area-chip.test.ts:7-8. Because the existing rule counts every saved pilot, change the three pilot strings to say what is checked (see the next finding) in the same change. Expect the demo books to move to a higher readiness state once pilots are read, so regenerate the walkthrough afterwards. OWNER DECISION: what should count as the pilot that unlocks 'Usable with founder support' and 'Hire-ready'. With the read fixed and the rule unchanged, a pilot saved as 'Not started' counts. Canon (CLAUDE.md §4.17) asks for a pilot 'whose result the buyer's boss could act on'. Counting only pilots with a recorded result would need a result signal the default Pilot Desk screen can set: today the outcome field (Not started / In progress / Converted / Failed) can only be changed on the two older Pilot Desk screens, and the default screen stores its results summary under a different key (gtmos_pilot_desk_v1, field `writeup`) that readiness does not read.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts (fixture at lines 191-202 uses a bare array the app no longer writes; needs cases for the { pocs: [...] } shape)",
+    "src/dashboard/v4/lib/area-chip.test.ts (comment at lines 7-8 states the enterprise demo has no completed pilot)",
+    "tests that assert the demo Dashboard readiness state or blocker text, if any (e2e walk specs)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-001"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 177,
+   "generation": "shared",
+   "state": "Pilot lines in readiness: the blocker under 'To become Usable with founder support' and 'To become Hire-ready' (also the Dashboard masthead line when it is first; it is the line both demo books show), the pilot gap and evidence lines in the two older readiness panels and the export, and the suffix on the 'Pilots, reviews and handoff records' chip in the default panel.",
+   "current": "verdict.ts:134 and :177 \"Run a pilot whose result the buyer's boss could act on without you in the room.\" · verdict.ts:68 \"Complete a pilot with a result the buyer can evaluate.\" (not reachable today) · dimensions.ts:280 \"Record results from 3+ pilots\" · dimensions.ts:293 \"{n} pilot evidence records\" · src/dashboard/v4/lib/area-chip.ts:25 \", but few pilot results are recorded\".",
+   "problem": "Every one of these strings talks about a pilot result, and the rule behind them does not look at results. readProofs() (src/dashboard/lib/readiness-aggregator.ts:217-240) counts a stored pilot when its outcome is any non-blank value other than \"open\". Pilot Desk stores the outcome as not_started, in_progress, converted or failed, default not_started (src/pilot-desk/lib/persistence.ts:55-60, 78-80), so once the storage read is repaired (previous finding) a pilot that has only been set up satisfies 'Run a pilot whose result the buyer's boss could act on' and is counted in '{n} pilot evidence records'. Executed (scratchpad readiness-fable/run_poc.cjs): a bare-array store holding one converted, one in-progress and one not-started pilot counts 3. The reverse also holds: the default Pilot Desk screen has no control for the outcome (only the two older screens do: src/pilot-desk/ds/components/ForgeForm.tsx:139, src/pilot-desk/components/ForgePanel.tsx:138), and the results summary it does collect is stored under `gtmos_pilot_desk_v1` (src/pilot-desk/v4/lib/pilot.ts:13, field `writeup`), which readiness does not read. So on the default screens a seller cannot record the thing these lines ask for. Two smaller points: with no pilot counted the chip says 'few pilot results are recorded' where 'none' is the fact; and chipFor() decides whether to add the suffix by comparing display text (`d.gaps.includes(PILOT_RESULTS_GAP)`, area-chip.ts:22), so rewording the gap line without updating the constant silently removes the suffix.",
+   "governing": "COPY_STANDARD.md §21 (do not make copy more precise than the product evidence permits) and §20; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (deterministic output must not state more than the recorded evidence); AUDIT_BRIEF.md disputed-term row 'proof' (the pilot artifact is 'the pilot', 'pilot evidence', 'success criteria').",
+   "proposed": "Keep the counting rule and make the strings say what it checks, using Pilot Desk's own labels ('Define the pilot', 'Success criteria', 'Who approves the result', 'Save pilot setup'): verdict.ts:134, :177 and :68 \"Define a pilot in Pilot Desk and save its setup: the success criteria, who approves the result, and when it ends.\" · dimensions.ts:280 \"Save the setup for 3+ pilots in Pilot Desk\" · dimensions.ts:293 \"{n} pilots saved in Pilot Desk\" · area-chip.ts:25 \", but fewer than 2 pilots are saved\" (the suffix shows while 0 or 1 pilot is counted). Replace the text comparison in chipFor() with a flag set by scoreProof() (for example export `function pilotItemIncomplete(d: DimensionScore)` next to PILOT_RESULTS_GAP, or add `pilotsShort: boolean` to the score). OWNER DECISION: the product description (CLAUDE.md §4.17: 'at least one pilot whose result the buyer's boss could act on') asks for a result, not a setup. To keep the result wording truthfully, count only pilots with a recorded result (outcome converted or failed, or a non-empty results summary from the default Pilot Desk screen) and give the default Pilot Desk screen a way to record the outcome. That changes which workspaces pass the gate.",
+   "testsAffected": [
+    "src/dashboard/v4/lib/area-chip.test.ts (asserts \"solid, but few pilot results are recorded\")",
+    "src/dashboard/lib/readiness-aggregator.test.ts > \"counts cast proofs (heat sum > 0 OR named outcome)\" (line 188)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-002"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 177,
+   "generation": "shared",
+   "state": "The Discovery area of readiness everywhere it is shown or used: the 'Discovery — …' chip in the default readiness panel, the Discovery evidence and gap lines in the two older readiness panels, any 'Discovery: …' line under 'To become …' and on the Dashboard masthead, the export, and the state itself.",
+   "current": "readDiscoveryStats() takes `advancedCalls` and `totalCalls` from `gtmos_discovery_stats` and the scorer (src/lib/readiness/dimensions.ts:178-202) presents them as \"{n} discovery calls recorded with outcome 'advanced'\" and \"{n} Discovery Studio sessions\" (gaps: \"Record 6+ discovery calls with outcome 'advanced'\", \"Run 5+ Discovery Studio sessions\"). The only code that writes that key is Cold Call Studio: incrementDiscoveryStats() adds 1 to totalCalls for every logged cold call and 1 to advancedCalls when the cold-call outcome is \"meeting booked\" (src/cold-call-studio/lib/persistence.ts:186-199). Discovery Studio never writes it; the result a seller records under 'How did the call end?' goes to `gtmos_discovery_call_log` (src/discovery-studio/lib/call-log.ts:236-285), which readCallPlanner() (line 166) counts as \"{n} discovery calls prepared\" (gap: \"Prepare 8+ discovery calls in Discovery Studio\").",
+   "problem": "All three Discovery lines name something other than what is counted, and two of the three actions cannot change the number. Executed with the engine (scratchpad script readiness-fable/run_disc.cjs): a workspace with 10 discovery calls run in Discovery Studio, each recorded as 'Advanced — dated next step set', and no cold calls scores 6 of 20, shows 'Discovery — limited', lists \"10 discovery calls prepared\" and still asks to \"Record 6+ discovery calls with outcome 'advanced'\" and \"Run 5+ Discovery Studio sessions\". A workspace that never opened Discovery Studio but logged 12 cold calls with 6 meetings booked scores 14, shows 'Discovery — solid', and lists \"6 discovery calls recorded with outcome 'advanced'\" and \"12 Discovery Studio sessions\". Because 'Usable with founder support' needs every area at 10 or more, a seller who does discovery only in Discovery Studio can never reach it, and nothing on screen says cold calls are what moves this area. Cold calls are also counted a second time under Outreach (\"{n} cold calls logged\"). The cause is the Call Planner retirement (owner decision, AUDIT_BRIEF.md section 4): Call Planner was the screen that recorded discovery outcomes into this key; the aggregator comment still calls the key a 'Cold Call + Discovery aggregate' (line 28).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (functional review: persisted state, scoring/thresholds/recommendation selection, cross-room handoffs) and 'Approved product evolution' (readiness recommendation/blocker selection must work); COPY_STANDARD.md §21 (claims discipline) and §20 (name the specific fact the product knows); AUDIT_BRIEF.md section 5 'copy that now claims something the code does not do'.",
+   "proposed": "Smallest change that makes the screen accurate today, in src/lib/readiness/dimensions.ts scoreDiscovery(): evidence \"{n} discovery calls with a recorded result\" and gap \"Record how 8+ discovery calls ended in Discovery Studio (After the call)\" for the call-log count; evidence \"{n} cold calls that booked a meeting\" and gap \"Book 6+ meetings from calls logged in Cold Call Studio\" for advancedCalls; evidence \"{n} calls logged in Cold Call Studio\" and gap \"Log 5+ calls in Cold Call Studio\" for totalCalls. Update the matching expectations in src/lib/readiness/dimensions.test.ts and the header comment at readiness-aggregator.ts:26-28. OWNER DECISION: the better fix is to feed the Discovery area from Discovery Studio's own call log, which needs a decision about what the area should measure. One consistent option: 'discovery calls that advanced' = call-log records whose result is 'Advanced — dated next step set' or 'Won' (optionally plus cold-call meetings booked, as today); 'Discovery Studio sessions' = call-log records of any result; and drop the cold-call total from this area because Outreach already counts it. That changes the readiness state of existing workspaces and of both demo books (they seed gtmos_discovery_stats directly: enterprise {totalCalls:14, advancedCalls:7}, SMB {totalCalls:11, advancedCalls:6}), so it should not be done without the owner. With that option the current strings (\"discovery calls recorded with outcome 'advanced'\", \"Discovery Studio sessions\") become true and only 'prepared' needs rewording.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts (asserts Discovery evidence/gap wording)",
+    "src/dashboard/lib/readiness-aggregator.test.ts (asserts advancedCalls/totalCalls are read from gtmos_discovery_stats)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-003"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 161,
+   "generation": "shared",
+   "state": "Readiness panel list under 'To become Usable with founder support' (default, previous and oldest Dashboard) and the saved/exported blocker list, in a 'Partially documented' workspace where no area has reached 16 of 20 and the highest-scoring area is also the first area below 10. Typical soon after setup, when ICP & targeting is both first in order and the strongest area.",
+   "current": "gateInheritable() adds one line for the first area scoring under 10 (lines 146-159) and a second line for the highest-scoring area when no area reaches 16 (lines 161-174). Both come from dimensionBlocker(area, …) = `${area.label}: ${area.gaps[0]}.`. When both rules pick the same area the list holds the same sentence twice. Executed with the engine (scratchpad readiness-fable/run_cases.cjs case 6: one ICP at quality 50, 30 outbound touches to 5 accounts): [\"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\", \"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\", \"Run a pilot whose result the buyer's boss could act on without you in the room.\"]. A random sweep of 600,000 inputs (run_sweep.cjs) produced a repeated line 1,627 times.",
+   "problem": "The same recommendation is printed twice in a list of two or three, so the reader looks for a difference that is not there. All three panels render the items with `key={b}` (src/dashboard/v4/ClimbDrawer.tsx:137, src/dashboard/today/components/ReadinessPanel.tsx:125, src/dashboard/components/ReadinessDrawer.tsx:194), so the two list items also share a key. This is in the approved blocker-selection logic; no test covers it.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (readiness recommendation/blocker selection must be intact) and Required work item 10 (duplicate explanations); comprehension principle.",
+   "proposed": "In gateInheritable(), add the second line only when it is new, and when the strongest area is the one already named use its next listed gap: `const line = strongest === weak && strongest.gaps[1] ? `${strongest.label}: ${strongest.gaps[1]}.` : dimensionBlocker(strongest, …); if (!blockers.includes(line)) blockers.push(line);` (hoist `weak` out of the first `if`). Add a test to src/lib/readiness/verdict.test.ts: evaluateReadiness({ ...EMPTY_READINESS_INPUT, icpCount: 1, bestIcpQualityScore: 50, outboundTouches: 30, distinctAccountsTouched: 5 }).gateBlockers has no repeated entry.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts (no existing case; add one)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-004"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 25,
+   "generation": "shared",
+   "state": "Dashboard masthead line under 'What would improve readiness' and the readiness panel list, when the area a gate names has no listed gap: every item in that area is above the level at which it is shown as evidence but the area total is still below the gate. Reached in the engine with ordinary inputs, for example Discovery with 3 logged calls, 2 'advanced' and 2 sessions (score 7, no gaps).",
+   "current": "dimensionBlocker() (lines 25-30) returns `${dimension.label}: ${fallback}` with no closing period when `dimension.gaps` is empty. Reachable results (run_cases.cjs cases 5 and 7, run_mine1.cjs case A): \"Discovery: more evidence is required for another seller to run this with founder support\" (line 153), \"Discovery: additional evidence is required before another seller can run this independently\" (line 119), \"Discovery: at least one part of the sales process needs stronger evidence of repeatability\" (line 169; also produced for Deal management, Outreach and the pilots area). In the random sweep the line-169 sentence appeared 22,707 times and the line-119 sentence 4,864 times.",
+   "problem": "Semantic compression and high-context dependence. The approved change was that a blocker names the area and the action; in exactly the case where the seller has done part of the work, the line says only that 'more evidence' is needed, not which. 'run this' has no referent on the Dashboard masthead. The line-169 sentence puts an area name in front of a statement about 'at least one part of the sales process', so the reader cannot tell whether the named area is that part or why it was named; the same area can show the chip 'solid' in the panel (score 14 or 15) while it is listed as the thing to fix. The missing period makes these lines look different from the others in the same list. A second effect of the same cause: the named action is always the first listed gap, which can be the smallest item rather than what the area lacks. Executed (run_mine1.cjs case B): Deal management with 2 active deals, 2 next steps, 2 wins and no lost deals scores 7 and produces \"Deal management: Record a loss reason on closed-lost deals.\" — an action a workspace with no lost deals cannot take and that is worth at most 4 of the 20 points.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, 'Structural rules' → Readiness: for each state show 'what evidence is missing' and 'what specific action moves readiness forward'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (generated recommendations state the evidence next to the assessment); COPY_STANDARD.md §8 (pronoun test) and §20 (if the product knows the measure, name it).",
+   "proposed": "Replace the three generic fallbacks with a sentence that states the area's targets, ending with a period. Export from src/lib/readiness/dimensions.ts a `FULL_CREDIT: Record<DimensionId, string>` built from the saturation thresholds already in the scorers, and have dimensionBlocker() return `${label}: ${t(\"more recorded activity is needed.\")} ${FULL_CREDIT[id]}` when there is no listed gap. Texts (numbers are the thresholds in scoreOutreach/scoreDiscovery/scoreDeals/scoreProof/scoreIcp): Outreach — \"Full credit is 30 outbound messages, 15 cold calls, 12 LinkedIn actions and 12 different accounts.\" · Discovery — \"Full credit is 8 discovery calls with a recorded result, 6 calls that led to a next meeting and 5 calls logged.\" (word the three items to match whatever the Discovery finding settles) · Deal management — \"Full credit is 6 active deals, 5 with a next step, 3 closed-won and 3 closed-lost with a loss reason.\" · Pilots, reviews and handoff records — \"Full credit is 3 pilots, 3 deals with a corrective action completed in Future Autopsy, 3 Call in a Favor requests and 5 handoff sections ready.\" · ICP & targeting — \"Full credit is an ICP with quality 75 or higher, 30 accounts in Territory Architect and 10 confirmed accounts in Prospecting Desk.\" (cannot occur today: an ICP area with no gap scores at least 17). For the 'one area at 16' rule (lines 161-174) say why the area is named: `t(\"One area has to be nearly complete. Closest:\")` + ` ${label} — ${gap or FULL_CREDIT sentence}`. Add tests: every blocker ends with a period; the three inputs above produce a line that names at least one number. OWNER DECISION: pick the named action by the largest remaining shortfall in the area instead of the first listed gap (and do not offer 'Record a loss reason…' to a workspace with no closed-lost deals, which needs the count of closed-lost deals passed from src/dashboard/lib/readiness-aggregator.ts readDeals()). That changes which action is recommended in some workspaces.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts (no assertion on these strings today; add the cases)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-005"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 194,
+   "generation": "shared",
+   "state": "The only line under 'What would improve readiness' on the Dashboard masthead, and under 'To become Partially documented' in the readiness panel, for every 'Founder-dependent' workspace — including a brand-new workspace before any data is entered.",
+   "current": "gateBuilding() (lines 183-205) takes the two highest-scoring areas, takes the first listed gap of each, and prints `Complete two readiness actions: {a}; {b}` with no closing period. Engine output (run_cases.cjs cases 1, 2, 4; run_sweep.cjs): empty workspace → \"Complete two readiness actions: Define your first ICP in ICP Studio; Record 30+ outbound touches\"; after doing exactly those two things (one ICP at quality 30, 30 touches to 3 accounts; scores 8 and 7) the state is still Founder-dependent and the line becomes \"Complete two readiness actions: Complete the missing ICP criteria; current quality is below 75/100; Log 15+ cold calls\"; with Discovery already at 12 → \"Complete two readiness actions: Prepare 8+ discovery calls in Discovery Studio; Record a next step on every active deal\"; when one of the two areas has no listed gap → \"Complete two readiness actions: Record results from 3+ pilots\" (4,864 of 600,000 random inputs).",
+   "problem": "The sentence states a rule the code does not apply. The gate is 'two of the five areas score 8 or more of 20', not 'two actions done': (1) completing the two named actions can leave the state unchanged and the line then asks for two different actions; (2) it can list a single action after the words 'two readiness actions'; (3) it names an action for an area that already meets the threshold when only one more area is needed; (4) the ICP gap contains a semicolon, so with the semicolon separator one action reads as two ('Complete the missing ICP criteria; current quality is below 75/100; Log 15+ cold calls' looks like three items); (5) 'readiness actions' is a label the reader has not met, and the line has no end punctuation. For a first-time user this is the first instruction the Dashboard gives.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline), §18 (punctuation must not hide the relationship), §6 (state the relation between evidence and conclusion); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Approved product evolution' (blocker selection).",
+   "proposed": "Say what the gate checks, name the area in front of each action, and end with a period. In gateBuilding(): `const steps = [...dimensions].sort((a, b) => b.score - a.score).slice(0, 2).filter((d) => d.gaps.length > 0).map((d) => `${d.label} — ${d.gaps[0]}`);` then `t(\"Readiness changes when two of the five areas have enough recorded activity. Next: {steps}.\").replace(\"{steps}\", steps.join(\"; \"))`, keeping the existing sentence at line 198 for the case with no listed step. Remove the semicolon from the ICP gap at src/lib/readiness/dimensions.ts:58 so the separator is unambiguous: \"Complete the missing ICP criteria (quality is below 75/100)\". Example result: \"Readiness changes when two of the five areas have enough recorded activity. Next: ICP & targeting — Define your first ICP in ICP Studio; Outreach — Log 30+ outbound messages in Outbound Studio.\" Add a test that the line ends with a period and never contains the word 'two' followed by one step. OWNER DECISION: list steps only for areas still under the threshold and say how many more areas are needed (one or two), so an area that already counts is not given an action. That changes which actions are shown for some workspaces.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts > \"returns 'you_are_the_system' on empty input\" (asserts only that a blocker exists; add text assertions)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-006"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 87,
+   "generation": "shared",
+   "state": "Dashboard masthead ('What would improve readiness') and readiness panel ('To become Hire-ready and repeatable') in a 'Hire-ready' workspace with fewer closed-won deals than closed-lost deals that have a loss reason.",
+   "current": "\"For this readiness state, recorded closed-won deals must be at least as numerous as analyzed closed-lost deals. Current: {won} won / {lost} analyzed lost.\" — engine output (run_cases.cjs case 8): \"For this readiness state, recorded closed-won deals must be at least as numerous as analyzed closed-lost deals. Current: 1 won / 3 analyzed lost.\"",
+   "problem": "High-context and compressed. On the masthead the state on screen is 'Hire-ready', so 'this readiness state' points at the wrong state (the rule belongs to the next one). 'Analyzed closed-lost deals' is not a term used anywhere else: the evidence line for the same number says 'closed-lost deals with a recorded loss reason' (src/lib/readiness/dimensions.ts:257). The sentence states a rule and a ratio but no action, and 'Current: 1 won / 3 analyzed lost' is a fragment.",
+   "governing": "COPY_STANDARD.md §8 (pronoun and placeholder test), §14 (verb + object), §19 (fragments); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'.",
+   "proposed": "\"Record more closed-won deals ({k} more needed). Hire-ready and repeatable requires at least as many closed-won deals as closed-lost deals with a recorded loss reason; this workspace has {won} won and {lost} lost.\" with `k = input.closedLostDealsAnalyzed - input.closedWonDeals`. Example: \"Record more closed-won deals (2 more needed). Hire-ready and repeatable requires at least as many closed-won deals as closed-lost deals with a recorded loss reason; this workspace has 1 won and 3 lost.\" The rule itself is unchanged.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts > \"blocks 'hire_ready_repeatable' on the actual 1:1 win/loss gate\" (lines 111-124 match /at least as numerous/ and /1 won \\/ 5 analyzed lost/; update both patterns to the new sentence, keeping the check that the two counts are shown)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-007"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 45,
+   "generation": "shared",
+   "state": "Not rendered today. The top gate's per-area check (lines 38-51) repeats the 'every area at 14' check that the Hire-ready gate has already passed before the top gate's blockers are shown, so this fallback cannot be reached through evaluateReadiness(). The same is true of the top gate's copies of the closed-won, deal-risk-review and pilot lines (lines 53-69).",
+   "current": "\"additional evidence is required for the documented-and-repeatable state\"",
+   "problem": "Names the highest state by the label the owner replaced on 2026-11-05/06 ('Documented and repeatable' → 'Hire-ready and repeatable'). The string is declared through t(), so it is part of the checked copy and would show the superseded name if the thresholds of the two gates ever diverge.",
+   "governing": "COPY_STANDARD.md §17 (state names); AUDIT_BRIEF.md section 4 (owner decision on readiness state names).",
+   "proposed": "\"more recorded activity is needed before the sales process is hire-ready and repeatable.\" (or delete lines 38-69's unreachable copies and keep one shared helper for the Hire-ready checks).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-008"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 131,
+   "generation": "shared",
+   "state": "Readiness panel 'To become Hire-ready' and the Dashboard masthead line in a 'Usable with founder support' workspace; the pilots/reviews/handoff evidence and gap lines in the two older readiness panels and in the export.",
+   "current": "verdict.ts:131 \"Complete at least one deal-risk review in Future Autopsy.\" (same sentence at :62, not reachable); dimensions.ts:305 \"{n} deal-risk reviews completed\"; dimensions.ts:312 \"Complete deal-risk reviews for 3+ deals in Future Autopsy\". The number behind all three is readAutopsies() (src/dashboard/lib/readiness-aggregator.ts:242-247): the count of deal ids in `gtmos_autopsy_log_v1`. A deal gets an entry only when a recommended corrective action is ticked or unticked for it in Future Autopsy (src/future-autopsy/lib/task-log.ts:92-108 toggleTask; called from src/future-autopsy/v4/FutureAutopsyV4.tsx:232 and the two older Future Autopsy screens).",
+   "problem": "The action named is not the action that is counted. Future Autopsy shows the risk review for every open deal as soon as the page opens; there is nothing to 'complete' or run. A seller who opens Future Autopsy and reads the review for a deal has done what the line says and the line stays. What clears it is ticking one of the 'Recommended corrective actions' on a deal. The evidence line also overstates: in the enterprise demo book '3 deal-risk reviews completed' includes Nordstrom, whose two corrective actions are both stored as not done (js/demo-seed-data-ent.js:631).",
+   "governing": "COPY_STANDARD.md §21 (claims discipline) and §20; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Approved product evolution' (blocker selection must lead to an action that works).",
+   "proposed": "verdict.ts:131 and :62: \"In Future Autopsy, mark at least one recommended corrective action complete on a deal.\" dimensions.ts:305: \"{n} deals with a corrective action marked in Future Autopsy\". dimensions.ts:312: \"Mark a recommended corrective action complete on 3+ deals in Future Autopsy\". (Wording follows the Future Autopsy heading 'Recommended corrective actions' and its hint 'Complete each action as it happens.') OWNER DECISION: whether readiness should instead count deals that have at least one corrective action currently marked complete (today a deal whose only action was ticked and then unticked still counts), or count something else as a 'review'.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts > \"counts unique deals with autopsy entries\" (unaffected by the copy; its fixture uses { deal: { task1: true } }, a shape Future Autopsy does not write)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-009"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 113,
+   "generation": "shared",
+   "state": "Outreach lines everywhere readiness is shown. After the onboarding flow (one ICP, accounts and ten deals, no outreach yet) the first line under 'What would improve readiness' on the default Dashboard is \"Outreach: Record 30+ outbound touches.\" (run_cases.cjs case 3). Also the Outreach evidence and gap lines in the two older panels (rendered: \"18 outbound touches\", \"15 distinct accounts contacted\", \"Log 15+ cold calls\") and in the export.",
+   "current": "dimensions.ts:107 \"{n} outbound touches\" · :113 \"Record 30+ outbound touches\" · :125 \"Log 15+ cold calls\" · :137 \"Log 12+ LinkedIn outreach actions\" · :143 \"{n} distinct accounts contacted\" · :149 \"Contact 12+ distinct accounts\".",
+   "problem": "(1) 'Outbound touches' is not a term the default screens use for this record: Outbound Studio's button is 'Mark sent', its toast 'Logged as sent to …' and its list 'Outreach log' (src/outbound-studio/v4/OutboundStudioV4.tsx:217-220, 266), and the activity panel says 'messages & calls'. A first-time user has to work out that a 'touch' is a message marked sent in Outbound Studio. (2) Four of the six lines do not say where the action is done, unlike the ICP, Discovery and pilot lines ('in ICP Studio', 'in Prospecting Desk'). (3) '{n} distinct accounts contacted' / 'Contact 12+ distinct accounts' claims more than is counted: readOutboundTouches() (src/dashboard/lib/readiness-aggregator.ts:135-148) counts account names on Outbound Studio messages only. Accounts reached by cold call or LinkedIn are not counted, so a seller who has called twenty accounts and logged every call is still told to 'Contact 12+ distinct accounts'.",
+   "governing": "COPY_STANDARD.md §2 (most literal noun), §20 and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'; comprehension principle.",
+   "proposed": ":107 \"{n} outbound messages logged\" · :113 \"Log 30+ outbound messages in Outbound Studio\" · :125 \"Log 15+ cold calls in Cold Call Studio\" · :137 \"Log 12+ LinkedIn actions in LinkedIn Playbook\" · :143 \"{n} different accounts with a logged outbound message\" · :149 \"Log outbound messages to 12+ different accounts\". ('Logged' rather than 'marked sent' because messages captured through the BCC address land in the same list once Outbound Studio has synced.) OWNER DECISION: count the distinct accounts across cold calls and LinkedIn actions as well, so that the line can truthfully say 'accounts contacted'. That changes the Outreach score of existing workspaces.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts (scoreOutreach cases assert scores only)",
+    "any test that matches the rendered blocker text 'Record 30+ outbound touches' (none found in src or tests)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-010"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 73,
+   "generation": "shared",
+   "state": "ICP & targeting lines. After the onboarding flow the second line in the default readiness panel is \"ICP & targeting: Build the territory to 30+ accounts.\" (run_cases.cjs case 3). Evidence line in the older panels and the export: \"29 accounts in territory\".",
+   "current": "dimensions.ts:67 \"{n} accounts in territory\" · :73 \"Build the territory to 30+ accounts\". The number is readTerritoryAccounts() (src/dashboard/lib/readiness-aggregator.ts:100-103): the length of `gtmos_ta_accounts`, the account list kept in Territory Architect.",
+   "problem": "'The territory' is not explained and the line does not say where to do it. The accounts a new user enters during onboarding are written to the Signal Console list (`gtmos_sc_v4`; src/onboarding/seeding/lib/seed-writer.ts:132-139) and not to Territory Architect, so a user who has just entered thirty accounts is told to 'build the territory to 30+ accounts' and cannot tell that a different list, in a different area, is meant.",
+   "governing": "COPY_STANDARD.md §20 and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule; comprehension principle (high-context dependence).",
+   "proposed": ":67 \"{n} accounts in Territory Architect\" · :73 \"Add 30+ accounts in Territory Architect\". OWNER DECISION: whether watched accounts in Signal Console (where onboarding puts them) should count toward this item, or whether onboarding should also place the accounts in Territory Architect. Either changes the ICP & targeting score.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts > \"saturates territory at 30 accounts\" (score only)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-011"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 58,
+   "generation": "shared",
+   "state": "ICP & targeting lines: blocker on the masthead and in the default panel (\"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\"), evidence and gap lines in the older panels (rendered in the previous version: \"3 ICP defined\", \"Complete the missing ICP criteria; current quality is below 75/100\") and the export.",
+   "current": "dimensions.ts:39 \"{n} ICP defined\" → \"3 ICP defined\" · :51 \"Best ICP quality: {n}/100\" · :58 \"Complete the missing ICP criteria; current quality is below 75/100\".",
+   "problem": "(1) The default ICP Studio never shows a quality number. It shows a rating (Too broad / Partially defined / Well defined / Highly specific) and 'N of 8 criteria' (src/icp-studio/v4/IcpStudioV4.tsx:27-30, 102, 128). Readiness quotes a score out of 100 and a threshold of 75 that the user cannot find on the screen they are sent to; 75 sits inside the 'Well defined' band (70-84, src/icp-studio/lib/quality.ts:154-164), so a user whose ICP is rated 'Well defined' can still be told its quality is too low with no way to see how far off it is. (2) The semicolon joins an instruction to a status and collides with the semicolon used to separate actions in the Founder-dependent line. (3) '3 ICP defined' is ungrammatical for any count above one.",
+   "governing": "COPY_STANDARD.md §13 (state units; name the reason), §20; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `heat` (\"if a score is shown, explain inputs\") applied by analogy; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md ICP Studio structural rule (quality system is Too broad / Partially defined / Well defined / Highly specific).",
+   "proposed": ":39 `input.icpCount === 1 ? t(\"1 ICP defined\") : t(\"{n} ICPs defined\")`. :51 \"Best ICP rating: {rating}\" where rating is the ICP Studio label for the stored score (85+ Highly specific, 70+ Well defined, 50+ Partially defined, else Too broad). :58 \"Complete the missing ICP criteria in ICP Studio (it lists which of the 8 are missing)\". OWNER DECISION: move the readiness threshold from 75 to an ICP Studio band edge (70 'Well defined' or 85 'Highly specific') so the line can name the rating that is required. That changes the ICP & targeting score for ICPs between the two numbers.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts > \"awards 6 the moment an ICP exists\" (expects the text \"1 ICP defined\"; still true)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-012"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 239,
+   "generation": "shared",
+   "state": "Deal management gap lines (older panels, export) and the Deal management blocker on the masthead and in the default panel when one of these is the first listed gap.",
+   "current": "dimensions.ts:239 \"Record a next step on every active deal\" — shown while fewer than 2 active deals have a next step (saturate(dealsWithNextStep, 5, 5) < 2). dimensions.ts:263 \"Record a loss reason on closed-lost deals\" — shown while fewer than 2 closed-lost deals have a loss reason.",
+   "problem": "Neither sentence matches the rule that shows it. Engine runs (scratchpad readiness-fable/run_mine2.cjs and run_mine1.cjs): one active deal that already has a next step still gets 'Record a next step on every active deal', and ten active deals of which two have a next step get no such line. A workspace with no closed-lost deals is told to 'Record a loss reason on closed-lost deals', and when that is the area's only listed gap it becomes the blocker (run_mine1.cjs case B: \"Deal management: Record a loss reason on closed-lost deals.\" with zero lost deals). The scorer receives only the number of lost deals that have a reason, so it cannot tell whether any lack one. The neighbouring lines state their target ('Build pipeline to 6+ active deals', 'Record 3+ closed-won deals').",
+   "governing": "COPY_STANDARD.md §21 and §26 (no sentences built as no-exception rules: 'every active deal'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10 (recommendation/logic mismatch).",
+   "proposed": ":239 \"Record a next step on 5+ active deals\". :263 \"Record a loss reason on 3+ closed-lost deals\". Both state the scored target (the items are full at 5 and at 3). OWNER DECISION: pass the number of closed-lost deals without a reason from readDeals() and show the loss-reason line only when such a deal exists; that removes a recommendation some workspaces see today.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts > \"flags missing next step as a gap\" (regex /next[ -]?step/ still matches)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-013"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 72,
+   "generation": "shared",
+   "state": "Readiness panel 'To become Hire-ready and repeatable' and the masthead line in a 'Hire-ready' workspace with no Call in a Favor request (run_cases.cjs case 10); the Call in a Favor gap line in the older panels and the export.",
+   "current": "verdict.ts:72 \"Use Call in a Favor on a real deal and record the outcome.\" · dimensions.ts:328 \"Use Call in a Favor on 3+ deals and record the outcomes\". The number is the count of logged requests (readAdvisorDeployments(), src/dashboard/lib/readiness-aggregator.ts:249-254); the default Call in a Favor screen logs each request with the outcome 'pending' (src/call-in-a-favor/v4/CallInAFavorV4.tsx:122) and says 'Request logged.'",
+   "problem": "The lines ask for more than is checked: a logged request counts whether or not an outcome is ever recorded, and three requests on one deal count as three. 'A real deal' implies the reader might use a pretend one. The evidence line for the same number is already accurate: '{n} Call in a Favor requests logged' (dimensions.ts:321).",
+   "governing": "COPY_STANDARD.md §21; COPY_STANDARD.md §26 (judgment words aimed at the reader).",
+   "proposed": "verdict.ts:72 \"Log at least one Call in a Favor request on a deal.\" · dimensions.ts:328 \"Log 3+ Call in a Favor requests\".",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-014"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

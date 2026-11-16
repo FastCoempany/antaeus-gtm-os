@@ -1,0 +1,316 @@
+{
+ "area": "shared-chrome",
+ "coverage": [
+  {
+   "surface": "Workspace map (footer handle, G key, panel, filter field, locked Onboarding entry in the private preview)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/lib/ground/GroundLine.tsx",
+    "src/lib/ground/motion.ts",
+    "src/lib/ground/ground.css",
+    "src/lib/ground/motion.test.ts",
+    "src/lib/preview-lane.ts"
+   ],
+   "note": "Read every line of the component, the registry, the CSS and the test. Rendered text checked against today's SMB walkthrough (corpus-smb/navigation.txt and corpus-smb/dashboard.txt, state 'After clicking OPEN WORKSPACE MAP · G') and the enterprise walkthrough (corpus/_other.txt, rows 'navigation | Workspace map / locked onboarding'). The map is mounted on the default screens only (grep for <GroundLine). The recommendation sentence is produced by src/birdseye/lib/ranker.ts and src/birdseye/lib/context.ts (dashboard reviewer's area); I read both because they decide what this panel recommends. I did not execute the G key handler, the Escape handler, or the 'All workspaces in sales-process order' fallback (it renders only on a path that is not in the registry). The label 'OPEN WORKSPACE MAP · G' that the walkthrough records as button text is visible only on hover (ground.css:75-93, opacity 0 at rest); at rest a sighted user sees the unlabeled grip tab."
+  },
+  {
+   "surface": "Recent activity panel (count, list, footer, hide and show controls, demo stream, calendar and scheduled-check lines)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/lib/edge/LiveEdge.tsx",
+    "src/lib/edge/edge-data.ts",
+    "src/lib/edge/demo-stream.ts",
+    "src/lib/edge/edge-prefs.ts",
+    "src/lib/edge/edge.css",
+    "src/lib/edge/edge-data.test.ts"
+   ],
+   "note": "Read every line. Demo text confirmed in corpus-smb/dashboard.txt ('RECENT ACTIVITY … NO RECENT RESPONSE · SIETE FOODS · 48D · TODAY · 26 MESSAGES & CALLS RECORDED'). I bundled src/lib/edge/edge-data.ts with esbuild into the scratchpad and ran quietLine, readStillQuiet and readEdge against crafted storage; the outputs quoted in findings SC-001 to SC-003 are from that run. Not executed: the live cloud path (observations and captured_meetings need a signed-in session), the hide/show animation, and the hidden state under 1240px width. Live observation sentences come from supabase/functions/heartbeat/generators.ts (backend reviewer's area); I read lines 157-362 only to compare them with the demo stream."
+  }
+ ],
+ "findings": [
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 298,
+   "generation": "v4",
+   "state": "Recent activity panel footer, on every default screen, whenever a watched account has had no new signal and no email or call from the user for 5 days or more. Walkthrough: 'NO RECENT RESPONSE · SIETE FOODS · 48D' (SMB book, corpus-smb/dashboard.txt) and 'NO RECENT RESPONSE · DAYFORCE · 33D' (enterprise book).",
+   "current": "No recent response · {account} · {N}d",
+   "problem": "The label says a buyer has not responded. The number does not measure responses. readStillQuiet (src/lib/edge/edge-data.ts:296-342) takes the later of the account's newest signal date and the user's last email or call to it, and counts days since; it never reads a reply. I ran it: an account that replied yesterday to a message sent 10 days ago is still returned as 10 days; an account that was never contacted and whose newest signal is 33 days old is returned as 33 days; a LinkedIn action yesterday does not reset it. In both demo books the account named is a closed-won customer with no outreach recorded (js/demo-seed-data-smb.js:246 Siete Foods, js/demo-seed-data-ent.js:412 Dayforce), so the first thing a tester reads in this footer is that a customer has not responded, when nothing was sent. A first-time user would chase a reply that was never owed. The unit is also the compressed 'd' the approved replacement had expanded to 'days'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[6] ('STILL QUIET · DAYFORCE · 33D' → 'DAYFORCE · NO RECORDED RESPONSE FOR 33 DAYS'); COPY_STANDARD.md §21 Claims discipline ('If the product knows only that there has been no logged activity, say that'); AUDIT_BRIEF §5 'copy that now claims something the code does not do'. The approved replacement assumed the number measured responses; the code shows it does not, so the wording has to follow the code.",
+   "proposed": "Keep the approved structure and name what is measured. Replace lines 297-300 with: <div><b>{read.stillQuiet.name}</b> · {t(\"no new signal or outreach for\", { class: \"body\" })} {read.stillQuiet.days} {t(\"days\")}</div> — renders 'DAYFORCE · NO NEW SIGNAL OR OUTREACH FOR 33 DAYS'. Update the file comment at lines 23-24 ('accounts without a recent response') to match. OWNER DECISION: if the line is meant to report buyer silence, readStillQuiet has to change: start the count at the user's last outreach, stop it at a recorded reply (outcomeDate on a touch marked replied or referred), count LinkedIn actions as outreach, and leave out accounts whose only deal is closed-won. That changes which account is shown.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "SC-001"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 245,
+   "generation": "v4",
+   "state": "Recent activity panel footer 'Today · N messages & calls recorded', on a day when the list holds buyer activity or automated updates but fewer messages and calls.",
+   "current": "const shift = Math.max((read?.shiftTotal ?? 0) + demoBump.value, todayEvents); rendered at line 303 as 'Today · {shift} messages & calls recorded'",
+   "problem": "The footer number is the larger of today's messages and calls and the number of list entries dated today of any kind: buyer replies, calendar meetings and scheduled-check observations included (LiveEdge.tsx:244-245; edge-data.ts:387-394 shiftTotal). The label says it counts messages and calls. I ran readEdge with no outreach today and one buyer reply recorded today: todayCount is 0 and shiftTotal is 1, so the same panel shows '0 today · messages & calls — logged or captured' at the top and 'Today · 1 messages & calls recorded' at the bottom. The original line ('SHIFT · 12 ON THE WIRE TODAY') counted everything in the list; the approved relabel narrowed the words and the formula stayed. With a count of 1 the text also reads '1 messages & calls recorded'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[7] ('SHIFT · 12 ON THE WIRE TODAY' → 'TODAY · 12 MESSAGES & CALLS RECORDED'); AUDIT_BRIEF §4 'Numbers shown in more than one area come from the area that owns them' and §5 'a number that no longer matches its formula'.",
+   "proposed": "Make the footer use the same number as the header: replace line 245 with `const shift = count;` (count is today's messages and calls, the Quota Workback counting rule), and drop the now-unused shiftTotal from EdgeRead (edge-data.ts:69-70, 387, 394). OWNER DECISION: with that change the footer repeats the header number. The owner may prefer to remove the footer line, or to keep the all-entries total under a label that matches it, such as 'Today · N updates in this panel'.",
+   "testsAffected": [
+    "src/lib/edge/edge-data.test.ts ('assembles the whole rail read' asserts read.shiftTotal >= 1)"
+   ],
+   "confidence": "high",
+   "id": "SC-002"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/edge/edge-data.ts",
+   "line": 378,
+   "generation": "v4",
+   "state": "Recent activity panel, the line shown on a day with no activity, when the last recorded activity was two calendar days ago but less than 48 hours ago (for example Wednesday 9:00 AM, last activity Monday 2:00 PM), and for anything older.",
+   "current": "No activity recorded today yet. The last recorded activity was yesterday ago at 2:00 PM. / No activity recorded today yet. The last recorded activity was 3d ago at 4:12 PM.",
+   "problem": "quietLine builds the day word as ageLabel(...) + ' ago' (lines 376-378). ageLabel returns the word 'yesterday' for anything 24 to 48 hours old, so the sentence reads 'yesterday ago' and names the wrong day (the activity was two days earlier). Both sentences above are the actual output of the function (run with now = Wed 09:00; last = Mon 14:00 and last = Sat 16:12). For older activity the sentence puts the compact stamp '3d' inside prose. This is the only sentence the panel shows on a day with no activity, so it is the first thing a returning user reads.",
+   "governing": "comprehension principle (AUDIT_BRIEF §5 dimension 9, elliptical syntax); COPY_STANDARD.md §19 (explanations use complete propositions; compact stamps are for labels).",
+   "proposed": "In quietLine stop reusing ageLabel. After the wasYesterday check compute whole calendar days: const days = Math.round((midnight(now) - new Date(when.getFullYear(), when.getMonth(), when.getDate()).getTime()) / 86_400_000); const dayWord = wasYesterday ? t(\"yesterday\") : `${days} ${t(\"days ago\")}`; — renders 'No activity recorded today. The last recorded activity was 2 days ago at 2:00 PM.' Drop 'yet' from the first clause ('No activity recorded today.'); nothing is lost.",
+   "testsAffected": [
+    "src/lib/edge/edge-data.test.ts ('the dead-morning line is honest, never fake-busy' asserts the line contains 'No activity recorded today yet' and 'yesterday')"
+   ],
+   "confidence": "high",
+   "id": "SC-003"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 308,
+   "generation": "v4",
+   "state": "Every default screen, keyboard or screen-reader use, in both the shown and the hidden state of the Recent activity panel.",
+   "current": "<button class=\"ledge-strip\" aria-label=\"Recent activity is hidden — click to show\"> is always in the page (lines 308-317), and <aside class=\"ledge-rail\" aria-label=\"Recent activity\"> with its 'Hide' button is always in the page (lines 254-306).",
+   "problem": "Both controls are always rendered and only CSS changes. edge.css:37-40 moves the hidden rail off screen with transform and pointer-events; edge.css:301-319 gives the strip opacity 0 and pointer-events none while the panel is showing. Neither removes the element from the tab order or from assistive technology. While the panel is showing, a keyboard user tabs to an invisible button that a screen reader announces as 'Recent activity is hidden — click to show' (the opposite of the truth), and pressing it does nothing because turnEdgeOn returns early. While the panel is hidden, the off-screen 'Hide' button and the whole list are still focusable and read aloud. The 'Hide' button's own accessible name is just 'Hide'; 'Hide recent activity' exists only as a title.",
+   "governing": "AUDIT_BRIEF §5 (accessible names in every state) and category A11Y; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row 'THE LIVE EDGE IS OFF — CLICK TO TURN ON' → 'RECENT ACTIVITY IS HIDDEN — CLICK TO SHOW' (the wording is implemented; the state it is announced in is wrong).",
+   "proposed": "Keep both elements for the animation and gate them by state. On the aside add aria-hidden={state === \"off\"} and inert={state === \"off\"}. On the strip button add tabIndex={state === \"off\" ? 0 : -1} and aria-hidden={state !== \"off\"}. On the Hide button add aria-label={t(\"Hide recent activity\", { class: \"body\" })}. No visible change.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "SC-004"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 272,
+   "generation": "v4",
+   "state": "Recent activity panel on any page other than Outbound Studio, for a signed-in workspace that uses the BCC address to capture sent email (Settings, 'Counting your work automatically').",
+   "current": "'messages & calls — logged or captured' under the day's count; the count and the 'you' lines are read from localStorage only (edge-data.ts:136-158, 183-252), and loadCloudEvents (LiveEdge.tsx:58-97) reads observations and captured_meetings but not captured email.",
+   "problem": "'Captured' tells the user that automatically captured email is in this count. A BCC-captured send is written by supabase/functions/inbound-email/index.ts:148-158 to the cloud table `sequences`. The panel counts from the localStorage key gtmos_outbound_touches, and the only writer of that key is Outbound Studio's own save effect (src/outbound-studio/state.ts:275, fed by src/outbound-studio/lib/cloud-persistence.ts:60-82 when that page boots). So a captured email is not counted, and no 'Outreach recorded for …' line appears, on the Dashboard or any other page until the user opens Outbound Studio on that device. The demo shows the opposite: a 'Sent email recorded for sofia@notion.so.' line arrives live on whatever page is open (demo-stream.ts:128). The Quota Workback pace count (src/quota-workback/v4/lib/pace.ts:70) reads the same key and has the same gap.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline; AUDIT_BRIEF §5 Function ('copy that now claims something the code does not do'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (examples and demo content must not show more than the product produces).",
+   "proposed": "In loadCloudEvents (LiveEdge.tsx:58-97) also read the workspace's recent outbound rows: data.sequences.list({ where: { sequence_key: \"outbound\" }, limit: 50 }), keep rows created inside WIRE_WINDOW_MS, emit { id: `touch:${row.id}`, who: \"you\", text: 'Outreach recorded for {account}.' } (mergeEvents already drops an id that the local list holds), and add the rows dated today that are not in the local list to the day's count. If that is not done in this pass, change line 272 to 'messages & calls recorded on this device' so the label matches what is counted. I read this path and did not run it against a live workspace.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-005"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/lib/edge/demo-stream.ts",
+   "line": 100,
+   "generation": "seed",
+   "state": "Interactive demo and private preview, Recent activity list: two 'automated updates' entries (one at load, one about 40 seconds later) and the first 'buyer activity' entry.",
+   "current": "Thursday's meeting with United Airlines is confirmed. / Tomorrow's meeting with Marriott is confirmed. / Starbucks replied to your outreach after 20 days without a recorded reply.",
+   "problem": "The live product never produces these sentences. The live calendar line (LiveEdge.tsx:89) is 'Calendar — a meeting with {account} is on the calendar.'; supabase/functions/calendar-sync stores meetings that have an attendee at a watched account and reads no acceptance status, so nothing is 'confirmed'. The live reply line (edge-data.ts:209) is '{account} replied to your outreach.'; nothing computes the number of days without a reply. The file header (lines 12-16) says the demo never performs a capability that does not exist. A tester who connects a calendar will not see a 'confirmed' line. 'Thursday's' is fixed text, so on a Thursday or Friday it describes a past meeting.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (demo and sample content held to the same evidence standard as generated copy).",
+   "proposed": "Use the sentences the live path produces. Line 87: `${c.bigReply} ${t(\"replied to your outreach.\", { class: \"body\" })}`. Line 100: `${t(\"Calendar — a meeting with\", { class: \"body\" })} ${c.calWith} ${t(\"is on the calendar.\", { class: \"body\" })}`. Line 156 the same with cast().arriveCal. Renders 'Calendar — a meeting with United Airlines is on the calendar.'",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-006"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/lib/edge/edge-data.ts",
+   "line": 349,
+   "generation": "v4",
+   "state": "Recent activity list, the age under each entry. Walkthrough: '28M', '1H', '3H', 'YESTERDAY' (corpus-smb/dashboard.txt).",
+   "current": "28m / 1h / 3d, shown in capitals by edge.css:214 as 28M / 1H / 3D",
+   "problem": "The stamp has no 'ago' and is set in capitals, so '28M' sits under a sales sentence in an app where 'M' next to a number normally means million ('$100MM', '$2MM quota' on the same screens). A first-time reader has to work out that 28M is an age. Dimension 1 (semantic compression), minor.",
+   "governing": "comprehension principle; COPY_STANDARD.md §14 (number + unit, event + time).",
+   "proposed": "In ageLabel return `${mins} ${t(\"min ago\")}`, `${hours} ${t(\"hr ago\")}`, t(\"yesterday\") and `${days} ${t(\"days ago\")}` — '28 MIN AGO', '1 HR AGO', 'YESTERDAY', '3 DAYS AGO'. With SC-003 applied quietLine no longer appends 'ago' to this value.",
+   "testsAffected": [
+    "src/lib/edge/edge-data.test.ts ('re-stamps ages in place' asserts '28m', '3h', 'yesterday', '3d')"
+   ],
+   "confidence": "medium",
+   "id": "SC-007"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 270,
+   "generation": "v4",
+   "state": "Recent activity panel header when a quota plan exists. Walkthrough: '26 / 33 TODAY · messages & calls — logged or captured'.",
+   "current": "{count} / {goal} today · messages & calls — logged or captured",
+   "problem": "The second number is the daily messages-and-calls requirement computed by Quota Workback (edge-data.ts:161-176). The panel does not say so, so the reader has to guess what 33 is and where it comes from (dimension 6, high-context dependence). Minor: the 'x / y today' pattern is widely read as progress against a daily number.",
+   "governing": "comprehension principle ('what a state or number means'); AUDIT_BRIEF §4 'Numbers shown in more than one area come from the area that owns them'.",
+   "proposed": "Line 270: <span class=\"ledge-goal\">/ {goal} {t(\"daily target\")}</span>. Line 272: t(\"messages & calls today — logged or captured\", { class: \"body\" }). Add title={t(\"Daily messages and calls required by your Quota Workback plan\", { class: \"body\" })} on the goal span. Renders '26 / 33 DAILY TARGET · messages & calls today — logged or captured'.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-008"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/ground/motion.ts",
+   "line": 23,
+   "generation": "v4",
+   "state": "Workspace map panel, first column heading, directly under the filter field. Walkthrough: 'ENTER Welcome … Onboarding … Dashboard'.",
+   "current": "Enter (rendered 'ENTER')",
+   "problem": "The other five column headings name a kind of sales work (Strategy, Find & watch, Work the account, Advance the deal, Diagnose · hand off). 'ENTER' in small capitals directly under a text field reads as the Enter key, and as a heading it only makes sense if the app is pictured as a place to walk into. The three pages under it are where a user starts.",
+   "governing": "comprehension principle; COPY_STANDARD.md §12 (navigation labels name destinations) and §3 'room' (do not make the reader learn the app-as-a-place picture).",
+   "proposed": "t(\"Start\") — column heading 'START'.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-009"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/ground/GroundLine.tsx",
+   "line": 198,
+   "generation": "v4",
+   "state": "Workspace map panel: the filter field placeholder, the fallback sub-line (line 184), and the related-activity card footer (src/lib/follow/FollowPeek.tsx:183).",
+   "current": "…or start typing a workspace / All workspaces in sales-process order / Recorded context remains available in each related workspace.",
+   "problem": "'Workspace' means the user's whole account everywhere else on these screens ('WORKSPACE MAP' two lines above, 'See related activity across the workspace' in the same card, 'Download my workspace' in Settings). Here the same word means one page of it, so 'All workspaces' and 'each related workspace' read as if the user had several workspaces. The jump palette and the help button already call these 'pages' ('Jump to a page…', 'What is this page for?'). 'Recommended next workspace:' (GroundLine.tsx:189) carries the same double meaning but is the approved replacement verbatim, so I list it under retained and raise it as an owner decision.",
+   "governing": "comprehension principle (consistent terms); docs/language-remediation-2026/19_ROOM_WORD_AUDIT.md ('say page when it means the screen you're on or the one you go to'); COPY_STANDARD.md §2.",
+   "proposed": "GroundLine.tsx:198 '…or type a page name'. GroundLine.tsx:184 'All pages in sales-process order'. FollowPeek.tsx:183 'Recorded context remains available on each related page.' OWNER DECISION: change the approved 'Recommended next workspace:' to 'Recommended next page:' so one panel does not use the word two ways.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-010"
+  },
+  {
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/lib/ground/GroundLine.tsx",
+   "line": 196,
+   "generation": "v4",
+   "state": "Workspace map panel, the filter field, read by a screen reader.",
+   "current": "<input class=\"gnd-filter\" placeholder=\"…or start typing a workspace\"> with no label",
+   "problem": "The field's only name is its placeholder, which starts with an ellipsis and 'or' because it continues the visible heading. Announced on its own it does not say what the field does.",
+   "governing": "AUDIT_BRIEF §5 (accessible names) and category A11Y.",
+   "proposed": "Add aria-label={t(\"Filter the workspace map\", { class: \"body\" })} to the input.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "SC-011"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/ground/GroundLine.tsx",
+   "line": 225,
+   "generation": "v4",
+   "state": "Private preview only: Workspace map, hover or keyboard focus on the locked 'Onboarding — not open in the preview' entry (corpus/_other.txt, row 'navigation | Workspace map / locked onboarding').",
+   "current": "…record the judgment Antaeus cannot reliably infer about active deals, such as the champion, final approver, current blocker, and real next step.",
+   "problem": "'real next step' implies that the next step a seller would otherwise give is not real. COPY_STANDARD.md §26 removes words that assume a failing in the reader ('really', 'actually'); 'real' does the same job here, and the sentence already names the four things recorded.",
+   "governing": "COPY_STANDARD.md §26 'Judgment words about the reader'.",
+   "proposed": "…record the judgment Antaeus cannot reliably infer about active deals, such as the champion, final approver, current blocker, and next step.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "SC-012"
+  }
+ ],
+ "dispositions": [
+  {
+   "recordId": "INV-0000",
+   "status": "IMPLEMENTED",
+   "currentText": "open workspace map · G (shown in capitals: 'OPEN WORKSPACE MAP · G'); tooltip 'Open workspace map (G)'; accessible name 'Open workspace map'",
+   "where": "src/lib/ground/GroundLine.tsx:142-143, 158; corpus-smb/dashboard.txt '[1. The area at rest | button] OPEN WORKSPACE MAP · G'",
+   "note": "The Batch 01 replacement for this string ('OPEN WORKSPACE MAP · G') is what renders. No 'Ground' or 'motion' wording remains in the handle, panel or CSS-visible text."
+  },
+  {
+   "recordId": "HS-000",
+   "status": "IMPLEMENTED",
+   "currentText": "open workspace map · G (shown in capitals); panel kicker 'Workspace map'; heading 'Where do you want to go?'",
+   "where": "src/lib/ground/GroundLine.tsx:158, 176-177; corpus-smb/dashboard.txt state 'After clicking OPEN WORKSPACE MAP · G'",
+   "note": "Same string as INV-0000; the interaction record had no replacement of its own and is covered by the Batch 01 exact replacement, which is implemented."
+  },
+  {
+   "recordId": "CG-00",
+   "status": "IMPLEMENTED",
+   "currentText": "open workspace map · G",
+   "where": "src/lib/ground/GroundLine.tsx:158 (static text in the shared component, not a generator)",
+   "note": "The contextual-generator record asked for the shared source to change once; the text lives in one shared component and is the approved replacement."
+  },
+  {
+   "recordId": "INV-0025",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Scheduled check: United Airlines has been at the same deal stage for more than 7 days with no dated next step. (demo) / Scheduled check: no new signals recorded in more than 14 days for Nordstrom. (demo) / live: tag 'AUTOMATED UPDATES' followed by the stored observation sentence",
+   "where": "src/lib/edge/demo-stream.ts:106, 165; src/lib/edge/LiveEdge.tsx:67, 226, 286; corpus-smb/dashboard.txt 'Scheduled check: no new signals recorded in more than 14 days for OLIPOP.'",
+   "note": "'Heartbeat —' is gone. 'Scheduled check' is the migration map's own term for heartbeat, and the sentence now states the two conditions the check tests (same stage for more than 7 days, no dated next step)."
+  },
+  {
+   "recordId": "HS-025",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Scheduled check: United Airlines has been at the same deal stage for more than 7 days with no dated next step.",
+   "where": "src/lib/edge/demo-stream.ts:165 (demo stream, arrives about 49 seconds after load); live path src/lib/edge/LiveEdge.tsx:67 shows the observation sentence under the tag 'AUTOMATED UPDATES'",
+   "note": "Approved text was 'Deal check · Nordstrom still has no dated next step.' The current label 'Scheduled check:' is the migration map's replacement for heartbeat and the sentence is more specific than the approved one. Passes the principle."
+  },
+  {
+   "recordId": "INV-1690",
+   "status": "STILL MISSING",
+   "currentText": "No recent response · Dayforce · 33d (shown in capitals)",
+   "where": "src/lib/edge/LiveEdge.tsx:298-299; corpus-smb/dashboard.txt 'NO RECENT RESPONSE · SIETE FOODS · 48D'",
+   "note": "'Still quiet' is gone, but the current label states a buyer non-response that the code does not measure, and it keeps the compressed 'd' the approved text expanded. Finding SC-001 gives the fix."
+  },
+  {
+   "recordId": "B1-X-006",
+   "status": "STILL MISSING",
+   "currentText": "No recent response · Dayforce · 33d (shown in capitals)",
+   "where": "src/lib/edge/LiveEdge.tsx:298-299; corpus-smb/dashboard.txt 'NO RECENT RESPONSE · SIETE FOODS · 48D'",
+   "note": "Approved: 'DAYFORCE · NO RECORDED RESPONSE FOR 33 DAYS'. Neither the approved text nor the current text matches what readStillQuiet measures (days since the newest signal or the user's last email or call). Finding SC-001 proposes 'DAYFORCE · NO NEW SIGNAL OR OUTREACH FOR 33 DAYS'."
+  }
+ ],
+ "retained": [
+  {
+   "file": "src/lib/ground/motion.ts",
+   "line": 48,
+   "text": "use your network to help move a deal",
+   "term": "move",
+   "why": "Ordinary verb ('move a deal'); it is the migration map's own approved description for Call in a Favor (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md, Navigation rewrite)."
+  },
+  {
+   "file": "src/lib/ground/GroundLine.tsx",
+   "line": 189,
+   "text": "Recommended next workspace:",
+   "term": "room",
+   "why": "Approved replacement verbatim (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md, rows 'You're in {page} · Recommended next workspace: Outbound Studio · …'). The page name follows directly. The double meaning of 'workspace' is raised in SC-010 as an owner decision."
+  },
+  {
+   "file": "src/lib/edge/edge-data.ts",
+   "line": 246,
+   "text": "You made a LinkedIn touch on {account}.",
+   "term": "motion",
+   "why": "'LinkedIn touch' is ordinary sales vocabulary and the literal word CLAUDE.md Part I §2 assigns to this activity. The sentence names who did what to which account."
+  },
+  {
+   "file": "src/lib/edge/edge-data.ts",
+   "line": 225,
+   "text": "{account} — a meeting came out of your cold call.",
+   "term": "other",
+   "why": "Plain statement of a recorded outcome (cold-call log outcome 'meeting_booked'); conversational, and no private vocabulary."
+  },
+  {
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 226,
+   "text": "automated updates / buyer activity / you (list tags)",
+   "term": "other",
+   "why": "Approved replacements verbatim (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[4] and [5]); each tag sits directly before a full sentence that says what happened."
+  },
+  {
+   "file": "src/lib/ground/motion.ts",
+   "line": 28,
+   "text": "Diagnose · hand off",
+   "term": "other",
+   "why": "Column heading over Future Autopsy, Quota Workback, Readiness Score, Founding GTM and Settings; two ordinary verbs, and each entry under it carries its own description."
+  }
+ ],
+ "gaps": []
+}

@@ -1,0 +1,287 @@
+{
+ "area": "onboarding",
+ "coverage": [],
+ "findings": [
+  {
+   "id": "ONBOARDING-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/onboarding/seeding/draft.ts",
+   "line": 44,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 5 (Your open deals): a deal is added with Stage = \"Proposal\" or \"Verbal yes\", setup is finished, and Deal Workspace (or any area that reads deals through it) is opened.",
+   "current": "DEAL_STAGES (draft.ts:29-36) offers ids prospect / discovery / proposal / negotiation / verbal-yes / unsure. roomStage() (draft.ts:44-46) only maps \"unsure\" → \"discovery\"; \"proposal\" and \"verbal-yes\" are written unchanged to localStorage (seed-writer.ts:171, key gtmos_deal_workspaces) and to the cloud deals table (cloud-mirror.ts:127, column stage).",
+   "problem": "\"proposal\" and \"verbal-yes\" are not Deal Workspace stage keys. The owning area's keys are prospect, discovery, evaluation, poc, negotiation, verbal, closed-won, closed-lost (src/deal-workspace/lib/deal-shape.ts:18-27), and both of its readers coerce any other value to \"prospect\" (asStage, src/deal-workspace/lib/deal-bridge.ts:39-42, used by legacyDealToDeal line 99 and dbRowToDeal line 145). So a deal the user entered as Proposal or Verbal yes is shown as \"Prospect\" in Deal Workspace, gets stage probability 0 there (STAGE_PROB.prospect, deal-shape.ts:52), is not treated as at-terms by Getting to Signed / Call in a Favor / Future Autopsy logic that tests for \"verbal\", and the wrong stage is then written back over the stored value when Deal Workspace mirrors its list (src/deal-workspace/lib/legacy-mirror.ts:28-33 via persistence.ts:23), so the stage the user chose is lost. Before that rewrite other readers disagree with each other about the same deal: Quota Workback weights raw \"proposal\" at 0.65 and \"verbal-yes\" at the 0.3 default (src/quota-workback/lib/coverage.ts:29-40,67-69). An earlier probe of these exact functions (onboarding-work/out-verify.txt, lines C0-C1 and 'C-cloud') recorded: stored 'proposal' → Deal Workspace stage 'prospect'; stored 'verbal-yes' → 'prospect'; I re-read each function at the cited lines. Present since the flow shipped (commit 293f27c, 2026-06-29); not caused by the language work, but it is wrong data on the main path of setup.",
+   "governing": "AUDIT_BRIEF §5 'Function' (stable keys, stored shapes, cloud columns; \"a display label stored where a stable key belongs\") and §4 (numbers and states come from the area that owns them). Owning contract: src/deal-workspace/lib/deal-shape.ts STAGE_IDS.",
+   "proposed": "Make roomStage() return a Deal Workspace StageId: change its return type to the owning area's StageId and map prospect → \"prospect\", discovery → \"discovery\", negotiation → \"negotiation\", \"verbal-yes\" → \"verbal\", unsure → \"discovery\", and proposal → \"evaluation\" (shown in Deal Workspace as \"Solution Fit\", the stage directly before pilot/negotiation). Keep the onboarding DealStage ids and diagnose.ts unchanged (they are only used inside the flow). Update logic.test.ts:60-65 (roomStage(\"proposal\") now \"evaluation\", add \"verbal-yes\" → \"verbal\") and cloud-mirror.test.ts:74 (expects stage \"proposal\"), and add a seed-writer test asserting every written stage is in STAGE_IDS. OWNER DECISION: Deal Workspace has no Proposal stage, so the mapping of \"Proposal\" is a product choice (Solution Fit vs Negotiation); the alternative is to replace the onboarding stage list with Deal Workspace's own six open stages (Prospect, Discovery, Solution Fit, PoC / Pilot, Negotiation, Verbal Commit, plus \"Not sure yet\"), which removes the translation but changes the options the user sees and which stages diagnose.ts counts as late.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/logic.test.ts:60-65",
+    "src/onboarding/seeding/lib/cloud-mirror.test.ts:66-76",
+    "src/onboarding/seeding/lib/seed-writer.test.ts:84"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-002",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/onboarding/seeding/components/WakeStep.tsx",
+   "line": 131,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 4 (Account research) when research succeeds, compared with Signal Console and the Dashboard after setup.",
+   "current": "Each researched account shows \"Estimated priority {n} out of 99\" (WakeStep.tsx:131), where n is the research model's own 0–100 score (function prompt index.ts:56-57, clamped at index.ts:40-44, capped to 99 for display). The list is headed \"Accounts ranked by recent findings\" (line 122). At the end of setup the same number is stored on the account row and in the gtmos_signal_room_health snapshot (seed-writer.ts:110, 151-158) and in the cloud row's data.heat (cloud-mirror.ts:99).",
+   "problem": "The number shown in setup is not the account priority the rest of the app shows. Signal Console, the Dashboard and every other reader compute account priority from the account's signals and ignore a stored heat when a signals array exists (heatFromStoredRow, src/signal-console/lib/heat.ts:86-104; readLiveSignalRoomHealth, src/signal-console/lib/health-snapshot.ts:117-136, whose comment says \"Onboarding writes its own estimate\"). Setup stores exactly one signal per researched account (AI-detected, confidence 0.7, dated now), so the computed priority is 18 for every account that had a finding and 0 for every account that did not (heat(): base 18 × recency 1.0, heat.ts:57-66). A user who saw \"Boeing · Estimated priority 82 out of 99\" in setup opens the Dashboard minutes later and sees Boeing at account priority 18 out of 99, tied with every other researched account, and Signal Console lists them all under \"New signal or newly watched\" with none high priority. Same unit, same account, different number: this breaks the owner's decision that a number shown in more than one area comes from the area that owns it. (Earlier probe output onboarding-work/out-verify.txt A4-A6 and B1-B3 recorded 90 → 18 and 71 → 18; I re-derived it from the cited functions.)",
+   "governing": "AUDIT_BRIEF §4 'Numbers shown in more than one area come from the area that owns them' (owner decision, CLAUDE.md session log 2026-11-05); COPY_STANDARD.md §21 (claims discipline).",
+   "proposed": "Stop presenting the research model's score as a priority number. In WakeStep.tsx remove the per-row \"Estimated priority {n} out of 99\" element (line 131) and change the heading/explainer (lines 122-123) to: heading \"Accounts in order of recent findings\"; explainer \"Accounts with a recent, source-backed change relevant to your ICP are listed first. The order is an assessment, not buying intent. Signal Console sets each account's priority score from its signals after setup.\" Change the margin note for this step (lib/evidence.ts:41) to match: \"Review the reported changes and their sources before acting. The order reflects an assessment of recency and ICP relevance, not confirmed buying intent.\" In seed-writer.ts stop writing the model score into gtmos_signal_room_health (build that snapshot with heatFromStoredRow of each written row, or omit it: the Dashboard already computes it live). OWNER DECISION: if the research assessment is meant to drive account priority after setup, Signal Console's scoring would have to accept it (a change to how priority is computed, owned by Signal Console).",
+   "testsAffected": [
+    "src/onboarding/seeding/components/WakeStep.test.tsx",
+    "src/onboarding/seeding/lib/seed-writer.test.ts (snapshot assertions)",
+    "src/onboarding/seeding/lib/evidence.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-003",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/Doorway.tsx",
+   "line": 22,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 1 of 7 (the first screen a new user sees), paragraph under the heading.",
+   "current": "It asks for things only you know: who you sell to, which companies you're going after, and where each of your open deals really stands. Most setup screens skip this work. Doing it is what lets the workspace flag deal problems before they surprise you.",
+   "problem": "Three of the owner's 2026-11-09 rules are broken on the screen those rules were written from. (1) \"really stands\" is a judgment word about the reader: it implies the reader's own account of a deal is not the true one. (2) \"Most setup screens skip this work.\" describes the step by what other products do not do and uses the stand-in noun \"this work\"; both are quoted in §26 as banned patterns (\"what most setup screens skip\", \"this work\"). The component's own comment (lines 6-7) says \"No claims about other teams\", yet the sentence is a claim about other products. (3) \"Doing it is what lets the workspace flag deal problems before they surprise you\" puts the stakes on the app instead of on what a buyer does, with a second stand-in (\"Doing it\").",
+   "governing": "COPY_STANDARD.md §26 'Name the thing' (casual stand-in nouns; describing by absence; judgment words about the reader) and 'Stakes come from buyers and deals, never from the app' (its Prefer example is the last sentence proposed here).",
+   "proposed": "You'll enter what only you know: who you sell to, which companies you're going after, and where each of your open deals stands. For every deal, that's who's championing it, who signs, and what's holding it up. Without that, the first sign one of your deals is in trouble is going to be an email saying they went with someone else.\n\n(These are the three sentences of step 1 in the mockup the owner reviewed, deliverables/mockups/onboarding-full-walkthrough-2026-11-10.html line 220. They fit the existing <p class=\"sd-lede\"> with no layout change and match what the flow collects: champion, who signs, where it's stuck.)",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js records this text; no unit test asserts it"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-004",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/Doorway.tsx",
+   "line": 28,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 1 of 7, second paragraph (the block above the Start button).",
+   "current": "You enter it once, and you'll get it back every morning on the Dashboard: which deals have gone quiet or missed a next step, what each one is missing, and which one to work on first. The more honest your answers, the more useful it gets.",
+   "problem": "\"The more honest your answers, the more useful it gets.\" uses the judgment word \"honest\" about the reader (it presumes they might not answer truthfully) and is shaped as a maxim that would fit on a poster. \"You enter it once, and you'll get it back … it gets\" uses \"it\" three times with no named referent, so a first-time user is not told what they will get back.",
+   "governing": "COPY_STANDARD.md §26 'Judgment words about the reader' (\"honest\" is listed) and 'Write to this reader, about what will happen'; §8 (pronoun test).",
+   "proposed": "You enter this once. Every morning after, your Dashboard opens on what needs you first, and why. Among your open deals, the ones that have gone quiet or have no next step booked come up first. Add the deals you're unsure about too. They'll show up there with the rest.\n\n(Sentences 1, 2, 4 and 5 are the mockup's wording, deliverables/mockups/onboarding-full-walkthrough-2026-11-10.html line 221. Sentence 3 is adjusted for accuracy: the mockup says \"Your open deals are lined up behind it in order of risk\", but the shipped Dashboard shows one recommendation at a time — \"Highest-priority recommended action · #1 of N\" with \"Show next recommendation\", src/dashboard/v4/DashboardV4.tsx:105-140 — and mixes deal and account recommendations, so the user will not see a line-up of deals there. The ordering rule itself is real: src/deal-workspace/lib/recovery.ts:57-78 scores days without recorded activity and a missing, undated or overdue next step.)",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js records this text; no unit test asserts it"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-005",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/onboarding/seeding/lib/seed-writer.ts",
+   "line": 101,
+   "generation": "v4",
+   "state": "Default onboarding flow: more than 12 companies entered at step 3, research succeeds at step 4, setup is finished.",
+   "current": "The accounts step says \"{n} ready. You can add as many as you like.\" (AccountsStep.tsx:89). The research function researches only the first 12 names (MAX_ACCOUNTS = 12, supabase/functions/seeding-enrichment/index.ts:24 and :120) and returns only those. At the end of setup both writers use the research result as the account list whenever it is not empty: seed-writer.ts:101-103 (`enriched.length > 0 ? enriched : draft.accountNames…`) and cloud-mirror.ts:90-92.",
+   "problem": "Every company after the twelfth is silently dropped: it is not listed on the research screen, not saved to Signal Console (gtmos_sc_v4) and not written to the cloud, although the user was told they could add as many as they like and nothing on any screen says a limit exists. Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): 20 names entered with a 12-row research result → \"saved locally 12\" and 12 cloud inserts.",
+   "governing": "AUDIT_BRIEF §5 'Function' (persistence; copy that claims something the code does not do); comprehension principle.",
+   "proposed": "Never drop an entered company. In seed-writer.ts and cloud-mirror.ts build the list from draft.accountNames and attach research where it exists: `const byName = new Map(enriched.map((a) => [a.name.toLowerCase(), a])); const list = draft.accountNames.map((name) => byName.get(name.toLowerCase()) ?? { name, signal: \"\", heat: 0, cold: true, sourceUrl: \"\" });`. On the research screen list the unresearched companies after the researched ones with the line \"Not researched in this pass\" (WakeStep.tsx: append draft names missing from the result). Change the accounts hint (AccountsStep.tsx:89) to \"{n} ready. You can add more; this step researches the first 12.\" Add a seed-writer test: 20 names + 12 researched rows → 20 accounts saved. OWNER DECISION: to research every company instead, call the function in batches of 12 from enrichAccounts and merge the results; that multiplies paid research calls per setup, so it is a cost decision.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/seed-writer.test.ts",
+    "src/onboarding/seeding/lib/cloud-mirror.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-006",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/QuotaStep.tsx",
+   "line": 69,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 6 (Your sales target), once an annual target and deal size are entered.",
+   "current": "Assuming you need about 3.5 times your target in open deals over each sales cycle, you'd want about {need} open deals at once. You added {have}. That meets this estimate. Quota Workback will show if your open deals drop below it. / That is below this estimate. Quota Workback shows how far short you are as you add deals.",
+   "problem": "Two problems. (1) The closing sentences say Quota Workback tracks this estimate. It does not: Quota Workback (and the Dashboard's \"Pipeline coverage\") compares stage-weighted pipeline with the ANNUAL target against a benchmark multiple that depends on deal size (3.5× mid-market, 5× at $200k deals; src/quota-workback/lib/coverage.ts and engine.ts benchmarkFor). The estimate here is 3.5 × the share of the target that falls in ONE sales cycle, counted in unweighted deals. Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): target $1.2M, $200k deals, 90-day cycle, ten deals added → this screen says \"you'd want about 5 open deals at once. You added 10. That meets this estimate.\" and the Dashboard then shows \"Pipeline coverage 0.5× / 5× — weighted pipeline is below benchmark\"; with 21 deals at $50k in negotiation the screen says the estimate is met and the Dashboard shows 0.7× / 3.5×. A first-time user is told they have enough and, one click later, that they are far short. (2) \"3.5 times your target … over each sales cycle\" compresses the calculation: most readers will take \"your target\" as the annual number just typed (which would give four times as many deals). The step also renders \"about 1 open deals\" when the estimate is 1 (for example when the cycle field is cleared).",
+   "governing": "AUDIT_BRIEF §4 'Numbers shown in more than one area come from the area that owns them'; COPY_STANDARD.md §21 (claims discipline) and §6 (state the calculation); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 2 ('State calculations as calculations').",
+   "proposed": "Replace the template and the two endings (QuotaStep.tsx:69-78) with a stated calculation and no claim about Quota Workback's measure: \"In one {cycle}-day sales cycle you need to close about {perCycle}. Assuming open deals worth 3.5 times that amount, you'd want about {need} open {deal|deals} at your typical deal size. You added {have}.\" followed by, when have >= need: \"That meets this rough estimate.\"; otherwise: \"That is below this rough estimate.\" and then always: \"Quota Workback measures coverage differently: it weights each open deal by stage and compares the total with your annual target.\" ({perCycle} = annualQuota × cycleDays / 365, formatted as money; use \"deal\" when need is 1.) Keep dealsForCoverage unchanged. OWNER DECISION: replace the estimate with Quota Workback's own coverage figure (computeCoverage with the benchmark multiple) so setup and the Dashboard show one number; that changes what this step reports.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/logic.test.ts (dealsForCoverage tests stay valid)",
+    "tools/preview/walk-onboarding.js records the sentence"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-007",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/onboarding/seeding/lib/diagnose.ts",
+   "line": 48,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 5: a deal at Proposal / Negotiation / Verbal yes with no signer (or with 'silent', 'quiet', 'stalled' in the stuck field) is added, then the Dashboard or Deal Workspace is opened after setup.",
+   "current": "The deal card in setup is labelled \"At risk\" (red): \"This deal is in a late stage with no signer recorded. This needs review before relying on the planned close date.\" The landing then names it under \"Where to start\".",
+   "problem": "\"At risk\" is also Deal Workspace's risk label (filter \"At risk\", src/deal-workspace/v4/DealWorkspaceV4.tsx:52) and the Dashboard's \"Open deal risk\" status, but those are computed from different facts: days without recorded activity, next-step status and close date (src/deal-workspace/lib/recovery.ts). A deal just entered in setup scores 60 there (\"No next step is recorded\"), which is the lower-risk group. Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): Boeing (Proposal, no signer) and Nordstrom (Negotiation, 'no reply for two weeks') were both labelled \"At risk\" in setup; after setup Deal Workspace put all four deals in the lower-risk group and the Dashboard status read \"Open deal risk: No elevated risk\". The same words mean two different things within one click, and the screen also refers to a \"planned close date\" that setup never asks for.",
+   "governing": "AUDIT_BRIEF §4 (states and numbers come from the area that owns them); COPY_STANDARD.md §17 (a state label names an observable condition) and §21.",
+   "proposed": "Name the recorded condition instead of borrowing the risk label. diagnose.ts:46-53: label \"Signer missing at a late stage\" when noSigner, otherwise \"No recent buyer reply\"; read: `This deal is at a late stage with ${why}. Confirm this before you count on it closing.` (keeps the existing why strings). The tone (red) and the suggested step stay. Update logic.test.ts:82-91 if it asserts the label. OWNER DECISION: have Deal Workspace's risk ranking also count a missing signer or champion at a late stage, so that a deal flagged in setup is flagged the same way afterwards (a scoring change owned by Deal Workspace).",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/logic.test.ts:82-91"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-008",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/DealsStep.tsx",
+   "line": 49,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 5, Value ($) field: the user types a common shorthand such as 120k or $1.2M and adds the deal.",
+   "current": "value: Number(fValue.value.replace(/[^0-9.]/g, \"\")) || 0 — every character except digits and dots is removed. The added-deal card shows the account, the check label and two sentences, but not the value (DealsStep.tsx:128-135).",
+   "problem": "Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): '120k' is stored as 120, '$1.2M' as 1.2, '1.2.3' as 0. The user is never shown the stored number, so a $120,000 deal enters Deal Workspace, the Dashboard pipeline total and Quota Workback coverage as $120 with no warning. The placeholder \"120000\" is the only hint that plain digits are expected.",
+   "governing": "AUDIT_BRIEF §5 'Function' (validation states; numbers that match what the user entered).",
+   "proposed": "Parse the common suffixes and show the result. Add a small parseMoney(raw) used by DealsStep: strip $ , and spaces; accept an optional k / m (any case) suffix (×1,000 / ×1,000,000); return 0 for anything else. Show the stored value on each added card, after the account name: `${account} · $${value.toLocaleString()}` (or \"no value entered\" when 0). Add tests for '120k', '$1.2M', '80,000', '120000', 'abc'.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/logic.test.ts (add cases)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-009",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/LandingStep.tsx",
+   "line": 34,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 7 (Setup complete), then signing in on a second device or after local storage is cleared.",
+   "current": "persistOnce() writes localStorage (writeSeedingDraft) and mirrors the ICP, accounts, signals and deals to the cloud (mirrorSeedToCloud). It never records that onboarding is complete in the cloud. Only the two fallback flows call persistOnboardingToCloud (ds/components/StepsDS.tsx:298, components/Steps.tsx:361), which sets workspace_profile.onboarding_completed.",
+   "problem": "The cross-device check in src/onboarding/main.tsx:90-111 reads workspace_profile.onboarding_completed. For a user who finished the default flow it is still false, so on a new device (where localStorage has no gtmos_onboarding marker) they are shown the whole setup again instead of being sent on. If they redo it, cloud-mirror.ts inserts their deals a second time (deals have no duplicate check there; only a unique-constraint error is ignored). The capability map states the completion is \"cloud-mirrored via ADR-007\", which is true only of the fallbacks. Confidence is medium because the legacy auth pages (js/supabase-config.js:686-700) can copy the local marker to the profiles table on a later sign-in from the first device; I did not execute that path.",
+   "governing": "AUDIT_BRIEF §5 'Function' (persistence, cloud columns, dedupe); deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html section 5 'Flows out'.",
+   "proposed": "In LandingStep.persistOnce, after mirrorSeedToCloud, also mark completion, fire-and-forget: add `markOnboardingCompleteInCloud(client)` to src/onboarding/lib/cloud.ts (same update-or-insert as persistOnboardingToCloud lines 41-63, setting onboarding_completed: true and onboarding_answers built from the seeding draft: icpStatement, account count, deal count, quota, average deal) and call it with createDataClient() inside a try/catch. Add a cloud.test.ts case. Separately make the deal insert in cloud-mirror.ts skip a deal whose account, value and stage already exist (list once, compare the same signature seed-writer.ts:196-197 uses).",
+   "testsAffected": [
+    "src/onboarding/lib/cloud.test.ts",
+    "src/onboarding/seeding/lib/cloud-mirror.test.ts"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ONBOARDING-010",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/onboarding/seeding/lib/seed-writer.ts",
+   "line": 115,
+   "generation": "v4",
+   "state": "Default onboarding flow, end of setup, when research found a sourced change for an account; then Signal Console is opened without a cloud session (or before the cloud copy loads).",
+   "current": "The signal saved to localStorage is { id, headline, confidence: 0.7, published_date: <time of setup>, fetched_at: <time of setup>, ai: true, status: \"active\" } (seed-writer.ts:117-125). The source link the research returned (EnrichedAccount.sourceUrl) is not written; the cloud copy does keep it (cloud-mirror.ts:110).",
+   "problem": "The research screen tells the user to \"Review the reported changes and their sources before acting\" and each row has a \"Review source\" link, but the saved signal has no url, so the source cannot be reviewed later from the locally saved account (Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): url=(none) on every saved signal). published_date is documented as \"When the signal happened in the world\" (src/signal-console/lib/types.ts:44-48) and is set to the moment setup finished, although the research does not return a date; any area that shows or ages a signal by that field treats an event of unknown date as having happened today.",
+   "governing": "AUDIT_BRIEF §5 'Function' (stored shapes); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md ('Observation: directly supported by stored or retrieved data'; evidence next to the assessment).",
+   "proposed": "In seed-writer.ts:117-125 add `...(a.sourceUrl ? { url: a.sourceUrl } : {})` to the saved signal and remove `published_date: iso` (keep fetched_at; Signal Console's recency falls back to fetched_at, src/signal-console/lib/heat.ts:31, so the score is unchanged). Add a seed-writer test asserting the url is kept and published_date is absent.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/seed-writer.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-011",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "supabase/functions/seeding-enrichment/index.ts",
+   "line": 172,
+   "generation": "backend",
+   "state": "Account research result (step 4) for a company the model did not return, or when more than ten companies are sent.",
+   "current": "accounts.push({ name: n, signal: \"No recent source-backed change found\", heat: 12, cold: true, fits: true, sourceUrl: \"\" }) for every requested name missing from the model's answer (index.ts:169-174). The call allows at most min(names, 10) web searches for up to 12 names (index.ts:132).",
+   "problem": "\"No recent source-backed change found\" reports the outcome of a search. For a company the model skipped, or the eleventh and twelfth company when only ten searches are allowed, no search is known to have run, so the line states a result that was not obtained (the README says the phrase \"means the search found no supporting evidence\"). The same applies when the model returns entries without having searched at all: the function accepts any https URL and does not look at result.search_count, so with zero searches a recalled URL is still shown as a source.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 1 and 3 (observed facts as facts; do not present an inference as an observation); COPY_STANDARD.md §21.",
+   "proposed": "index.ts:172: use signal \"Not researched in this pass\" for names the model did not return. index.ts:132: set max_searches to names.length (the request is already capped at 12). After the call, if result.search_count === 0, return every account as { signal: \"Not researched in this pass\", heat: 0, cold: true, sourceUrl: \"\" } with no explanations, because nothing was retrieved. Add harness cases to src/onboarding/seeding/lib/enrichment-function.test.ts (skipped name; search_count 0).",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/enrichment-function.test.ts:25-28 (expects the current text for the skipped account 'Beta')"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ONBOARDING-012",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/LandingStep.tsx",
+   "line": 67,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 7 (Setup complete), then the button \"Open the Dashboard →\".",
+   "current": "\"Where to start\" + \"{account}: {step}\" — e.g. \"Boeing: Confirm who can sign and agree on a dated next step.\" (the first deal with the most serious check result from setup, firstDealToReview, lines 48-57), directly above the only button, \"Open the Dashboard →\".",
+   "problem": "The Dashboard the button opens does not start there. Its first recommendation comes from a different ranking, and right after setup account-outreach recommendations outrank every deal. Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt) (four deals, five accounts): landing said \"Where to start — Boeing: Confirm who can sign and agree on a dated next step.\"; the Dashboard's list was 1-5 \"Outbound to Boeing / Starbucks / Chipotle / delta.com / Nordstrom\", 6 \"Save an ideal customer profile this week.\", and the Boeing deal only at position 7. The user is told where to start and then shown a different first action for the same company.",
+   "governing": "comprehension principle (what to do next and where to do it); COPY_STANDARD.md §7 (evidence → interpretation → action).",
+   "proposed": "Say what the line is and send the user to where it can be done. LandingStep.tsx:67: label \"First deal to review\" (instead of \"Where to start\"). Line 70 text: \"{acct}: {move}\" unchanged. Make that line a link to Deal Workspace for the named account using the existing continuity parameters: href=`/deal-workspace/?focusObject=${encodeURIComponent(first.account)}&returnTo=%2Fdashboard%2F&returnLabel=Dashboard&fromMode=threshold&fromSurface=onboarding-complete`. Keep \"Open the Dashboard →\" as the main button. Fallback text (line 71): \"Add your open deals so the workspace can suggest which one to review first.\" OWNER DECISION: whether the Dashboard's first recommendation after setup should be the same deal (a ranking change owned by the Dashboard).",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js records the label"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-013",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/LandingStep.tsx",
+   "line": 79,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 7 (Setup complete), block \"Where you stand\".",
+   "current": "Most of what a new hire would need still lives in your head. The workspace now has your targets, accounts, and deals, and it flags deals that need attention. Each week of recorded work makes it easier for someone else to pick up.",
+   "problem": "\"still lives in your head\" is the metaphor the original remediation replaced on the readiness screens; it does not say what the condition is. The sentence is also fixed text shown to every user whatever they entered, stated as a fact about them. \"recorded work\" is a stand-in noun for the specific things the app records.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] (\"It all lived in your head — nothing to inherit.\" → \"The sales process was not yet documented for another seller.\"); AUDIT_BRIEF §3 disputed term 'in your head'; COPY_STANDARD.md §3 and §26 'Name the thing'.",
+   "proposed": "The workspace now has who you sell to, your accounts and your open deals, and it flags deals that need attention. The rest of your sales process is not documented for another seller, so a new hire would still depend on you. Each week of recorded outreach, calls and deal updates makes it easier for someone else to pick up.",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js records this text"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-014",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/LandingStep.tsx",
+   "line": 88,
+   "generation": "v4",
+   "state": "Default onboarding flow, step 7 (Setup complete), block \"What's left — later, no rush\".",
+   "current": "Over the coming days the workspace will ask about your pilots, your advisors, and your wins and losses. Each answer fills in another part of the workspace. The hardest part is done.",
+   "problem": "Nothing in the app asks these questions over the following days. I searched src/ for any prompt, schedule or notification about pilots, advisors or wins and losses: Welcome's next-action list (src/welcome/lib/engine.ts) and the Briefing suggestions do not contain one. What exists is the readiness panel on the Dashboard, which lists what to record next (\"Record results from 3+ pilots\", \"Use Call in a Favor on 3+ deals and record the outcomes\", \"Record 3+ closed-won deals\", \"Record a loss reason on closed-lost deals\"; src/lib/readiness/dimensions.ts:251-343). The sentence promises behaviour the user will wait for and not see.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline) and §26 ('write about what will happen'); AUDIT_BRIEF category CLAIM.",
+   "proposed": "None of the rest is needed to start. The readiness panel on your Dashboard lists what to record next: pilot results, favors asked through Call in a Favor, and closed wins and losses. Each one fills in another part of the sales handoff. The hardest part is done.",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js records this text"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-015",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 264,
+   "generation": "shared",
+   "state": "Dashboard recommendation list for any workspace with at least one open deal, including immediately after onboarding has saved an ICP.",
+   "current": "shellContext: { deals: dealActive } — the only count the Dashboard passes to its recommendation builder. buildCommandObjects (src/dashboard/lib/command-intelligence.ts:370-377) reads context.icps, finds it undefined, and adds the recommendation \"Save an ideal customer profile this week.\" with the text \"You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit.\" and the badge \"Missing ICP\".",
+   "problem": "The ICP count is never supplied, so the Dashboard tells every user with an open deal that they have no saved ICP, whether or not one exists. Executed by this reviewer in an out-of-repo probe that imports the real modules (final-audit/onboarding-fable/probe/out.txt): after onboarding wrote the ICP (Welcome's counter reads icps: 1 and readiness shows \"1 ICP defined\"), the Dashboard list still contained \"Save an ideal customer profile this week.\" at position 6 with \"missing ICP\". A user who defined their ICP minutes earlier is told it is missing.",
+   "governing": "AUDIT_BRIEF §5 'Function' (recommendation selection; copy that claims something the code does not do). Outside the onboarding scope; reported for routing to the Dashboard area.",
+   "proposed": "In aggregateEngineInput add the missing counts to shellContext from the same stores the other areas read: icps (length of gtmos_icp_analytics.icps), accounts and signals (from readLiveSignalRoomHealth: accountCount, signalCount). Add a snapshot-aggregator test: with one saved ICP and one open deal, no object with id \"icp-truth\" is produced.",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts",
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ONBOARDING-016",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "js/demo-seed-data-ent.js",
+   "line": 286,
+   "generation": "seed",
+   "state": "Interactive demo, both sample books: deals stored with stage 'proposal' (enterprise: Starbucks $420k line 286, United Airlines $380k line 297; SMB: Chomps line 152, Warby Parker line 162 of js/demo-seed-data-smb.js).",
+   "current": "stage:'proposal' in the seeded gtmos_deal_workspaces rows.",
+   "problem": "'proposal' is not a Deal Workspace stage key (src/deal-workspace/lib/deal-shape.ts:18-27), so Deal Workspace and the related-activity card show these deals as \"Prospect\", while Future Autopsy prints the raw key in lower case. The current walkthrough corpus shows both: \"$420k · Prospect · next step 2026-11-11\" for Starbucks and \"$380k · proposal · no deal updates recorded for 16 days\" for United Airlines. Same defect as the onboarding stage keys above, in the demo data. Outside the onboarding scope; reported for routing to the demo-seed and Deal Workspace areas.",
+   "governing": "AUDIT_BRIEF §5 'Function' (stable keys); original interaction patch row \"$380k · proposal · quiet 16d …\" → \"$380k · Proposal · …\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md) shows the stage was meant to render as a stage name.",
+   "proposed": "Change the four seeded rows to a Deal Workspace stage key (\"evaluation\", shown as \"Solution Fit\", matches their stageHistory, which already ends at 'evaluation'), or add 'proposal' → 'evaluation' to asStage in src/deal-workspace/lib/deal-bridge.ts:39-42 so old stored rows are translated instead of reset to Prospect. Regenerate the walkthrough afterwards.",
+   "testsAffected": [],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

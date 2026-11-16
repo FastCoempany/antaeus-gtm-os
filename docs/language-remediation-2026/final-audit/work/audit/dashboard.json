@@ -1,0 +1,551 @@
+{
+ "area": "dashboard",
+ "coverage": [
+  {
+   "surface": "Dashboard default cockpit — masthead, recommended-action block (all 11 recommendations stepped through), five status tiles, empty state",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/dashboard/main.tsx",
+    "src/dashboard/v4/DashboardV4.tsx",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/dashboard/v4/dashboard-v4.css",
+    "src/dashboard/state.ts"
+   ],
+   "note": "At-rest state, 'Review readiness', one 'Show next recommendation' click, workspace map, hide activity and the related-activity peek are in the SMB walkthrough generated today (corpus-smb/dashboard.txt). Recommendations #3–#11, the tile values for both demo books, the healthy-workspace and empty-workspace states were not in any walkthrough: I read the source in full and reproduced the engine and tile output for both demo books and for crafted healthy/empty/stale inputs with read-only vitest probes (scratchpad dash-work/my/v4.probe.ts and edge.probe.ts; output in dash-work/out2/). I did not run a browser. The loading state does not exist on this screen (it renders synchronously from localStorage)."
+  },
+  {
+   "surface": "Recommendation engine — card builders, scoring, reasons, ranking, explanation text, confidence label",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/snapshot-aggregator.ts",
+    "src/dashboard/lib/command-intelligence.ts",
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/dashboard/lib/engine-helpers.ts",
+    "src/dashboard/lib/types.ts",
+    "src/dashboard/lib/snapshot-warmup.ts",
+    "src/dashboard/lib/handoff.ts"
+   ],
+   "note": "Read every file in full; traced each displayed reason back to the input that produces it and each score term back to a reason. Verified with probes on both demo books and on crafted inputs (ties, saturated scores, account names containing 'advisor'/'dark', stale published snapshot, ICP saved). Many reason strings and explanation titles cannot be produced by the current aggregator because it never supplies their inputs (dependencyWarnings, linkedRoomTop, quota pressureScore, deal-room pressureScore, signal motionReady/evidenceThin, coverage cause, replies, family 'move'); those are listed under gaps, not as findings."
+  },
+  {
+   "surface": "Recommendation engine, second pass — reasons that are not evidence, readiness and quota inputs, text-pattern classification, fallbacks and branches that cannot render",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/dashboard/lib/command-intelligence.ts",
+    "src/dashboard/lib/engine-helpers.ts",
+    "src/dashboard/lib/snapshot-aggregator.ts",
+    "src/dashboard/lib/readiness-snapshot-publisher.ts",
+    "src/quota-workback/lib/persistence.ts",
+    "src/signal-console/lib/health-snapshot.ts",
+    "src/signal-console/lib/heat.ts",
+    "src/deal-workspace/lib/health-snapshot.ts",
+    "src/deal-workspace/lib/recovery.ts"
+   ],
+   "note": "Re-read every engine file in full and checked the earlier reviewer's 14 findings against the code at the cited lines (all 14 hold; line numbers and quoted text confirmed). Traced each input the engine reads back to the area that writes it: the readiness summary is written by the Dashboard itself (readiness-snapshot-publisher.ts), the quota summary is written with different key names than the engine reads, and Signal Console's and Deal Workspace's summaries never carry several fields the engine tests for. Used the earlier reviewer's read-only probe output (dash-work/out2/v4.txt, dash-work/out/probe7.txt) as evidence for scores and name-pattern cases, and today's previous-surface and oldest-surface walkthroughs for rendered reasons. I ran no code myself."
+  },
+  {
+   "surface": "Summary sentences for the 'Read' view (brief-narrative.ts) and the recommended-actions export (command-export.ts)",
+   "generation": "shared",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/dashboard/lib/brief-narrative.ts",
+    "src/dashboard/lib/command-export.ts",
+    "src/lib/file-download.ts"
+   ],
+   "note": "The four summary sentences and the 'INSIGHT' line are rendered in today's previous-surface and oldest-surface walkthroughs (enterprise book). The 'supported' and 'mixed signal' sentence variants and the empty narrative were read in source only. The export was not downloaded: the file's contents were read from buildCommandExport and from the earlier reviewer's probe output (dash-work/out2/v4.txt, line 'export {…}')."
+  }
+ ],
+ "findings": [
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 65,
+   "generation": "v4",
+   "state": "Default Dashboard, after clicking 'Show next recommendation' one or more times (recommendations #2 to #11)",
+   "current": "Kicker \"Highest-priority recommended action · #2 of 11\" and explanation \"Ranked first. Reasons: account priority score 50 out of 99 and multiple recent signals are recorded.\" The same frame is used down to \"#11 of 11 — Boeing — Ranked first. Reasons: risk score 60 out of 100 and negotiation.\"",
+   "problem": "The cockpit always asks the engine for the first-place explanation (mode \"spotlight\" → src/dashboard/lib/command-intelligence.ts:445 returns \"Ranked first. Reasons: …\") and always prints the kicker \"Highest-priority recommended action\" (DashboardV4.tsx:105), whichever recommendation is on screen. From the second recommendation on, the screen tells the user that a lower-ranked item is the highest-priority action and is ranked first. Reproduced read-only with the real demo seed data (js/demo-seed-data-ent.js, js/demo-seed-data-smb.js) through aggregateEngineInput → buildCommandObjects → summarizeCommandContext → explainCommandObject; every one of the 11 items in both books returns \"Ranked first.\" The enterprise walkthrough of 2026-11-06 shows it rendered (\"· #2 OF 11 / Outbound to OpenAI / Ranked first. Reasons: …\").",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — exact replacement \"At the top because heat 62 and fresh signals.\" → \"Ranked first because Boeing has a priority score of 62 and recent account signals.\" (applies to the first item only) and Dashboard structural rule 4 \"Evidence supporting the ranking\"; COPY_STANDARD.md §21 Claims discipline; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10 (recommendation/logic mismatch).",
+   "proposed": "Pass the position to the explanation and the kicker. In src/dashboard/lib/command-intelligence.ts give explainCommandObject an optional third argument `position?: { index: number; total: number }` and in explainLeadCopy return, for index > 0, `\"Ranked \" + (index + 1) + \" of \" + total + \". Reasons: \" + because + \".\"` (keep \"Ranked first. Reasons: …\" for index 0). In DashboardV4.tsx:65 call `explainCommandObject(move, \"spotlight\", { index: idx, total })`, and at :105 render `idx === 0 ? t(\"Highest-priority recommended action\") : t(\"Recommended action\")` before the existing \"· #N of M\". Add a test that the second-ranked object's copy starts with \"Ranked 2 of\".",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts (explainCommandObject cases, lines 200-213, assert label and trailing period only; add the position case)"
+   ],
+   "confidence": "high",
+   "id": "DASH-001"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 28,
+   "generation": "v4",
+   "state": "Default Dashboard, under the recommendation explanation, at rest and on every later recommendation",
+   "current": "\"clear first choice\" / \"reasonably clear first choice\" / \"close call with the next item\"",
+   "problem": "The label says how the item compares with the next one, but the number behind it (scoreRankingConfidence, src/dashboard/lib/scoring.ts:234-260) only adds up how many inputs exist for this one item (risk, priority score, action links, readiness snapshot present, and so on). It never looks at the next item. In the SMB demo book the first three recommendations have exactly the same score (89) and are ordered alphabetically, and the screen says \"reasonably clear first choice\" (SMB walkthrough, area at rest). In the enterprise book \"clear first choice\" also shows on #2 and #3. The claim is not computed, and on any item after the first it is false by definition. The original replacement for this label, \"priority remains stable\", would be equally unsupported today because the re-rank stability bonus is never active (state.ts:63 calls buildCommandObjects without previousSnapshot).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — exact replacement \"stable lead\" → \"priority remains stable\" (05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[26]); COPY_STANDARD.md §21 Claims discipline (\"Do not make the copy more precise than the underlying product evidence permits\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 5.",
+   "proposed": "Say what the number measures. Replace the three values at DashboardV4.tsx:28-30 with: \"stable lead\": \"based on several recorded inputs\"; supported: \"based on some recorded inputs\"; \"mixed signal\": \"based on few recorded inputs — check the account or deal before acting\". Keep the engine keys.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DASH-002"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 264,
+   "generation": "shared",
+   "state": "Any workspace with at least one open deal. Default cockpit: recommendation #6 of 11 in both demo books (after five clicks on 'Show next recommendation'); previous surface: Focus and Triage views; oldest surface: the 'Customer targeting' card; Welcome also lists it",
+   "current": "\"Save an ideal customer profile this week.\" — \"Ranked first. Reasons: your targeting is below the readiness bar and no saved ICP yet.\" — card text \"You have signals and deals, but no saved ICP, so the rest of the app can't tell which accounts fit. Save one in ICP Studio and account scoring, sourcing, and outreach can target the right buyers.\" — badge \"Missing ICP\"",
+   "problem": "The engine adds this card when shellContext.icps is 0 and there is any account, signal or deal (src/dashboard/lib/command-intelligence.ts:370-377). The aggregator only ever puts `deals` into shellContext, so icps is always 0 and the card appears for every workspace that has an open deal, including workspaces with saved ICPs. Both demo books have three saved ICPs (gtmos_icp_analytics; the readiness drawer on the same Dashboard says \"3 ICP defined\") and still get \"no saved ICP\". Because onboarding requires an ICP before deals, a real user will always see this false statement. Reproduced read-only with the real demo seed data (js/demo-seed-data-ent.js, js/demo-seed-data-smb.js) through aggregateEngineInput → buildCommandObjects → summarizeCommandContext → explainCommandObject (\"shellContext {deals:12}\", card present with icps: 3). The previous-surface walkthrough rendered today shows the card under \"CUSTOMER TARGETING\". Also reported from the Welcome side as WELCOME-003.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 7 (recommendation selection, cross-room handoffs) and item 10 (recommendation/logic mismatch); comprehension principle.",
+   "proposed": "In aggregateEngineInput (snapshot-aggregator.ts:264-270) fill the counts the engine already reads: `const icpRoot = asObject(parseJson(storage.getItem(\"gtmos_icp_analytics\"))); const signalSummary = asObject(summaries.signal);` then `shellContext: { deals: dealActive, icps: asArray(icpRoot?.icps).length, accounts: Number(signalSummary?.accountCount ?? 0), signals: Number(signalSummary?.signalCount ?? 0) }`. (gtmos_icp_analytics is the same key the readiness aggregator counts ICPs from, readiness-aggregator.ts:88.) Add a regression test: with one saved ICP and one open deal, buildCommandObjects returns no object with id \"icp-truth\". The card text itself (command-intelligence.ts:270) should then also stop asserting \"signals and deals\": use \"No ICP is saved, so account scoring, prospecting and outreach have no target criteria to check accounts against. Save one in ICP Studio.\"",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts",
+    "src/dashboard/lib/command-intelligence.test.ts (ICP-object cases)"
+   ],
+   "confidence": "high",
+   "id": "DASH-003"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 24,
+   "generation": "shared",
+   "state": "Every deal recommendation: default cockpit items #6–#11, previous surface 'Why' list, oldest surface card rows, the JSON export",
+   "current": "\"Ranked first. Reasons: risk score 100 out of 100 and evaluation.\" (Nordstrom and United Airlines both), \"risk score 95 out of 100\" (Best Buy, Uber), \"risk score 60 out of 100\" (Boeing)",
+   "problem": "The number comes from Deal Workspace's ranking score (src/deal-workspace/lib/recovery.ts:119), whose range is 0–230 (inactivity up to 100 + next step up to 80 + close date up to 50). The engine cuts it off at 100 (signal-profile.ts:117) and the copy adds \"out of 100\", so (a) the scale is false: Best Buy's 95 is 95 of 230, not 95%; (b) every deal at 100 or more reads \"100 out of 100\" and they become indistinguishable — United Airlines (160, the only critical deal) and Nordstrom (130) tie, are ordered alphabetically, and Nordstrom is listed ahead of United while the tile on the same screen names United Airlines as the highest deal risk; (c) Deal Workspace itself never shows this number to the user, so the reader cannot check it anywhere. The \"out of 100\" wording was added by the language pass (commit 6d11561: \"risk \" + profile.risk → \"risk score … out of 100\"). The actual recorded condition (\"16 days since last recorded activity\") is on the card (object.copy) but the default cockpit does not print it. Reproduced read-only with the real demo seed data (js/demo-seed-data-ent.js, js/demo-seed-data-smb.js) through aggregateEngineInput → buildCommandObjects → summarizeCommandContext → explainCommandObject.",
+   "governing": "AUDIT_BRIEF §4 \"Numbers shown in more than one area come from the area that owns them\"; COPY_STANDARD.md §20 Specificity test (\"If Antaeus knows the underlying event or measure, name it\") and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `pressure` (\"Choose the actual construct\").",
+   "proposed": "Use the recorded condition from Deal Workspace as the reason instead of an invented scale. In buildRiskReasons (scoring.ts:24) replace the line with: `const condition = tx(card?.subtitle); if (condition) pushReason(reasons, condition.charAt(0).toLowerCase() + condition.slice(1)); else if (profile.risk) pushReason(reasons, \"Deal Workspace ranks it among the highest-risk open deals\");` (import tx from ./engine-helpers; the subtitle is the cause text set at snapshot-aggregator.ts:111 — note finalizeCommandObject must pass `subtitle` through to profileCard, command-intelligence.ts:132-140). Result: \"Ranked 7 of 11. Reasons: 16 days since last recorded activity.\" To keep Deal Workspace's order among deals, pass the unclamped score for tie-breaking: at snapshot-aggregator.ts:132 add `dealWorkspaceScore: score` to rankingSignals and use it in rankCommandObjects before the alphabetical fallback (see the tie-break finding).",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts",
+    "src/dashboard/lib/snapshot-aggregator.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-004"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 45,
+   "generation": "shared",
+   "state": "Every deal recommendation on all three Dashboard generations, the Welcome list and the JSON export",
+   "current": "\"Ranked first. Reasons: risk score 100 out of 100 and evaluation.\" / \"… and prospect.\" / \"… and negotiation.\"; for a deal with a score of 0: \"Ranked first. Reasons: prospect.\"",
+   "problem": "The loop at scoring.ts:40-46 appends every meta item as a reason, and the only meta item a deal card carries is its stage id (snapshot-aggregator.ts:113 `meta: stage ? [stage] : []`). The lower-case stage id is therefore printed as if it were a reason for the ranking. A stage is not a reason, the reader has to guess what \"and evaluation\" means, and for a deal with no risk factors it is the only \"reason\" given (probe with three deals that have no risk factors: \"Ranked first. Reasons: prospect.\").",
+   "governing": "COPY_STANDARD.md §6 Restore causal connective tissue and §7 Evidence → interpretation → action; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Dashboard structural rule 4 \"Evidence supporting the ranking\".",
+   "proposed": "Delete the meta loop at scoring.ts:40-46 (keep `return reasons.slice(0, 4);`). The stage stays available on the card for surfaces that want to show it as a labelled fact (\"Stage: Evaluation\").",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-005"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 156,
+   "generation": "shared",
+   "state": "Default cockpit 'Highest-priority recommended action' (and the same list on the previous and oldest surfaces, Welcome and the workspace-map suggestion) in any workspace that watches at least one account and has at least one open deal",
+   "current": "#1 is always an \"Outbound to {account}\" card. With one watched account at priority 1 of 99 and one deal with no recorded activity for 45 days, the screen reads \"Outbound to Tiny Signal Co — Ranked first. Reasons: account priority score 1 out of 99 and account signal context is available.\" and the deal is #2.",
+   "problem": "The order between kinds of recommendation is decided by constants, not by the reasons shown. An outbound card starts at 62 and always receives +6 (the word \"Outbound\" in its own title matches the marketMotion pattern, signal-profile.ts:171-175), +4 (it has two action links, scoring.ts:174) and +6 (family bonus, :199): at least 78 before the account's priority counts. A deal card receives risk × 0.5 (risk is cut off at 100) + 15.4 and nothing else, because the aggregator passes only `risk` and the cause text (snapshot-aggregator.ts:131-134): at most about 74. So every watched account outranks every deal, however low the account's priority and however serious the deal's condition, and the explanation (\"account priority score 26 out of 99…\") does not tell the user that. In both demo books items #1–#5 are outbound cards and the four deals at elevated risk are #7–#10. Verified with a probe (priority-1 account ranks above a deal scored 230 in Deal Workspace).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 7 (scoring/thresholds/recommendation selection) and item 10 (recommendation/logic mismatch); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Dashboard structural rule 4 \"Evidence supporting the ranking\"; COPY_STANDARD.md §7.",
+   "proposed": "Smallest accurate change without altering which item comes first: state the real basis in the explanation for outbound cards when deal cards exist — in explainLeadCopy append for family \"opportunity\": \" Outreach to watched accounts is listed before open-deal reviews.\" OWNER DECISION: rebalance the scoring so that a deal Deal Workspace classes as critical (score ≥ 150) or at risk (≥ 80) can outrank outreach to a low-priority account — for example pass Deal Workspace's unclamped score and risk level into the deal card and score the risk family from them, and drop the +6 an outbound card gets for the word \"Outbound\" in its own title. This changes which recommendation the product shows first, so it needs the owner's approval.",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-006"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 169,
+   "generation": "shared",
+   "state": "Default cockpit recommendation #1 in both demo books; same cards on the previous and oldest surfaces and on Welcome",
+   "current": "Enterprise book: \"Highest-priority recommended action — Outbound to Boeing — Compose outbound →\". Boeing already has a $480k open deal in Negotiation with a champion and an economic buyer recorded. SMB book: \"Outbound to Chomps\" — Chomps has an open deal, a recorded reply and a confirmed meeting on Thursday.",
+   "problem": "An outbound card is created for each of the five highest-priority watched accounts without checking whether the account already has an open deal (signalSnapshotToMoveCards, snapshot-aggregator.ts:152-205). The product then recommends composing first outreach to a buyer the seller is already negotiating with, and the same account appears twice in the list (\"Outbound to Boeing\" at #1 and the deal \"Boeing\" at #11). Clicking the title opens the related-activity card, which contradicts the recommendation: \"$480k · Negotiation … Review the current next step and keep it dated. Review the negotiation and next steps in Getting to Signed.\" Signal Console itself treats such accounts differently (its account card offers \"Open deal\"). Also reported from Welcome as WELCOME-014.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10 (recommendation/logic mismatch, contradictions) and item 7 (recommendation selection, cross-room handoffs); COPY_STANDARD.md §7 Evidence → interpretation → action.",
+   "proposed": "In signalSnapshotToMoveCards look the account up in the open deals (read gtmos_deal_workspaces once in aggregateEngineInput, the same way src/dashboard/v4/lib/cockpit.ts:138-155 does, and build a lower-cased set of accountName for stages other than closed-won/closed-lost). When the account has an open deal, build the card as: title `Review new signals for ${name}`, subtitle `${name} already has an open deal. ${recentCount} recent signal(s) are recorded.`, primary action { label: \"Check the signals\", href: hrefToSignalForAccount(name) }, second action { label: \"Open the deal\", href: hrefToDealForDeal(dealId, name) }; keep focusObject and rankingSignals as they are. OWNER DECISION: whether watched accounts that already have an open deal should be left out of the recommendation list altogether (or merged with that deal's card) instead of being relabelled.",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts",
+    "tests/e2e (any walk that asserts the first card is \"Outbound to …\" with \"Compose outbound\")"
+   ],
+   "confidence": "medium",
+   "id": "DASH-007"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 395,
+   "generation": "shared",
+   "state": "Default cockpit recommendation order (and the same list on the other surfaces, Welcome and the export) when two cards reach the same rounded score",
+   "current": "SMB book: #1 \"Outbound to Chomps\" (26), #2 Duolingo (26), #3 Sweetgreen (26), #4 \"Outbound to Figma\" (priority 24), #5 \"Outbound to Gymshark\" (priority 25). The tile on the same screen reads \"ACCOUNT PRIORITY — Sweetgreen · 26\" and the workspace map says \"Sweetgreen is currently the highest-priority account in your watchlist.\" Enterprise book: Nordstrom (Deal Workspace score 130) is listed before United Airlines (160).",
+   "problem": "Scores are rounded and capped at 100 (scoring.ts:152 and :200), so equal scores are common; the last tie-break is the card title in alphabetical order. The result contradicts the measures shown as reasons: a 24-priority account is listed above a 25-priority one, the #1 recommendation (Chomps) is not the account the tile and the workspace map call highest priority (Sweetgreen, first in Signal Console's order), and two accounts at priority 70 and 90 with four recent signals both reach 100 and the 70 is listed first because its name starts with A (probe). The explanation gives no hint that the order was alphabetical.",
+   "governing": "AUDIT_BRIEF §4 \"Numbers shown in more than one area come from the area that owns them\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Dashboard structural rule 4; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 7 (scoring thresholds, recommendation selection).",
+   "proposed": "Break ties on the measure the reasons cite before falling back to the title. In rankCommandObjects (command-intelligence.ts:392-395) insert before the localeCompare: `const aMeasure = signalNumber(a.rankingSignals, \"heat\", 0, 0, 100) || signalNumber(a.rankingSignals, \"dealWorkspaceScore\", signalNumber(a.rankingSignals, \"risk\", 0, 0, 1000), 0, 1000); const bMeasure = …same for b…; if (bMeasure !== aMeasure) return bMeasure - aMeasure;` and keep the input order (Signal Console's and Deal Workspace's own order) for full ties by returning 0 instead of comparing titles. Add a test: two outbound cards with priority 90 and 70 that both score 100 keep the 90 first.",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts (ranking tie-break cases, line 139 onward)"
+   ],
+   "confidence": "high",
+   "id": "DASH-008"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 244,
+   "generation": "shared",
+   "state": "Dashboard recommendation list versus its own status tiles, whenever the stored deals changed, or days passed, since Deal Workspace last published its summary",
+   "current": "The recommendation list builds deal cards from the published summary `gtmos_deal_workspace_health`; the tiles \"Open deal risk\" and \"Highest deal risk\" are computed live from `gtmos_deal_workspaces` (src/dashboard/v4/lib/cockpit.ts:164-166).",
+   "problem": "The two halves of the same screen can describe different deals. The published summary is rewritten only when Deal Workspace saves (and by the Dashboard only when the key is missing, snapshot-warmup.ts:68). Other areas change deals without republishing it (Cold Call Studio creates a deal on a booked meeting, Call in a Favor and Pilot Desk write next steps back, Settings restores a backup, cloud sync), and the summary's text is frozen at publish time (\"7 days since last recorded activity\" stays 7 after ten more days). Probe: with a stale summary naming \"Old Co\" and a newer critical deal in the stored deals, the list recommends only \"Old Co\" while the tiles say \"1 at elevated risk\" and \"Highest deal risk: New Critical Co · 40d\". The account side was already moved to a live read (readLiveSignalRoomHealth); the deal side of the recommendation list was not.",
+   "governing": "AUDIT_BRIEF §4 \"Numbers shown in more than one area come from the area that owns them\" (owner decision, 2026-11-05 numbers agreement); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 7 (persisted-state, cross-room handoffs).",
+   "proposed": "Compute the deal summary live in the aggregator, with the published key as fallback, exactly as the cockpit does. Move readLiveDealHealth from src/dashboard/v4/lib/cockpit.ts:138-155 into a shared module (for example src/deal-workspace/lib/health-snapshot.ts as `readLiveDealHealth(storage)`), then in snapshot-aggregator.ts:244-245 use `(readLiveDealHealth(storage) ?? parseJson(storage.getItem(KEY_DEAL_HEALTH)) ?? {})` and the same value for `deal` in readHealthSummaries (:210). Add a test with a stale published summary and newer stored deals.",
+   "testsAffected": [
+    "src/dashboard/lib/snapshot-aggregator.test.ts",
+    "src/dashboard/v4/lib/cockpit.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-009"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 123,
+   "generation": "v4",
+   "state": "Default cockpit, deal recommendations (#6/#7 to #11 in the demo books)",
+   "current": "Under \"Highest-priority recommended action · #7 of 11\": heading \"Nordstrom\", link \"Open the deal →\", then \"Ranked first. Reasons: risk score 100 out of 100 and evaluation.\"",
+   "problem": "The block is headed \"recommended action\" but for a deal the heading is only the account name; the action has to be inferred from the link, and the recorded condition that put the deal on the list (the card's copy, \"21 days since last recorded activity\") is not printed anywhere on the default screen. The same block does not print the ICP card's text either. A first-time user sees a company name, an unexplained score and a stage word.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `one move` (\"State the action and why it ranks first\"); COPY_STANDARD.md §7 Evidence → interpretation → action, §11 Headline standard.",
+   "proposed": "In DashboardV4.tsx render the heading as an action for deal cards and print the card's own text under it: `const heading = move.commandFamily === \"risk\" ? `${t(\"Review the deal with\")} ${move.title}` : move.title;` at :123, and after the heading row add `{move.copy ? <div class=\"db4-why\">{move.copy}</div> : null}` (for a deal this is the Deal Workspace condition, for the ICP card its explanation). Keep `openFollow(…, move.focusObject)` unchanged.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DASH-010"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/v4/lib/cockpit.ts",
+   "line": 269,
+   "generation": "v4",
+   "state": "Default cockpit, 'Highest deal risk' tile",
+   "current": "\"HIGHEST DEAL RISK — United Airlines · 16d — highest-risk open deal\" (SMB: \"Liquid Death · 14d\")",
+   "problem": "\"16d\" has no noun: the reader is not told 16 days of what. The number is pulled by a pattern (cockpit.ts:188) from whatever Deal Workspace condition is first, so it does not always mean inactivity: \"Next step is due in 3 days\" renders \"· 3d\", \"Next step is 5 days overdue\" renders \"· 5d\", \"Expected close date is 12 days overdue\" renders \"· 12d\" (probe). The approved replacement stated the fact in words: \"DEAL RISK Nordstrom · no recorded activity for 21 days\". The sub-line \"highest-risk open deal\" repeats the tile's title instead of giving the reason.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — exact replacement \"DYING Nordstrom · 21d your worst open deal Dying ↗\" → \"DEAL RISK Nordstrom · no recorded activity for 21 days Deal risk ↗\" (05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[30]); COPY_STANDARD.md §14 (number + unit; event + time) and §20.",
+   "proposed": "Show Deal Workspace's condition sentence instead of extracting a number. In cockpit.ts replace :188 with `const worstCause = typeof worst?.cause === \"string\" ? worst.cause.trim() : \"\";` and :269-270 with `value: worstName ?? t(\"None\"), sub: worstName ? (worstCause ? worstCause.charAt(0).toLowerCase() + worstCause.slice(1) : t(\"highest-risk open deal\")) : t(\"no open deal has elevated risk\"),`. Result: \"HIGHEST DEAL RISK — United Airlines — 16 days since last recorded activity\".",
+   "testsAffected": [
+    "src/dashboard/v4/lib/cockpit.test.ts:98 (expects \"Datadog · 16d\")"
+   ],
+   "confidence": "high",
+   "id": "DASH-011"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/dashboard/v4/lib/cockpit.ts",
+   "line": 271,
+   "generation": "v4",
+   "state": "Default cockpit tiles in a workspace whose open deals have no elevated risk",
+   "current": "\"OPEN DEAL RISK — No elevated risk\" (green) next to \"HIGHEST DEAL RISK — Charlie — highest-risk open deal\" (red)",
+   "problem": "The first tile counts deals Deal Workspace classes as at risk or critical; the second names the first of Deal Workspace's top five deals whatever its class (top_pressure is the top five by score and includes deals with no risk factors, src/deal-workspace/lib/health-snapshot.ts:59). With three deals that have no risk factors the screen says there is no elevated risk and, in red, that Charlie is the highest-risk open deal (probe). The fallback sub-line \"no critical deal risk detected\" (cockpit.ts:270) is shown only when there are no deals at all and uses a different word (\"critical\") from the tile next to it (\"elevated\").",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10 (contradictions); COPY_STANDARD.md §21 Claims discipline.",
+   "proposed": "Name a deal only when one has elevated risk. In cockpit.ts after :183 add `const hasElevated = riskN > 0;` and use `const worstName = hasElevated && worst && … ? … : null;` so that with no at-risk or critical deal the tile reads value \"None\", sub \"no open deal has elevated risk\", tone \"good\".",
+   "testsAffected": [
+    "src/dashboard/v4/lib/cockpit.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-012"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/v4/lib/cockpit.ts",
+   "line": 246,
+   "generation": "v4",
+   "state": "Default cockpit, 'Account priority' tile",
+   "current": "\"ACCOUNT PRIORITY — Boeing · 62 — no high-priority accounts yet\"; with one account at 75 or more: \"Acme · 80 — 1 accounts ready for outreach\"",
+   "problem": "Three problems. (1) \"62\" is a bare number; the approved replacement labelled it (\"Boeing · score 62\"). (2) \"no high-priority accounts yet\" contradicts the rest of the screen, which calls Boeing the subject of the \"Highest-priority recommended action\" and (workspace map) \"the highest-priority account in your watchlist\"; the line actually means that no watched account has a score of 75 or more (readyCount, src/signal-console/lib/health-snapshot.ts:59), a threshold the user is never told, and it differs from Signal Console's own \"high priority\" group (score 78 or more with a signal in the last two days, src/signal-console/v4/lib/attention.ts:83). (3) The count is not singularised: \"1 accounts ready for outreach\" (probe).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — exact replacement \"HOTTEST Boeing · 62 no hot accounts yet Hottest ↗\" → \"ACCOUNT PRIORITY Boeing · score 62 Account priority ↗\" (05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[29]); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `heat` (\"if a score is shown, explain inputs\"); COPY_STANDARD.md §14, §20.",
+   "proposed": "cockpit.ts:244 value: `${priorityName} · ${t(\"score\")} ${signal.topHeat} ${t(\"of 99\")}` → \"Boeing · score 62 of 99\". cockpit.ts:246 sub: `ready > 0 ? `${ready} ${ready === 1 ? t(\"account scores 75 or higher\") : t(\"accounts score 75 or higher\")}` : t(\"highest score among watched accounts\")`.",
+   "testsAffected": [
+    "src/dashboard/v4/lib/cockpit.test.ts:94-95 (expects the value to contain \"Ramp\" and the sub to contain \"4\")"
+   ],
+   "confidence": "high",
+   "id": "DASH-013"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 145,
+   "generation": "v4",
+   "state": "Default cockpit with no watched accounts and no open deals (new or emptied workspace)",
+   "current": "\"No single action currently ranks above the rest. Review the status areas below.\"",
+   "problem": "This branch renders only when the recommendation list is empty (DashboardV4.tsx:45 `move` is null only when `ranked` is empty). The sentence says several actions are tied; in fact there are none, because there is no account or deal to rank. The tiles below it then read \"No elevated risk\", \"None yet\", \"Not set\", \"None\", \"0 / 7\", so the user is sent to look at empty tiles and is not told what to add (probe with an empty store).",
+   "governing": "COPY_STANDARD.md §1 (what exists; what the user can do next) and §21; comprehension principle (empty state must say what is missing and where to add it).",
+   "proposed": "\"No recommended action yet. Add accounts to watch in Signal Console or open deals in Deal Workspace, and the highest-priority action will appear here.\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "DASH-014"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 75,
+   "generation": "shared",
+   "state": "Every outbound recommendation. Default cockpit: the first filler is printed as the second reason for an account with fewer than two recent or high-confidence signals, and both are the only reasons for a watched account that has no signals. Previous surface: always, as items 3 and 4 of the 'Why' list. Oldest surface: third row of each outbound card. Also in the JSON export and on Welcome.",
+   "current": "“account signal context is available” and “the source workspace has enough context to proceed”. Rendered today on the previous surface after clicking “Why ▾”: “account priority score 62 out of 99 / multiple recent signals are recorded / account signal context is available / the source workspace has enough context to proceed”. For a watched account with no signals the default cockpit builds: “Outbound to {account} — Ranked first. Reasons: account signal context is available and the source workspace has enough context to proceed.”",
+   "problem": "Neither line is evidence. The first is added because the card is an outbound card (scoring.ts:75 `family === \"opportunity\"`, true for every card the aggregator titles “Outbound to …”). The second is added because the card has two links (roomReadiness falls back to the number of actions, signal-profile.ts:132, and the aggregator always supplies two, snapshot-aggregator.ts:183-194); it also adds 4 points to every outbound card (scoring.ts:174). Signal Console's summary lists its first five accounts whatever their score (src/signal-console/lib/health-snapshot.ts:62), so an account with no signals still gets a card, and the screen then says signal context is available when none is recorded. Also reported from Welcome as WELCOME-004.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline and §7 Evidence → interpretation → action; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Dashboard structural rule 4 “Evidence supporting the ranking”; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 6 “Give the evidence immediately next to an assessment”.",
+   "proposed": "Delete scoring.ts:75 and :77. For an outbound card with no priority score add a true statement instead: after :57 add `else if (family === \"opportunity\") pushReason(reasons, \"it is a watched account with no recorded signals\");` so the screen reads “Ranked first. Reasons: it is a watched account with no recorded signals.” OWNER DECISION: whether a watched account with a priority score of 0 should produce an outbound recommendation at all (the alternative is `if (heat <= 0) return null;` in signalSnapshotToMoveCards, snapshot-aggregator.ts:162), and whether the 4 points every outbound card gets for having two links (scoring.ts:174) should stay.",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts (no test asserts either string today; add one for a zero-signal account)"
+   ],
+   "confidence": "high",
+   "id": "DASH-015"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 68,
+   "generation": "shared",
+   "state": "Any workspace where a part of Readiness scores under 14 of 20 (every new workspace). Default cockpit: ICP item (“… your targeting is below the readiness bar and no saved ICP yet.”) and deal items (second reason). Previous surface 'Why' list and oldest-surface card rows for outbound cards. JSON export. Welcome.",
+   "current": "“your outreach is below the readiness bar” (scoring.ts:68) · “your discovery calls are below the readiness bar” (:69) · “your open-deal records are below the readiness bar” (:36) · “your targeting is below the readiness bar” (:108) · “your pilot evidence is below the readiness bar” (:71). Rendered today on the oldest surface, first row of the ICP card: “your targeting is below the readiness bar”.",
+   "problem": "(1) “The readiness bar” is not defined on any screen. The flag is set when that part of Readiness scores under 14 of 20 (readiness-snapshot-publisher.ts:39 and :91-97), the level the default readiness panel words as “solid”; the reader cannot tell which bar is meant or what would clear it. (2) The discovery line is shown for a card it did not affect: it is pushed for every outbound card (scoring.ts:69) but the 3 points apply only to family “move” (scoring.ts:196), a family the aggregator never produces. (3) On a deal card the line is listed second (scoring.ts:36) although the 5 points behind it (scoring.ts:150) are added to every deal alike, so it explains nothing about that deal and pushes the deal's own recorded condition out of the two reasons the default cockpit prints.",
+   "governing": "COPY_STANDARD.md §8 Pronoun and placeholder test, §20 Specificity test (“If Antaeus knows the underlying event or measure, name it”) and §6; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10 (recommendation/logic mismatch).",
+   "proposed": "scoring.ts:68 → “Readiness rates your outreach below solid”. :69 → gate it on the family the bonus applies to: `if (profile.readinessDiscoveryWeak && family === \"move\") pushReason(reasons, \"Readiness rates your discovery calls below solid\");`. :36 → move the line to the end of buildRiskReasons (after the deal's own conditions) and word it “Readiness rates your deal management below solid”. :108 → “Readiness rates your ICP and targeting below solid”. :71 → “Readiness rates your pilot records below solid”. (“solid” is the word the readiness panel shows for a part at 14 or more, src/dashboard/v4/lib/area-chip.ts:16.)",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-016"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 339,
+   "generation": "shared",
+   "state": "A watched account whose name contains “advisor”, or an open deal whose account name contains “drift”, “dark” or “stale”. All three Dashboard generations, Welcome and the export.",
+   "current": "Earlier reviewer's read-only probe (dash-work/out/probe7.txt), three accounts with identical signals: “Outbound to Tripadvisor” and “Outbound to Betterment Advisor Solutions” are grouped under “Advisor requests”, carry the reason “an advisor request can be reviewed” and score 97; “Outbound to Acme” is under “Account opportunities” and scores 91. Three identical deals: “Darktrace” and “Drift” score 69, “Acme” scores 65.",
+   "problem": "The kind of recommendation is guessed from words in the card title (command-intelligence.ts:337-343), and the aggregator builds the title from the account name. A name containing “advisor” turns outreach to that account into an “advisor request”: a different group label (engine-helpers.ts:104), a reason that is false (scoring.ts:74 — no advisor request exists), a higher starting score (66 + 8 instead of 62 + 6), and on the oldest surface the sentence “An advisor intro could get this deal moving — ask this week.” In the same way signal-profile.ts:166-170 tests the title and text for “drift”, “drifting”, “stale” or “dark” and adds 4 points (scoring.ts:148), so a deal with Drift or Darktrace is listed above an identical deal. The reasons shown do not mention either effect.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 7 (scoring, recommendation selection) and item 10 (recommendation/logic mismatch); COPY_STANDARD.md §21.",
+   "proposed": "Carry the kind explicitly instead of inferring it from text. Add `readonly family?: CommandFamily;` to RawCommandCard (src/dashboard/lib/types.ts:130), set `family: \"opportunity\"` on the card built in signalSnapshotToMoveCards (snapshot-aggregator.ts:167), and in buildCommandObjects use `const family = card.family ?? inferMoveFamily(card);` (command-intelligence.ts:357). In signal-profile.ts:166-170 read only the explicit flag: `const driftSignal = signalBool(signals, \"driftSignal\", false);`. Add regression tests with accounts named “Tripadvisor” and “Drift”.",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts (family-detection cases that pass titles containing “advisor” or “Outbound”)"
+   ],
+   "confidence": "high",
+   "id": "DASH-017"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 424,
+   "generation": "shared",
+   "state": "A recommendation whose reason list is empty. Today only a deal with a Deal Workspace score of 0 and no stage; once the stage is no longer printed as a reason (finding on scoring.ts:45) every open deal that has no risk factor.",
+   "current": "“Ranked first. Reasons: its calculated priority score ranks it above the other available actions.”",
+   "problem": "The sentence is circular (it is ranked first because its score ranks it first) and refers to a “calculated priority score” the user is never shown.",
+   "governing": "COPY_STANDARD.md §7 and §10; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Dashboard structural rule 4.",
+   "proposed": "Give a deal card a true fallback reason in buildRiskReasons, before the return at scoring.ts:47: `if (!reasons.length) pushReason(reasons, \"it is one of the five open deals Deal Workspace lists first\");` (accurate: the summary's top_pressure is the first five deals in Deal Workspace's order, src/deal-workspace/lib/health-snapshot.ts:59). Change the generic fallback at command-intelligence.ts:424 to “no specific risk or priority factor is recorded for it”.",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "DASH-018"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/lib/snapshot-aggregator.ts",
+   "line": 126,
+   "generation": "shared",
+   "state": "Second link on every deal card. Rendered on the previous surface (Focus and Triage views); the default cockpit and the oldest surface print only the first link.",
+   "current": "“Pre-mortem the deal” (previous-surface walkthrough rendered today (corpus-ds/dashboard.txt, enterprise book, ?v4=0), after clicking “Triage”, under “Boeing”).",
+   "problem": "“Pre-mortem” used as a verb is the wording the original rewrite removed from Future Autopsy. It does not tell a first-time user that the link opens the risk review for this deal.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact replacement “PRE-MORTEM · WORST FIRST” → “DEAL RISK · HIGHEST RISK FIRST”; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md CTA standard (“Buttons must predict the resulting action … Review deal risk”); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `Future Autopsy` (“Identify deals with high loss risk and why”).",
+   "proposed": "label: \"Review deal risk\". Do not put the word “autopsy” in the label: signal-profile.ts:183 gives 11 points and the reason “a deal-risk review is available” to any card whose link label matches /autopsy/, which would change the order.",
+   "testsAffected": [
+    "tests/e2e/new-surface-seam-walk.spec.ts:75 (expects the label “Pre-mortem the deal”)"
+   ],
+   "confidence": "high",
+   "id": "DASH-019"
+  },
+  {
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 268,
+   "generation": "shared",
+   "state": "The ICP recommendation, when it is shown (all three generations, Welcome).",
+   "current": "Title “Save an ideal customer profile this week.”; link “Open ICP Studio” → `/icp-studio/` with no return parameters.",
+   "problem": "“this week” is a deadline the product did not compute. The link is a bare path (command-intelligence.ts:278), so ICP Studio opens without the return link every other Dashboard recommendation carries; src/dashboard/lib/handoff.ts states that every link leaving the Dashboard must be built there.",
+   "governing": "deliverables/audit/continuity-params-2026-05.md Invariant 1 (as quoted in src/dashboard/lib/handoff.ts:16-18); COPY_STANDARD.md §21.",
+   "proposed": "title: \"Save an ideal customer profile.\"; href: `buildDashboardHref({ href: \"/icp-studio/\", roomLabel: \"ICP Studio\" })` (import from ./handoff).",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts (ICP-object cases)"
+   ],
+   "confidence": "high",
+   "id": "DASH-020"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 532,
+   "generation": "shared",
+   "state": "Cannot render today. Explanation titles and reasons whose inputs no area supplies; they would appear if those inputs were ever connected. Listed so that the old wording is not carried forward.",
+   "current": "“Your plan is ahead of the work logged — log or do more outreach.” (command-intelligence.ts:499, :532) · “Coverage gap needs more open opportunities.” (:489, :522) · “Your quota plan needs this deal — fix its weak spots this week.” (:473, :506) · “They replied — send the follow-up today while it's fresh.” (:483, :516) · “Recover this deal before chasing new pipeline.” (:476, :509) · “Fix this so the rest of the ranking stays accurate.” (:500, :533) · reasons “in the recovery queue” (scoring.ts:29), “prioritized by the source workspace” (:38, :76), “the quota plan increases this item's priority” (:37, :65, :98).",
+   "problem": "Why they cannot render: the engine reads the quota summary as `pressureScore`, `qualityScore`, `qualityBand` (signal-profile.ts:229-233) but Quota Workback writes `quality_score`, `quality_band` and no pressure score (src/quota-workback/lib/persistence.ts:108-128); Signal Console's summary has no `cause` field (src/signal-console/lib/health-snapshot.ts:62-73), so `coverage_gap` never arrives; nothing sets `hasReplies`, `linkedRoomTop`, `recoveryCount` or `dependencyWarnings`; and the explanation title is printed only on the oldest surface for a card with no text of its own (src/dashboard/components/Slice.tsx:91-95), which deal cards and the ICP card always have. Why it still matters: the wording is compressed or absolute (“Your plan is ahead of the work logged”, “Coverage gap needs more open opportunities”, “Recover this deal before chasing new pipeline”) and would reach users unchanged if someone connected the inputs.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (“Every prompt, template, deterministic text generator, and summary builder that can produce user-visible language must follow this specification”); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `pressure`, `thin`; COPY_STANDARD.md §6.",
+   "proposed": "Either delete the branches that have no input, or reword them now: :499/:532 → “Logged outreach is below what your quota plan requires. Log completed outreach or schedule more.”; :489/:522 → “Pipeline coverage is below target. This account could add an open opportunity.”; :473/:506 → “Your quota plan depends on this deal. Update its missing details this week.”; :483/:516 → “The prospect replied. Send the follow-up.”; :476/:509 → “Review this deal's recorded risk conditions.”; :500/:533 → “Resolve this so the recommendations use current data.”; scoring.ts:29 → “listed in Deal Workspace's at-risk deals”; :38/:76 → name the area (“listed first in Deal Workspace” / “listed first in Signal Console”).",
+   "testsAffected": [
+    "src/dashboard/lib/command-intelligence.test.ts:187-190 (asserts the overdue and stage-age titles; not affected by the rewording above)"
+   ],
+   "confidence": "high",
+   "id": "DASH-021"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/dashboard/lib/brief-narrative.ts",
+   "line": 71,
+   "generation": "shared",
+   "state": "“Read” view, second sentence. This is the first view shown on the previous surface (?v4=0) and the oldest surface (?v4=0&today=0).",
+   "current": "“The current list includes 3 deals in recovery, 4 moves queued, and 1 system note.” (both walkthroughs rendered today, enterprise book). The list on the same screen holds 5 deals, 5 outbound recommendations and the ICP item — 11 in all.",
+   "problem": "(1) The numbers are not counts of the list. They are the lengths of three capped subsets (first 3 deal cards, first 4 other cards, first 3 ICP/system cards; command-intelligence.ts:410-416), so they understate, and “3 deals” disagrees with Deal Workspace's “4 at elevated risk”. (2) “in recovery”: a deal card is created for each of the five deals Deal Workspace lists first, whatever its risk level. (3) “moves queued” is the private label for a recommendation; nothing is queued. The same subset can include the ICP item, which is then counted a second time as (4) a “system note”, which it is not.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `one move`; COPY_STANDARD.md §21 Claims discipline and §3 (move → action, recommendation); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work item 10.",
+   "proposed": "Count the full list and name each kind: replace lines 50-52 with `const dealCount = ranked.filter((o) => o.commandFamily === \"risk\").length; const accountCount = ranked.filter((o) => o.commandFamily === \"opportunity\" || o.commandFamily === \"advisor\" || o.commandFamily === \"move\").length; const setupCount = ranked.filter((o) => o.commandFamily === \"icp\" || o.commandFamily === \"system\").length;` and lines 71-73 with `pluralize(dealCount, \"open deal to review\", \"open deals to review\")`, `pluralize(accountCount, \"account to contact\", \"accounts to contact\")`, `pluralize(setupCount, \"setup item\", \"setup items\")`. Result: “The current list includes 5 open deals to review, 5 accounts to contact, and 1 setup item.”",
+   "testsAffected": [
+    "src/dashboard/lib/brief-narrative.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-022"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/dashboard/lib/brief-narrative.ts",
+   "line": 83,
+   "generation": "shared",
+   "state": "“Read” view, third sentence (previous and oldest surfaces).",
+   "current": "“The ranking has strong support from the recorded inputs and may change as they are updated.” (line 81; rendered today, enterprise book) · “The ranking is well-supported by the live signals.” (line 83; SMB book) · “Support for this ranking is mixed. Review the underlying inputs before acting.” (line 85).",
+   "problem": "The three sentences are chosen from the same number as the cockpit's label (scoreRankingConfidence, scoring.ts:234-260), which only adds up how many inputs exist for the first item. It does not compare the first item with the others: in the SMB book the first three items have identical scores and are ordered alphabetically, and the sentence still says the ranking is well-supported. “live signals” will be read as account signals, which is a different thing in this product.",
+   "governing": "COPY_STANDARD.md §21 Claims discipline; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md Epistemic standard (“Avoid converting a ranking or model output into an absolute claim”).",
+   "proposed": "Say what the number measures, with the same wording proposed for the cockpit label: line 81 → “This recommendation is based on several recorded inputs.”; line 83 → “This recommendation is based on some recorded inputs.”; line 85 → “This recommendation is based on few recorded inputs. Check the account or deal before acting.”",
+   "testsAffected": [
+    "src/dashboard/lib/brief-narrative.test.ts"
+   ],
+   "confidence": "high",
+   "id": "DASH-023"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 180,
+   "generation": "v4",
+   "state": "Readiness panel footer on the default Dashboard (after “Review readiness →”). Same button on the previous surface (src/dashboard/today/components/ReadinessPanel.tsx:145) and the oldest surface (src/dashboard/components/ReadinessDrawer.tsx:220).",
+   "current": "Button “Export today's snapshot”. Oldest surface hover text: “Export 11 ranked objects as JSON”, disabled: “No ranked objects to export yet” (ReadinessDrawer.tsx:212-217). Previous surface disabled text: “Nothing ranked to export yet” (ReadinessPanel.tsx:139). On the default Dashboard the button is disabled with no explanation when the list is empty (ClimbDrawer.tsx:175).",
+   "problem": "The button sits in a panel about readiness and does not say what the snapshot is. It downloads the Dashboard's list of recommended actions, not readiness. “ranked objects” is internal phrasing for the same list.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md CTA standard (“Buttons must predict the resulting action”); COPY_STANDARD.md §14; AUDIT_BRIEF §3 rank row (“ranked object” is not plain language).",
+   "proposed": "Label on all three: “Export recommended actions (JSON)”. Hover text (ReadinessDrawer.tsx:215-217): `Download today's ${rankedCount} recommended action${rankedCount === 1 ? \"\" : \"s\"} as JSON`. Disabled text (ReadinessDrawer.tsx:212, ReadinessPanel.tsx:139, and add `title` at ClimbDrawer.tsx:175): “No recommended actions to export”.",
+   "testsAffected": [
+    "src/dashboard/components/ReadinessDrawer.test.tsx (if it asserts the button text)"
+   ],
+   "confidence": "high",
+   "id": "DASH-024"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/dashboard/lib/command-export.ts",
+   "line": 94,
+   "generation": "shared",
+   "state": "The file downloaded by “Export today's snapshot”.",
+   "current": "File name `antaeus-command-center-<timestamp>.json`. Contents include `\"rankingConfidenceLabel\": \"stable lead\"` / `\"supported\"` / `\"mixed signal\"`, `\"mode\": \"brief\"`, and `riskCards` / `moveCards` / `systemCards`.",
+   "problem": "“Command center” is a name the Dashboard no longer uses, so the file name does not match the screen it came from. The confidence value is the engine's key (the label the original rewrite replaced on screen), not the wording the Dashboard shows. `mode` is written as “brief” even from the default cockpit, which has no views. The three `…Cards` lists are the capped subsets (3, 4 and 3 items), which a reader will take for complete lists.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact replacement “stable lead” → “priority remains stable” (the on-screen label was replaced; the exported value was not); comprehension principle.",
+   "proposed": "File name: `antaeus-dashboard-recommendations-${timestampForFilename()}.json`. Keep `source` (schema identifier) and the keys. Add the on-screen wording beside the key: `rankingConfidenceText` (the same text the Dashboard prints). Drop `riskCards`, `moveCards` and `systemCards` from the payload or rename them `firstDealItems`, `firstOtherItems`, `firstSetupItems`; `ranked` already holds every item with its `family`.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "DASH-025"
+  }
+ ],
+ "dispositions": [],
+ "retained": [
+  {
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 105,
+   "text": "Highest-priority recommended action",
+   "term": "rank",
+   "why": "Batch 01 exact replacement for \"The most valuable move on your board\"; describes what the product does and the reasons follow it. Correct for the first item (the finding above covers later items)."
+  },
+  {
+   "file": "src/dashboard/lib/command-intelligence.ts",
+   "line": 445,
+   "text": "Ranked first. Reasons: ",
+   "term": "rank",
+   "why": "Describes the product's ordering of its own recommendations and is followed by the basis (COPY_STANDARD §26 allowed form; Batch 01 \"Ranked first because…\"). The colon-list form was chosen because the reasons are noun phrases."
+  },
+  {
+   "file": "src/dashboard/v4/DashboardV4.tsx",
+   "line": 137,
+   "text": "Show next recommendation",
+   "term": "move",
+   "why": "Batch 01 exact replacement for \"not now — show me the next\"; no private 'move' label remains on the default screen."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 134,
+   "text": "Run a pilot whose result the buyer's boss could act on without you in the room.",
+   "term": "room",
+   "why": "Meeting-presence idiom, ordinary English (AUDIT_BRIEF §3 room row). Rendered in the Dashboard masthead under \"What would improve readiness\"."
+  },
+  {
+   "file": "src/dashboard/v4/lib/cockpit.ts",
+   "line": 251,
+   "text": "Pipeline coverage — 0.8× / 5× — weighted pipeline is below benchmark",
+   "term": "pipeline coverage",
+   "why": "Standard sales term; the sub-line says which side is short. The ratio is the same one Quota Workback shows (readCoverageStanding)."
+  },
+  {
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 57,
+   "text": "account priority score 62 out of 99",
+   "term": "heat",
+   "why": "Names the measure, the value and the scale (Signal Console's score is 0–99, src/signal-console/lib/heat.ts:65). Implements the migration-map row `heat` → account priority."
+  },
+  {
+   "file": "src/dashboard/lib/scoring.ts",
+   "line": 60,
+   "text": "multiple recent signals are recorded",
+   "term": "signal",
+   "why": "True to the input: two or more signals dated within the last 60 days (src/signal-console/lib/heat.ts:132). Close to the approved “recent account signals”."
+  },
+  {
+   "file": "src/dashboard/lib/brief-narrative.ts",
+   "line": 66,
+   "text": "The highest-ranked action is: Outbound to Boeing.",
+   "term": "rank",
+   "why": "Describes the product's own ordering and names the item; the basis follows in the line below it (COPY_STANDARD §26 allowed form)."
+  }
+ ],
+ "gaps": [
+  "Explanation titles and reasons that no current input can produce (quota, coverage, replies, sync warnings, deal-workspace priority flags) were reviewed in source only; they cannot be rendered in any walkthrough. They are listed in the finding on src/dashboard/lib/command-intelligence.ts:532.",
+  "The empty summary text in src/dashboard/lib/brief-narrative.ts:23-30 (“No active deals, signals, or recovery moves to triage yet.” / “… the morning brief fills in immediately.”) cannot render: both screens that use the summary show their own empty state when the list is empty (TodaySurface.tsx:104, Dashboard.tsx:60). Not filed as a finding; it should be deleted or reworded with the empty states.",
+  "The stability bonus (computeStabilityBonus, command-intelligence.ts:45-71) is never active because no caller passes previousSnapshot; its effect on order was not exercised."
+ ]
+}

@@ -1,0 +1,1330 @@
+{
+ "area": "terms-and-rules",
+ "coverage": [
+  {
+   "surface": "Default screens — rendered walkthrough, SMB book (21 areas, generated today from a fresh build)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "scratchpad final-audit/corpus-smb/*.txt"
+   ],
+   "note": "Scanned all 5,334 rendered lines with one regex per migration-map term (63 terms plus related forms) and read every hit. This walk was executed by the orchestrator's tooling, not by me; I read its output. It covers the states the walker clicks, not arbitrary form input or network failure."
+  },
+  {
+   "surface": "Default screens — every visible string in files reachable from the 21 v4 roots and the 25 main.tsx entries",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/**/v4/**",
+    "src/onboarding/seeding/**",
+    "src/lib/**",
+    "src/*/lib/**",
+    "src/briefing/components/**",
+    "src/founding-gtm/components/SharePanel.tsx",
+    "src/deal-workspace/ds/components/DealDrawer.tsx",
+    "src/deal-workspace/ds/components/DealHealthFormDS.tsx"
+   ],
+   "note": "TypeScript-AST extraction of 43,800 string literals, JSX text and template strings from src/, js/, supabase/functions, worker and the served HTML; import-graph reachability from each generation's root component decided which screen a file belongs to. Every term hit in a default-reachable file was read in context."
+  },
+  {
+   "surface": "Generated text — scheduled-check observation and suggestion generators",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/heartbeat/generators.ts",
+    "supabase/functions/heartbeat/phase-f-generators.ts",
+    "supabase/functions/heartbeat/voice-document.ts",
+    "src/lib/observations/generators/deal-decay.ts",
+    "src/lib/observations/generators/proof-staleness.ts",
+    "src/lib/phase-f/phase-f-generators.test.ts",
+    "src/lib/session/types.ts"
+   ],
+   "note": "Read all four observation generators and both suggestion generators end to end, traced each sentence to where it renders (Briefing default screen, recent-activity panel, previous/oldest Dashboard cards) and to the parsers that depend on its wording. Not executed: the functions run in Deno against a database; I read the code and the Node-side tests."
+  },
+  {
+   "surface": "AI prompts and output gates — Briefing synthesis, conflicting evidence, weekly summary, critic; prospecting research; onboarding enrichment; events search",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/briefing-pipeline/llm/synthesis-shared.ts",
+    "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts",
+    "supabase/functions/briefing-pipeline/llm/compose-shared.ts",
+    "supabase/functions/briefing-pattern-critic/prompt.ts",
+    "supabase/functions/briefing-pipeline/triggers/_shared.ts",
+    "supabase/functions/prospecting-research/_shared.ts",
+    "supabase/functions/seeding-enrichment/index.ts",
+    "supabase/functions/outdoors-events-discovery/index.ts",
+    "src/lib/voice/voice-document.ts",
+    "src/lib/voice/banned-vocabulary.ts"
+   ],
+   "note": "Scanned every string in supabase/functions for the 63 migration-map terms and the semantic-migration vocabulary and read each hit; read the voice blocks, banned lists and output schemas of the Briefing prompts in full. No live model call was made, so what a model actually returns was not observed."
+  },
+  {
+   "surface": "Deterministic document and note builders — Pilot Desk documents, Call in a Favor request notes, cold-call tokens, LinkedIn steps, shortcut recipes",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/pilot-desk/lib/docs.ts",
+    "src/pilot-desk/state.ts",
+    "src/call-in-a-favor/state.ts",
+    "src/call-in-a-favor/lib/advisor-bridge.ts",
+    "src/cold-call-studio/lib/personalize.ts",
+    "src/cold-call-studio/lib/threads.ts",
+    "src/linkedin-playbook/lib/cues.ts",
+    "src/skills/recipes/*.md",
+    "src/lib/briefing-drafts.ts",
+    "src/briefing/lib/destinations.ts"
+   ],
+   "note": "Followed each builder from the call site on the default screen to storage and to the screens that display the result."
+  },
+  {
+   "surface": "Copy audit scanner (the deprecated-term scan)",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "tools/language-remediation/copy-audit.js",
+    "tools/language-remediation/copy-allowlist.json",
+    "tools/deploy/build-cloudflare-assets.js"
+   ],
+   "note": "Read the scanner, its target list, tier lists and allowlist (181 entries, categories F and G only), and compared the target list with the files the deploy script serves. Did not run it (it writes under artifacts/); another reviewer's read-only reproduction reported 0 Tier-1 and 21 Tier-2 rows, all in the generated transcript."
+  },
+  {
+   "surface": "Entry pages, stored labels and cross-area handoff labels",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/*/index.html",
+    "src/*/lib/handoff.ts",
+    "src/lib/continuity.ts",
+    "src/lib/briefing-drafts.ts",
+    "src/briefing/lib/destinations.ts",
+    "src/settings/lib/workspace-tables.ts",
+    "js/supabase-config.js",
+    "app/*/index.html",
+    "src/lib/ground/GroundLine.tsx"
+   ],
+   "note": "Listed the <title> of all 25 entry pages; grepped every roomLabel / returnLabel / focusObject default in the handoff builders; read the Settings table-label list and the legacy redirect stubs. Did not click the links in a browser."
+  },
+  {
+   "surface": "Previous-generation screens (src/<area>/ds/ and src/dashboard/today/), all 21 areas — deprecated-term and semantic-migration vocabulary",
+   "generation": "ds",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/*/ds/**",
+    "src/dashboard/today/**",
+    "src/briefing/components/WorkspaceReads.tsx",
+    "src/briefing/components/SuggestionsSection.tsx",
+    "src/birdseye/BirdseyeFloat.tsx",
+    "src/welcome/lib/engine.ts",
+    "src/dashboard/lib/brief-narrative.ts",
+    "src/outbound-studio/lib/types.ts",
+    "src/onboarding/lib/types.ts",
+    "scratchpad final-audit/corpus-ds/*.txt"
+   ],
+   "note": "Every string in files reachable only from a previous-generation root was scanned for the 63 migration-map terms and the Batch 02/03 semantic-migration vocabulary (temperature, carrier/deploy, mold/forge/cast, switchboard, cue, front/line, kit, read, room); each hit was read with the file's other visible strings. A rendered walk of these screens with ?v4=0 exists (corpus-ds, 4,495 lines, produced by the orchestrator's tooling) and was scanned with the same term list. Findings here cover term-bearing strings; they are not a full copy review of each previous-generation screen."
+  }
+ ],
+ "findings": [
+  {
+   "id": "TERMS-001",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/components/PatternCard.tsx",
+   "line": 117,
+   "generation": "shared",
+   "state": "Briefing default screen → Your market → each market-pattern card, heading above the action list (same component on the previous and oldest Briefing screens)",
+   "current": "Recommended moves",
+   "problem": "Private ontology (dimension 2). 'Moves' is the Antaeus noun for a recommendation; the disputed-terms table names this exact label. The conflicting-evidence card on the same screen already says 'Recommended actions' (src/briefing/components/ContrarianRail.tsx:68), so one screen uses two names for the same list.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14, ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json deprecated_terms[14]); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "Recommended actions",
+   "testsAffected": [
+    "src/briefing/components/PatternCard.test.tsx:68 (queryByText(\"Recommended moves\") — update the string)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-002",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 113,
+   "generation": "shared",
+   "state": "Deal Workspace default screen → open any deal → edit drawer (DealDrawer → DealHealthFormDS) → section kicker directly above the 'Next step' field. Rendered in the current SMB walkthrough: deal-workspace | After clicking \"Set a dated next step with the buyer.\" → 'NEXT MOVE'. Same form on the previous screen (?v4=0).",
+   "current": "NEXT MOVE",
+   "problem": "Private ontology (dimension 2). The section is headed 'NEXT MOVE' and its first field is the standard sales term 'Next step' — two names for one thing, and the heading is the Antaeus recommendation noun the remediation retires.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' (record B1-TERM-14); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json preserve_standard_sales_terms[5] 'Next step' (record B3-PRES-05); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "NEXT STEP",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-003",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm/components/SharePanel.tsx",
+   "line": 175,
+   "generation": "shared",
+   "state": "Founding GTM default screen → 'Share read-only with a seller' → share panel kicker (lines 175, 191, 211) and its aria-label 'Share this kit' (lines 173, 189, 209). Rendered in the current SMB walkthrough: founding-gtm | After clicking \"Share read-only with a seller\" → 'SHARE THIS KIT'. Also on the oldest Founding GTM screen.",
+   "current": "SHARE THIS KIT (kicker, 3 places) / aria-label \"Share this kit\" (3 places)",
+   "problem": "Private ontology (dimension 2) and A11Y: 'kit' is the deprecated 'handoff kit' name. Everywhere else on this screen the object is 'the handoff document' (the title two lines below says 'Sign in to share the handoff document with a new hire'), so the reader meets a second, unexplained name for it; screen readers announce the region as 'Share this kit'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39, ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json deprecated_terms[39])",
+   "proposed": "Kicker (lines 175, 191, 211): t(\"SHARE THE HANDOFF DOCUMENT\"). aria-label (lines 173, 189, 209): t(\"Share the handoff document\").",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-004",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm/components/SharePanel.tsx",
+   "line": 213,
+   "generation": "shared",
+   "state": "Founding GTM default screen → 'Share read-only with a seller' → signed-in share panel: title (line 213), description (lines 216–218), empty list (lines 259–260)",
+   "current": "Send the kit to a hire as a read-only link / The recipient sees a frozen snapshot of all seven sections. They can't edit anything; you can revoke the link or refresh the snapshot whenever the kit changes. / No share links yet. Create one above when the kit is ready to hand off.",
+   "problem": "Same deprecated 'kit' noun in three sentences of running copy (dimension 2). These three strings are also bare JSX text, not wrapped in t(), so the voice gate never sees them.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39)",
+   "proposed": "Line 213: \"Send the handoff document to a new hire as a read-only link\". Lines 216–218: \"The recipient sees a frozen snapshot of all seven sections. They can't edit anything; you can revoke the link or refresh the snapshot whenever the handoff document changes.\" Lines 259–260: \"No share links yet. Create one above when the handoff document is ready to share.\" Wrap each in t(…, { class: \"body\" }).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-005",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/settings/lib/workspace-tables.ts",
+   "line": 97,
+   "generation": "shared",
+   "state": "Settings default screen → Your data → the list of what Download / Delete everything covers (rendered in the current SMB walkthrough: settings | area at rest → 'Things the system noticed — observations about your work'); also the section heading inside the downloaded workspace file and its spreadsheet index",
+   "current": "Things the system noticed",
+   "problem": "Personification (dimension 8): the section is named by narrating system perception instead of naming the records it holds (automatic observations about deals, accounts and pilots). It is the only personified section name in the list; the others name the data ('Deals', 'Pilots', 'Events').",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' → 'recent changes / analysis / observations' and 'what the system saw' → retire as a section heading (records B1-TERM-53, B1-TERM-55); COPY_STANDARD.md §9",
+   "proposed": "SECTION.observations: \"Automatic observations\" (the one table under it is already labelled 'Observations about your work', so the row reads 'Automatic observations — observations about your work'; if that reads as a repeat, rename the table label at line 172 to \"Changes detected in your deals, accounts and pilots\"). The section label is only a grouping key: restoreCloudExport iterates Object.values(sections), so older downloaded files still restore.",
+   "testsAffected": [
+    "src/settings/lib/cloud-sync.test.ts:333,425",
+    "src/settings/lib/workspace-export-formats.test.ts:36,37,46,111"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-006",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/components/BriefingLead.tsx",
+   "line": 29,
+   "generation": "shared",
+   "state": "Briefing default screen → Your market → lead sentence block, kicker (line 29) and aria-label (line 28); shown when the weekly run produced a lead",
+   "current": "The read this week",
+   "problem": "'Read' used as a noun for the weekly market summary (dimensions 1, 2). The original Briefing rewrite removes 'read' as the generic noun for analysis; the rest of this screen now says 'market updates' and 'analysis'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' → 'analysis / assessment / summary … when used as a noun, replace with the specific artifact' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing' (\"Remove read as the generic noun for analysis\")",
+   "proposed": "This week's market summary (both the kicker and the aria-label)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-007",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/components/EmptyState.tsx",
+   "line": 21,
+   "generation": "shared",
+   "state": "Briefing default screen → Your market, when the latest weekly run has no patterns (empty state): headline line 21, body lines 25 and 31",
+   "current": "There are no market reads for this week yet. / Market reads appear here after the weekly market review runs. Each one summarizes a change in your market: … / Each read lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.",
+   "problem": "'Market reads' / 'each read' — 'read' as the noun for a market analysis (dimension 2). A first-time user meeting the empty Briefing has no screen example of a 'read' to decode it from. The populated state calls the same items 'market updates' (PatternList.tsx:31, StaleRunBanner.tsx:51).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacements '3 READS THIS WEEK' → '3 MARKET ANALYSES THIS WEEK' and 'every read links to its evidence' → 'every analysis includes supporting evidence'",
+   "proposed": "Line 21: \"There are no market updates for this week yet.\" Line 25: \"Market updates appear here after the weekly market review runs. Each one summarizes a change in your market: a company you aren't tracking yet that matches your targets, or evidence that disagrees with an assumption you've made.\" Line 31: \"Each update lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-008",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/briefing/components/PatternList.tsx",
+   "line": 29,
+   "generation": "shared",
+   "state": "Briefing default screen → Your market → region label of the pattern list (screen-reader name); the visible count two lines below says 'N market updates this week'",
+   "current": "aria-label \"This week's reads\"",
+   "problem": "The accessible name uses the retired noun 'reads' while the visible text in the same region says 'market updates' (dimension 2; accessible name does not match visible wording).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56)",
+   "proposed": "aria-label={t(\"This week's market updates\")}",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-009",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/briefing/components/MarksBar.tsx",
+   "line": 56,
+   "generation": "shared",
+   "state": "Briefing default screen → each market-pattern card → 'Did this help?' button group (screen-reader group name)",
+   "current": "aria-label \"Rate this read\"",
+   "problem": "Accessible name uses 'read' as the noun for a market update (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56)",
+   "proposed": "aria-label={t(\"Rate this market update\")}",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-010",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/components/ShowYourWork.tsx",
+   "line": 56,
+   "generation": "shared",
+   "state": "Briefing default screen → market-pattern card → 'Show sources and reasoning' when no audit record exists (rendered in the current SMB walkthrough: briefing | After clicking \"SHOW SOURCES AND REASONING\"); line 68 is the aria-label of the populated panel",
+   "current": "No source record is saved for this read. Reads created from now on will include one. (line 56) / aria-label \"How this read was produced\" (line 68)",
+   "problem": "'This read' / 'Reads created from now on' — 'read' as a noun for the market update (dimension 2); the button that opened the panel says 'sources and reasoning', so the reader has to work out that 'read' means the card they are on.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing'",
+   "proposed": "Line 56: \"No source record is saved for this market update. Updates created from now on will include one.\" Line 68: aria-label={t(\"How this market update was produced\")}",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-011",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/briefing/v4/lib/reads.ts",
+   "line": 81,
+   "generation": "v4",
+   "state": "Briefing default screen → Your work → collapsed overflow row '+ N <label>' when one check produced more than three observations (labels at lines 78–81, fallback at line 112)",
+   "current": "+ N more reads on your call rhythm (line 81) / + N more reads like these (fallback, line 112) / + N more pilots past their readout (line 80) / + N more accounts gone quiet (line 78) / + N more deals sitting still (line 79)",
+   "problem": "'Reads' as a noun for observations (dimension 2); 'call rhythm' and 'readout' are insider shorthand for discovery-call frequency and the pilot end date. 'Gone quiet' is the idiom the original Deal Workspace rewrite replaced with 'No recent activity'; the observations these rows collapse say 'No new signals have been recorded for …' and '… has been at <stage> for N days'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Gone quiet' → 'No recent activity'; comprehension principle",
+   "proposed": "Line 78: \"more accounts with no new signals\". Line 79: \"more deals with no stage change\". Line 80: \"more pilots past their end date\". Line 81: \"more notes about how many discovery calls were logged\". Line 112: \"more observations like these\".",
+   "testsAffected": [
+    "src/briefing/v4/lib/reads.test.ts (check for the run labels)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-012",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/settings/lib/workspace-tables.ts",
+   "line": 153,
+   "generation": "shared",
+   "state": "Settings default screen → Your data → Briefing row of the download/delete list (rendered in the current SMB walkthrough: '… briefing reads, how each briefing read was written, quality checks on briefing reads, your marks on briefing reads …'); also table labels inside the downloaded file. Lines 153, 155, 159, 161.",
+   "current": "Briefing reads / How each briefing read was written / Quality checks on briefing reads / Your marks on briefing reads",
+   "problem": "Four table labels use 'read' as the noun for a Briefing market update (dimension 2), in a list whose job is to tell the user exactly what will be downloaded or deleted.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56)",
+   "proposed": "Line 153: \"Briefing market updates\". Line 155: \"How each market update was written\". Line 159: \"Quality checks on market updates\". Line 161: \"Your ratings of market updates\".",
+   "testsAffected": [
+    "src/settings/lib/workspace-tables.test.ts (if labels are asserted)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-013",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/seeding/components/LandingStep.tsx",
+   "line": 79,
+   "generation": "v4",
+   "state": "Onboarding default flow → final 'Setup complete' step → 'Where you stand' paragraph",
+   "current": "Most of what a new hire would need still lives in your head. The workspace now has your targets, accounts, and deals, and it flags deals that need attention. Each week of recorded work makes it easier for someone else to pick up.",
+   "problem": "'Lives in your head' is the specific readiness metaphor the original remediation replaced (dimension 3); the control document requires related prose to state the actual condition — the process is not yet documented for another seller.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] (\"It all lived in your head — nothing to inherit.\" → \"The sales process was not yet documented for another seller.\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md disputed-terms row 'in your head'",
+   "proposed": "Most of what a new hire would need is not written down for them. The workspace now has your targets, accounts, and deals, and it flags deals that need attention. Each week of recorded work makes it easier for someone else to pick up.",
+   "testsAffected": [
+    "tools/preview/walk-onboarding.js output only (no unit assertion found)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-014",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "supabase/functions/heartbeat/generators.ts",
+   "line": 300,
+   "generation": "backend",
+   "state": "Scheduled 30-minute check → pilot past its end date → observation text shown on the Briefing default screen ('Your work'), the recent-activity panel ('automated updates') and the previous/oldest Dashboard weekly cards. Lines 300–307; mirrored for tests at src/lib/observations/generators/proof-staleness.ts:63–68.",
+   "current": "The \"<success criterion>\" proof passed its readout window 12 days ago with no recorded outcome. Readout owner is Dana. / A pilot proof is at its readout window today with no recorded outcome.",
+   "problem": "Generated copy in the product's own voice calls the pilot a 'proof' and its end date a 'readout window' (dimensions 2, 6). Both are the retired pilot vocabulary; Pilot Desk itself now says pilot, end date, results and 'who approves the result'. The heartbeat voice gate does not list 'proof', so nothing stops this text.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; final-audit AUDIT_BRIEF.md §3 disputed terms row 'proof'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[1] (record B1-INSTR-1: change the generator)",
+   "proposed": "const subject = claim ? `The pilot \"${claim}\"` : \"A pilot\"; const ownerClause = owner ? ` ${owner} approves the result.` : \"\"; const overdueClause = daysOverdue === 0 ? \"reaches its planned end date today\" : `passed its planned end date ${daysOverdue} days ago`; observationText: `${subject} ${overdueClause} and no result is recorded.${ownerClause}`. Apply the same text in src/lib/observations/generators/proof-staleness.ts:63–68. Keep relatedObjectType \"proof\" and the dedupe keys.",
+   "testsAffected": [
+    "src/lib/observations/generators/proof-staleness.test.ts:98-111 (asserts 'pilot proof' and the readout-window variants — update to the new wording)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-015",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "supabase/functions/heartbeat/generators.ts",
+   "line": 157,
+   "generation": "backend",
+   "state": "Scheduled 30-minute check → open deal with no stage change for 7+ days → observation sentence shown on the Briefing default screen ('Your work'), in the recent-activity panel, and on the previous/oldest Dashboard weekly cards. The stage word comes from line 150 (`d.stage.trim()`), the stored stage key. Mirrored for tests at src/lib/observations/generators/deal-decay.ts:149,154.",
+   "current": "`${account} has been at ${stage} for ${daysAtStage} days with ${nextStepClause}.` — renders e.g. \"Boeing has been at poc for 12 days with no dated next step.\", \"… at verbal for 9 days …\", \"… at evaluation for 21 days …\"",
+   "problem": "The sentence prints the stored stage key instead of the stage label the user sees everywhere else (dimensions 2 and 6). Deal Workspace calls these stages 'PoC / Pilot', 'Verbal Commit' and 'Solution Fit' (src/deal-workspace/lib/deal-shape.ts:30-39); 'poc', 'verbal' and 'evaluation' never appear on a screen, so the reader has to guess which stage is meant. This is the reverse of the original rule that an enum key stays internal and only the label is user-facing.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[1] (record B2-RULE-1: keep the enum key, change only the user-facing label); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json preserve_standard_sales_terms[2] 'Stage' (record B3-PRES-02); comprehension principle",
+   "proposed": "In supabase/functions/heartbeat/generators.ts add a label map beside CLOSED_STAGES: `const STAGE_LABEL: Record<string, string> = { prospect: \"Prospect\", discovery: \"Discovery\", evaluation: \"Solution Fit\", poc: \"PoC / Pilot\", negotiation: \"Negotiation\", verbal: \"Verbal Commit\" };` then at line 150 `const stageKey = d.stage.trim(); const stage = STAGE_LABEL[stageKey] ?? stageKey;` and at line 157 `observationText: `${account} has been in the ${stage} stage for ${daysAtStage} days with ${nextStepClause}.``. Apply the same change in src/lib/observations/generators/deal-decay.ts (lines 149, 154; it can import STAGE_LABELS from src/deal-workspace/lib/deal-shape.ts). 'for N days' is kept, so the day-count parsers (src/dashboard/lib/week-reads-filter.ts:29, src/briefing/v4/lib/reads.ts:56) still match.",
+   "testsAffected": [
+    "src/lib/observations/generators/deal-decay.test.ts:230 (toContain(\"negotiation\") — becomes \"Negotiation\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-016",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "supabase/functions/heartbeat/phase-f-generators.ts",
+   "line": 98,
+   "generation": "backend",
+   "state": "Scheduled check → a scheduled shortcut has run 5+ times in 30 days → suggestion shown on the Briefing default screen in the 'NOTICED' band (src/briefing/v4/BriefingV4.tsx:337 prints whatNoticed + whatChanges) and, with the title, on the previous/oldest Briefing (src/briefing/components/SuggestionsSection.tsx:53-61). Text built at lines 86, 98, 103; the name comes from humanizeSkillId (line 129), which title-cases the stored id.",
+   "current": "Make \"Cast Proof For Hottest Deal\" default to your scheduled setup? / You scheduled \"Cast Proof For Hottest Deal\" and it has fired 6 times in the last 30 days without a parameter override. / Your scheduled parameters become the recipe default for \"Cast Proof For Hottest Deal\". Manual runs land on the same configuration.",
+   "problem": "Three problems in one generated message. (1) The shortcut is named from its internal id, so the retired words come back on screen — 'Cast Proof For Hottest Deal', 'Triage Week Reads' — although each shortcut has a plain label ('Plan a pilot for the highest-risk deal', src/skills/recipes/cast-proof-for-hottest-deal.md:3). (2) 'fired', 'parameter override', 'recipe default' and 'runs land on the same configuration' are internal scheduler vocabulary (dimensions 2, 6). (3) 'without a parameter override' is not checked anywhere: the detector only counts runs (lines 153-168).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'fires' → 'matches / triggers / detects' (record B1-TERM-59), 'hottest' (B1-TERM-05), 'read' (B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112] (cast/forge a proof); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[1] (record B1-INSTR-1: change the generator)",
+   "proposed": "Add `const SKILL_LABELS: Record<string, string> = { \"cast-proof-for-hottest-deal\": \"Plan a pilot for the highest-risk deal\", \"compose-this-weeks-outbound\": \"Compose this week's outbound\", \"prep-next-call\": \"Prep for my next call\", \"triage-week-reads\": \"Review this week's workspace analysis\", \"whats-at-risk\": \"What's at risk this week\" };` and make humanizeSkillId return `SKILL_LABELS[id] ?? <current fallback>`. Line 86: `Open \"${human}\" with your scheduled settings every time?` Line 98: `\"${human}\" has run on its schedule ${fires} times in the last 30 days.` Line 103: `If you accept, opening \"${human}\" yourself uses the same settings as the scheduled run.` Ids, payload and dedupe hash unchanged.",
+   "testsAffected": [
+    "src/lib/phase-f/phase-f-generators.test.ts:139-148 (expects \"7 times\", \"30 days\" — still true; expects \"recipe default\" — update)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-017",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "supabase/functions/heartbeat/phase-f-generators.ts",
+   "line": 119,
+   "generation": "backend",
+   "state": "Scheduled check → 5+ 'focus' events for one area in 14 days → suggestion (lines 107, 115, 119). Not reachable today: nothing in src/ calls setFocusedObject or pushRecentAction, so workspace_sessions.recent_actions stays empty and this generator has no input. The text ships and would render in the same Briefing suggestion band.",
+   "current": "Surface Poc Framework in your weekly brief? / You opened Poc Framework 6 times in the last 14 days. / A short read about Poc Framework lands at the top of your weekly brief, so you do not have to think to start.",
+   "problem": "humanizeRoom (line 122) title-cases the stored area id, and the stored ids are the retired names (src/lib/session/types.ts:44-64: poc-framework, advisor-deploy, sourcing-workbench, negotiation, call-planner), so the message would name areas that no longer exist. 'A short read … lands' uses 'read' as a noun (dimension 2). The promise is also not what accepting does: it registers an extra run of an existing observation check; nothing places anything 'at the top of your weekly brief'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56) and row 'landing' (B1-TERM-21); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[1] (record B2-RULE-1); comprehension principle",
+   "proposed": "Add `const AREA_NAMES: Record<string, string> = { \"poc-framework\": \"Pilot Desk\", \"advisor-deploy\": \"Call in a Favor\", \"sourcing-workbench\": \"Prospecting Desk\", negotiation: \"Getting to Signed\", \"call-planner\": \"Discovery Studio\" };` and have humanizeRoom return `AREA_NAMES[room] ?? <current title-casing>`. Line 107: `Show more observations about ${area} in Briefing?` Line 115 unchanged apart from the name. Line 119: `If you accept, Briefing adds observations about ${area} to \"Your work\" after each scheduled check.`",
+   "testsAffected": [
+    "src/lib/phase-f/phase-f-generators.test.ts:151-171 (expects \"Deal Workspace\", \"6 times\", \"weekly brief\" — update the last)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-018",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/pilot-desk/lib/docs.ts",
+   "line": 89,
+   "generation": "shared",
+   "state": "Pilot Desk → every saved pilot. saveDraft() (src/pilot-desk/state.ts:109, called from the default screen at src/pilot-desk/v4/PilotDeskV4.tsx:441) freezes these four documents into the pilot record, so they are stored locally and in the cloud row and appear in the Settings download. They are displayed with a copy button on the previous screen (src/pilot-desk/ds/components/ProofObject.tsx:159) and the oldest screen (src/pilot-desk/components/CastPanel.tsx). The documents are written to be sent to the buyer.",
+   "current": "Lines 84-159, e.g. \"Readout owner: Dana\" / \"Can Luca produce enough buyer-owned proof for Notion to make an expand / pause / stop decision?\" / \"Boundaries / kill rules:\" / \"Required readout: 1. What changed during the proof window?\" / \"If the readout owner is not present, the PoC does not count as decision proof.\" / \"1. Confirm the proof claim.\" / \"If the proof cannot be carried into a buyer decision, the PoC stops instead of drifting.\" / \"POC READOUT AGENDA\" / \"Stop if the proof did not survive the agreed boundary.\" / \"5. Name the next move.\" / \"Subject: Notion PoC scope and readout owner\" / \"we can lock the PoC and start the proof window.\"",
+   "problem": "Generated documents in the product's own voice still use the retired pilot vocabulary: 'proof' as the name of the pilot's result, 'kill rules', 'readout / readout owner', 'proof window', 'the next move' (dimensions 2, 3). The default Pilot Desk now says success criteria, who approves the result, pilot end date and results meeting, so a seller who copies these documents sends a buyer words the app itself no longer uses. 'PoC' as the name of the exercise is ordinary and can stay.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; final-audit AUDIT_BRIEF.md §3 disputed terms rows 'proof' and 'move'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Pilot Desk' (success criteria, approver, end date, results summary); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[1] (record B1-INSTR-1)",
+   "proposed": "Line 67: fallback \"[Who approves the result]\". Line 84: `Result approver: ${owner}`. Line 89: `Can ${vendor} produce results that ${account} accepts as the basis for an expand / pause / stop decision?` Line 94: \"Boundaries and stop conditions:\". Lines 97-100: \"The results meeting must answer:\\n1. What changed during the pilot?\\n2. Which criteria passed, failed, or stayed ambiguous?\\n3. What decision is now justified?\". Line 102: \"If the person who approves the result is not in the results meeting, the results cannot be used for the decision.\" Line 106: \"1. Confirm what the pilot has to show.\" Lines 115-117: \"4. Confirm who approves the result and the results meeting.\\nApprover: ${owner}\\nResults meeting: ${fmtDate(end)}\". Line 120: \"If the results cannot support a buyer decision, the PoC stops on the end date instead of running on without one.\" Line 122: `POC RESULTS MEETING AGENDA - ${account}`. Line 125: `Can ${vendor} produce enough evidence for ${account} to make an expand / pause / stop decision?` Line 136: \"- Stop if a stop condition was met.\" Line 138: \"5. Agree the next step.\" Line 142: `Subject: ${account} PoC scope and who approves the result`. Lines 154-155: `Result approver: ${owner}\\nResults meeting: ${fmtDate(end)}`. Line 159: \"If this still matches how you want to evaluate, we can confirm the PoC and set the start date.\" Keep the ProofDocs keys (scope, kickoff, readout, email).",
+   "testsAffected": [
+    "src/pilot-desk/lib/docs.test.ts:17 (toContain(\"POC READOUT AGENDA\") — update)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-019",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/call-in-a-favor/state.ts",
+   "line": 236,
+   "generation": "shared",
+   "state": "Call in a Favor → 'send' on the default screen (src/call-in-a-favor/v4/CallInAFavorV4.tsx:122 logDeployment(\"pending\")) → the note saved on the request record (lines 236, 238, 240). The note is stored in the cloud row (src/call-in-a-favor/lib/advisor-bridge.ts:205), appears in the Settings download, and is shown in an editable notes field on the previous screen (src/call-in-a-favor/ds/components/DeskSide.tsx:162).",
+   "current": "Ask sent from Backchannel Desk. / Held before spending advisor trust. / Rerouted before sending.",
+   "problem": "The saved note names a place that does not exist in the product ('Backchannel Desk') and uses the retired 'spend trust' model (dimensions 2, 3). Anyone reading the request history or the downloaded file meets vocabulary the screens no longer use.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6: relay/backchannel/spend-trust → network assistance + trackable request/outcome); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'",
+   "proposed": "Line 236: \"Request sent from Call in a Favor.\" Line 238: \"Held: not sent.\" Line 240: \"Not sent: routed to a different contact.\" Existing stored notes can stay as they are (free text, not a key).",
+   "testsAffected": [
+    "src/call-in-a-favor/state.test.ts (check for the note strings)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-020",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/briefing/v4/BriefingV4.tsx",
+   "line": 335,
+   "generation": "v4",
+   "state": "Briefing default screen → suggestion band label, shown when a pending suggestion exists (bell button opens it)",
+   "current": "NOTICED",
+   "problem": "A one-word label that narrates system perception with no subject (dimensions 8, 9): the reader has to supply 'the system noticed'. The setting that controls this band is already called 'Allow recommendations', and the band holds a suggestion with Accept / Not now buttons.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' / 'what the system saw' (records B1-TERM-53, B1-TERM-55: state the result rather than narrating system perception); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Let the system suggest things' → 'Allow recommendations'",
+   "proposed": "t(\"SUGGESTION\")",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-021",
+   "category": "LANG-C",
+   "severity": 1,
+   "file": "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts",
+   "line": 161,
+   "generation": "backend",
+   "state": "Weekly Briefing run → conflicting-evidence prompt, output-schema example (same line in the test mirror src/briefing/lib/synthesis/contrarian.ts:161); also the lead-sentence prompt context at supabase/functions/briefing-pipeline/llm/compose-shared.ts:57,61,71 and the critic prompt label at supabase/functions/briefing-pattern-critic/prompt.ts:134",
+   "current": "{ \"label\": \"<verb-led move>\", … } / \"TRIGGER FIRES THIS RUN:\" … `- \"${rule}\" fired: ${summary} (${n} items)` / \"(no triggers fired this run)\" / \"Recommended moves:\"",
+   "problem": "The prompts hand the model the retired nouns 'move' and 'fired' as the names of the things it is writing about. The visible labels are 'Recommended actions' and 'monitoring rule matched'; a model that echoes its input can bring 'move' or 'fired' back into the weekly summary sentence. The voice instructions ban private terminology in general, so the risk is low, but the prompt vocabulary should match the screen.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[2] (record B2-RULE-2: update prompt/template instructions so future outputs do not recreate banned metaphors); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'one move' (B1-TERM-14) and 'fires' (B1-TERM-59)",
+   "proposed": "contrarian-shared.ts:161 and src/briefing/lib/synthesis/contrarian.ts:161: \"<verb-led recommended action>\". compose-shared.ts:57 \"(no monitoring rules matched this run)\"; :61 `- \"${f.trigger_natural_language}\" matched: ${f.fire_summary} (${f.evidence_count} items)`; :71 \"MONITORING RULES MATCHED THIS RUN:\". briefing-pattern-critic/prompt.ts:134 \"Recommended actions:\". Field names (recommended_moves, trigger_fires) unchanged.",
+   "testsAffected": [
+    "src/briefing/lib/compose/lead.test.ts and src/briefing/lib/synthesis/contrarian.test.ts (if they assert the prompt text)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-022",
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "tools/language-remediation/copy-audit.js",
+   "line": 12,
+   "generation": "tooling",
+   "state": "npm run copy:audit — the deprecated-term scan the original manifest requires after implementation",
+   "current": "TARGETS covers src, supabase/functions, the capability maps, the transcript, the Discovery scripts, the two demo seed files and nine public pages. It does not scan these served files: privacy.html, terms.html, index.html, preview.html, auth/callback/index.html, js/demo-seed-runtime.js, js/onboarding.js, js/supabase-config.js, or any of the 17 served design-variant pages (demo-a-time.html … seeding-flow.html, listed in tools/deploy/build-cloudflare-assets.js). TIER2 (line 10) matches exact word forms only, so 'motions', 'threads', 'fronts' pass.",
+   "problem": "The scan reports a clean Tier 1 while served pages still contain Tier-1 phrases — 'You are the system' appears 15 times and 'the machine' 7 times across the variant pages — and while plural forms of Tier-2 words render on fallback screens (src/settings/ds/components/SettingsCardsDS.tsx:430 'motions', src/cold-call-studio/ds/components/ThreadRail.tsx:17 'THE THREADS'). The scan is a regression gate, not the standard, but its green result currently says less than it appears to.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[5] (record B1-INSTR-5: regenerate the preview transcript and run the deprecated-term scan); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/12_COPY_LINTER_AND_CI_SPEC.md",
+   "proposed": "Add to TARGETS: \"privacy.html\", \"terms.html\", \"index.html\", \"preview.html\", \"auth/callback/index.html\", \"js/demo-seed-runtime.js\", \"js/onboarding.js\". Build each TIER2 pattern with an optional plural (`${esc(phrase)}s?`). OWNER DECISION: the 17 variant pages are served but were left as design mockups. Adding them to TARGETS will fail Tier 1 until they are rewritten or removed from the deploy list; the owner decides whether they are rewritten, unpublished, or recorded as excluded mockups.",
+   "testsAffected": [
+    "tools/language-remediation/copy-audit.test.js"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-023",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/call-in-a-favor/index.html",
+   "line": 6,
+   "generation": "static",
+   "state": "Browser tab title, history entry and bookmark name of the default Call in a Favor page (the entry HTML for every generation of this area); nothing sets document.title at runtime",
+   "current": "<title>Advisor Deploy | Antaeus GTM OS</title>",
+   "problem": "The page is titled with the retired area name while the screen, the workspace map and every link call it Call in a Favor. A user with several tabs open, or looking through browser history, cannot find Call in a Favor; the tab names a place the app no longer mentions (dimension 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table",
+   "proposed": "<title>Call in a Favor | Antaeus GTM OS</title>",
+   "testsAffected": [
+    "tests/e2e/*.spec.ts (check for toHaveTitle assertions on this route)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-024",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/pilot-desk/index.html",
+   "line": 6,
+   "generation": "static",
+   "state": "Browser tab title, history entry and bookmark name of the default Pilot Desk page (the entry HTML for every generation of this area); nothing sets document.title at runtime",
+   "current": "<title>PoC Framework | Antaeus GTM OS</title>",
+   "problem": "The page is titled with the retired area name while the screen, the workspace map and every link call it Pilot Desk. A user with several tabs open, or looking through browser history, cannot find Pilot Desk; the tab names a place the app no longer mentions (dimension 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table",
+   "proposed": "<title>Pilot Desk | Antaeus GTM OS</title>",
+   "testsAffected": [
+    "tests/e2e/*.spec.ts (check for toHaveTitle assertions on this route)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-025",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/prospecting-desk/index.html",
+   "line": 6,
+   "generation": "static",
+   "state": "Browser tab title, history entry and bookmark name of the default Prospecting Desk page (the entry HTML for every generation of this area); nothing sets document.title at runtime",
+   "current": "<title>Sourcing Workbench | Antaeus GTM OS</title>",
+   "problem": "The page is titled with the retired area name while the screen, the workspace map and every link call it Prospecting Desk. A user with several tabs open, or looking through browser history, cannot find Prospecting Desk; the tab names a place the app no longer mentions (dimension 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table",
+   "proposed": "<title>Prospecting Desk | Antaeus GTM OS</title>",
+   "testsAffected": [
+    "tests/e2e/*.spec.ts (check for toHaveTitle assertions on this route)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-026",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/getting-to-signed/index.html",
+   "line": 6,
+   "generation": "static",
+   "state": "Browser tab title, history entry and bookmark name of the default Getting to Signed page (the entry HTML for every generation of this area); nothing sets document.title at runtime",
+   "current": "<title>Negotiation | Antaeus</title>",
+   "problem": "The page is titled with the retired area name while the screen, the workspace map and every link call it Getting to Signed. A user with several tabs open, or looking through browser history, cannot find Getting to Signed; the tab names a place the app no longer mentions (dimension 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table",
+   "proposed": "<title>Getting to Signed | Antaeus GTM OS</title>",
+   "testsAffected": [
+    "tests/e2e/*.spec.ts (check for toHaveTitle assertions on this route)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-027",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/call-in-a-favor/lib/handoff.ts",
+   "line": 57,
+   "generation": "shared",
+   "state": "Call in a Favor previous screen (src/call-in-a-favor/ds/components/DeskSide.tsx) and oldest screen (src/call-in-a-favor/components/SecondaryStack.tsx:340-362) → links to Deal Workspace, Future Autopsy and Pilot Desk when no deal is selected. Lines 57, 71, 85. The default screen does not import this file.",
+   "current": "focusObject: accountName || \"Advisor deployment\"",
+   "problem": "With no deal selected the link carries focusObject=Advisor deployment, a placeholder that is not an account. The destination treats focusObject as an account or deal name (it looks it up and shows it in the return strip), so it is primed with a name that matches nothing, and the label is the retired 'deploy' vocabulary. The project's own continuity rule says an empty focus must be omitted, not replaced by a placeholder.",
+   "governing": "deliverables/audit/continuity-params-2026-05.md Invariant 8 (empty focusObject placeholders are not written); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6)",
+   "proposed": "At lines 57, 71 and 85 pass `focusObject: accountName` with no fallback. buildAdvisorRoomHref already omits the parameter when it is empty (line 35: `if (focusObject) params.set(\"focusObject\", focusObject)`), so the link then carries no focus instead of a placeholder.",
+   "testsAffected": [
+    "src/call-in-a-favor/lib/handoff.test.ts:80 (\"uses 'Advisor deployment' fallback when accountName is blank\" — change to expect no focusObject parameter)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-028",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/ds/components/TopbarDS.tsx",
+   "line": 15,
+   "generation": "ds",
+   "state": "Briefing previous screen (?v4=0, or the room's *_v4_off flag) → page kicker",
+   "current": "L15: \"BRIEFING · THE DAILY READ\"",
+   "problem": "'Read' as the noun for the Briefing itself (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' → 'analysis / assessment / summary' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing'",
+   "proposed": "L15: t(\"BRIEFING · DAILY SUMMARY\") OWNER DECISION: the previous-generation screens across the app (src/*/ds/) still carry much of the vocabulary the default screens replaced. Each can be fixed string by string as listed in these findings; the larger option is to retire the ?v4=0 fallback for areas whose default screen has been stable, which removes a kill switch and is the owner's call.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-029",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/briefing/ds/BriefingDS.tsx",
+   "line": 53,
+   "generation": "ds",
+   "state": "Briefing previous screen (?v4=0, or the room's *_v4_off flag) → skip link (keyboard / screen-reader); same string on the oldest screen at src/briefing/Briefing.tsx:50",
+   "current": "L53: \"Skip to this week's reads\"",
+   "problem": "Accessible skip link uses 'reads' for market updates (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' → 'analysis / assessment / summary' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing'",
+   "proposed": "L53: t(\"Skip to this week's market updates\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-030",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/briefing/components/WorkspaceReads.tsx",
+   "line": 127,
+   "generation": "shared",
+   "state": "Briefing previous screen (?v4=0, or the room's *_v4_off flag) and oldest Briefing → 'Your work' column: region label (lines 127, 142, 152, 168), load error (51), group headings (75, 76), empty state (155), dismiss button label (220)",
+   "current": "L51: \"Couldn't load your workspace reads.\" · L75: \"Accounts going quiet\" · L76: \"Evidence past its readout\" · L127: \"Workspace reads (aria-label, 4 places)\" · L155: \"The system has nothing to flag in your work right now.\" · L220: \"Dismiss this read\"",
+   "problem": "'Reads' as a noun for observations, 'going quiet' and 'readout' shorthand, and a personified empty state (dimensions 2, 8). The default screen already uses the approved wording for the same states.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' → 'analysis / assessment / summary' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md row 'Nothing to flag in your work right now. The system checks every half hour…' → 'No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.'",
+   "proposed": "L51: \"Couldn't load changes in your deals and accounts.\" · L75: \"Accounts with no new signals\" · L76: \"Pilots past their end date\" · L127: \"Changes in your deals and accounts\" · L155: \"No material changes are currently detected in your active deals or watched accounts.\" · L220: \"Dismiss this observation\"",
+   "testsAffected": [
+    "src/briefing/components/WorkspaceReads.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-031",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/briefing/components/SuggestionsSection.tsx",
+   "line": 56,
+   "generation": "shared",
+   "state": "Briefing previous screen (?v4=0, or the room's *_v4_off flag) and oldest Briefing → suggestion card label",
+   "current": "L56: \"What I noticed:\"",
+   "problem": "The software speaks in the first person about noticing (dimension 8).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' and 'what the system saw' (records B1-TERM-53, B1-TERM-55); COPY_STANDARD.md §9",
+   "proposed": "L56: t(\"What was observed:\")",
+   "testsAffected": [
+    "src/briefing/components/SuggestionsSection.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-032",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/briefing/components/OutdoorsEventsChip.tsx",
+   "line": 19,
+   "generation": "shared",
+   "state": "Briefing previous screen (?v4=0, or the room's *_v4_off flag) and oldest Briefing → 'Your market' view → link chip to Outdoors Events",
+   "current": "L19: \"Outdoors Events — gatherings the system found for your category\"",
+   "problem": "Narrates what 'the system found' and calls events 'gatherings' (dimensions 3, 8); the default Outdoors Events screen says 'events relevant to your target buyers'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' and 'what the system saw' (records B1-TERM-53, B1-TERM-55); COPY_STANDARD.md §9; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'The system finds the gatherings — you decide which matter.' → 'Antaeus identifies relevant events; you decide which ones are worth pursuing.' and 'gatherings squarely about what you sell' → 'events focused directly on your market'",
+   "proposed": "L19: \"Outdoors Events — events relevant to your category\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-033",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/call-in-a-favor/ds/AdvisorDeployDS.tsx",
+   "line": 41,
+   "generation": "ds",
+   "state": "Call in a Favor previous screen (?v4=0, or the room's *_v4_off flag) → top bar: area name (41), count line (35), side-column label (64)",
+   "current": "L35: \"${advisorCount} carriers · ${loopCount} loops\" · L41: \"ADVISOR DEPLOY\" · L64: \"Carriers + the desk read\"",
+   "problem": "The screen is headed with the retired area name and the retired 'carrier / loop / desk read' model (dimensions 2, 3). A user sent here from 'Call in a favor' on Deal Workspace lands on a page called something else.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'",
+   "proposed": "L35: `${advisorCount} contacts · ${loopCount} requests` · L41: t(\"CALL IN A FAVOR\") · L64: t(\"Contacts who can help and request results\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-034",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/call-in-a-favor/ds/components/AskDesk.tsx",
+   "line": 174,
+   "generation": "ds",
+   "state": "Call in a Favor previous screen (?v4=0, or the room's *_v4_off flag) → request builder: selects (107, 137, 140), card kickers (150, 155-162), outcome buttons (174, 176, 183), handoff strip (200-202, 209-210)",
+   "current": "L107: \"Choose a carrier…\" · L120: \"IS THE ASK READY\" · L137: \"Carrier\" · L140: \"Ask moment\" · L150: \"THE EVIDENCE LINE\" · L157: \"Carrier: … · Return: …\" · L160: \"No carrier selected\" · L174: \"SPEND THE TRUST\" · L176: \"Deployment outcome (aria-label)\" · L183: \"Pick a deal and a carrier first.\" · L193: \"Reroute\" · L200: \"Carry the ask forward / RETURN THE LOOP / Every ask returns as a deal update.\" · L209: \"Pre-mortem the deal\" · L210: \"Forge the evidence\"",
+   "problem": "The whole builder runs on the retired relay vocabulary — carrier, ask moment, spend the trust, deployment, return the loop — plus 'pre-mortem' and 'forge' on its links (dimensions 2, 3). The default screen says contact, what you need, request and outcome.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]",
+   "proposed": "L107: \"Choose a contact…\" · L120: \"IS THE REQUEST READY TO SEND?\" · L137: \"Who can help\" · L140: \"What you need\" · L150: \"EVIDENCE TO MENTION\" · L157: \"Contact: … · What you are asking for: …\" · L160: \"No contact selected\" · L174: \"LOG THE REQUEST\" · L176: \"Request outcome\" · L183: \"Choose a deal and a contact first.\" · L193: \"Ask someone else\" · L200: \"Continue working this deal\" / \"TRACK THE OUTCOME\" / \"Record what came of the request on the deal.\" · L209: \"Review deal risk\" · L210: \"Run a pilot\"",
+   "testsAffected": [
+    "src/call-in-a-favor/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-035",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/call-in-a-favor/ds/components/DeskSide.tsx",
+   "line": 246,
+   "generation": "ds",
+   "state": "Call in a Favor previous screen (?v4=0, or the room's *_v4_off flag) → side column: contact list (91, 92), results block (245, 246)",
+   "current": "L91: \"Advisor rolodex (aria-label)\" · L92: \"CARRIERS\" · L164: \"What ask should this person carry?\" · L245: \"Desk read / DESK READ\"",
+   "problem": "'Rolodex', 'carriers' and 'desk read' are the retired model's names for the contact list and the results summary (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'",
+   "proposed": "L91: \"Contacts who can help\" · L92: \"CONTACTS WHO CAN HELP\" · L164: \"What could you ask this person for?\" · L245: \"Request results\" / \"REQUEST RESULTS\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-036",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/cold-call-studio/ds/components/ThreadRail.tsx",
+   "line": 17,
+   "generation": "ds",
+   "state": "Cold Call Studio previous screen (?v4=0, or the room's *_v4_off flag) → step list heading (16, 17) and the one-word chip beside each step (line 29, from the verb field in src/cold-call-studio/lib/threads.ts); rail label at src/cold-call-studio/ds/ColdCallStudioDS.tsx:60; same chip at src/cold-call-studio/ds/components/ThreadConsole.tsx:60",
+   "current": "L17: \"THE THREADS (and aria-label \"Threads\", and \"The threads\" in ColdCallStudioDS.tsx:60)\" · L29: \"step chips: hold · pull · tighten · trade · lock · release\"",
+   "problem": "'Threads' names the call steps with a private metaphor, and each step carries a one-word verb chip ('pull', 'release') that does not say what the seller should do (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'thread' (record B1-TERM-23); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Your game plan' → 'Call plan' and 'Generated message rule'",
+   "proposed": "L17: \"CALL STEPS\" / \"Call steps\" · L29: remove the chip, or show the step number (\"Step 2 of 6\") — the step's own label already says what to do",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-037",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/cold-call-studio/ds/components/AccountBar.tsx",
+   "line": 29,
+   "generation": "ds",
+   "state": "Cold Call Studio previous screen (?v4=0, or the room's *_v4_off flag) → account picker options (29) and call panel label (57, also src/discovery-studio/ds/components/CallReadDS.tsx:31)",
+   "current": "L29: \"${a.name} · ${a.heat}  (renders \"Boeing · 62\")\" · L57: \"Live call read (aria-label)\"",
+   "problem": "The option shows a bare number after the account name with no label, so the reader cannot tell it is the account-priority score (dimensions 1, 6); the oldest screen labels the same number 'priority'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'heat' and 'hottest' (records B1-TERM-04, B1-TERM-05); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signal_console (record B2-SEM-1); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Signal Console' (do not use hot / warm / cool / cold to carry functional meaning); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[3] (record B2-RULE-3)",
+   "proposed": "L29: `${a.name} · priority ${a.heat}` · L57: \"Call plan\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-038",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 24,
+   "generation": "ds",
+   "state": "Dashboard previous screen (?v4=0, or the room's *_v4_off flag) → readiness panel sub-line for the first and last readiness states (24, 39); same strings on the oldest screen at src/dashboard/components/ReadinessDrawer.tsx:27,42",
+   "current": "L24: \"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\" · L39: \"This system holds up to repetition — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed.\"",
+   "problem": "The exact metaphor the original remediation replaced ('lives in your head … nothing to inherit') is still the readiness sub-line, and the top state still says 'handoff kit' and 'advisors lit up' (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] (\"It all lived in your head — nothing to inherit.\" → \"The sales process was not yet documented for another seller.\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md disputed-terms row 'in your head'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.founding_gtm (record B2-SEM-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md row 'Wins and losses both feed the machine; the handoff kit is written.' → 'Win and loss patterns are documented, and the sales handoff documentation is complete.'",
+   "proposed": "L24: t(\"The sales process is not yet documented for another seller. A new hire would have nothing to work from on day one.\", { class: \"body\" }) · L39: t(\"Win and loss patterns are documented, favors have been logged, and the sales handoff documentation is mostly complete.\", { class: \"body\" })",
+   "testsAffected": [
+    "src/dashboard/today/today-components.test.tsx",
+    "src/dashboard/components/ReadinessDrawer.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-039",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/today/components/WeekReads.tsx",
+   "line": 105,
+   "generation": "ds",
+   "state": "Dashboard previous screen (?v4=0, or the room's *_v4_off flag) → weekly observations band: kicker (101), heading (105), error (58), empty state (129, 133), dismiss label (146). Same strings on the oldest screen at src/dashboard/components/WeekReadsCard.tsx:58,98-102,136,141,156",
+   "current": "L58: \"Couldn't load this week's reads.\" · L101: \"THIS WEEK'S READS\" · L105: \"What the system noticed about your work\" · L129: \"No reads above the {days}-day threshold right now.\" · L133: \"Try 7d for thinner signals.\" · L146: \"Dismiss this read\"",
+   "problem": "Personified heading, 'reads' as a noun, and 'thinner signals' (dimensions 2, 8). The 14d/7d filter applies only to stalled-deal observations (src/dashboard/lib/week-reads-filter.ts), so the empty state can say that.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' and 'what the system saw' (records B1-TERM-53, B1-TERM-55); COPY_STANDARD.md §9; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' → 'analysis / assessment / summary' (record B1-TERM-56); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Briefing'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'thin' → 'incomplete / insufficient / limited' (record B1-TERM-44)",
+   "proposed": "L58: \"Couldn't load this week's observations.\" · L101: \"THIS WEEK'S OBSERVATIONS\" · L105: \"Changes in your deals and accounts this week\" · L129: \"No deals have gone {days} or more days without a stage change.\" · L133: \"Switch to 7d to include deals stalled for a week.\" · L146: \"Dismiss this observation\"",
+   "testsAffected": [
+    "src/dashboard/components/WeekReadsCard.test.tsx",
+    "src/dashboard/today/today-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-040",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/today/components/QueueRead.tsx",
+   "line": 41,
+   "generation": "ds",
+   "state": "Dashboard previous screen (?v4=0, or the room's *_v4_off flag) → Queue view: tag on the first row (41), zone heading (57) and count (71)",
+   "current": "L41: \"— Most pressured\" · L57: \"GONE QUIET\" · L71: \"gone quiet\"",
+   "problem": "'Pressured' is the private pressure construct and does not say what the row is first by; 'gone quiet' is the idiom the original rewrite replaced (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'pressure' → 'risk / urgency / priority' (record B1-TERM-25); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Gone quiet' → 'No recent activity'; COPY_STANDARD.md §13",
+   "proposed": "L41: t(\"— Highest priority\") · L57: t(\"NO RECENT ACTIVITY\") · L71: t(\"no recent activity\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-041",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/lib/brief-narrative.ts",
+   "line": 26,
+   "generation": "shared",
+   "state": "Dashboard previous screen (?v4=0, or the room's *_v4_off flag) Brief view and oldest Dashboard → generated summary sentences (26, 72); oldest top bar at src/dashboard/components/Topbar.tsx:51",
+   "current": "L26: \"No active deals, signals, or recovery moves to triage yet.\" · L72: \"… and N move(s) queued\"",
+   "problem": "'Moves' as the noun for recommendations in generated sentences (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "L26: \"No active deals, signals, or recommended actions yet.\" · L72: pluralize(moveCount, \"recommended action\", \"recommended actions\")",
+   "testsAffected": [
+    "src/dashboard/lib/brief-narrative.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-042",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/HealthStrip.tsx",
+   "line": 42,
+   "generation": "ds",
+   "state": "Deal Workspace previous screen (?v4=0, or the room's *_v4_off flag) → health strip stat (42); empty-board text and lane heading at src/deal-workspace/ds/components/RecoveryBoard.tsx:35,66",
+   "current": "L42: \"NEED A MOVE\" · L35: \"(RecoveryBoard) The board ranks deals by how close they are to going stale, and names the smallest corrective move on each. It needs one live deal to start.\" · L66: \"(RecoveryBoard) NEEDS INTERVENTION\"",
+   "problem": "'NEED A MOVE' is the private recommendation label named in the disputed-terms table and does not say what is counted (deals in the at-risk and critical lanes); 'intervention' is internal (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "L42: t(\"AT RISK\") · L35: \"Deals are ranked by risk, each with a suggested corrective action. Add one open deal to start.\" · L66: \"HIGH RISK\"",
+   "testsAffected": [
+    "src/deal-workspace/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-043",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/DealWorkspaceDS.tsx",
+   "line": 84,
+   "generation": "ds",
+   "state": "Deal Workspace previous screen (?v4=0, or the room's *_v4_off flag) → handoff links (84, 89, 93) and deal card link at src/deal-workspace/ds/components/DealCard.tsx:38",
+   "current": "L84: \"Pre-mortem a deal\" · L89: \"Forge the evidence\" · L93: \"Deploy an advisor\" · L38: \"(DealCard) Pre-mortem\"",
+   "problem": "Three link labels use the retired verbs — pre-mortem, forge, deploy — for areas now called Future Autopsy (deal-risk review), Pilot Desk and Call in a Favor (dimensions 2, 3). The default screen's links say 'Review deal risk', 'Run a pilot', 'Call in a favor'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'",
+   "proposed": "L84: t(\"Review deal risk\") · L89: t(\"Run a pilot\") · L93: t(\"Call in a favor\") · L38: t(\"Review loss risk\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-044",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/discovery-studio/ds/DiscoveryStudioDS.tsx",
+   "line": 96,
+   "generation": "ds",
+   "state": "Discovery Studio previous screen (?v4=0, or the room's *_v4_off flag) → masthead heading (96), framework hint (138), panel label (160); recovery empty state at src/discovery-studio/components/RecoverRail.tsx:35 (also oldest screen)",
+   "current": "L96: \"Whatever they say, your next move.\" · L138: \"Switch the lens only when the conversation actually changes.\" · L160: \"On-call rails\" · L35: \"(RecoverRail) No recovery moves loaded for this framework.\"",
+   "problem": "A slogan heading built on the private 'next move' label (dimensions 2, 5), plus 'lens' and 'rails' for the framework and the side panels.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Off the list? Pick the closest fit — the call path and the recover moves hold either way.' → '… The question flow and recovery prompts remain available.'",
+   "proposed": "L96: t(\"See a suggested response for whatever the buyer says.\", { class: \"body\" }) · L138: t(\"Change the framework only if the conversation moves to a different kind of buyer.\", { class: \"body\" }) · L160: t(\"Call tools\") · L35: \"No recovery prompts are available for this framework.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-045",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/discovery-studio/ds/components/HandoffStripDS.tsx",
+   "line": 38,
+   "generation": "ds",
+   "state": "Discovery Studio previous screen (?v4=0, or the room's *_v4_off flag) → handoff strip after the next step is set (27, 38); oldest screen src/discovery-studio/components/HandoffStrip.tsx:59",
+   "current": "L27: \"Next step locked — the deal inherits it.\" · L38: \"Pre-mortem this deal\"",
+   "problem": "'The deal inherits it' and 'pre-mortem' (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'inheritable' (record B1-TERM-33)",
+   "proposed": "L27: t(\"Next step saved to the deal.\", { class: \"body\" }) · L38: t(\"Review deal risk\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-046",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/discovery-studio/components/WorkedMemory.tsx",
+   "line": 35,
+   "generation": "shared",
+   "state": "Discovery Studio previous screen (?v4=0, or the room's *_v4_off flag) and oldest screen → covered-questions panel empty states (35, 69)",
+   "current": "L35: \"Pick a framework to start tracking covered ground.\" · L69: \"Open a buyer-response in any segment to start tracking covered ground.\"",
+   "problem": "'Covered ground' is an idiom standing in for the questions already covered (dimension 3); minor.",
+   "governing": "comprehension principle (COPY_STANDARD.md §2: use the literal noun)",
+   "proposed": "L35: \"Pick a framework to start tracking which questions you have covered.\" · L69: \"Open a buyer response in any section to start tracking which questions you have covered.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-047",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm/ds/FoundingGtmDS.tsx",
+   "line": 82,
+   "generation": "ds",
+   "state": "Founding GTM previous screen (?v4=0, or the room's *_v4_off flag) → masthead kicker (82), handoff strip (122-125); top-bar line at src/founding-gtm/ds/lib/adapters.ts:59",
+   "current": "L82: \"THE DAY-ONE KIT\" · L122: \"Carry the kit forward / CARRY THE KIT FORWARD\" · L125: \"The kit is read-mode here — real updates come from the work you record elsewhere in the app.\" · L59: \"(adapters.ts) The kit is read-mode — updates come from the rest of the app\"",
+   "problem": "'Kit' is the retired name for the sales handoff document; 'read-mode' is jargon for read-only (dimensions 2, 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.founding_gtm (record B2-SEM-5)",
+   "proposed": "L82: t(\"SALES HANDOFF\") · L122: t(\"Where the handoff gets its content\") / t(\"UPDATE THE HANDOFF\") · L125: t(\"This document is read-only. It updates from the deals, outreach and calls you record elsewhere in the app.\", { class: \"body\" }) · L59: \"Read-only — updates come from the rest of the app\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-048",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/ds/components/PinnedCaseDS.tsx",
+   "line": 83,
+   "generation": "ds",
+   "state": "Future Autopsy previous screen (?v4=0, or the room's *_v4_off flag) → selected deal: empty state (54), intro (60), sub-line (83), stop-condition label (201); list empty state at src/future-autopsy/ds/components/LedgerDS.tsx:25",
+   "current": "L54: \"Pick a deal from the ledger to start the pre-mortem.\" · L60: \"Future Autopsy pins a deal as evidence, then shows what kills it in 45 days — and the smallest step that turns it around.\" · L83: \"What kills this in {days} days.\" · L201: \"Kill switch.\" · L25: \"(LedgerDS) No deals pinned yet. Open Deal Workspace and push one here to start the pre-mortem.\"",
+   "problem": "States loss as certain ('what kills it in 45 days') and uses 'kill switch' and 'pre-mortem' (dimensions 3, 4). The 45-day horizon is now projected per deal, so the fixed number in the intro is also inaccurate.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'dies' and 'dying' (records B1-TERM-28, B1-TERM-29); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural rules · Future Autopsy' (do not say a deal dies or will definitely be lost); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md rows 'WHAT KILLS IT — THE EVIDENCE' → 'WHY RISK IS HIGH · EVIDENCE' and 'WHEN TO WALK AWAY' → 'WHEN TO CONSIDER CLOSING THE DEAL'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30)",
+   "proposed": "L54: t(\"Choose a deal from the list to review its loss risk.\", { class: \"body\" }) · L60: t(\"Future Autopsy reviews an open deal for loss risk: the recorded risk factors, what often happens next, and the corrective actions to take.\", { class: \"body\" }) · L83: t(\"What could stall or lose this deal in the next {days} days.\", { class: \"body\" }) · L201: t(\"When to consider closing the deal.\") · L25: \"No open deals to review. Add a deal in Deal Workspace and it will appear here.\"",
+   "testsAffected": [
+    "src/future-autopsy/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-049",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/ds/components/PinnedCaseDS.tsx",
+   "line": 142,
+   "generation": "ds",
+   "state": "Future Autopsy previous screen (?v4=0, or the room's *_v4_off flag) → selected deal → 'what would turn it around' list (142); same rendering on the oldest screen at src/future-autopsy/components/ForensicSheets.tsx:184",
+   "current": "L142: \"{w.id.replace(/_/g, \" \")} — renders internal ids as labels: \"dated nextstep set\", \"eb engaged\", \"thread reactivated\", \"multi threaded\", \"poc success criteria locked\"\"",
+   "problem": "Internal identifiers are shown as labels: 'eb', 'poc', 'nextstep' and 'thread reactivated' need translating (dimensions 2, 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'thread' (record B1-TERM-23); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[1] (record B2-RULE-1: keys stay internal, labels are user-facing)",
+   "proposed": "L142: add `export const WIN_LABEL: Record<string, string>` in src/future-autopsy/lib/autopsy-data.ts with one plain label per win-condition id (e.g. dated_nextstep_set → \"Dated next step set\", eb_engaged → \"Economic buyer engaged\", thread_reactivated → \"Buyer contact re-established\", multi_threaded → \"More than one stakeholder engaged\", poc_success_criteria_locked → \"Pilot success criteria agreed\") and render `WIN_LABEL[w.id] ?? w.text`",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-050",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/getting-to-signed/ds/NegotiationDS.tsx",
+   "line": 77,
+   "generation": "ds",
+   "state": "Getting to Signed previous screen (?v4=0, or the room's *_v4_off flag) → floating helper mounted here and on the previous Quota Workback and Territory Architect screens (src/quota-workback/ds/QuotaWorkbackDS.tsx:68, src/territory-architect/ds/TerritoryArchitectDS.tsx); its panel heading is src/birdseye/BirdseyeFloat.tsx:133",
+   "current": "L133: \"(BirdseyeFloat.tsx) BIRDSEYE · CURRENT ANALYSIS\"",
+   "problem": "'Birdseye' is an internal component name shown as a heading (dimension 2); the panel holds one recommended next step.",
+   "governing": "comprehension principle; COPY_STANDARD.md §4 (no additional capitalized concepts)",
+   "proposed": "L133: \"RECOMMENDED NEXT STEP\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-051",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/getting-to-signed/ds/components/RouteControls.tsx",
+   "line": 163,
+   "generation": "ds",
+   "state": "Getting to Signed previous screen (?v4=0, or the room's *_v4_off flag) → setup controls: role select (112), help texts (132, 163); status lines in src/getting-to-signed/ds/lib/adapters.ts:51,89,100,102",
+   "current": "L112: \"Counterparty role\" · L132: \"What you're walking in to ask for — it swaps the seed pushbacks and suggests an opening line.\" · L163: \"The line you won't cross. Below this, you walk.\" · L51: \"(adapters.ts) Walkaway missing\"",
+   "problem": "'Counterparty', 'seed pushbacks' and 'the line you won't cross' are the vocabulary the original rewrite replaced with customer request / your proposed position / non-negotiable limit (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signature (record B2-SEM-3); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Getting to Signed'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md row 'Your counter — and the line you won't cross' → 'Your proposed response and any non-negotiable limit'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'seed' → 'initialize / enter setup data' (record B1-TERM-40)",
+   "proposed": "L112: t(\"Who you are negotiating with\") · L132: t(\"What you are going to ask for. It changes the example objections below and suggests an opening line.\", { class: \"body\" }) · L163: t(\"The terms you will not accept. Below this, you end the negotiation.\", { class: \"body\" }) · L51: \"Walk-away position not set\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-052",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/getting-to-signed/ds/components/RehearsalObject.tsx",
+   "line": 271,
+   "generation": "ds",
+   "state": "Getting to Signed previous screen (?v4=0, or the room's *_v4_off flag) → rehearsal panel: concession list heading (157, 163), saved note (271), link (286)",
+   "current": "L157: \"THE CONCESSION LADDER / Concession ladder\" · L271: \"Outcome + concession ledger land on the linked deal.\" · L286: \"Pre-mortem this deal\"",
+   "problem": "'Concession ladder' and a compressed fragment ('Outcome + … ledger land') leave the reader to reconstruct what is saved where (dimensions 1, 7, 9).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signature (record B2-SEM-3); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Getting to Signed'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30)",
+   "proposed": "L157: t(\"WHAT YOU CAN TRADE\") / t(\"What you can trade\") · L271: t(\"The outcome and the concessions you logged are saved to the linked deal.\", { class: \"body\" }) · L286: t(\"Review deal risk\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-053",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/linkedin-playbook/ds/components/CueLadder.tsx",
+   "line": 18,
+   "generation": "ds",
+   "state": "LinkedIn Playbook previous screen (?v4=0, or the room's *_v4_off flag) → step list heading (17, 18); top bar count and rail label at src/linkedin-playbook/ds/LinkedinPlaybookDS.tsx:39,62; stage at src/linkedin-playbook/ds/components/CueStage.tsx:33,37,76; reference text at src/linkedin-playbook/ds/components/MethodSheetsDS.tsx:67; src/linkedin-playbook/ds/lib/adapters.ts:89",
+   "current": "L18: \"THE CUE LADDER / The cues\" · L39: \"(LinkedinPlaybookDS) ${s.total} cues\" · L33: \"(CueStage) Cue logged.\" · L37: \"(CueStage) Cue: ${cue.name}\" · L76: \"(CueStage) Log the cue\" · L67: \"(MethodSheetsDS) Reference for the cue you're on. Copy, fill the blanks, send.\" · L89: \"(adapters.ts) Compose the line\"",
+   "problem": "'Cue' and 'cue ladder' are private names for the five LinkedIn steps (dimension 2); the default screen calls them steps.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md LinkedIn Playbook rows; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'air cover' (record B1-TERM-50); comprehension principle",
+   "proposed": "L18: \"LINKEDIN STEPS\" / \"LinkedIn steps\" · L39: `${s.total} actions logged` · L33: \"Action logged.\" · L37: `Step: ${cue.name}` · L76: \"Log this action\" · L67: \"Message templates for the step you are on. Copy one, fill in the blanks and send it.\" · L89: \"Write the outbound message\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-054",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/onboarding/ds/components/StepsDS.tsx",
+   "line": 343,
+   "generation": "ds",
+   "state": "Onboarding previous screen (?v4=0, or the room's *_v4_off flag) (?v4=0) → intro (69, 74), first-account field (264), quota coach note (328), completion screen (343, 344, 353). The oldest screen repeats these at src/onboarding/components/Steps.tsx:43,49,318,401,418,419,428",
+   "current": "L69: \"The dashboard wakes up live.\" · L74: \"The first ask is a one-line ICP — everything else compounds off of it.\" · L264: \"Why now? One signal that pulled them up (optional)\" · L328: \"None of these block finishing — they make the Dashboard land sharper.\" · L343: \"Your answers seeded an ICP, an account, and a quota plan. Welcome will guide the next real moves.\" · L344: \"Nothing was seeded — but the workspace is yours. Come back anytime.\" · L353: \"Start the first move\"",
+   "problem": "Five retired terms on one flow — seeded, moves, wakes up, land sharper, pulled them up (dimensions 2, 3, 8). A newcomer cannot tell what was created or what the button opens.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'seed' → 'initialize / enter setup data' (record B1-TERM-40); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'awake' and 'wake-up' (records B1-TERM-17, B1-TERM-18); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'sharp' (record B1-TERM-06) and row 'landing' (record B1-TERM-21); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'pulling' → 'factors increasing priority' (record B1-TERM-26)",
+   "proposed": "L69: t(\"The Dashboard is ready when you finish.\", { class: \"body\" }) · L74: t(\"The first question is a one-line description of who you sell to. The rest of setup builds on it.\", { class: \"body\" }) · L264: t(\"Why now? One recent event at this company (optional)\") · L328: t(\"None of these block finishing. They give the Dashboard more to work with.\", { class: \"body\" }) · L343: t(\"Your answers created an ICP, an account and a quota plan. Welcome shows what to do next.\", { class: \"body\" }) · L344: t(\"Nothing was saved. You can come back and finish setup at any time.\", { class: \"body\" }) · L353: t(\"Go to Welcome\")",
+   "testsAffected": [
+    "src/onboarding/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-055",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/onboarding/lib/types.ts",
+   "line": 34,
+   "generation": "shared",
+   "state": "Onboarding previous screen (?v4=0, or the room's *_v4_off flag) and oldest Onboarding → role step: description under the Founder role (34) and the Advisor role (59)",
+   "current": "L34: \"You are still the one selling. Antaeus is the system holding everything you can't keep in your head.\" · L59: \"You are an outside lens — the system shows you what is real.\"",
+   "problem": "'In your head' and 'outside lens / what is real' (dimensions 3, 5).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] (\"It all lived in your head — nothing to inherit.\" → \"The sales process was not yet documented for another seller.\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md disputed-terms row 'in your head'",
+   "proposed": "L34: \"You are still the one selling. Antaeus keeps the accounts, deals and next steps you would otherwise have to remember.\" · L59: \"You advise from outside the company. Antaeus shows you the recorded state of the pipeline.\"",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-056",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outbound-studio/ds/components/SendLinePanel.tsx",
+   "line": 79,
+   "generation": "ds",
+   "state": "Outbound Studio previous screen (?v4=0, or the room's *_v4_off flag) → message panel (67-105); input column heading at src/outbound-studio/ds/components/OperatorRack.tsx:42; labels at src/outbound-studio/ds/OutboundStudioDS.tsx:65,74",
+   "current": "L67: \"The line / THE LINE\" · L70: \"NO LINE YET\" · L73: \"Name an account and a contact — then the line routes itself.\" · L79: \"The line is built from the rack: who, at what temperature, on what trigger. No generic category language goes into a live channel.\" · L88: \"Line for ${r.accountName}\" · L105: \"Copy the line\" · L42: \"(OperatorRack) ROUTE THE LINE\" · L65: \"(OutboundStudioDS) Route the line\" · L74: \"(OutboundStudioDS) Line up the channels around this account\"",
+   "problem": "The switchboard metaphor — the line, the rack, routing, temperature — is the primary explanation of how a message is drafted (dimensions 2, 3). The default screen says message, current outreach stage and reason for outreach.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Outbound Studio rows ('WHERE ARE YOU WITH THEM?' → 'CURRENT OUTREACH STAGE', 'THE MESSAGE · FOLLOWING UP' → 'FOLLOW-UP MESSAGE'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'your line' (record B1-TERM-47); COPY_STANDARD.md §3 'line', 'hot / warm / cold'",
+   "proposed": "L67: \"The message\" / \"THE MESSAGE\" · L70: \"NO MESSAGE YET\" · L73: \"Enter the account and contact. Antaeus then drafts the message.\" · L79: \"The message is drafted from the inputs on the left: the contact, the current outreach stage and the trigger you chose.\" · L88: `Message for ${r.accountName}` · L105: \"Copy message\" · L42: \"MESSAGE INPUTS\" · L65: \"Message inputs\" · L74: \"Other outreach for this account\"",
+   "testsAffected": [
+    "src/outbound-studio/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-057",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outbound-studio/lib/types.ts",
+   "line": 36,
+   "generation": "shared",
+   "state": "Outbound Studio previous screen (?v4=0, or the room's *_v4_off flag) → 'Temperature' select (src/outbound-studio/ds/components/OperatorRack.tsx:35) and message-log rows (src/outbound-studio/ds/components/TouchLogDS.tsx); oldest screen src/outbound-studio/components/Switchboard.tsx and TouchLog.tsx. Labels at lines 36-41.",
+   "current": "L36: \"TEMPERATURE_LABELS: Ice cold / Cool / Warm / Hot / Closing, under a field labelled \"Temperature\"\"",
+   "problem": "Temperature words stand in for the outreach stage (dimension 3). The default screen already shows plain stage labels for the same stored keys, so the two generations disagree about what 'warm' means.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Outbound Studio rows ('WHERE ARE YOU WITH THEM?' → 'CURRENT OUTREACH STAGE', 'THE MESSAGE · FOLLOWING UP' → 'FOLLOW-UP MESSAGE'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'your line' (record B1-TERM-47); COPY_STANDARD.md §3 'line', 'hot / warm / cold'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[1] (record B2-RULE-1)",
+   "proposed": "L36: \"First outreach\" / \"Following up\" / \"Contact replied\" / \"Active conversation\" / \"Approval / contract\" (the wording the default screen uses in STAGE_LABELS, src/outbound-studio/v4/OutboundStudioV4.tsx:54-60), and relabel the field \"Current outreach stage\". Keys (ice_cold, cool, warm, hot, closing) unchanged.",
+   "testsAffected": [
+    "src/outbound-studio/lib/types.test.ts (if it asserts the labels)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-058",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/ds/OutdoorsEventsDS.tsx",
+   "line": 43,
+   "generation": "ds",
+   "state": "Outdoors Events previous screen (?v4=0, or the room's *_v4_off flag) → intro (43), search panel (src/outdoors-events/ds/components/DiscoveryConsoleDS.tsx:30), empty list (src/outdoors-events/ds/components/EventListDS.tsx:121)",
+   "current": "L43: \"The system reads your product category and finds offline gatherings worth knowing about — direct to your space, adjacent to it, and indirect-but-buyer-relevant. You decide which ones matter.\" · L30: \"(DiscoveryConsoleDS) Reads your product category and finds gatherings — direct, adjacent, and indirect — with real source links.\" · L121: \"(EventListDS) The system reads your product category and surfaces conferences, mixers, and meetups — direct, adjacent, or indirect to your space, each with a real link and a one-line reason it matters.\"",
+   "problem": "'The system … gatherings … direct, adjacent, indirect' is the wording the original rewrite replaced with events relevant to your market and buyers (dimensions 3, 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'The system finds the gatherings — you decide which matter.' → 'Antaeus identifies relevant events; you decide which ones are worth pursuing.' and 'gatherings squarely about what you sell' → 'events focused directly on your market'",
+   "proposed": "L43: t(\"Antaeus uses your product category to find in-person events: ones about your market, ones your buyers attend, and broader related events. You decide which are worth pursuing.\", { class: \"body\" }) · L30: \"Uses your product category to find events, each with a link to its source.\" · L121: \"No events yet. Run a search to find conferences, mixers and meetups relevant to your category, each with a source link and a one-line reason.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-059",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/pilot-desk/ds/PocFrameworkDS.tsx",
+   "line": 37,
+   "generation": "ds",
+   "state": "Pilot Desk previous screen (?v4=0, or the room's *_v4_off flag) → top bar: area name (37), count (38), controls label (60)",
+   "current": "L37: \"POC FRAMEWORK\" · L38: \"${count} cast\" · L60: \"Shape the molds\"",
+   "problem": "Retired area name and foundry words on the top bar (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Pilot Desk'; final-audit AUDIT_BRIEF.md §3 disputed terms row 'proof'",
+   "proposed": "L37: t(\"PILOT DESK\") · L38: `${count} saved` · L60: t(\"Pilot setup\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-060",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/pilot-desk/ds/components/ForgeForm.tsx",
+   "line": 66,
+   "generation": "ds",
+   "state": "Pilot Desk previous screen (?v4=0, or the room's *_v4_off flag) → setup form: heading (66), fields (84, 113), save button (155)",
+   "current": "L66: \"FORGE THE EVIDENCE\" · L84: \"Readout owner\" · L113: \"Kill rules\" · L155: \"Cast the evidence\"",
+   "problem": "Forge / cast / kill rules / readout owner are the metallurgy vocabulary the original patch replaced with pilot setup, success criteria, who approves the result and end date (dimension 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Pilot Desk'; final-audit AUDIT_BRIEF.md §3 disputed terms row 'proof'",
+   "proposed": "L66: t(\"SET UP THE PILOT\") · L84: t(\"Who approves the result\") · L113: t(\"When you'll stop\") · L155: t(\"Save pilot setup\")",
+   "testsAffected": [
+    "src/pilot-desk/ds/ds-components.test.tsx:34 (getByText(\"Cast the evidence\"))"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-061",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/pilot-desk/ds/components/ProofObject.tsx",
+   "line": 136,
+   "generation": "ds",
+   "state": "Pilot Desk previous screen (?v4=0, or the room's *_v4_off flag) → quality panel: meters (111, 117), parts heading (124), callout (136), document tab (47), link (180)",
+   "current": "L47: \"Readout\" · L111: \"Owner — who signs off on the readout\" · L117: \"Kill — when the pilot stops\" · L124: \"The five molds\" · L136: \"WEAKEST MOLD · NEXT MOVE\" · L180: \"Pre-mortem the deal\"",
+   "problem": "'Mold', 'kill', 'readout' and 'next move' on the pilot quality panel (dimensions 2, 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Pilot Desk'; final-audit AUDIT_BRIEF.md §3 disputed terms row 'proof'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30)",
+   "proposed": "L47: t(\"Results meeting\") · L111: t(\"Owner — who approves the result\", { class: \"body\" }) · L117: t(\"Stop conditions — when the pilot ends\", { class: \"body\" }) · L124: t(\"The five parts of the pilot\") · L136: t(\"LEAST COMPLETE PART · NEXT STEP\") · L180: t(\"Review deal risk\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-062",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/prospecting-desk/ds/SourcingWorkbenchDS.tsx",
+   "line": 35,
+   "generation": "ds",
+   "state": "Prospecting Desk previous screen (?v4=0, or the room's *_v4_off flag) → top bar area name (35); entry-type label at src/prospecting-desk/ds/lib/adapters.ts:27",
+   "current": "L35: \"SOURCING WORKBENCH\" · L27: \"(adapters.ts) Cold entry\"",
+   "problem": "Retired area name; 'cold entry' is shorthand for an account with no connection or signal to open with (dimension 2).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table",
+   "proposed": "L35: t(\"PROSPECTING DESK\") · L27: \"No existing connection\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-063",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/settings/ds/components/SettingsCardsDS.tsx",
+   "line": 430,
+   "generation": "ds",
+   "state": "Settings previous screen (?v4=0, or the room's *_v4_off flag) → re-run onboarding card (430) and delete card (474); oldest screen src/settings/components/SettingsCards.tsx:112,645,659",
+   "current": "L430: \"Changed roles or starting fresh? Re-run onboarding to reconfigure the workspace. Existing ICPs, deals, signals, and motions stay safe — onboarding only retunes the activation path.\" · L474: \"… pilot evidence, signals, advisor deployments, discovery call logs, and supporting artifacts …\"",
+   "problem": "'Motions' is used as a catch-all for some unnamed set of records, and 'retunes the activation path' is internal (dimensions 1, 2); 'advisor deployments' is the retired name for favor requests.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'motion' (record B1-TERM-03); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rules[5] is ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[5] (record B3-RULE-5: Settings language must describe actual storage behavior directly)",
+   "proposed": "L430: t(\"Changed roles or starting fresh? Re-run onboarding to update your setup answers. Your ICPs, accounts, deals, signals and logged outreach are kept.\", { class: \"body\" }) · L474: replace \"advisor deployments\" with \"favor requests\" and \"supporting artifacts\" with \"saved documents\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-064",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/signal-console/ds/components/HealthStrip.tsx",
+   "line": 28,
+   "generation": "ds",
+   "state": "Signal Console previous screen (?v4=0, or the room's *_v4_off flag) → summary strip stat (28); account card line built at src/signal-console/ds/lib/adapters.ts:58 from the band names in src/signal-console/lib/heat.ts:112-115",
+   "current": "L28: \"HOT ≥ 75\" · L58: \"(adapters.ts) `${m.band} · ${m.heat} — ${signalPhrase}${recentPhrase}` — renders \"Hot · 92 — 3 signals, 2 recent\"\"",
+   "problem": "'Hot' labels a count of accounts scoring 75 or more, while the band function calls only 91+ 'Hot' (75-90 is 'Active'), so one word means two thresholds; and the card line prints a temperature word and a bare number with no statement that it is the account-priority score (dimensions 3, 6).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'heat' and 'hottest' (records B1-TERM-04, B1-TERM-05); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signal_console (record B2-SEM-1); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Signal Console' (do not use hot / warm / cool / cold to carry functional meaning); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[3] (record B2-RULE-3: keep numeric scores only if the UI says what the score represents)",
+   "proposed": "L28: t(\"PRIORITY 75+\") · L58: `Priority ${m.heat} of 99 (${BAND_WORD[m.band]}) — ${signalPhrase}${recentPhrase}` with a display map `const BAND_WORD = { Hot: \"very high\", Active: \"high\", Watch: \"medium\", Low: \"low\" }`; heatBand() keeps returning the existing keys because the health snapshot stores them",
+   "testsAffected": [
+    "src/signal-console/ds/lib/adapters.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-065",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/welcome/ds/components/ActionsObject.tsx",
+   "line": 31,
+   "generation": "ds",
+   "state": "Welcome previous screen (?v4=0, or the room's *_v4_off flag) → actions band (29, 31, 32); generated line at src/welcome/lib/engine.ts:69; milestone label at src/welcome/ds/WelcomeDS.tsx:103 and src/welcome/ds/lib/adapters.ts:47. Oldest screen: src/welcome/components/ActionStack.tsx:15-20",
+   "current": "L31: \"NEXT MOVES / Next moves\" · L32: \"Pick the action that compounds.\" · L69: \"(engine.ts) Next move: ${next.label.toLowerCase()}.\" · L103: \"(WelcomeDS) Activation anchors\" · L47: \"(adapters.ts) ${m.completed} of ${m.total} anchors live\"",
+   "problem": "'Moves' as the recommendation noun, an aphoristic heading ('compounds') and 'anchors' for setup milestones (dimensions 2, 5).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "L31: t(\"NEXT STEPS\") / t(\"Next steps\") · L32: t(\"Recommended next steps, most useful first\", { class: \"body\" }) · L69: `Next step: ${next.label.toLowerCase()}.` · L103: t(\"Setup milestones\") · L47: `${m.completed} of ${m.total} setup milestones complete`",
+   "testsAffected": [
+    "src/welcome/lib/engine.test.ts",
+    "src/welcome/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [
+  {
+   "file": "src/call-in-a-favor/v4/CallInAFavorV4.tsx",
+   "line": 142,
+   "text": "Use an advisor, investor, customer, or other trusted contact when outside help could move an active deal.",
+   "term": "move",
+   "why": "Literal verb (advance a deal). The migration map's own Call in a Favor description is 'Use your network to help move a deal'."
+  },
+  {
+   "file": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+   "line": 413,
+   "text": "Move to another segment",
+   "term": "move",
+   "why": "Literal verb for reassigning an account; named as an ordinary use in AUDIT_BRIEF §3."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 159,
+   "text": "Deals tend to move when a real result lands early and the risks to the decision are raised before they become deal-breakers.",
+   "term": "move / landing",
+   "why": "Ordinary verbs (a deal moves forward; a result lands); calibrated ('tend to'). Not the recommendation noun and not the 'landing' screen name."
+  },
+  {
+   "file": "src/getting-to-signed/lib/seed-scripts.ts",
+   "line": 103,
+   "text": "We need indemnification carve-outs.",
+   "term": "carve",
+   "why": "'Carve-out' is the standard contract term, quoted as the buyer's request; not the territory 'carve a division' metaphor."
+  },
+  {
+   "file": "src/deal-workspace/lib/deal-shape.ts",
+   "line": 75,
+   "text": "Budget Killed",
+   "term": "dies / kill",
+   "why": "A conventional closed-lost reason label (budget was cut), chosen by the user from a list; it records a known historical outcome, which the original Future Autopsy rule allows."
+  },
+  {
+   "file": "src/pilot-desk/v4/PilotDeskV4.tsx",
+   "line": 148,
+   "text": "Champion kit",
+   "term": "kit",
+   "why": "Ordinary English for a small set of materials sent to the champion; it is not the 'handoff kit' name for the sales handoff document and the next line says what is in it."
+  },
+  {
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 180,
+   "text": "Suggested line",
+   "term": "line",
+   "why": "A line to say on a call is ordinary sales English; the map retires 'your line' only where it means a negotiation position."
+  },
+  {
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 163,
+   "text": "Future Autopsy · N deals reviewed · highest risk first / Deal risk · highest risk first / If nothing changes, <deal> is at high risk of stalling or being lost within the next N days.",
+   "term": "Future Autopsy",
+   "why": "Branded name kept by owner decision (AUDIT_BRIEF §4) with surrounding copy that says it reviews open deals for loss risk."
+  },
+  {
+   "file": "src/lib/edge/LiveEdge.tsx",
+   "line": 226,
+   "text": "automated updates / buyer activity / Recent activity",
+   "term": "the machine / Live Edge",
+   "why": "The internal who-key 'machine' and component name LiveEdge are identifiers; the labels rendered are the approved 'Recent activity', 'automated updates', 'buyer activity'."
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 34,
+   "text": "Hire-ready / Hire-ready and repeatable",
+   "term": "Hire-ready",
+   "why": "Owner decision 2026-11-05/06 (COPY_STANDARD §17) keeps these as readiness state names; supersedes the map's 'Runnable independently / Documented and repeatable'."
+  },
+  {
+   "file": "supabase/functions/seeding-enrichment/index.ts",
+   "line": 57,
+   "text": "heat: an assessed account-priority score from 0 to 100 based on the recency and ICP relevance of the reported change. It is not a probability of purchase.",
+   "term": "heat",
+   "why": "'heat' is the JSON field name in a model output contract; the prompt defines it literally as an account-priority score and the screen labels the number 'priority'. Field names are identifiers."
+  },
+  {
+   "file": "supabase/functions/seeding-enrichment/index.ts",
+   "line": 82,
+   "text": "${hot.name}: ${hot.signal} This account ranks first among the supplied accounts based on the assessed recency and relevance of its reported change. Verify the source before acting.",
+   "term": "rank",
+   "why": "Describes what the product did to the user's accounts and by what (recency and relevance); matches AUDIT_BRIEF §3 and COPY_STANDARD §26."
+  },
+  {
+   "file": "supabase/functions/briefing-pipeline/index.ts",
+   "line": 1022,
+   "text": "Evaluated N armed triggers; N fired, N skipped.",
+   "term": "fires",
+   "why": "A stage-log note inside the run record (StageLogEntry.notes), not rendered on a screen; internal diagnostics."
+  },
+  {
+   "file": "supabase/functions/heartbeat/voice-document.ts",
+   "line": 30,
+   "text": "the move / operator move / field read / loom read / ingot read / replacement pressure",
+   "term": "move / read / pressure",
+   "why": "Entries in a banned-vocabulary list: negative examples the generator gate rejects, not copy."
+  },
+  {
+   "file": "src/cold-call-studio/lib/threads.ts",
+   "line": 58,
+   "text": "[Your name] with [company]. I am calling about something I saw at [account]: [pressure]. Can I give you the 20-second version?",
+   "term": "pressure",
+   "why": "'[pressure]' is a template token replaced before display with the account's newest signal headline, or with \"[specific business issue to verify]\" when none exists (src/cold-call-studio/lib/personalize.ts:32,41). The word is never shown."
+  },
+  {
+   "file": "src/lib/briefing-drafts.ts",
+   "line": 128,
+   "text": "PoC Framework / Advisor Deploy",
+   "term": "retired area names",
+   "why": "Label mapping for old draft paths (/poc-framework, /advisor-deploy). Briefing drafts are only created for Discovery Studio, Outbound Studio and Deal Workspace (src/briefing/lib/destinations.ts:163-173), so these two branches cannot be reached by current data."
+  },
+  {
+   "file": "js/supabase-config.js",
+   "line": 1754,
+   "text": "POC Framework Data / Advisor Deployments / Outbound Seed / Demo Seed Metadata / Discovery Agenda Links",
+   "term": "retired area names / seed",
+   "why": "Titles in the legacy sync's key-to-document table (DURABLE_SEQUENCE_DOCUMENTS). They label stored rows for the pre-migration sync path and are not rendered by any current screen; changing them would change stored row titles for no reader."
+  },
+  {
+   "file": "src/lib/ground/GroundLine.tsx",
+   "line": 173,
+   "text": "Open workspace map (G) / Workspace map / Where do you want to go?",
+   "term": "Ground",
+   "why": "The approved replacements for 'Touch the Ground' and 'THE GROUND — YOUR WHOLE MOTION' are what renders; 'ground' survives only in file, class and component names."
+  },
+  {
+   "file": "src/getting-to-signed/lib/handoff.ts",
+   "line": 48,
+   "text": "Back to Getting to Signed (and the roomLabel values in every src/*/lib/handoff.ts)",
+   "term": "area names in handoffs",
+   "why": "Every return label and destination label in the handoff builders uses the current area name (Pilot Desk, Call in a Favor, Prospecting Desk, Getting to Signed); the continuity parameter names are unchanged."
+  },
+  {
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 113,
+   "text": "What would move this next",
+   "term": "move",
+   "why": "Ordinary verb: what would change the readiness state. Not the recommendation noun."
+  },
+  {
+   "file": "src/icp-studio/lib/options.ts",
+   "line": 89,
+   "text": "Audit / compliance pressure",
+   "term": "pressure",
+   "why": "Ordinary English for a real business pressure on the buyer (an ICP trigger option), not the Antaeus pressure construct."
+  },
+  {
+   "file": "src/quota-workback/ds/components/PlanLedger.tsx",
+   "line": 155,
+   "text": "Run cold calls",
+   "term": "cold",
+   "why": "'Cold call' is the standard sales term; Cold Call Studio is an approved area name."
+  }
+ ],
+ "gaps": []
+}

@@ -1,0 +1,685 @@
+{
+  "tool": "tools/preview/walk-public-pages.js",
+  "generatedAt": "2026-11-16T22:12:38.197Z",
+  "servedFrom": "dist/ (production build, served read-only)",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "analyticsCallsDropped": "google-analytics\\.com|googletagmanager\\.com|google\\.com\\/g\\/collect",
+  "pages": [
+    {
+      "page": "/start.html",
+      "lines": 284,
+      "statesReached": 2,
+      "reached": [
+        {
+          "state": "at rest, after the ranking demo and the scroll reveals finish",
+          "lines": 140,
+          "shownBrieflyBefore": 2,
+          "newSincePreviousState": 140,
+          "actions": [
+            "open /start.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "after “↻ Watch it rank” replays the ranking demo",
+          "lines": 140,
+          "shownBrieflyBefore": 2,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “↻ Watch it rank”"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS": "#top",
+        "Why Antaeus": "/why-antaeus/",
+        "Sign in": "/login.html",
+        "Start your workspace →": "/signup.html",
+        "↻ Watch it rank": "#",
+        "Privacy": "/privacy.html",
+        "Terms": "/terms.html",
+        "Contact": "mailto:hello@antaeus.app"
+      }
+    },
+    {
+      "page": "/why-antaeus/",
+      "lines": 67,
+      "statesReached": 1,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 67,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 67,
+          "actions": [
+            "open /why-antaeus/ in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS · PRIVATE PREVIEW": "/start.html",
+        "← Back to homepage": "/start.html",
+        "Start your workspace →": "/signup.html",
+        "Sign in": "/login.html",
+        "Home": "/start.html",
+        "Privacy": "/privacy.html",
+        "Terms": "/terms.html",
+        "Contact": "mailto:founders@antaeus.app"
+      }
+    },
+    {
+      "page": "/login.html",
+      "lines": 146,
+      "statesReached": 5,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 27,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 27,
+          "actions": [
+            "open /login.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "form sent empty",
+          "lines": 30,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 3,
+          "actions": [
+            "click “Sign in →”"
+          ]
+        },
+        {
+          "state": "form sent with a bad value (email “not-an-email”, password “x”)",
+          "lines": 30,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 3,
+          "actions": [
+            "open /login.html in a fresh browser context",
+            "type “not-an-email” into #email",
+            "type “x” into #password",
+            "click “Sign in →”"
+          ]
+        },
+        {
+          "state": "form sent while the browser is offline",
+          "lines": 28,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /login.html in a fresh browser context",
+            "type “not-an-email” into #email",
+            "type “x” into #password",
+            "take the browser offline",
+            "click “Sign in →”"
+          ]
+        },
+        {
+          "state": "arriving from checkout (?source=checkout)",
+          "lines": 28,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /login.html?source=checkout in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "signed in",
+          "reason": "needs real credentials; the walk sends none"
+        },
+        {
+          "state": "sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)",
+          "reason": "needs the page to load while its sign-in library (from cdn.jsdelivr.net) does not; the walk does not force that"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 400 () @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/token?grant_type=password",
+        "Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/token?grant_type=password"
+      ],
+      "failedRequests": [
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/token — HTTP 400",
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/token — net::ERR_INTERNET_DISCONNECTED"
+      ],
+      "links": {
+        "ANTAEUS": "/start.html",
+        "← BACK TO HOMEPAGE": "/start.html",
+        "NEW HERE? CREATE ONE": "/signup.html",
+        "Forgot password?": "/forgot-password.html",
+        "Create one": "/signup.html",
+        "Back to sign in": "/login.html",
+        "Reset password": "/forgot-password.html"
+      }
+    },
+    {
+      "page": "/signup.html",
+      "lines": 189,
+      "statesReached": 6,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 30,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 30,
+          "actions": [
+            "open /signup.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "form sent empty",
+          "lines": 31,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Create your workspace →”"
+          ]
+        },
+        {
+          "state": "form sent with a bad value (email “not-an-email”, password “short”)",
+          "lines": 31,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “not-an-email” into #email",
+            "type “short” into #password",
+            "click “Create your workspace →”"
+          ]
+        },
+        {
+          "state": "form sent with a malformed email and a long-enough password (the page sends the request)",
+          "lines": 33,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 3,
+          "actions": [
+            "type “not-a-real-password” into #password",
+            "click “Create your workspace →”"
+          ]
+        },
+        {
+          "state": "form sent while the browser is offline",
+          "lines": 31,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /signup.html in a fresh browser context",
+            "type “not-an-email” into #email",
+            "type “not-a-real-password” into #password",
+            "take the browser offline",
+            "click “Create your workspace →”"
+          ]
+        },
+        {
+          "state": "arriving from checkout (?source=checkout)",
+          "lines": 31,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /signup.html?source=checkout in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "confirmation screen (“One click and you're inside.”)",
+          "reason": "appears only after a real account is created; the walk never sends a well-formed email"
+        },
+        {
+          "state": "sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)",
+          "reason": "needs the page to load while its sign-in library (from cdn.jsdelivr.net) does not; the walk does not force that"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 400 () @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/signup?redirect_to=http%3A%2F%2F127.0.0.1%3A4332%2Fauth%2Fcallback%2F",
+        "Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/signup?redirect_to=http%3A%2F%2F127.0.0.1%3A4332%2Fauth%2Fcallback%2F"
+      ],
+      "failedRequests": [
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/signup — HTTP 400",
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/signup — net::ERR_INTERNET_DISCONNECTED"
+      ],
+      "links": {
+        "ANTAEUS": "/start.html",
+        "← BACK TO HOMEPAGE": "/start.html",
+        "HAVE AN ACCOUNT? SIGN IN": "/login.html",
+        "Sign in": "/login.html",
+        "See what Antaeus actually is →": "/why-antaeus/",
+        "Back to sign in": "/login.html"
+      }
+    },
+    {
+      "page": "/forgot-password.html",
+      "lines": 98,
+      "statesReached": 4,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 22,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 22,
+          "actions": [
+            "open /forgot-password.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "form sent empty",
+          "lines": 25,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 3,
+          "actions": [
+            "click “Send reset link →”"
+          ]
+        },
+        {
+          "state": "form sent with a bad value (email “not-an-email”)",
+          "lines": 25,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 0,
+          "actions": [
+            "open /forgot-password.html in a fresh browser context",
+            "type “not-an-email” into #email",
+            "click “Send reset link →”"
+          ]
+        },
+        {
+          "state": "form sent while the browser is offline",
+          "lines": 23,
+          "shownBrieflyBefore": 1,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /forgot-password.html in a fresh browser context",
+            "type “not-an-email” into #email",
+            "take the browser offline",
+            "click “Send reset link →”"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "“Check your email if the account exists.” confirmation",
+          "reason": "appears only when the reset service accepts a request; the walk never sends a well-formed email"
+        },
+        {
+          "state": "sign-in library failed to load (“Unable to connect. Check your internet and try again.”, button disabled)",
+          "reason": "needs the page to load while its sign-in library (from cdn.jsdelivr.net) does not; the walk does not force that"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 400 () @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/recover?redirect_to=http%3A%2F%2F127.0.0.1%3A4332%2Freset-password.html",
+        "Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/recover?redirect_to=http%3A%2F%2F127.0.0.1%3A4332%2Freset-password.html"
+      ],
+      "failedRequests": [
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/recover — HTTP 400",
+        "https://wjdqmgxwulqxxxnyuzyl.supabase.co/auth/v1/recover — net::ERR_INTERNET_DISCONNECTED"
+      ],
+      "links": {
+        "ANTAEUS": "/start.html",
+        "← BACK TO SIGN IN": "/login.html",
+        "REMEMBERED IT? SIGN IN": "/login.html",
+        "Sign in": "/login.html",
+        "Back to sign in": "/login.html"
+      }
+    },
+    {
+      "page": "/reset-password.html",
+      "lines": 38,
+      "statesReached": 2,
+      "reached": [
+        {
+          "state": "on arrival, while the link is being checked (about five seconds)",
+          "lines": 18,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 18,
+          "actions": [
+            "open /reset-password.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "after the check: link expired or invalid",
+          "lines": 20,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 3,
+          "actions": []
+        }
+      ],
+      "notReached": [
+        {
+          "state": "new-password form and its messages (“Passwords do not match.”, “Password must be at least 8 characters.”, “Password updated.”)",
+          "reason": "shown only when the page is opened from a valid reset link in an email"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS": "/start.html",
+        "← BACK TO SIGN IN": "/login.html",
+        "REMEMBERED IT? SIGN IN": "/login.html",
+        "Sign in": "/login.html",
+        "Request a new link →": "/forgot-password.html"
+      }
+    },
+    {
+      "page": "/coming-soon.html",
+      "lines": 39,
+      "statesReached": 4,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 9,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 9,
+          "actions": [
+            "open /coming-soon.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "“Enter” pressed with no code",
+          "lines": 10,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Enter”"
+          ],
+          "notes": [
+            "The form was not sent; the message comes from the browser, not the page, and follows the browser's language."
+          ]
+        },
+        {
+          "state": "six digits typed and “Enter” pressed, before the page moves on",
+          "lines": 10,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "type “000000” into #gate-input",
+            "click “Enter”"
+          ],
+          "notes": [
+            "The browser then moved to /_gate/unlock?code=000000&next=%2F."
+          ]
+        },
+        {
+          "state": "after a wrong code (where the Worker sends the visitor: ?error=1)",
+          "lines": 10,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /coming-soon.html?error=1 in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "a correct code",
+          "reason": "codes are checked by the production Worker at /_gate/unlock, which a static server does not run"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4332/_gate/unlock?code=000000&next=%2F"
+      ],
+      "failedRequests": [
+        "http://127.0.0.1:4332/_gate/unlock — HTTP 404"
+      ],
+      "links": {
+        "founders@antaeus.app": "mailto:founders@antaeus.app"
+      }
+    },
+    {
+      "page": "/privacy.html",
+      "lines": 69,
+      "statesReached": 1,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 69,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 69,
+          "actions": [
+            "open /privacy.html in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS · OPERATOR PREVIEW": "/start.html",
+        "← Back to preview": "/start.html",
+        "Home": "/start.html",
+        "Terms": "/terms.html",
+        "Contact": "mailto:hello@antaeus.app"
+      }
+    },
+    {
+      "page": "/terms.html",
+      "lines": 65,
+      "statesReached": 1,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 65,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 65,
+          "actions": [
+            "open /terms.html in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS · OPERATOR PREVIEW": "/start.html",
+        "← Back to preview": "/start.html",
+        "Home": "/start.html",
+        "Privacy": "/privacy.html",
+        "Contact": "mailto:hello@antaeus.app"
+      }
+    },
+    {
+      "page": "/preview",
+      "lines": 36,
+      "statesReached": 4,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 10,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 10,
+          "actions": [
+            "open /preview in a fresh browser context"
+          ]
+        },
+        {
+          "state": "“Open the workspace →” pressed with no code",
+          "lines": 11,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Open the workspace →”"
+          ],
+          "notes": [
+            "The form was not sent; the message comes from the browser, not the page, and follows the browser's language."
+          ]
+        },
+        {
+          "state": "after a wrong code (where the Worker sends the visitor: ?error=1)",
+          "lines": 11,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /preview?error=1 in a fresh browser context"
+          ]
+        },
+        {
+          "state": "opened on a phone or tablet (?error=desktop)",
+          "lines": 4,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 3,
+          "actions": [
+            "open /preview?error=desktop in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "a correct code",
+          "reason": "codes are checked by the production Worker at /_preview/unlock; build-transcript.js records the workspace it opens"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {}
+    },
+    {
+      "page": "/demo-seed.html",
+      "lines": 69,
+      "statesReached": 4,
+      "reached": [
+        {
+          "state": "sample picker at rest (no autoseed)",
+          "lines": 16,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 16,
+          "actions": [
+            "open /demo-seed.html in a fresh browser context"
+          ]
+        },
+        {
+          "state": "after “Clear the sample from this browser”",
+          "lines": 17,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Clear the sample from this browser”"
+          ]
+        },
+        {
+          "state": "after “Load it →” on sample one, before the Dashboard opens",
+          "lines": 18,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 2,
+          "actions": [
+            "click “css=.pick:nth-child(1) .go”"
+          ],
+          "notes": [
+            "The browser then moved to /dashboard/?demo=1."
+          ]
+        },
+        {
+          "state": "after “Load it →” on sample two, before the Dashboard opens",
+          "lines": 18,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /demo-seed.html in a fresh browser context",
+            "click “css=.pick:nth-child(2) .go”"
+          ],
+          "notes": [
+            "The browser then moved to /dashboard/?demo=1."
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "Sign in": "/login.html",
+        "What is Antaeus?": "/start.html",
+        "Open the workspace →": "/dashboard/?demo=1"
+      }
+    },
+    {
+      "page": "/should-we-hire-an-ae/",
+      "lines": 541,
+      "statesReached": 3,
+      "reached": [
+        {
+          "state": "at rest",
+          "lines": 174,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 174,
+          "actions": [
+            "open /should-we-hire-an-ae/ in a fresh browser context"
+          ]
+        },
+        {
+          "state": "every FAQ answer opened",
+          "lines": 183,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 9,
+          "actions": [
+            "click every details > summary"
+          ]
+        },
+        {
+          "state": "after pressing the first checkout button",
+          "lines": 184,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “css=[data-ae-checkout=hero]”"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "Skip to content": "#main",
+        "ANTAEUS": "/",
+        "How it works": "#how-it-works",
+        "Sample": "#sample",
+        "Pricing": "#pricing",
+        "Get the hiring brief →": "#pricing",
+        "Get the hiring brief — $149": "#pricing",
+        "See a sample result": "#sample",
+        "Get the AE Hiring Brief →": "#pricing",
+        "Get the AE Hiring Brief — $149 →": "#pricing",
+        "Privacy": "/privacy.html",
+        "Terms": "/terms.html",
+        "Antaeus privacy policy": "/privacy.html"
+      }
+    },
+    {
+      "page": "/index.html",
+      "lines": 1,
+      "statesReached": 1,
+      "reached": [
+        {
+          "state": "opened with no saved session: where it sends the visitor",
+          "lines": 1,
+          "shownBrieflyBefore": 0,
+          "newSincePreviousState": 1,
+          "actions": [
+            "open /index.html in a fresh browser context"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {}
+    }
+  ]
+}
